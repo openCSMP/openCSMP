@@ -1,0 +1,116 @@
+\doxysection{Brooks\+Corey\+CO2.\+h}
+\hypertarget{_brooks_corey_c_o2_8h_source}{}\label{_brooks_corey_c_o2_8h_source}\index{source/includes/thmc/two\_phase\_flow/BrooksCoreyCO2.h@{source/includes/thmc/two\_phase\_flow/BrooksCoreyCO2.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{BROOKS\_COREY\_CO2\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{BROOKS\_COREY\_CO2\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_two_phase_model_8h}{"{}TwoPhaseModel.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_cubic_spline_8h}{"{}CubicSpline.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{comment}{///\ @note\ for\ lambda=0,\ this\ implementation\ of\ Brooks-\/Corey\ model\ switches\ to\ linear}}
+\DoxyCodeLine{00010\ \textcolor{comment}{///\ @note\ for\ linear\ case\ capillary\ pressure\ is\ a\ constant\ value\ equal\ to\ entry\ pressure}}
+\DoxyCodeLine{00011\ \textcolor{comment}{///\ @note\ base\ class\ pm1\ and\ pm2\ are\ used\ for\ pd\ and\ lambda,\ respectively}}
+\DoxyCodeLine{00012\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00013\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_brooks_corey_c_o2}{BrooksCoreyCO2}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_model}{TwoPhaseModel}}<dim>\ \{}
+\DoxyCodeLine{00014\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \ \ BrooksCoreyCO2(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&\ database,}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ lamda,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ pc\_entry,}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ sw\_ro\_mu\_placement\ =\ \textcolor{keyword}{true});\ \textcolor{comment}{//\ NODE=true\ ELEMENT=false}}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_brooks_corey_c_o2_a3d910e28b40f50b5a3c2e272dfc7153b}{BrooksCoreyCO2}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&\ database,}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ permeability,}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ viscosity\_nw,\ \textcolor{keywordtype}{double}\ viscosity\_w,}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ density\_nw,\ \textcolor{keywordtype}{double}\ density\_w,}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ lamda,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ pc\_entry,}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ sw\_ro\_mu\_placement\ =\ \textcolor{keyword}{true});\ \textcolor{comment}{//\ NODE=true\ ELEMENT=false}}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{comment}{///\ constructor\ for\ constant\ capillary\ pressure\ equal\ to\ entry\ pressure\ \ in\ case\ if\ lambda\ =\ 0}}
+\DoxyCodeLine{00029\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_brooks_corey_c_o2_abff875659755fce0f8b51824c4af04ba}{BrooksCoreyCO2}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&\ database,}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ permeability,}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ viscosity\_nw,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ viscosity\_w,}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ density\_nw,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ density\_w,}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ lamda,}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ pc\_entry,}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ sat\_w,}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ res\_sat\_nw,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ res\_sat\_w,}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ sw\_ro\_mu\_placement\ =\ \textcolor{keyword}{true}\ );\ \textcolor{comment}{//\ NODE=true\ ELEMENT=fals}}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{comment}{///\ constructor\ for\ linear\ capillary\ pressure\ in\ case\ if\ lambda\ =\ 0}}
+\DoxyCodeLine{00040\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_brooks_corey_c_o2_afc7190aedd37d8678a96da610220ac0e}{BrooksCoreyCO2}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&\ database,}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ permeability,}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ viscosity\_nw,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ viscosity\_w,}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ density\_nw,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ density\_w,}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ lamda,}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ pc\_entry,}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ maximum\_pc,}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ sat\_w,}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ res\_sat\_nw,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ res\_sat\_w,}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ sw\_ro\_mu\_placement\ =\ \textcolor{keyword}{true}\ );\ \textcolor{comment}{//\ NODE=true\ ELEMENT=fals}}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{comment}{//\ manual\ assignment\ of\ two\ phase\ properties}}
+\DoxyCodeLine{00052\ \ \ \ \ BrooksCoreyCO2();}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~BrooksCoreyCO2();}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_brooks_corey_c_o2_a4583fa2898ef8912eedc087b38035c80}{Initialize}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&\ e\ );}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{comment}{//\ relative\ permeabilities}}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_brooks_corey_c_o2_a73281210b130d2f49c23a925ff67eaa4}{krn\_Phase}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_brooks_corey_c_o2_aa7f15068bb9953bd9e443e4f7d96314b}{krw\_Phase}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{comment}{//\ derivatives\ of\ relative\ permeabilities}}
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_brooks_corey_c_o2_ad763ae60949391783c9a24d01b4d9b6f}{dkrnds\_Phase}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_brooks_corey_c_o2_a00632ed453726d98d67946223b35ca33}{dkrwds\_Phase}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{comment}{//\ capillary\ pressure}}
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_brooks_corey_c_o2_af5cc861149d252d6996a472a8dc40aa0}{pc\_Phase}}(\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{comment}{//\ capillary\ pressure\ derivatives}}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_brooks_corey_c_o2_a97703bb3609e44d1bad3256b2354249e}{dpcds\_Phase}}(\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{comment}{//\ inverse\ capillary\ pressure\ function}}
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_brooks_corey_c_o2_ac4f0aa6a1893bf0c784805784da7fe58}{Sw\_Phase}}(\ \textcolor{keywordtype}{double}\ pc\_Phase\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{comment}{//\ inverse\ capillary\ pressure\ derivative}}
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_brooks_corey_c_o2_a2a6232e0f8d287f7667157b58868a0fd}{dsdpc\_Phase}}(\ \textcolor{keywordtype}{double}\ pc\_Phase\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{comment}{//\ derivative\ of\ fractional\ flow\ (advection\ multipliers)}}
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_brooks_corey_c_o2_a0a97ddbdd4987c941e20d9b46ef543b6}{dfds}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{comment}{//\ derivatives\ of\ gravitational\ flow\ (advection\ multipliers)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_brooks_corey_c_o2_a0b9a287256e9039e20c19f9d6bf48965}{dGds}}(\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{comment}{//\ maximum\ absolute\ value\ returned\ by\ dfdS}}
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_brooks_corey_c_o2_a22e5a8412d6be43b44b973c7d5998a2c}{MaxFractionalFlowDerivative}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \ \ \ \ \textcolor{comment}{//\ linearized\ fractional\ flow\ derivative}}
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_brooks_corey_c_o2_a7fdaacd6f69d7f7ca590374c15dbac80}{ShockSpeed}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_brooks_corey_c_o2_a7d5a0f2be6c5cc05c0a57d14c0025c23}{ShockHeight}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_brooks_corey_c_o2_a57b6dd55f17473c3aa9a6b14242eacd5}{Out}}(\ uint32\_t\ phase\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{comment}{//\ brooks\ corey\ parameters}}
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ Lambda(\ \textcolor{keywordtype}{double}\ lambda\ );}
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keywordtype}{double}\ \ Lambda()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ Pd(\ \textcolor{keywordtype}{double}\ pd\ );}
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keywordtype}{double}\ \ Pd()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ pd\_key\_,\ pc\_max\_key\_,\ lamda\_key\_;}
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ lambda\_,\ entry\_pressure\_,pc\_max\_;}
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ default\_capillary\_pressure\_max\_;}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ \};}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \}\ \textcolor{comment}{//\ end\ namespace\ csmp}}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

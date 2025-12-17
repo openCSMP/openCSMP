@@ -1,0 +1,1073 @@
+\doxysection{binary\+Read\+Write.\+h}
+\hypertarget{binary_read_write_8h_source}{}\label{binary_read_write_8h_source}\index{source/includes/model/binaryReadWrite.h@{source/includes/model/binaryReadWrite.h}}
+\mbox{\hyperlink{binary_read_write_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_READ\_WRITE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_READ\_WRITE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_property_database_8h}{"{}PropertyDatabase.h"{}}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_array_variable_8h}{"{}ArrayVariable.h"{}}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_flagged_array_variable_8h}{"{}FlaggedArrayVariable.h"{}}}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00012\ \textcolor{comment}{@file\ binaryReadWrite.h}}
+\DoxyCodeLine{00013\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{constexpr}\ size\_t\ CSMP\_BINARY\_FILE\_HDR\_SIZE(8+1);\ \textcolor{comment}{//\ JCK\ header\ for\ data\ record\ in\ file\ +\ null\ terminator}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ \ \ Helper\ class\ for\ reading\ fixed-\/size\ strings\ from\ binary\ files}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ \ \ \ \ \ defines\ strings\ that\ are\ used\ to\ read\ the\ possible\ datablocks\ that\ are\ abbreviated\ as}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ \ \ \ \ \ \ \ VSETCORD}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ \ \ \ \ \ \ \ VSETPELT}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ \ \ \ \ \ \ \ VSETPLST}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ \ \ \ \ \ \ \ VSETPFVT}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ \ \ \ \ \ \ VSETBFLG}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ \ \ \ \ \ \ \ VSETHEDR}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ \ \ \ \ \ \ \ VSETCONN}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ \ \ \ \ \ \ \ VSETFOTR}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ \ \ \ \ \ \ \ VSETMTRL\ -\/\ new\ for\ pmtrl\ record}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ \ \ \ \ BoundaryInterface}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ \ \ \ \ \ \ \ BNDFHEDR\ -\/\ file\ header}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ \ \ \ \ \ \ \ BOUNDARY\ -\/\ object\ description}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ \ \ \ \ ONE\_BDRY}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ \ \ \ \ \ \ \ BOUNDVAR\ -\/\ variable\ datablock}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ \ \ \ \ BNDFFOTR\ -\/\ file\ footer}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ \ \ \ SplitBoundaryInterface}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ \ \ \ \ \ \ \ SBDFHEDR}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ \ \ \ \ \ \ \ SPLITBDRY}}
+\DoxyCodeLine{00041\ \textcolor{comment}{\ \ \ \ \ \ \ \ ONE\_BDRY}}
+\DoxyCodeLine{00042\ \textcolor{comment}{\ \ \ \ \ \ \ \ SBDRYVAR}}
+\DoxyCodeLine{00043\ \textcolor{comment}{\ \ \ \ \ \ \ \ SBDFFOTR}}
+\DoxyCodeLine{00044\ \textcolor{comment}{}}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ \ \ \ RegionInterface}}
+\DoxyCodeLine{00046\ \textcolor{comment}{\ \ \ \ \ \ \ \ REGGHEDR}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ \ \ \ \ \ \ \ UNIQREGN}}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ \ \ \ \ \ \ \ ONE\_REGN}}
+\DoxyCodeLine{00049\ \textcolor{comment}{\ \ \ \ \ \ \ \ NONUREGN}}
+\DoxyCodeLine{00050\ \textcolor{comment}{\ \ \ \ \ \ \ \ MODELVARS}}
+\DoxyCodeLine{00051\ \textcolor{comment}{\ \ \ \ \ \ \ \ REGFFOTR}}
+\DoxyCodeLine{00052\ \textcolor{comment}{\ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00053\ \textcolor{comment}{\ \ \ \ NodeManifolds}}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ \ \ \ \ \ \ \ NDMFHEDR}}
+\DoxyCodeLine{00055\ \textcolor{comment}{\ \ \ \ \ \ \ \ MANIFLDS}}
+\DoxyCodeLine{00056\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00057\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_binary_file_section_read}{BinaryFileSectionRead}}}
+\DoxyCodeLine{00058\ \{}
+\DoxyCodeLine{00059\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00060\ \ \ \ \ BinaryFileSectionRead(\ std::fstream\&\ fp,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ header\ );}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keywordtype}{char}\ hdr\_[CSMP\_BINARY\_FILE\_HDR\_SIZE];}
+\DoxyCodeLine{00064\ \ \ \ \ std::fstream\&\ fp\_;}
+\DoxyCodeLine{00065\ \};}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \textcolor{comment}{///\ Helper\ class\ to\ write\ sections\ to\ a\ binary\ file}}
+\DoxyCodeLine{00069\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_binary_file_section_write}{BinaryFileSectionWrite}}\ \{}
+\DoxyCodeLine{00070\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00071\ \ \ \ \ BinaryFileSectionWrite(\ std::fstream\&\ fp,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ header\ );}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00074\ \ \ \ \ std::fstream\&\ fp\_;}
+\DoxyCodeLine{00075\ \};}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00079\ \textcolor{comment}{@addtogroup\ CSMPglobalFunctions}}
+\DoxyCodeLine{00080\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \textcolor{comment}{///\ checks\ whether\ the\ integer\ value\ fits\ within\ the\ range\ of\ a\ size\_t\ \ and\ returns\ it}}
+\DoxyCodeLine{00083\ \mbox{\hyperlink{namespacecsmp_af7250249e89b01e108f2bd068a0a53da}{size\_t}}\ \mbox{\hyperlink{namespacecsmp_af7250249e89b01e108f2bd068a0a53da}{readContainerSize}}(\ std::fstream\&\ fp\ );}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ T>}
+\DoxyCodeLine{00086\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp_a78408a68c035874daa7357ac9797041f}{binaryFileWrite}}(std::fstream\&\ fp,\ \textcolor{keyword}{const}\ std::vector<T>\&\ stl\_ctner);}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ \mbox{\hyperlink{namespacecsmp_a07feee7483c197b7b6c1c5e789bdc756}{T}}>}
+\DoxyCodeLine{00089\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp_a07feee7483c197b7b6c1c5e789bdc756}{binaryFileRead}}(\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{fstream}}\&\ \mbox{\hyperlink{namespacecsmp}{fp}},\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{T}}>\&\ \mbox{\hyperlink{namespacecsmp}{stl\_ctner}});}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00092\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp_a78408a68c035874daa7357ac9797041f}{binaryFileWrite}}(std::fstream\&\ fp,\ \textcolor{keyword}{const}\ std::deque<T>\&\ stl\_ctner);}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ \mbox{\hyperlink{namespacecsmp_a07feee7483c197b7b6c1c5e789bdc756}{T}}>}
+\DoxyCodeLine{00095\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp_a07feee7483c197b7b6c1c5e789bdc756}{binaryFileRead}}(\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{fstream}}\&\ \mbox{\hyperlink{namespacecsmp}{fp}},\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{deque}}<\mbox{\hyperlink{namespacecsmp}{T}}>\&\ \mbox{\hyperlink{namespacecsmp}{stl\_ctner}});}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ T>}
+\DoxyCodeLine{00098\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp_a39587cb0cc8b662f39d9587d6fedb66f}{binaryFileWrite}}(std::fstream\&\ fp,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp_a39587cb0cc8b662f39d9587d6fedb66f}{std}}::\mbox{\hyperlink{namespacecsmp_a39587cb0cc8b662f39d9587d6fedb66f}{deque}}<\mbox{\hyperlink{namespacecsmp_a39587cb0cc8b662f39d9587d6fedb66f}{std}}::\mbox{\hyperlink{namespacecsmp_a39587cb0cc8b662f39d9587d6fedb66f}{vector}}<\mbox{\hyperlink{namespacecsmp_a39587cb0cc8b662f39d9587d6fedb66f}{T}}>\ >\&\ \mbox{\hyperlink{namespacecsmp_a39587cb0cc8b662f39d9587d6fedb66f}{stl\_ctner}});}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ \mbox{\hyperlink{namespacecsmp_a07feee7483c197b7b6c1c5e789bdc756}{T}}>}
+\DoxyCodeLine{00101\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp_a07feee7483c197b7b6c1c5e789bdc756}{binaryFileRead}}(\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{fstream}}\&\ \mbox{\hyperlink{namespacecsmp}{fp}},\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{deque}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{T}}>\ >\&\ \mbox{\hyperlink{namespacecsmp}{stl\_ctner}});}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \textcolor{comment}{//\ maps}}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ M,\ \textcolor{keyword}{class}\ T>}
+\DoxyCodeLine{00106\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp_a00dea565b4cc369d30c529140c23e648}{binaryFileWrite}}(std::fstream\&\ fp,\ \textcolor{keyword}{const}\ std::map<M,\ T>\&\ stl\_ctner);}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ M,\ \textcolor{keyword}{class}\ T>}
+\DoxyCodeLine{00109\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp_a00dea565b4cc369d30c529140c23e648}{binaryFileWrite}}(std::fstream\&\ fp,\ \textcolor{keyword}{const}\ std::unordered\_map<M,\ T>\&\ stl\_ctner);}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ \mbox{\hyperlink{namespacecsmp_a07feee7483c197b7b6c1c5e789bdc756}{M}},\ \textcolor{keyword}{class}\ \mbox{\hyperlink{namespacecsmp_a07feee7483c197b7b6c1c5e789bdc756}{T}}>}
+\DoxyCodeLine{00112\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp_a07feee7483c197b7b6c1c5e789bdc756}{binaryFileRead}}(\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{fstream}}\&\ \mbox{\hyperlink{namespacecsmp}{fp}},\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{map}}<\mbox{\hyperlink{namespacecsmp}{M}},\ \mbox{\hyperlink{namespacecsmp}{T}}>\&\ \mbox{\hyperlink{namespacecsmp}{stl\_ctner}});}
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00114\ \textcolor{comment}{//\ maps\ of\ vectors}}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ M,\ \textcolor{keyword}{class}\ T>}
+\DoxyCodeLine{00117\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp_ac95b6a49363c4a33733d04d4cfa18817}{binaryFileWrite}}(std::fstream\&\ fp,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp_ac95b6a49363c4a33733d04d4cfa18817}{std}}::\mbox{\hyperlink{namespacecsmp_ac95b6a49363c4a33733d04d4cfa18817}{map}}<\mbox{\hyperlink{namespacecsmp_ac95b6a49363c4a33733d04d4cfa18817}{M}},\ \mbox{\hyperlink{namespacecsmp_ac95b6a49363c4a33733d04d4cfa18817}{std}}::\mbox{\hyperlink{namespacecsmp_ac95b6a49363c4a33733d04d4cfa18817}{vector}}<\mbox{\hyperlink{namespacecsmp_ac95b6a49363c4a33733d04d4cfa18817}{T}}>\ >\&\ \mbox{\hyperlink{namespacecsmp_ac95b6a49363c4a33733d04d4cfa18817}{stl\_ctner}});}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ \mbox{\hyperlink{namespacecsmp_a07feee7483c197b7b6c1c5e789bdc756}{M}},\ \textcolor{keyword}{class}\ \mbox{\hyperlink{namespacecsmp_a07feee7483c197b7b6c1c5e789bdc756}{T}}>}
+\DoxyCodeLine{00120\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp_a07feee7483c197b7b6c1c5e789bdc756}{binaryFileRead}}(\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{fstream}}\&\ \mbox{\hyperlink{namespacecsmp}{fp}},\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{map}}<\mbox{\hyperlink{namespacecsmp}{M}},\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{T}}>\ >\&\ \mbox{\hyperlink{namespacecsmp}{stl\_ctner}});}
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ \textcolor{comment}{//\ character\ strings}}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ \textcolor{keywordtype}{bool}\ binaryFileWrite(\ std::fstream\&\ fp,\ \textcolor{keyword}{const}\ std::string\&\ );}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ \textcolor{keywordtype}{bool}\ binaryFileRead(\ std::fstream\&\ fp,\ std::string\&\ );}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00129\ \textcolor{keywordtype}{bool}\ binaryFileWrite(\ std::fstream\&\ fp,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ str);}
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ \textcolor{keywordtype}{bool}\ binaryFileRead(\ std::fstream\&\ fp,\ \textcolor{keywordtype}{char}\ str[]);}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00134\ \textcolor{comment}{//\ OUTPUT\ OF\ DISCRETISED\ CSMP\ VARIABLES\ TO\ FILE}}
+\DoxyCodeLine{00135\ }
+\DoxyCodeLine{00136\ \textcolor{comment}{///\ additions\ by\ P.\ Lang\ (2012);\ SKM\ @todo\ explain\ what\ this\ is\ good\ for}}
+\DoxyCodeLine{00137\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp_1_1fem_data_output_dispatch}{femDataOutputDispatch}}\ \{}
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00139\ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ Var>}
+\DoxyCodeLine{00140\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ initVariable(\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}},\ Var\&\ )\ \{\}}
+\DoxyCodeLine{00141\ }
+\DoxyCodeLine{00142\ \textcolor{keyword}{template}<>}
+\DoxyCodeLine{00143\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ initVariable(\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ key,\ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\&\ var\ )}
+\DoxyCodeLine{00144\ \{\ var.Resize(\ key.dataDepth\ );\ \}}
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00146\ \textcolor{keyword}{template}<>}
+\DoxyCodeLine{00147\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ initVariable(\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ key,\ \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{FlaggedArrayVariable}}\&\ var\ )}
+\DoxyCodeLine{00148\ \{\ var.Resize(\ key.dataDepth\ );\ \}}
+\DoxyCodeLine{00149\ }
+\DoxyCodeLine{00150\ \}\ \textcolor{comment}{//\ femDataOutputDispatch}}
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00152\ }
+\DoxyCodeLine{00153\ }
+\DoxyCodeLine{00154\ \ \ \textcolor{comment}{///\ domain\ (Model,\ Region...)\ variables\ binary\ IO}}
+\DoxyCodeLine{00155\ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ V,\ \textcolor{keyword}{class}\ D,\ uint32\_t\ dim>}
+\DoxyCodeLine{00156\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp_a72450befe9a30a9e5854713ee8bce6e9}{variablesOut}}(\ std::fstream\&\ fp,\ \textcolor{keyword}{const}\ D\&\ domain,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&\ pref,\ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\_TYPE}}\ vtype\ )}
+\DoxyCodeLine{00157\ \{}
+\DoxyCodeLine{00158\ \ \ size\_t\ vcount(\ pref.VariableCount(\ domain.Placement(),\ vtype\ )\ );}
+\DoxyCodeLine{00159\ \ \ fp.write(\ (\textcolor{keywordtype}{char}*)\&vcount,\ \textcolor{keyword}{sizeof}(\ size\_t\ )\ );}
+\DoxyCodeLine{00160\ \ \ std::set<std::string>\ propList;}
+\DoxyCodeLine{00161\ \ \ pref.ListVariables(\ domain.Placement(),\ vtype,\ propList\ );}
+\DoxyCodeLine{00162\ \ \ \textcolor{keywordflow}{for}\ (\ std::set<std::string>::const\_iterator\ it(\ propList.begin()\ );\ it\ !=\ propList.end();\ ++it\ )}
+\DoxyCodeLine{00163\ \ \ \{}
+\DoxyCodeLine{00164\ \ \ \ \ V\ var;}
+\DoxyCodeLine{00165\ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ key(\ pref.StorageKey(\ it-\/>c\_str()\ )\ );}
+\DoxyCodeLine{00166\ \ \ \ \ \mbox{\hyperlink{namespacecsmp_1_1fem_data_output_dispatch}{femDataOutputDispatch}}::initVariable(\ key,\ var\ );}
+\DoxyCodeLine{00167\ \ \ \ \ domain.Read(\ key,\ var\ );}
+\DoxyCodeLine{00168\ \ \ \ \ binaryFileWrite(\ fp,\ it-\/>c\_str()\ );}
+\DoxyCodeLine{00169\ \ \ \ \ \textcolor{keywordflow}{if}\ (\ !var.Out(\ fp\ )\ )}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00171\ \ \ \}}
+\DoxyCodeLine{00172\ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00173\ \}}
+\DoxyCodeLine{00174\ }
+\DoxyCodeLine{00175\ }
+\DoxyCodeLine{00176\ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ V,\ \textcolor{keyword}{class}\ D,\ uint32\_t\ dim>}
+\DoxyCodeLine{00177\ \textcolor{keywordtype}{bool}\ variablesIn(\ std::fstream\&\ fp,\ D\&\ domain,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&\ pref,\ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\_TYPE}}\ )}
+\DoxyCodeLine{00178\ \{}
+\DoxyCodeLine{00179\ \ \ size\_t\ vcount(\ -\/1\ );}
+\DoxyCodeLine{00180\ \ \ fp.read(\ \textcolor{keyword}{reinterpret\_cast}<\textcolor{keywordtype}{char}*>(\&vcount),\ \textcolor{keyword}{sizeof}(\ size\_t\ )\ );}
+\DoxyCodeLine{00181\ \ \ \textcolor{keywordflow}{for}\ (\ size\_t\ i(\ 0\ );\ i\ <\ vcount;\ ++i\ )}
+\DoxyCodeLine{00182\ \ \ \{}
+\DoxyCodeLine{00183\ \ \ \ \ V\ var;}
+\DoxyCodeLine{00184\ \ \ \ \ \textcolor{keywordtype}{char}\ propName[\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga8413f7c3b4f238c5a98a846198d49469}{NAME\_STRING}}];}
+\DoxyCodeLine{00185\ \ \ \ \ binaryFileRead(\ fp,\ propName\ );}
+\DoxyCodeLine{00186\ \ \ \ \ \textcolor{keywordflow}{if}\ (\ pref.IsDefined(\ propName\ )\ )\ \{}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ key(\ pref.StorageKey(\ propName\ )\ );}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp_1_1fem_data_output_dispatch}{femDataOutputDispatch}}::initVariable(\ key,\ var\ );}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\ !var.In(\ fp\ )\ )}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ domain.Store(\ key,\ var\ );}
+\DoxyCodeLine{00192\ \ \ \ \ \}\textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\ !var.In(\ fp\ )\ )}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00195\ \ \ \ \ \}}
+\DoxyCodeLine{00196\ \ \ \}}
+\DoxyCodeLine{00197\ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00198\ \}}
+\DoxyCodeLine{00199\ }
+\DoxyCodeLine{00200\ }
+\DoxyCodeLine{00201\ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ D,\ uint32\_t\ dim>}
+\DoxyCodeLine{00202\ \textcolor{keywordtype}{bool}\ domainVariablesOut(\ std::fstream\&\ fp,\ \textcolor{keyword}{const}\ D\&\ domain,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&\ pref\ )}
+\DoxyCodeLine{00203\ \{}
+\DoxyCodeLine{00204\ \ \ \textcolor{keywordflow}{if}\ (\ !variablesOut<\mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}>(\ fp,\ domain,\ pref,\ SCALAR\ )\ )}
+\DoxyCodeLine{00205\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00206\ \ \ \textcolor{keywordflow}{if}\ (\ !variablesOut<\mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\ >(\ fp,\ domain,\ pref,\ VECTOR\ )\ )}
+\DoxyCodeLine{00207\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00208\ \ \ \textcolor{keywordflow}{if}\ (\ !variablesOut<\mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<dim>\ >(\ fp,\ domain,\ pref,\ TENSOR\ )\ )}
+\DoxyCodeLine{00209\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00210\ \ \ \textcolor{keywordflow}{if}\ (\ !variablesOut<\mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}>(\ fp,\ domain,\ pref,\ ARRAY\ )\ )}
+\DoxyCodeLine{00211\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00212\ \ \ \textcolor{keywordflow}{if}\ (\ !variablesOut<\mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{FlaggedArrayVariable}}>(\ fp,\ domain,\ pref,\ FLAGGEDARRAY\ )\ )}
+\DoxyCodeLine{00213\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00214\ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00215\ \}}
+\DoxyCodeLine{00216\ }
+\DoxyCodeLine{00217\ }
+\DoxyCodeLine{00218\ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ D,\ uint32\_t\ dim>}
+\DoxyCodeLine{00219\ \textcolor{keywordtype}{bool}\ domainVariablesIn(\ std::fstream\&\ fp,\ D\&\ domain,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&\ pref\ )}
+\DoxyCodeLine{00220\ \{}
+\DoxyCodeLine{00221\ \ \ \textcolor{keywordflow}{if}\ (\ !variablesIn<\mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}>(\ fp,\ domain,\ pref,\ SCALAR\ )\ )}
+\DoxyCodeLine{00222\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00223\ \ \ \textcolor{keywordflow}{if}\ (\ !variablesIn<\mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\ >(\ fp,\ domain,\ pref,\ VECTOR\ )\ )}
+\DoxyCodeLine{00224\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00225\ \ \ \textcolor{keywordflow}{if}\ (\ !variablesIn<\mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<dim>\ >(\ fp,\ domain,\ pref,\ TENSOR\ )\ )}
+\DoxyCodeLine{00226\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00227\ \ \ \textcolor{keywordflow}{if}\ (\ !variablesIn<\mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}>(\ fp,\ domain,\ pref,\ ARRAY\ )\ )}
+\DoxyCodeLine{00228\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00229\ \ \ \textcolor{keywordflow}{if}\ (\ !variablesIn<\mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{FlaggedArrayVariable}}>(\ fp,\ domain,\ pref,\ FLAGGEDARRAY\ )\ )}
+\DoxyCodeLine{00230\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00231\ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00232\ \}}
+\DoxyCodeLine{00233\ }
+\DoxyCodeLine{00234\ }
+\DoxyCodeLine{00235\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00236\ \textcolor{comment}{\ \ \ \ selective\ variable\ reader,\ that\ extracts\ only\ those\ variables\ from\ file\ whose\ names\ are\ contained\ in\ the\ target\ set}}
+\DoxyCodeLine{00237\ \textcolor{comment}{\ \ \ \ @author\ SKM}}
+\DoxyCodeLine{00238\ \textcolor{comment}{\ \ \ \ @date\ 6/9/2021}}
+\DoxyCodeLine{00239\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00240\ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ V,\ \textcolor{keyword}{class}\ D,\ uint32\_t\ dim>}
+\DoxyCodeLine{00241\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp_aa36e60a8e5675833a8c625a542b4c0d4}{selectedVariablesIn}}(\ std::fstream\&\ fp,\ D\&\ domain,}
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&\ pref,}
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\_TYPE}},\ \textcolor{keyword}{const}\ std::set<std::string>\&\ selection\ )}
+\DoxyCodeLine{00244\ \{}
+\DoxyCodeLine{00245\ \ \ size\_t\ vcount(\ -\/1\ );}
+\DoxyCodeLine{00246\ \ \ fp.read(\ \textcolor{keyword}{reinterpret\_cast}<\textcolor{keywordtype}{char}*>(\&vcount),\ \textcolor{keyword}{sizeof}(\ size\_t\ )\ );}
+\DoxyCodeLine{00247\ \ \ \textcolor{keywordflow}{for}\ (\ size\_t\ i(\ 0\ );\ i\ <\ vcount;\ ++i\ )}
+\DoxyCodeLine{00248\ \ \ \ \ \{}
+\DoxyCodeLine{00249\ \ \ \ \ \ \ V\ var;}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ propName[\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga8413f7c3b4f238c5a98a846198d49469}{NAME\_STRING}}];}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ binaryFileRead(\ fp,\ propName\ );}
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\ selection.find(\ propName\ )\ !=\ selection.end()\ \&\&\ pref.IsDefined(\ propName\ )\ )\ \{}
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ key(\ pref.StorageKey(\ propName\ )\ );}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp_1_1fem_data_output_dispatch}{femDataOutputDispatch}}::initVariable(\ key,\ var\ );}
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\ !var.In(\ fp\ )\ )}
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ domain.Store(\ key,\ var\ );}
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \}\textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\ !var.In(\ fp\ )\ )}
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00262\ \ \ \ \ \}}
+\DoxyCodeLine{00263\ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00264\ \}}
+\DoxyCodeLine{00265\ }
+\DoxyCodeLine{00266\ }
+\DoxyCodeLine{00267\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00268\ \textcolor{comment}{\ \ \ \ selective\ variable\ reader,\ that\ extracts\ only\ those\ variables\ from\ file\ whose\ names\ are\ contained\ in\ the\ target\ set}}
+\DoxyCodeLine{00269\ \textcolor{comment}{\ \ \ \ @author\ SKM}}
+\DoxyCodeLine{00270\ \textcolor{comment}{\ \ \ \ @date\ 6/9/2021}}
+\DoxyCodeLine{00271\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00272\ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ D,\ uint32\_t\ dim>}
+\DoxyCodeLine{00273\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp_a193eb0207bf8980dc7e82153e05274e1}{selectedDomainVariablesIn}}(\ std::fstream\&\ fp,\ D\&\ domain,}
+\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&\ pref,}
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::set<std::string>\&\ selection\ )}
+\DoxyCodeLine{00276\ \{}
+\DoxyCodeLine{00277\ \ \ \textcolor{keywordflow}{if}\ (\ !selectedVariablesIn<\mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}>(\ fp,\ domain,\ pref,\ SCALAR,\ selection\ )\ )}
+\DoxyCodeLine{00278\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00279\ \ \ \textcolor{keywordflow}{if}\ (\ !selectedVariablesIn<\mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\ >(\ fp,\ domain,\ pref,\ VECTOR,\ selection\ )\ )}
+\DoxyCodeLine{00280\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00281\ \ \ \textcolor{keywordflow}{if}\ (\ !selectedVariablesIn<\mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<dim>\ >(\ fp,\ domain,\ pref,\ TENSOR,\ selection\ )\ )}
+\DoxyCodeLine{00282\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00283\ \ \ \textcolor{keywordflow}{if}\ (\ !selectedVariablesIn<\mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}>(\ fp,\ domain,\ pref,\ ARRAY,\ selection\ )\ )}
+\DoxyCodeLine{00284\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00285\ \ \ \textcolor{keywordflow}{if}\ (\ !selectedVariablesIn<\mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{FlaggedArrayVariable}}>(\ fp,\ domain,\ pref,\ FLAGGEDARRAY,\ selection\ )\ )}
+\DoxyCodeLine{00286\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00287\ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00288\ \}}
+\DoxyCodeLine{00289\ }
+\DoxyCodeLine{00290\ }
+\DoxyCodeLine{00291\ }
+\DoxyCodeLine{00292\ }
+\DoxyCodeLine{00293\ }
+\DoxyCodeLine{00294\ }
+\DoxyCodeLine{00295\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00296\ \textcolor{comment}{}}
+\DoxyCodeLine{00297\ \textcolor{comment}{Uses\ the\ C-\/style\ fwrite()\ function\ for\ binary\ file\ IO\ to\ write\ the\ contents}}
+\DoxyCodeLine{00298\ \textcolor{comment}{of\ an\ STL\ deque\ to\ a\ binary\ file.\ The\ data\ segment\ is\ preceded\ by\ an}}
+\DoxyCodeLine{00299\ \textcolor{comment}{'unsigned\ long'\ number\ which\ determines\ the\ number\ of\ objects\ which\ are}}
+\DoxyCodeLine{00300\ \textcolor{comment}{written\ to\ file.}}
+\DoxyCodeLine{00301\ \textcolor{comment}{}}
+\DoxyCodeLine{00302\ \textcolor{comment}{@section\ arguments\ Input\ Arguments}}
+\DoxyCodeLine{00303\ \textcolor{comment}{}}
+\DoxyCodeLine{00304\ \textcolor{comment}{A\ file\ pointer\ of\ a\ binary\ file\ opened\ in\ write\ mode\ (e.g.,\ "{}wb"{})\ and\ a}}
+\DoxyCodeLine{00305\ \textcolor{comment}{constant\ reference\ to\ the\ STL\ deque\ which\ will\ be\ written\ to\ file.}}
+\DoxyCodeLine{00306\ \textcolor{comment}{}}
+\DoxyCodeLine{00307\ \textcolor{comment}{@return\ returns\ a\ boolean\ indicating\ whether\ all\ data\ have\ been}}
+\DoxyCodeLine{00308\ \textcolor{comment}{written\ correctly\ to\ the\ file.}}
+\DoxyCodeLine{00309\ \textcolor{comment}{}}
+\DoxyCodeLine{00310\ \textcolor{comment}{@section\ implementation\ Implementation}}
+\DoxyCodeLine{00311\ \textcolor{comment}{}}
+\DoxyCodeLine{00312\ \textcolor{comment}{Uses\ the\ ANSI\ standard\ C\ function\ fwrite().}}
+\DoxyCodeLine{00313\ \textcolor{comment}{}}
+\DoxyCodeLine{00314\ \textcolor{comment}{@section\ application\ Application}}
+\DoxyCodeLine{00315\ \textcolor{comment}{}}
+\DoxyCodeLine{00316\ \textcolor{comment}{To\ efficiently\ write\ std::\ container\ data\ to\ a\ binary\ file.}}
+\DoxyCodeLine{00317\ \textcolor{comment}{}}
+\DoxyCodeLine{00318\ \textcolor{comment}{@section\ messages\ Messages}}
+\DoxyCodeLine{00319\ \textcolor{comment}{}}
+\DoxyCodeLine{00320\ \textcolor{comment}{If\ the\ file\ pointer\ is\ invalid,\ method\ will\ quit,\ reporting\ an\ error.}}
+\DoxyCodeLine{00321\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00322\ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ T>}
+\DoxyCodeLine{00323\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp_a78408a68c035874daa7357ac9797041f}{binaryFileWrite}}(\ std::fstream\&\ fp,\ \textcolor{keyword}{const}\ std::vector<T>\&\ stl\_ctner\ )}
+\DoxyCodeLine{00324\ \{}
+\DoxyCodeLine{00325\ \ \ \ \ \textcolor{keyword}{const}\ size\_t\ \ \ \ bytes\ =\ \textcolor{keyword}{sizeof}(T);}
+\DoxyCodeLine{00326\ \ \ \ \ \textcolor{keyword}{const}\ size\_t\ \ \ \ elements(stl\_ctner.size());}
+\DoxyCodeLine{00327\ }
+\DoxyCodeLine{00328\ \ \ \textcolor{keywordflow}{if}\ (\ stl\_ctner.empty()\ )\ \{}
+\DoxyCodeLine{00329\ \ \ \ \ \ \ \ std::cerr\ <<\textcolor{stringliteral}{"{}\(\backslash\)nbinaryFileWrite(vector):\ WARNING:\ container\ is\ empty."{}}<<\ std::endl;}
+\DoxyCodeLine{00330\ \ \ \ \ \ \ \ \ \ fp.write(\ \textcolor{keyword}{reinterpret\_cast}<\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*>(\&elements),\ \textcolor{keyword}{sizeof}(size\_t)\ );}
+\DoxyCodeLine{00331\ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00332\ \ \ \ \ \}}
+\DoxyCodeLine{00333\ \ \ \ \ \textcolor{keywordflow}{if}\ (!fp.is\_open())\ \{}
+\DoxyCodeLine{00334\ \ \ \ \ \ \ std::cerr\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)nbool\ binaryFileWrite(vector):\ ERROR:\ invalid\ file\ pointer."{}}\ <<\ std::endl;}
+\DoxyCodeLine{00335\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00336\ \ \ \ \ \}}
+\DoxyCodeLine{00337\ }
+\DoxyCodeLine{00338\ \ \ \ \ \textcolor{comment}{//\ writing\ the\ size\ of\ the\ object}}
+\DoxyCodeLine{00339\ \ \ \ \ fp.write(\ \textcolor{keyword}{reinterpret\_cast}<\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*>(\&elements),\ \textcolor{keyword}{sizeof}(size\_t)\ );}
+\DoxyCodeLine{00340\ }
+\DoxyCodeLine{00341\ \ \ \ \ \textcolor{comment}{//\ writing\ all\ elements}}
+\DoxyCodeLine{00342\ \ \ \textcolor{keywordflow}{if}\ (\ elements\ >=\ 1\ )}
+\DoxyCodeLine{00343\ \textcolor{comment}{//\ \ \ \ fp.write(\ reinterpret\_cast<const\ char*>(\&stl\_ctner[0]),\ bytes\ *\ elements\ );}}
+\DoxyCodeLine{00344\ \ \ \ \ fp.write(\ \textcolor{keyword}{reinterpret\_cast}<\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*>(stl\_ctner.data()),\ bytes\ *\ elements\ );}
+\DoxyCodeLine{00345\ }
+\DoxyCodeLine{00346\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00347\ \}}
+\DoxyCodeLine{00348\ }
+\DoxyCodeLine{00349\ }
+\DoxyCodeLine{00350\ \textcolor{comment}{///\ deque\ version}}
+\DoxyCodeLine{00351\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00352\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp_a78408a68c035874daa7357ac9797041f}{binaryFileWrite}}(\ std::fstream\&\ fp,\ \textcolor{keyword}{const}\ std::deque<T>\&\ stl\_ctner\ )}
+\DoxyCodeLine{00353\ \{}
+\DoxyCodeLine{00354\ \ \ \ \ \textcolor{keyword}{const}\ size\_t\ bytes\ =\ \textcolor{keyword}{sizeof}(T);}
+\DoxyCodeLine{00355\ \ \ \ \ \textcolor{keyword}{const}\ size\_t\ elements\ =\ stl\_ctner.size();}
+\DoxyCodeLine{00356\ }
+\DoxyCodeLine{00357\ \ \ \textcolor{keywordflow}{if}\ (\ stl\_ctner.empty()\ )\ \{}
+\DoxyCodeLine{00358\ \ \ \ \ \ \ \ std::cerr\ <<\textcolor{stringliteral}{"{}\(\backslash\)nbinaryFileWrite(deque):\ WARNING:\ container\ is\ empty."{}}<<\ std::endl;}
+\DoxyCodeLine{00359\ \ \ \ \ \ \ \ \ \ fp.write(\ \textcolor{keyword}{reinterpret\_cast}<\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*>(\&elements),\ \textcolor{keyword}{sizeof}(size\_t)\ );}
+\DoxyCodeLine{00360\ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00361\ \ \ \ \ \}}
+\DoxyCodeLine{00362\ \ \ \ \ \textcolor{keywordflow}{if}\ (!fp.is\_open())\ \{}
+\DoxyCodeLine{00363\ \ \ \ \ \ \ std::cerr\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)nbool\ binaryFileWrite(deque):\ ERROR:\ invalid\ file\ pointer."{}}\ <<\ std::endl;}
+\DoxyCodeLine{00364\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00365\ \ \ \ \ \}}
+\DoxyCodeLine{00366\ }
+\DoxyCodeLine{00367\ \ \ \ \ \textcolor{comment}{//\ writing\ the\ size\ of\ the\ object}}
+\DoxyCodeLine{00368\ \ \ \ \ fp.write(\ \textcolor{keyword}{reinterpret\_cast}<\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*>(\&elements),\ \textcolor{keyword}{sizeof}(size\_t)\ );}
+\DoxyCodeLine{00369\ }
+\DoxyCodeLine{00370\ \ \ \ \ \textcolor{comment}{//\ writing\ all\ elements}}
+\DoxyCodeLine{00371\ \ \ \textcolor{keywordflow}{if}\ (\ elements\ >=\ 1\ )}
+\DoxyCodeLine{00372\ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\ \textcolor{keyword}{typename}\ std::deque<T>::const\_iterator\ it\ =\ stl\_ctner.begin();\ it\ !=\ stl\_ctner.end();\ it++\ )}
+\DoxyCodeLine{00373\ \ \ \ \ \ \ \ \ \ \ fp.write(\textcolor{keyword}{reinterpret\_cast}<\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*>(\&(*it)),\ bytes);}
+\DoxyCodeLine{00374\ }
+\DoxyCodeLine{00375\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00376\ \}}
+\DoxyCodeLine{00377\ }
+\DoxyCodeLine{00378\ }
+\DoxyCodeLine{00379\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00380\ \textcolor{comment}{}}
+\DoxyCodeLine{00381\ \textcolor{comment}{Reads\ data\ from\ a\ binary\ file\ into\ an\ STL\ deque\ which\ is\ erased\ before}}
+\DoxyCodeLine{00382\ \textcolor{comment}{adding\ the\ data,\ if\ it\ already\ contained\ any\ data.\ How\ many}}
+\DoxyCodeLine{00383\ \textcolor{comment}{records\ are\ read\ is\ specified\ by\ an\ 'unsigned\ long'\ number\ which\ precedes}}
+\DoxyCodeLine{00384\ \textcolor{comment}{the\ dataset.}}
+\DoxyCodeLine{00385\ \textcolor{comment}{}}
+\DoxyCodeLine{00386\ \textcolor{comment}{@section\ arguments\ Input\ Arguments}}
+\DoxyCodeLine{00387\ \textcolor{comment}{}}
+\DoxyCodeLine{00388\ \textcolor{comment}{A\ pointer\ to\ a\ binary\ file\ opened\ in\ read\ binary\ mode\ ("{}rb"{}),\ and\ a}}
+\DoxyCodeLine{00389\ \textcolor{comment}{reference\ to\ an\ STL\ deque.}}
+\DoxyCodeLine{00390\ \textcolor{comment}{}}
+\DoxyCodeLine{00391\ \textcolor{comment}{@return\ returns\ the\ boolean\ 'true'\ if\ the\ number\ of\ data\ records}}
+\DoxyCodeLine{00392\ \textcolor{comment}{which\ precedes\ the\ dataset\ in\ the\ file\ has\ been\ read\ correctly.\ If\ the}}
+\DoxyCodeLine{00393\ \textcolor{comment}{file\ pointer\ is\ invalid\ or\ less\ data\ are\ read,\ the\ function\ returns\ false.}}
+\DoxyCodeLine{00394\ \textcolor{comment}{}}
+\DoxyCodeLine{00395\ \textcolor{comment}{@section\ implementation\ Implementation}}
+\DoxyCodeLine{00396\ \textcolor{comment}{}}
+\DoxyCodeLine{00397\ \textcolor{comment}{Uses\ the\ ANSI\ C\ function\ fread().\ The\ deque\ which\ will\ hold\ the\ data}}
+\DoxyCodeLine{00398\ \textcolor{comment}{is\ erased\ if\ it\ is\ not\ empty,\ and\ storage\ is\ reserved\ for\ the\ new\ number}}
+\DoxyCodeLine{00399\ \textcolor{comment}{of\ elements\ which\ is\ read\ from\ file.\ Then\ the\ elements\ are\ read\ and\ the}}
+\DoxyCodeLine{00400\ \textcolor{comment}{deque\ is\ returned.}}
+\DoxyCodeLine{00401\ \textcolor{comment}{}}
+\DoxyCodeLine{00402\ \textcolor{comment}{@section\ application\ Application}}
+\DoxyCodeLine{00403\ \textcolor{comment}{}}
+\DoxyCodeLine{00404\ \textcolor{comment}{Efficiently\ read\ data\ into\ STL\ deques.}}
+\DoxyCodeLine{00405\ \textcolor{comment}{}}
+\DoxyCodeLine{00406\ \textcolor{comment}{@section\ messages\ Messages}}
+\DoxyCodeLine{00407\ \textcolor{comment}{}}
+\DoxyCodeLine{00408\ \textcolor{comment}{The\ function\ will\ return\ false\ if\ (1)\ the\ file\ pointer\ is\ invalid,\ (2)}}
+\DoxyCodeLine{00409\ \textcolor{comment}{the\ number\ of\ data\ records\ cannot\ be\ read\ correctly,\ and\ (3)\ if\ this}}
+\DoxyCodeLine{00410\ \textcolor{comment}{number\ does\ not\ match\ the\ number\ of\ records\ which\ were\ actually\ read.}}
+\DoxyCodeLine{00411\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00412\ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ \mbox{\hyperlink{namespacecsmp_a07feee7483c197b7b6c1c5e789bdc756}{T}}>}
+\DoxyCodeLine{00413\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp_a07feee7483c197b7b6c1c5e789bdc756}{binaryFileRead}}(\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{fstream}}\&\ \mbox{\hyperlink{namespacecsmp}{fp}},\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{T}}>\&\ \mbox{\hyperlink{namespacecsmp}{stl\_ctner}}\ )}
+\DoxyCodeLine{00414\ \ \ \{}
+\DoxyCodeLine{00415\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{namespacecsmp}{fp}}.\mbox{\hyperlink{namespacecsmp}{is\_open}}())\ \{}
+\DoxyCodeLine{00416\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{cerr}}\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)nbool\ binaryFileRead(vector):\ ERROR:\ invalid\ file\ pointer."{}}\ <<\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{endl}};}
+\DoxyCodeLine{00417\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00418\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00419\ }
+\DoxyCodeLine{00420\ \ \ \ \ \textcolor{comment}{//\ read\ size\ of\ the\ record\ and\ check\ it}}
+\DoxyCodeLine{00421\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{size\_t}}\ \mbox{\hyperlink{namespacecsmp}{elements}}\ =\ \mbox{\hyperlink{namespacecsmp}{readContainerSize}}(\ \mbox{\hyperlink{namespacecsmp}{fp}}\ );}
+\DoxyCodeLine{00422\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{stl\_ctner}}.\mbox{\hyperlink{namespacecsmp}{resize}}(\ \mbox{\hyperlink{namespacecsmp}{elements}}\ );}
+\DoxyCodeLine{00423\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{size\_t}}\ \mbox{\hyperlink{namespacecsmp}{bytes}}\ =\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{namespacecsmp}{T}});}
+\DoxyCodeLine{00424\ }
+\DoxyCodeLine{00425\ \ \ \ \ \textcolor{keywordflow}{if}\ (\ !\mbox{\hyperlink{namespacecsmp}{fp}}.\mbox{\hyperlink{namespacecsmp}{read}}(\textcolor{keyword}{reinterpret\_cast}<\textcolor{keywordtype}{char}*>(\mbox{\hyperlink{namespacecsmp}{stl\_ctner}}.\mbox{\hyperlink{namespacecsmp}{data}}()),\ \mbox{\hyperlink{namespacecsmp}{elements}}\ *\ \mbox{\hyperlink{namespacecsmp}{bytes}}\ )\ )\ \{}
+\DoxyCodeLine{00426\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{cerr}}\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)nbool\ binaryFileRead(vector):\ ERROR:\ reading\ from\ file."{}}<<\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{endl}};}
+\DoxyCodeLine{00427\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00428\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00429\ }
+\DoxyCodeLine{00430\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00431\ \ \ \}}
+\DoxyCodeLine{00432\ }
+\DoxyCodeLine{00433\ \textcolor{comment}{/*\ OLD\ ONE-\/BY-\/ONE\ VERSION}}
+\DoxyCodeLine{00434\ \textcolor{comment}{}}
+\DoxyCodeLine{00435\ \textcolor{comment}{\ \ if\ (\ elements\ >=\ 1\ )\ \{}}
+\DoxyCodeLine{00436\ \textcolor{comment}{\ \ \ \ \ \ \ \ if\ (!stl\_ctner.empty())}}
+\DoxyCodeLine{00437\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ stl\_ctner.erase(stl\_ctner.begin(),\ stl\_ctner.end());}}
+\DoxyCodeLine{00438\ \textcolor{comment}{\ \ \ \ \ \ \ \ stl\_ctner.reserve(elements);}}
+\DoxyCodeLine{00439\ \textcolor{comment}{\ \ \ \ \ \ \ \ //\ writing\ all\ elements}}
+\DoxyCodeLine{00440\ \textcolor{comment}{\ \ \ \ \ \ \ \ for\ (\ size\_t\ i\{0U\};\ i<elements;\ i++\ )\ \{}}
+\DoxyCodeLine{00441\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ //\ counting\ the\ successfully\ read\ elements}}
+\DoxyCodeLine{00442\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ fp.read(\ reinterpret\_cast<char*>(\&val),\ bytes\ );}}
+\DoxyCodeLine{00443\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ counter\ +=\ 1;}}
+\DoxyCodeLine{00444\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ stl\_ctner.push\_back(val);}}
+\DoxyCodeLine{00445\ \textcolor{comment}{\ \ \ \ \ \ \}}}
+\DoxyCodeLine{00446\ \textcolor{comment}{\ \ \ \ \}}}
+\DoxyCodeLine{00447\ \textcolor{comment}{}}
+\DoxyCodeLine{00448\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00449\ }
+\DoxyCodeLine{00450\ }
+\DoxyCodeLine{00451\ \textcolor{comment}{/*\ ALTERNATIVE}}
+\DoxyCodeLine{00452\ \textcolor{comment}{std::vector<uint8\_t>\ read\_vector\_from\_disk(std::string\ file\_path)}}
+\DoxyCodeLine{00453\ \textcolor{comment}{\ \ \{}}
+\DoxyCodeLine{00454\ \textcolor{comment}{\ \ \ \ \ \ std::ifstream\ instream(file\_path,\ std::ios::in\ |\ std::ios::binary);}}
+\DoxyCodeLine{00455\ \textcolor{comment}{\ \ \ \ \ \ std::vector<uint8\_t>\ data((std::istreambuf\_iterator<char>(instream)),\ std::istreambuf\_iterator<char>());}}
+\DoxyCodeLine{00456\ \textcolor{comment}{\ \ \ \ \ \ return\ data;}}
+\DoxyCodeLine{00457\ \textcolor{comment}{\ \ \}}}
+\DoxyCodeLine{00458\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00459\ }
+\DoxyCodeLine{00460\ }
+\DoxyCodeLine{00461\ }
+\DoxyCodeLine{00462\ \textcolor{comment}{///\ deque\ version}}
+\DoxyCodeLine{00463\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ \mbox{\hyperlink{namespacecsmp_a07feee7483c197b7b6c1c5e789bdc756}{T}}>}
+\DoxyCodeLine{00464\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp_a07feee7483c197b7b6c1c5e789bdc756}{binaryFileRead}}(\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{fstream}}\&\ \mbox{\hyperlink{namespacecsmp}{fp}},\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{deque}}<\mbox{\hyperlink{namespacecsmp}{T}}>\&\ \mbox{\hyperlink{namespacecsmp}{stl\_ctner}}\ )}
+\DoxyCodeLine{00465\ \{}
+\DoxyCodeLine{00466\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{namespacecsmp}{fp}}.\mbox{\hyperlink{namespacecsmp}{is\_open}}())\ \{}
+\DoxyCodeLine{00467\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{cerr}}\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)nbool\ binaryFileRead:\ ERROR:\ invalid\ file\ pointer."{}}\ <<\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{endl}};}
+\DoxyCodeLine{00468\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00469\ \ \ \ \ \}}
+\DoxyCodeLine{00470\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{size\_t}}\ \mbox{\hyperlink{namespacecsmp}{bytes}}\ =\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{namespacecsmp}{T}});}
+\DoxyCodeLine{00471\ \ \ \mbox{\hyperlink{namespacecsmp}{size\_t}}\ \mbox{\hyperlink{namespacecsmp}{counter}}(0);}
+\DoxyCodeLine{00472\ }
+\DoxyCodeLine{00473\ \ \ \ \ \textcolor{comment}{//\ read\ size\ of\ the\ record\ and\ assert\ this\ }}
+\DoxyCodeLine{00474\ \ \ \mbox{\hyperlink{namespacecsmp}{size\_t}}\ \mbox{\hyperlink{namespacecsmp}{elements}}\ =\ \mbox{\hyperlink{namespacecsmp}{readContainerSize}}(\ \mbox{\hyperlink{namespacecsmp}{fp}}\ );}
+\DoxyCodeLine{00475\ }
+\DoxyCodeLine{00476\ \ \ \ \ \textcolor{comment}{//\ TODO:\ write\ the\ elements\ in\ one\ go,\ rather\ than\ one\ by\ one}}
+\DoxyCodeLine{00477\ \ \ \ \ \textcolor{keywordflow}{if}\ (\ \mbox{\hyperlink{namespacecsmp}{elements}}\ >=\ 1\ )}
+\DoxyCodeLine{00478\ \ \ \ \ \{}
+\DoxyCodeLine{00479\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{namespacecsmp}{stl\_ctner}}.\mbox{\hyperlink{namespacecsmp}{empty}}())}
+\DoxyCodeLine{00480\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{stl\_ctner}}.\mbox{\hyperlink{namespacecsmp}{erase}}(\mbox{\hyperlink{namespacecsmp}{stl\_ctner}}.\mbox{\hyperlink{namespacecsmp}{begin}}(),\ \mbox{\hyperlink{namespacecsmp}{stl\_ctner}}.\mbox{\hyperlink{namespacecsmp}{end}}());}
+\DoxyCodeLine{00481\ }
+\DoxyCodeLine{00482\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{T}}\ \mbox{\hyperlink{namespacecsmp}{val}};}
+\DoxyCodeLine{00483\ \ \ \ \ \ \ \textcolor{comment}{//\ writing\ all\ elements}}
+\DoxyCodeLine{00484\ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\ \mbox{\hyperlink{namespacecsmp}{size\_t}}\ \mbox{\hyperlink{namespacecsmp}{i}}\{0U\};\ \mbox{\hyperlink{namespacecsmp}{i}}<\mbox{\hyperlink{namespacecsmp}{elements}};\ \mbox{\hyperlink{namespacecsmp}{i}}++\ )}
+\DoxyCodeLine{00485\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00486\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ counting\ the\ successfully\ read\ elements}}
+\DoxyCodeLine{00487\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{fp}}.\mbox{\hyperlink{namespacecsmp}{read}}(\ \textcolor{keyword}{reinterpret\_cast}<\textcolor{keywordtype}{char}*>(\&\mbox{\hyperlink{namespacecsmp}{val}}),\ \mbox{\hyperlink{namespacecsmp}{bytes}}\ );}
+\DoxyCodeLine{00488\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{counter}}\ +=\ 1;}
+\DoxyCodeLine{00489\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{stl\_ctner}}.\mbox{\hyperlink{namespacecsmp}{push\_back}}(\mbox{\hyperlink{namespacecsmp}{val}});}
+\DoxyCodeLine{00490\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00491\ \ \ \ \ \}}
+\DoxyCodeLine{00492\ \ \ \ \ \textcolor{keywordflow}{if}\ (\ \mbox{\hyperlink{namespacecsmp}{counter}}\ !=\ \mbox{\hyperlink{namespacecsmp}{elements}}\ )}
+\DoxyCodeLine{00493\ \ \ \ \ \{}
+\DoxyCodeLine{00494\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{cerr}}\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)nbool\ binaryFileRead:\ ERROR:\ incorrect\ number\ of\ records\ were\ read:\ "{}};}
+\DoxyCodeLine{00495\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{cerr}}\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)nIndicated\ number:\ "{}}\ <<\ \mbox{\hyperlink{namespacecsmp}{elements}}\ <<\ \textcolor{stringliteral}{"{},\ actual\ number\ read:\ "{}}\ <<\ \mbox{\hyperlink{namespacecsmp}{counter}}\ <<\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{endl}};}
+\DoxyCodeLine{00496\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00497\ \ \ \ \ \}}
+\DoxyCodeLine{00498\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00499\ \}}
+\DoxyCodeLine{00500\ }
+\DoxyCodeLine{00501\ }
+\DoxyCodeLine{00502\ }
+\DoxyCodeLine{00503\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00504\ \textcolor{comment}{}}
+\DoxyCodeLine{00505\ \textcolor{comment}{Uses\ the\ C-\/style\ fwrite()\ function\ for\ binary\ file\ IO\ to\ write\ the\ contents}}
+\DoxyCodeLine{00506\ \textcolor{comment}{of\ an\ STL\ deque<vector<T>\ >\ to\ a\ binary\ file.\ The\ data\ segment\ is\ preceded}}
+\DoxyCodeLine{00507\ \textcolor{comment}{by\ an\ 'unsigned\ long'\ number\ which\ determines\ the\ number\ of\ vector\ objects}}
+\DoxyCodeLine{00508\ \textcolor{comment}{which\ are\ written\ to\ file.}}
+\DoxyCodeLine{00509\ \textcolor{comment}{}}
+\DoxyCodeLine{00510\ \textcolor{comment}{@section\ arguments\ Input\ Arguments}}
+\DoxyCodeLine{00511\ \textcolor{comment}{}}
+\DoxyCodeLine{00512\ \textcolor{comment}{A\ file\ pointer\ of\ a\ binary\ file\ opened\ in\ write\ mode\ (e.g.,\ "{}wb"{})\ and\ a}}
+\DoxyCodeLine{00513\ \textcolor{comment}{constant\ reference\ to\ the\ STL\ vector\ of\ vectors\ which\ will\ be\ written\ to}}
+\DoxyCodeLine{00514\ \textcolor{comment}{file.}}
+\DoxyCodeLine{00515\ \textcolor{comment}{}}
+\DoxyCodeLine{00516\ \textcolor{comment}{@return\ returns\ a\ boolean\ indicating\ whether\ all\ vector\ data\ have}}
+\DoxyCodeLine{00517\ \textcolor{comment}{been\ written\ correctly\ to\ the\ file.}}
+\DoxyCodeLine{00518\ \textcolor{comment}{}}
+\DoxyCodeLine{00519\ \textcolor{comment}{@section\ implementation\ Implementation}}
+\DoxyCodeLine{00520\ \textcolor{comment}{}}
+\DoxyCodeLine{00521\ \textcolor{comment}{Uses\ the\ ANSI\ standard\ C\ function\ fwrite().}}
+\DoxyCodeLine{00522\ \textcolor{comment}{}}
+\DoxyCodeLine{00523\ \textcolor{comment}{@section\ application\ Application}}
+\DoxyCodeLine{00524\ \textcolor{comment}{}}
+\DoxyCodeLine{00525\ \textcolor{comment}{To\ efficiently\ write\ vector\ data\ to\ a\ binary\ file.}}
+\DoxyCodeLine{00526\ \textcolor{comment}{}}
+\DoxyCodeLine{00527\ \textcolor{comment}{@section\ messages\ Messages}}
+\DoxyCodeLine{00528\ \textcolor{comment}{}}
+\DoxyCodeLine{00529\ \textcolor{comment}{If\ the\ file\ pointer\ is\ invalid,\ method\ will\ quit,\ reporting\ an\ error.}}
+\DoxyCodeLine{00530\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00531\ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ T>}
+\DoxyCodeLine{00532\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp_a39587cb0cc8b662f39d9587d6fedb66f}{binaryFileWrite}}(\ std::fstream\&\ fp,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp_a39587cb0cc8b662f39d9587d6fedb66f}{std}}::\mbox{\hyperlink{namespacecsmp_a39587cb0cc8b662f39d9587d6fedb66f}{deque}}<\mbox{\hyperlink{namespacecsmp_a39587cb0cc8b662f39d9587d6fedb66f}{std}}::\mbox{\hyperlink{namespacecsmp_a39587cb0cc8b662f39d9587d6fedb66f}{vector}}<\mbox{\hyperlink{namespacecsmp_a39587cb0cc8b662f39d9587d6fedb66f}{T}}>\ >\&\ \mbox{\hyperlink{namespacecsmp_a39587cb0cc8b662f39d9587d6fedb66f}{stl\_ctner}}\ )}
+\DoxyCodeLine{00533\ \{}
+\DoxyCodeLine{00534\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \textcolor{preprocessor}{DEBUG}}
+\DoxyCodeLine{00535\ \ \ \textcolor{keywordflow}{if}\ (\ stl\_ctner.empty()\ )}
+\DoxyCodeLine{00536\ \ \ \ \ std::cerr\ <<\textcolor{stringliteral}{"{}\(\backslash\)nbinaryFileWrite(deque<vector>):\ WARNING:\ container\ is\ empty."{}}<<\ std::endl;}
+\DoxyCodeLine{00537\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00538\ \ \ \ \ \textcolor{keywordflow}{if}\ (!fp.is\_open())\ \{}
+\DoxyCodeLine{00539\ \ \ \ \ \ \ std::cerr\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)nbool\ binaryFileWrite(const\ deque<vector<T>\ >\&):\ "{}};}
+\DoxyCodeLine{00540\ \ \ \ \ \ \ std::cerr\ <<\ \textcolor{stringliteral}{"{}ERROR:\ invalid\ file\ pointer."{}}\ <<\ std::endl;}
+\DoxyCodeLine{00541\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00542\ \ \ \ \ \}}
+\DoxyCodeLine{00543\ }
+\DoxyCodeLine{00544\ \ \ \ \ \textcolor{comment}{//\ writing\ the\ number\ of\ vector\ objects}}
+\DoxyCodeLine{00545\ \ \ \ \ \textcolor{keyword}{const}\ size\_t\ \ elements(stl\_ctner.size());}
+\DoxyCodeLine{00546\ \ \ \ \ fp.write(\ \textcolor{keyword}{reinterpret\_cast}<\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*>(\&elements),\ \textcolor{keyword}{sizeof}(size\_t)\ );}
+\DoxyCodeLine{00547\ }
+\DoxyCodeLine{00548\ \ \ \ \ \textcolor{comment}{//\ writing\ all\ elements}}
+\DoxyCodeLine{00549\ \ \ \textcolor{keywordflow}{if}\ (\ elements\ >=\ 1\ )}
+\DoxyCodeLine{00550\ \ \ \ \ \textcolor{keywordflow}{for}\ (\ \textcolor{keyword}{auto}\ it\ =\ stl\_ctner.begin();\ it\ !=\ stl\_ctner.end();\ it++\ )}
+\DoxyCodeLine{00551\ \ \ \ \ \ \ binaryFileWrite(fp,\ (*it)\ );}
+\DoxyCodeLine{00552\ }
+\DoxyCodeLine{00553\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00554\ \}}
+\DoxyCodeLine{00555\ }
+\DoxyCodeLine{00556\ }
+\DoxyCodeLine{00557\ }
+\DoxyCodeLine{00558\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00559\ \textcolor{comment}{}}
+\DoxyCodeLine{00560\ \textcolor{comment}{Reads\ a\ vector\ of\ STL\ vector\ data\ from\ a\ binary\ file.\ The\ STL\ container}}
+\DoxyCodeLine{00561\ \textcolor{comment}{is\ erased\ before\ adding\ the\ data,\ if\ it\ already\ contained\ any\ data.\ How\ many}}
+\DoxyCodeLine{00562\ \textcolor{comment}{records\ are\ read\ is\ specified\ by\ an\ 'unsigned\ long'\ number\ which\ precedes}}
+\DoxyCodeLine{00563\ \textcolor{comment}{the\ dataset.}}
+\DoxyCodeLine{00564\ \textcolor{comment}{}}
+\DoxyCodeLine{00565\ \textcolor{comment}{@section\ arguments\ Input\ Arguments}}
+\DoxyCodeLine{00566\ \textcolor{comment}{}}
+\DoxyCodeLine{00567\ \textcolor{comment}{A\ pointer\ to\ a\ binary\ file\ opened\ in\ read\ binary\ mode\ ("{}rb"{}),\ and\ a}}
+\DoxyCodeLine{00568\ \textcolor{comment}{reference\ to\ an\ STL\ vector\ of\ vector.}}
+\DoxyCodeLine{00569\ \textcolor{comment}{}}
+\DoxyCodeLine{00570\ \textcolor{comment}{@return\ returns\ the\ boolean\ 'true'\ if\ the\ number\ of\ data\ records}}
+\DoxyCodeLine{00571\ \textcolor{comment}{which\ precedes\ the\ dataset\ in\ the\ file\ has\ been\ read\ correctly.\ If\ the}}
+\DoxyCodeLine{00572\ \textcolor{comment}{file\ pointer\ is\ invalid\ or\ less\ data\ are\ read,\ the\ function\ returns\ false.}}
+\DoxyCodeLine{00573\ \textcolor{comment}{}}
+\DoxyCodeLine{00574\ \textcolor{comment}{@section\ implementation\ Implementation}}
+\DoxyCodeLine{00575\ \textcolor{comment}{}}
+\DoxyCodeLine{00576\ \textcolor{comment}{Uses\ the\ ANSI\ C\ function\ fread().\ The\ vector<vector<T>\ >\ which\ will\ hold\ the}}
+\DoxyCodeLine{00577\ \textcolor{comment}{data\ is\ erased\ if\ it\ is\ not\ empty.\ Storage\ is\ reserved\ for\ the\ new\ number}}
+\DoxyCodeLine{00578\ \textcolor{comment}{of\ elements\ which\ is\ read\ from\ file.\ Then\ the\ elements\ are\ read\ and\ the}}
+\DoxyCodeLine{00579\ \textcolor{comment}{container\ is\ returned.}}
+\DoxyCodeLine{00580\ \textcolor{comment}{}}
+\DoxyCodeLine{00581\ \textcolor{comment}{@section\ application\ Application}}
+\DoxyCodeLine{00582\ \textcolor{comment}{}}
+\DoxyCodeLine{00583\ \textcolor{comment}{Efficiently\ read\ data\ into\ STL\ vector\ of\ vectors.}}
+\DoxyCodeLine{00584\ \textcolor{comment}{}}
+\DoxyCodeLine{00585\ \textcolor{comment}{@section\ messages\ Messages}}
+\DoxyCodeLine{00586\ \textcolor{comment}{}}
+\DoxyCodeLine{00587\ \textcolor{comment}{The\ function\ will\ return\ false\ if\ (1)\ the\ file\ pointer\ is\ invalid,\ (2)}}
+\DoxyCodeLine{00588\ \textcolor{comment}{the\ number\ of\ data\ records\ cannot\ be\ read\ correctly,\ and\ (3)\ if\ this}}
+\DoxyCodeLine{00589\ \textcolor{comment}{number\ does\ not\ match\ the\ number\ of\ records\ which\ were\ actually\ read.}}
+\DoxyCodeLine{00590\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00591\ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ \mbox{\hyperlink{namespacecsmp_a07feee7483c197b7b6c1c5e789bdc756}{T}}>}
+\DoxyCodeLine{00592\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp_a07feee7483c197b7b6c1c5e789bdc756}{binaryFileRead}}(\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{fstream}}\&\ \mbox{\hyperlink{namespacecsmp}{fp}},\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{deque}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{T}}>\ >\&\ \mbox{\hyperlink{namespacecsmp}{stl\_ctner}}\ )}
+\DoxyCodeLine{00593\ \{}
+\DoxyCodeLine{00594\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{namespacecsmp}{fp}}.\mbox{\hyperlink{namespacecsmp}{is\_open}}())\ \{}
+\DoxyCodeLine{00595\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{cerr}}\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)nbool\ binaryFileRead(deque<vector<T>\ >\&):\ "{}};}
+\DoxyCodeLine{00596\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{cerr}}\ <<\ \textcolor{stringliteral}{"{}ERROR:\ invalid\ file\ pointer."{}}\ <<\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{endl}};}
+\DoxyCodeLine{00597\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00598\ \ \ \ \ \}}
+\DoxyCodeLine{00599\ }
+\DoxyCodeLine{00600\ \ \ \ \ \textcolor{comment}{//\ 1.\ reading\ number\ of\ vector\ records\ and\ assert\ this\ reading}}
+\DoxyCodeLine{00601\ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{size\_t}}\ \ \mbox{\hyperlink{namespacecsmp}{elements}}\ =\ \mbox{\hyperlink{namespacecsmp}{readContainerSize}}(\ \mbox{\hyperlink{namespacecsmp}{fp}}\ );}
+\DoxyCodeLine{00602\ }
+\DoxyCodeLine{00603\ \ \ \ \ \textcolor{comment}{//\ TODO:\ write\ the\ elements\ in\ one\ go,\ rather\ than\ one\ by\ one}}
+\DoxyCodeLine{00604\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{size\_t}}\ \mbox{\hyperlink{namespacecsmp}{counter}}(0);}
+\DoxyCodeLine{00605\ \ \ \ \ \textcolor{keywordflow}{if}\ (\ \mbox{\hyperlink{namespacecsmp}{elements}}\ >=\ 1\ )\ \{}
+\DoxyCodeLine{00606\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{namespacecsmp}{stl\_ctner}}.\mbox{\hyperlink{namespacecsmp}{empty}}())}
+\DoxyCodeLine{00607\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{stl\_ctner}}.\mbox{\hyperlink{namespacecsmp}{erase}}(\mbox{\hyperlink{namespacecsmp}{stl\_ctner}}.\mbox{\hyperlink{namespacecsmp}{begin}}(),\ \mbox{\hyperlink{namespacecsmp}{stl\_ctner}}.\mbox{\hyperlink{namespacecsmp}{end}}());}
+\DoxyCodeLine{00608\ \ \ \ \ \ \ \textcolor{comment}{//stl\_ctner.reserve(\ elements\ );}}
+\DoxyCodeLine{00609\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{T}}>\ \ \mbox{\hyperlink{namespacecsmp}{val}};}
+\DoxyCodeLine{00610\ \ \ \ \ \ \ \textcolor{comment}{//\ 2.\ reading\ all\ the\ vector\ records}}
+\DoxyCodeLine{00611\ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\ \mbox{\hyperlink{namespacecsmp}{size\_t}}\ \mbox{\hyperlink{namespacecsmp}{i}}\{0U\};\ \mbox{\hyperlink{namespacecsmp}{i}}<\mbox{\hyperlink{namespacecsmp}{elements}};\ \mbox{\hyperlink{namespacecsmp}{i}}++\ )\ \{}
+\DoxyCodeLine{00612\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ counting\ the\ successfully\ read\ elements}}
+\DoxyCodeLine{00613\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{namespacecsmp}{binaryFileRead}}(\mbox{\hyperlink{namespacecsmp}{fp}},\ \mbox{\hyperlink{namespacecsmp}{val}}))\ \{}
+\DoxyCodeLine{00614\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{counter}}++;}
+\DoxyCodeLine{00615\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{stl\_ctner}}.\mbox{\hyperlink{namespacecsmp}{push\_back}}(\mbox{\hyperlink{namespacecsmp}{val}});}
+\DoxyCodeLine{00616\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00617\ \ \ \ \ \ \}}
+\DoxyCodeLine{00618\ \ \ \ \ \}}
+\DoxyCodeLine{00619\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{namespacecsmp}{counter}}\ !=\ \mbox{\hyperlink{namespacecsmp}{elements}})\ \{}
+\DoxyCodeLine{00620\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{cerr}}\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)nbool\ binaryFileRead(deque<vector<T>\ >\&):\ "{}};}
+\DoxyCodeLine{00621\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{cerr}}\ <<\ \textcolor{stringliteral}{"{}ERROR:\ incorrect\ number\ of\ records\ were\ read:\ "{}};}
+\DoxyCodeLine{00622\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{cerr}}\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)nIndicated\ number:\ "{}}\ <<\ \mbox{\hyperlink{namespacecsmp}{elements}}\ <<\ \textcolor{stringliteral}{"{},\ actual\ number\ read:\ "{}}\ <<\ \mbox{\hyperlink{namespacecsmp}{counter}}\ <<\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{endl}};}
+\DoxyCodeLine{00623\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00624\ \ \ \ \ \}}
+\DoxyCodeLine{00625\ }
+\DoxyCodeLine{00626\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00627\ \}}
+\DoxyCodeLine{00628\ }
+\DoxyCodeLine{00629\ }
+\DoxyCodeLine{00630\ }
+\DoxyCodeLine{00631\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00632\ \textcolor{comment}{}}
+\DoxyCodeLine{00633\ \textcolor{comment}{Uses\ the\ C-\/style\ fwrite()\ function\ for\ binary\ file\ IO\ to\ write\ the\ contents}}
+\DoxyCodeLine{00634\ \textcolor{comment}{of\ an\ STL\ map\ to\ a\ binary\ file.\ The\ data\ segment\ is\ preceded}}
+\DoxyCodeLine{00635\ \textcolor{comment}{by\ an\ 'unsigned\ long'\ number\ which\ determines\ the\ number\ of\ objects}}
+\DoxyCodeLine{00636\ \textcolor{comment}{which\ are\ written\ to\ file.\ Each\ record\ is\ preceded\ by\ the}}
+\DoxyCodeLine{00637\ \textcolor{comment}{corresponding\ map\ key.}}
+\DoxyCodeLine{00638\ \textcolor{comment}{}}
+\DoxyCodeLine{00639\ \textcolor{comment}{@section\ arguments\ Input\ Arguments}}
+\DoxyCodeLine{00640\ \textcolor{comment}{}}
+\DoxyCodeLine{00641\ \textcolor{comment}{A\ file\ pointer\ of\ a\ binary\ file\ opened\ in\ write\ mode\ (e.g.,\ "{}wb"{})\ and\ a}}
+\DoxyCodeLine{00642\ \textcolor{comment}{constant\ reference\ to\ the\ STL\ map\ which\ will\ be\ written\ to}}
+\DoxyCodeLine{00643\ \textcolor{comment}{file.}}
+\DoxyCodeLine{00644\ \textcolor{comment}{}}
+\DoxyCodeLine{00645\ \textcolor{comment}{@return\ a\ boolean\ indicating\ whether\ all\ data\ have}}
+\DoxyCodeLine{00646\ \textcolor{comment}{been\ written\ correctly\ to\ the\ file.}}
+\DoxyCodeLine{00647\ \textcolor{comment}{}}
+\DoxyCodeLine{00648\ \textcolor{comment}{@section\ implementation\ Implementation}}
+\DoxyCodeLine{00649\ \textcolor{comment}{}}
+\DoxyCodeLine{00650\ \textcolor{comment}{Uses\ the\ ANSI\ standard\ C\ function\ fwrite().\ NOTE\ that\ the\ map\ key\ must}}
+\DoxyCodeLine{00651\ \textcolor{comment}{not\ contain\ any\ dynamically\ allocated\ data.\ Otherwise\ these\ data\ are}}
+\DoxyCodeLine{00652\ \textcolor{comment}{sliced\ of\ the\ binary\ record.}}
+\DoxyCodeLine{00653\ \textcolor{comment}{}}
+\DoxyCodeLine{00654\ \textcolor{comment}{@section\ application\ Application}}
+\DoxyCodeLine{00655\ \textcolor{comment}{}}
+\DoxyCodeLine{00656\ \textcolor{comment}{To\ efficiently\ write\ map\ data\ to\ a\ binary\ file.}}
+\DoxyCodeLine{00657\ \textcolor{comment}{}}
+\DoxyCodeLine{00658\ \textcolor{comment}{@section\ messages\ Messages}}
+\DoxyCodeLine{00659\ \textcolor{comment}{}}
+\DoxyCodeLine{00660\ \textcolor{comment}{If\ the\ file\ pointer\ is\ invalid,\ method\ will\ quit,\ reporting\ an\ error.}}
+\DoxyCodeLine{00661\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00662\ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ M,\ \textcolor{keyword}{class}\ T>}
+\DoxyCodeLine{00663\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp_a00dea565b4cc369d30c529140c23e648}{binaryFileWrite}}(std::fstream\&\ fp,\ \textcolor{keyword}{const}\ std::map<M,\ T>\&\ stl\_ctner)}
+\DoxyCodeLine{00664\ \{}
+\DoxyCodeLine{00665\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \textcolor{preprocessor}{DEBUG}}
+\DoxyCodeLine{00666\ \ \ \textcolor{keywordflow}{if}\ (\ stl\_ctner.empty()\ )}
+\DoxyCodeLine{00667\ \ \ \ \ std::cerr\ <<\textcolor{stringliteral}{"{}\(\backslash\)nbinaryFileWrite(map):\ WARNING:\ container\ is\ empty."{}}<<\ std::endl;}
+\DoxyCodeLine{00668\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00669\ \ \ \ \ \textcolor{keywordflow}{if}\ (!fp.is\_open())}
+\DoxyCodeLine{00670\ \ \ \ \ \{}
+\DoxyCodeLine{00671\ \ \ \ \ \ \ std::cerr\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)nbool\ binaryFileWrite(const\ map<M,T,less<M>\ >\&):\ "{}};}
+\DoxyCodeLine{00672\ \ \ \ \ \ \ std::cerr\ <<\ \textcolor{stringliteral}{"{}ERROR:\ invalid\ file\ pointer."{}}\ <<\ std::endl;}
+\DoxyCodeLine{00673\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00674\ \ \ \ \ \}}
+\DoxyCodeLine{00675\ }
+\DoxyCodeLine{00676\ \ \ \ \ \textcolor{keyword}{const}\ size\_t\ bytesM\ =\ \textcolor{keyword}{sizeof}(M);}
+\DoxyCodeLine{00677\ \ \ \ \ \textcolor{keyword}{const}\ size\_t\ bytesT\ =\ \textcolor{keyword}{sizeof}(T);}
+\DoxyCodeLine{00678\ \ \ \ \ size\_t\ \ \ \ \ \ \ elements\ =\ stl\_ctner.size();}
+\DoxyCodeLine{00679\ \ \ \ \ M\ \ \ \ \ \ \ \ \ \ \ \ key;}
+\DoxyCodeLine{00680\ \ \ \ \ T\ \ \ \ \ \ \ \ \ \ \ \ val;}
+\DoxyCodeLine{00681\ }
+\DoxyCodeLine{00682\ \ \ \ \ \textcolor{comment}{//\ writing\ the\ number\ of\ vector\ objects}}
+\DoxyCodeLine{00683\ \ \ \ \ fp.write(\ \textcolor{keyword}{reinterpret\_cast}<\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*>(\&elements),\ \textcolor{keyword}{sizeof}(size\_t)\ );}
+\DoxyCodeLine{00684\ }
+\DoxyCodeLine{00685\ \ \ \ \ \textcolor{comment}{//\ writing\ all\ key-\/value\ pairs}}
+\DoxyCodeLine{00686\ \ \ \textcolor{keywordflow}{if}\ (\ elements\ >=\ 1\ )}
+\DoxyCodeLine{00687\ \ \ \ \ \textcolor{keywordflow}{for}\ (\ \textcolor{keyword}{typename}\ std::map<M,\ T>::const\_iterator\ it\ =\ stl\_ctner.begin();\ it\ !=\ stl\_ctner.end();\ it++)}
+\DoxyCodeLine{00688\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00689\ \ \ \ \ \ \ \ \ key\ =\ (*it).first;}
+\DoxyCodeLine{00690\ \ \ \ \ \ \ \ \ val\ =\ (*it).second;}
+\DoxyCodeLine{00691\ \ \ \ \ \ \ \ \ fp.write(\ \textcolor{keyword}{reinterpret\_cast}<\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*>(\&key),\ bytesM\ );}
+\DoxyCodeLine{00692\ \ \ \ \ \ \ \ \ fp.write(\ \textcolor{keyword}{reinterpret\_cast}<\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*>(\&val),\ bytesT\ );}
+\DoxyCodeLine{00693\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00694\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00695\ \}}
+\DoxyCodeLine{00696\ }
+\DoxyCodeLine{00697\ }
+\DoxyCodeLine{00698\ }
+\DoxyCodeLine{00699\ }
+\DoxyCodeLine{00700\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00701\ \textcolor{comment}{}}
+\DoxyCodeLine{00702\ \textcolor{comment}{Reads\ an\ STL\ map\ from\ a\ binary\ file.\ The\ map}}
+\DoxyCodeLine{00703\ \textcolor{comment}{is\ erased\ before\ adding\ the\ data\ if\ it\ already\ contains\ data.\ How\ many}}
+\DoxyCodeLine{00704\ \textcolor{comment}{records\ are\ read\ is\ specified\ by\ an\ 'unsigned\ long'\ number\ which\ precedes}}
+\DoxyCodeLine{00705\ \textcolor{comment}{the\ dataset.}}
+\DoxyCodeLine{00706\ \textcolor{comment}{}}
+\DoxyCodeLine{00707\ \textcolor{comment}{@section\ arguments\ Input\ Arguments}}
+\DoxyCodeLine{00708\ \textcolor{comment}{}}
+\DoxyCodeLine{00709\ \textcolor{comment}{A\ pointer\ to\ a\ binary\ file\ opened\ in\ read\ binary\ mode\ ("{}rb"{}),\ and\ a}}
+\DoxyCodeLine{00710\ \textcolor{comment}{reference\ to\ an\ STL\ map.}}
+\DoxyCodeLine{00711\ \textcolor{comment}{}}
+\DoxyCodeLine{00712\ \textcolor{comment}{@return\ binaryFileRead()\ returns\ the\ boolean\ 'true'\ if\ the\ number\ of\ data\ records}}
+\DoxyCodeLine{00713\ \textcolor{comment}{which\ precedes\ the\ dataset\ in\ the\ file\ has\ been\ read\ correctly.\ If\ the}}
+\DoxyCodeLine{00714\ \textcolor{comment}{file\ pointer\ is\ invalid\ or\ less\ data\ are\ read,\ the\ function\ returns\ false.}}
+\DoxyCodeLine{00715\ \textcolor{comment}{}}
+\DoxyCodeLine{00716\ \textcolor{comment}{@section\ implementation\ Implementation}}
+\DoxyCodeLine{00717\ \textcolor{comment}{}}
+\DoxyCodeLine{00718\ \textcolor{comment}{Uses\ the\ ANSI\ C\ function\ fread().\ The\ map\ which\ will\ hold\ the}}
+\DoxyCodeLine{00719\ \textcolor{comment}{data\ is\ erased\ if\ it\ is\ not\ empty.\ Storage\ is\ reserved\ for\ the\ new\ number}}
+\DoxyCodeLine{00720\ \textcolor{comment}{of\ elements\ which\ is\ read\ from\ file.\ Then\ the\ elements\ are\ read\ and\ the}}
+\DoxyCodeLine{00721\ \textcolor{comment}{container\ is\ returned.}}
+\DoxyCodeLine{00722\ \textcolor{comment}{}}
+\DoxyCodeLine{00723\ \textcolor{comment}{@section\ application\ Application}}
+\DoxyCodeLine{00724\ \textcolor{comment}{}}
+\DoxyCodeLine{00725\ \textcolor{comment}{Efficiently\ read\ data\ into\ an\ STL\ map.}}
+\DoxyCodeLine{00726\ \textcolor{comment}{}}
+\DoxyCodeLine{00727\ \textcolor{comment}{@section\ messages\ Messages}}
+\DoxyCodeLine{00728\ \textcolor{comment}{}}
+\DoxyCodeLine{00729\ \textcolor{comment}{The\ function\ will\ return\ false\ if\ (1)\ the\ file\ pointer\ is\ invalid,\ (2)}}
+\DoxyCodeLine{00730\ \textcolor{comment}{the\ number\ of\ data\ records\ cannot\ be\ read\ correctly,\ and\ (3)\ if\ this}}
+\DoxyCodeLine{00731\ \textcolor{comment}{number\ does\ not\ match\ the\ number\ of\ records\ which\ were\ actually\ read.}}
+\DoxyCodeLine{00732\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00733\ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ \mbox{\hyperlink{namespacecsmp_a07feee7483c197b7b6c1c5e789bdc756}{M}},\ \textcolor{keyword}{class}\ \mbox{\hyperlink{namespacecsmp_a07feee7483c197b7b6c1c5e789bdc756}{T}}>}
+\DoxyCodeLine{00734\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp_a07feee7483c197b7b6c1c5e789bdc756}{binaryFileRead}}(\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{fstream}}\&\ \mbox{\hyperlink{namespacecsmp}{fp}},\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{map}}<\mbox{\hyperlink{namespacecsmp}{M}},\ \mbox{\hyperlink{namespacecsmp}{T}}>\&\ \mbox{\hyperlink{namespacecsmp}{stl\_ctner}})}
+\DoxyCodeLine{00735\ \{}
+\DoxyCodeLine{00736\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{namespacecsmp}{stl\_ctner}}.\mbox{\hyperlink{namespacecsmp}{empty}}())}
+\DoxyCodeLine{00737\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{stl\_ctner}}.\mbox{\hyperlink{namespacecsmp}{erase}}(\mbox{\hyperlink{namespacecsmp}{stl\_ctner}}.\mbox{\hyperlink{namespacecsmp}{begin}}(),\ \mbox{\hyperlink{namespacecsmp}{stl\_ctner}}.\mbox{\hyperlink{namespacecsmp}{end}}());}
+\DoxyCodeLine{00738\ }
+\DoxyCodeLine{00739\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{namespacecsmp}{fp}}.\mbox{\hyperlink{namespacecsmp}{is\_open}}())}
+\DoxyCodeLine{00740\ \ \ \ \ \{}
+\DoxyCodeLine{00741\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{cerr}}\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)nbool\ binaryFileRead(map<M,T>\&):\ "{}};}
+\DoxyCodeLine{00742\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{cerr}}\ <<\ \textcolor{stringliteral}{"{}ERROR:\ invalid\ file\ pointer."{}}\ <<\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{endl}};}
+\DoxyCodeLine{00743\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00744\ \ \ \ \ \}}
+\DoxyCodeLine{00745\ }
+\DoxyCodeLine{00746\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{size\_t}}\ \mbox{\hyperlink{namespacecsmp}{bytesM}}\ =\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{namespacecsmp}{M}}),\ \mbox{\hyperlink{namespacecsmp}{bytesT}}\ =\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{namespacecsmp}{T}});}
+\DoxyCodeLine{00747\ \ \ \mbox{\hyperlink{namespacecsmp}{size\_t}}\ \ \mbox{\hyperlink{namespacecsmp}{counterM}}(0),\ \mbox{\hyperlink{namespacecsmp}{counterT}}(0);}
+\DoxyCodeLine{00748\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{M}}\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{key}};}
+\DoxyCodeLine{00749\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{T}}\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{val}};}
+\DoxyCodeLine{00750\ }
+\DoxyCodeLine{00751\ \ \ \ \ \textcolor{comment}{//\ 1.\ read\ number\ of\ record\ in\ the\ map\ and\ assert\ reading}}
+\DoxyCodeLine{00752\ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{size\_t}}\ \mbox{\hyperlink{namespacecsmp}{elements}}\ =\ \mbox{\hyperlink{namespacecsmp}{readContainerSize}}(\ \mbox{\hyperlink{namespacecsmp}{fp}}\ );}
+\DoxyCodeLine{00753\ }
+\DoxyCodeLine{00754\ \ \ \ \ \textcolor{comment}{//\ TODO:\ write\ the\ elements\ in\ one\ go,\ rather\ than\ one\ by\ one}}
+\DoxyCodeLine{00755\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{namespacecsmp}{elements}}\ >=\ 1\ )\ \{}
+\DoxyCodeLine{00756\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 2.\ reading\ all\ map\ records}}
+\DoxyCodeLine{00757\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\ \mbox{\hyperlink{namespacecsmp}{size\_t}}\ \mbox{\hyperlink{namespacecsmp}{i}}\{0U\};\ \mbox{\hyperlink{namespacecsmp}{i}}<\mbox{\hyperlink{namespacecsmp}{elements}};\ \mbox{\hyperlink{namespacecsmp}{i}}++\ )}
+\DoxyCodeLine{00758\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00759\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ reading\ key}}
+\DoxyCodeLine{00760\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{namespacecsmp}{fp}}.\mbox{\hyperlink{namespacecsmp}{read}}(\ \textcolor{keyword}{reinterpret\_cast}<\textcolor{keywordtype}{char}*>(\&\mbox{\hyperlink{namespacecsmp}{key}}),\ \mbox{\hyperlink{namespacecsmp}{bytesM}}\ ))\ \mbox{\hyperlink{namespacecsmp}{counterM}}++;}
+\DoxyCodeLine{00761\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ reading\ value}}
+\DoxyCodeLine{00762\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{namespacecsmp}{fp}}.\mbox{\hyperlink{namespacecsmp}{read}}(\ \textcolor{keyword}{reinterpret\_cast}<\textcolor{keywordtype}{char}*>(\&\mbox{\hyperlink{namespacecsmp}{val}}),\ \mbox{\hyperlink{namespacecsmp}{bytesT}}\ ))\ \mbox{\hyperlink{namespacecsmp}{counterT}}++;}
+\DoxyCodeLine{00763\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ storing\ value\ in\ map\ after\ key}}
+\DoxyCodeLine{00764\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{stl\_ctner}}[\mbox{\hyperlink{namespacecsmp}{key}}]\ =\ \mbox{\hyperlink{namespacecsmp}{val}};}
+\DoxyCodeLine{00765\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00766\ \ \ \ \ \}}
+\DoxyCodeLine{00767\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{namespacecsmp}{counterM}}\ !=\ \mbox{\hyperlink{namespacecsmp}{elements}}\ ||\ \mbox{\hyperlink{namespacecsmp}{counterT}}\ !=\ \mbox{\hyperlink{namespacecsmp}{elements}})\ \{}
+\DoxyCodeLine{00768\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{cerr}}\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)nbool\ binaryFileRead(vector<map<M,T>\&):\ "{}};}
+\DoxyCodeLine{00769\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{cerr}}\ <<\ \textcolor{stringliteral}{"{}ERROR:\ incorrect\ number\ of\ map\ records\ were\ read:\ "{}};}
+\DoxyCodeLine{00770\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{cerr}}\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)nIndicated\ number:\ "{}}\ <<\ \mbox{\hyperlink{namespacecsmp}{elements}}\ <<\ \textcolor{stringliteral}{"{},\ actual\ number\ read:\ "{}}\ <<\ \mbox{\hyperlink{namespacecsmp}{counterM}}\ <<\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{endl}};}
+\DoxyCodeLine{00771\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00772\ \ \ \ \ \}}
+\DoxyCodeLine{00773\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00774\ \}}
+\DoxyCodeLine{00775\ }
+\DoxyCodeLine{00776\ }
+\DoxyCodeLine{00777\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00778\ \textcolor{comment}{}}
+\DoxyCodeLine{00779\ \textcolor{comment}{Uses\ the\ C-\/style\ fwrite()\ function\ for\ binary\ file\ IO\ to\ write\ the\ contents}}
+\DoxyCodeLine{00780\ \textcolor{comment}{of\ an\ STL\ unordered\_map\ to\ a\ binary\ file.\ The\ data\ segment\ is\ preceded}}
+\DoxyCodeLine{00781\ \textcolor{comment}{by\ an\ 'unsigned\ long'\ number\ which\ determines\ the\ number\ of\ objects}}
+\DoxyCodeLine{00782\ \textcolor{comment}{which\ are\ written\ to\ file.\ Each\ record\ is\ preceded\ by\ the}}
+\DoxyCodeLine{00783\ \textcolor{comment}{corresponding\ map\ key.}}
+\DoxyCodeLine{00784\ \textcolor{comment}{}}
+\DoxyCodeLine{00785\ \textcolor{comment}{@section\ arguments\ Input\ Arguments}}
+\DoxyCodeLine{00786\ \textcolor{comment}{}}
+\DoxyCodeLine{00787\ \textcolor{comment}{A\ file\ pointer\ of\ a\ binary\ file\ opened\ in\ write\ mode\ (e.g.,\ "{}wb"{})\ and\ a}}
+\DoxyCodeLine{00788\ \textcolor{comment}{constant\ reference\ to\ the\ STL\ map\ which\ will\ be\ written\ to}}
+\DoxyCodeLine{00789\ \textcolor{comment}{file.}}
+\DoxyCodeLine{00790\ \textcolor{comment}{}}
+\DoxyCodeLine{00791\ \textcolor{comment}{@return\ a\ boolean\ indicating\ whether\ all\ data\ have}}
+\DoxyCodeLine{00792\ \textcolor{comment}{been\ written\ correctly\ to\ the\ file.}}
+\DoxyCodeLine{00793\ \textcolor{comment}{}}
+\DoxyCodeLine{00794\ \textcolor{comment}{@section\ implementation\ Implementation}}
+\DoxyCodeLine{00795\ \textcolor{comment}{}}
+\DoxyCodeLine{00796\ \textcolor{comment}{Uses\ the\ ANSI\ standard\ C\ function\ fwrite().\ NOTE\ that\ the\ map\ key\ must}}
+\DoxyCodeLine{00797\ \textcolor{comment}{not\ contain\ any\ dynamically\ allocated\ data.\ Otherwise\ these\ data\ are}}
+\DoxyCodeLine{00798\ \textcolor{comment}{sliced\ of\ the\ binary\ record.}}
+\DoxyCodeLine{00799\ \textcolor{comment}{}}
+\DoxyCodeLine{00800\ \textcolor{comment}{@section\ application\ Application}}
+\DoxyCodeLine{00801\ \textcolor{comment}{}}
+\DoxyCodeLine{00802\ \textcolor{comment}{To\ efficiently\ write\ map\ data\ to\ a\ binary\ file.}}
+\DoxyCodeLine{00803\ \textcolor{comment}{}}
+\DoxyCodeLine{00804\ \textcolor{comment}{@section\ messages\ Messages}}
+\DoxyCodeLine{00805\ \textcolor{comment}{}}
+\DoxyCodeLine{00806\ \textcolor{comment}{If\ the\ file\ pointer\ is\ invalid,\ method\ will\ quit,\ reporting\ an\ error.}}
+\DoxyCodeLine{00807\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00808\ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ M,\ \textcolor{keyword}{class}\ T>}
+\DoxyCodeLine{00809\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp_a00dea565b4cc369d30c529140c23e648}{binaryFileWrite}}(std::fstream\&\ fp,\ \textcolor{keyword}{const}\ std::unordered\_map<M,\ T>\&\ stl\_ctner\ )}
+\DoxyCodeLine{00810\ \{}
+\DoxyCodeLine{00811\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \textcolor{preprocessor}{DEBUG}}
+\DoxyCodeLine{00812\ \ \ \textcolor{keywordflow}{if}\ (\ stl\_ctner.empty()\ )}
+\DoxyCodeLine{00813\ \ \ \ \ std::cerr\ <<\textcolor{stringliteral}{"{}\(\backslash\)nbinaryFileWrite(unordered\ map):\ WARNING:\ container\ is\ empty."{}}<<\ std::endl;}
+\DoxyCodeLine{00814\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00815\ \ \ \ \ \textcolor{keywordflow}{if}\ (!fp.is\_open())}
+\DoxyCodeLine{00816\ \ \ \ \ \{}
+\DoxyCodeLine{00817\ \ \ \ \ \ \ \ \ std::cerr\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)nbool\ binaryFileWrite(const\ unordered\_map<M,T,less<M>\ >\&):\ "{}};}
+\DoxyCodeLine{00818\ \ \ \ \ \ \ \ \ std::cerr\ <<\ \textcolor{stringliteral}{"{}ERROR:\ invalid\ file\ pointer."{}}\ <<\ std::endl;}
+\DoxyCodeLine{00819\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00820\ \ \ \ \ \}}
+\DoxyCodeLine{00821\ \ \ \ \ \textcolor{keyword}{const}\ size\_t\ elements\ =\ stl\_ctner.size();}
+\DoxyCodeLine{00822\ \ \ \ \ \textcolor{keyword}{const}\ size\_t\ bytesM\ =\ \textcolor{keyword}{sizeof}(M);}
+\DoxyCodeLine{00823\ \ \ \ \ \textcolor{keyword}{const}\ size\_t\ bytesT\ =\ \textcolor{keyword}{sizeof}(T);}
+\DoxyCodeLine{00824\ \ \ \ \ M\ \ \ \ \ \ key;}
+\DoxyCodeLine{00825\ \ \ \ \ T\ \ \ \ \ \ val;}
+\DoxyCodeLine{00826\ }
+\DoxyCodeLine{00827\ \ \ \ \ \textcolor{comment}{//\ writing\ the\ number\ of\ vector\ objects}}
+\DoxyCodeLine{00828\ \ \ \ \ fp.write(\textcolor{keyword}{reinterpret\_cast}<\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*>(\&elements),\ \textcolor{keyword}{sizeof}(size\_t));}
+\DoxyCodeLine{00829\ }
+\DoxyCodeLine{00830\ \ \ \ \ \textcolor{comment}{//\ writing\ all\ key-\/value\ pairs}}
+\DoxyCodeLine{00831\ \ \ \textcolor{keywordflow}{if}\ (\ elements\ >=\ 1\ )}
+\DoxyCodeLine{00832\ \ \ \ \ \textcolor{keywordflow}{for}\ (\ \textcolor{keyword}{typename}\ std::unordered\_map<M,\ T>::const\_iterator\ it\ =\ stl\_ctner.begin();\ it\ !=\ stl\_ctner.end();\ it++)}
+\DoxyCodeLine{00833\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00834\ \ \ \ \ \ \ \ \ key\ =\ (*it).first;}
+\DoxyCodeLine{00835\ \ \ \ \ \ \ \ \ val\ =\ (*it).second;}
+\DoxyCodeLine{00836\ \ \ \ \ \ \ \ \ fp.write(\ \textcolor{keyword}{reinterpret\_cast}<\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*>(\&key),\ bytesM\ );}
+\DoxyCodeLine{00837\ \ \ \ \ \ \ \ \ fp.write(\ \textcolor{keyword}{reinterpret\_cast}<\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*>(\&val),\ bytesT\ );}
+\DoxyCodeLine{00838\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00839\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00840\ \}}
+\DoxyCodeLine{00841\ }
+\DoxyCodeLine{00842\ }
+\DoxyCodeLine{00843\ }
+\DoxyCodeLine{00844\ }
+\DoxyCodeLine{00845\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00846\ \textcolor{comment}{}}
+\DoxyCodeLine{00847\ \textcolor{comment}{Reads\ an\ STL\ unordered\_map\ from\ a\ binary\ file.\ The\ map}}
+\DoxyCodeLine{00848\ \textcolor{comment}{is\ erased\ before\ adding\ the\ data\ if\ it\ already\ contains\ data.\ How\ many}}
+\DoxyCodeLine{00849\ \textcolor{comment}{records\ are\ read\ is\ specified\ by\ an\ 'unsigned\ long'\ number\ which\ precedes}}
+\DoxyCodeLine{00850\ \textcolor{comment}{the\ dataset.}}
+\DoxyCodeLine{00851\ \textcolor{comment}{}}
+\DoxyCodeLine{00852\ \textcolor{comment}{@section\ arguments\ Input\ Arguments}}
+\DoxyCodeLine{00853\ \textcolor{comment}{}}
+\DoxyCodeLine{00854\ \textcolor{comment}{A\ pointer\ to\ a\ binary\ file\ opened\ in\ read\ binary\ mode\ ("{}rb"{}),\ and\ a}}
+\DoxyCodeLine{00855\ \textcolor{comment}{reference\ to\ an\ STL\ map.}}
+\DoxyCodeLine{00856\ \textcolor{comment}{}}
+\DoxyCodeLine{00857\ \textcolor{comment}{@return\ binaryFileRead()\ returns\ the\ boolean\ 'true'\ if\ the\ number\ of\ data\ records}}
+\DoxyCodeLine{00858\ \textcolor{comment}{which\ precedes\ the\ dataset\ in\ the\ file\ has\ been\ read\ correctly.\ If\ the}}
+\DoxyCodeLine{00859\ \textcolor{comment}{file\ pointer\ is\ invalid\ or\ less\ data\ are\ read,\ the\ function\ returns\ false.}}
+\DoxyCodeLine{00860\ \textcolor{comment}{}}
+\DoxyCodeLine{00861\ \textcolor{comment}{@section\ implementation\ Implementation}}
+\DoxyCodeLine{00862\ \textcolor{comment}{}}
+\DoxyCodeLine{00863\ \textcolor{comment}{Uses\ the\ ANSI\ C\ function\ fread().\ The\ map\ which\ will\ hold\ the}}
+\DoxyCodeLine{00864\ \textcolor{comment}{data\ is\ erased\ if\ it\ is\ not\ empty.\ Storage\ is\ reserved\ for\ the\ new\ number}}
+\DoxyCodeLine{00865\ \textcolor{comment}{of\ elements\ which\ is\ read\ from\ file.\ Then\ the\ elements\ are\ read\ and\ the}}
+\DoxyCodeLine{00866\ \textcolor{comment}{container\ is\ returned.}}
+\DoxyCodeLine{00867\ \textcolor{comment}{}}
+\DoxyCodeLine{00868\ \textcolor{comment}{@section\ application\ Application}}
+\DoxyCodeLine{00869\ \textcolor{comment}{}}
+\DoxyCodeLine{00870\ \textcolor{comment}{Efficiently\ read\ data\ into\ an\ STL\ map.}}
+\DoxyCodeLine{00871\ \textcolor{comment}{}}
+\DoxyCodeLine{00872\ \textcolor{comment}{@section\ messages\ Messages}}
+\DoxyCodeLine{00873\ \textcolor{comment}{}}
+\DoxyCodeLine{00874\ \textcolor{comment}{The\ function\ will\ return\ false\ if\ (1)\ the\ file\ pointer\ is\ invalid,\ (2)}}
+\DoxyCodeLine{00875\ \textcolor{comment}{the\ number\ of\ data\ records\ cannot\ be\ read\ correctly,\ and\ (3)\ if\ this}}
+\DoxyCodeLine{00876\ \textcolor{comment}{number\ does\ not\ match\ the\ number\ of\ records\ which\ were\ actually\ read.}}
+\DoxyCodeLine{00877\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00878\ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ \mbox{\hyperlink{namespacecsmp_a07feee7483c197b7b6c1c5e789bdc756}{M}},\ \textcolor{keyword}{class}\ \mbox{\hyperlink{namespacecsmp_a07feee7483c197b7b6c1c5e789bdc756}{T}}>}
+\DoxyCodeLine{00879\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp_a07feee7483c197b7b6c1c5e789bdc756}{binaryFileRead}}(\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{fstream}}\&\ \mbox{\hyperlink{namespacecsmp}{fp}},\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{unordered\_map}}<\mbox{\hyperlink{namespacecsmp}{M}},\ \mbox{\hyperlink{namespacecsmp}{T}}>\&\ \mbox{\hyperlink{namespacecsmp}{stl\_ctner}})}
+\DoxyCodeLine{00880\ \{}
+\DoxyCodeLine{00881\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{namespacecsmp}{fp}}.\mbox{\hyperlink{namespacecsmp}{is\_open}}())}
+\DoxyCodeLine{00882\ \ \ \ \ \{}
+\DoxyCodeLine{00883\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{cerr}}\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)nbool\ binaryFileRead(unordered\_map<M,T>\&):\ "{}};}
+\DoxyCodeLine{00884\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{cerr}}\ <<\ \textcolor{stringliteral}{"{}ERROR:\ invalid\ file\ pointer."{}}\ <<\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{endl}};}
+\DoxyCodeLine{00885\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00886\ \ \ \ \ \}}
+\DoxyCodeLine{00887\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{size\_t}}\ \mbox{\hyperlink{namespacecsmp}{bytesM}}\ =\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{namespacecsmp}{M}}),\ \mbox{\hyperlink{namespacecsmp}{bytesT}}\ =\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{namespacecsmp}{T}});}
+\DoxyCodeLine{00888\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{size\_t}}\ \ \mbox{\hyperlink{namespacecsmp}{counterM}}(0),\ \mbox{\hyperlink{namespacecsmp}{counterT}}(0);}
+\DoxyCodeLine{00889\ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{M}}\ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{key}};}
+\DoxyCodeLine{00890\ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{T}}\ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{val}};}
+\DoxyCodeLine{00891\ }
+\DoxyCodeLine{00892\ \ \ \ \ \textcolor{comment}{//\ 1.\ read\ number\ of\ record\ in\ the\ map\ and\ assert\ reading}}
+\DoxyCodeLine{00893\ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{size\_t}}\ \mbox{\hyperlink{namespacecsmp}{elements}}\ =\ \mbox{\hyperlink{namespacecsmp}{readContainerSize}}(\ \mbox{\hyperlink{namespacecsmp}{fp}}\ );}
+\DoxyCodeLine{00894\ }
+\DoxyCodeLine{00895\ \ \ \ \ \textcolor{comment}{//\ TODO:\ write\ the\ elements\ in\ one\ go,\ rather\ than\ one\ by\ one}}
+\DoxyCodeLine{00896\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{namespacecsmp}{elements}}\ >=\ 1\ )\ \{}
+\DoxyCodeLine{00897\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{namespacecsmp}{stl\_ctner}}.\mbox{\hyperlink{namespacecsmp}{empty}}())}
+\DoxyCodeLine{00898\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{stl\_ctner}}.\mbox{\hyperlink{namespacecsmp}{erase}}(\mbox{\hyperlink{namespacecsmp}{stl\_ctner}}.\mbox{\hyperlink{namespacecsmp}{begin}}(),\ \mbox{\hyperlink{namespacecsmp}{stl\_ctner}}.\mbox{\hyperlink{namespacecsmp}{end}}());}
+\DoxyCodeLine{00899\ \ \ \ \ \ \ \textcolor{comment}{//\ 2.\ reading\ all\ map\ records}}
+\DoxyCodeLine{00900\ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\ \mbox{\hyperlink{namespacecsmp}{size\_t}}\ \mbox{\hyperlink{namespacecsmp}{i}}\{0U\};\ \mbox{\hyperlink{namespacecsmp}{i}}<\mbox{\hyperlink{namespacecsmp}{elements}};\ \mbox{\hyperlink{namespacecsmp}{i}}++)}
+\DoxyCodeLine{00901\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00902\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ reading\ key}}
+\DoxyCodeLine{00903\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{namespacecsmp}{fp}}.\mbox{\hyperlink{namespacecsmp}{read}}(\ \textcolor{keyword}{reinterpret\_cast}<\textcolor{keywordtype}{char}*>(\&\mbox{\hyperlink{namespacecsmp}{key}}),\ \mbox{\hyperlink{namespacecsmp}{bytesM}}))\ \mbox{\hyperlink{namespacecsmp}{counterM}}++;}
+\DoxyCodeLine{00904\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ reading\ value}}
+\DoxyCodeLine{00905\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{namespacecsmp}{fp}}.\mbox{\hyperlink{namespacecsmp}{read}}(\ \textcolor{keyword}{reinterpret\_cast}<\textcolor{keywordtype}{char}*>(\&\mbox{\hyperlink{namespacecsmp}{val}}),\ \mbox{\hyperlink{namespacecsmp}{bytesT}}))\ \mbox{\hyperlink{namespacecsmp}{counterT}}++;}
+\DoxyCodeLine{00906\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ storing\ value\ in\ map\ after\ key}}
+\DoxyCodeLine{00907\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{stl\_ctner}}[\mbox{\hyperlink{namespacecsmp}{key}}]\ =\ \mbox{\hyperlink{namespacecsmp}{val}};}
+\DoxyCodeLine{00908\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00909\ \ \ \ \ \}}
+\DoxyCodeLine{00910\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{namespacecsmp}{counterM}}\ !=\ \mbox{\hyperlink{namespacecsmp}{elements}}\ ||\ \mbox{\hyperlink{namespacecsmp}{counterT}}\ !=\ \mbox{\hyperlink{namespacecsmp}{elements}})\ \{}
+\DoxyCodeLine{00911\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{cerr}}\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)nbool\ binaryFileRead(vector<map<M,T>\&):\ "{}};}
+\DoxyCodeLine{00912\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{cerr}}\ <<\ \textcolor{stringliteral}{"{}ERROR:\ incorrect\ number\ of\ map\ records\ were\ read:\ "{}};}
+\DoxyCodeLine{00913\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{cerr}}\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)nIndicated\ number:\ "{}}\ <<\ \mbox{\hyperlink{namespacecsmp}{elements}}\ <<\ \textcolor{stringliteral}{"{},\ actual\ number\ read:\ "{}}\ <<\ \mbox{\hyperlink{namespacecsmp}{counterM}}\ <<\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{endl}};}
+\DoxyCodeLine{00914\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00915\ \ \ \ \ \}}
+\DoxyCodeLine{00916\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00917\ \}}
+\DoxyCodeLine{00918\ }
+\DoxyCodeLine{00919\ }
+\DoxyCodeLine{00920\ }
+\DoxyCodeLine{00921\ }
+\DoxyCodeLine{00922\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00923\ \textcolor{comment}{}}
+\DoxyCodeLine{00924\ \textcolor{comment}{Uses\ the\ C-\/style\ fwrite()\ function\ for\ binary\ file\ IO\ to\ write\ the\ contents}}
+\DoxyCodeLine{00925\ \textcolor{comment}{of\ an\ STL\ map\ of\ vector<T>\ to\ a\ binary\ file.\ The\ data\ segment\ is\ preceded}}
+\DoxyCodeLine{00926\ \textcolor{comment}{by\ an\ 'size\_t'\ number\ which\ determines\ the\ number\ of\ vector\ objects}}
+\DoxyCodeLine{00927\ \textcolor{comment}{which\ are\ written\ to\ file.\ Each\ vector\ record\ is\ preceded\ by\ the}}
+\DoxyCodeLine{00928\ \textcolor{comment}{corresponding\ map\ key.}}
+\DoxyCodeLine{00929\ \textcolor{comment}{}}
+\DoxyCodeLine{00930\ \textcolor{comment}{@section\ arguments\ Input\ Arguments}}
+\DoxyCodeLine{00931\ \textcolor{comment}{}}
+\DoxyCodeLine{00932\ \textcolor{comment}{A\ file\ pointer\ of\ a\ binary\ file\ opened\ in\ write\ mode\ (e.g.,\ "{}wb"{})\ and\ a}}
+\DoxyCodeLine{00933\ \textcolor{comment}{constant\ reference\ to\ the\ STL\ map\ of\ vectors\ which\ will\ be\ written\ to}}
+\DoxyCodeLine{00934\ \textcolor{comment}{file.}}
+\DoxyCodeLine{00935\ \textcolor{comment}{}}
+\DoxyCodeLine{00936\ \textcolor{comment}{@return\ a\ boolean\ indicating\ whether\ all\ map\ data\ have}}
+\DoxyCodeLine{00937\ \textcolor{comment}{been\ written\ correctly\ to\ the\ file.}}
+\DoxyCodeLine{00938\ \textcolor{comment}{}}
+\DoxyCodeLine{00939\ \textcolor{comment}{@section\ implementation\ Implementation}}
+\DoxyCodeLine{00940\ \textcolor{comment}{}}
+\DoxyCodeLine{00941\ \textcolor{comment}{Uses\ the\ ANSI\ standard\ C\ function\ fwrite().\ NOTE\ that\ the\ map\ key\ must}}
+\DoxyCodeLine{00942\ \textcolor{comment}{not\ contain\ any\ dynamically\ allocated\ data.\ Otherwise\ these\ data\ are}}
+\DoxyCodeLine{00943\ \textcolor{comment}{sliced\ of\ the\ binary\ record.}}
+\DoxyCodeLine{00944\ \textcolor{comment}{}}
+\DoxyCodeLine{00945\ \textcolor{comment}{@section\ application\ Application}}
+\DoxyCodeLine{00946\ \textcolor{comment}{}}
+\DoxyCodeLine{00947\ \textcolor{comment}{To\ efficiently\ write\ a\ map\ of\ vector\ data\ to\ a\ binary\ file.}}
+\DoxyCodeLine{00948\ \textcolor{comment}{}}
+\DoxyCodeLine{00949\ \textcolor{comment}{@section\ messages\ Messages}}
+\DoxyCodeLine{00950\ \textcolor{comment}{}}
+\DoxyCodeLine{00951\ \textcolor{comment}{If\ the\ file\ pointer\ is\ invalid,\ method\ will\ quit,\ reporting\ an\ error.}}
+\DoxyCodeLine{00952\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00953\ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ M,\ \textcolor{keyword}{class}\ T>}
+\DoxyCodeLine{00954\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp_ac95b6a49363c4a33733d04d4cfa18817}{binaryFileWrite}}(std::fstream\&\ fp,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp_ac95b6a49363c4a33733d04d4cfa18817}{std}}::\mbox{\hyperlink{namespacecsmp_ac95b6a49363c4a33733d04d4cfa18817}{map}}<\mbox{\hyperlink{namespacecsmp_ac95b6a49363c4a33733d04d4cfa18817}{M}},\ \mbox{\hyperlink{namespacecsmp_ac95b6a49363c4a33733d04d4cfa18817}{std}}::\mbox{\hyperlink{namespacecsmp_ac95b6a49363c4a33733d04d4cfa18817}{vector}}<\mbox{\hyperlink{namespacecsmp_ac95b6a49363c4a33733d04d4cfa18817}{T}}>\ >\&\ \mbox{\hyperlink{namespacecsmp_ac95b6a49363c4a33733d04d4cfa18817}{stl\_ctner}})}
+\DoxyCodeLine{00955\ \{}
+\DoxyCodeLine{00956\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \textcolor{preprocessor}{DEBUG}}
+\DoxyCodeLine{00957\ \ \ \textcolor{keywordflow}{if}\ (\ stl\_ctner.empty()\ )}
+\DoxyCodeLine{00958\ \ \ \ \ std::cerr\ <<\textcolor{stringliteral}{"{}\(\backslash\)nbinaryFileWrite(map<vector>>):\ WARNING:\ container\ is\ empty."{}}<<\ std::endl;}
+\DoxyCodeLine{00959\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00960\ \ \ \ \ \textcolor{keywordflow}{if}\ (!fp.is\_open())\ \{}
+\DoxyCodeLine{00961\ \ \ \ \ \ \ \ \ std::cerr\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)nbool\ binaryFileWrite(const\ map<M,vector<T>,less<M>\ >\&):\ "{}};}
+\DoxyCodeLine{00962\ \ \ \ \ \ \ \ \ std::cerr\ <<\ \textcolor{stringliteral}{"{}ERROR:\ invalid\ file\ pointer."{}}\ <<\ std::endl;}
+\DoxyCodeLine{00963\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00964\ \ \ \ \ \}}
+\DoxyCodeLine{00965\ }
+\DoxyCodeLine{00966\ \ \ \ \ \textcolor{keyword}{const}\ size\_t\ elements\ =\ stl\_ctner.size();}
+\DoxyCodeLine{00967\ \ \ \ \ \textcolor{keyword}{const}\ size\_t\ bytes\ =\ \textcolor{keyword}{sizeof}(M);}
+\DoxyCodeLine{00968\ \ \ \ \ M\ \ \ \ \ \ \ \ \ \ \ \ val;}
+\DoxyCodeLine{00969\ }
+\DoxyCodeLine{00970\ \ \ \ \ \textcolor{comment}{//\ writing\ the\ number\ of\ vector\ objects}}
+\DoxyCodeLine{00971\ \ \ \ \ fp.write(\textcolor{keyword}{reinterpret\_cast}<\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*>(\&elements),\ \textcolor{keyword}{sizeof}(size\_t));}
+\DoxyCodeLine{00972\ }
+\DoxyCodeLine{00973\ \ \ \ \ \textcolor{comment}{//\ writing\ all\ elements}}
+\DoxyCodeLine{00974\ \ \ \textcolor{keywordflow}{if}\ (\ elements\ >=\ 1\ )}
+\DoxyCodeLine{00975\ \ \ \ \ \textcolor{keywordflow}{for}\ (\ \textcolor{keyword}{typename}\ std::map<M,\ std::vector<T>\ >::const\_iterator\ it\ =\ stl\_ctner.begin();\ it\ !=\ stl\_ctner.end();\ it++)}
+\DoxyCodeLine{00976\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00977\ \ \ \ \ \ \ \ \ val\ =\ (*it).first;}
+\DoxyCodeLine{00978\ \ \ \ \ \ \ \ \ fp.write(\ \textcolor{keyword}{reinterpret\_cast}<\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*>(\&val),\ bytes\ );}
+\DoxyCodeLine{00979\ \ \ \ \ \ \ \ \ binaryFileWrite(fp,\ (*it).second\ );}
+\DoxyCodeLine{00980\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00981\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00982\ \}}
+\DoxyCodeLine{00983\ }
+\DoxyCodeLine{00984\ }
+\DoxyCodeLine{00985\ }
+\DoxyCodeLine{00986\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00987\ \textcolor{comment}{}}
+\DoxyCodeLine{00988\ \textcolor{comment}{Reads\ a\ map\ of\ STL\ vectors\ and\ their\ keys\ from\ a\ binary\ file.\ The\ map}}
+\DoxyCodeLine{00989\ \textcolor{comment}{is\ erased\ before\ adding\ the\ data\ if\ it\ already\ contained\ any\ data.\ How\ many}}
+\DoxyCodeLine{00990\ \textcolor{comment}{records\ are\ read\ is\ specified\ by\ an\ 'size\_t'\ number\ which\ precedes}}
+\DoxyCodeLine{00991\ \textcolor{comment}{the\ dataset.}}
+\DoxyCodeLine{00992\ \textcolor{comment}{}}
+\DoxyCodeLine{00993\ \textcolor{comment}{@section\ arguments\ Input\ Arguments}}
+\DoxyCodeLine{00994\ \textcolor{comment}{}}
+\DoxyCodeLine{00995\ \textcolor{comment}{A\ pointer\ to\ a\ binary\ file\ opened\ in\ read\ binary\ mode\ ("{}rb"{}),\ and\ a}}
+\DoxyCodeLine{00996\ \textcolor{comment}{reference\ to\ an\ STL\ map\ of\ vectors.}}
+\DoxyCodeLine{00997\ \textcolor{comment}{}}
+\DoxyCodeLine{00998\ \textcolor{comment}{@return\ the\ boolean\ 'true'\ if\ the\ number\ of\ data\ records}}
+\DoxyCodeLine{00999\ \textcolor{comment}{which\ precedes\ the\ dataset\ in\ the\ file\ has\ been\ read\ correctly.\ If\ the}}
+\DoxyCodeLine{01000\ \textcolor{comment}{file\ pointer\ is\ invalid\ or\ less\ data\ are\ read,\ the\ function\ returns\ false.}}
+\DoxyCodeLine{01001\ \textcolor{comment}{}}
+\DoxyCodeLine{01002\ \textcolor{comment}{@section\ implementation\ Implementation}}
+\DoxyCodeLine{01003\ \textcolor{comment}{}}
+\DoxyCodeLine{01004\ \textcolor{comment}{Uses\ the\ ANSI\ C\ function\ fread().\ The\ map\ which\ will\ hold\ the}}
+\DoxyCodeLine{01005\ \textcolor{comment}{data\ is\ erased\ if\ it\ is\ not\ empty.\ Storage\ is\ reserved\ for\ the\ new\ number}}
+\DoxyCodeLine{01006\ \textcolor{comment}{of\ elements\ which\ is\ read\ from\ file.\ Then\ the\ elements\ are\ read\ and\ the}}
+\DoxyCodeLine{01007\ \textcolor{comment}{container\ is\ returned.}}
+\DoxyCodeLine{01008\ \textcolor{comment}{}}
+\DoxyCodeLine{01009\ \textcolor{comment}{@section\ application\ Application}}
+\DoxyCodeLine{01010\ \textcolor{comment}{}}
+\DoxyCodeLine{01011\ \textcolor{comment}{Efficiently\ read\ data\ into\ an\ STL\ map\ of\ vectors.}}
+\DoxyCodeLine{01012\ \textcolor{comment}{}}
+\DoxyCodeLine{01013\ \textcolor{comment}{@section\ messages\ Messages}}
+\DoxyCodeLine{01014\ \textcolor{comment}{}}
+\DoxyCodeLine{01015\ \textcolor{comment}{The\ function\ will\ return\ false\ if\ (1)\ the\ file\ pointer\ is\ invalid,\ (2)}}
+\DoxyCodeLine{01016\ \textcolor{comment}{the\ number\ of\ data\ records\ cannot\ be\ read\ correctly,\ and\ (3)\ if\ this}}
+\DoxyCodeLine{01017\ \textcolor{comment}{number\ does\ not\ match\ the\ number\ of\ records\ which\ were\ actually\ read.}}
+\DoxyCodeLine{01018\ \textcolor{comment}{*/}}
+\DoxyCodeLine{01019\ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ \mbox{\hyperlink{namespacecsmp_a07feee7483c197b7b6c1c5e789bdc756}{M}},\ \textcolor{keyword}{class}\ \mbox{\hyperlink{namespacecsmp_a07feee7483c197b7b6c1c5e789bdc756}{T}}>}
+\DoxyCodeLine{01020\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp_a07feee7483c197b7b6c1c5e789bdc756}{binaryFileRead}}(\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{fstream}}\&\ \mbox{\hyperlink{namespacecsmp}{fp}},\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{map}}<\mbox{\hyperlink{namespacecsmp}{M}},\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{T}}>\ >\&\ \mbox{\hyperlink{namespacecsmp}{stl\_ctner}})}
+\DoxyCodeLine{01021\ \{}
+\DoxyCodeLine{01022\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{namespacecsmp}{fp}}.\mbox{\hyperlink{namespacecsmp}{is\_open}}())\ \{}
+\DoxyCodeLine{01023\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{cerr}}\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)nbool\ binaryFileRead(map<M,vector<T>,less<M>\ >\&):\ "{}};}
+\DoxyCodeLine{01024\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{cerr}}\ <<\ \textcolor{stringliteral}{"{}ERROR:\ invalid\ file\ pointer."{}}\ <<\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{endl}};}
+\DoxyCodeLine{01025\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{01026\ \ \ \ \ \}}
+\DoxyCodeLine{01027\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{size\_t}}\ \ \ \mbox{\hyperlink{namespacecsmp}{bytes}}(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{namespacecsmp}{M}}));}
+\DoxyCodeLine{01028\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{size\_t}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{counter}}(0);}
+\DoxyCodeLine{01029\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{T}}>\ \mbox{\hyperlink{namespacecsmp}{val}};}
+\DoxyCodeLine{01030\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{M}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{key}};}
+\DoxyCodeLine{01031\ }
+\DoxyCodeLine{01032\ \ \ \ \ \textcolor{comment}{//\ 1.\ read\ number\ of\ record\ in\ the\ map\ and\ assert\ reading}}
+\DoxyCodeLine{01033\ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{size\_t}}\ \mbox{\hyperlink{namespacecsmp}{elements}}\ =\ \mbox{\hyperlink{namespacecsmp}{readContainerSize}}(\ \mbox{\hyperlink{namespacecsmp}{fp}}\ );}
+\DoxyCodeLine{01034\ }
+\DoxyCodeLine{01035\ \ \ \ \ \textcolor{comment}{//\ TODO:\ write\ the\ elements\ in\ one\ go,\ rather\ than\ one\ by\ one}}
+\DoxyCodeLine{01036\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{namespacecsmp}{elements}}\ >=\ 1\ )\ \{}
+\DoxyCodeLine{01037\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{namespacecsmp}{stl\_ctner}}.\mbox{\hyperlink{namespacecsmp}{empty}}())}
+\DoxyCodeLine{01038\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{stl\_ctner}}.\mbox{\hyperlink{namespacecsmp}{erase}}(\mbox{\hyperlink{namespacecsmp}{stl\_ctner}}.\mbox{\hyperlink{namespacecsmp}{begin}}(),\ \mbox{\hyperlink{namespacecsmp}{stl\_ctner}}.\mbox{\hyperlink{namespacecsmp}{end}}());}
+\DoxyCodeLine{01039\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 2.\ reading\ all\ map\ records}}
+\DoxyCodeLine{01040\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\ \mbox{\hyperlink{namespacecsmp}{size\_t}}\ \mbox{\hyperlink{namespacecsmp}{i}}\{0U\};\ \mbox{\hyperlink{namespacecsmp}{i}}<\mbox{\hyperlink{namespacecsmp}{elements}};\ \mbox{\hyperlink{namespacecsmp}{i}}++)}
+\DoxyCodeLine{01041\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{01042\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ reading\ key}}
+\DoxyCodeLine{01043\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{fp}}.\mbox{\hyperlink{namespacecsmp}{read}}(\ \textcolor{keyword}{reinterpret\_cast}<\textcolor{keywordtype}{char}*>(\&\mbox{\hyperlink{namespacecsmp}{key}}),\ \mbox{\hyperlink{namespacecsmp}{bytes}});}
+\DoxyCodeLine{01044\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ reading\ vector\ and\ counting\ the\ successfully\ read\ records}}
+\DoxyCodeLine{01045\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{namespacecsmp}{binaryFileRead}}(\mbox{\hyperlink{namespacecsmp}{fp}},\ \mbox{\hyperlink{namespacecsmp}{val}}))\ \{}
+\DoxyCodeLine{01046\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{counter}}++;}
+\DoxyCodeLine{01047\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{stl\_ctner}}[\mbox{\hyperlink{namespacecsmp}{key}}]\ =\ \mbox{\hyperlink{namespacecsmp}{val}};}
+\DoxyCodeLine{01048\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01049\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01050\ \ \ \ \ \}}
+\DoxyCodeLine{01051\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{namespacecsmp}{counter}}\ !=\ \mbox{\hyperlink{namespacecsmp}{elements}})\ \{}
+\DoxyCodeLine{01052\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{cerr}}\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)nbool\ binaryFileRead(vector<map<M,vector<T>\ >\&):\ "{}};}
+\DoxyCodeLine{01053\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{cerr}}\ <<\ \textcolor{stringliteral}{"{}ERROR:\ incorrect\ number\ of\ map\ records\ were\ read:\ "{}};}
+\DoxyCodeLine{01054\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{cerr}}\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)nIndicated\ number:\ "{}}\ <<\ \mbox{\hyperlink{namespacecsmp}{elements}}\ <<\ \textcolor{stringliteral}{"{},\ actual\ number\ read:\ "{}}\ <<\ \mbox{\hyperlink{namespacecsmp}{counter}}\ <<\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{endl}};}
+\DoxyCodeLine{01055\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{01056\ \ \ \ \ \}}
+\DoxyCodeLine{01057\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{01058\ \}}
+\DoxyCodeLine{01059\ }
+\DoxyCodeLine{01060\ \textcolor{comment}{/**}}
+\DoxyCodeLine{01061\ \textcolor{comment}{@\}}}
+\DoxyCodeLine{01062\ \textcolor{comment}{*/}}
+\DoxyCodeLine{01063\ }
+\DoxyCodeLine{01064\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{01065\ }
+\DoxyCodeLine{01066\ }
+\DoxyCodeLine{01067\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

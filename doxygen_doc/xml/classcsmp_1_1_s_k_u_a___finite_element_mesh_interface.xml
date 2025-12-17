@@ -1,0 +1,1478 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface" kind="class" language="C++" prot="public">
+    <compoundname>csmp::SKUA_FiniteElementMeshInterface</compoundname>
+    <includes refid="_s_k_u_a___finite_element_mesh_interface_8h" local="no">SKUA_FiniteElementMeshInterface.h</includes>
+    <sectiondef kind="private-type">
+      <memberdef kind="typedef" id="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1ac2fc646b91e3c5fe387bac9b60064205" prot="private" static="no">
+        <type><ref refid="classcsmp_1_1_c_s_m_p___element_specifications" kindref="compound">CSMP_ElementSpecifications</ref></type>
+        <definition>typedef CSMP_ElementSpecifications csmp::SKUA_FiniteElementMeshInterface::csmp_elmt_specs</definition>
+        <argsstring></argsstring>
+        <name>csmp_elmt_specs</name>
+        <qualifiedname>csmp::SKUA_FiniteElementMeshInterface::csmp_elmt_specs</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.h" line="347" column="54" bodyfile="source/includes/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.h" bodystart="347" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a1e44b69f3b7c662e93faa93ed3b8c5d4" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::SKUA_FiniteElementMeshInterface::file_header_</definition>
+        <argsstring></argsstring>
+        <name>file_header_</name>
+        <qualifiedname>csmp::SKUA_FiniteElementMeshInterface::file_header_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.h" line="345" column="54" bodyfile="source/includes/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.h" bodystart="345" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a4fd55282eb8430fb54b0f061b08edde9" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::SKUA_FiniteElementMeshInterface::boundary_tag_</definition>
+        <argsstring></argsstring>
+        <name>boundary_tag_</name>
+        <qualifiedname>csmp::SKUA_FiniteElementMeshInterface::boundary_tag_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.h" line="346" column="54" bodyfile="source/includes/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.h" bodystart="346" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1acefd23e0a98d74c23f8c41d56d24d587" prot="private" static="no" mutable="no">
+        <type>std::multimap&lt; std::string, std::string &gt;</type>
+        <definition>std::multimap&lt;std::string,std::string&gt; csmp::SKUA_FiniteElementMeshInterface::object_specs_</definition>
+        <argsstring></argsstring>
+        <name>object_specs_</name>
+        <qualifiedname>csmp::SKUA_FiniteElementMeshInterface::object_specs_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.h" line="349" column="29" bodyfile="source/includes/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.h" bodystart="349" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1afbba6a3db557e12efa1070e23794820c" prot="private" static="no" mutable="no">
+        <type>std::multimap&lt; std::string, std::vector&lt; size_t &gt; &gt;</type>
+        <definition>std::multimap&lt;std::string,std::vector&lt;size_t&gt; &gt; csmp::SKUA_FiniteElementMeshInterface::object_elements_</definition>
+        <argsstring></argsstring>
+        <name>object_elements_</name>
+        <qualifiedname>csmp::SKUA_FiniteElementMeshInterface::object_elements_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.h" line="351" column="20" bodyfile="source/includes/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.h" bodystart="351" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a0736ac5381cf4360639f241ce5d67f40" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::SKUA_FiniteElementMeshInterface::isoparametric_</definition>
+        <argsstring></argsstring>
+        <name>isoparametric_</name>
+        <qualifiedname>csmp::SKUA_FiniteElementMeshInterface::isoparametric_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.h" line="352" column="11" bodyfile="source/includes/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.h" bodystart="352" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a0437f47405cb07ab3a4cb688ad93a463" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::SKUA_FiniteElementMeshInterface::extra_checks_on_binary_file_</definition>
+        <argsstring></argsstring>
+        <name>extra_checks_on_binary_file_</name>
+        <qualifiedname>csmp::SKUA_FiniteElementMeshInterface::extra_checks_on_binary_file_</qualifiedname>
+        <initializer>= true</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.h" line="353" column="11" bodyfile="source/includes/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.h" bodystart="353" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1ad69ba9effa2e8c2fbf2cc73dc4537d17" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::SKUA_FiniteElementMeshInterface::SKUA_FiniteElementMeshInterface</definition>
+        <argsstring>(bool create_isoparametric_element_mesh=true)</argsstring>
+        <name>SKUA_FiniteElementMeshInterface</name>
+        <qualifiedname>csmp::SKUA_FiniteElementMeshInterface::SKUA_FiniteElementMeshInterface</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>create_isoparametric_element_mesh</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Constructs the <ref refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface" kindref="compound">SKUA_FiniteElementMeshInterface</ref> interface object.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The default argument of the constructor (false) means that it will try to output finite elements using a global interpolation coordinate system to the client objects. However there are currently only line, triangular and tetrahedral elements with linear basis functions available in CSMP because the elements must be straight-sided for such an approach to work. Instead isoparametric elements can be used. <linebreak/>
+</para>
+<para>In order to create isoparametric element models use &apos;true&apos;. <linebreak/>
+</para>
+<para>At the moment, CSMP supports analytical element forms only for tetra-triangular poly-element type meshes. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.h" line="276" column="16" bodyfile="source/modules/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.cpp" bodystart="29" bodyend="34"/>
+        <references refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1ad69ba9effa2e8c2fbf2cc73dc4537d17" compoundref="_s_k_u_a___finite_element_mesh_interface_8cpp" startline="29" endline="34">SKUA_FiniteElementMeshInterface</references>
+        <referencedby refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1ad69ba9effa2e8c2fbf2cc73dc4537d17" compoundref="_s_k_u_a___finite_element_mesh_interface_8cpp" startline="29" endline="34">SKUA_FiniteElementMeshInterface</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a0e7f2e3ded86dbf23889c4ef689a6eaa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::SKUA_FiniteElementMeshInterface::~SKUA_FiniteElementMeshInterface</definition>
+        <argsstring>()</argsstring>
+        <name>~SKUA_FiniteElementMeshInterface</name>
+        <qualifiedname>csmp::SKUA_FiniteElementMeshInterface::~SKUA_FiniteElementMeshInterface</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.h" line="277" column="7" bodyfile="source/modules/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.cpp" bodystart="37" bodyend="39"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1ac0a21d2796e40f9b6bf60fc76e67bfe9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::SKUA_FiniteElementMeshInterface::Read_SKUA_Mesh</definition>
+        <argsstring>(const std::string &amp;mesh_file_set, VSet&lt; dim &gt; &amp;, ModelTopology &amp;, bool binary_input_file)</argsstring>
+        <name>Read_SKUA_Mesh</name>
+        <qualifiedname>csmp::SKUA_FiniteElementMeshInterface::Read_SKUA_Mesh</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>mesh_file_set</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_model_topology" kindref="compound">ModelTopology</ref> &amp;</type>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>binary_input_file</declname>
+        </param>
+        <briefdescription>
+<para>Reading SKUA mesh from .asc and .dat files; deduces irregular if more than the top surface is warped (IRREGULAR) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.h" line="281" column="12"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a9e90b90d8c7ef6eb4b1e7acd0751963c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::SKUA_FiniteElementMeshInterface::Read_SKUA_Mesh</definition>
+        <argsstring>(const string &amp;filename, VSet&lt; dim &gt; &amp;vset, ModelTopology &amp;mesh_topology, bool binary_input_file)</argsstring>
+        <name>Read_SKUA_Mesh</name>
+        <qualifiedname>csmp::SKUA_FiniteElementMeshInterface::Read_SKUA_Mesh</qualifiedname>
+        <param>
+          <type>const string &amp;</type>
+          <declname>filename</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <declname>vset</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_model_topology" kindref="compound">ModelTopology</ref> &amp;</type>
+          <declname>mesh_topology</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>binary_input_file</declname>
+        </param>
+        <briefdescription>
+<para>Builds <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> after it was constructed with the default constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para>read ansys mesh</para>
+        </inbodydescription>
+        <location file="source/modules/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.cpp" line="55" column="6" bodyfile="source/modules/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.cpp" bodystart="55" bodyend="65"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1ad4af5c41a455bfd192f01b86656f22c5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::SKUA_FiniteElementMeshInterface::ReadMeshBinary</definition>
+        <argsstring>(const string &amp;meshfile, VSet&lt; dim &gt; &amp;vset, ModelTopology &amp;mesh_topology)</argsstring>
+        <name>ReadMeshBinary</name>
+        <qualifiedname>csmp::SKUA_FiniteElementMeshInterface::ReadMeshBinary</qualifiedname>
+        <param>
+          <type>const string &amp;</type>
+          <declname>meshfile</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <declname>vset</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_model_topology" kindref="compound">ModelTopology</ref> &amp;</type>
+          <declname>mesh_topology</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Reads SKUA finite element meshes created by SKUA&apos;s finite element mesher. If box shaped model geometry is assumed the method will attempt to set flags that will later be used to assign boundary counditions in CSMP (see method documentation for Model::AssignBoundaryValues3D() ). <linebreak/>
+</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The method needs the filename (without extension) of the &apos;<emphasis>.asc&apos;, &apos;</emphasis>.dat&apos; file pair that is output by the Input utility in the SKUA mesher. <linebreak/>
+</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>vset</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The correctly read mesh and the family definitions are returned into the user supplied vset and model topology objects, respectively. <linebreak/>
+</para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>mesh_topology</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the elements that make up the different model regions</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>Reads output which is expected to have the following number type formats.</para>
+<para><programlisting><codeline><highlight class="comment">//<sp/>32<sp/>bit<sp/>integers<sp/>and<sp/>unsigned<sp/>integers</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>nnodes;</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>records;</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>lplist,<sp/>lpfverts;<sp/></highlight><highlight class="comment">//<sp/>overall<sp/>length<sp/>of<sp/>plist,<sp/>pfvert<sp/>records</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>lelem;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>32<sp/>bit<sp/>integers<sp/>and<sp/>unsigned<sp/>integers<sp/>arrays</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>*pbflags,<sp/>*pfverts;</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>*pelmt,<sp/>*pmtrl,<sp/>*plist;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>64<sp/>bit<sp/>double<sp/>arrays</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>*pnts,<sp/>*px,<sp/>*py,<sp/>*pz;</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>*pbvals;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">records<sp/>=<sp/>(</highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/>int)<sp/>nnodes;<sp/></highlight><highlight class="comment">//<sp/>changed</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>writing<sp/>the<sp/>nnodes-sized<sp/>data<sp/>blocks<sp/>to<sp/>file</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>size<sp/>=<sp/>nnodes<sp/>(Knotenpunkte)</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">fwrite(&amp;records,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(</highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">),<sp/>1,<sp/>fdat);<sp/></highlight></codeline>
+<codeline><highlight class="normal">fwrite(px,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(</highlight><highlight class="keywordtype">double</highlight><highlight class="normal">),<sp/>nnodes,<sp/>fdat);</highlight></codeline>
+<codeline><highlight class="normal">fwrite(py,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(</highlight><highlight class="keywordtype">double</highlight><highlight class="normal">),<sp/>nnodes,<sp/>fdat);</highlight></codeline>
+<codeline><highlight class="normal">fwrite(pz,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(</highlight><highlight class="keywordtype">double</highlight><highlight class="normal">),<sp/>nnodes,<sp/>fdat);</highlight></codeline>
+<codeline><highlight class="normal">fwrite(pbflags,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">),<sp/>nnodes,<sp/>fdat);</highlight></codeline>
+<codeline><highlight class="normal">fwrite(pbvals,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(</highlight><highlight class="keywordtype">double</highlight><highlight class="normal">),<sp/>nnodes,<sp/>fdat);</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>size<sp/>=<sp/>nelements<sp/>(Finite<sp/>Elemente)</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">fwrite(&amp;lelem,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(</highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">),<sp/>1,<sp/>fdat);</highlight></codeline>
+<codeline><highlight class="normal">fwrite(pelmt,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">),<sp/>lelem,<sp/>fdat);</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>size<sp/>=<sp/>sum<sp/>over<sp/>nodes<sp/>per<sp/>element</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">fwrite(&amp;lplist,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(</highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">),<sp/>1,<sp/>fdat);</highlight></codeline>
+<codeline><highlight class="normal">fwrite(plist,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(</highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">),<sp/>lplist,<sp/>fdat);</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>size<sp/>=<sp/>sum<sp/>over<sp/>neighbors<sp/>per<sp/>element</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">fwrite(&amp;lpfverts,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(</highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">),<sp/>1,<sp/>fdat);</highlight></codeline>
+<codeline><highlight class="normal">fwrite(pfverts,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">),<sp/>lpfverts,<sp/>fdat);</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>size<sp/>=<sp/>nelements<sp/>(Finite<sp/>Elemente)</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">fwrite(&amp;lelem,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(</highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">),<sp/>1,<sp/>fdat);</highlight></codeline>
+<codeline><highlight class="normal">fwrite(pmtrl,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">),<sp/>lelem,<sp/>fdat);</highlight></codeline>
+</programlisting></para>
+<para>NB: <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> IDs in the SKUA dataset are expected to be numbered 0..n-1 by default.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Creates an interface the SKUA suite of meshing tools. This interface can also be used for mixed (poly-element type meshes). <linebreak/>
+</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>To protect the user against the erratic reading of transferred binary files a detailed reporting of the reading progress is output and errors are raised is encountered. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.cpp" line="154" column="6" bodyfile="source/modules/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.cpp" bodystart="154" bodyend="239"/>
+        <references refid="classcsmp_1_1_model_topology_1a9889be49c4614fd925b1159f21f54f9f" compoundref="_model_topology_8cpp" startline="212" endline="215">csmp::ModelTopology::ModelName</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a7efc76104170624140f176e29cf369a9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::SKUA_FiniteElementMeshInterface::ReadMeshASCII</definition>
+        <argsstring>(const string &amp;meshfile, VSet&lt; dim &gt; &amp;vset, ModelTopology &amp;mesh_topology)</argsstring>
+        <name>ReadMeshASCII</name>
+        <qualifiedname>csmp::SKUA_FiniteElementMeshInterface::ReadMeshASCII</qualifiedname>
+        <param>
+          <type>const string &amp;</type>
+          <declname>meshfile</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <declname>vset</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_model_topology" kindref="compound">ModelTopology</ref> &amp;</type>
+          <declname>mesh_topology</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Reads SKUA &apos;<emphasis>.asc&apos; and &apos;</emphasis>.dat&apos; files as created by the Input module in the MED interface. The dat files which store the mesh connectivity must be in ASCII format.</para>
+<para>This method reads models of an arbitrary shape and returns them into the supplied <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref> and mesh topology file. In order to assign boundary conditions to irregular shaped models one can use the outer surfaces if they are named appropriately. This must be done using the CAD and SKUA tools.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The method needs the model name which it will automatically expand into the names of the &apos;<emphasis>.asc&apos; and &apos;</emphasis>.dat&apos; files.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>To read the ASCII file &apos;*dat&apos; specifications that make sense for small box-shaped models for which the mesh data are to be transferred between different platforms so that binary files cannot be used.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>The output is rather verbose, alerting the user to all potential errors that may have occurred in the reading and processing phase of the input data. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+<para>name topology</para>
+        </inbodydescription>
+        <location file="source/modules/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.cpp" line="295" column="6" bodyfile="source/modules/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.cpp" bodystart="295" bodyend="385"/>
+        <references refid="classcsmp_1_1_model_topology_1a9889be49c4614fd925b1159f21f54f9f" compoundref="_model_topology_8cpp" startline="212" endline="215">csmp::ModelTopology::ModelName</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1ad4cfe1ae9db2d2bb63d8850796447b8f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool csmp::SKUA_FiniteElementMeshInterface::ReadNodeCoordinatesASCII</definition>
+        <argsstring>(ifstream &amp;ifs, VSet&lt; dim &gt; &amp;vset)</argsstring>
+        <name>ReadNodeCoordinatesASCII</name>
+        <qualifiedname>csmp::SKUA_FiniteElementMeshInterface::ReadNodeCoordinatesASCII</qualifiedname>
+        <param>
+          <type>ifstream &amp;</type>
+          <declname>ifs</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <declname>vset</declname>
+        </param>
+        <briefdescription>
+<para>ASCII DATA FILE. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The method reads the node coordinate block from the supplied file stream. <linebreak/>
+</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>A reference to the initialized ASCII input file stream. <linebreak/>
+</para>
+<para><simplesect kind="return"><para>The node coordinates are stored in the px, py, and pz records of the <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>. </para>
+</simplesect>
+</para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.cpp" line="696" column="6" bodyfile="source/modules/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.cpp" bodystart="696" bodyend="739"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1ab5981a03f8104973dbc234772d4e6c66" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool csmp::SKUA_FiniteElementMeshInterface::ReadBoundaryFlagsAndConditionsASCII</definition>
+        <argsstring>(ifstream &amp;ifs, VSet&lt; dim &gt; &amp;vset)</argsstring>
+        <name>ReadBoundaryFlagsAndConditionsASCII</name>
+        <qualifiedname>csmp::SKUA_FiniteElementMeshInterface::ReadBoundaryFlagsAndConditionsASCII</qualifiedname>
+        <param>
+          <type>ifstream &amp;</type>
+          <declname>ifs</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <declname>vset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The method reads the boundary condition and flag records from the input stream and stores them in the pbound and pbcond records in the <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>. <linebreak/>
+</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>A reference to the initialized ASCII input file stream. <linebreak/>
+</para>
+<para><simplesect kind="return"><para>The boundary flags and values at where nodes were flagged as boundary nodes are stored in the second method argument. </para>
+</simplesect>
+</para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.cpp" line="760" column="6" bodyfile="source/modules/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.cpp" bodystart="760" bodyend="802"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a1ae538155483f5084052cb701a605945" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool csmp::SKUA_FiniteElementMeshInterface::ReadPelementASCII</definition>
+        <argsstring>(ifstream &amp;ifs, VSet&lt; dim &gt; &amp;vset)</argsstring>
+        <name>ReadPelementASCII</name>
+        <qualifiedname>csmp::SKUA_FiniteElementMeshInterface::ReadPelementASCII</qualifiedname>
+        <param>
+          <type>ifstream &amp;</type>
+          <declname>ifs</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <declname>vset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Reads element-type integer-based identifiers for each element which are later parsed to determine the number of nodes per element and neighbors per element for the reading process.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>A reference to the initialized ASCII input file stream. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.cpp" line="821" column="6" bodyfile="source/modules/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.cpp" bodystart="821" bodyend="862"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a0efa16aede48c791746ae01277844516" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool csmp::SKUA_FiniteElementMeshInterface::ReadPlistASCII</definition>
+        <argsstring>(ifstream &amp;ifs, VSet&lt; dim &gt; &amp;vset, bool test_for_consecutive_node_numbering)</argsstring>
+        <name>ReadPlistASCII</name>
+        <qualifiedname>csmp::SKUA_FiniteElementMeshInterface::ReadPlistASCII</qualifiedname>
+        <param>
+          <type>ifstream &amp;</type>
+          <declname>ifs</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <declname>vset</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>test_for_consecutive_node_numbering</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The method reads the &apos;plist&apos; record from the supplied ASCII file. The plist contains the nodel id&apos;s of the consecutive finite elements that make up the mesh. These are output to the <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>. <linebreak/>
+</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>A reference to the initialized ASCII file stream that points to the beginning of the plist data block. <linebreak/>
+</para>
+<para><simplesect kind="return"><para>The <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref> into which the plist data shall be stored is supplied as the second method argument. </para>
+</simplesect>
+</para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.cpp" line="959" column="6" bodyfile="source/modules/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.cpp" bodystart="959" bodyend="1021"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a7c27fc98c209de51a8c26084975a6b4a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool csmp::SKUA_FiniteElementMeshInterface::ReadPfvertsASCII</definition>
+        <argsstring>(ifstream &amp;ifs, VSet&lt; dim &gt; &amp;vset)</argsstring>
+        <name>ReadPfvertsASCII</name>
+        <qualifiedname>csmp::SKUA_FiniteElementMeshInterface::ReadPfvertsASCII</qualifiedname>
+        <param>
+          <type>ifstream &amp;</type>
+          <declname>ifs</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <declname>vset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The &apos;pfverts&apos; record stores the IDs of the finite elements that sit opposite to the faces of the current finite element. If the face is located at the model boundary a negative boundary flag is stored in stead of the neighbor ID. <linebreak/>
+</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>A reference to the initialized ASCII input file stream. <linebreak/>
+</para>
+<para><simplesect kind="return"><para>The pfvert information is added to the second argument <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>. </para>
+</simplesect>
+</para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.cpp" line="1044" column="6" bodyfile="source/modules/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.cpp" bodystart="1044" bodyend="1091"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a2494acf5df62a29cfa69548489acd00c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool csmp::SKUA_FiniteElementMeshInterface::ReadPmaterialASCII</definition>
+        <argsstring>(ifstream &amp;ifs, VSet&lt; dim &gt; &amp;vset)</argsstring>
+        <name>ReadPmaterialASCII</name>
+        <qualifiedname>csmp::SKUA_FiniteElementMeshInterface::ReadPmaterialASCII</qualifiedname>
+        <param>
+          <type>ifstream &amp;</type>
+          <declname>ifs</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <declname>vset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Method reads the material ID record from the file stream and assigns the data to the argument <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>. <linebreak/>
+</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>A reference to the initialized ASCII input file stream. <linebreak/>
+</para>
+<para><simplesect kind="return"><para>The material information is assigned to the supplied <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>. </para>
+</simplesect>
+</para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.cpp" line="1124" column="6" bodyfile="source/modules/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.cpp" bodystart="1124" bodyend="1162"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a4db54bfa2ffe9688cd62414e404e7248" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool csmp::SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII</definition>
+        <argsstring>(ifstream &amp;ifs, VSet&lt; dim &gt; &amp;vset)</argsstring>
+        <name>ReadPropertyRecordsASCII</name>
+        <qualifiedname>csmp::SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII</qualifiedname>
+        <param>
+          <type>ifstream &amp;</type>
+          <declname>ifs</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <declname>vset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Method reads a single property record into a <ref refid="classcsmp_1_1_property_data" kindref="compound">PropertyData</ref> object and adds the data to the argument <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>.</para>
+<para>Each property record consists of :</para>
+<para>name(string) placement(enum PLACEMENT) type (<ref refid="group___c_s_m_p__global__enumerations_1gacbf62c758c46dc45b3f024638bb89274" kindref="member">VARIABLE_TYPE</ref>) (array length (int32)) number of data entries (int32) flag values (int32) property values (double)</para>
+<para>for variable placement and type, upper case or lower case spellings are accepted.</para>
+<para><simplesect kind="attention"><para>While space in variable names is expressed by an underscore which gets removed in CSMP.</para>
+</simplesect>
+<simplesect kind="attention"><para>At this point, no range check is performed on the values read, but parsing errors related to variable placement, type and flags are reported.</para>
+</simplesect>
+</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>A reference to the initialized ASCII input file stream. <linebreak/>
+</para>
+<para><simplesect kind="return"><para>true when the record was read correctly and completely.</para>
+</simplesect>
+TODO: potentially, we could test variable names with the <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref> already here, to rectify issues </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.cpp" line="1200" column="6" bodyfile="source/modules/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.cpp" bodystart="1200" bodyend="1321"/>
+        <references refid="classcsmp_1_1_property_data_1ab7debc3c38d32ccccd943ca61c42d024" compoundref="_property_data_8cpp" startline="84" endline="84">csmp::PropertyData::PushBack</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-func">
+      <memberdef kind="function" id="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1aff14876ade4a8728f52f47b14ce9f9f3" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::SKUA_FiniteElementMeshInterface::ReadMeshASCII</definition>
+        <argsstring>(const std::string &amp;meshfile, VSet&lt; dim &gt; &amp;, ModelTopology &amp;)</argsstring>
+        <name>ReadMeshASCII</name>
+        <qualifiedname>csmp::SKUA_FiniteElementMeshInterface::ReadMeshASCII</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>meshfile</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_model_topology" kindref="compound">ModelTopology</ref> &amp;</type>
+        </param>
+        <briefdescription>
+<para>ascii format </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.h" line="288" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a4b7847b74b87fede1fb498260c5a949c" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::SKUA_FiniteElementMeshInterface::ReadMeshBinary</definition>
+        <argsstring>(const std::string &amp;meshfile, VSet&lt; dim &gt; &amp;, ModelTopology &amp;)</argsstring>
+        <name>ReadMeshBinary</name>
+        <qualifiedname>csmp::SKUA_FiniteElementMeshInterface::ReadMeshBinary</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>meshfile</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_model_topology" kindref="compound">ModelTopology</ref> &amp;</type>
+        </param>
+        <briefdescription>
+<para>binary format - use binary interfaces for efficient reading of large files </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.h" line="294" column="10"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a14dc8571d4c343f7364b9eeb631ccead" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::SKUA_FiniteElementMeshInterface::IsCommentLine</definition>
+        <argsstring>(char *str) const</argsstring>
+        <name>IsCommentLine</name>
+        <qualifiedname>csmp::SKUA_FiniteElementMeshInterface::IsCommentLine</qualifiedname>
+        <param>
+          <type>char *</type>
+          <declname>str</declname>
+        </param>
+        <briefdescription>
+<para>reading comments </para>
+        </briefdescription>
+        <detaileddescription>
+<para>If string commences with # sign true is returned, else false is returned. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.h" line="299" column="10" bodyfile="source/modules/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.cpp" bodystart="403" bodyend="409"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1ac9fd1afdc95bfa5fcfbaaeace8625fca" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::SKUA_FiniteElementMeshInterface::SkipPotentialComment</definition>
+        <argsstring>(std::ifstream &amp;) const</argsstring>
+        <name>SkipPotentialComment</name>
+        <qualifiedname>csmp::SKUA_FiniteElementMeshInterface::SkipPotentialComment</qualifiedname>
+        <param>
+          <type>std::ifstream &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>If a comment occurs in the current line everything after the comment is skipped. The functions returns true if such a comment was found. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.h" line="300" column="10" bodyfile="source/modules/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.cpp" bodystart="416" bodyend="438"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a2df538f54c9b73385265f245fbf198f9" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SKUA_FiniteElementMeshInterface::AdvancePastCommentLine</definition>
+        <argsstring>(std::ifstream &amp;) const</argsstring>
+        <name>AdvancePastCommentLine</name>
+        <qualifiedname>csmp::SKUA_FiniteElementMeshInterface::AdvancePastCommentLine</qualifiedname>
+        <param>
+          <type>std::ifstream &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Advances the file stream to behind the comment line. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.h" line="301" column="10" bodyfile="source/modules/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.cpp" bodystart="445" bodyend="470"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a7850301a9089b0d5f907c21b103cc780" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::SKUA_FiniteElementMeshInterface::ReadTitleASCII</definition>
+        <argsstring>(std::ifstream &amp;ifs, std::string &amp;title)</argsstring>
+        <name>ReadTitleASCII</name>
+        <qualifiedname>csmp::SKUA_FiniteElementMeshInterface::ReadTitleASCII</qualifiedname>
+        <param>
+          <type>std::ifstream &amp;</type>
+          <declname>ifs</declname>
+        </param>
+        <param>
+          <type>std::string &amp;</type>
+          <declname>title</declname>
+        </param>
+        <briefdescription>
+<para>ASCII file ( regions and corresponding element id&apos;s ) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>ASCII REGION&apos;S FILE.</para>
+<para>Reads the title line of the &apos;*.asc&apos; file and echoes it to screen.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>A reference to the initialized ASCII input file stream. <linebreak/>
+</para>
+<para><simplesect kind="return"><para>The file title is returned. </para>
+</simplesect>
+</para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.h" line="304" column="10" bodyfile="source/modules/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.cpp" bodystart="495" bodyend="514"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a1669783cfa6ff90daa7fede31f62d879" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::SKUA_FiniteElementMeshInterface::ReadRegionsAndElementTypesASCII</definition>
+        <argsstring>(std::ifstream &amp;ifs)</argsstring>
+        <name>ReadRegionsAndElementTypesASCII</name>
+        <qualifiedname>csmp::SKUA_FiniteElementMeshInterface::ReadRegionsAndElementTypesASCII</qualifiedname>
+        <param>
+          <type>std::ifstream &amp;</type>
+          <declname>ifs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Reads regions indiscriminately of their element types that they contain and stores all the information in corresponding multimaps.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>A reference to the initialized ASCII input file stream. <linebreak/>
+</para>
+<para><simplesect kind="return"><para>If the ascii file was read correctly, the method returns true, else false. <linebreak/>
+</para>
+</simplesect>
+</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>This method is based on the assumption that object names never start with a digit.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Used by the public interfaces of the class. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.h" line="305" column="10" bodyfile="source/modules/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.cpp" bodystart="537" bodyend="672"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a27812d8c3e35ab16339f848f929fca4f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool csmp::SKUA_FiniteElementMeshInterface::ReadNodeCoordinatesASCII</definition>
+        <argsstring>(std::ifstream &amp;ifs, VSet&lt; dim &gt; &amp;)</argsstring>
+        <name>ReadNodeCoordinatesASCII</name>
+        <qualifiedname>csmp::SKUA_FiniteElementMeshInterface::ReadNodeCoordinatesASCII</qualifiedname>
+        <param>
+          <type>std::ifstream &amp;</type>
+          <declname>ifs</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+        </param>
+        <briefdescription>
+<para>ASCI data file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.h" line="309" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1aced78b27a327fe763b01fa1e8245a39a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool csmp::SKUA_FiniteElementMeshInterface::ReadBoundaryFlagsAndConditionsASCII</definition>
+        <argsstring>(std::ifstream &amp;ifs, VSet&lt; dim &gt; &amp;)</argsstring>
+        <name>ReadBoundaryFlagsAndConditionsASCII</name>
+        <qualifiedname>csmp::SKUA_FiniteElementMeshInterface::ReadBoundaryFlagsAndConditionsASCII</qualifiedname>
+        <param>
+          <type>std::ifstream &amp;</type>
+          <declname>ifs</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.h" line="311" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a00dddb1afab7b5e977cd9e3293ebe97c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool csmp::SKUA_FiniteElementMeshInterface::ReadPelementASCII</definition>
+        <argsstring>(std::ifstream &amp;, VSet&lt; dim &gt; &amp;)</argsstring>
+        <name>ReadPelementASCII</name>
+        <qualifiedname>csmp::SKUA_FiniteElementMeshInterface::ReadPelementASCII</qualifiedname>
+        <param>
+          <type>std::ifstream &amp;</type>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.h" line="313" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a73c64a09b4458926b2caa745e21e7e87" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool csmp::SKUA_FiniteElementMeshInterface::ReadPlistASCII</definition>
+        <argsstring>(std::ifstream &amp;, VSet&lt; dim &gt; &amp;, bool test_for_consecutive_node_numbering=true)</argsstring>
+        <name>ReadPlistASCII</name>
+        <qualifiedname>csmp::SKUA_FiniteElementMeshInterface::ReadPlistASCII</qualifiedname>
+        <param>
+          <type>std::ifstream &amp;</type>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>test_for_consecutive_node_numbering</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.h" line="315" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1aa1e3ec5767ffc77e926443054582b7d5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool csmp::SKUA_FiniteElementMeshInterface::ReadPfvertsASCII</definition>
+        <argsstring>(std::ifstream &amp;, VSet&lt; dim &gt; &amp;)</argsstring>
+        <name>ReadPfvertsASCII</name>
+        <qualifiedname>csmp::SKUA_FiniteElementMeshInterface::ReadPfvertsASCII</qualifiedname>
+        <param>
+          <type>std::ifstream &amp;</type>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.h" line="317" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a31ce00860d71e75c2ddaf7670a027871" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool csmp::SKUA_FiniteElementMeshInterface::ReadPmaterialASCII</definition>
+        <argsstring>(std::ifstream &amp;, VSet&lt; dim &gt; &amp;)</argsstring>
+        <name>ReadPmaterialASCII</name>
+        <qualifiedname>csmp::SKUA_FiniteElementMeshInterface::ReadPmaterialASCII</qualifiedname>
+        <param>
+          <type>std::ifstream &amp;</type>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.h" line="319" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a3124ab9aa5e4c8248019c960507b1ce5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool csmp::SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII</definition>
+        <argsstring>(std::ifstream &amp;, VSet&lt; dim &gt; &amp;)</argsstring>
+        <name>ReadPropertyRecordsASCII</name>
+        <qualifiedname>csmp::SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII</qualifiedname>
+        <param>
+          <type>std::ifstream &amp;</type>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.h" line="321" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a4def8880d9058c1a5535d90b692d50c2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>template bool csmp::SKUA_FiniteElementMeshInterface::ReadNodeCoordinatesBinary</definition>
+        <argsstring>(FILE *, VSet&lt; dim &gt; &amp;)</argsstring>
+        <name>ReadNodeCoordinatesBinary</name>
+        <qualifiedname>csmp::SKUA_FiniteElementMeshInterface::ReadNodeCoordinatesBinary</qualifiedname>
+        <param>
+          <type>FILE *</type>
+          <defname>fp</defname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <defname>vset</defname>
+        </param>
+        <briefdescription>
+<para>Binary data file. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><ref refid="classcsmp_1_1_node" kindref="compound">Node</ref> coordinates</para>
+<para>written in Tcl using the formating (sizes in int32)</para>
+<para>puts -nonewline $TCLID [binary format d $TCLLine] ; x puts -nonewline $TCLID [binary format d $TCLLine] ; y puts -nonewline $TCLID [binary format d $TCLLine] ; z </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.h" line="325" column="10" bodyfile="source/modules/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.cpp" bodystart="1361" bodyend="1437"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1aae5d1223678d33396e0188833eef7301" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>template bool csmp::SKUA_FiniteElementMeshInterface::ReadBoundaryFlagsAndConditionsBinary</definition>
+        <argsstring>(FILE *, VSet&lt; dim &gt; &amp;)</argsstring>
+        <name>ReadBoundaryFlagsAndConditionsBinary</name>
+        <qualifiedname>csmp::SKUA_FiniteElementMeshInterface::ReadBoundaryFlagsAndConditionsBinary</qualifiedname>
+        <param>
+          <type>FILE *</type>
+          <defname>fp</defname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <defname>vset</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.h" line="327" column="10" bodyfile="source/modules/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.cpp" bodystart="1447" bodyend="1495"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a5be8da2b16baf882c3f8f08bb74e82f1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>template bool csmp::SKUA_FiniteElementMeshInterface::ReadPelementBinary</definition>
+        <argsstring>(FILE *, VSet&lt; dim &gt; &amp;)</argsstring>
+        <name>ReadPelementBinary</name>
+        <qualifiedname>csmp::SKUA_FiniteElementMeshInterface::ReadPelementBinary</qualifiedname>
+        <param>
+          <type>FILE *</type>
+          <defname>fp</defname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <defname>vset</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.h" line="329" column="10" bodyfile="source/modules/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.cpp" bodystart="1508" bodyend="1543"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a8d13f7138fe16f7ac7fbf5bba44799ce" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>template bool csmp::SKUA_FiniteElementMeshInterface::ReadPlistBinary</definition>
+        <argsstring>(FILE *, VSet&lt; dim &gt; &amp;)</argsstring>
+        <name>ReadPlistBinary</name>
+        <qualifiedname>csmp::SKUA_FiniteElementMeshInterface::ReadPlistBinary</qualifiedname>
+        <param>
+          <type>FILE *</type>
+          <defname>fp</defname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <defname>vset</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.h" line="331" column="10" bodyfile="source/modules/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.cpp" bodystart="1553" bodyend="1598"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a46a31109fdd30b51fd317fcf4cd1a7c7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>template bool csmp::SKUA_FiniteElementMeshInterface::ReadPfvertsBinary</definition>
+        <argsstring>(FILE *, VSet&lt; dim &gt; &amp;)</argsstring>
+        <name>ReadPfvertsBinary</name>
+        <qualifiedname>csmp::SKUA_FiniteElementMeshInterface::ReadPfvertsBinary</qualifiedname>
+        <param>
+          <type>FILE *</type>
+          <defname>fp</defname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <defname>vset</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.h" line="333" column="10" bodyfile="source/modules/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.cpp" bodystart="1609" bodyend="1653"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1ae39e3c682b1a40ee31092e8d65ab7cf7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>template bool csmp::SKUA_FiniteElementMeshInterface::ReadPmaterialBinary</definition>
+        <argsstring>(FILE *, VSet&lt; dim &gt; &amp;)</argsstring>
+        <name>ReadPmaterialBinary</name>
+        <qualifiedname>csmp::SKUA_FiniteElementMeshInterface::ReadPmaterialBinary</qualifiedname>
+        <param>
+          <type>FILE *</type>
+          <defname>fp</defname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <defname>vset</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.h" line="335" column="10" bodyfile="source/modules/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.cpp" bodystart="1684" bodyend="1710"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1aae1087a95e669794ce53b42f57f1de74" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SKUA_FiniteElementMeshInterface::Clear</definition>
+        <argsstring>()</argsstring>
+        <name>Clear</name>
+        <qualifiedname>csmp::SKUA_FiniteElementMeshInterface::Clear</qualifiedname>
+        <briefdescription>
+<para>removes any object and data records potentially held in the interface </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.h" line="340" column="10" bodyfile="source/modules/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.cpp" bodystart="43" bodyend="49"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>File based interface between SKUA and CSMP. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>To provide a direct file-based interface between the SKUA&apos;s FiniteElementMesher and CSMP, allowing to read parts of the input mesh selectively, assign material properties, boundary conditions and to rigorously test the incorporated mesh for its compliance with CSMP requirements.</para>
+<para><simplesect kind="author"><para>S.K. Matthai </para>
+</simplesect>
+<simplesect kind="author"><para>Thomas Jerome </para>
+</simplesect>
+<simplesect kind="date"><para>2020</para>
+</simplesect>
+</para>
+<sect1 id="classcsmp_1_1_solver_1participants">
+<title>Participants</title><para>Part of the file format of this interface is modelled on the SKUA interface using the classes <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>, FEM_Primitive and <ref refid="classcsmp_1_1_model_topology" kindref="compound">ModelTopology</ref> to store the information retrieved from file.</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>Two files: one human readable text (.asc = ASCII) file and a binary (.dat) file that can be transferred across platforms (Windows OSX, linux etc/). Both files have the same name (model name) and are distinguished only by their extension.</para>
+<para>The regions and material file (&apos;*.asc&apos;):</para>
+<para><itemizedlist>
+<listitem><para>model name (line break)</para>
+</listitem><listitem><para>Comment line (header): 1. filename, 2. date of generaton</para>
+</listitem><listitem><para>Number of labelled objects</para>
+</listitem><listitem><para>Table with objects, element types, material ID values (rock types), number of elements (cells)</para>
+</listitem></itemizedlist>
+</para>
+<para><programlisting><codeline><highlight class="normal">Object<sp/><sp/><sp/>element-type<sp/><sp/><sp/>material<sp/>ID<sp/><sp/><sp/>number-of-elements</highlight></codeline>
+<codeline><highlight class="normal">LIV<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>TETRA_4<sp/><sp/><sp/><sp/><sp/><sp/>3<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>760</highlight></codeline>
+<codeline><highlight class="normal">BOXS<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>TRI_3<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>2030</highlight></codeline>
+<codeline><highlight class="normal">CURVES<sp/><sp/><sp/><sp/><sp/><sp/><sp/>BAR_2<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>20</highlight></codeline>
+</programlisting></para>
+<para>The material ID facilitates the association of &apos;rock types&apos; with model regions.</para>
+<para><itemizedlist>
+<listitem><para>List of elements making up each region (numbered 0...n-1), preceded by region name and number of elements of region.</para>
+</listitem></itemizedlist>
+</para>
+<para><programlisting><codeline><highlight class="normal">UNIT_1<sp/>6</highlight></codeline>
+<codeline><highlight class="normal">12<sp/>13<sp/>14<sp/>15<sp/>16<sp/>17</highlight></codeline>
+</programlisting></para>
+<para>The binary file (&apos;*.dat&apos;) contains:</para>
+<para><orderedlist>
+<listitem><para>NODE COORDINATE DATA (double):</para>
+</listitem></orderedlist>
+</para>
+<para>PX, PY, PZ records: preceded by a single unsigned long indicating the size of these records which (individually) contain (with or without line breaks):</para>
+<para>px: -&gt; x-coordinates of the nodes <linebreak/>
+ py: -&gt; y-coordinates of the nodes pz: -&gt; z-coordinates of the nodes</para>
+<para>(all entries in these records have the format double and the node-IDs are implicit from 0 to nodes-1):</para>
+<para>Such records could be written as shown in the C++ code example below:</para>
+<para><programlisting><codeline><highlight class="keywordtype">double</highlight><highlight class="normal">*<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ptr;<sp/></highlight><highlight class="comment">//<sp/>data<sp/>pointer</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">...</highlight></codeline>
+<codeline><highlight class="normal">unsigned<sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/><sp/>n0(0),<sp/>n1(1);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<sp/>(records=px.size())<sp/>&gt;<sp/>0<sp/>&amp;&amp;<sp/>(ptr=</highlight><highlight class="keyword">const_cast&lt;</highlight><highlight class="keywordtype">double</highlight><highlight class="normal">*</highlight><highlight class="keyword">&gt;</highlight><highlight class="normal">(px.Data()))<sp/>!=<sp/>NULL<sp/>)<sp/></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>fwrite(<sp/>(</highlight><highlight class="keywordtype">void</highlight><highlight class="normal">*)<sp/>&amp;records,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(</highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal">),<sp/>1,<sp/>fp<sp/>);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>fwrite(<sp/>(</highlight><highlight class="keywordtype">void</highlight><highlight class="normal">*)<sp/>ptr,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(</highlight><highlight class="keywordtype">double</highlight><highlight class="normal">),<sp/>records,<sp/>fp<sp/>);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>fwrite(<sp/>(</highlight><highlight class="keywordtype">void</highlight><highlight class="normal">*)<sp/>&amp;n0,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(</highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal">),<sp/>1,<sp/>fp<sp/>);</highlight></codeline>
+</programlisting></para>
+<para><orderedlist>
+<listitem><para>NODE FLAGS (int)</para>
+</listitem></orderedlist>
+</para>
+<para>PBFLAGS: Same record length as the record set above but in int32_t format.</para>
+<para><itemizedlist>
+<listitem><para>if a node lies on a model boundary, a negative integer value is assigned to identify that boundary uniquely in terms of the named surface it belongs to. If the node is not located on a model boundary, its int value is set to zero. If lines or curves were specified on the model boundaries, edge nodes along these lines are flagged by unique negative integers by analogy to the identifiers for the edges in the SKUA topology.</para>
+<para>A boundary and edge numbering scheme for box-shaped models in CSP has the following values (adhering to a righthand-rule coordinate system where x points to the right, y points upward and z points to the front:</para>
+</listitem></itemizedlist>
+</para>
+<para><programlisting><codeline><highlight class="preprocessor">#define<sp/>BACK_BOTTOM<sp/><sp/><sp/><sp/><sp/><sp/><sp/>-16<sp/></highlight><highlight class="comment">//<sp/>BACK<sp/>and<sp/>BOTTOM</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>BACK_RIGHT<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>-17<sp/></highlight><highlight class="comment">//<sp/>BACK<sp/>and<sp/>RIGHT</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>BACK_TOP<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>-18<sp/></highlight><highlight class="comment">//<sp/>BACK<sp/>and<sp/>TOP</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>BACK_LEFT<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>-19<sp/></highlight><highlight class="comment">//<sp/>BACK<sp/>and<sp/>LEFT</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>BOTTOM_RIGHT<sp/><sp/><sp/><sp/><sp/><sp/>-20<sp/></highlight><highlight class="comment">//<sp/>BOTTOM<sp/>and<sp/>RIGHT</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>TOP_RIGHT<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>-21<sp/></highlight><highlight class="comment">//<sp/>TOP<sp/>and<sp/>RIGHT</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>TOP_LEFT<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>-22<sp/></highlight><highlight class="comment">//<sp/>TOP<sp/>and<sp/>LEFT</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>BOTTOM_LEFT<sp/><sp/><sp/><sp/><sp/><sp/><sp/>-23<sp/></highlight><highlight class="comment">//<sp/>BOTTOM<sp/>and<sp/>LEFT</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>FRONT_BOTTOM<sp/><sp/><sp/><sp/><sp/><sp/>-24<sp/></highlight><highlight class="comment">//<sp/>FRONT<sp/>and<sp/>BOTTOM</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>FRONT_RIGHT<sp/><sp/><sp/><sp/><sp/><sp/><sp/>-25<sp/></highlight><highlight class="comment">//<sp/>FRONT<sp/>and<sp/>RIGHT</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>FRONT_TOP<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>-26<sp/></highlight><highlight class="comment">//<sp/>FRONT<sp/>and<sp/>TOP</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>FRONT_LEFT<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>-27<sp/></highlight><highlight class="comment">//<sp/>FRONT<sp/>and<sp/>LEFT</highlight></codeline>
+</programlisting></para>
+<para><orderedlist>
+<listitem><para>BOUNDARY CONDITIONS APPLIED TO NODES (double)</para>
+</listitem></orderedlist>
+</para>
+<para>PBVALS: Analogous to the record sets above but in double format:</para>
+<para><itemizedlist>
+<listitem><para>Corresponding to the non-zero flags from above, where a node is located at a model boundary, a boundary value as previously assigned to the SKUA topological model can be stored in this data record. If no value was assigned, this record will just hold zeroes.</para>
+</listitem></itemizedlist>
+<orderedlist>
+<listitem><para>TYPE OF FINITE ELEMENTS (enum -&gt; unsigned int)</para>
+</listitem></orderedlist>
+</para>
+<para>PELMT (0...e-1): Record is preceded by an unsigned long indicating record size (=number of finite elements in the mesh). &apos;pelmt&apos; consists of a single record of (all as unsigned longs):</para>
+<para><itemizedlist>
+<listitem><para>element-type identifiers (unsigned int) for each finite element in the mesh. How they correspond to element type strings is specified further below.</para>
+<para>Dieser Eintrag vermeidet Doppeldeutigkeiten, die dadurch entstehen koennten, dass es verschiedene Elementtypen mit der gleichen Anzahl von Knotenpunkten gibt. <linebreak/>
+</para>
+</listitem></itemizedlist>
+<orderedlist>
+<listitem><para>MESH CONNECTIVITY (unsigned long)</para>
+</listitem></orderedlist>
+</para>
+<para>PLIST: Record preceded by an unsigned long indicating record size, a single record follows containing (all as unsigned longs):</para>
+<para><itemizedlist>
+<listitem><para>node ids of each element in counter-clockwise order (according to node numbering on reference elements). The enlisted node numbers range from 0...nodes-1 as above.</para>
+</listitem></itemizedlist>
+</para>
+<para>The elements are numbered implicitly and continuously by their position in the plist (there must be no jumps in the element ids).</para>
+<para>PFVERTS: Record preceded by unsigned long indicating record size, then a single record (all long, where negative numbers denote model boundaries):</para>
+<para><itemizedlist>
+<listitem><para>neighbour elements of each element in an order defined for each existing element type (see further below, for tetrahedra and triangles, neighbors are those elements touching the element&apos;s faces opposite of its corner nodes). Neighbor elements are denoted 0...element-1. Where there are no neighbour elements adjacent to the element&apos;s faces because the element lies on a model boundary, a negative long is used to identify this boundary surface. <linebreak/>
+</para>
+</listitem></itemizedlist>
+<orderedlist>
+<listitem><para>MATERIAL IDENTIFIER FOR EACH ELEMENT = ROCK TYPE</para>
+</listitem></orderedlist>
+</para>
+<para>PMTRL: preceded by number of elements, associates each element with the material flag from the &apos;*.asc&apos; file such that properties can be assigned. <linebreak/>
+</para>
+<para>Comments: leading hash key (# everything thereafter is ignored)</para>
+<para><orderedlist>
+<listitem><para>ELEMENT AND NODE PROPERTIES</para>
+</listitem></orderedlist>
+</para>
+<para>Following the material ID record of integers, the property data block starts. Since the properties have different placements (element, node etc.) and types (scalar, vector, tensor, array, flagged-array), this information must be specified alongside with the property name. Furthermore, by contrast with <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref> (dim) and <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> (dim x dim), the size of which is defined by the model dimension, dim, <ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> and <ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> have a length (number of entries) that is defined at runtime and therefore has to be specified. While each <ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> has only one flag, each <ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> has one flag per value. For this reason, flag strides and data strides are provided for all variables.</para>
+<para>In summary, a complete record for a CSMP variable consists of:</para>
+<para>name(string) placement(enum PLACEMENT) type (<ref refid="group___c_s_m_p__global__enumerations_1gacbf62c758c46dc45b3f024638bb89274" kindref="member">VARIABLE_TYPE</ref>) (array length (int32)) number of data entries (int32) flag values (int32) property values (double)</para>
+<para>Since the names can contain whitespace, they are placed in quotation marks.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_visitor_1examples">
+<title>Application Examples</title><para>Human readable geometry descrition file (*.asc):</para>
+<para><programlisting><codeline><highlight class="normal">example1</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="stringliteral">&apos;icem1.asc&apos;</highlight><highlight class="normal"><sp/>generated<sp/>by<sp/>SKM<sp/>on<sp/>8/6/2001</highlight></codeline>
+<codeline><highlight class="normal">7<sp/>#<sp/>number<sp/>of<sp/>regions<sp/>that<sp/>make<sp/>up<sp/>the<sp/>simulation<sp/>model</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/>region_name<sp/><sp/><sp/>element_type<sp/><sp/><sp/>material_ID<sp/><sp/><sp/>number-of-elements-in-region</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">soil<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>TRI_3<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>1<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>6</highlight></codeline>
+<codeline><highlight class="normal">rock<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>TRI_3<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>2<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>1</highlight></codeline>
+<codeline><highlight class="normal">air<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>TRI_3<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>3<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>5</highlight></codeline>
+<codeline><highlight class="normal">left_boundary<sp/><sp/><sp/><sp/>BAR_2<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>1<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>2</highlight></codeline>
+<codeline><highlight class="normal">right_boundary<sp/>BAR_2<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>3<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>2</highlight></codeline>
+<codeline><highlight class="normal">top_boundary<sp/><sp/><sp/><sp/><sp/>BAR_2<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>3<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>2</highlight></codeline>
+<codeline><highlight class="normal">bottom_boundary<sp/>BAR_2<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>1<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>2</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/>now<sp/>the<sp/>elements<sp/>which<sp/>make<sp/>up<sp/>each<sp/>object<sp/>are<sp/>listed<sp/>in<sp/>sequence</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">soil<sp/>6</highlight></codeline>
+<codeline><highlight class="normal">2<sp/>4<sp/>7<sp/>8<sp/>9<sp/>10</highlight></codeline>
+<codeline><highlight class="normal">rock<sp/>1</highlight></codeline>
+<codeline><highlight class="normal">5</highlight></codeline>
+<codeline><highlight class="normal">air<sp/>5</highlight></codeline>
+<codeline><highlight class="normal">0<sp/>1<sp/>3<sp/>6<sp/>11</highlight></codeline>
+<codeline><highlight class="normal">left_boundary<sp/>2</highlight></codeline>
+<codeline><highlight class="normal">12<sp/>13</highlight></codeline>
+<codeline><highlight class="normal">right_boundary<sp/>2</highlight></codeline>
+<codeline><highlight class="normal">18<sp/>19</highlight></codeline>
+<codeline><highlight class="normal">top_boundary<sp/>2</highlight></codeline>
+<codeline><highlight class="normal">14<sp/>15</highlight></codeline>
+<codeline><highlight class="normal">bottom_boundary<sp/>2</highlight></codeline>
+<codeline><highlight class="normal">16<sp/>17</highlight></codeline>
+</programlisting></para>
+<para>Mesh connectivity file (*.dat) in text ASCII version:</para>
+<para><programlisting><codeline><highlight class="normal">11<sp/>#<sp/>px,<sp/>py,<sp/>pz</highlight></codeline>
+<codeline><highlight class="normal">0.<sp/>5.<sp/>10.<sp/>0.<sp/>5.<sp/>10.<sp/>2.5<sp/>7.5<sp/>0.<sp/>5.<sp/>10.</highlight></codeline>
+<codeline><highlight class="normal">10.<sp/>10.<sp/>10.<sp/>6.<sp/>7.<sp/>5.<sp/>4.<sp/>4.<sp/>0.<sp/>0.<sp/>0.</highlight></codeline>
+<codeline><highlight class="normal">0.<sp/>0.<sp/>0.<sp/>0.<sp/>0.<sp/>0.<sp/>0.<sp/>0.<sp/>0.<sp/>0.<sp/>0.</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/>pbflags</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">-13<sp/>-5<sp/>-14<sp/>-2<sp/>0<sp/>-3<sp/>0<sp/>0<sp/>-8<sp/>-4<sp/>-10</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/>pbvals</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">0.<sp/>5.<sp/>10.<sp/>0.<sp/>0.<sp/>10.<sp/>0.<sp/>0.<sp/>0.<sp/>5.<sp/>10.</highlight></codeline>
+<codeline><highlight class="normal">20<sp/>#<sp/>pelements</highlight></codeline>
+<codeline><highlight class="normal">3<sp/>3<sp/>3<sp/>3<sp/>3<sp/>3<sp/>3<sp/>3<sp/>3<sp/>3<sp/>3<sp/>3<sp/>2<sp/>2<sp/>2<sp/>2<sp/>2<sp/>2<sp/>2<sp/>2</highlight></codeline>
+<codeline><highlight class="normal">42<sp/>#<sp/>plist</highlight></codeline>
+<codeline><highlight class="normal">0<sp/>4<sp/>1<sp/><sp/>1<sp/>4<sp/>2<sp/><sp/>0<sp/>3<sp/>4<sp/><sp/>3<sp/>6<sp/>4<sp/><sp/>4<sp/>6<sp/>7<sp/><sp/>4<sp/>7<sp/>5<sp/><sp/>3<sp/>8<sp/>6</highlight></codeline>
+<codeline><highlight class="normal">6<sp/>8<sp/>9<sp/><sp/>6<sp/>9<sp/>7<sp/><sp/>7<sp/>9<sp/>10<sp/><sp/>7<sp/>10<sp/>5<sp/><sp/>0<sp/>3<sp/><sp/>3<sp/>8<sp/><sp/>0<sp/>1<sp/><sp/>1<sp/>2</highlight></codeline>
+<codeline><highlight class="normal">8<sp/>9<sp/><sp/>9<sp/>10<sp/><sp/>2<sp/>5<sp/><sp/>5<sp/>10</highlight></codeline>
+<codeline><highlight class="normal">42<sp/>#<sp/>pfverts</highlight></codeline>
+<codeline><highlight class="normal">1<sp/>-5<sp/>2<sp/><sp/>3<sp/>-5<sp/>0<sp/><sp/>4<sp/>0<sp/>-2<sp/><sp/>5<sp/>2<sp/>7<sp/><sp/>9<sp/>6<sp/>4<sp/><sp/>11<sp/>3<sp/>5<sp/><sp/>-3<sp/>1<sp/>6</highlight></codeline>
+<codeline><highlight class="normal">8<sp/>4<sp/>-2<sp/><sp/>-4<sp/>9<sp/>7<sp/><sp/>10<sp/>5<sp/>8<sp/><sp/>11<sp/>9<sp/>-4<sp/><sp/>-3<sp/>6<sp/>10</highlight></codeline>
+<codeline><highlight class="normal">-2<sp/>2<sp/><sp/>-2<sp/>7<sp/><sp/>0<sp/>-5<sp/><sp/>1<sp/>-5<sp/><sp/>-4<sp/>8<sp/><sp/>-4<sp/>10<sp/><sp/>3<sp/>-3<sp/><sp/>11<sp/>-3</highlight></codeline>
+<codeline><highlight class="normal">20<sp/>#<sp/>pmaterial</highlight></codeline>
+<codeline><highlight class="normal">3<sp/>3<sp/>1<sp/>3<sp/>1<sp/>2<sp/>3<sp/>1<sp/>1<sp/>1<sp/>1<sp/>3<sp/>1<sp/>1<sp/>3<sp/>3<sp/>1<sp/>1<sp/>3<sp/>3</highlight></codeline>
+<codeline><highlight class="normal">1<sp/>#<sp/>element<sp/>and<sp/>node<sp/>properties</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="stringliteral">&quot;permeability&quot;</highlight><highlight class="normal"><sp/><sp/></highlight><highlight class="stringliteral">&quot;element&quot;</highlight><highlight class="normal"><sp/></highlight><highlight class="stringliteral">&quot;scalar&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">1<sp/>1</highlight></codeline>
+<codeline><highlight class="normal">20</highlight></codeline>
+<codeline><highlight class="normal">1<sp/>(<ref refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9a6c4de567ce41f96e0e61175ca75945b3" kindref="member">ANY</ref>)<sp/>1<sp/>1<sp/>1<sp/>1<sp/>1<sp/>1<sp/>1<sp/>1<sp/>1<sp/>1<sp/>1<sp/>1<sp/>1<sp/>1<sp/>1<sp/>1<sp/>1<sp/>1<sp/>1</highlight></codeline>
+<codeline><highlight class="normal">20</highlight></codeline>
+<codeline><highlight class="normal">1.0e-12<sp/>1.0e-12<sp/>1.0e-12<sp/>1.0e-12<sp/>1.0e-12<sp/>1.0e-12<sp/>1.0e-12<sp/>1.0e-12<sp/>1.0e-12<sp/>1.0e-12<sp/></highlight></codeline>
+<codeline><highlight class="normal">1.0e-12<sp/>1.0e-12<sp/>1.0e-12<sp/>1.0e-12<sp/>1.0e-12<sp/>1.0e-12<sp/>1.0e-12<sp/>1.0e-12<sp/>1.0e-12<sp/>1.0e-12<sp/><sp/></highlight></codeline>
+</programlisting> </para>
+</sect1>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::SKUA_FiniteElementMeshInterface</label>
+        <link refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.h" line="274" column="1" bodyfile="source/includes/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.h" bodystart="274" bodyend="354"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a2df538f54c9b73385265f245fbf198f9" prot="private" virt="non-virtual"><scope>csmp::SKUA_FiniteElementMeshInterface</scope><name>AdvancePastCommentLine</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a4fd55282eb8430fb54b0f061b08edde9" prot="private" virt="non-virtual"><scope>csmp::SKUA_FiniteElementMeshInterface</scope><name>boundary_tag_</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1aae1087a95e669794ce53b42f57f1de74" prot="private" virt="non-virtual"><scope>csmp::SKUA_FiniteElementMeshInterface</scope><name>Clear</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1ac2fc646b91e3c5fe387bac9b60064205" prot="private" virt="non-virtual"><scope>csmp::SKUA_FiniteElementMeshInterface</scope><name>csmp_elmt_specs</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a0437f47405cb07ab3a4cb688ad93a463" prot="private" virt="non-virtual"><scope>csmp::SKUA_FiniteElementMeshInterface</scope><name>extra_checks_on_binary_file_</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a1e44b69f3b7c662e93faa93ed3b8c5d4" prot="private" virt="non-virtual"><scope>csmp::SKUA_FiniteElementMeshInterface</scope><name>file_header_</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a14dc8571d4c343f7364b9eeb631ccead" prot="private" virt="non-virtual"><scope>csmp::SKUA_FiniteElementMeshInterface</scope><name>IsCommentLine</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a0736ac5381cf4360639f241ce5d67f40" prot="private" virt="non-virtual"><scope>csmp::SKUA_FiniteElementMeshInterface</scope><name>isoparametric_</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1afbba6a3db557e12efa1070e23794820c" prot="private" virt="non-virtual"><scope>csmp::SKUA_FiniteElementMeshInterface</scope><name>object_elements_</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1acefd23e0a98d74c23f8c41d56d24d587" prot="private" virt="non-virtual"><scope>csmp::SKUA_FiniteElementMeshInterface</scope><name>object_specs_</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1ac0a21d2796e40f9b6bf60fc76e67bfe9" prot="public" virt="non-virtual"><scope>csmp::SKUA_FiniteElementMeshInterface</scope><name>Read_SKUA_Mesh</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a9e90b90d8c7ef6eb4b1e7acd0751963c" prot="public" virt="non-virtual"><scope>csmp::SKUA_FiniteElementMeshInterface</scope><name>Read_SKUA_Mesh</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1aced78b27a327fe763b01fa1e8245a39a" prot="private" virt="non-virtual"><scope>csmp::SKUA_FiniteElementMeshInterface</scope><name>ReadBoundaryFlagsAndConditionsASCII</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1ab5981a03f8104973dbc234772d4e6c66" prot="public" virt="non-virtual"><scope>csmp::SKUA_FiniteElementMeshInterface</scope><name>ReadBoundaryFlagsAndConditionsASCII</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1aae5d1223678d33396e0188833eef7301" prot="private" virt="non-virtual"><scope>csmp::SKUA_FiniteElementMeshInterface</scope><name>ReadBoundaryFlagsAndConditionsBinary</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1aff14876ade4a8728f52f47b14ce9f9f3" prot="protected" virt="non-virtual"><scope>csmp::SKUA_FiniteElementMeshInterface</scope><name>ReadMeshASCII</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a7efc76104170624140f176e29cf369a9" prot="public" virt="non-virtual"><scope>csmp::SKUA_FiniteElementMeshInterface</scope><name>ReadMeshASCII</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a4b7847b74b87fede1fb498260c5a949c" prot="protected" virt="non-virtual"><scope>csmp::SKUA_FiniteElementMeshInterface</scope><name>ReadMeshBinary</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1ad4af5c41a455bfd192f01b86656f22c5" prot="public" virt="non-virtual"><scope>csmp::SKUA_FiniteElementMeshInterface</scope><name>ReadMeshBinary</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a27812d8c3e35ab16339f848f929fca4f" prot="private" virt="non-virtual"><scope>csmp::SKUA_FiniteElementMeshInterface</scope><name>ReadNodeCoordinatesASCII</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1ad4cfe1ae9db2d2bb63d8850796447b8f" prot="public" virt="non-virtual"><scope>csmp::SKUA_FiniteElementMeshInterface</scope><name>ReadNodeCoordinatesASCII</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a4def8880d9058c1a5535d90b692d50c2" prot="private" virt="non-virtual"><scope>csmp::SKUA_FiniteElementMeshInterface</scope><name>ReadNodeCoordinatesBinary</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a00dddb1afab7b5e977cd9e3293ebe97c" prot="private" virt="non-virtual"><scope>csmp::SKUA_FiniteElementMeshInterface</scope><name>ReadPelementASCII</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a1ae538155483f5084052cb701a605945" prot="public" virt="non-virtual"><scope>csmp::SKUA_FiniteElementMeshInterface</scope><name>ReadPelementASCII</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a5be8da2b16baf882c3f8f08bb74e82f1" prot="private" virt="non-virtual"><scope>csmp::SKUA_FiniteElementMeshInterface</scope><name>ReadPelementBinary</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1aa1e3ec5767ffc77e926443054582b7d5" prot="private" virt="non-virtual"><scope>csmp::SKUA_FiniteElementMeshInterface</scope><name>ReadPfvertsASCII</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a7c27fc98c209de51a8c26084975a6b4a" prot="public" virt="non-virtual"><scope>csmp::SKUA_FiniteElementMeshInterface</scope><name>ReadPfvertsASCII</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a46a31109fdd30b51fd317fcf4cd1a7c7" prot="private" virt="non-virtual"><scope>csmp::SKUA_FiniteElementMeshInterface</scope><name>ReadPfvertsBinary</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a73c64a09b4458926b2caa745e21e7e87" prot="private" virt="non-virtual"><scope>csmp::SKUA_FiniteElementMeshInterface</scope><name>ReadPlistASCII</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a0efa16aede48c791746ae01277844516" prot="public" virt="non-virtual"><scope>csmp::SKUA_FiniteElementMeshInterface</scope><name>ReadPlistASCII</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a8d13f7138fe16f7ac7fbf5bba44799ce" prot="private" virt="non-virtual"><scope>csmp::SKUA_FiniteElementMeshInterface</scope><name>ReadPlistBinary</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a31ce00860d71e75c2ddaf7670a027871" prot="private" virt="non-virtual"><scope>csmp::SKUA_FiniteElementMeshInterface</scope><name>ReadPmaterialASCII</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a2494acf5df62a29cfa69548489acd00c" prot="public" virt="non-virtual"><scope>csmp::SKUA_FiniteElementMeshInterface</scope><name>ReadPmaterialASCII</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1ae39e3c682b1a40ee31092e8d65ab7cf7" prot="private" virt="non-virtual"><scope>csmp::SKUA_FiniteElementMeshInterface</scope><name>ReadPmaterialBinary</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a3124ab9aa5e4c8248019c960507b1ce5" prot="private" virt="non-virtual"><scope>csmp::SKUA_FiniteElementMeshInterface</scope><name>ReadPropertyRecordsASCII</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a4db54bfa2ffe9688cd62414e404e7248" prot="public" virt="non-virtual"><scope>csmp::SKUA_FiniteElementMeshInterface</scope><name>ReadPropertyRecordsASCII</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a1669783cfa6ff90daa7fede31f62d879" prot="private" virt="non-virtual"><scope>csmp::SKUA_FiniteElementMeshInterface</scope><name>ReadRegionsAndElementTypesASCII</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a7850301a9089b0d5f907c21b103cc780" prot="private" virt="non-virtual"><scope>csmp::SKUA_FiniteElementMeshInterface</scope><name>ReadTitleASCII</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1ac9fd1afdc95bfa5fcfbaaeace8625fca" prot="private" virt="non-virtual"><scope>csmp::SKUA_FiniteElementMeshInterface</scope><name>SkipPotentialComment</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1ad69ba9effa2e8c2fbf2cc73dc4537d17" prot="public" virt="non-virtual"><scope>csmp::SKUA_FiniteElementMeshInterface</scope><name>SKUA_FiniteElementMeshInterface</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a0e7f2e3ded86dbf23889c4ef689a6eaa" prot="public" virt="non-virtual"><scope>csmp::SKUA_FiniteElementMeshInterface</scope><name>~SKUA_FiniteElementMeshInterface</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

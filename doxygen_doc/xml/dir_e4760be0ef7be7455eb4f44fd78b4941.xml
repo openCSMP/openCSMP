@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_e4760be0ef7be7455eb4f44fd78b4941" kind="dir">
+    <compoundname>source/modules/eos/h2o_nacl</compoundname>
+    <innerfile refid="_brine_8cpp">Brine.cpp</innerfile>
+    <innerfile refid="_critical_curve_8cpp">CriticalCurve.cpp</innerfile>
+    <innerfile refid="_halite_8cpp">Halite.cpp</innerfile>
+    <innerfile refid="_halite_liquidus_8cpp">HaliteLiquidus.cpp</innerfile>
+    <innerfile refid="_na_cl_boiling_curve_8cpp">NaClBoilingCurve.cpp</innerfile>
+    <innerfile refid="_na_cl_melting_curve_8cpp">NaClMeltingCurve.cpp</innerfile>
+    <innerfile refid="_na_cl_saturated_vapor_8cpp">NaClSaturatedVapor.cpp</innerfile>
+    <innerfile refid="_na_cl_sublimation_curve_8cpp">NaClSublimationCurve.cpp</innerfile>
+    <innerfile refid="_threephase_h_l_v_8cpp">ThreephaseHLV.cpp</innerfile>
+    <innerfile refid="_triple_point_h2_o_8cpp">TriplePointH2O.cpp</innerfile>
+    <innerfile refid="_triple_point_na_cl_8cpp">TriplePointNaCl.cpp</innerfile>
+    <innerfile refid="_twophase_liquid_8cpp">TwophaseLiquid.cpp</innerfile>
+    <innerfile refid="_twophase_vapor_8cpp">TwophaseVapor.cpp</innerfile>
+    <innerfile refid="_water_8cpp">Water.cpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="source/modules/eos/h2o_nacl/"/>
+  </compounddef>
+</doxygen>

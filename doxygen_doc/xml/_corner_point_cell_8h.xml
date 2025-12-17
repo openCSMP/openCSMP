@@ -1,0 +1,702 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="_corner_point_cell_8h" kind="file" language="C++">
+    <compoundname>CornerPointCell.h</compoundname>
+    <includes refid="_polygon_grid_8h" local="yes">PolygonGrid.h</includes>
+    <includes refid="_polygon_cell_8h" local="yes">PolygonCell.h</includes>
+    <includes refid="_pillar_8h" local="yes">Pillar.h</includes>
+    <includes refid="_meshing_tools_8h" local="yes">MeshingTools.h</includes>
+    <includedby refid="_eclipse_interface_8h" local="yes">source/includes/interfaces/Eclipse/EclipseInterface.h</includedby>
+    <includedby refid="_corner_point_grid_8h" local="yes">source/includes/regular_grids/CornerPointGrid.h</includedby>
+    <includedby refid="_corner_point_cell_8cpp" local="yes">source/modules/regular_grids/CornerPointCell.cpp</includedby>
+    <incdepgraph>
+      <node id="65">
+        <label>geometricCalculations.h</label>
+        <link refid="geometric_calculations_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="64">
+        <label>CSMP_ElementSpecifications.h</label>
+        <link refid="_c_s_m_p___element_specifications_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="50" relation="include">
+        </childnode>
+      </node>
+      <node id="50">
+        <label>FiniteElement.h</label>
+        <link refid="_finite_element_8h"/>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+        <childnode refid="51" relation="include">
+        </childnode>
+      </node>
+      <node id="63">
+        <label>MeshingTools.h</label>
+        <link refid="_meshing_tools_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="64" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="65" relation="include">
+        </childnode>
+      </node>
+      <node id="62">
+        <label>Pillar.h</label>
+        <link refid="_pillar_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+      </node>
+      <node id="61">
+        <label>PolygonCell.h</label>
+        <link refid="_polygon_cell_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>PolygonGrid.h</label>
+        <link refid="_polygon_grid_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="50" relation="include">
+        </childnode>
+      </node>
+      <node id="51">
+        <label>DenseMatrix.h</label>
+        <link refid="_dense_matrix_8h"/>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="56" relation="include">
+        </childnode>
+        <childnode refid="59" relation="include">
+        </childnode>
+        <childnode refid="60" relation="include">
+        </childnode>
+      </node>
+      <node id="59">
+        <label>ArrayVariable.h</label>
+        <link refid="_array_variable_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="60" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>CSMP_definitions.h</label>
+        <link refid="_c_s_m_p__definitions_8h"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="43" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+      </node>
+      <node id="46">
+        <label>CSMP_global_enumerations.h</label>
+        <link refid="_c_s_m_p__global__enumerations_8h_source"/>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
+      </node>
+      <node id="60">
+        <label>FlaggedArrayVariable.h</label>
+        <link refid="_flagged_array_variable_8h_source"/>
+        <childnode refid="59" relation="include">
+        </childnode>
+      </node>
+      <node id="45">
+        <label>Index.h</label>
+        <link refid="_index_8h_source"/>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+        <childnode refid="49" relation="include">
+        </childnode>
+      </node>
+      <node id="49">
+        <label>IntegrationPointVariables.h</label>
+        <link refid="_integration_point_variables_8h_source"/>
+        <childnode refid="48" relation="include">
+        </childnode>
+      </node>
+      <node id="48">
+        <label>LocalVariables.h</label>
+        <link refid="_local_variables_8h_source"/>
+      </node>
+      <node id="3">
+        <label>Point.h</label>
+        <link refid="_point_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="52">
+        <label>ScalarVariable.h</label>
+        <link refid="_scalar_variable_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="56">
+        <label>TensorVariable.h</label>
+        <link refid="_tensor_variable_8h_source"/>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="57" relation="include">
+        </childnode>
+        <childnode refid="58" relation="include">
+        </childnode>
+      </node>
+      <node id="57">
+        <label>TensorVariable1.h</label>
+        <link refid="_tensor_variable1_8h_source"/>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="54" relation="include">
+        </childnode>
+      </node>
+      <node id="58">
+        <label>TensorVariable2.h</label>
+        <link refid="_tensor_variable2_8h_source"/>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="55" relation="include">
+        </childnode>
+      </node>
+      <node id="53">
+        <label>VectorVariable.h</label>
+        <link refid="_vector_variable_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="54" relation="include">
+        </childnode>
+        <childnode refid="55" relation="include">
+        </childnode>
+      </node>
+      <node id="54">
+        <label>VectorVariable1.h</label>
+        <link refid="_vector_variable1_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+      </node>
+      <node id="55">
+        <label>VectorVariable2.h</label>
+        <link refid="_vector_variable2_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>source/includes/regular_grids/CornerPointCell.h</label>
+        <link refid="_corner_point_cell_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="61" relation="include">
+        </childnode>
+        <childnode refid="62" relation="include">
+        </childnode>
+        <childnode refid="63" relation="include">
+        </childnode>
+      </node>
+      <node id="16">
+        <label>algorithm</label>
+      </node>
+      <node id="17">
+        <label>array</label>
+      </node>
+      <node id="15">
+        <label>cassert</label>
+      </node>
+      <node id="10">
+        <label>cctype</label>
+      </node>
+      <node id="13">
+        <label>cfloat</label>
+      </node>
+      <node id="18">
+        <label>chrono</label>
+      </node>
+      <node id="14">
+        <label>climits</label>
+      </node>
+      <node id="5">
+        <label>cmath</label>
+      </node>
+      <node id="9">
+        <label>cstdarg</label>
+      </node>
+      <node id="8">
+        <label>cstddef</label>
+      </node>
+      <node id="47">
+        <label>cstdint</label>
+      </node>
+      <node id="6">
+        <label>cstdio</label>
+      </node>
+      <node id="7">
+        <label>cstdlib</label>
+      </node>
+      <node id="11">
+        <label>cstring</label>
+      </node>
+      <node id="12">
+        <label>ctime</label>
+      </node>
+      <node id="19">
+        <label>deque</label>
+      </node>
+      <node id="20">
+        <label>exception</label>
+      </node>
+      <node id="21">
+        <label>filesystem</label>
+      </node>
+      <node id="22">
+        <label>fstream</label>
+      </node>
+      <node id="23">
+        <label>functional</label>
+      </node>
+      <node id="24">
+        <label>iomanip</label>
+      </node>
+      <node id="25">
+        <label>iostream</label>
+      </node>
+      <node id="26">
+        <label>istream</label>
+      </node>
+      <node id="27">
+        <label>iterator</label>
+      </node>
+      <node id="28">
+        <label>limits</label>
+      </node>
+      <node id="29">
+        <label>list</label>
+      </node>
+      <node id="30">
+        <label>map</label>
+      </node>
+      <node id="31">
+        <label>memory</label>
+      </node>
+      <node id="32">
+        <label>numeric</label>
+      </node>
+      <node id="33">
+        <label>ostream</label>
+      </node>
+      <node id="34">
+        <label>random</label>
+      </node>
+      <node id="35">
+        <label>set</label>
+      </node>
+      <node id="36">
+        <label>sstream</label>
+      </node>
+      <node id="37">
+        <label>stdexcept</label>
+      </node>
+      <node id="38">
+        <label>string</label>
+      </node>
+      <node id="40">
+        <label>type_traits</label>
+      </node>
+      <node id="39">
+        <label>typeinfo</label>
+      </node>
+      <node id="44">
+        <label>unordered_map</label>
+      </node>
+      <node id="43">
+        <label>unordered_set</label>
+      </node>
+      <node id="41">
+        <label>utility</label>
+      </node>
+      <node id="42">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="5">
+        <label>source/includes/interfaces/Eclipse/CellGenerator.h</label>
+        <link refid="_cell_generator_8h_source"/>
+      </node>
+      <node id="2">
+        <label>source/includes/interfaces/Eclipse/EclipseInterface.h</label>
+        <link refid="_eclipse_interface_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>source/includes/interfaces/Eclipse/EclipseModel.h</label>
+        <link refid="_eclipse_model_8h_source"/>
+      </node>
+      <node id="6">
+        <label>source/includes/interfaces/Eclipse/GridIJK.h</label>
+        <link refid="_grid_i_j_k_8h_source"/>
+      </node>
+      <node id="1">
+        <label>source/includes/regular_grids/CornerPointCell.h</label>
+        <link refid="_corner_point_cell_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>source/includes/regular_grids/CornerPointGrid.h</label>
+        <link refid="_corner_point_grid_8h_source"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="classcsmp_1_1_corner_point_cell" prot="public">csmp::CornerPointCell</innerclass>
+    <innernamespace refid="namespacecsmp">csmp</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#ifndef<sp/>CORNER_POINT_CELL_UOM_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>CORNER_POINT_CELL_UOM_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;PolygonGrid.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;PolygonCell.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;Pillar.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;MeshingTools.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacecsmp" kindref="compound">csmp</ref><sp/>{</highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight></codeline>
+<codeline lineno="11" refid="namespacecsmp_1a869a59957cb7dba7baacd008b7ca46f6" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">enum</highlight><highlight class="normal"><sp/><ref refid="namespacecsmp_1a869a59957cb7dba7baacd008b7ca46f6" kindref="member">CORNER_POINT_CELL_TYPE</ref></highlight></codeline>
+<codeline lineno="12"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="13"><highlight class="normal"><sp/><sp/><sp/><sp/>CORNER_POINT_CELL_UNDEFINED<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>0,</highlight></codeline>
+<codeline lineno="14"><highlight class="normal"><sp/><sp/><sp/><sp/>CORNER_POINT_CELL_8_HEXAHEDRON<sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>1,<sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="15" refid="namespacecsmp_1a869a59957cb7dba7baacd008b7ca46f6a86b18901d1dd2346c8257cfcd112a789" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacecsmp_1a869a59957cb7dba7baacd008b7ca46f6a86b18901d1dd2346c8257cfcd112a789" kindref="member">CORNER_POINT_CELL_7_AUGMENTED_PRISM</ref><sp/><sp/>=<sp/>2,<sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="16" refid="namespacecsmp_1a869a59957cb7dba7baacd008b7ca46f6a855aa994d8b3cdd6285e41241d41cead" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacecsmp_1a869a59957cb7dba7baacd008b7ca46f6a855aa994d8b3cdd6285e41241d41cead" kindref="member">CORNER_POINT_CELL_6_WEDGE</ref><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>3,<sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="17" refid="namespacecsmp_1a869a59957cb7dba7baacd008b7ca46f6aefcd7566436ca5157a03233feddd83de" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacecsmp_1a869a59957cb7dba7baacd008b7ca46f6aefcd7566436ca5157a03233feddd83de" kindref="member">CORNER_POINT_CELL_6_OCTAHEDRON</ref><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>4,<sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="18" refid="namespacecsmp_1a869a59957cb7dba7baacd008b7ca46f6a60621dabdfe381d6b125eb67a0b12f5e" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacecsmp_1a869a59957cb7dba7baacd008b7ca46f6a60621dabdfe381d6b125eb67a0b12f5e" kindref="member">CORNER_POINT_CELL_5_AUGMENTED_TETRA</ref><sp/><sp/>=<sp/>5,<sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="19" refid="namespacecsmp_1a869a59957cb7dba7baacd008b7ca46f6ac2de4a04f1f444ff7260f5e4b8cc6136" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacecsmp_1a869a59957cb7dba7baacd008b7ca46f6ac2de4a04f1f444ff7260f5e4b8cc6136" kindref="member">CORNER_POINT_CELL_5_PYRAMID</ref><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>6,<sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="20" refid="namespacecsmp_1a869a59957cb7dba7baacd008b7ca46f6a4e0dadc3f5c6cfaf38d2b607a0fe0d20" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacecsmp_1a869a59957cb7dba7baacd008b7ca46f6a4e0dadc3f5c6cfaf38d2b607a0fe0d20" kindref="member">CORNER_POINT_CELL_4_TETRAHEDRON</ref><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>7,<sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="21" refid="namespacecsmp_1a869a59957cb7dba7baacd008b7ca46f6a3e9b98e072d45c4dc2fe25c5029de8ec" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacecsmp_1a869a59957cb7dba7baacd008b7ca46f6a3e9b98e072d45c4dc2fe25c5029de8ec" kindref="member">CORNER_POINT_CELL_4_QUADRILATERAL</ref><sp/><sp/><sp/><sp/>=<sp/>8,<sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="22" refid="namespacecsmp_1a869a59957cb7dba7baacd008b7ca46f6ae2fc5d1fc8f936e790b2b3de1dccc9e5" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacecsmp_1a869a59957cb7dba7baacd008b7ca46f6ae2fc5d1fc8f936e790b2b3de1dccc9e5" kindref="member">CORNER_POINT_CELL_3_TRIANGLE</ref><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>9,<sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="23" refid="namespacecsmp_1a869a59957cb7dba7baacd008b7ca46f6aca3887e4bc8c1a238c4848587113eda3" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacecsmp_1a869a59957cb7dba7baacd008b7ca46f6aca3887e4bc8c1a238c4848587113eda3" kindref="member">CORNER_POINT_CELL_2_BAR</ref><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>10,<sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="24" refid="namespacecsmp_1a869a59957cb7dba7baacd008b7ca46f6a6768cf591f9cd0b2b0002a9d3550059a" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacecsmp_1a869a59957cb7dba7baacd008b7ca46f6a6768cf591f9cd0b2b0002a9d3550059a" kindref="member">CORNER_POINT_CELL_1_POINT</ref><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>11<sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="25"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal">std::string<sp/><ref refid="namespacecsmp_1adb2a12d1517b2d9b45e9f8b2b93a912c" kindref="member">toString</ref>(<sp/><ref refid="namespacecsmp_1a869a59957cb7dba7baacd008b7ca46f6" kindref="member">CORNER_POINT_CELL_TYPE</ref><sp/>);</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight><highlight class="keyword">enum</highlight><highlight class="normal"><sp/>CORNER_POINT_CELL_CATEGORY</highlight></codeline>
+<codeline lineno="32"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/>CORNER_POINT_CELL_DIM_3_NON_OVERLAPPING<sp/>=<sp/>0,</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/>CORNER_POINT_CELL_DIM_3_OVERLAPPING<sp/><sp/><sp/><sp/><sp/>=<sp/>1,</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/>CORNER_POINT_CELL_DIM_2<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>2,</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/>CORNER_POINT_CELL_DIM_1<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>3,</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/>CORNER_POINT_CELL_DIM_0<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>4</highlight></codeline>
+<codeline lineno="38"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"></highlight></codeline>
+<codeline lineno="40"><highlight class="normal">std::string<sp/><ref refid="namespacecsmp_1adb2a12d1517b2d9b45e9f8b2b93a912c" kindref="member">toString</ref>(<sp/>CORNER_POINT_CELL_CATEGORY<sp/>);</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"></highlight></codeline>
+<codeline lineno="43"><highlight class="normal"></highlight></codeline>
+<codeline lineno="67"><highlight class="normal"></highlight></codeline>
+<codeline lineno="68" refid="namespacecsmp_1ae8bbaf7555417ec6195d15112682a43d" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">enum</highlight><highlight class="normal"><sp/><ref refid="namespacecsmp_1ae8bbaf7555417ec6195d15112682a43d" kindref="member">CORNER_POINT_CELL_FACE_INDEX</ref><sp/>{</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/>CORNER_POINT_CELL_FACE_Xplus<sp/><sp/>=<sp/>4,</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/>CORNER_POINT_CELL_FACE_Xminus<sp/>=<sp/>2,</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/>CORNER_POINT_CELL_FACE_Yplus<sp/><sp/>=<sp/>3,</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/>CORNER_POINT_CELL_FACE_Yminus<sp/>=<sp/>1,</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/>CORNER_POINT_CELL_FACE_Zplus<sp/><sp/>=<sp/>0,</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/>CORNER_POINT_CELL_FACE_Zminus<sp/>=<sp/>5</highlight></codeline>
+<codeline lineno="75"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"></highlight></codeline>
+<codeline lineno="77"><highlight class="normal">std::string<sp/><ref refid="namespacecsmp_1adb2a12d1517b2d9b45e9f8b2b93a912c" kindref="member">toString</ref>(<sp/><ref refid="namespacecsmp_1ae8bbaf7555417ec6195d15112682a43d" kindref="member">CORNER_POINT_CELL_FACE_INDEX</ref><sp/>);</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"></highlight></codeline>
+<codeline lineno="79"><highlight class="normal"></highlight></codeline>
+<codeline lineno="91" refid="classcsmp_1_1_corner_point_cell" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal">CornerPointCell:<sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_polygon_cell_1a26d4e9b41ba6b3ea173ad3082f4f7abe" kindref="member">PolygonCell</ref></highlight></codeline>
+<codeline lineno="92"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="93"><highlight class="normal"></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">explicit</highlight><highlight class="normal"><sp/>CornerPointCell(<sp/><ref refid="classcsmp_1_1_polygon_grid_manager" kindref="compound">PolygonGridManager</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/><sp/>CornerPointCell(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>CornerPointCell&amp;<sp/>poly<sp/>);</highlight></codeline>
+<codeline lineno="96"><highlight class="normal"><sp/><sp/><sp/><sp/>CornerPointCell&amp;<sp/>operator=(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>CornerPointCell&amp;<sp/>poly<sp/>);</highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/>~CornerPointCell();</highlight></codeline>
+<codeline lineno="98"><highlight class="normal"></highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><sp/><sp/><ref refid="classcsmp_1_1_corner_point_cell_1ae1836980921183105a28d5524abba0fd" kindref="member">AssignNode</ref>(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>local_nid,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point&lt;3U&gt;</ref>&amp;<sp/>pt<sp/>);</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><sp/><sp/><ref refid="classcsmp_1_1_corner_point_cell_1a1c743626a0fdacd3da588bd2699b6262" kindref="member">InitializeCornerPointCell</ref>(<sp/>);</highlight></codeline>
+<codeline lineno="102"><highlight class="normal"></highlight></codeline>
+<codeline lineno="104"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><sp/><sp/><ref refid="classcsmp_1_1_corner_point_cell_1a41535d383e884e5199ad326175e86480" kindref="member">AddCornerPointWellCell</ref>(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>face_id_org,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>face_id_dst<sp/>);</highlight></codeline>
+<codeline lineno="105"><highlight class="normal"></highlight></codeline>
+<codeline lineno="107"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><sp/><sp/><ref refid="classcsmp_1_1_corner_point_cell_1a96d024d38eb32043cfec39ef99b0c2cf" kindref="member">ResolveCornerPointCellConflicts</ref>(<sp/>std::map&lt;std::set&lt;size_t&gt;,<ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref>*&gt;&amp;<sp/>additional_points,<sp/>std::set&lt;std::set&lt;size_t&gt;<sp/>&gt;&amp;<sp/>additional_edges<sp/>);</highlight></codeline>
+<codeline lineno="108"><highlight class="normal"></highlight></codeline>
+<codeline lineno="110"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><sp/><sp/><ref refid="classcsmp_1_1_corner_point_cell_1a5079e745f3c187d55aea82bce55b7a5c" kindref="member">ProcessCornerPointCell</ref>(<sp/>std::map&lt;std::set&lt;size_t&gt;,<ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref>*&gt;&amp;<sp/>additional_points,<sp/>std::set&lt;std::set&lt;size_t&gt;<sp/>&gt;&amp;<sp/>additional_edges,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>well_element<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>tetra_mesh<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="111"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="112"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><sp/><sp/>ProcessCornerPointRegularCell(<sp/>std::map&lt;std::set&lt;size_t&gt;,<ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref>*&gt;&amp;<sp/>additional_points,<sp/>std::set&lt;std::set&lt;size_t&gt;<sp/>&gt;&amp;<sp/>additional_edges,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>well_element<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>tetra_mesh<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="113"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="114"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><sp/><sp/>ProcessCornerPointDegenerateCell(<sp/>std::map&lt;std::set&lt;size_t&gt;,<ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref>*&gt;&amp;<sp/>additional_points,<sp/>std::set&lt;std::set&lt;size_t&gt;<sp/>&gt;&amp;<sp/>additional_edges,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>well_element<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>tetra_mesh<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="115"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="116"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><sp/><sp/>ProcessCornerPointDegenerateVolumetricCell(<sp/>std::map&lt;std::set&lt;size_t&gt;,<ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref>*&gt;&amp;<sp/>additional_points,<sp/>std::set&lt;std::set&lt;size_t&gt;<sp/>&gt;&amp;<sp/>additional_edges,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>well_element<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>tetra_mesh<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="117"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="118"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><sp/><sp/>ProcessCornerPointDegenerateVolumetricNonOverlappingCell(<sp/>std::map&lt;std::set&lt;size_t&gt;,<ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref>*&gt;&amp;<sp/>additional_points,<sp/>std::set&lt;std::set&lt;size_t&gt;<sp/>&gt;&amp;<sp/>additional_edges,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>well_element<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>tetra_mesh<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="119"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="120"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><sp/><sp/>ProcessCornerPointDegenerateVolumetricOverlappingCell(<sp/>std::map&lt;std::set&lt;size_t&gt;,<ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref>*&gt;&amp;<sp/>additional_points,<sp/>std::set&lt;std::set&lt;size_t&gt;<sp/>&gt;&amp;<sp/>additional_edges,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>well_element<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>tetra_mesh<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="121"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="122"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><sp/><sp/>ProcessCornerPointDegenerateLowDimensionalCell(<sp/>std::map&lt;std::set&lt;size_t&gt;,<ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref>*&gt;&amp;<sp/>additional_points,<sp/>std::set&lt;std::set&lt;size_t&gt;<sp/>&gt;&amp;<sp/>additional_edges,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>well_element<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>tetra_mesh<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="123"><highlight class="normal"></highlight></codeline>
+<codeline lineno="125"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_polygon_cell_1acc3b3f082a6e09b8f277fe4b72cf2029" kindref="member">GetNumFaces</ref>(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>fid<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="126"><highlight class="normal"></highlight></codeline>
+<codeline lineno="128"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><sp/><sp/><ref refid="classcsmp_1_1_corner_point_cell_1aae70629c88d2a931d814823d80378597" kindref="member">IsVolume</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="129"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><sp/><sp/>IsSurface()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="130"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><sp/><sp/>IsLine()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="131"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><sp/><sp/>IsPointElement()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="132"><highlight class="normal"></highlight></codeline>
+<codeline lineno="134"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><sp/><sp/><ref refid="classcsmp_1_1_corner_point_cell_1a3728d88c5910661153e6ae9ed58d3894" kindref="member">IsVolumetricNonOverlapingElement</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="135"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><sp/><sp/>IsVolumetricOverlapingElement()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="136"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><sp/><sp/>IsLowDimensionalElement()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="137"><highlight class="normal"></highlight></codeline>
+<codeline lineno="139"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_corner_point_cell_1a440fd386bc3391575420a409dd8e5e23" kindref="member">GetNumWellSections</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="140"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>GetNumWellSectionNodes(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>eid<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="141"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point&lt;3U&gt;</ref>&amp;<sp/>GetWellSectionNode(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>eid,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>nid<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="142"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>GetWellSectionNodeGlobalId(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>eid,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>nid<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="143"><highlight class="normal"></highlight></codeline>
+<codeline lineno="145"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_corner_point_cell_1a8bb32630df62cf158f69e58d6821de03" kindref="member">GetPillarNodeGlobalIdOriginalOrder</ref>(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>nid<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="146"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>GetPillarNodeGlobalIdCustomOrder(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>nid<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="147"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point&lt;3U&gt;</ref>&amp;<sp/>GetPillarPointOriginalOrder(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>nid<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="148"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point&lt;3U&gt;</ref>&amp;<sp/>GetPillarPointCustomOrder(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>nid<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="149"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref>*<sp/>GetPillarNodeOriginalOrder(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>nid<sp/>);</highlight></codeline>
+<codeline lineno="150"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref>*<sp/>GetPillarNodeCustomOrder(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>nid<sp/>);</highlight></codeline>
+<codeline lineno="151"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="153"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_corner_point_cell_1a6573f607d02b0782efeef107cbccfb75" kindref="member">Out</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="154"><highlight class="normal"></highlight></codeline>
+<codeline lineno="155"><highlight class="normal"></highlight><highlight class="keyword">protected</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="156"><highlight class="normal"></highlight></codeline>
+<codeline lineno="158"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_corner_point_cell_1a3d087e0b8298632694f2b92e03288689" kindref="member">AddWell</ref>(<sp/>std::map&lt;std::set&lt;size_t&gt;,<ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref>*&gt;&amp;<sp/>additional_points<sp/>);</highlight></codeline>
+<codeline lineno="159"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_corner_point_cell_1a3d087e0b8298632694f2b92e03288689" kindref="member">AddWell</ref>(<sp/><ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref>*<sp/>n0,<sp/><ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref>*<sp/>n1<sp/>);</highlight></codeline>
+<codeline lineno="160"><highlight class="normal"></highlight></codeline>
+<codeline lineno="162"><highlight class="normal"></highlight></codeline>
+<codeline lineno="163"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_corner_point_cell_1a186dd309bb9ce5c98557707bc37e5d7c" kindref="member">AssignPillarNodesOrder</ref>(<sp/>);</highlight></codeline>
+<codeline lineno="164"><highlight class="normal"></highlight></codeline>
+<codeline lineno="165"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_corner_point_cell_1a6ea2c8a3d7206da48aacf41ac7bd432a" kindref="member">InitializeNodes</ref>(<sp/>std::map&lt;<ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point&lt;3U&gt;</ref>,</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal">&gt;&amp;<sp/>cell_nodes<sp/>);</highlight></codeline>
+<codeline lineno="166"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>CheckNodeOrder();</highlight></codeline>
+<codeline lineno="167"><highlight class="normal"></highlight></codeline>
+<codeline lineno="168"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_corner_point_cell_1a36f8b016b2bf572e190937752ee1f7bc" kindref="member">InitializeFaces</ref>();</highlight></codeline>
+<codeline lineno="169"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>CheckFaceOrder();</highlight></codeline>
+<codeline lineno="170"><highlight class="normal"></highlight></codeline>
+<codeline lineno="171"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_corner_point_cell_1ae49b96dca94a709f689ae0ed6ca18cf5" kindref="member">InitializePoly8Element</ref>(<sp/>);</highlight></codeline>
+<codeline lineno="172"><highlight class="normal"></highlight></codeline>
+<codeline lineno="173"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_corner_point_cell_1acdba5ac52a5d4100d6fe256dc3bfc90e" kindref="member">InitializePoly7Element</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::map&lt;<ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point&lt;3U&gt;</ref>,</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal">&gt;&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>cell_nodes,</highlight></codeline>
+<codeline lineno="174"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;std::vector&lt;<ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point&lt;3U&gt;</ref><sp/>&gt;<sp/>&gt;&amp;<sp/><sp/><sp/><sp/>face_ordered_points,</highlight></codeline>
+<codeline lineno="175"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;size_t&gt;&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>tri_faces,</highlight></codeline>
+<codeline lineno="176"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;size_t&gt;&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>quad_faces,</highlight></codeline>
+<codeline lineno="177"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::map&lt;<ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point&lt;3U&gt;</ref>,std::vector&lt;size_t&gt;<sp/>&gt;&amp;<sp/>point_tri_faces,</highlight></codeline>
+<codeline lineno="178"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::map&lt;<ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point&lt;3U&gt;</ref>,std::vector&lt;size_t&gt;<sp/>&gt;&amp;<sp/>point_quad_faces,</highlight></codeline>
+<codeline lineno="179"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;std::vector&lt;<ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point&lt;3U&gt;</ref><sp/>&gt;<sp/>&gt;&amp;<sp/><sp/><sp/><sp/>edge_ordered_points,</highlight></codeline>
+<codeline lineno="180"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::map&lt;<ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point&lt;3U&gt;</ref>,std::vector&lt;size_t&gt;<sp/>&gt;&amp;<sp/>point_edges<sp/>);</highlight></codeline>
+<codeline lineno="181"><highlight class="normal"></highlight></codeline>
+<codeline lineno="182"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_corner_point_cell_1a1f077cd786e18077af5cc396ff6bd674" kindref="member">InitializePoly6Element</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::map&lt;<ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point&lt;3U&gt;</ref>,</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal">&gt;&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>cell_nodes,</highlight></codeline>
+<codeline lineno="183"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;std::vector&lt;<ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point&lt;3U&gt;</ref><sp/>&gt;<sp/>&gt;&amp;<sp/><sp/><sp/><sp/>face_ordered_points,</highlight></codeline>
+<codeline lineno="184"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;size_t&gt;&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>tri_faces,</highlight></codeline>
+<codeline lineno="185"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;size_t&gt;&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>quad_faces,</highlight></codeline>
+<codeline lineno="186"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::map&lt;<ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point&lt;3U&gt;</ref>,std::vector&lt;size_t&gt;<sp/>&gt;&amp;<sp/>point_tri_faces,</highlight></codeline>
+<codeline lineno="187"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::map&lt;<ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point&lt;3U&gt;</ref>,std::vector&lt;size_t&gt;<sp/>&gt;&amp;<sp/>point_quad_faces,</highlight></codeline>
+<codeline lineno="188"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;std::vector&lt;<ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point&lt;3U&gt;</ref><sp/>&gt;<sp/>&gt;&amp;<sp/><sp/><sp/><sp/>edge_ordered_points,</highlight></codeline>
+<codeline lineno="189"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::map&lt;<ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point&lt;3U&gt;</ref>,std::vector&lt;size_t&gt;<sp/>&gt;&amp;<sp/>point_edges<sp/>);</highlight></codeline>
+<codeline lineno="190"><highlight class="normal"></highlight></codeline>
+<codeline lineno="191"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_corner_point_cell_1a066acea52bd4d2390e1bc3fb53d1f0be" kindref="member">InitializePoly5Element</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::map&lt;<ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point&lt;3U&gt;</ref>,</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal">&gt;&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>cell_nodes,</highlight></codeline>
+<codeline lineno="192"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;std::vector&lt;<ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point&lt;3U&gt;</ref><sp/>&gt;<sp/>&gt;&amp;<sp/><sp/><sp/><sp/>face_ordered_points,</highlight></codeline>
+<codeline lineno="193"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;size_t&gt;&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>tri_faces,</highlight></codeline>
+<codeline lineno="194"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;size_t&gt;&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>quad_faces,</highlight></codeline>
+<codeline lineno="195"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::map&lt;<ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point&lt;3U&gt;</ref>,std::vector&lt;size_t&gt;<sp/>&gt;&amp;<sp/>point_tri_faces,</highlight></codeline>
+<codeline lineno="196"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::map&lt;<ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point&lt;3U&gt;</ref>,std::vector&lt;size_t&gt;<sp/>&gt;&amp;<sp/>point_quad_faces,</highlight></codeline>
+<codeline lineno="197"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;std::vector&lt;<ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point&lt;3U&gt;</ref><sp/>&gt;<sp/>&gt;&amp;<sp/><sp/><sp/><sp/>edge_ordered_points,</highlight></codeline>
+<codeline lineno="198"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::map&lt;<ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point&lt;3U&gt;</ref>,std::vector&lt;size_t&gt;<sp/>&gt;&amp;<sp/>point_edges<sp/>);</highlight></codeline>
+<codeline lineno="199"><highlight class="normal"></highlight></codeline>
+<codeline lineno="200"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_corner_point_cell_1abce58bc3cd6b6d75795bf7f402e6569d" kindref="member">InitializePoly4Element</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;size_t&gt;&amp;<sp/>tri_faces,</highlight></codeline>
+<codeline lineno="201"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;size_t&gt;&amp;<sp/>quad_faces<sp/>);</highlight></codeline>
+<codeline lineno="202"><highlight class="normal"></highlight></codeline>
+<codeline lineno="203"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_corner_point_cell_1ae5d91554e85bd127b0d37cde5d20079f" kindref="member">InitializePoly3Element</ref>(<sp/>);</highlight></codeline>
+<codeline lineno="204"><highlight class="normal"></highlight></codeline>
+<codeline lineno="205"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_corner_point_cell_1a05f3c1882d7637b48969b8c06306c122" kindref="member">InitializePoly2Element</ref>(<sp/>);</highlight></codeline>
+<codeline lineno="206"><highlight class="normal"></highlight></codeline>
+<codeline lineno="207"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_corner_point_cell_1afa428004f3b22c7f8ebc744bf4b6732a" kindref="member">InitializePoly1Element</ref>(<sp/>);</highlight></codeline>
+<codeline lineno="208"><highlight class="normal"></highlight></codeline>
+<codeline lineno="209"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_corner_point_cell_1a2962d977fbd3b96f0321a51954102c53" kindref="member">GetTopologycalInfo</ref>(<sp/><sp/><sp/><sp/>std::map&lt;<ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point&lt;3U&gt;</ref>,</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal">&gt;&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>cell_nodes,</highlight></codeline>
+<codeline lineno="210"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::set&lt;std::set&lt;<ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point&lt;3U&gt;</ref><sp/>&gt;<sp/>&gt;&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>unique_faces,</highlight></codeline>
+<codeline lineno="211"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::vector&lt;std::vector&lt;<ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point&lt;3U&gt;</ref><sp/>&gt;<sp/>&gt;&amp;<sp/><sp/><sp/><sp/>face_ordered_points,</highlight></codeline>
+<codeline lineno="212"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::vector&lt;std::set&lt;<ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point&lt;3U&gt;</ref><sp/>&gt;<sp/>&gt;&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/>face_unique_points,</highlight></codeline>
+<codeline lineno="213"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::vector&lt;size_t&gt;&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>tri_faces,</highlight></codeline>
+<codeline lineno="214"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::vector&lt;size_t&gt;&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>quad_faces,</highlight></codeline>
+<codeline lineno="215"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::map&lt;<ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point&lt;3U&gt;</ref>,std::vector&lt;size_t&gt;<sp/>&gt;&amp;<sp/>point_tri_faces,</highlight></codeline>
+<codeline lineno="216"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::map&lt;<ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point&lt;3U&gt;</ref>,std::vector&lt;size_t&gt;<sp/>&gt;&amp;<sp/>point_quad_faces,</highlight></codeline>
+<codeline lineno="217"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::set&lt;std::set&lt;<ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point&lt;3U&gt;</ref><sp/>&gt;<sp/>&gt;&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>unique_edges,</highlight></codeline>
+<codeline lineno="218"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::vector&lt;std::vector&lt;<ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point&lt;3U&gt;</ref><sp/>&gt;<sp/>&gt;&amp;<sp/><sp/><sp/><sp/>edge_ordered_points,</highlight></codeline>
+<codeline lineno="219"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::vector&lt;std::set&lt;<ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point&lt;3U&gt;</ref><sp/>&gt;<sp/>&gt;&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/>edge_unique_points,</highlight></codeline>
+<codeline lineno="220"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::map&lt;<ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point&lt;3U&gt;</ref>,std::vector&lt;size_t&gt;<sp/>&gt;&amp;<sp/>point_edges<sp/>);</highlight></codeline>
+<codeline lineno="221"><highlight class="normal"></highlight></codeline>
+<codeline lineno="223"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_corner_point_cell_1ab7cb0c8b6c938e3e26e534e6231e69b8" kindref="member">AddQuadFaceCentroids</ref>(<sp/>std::map&lt;std::set&lt;size_t&gt;,<ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref>*&gt;&amp;<sp/>additional_points,<sp/>std::set&lt;std::set&lt;size_t&gt;<sp/>&gt;&amp;<sp/>additional_edges<sp/>);</highlight></codeline>
+<codeline lineno="224"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_corner_point_cell_1ab53427334a564b151638248a10b72ccc" kindref="member">ProcessPolyElement</ref>(<sp/><sp/>std::map&lt;std::set&lt;size_t&gt;,<ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref>*&gt;&amp;<sp/>additional_points,<sp/>std::set&lt;std::set&lt;size_t&gt;<sp/>&gt;&amp;<sp/>additional_edges,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>well_element<sp/>);</highlight></codeline>
+<codeline lineno="225"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>ProcessPolyNonWellElement(<sp/>std::map&lt;std::set&lt;size_t&gt;,<ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref>*&gt;&amp;<sp/>additional_points,<sp/>std::set&lt;std::set&lt;size_t&gt;<sp/>&gt;&amp;<sp/>additional_edges,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>add_edge_centroids,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>add_face_centroids,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>add_cell_centroids<sp/>);</highlight></codeline>
+<codeline lineno="226"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_corner_point_cell_1a4adfaac6e25e24942168c30bdc035cf9" kindref="member">ProcessPolyWellElement</ref>(<sp/>std::map&lt;std::set&lt;size_t&gt;,<ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref>*&gt;&amp;<sp/>additional_points,<sp/>std::set&lt;std::set&lt;size_t&gt;<sp/>&gt;&amp;<sp/>additional_edges<sp/>);</highlight></codeline>
+<codeline lineno="227"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_corner_point_cell_1a7787a7136651f59c869928ecb5189c4c" kindref="member">ProcessPoly8Element</ref>(<sp/>std::map&lt;std::set&lt;size_t&gt;,<ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref>*&gt;&amp;<sp/>additional_points,<sp/>std::set&lt;std::set&lt;size_t&gt;<sp/>&gt;&amp;<sp/>additional_edges,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>well_element,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>tetra_mesh<sp/>);</highlight></codeline>
+<codeline lineno="228"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_corner_point_cell_1acfef7b233b2dd310c4dba603f4790402" kindref="member">ProcessPoly7Element</ref>(<sp/>std::map&lt;std::set&lt;size_t&gt;,<ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref>*&gt;&amp;<sp/>additional_points,<sp/>std::set&lt;std::set&lt;size_t&gt;<sp/>&gt;&amp;<sp/>additional_edges,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>well_element,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>tetra_mesh<sp/>);</highlight></codeline>
+<codeline lineno="229"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_corner_point_cell_1a0c632bbe50ffa44641d75f9e741226d0" kindref="member">ProcessPoly6Element</ref>(<sp/>std::map&lt;std::set&lt;size_t&gt;,<ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref>*&gt;&amp;<sp/>additional_points,<sp/>std::set&lt;std::set&lt;size_t&gt;<sp/>&gt;&amp;<sp/>additional_edges,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>well_element,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>tetra_mesh<sp/>);</highlight></codeline>
+<codeline lineno="230"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_corner_point_cell_1a553bcf9a24a54f01bd069b2a5f0b94ec" kindref="member">ProcessPoly5Element</ref>(<sp/>std::map&lt;std::set&lt;size_t&gt;,<ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref>*&gt;&amp;<sp/>additional_points,<sp/>std::set&lt;std::set&lt;size_t&gt;<sp/>&gt;&amp;<sp/>additional_edges,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>well_element,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>tetra_mesh<sp/>);</highlight></codeline>
+<codeline lineno="231"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_corner_point_cell_1a43ca3b2056c666fd0ba08a75c982331b" kindref="member">ProcessPoly4Element</ref>(<sp/>std::map&lt;std::set&lt;size_t&gt;,<ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref>*&gt;&amp;<sp/>additional_points,<sp/>std::set&lt;std::set&lt;size_t&gt;<sp/>&gt;&amp;<sp/>additional_edges,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>well_element,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>tetra_mesh<sp/>);</highlight></codeline>
+<codeline lineno="232"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_corner_point_cell_1a5596efbd76a584ae7617e87c02ad9a91" kindref="member">ProcessPoly3Element</ref>(<sp/>std::map&lt;std::set&lt;size_t&gt;,<ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref>*&gt;&amp;<sp/>additional_points,<sp/>std::set&lt;std::set&lt;size_t&gt;<sp/>&gt;&amp;<sp/>additional_edges,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>well_element,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>tetra_mesh<sp/>);</highlight></codeline>
+<codeline lineno="233"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_corner_point_cell_1a39a5a3b329c5e46c6f27a0004dfbd92c" kindref="member">ProcessPoly2Element</ref>(<sp/>std::map&lt;std::set&lt;size_t&gt;,<ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref>*&gt;&amp;<sp/>additional_points,<sp/>std::set&lt;std::set&lt;size_t&gt;<sp/>&gt;&amp;<sp/>additional_edges,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>well_element,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>tetra_mesh<sp/>);</highlight></codeline>
+<codeline lineno="234"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_corner_point_cell_1a5e91a036b98617f6baf5dcd34193fa9d" kindref="member">ProcessPoly1Element</ref>(<sp/>std::map&lt;std::set&lt;size_t&gt;,<ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref>*&gt;&amp;<sp/>additional_points,<sp/>std::set&lt;std::set&lt;size_t&gt;<sp/>&gt;&amp;<sp/>additional_edges,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>well_element,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>tetra_mesh<sp/>);</highlight></codeline>
+<codeline lineno="235"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>FinishMeshing();</highlight></codeline>
+<codeline lineno="236"><highlight class="normal"></highlight></codeline>
+<codeline lineno="237"><highlight class="normal"></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="238"><highlight class="normal"></highlight></codeline>
+<codeline lineno="240"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacecsmp_1a869a59957cb7dba7baacd008b7ca46f6" kindref="member">CORNER_POINT_CELL_TYPE</ref><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>cell_type_;</highlight></codeline>
+<codeline lineno="241"><highlight class="normal"><sp/><sp/><sp/><sp/>CORNER_POINT_CELL_CATEGORY<sp/><sp/><sp/><sp/><sp/><sp/><sp/>cell_category_;</highlight></codeline>
+<codeline lineno="242"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>num_quad_faces_;</highlight></codeline>
+<codeline lineno="243"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>num_tri_faces_;</highlight></codeline>
+<codeline lineno="244"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>meshing_cycle_;</highlight></codeline>
+<codeline lineno="246"><highlight class="normal"><sp/><sp/><sp/><sp/>std::vector&lt;GridNode*&gt;<sp/><sp/><sp/><sp/><sp/>pillar_nodes_;</highlight></codeline>
+<codeline lineno="247"><highlight class="normal"><sp/><sp/><sp/><sp/>std::vector&lt;size_t&gt;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>pillar_nodes_order_;</highlight></codeline>
+<codeline lineno="249"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>well_face_org_;</highlight></codeline>
+<codeline lineno="250"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>well_face_dst_;</highlight></codeline>
+<codeline lineno="251"><highlight class="normal"><sp/><sp/><sp/><sp/>std::vector&lt;std::pair&lt;csmp::CSMP_FEM_TYPE,std::vector&lt;GridNode*&gt;<sp/>&gt;<sp/>&gt;<sp/><sp/><sp/><sp/>wells_;</highlight></codeline>
+<codeline lineno="252"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="253"><highlight class="normal"></highlight></codeline>
+<codeline lineno="254"><highlight class="normal">}</highlight><highlight class="comment">//<sp/>end<sp/>namespace<sp/>csmp</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="255"><highlight class="normal"></highlight></codeline>
+<codeline lineno="256"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="257"><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="source/includes/regular_grids/CornerPointCell.h"/>
+  </compounddef>
+</doxygen>

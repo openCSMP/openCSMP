@@ -4,11 +4,6 @@
 #include "Exception.h"
 #include "ErrorHandler.h"
 
-// input file needed in order to specify arguments to main() functions
-#ifdef __MWERKS__
-#include <crtl.h>
-#endif
-
 // GUI
 #ifdef EXAMPLE_SUITE_WITH_GUI
 #define COMMAND_LINE_EXAMPLES
@@ -28,12 +23,12 @@ int main()
  {
     try {
       // instantiating suite
-      ExampleSuite examplesSuite( "CSMP EXAMPLES", &cout );
+      ExampleSuite examplesSuite( "Open-CSMP++ EXAMPLES", &cout );
 
       // write your own
       examplesSuite.RegisterExample( new Experimental_Example() );
 
-      // this is where your examples go in alphabetical order
+      // this is where your examples go (they will be ordered alphabetically when listed)
   
       // C++ EXAMPLES
             examplesSuite.RegisterExample( new CuriouslyRecurringTemplate_Example() );
@@ -47,10 +42,11 @@ int main()
             examplesSuite.RegisterExample( new StokesDiscrepancyMeasure_Example() );
             examplesSuite.RegisterExample( new StokesDiscrepancyMeasureQuadratic_Example() );
             examplesSuite.RegisterExample( new TimeSteppingApproaches_Example() );
+            examplesSuite.RegisterExample( new PoreRadiusAnd_Pc_Example() );
 
       // SOFTWARE INTERFACES
             // interfaces with other software tools
-            examplesSuite.RegisterExample( new CSMPInterfaces_Example() ); // example to generate csmp native format models from various interfaces
+            examplesSuite.RegisterExample( new Interfaces_Example() ); // example to generate csmp native format models from various interfaces
             examplesSuite.RegisterExample( new ModelANSYS_Example() );
             examplesSuite.RegisterExample( new Triangulator_Example() );
             examplesSuite.RegisterExample( new QuadrilateratorToCSMPbinary_Example() );
@@ -69,10 +65,9 @@ int main()
             examplesSuite.RegisterExample( new Visitor_Example() );
             examplesSuite.RegisterExample( new Region_Example() );
             examplesSuite.RegisterExample( new RegionProperties_Example() );
+            examplesSuite.RegisterExample( new RegionMonitor_Example() );
             examplesSuite.RegisterExample( new StatisticalAnalyzer_Example() );
-
-            // TODO: region monitor example
-//          examplesSuite.RegisterExample( new ReadingBinaries_Example() );
+//            examplesSuite.RegisterExample( new FieldVariable_Example() );
 
       // SIMULATION OF PHYSICAL PROCESSES
             examplesSuite.RegisterExample( new PressureDiffusion_Example() );
@@ -92,9 +87,11 @@ int main()
             examplesSuite.RegisterExample( new TemperatureDensityPressure_Example() );
             examplesSuite.RegisterExample( new ThermalConvectionETHZ_Example() );
             examplesSuite.RegisterExample( new Geothermal_Example() );
-            // CVEN90074 course 2024
             examplesSuite.RegisterExample( new MechanicsAndMultiphaseFlow_Example() );
             examplesSuite.RegisterExample( new UG4_ProMeshOutput_Example() );
+            examplesSuite.RegisterExample( new StaggeredGridStokesSolver_Example() );
+            examplesSuite.RegisterExample( new PressureDependentBlackOilProperties_Example() );
+            examplesSuite.RegisterExample( new Tractions_Example() );
 
       // TUTORIALS
             examplesSuite.RegisterExample( new Tutorial1_Example() );

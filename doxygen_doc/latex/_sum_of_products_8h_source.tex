@@ -1,0 +1,46 @@
+\doxysection{Sum\+Of\+Products.\+h}
+\hypertarget{_sum_of_products_8h_source}{}\label{_sum_of_products_8h_source}\index{source/includes/math/SumOfProducts.h@{source/includes/math/SumOfProducts.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_SUM\_OF\_PRODUCTS\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_SUM\_OF\_PRODUCTS\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_sum_of_products}{SumOfProducts}}\ \{}
+\DoxyCodeLine{00009\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00010\ \ \ \ SumOfProducts();}
+\DoxyCodeLine{00011\ \ \ \ \string~SumOfProducts();}
+\DoxyCodeLine{00012\ \ \ \ SumOfProducts(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_sum_of_products}{SumOfProducts}}\&\ s\ );}
+\DoxyCodeLine{00013\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_sum_of_products}{SumOfProducts}}\&\ operator=(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_sum_of_products}{SumOfProducts}}\&\ s\ );}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{comment}{//\ negative\ indexed\ terms\ are\ regarded\ as\ constants\ }}
+\DoxyCodeLine{00016\ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ AddProduct(\ \textcolor{keyword}{const}\ std::map<int32\_t,\textcolor{keywordtype}{double}>\&\ product\ );}
+\DoxyCodeLine{00017\ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_sum_of_products_a41ec3c48e508565ea48ce2fc9870c307}{Sum}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ a[]\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00018\ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ Erase();}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_sum_of_products_afb634129c30d27dd4acf2f9e1e97dfb1}{InitializeFrom}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ s,}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_sum_of_products_afb634129c30d27dd4acf2f9e1e97dfb1}{std}}::\mbox{\hyperlink{classcsmp_1_1_sum_of_products_afb634129c30d27dd4acf2f9e1e97dfb1}{map}}<\mbox{\hyperlink{classcsmp_1_1_sum_of_products_afb634129c30d27dd4acf2f9e1e97dfb1}{std}}::\mbox{\hyperlink{classcsmp_1_1_sum_of_products_afb634129c30d27dd4acf2f9e1e97dfb1}{string}},\mbox{\hyperlink{classcsmp_1_1_sum_of_products_afb634129c30d27dd4acf2f9e1e97dfb1}{std}}::\mbox{\hyperlink{classcsmp_1_1_sum_of_products_afb634129c30d27dd4acf2f9e1e97dfb1}{pair}}<\textcolor{keywordtype}{int},\textcolor{keywordtype}{double}>\ >\&\ \mbox{\hyperlink{classcsmp_1_1_sum_of_products_afb634129c30d27dd4acf2f9e1e97dfb1}{withval}},}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_sum_of_products_afb634129c30d27dd4acf2f9e1e97dfb1}{std}}::\mbox{\hyperlink{classcsmp_1_1_sum_of_products_afb634129c30d27dd4acf2f9e1e97dfb1}{map}}<\mbox{\hyperlink{classcsmp_1_1_sum_of_products_afb634129c30d27dd4acf2f9e1e97dfb1}{std}}::\mbox{\hyperlink{classcsmp_1_1_sum_of_products_afb634129c30d27dd4acf2f9e1e97dfb1}{string}},\textcolor{keywordtype}{int}>\&\ \mbox{\hyperlink{classcsmp_1_1_sum_of_products_afb634129c30d27dd4acf2f9e1e97dfb1}{withoutval}}\ );}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ TokenizeString(\ \textcolor{keywordtype}{char}*\ s,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ delim,\ std::list<std::string>\&\ li\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_sum_of_products}{std}}::\mbox{\hyperlink{classcsmp_1_1_sum_of_products}{vector}}<\mbox{\hyperlink{classcsmp_1_1_sum_of_products}{std}}::\mbox{\hyperlink{classcsmp_1_1_sum_of_products}{map}}<\textcolor{keywordtype}{int},\textcolor{keywordtype}{double}>\ >::\mbox{\hyperlink{classcsmp_1_1_sum_of_products}{iterator}}\ \ \mbox{\hyperlink{classcsmp_1_1_sum_of_products}{Begin}}()\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcsmp_1_1_sum_of_products}{sumproducts}}.\mbox{\hyperlink{classcsmp_1_1_sum_of_products}{begin}}();\ \};}
+\DoxyCodeLine{00027\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_sum_of_products}{std}}::\mbox{\hyperlink{classcsmp_1_1_sum_of_products}{vector}}<\mbox{\hyperlink{classcsmp_1_1_sum_of_products}{std}}::\mbox{\hyperlink{classcsmp_1_1_sum_of_products}{map}}<\textcolor{keywordtype}{int},\textcolor{keywordtype}{double}>\ >::\mbox{\hyperlink{classcsmp_1_1_sum_of_products}{iterator}}\ \ \mbox{\hyperlink{classcsmp_1_1_sum_of_products}{End}}()\ \ \ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcsmp_1_1_sum_of_products}{sumproducts}}.\mbox{\hyperlink{classcsmp_1_1_sum_of_products}{end}}();\ \};}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ Out()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00032\ \ \ \ \textcolor{comment}{//\ terms\ that\ make\ up\ sum,\ e.g.,}}
+\DoxyCodeLine{00033\ \ \ \ \textcolor{comment}{//\ a1\ c2\ -\/\ b2\string^2\ c1\ ...}}
+\DoxyCodeLine{00034\ \ \ \ \textcolor{comment}{//\ terms:\ \ spec.idx\ \ product\ term\ \ \ }}
+\DoxyCodeLine{00035\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_sum_of_products}{std}}::\mbox{\hyperlink{classcsmp_1_1_sum_of_products}{vector}}<\mbox{\hyperlink{classcsmp_1_1_sum_of_products}{std}}::\mbox{\hyperlink{classcsmp_1_1_sum_of_products}{map}}<\textcolor{keywordtype}{int},\textcolor{keywordtype}{double}>\ >\ \ \mbox{\hyperlink{classcsmp_1_1_sum_of_products}{sumproducts}};}
+\DoxyCodeLine{00036\ \};}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \}\ \textcolor{comment}{//\ end\ namespace\ csp}}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

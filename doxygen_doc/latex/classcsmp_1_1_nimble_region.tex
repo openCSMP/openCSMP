@@ -1,0 +1,415 @@
+\doxysection{csmp\+::Nimble\+Region\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_nimble_region}{}\label{classcsmp_1_1_nimble_region}\index{csmp::NimbleRegion$<$ dim $>$@{csmp::NimbleRegion$<$ dim $>$}}
+
+
+{\ttfamily \#include $<$Nimble\+Region.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Nimble\+Region\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_nimble_region__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Nimble\+Region\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_nimble_region__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_nimble_region_a9ad5a05703fc85e0107cd02f52aa56f9}{Nimble\+Region}} (const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&, typename std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator first, typename std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator last)
+\begin{DoxyCompactList}\small\item\em construction of region from nodes, relying on existing node-\/parent-\/element connectivity to identify elements \end{DoxyCompactList}\item 
+virtual \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} \mbox{\hyperlink{classcsmp_1_1_nimble_region_a2e7585d219687bb26639680178349c51}{Placement}} () const
+\begin{DoxyCompactList}\small\item\em Local variable storage interface. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_nimble_region_a04a1382330e922eeeacbc4260f169079}\label{classcsmp_1_1_nimble_region_a04a1382330e922eeeacbc4260f169079} 
+size\+\_\+t {\bfseries Nodes} () const
+\item 
+\Hypertarget{classcsmp_1_1_nimble_region_ac8aa42d0d870f9660389d2989fd5b9e3}\label{classcsmp_1_1_nimble_region_ac8aa42d0d870f9660389d2989fd5b9e3} 
+size\+\_\+t {\bfseries Interior\+Nodes} () const
+\item 
+\Hypertarget{classcsmp_1_1_nimble_region_a57ec2ace07c6a62954ba25dbc0c43ae8}\label{classcsmp_1_1_nimble_region_a57ec2ace07c6a62954ba25dbc0c43ae8} 
+size\+\_\+t {\bfseries Perimeter\+Nodes} () const
+\item 
+\Hypertarget{classcsmp_1_1_nimble_region_a14efd3784a9a12f331068d593064869a}\label{classcsmp_1_1_nimble_region_a14efd3784a9a12f331068d593064869a} 
+size\+\_\+t {\bfseries Cells} () const
+\item 
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_nimble_region_ad11ec3a555e158b285590f3da3566dea}{Renumber\+Nodes}} () const
+\item 
+\Hypertarget{classcsmp_1_1_nimble_region_a1e54876a8d0b9b5e2a48cfc9c588949e}\label{classcsmp_1_1_nimble_region_a1e54876a8d0b9b5e2a48cfc9c588949e} 
+\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const {\bfseries E} (size\+\_\+t)
+\item 
+\Hypertarget{classcsmp_1_1_nimble_region_a6218b2de4ca4dcf2cc05f867eb90207a}\label{classcsmp_1_1_nimble_region_a6218b2de4ca4dcf2cc05f867eb90207a} 
+\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const {\bfseries N} (size\+\_\+t)
+\item 
+\Hypertarget{classcsmp_1_1_nimble_region_a683529253d4fc41cdef3822ed11f9a88}\label{classcsmp_1_1_nimble_region_a683529253d4fc41cdef3822ed11f9a88} 
+const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const {\bfseries E} (size\+\_\+t) const
+\item 
+\Hypertarget{classcsmp_1_1_nimble_region_a98929a55e138625ce92a3c826c2a7f98}\label{classcsmp_1_1_nimble_region_a98929a55e138625ce92a3c826c2a7f98} 
+const \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const {\bfseries N} (size\+\_\+t) const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_nimble_region_a54273171f80314c9bd0e3c74cf918077}{Clear}} ()
+\begin{DoxyCompactList}\small\item\em resize to zero while keeping the memory \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_nimble_region_a2d450a034207185f0edd788569bee754}{Erase}} ()
+\begin{DoxyCompactList}\small\item\em removing storage \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_nimble_region_ac810cf1901509b73a8468d901051a935}{Out}} () const
+\begin{DoxyCompactList}\small\item\em writes the current element and node memberships to the console \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_model_sub_domain}{csmp\+::\+Model\+Sub\+Domain$<$ dim, Element $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Model\+Sub\+Domain} (const std\+::string \&subdomain\+\_\+name, const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em constructs incomplete subdomain for later initialisation with suitable methods in subclasses \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_model_sub_domain}{Model\+Sub\+Domain}}$<$ dim, \mbox{\hyperlink{classcsmp_1_1_element}{Element}} $>$ \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_model_sub_domain}{Model\+Sub\+Domain}} \&)
+\item 
+std\+::string {\bfseries Name} () const
+\item 
+virtual bool \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a08bfac55b1199d3b1b2271cc207baa1f}{Valid\+Variable}} (const char \texorpdfstring{$\ast$}{*}variable\+Name) const
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ad584415f46a55043ff7f3ca6aedede95}{Accept}} (\mbox{\hyperlink{classcsmp_1_1_visitor}{Visitor}}$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em support of the \doxylink{classcsmp_1_1_visitor}{Visitor} pattern \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ac2e34ce178d5896bdff2826e02e022d5}{Apply}} (\mbox{\hyperlink{classcsmp_1_1_interrelation}{Interrelation}}$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em modification via Operand-\/based relations between discretised properties that only modify a single result variable \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_aedad5f8e462b7e645c1745f5c674e39c}{Rebuild\+Sub\+Domain\+After\+Change\+Of\+Cell\+Vector}} ()
+\begin{DoxyCompactList}\small\item\em deletes nullptr cells, rebuilds node vector, sorts everything and re-\/establishes the perimeter face vectors after modifications of cells \end{DoxyCompactList}\item 
+void {\bfseries Rebuild\+Sub\+Domain\+After\+Change\+Of\+Node\+Vector} ()
+\begin{DoxyCompactList}\small\item\em rebuilds node vector, sorts everything and re-\/establishes interior and perimeter \end{DoxyCompactList}\item 
+void {\bfseries Update\+Cell\+Membership\+Applying\+Constraints} (typename std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator master\+\_\+domain\+\_\+start, typename std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator master\+\_\+domain\+\_\+end, const \mbox{\hyperlink{classcsmp_1_1_property_constraints}{Property\+Constraints}} \&)
+\begin{DoxyCompactList}\small\item\em rebuilds subdomain on the basis of the cells that will be selected according to the supplied property constraints \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a558d771a7d76ff360397d9c2383d89fc}{Identify\+Perimeter}} ()
+\begin{DoxyCompactList}\small\item\em distinguishes PERIMETER simplices that have at least one face on domain boundary from INTERIOR ones; calls Partition\+Element\+Vector() \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_aaf3ef248874090a67fe87e50d8bd5873}{Create\+Node\+Pointer\+Vector}} ()
+\begin{DoxyCompactList}\small\item\em creates node pointer vector from cell vector, using a vector to achieve uniqueness via sort, unique, erase algorithms \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a3757b2383895058cff32c8e3ea1a7b3c}{Sort\+Vectors}} (size\+\_\+t interior\+\_\+cells, size\+\_\+t interior\+\_\+nodes)
+\begin{DoxyCompactList}\small\item\em sorts the node and CELL vectors split into the interior and perimeter ranges (4 sorting operations) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a03118649c3f6254773d9e9ed34f33aea}{Build\+Perimeter\+Face\+Vector}} (int64\+\_\+t interior\+\_\+cells)
+\begin{DoxyCompactList}\small\item\em assuming that a partitioned (and sorted) cell vector is in place, constructs the bd\+\_\+face\+\_\+vec\+\_\+ by checking whether neighbor cells belong to the domain or not \end{DoxyCompactList}\item 
+void {\bfseries Schedule\+For\+Rebuild} ()
+\begin{DoxyCompactList}\small\item\em for rebuilding subdomains when nodes or cells changed\+: flag up for a rebuild using Rebuild\+Sub\+Domain\+After\+Change\+Of\+Cell\+Vector \end{DoxyCompactList}\item 
+bool {\bfseries Needs\+Rebuild} () const
+\item 
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a23464a6c34ba9416419f87036a813d68}{Rebuild\+Cell\+And\+Perimeter\+Face\+Vector}} ()
+\begin{DoxyCompactList}\small\item\em deletes \textquotesingle{}nullptr\textquotesingle{} cells from cell vector, retaining the sorting into interior and perimeter elements, and rebuilding perimeter faces as necessary \end{DoxyCompactList}\item 
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a028f4a5b3dc58fb6b59ac9237b7f519c}{Rebuild\+Node\+Vector}} ()
+\begin{DoxyCompactList}\small\item\em deletes \textquotesingle{}nullptr\textquotesingle{} nodes from \doxylink{classcsmp_1_1_node}{Node} vector, retaining the sorting into interior and perimeter nodes \end{DoxyCompactList}\item 
+int32\+\_\+t {\bfseries Domain\+Index} () const
+\begin{DoxyCompactList}\small\item\em reference counting-\/based unique domain identifier (0..n-\/1) \end{DoxyCompactList}\item 
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ad79aeada5222861dabe5c81323c59507}{Renumber\+Nodes}} () const
+\begin{DoxyCompactList}\small\item\em renumbers nodes in domain 0..n-\/1 \end{DoxyCompactList}\item 
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a17520db92d9751e03853275afc84fa09}{Renumber\+Cells}} () const
+\begin{DoxyCompactList}\small\item\em renumbers cells in domain 0..n-\/1 \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af44335d9a2ce08027b18924e2a10927c}{Update\+Member\+Indexes}} () const
+\begin{DoxyCompactList}\small\item\em renumber cells and nodes consecutively from 0..n-\/1 \end{DoxyCompactList}\item 
+std\+::vector$<$ size\+\_\+t $>$ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a67e17a74c2386395bb019a4c9e440be0}{Member\+Cell\+Indexes}} () const
+\begin{DoxyCompactList}\small\item\em output current indices to vector \end{DoxyCompactList}\item 
+const std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$ \& \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a82cbf631efd523e2d7ba277294950c85}{Cell\+Vector}} () const
+\begin{DoxyCompactList}\small\item\em reference to container of finite cell pointers to either \doxylink{classcsmp_1_1_element}{Element}, \doxylink{classcsmp_1_1_face}{Face} or \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} objects; \end{DoxyCompactList}\item 
+const std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$ \& {\bfseries Node\+Vector} () const
+\begin{DoxyCompactList}\small\item\em reference to const \doxylink{classcsmp_1_1_node}{Node} pointer vector \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator {\bfseries Nodes\+Begin} () const
+\begin{DoxyCompactList}\small\item\em const iterators (cell and node pointers cannot be modified but the nodes and cells can!) \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator {\bfseries Perimeter\+Nodes\+Begin} () const
+\item 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator {\bfseries Nodes\+End} () const
+\item 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator {\bfseries Cells\+Begin} () const
+\item 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator {\bfseries Perimeter\+Cells\+Begin} () const
+\item 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator {\bfseries Cells\+End} () const
+\item 
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ad09876ac74479c2fce0230ca4eb623fd}{Shared\+Perimeter\+Nodes}} (typename std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator start, typename std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator end) const
+\begin{DoxyCompactList}\small\item\em returns how many of the nodes in the supplied iterator range also form part of the current subdomain\textquotesingle{}s perimeter \end{DoxyCompactList}\item 
+bool {\bfseries Empty} () const
+\begin{DoxyCompactList}\small\item\em check whether subdomain conatains any cells \end{DoxyCompactList}\item 
+size\+\_\+t {\bfseries Nodes} () const
+\item 
+size\+\_\+t {\bfseries Interior\+Nodes} () const
+\item 
+size\+\_\+t {\bfseries Perimeter\+Nodes} () const
+\item 
+size\+\_\+t {\bfseries Integration\+Points} () const
+\item 
+size\+\_\+t {\bfseries Sector\+Integration\+Points} () const
+\item 
+size\+\_\+t {\bfseries Facet\+Integration\+Points} () const
+\item 
+size\+\_\+t {\bfseries Cells} () const
+\item 
+size\+\_\+t {\bfseries Interior\+Cells} () const
+\item 
+size\+\_\+t {\bfseries Perimeter\+Cells} () const
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a347ab9b03b1dfa44c93f1b99956bc47b}{Contains}} (const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\item 
+bool {\bfseries Is\+Perimeter\+Node} (const \mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\item 
+bool {\bfseries Is\+Perimeter\+Cell} (const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a57da45c091a50ea8cbbb337fdc6a64c6}{Perimeter\+Faces}} (size\+\_\+t eid) const
+\begin{DoxyCompactList}\small\item\em for looping over the perimeter faces of perimeter cell with \#eid, method is used to travel across subdomain surface / outline \end{DoxyCompactList}\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a1a759eb5ea8a606b18524cb1fbd133f6}{Perimeter\+Face}} (size\+\_\+t eid, uint32\+\_\+t face) const
+\begin{DoxyCompactList}\small\item\em returns local face id of face \#face that lies on perimeter of model subdomain \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a010f14b108721967ca9978df1499d52f}{N}} (size\+\_\+t n) const
+\begin{DoxyCompactList}\small\item\em pointer to node \#n in subdomain; \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} {\bfseries E} (size\+\_\+t n) const
+\begin{DoxyCompactList}\small\item\em pointer to cell \#n of model subdomain \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a2f8fe3782a143a775c253d3c6191fc62}{Is\+Contiguous}} () const
+\begin{DoxyCompactList}\small\item\em checks whether all cells within the subdomain are interconnected (if the domain has multi-\/dimensional cells this is never the case) \end{DoxyCompactList}\item 
+std\+::pair$<$ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gae70f4082919c7730a8934bfcac658ea2}{CELL\+\_\+\+SHAPE}}, bool $>$ {\bfseries Single\+Cell\+Shape\+Domain} () const
+\begin{DoxyCompactList}\small\item\em if the model subdomain consists of a single cell shape (line, surface, volume) this method returns true revealing the type \end{DoxyCompactList}\item 
+std\+::pair$<$ int32\+\_\+t, int32\+\_\+t $>$ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ab4c56e525a0880281af8173c8538565e}{Spatial\+Dimensions}} () const
+\begin{DoxyCompactList}\small\item\em returns 1) cells of how many different spatial dimensions are contained, and 2) the highest cell spatial dimension in subdomain \end{DoxyCompactList}\item 
+void {\bfseries Min\+Max\+Coordinates} (\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \&xyz\+\_\+min, \mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \&xyz\+\_\+max) const
+\begin{DoxyCompactList}\small\item\em returns diagonally opposite points of bounding box \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ae5f0861ac366755bbc9a7bedd3c7eb79}{Assign\+Node\+Coordinates\+To}} (const char \texorpdfstring{$\ast$}{*}vector\+\_\+prop)
+\begin{DoxyCompactList}\small\item\em output coordinates to user-\/defined vector variable \mbox{[}x1,y1,z1,...xn,yn,zn\mbox{]} \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_affe9c994091a81214bffdec3b1eb379d}{Assign\+Cell\+Characteristics\+To}} (const char \texorpdfstring{$\ast$}{*}characteristic, const char \texorpdfstring{$\ast$}{*}var)
+\begin{DoxyCompactList}\small\item\em characteristics like \textquotesingle{}length\textquotesingle{}, \textquotesingle{}area\textquotesingle{}, \textquotesingle{}volume\textquotesingle{} , \textquotesingle{}aspect ratio\textquotesingle{}, \textquotesingle{}inner radius\textquotesingle{} are assigned to user-\/defined variable \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a67ef0c828a71395fd0fe06c01c0ada6e}{Node\+Attributes\+To\+CSV}} ()
+\begin{DoxyCompactList}\small\item\em writes a CSV (comma delimited ascii text) file with point coordinates, node-\/idx, \doxylink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\+\_\+\+BOUNDARY} flags, and interior vs perimeter information \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a75a4cf21feddd36d999043a1451dabce}{Input\+Property\+Value}} (const char \texorpdfstring{$\ast$}{*}input\+\_\+prop, const Var \&new\+\_\+value, \mbox{\hyperlink{namespacecsmp_a4b8f1ad9f1a09a957714679ce72aee3f}{SUBDOMAIN\+\_\+\+PART}} sd=COMPLETE)
+\begin{DoxyCompactList}\small\item\em assigns uniform (single) variable value to either the entire subdomain or its interior or perimeter \end{DoxyCompactList}\item 
+void {\bfseries Change\+Property\+Status} (const char \texorpdfstring{$\ast$}{*}property, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} new\+\_\+status\+\_\+of\+\_\+scalar, \mbox{\hyperlink{namespacecsmp_a4b8f1ad9f1a09a957714679ce72aee3f}{SUBDOMAIN\+\_\+\+PART}}=COMPLETE)
+\begin{DoxyCompactList}\small\item\em changes the flag of the scalar variable \textquotesingle{}property\textquotesingle{} to new value; applied either in the entire subdomain or its interior or perimeter \end{DoxyCompactList}\item 
+void {\bfseries Change\+Property\+Status\+Where} (const char \texorpdfstring{$\ast$}{*}property, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} new\+\_\+status\+\_\+of\+\_\+scalar, double min\+\_\+value\+\_\+to\+\_\+change, double max\+\_\+value\+\_\+to\+\_\+change)
+\begin{DoxyCompactList}\small\item\em changes the flag of the scalar variable \textquotesingle{}property\textquotesingle{} to new value if the scalar variable is withing the specified range \end{DoxyCompactList}\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ababfefdacbec60ddd809e37ec764997b}{Property\+Status}} (const char \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{structvariable}{variable}}, \mbox{\hyperlink{namespacecsmp_a4b8f1ad9f1a09a957714679ce72aee3f}{SUBDOMAIN\+\_\+\+PART}} flag=COMPLETE, uint32\+\_\+t i=0) const
+\begin{DoxyCompactList}\small\item\em by default (i=0) returns status of scalar variable or first component of a vector or tensor variable; if i\texorpdfstring{$>$}{>}0 flag of corresponding component is returned \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a427056542aa764b22ca3284fc77e170f}{Min\+Max\+Of}} (const char \texorpdfstring{$\ast$}{*}property, double \&gmin, double \&gmax) const
+\begin{DoxyCompactList}\small\item\em min/max property values (length of vectors and eigenvalues of tensors) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a4e074800bd8dbe5099bc9a3b71089f44}{Interpolate\+Node\+To\+Cell\+Property}} (const char \texorpdfstring{$\ast$}{*}nprop, const char \texorpdfstring{$\ast$}{*}eprop)
+\item 
+void {\bfseries Interpolate\+Node\+To\+Integration\+Point\+Property} (const char \texorpdfstring{$\ast$}{*}nprop, const char \texorpdfstring{$\ast$}{*}eprop)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a1a884652fb9c34a64d55665a19939b22}{Interpolate\+Integration\+Point\+To\+Cell\+Property}} (const char \texorpdfstring{$\ast$}{*}cprop, const char \texorpdfstring{$\ast$}{*}eprop)
+\item 
+void {\bfseries Extrapolate\+Cell\+To\+Integration\+Point\+Property} (const char \texorpdfstring{$\ast$}{*}eprop, const char \texorpdfstring{$\ast$}{*}cprop)
+\item 
+void {\bfseries Extrapolate\+Cell\+To\+Facet\+Integration\+Point\+Property} (const char \texorpdfstring{$\ast$}{*}eprop, const char \texorpdfstring{$\ast$}{*}fipprop)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a0646dd865affebcbae44e00f4d00aa21}{Extrapolate\+Cell\+To\+Node\+Property}} (const char \texorpdfstring{$\ast$}{*}eprop, const char \texorpdfstring{$\ast$}{*}nprop, bool by\+\_\+distance=true)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_aecc9505535c81b0151704fc5b9fac09e}{Extrapolate\+Integration\+Point\+To\+Node\+Property}} (const char \texorpdfstring{$\ast$}{*}cprop, const char \texorpdfstring{$\ast$}{*}nprop)
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ad56987658b3732e443a349b49445792b}{Average}} (const char \texorpdfstring{$\ast$}{*}property) const
+\begin{DoxyCompactList}\small\item\em arithmetic (number as opposed to volume weighted) average \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af7671cce5f309418f3b52d5a1d3ab02e}{Copy\+Gradient\+Of\+Property\+\_\+\+A\+\_\+\+To\+\_\+B}} (const char \texorpdfstring{$\ast$}{*}node\+\_\+prop, const char \texorpdfstring{$\ast$}{*}cell\+\_\+prop)
+\item 
+void {\bfseries Copy\+Replace} (const char \texorpdfstring{$\ast$}{*}from, const char \texorpdfstring{$\ast$}{*}to)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a472e8d79822b50bf470b3faf71266cb0}{Write\+Domain\+Indexes\+To\+Binary\+File}} (std\+::fstream \&) const
+\begin{DoxyCompactList}\small\item\em writes complete \doxylink{classcsmp_1_1_model_sub_domain}{Model\+Sub\+Domain} specifications in terms of unique indices as block to binary file \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a3e4530100fdef7bf13ba9fd963f83fd0}{Output\+Variable\+To\+Screen}} (const char \texorpdfstring{$\ast$}{*}prop) const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ae83133e61ae2e75a6da7cce17a4afe5d}{Out}} () const
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_local_variable_storage}{csmp\+::\+Local\+Variable\+Storage$<$ dim, Region $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+bool {\bfseries operator==} (const \mbox{\hyperlink{classcsmp_1_1_local_variable_storage}{Local\+Variable\+Storage}}$<$ dim, \mbox{\hyperlink{classcsmp_1_1_region}{Region}} $>$ \&) const
+\begin{DoxyCompactList}\small\item\em Goto overload for storees without \doxylink{structcsmp_1_1_integration_point_variables}{Integration\+Point\+Variables}. \end{DoxyCompactList}\item 
+void {\bfseries Resize\+Property\+Storage} (const \mbox{\hyperlink{structcsmp_1_1_local_variables}{Local\+Variables}} \&)
+\begin{DoxyCompactList}\small\item\em Goto overload for storees without \doxylink{structcsmp_1_1_integration_point_variables}{Integration\+Point\+Variables}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_local_variable_storage_ae81c2b297f4166821bc3de2856e055ae}{Add\+Property}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&)
+\begin{DoxyCompactList}\small\item\em Creates an empty space in the storage preserving the original variable values. \doxylink{structcsmp_1_1_local_variables}{Local\+Variables} in \doxylink{structcsmp_1_1_index}{Index} have to reflect NEW state (incl added) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_local_variable_storage_a3b56bab7bc4a1db37bfc4d4176457349}{Delete\+Property}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&)
+\begin{DoxyCompactList}\small\item\em Deletes data and flags of property \doxylink{structcsmp_1_1_local_variables}{Local\+Variables} in \doxylink{structcsmp_1_1_index}{Index} have to reflect CURRENT state (incl property to be removed) \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_local_variable_storage_aa8f995011429356bfd7e7744794c9b9b}{Is\+Within\+Range}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, double, double) const
+\item 
+double {\bfseries Read} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\begin{DoxyCompactList}\small\item\em Scalar variable value. \end{DoxyCompactList}\item 
+void {\bfseries Store} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, const \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&)
+\begin{DoxyCompactList}\small\item\em Scalar variable. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} {\bfseries Status} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\begin{DoxyCompactList}\small\item\em Scalar \& Array variable flag. \end{DoxyCompactList}\item 
+void {\bfseries Store\+Array\+Entry} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, double array\+\_\+elmt\+\_\+value, int\+\_\+type)
+\item 
+double {\bfseries Read\+Array\+Entry} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, int\+\_\+type array\+\_\+elmt) const
+\begin{DoxyCompactList}\small\item\em reads single double element inside of the target array \end{DoxyCompactList}\item 
+bool {\bfseries Empty\+LVS} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_local_variable_storage_ade5ec5a8e9afb482c1619924cf8259b2}{Out\+LVS}} () const
+\item 
+void {\bfseries Assert\+Placement} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\begin{DoxyCompactList}\small\item\em We check in debug only. \end{DoxyCompactList}\item 
+void {\bfseries Assert\+Integration\+Point\+Placement} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\begin{DoxyCompactList}\small\item\em We check in debug only. \end{DoxyCompactList}\item 
+void {\bfseries Assert\+Finite\+Volume\+Integration\+Point\+Placement} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\begin{DoxyCompactList}\small\item\em We check in debug only. \end{DoxyCompactList}\item 
+void {\bfseries Store\+Local\+State} (const \mbox{\hyperlink{structcsmp_1_1_local_variables}{Local\+Variables}} \&lv)
+\begin{DoxyCompactList}\small\item\em We store in debug only. \end{DoxyCompactList}\item 
+void {\bfseries LVS} (const Data \&data)
+\begin{DoxyCompactList}\small\item\em copy or move supplied data into storage \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_nimble_region_a7777eb58332fc61952b33213c24858af}\label{classcsmp_1_1_nimble_region_a7777eb58332fc61952b33213c24858af} 
+class {\bfseries Nimble\+Region\+\_\+\+Test}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_model_sub_domain}{csmp\+::\+Model\+Sub\+Domain$<$ dim, Element $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a9d850f869aa6838cecb95fb492a02568}{Partition\+Cell\+Vector}} ()
+\begin{DoxyCompactList}\small\item\em establishes interior vs. exterior simplices and nodes; returns index of first boundary cell \end{DoxyCompactList}\item 
+size\+\_\+t {\bfseries Partition\+Cell\+Vector\+For\+Boundary} ()
+\item 
+size\+\_\+t {\bfseries Partition\+Cell\+Vector\+For\+Split\+Boundary} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_model_sub_domain}{csmp\+::\+Model\+Sub\+Domain$<$ dim, Element $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \& {\bfseries pref\+\_\+}
+\item 
+std\+::string {\bfseries subdomain\+\_\+name\+\_\+}
+\begin{DoxyCompactList}\small\item\em passed down when domain is created so that it can be referred to \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$ {\bfseries cell\+\_\+vec\+\_\+}
+\begin{DoxyCompactList}\small\item\em doubly sorted, interior cells first \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::vector$<$ uint32\+\_\+t $>$ $>$ {\bfseries bd\+\_\+face\+\_\+vec\+\_\+}
+\begin{DoxyCompactList}\small\item\em matching second sorted range of cell\+\_\+vec\+\_\+ \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$ {\bfseries node\+\_\+vec\+\_\+}
+\begin{DoxyCompactList}\small\item\em doubly sorted, interior nodes first \end{DoxyCompactList}\item 
+size\+\_\+t {\bfseries first\+\_\+bd\+\_\+node\+\_\+}
+\begin{DoxyCompactList}\small\item\em begin of the perimeter nodes \end{DoxyCompactList}\item 
+int32\+\_\+t {\bfseries domain\+\_\+idx\+\_\+}
+\begin{DoxyCompactList}\small\item\em created during construction from domain\+\_\+count\+\_\+ \end{DoxyCompactList}\item 
+bool {\bfseries rebuilt\+\_\+needed\+\_\+}
+\begin{DoxyCompactList}\small\item\em parameter set when mesh gets modified by \doxylink{classcsmp_1_1_mesh_manager}{Mesh\+Manager} so that update can be prompted \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Static Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_model_sub_domain}{csmp\+::\+Model\+Sub\+Domain$<$ dim, Element $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+static int32\+\_\+t {\bfseries domain\+\_\+count\+\_\+}
+\begin{DoxyCompactList}\small\item\em reference-\/counting to get unique identifier for subdomains \end{DoxyCompactList}\item 
+static constexpr bool {\bfseries verbose\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim$>$\newline
+class csmp\+::\+Nimble\+Region$<$ dim $>$}
+Flexible collection of \doxylink{classcsmp_1_1_element}{Element} and \doxylink{classcsmp_1_1_node}{Node} object pointers to be used by the \doxylink{classcsmp_1_1_p_d_e___integrator}{PDE\+\_\+\+Integrator}, which also requires access to ranges of (perimeter) nodes.
+
+\doxylink{classcsmp_1_1_nimble_region}{Nimble\+Region} is a light (non-\/unique) version of \doxylink{classcsmp_1_1_region}{Region} that can grow or shrink, retaining the knowledge of its perimeter.
+
+Like \doxylink{classcsmp_1_1_region}{Region}, \doxylink{classcsmp_1_1_nimble_region}{Nimble\+Region} keeps track of its perimeter, which always includes a halo that comes about as all elements that contain user-\/supplied nodes (and additional ones) will be included into the contructed region.
+
+The region is based on the STL vector and operated under a high-\/memory policy. This means that the Update() and other functions retain previous vector storage allocations, just resizing these vectors to zero when a reconstruction is performed, to avoid costly memory allocations. To delete both elements and the internal storage of the vectors, delete and create a new \doxylink{classcsmp_1_1_nimble_region}{Nimble\+Region} object.
+
+\begin{DoxyAttention}{Attention}
+\doxylink{classcsmp_1_1_nimble_region}{Nimble\+Region} does not have a name or properties of its own and it is not managed by the \doxylink{classcsmp_1_1_region_interface}{Region\+Interface}, create it using its constructor and manage it with DES or any other parallel algorithm.
+
+Grow(), Shrink() and Change\+Shape() operations rely on the connectivity between equidimensional elements and nodes.
+
+Thus far, Nimbleregion only works with linear elements.
+\end{DoxyAttention}
+Design specifications in detail\+: \doxylink{classcsmp_1_1_nimble_region}{Nimble\+Region} for use in PDE\+\_\+\+Integrators?
+
+
+\begin{DoxyEnumerate}
+\item Must be a template with integral parameter uint32\+\_\+t dim
+\item Be a suitable plugin into the \doxylink{classcsmp_1_1_p_d_e___integrator}{PDE\+\_\+\+Integrator}, meaning that it has the methods\+:
+
+1.\+1 Must have a contructor that accepts iterators to node pointers 1.\+2 Should be able to change shape at low computational cost 1.\+3 Have the interfaces needed by the \doxylink{classcsmp_1_1_p_d_e___integrator}{PDE\+\_\+\+Integrator} to function\+:
+\begin{DoxyItemize}
+\item Must be based on vectors,
+\item Know its perimeter nodes / have nodes sorted into interior and perimeter ranges so that boundary conditions can be applied.
+\end{DoxyItemize}
+\item \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} / task share with DES algorithm to convey update information. 
+\end{DoxyEnumerate}
+
+\label{doc-constructors}
+\Hypertarget{classcsmp_1_1_nimble_region_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcsmp_1_1_nimble_region_a9ad5a05703fc85e0107cd02f52aa56f9}\index{csmp::NimbleRegion$<$ dim $>$@{csmp::NimbleRegion$<$ dim $>$}!NimbleRegion@{NimbleRegion}}
+\index{NimbleRegion@{NimbleRegion}!csmp::NimbleRegion$<$ dim $>$@{csmp::NimbleRegion$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{NimbleRegion()}{NimbleRegion()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_nimble_region_a9ad5a05703fc85e0107cd02f52aa56f9} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_nimble_region}{csmp\+::\+Nimble\+Region}}$<$ dim $>$\+::\+Nimble\+Region (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&}]{p}{, }\item[{typename std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator}]{first}{, }\item[{typename std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator}]{last}{}\end{DoxyParamCaption})}
+
+
+
+construction of region from nodes, relying on existing node-\/parent-\/element connectivity to identify elements 
+
+construction from nodes only, relying on existing node-\/parent-\/element connectivity to identify elements
+
+the assumption is made that the node pointers are unique.
+
+the element vector is also sorted for searching.
+
+the elements are identified by looping over the parents of the nodes, then additional nodes are added where necessary to capture a halo for the pressure equation. 
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_nimble_region_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_nimble_region_a54273171f80314c9bd0e3c74cf918077}\index{csmp::NimbleRegion$<$ dim $>$@{csmp::NimbleRegion$<$ dim $>$}!Clear@{Clear}}
+\index{Clear@{Clear}!csmp::NimbleRegion$<$ dim $>$@{csmp::NimbleRegion$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Clear()}{Clear()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_nimble_region_a54273171f80314c9bd0e3c74cf918077} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_nimble_region}{csmp\+::\+Nimble\+Region}}$<$ dim $>$\+::\+Clear (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+resize to zero while keeping the memory 
+
+When you do not want to call the destructor yet. \Hypertarget{classcsmp_1_1_nimble_region_a2d450a034207185f0edd788569bee754}\index{csmp::NimbleRegion$<$ dim $>$@{csmp::NimbleRegion$<$ dim $>$}!Erase@{Erase}}
+\index{Erase@{Erase}!csmp::NimbleRegion$<$ dim $>$@{csmp::NimbleRegion$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Erase()}{Erase()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_nimble_region_a2d450a034207185f0edd788569bee754} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_nimble_region}{csmp\+::\+Nimble\+Region}}$<$ dim $>$\+::\+Erase (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+removing storage 
+
+Deleting everything including the storage. \Hypertarget{classcsmp_1_1_nimble_region_ac810cf1901509b73a8468d901051a935}\index{csmp::NimbleRegion$<$ dim $>$@{csmp::NimbleRegion$<$ dim $>$}!Out@{Out}}
+\index{Out@{Out}!csmp::NimbleRegion$<$ dim $>$@{csmp::NimbleRegion$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Out()}{Out()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_nimble_region_ac810cf1901509b73a8468d901051a935} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_nimble_region}{csmp\+::\+Nimble\+Region}}$<$ dim $>$\+::\+Out (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+writes the current element and node memberships to the console 
+
+Print the \doxylink{classcsmp_1_1_nimble_region}{Nimble\+Region} to screen. \Hypertarget{classcsmp_1_1_nimble_region_a2e7585d219687bb26639680178349c51}\index{csmp::NimbleRegion$<$ dim $>$@{csmp::NimbleRegion$<$ dim $>$}!Placement@{Placement}}
+\index{Placement@{Placement}!csmp::NimbleRegion$<$ dim $>$@{csmp::NimbleRegion$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Placement()}{Placement()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_nimble_region_a2e7585d219687bb26639680178349c51} 
+template$<$uint32\+\_\+t dim$>$ \\
+virtual \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} \mbox{\hyperlink{classcsmp_1_1_nimble_region}{csmp\+::\+Nimble\+Region}}$<$ dim $>$\+::\+Placement (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Local variable storage interface. 
+
+
+
+Implements \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a74ddc3c010264bef70bd0604ec19ff11}{csmp\+::\+Model\+Sub\+Domain$<$ dim, Element $>$}}.
+
+\Hypertarget{classcsmp_1_1_nimble_region_ad11ec3a555e158b285590f3da3566dea}\index{csmp::NimbleRegion$<$ dim $>$@{csmp::NimbleRegion$<$ dim $>$}!RenumberNodes@{RenumberNodes}}
+\index{RenumberNodes@{RenumberNodes}!csmp::NimbleRegion$<$ dim $>$@{csmp::NimbleRegion$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{RenumberNodes()}{RenumberNodes()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_nimble_region_ad11ec3a555e158b285590f3da3566dea} 
+template$<$uint32\+\_\+t dim$>$ \\
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_nimble_region}{csmp\+::\+Nimble\+Region}}$<$ dim $>$\+::\+Renumber\+Nodes (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+Consecutive numbering, interior nodes first, perimeter nodes second. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/integration/pde\+\_\+integrators/PDE\+\_\+\+Integrator.\+h\item 
+source/includes/model/Nimble\+Region.\+h\item 
+source/modules/model/Nimble\+Region.\+cpp\end{DoxyCompactItemize}

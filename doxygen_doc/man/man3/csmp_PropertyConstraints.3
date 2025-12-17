@@ -1,0 +1,105 @@
+.TH "csmp::PropertyConstraints" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::PropertyConstraints \- \fBPropertyConstraints\fP permits to combine multiple criteria on the basis of which non-unique regions can be formed\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <PropertyConstraints\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPropertyConstraints\fP (const \fBPropertyConstraints\fP &cr)"
+.br
+.ti -1c
+.RI "\fBPropertyConstraints\fP (const char *prop_name, double pmin, double pmax)"
+.br
+.ti -1c
+.RI "\fBPropertyConstraints\fP & \fBoperator=\fP (const \fBPropertyConstraints\fP &cr)"
+.br
+.ti -1c
+.RI "bool \fBWithIndexes\fP () const"
+.br
+.ti -1c
+.RI "uint32_t \fBConstraints\fP () const"
+.br
+.ti -1c
+.RI "void \fBCheckLengthOfVectorVariables\fP (bool check)"
+.br
+.ti -1c
+.RI "bool \fBAddConstraint\fP (const char *prop_name, double pmin, double pmax)"
+.br
+.ti -1c
+.RI "void \fBChangeConstraint\fP (const char *prop_name, double pmin, double pmax)"
+.br
+.ti -1c
+.RI "template<uint32_t dim> bool \fBInitializePropertyIndices\fP (const \fBPropertyDatabase\fP< dim > &)"
+.br
+.ti -1c
+.RI "template<uint32_t dim> void \fBDeleteConstraint\fP (const \fBPropertyDatabase\fP< dim > &, const char *prop_name)"
+.br
+.ti -1c
+.RI "template<uint32_t dim, template< uint32_t > class CELL> bool \fBCheckConstraints\fP (const CELL< dim > *) const"
+.br
+.ti -1c
+.RI "template<uint32_t dim, template< uint32_t > class CELL> bool \fBCheckConstraints\fP (const CELL< dim > *, \fBIndex\fP &idx) const"
+.br
+.ti -1c
+.RI "void \fBSatisfyConstraintsForAtLeastOneNode\fP (bool satisfy)"
+.br
+.ti -1c
+.RI "void \fBSatisfyConstraintsForNodalAverage\fP (bool satisfy)"
+.br
+.ti -1c
+.RI "void \fBErase\fP ()"
+.br
+.ti -1c
+.RI "void \fBOut\fP () const"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+\fBPropertyConstraints\fP permits to combine multiple criteria on the basis of which non-unique regions can be formed\&. 
+
+In the terminology of this class, a criterion is called a constraint\&. This class stores user-defined constraints that may include, for instance, the magnitude of a vector\&.
+
+.PP
+\fBNote\fP
+.RS 4
+look in the region interface to see how to build regions using \fBPropertyConstraints\fP\&.
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+SKM 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+15/6/1999 
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> bool csmp::PropertyConstraints::CheckConstraints (const CELL< dim > * e, \fBIndex\fP & failed_upon) const"
+For all constraints the checks are performed until a check fails\&. Since the constraints scalar ranges, vector and tensor variables are checked for their individual components unless specific check instructions were specified\&. If so, for instance, vectors can be checked for 
+.br
+ their length and tensors for their Eigenvalues\&. 
+.br
+
+.PP
+\fBReturns\fP
+.RS 4
+whether the element satisfies the user-supplied constraints\&. 
+.RE
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

@@ -1,0 +1,338 @@
+\doxysection{ODE\+\_\+\+Stiff\+Solver.\+h}
+\hypertarget{_o_d_e___stiff_solver_8h_source}{}\label{_o_d_e___stiff_solver_8h_source}\index{source/includes/math/ODE\_StiffSolver.h@{source/includes/math/ODE\_StiffSolver.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_ODE\_STIFF\_SOLVER\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_ODE\_STIFF\_SOLVER\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_sum_of_products_8h}{"{}SumOfProducts.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_sum_of_products_with_exponents_8h}{"{}SumOfProductsWithExponents.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00010\ \textcolor{comment}{}}
+\DoxyCodeLine{00011\ \textcolor{comment}{@brief\ Burlisch-\/Stoer\ solver\ for\ a\ stiff\ systemof\ ordinary\ differential\ equations.}}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ \ }}
+\DoxyCodeLine{00013\ \textcolor{comment}{@section\ motivation\ Motivation}}
+\DoxyCodeLine{00014\ \textcolor{comment}{}}
+\DoxyCodeLine{00015\ \textcolor{comment}{A\ great\ variety\ of\ physical\ processes\ are\ best\ described\ by\ non-\/linear}}
+\DoxyCodeLine{00016\ \textcolor{comment}{systems\ of\ ordinary\ differential\ equations\ (ODEs)\ which\ describe\ the\ }}
+\DoxyCodeLine{00017\ \textcolor{comment}{change\ of\ the\ system.\ Typically,\ these\ ODEs\ can\ only\ be\ integrated\ }}
+\DoxyCodeLine{00018\ \textcolor{comment}{(solved)\ numerically\ as\ is\ the\ case\ for\ rate-\/dependent\ }}
+\DoxyCodeLine{00019\ \textcolor{comment}{chemical\ reactions.\ If\ the\ rate\ coefficients\ differ\ among\ the\ }}
+\DoxyCodeLine{00020\ \textcolor{comment}{equations\ by\ many\ orders\ of\ magnitude,\ the\ systems\ are\ called\ stiff.\ }}
+\DoxyCodeLine{00021\ \textcolor{comment}{The\ main\ numerical\ problem\ imposed\ by\ the\ 'stiffness'\ is\ that,\ for\ instance}}
+\DoxyCodeLine{00022\ \textcolor{comment}{in\ a\ time-\/dependent\ system,\ some\ equilibria\ described\ by\ individual\ ODE}}
+\DoxyCodeLine{00023\ \textcolor{comment}{equations\ are\ obtained\ very\ fast\ while\ other\ equations\ evolve\ very\ slowly.\ }}
+\DoxyCodeLine{00024\ \textcolor{comment}{Coupling\ such\ different\ equations\ together,\ therefore\ requires\ very\ small\ time\ }}
+\DoxyCodeLine{00025\ \textcolor{comment}{steps\ to\ limit\ the\ change\ in\ each\ step\ over\ periods\ where\ rapid\ changes\ occur.}}
+\DoxyCodeLine{00026\ \textcolor{comment}{Large\ timesteps\ are\ however\ essential\ in\ periods\ of\ minor\ change\ to\ obtain\ a}}
+\DoxyCodeLine{00027\ \textcolor{comment}{solution\ in\ a\ reasonable\ amount\ of\ time.\ \ }}
+\DoxyCodeLine{00028\ \textcolor{comment}{}}
+\DoxyCodeLine{00029\ \textcolor{comment}{Solution\ methods\ which\ provide}}
+\DoxyCodeLine{00030\ \textcolor{comment}{the\ necessary\ adaptive\ timestepping\ are\ known\ as\ stiff\ ODE\ solvers,\ and}}
+\DoxyCodeLine{00031\ \textcolor{comment}{the\ motivation\ for\ the\ design\ of\ the\ class\ ODE\_StiffSolver\ is\ to}}
+\DoxyCodeLine{00032\ \textcolor{comment}{make\ a\ robust\ solver\ of\ this\ kind\ available\ to\ CSP.\ \ \ }}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00035\ \textcolor{comment}{@section\ Design\ Intent}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00037\ \textcolor{comment}{}}
+\DoxyCodeLine{00038\ \textcolor{comment}{The\ class\ ODE\_StiffSolver\ encapsulates\ a\ semi-\/implicit\ form\ of\ a\ }}
+\DoxyCodeLine{00039\ \textcolor{comment}{Burlisch-\/Stoer\ method\ as\ described\ by\ Bader\ and\ Deuflhard\ (1983)\ into}}
+\DoxyCodeLine{00040\ \textcolor{comment}{a\ code\ module\ which\ is\ also\ capable\ of\ the\ house\ keeping\ and\ analytical\ }}
+\DoxyCodeLine{00041\ \textcolor{comment}{differentiation\ of\ the\ actual\ ordinary\ differential\ equations.\ Textfile}}
+\DoxyCodeLine{00042\ \textcolor{comment}{input\ provides\ an\ interface\ for\ the\ definition\ and\ description}}
+\DoxyCodeLine{00043\ \textcolor{comment}{of\ the\ system\ of\ equations\ in\ human-\/readable\ form.\ The\ equations\ are\ }}
+\DoxyCodeLine{00044\ \textcolor{comment}{linked\ in\ a\ matrix\ scheme\ which\ uses\ LU\ decomposition\ and\ back\ substitution}}
+\DoxyCodeLine{00045\ \textcolor{comment}{of\ the\ results\ after\ the\ inversion\ of\ the\ matrix\ in\ each\ timestep.\ }}
+\DoxyCodeLine{00046\ \textcolor{comment}{The\ integration\ routine\ 'odeint'\ controls\ the\ timestep\ size\ using\ the\ }}
+\DoxyCodeLine{00047\ \textcolor{comment}{cross\ derivatives\ of\ all\ of\ the\ individual\ ODEs.\ For\ this\ purpose,\ the\ }}
+\DoxyCodeLine{00048\ \textcolor{comment}{derivatives\ are\ assembled\ into\ a\ Jacobian\ matrix.\ Additional\ methods\ are}}
+\DoxyCodeLine{00049\ \textcolor{comment}{provided\ to\ change\ coefficients\ in\ individual\ equations\ without\ having}}
+\DoxyCodeLine{00050\ \textcolor{comment}{to\ redine\ them.\ This\ capability\ is\ useful,\ for\ instance,\ if\ activities}}
+\DoxyCodeLine{00051\ \textcolor{comment}{or\ surface\ area\ changes\ in\ an\ equilibration\ calculation.\ \ }}
+\DoxyCodeLine{00052\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00053\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00054\ \textcolor{comment}{@section\ Applicability}}
+\DoxyCodeLine{00055\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00056\ \textcolor{comment}{}}
+\DoxyCodeLine{00057\ \textcolor{comment}{The\ class\ ODE\_StiffSolver\ is\ useful\ only\ for\ relatively\ small\ systems}}
+\DoxyCodeLine{00058\ \textcolor{comment}{of\ ODEs\ (<50\ degrees\ of\ freedom).\ Runtime\ scales\ with\ number\ of\ ODEs}}
+\DoxyCodeLine{00059\ \textcolor{comment}{which\ is\ also\ readily\ explained\ on\ a\ physical\ basis.\ Since\ the}}
+\DoxyCodeLine{00060\ \textcolor{comment}{ODE\ coefficients\ will\ influence\ the\ condition\ number\ of\ the\ solution\ }}
+\DoxyCodeLine{00061\ \textcolor{comment}{matrix,\ these\ must\ not\ differ\ from\ one-\/another\ by\ more\ than}}
+\DoxyCodeLine{00062\ \textcolor{comment}{the\ numerical\ (double)\ precision.\ Otherwise\ the\ matrix\ will\ become\ singular.\ }}
+\DoxyCodeLine{00063\ \textcolor{comment}{The\ solution\ speed\ also\ limits\ the\ applicability\ of\ the\ stiff\ ODE}}
+\DoxyCodeLine{00064\ \textcolor{comment}{integration\ algorithm\ in\ serial\ application\ in\ a\ finite-\/element\ model.}}
+\DoxyCodeLine{00065\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00066\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00067\ \textcolor{comment}{@section\ Implementation}}
+\DoxyCodeLine{00068\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00069\ \textcolor{comment}{}}
+\DoxyCodeLine{00070\ \textcolor{comment}{The\ implementation\ of\ the\ ODE\ solver\ stems\ from\ the\ second\ edition\ of}}
+\DoxyCodeLine{00071\ \textcolor{comment}{Numerical\ Recipes\ in\ C\ by\ Press\ et\ al.\ 1996\ (p.\ 742ff)\ which\ also\ provides}}
+\DoxyCodeLine{00072\ \textcolor{comment}{detailed\ documentation\ of\ functions\ included.\ The\ original\ names\ of\ the\ functions}}
+\DoxyCodeLine{00073\ \textcolor{comment}{which\ have\ been\ integrated\ as\ private\ methods\ of\ the\ class\ ODE\_StiffSolver}}
+\DoxyCodeLine{00074\ \textcolor{comment}{are\ derivs(),\ jacobn(),\ ludcmp(),\ lubksb(),\ simpr()\ pzextr(),\ odeint(),\ and}}
+\DoxyCodeLine{00075\ \textcolor{comment}{stifbs().\ Additional\ auxiliary\ methods\ manage\ storage\ in\ the\ peculiar\ }}
+\DoxyCodeLine{00076\ \textcolor{comment}{numerical\ recipe\ way.\ }}
+\DoxyCodeLine{00077\ \textcolor{comment}{}}
+\DoxyCodeLine{00078\ \textcolor{comment}{The\ method\ implemented\ herein\ goes\ back\ to\ Bader,\ G.\ and\ Deuflhard,\ P.\ 1983,}}
+\DoxyCodeLine{00079\ \textcolor{comment}{Numerische\ Mathematik\ 41,\ 373-\/398.}}
+\DoxyCodeLine{00080\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00081\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00082\ \textcolor{comment}{@section\ Participants}}
+\DoxyCodeLine{00083\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00084\ \textcolor{comment}{}}
+\DoxyCodeLine{00085\ \textcolor{comment}{The\ objects\ SumOfProductsWithExponents\ and\ SumOfProducts\ are\ used\ to}}
+\DoxyCodeLine{00086\ \textcolor{comment}{represent\ individual\ OD\ equations\ in\ the\ stiff\ solver\ object.\ }}
+\DoxyCodeLine{00087\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00088\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00089\ \textcolor{comment}{@section\ Collaboration}}
+\DoxyCodeLine{00090\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00091\ \textcolor{comment}{}}
+\DoxyCodeLine{00092\ \textcolor{comment}{Inside\ the\ CSP\ framework\ the\ class\ ODE\_StiffSolver\ is\ used\ by\ the\ }}
+\DoxyCodeLine{00093\ \textcolor{comment}{ReactionVisitor\ object.\ This\ object\ uses\ the\ solver\ to\ find\ fluid-\/rock}}
+\DoxyCodeLine{00094\ \textcolor{comment}{equilibria\ in\ individual\ finite\ elements.}}
+\DoxyCodeLine{00095\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00096\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00097\ \textcolor{comment}{@section\ Consequences}}
+\DoxyCodeLine{00098\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00099\ \textcolor{comment}{}}
+\DoxyCodeLine{00100\ \textcolor{comment}{The\ ODE\_StiffSolver\ form\ a\ sequentially\ applied\ reaction\ module\ in\ the\ }}
+\DoxyCodeLine{00101\ \textcolor{comment}{object-\/oriented\ implementation\ of\ an\ decoupled\ incremental\ transport\ followed\ }}
+\DoxyCodeLine{00102\ \textcolor{comment}{by\ reaction\ scheme\ for\ reactive\ transport\ calculations\ with\ CSP.}}
+\DoxyCodeLine{00103\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00104\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00105\ \textcolor{comment}{@section\ Application\ Examples}}
+\DoxyCodeLine{00106\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00107\ \textcolor{comment}{}}
+\DoxyCodeLine{00108\ \textcolor{comment}{The\ ODE\_StiffSolver\ can\ be\ applied\ using\ its\ Solve()\ method\ inside\ of}}
+\DoxyCodeLine{00109\ \textcolor{comment}{other\ CSP\ objects\ or\ it\ can\ be\ used\ as\ a\ stand-\/alone\ tool\ to\ solve\ }}
+\DoxyCodeLine{00110\ \textcolor{comment}{non-\/linear\ ODEs.\ The\ system\ of\ equations\ is\ defined\ in\ a\ textfile\ }}
+\DoxyCodeLine{00111\ \textcolor{comment}{starting\ with\ an\ underlined\ headline\ followed\ by\ a\ blank\ line,\ e.g.:}}
+\DoxyCodeLine{00112\ \textcolor{comment}{}}
+\DoxyCodeLine{00113\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00114\ \textcolor{comment}{carbonate\ -\/\ dissolution\ example}}
+\DoxyCodeLine{00115\ \textcolor{comment}{===============================}}
+\DoxyCodeLine{00116\ \textcolor{comment}{}}
+\DoxyCodeLine{00117\ \textcolor{comment}{independent\ variables}}
+\DoxyCodeLine{00118\ \textcolor{comment}{-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00119\ \textcolor{comment}{}}
+\DoxyCodeLine{00120\ \textcolor{comment}{dependent\ variable\ definitions\ for\ which\ is\ solved\ for\ (aqueous,\ gaseous,\ and\ solid)}}
+\DoxyCodeLine{00121\ \textcolor{comment}{-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00122\ \textcolor{comment}{OH\_1m\ \ CO2\_aq\ \ CC\ \ Ca\_2p\ \ H\_1p\ \ H2O\_aq\ \ HCO3\_1m\ \ }}
+\DoxyCodeLine{00123\ \textcolor{comment}{}}
+\DoxyCodeLine{00124\ \textcolor{comment}{equilibrium\ constants\ (in\ sequence\ of\ listed\ reactions,\ same\ number)}}
+\DoxyCodeLine{00125\ \textcolor{comment}{-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00126\ \textcolor{comment}{KF=4.37e-\/2\ \ KB1=3.4593938e-\/12\ \ KB2=8.336811e+10\ \ KB3=9727.4722}}
+\DoxyCodeLine{00127\ \textcolor{comment}{}}
+\DoxyCodeLine{00128\ \textcolor{comment}{reactions\ (odes)\ A\ +\ B\ -\/>\ C\ (K):\ \ dA/dt\ =\ -\/kf\ [A][B]\ +\ kf\ [C]\ /\ K}}
+\DoxyCodeLine{00129\ \textcolor{comment}{-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00130\ \textcolor{comment}{OH\_1m\ \ \ \ =\ -\/KF\ H\_1p\ OH\_1m\ \ \ \ +\ \ KB1\ H2O\_aq}}
+\DoxyCodeLine{00131\ \textcolor{comment}{CO2\_aq\ \ \ =\ -\/KF\ CO2\_aq\ H2O\_aq\ +\ \ KB2\ HCO3\_1m\ H\_1p}}
+\DoxyCodeLine{00132\ \textcolor{comment}{CC\ \ \ \ \ \ \ =\ -\/KF\ CC\ H\_1p\ \ \ \ \ \ \ +\ \ KB3\ HCO3\_1m\ Ca\_2p}}
+\DoxyCodeLine{00133\ \textcolor{comment}{Ca\_2p\ \ \ \ =\ \ KF\ CC\ H\_1p\ \ \ \ \ \ \ +\ -\/KB3\ HCO3\_1m\ Ca\_2p}}
+\DoxyCodeLine{00134\ \textcolor{comment}{H\_1p\ \ \ \ \ =\ \ KF\ CO2\_aq\ H2O\_aq\ +\ -\/KB2\ HCO3\_1m\ H\_1p\ +\ -\/KF\ CC\ H\_1p\ +\ KB3\ HCO3\_1m\ Ca\_2p\ +\ -\/KF\ H\_1p\ OH\_1m\ +\ KB1\ H2O\_aq}}
+\DoxyCodeLine{00135\ \textcolor{comment}{H2O\_aq\ \ \ =\ \ KF\ H\_1p\ OH\_1m\ \ \ \ +\ -\/KB1\ H2O\_aq}}
+\DoxyCodeLine{00136\ \textcolor{comment}{HCO3\_1m\ \ =\ \ KF\ CO2\_aq\ H2O\_aq\ +\ -\/KB2\ HCO3\_1m\ H\_1p\ +\ KF\ CC\ H\_1p\ +\ -\/KB3\ HCO3\_1m\ Ca\_2p}}
+\DoxyCodeLine{00137\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00138\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00139\ \textcolor{comment}{Independent\ variables\ are\ specified\ next\ (such\ as\ constant\ coefficients).\ }}
+\DoxyCodeLine{00140\ \textcolor{comment}{In\ this\ example,\ there\ are\ no\ independent\ variables.\ Again}}
+\DoxyCodeLine{00141\ \textcolor{comment}{there\ is\ an\ underlined\ headline\ followed\ by\ the\ data\ and\ a\ blank\ line.\ }}
+\DoxyCodeLine{00142\ \textcolor{comment}{}}
+\DoxyCodeLine{00143\ \textcolor{comment}{The\ next\ block\ defines\ the\ names\ of\ the\ dependent\ variables\ in\ the\ }}
+\DoxyCodeLine{00144\ \textcolor{comment}{equations\ (i.e.,\ those\ variables\ which\ shall\ be\ calculated\ as\ a\ function}}
+\DoxyCodeLine{00145\ \textcolor{comment}{of\ time).\ Importantly,\ no\ '+'\ or\ '-\/'\ signs\ must\ be\ used\ here\ since\ these\ }}
+\DoxyCodeLine{00146\ \textcolor{comment}{symbols\ are\ reserved\ by\ the\ equation\ parser\ for\ algebraic\ operations.}}
+\DoxyCodeLine{00147\ \textcolor{comment}{A\ similar\ block\ follows,\ specifying\ the\ numerical\ values\ of\ the}}
+\DoxyCodeLine{00148\ \textcolor{comment}{equation\ coefficients\ using\ the\ assigment\ operator\ without\ blank\ space.}}
+\DoxyCodeLine{00149\ \textcolor{comment}{In\ the\ example,\ forward\ and\ backward\ reaction\ rates\ are\ specified\ in}}
+\DoxyCodeLine{00150\ \textcolor{comment}{terms\ of\ dissolution\ data\ and\ the\ equilibrium\ constants.\ This\ first}}
+\DoxyCodeLine{00151\ \textcolor{comment}{order\ kinetic\ approach\ is\ described\ by\ Carl\ Steefel\ in\ the\ Min.\ Soc.}}
+\DoxyCodeLine{00152\ \textcolor{comment}{America\ volume\ on\ reactive\ transport\ processes.\ \ }}
+\DoxyCodeLine{00153\ \textcolor{comment}{}}
+\DoxyCodeLine{00154\ \textcolor{comment}{A\ following\ 'reaction'\ block\ defines\ the\ actual\ ordinary\ differential}}
+\DoxyCodeLine{00155\ \textcolor{comment}{equations\ in\ terms\ of\ the\ notation\ established\ above.\ Importantly,\ the\ }}
+\DoxyCodeLine{00156\ \textcolor{comment}{ODEs\ must\ be\ listed\ in\ exactly\ the\ same\ order\ in\ which\ the\ dependent}}
+\DoxyCodeLine{00157\ \textcolor{comment}{variables\ were\ defined\ before.\ There\ must\ be\ exactly\ one\ equation\ for\ each}}
+\DoxyCodeLine{00158\ \textcolor{comment}{dependent\ variable\ and\ the\ stochiometry\ of\ the\ aqueous\ species/minerals}}
+\DoxyCodeLine{00159\ \textcolor{comment}{determines\ the\ exponents\ and\ multipliers\ of\ the\ equation\ coefficients.}}
+\DoxyCodeLine{00160\ \textcolor{comment}{This\ derives\ directly\ from\ the\ related\ mass-\/action\ expressions.\ \ }}
+\DoxyCodeLine{00161\ \textcolor{comment}{}}
+\DoxyCodeLine{00162\ \textcolor{comment}{Everything\ which\ follows\ after\ the\ blank\ line\ below\ the\ equation\ block}}
+\DoxyCodeLine{00163\ \textcolor{comment}{is\ ignored.\ Here\ the\ user\ can\ insert\ comments\ and\ a\ discussion\ of\ the\ }}
+\DoxyCodeLine{00164\ \textcolor{comment}{system\ he\ defined\ and\ its\ time-\/dependent\ behaviour.\ }}
+\DoxyCodeLine{00165\ \textcolor{comment}{}}
+\DoxyCodeLine{00166\ \textcolor{comment}{Of\ course,\ the\ described\ syntax\ can\ also\ be\ used\ to\ define\ arbitrary\ ODE\ }}
+\DoxyCodeLine{00167\ \textcolor{comment}{systems\ other\ than\ sets\ of\ reaction\ equations.}}
+\DoxyCodeLine{00168\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00169\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00170\ \textcolor{comment}{copyright\ (c)\ 1999\ by\ Dr.\ Stephan\ K.\ Matthaei\ \&\ Stephen\ G.\ Roberts}}
+\DoxyCodeLine{00171\ \textcolor{comment}{}}
+\DoxyCodeLine{00172\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00173\ \textcolor{keyword}{class}\ \ \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver}{ODE\_StiffSolver}}\ \{}
+\DoxyCodeLine{00174\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00175\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_a2f8b60e5fc892ffca9993e52614b19c4}{ODE\_StiffSolver}}(\ \textcolor{keyword}{const}\ std::vector<SumOfProductsWithExponents>\&\ equations\ );}
+\DoxyCodeLine{00176\ \ \ \ \ \string~ODE\_StiffSolver();}
+\DoxyCodeLine{00177\ }
+\DoxyCodeLine{00178\ \ \ \ \ \textcolor{comment}{//\ assign\ initial\ conditions\ and\ read\ computed\ values\ (equations\ 1...n)}}
+\DoxyCodeLine{00179\ \ \ \ \ \textcolor{keywordtype}{double}\&\ \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_a24e3a2fb073d71bbeaeca272e2a773de}{operator}}()(\ size\_t\ i\ );}
+\DoxyCodeLine{00180\ \ \ \ \ \textcolor{comment}{//\ retrieve\ the\ time\ derivatives\ from\ the\ last\ step\ before\ the\ solver\ quit}}
+\DoxyCodeLine{00181\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_a15a809222872cf68d4a85664aac1f399}{operator}}[](\ size\_t\ i\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00182\ }
+\DoxyCodeLine{00183\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ Tolerance(\ \textcolor{keywordtype}{double}\ epsilon\ );}
+\DoxyCodeLine{00184\ \ \ \ \ \textcolor{keywordtype}{double}\ \ Tolerance()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00185\ \ \ \ \ size\_t\ \ Equations()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00186\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_a856241b03713d65682f084f599042af3}{IntermediateStepsToSave}}(\ size\_t\ s\ );}
+\DoxyCodeLine{00187\ \ \ \ \ size\_t\ \ IntermediateStepsToSave()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00188\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_a96ab3b72cdd686b0c56748ff1402190b}{InitialConditions}}(\ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ init\ );}
+\DoxyCodeLine{00189\ }
+\DoxyCodeLine{00190\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_a2b49904fb2de07d9e0e3a34abe176663}{ReadODEsFrom}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file\ );}
+\DoxyCodeLine{00191\ }
+\DoxyCodeLine{00192\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ ReadODEsFrom(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file,\ std::vector<std::pair<int32\_t,std::string>\ >\&\ coefs,}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<std::pair<int32\_t,std::string>\ >\&\ dependent\_comps,}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<std::pair<int32\_t,std::string>\ >\&\ independent\_comps\ );}
+\DoxyCodeLine{00195\ }
+\DoxyCodeLine{00196\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_a6c0b5900d596870a228a27e9370b0572}{Solve}}(\ \textcolor{keywordtype}{double}\ time,\ \textcolor{keywordtype}{double}\ init\_stepsize,}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ size\_t\ n\_savesteps,\ \textcolor{keywordtype}{double}\ tolerance=1.0e-\/10,\ \textcolor{keywordtype}{bool}\ print\_step\_numbers=\textcolor{keyword}{false}\ );}
+\DoxyCodeLine{00198\ }
+\DoxyCodeLine{00199\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_a2704ba9e53517f5abf80b0126eb4539a}{Out}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00200\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_a21f9b1ac4e0691d26f2c79c6b6d8e3e6}{OutputResults}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00201\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_af0779321112fc3151e3815a1cba2fd34}{OutputResultsTo}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ textfile\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00202\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ OutputLastDerivatives()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00203\ }
+\DoxyCodeLine{00204\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_ac51e021a34564405cd4e92c41810c94f}{EvaluateIndependentProductTerms}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ dependent\_vals[],}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\&\ indep\_vals\ );}
+\DoxyCodeLine{00206\ }
+\DoxyCodeLine{00207\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_a48f9e3fbd26801e8bf29ea3b8a568a87}{ResetIndependentProductTerms}}(\ \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_a48f9e3fbd26801e8bf29ea3b8a568a87}{std}}::\mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_a48f9e3fbd26801e8bf29ea3b8a568a87}{vector}}<\mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_a48f9e3fbd26801e8bf29ea3b8a568a87}{std}}::\mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_a48f9e3fbd26801e8bf29ea3b8a568a87}{pair}}<\mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_a48f9e3fbd26801e8bf29ea3b8a568a87}{int32\_t}},\mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_a48f9e3fbd26801e8bf29ea3b8a568a87}{std}}::\mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_a48f9e3fbd26801e8bf29ea3b8a568a87}{string}}>\ >\&\ \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_a48f9e3fbd26801e8bf29ea3b8a568a87}{ind}},}
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_a48f9e3fbd26801e8bf29ea3b8a568a87}{std}}::\mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_a48f9e3fbd26801e8bf29ea3b8a568a87}{vector}}<\textcolor{keywordtype}{double}>\&\ \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_a48f9e3fbd26801e8bf29ea3b8a568a87}{vals}}\ );}
+\DoxyCodeLine{00209\ }
+\DoxyCodeLine{00210\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_aa359371c064d134d43e4959d7d989338}{AssignIndependentProductTerms}}(\ \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_aa359371c064d134d43e4959d7d989338}{std}}::\mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_aa359371c064d134d43e4959d7d989338}{vector}}<\mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_aa359371c064d134d43e4959d7d989338}{std}}::\mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_aa359371c064d134d43e4959d7d989338}{pair}}<\mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_aa359371c064d134d43e4959d7d989338}{int32\_t}},\mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_aa359371c064d134d43e4959d7d989338}{std}}::\mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_aa359371c064d134d43e4959d7d989338}{string}}>\ >\&\ \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_aa359371c064d134d43e4959d7d989338}{ind}},}
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_aa359371c064d134d43e4959d7d989338}{std}}::\mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_aa359371c064d134d43e4959d7d989338}{vector}}<\textcolor{keywordtype}{double}>\&\ \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_aa359371c064d134d43e4959d7d989338}{vals}}\ );}
+\DoxyCodeLine{00212\ }
+\DoxyCodeLine{00213\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_a4bc9c1390ae07cff8e26672257d1c38a}{Out}}(\ \textcolor{keyword}{const}\ std::vector<int32\_t>\&\ vec\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00214\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_a4bc9c1390ae07cff8e26672257d1c38a}{Out}}(\ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ vec\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00215\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ Out(\ \textcolor{keyword}{const}\ std::vector<std::vector<\textcolor{keywordtype}{double}>\ >\&\ vec\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00216\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ Out(\ int32\_t*\ \ vec,\ int32\_t\ n\ );}
+\DoxyCodeLine{00217\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ Out(\ \textcolor{keywordtype}{double}*\ vec,\ int32\_t\ n\ );}
+\DoxyCodeLine{00218\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ Out(\ \textcolor{keywordtype}{double}**\ vec,\ int32\_t\ m,\ int32\_t\ n\ );}
+\DoxyCodeLine{00219\ }
+\DoxyCodeLine{00220\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00221\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ SAFETY;}
+\DoxyCodeLine{00222\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ GROW;}
+\DoxyCodeLine{00223\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ PGROW;}
+\DoxyCodeLine{00224\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ SHRNK;}
+\DoxyCodeLine{00225\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ PSHRNK;}
+\DoxyCodeLine{00226\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ ERRCON;}
+\DoxyCodeLine{00227\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ MAXTRY;}
+\DoxyCodeLine{00228\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ GAM;}
+\DoxyCodeLine{00229\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ TINY;}
+\DoxyCodeLine{00230\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ MAXSTP;}
+\DoxyCodeLine{00231\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ A21;\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ A31;\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ A32;}
+\DoxyCodeLine{00232\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ C21;\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ C31;\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ C32;\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ C41;\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ C42;\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ C43;}
+\DoxyCodeLine{00233\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ B1;\ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ B2;\ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ B3;\ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ B4;}
+\DoxyCodeLine{00234\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ E1;\ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ E2;\ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ E3;\ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ E4;}
+\DoxyCodeLine{00235\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ C1X;\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ C2X;\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ C3X;\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ C4X;}
+\DoxyCodeLine{00236\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ A2X;\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ A3X;}
+\DoxyCodeLine{00237\ \ \ \ \ \textcolor{keyword}{const}\ int32\_t\ \ \ \ \ NR\_END;}
+\DoxyCodeLine{00238\ }
+\DoxyCodeLine{00239\ \ \ \ \ \textcolor{comment}{//\ for\ stiff\ Bulirsch-\/Stoer\ method}}
+\DoxyCodeLine{00240\ \ \ \ \ \textcolor{keyword}{const}\ size\_t\ \ KMAXX;}
+\DoxyCodeLine{00241\ \ \ \ \ \textcolor{keyword}{const}\ size\_t\ \ IMAXX;}
+\DoxyCodeLine{00242\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \ \ \ \ SAFE1;}
+\DoxyCodeLine{00243\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \ \ \ \ SAFE2;}
+\DoxyCodeLine{00244\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \ \ \ \ REDMAX;}
+\DoxyCodeLine{00245\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \ \ \ \ REDMIN;}
+\DoxyCodeLine{00246\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \ \ \ \ SCALMX;}
+\DoxyCodeLine{00247\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ correct\_interpretation;}
+\DoxyCodeLine{00248\ }
+\DoxyCodeLine{00249\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ eps;\ \ \ \textcolor{comment}{//\ required\ accuracy}}
+\DoxyCodeLine{00250\ \ \ \ \ size\_t\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dof;\ \ \ \textcolor{comment}{//\ n-\/equations\ =\ n-\/unknowns}}
+\DoxyCodeLine{00251\ \ \ \ \ std::vector<SumOfProductsWithExponents>\ \ odes;\ \ \textcolor{comment}{//\ ODEs}}
+\DoxyCodeLine{00252\ }
+\DoxyCodeLine{00253\ \ \ \ \ \textcolor{comment}{//\ used\ by\ 'pzextr'}}
+\DoxyCodeLine{00254\ \ \ \ \ \textcolor{keywordtype}{double}\ \ **pzextr\_d,\ *pzextr\_x;}
+\DoxyCodeLine{00255\ \ \ \ \ \textcolor{comment}{//\ used\ by\ 'odeint'}}
+\DoxyCodeLine{00256\ \ \ \ \ \textcolor{keywordtype}{double}\ *odeint\_yscal,\ *odeint\_y,\ *odeint\_dydx;}
+\DoxyCodeLine{00257\ \ \ \ \ \textcolor{comment}{//\ used\ by\ 'stifbs'}}
+\DoxyCodeLine{00258\ \ \ \ \ \textcolor{keywordtype}{double}\ *stifbs\_dfdx,**stifbs\_dfdy,*stifbs\_err,*stifbs\_yerr,*stifbs\_ysav,*stifbs\_yseq;}
+\DoxyCodeLine{00259\ \ \ \ \ \textcolor{comment}{//\ initial\ conditions}}
+\DoxyCodeLine{00260\ \ \ \ \ \textcolor{keywordtype}{double}*\ init\_cond;}
+\DoxyCodeLine{00261\ \ \ \ \ \textcolor{comment}{//\ saving\ intermediate\ results}}
+\DoxyCodeLine{00262\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dxsav;}
+\DoxyCodeLine{00263\ \ \ \ \ size\_t\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ kmax,\ kount;}
+\DoxyCodeLine{00264\ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ result\_xp;\ \textcolor{comment}{//\ time\_increments\ (size=number\ of\ timesteps=kount)}}
+\DoxyCodeLine{00265\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver}{std}}::\mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver}{vector}}<\mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver}{std}}::\mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver}{vector}}<\textcolor{keywordtype}{double}>\ >\ \ \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver}{result\_yp}};\ \textcolor{comment}{//\ results\ nvar\ rows\ x\ timestep\ cols}}
+\DoxyCodeLine{00266\ }
+\DoxyCodeLine{00267\ \ \ \ \ \textcolor{comment}{//\ not\ usually\ used:}}
+\DoxyCodeLine{00268\ \ \ \ \ std::vector<SumOfProducts>\ \ \ \ \ \ \ \ \ \ \ \ \ eqns;\ \ \textcolor{comment}{//\ if\ there\ are\ independent\ algebraic\ equations}}
+\DoxyCodeLine{00269\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver}{std}}::\mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver}{vector}}<\mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver}{std}}::\mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver}{pair}}<\mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver}{int32\_t}},\mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver}{std}}::\mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver}{string}}>\ >\ \ \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver}{independent\_terms}};\ \ \textcolor{comment}{//\ independent\ algebraic\ equations\ labels}}
+\DoxyCodeLine{00270\ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ independent\_values;\ \textcolor{comment}{//\ independent\ variable\ values}}
+\DoxyCodeLine{00271\ }
+\DoxyCodeLine{00272\ \ \ \ \ \textcolor{comment}{//\ auxialiary\ methods\ for\ solver}}
+\DoxyCodeLine{00273\ \ \ \ \ int32\_t\ \ \ \ \ *ivector(size\_t\ nl,\ size\_t\ nh);}
+\DoxyCodeLine{00274\ \ \ \ \ \textcolor{keywordtype}{double}\ \ *dvector(size\_t\ nl,\ size\_t\ nh);}
+\DoxyCodeLine{00275\ \ \ \ \ int32\_t\ \ \ \ **imatrix(size\_t\ nrl,\ size\_t\ nrh,\ size\_t\ ncl,\ size\_t\ nch);}
+\DoxyCodeLine{00276\ \ \ \ \ \textcolor{keywordtype}{double}\ **dmatrix(size\_t\ nrl,\ size\_t\ nrh,\ size\_t\ ncl,\ size\_t\ nch);}
+\DoxyCodeLine{00277\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ free\_ivector(int32\_t\ *v,\ size\_t\ nl);}
+\DoxyCodeLine{00278\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ free\_dvector(\textcolor{keywordtype}{double}\ *v,\ size\_t\ nl);}
+\DoxyCodeLine{00279\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ free\_imatrix(int32\_t\ **m,\ size\_t\ nrl,\ size\_t\ ncl);}
+\DoxyCodeLine{00280\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ free\_dmatrix(\textcolor{keywordtype}{double}\ **m,\ size\_t\ nrl,\ size\_t\ ncl);}
+\DoxyCodeLine{00281\ }
+\DoxyCodeLine{00282\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ derivs(\ \textcolor{keywordtype}{double}\ y[],\ \textcolor{keywordtype}{double}\ dydx[]\ );}
+\DoxyCodeLine{00283\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ jacobn(\ \textcolor{keywordtype}{double}\ y[],\ \textcolor{keywordtype}{double}\ dfdx[],\ \textcolor{keywordtype}{double}\ **dfdy\ );}
+\DoxyCodeLine{00284\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ LU\_Decomposition(\ \textcolor{keywordtype}{double}\ **a,\ size\_t\ n,\ int32\_t\ *indx,\ \textcolor{keywordtype}{double}\&\ d\ );}
+\DoxyCodeLine{00285\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ LU\_BackSubstitution(\textcolor{keywordtype}{double}\ **a,\ size\_t\ n,\ int32\_t\ *indx,\ \textcolor{keywordtype}{double}\ b[]\ );}
+\DoxyCodeLine{00286\ }
+\DoxyCodeLine{00287\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ simpr(\ \textcolor{keywordtype}{double}\ y[],\ \textcolor{keywordtype}{double}\ dydx[],\ \textcolor{keywordtype}{double}\ dfdx[],\ \textcolor{keywordtype}{double}\ **dfdy,}
+\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ size\_t\ n,\ \textcolor{keywordtype}{double}\ xs,\ \textcolor{keywordtype}{double}\ htot,\ int32\_t\ nstep,\ \textcolor{keywordtype}{double}\ yout[]\ );}
+\DoxyCodeLine{00289\ }
+\DoxyCodeLine{00290\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ pzextr(int32\_t\ iest,\ \textcolor{keywordtype}{double}\ xest,\ \textcolor{keywordtype}{double}\ yest[],\ \textcolor{keywordtype}{double}\ yz[],\ \textcolor{keywordtype}{double}\ dy[],\ size\_t\ nv);}
+\DoxyCodeLine{00291\ }
+\DoxyCodeLine{00292\ }
+\DoxyCodeLine{00293\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ odeint(\ \textcolor{keywordtype}{double}\ ystart[],\ size\_t\ nvar,\ \textcolor{keywordtype}{double}\ x1,\ \textcolor{keywordtype}{double}\ x2,}
+\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ eps,\ \textcolor{keywordtype}{double}\ h1,\ \textcolor{keywordtype}{double}\ hmin,\ size\_t\&\ nok,\ size\_t\&\ nbad\ );}
+\DoxyCodeLine{00295\ }
+\DoxyCodeLine{00296\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ StiffBulirschStoer(\ \textcolor{keywordtype}{double}\ y[],\ \textcolor{keywordtype}{double}\ dydx[],\ size\_t\ nv,\ \textcolor{keywordtype}{double}\&\ xx,\ \textcolor{keywordtype}{double}\ htry,\ \textcolor{keywordtype}{double}\ eps,}
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ yscal[],\ \textcolor{keywordtype}{double}\&\ hdid,\ \textcolor{keywordtype}{double}\&\ hnext\ );}
+\DoxyCodeLine{00298\ }
+\DoxyCodeLine{00299\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ AllocateSolverMemory();}
+\DoxyCodeLine{00300\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ FreeSolverMemory();}
+\DoxyCodeLine{00301\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ ZeroAllStorage();}
+\DoxyCodeLine{00302\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ TokenizeString(\ \textcolor{keywordtype}{char}*\ s,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ delim,\ std::list<std::string>\&\ li\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00303\ }
+\DoxyCodeLine{00304\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ DSQR(\ \textcolor{keywordtype}{double}\ a\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00305\ \ \};}
+\DoxyCodeLine{00306\ }
+\DoxyCodeLine{00307\ }
+\DoxyCodeLine{00308\ \textcolor{comment}{///\ assign\ initial\ conditions\ and\ read\ computed\ values\ (equations\ 1...n)}}
+\DoxyCodeLine{00309\ \textcolor{keyword}{inline}\ \ \textcolor{keywordtype}{double}\&\ \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver}{ODE\_StiffSolver}}::\mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_a24e3a2fb073d71bbeaeca272e2a773de}{operator}}()(\ size\_t\ i\ )}
+\DoxyCodeLine{00310\ \ \ \{}
+\DoxyCodeLine{00311\ \ \ \ \ \ \ assert\ (\ i>0\ \&\&\ i<=dof\ );}
+\DoxyCodeLine{00312\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ init\_cond[i];}
+\DoxyCodeLine{00313\ \ \ \}}
+\DoxyCodeLine{00314\ }
+\DoxyCodeLine{00315\ \textcolor{comment}{///\ retrieve\ the\ time\ derivatives\ from\ the\ last\ step\ before\ the\ solver\ quit}}
+\DoxyCodeLine{00316\ \textcolor{keyword}{inline}\ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver}{ODE\_StiffSolver}}::\mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_a15a809222872cf68d4a85664aac1f399}{operator}}[](\ size\_t\ i\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00317\ \ \ \{}
+\DoxyCodeLine{00318\ \ \ \ \ \ \ assert\ (\ i>0\ \&\&\ i<=dof\ );}
+\DoxyCodeLine{00319\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ odeint\_dydx[i];}
+\DoxyCodeLine{00320\ \ \ \}}
+\DoxyCodeLine{00321\ }
+\DoxyCodeLine{00322\ }
+\DoxyCodeLine{00323\ \textcolor{keyword}{inline}\ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver}{ODE\_StiffSolver}}::Tolerance(\ \textcolor{keywordtype}{double}\ epsilon\ )\ \{\ eps=epsilon;\ \}}
+\DoxyCodeLine{00324\ \textcolor{keyword}{inline}\ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver}{ODE\_StiffSolver}}::Tolerance()\ \textcolor{keyword}{const}\ \ \ \ \ \ \ \ \ \ \ \{\ \textcolor{keywordflow}{return}\ eps;\ \}}
+\DoxyCodeLine{00325\ \textcolor{keyword}{inline}\ \ size\_t\ \ \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver}{ODE\_StiffSolver}}::Equations()\ \textcolor{keyword}{const}\ \ \ \ \ \ \ \ \ \ \ \{\ \textcolor{keywordflow}{return}\ dof;\ \}}
+\DoxyCodeLine{00326\ \textcolor{keyword}{inline}\ \ size\_t\ \ \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver}{ODE\_StiffSolver}}::IntermediateStepsToSave()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ kmax;\ \}}
+\DoxyCodeLine{00327\ }
+\DoxyCodeLine{00328\ \textcolor{keyword}{inline}\ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver}{ODE\_StiffSolver}}::DSQR(\ \textcolor{keywordtype}{double}\ a\ )\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ (a==0.0)\ ?\ 0.0\ :\ a*a;\ \}}
+\DoxyCodeLine{00329\ }
+\DoxyCodeLine{00330\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00331\ }
+\DoxyCodeLine{00332\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

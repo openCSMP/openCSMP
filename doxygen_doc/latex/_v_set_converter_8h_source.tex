@@ -1,0 +1,97 @@
+\doxysection{VSet\+Converter.\+h}
+\hypertarget{_v_set_converter_8h_source}{}\label{_v_set_converter_8h_source}\index{source/includes/integration/finite\_elements/VSetConverter.h@{source/includes/integration/finite\_elements/VSetConverter.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_VSET\_CONVERTER\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_VSET\_CONVERTER\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_v_set}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}};}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00011\ \textcolor{comment}{\ \ \ \ To\ convert\ linear\ to\ quadratic\ elements\ and\ to\ remove\ degenerate\ elements\ }}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ \ \ \ from\ the\ input\ mesh.\ Methods\ are\ only\ for\ triangles\ and\ tetrahedra.}}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ \ \ \ @author\ Stephan\ Matthai}}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ \ \ \ @date\ 2001}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00017\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00018\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00019\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_v_set_converter}{VSetConverter}}\ \{}
+\DoxyCodeLine{00020\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{comment}{///\ the\ coordinates\ of\ the\ bounding\ box\ are\ initialized\ to\ Not\ A\ Number}}
+\DoxyCodeLine{00022\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_v_set_converter_a2df5ff8aa18692fd493718bddadc7f2c}{VSetConverter}}()\ :\ \mbox{\hyperlink{classcsmp_1_1_v_set_converter_a2df5ff8aa18692fd493718bddadc7f2c}{xmin}}(\mbox{\hyperlink{classcsmp_1_1_v_set_converter_a2df5ff8aa18692fd493718bddadc7f2c}{std}}::\mbox{\hyperlink{classcsmp_1_1_v_set_converter_a2df5ff8aa18692fd493718bddadc7f2c}{numeric\_limits}}<\textcolor{keywordtype}{double}>::\mbox{\hyperlink{classcsmp_1_1_v_set_converter_a2df5ff8aa18692fd493718bddadc7f2c}{quiet\_NaN}}()),\ \mbox{\hyperlink{classcsmp_1_1_v_set_converter_a2df5ff8aa18692fd493718bddadc7f2c}{xmax}}(\mbox{\hyperlink{classcsmp_1_1_v_set_converter_a2df5ff8aa18692fd493718bddadc7f2c}{std}}::\mbox{\hyperlink{classcsmp_1_1_v_set_converter_a2df5ff8aa18692fd493718bddadc7f2c}{numeric\_limits}}<\textcolor{keywordtype}{double}>::\mbox{\hyperlink{classcsmp_1_1_v_set_converter_a2df5ff8aa18692fd493718bddadc7f2c}{quiet\_NaN}}()),}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_v_set_converter_a2df5ff8aa18692fd493718bddadc7f2c}{ymin}}(\mbox{\hyperlink{classcsmp_1_1_v_set_converter_a2df5ff8aa18692fd493718bddadc7f2c}{std}}::\mbox{\hyperlink{classcsmp_1_1_v_set_converter_a2df5ff8aa18692fd493718bddadc7f2c}{numeric\_limits}}<\textcolor{keywordtype}{double}>::\mbox{\hyperlink{classcsmp_1_1_v_set_converter_a2df5ff8aa18692fd493718bddadc7f2c}{quiet\_NaN}}()),\ \mbox{\hyperlink{classcsmp_1_1_v_set_converter_a2df5ff8aa18692fd493718bddadc7f2c}{ymax}}(\mbox{\hyperlink{classcsmp_1_1_v_set_converter_a2df5ff8aa18692fd493718bddadc7f2c}{std}}::\mbox{\hyperlink{classcsmp_1_1_v_set_converter_a2df5ff8aa18692fd493718bddadc7f2c}{numeric\_limits}}<\textcolor{keywordtype}{double}>::\mbox{\hyperlink{classcsmp_1_1_v_set_converter_a2df5ff8aa18692fd493718bddadc7f2c}{quiet\_NaN}}()),}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_v_set_converter_a2df5ff8aa18692fd493718bddadc7f2c}{zmin}}(\mbox{\hyperlink{classcsmp_1_1_v_set_converter_a2df5ff8aa18692fd493718bddadc7f2c}{std}}::\mbox{\hyperlink{classcsmp_1_1_v_set_converter_a2df5ff8aa18692fd493718bddadc7f2c}{numeric\_limits}}<\textcolor{keywordtype}{double}>::\mbox{\hyperlink{classcsmp_1_1_v_set_converter_a2df5ff8aa18692fd493718bddadc7f2c}{quiet\_NaN}}()),\ \mbox{\hyperlink{classcsmp_1_1_v_set_converter_a2df5ff8aa18692fd493718bddadc7f2c}{zmax}}(\mbox{\hyperlink{classcsmp_1_1_v_set_converter_a2df5ff8aa18692fd493718bddadc7f2c}{std}}::\mbox{\hyperlink{classcsmp_1_1_v_set_converter_a2df5ff8aa18692fd493718bddadc7f2c}{numeric\_limits}}<\textcolor{keywordtype}{double}>::\mbox{\hyperlink{classcsmp_1_1_v_set_converter_a2df5ff8aa18692fd493718bddadc7f2c}{quiet\_NaN}}())\ \{\};}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ \string~VSetConverter()\ \{\};}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{comment}{///\ replaces\ straight-\/sided\ global\ element\ types\ with\ isoparametric\ ones}}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_v_set_converter_a6e7f7d0387418fd6def0a470cfdc45c6}{ConvertElementTypesToOnesUsingLocalCoordinateSystem}}(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ );}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{comment}{///\ applies\ the\ naming\ conventions\ TOP,\ BOTTOM\ etc.\ to\ sides,\ edges\ and\ cornier\ points\ of\ the\ box}}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_v_set_converter_affb0868a4eac284c4586f7935c31e376}{EstablishBoundaryFlagsForBoxModel}}(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&,\ \textcolor{keywordtype}{double}\ tolerance=0.2\ );}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{comment}{///\ turn\ triangular\ element\ mesh\ data\ to\ target\ element\ data}}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_v_set_converter_a8e7622587391dbe8df253ddeabb1bd35}{ConvertLinearToQuadraticTriangles}}(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ );}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{comment}{///\ turn\ triangular\ element\ mesh\ data\ to\ target\ 3D\ surface\ element\ data}}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_v_set_converter_aa3ef5186be8a3bb7a92cf7f2364ca591}{ConvertLinearToQuadraticTriangles3D}}(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ );}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{comment}{///\ create\ a\ mesh\ of\ 7-\/noded\ barycentric\ triangular\ finite\ elements}}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_v_set_converter_ac44f3466d98863e6486b6efa763515e5}{ConvertLinearToBarycentricTriangles}}(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ );}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{comment}{///\ create\ 10-\/noded\ tetrahedra\ from\ 4-\/noded\ ones}}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_v_set_converter_afdbdb8cae8f0840f8f4c59d7b1ee1fb1}{ConvertLinearToQuadraticTetrahedra}}(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ );}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{comment}{///\ turn\ linear\ tetrahedral\ mesh\ into\ 11-\/noded\ barycentric\ tetrahedral\ mesh}}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_v_set_converter_a2cc77c224a475d09752a9e689f93c8f0}{ConvertLinearToBarycentricTetrahedra}}(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ );}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keywordtype}{double}\ xmin,\ xmax,\ ymin,\ ymax,\ zmin,\ zmax;\ \textcolor{comment}{///<\ coordinates\ values\ of\ bounding\ box\ of\ model}}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{comment}{//\ 2D\ triangular\ meshes}}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{comment}{///\ rectangular\ model\ in\ 2\ and\ 3D,\ flagging\ of\ corner\ node}}
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keywordtype}{void}\ FlagCornerNodes(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&,\ \textcolor{keywordtype}{bool}\ three\_dimensional=\textcolor{keyword}{false}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{comment}{///\ returns\ 0\ if\ face\ is\ not\ at\ the\ model\ boundary}}
+\DoxyCodeLine{00059\ \ \ \ \ int8\_t\ \ TestForBoundaryFlags(\ \textcolor{keyword}{const}\ std::vector<std::int8\_t>\&\ bflags,}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ size\_t\ nID1,\ size\_t\ nID2\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{comment}{///\ interpolation\ between\ value\ pairs}}
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keywordtype}{double}\ BoundaryValue(\ \textcolor{keyword}{const}\ std::map<size\_t,\textcolor{keywordtype}{double}>\&\ bvals,}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ size\_t\ nID1,\ size\_t\ nID2\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{comment}{//\ from\ linear\ to\ quadratic\ mesh}}
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{comment}{//void\ InterpolateNodeProperties(\ size\_t\ nodes,\ int32\_t\ enodes,\ VSet<dim>\&\ )\ const;}}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keywordtype}{void}\ OrderQuadraticTriangleCoordinateOrigins(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keywordtype}{void}\ OrderBarycentricQuadraticTriangleCoordinateOrigins(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{comment}{//\ 3D\ tetrahedral\ meshes}}
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ default\ as\ in\ most\ Rhino\ models}}
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ FlagEdges(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ vset,\ \textcolor{keywordtype}{double}\ tolerance=1.0e-\/4\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{comment}{///\ flag-\/based\ check}}
+\DoxyCodeLine{00078\ \ \ \ \ int8\_t\ \ BoundaryFlags3D(\ \textcolor{keyword}{const}\ std::vector<std::int8\_t>\&\ bflags,}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ size\_t\ nID1,\ size\_t\ nID2\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{comment}{///\ coordinate-\/based\ check\ of\ whether\ a\ node\ is\ in\ on\ the\ boundary\ of\ a\ box\ shaped\ model}}
+\DoxyCodeLine{00082\ \ \ \ \ int8\_t\ \ TestForBoundaryFlags3D(\ \textcolor{keywordtype}{double}\ x,\ \textcolor{keywordtype}{double}\ y,\ \textcolor{keywordtype}{double}\ z\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00083\ \ \};}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

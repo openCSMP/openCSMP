@@ -4,6 +4,7 @@
 #include "MJL_geometry.h"
 #include "MJL_Point3D.h"
 #include "MJL_Triangle3D.h"
+#include "CSMP_definitions.h"
 
 namespace csmp {
 

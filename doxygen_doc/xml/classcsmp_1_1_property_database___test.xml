@@ -1,0 +1,444 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_property_database___test" kind="class" language="C++" prot="public">
+    <compoundname>csmp::PropertyDatabase_Test</compoundname>
+    <basecompoundref refid="classcsmp_1_1_test" prot="public" virt="non-virtual">csmp::Test</basecompoundref>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_property_database___test_1a8529a793c27c1eef503bbb5192d90a5c" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>&lt; 3 &gt; *</type>
+        <definition>PropertyDatabase&lt;3&gt;* csmp::PropertyDatabase_Test::pdb</definition>
+        <argsstring></argsstring>
+        <name>pdb</name>
+        <qualifiedname>csmp::PropertyDatabase_Test::pdb</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/PropertyDatabase_Test.h" line="37" column="26" bodyfile="tests/unit/PropertyDatabase_Test.h" bodystart="37" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_property_database___test_1ad2dcc611474157aa3d4ea14ad72fe63f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::PropertyDatabase_Test::PropertyDatabase_Test</definition>
+        <argsstring>()</argsstring>
+        <name>PropertyDatabase_Test</name>
+        <qualifiedname>csmp::PropertyDatabase_Test::PropertyDatabase_Test</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/PropertyDatabase_Test.h" line="12" column="9" bodyfile="tests/unit/PropertyDatabase_Test.cpp" bodystart="12" bodyend="16"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_database___test_1af3baaab0706d448e60edc965fffe3157" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::PropertyDatabase_Test::~PropertyDatabase_Test</definition>
+        <argsstring>()</argsstring>
+        <name>~PropertyDatabase_Test</name>
+        <qualifiedname>csmp::PropertyDatabase_Test::~PropertyDatabase_Test</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/PropertyDatabase_Test.h" line="13" column="9" bodyfile="tests/unit/PropertyDatabase_Test.cpp" bodystart="18" bodyend="22"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_database___test_1a6cd5c58658e70d9dc3b5b195950dd3a9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyDatabase_Test::AddPropertyTest</definition>
+        <argsstring>()</argsstring>
+        <name>AddPropertyTest</name>
+        <qualifiedname>csmp::PropertyDatabase_Test::AddPropertyTest</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>At the beginning, there are variables of all types and placements, but no <ref refid="structcsmp_1_1_index" kindref="compound">Index</ref> objects that need to be tracked.</para>
+<para>Two new properties are created here testing their addition and registration with the <ref refid="classcsmp_1_1_index_tracker" kindref="compound">IndexTracker</ref>.</para>
+<para>At the end of this text function, these 2 tracked <ref refid="structcsmp_1_1_index" kindref="compound">Index</ref> objects are destructed again (leaving the function scope), triggering their removal from the tracked <ref refid="structcsmp_1_1_index" kindref="compound">Index</ref> map inside of the <ref refid="classcsmp_1_1_index_tracker" kindref="compound">IndexTracker</ref> object. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/PropertyDatabase_Test.h" line="16" column="14" bodyfile="tests/unit/PropertyDatabase_Test.cpp" bodystart="49" bodyend="82"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_database___test_1a6cbb8e0112c777a94405b6b8e06cf7b3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyDatabase_Test::IsDefinedTest</definition>
+        <argsstring>()</argsstring>
+        <name>IsDefinedTest</name>
+        <qualifiedname>csmp::PropertyDatabase_Test::IsDefinedTest</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/PropertyDatabase_Test.h" line="17" column="14" bodyfile="tests/unit/PropertyDatabase_Test.cpp" bodystart="85" bodyend="90"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_database___test_1a7a31b23f3bec1c2547bebe677bc8596f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyDatabase_Test::PlacementTest</definition>
+        <argsstring>()</argsstring>
+        <name>PlacementTest</name>
+        <qualifiedname>csmp::PropertyDatabase_Test::PlacementTest</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/PropertyDatabase_Test.h" line="18" column="14" bodyfile="tests/unit/PropertyDatabase_Test.cpp" bodystart="93" bodyend="98"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_database___test_1a06eff1601289977382d09f5d03c18155" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyDatabase_Test::TypeTest</definition>
+        <argsstring>()</argsstring>
+        <name>TypeTest</name>
+        <qualifiedname>csmp::PropertyDatabase_Test::TypeTest</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/PropertyDatabase_Test.h" line="19" column="14" bodyfile="tests/unit/PropertyDatabase_Test.cpp" bodystart="101" bodyend="105"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_database___test_1a995b6c816c027602f860e66cc24a7cc1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyDatabase_Test::VariablesTotalTest</definition>
+        <argsstring>(size_t)</argsstring>
+        <name>VariablesTotalTest</name>
+        <qualifiedname>csmp::PropertyDatabase_Test::VariablesTotalTest</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <defname>s</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/PropertyDatabase_Test.h" line="20" column="14" bodyfile="tests/unit/PropertyDatabase_Test.cpp" bodystart="108" bodyend="111"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_database___test_1a216548b7e4f7d45791e758d7dec15121" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyDatabase_Test::DeletePropertyTest</definition>
+        <argsstring>()</argsstring>
+        <name>DeletePropertyTest</name>
+        <qualifiedname>csmp::PropertyDatabase_Test::DeletePropertyTest</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/PropertyDatabase_Test.h" line="21" column="14" bodyfile="tests/unit/PropertyDatabase_Test.cpp" bodystart="120" bodyend="125"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_database___test_1a78d5fb1fb316fc1ba7bc2bd9ca84037c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyDatabase_Test::NameTest</definition>
+        <argsstring>(const csmp::Index &amp;, const char *)</argsstring>
+        <name>NameTest</name>
+        <qualifiedname>csmp::PropertyDatabase_Test::NameTest</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <defname>idx</defname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <defname>name</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/PropertyDatabase_Test.h" line="22" column="14" bodyfile="tests/unit/PropertyDatabase_Test.cpp" bodystart="25" bodyend="28"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_database___test_1ac9a100d45e7d44b4f47ba6c004b7c23f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyDatabase_Test::UnitTest</definition>
+        <argsstring>(const csmp::Index &amp;, const char *)</argsstring>
+        <name>UnitTest</name>
+        <qualifiedname>csmp::PropertyDatabase_Test::UnitTest</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <defname>idx</defname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <defname>unit</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/PropertyDatabase_Test.h" line="23" column="14" bodyfile="tests/unit/PropertyDatabase_Test.cpp" bodystart="31" bodyend="34"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_database___test_1a67b64cfe2a20cf52bd9a972068d363d3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyDatabase_Test::VariablesElementTest</definition>
+        <argsstring>(size_t)</argsstring>
+        <name>VariablesElementTest</name>
+        <qualifiedname>csmp::PropertyDatabase_Test::VariablesElementTest</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/PropertyDatabase_Test.h" line="24" column="14" bodyfile="tests/unit/PropertyDatabase_Test.cpp" bodystart="128" bodyend="136"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_database___test_1a6206cdda53c4725ab6e9eb463baf5938" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyDatabase_Test::VariablesRegionTest</definition>
+        <argsstring>(size_t)</argsstring>
+        <name>VariablesRegionTest</name>
+        <qualifiedname>csmp::PropertyDatabase_Test::VariablesRegionTest</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <defname>r</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/PropertyDatabase_Test.h" line="25" column="14" bodyfile="tests/unit/PropertyDatabase_Test.cpp" bodystart="114" bodyend="117"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_database___test_1ab2f55caeaf3a3f34c9ee9f548ddd5ac3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyDatabase_Test::VariablesBoundaryTest</definition>
+        <argsstring>(size_t)</argsstring>
+        <name>VariablesBoundaryTest</name>
+        <qualifiedname>csmp::PropertyDatabase_Test::VariablesBoundaryTest</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <defname>b</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/PropertyDatabase_Test.h" line="26" column="14" bodyfile="tests/unit/PropertyDatabase_Test.cpp" bodystart="139" bodyend="147"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_database___test_1a12169f1bc01dbdf570d3dd9e51899116" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyDatabase_Test::VariablesNodeTest</definition>
+        <argsstring>(size_t)</argsstring>
+        <name>VariablesNodeTest</name>
+        <qualifiedname>csmp::PropertyDatabase_Test::VariablesNodeTest</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <defname>n</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/PropertyDatabase_Test.h" line="27" column="14" bodyfile="tests/unit/PropertyDatabase_Test.cpp" bodystart="150" bodyend="157"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_database___test_1a8fa1f573cd6975de058585c6463fce09" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyDatabase_Test::VariablesConstraintPointTest</definition>
+        <argsstring>(size_t)</argsstring>
+        <name>VariablesConstraintPointTest</name>
+        <qualifiedname>csmp::PropertyDatabase_Test::VariablesConstraintPointTest</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <defname>cp</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/PropertyDatabase_Test.h" line="28" column="14" bodyfile="tests/unit/PropertyDatabase_Test.cpp" bodystart="160" bodyend="163"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_database___test_1a2cd2677c5a48e36cf24ec04d364eecbd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyDatabase_Test::VariablesFaceTest</definition>
+        <argsstring>(size_t)</argsstring>
+        <name>VariablesFaceTest</name>
+        <qualifiedname>csmp::PropertyDatabase_Test::VariablesFaceTest</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <defname>f</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/PropertyDatabase_Test.h" line="29" column="14" bodyfile="tests/unit/PropertyDatabase_Test.cpp" bodystart="166" bodyend="175"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_database___test_1a6ad316d33dc62860e6302c4fb8c59612" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyDatabase_Test::VariablesInterFaceTest</definition>
+        <argsstring>(size_t)</argsstring>
+        <name>VariablesInterFaceTest</name>
+        <qualifiedname>csmp::PropertyDatabase_Test::VariablesInterFaceTest</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <defname>i</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/PropertyDatabase_Test.h" line="30" column="14" bodyfile="tests/unit/PropertyDatabase_Test.cpp" bodystart="177" bodyend="180"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_database___test_1aee7ecc359790d8d82c284dd753d2d0c4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyDatabase_Test::VariablesModelTest</definition>
+        <argsstring>(size_t)</argsstring>
+        <name>VariablesModelTest</name>
+        <qualifiedname>csmp::PropertyDatabase_Test::VariablesModelTest</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <defname>v</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/PropertyDatabase_Test.h" line="31" column="14" bodyfile="tests/unit/PropertyDatabase_Test.cpp" bodystart="183" bodyend="191"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_database___test_1aaa7e9dfbec1965978e86675da41930ad" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyDatabase_Test::SubsetVariablesTest</definition>
+        <argsstring>()</argsstring>
+        <name>SubsetVariablesTest</name>
+        <qualifiedname>csmp::PropertyDatabase_Test::SubsetVariablesTest</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/PropertyDatabase_Test.h" line="32" column="14" bodyfile="tests/unit/PropertyDatabase_Test.cpp" bodystart="193" bodyend="212"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_database___test_1a6219ee79363bc34b305af2a99919089d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyDatabase_Test::FromFile</definition>
+        <argsstring>()</argsstring>
+        <name>FromFile</name>
+        <qualifiedname>csmp::PropertyDatabase_Test::FromFile</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/PropertyDatabase_Test.h" line="33" column="14" bodyfile="tests/unit/PropertyDatabase_Test.cpp" bodystart="238" bodyend="241"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_database___test_1ae88f6dc8f7d6924d7be8d426f4cc6b25" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyDatabase_Test::run</definition>
+        <argsstring>()</argsstring>
+        <name>run</name>
+        <qualifiedname>csmp::PropertyDatabase_Test::run</qualifiedname>
+        <reimplements refid="classcsmp_1_1_test_1af63cd2af47d8d03819b05cf8bfb27eac">run</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/PropertyDatabase_Test.h" line="35" column="14" bodyfile="tests/unit/PropertyDatabase_Test.cpp" bodystart="214" bodyend="235"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::PropertyDatabase_Test</label>
+        <link refid="classcsmp_1_1_property_database___test"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Test</label>
+        <link refid="classcsmp_1_1_test"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::PropertyDatabase_Test</label>
+        <link refid="classcsmp_1_1_property_database___test"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Test</label>
+        <link refid="classcsmp_1_1_test"/>
+      </node>
+    </collaborationgraph>
+    <location file="tests/unit/PropertyDatabase_Test.h" line="9" column="5" bodyfile="tests/unit/PropertyDatabase_Test.h" bodystart="10" bodyend="38"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_property_database___test_1a6cd5c58658e70d9dc3b5b195950dd3a9" prot="public" virt="non-virtual"><scope>csmp::PropertyDatabase_Test</scope><name>AddPropertyTest</name></member>
+      <member refid="classcsmp_1_1_property_database___test_1a216548b7e4f7d45791e758d7dec15121" prot="public" virt="non-virtual"><scope>csmp::PropertyDatabase_Test</scope><name>DeletePropertyTest</name></member>
+      <member refid="classcsmp_1_1_test_1ad3346b23b36fbe34ac5f306a2a5d0e28" prot="protected" virt="non-virtual"><scope>csmp::PropertyDatabase_Test</scope><name>do_equal</name></member>
+      <member refid="classcsmp_1_1_test_1aee0da28e82775ce7d1ebd3b9fae9bf7d" prot="protected" virt="non-virtual"><scope>csmp::PropertyDatabase_Test</scope><name>do_fail</name></member>
+      <member refid="classcsmp_1_1_test_1a9976e7601c20a057d2f0ed2f8318c862" prot="public" virt="non-virtual"><scope>csmp::PropertyDatabase_Test</scope><name>do_succeed</name></member>
+      <member refid="classcsmp_1_1_test_1a0bf5d355d1455b2bc113ba2572e95ad8" prot="protected" virt="non-virtual"><scope>csmp::PropertyDatabase_Test</scope><name>do_test</name></member>
+      <member refid="classcsmp_1_1_property_database___test_1a6219ee79363bc34b305af2a99919089d" prot="public" virt="non-virtual"><scope>csmp::PropertyDatabase_Test</scope><name>FromFile</name></member>
+      <member refid="classcsmp_1_1_test_1ab8d7cbdfd0588aa57d7ce4d2574d665b" prot="public" virt="non-virtual"><scope>csmp::PropertyDatabase_Test</scope><name>getName</name></member>
+      <member refid="classcsmp_1_1_test_1a47920cfd13f92f0860ca62ade4f2e150" prot="public" virt="non-virtual"><scope>csmp::PropertyDatabase_Test</scope><name>getNumFailed</name></member>
+      <member refid="classcsmp_1_1_test_1af0f3b897ba4ff0cb7c94cde8be1fb32b" prot="public" virt="non-virtual"><scope>csmp::PropertyDatabase_Test</scope><name>getNumPassed</name></member>
+      <member refid="classcsmp_1_1_test_1ac340370a07ff5fd4bd85bae93f0a3dac" prot="public" virt="non-virtual"><scope>csmp::PropertyDatabase_Test</scope><name>getStream</name></member>
+      <member refid="classcsmp_1_1_test_1adfad3f1f85aa766958ffcc59070e2d2d" prot="public" virt="non-virtual"><scope>csmp::PropertyDatabase_Test</scope><name>hasName</name></member>
+      <member refid="classcsmp_1_1_property_database___test_1a6cbb8e0112c777a94405b6b8e06cf7b3" prot="public" virt="non-virtual"><scope>csmp::PropertyDatabase_Test</scope><name>IsDefinedTest</name></member>
+      <member refid="classcsmp_1_1_property_database___test_1a78d5fb1fb316fc1ba7bc2bd9ca84037c" prot="public" virt="non-virtual"><scope>csmp::PropertyDatabase_Test</scope><name>NameTest</name></member>
+      <member refid="classcsmp_1_1_property_database___test_1a8529a793c27c1eef503bbb5192d90a5c" prot="private" virt="non-virtual"><scope>csmp::PropertyDatabase_Test</scope><name>pdb</name></member>
+      <member refid="classcsmp_1_1_property_database___test_1a7a31b23f3bec1c2547bebe677bc8596f" prot="public" virt="non-virtual"><scope>csmp::PropertyDatabase_Test</scope><name>PlacementTest</name></member>
+      <member refid="classcsmp_1_1_test_1a73afdd22caa8aac000b0d07fb3ae42e5" prot="protected" virt="non-virtual"><scope>csmp::PropertyDatabase_Test</scope><name>prefix_</name></member>
+      <member refid="classcsmp_1_1_property_database___test_1ad2dcc611474157aa3d4ea14ad72fe63f" prot="public" virt="non-virtual"><scope>csmp::PropertyDatabase_Test</scope><name>PropertyDatabase_Test</name></member>
+      <member refid="classcsmp_1_1_test_1aa241dcb3adf0ec6716ed08739bd3f79b" prot="public" virt="non-virtual"><scope>csmp::PropertyDatabase_Test</scope><name>report</name></member>
+      <member refid="classcsmp_1_1_test_1a5d334e867a3de4afd434dd9b0034234c" prot="public" virt="virtual"><scope>csmp::PropertyDatabase_Test</scope><name>reset</name></member>
+      <member refid="classcsmp_1_1_property_database___test_1ae88f6dc8f7d6924d7be8d426f4cc6b25" prot="public" virt="virtual"><scope>csmp::PropertyDatabase_Test</scope><name>run</name></member>
+      <member refid="classcsmp_1_1_test_1a3e006cad54b35d9e20561f4a64843b4e" prot="public" virt="non-virtual"><scope>csmp::PropertyDatabase_Test</scope><name>setName</name></member>
+      <member refid="classcsmp_1_1_test_1a20ba6ab18fcaaf806df6348a3b2e032b" prot="public" virt="non-virtual"><scope>csmp::PropertyDatabase_Test</scope><name>setStream</name></member>
+      <member refid="classcsmp_1_1_property_database___test_1aaa7e9dfbec1965978e86675da41930ad" prot="public" virt="non-virtual"><scope>csmp::PropertyDatabase_Test</scope><name>SubsetVariablesTest</name></member>
+      <member refid="classcsmp_1_1_test_1aa4e274174d16215448eab6198bdb5979" prot="public" virt="non-virtual"><scope>csmp::PropertyDatabase_Test</scope><name>Test</name></member>
+      <member refid="classcsmp_1_1_property_database___test_1a06eff1601289977382d09f5d03c18155" prot="public" virt="non-virtual"><scope>csmp::PropertyDatabase_Test</scope><name>TypeTest</name></member>
+      <member refid="classcsmp_1_1_property_database___test_1ac9a100d45e7d44b4f47ba6c004b7c23f" prot="public" virt="non-virtual"><scope>csmp::PropertyDatabase_Test</scope><name>UnitTest</name></member>
+      <member refid="classcsmp_1_1_property_database___test_1ab2f55caeaf3a3f34c9ee9f548ddd5ac3" prot="public" virt="non-virtual"><scope>csmp::PropertyDatabase_Test</scope><name>VariablesBoundaryTest</name></member>
+      <member refid="classcsmp_1_1_property_database___test_1a8fa1f573cd6975de058585c6463fce09" prot="public" virt="non-virtual"><scope>csmp::PropertyDatabase_Test</scope><name>VariablesConstraintPointTest</name></member>
+      <member refid="classcsmp_1_1_property_database___test_1a67b64cfe2a20cf52bd9a972068d363d3" prot="public" virt="non-virtual"><scope>csmp::PropertyDatabase_Test</scope><name>VariablesElementTest</name></member>
+      <member refid="classcsmp_1_1_property_database___test_1a2cd2677c5a48e36cf24ec04d364eecbd" prot="public" virt="non-virtual"><scope>csmp::PropertyDatabase_Test</scope><name>VariablesFaceTest</name></member>
+      <member refid="classcsmp_1_1_property_database___test_1a6ad316d33dc62860e6302c4fb8c59612" prot="public" virt="non-virtual"><scope>csmp::PropertyDatabase_Test</scope><name>VariablesInterFaceTest</name></member>
+      <member refid="classcsmp_1_1_property_database___test_1aee7ecc359790d8d82c284dd753d2d0c4" prot="public" virt="non-virtual"><scope>csmp::PropertyDatabase_Test</scope><name>VariablesModelTest</name></member>
+      <member refid="classcsmp_1_1_property_database___test_1a12169f1bc01dbdf570d3dd9e51899116" prot="public" virt="non-virtual"><scope>csmp::PropertyDatabase_Test</scope><name>VariablesNodeTest</name></member>
+      <member refid="classcsmp_1_1_property_database___test_1a6206cdda53c4725ab6e9eb463baf5938" prot="public" virt="non-virtual"><scope>csmp::PropertyDatabase_Test</scope><name>VariablesRegionTest</name></member>
+      <member refid="classcsmp_1_1_property_database___test_1a995b6c816c027602f860e66cc24a7cc1" prot="public" virt="non-virtual"><scope>csmp::PropertyDatabase_Test</scope><name>VariablesTotalTest</name></member>
+      <member refid="classcsmp_1_1_property_database___test_1af3baaab0706d448e60edc965fffe3157" prot="public" virt="non-virtual"><scope>csmp::PropertyDatabase_Test</scope><name>~PropertyDatabase_Test</name></member>
+      <member refid="classcsmp_1_1_test_1ac154a16a5e086fe52e032c30722f5060" prot="public" virt="virtual"><scope>csmp::PropertyDatabase_Test</scope><name>~Test</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

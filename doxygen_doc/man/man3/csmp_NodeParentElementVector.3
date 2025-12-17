@@ -1,0 +1,126 @@
+.TH "csmp::NodeParentElementVector< dim >" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::NodeParentElementVector< dim >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <NodeParentElementVector\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBNodeParentElementVector\fP (size_t capacity)"
+.br
+.RI "to pre-reserve some elements to control over memory growth "
+.ti -1c
+.RI "void \fBReserve\fP (size_t expected_size)"
+.br
+.RI "to avoid unneccasary reallocations of the storage in case the desired number of entries is known before multiple Assign's are called "
+.ti -1c
+.RI "void \fBAssign\fP (\fBElement\fP< dim > *const, uint32_t index)"
+.br
+.RI "assign parent-element pointer - parent-element node-number pairs to the storage "
+.ti -1c
+.RI "void \fBUnassign\fP (const \fBElement\fP< dim > *const)"
+.br
+.RI "erase parent element from vector "
+.ti -1c
+.RI "void \fBShrinkToFit\fP ()"
+.br
+.RI "to prune excess capacity "
+.ti -1c
+.RI "void \fBErase\fP ()"
+.br
+.RI "get rid of current storage contents "
+.ti -1c
+.RI "uint32_t \fBLocalNodeNumber\fP (uint32_t vector_entry) const"
+.br
+.RI "find integer associated with given value "
+.ti -1c
+.RI "uint32_t \fBLocalNodeNumber\fP (const \fBElement\fP< dim > *const) const"
+.br
+.ti -1c
+.RI "\fBElement\fP< dim > * \fBParentElement\fP (uint32_t vector_entry)"
+.br
+.RI "retrieving parent element of the \fBNode\fP by vector index (implemented with find_if) "
+.ti -1c
+.RI "const \fBElement\fP< dim > *const \fBParentElement\fP (uint32_t vector_entry) const"
+.br
+.ti -1c
+.RI "bool \fBIsParent\fP (const \fBElement\fP< dim > *const) const"
+.br
+.RI "is contained in the vector? "
+.ti -1c
+.RI "uint32_t \fBParents\fP () const"
+.br
+.RI "parents "
+.ti -1c
+.RI "size_t \fBSize\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBCapacity\fP () const"
+.br
+.ti -1c
+.RI "std::vector< std::pair< \fBElement\fP< dim > *, short > >::const_iterator \fBParentsBegin\fP () const"
+.br
+.RI "iterators "
+.ti -1c
+.RI "std::vector< std::pair< \fBElement\fP< dim > *, short > >::const_iterator \fBParentsEnd\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBSizeOf\fP () const"
+.br
+.RI "storage requirements "
+.ti -1c
+.RI "void \fBOut\fP () const"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim>
+.br
+class csmp::NodeParentElementVector< dim >"
+.PP
+\fBPrecondition\fP
+.RS 4
+values must be unique, indices not 
+
+.PP
+one cannot search by index 
+.RE
+.PP
+
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<uint32_t dim> \fBcsmp::NodeParentElementVector\fP< dim >::NodeParentElementVector (size_t capacity)\fR [explicit]\fP"
+
+.PP
+to pre-reserve some elements to control over memory growth to have some control over memory growth 
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim> void \fBcsmp::NodeParentElementVector\fP< dim >::Erase ()"
+
+.PP
+get rid of current storage contents erase parent element from vector 
+.SS "template<uint32_t dim> uint32_t \fBcsmp::NodeParentElementVector\fP< dim >::LocalNodeNumber (const \fBElement\fP< dim > * const eptr) const"
+Handcoded linear search\&. 
+.SS "template<uint32_t dim> \fBElement\fP< dim > * \fBcsmp::NodeParentElementVector\fP< dim >::ParentElement (uint32_t vector_entry)"
+
+.PP
+retrieving parent element of the \fBNode\fP by vector index (implemented with find_if) retrieving parent element of the \fBNode\fP by vector index 
+.SS "template<uint32_t dim> void \fBcsmp::NodeParentElementVector\fP< dim >::Reserve (size_t expected_size)"
+
+.PP
+to avoid unneccasary reallocations of the storage in case the desired number of entries is known before multiple Assign's are called erase parent element from vector 
+.SS "template<uint32_t dim> void \fBcsmp::NodeParentElementVector\fP< dim >::ShrinkToFit ()"
+
+.PP
+to prune excess capacity to prune excess capacity from vector 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

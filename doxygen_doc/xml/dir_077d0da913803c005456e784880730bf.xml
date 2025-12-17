@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_077d0da913803c005456e784880730bf" kind="dir">
+    <compoundname>source/includes/integration/finite_elements</compoundname>
+    <innerfile refid="_c_s_m_p___element_specifications_8h">CSMP_ElementSpecifications.h</innerfile>
+    <innerfile refid="_finite_element_8h">FiniteElement.h</innerfile>
+    <innerfile refid="_finite_element_policy_8h">FiniteElementPolicy.h</innerfile>
+    <innerfile refid="_isoparametric_linear_hexahedron_8h">IsoparametricLinearHexahedron.h</innerfile>
+    <innerfile refid="_isoparametric_linear_line_element_8h">IsoparametricLinearLineElement.h</innerfile>
+    <innerfile refid="_isoparametric_linear_prism_8h">IsoparametricLinearPrism.h</innerfile>
+    <innerfile refid="_isoparametric_linear_pyramid_8h">IsoparametricLinearPyramid.h</innerfile>
+    <innerfile refid="_isoparametric_linear_quadrilateral_8h">IsoparametricLinearQuadrilateral.h</innerfile>
+    <innerfile refid="_isoparametric_linear_tetrahedron_8h">IsoparametricLinearTetrahedron.h</innerfile>
+    <innerfile refid="_isoparametric_linear_triangle_8h">IsoparametricLinearTriangle.h</innerfile>
+    <innerfile refid="_isoparametric_quadratic_hexahedron_8h">IsoparametricQuadraticHexahedron.h</innerfile>
+    <innerfile refid="_isoparametric_quadratic_line_element_8h">IsoparametricQuadraticLineElement.h</innerfile>
+    <innerfile refid="_isoparametric_quadratic_prism_8h">IsoparametricQuadraticPrism.h</innerfile>
+    <innerfile refid="_isoparametric_quadratic_pyramid_8h">IsoparametricQuadraticPyramid.h</innerfile>
+    <innerfile refid="_isoparametric_quadratic_quadrilateral_8h">IsoparametricQuadraticQuadrilateral.h</innerfile>
+    <innerfile refid="_isoparametric_quadratic_tetrahedron_8h">IsoparametricQuadraticTetrahedron.h</innerfile>
+    <innerfile refid="_isoparametric_quadratic_triangle_8h">IsoparametricQuadraticTriangle.h</innerfile>
+    <innerfile refid="_linear_cuboid_8h">LinearCuboid.h</innerfile>
+    <innerfile refid="_linear_line_element_8h">LinearLineElement.h</innerfile>
+    <innerfile refid="_linear_rectangle_8h">LinearRectangle.h</innerfile>
+    <innerfile refid="_linear_tetrahedron_8h">LinearTetrahedron.h</innerfile>
+    <innerfile refid="_linear_triangle_8h">LinearTriangle.h</innerfile>
+    <innerfile refid="_linear_triangle3_d_8h">LinearTriangle3D.h</innerfile>
+    <innerfile refid="_stabilization_parameter_visitor_8h">StabilizationParameterVisitor.h</innerfile>
+    <innerfile refid="_v_data_8h">VData.h</innerfile>
+    <innerfile refid="_v_set_8h">VSet.h</innerfile>
+    <innerfile refid="_v_set_converter_8h">VSetConverter.h</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="source/includes/integration/finite_elements/"/>
+  </compounddef>
+</doxygen>

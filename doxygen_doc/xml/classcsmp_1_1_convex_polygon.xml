@@ -1,0 +1,248 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_convex_polygon" kind="class" language="C++" prot="public">
+    <compoundname>csmp::ConvexPolygon</compoundname>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_convex_polygon_1a7af673e1d29066708ecdb3d04989b8b1" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &gt;</type>
+        <definition>std::vector&lt;Point&lt;dim&gt; &gt; csmp::ConvexPolygon&lt; dim &gt;::vertices</definition>
+        <argsstring></argsstring>
+        <name>vertices</name>
+        <qualifiedname>csmp::ConvexPolygon::vertices</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/ConvexPolygon.h" line="50" column="18" bodyfile="source/includes/discretisation/ConvexPolygon.h" bodystart="50" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="friend">
+      <memberdef kind="friend" id="classcsmp_1_1_convex_polygon_1a43dfb75505f3161a2d64441cd9098e9f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class ConvexPolygon_Test</definition>
+        <argsstring></argsstring>
+        <name>ConvexPolygon_Test</name>
+        <qualifiedname>csmp::ConvexPolygon::ConvexPolygon_Test</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_convex_polygon___test" kindref="compound">ConvexPolygon_Test</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/ConvexPolygon.h" line="52" column="19" bodyfile="source/includes/discretisation/ConvexPolygon.h" bodystart="52" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_convex_polygon_1aab0796f7e3382231df20f794879dfe51" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::ConvexPolygon&lt; dim &gt;::ConvexPolygon</definition>
+        <argsstring>(const std::vector&lt; Point&lt; dim &gt; &gt; &amp;)</argsstring>
+        <name>ConvexPolygon</name>
+        <qualifiedname>csmp::ConvexPolygon::ConvexPolygon</qualifiedname>
+        <param>
+          <type>const std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &gt; &amp;</type>
+          <defname>points</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/ConvexPolygon.h" line="25" column="5" bodyfile="source/modules/discretisation/ConvexPolygon.cpp" bodystart="17" bodyend="22"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_convex_polygon_1ab85b01e66c2d15d289cdb8ce04a87588" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Iterator</type>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>csmp::ConvexPolygon&lt; dim &gt;::ConvexPolygon</definition>
+        <argsstring>(Iterator begin, Iterator end)</argsstring>
+        <name>ConvexPolygon</name>
+        <qualifiedname>csmp::ConvexPolygon::ConvexPolygon</qualifiedname>
+        <param>
+          <type>Iterator</type>
+          <declname>begin</declname>
+        </param>
+        <param>
+          <type>Iterator</type>
+          <declname>end</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/ConvexPolygon.h" line="29" column="5" bodyfile="source/includes/discretisation/ConvexPolygon.h" bodystart="59" bodyend="65"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_convex_polygon_1afcdd1ade8c40ed49dcf5af2d8921df34" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt;</type>
+        <definition>Point&lt; dim &gt; csmp::ConvexPolygon&lt; dim &gt;::UnitNormal</definition>
+        <argsstring>(const Point&lt; dim &gt; &amp;inside_point) const</argsstring>
+        <name>UnitNormal</name>
+        <qualifiedname>csmp::ConvexPolygon::UnitNormal</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &amp;</type>
+          <declname>inside_point</declname>
+        </param>
+        <briefdescription>
+<para>construct the normal at the point of interest inside of the polygon (like at a hub vertex thinking of the polygon as a wheel) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/ConvexPolygon.h" line="34" column="11" bodyfile="source/modules/discretisation/ConvexPolygon.cpp" bodystart="26" bodyend="53"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_convex_polygon_1ad18d5c2ce41048d299c52996751c59f5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::ConvexPolygon&lt; dim &gt;::IsPointInside</definition>
+        <argsstring>(const Point&lt; dim &gt; &amp;point) const</argsstring>
+        <name>IsPointInside</name>
+        <qualifiedname>csmp::ConvexPolygon::IsPointInside</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &amp;</type>
+          <declname>point</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/ConvexPolygon.h" line="35" column="10" bodyfile="source/modules/discretisation/ConvexPolygon.cpp" bodystart="84" bodyend="108"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_convex_polygon_1a1db6f7f2ddf7b92693f8adbd8cbd5120" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ConvexPolygon&lt; dim &gt;::Print</definition>
+        <argsstring>() const</argsstring>
+        <name>Print</name>
+        <qualifiedname>csmp::ConvexPolygon::Print</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/ConvexPolygon.h" line="36" column="10" bodyfile="source/modules/discretisation/ConvexPolygon.cpp" bodystart="113" bodyend="117"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_convex_polygon_1aec4aa5e0b4341a2b383b8b70140a05fa" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &gt;</type>
+        <definition>std::vector&lt; Point&lt; dim &gt; &gt; csmp::ConvexPolygon&lt; dim &gt;::GetCounterClockwiseVertices</definition>
+        <argsstring>() const</argsstring>
+        <name>GetCounterClockwiseVertices</name>
+        <qualifiedname>csmp::ConvexPolygon::GetCounterClockwiseVertices</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/ConvexPolygon.h" line="37" column="17" bodyfile="source/modules/discretisation/ConvexPolygon.cpp" bodystart="122" bodyend="142"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_convex_polygon_1a663bcaef5fcdda857e4e71ea6f82e554" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &gt;::const_iterator</type>
+        <definition>std::vector&lt; Point&lt; dim &gt; &gt;::const_iterator csmp::ConvexPolygon&lt; dim &gt;::CounterClockwiseVerticesBegin</definition>
+        <argsstring>() const</argsstring>
+        <name>CounterClockwiseVerticesBegin</name>
+        <qualifiedname>csmp::ConvexPolygon::CounterClockwiseVerticesBegin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/ConvexPolygon.h" line="40" column="43" bodyfile="source/modules/discretisation/ConvexPolygon.cpp" bodystart="146" bodyend="149"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_convex_polygon_1ab4f83bfc215d4ec450cf6cceb543319f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &gt;::const_iterator</type>
+        <definition>std::vector&lt; Point&lt; dim &gt; &gt;::const_iterator csmp::ConvexPolygon&lt; dim &gt;::CounterClockwiseVerticesEnd</definition>
+        <argsstring>() const</argsstring>
+        <name>CounterClockwiseVerticesEnd</name>
+        <qualifiedname>csmp::ConvexPolygon::CounterClockwiseVerticesEnd</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/ConvexPolygon.h" line="41" column="43" bodyfile="source/modules/discretisation/ConvexPolygon.cpp" bodystart="152" bodyend="155"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_convex_polygon_1af4d0a17c453a9f3f6cef6ca88e8e5e36" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ConvexPolygon&lt; dim &gt;::Out</definition>
+        <argsstring>(const std::string &amp;filename) const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::ConvexPolygon::Out</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>filename</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/ConvexPolygon.h" line="44" column="10" bodyfile="source/modules/discretisation/ConvexPolygon.cpp" bodystart="159" bodyend="192"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_convex_polygon_1a1ad4bd301fdc1185c8d18d54e82db609" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt;</type>
+        <definition>Point&lt; dim &gt; csmp::ConvexPolygon&lt; dim &gt;::UnitNormalFirstTriangle</definition>
+        <argsstring>() const</argsstring>
+        <name>UnitNormalFirstTriangle</name>
+        <qualifiedname>csmp::ConvexPolygon::UnitNormalFirstTriangle</qualifiedname>
+        <briefdescription>
+<para>computes the unit normal for the first triangle in the polygon as is needed to test for point containment </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/ConvexPolygon.h" line="48" column="12" bodyfile="source/modules/discretisation/ConvexPolygon.cpp" bodystart="59" bodyend="79"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::ConvexPolygon&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_convex_polygon"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/discretisation/ConvexPolygon.h" line="22" column="1" bodyfile="source/includes/discretisation/ConvexPolygon.h" bodystart="22" bodyend="53"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_convex_polygon_1aab0796f7e3382231df20f794879dfe51" prot="public" virt="non-virtual"><scope>csmp::ConvexPolygon</scope><name>ConvexPolygon</name></member>
+      <member refid="classcsmp_1_1_convex_polygon_1ab85b01e66c2d15d289cdb8ce04a87588" prot="public" virt="non-virtual"><scope>csmp::ConvexPolygon</scope><name>ConvexPolygon</name></member>
+      <member refid="classcsmp_1_1_convex_polygon_1a43dfb75505f3161a2d64441cd9098e9f" prot="private" virt="non-virtual"><scope>csmp::ConvexPolygon</scope><name>ConvexPolygon_Test</name></member>
+      <member refid="classcsmp_1_1_convex_polygon_1a663bcaef5fcdda857e4e71ea6f82e554" prot="public" virt="non-virtual"><scope>csmp::ConvexPolygon</scope><name>CounterClockwiseVerticesBegin</name></member>
+      <member refid="classcsmp_1_1_convex_polygon_1ab4f83bfc215d4ec450cf6cceb543319f" prot="public" virt="non-virtual"><scope>csmp::ConvexPolygon</scope><name>CounterClockwiseVerticesEnd</name></member>
+      <member refid="classcsmp_1_1_convex_polygon_1aec4aa5e0b4341a2b383b8b70140a05fa" prot="public" virt="non-virtual"><scope>csmp::ConvexPolygon</scope><name>GetCounterClockwiseVertices</name></member>
+      <member refid="classcsmp_1_1_convex_polygon_1ad18d5c2ce41048d299c52996751c59f5" prot="public" virt="non-virtual"><scope>csmp::ConvexPolygon</scope><name>IsPointInside</name></member>
+      <member refid="classcsmp_1_1_convex_polygon_1af4d0a17c453a9f3f6cef6ca88e8e5e36" prot="public" virt="non-virtual"><scope>csmp::ConvexPolygon</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_convex_polygon_1a1db6f7f2ddf7b92693f8adbd8cbd5120" prot="public" virt="non-virtual"><scope>csmp::ConvexPolygon</scope><name>Print</name></member>
+      <member refid="classcsmp_1_1_convex_polygon_1afcdd1ade8c40ed49dcf5af2d8921df34" prot="public" virt="non-virtual"><scope>csmp::ConvexPolygon</scope><name>UnitNormal</name></member>
+      <member refid="classcsmp_1_1_convex_polygon_1a1ad4bd301fdc1185c8d18d54e82db609" prot="private" virt="non-virtual"><scope>csmp::ConvexPolygon</scope><name>UnitNormalFirstTriangle</name></member>
+      <member refid="classcsmp_1_1_convex_polygon_1a7af673e1d29066708ecdb3d04989b8b1" prot="private" virt="non-virtual"><scope>csmp::ConvexPolygon</scope><name>vertices</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

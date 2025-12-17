@@ -1,0 +1,175 @@
+.TH "csmp::CVFEM_PHX_VariableNames" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::CVFEM_PHX_VariableNames
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <CVFEM_PHX_VariableNames\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBAddAdvectionVariable\fP (std::string balanced_variable, std::string new_lhs_liquid, std::string new_rhs_liquid, std::string new_lhs_vapor, std::string new_rhs_vapor)"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::vector< std::string > \fBpres_grad_variables\fP"
+.br
+.ti -1c
+.RI "std::vector< std::string > \fBpore_visitor_variables\fP"
+.br
+.ti -1c
+.RI "std::vector< std::string > \fBlhs_liquid_vector\fP"
+.br
+.ti -1c
+.RI "std::vector< std::string > \fBrhs_liquid_vector\fP"
+.br
+.ti -1c
+.RI "std::vector< std::string > \fBlhs_vapor_vector\fP"
+.br
+.ti -1c
+.RI "std::vector< std::string > \fBrhs_vapor_vector\fP"
+.br
+.ti -1c
+.RI "std::vector< std::string > \fBfv_transport_vapor_variables\fP"
+.br
+.ti -1c
+.RI "std::vector< std::string > \fBfv_transport_liquid_variables\fP"
+.br
+.ti -1c
+.RI "std::vector< std::string > \fBupwind_control_variables\fP"
+.br
+.ti -1c
+.RI "std::vector< std::string > \fBrelperm_visc\fP"
+.br
+.ti -1c
+.RI "std::vector< std::string > \fBdensities\fP"
+.br
+.ti -1c
+.RI "std::vector< std::string > \fBsaturations\fP"
+.br
+.ti -1c
+.RI "std::vector< std::string > \fBvelocities\fP"
+.br
+.ti -1c
+.RI "std::vector< std::string > \fBpore_velocities\fP"
+.br
+.ti -1c
+.RI "std::vector< std::string > \fBtime_control\fP"
+.br
+.ti -1c
+.RI "std::vector< std::string > \fBcapacitance_lhs_variables\fP"
+.br
+.ti -1c
+.RI "std::vector< std::string > \fBconductance_variables\fP"
+.br
+.ti -1c
+.RI "std::vector< std::string > \fBcapacitance_rhs_variables\fP"
+.br
+.ti -1c
+.RI "std::vector< std::string > \fBheat_bottom_variables\fP"
+.br
+.ti -1c
+.RI "std::vector< std::string > \fBcapacitance_lhs_p_variables\fP"
+.br
+.ti -1c
+.RI "std::vector< std::string > \fBconductance_p_upwind_liquid_variables\fP"
+.br
+.ti -1c
+.RI "std::vector< std::string > \fBconductance_p_upwind_vapor_variables\fP"
+.br
+.ti -1c
+.RI "std::vector< std::string > \fBcapacitance_rhs_p_variables\fP"
+.br
+.ti -1c
+.RI "std::vector< std::string > \fBgrav_liq_variables\fP"
+.br
+.ti -1c
+.RI "std::vector< std::string > \fBgrav_vap_variables\fP"
+.br
+.ti -1c
+.RI "std::vector< std::string > \fBsource_p_variables\fP"
+.br
+.ti -1c
+.RI "std::vector< std::string > \fBsource_p2_variables\fP"
+.br
+.ti -1c
+.RI "std::vector< std::string > \fBmass_visitor_variables\fP"
+.br
+.ti -1c
+.RI "std::vector< std::string > \fBenthalpy_visitor_variables\fP"
+.br
+.ti -1c
+.RI "std::vector< std::string > \fBenthalpy_visitor_liquid_variables\fP"
+.br
+.ti -1c
+.RI "std::vector< std::string > \fBenthalpy_visitor_vapor_variables\fP"
+.br
+.ti -1c
+.RI "std::vector< std::string > \fBenthalpy_visitor_source_variables\fP"
+.br
+.ti -1c
+.RI "std::vector< std::string > \fBconduction_visitor_variables\fP"
+.br
+.ti -1c
+.RI "std::vector< std::string > \fBtransient_variables\fP"
+.br
+.ti -1c
+.RI "std::vector< std::string > \fBfull_reset_variables\fP"
+.br
+.ti -1c
+.RI "std::vector< std::string > \fBdiff_mass_variables\fP"
+.br
+.ti -1c
+.RI "std::vector< std::string > \fBdiff_enthalpy_variables\fP"
+.br
+.ti -1c
+.RI "std::vector< std::string > \fBboundary_corrections\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.PP
+\fBAuthor\fP
+.RS 4
+Philipp Weis, ETH Zuerich 
+.RE
+.PP
+.SH "Contact"
+.PP
+philipp.weis@erdw.ethz.ch
+
+.PP
+@changes changes Latest Changes
+.SH "Motivation"
+.PP
+Class to bundle all variable names needed for CVFEM scheme\&.
+.SH "Usage"
+.PP
+Used within the CVFEM scheme (Weis et al\&., Geofluids, 2014)\&.
+
+.PP
+.PP
+.nf
+Applies source term at the node\&.
+.fi
+.PP
+.SH "Dependencies"
+.PP
+Tailored for CVFEM_PHX_Schem
+.SH "Known issues"
+.PP
+.SH "Testing"
+.PP
+testing was done in the period before publication in 2014\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

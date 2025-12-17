@@ -1,0 +1,11 @@
+<map id="csmp::HeterogeneityAndRateAwareModel::pc_Phase" name="csmp::HeterogeneityAndRateAwareModel::pc_Phase">
+<area shape="rect" id="Node000001" title="capillary pressure of the non&#45;wetting phase; cap value is applied" alt="" coords="5,23,199,64"/>
+<area shape="rect" id="Node000002" href="$namespacecsmp.html#a8f56624185d7a8419b27632cfeaf0b2f" title=" " alt="" coords="247,31,348,56"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="199,41,231,41,231,46,199,46"/>
+<area shape="rect" id="Node000003" href="$namespacecsmp.html#a70d7d95e5297538382fe6d8f2a5b8b7d" title="logarithmic extension of PC following Webb (2000); Sw=actual water saturation, Pc0(sw=0)=PC_MAX,..." alt="" coords="396,5,557,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="348,34,380,29,381,34,349,39"/>
+<area shape="rect" id="Node000005" href="$namespacecsmp.html#ad5f148f07d290165871424c6a79b2c1b" title="effective wetting phase saturation" alt="" coords="435,55,518,80"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="349,48,420,57,419,63,348,53"/>
+<area shape="rect" id="Node000004" href="$namespacecsmp.html#afc35954a9ad77ed8d66dc89dd3bcc31a" title="log10 slope for logarithmic extension of pc following Webb (2000), Pc0(sw=0)=PC_MAX,..." alt="" coords="605,5,721,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="557,16,590,16,590,21,557,21"/>
+</map>

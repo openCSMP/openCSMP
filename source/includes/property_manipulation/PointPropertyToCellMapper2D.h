@@ -9,6 +9,7 @@
 #ifndef CSMP_POINT_PROPERTY_TO_CELL_MAPPER_2D_H
 #define CSMP_POINT_PROPERTY_TO_CELL_MAPPER_2D_H
 
+#include "CSMP_definitions.h"
 #include "DataTable.h"
 
 namespace csmp {

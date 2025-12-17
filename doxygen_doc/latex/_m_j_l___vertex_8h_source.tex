@@ -1,0 +1,99 @@
+\doxysection{MJL\+\_\+\+Vertex.\+h}
+\hypertarget{_m_j_l___vertex_8h_source}{}\label{_m_j_l___vertex_8h_source}\index{source/includes/discretisation/MJL\_Vertex.h@{source/includes/discretisation/MJL\_Vertex.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{MJL\_VERTEX\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{MJL\_VERTEX\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_m_j_l___point_8h}{"{}MJL\_Point.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_m_j_l___node_8h}{"{}MJL\_Node.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacemjl}{mjl}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{enum}\ ORIENTATION\ \{\ CLOCKWISE,\ COUNTER\_CLOCKWISE\ \};}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classmjl_1_1_node}{Node}},\ \textcolor{keyword}{public}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\ \{}
+\DoxyCodeLine{00012\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00013\ \ \ \ \ Vertex(\ \textcolor{keywordtype}{double},\ \textcolor{keywordtype}{double}\ );}
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keyword}{explicit}\ \ \ \ Vertex(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\&\ );}
+\DoxyCodeLine{00015\ \ \ \ \ \mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ \ \ \ \ Cw()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00016\ \ \ \ \ \mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ \ \ \ \ Ccw()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00017\ \ \ \ \ \mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ \ \ \ \ Neighbor(\ ORIENTATION\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00018\ \ \ \ \ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\ \ Point()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00019\ \ \ \ \ \mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ \ \ \ \ Insert(\ \mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ );}
+\DoxyCodeLine{00020\ \ \ \ \ \mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ \ \ \ \ Remove();}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ Splice(\ \mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ );}
+\DoxyCodeLine{00022\ \ \ \ \ \mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ \ \ \ \ Split(\ \mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ );}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ IsConvex()\ \textcolor{keyword}{const};\ \textcolor{comment}{//\ MJL,\ p.\ 198}}
+\DoxyCodeLine{00024\ \};}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{keywordtype}{bool}\ adjacent(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ );}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ adjacent(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ v,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ w\ )}
+\DoxyCodeLine{00030\ \ \{}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordflow}{return}\ (\ w==v-\/>Cw()\ \textcolor{keyword}{or}\ w==v-\/>Ccw()\ );}
+\DoxyCodeLine{00032\ \ \}}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \textcolor{comment}{//\ methods}}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}::Vertex(\ \textcolor{keywordtype}{double}\ x,\ \textcolor{keywordtype}{double}\ y\ )}
+\DoxyCodeLine{00038\ \ \ \ :\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}(x,y)}
+\DoxyCodeLine{00039\ \ \{}
+\DoxyCodeLine{00040\ \ \}}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}::Vertex(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\&\ p\ )}
+\DoxyCodeLine{00044\ \ \ \ :\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}(p)}
+\DoxyCodeLine{00045\ \ \{}
+\DoxyCodeLine{00046\ \ \}}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ \mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}::Cw()\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00050\ \ \{}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<\mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*>(next\_);}
+\DoxyCodeLine{00052\ \ \}}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ \mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}::Ccw()\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00056\ \ \{}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<\mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*>(prev\_);}
+\DoxyCodeLine{00058\ \ \}}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ \mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}::Neighbor(\ ORIENTATION\ rotation\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00062\ \ \{}
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keywordflow}{return}\ (\ (rotation\ ==\ CLOCKWISE)\ ?\ Cw()\ :\ Ccw()\ );}
+\DoxyCodeLine{00064\ \ \}}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\ \mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}::Point()\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00068\ \ \{}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00070\ \ \}}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ \mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}::Insert(\ \mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ v\ )}
+\DoxyCodeLine{00074\ \ \{}
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<\mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*>(\mbox{\hyperlink{classmjl_1_1_node}{Node}}::Insert(v));}
+\DoxyCodeLine{00076\ \ \}}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ \ \mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}::Remove()}
+\DoxyCodeLine{00080\ \ \{}
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<\mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*>(\mbox{\hyperlink{classmjl_1_1_node}{Node}}::Remove());}
+\DoxyCodeLine{00082\ \ \}}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}::Splice(\ \mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ b\ )}
+\DoxyCodeLine{00086\ \ \{}
+\DoxyCodeLine{00087\ \ \ \ \ \mbox{\hyperlink{classmjl_1_1_node}{Node}}::Splice(b);}
+\DoxyCodeLine{00088\ \ \}}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \}\ \textcolor{comment}{//\ end\ namespace\ mjl}}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

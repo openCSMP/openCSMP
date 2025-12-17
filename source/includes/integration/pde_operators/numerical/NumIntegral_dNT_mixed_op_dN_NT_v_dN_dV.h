@@ -31,12 +31,12 @@ class NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV : public MathOperatorLHS<dim,CELL> 
                                           const char* basic,            // e.g., fluid pressure
                                           const char* test );           // e.g., fluid pressure
     
-    virtual void GetOperands( const CELL<dim>& );
-    virtual void ComputeContribution( const CELL<dim>& );
+    void GetOperands( const CELL<dim>& ) override final;
+    void ComputeContribution( const CELL<dim>& ) override final;
     
     void SpatialDerivative( uint32_t num_xyz ); // set gradZ direction to X=1, Y=2, Z=3
 
-    virtual NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV<dim,CELL>* clone() const { return new NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV<dim,CELL>(*this); }
+    NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV<dim,CELL>* clone() const override final { return new NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV<dim,CELL>(*this); }
 
   private:
 

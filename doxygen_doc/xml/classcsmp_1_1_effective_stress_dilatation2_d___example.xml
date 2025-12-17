@@ -1,0 +1,226 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_effective_stress_dilatation2_d___example" kind="class" language="C++" prot="public">
+    <compoundname>csmp::EffectiveStressDilatation2D_Example</compoundname>
+    <basecompoundref refid="classcsmp_1_1_example" prot="public" virt="non-virtual">csmp::Example</basecompoundref>
+    <includes refid="_effective_stress_dilatation2_d___example_8h" local="no">EffectiveStressDilatation2D_Example.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_effective_stress_dilatation2_d___example_1a48702f2a33c2c976b6465a68fe26d9f7" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_p_d_e___integrator" kindref="compound">PDE_Integrator</ref>&lt; 2U, <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> &gt; *</type>
+        <definition>PDE_Integrator&lt;2U,Element&gt;* csmp::EffectiveStressDilatation2D_Example::fluid_pressure_</definition>
+        <argsstring></argsstring>
+        <name>fluid_pressure_</name>
+        <qualifiedname>csmp::EffectiveStressDilatation2D_Example::fluid_pressure_</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/EffectiveStressDilatation2D_Example.h" line="32" column="21" bodyfile="examples/source/EffectiveStressDilatation2D_Example.h" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_effective_stress_dilatation2_d___example_1ac2a16db0791da61ee9282a997b714de8" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::EffectiveStressDilatation2D_Example::verbose_</definition>
+        <argsstring></argsstring>
+        <name>verbose_</name>
+        <qualifiedname>csmp::EffectiveStressDilatation2D_Example::verbose_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/EffectiveStressDilatation2D_Example.h" line="33" column="11" bodyfile="examples/source/EffectiveStressDilatation2D_Example.h" bodystart="33" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_effective_stress_dilatation2_d___example_1a13666955855a766d6b51a49db6c07f5f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::EffectiveStressDilatation2D_Example::EffectiveStressDilatation2D_Example</definition>
+        <argsstring>()</argsstring>
+        <name>EffectiveStressDilatation2D_Example</name>
+        <qualifiedname>csmp::EffectiveStressDilatation2D_Example::EffectiveStressDilatation2D_Example</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/EffectiveStressDilatation2D_Example.h" line="24" column="5" bodyfile="examples/source/EffectiveStressDilatation2D_Example.cpp" bodystart="51" bodyend="54"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_effective_stress_dilatation2_d___example_1a2c22a09c923b2723d4d4a93f67c27e7b" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::EffectiveStressDilatation2D_Example::Run</definition>
+        <argsstring>()</argsstring>
+        <name>Run</name>
+        <qualifiedname>csmp::EffectiveStressDilatation2D_Example::Run</qualifiedname>
+        <reimplements refid="classcsmp_1_1_example_1a6e65f9276ebaa3ea88587cc742a81f8f">Run</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><hruler/>
+</para>
+<para>Diffusion out of ultra-low permeability shale through a fracture network.</para>
+<para>Exercise: on the basis of the code presented herein and the linear elasticity example, implement:</para>
+<para><orderedlist>
+<listitem><para>model of over-pressured fractured layer (is there a gas generation rate?)<itemizedlist>
+<listitem><para>no flow boundary conditions, fixed initial pressure</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para>computation of total system compressibility, ct taking into account gas compressibility</para>
+</listitem><listitem><para>simulation of the evolution of the bhp and reservoir pressure over time</para>
+</listitem><listitem><para>visualisation with Paraview</para>
+</listitem><listitem><para>well: flow rate monitoring for constant bh pressure</para>
+</listitem><listitem><para>introduce split boundaries to do mechanics</para>
+</listitem></orderedlist>
+</para>
+<para>suppporting functionality to illustrate:<itemizedlist>
+<listitem><para>implement: gas EOS</para>
+</listitem><listitem><para>Knudson diffusion in rock matrix</para>
+</listitem><listitem><para>implement: conversion of linear bar elements into quadratic bar elements</para>
+</listitem><listitem><para>split boundaries</para>
+</listitem><listitem><para>mechanics (change property placement to element integration points) </para>
+</listitem></itemizedlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/EffectiveStressDilatation2D_Example.h" line="25" column="18" bodyfile="examples/source/EffectiveStressDilatation2D_Example.cpp" bodystart="98" bodyend="259"/>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9a2d373b048f997a96c661862c40f2fcae" compoundref="_c_s_m_p__global__enumerations_8h" startline="64">csmp::DIRICH</references>
+        <references refid="namespacecsmp_1a045796fbaba7d5053c66ae8e794e5f9b" compoundref="_scalar_variable_8cpp" startline="222" endline="225">csmp::makeScalar</references>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6" compoundref="_c_s_m_p__global__enumerations_8h" startline="58">csmp::PLAIN</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_effective_stress_dilatation2_d___example_1a33b51e12a9995dd5dc82c21729d27112" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::EffectiveStressDilatation2D_Example::Specifications</definition>
+        <argsstring>()</argsstring>
+        <name>Specifications</name>
+        <qualifiedname>csmp::EffectiveStressDilatation2D_Example::Specifications</qualifiedname>
+        <reimplements refid="classcsmp_1_1_example_1a8cee542c22a71c15bba5c6ddf959455b">Specifications</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/EffectiveStressDilatation2D_Example.h" line="26" column="18" bodyfile="examples/source/EffectiveStressDilatation2D_Example.cpp" bodystart="57" bodyend="68"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_effective_stress_dilatation2_d___example_1ae6a785dfc27b795ec1ac7a8a1d0fcfa3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::EffectiveStressDilatation2D_Example::ComputeTransientFluidPressure</definition>
+        <argsstring>(Model&lt; 2U &gt; &amp;, double time_increment)</argsstring>
+        <name>ComputeTransientFluidPressure</name>
+        <qualifiedname>csmp::EffectiveStressDilatation2D_Example::ComputeTransientFluidPressure</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; 2U &gt; &amp;</type>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>time_increment</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/EffectiveStressDilatation2D_Example.h" line="29" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_effective_stress_dilatation2_d___example_1a6b48472fb8738ef619533ad39f661a4f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::EffectiveStressDilatation2D_Example::ComputeTransientFluidPressure</definition>
+        <argsstring>(Model&lt; 2U &gt; &amp;, const char *split_boundary_name, double time_increment)</argsstring>
+        <name>ComputeTransientFluidPressure</name>
+        <qualifiedname>csmp::EffectiveStressDilatation2D_Example::ComputeTransientFluidPressure</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; 2U &gt; &amp;</type>
+          <defname>model</defname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>split_boundary_name</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>time_increment</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>For <ref refid="classcsmp_1_1_split_boundary" kindref="compound">SplitBoundary</ref> computations. </para>
+        </detaileddescription>
+        <inbodydescription>
+<para>add extra functionality for alternative solver if needed</para>
+<para>add extra functionality for alternative solver if needed</para>
+<para>add extra functionality for alternative solver if needed</para>
+        </inbodydescription>
+        <location file="examples/source/EffectiveStressDilatation2D_Example.h" line="30" column="10" bodyfile="examples/source/EffectiveStressDilatation2D_Example.cpp" bodystart="371" bodyend="482"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>gas flow into a horizontal well drilled into overpressured &quot;shale&quot; layer </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::EffectiveStressDilatation2D_Example</label>
+        <link refid="classcsmp_1_1_effective_stress_dilatation2_d___example"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Example</label>
+        <link refid="classcsmp_1_1_example"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::EffectiveStressDilatation2D_Example</label>
+        <link refid="classcsmp_1_1_effective_stress_dilatation2_d___example"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Example</label>
+        <link refid="classcsmp_1_1_example"/>
+      </node>
+    </collaborationgraph>
+    <location file="examples/source/EffectiveStressDilatation2D_Example.h" line="22" column="1" bodyfile="examples/source/EffectiveStressDilatation2D_Example.h" bodystart="22" bodyend="34"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_example_1a7a2776d1a529fdc5185d24804e249fa4" prot="public" virt="non-virtual"><scope>csmp::EffectiveStressDilatation2D_Example</scope><name>AddAuthor</name></member>
+      <member refid="classcsmp_1_1_example_1a460febdef7c98c40ba774ba6670ff786" prot="public" virt="non-virtual"><scope>csmp::EffectiveStressDilatation2D_Example</scope><name>AddDescription</name></member>
+      <member refid="classcsmp_1_1_example_1a246f075bb8bf802ca5b9e49096f6a1ca" prot="public" virt="non-virtual"><scope>csmp::EffectiveStressDilatation2D_Example</scope><name>AddRequirement</name></member>
+      <member refid="classcsmp_1_1_effective_stress_dilatation2_d___example_1ae6a785dfc27b795ec1ac7a8a1d0fcfa3" prot="private" virt="non-virtual"><scope>csmp::EffectiveStressDilatation2D_Example</scope><name>ComputeTransientFluidPressure</name></member>
+      <member refid="classcsmp_1_1_effective_stress_dilatation2_d___example_1a6b48472fb8738ef619533ad39f661a4f" prot="private" virt="non-virtual"><scope>csmp::EffectiveStressDilatation2D_Example</scope><name>ComputeTransientFluidPressure</name></member>
+      <member refid="classcsmp_1_1_example_1ac926ad8eb6de45710b9076c8f6304880" prot="protected" virt="non-virtual"><scope>csmp::EffectiveStressDilatation2D_Example</scope><name>CreateWorkingDirectoryAndCopyInputModelFiles</name></member>
+      <member refid="classcsmp_1_1_effective_stress_dilatation2_d___example_1a13666955855a766d6b51a49db6c07f5f" prot="public" virt="non-virtual"><scope>csmp::EffectiveStressDilatation2D_Example</scope><name>EffectiveStressDilatation2D_Example</name></member>
+      <member refid="classcsmp_1_1_example_1a55b5098a7e25da12f36037b0347f63c1" prot="public" virt="non-virtual"><scope>csmp::EffectiveStressDilatation2D_Example</scope><name>Example</name></member>
+      <member refid="classcsmp_1_1_effective_stress_dilatation2_d___example_1a48702f2a33c2c976b6465a68fe26d9f7" prot="private" virt="non-virtual"><scope>csmp::EffectiveStressDilatation2D_Example</scope><name>fluid_pressure_</name></member>
+      <member refid="classcsmp_1_1_example_1a6ea7892372f1ed54bd66fbc93ed4c1e1" prot="public" virt="non-virtual"><scope>csmp::EffectiveStressDilatation2D_Example</scope><name>GetAuthorsBegin</name></member>
+      <member refid="classcsmp_1_1_example_1a1381ce20fa12dc1168f422ab348bb7d4" prot="public" virt="non-virtual"><scope>csmp::EffectiveStressDilatation2D_Example</scope><name>GetAuthorsEnd</name></member>
+      <member refid="classcsmp_1_1_example_1afbbe7869b870b19bcd16dc6a98ee2b2f" prot="public" virt="non-virtual"><scope>csmp::EffectiveStressDilatation2D_Example</scope><name>GetCategory</name></member>
+      <member refid="classcsmp_1_1_example_1a3fd636e079c1b09631a480c3cc5861fc" prot="public" virt="non-virtual"><scope>csmp::EffectiveStressDilatation2D_Example</scope><name>GetDescriptionsBegin</name></member>
+      <member refid="classcsmp_1_1_example_1a23eee344b701096cfe20784858b490b8" prot="public" virt="non-virtual"><scope>csmp::EffectiveStressDilatation2D_Example</scope><name>GetDescriptionsEnd</name></member>
+      <member refid="classcsmp_1_1_example_1af575e4786aca651596ed454ed6d262f6" prot="public" virt="non-virtual"><scope>csmp::EffectiveStressDilatation2D_Example</scope><name>GetDifficulty</name></member>
+      <member refid="classcsmp_1_1_example_1ac867309e60852ae127a00585205f9ac9" prot="protected" virt="non-virtual"><scope>csmp::EffectiveStressDilatation2D_Example</scope><name>GetExampleFileName</name></member>
+      <member refid="classcsmp_1_1_example_1afb4453025180082963850cd7b86ab7e5" prot="public" virt="non-virtual"><scope>csmp::EffectiveStressDilatation2D_Example</scope><name>GetRequirementsBegin</name></member>
+      <member refid="classcsmp_1_1_example_1a63d42dff58fdfd642d842a74bb609e1d" prot="public" virt="non-virtual"><scope>csmp::EffectiveStressDilatation2D_Example</scope><name>GetRequirementsEnd</name></member>
+      <member refid="classcsmp_1_1_example_1a7104cbfd7020f9e681204f0fb09953b7" prot="protected" virt="non-virtual"><scope>csmp::EffectiveStressDilatation2D_Example</scope><name>GetStream</name></member>
+      <member refid="classcsmp_1_1_example_1ab6d059e048b82444c3fcbc36880d70b6" prot="public" virt="non-virtual"><scope>csmp::EffectiveStressDilatation2D_Example</scope><name>GetTitle</name></member>
+      <member refid="classcsmp_1_1_example_1a69f06458486c7a3a3669739a2039c4ed" prot="protected" virt="non-virtual"><scope>csmp::EffectiveStressDilatation2D_Example</scope><name>Initialize</name></member>
+      <member refid="classcsmp_1_1_effective_stress_dilatation2_d___example_1a2c22a09c923b2723d4d4a93f67c27e7b" prot="public" virt="virtual"><scope>csmp::EffectiveStressDilatation2D_Example</scope><name>Run</name></member>
+      <member refid="classcsmp_1_1_example_1abe2b0fd87714fc83a379d825adb5771b" prot="public" virt="non-virtual"><scope>csmp::EffectiveStressDilatation2D_Example</scope><name>SetCategory</name></member>
+      <member refid="classcsmp_1_1_example_1a4909bbd859ca62d273c259d1b8b6657a" prot="public" virt="non-virtual"><scope>csmp::EffectiveStressDilatation2D_Example</scope><name>SetDifficulty</name></member>
+      <member refid="classcsmp_1_1_example_1a9814fee9852cbbcb4504f24f205b5e67" prot="protected" virt="non-virtual"><scope>csmp::EffectiveStressDilatation2D_Example</scope><name>SetStream</name></member>
+      <member refid="classcsmp_1_1_example_1adce5953feb4828ee24fb935d416a045b" prot="public" virt="non-virtual"><scope>csmp::EffectiveStressDilatation2D_Example</scope><name>SetTitle</name></member>
+      <member refid="classcsmp_1_1_effective_stress_dilatation2_d___example_1a33b51e12a9995dd5dc82c21729d27112" prot="public" virt="virtual"><scope>csmp::EffectiveStressDilatation2D_Example</scope><name>Specifications</name></member>
+      <member refid="classcsmp_1_1_effective_stress_dilatation2_d___example_1ac2a16db0791da61ee9282a997b714de8" prot="private" virt="non-virtual"><scope>csmp::EffectiveStressDilatation2D_Example</scope><name>verbose_</name></member>
+      <member refid="classcsmp_1_1_example_1ab414b9f392a222139d56428ad915e620" prot="public" virt="virtual"><scope>csmp::EffectiveStressDilatation2D_Example</scope><name>~Example</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

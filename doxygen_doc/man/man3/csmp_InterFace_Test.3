@@ -1,0 +1,179 @@
+.TH "csmp::InterFace_Test" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::InterFace_Test
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <InterFace_Test\&.h>\fP
+.PP
+Inherits \fBcsmp::Test\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual void \fBrun\fP () override"
+.br
+.ti -1c
+.RI "void \fBAssign_tests\fP ()"
+.br
+.ti -1c
+.RI "void \fBGeometry_tests\fP ()"
+.br
+.ti -1c
+.RI "void \fBNodeCoordinateMatrix_linear_test\fP ()"
+.br
+.ti -1c
+.RI "void \fBAssign_Geometry_quadratic_test\fP ()"
+.br
+.ti -1c
+.RI "void \fBAssign_Geometry_quadratic2_test\fP ()"
+.br
+.ti -1c
+.RI "void \fBAssign_tests_linear_3D\fP ()"
+.br
+.ti -1c
+.RI "void \fBConstructInterFaceIngredients\fP (\fBElement\fP< 2 > &e_in, \fBElement\fP< 2 > &e_out, \fBNode\fP< 2 > &n_in0, \fBNode\fP< 2 > &n_in1, \fBNode\fP< 2 > &n_in2, \fBNode\fP< 2 > &n_out0, \fBNode\fP< 2 > &n_out1, \fBNode\fP< 2 > &n_out2, \fBElement\fP< 2 > &e_nb_in1, \fBElement\fP< 2 > &e_nb_in2, \fBElement\fP< 2 > &e_nb_ou1, \fBElement\fP< 2 > &e_nb_ou2)"
+.br
+.RI "Data for test\&. "
+.ti -1c
+.RI "void \fBConstructInterFaceIngredients_quadratic\fP (\fBElement\fP< 2 > &e_in, \fBElement\fP< 2 > &e_out, \fBNode\fP< 2 > &n_in0, \fBNode\fP< 2 > &n_in1, \fBNode\fP< 2 > &n_in2, \fBNode\fP< 2 > &n_out0, \fBNode\fP< 2 > &n_out1, \fBNode\fP< 2 > &n_out2, \fBElement\fP< 2 > &e_nb_in1, \fBElement\fP< 2 > &e_nb_in2, \fBElement\fP< 2 > &e_nb_ou1, \fBElement\fP< 2 > &e_nb_ou2, \fBNode\fP< 2 > &n_in3, \fBNode\fP< 2 > &n_in4, \fBNode\fP< 2 > &n_in5, \fBNode\fP< 2 > &n_out3, \fBNode\fP< 2 > &n_out4, \fBNode\fP< 2 > &n_out5)"
+.br
+.ti -1c
+.RI "void \fBConstructInterFaceIngredients_3D\fP (\fBElement\fP< 3 > &e_in, \fBElement\fP< 3 > &e_out, \fBNode\fP< 3 > &n_in0, \fBNode\fP< 3 > &n_in1, \fBNode\fP< 3 > &n_in2, \fBNode\fP< 3 > &n_in4, \fBNode\fP< 3 > &n_out0, \fBNode\fP< 3 > &n_out1, \fBNode\fP< 3 > &n_out2, \fBNode\fP< 3 > &n_out4, \fBElement\fP< 3 > &e_nb_in1, \fBElement\fP< 3 > &e_nb_in2, \fBElement\fP< 3 > &e_nb_ou1, \fBElement\fP< 3 > &e_nb_ou2)"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::Test\fP
+.in +1c
+.ti -1c
+.RI "\fBTest\fP (std::ostream *osptr=0)"
+.br
+.ti -1c
+.RI "long \fBgetNumPassed\fP () const"
+.br
+.ti -1c
+.RI "long \fBgetNumFailed\fP () const"
+.br
+.ti -1c
+.RI "const std::ostream * \fBgetStream\fP () const"
+.br
+.ti -1c
+.RI "void \fBsetStream\fP (std::ostream *osptr)"
+.br
+.ti -1c
+.RI "void \fBsetName\fP (std::string testName)"
+.br
+.ti -1c
+.RI "std::string \fBgetName\fP () const"
+.br
+.ti -1c
+.RI "bool \fBhasName\fP () const"
+.br
+.ti -1c
+.RI "void \fBdo_succeed\fP ()"
+.br
+.ti -1c
+.RI "long \fBreport\fP () const"
+.br
+.ti -1c
+.RI "virtual void \fBreset\fP ()"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Member Functions inherited from \fBcsmp::Test\fP
+.in +1c
+.ti -1c
+.RI "void \fBdo_equal\fP (double expr, double value, double tol, const std::string &lbl, const char *fname, long lineno)"
+.br
+.ti -1c
+.RI "void \fBdo_test\fP (bool cond, const std::string &lbl, const char *fname, long lineno)"
+.br
+.ti -1c
+.RI "void \fBdo_fail\fP (const std::string &lbl, const char *fname, long lineno)"
+.br
+.in -1c
+
+Protected Attributes inherited from \fBcsmp::Test\fP
+.in +1c
+.ti -1c
+.RI "const char * \fBprefix_\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Tests the construction of \fBInterFace\fP via its constructors and reconstructors as well as the functionality of the interface\&.
+
+.PP
+\fBTodo\fP
+.RS 4
+only 2D so far; expand to 3D\&. 
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "void csmp::InterFace_Test::Assign_Geometry_quadratic2_test ()"
+
+.SS "Beginning Geometry Tests"
+
+.SS "void csmp::InterFace_Test::Assign_Geometry_quadratic_test ()"
+
+.SS "Beginning Geometry Tests"
+
+.SS "void csmp::InterFace_Test::Assign_tests ()"
+
+.SS "Beginning Use and Tests"
+Assign 0
+
+.PP
+Assign 1
+
+.PP
+Assign 2
+
+.PP
+Assign 3
+
+.PP
+Neighbour Testing
+.SS "void csmp::InterFace_Test::Assign_tests_linear_3D ()"
+
+.SS "Beginning Use and Tests for 3D"
+Assign 0
+
+.PP
+ASSIGN 1
+
+.PP
+ASSIGN 2
+.SS "void csmp::InterFace_Test::ConstructInterFaceIngredients (\fBElement\fP< 2 > & e_in, \fBElement\fP< 2 > & e_out, \fBNode\fP< 2 > & n_in0, \fBNode\fP< 2 > & n_in1, \fBNode\fP< 2 > & n_in2, \fBNode\fP< 2 > & n_out0, \fBNode\fP< 2 > & n_out1, \fBNode\fP< 2 > & n_out2, \fBElement\fP< 2 > & e_nb_in1, \fBElement\fP< 2 > & e_nb_in2, \fBElement\fP< 2 > & e_nb_ou1, \fBElement\fP< 2 > & e_nb_ou2)"
+
+.PP
+Data for test\&. Calibrating Neighbours
+.SS "void csmp::InterFace_Test::ConstructInterFaceIngredients_quadratic (\fBElement\fP< 2 > & e_in, \fBElement\fP< 2 > & e_out, \fBNode\fP< 2 > & n_in0, \fBNode\fP< 2 > & n_in1, \fBNode\fP< 2 > & n_in2, \fBNode\fP< 2 > & n_out0, \fBNode\fP< 2 > & n_out1, \fBNode\fP< 2 > & n_out2, \fBElement\fP< 2 > & e_nb_in1, \fBElement\fP< 2 > & e_nb_in2, \fBElement\fP< 2 > & e_nb_ou1, \fBElement\fP< 2 > & e_nb_ou2, \fBNode\fP< 2 > & n_in3, \fBNode\fP< 2 > & n_in4, \fBNode\fP< 2 > & n_in5, \fBNode\fP< 2 > & n_out3, \fBNode\fP< 2 > & n_out4, \fBNode\fP< 2 > & n_out5)"
+Calibrating Neighbours
+.SS "void csmp::InterFace_Test::Geometry_tests ()"
+
+.SS "Beginning Geometry Tests"
+
+.SS "void csmp::InterFace_Test::NodeCoordinateMatrix_linear_test ()"
+
+.SS "Beginning Geometry Tests"
+.SS "Beginning NodeCoordinateMatrix_Tests and Finite ELement shape functions"
+
+.SS "void csmp::InterFace_Test::run ()\fR [override]\fP, \fR [virtual]\fP"
+Testing:
+
+.PP
+\fBInterFace\fP creation and operations 
+.PP
+Implements \fBcsmp::Test\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

@@ -1,0 +1,140 @@
+\doxysection{csmp\+::Index\+Tracker Class Reference}
+\hypertarget{classcsmp_1_1_index_tracker}{}\label{classcsmp_1_1_index_tracker}\index{csmp::IndexTracker@{csmp::IndexTracker}}
+
+
+Keeps track of all \doxylink{structcsmp_1_1_index}{Index} objects once they have been registered.  
+
+
+
+
+{\ttfamily \#include $<$Index\+Tracker.\+h$>$}
+
+
+
+Collaboration diagram for csmp\+::Index\+Tracker\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=175pt]{classcsmp_1_1_index_tracker__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_index_tracker_a67c554f250ba3fe2353434ca947e9046}\label{classcsmp_1_1_index_tracker_a67c554f250ba3fe2353434ca947e9046} 
+std\+::map$<$ \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \texorpdfstring{$\ast$}{*}, std\+::string $>$\+::const\+\_\+iterator {\bfseries Indices\+Begin} () const
+\item 
+\Hypertarget{classcsmp_1_1_index_tracker_a64858ea9a5b722ec8e7a68a7d32f3339}\label{classcsmp_1_1_index_tracker_a64858ea9a5b722ec8e7a68a7d32f3339} 
+std\+::map$<$ \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \texorpdfstring{$\ast$}{*}, std\+::string $>$\+::const\+\_\+iterator {\bfseries Indices\+End} () const
+\item 
+\Hypertarget{classcsmp_1_1_index_tracker_a16cc894f0e6e980b0b4adc7a002c0f06}\label{classcsmp_1_1_index_tracker_a16cc894f0e6e980b0b4adc7a002c0f06} 
+void {\bfseries Attach} (\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \texorpdfstring{$\ast$}{*}new\+Index, std\+::string parameter\+Name)
+\begin{DoxyCompactList}\small\item\em Called when a new \doxylink{structcsmp_1_1_index}{Index} is issued. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_index_tracker_a6cf491413a4fce44db086a25038727c4}{Attach}} (\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \texorpdfstring{$\ast$}{*}new\+Index, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \texorpdfstring{$\ast$}{*}existing\+Index)
+\begin{DoxyCompactList}\small\item\em Called when a new \doxylink{structcsmp_1_1_index}{Index} is copied using an existing \doxylink{structcsmp_1_1_index}{Index}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_index_tracker_a12c60cf0bf7c1f496809ca15b7f60e07}{Detach}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \texorpdfstring{$\ast$}{*}existing\+Index)
+\begin{DoxyCompactList}\small\item\em Called when an existing \doxylink{structcsmp_1_1_index}{Index} is destroyed. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_index_tracker_a23df3b32dc0719508081ebf6fa85319f}\label{classcsmp_1_1_index_tracker_a23df3b32dc0719508081ebf6fa85319f} 
+void {\bfseries Detach} (std\+::string parameter\+Name)
+\begin{DoxyCompactList}\small\item\em Called when an existing \doxylink{structcsmp_1_1_index}{Index} is destroyed. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_index_tracker_ac2c0883b5bfc8e41895be21c32b66006}\label{classcsmp_1_1_index_tracker_ac2c0883b5bfc8e41895be21c32b66006} 
+void {\bfseries Detach\+From\+All} ()
+\begin{DoxyCompactList}\small\item\em Detaches itself from all \doxylink{structcsmp_1_1_index}{Index} objects; this method is called upon destruction. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_index_tracker_aab0c0d4cbc7ccf5495c08f87e1909aeb}\label{classcsmp_1_1_index_tracker_aab0c0d4cbc7ccf5495c08f87e1909aeb} 
+void {\bfseries Out} () const
+\begin{DoxyCompactList}\small\item\em print all currently registered \doxylink{structcsmp_1_1_index}{Index} objects \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_index_tracker_a6853b2d5067ff7319714d5c92467865f}\label{classcsmp_1_1_index_tracker_a6853b2d5067ff7319714d5c92467865f} 
+{\bfseries Index\+Tracker} (const \mbox{\hyperlink{classcsmp_1_1_index_tracker}{Index\+Tracker}} \&)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Keeps track of all \doxylink{structcsmp_1_1_index}{Index} objects once they have been registered. 
+
+Serves \doxylink{classcsmp_1_1_property_database}{Property\+Database} to keep all existing \doxylink{structcsmp_1_1_index}{Index} objects objects up to date, which is necessary when new variables are created at runtime.
+
+\begin{DoxyNote}{Note}
+index tracking is necessary because some classes have indices as members. These objects can get invalidated when new variables of the same kind and place. are created. If so, for instance, the 5th scalar on the node might become the 10th.
+\end{DoxyNote}
+By tracking all \doxylink{structcsmp_1_1_index}{Index} objects that exist in a model, these can be updated by the \doxylink{classcsmp_1_1_property_database}{Property\+Database} everytime a variable is created or deleted.
+
+\begin{DoxyNote}{Note}
+this implementation is based on the "{}\+Observer"{} design pattern.
+\end{DoxyNote}
+\begin{DoxyAuthor}{Author}
+P. Lang 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+9/25/2012
+\end{DoxyDate}
+TODO\+: \begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000011}{Todo}}]SKM 2/2017 -\/ The \doxylink{classcsmp_1_1_index_tracker}{Index\+Tracker} -\/\texorpdfstring{$>$}{>} update methodology seems to fail if \doxylink{classcsmp_1_1_array_variable}{Array\+Variable} objects of different length are created at runtime; fix or rethink approach.\end{DoxyRefDesc}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_index_tracker_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_index_tracker_a6cf491413a4fce44db086a25038727c4}\index{csmp::IndexTracker@{csmp::IndexTracker}!Attach@{Attach}}
+\index{Attach@{Attach}!csmp::IndexTracker@{csmp::IndexTracker}}
+\doxysubsubsection{\texorpdfstring{Attach()}{Attach()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_index_tracker_a6cf491413a4fce44db086a25038727c4} 
+void csmp\+::\+Index\+Tracker\+::\+Attach (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \texorpdfstring{$\ast$}{*}}]{new\+Index}{, }\item[{const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \texorpdfstring{$\ast$}{*}}]{existing\+Index}{}\end{DoxyParamCaption})}
+
+
+
+Called when a new \doxylink{structcsmp_1_1_index}{Index} is copied using an existing \doxylink{structcsmp_1_1_index}{Index}. 
+
+Attaches an existing index object to a new index. Reports if the existing index object is orphan, i.\+e. has no name because it has not been tracked before.
+
+In this case, the parameter is called \textquotesingle{}unspecified\textquotesingle{}. This will be picked up by the property database at the next update attempt. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=344pt]{classcsmp_1_1_index_tracker_a6cf491413a4fce44db086a25038727c4_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_index_tracker_a6cf491413a4fce44db086a25038727c4_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_index_tracker_a12c60cf0bf7c1f496809ca15b7f60e07}\index{csmp::IndexTracker@{csmp::IndexTracker}!Detach@{Detach}}
+\index{Detach@{Detach}!csmp::IndexTracker@{csmp::IndexTracker}}
+\doxysubsubsection{\texorpdfstring{Detach()}{Detach()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_index_tracker_a12c60cf0bf7c1f496809ca15b7f60e07} 
+void csmp\+::\+Index\+Tracker\+::\+Detach (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \texorpdfstring{$\ast$}{*}}]{existing\+Index}{}\end{DoxyParamCaption})}
+
+
+
+Called when an existing \doxylink{structcsmp_1_1_index}{Index} is destroyed. 
+
+Detach index object as identified by a (unique) pointer to it. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=344pt]{classcsmp_1_1_index_tracker_a12c60cf0bf7c1f496809ca15b7f60e07_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_index_tracker_a12c60cf0bf7c1f496809ca15b7f60e07_icgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/model/Index\+Tracker.\+h\item 
+source/modules/model/Index\+Tracker.\+cpp\end{DoxyCompactItemize}

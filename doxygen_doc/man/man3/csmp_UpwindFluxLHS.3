@@ -1,0 +1,66 @@
+.TH "csmp::UpwindFluxLHS< dim >" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::UpwindFluxLHS< dim >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <UpwindFluxLHS\&.h>\fP
+.PP
+Inherits \fBcsmp::MatrixOperator< dim >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBUpwindFluxLHS\fP (const \fBcsmp::INDEX\fP< SCALAR, FACET_INTEGRATION_POINT > &vol_flow_across_facet)"
+.br
+.ti -1c
+.RI "virtual void \fBAccumulateFiniteVolume\fP (const \fBNode\fP< dim > &, \fBSparseMatrix\fP &) const"
+.br
+.ti -1c
+.RI "virtual void \fBAccumulateStencil\fP (const \fBElement\fP< dim > &, \fBSparseMatrix\fP &) const"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::MatrixOperator< dim >\fP
+.in +1c
+.ti -1c
+.RI "void \fBMultiplyWithTimeIncrement\fP (double dt)"
+.br
+.RI "includes the time increment in the multiplication factor for this operator "
+.ti -1c
+.RI "void \fBFactor\fP (double value)"
+.br
+.RI "set factor to achieve multiplication with time increment (fac=dt), subtraction (fac=-1), multiplication or division (fac=1/value) "
+.ti -1c
+.RI "double \fBFactor\fP () const"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim>
+.br
+class csmp::UpwindFluxLHS< dim >"First-order upwind flux\&.
+
+.PP
+Incoming fluxes create off-diagonal couplings\&. Outgoing fluxes are added to the matrix diagonal\&.
+
+.PP
+TODO: create version for tensor permeabilities where the flux is actually calculated from the pressure gradient 
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim> void \fBcsmp::UpwindFluxLHS\fP< dim >::AccumulateFiniteVolume (const \fBNode\fP< dim > & fv, \fBSparseMatrix\fP & mat) const\fR [virtual]\fP"
+
+.PP
+Implements \fBcsmp::MatrixOperator< dim >\fP\&.
+.SS "template<uint32_t dim> void \fBcsmp::UpwindFluxLHS\fP< dim >::AccumulateStencil (const \fBElement\fP< dim > & fe, \fBSparseMatrix\fP & mat) const\fR [virtual]\fP"
+Upwinded first-order in space and time\&. 
+.PP
+Implements \fBcsmp::MatrixOperator< dim >\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

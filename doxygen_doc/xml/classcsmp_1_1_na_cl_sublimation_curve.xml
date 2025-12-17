@@ -1,0 +1,173 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_na_cl_sublimation_curve" kind="class" language="C++" prot="public">
+    <compoundname>csmp::NaClSublimationCurve</compoundname>
+    <includes refid="_na_cl_sublimation_curve_8h" local="yes">eos/h2o_nacl/NaClSublimationCurve.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_sublimation_curve_1a7060055011d627ab4d93dffff9875972" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::NaClSublimationCurve::temperature_</definition>
+        <argsstring></argsstring>
+        <name>temperature_</name>
+        <qualifiedname>csmp::NaClSublimationCurve::temperature_</qualifiedname>
+        <briefdescription>
+<para>reference to temperature [C] in flow code </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSublimationCurve.h" line="28" column="18" bodyfile="source/includes/eos/NaClSublimationCurve.h" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_sublimation_curve_1a0bfc4bd5fb05b296815fa87d4f14a4a7" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSublimationCurve::tcurrent_</definition>
+        <argsstring></argsstring>
+        <name>tcurrent_</name>
+        <qualifiedname>csmp::NaClSublimationCurve::tcurrent_</qualifiedname>
+        <briefdescription>
+<para>temperature [C] for internal use </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSublimationCurve.h" line="29" column="12" bodyfile="source/includes/eos/NaClSublimationCurve.h" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_sublimation_curve_1a95f0e3ed363755938abe3fd3f2935aeb" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_triple_point_na_cl" kindref="compound">TriplePointNaCl</ref></type>
+        <definition>TriplePointNaCl csmp::NaClSublimationCurve::tp_nacl</definition>
+        <argsstring></argsstring>
+        <name>tp_nacl</name>
+        <qualifiedname>csmp::NaClSublimationCurve::tp_nacl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSublimationCurve.h" line="31" column="21" bodyfile="source/includes/eos/NaClSublimationCurve.h" bodystart="31" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_sublimation_curve_1ae18bc0284b96a2896b9abd03a221de80" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::NaClSublimationCurve::NaClSublimationCurve</definition>
+        <argsstring>(const double &amp;externaltemperature)</argsstring>
+        <name>NaClSublimationCurve</name>
+        <qualifiedname>csmp::NaClSublimationCurve::NaClSublimationCurve</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>externaltemperature</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>custom constructor <simplesect kind="attention"><para>Use only this conctructor. <ref refid="classcsmp_1_1_na_cl_sublimation_curve" kindref="compound">NaClSublimationCurve</ref> computes the vapor pressure of NaCl sublimation as a function of temperature. The latter is typically computed somewhere outside this class. By using const ref to that external variable as constructor argument, <ref refid="classcsmp_1_1_na_cl_sublimation_curve" kindref="compound">NaClSublimationCurve</ref> is able to decipher the current temperature value when being queried for the vapor pressure. Only this constructor is allowed to ensure that functionality, default constructor has been made private. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSublimationCurve.h" line="18" column="5" bodyfile="source/modules/eos/h2o_nacl/NaClSublimationCurve.cpp" bodystart="12" bodyend="16"/>
+        <referencedby refid="classcsmp_1_1_na_cl_saturated_vapor_1abd993e8f13b163d4832a507285effdfa" compoundref="_na_cl_saturated_vapor_8cpp" startline="14" endline="56">csmp::NaClSaturatedVapor::NaClSaturatedVapor</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_sublimation_curve_1aab023556cc2fd9e43744b1ea937c5c49" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::NaClSublimationCurve::~NaClSublimationCurve</definition>
+        <argsstring>()</argsstring>
+        <name>~NaClSublimationCurve</name>
+        <qualifiedname>csmp::NaClSublimationCurve::~NaClSublimationCurve</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>destructor </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSublimationCurve.h" line="20" column="5" bodyfile="source/modules/eos/h2o_nacl/NaClSublimationCurve.cpp" bodystart="19" bodyend="21"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_sublimation_curve_1a22286f2ffa64a8e6c272d0a5b144858f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NaClSublimationCurve::VaporPressure</definition>
+        <argsstring>()</argsstring>
+        <name>VaporPressure</name>
+        <qualifiedname>csmp::NaClSublimationCurve::VaporPressure</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>vapor pressure at sublimation for given temperature (eqn. ? of Driesner &amp; Heinrich (2007))</para>
+<para><simplesect kind="attention"><para>No range check is performed, function makes only sense below NaCl triple point temperature (800.7 C). </para>
+</simplesect>
+<xrefsect id="todo_1_todo000060"><xreftitle>Todo</xreftitle><xrefdescription><para>Implement range checking and error handling </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSublimationCurve.h" line="22" column="12" bodyfile="source/modules/eos/h2o_nacl/NaClSublimationCurve.cpp" bodystart="29" bodyend="33"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_sublimation_curve_1a56976295313d09866ec8eefa02f0297d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::NaClSublimationCurve::NaClSublimationCurve</definition>
+        <argsstring>()</argsstring>
+        <name>NaClSublimationCurve</name>
+        <qualifiedname>csmp::NaClSublimationCurve::NaClSublimationCurve</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSublimationCurve.h" line="26" column="5"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Vapor pressure on the NaCl sublimation curve. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>Thomas Driesner, ETH Zuerich, <ulink url="mailto:thomas.driesner@erdw.ethz.ch">thomas.driesner@erdw.ethz.ch</ulink></para>
+</simplesect>
+</para>
+<sect1 id="compare_floats_8h_1motivation">
+<title>Motivation</title><para>&quot;NaClSublimationCurve&quot; is legacy code from Thomas Driesner&apos;s developments for the H2O-NaCl system, and computes the vapor pressure at sublimation (NaCl vapor / halite phase transition). It can be used standalone if only this information is needed. Otherwise, it is only used in the CSMP++ context for building accurate lookup tables for the H2O-NaCl system, which are significantly faster if the full system properties are needed.</para>
+<para>Details of the underlying formulation can be found in</para>
+<para>Driesner T. and Heinrich C.A. (2007): The system H2O-NaCl. Part I: Correlation formulae for phase relations in temperature-pressure-molefraction space from 0 to 1000oC, 0 to 5000 bar, and 0 to 1 XNaCl. Geochimica et Cosmochimica Acta 71, 4880-4901.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_upwind_control_visitor_1usage">
+<title>Usage</title><para>Construct an instance of &quot;NaClSublimationCurve&quot; with the temperature (in C) as constructor argument. &quot;NaClSublimationCurve&quot; has an internal mechanism to make sure that it always uses the current value of that temperature as they exist in your code. Public member names should be self-explanatory, I hope.</para>
+<para><programlisting><codeline><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>t(somevalue);<sp/></highlight><highlight class="comment">//<sp/>temperature<sp/>[C]<sp/>in<sp/>user&apos;s<sp/>application</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">...</highlight></codeline>
+<codeline><highlight class="normal">NaClSublimationCurve<sp/>naclboil(t);<sp/></highlight></codeline>
+<codeline><highlight class="normal">...</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>here,<sp/>t<sp/>may<sp/>be<sp/>updated</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">...</highlight></codeline>
+<codeline><highlight class="normal">cout<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;new<sp/>NaCl<sp/>sublimation<sp/>pressure:<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/>naclboil.VaporPressure()<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;Pa\n&quot;</highlight><highlight class="normal">;<sp/></highlight><highlight class="comment">//<sp/>compute<sp/>and<sp/>output<sp/>vapor<sp/>pressure<sp/>on<sp/>sublimation<sp/>curve<sp/>[Pa]<sp/>for<sp/>new<sp/>temperature</highlight></codeline>
+</programlisting></para>
+</sect1>
+<sect1 id="classcsmp_1_1_upwind_control_visitor_1issues">
+<title>Known issues</title><para>The underlying equations are valid only in a restricted temperature-pressure range; range checking and error handling has not yet been implemented</para>
+</sect1>
+<sect1 id="compare_floats_8h_1testing">
+<title>Testing</title><para>tested against CSP version (ok), which in turn was tested in the period before publication in 2007, prior to writing this documentation, no details are available anymore </para>
+</sect1>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::NaClSublimationCurve</label>
+        <link refid="classcsmp_1_1_na_cl_sublimation_curve"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/eos/NaClSublimationCurve.h" line="13" column="3" bodyfile="source/includes/eos/NaClSublimationCurve.h" bodystart="14" bodyend="32"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_na_cl_sublimation_curve_1ae18bc0284b96a2896b9abd03a221de80" prot="public" virt="non-virtual"><scope>csmp::NaClSublimationCurve</scope><name>NaClSublimationCurve</name></member>
+      <member refid="classcsmp_1_1_na_cl_sublimation_curve_1a56976295313d09866ec8eefa02f0297d" prot="private" virt="non-virtual"><scope>csmp::NaClSublimationCurve</scope><name>NaClSublimationCurve</name></member>
+      <member refid="classcsmp_1_1_na_cl_sublimation_curve_1a0bfc4bd5fb05b296815fa87d4f14a4a7" prot="private" virt="non-virtual"><scope>csmp::NaClSublimationCurve</scope><name>tcurrent_</name></member>
+      <member refid="classcsmp_1_1_na_cl_sublimation_curve_1a7060055011d627ab4d93dffff9875972" prot="private" virt="non-virtual"><scope>csmp::NaClSublimationCurve</scope><name>temperature_</name></member>
+      <member refid="classcsmp_1_1_na_cl_sublimation_curve_1a95f0e3ed363755938abe3fd3f2935aeb" prot="private" virt="non-virtual"><scope>csmp::NaClSublimationCurve</scope><name>tp_nacl</name></member>
+      <member refid="classcsmp_1_1_na_cl_sublimation_curve_1a22286f2ffa64a8e6c272d0a5b144858f" prot="public" virt="non-virtual"><scope>csmp::NaClSublimationCurve</scope><name>VaporPressure</name></member>
+      <member refid="classcsmp_1_1_na_cl_sublimation_curve_1aab023556cc2fd9e43744b1ea937c5c49" prot="public" virt="non-virtual"><scope>csmp::NaClSublimationCurve</scope><name>~NaClSublimationCurve</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

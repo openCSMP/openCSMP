@@ -1,0 +1,649 @@
+.TH "csmp::HeterogeneityAndRateAwareModel< dim >" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::HeterogeneityAndRateAwareModel< dim >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <HeterogeneityAndRateAwareModel\&.h>\fP
+.PP
+Inherits \fBcsmp::TwoPhaseModel< dim >\fP\&.
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "enum \fBFLOW_DIRECTION\fP { \fBHORIZONTAL\fP, \fBVERTICAL\fP }"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBHeterogeneityAndRateAwareModel\fP (const \fBPropertyDatabase\fP< dim > &database, const bool sw_ro_mu_placement=false)"
+.br
+.ti -1c
+.RI "int32_t \fBRockType\fP (const \fBElement\fP< dim > &) const"
+.br
+.RI "return integer key of rocktype "
+.ti -1c
+.RI "void \fBInitializeVelocity\fP (const \fBElement\fP< dim > &)"
+.br
+.RI "reads vt and makes some initiaisations "
+.ti -1c
+.RI "virtual void \fBInitialize\fP (const \fBElement\fP< dim > &)"
+.br
+.ti -1c
+.RI "void \fBInitialize\fP (long rocktype, double Sw, const \fBVectorVariable\fP< dim > &vt)"
+.br
+.RI "updating model parameters for testing and plotting "
+.ti -1c
+.RI "virtual double \fBEffectiveSaturation\fP () const"
+.br
+.RI "average effective saturation as required by 2-phase model "
+.ti -1c
+.RI "virtual double \fBkrw_Phase\fP () const"
+.br
+.RI "heterogeneity-aware, rate-dependent versions, Nc is calculated in the background "
+.ti -1c
+.RI "virtual double \fBkrn_Phase\fP () const"
+.br
+.ti -1c
+.RI "virtual double \fBpc_Phase\fP () const"
+.br
+.RI "capillary pressure of the non-wetting phase; cap value is applied "
+.ti -1c
+.RI "double \fBpc_Phase_at\fP (double sw) const"
+.br
+.ti -1c
+.RI "virtual double \fBdpcds_Phase\fP () const"
+.br
+.RI "numeric implementation of capillary pressure derivative; cap value is applied "
+.ti -1c
+.RI "double \fBdpcds_Phase_at\fP (double sw) const"
+.br
+.ti -1c
+.RI "virtual double \fBMaxFractionalFlowDerivative\fP () const"
+.br
+.RI "for the wetting phase "
+.ti -1c
+.RI "void \fBWriteRelativePermeabilityTable\fP (const char *filename, long rocktype, const \fBVectorVariable\fP< dim > &vt)"
+.br
+.RI "Outputs the relperms for the current model initialisation to a plot for visual examination; filename appends rocktype and Ncap calculated\&. "
+.ti -1c
+.RI "virtual void \fBOut\fP (uint32_t phase) const"
+.br
+.RI "default is the wetting phase "
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::TwoPhaseModel< dim >\fP
+.in +1c
+.ti -1c
+.RI "\fBTwoPhaseModel\fP (const \fBPropertyDatabase\fP< dim > &database, double viscosity_nw, double viscosity_w, double density_nw, double density_w, const char *kkk, const char *sat, const char *snr, const char *swr, const bool sw_ro_mu_placement=true)"
+.br
+.RI "for fixed values of fluid viscosities and densities "
+.ti -1c
+.RI "\fBTwoPhaseModel\fP (const \fBPropertyDatabase\fP< dim > &database, const char *kkk, const char *mun, const char *muw, const char *rhn, const char *rhw, const char *sat, const char *snr, const char *swr, const bool sw_ro_mu_placement=true)"
+.br
+.RI "for interpolated values "
+.ti -1c
+.RI "virtual void \fBInitializeAndStore\fP (\fBElement\fP< dim > &e)"
+.br
+.RI "read and modify element properties when the saturation functions are history dependent "
+.ti -1c
+.RI "virtual void \fBInitializeForBaryCenter\fP (const \fBElement\fP< dim > &e)"
+.br
+.RI "interpolates node properties to element barycenter "
+.ti -1c
+.RI "virtual void \fBInitializeForNode\fP (const \fBElement\fP< dim > &e, uint32_t node)"
+.br
+.ti -1c
+.RI "virtual void \fBInitializeForIntegrationPoint\fP (uint32_t ip, const \fBElement\fP< dim > &e)"
+.br
+.RI "finite element integration points "
+.ti -1c
+.RI "virtual void \fBInitializeForFacetIntegrationPoint\fP (uint32_t facet, uint32_t ip, const \fBElement\fP< dim > &e)"
+.br
+.RI "finite volume facets "
+.ti -1c
+.RI "virtual void \fBInitializeForSectorIntegrationPoint\fP (uint32_t sector, uint32_t ip, const \fBElement\fP< dim > &e)"
+.br
+.RI "finite volume sectors "
+.ti -1c
+.RI "virtual void \fBInterpolateNodeProperties\fP (const \fBElement\fP< dim > &e)"
+.br
+.ti -1c
+.RI "void \fBSaturationWettingPhase\fP (double s_wetting)"
+.br
+.RI "to set properties on the fly for compressible flow modelling "
+.ti -1c
+.RI "void \fBViscosityNonWettingPhase\fP (double visc)"
+.br
+.ti -1c
+.RI "void \fBViscosityWettingPhase\fP (double visc)"
+.br
+.ti -1c
+.RI "void \fBDensityNonWettingPhase\fP (double dens)"
+.br
+.ti -1c
+.RI "void \fBDensityWettingPhase\fP (double dens)"
+.br
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBWettingPhaseSaturationKey\fP () const"
+.br
+.RI "Return of keys for calculation of two phase mobilities in transport\&. "
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBNonWettingPhaseSaturationKey\fP () const"
+.br
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBTotalMobilityKey\fP () const"
+.br
+.ti -1c
+.RI "double \fBPermeability\fP () const"
+.br
+.RI "accessors "
+.ti -1c
+.RI "void \fBPermeability\fP (double permeability)"
+.br
+.ti -1c
+.RI "\fBTensorVariable\fP< dim > \fBTensorPermeability\fP () const"
+.br
+.ti -1c
+.RI "void \fBTensorPermeability\fP (\fBTensorVariable\fP< dim > permeability)"
+.br
+.ti -1c
+.RI "double \fBSwr\fP () const"
+.br
+.ti -1c
+.RI "double \fBSnr\fP () const"
+.br
+.ti -1c
+.RI "void \fBSwr\fP (double swr)"
+.br
+.ti -1c
+.RI "void \fBSnr\fP (double snr)"
+.br
+.ti -1c
+.RI "double \fBViscosityNonWettingPhase\fP () const"
+.br
+.RI "fluid properties "
+.ti -1c
+.RI "double \fBViscosityWettingPhase\fP () const"
+.br
+.ti -1c
+.RI "double \fBDensityNonWettingPhase\fP () const"
+.br
+.ti -1c
+.RI "double \fBDensityWettingPhase\fP () const"
+.br
+.ti -1c
+.RI "double \fBSaturation\fP (uint32_t phase) const"
+.br
+.ti -1c
+.RI "double \fBMobilityPhase\fP (uint32_t phase) const"
+.br
+.ti -1c
+.RI "double \fBViscosityRatio\fP () const"
+.br
+.ti -1c
+.RI "double \fBTotalMobility\fP () const"
+.br
+.RI "sum of all phase mobilities * k "
+.ti -1c
+.RI "double \fBTotalMobilityMultiplier\fP () const"
+.br
+.RI "sum of all phase mobilities "
+.ti -1c
+.RI "double \fBDiffusionMultiplier\fP (size_t phase) const"
+.br
+.ti -1c
+.RI "double \fBCapillaryDiffusionMultiplier\fP () const"
+.br
+.RI "driven by capillary pressure gradient "
+.ti -1c
+.RI "double \fBGravityTerm\fP () const"
+.br
+.RI "multipliers for gravity-driven flow (advection multiplier and source term) "
+.ti -1c
+.RI "double \fBGravityMultiplier_G\fP () const"
+.br
+.ti -1c
+.RI "double \fBGravityMultiplier_dGds\fP () const"
+.br
+.ti -1c
+.RI "double \fBG\fP () const"
+.br
+.RI "G multiplier\&. "
+.ti -1c
+.RI "double \fBAdvectionMultiplier\fP () const"
+.br
+.RI "multiplier for advection viscosity coefficient in the case of non-linear advection "
+.ti -1c
+.RI "virtual double \fBDiffusionCharacteristic\fP (size_t phase) const"
+.br
+.RI "linearized diffusion multiplier for large-timestep calculations "
+.ti -1c
+.RI "virtual double \fBShockSpeed\fP () const"
+.br
+.RI "linearized fractional flow derivative "
+.ti -1c
+.RI "virtual double \fBShockHeight\fP () const"
+.br
+.ti -1c
+.RI "void \fBShockSpeedHeight\fP (double &speed, double &height) const"
+.br
+.ti -1c
+.RI "double \fBMaxCapillaryPressure\fP (uint32_t phase=1U) const"
+.br
+.RI "maximum value of dpcdS "
+.ti -1c
+.RI "virtual double \fBSeffToSw\fP () const"
+.br
+.RI "return wetting-phase saturation based on effective saturation "
+.ti -1c
+.RI "virtual double \fBSeffToSw\fP (double \fBseff\fP) const"
+.br
+.RI "return wetting-phase saturation based on effective saturation ( useful for numerical calculations ) "
+.ti -1c
+.RI "double \fBf_Phase\fP (uint32_t phase) const"
+.br
+.RI "fractional flow "
+.ti -1c
+.RI "double \fBfw_at\fP (double sw) const"
+.br
+.RI "fractional flow of water at water saturation sw "
+.ti -1c
+.RI "double \fBfn_at\fP (double sw) const"
+.br
+.ti -1c
+.RI "virtual double \fBdkrnds_Phase\fP () const"
+.br
+.RI "derivatives of relative permeabilities "
+.ti -1c
+.RI "virtual double \fBdkrwds_Phase\fP () const"
+.br
+.RI "derivatives of relative permeabilities "
+.ti -1c
+.RI "virtual double \fBdlnds\fP () const"
+.br
+.RI "derivative of non-wetting phase mobility "
+.ti -1c
+.RI "virtual double \fBdlwds\fP () const"
+.br
+.RI "derivative of wetting phase mobility "
+.ti -1c
+.RI "virtual double \fBSw_Phase\fP (double \fBpc_Phase\fP) const"
+.br
+.RI "inverse capillary pressure function "
+.ti -1c
+.RI "virtual double \fBdsdpc_Phase\fP (double \fBpc_Phase\fP) const"
+.br
+.RI "derivatives of inverse capillary pressure function "
+.ti -1c
+.RI "virtual double \fBdfds\fP () const"
+.br
+.RI "derivative of fractional flow (used in advection multiplier); note that fw+fn=1, dfw_dsw=dfn_dsn "
+.ti -1c
+.RI "virtual double \fBdGds\fP () const"
+.br
+.RI "derivatives of gravitational flow (advection multipliers) "
+.ti -1c
+.RI "double \fBmobility_w_at\fP (double) const"
+.br
+.RI "Numerical derivatives\&. "
+.ti -1c
+.RI "double \fBmobility_n_at\fP (double) const"
+.br
+.ti -1c
+.RI "double \fBkrw_at\fP (double) const"
+.br
+.ti -1c
+.RI "double \fBkrn_at\fP (double) const"
+.br
+.ti -1c
+.RI "double \fBdkrwds_at\fP (double) const"
+.br
+.ti -1c
+.RI "double \fBdkrnds_at\fP (double) const"
+.br
+.ti -1c
+.RI "double \fBdfds_at\fP (double se) const"
+.br
+.ti -1c
+.RI "double \fBG_at\fP (double se) const"
+.br
+.ti -1c
+.RI "double \fBpc_at\fP (double se) const"
+.br
+.ti -1c
+.RI "double \fBdpcds_at\fP (double se) const"
+.br
+.ti -1c
+.RI "double \fBSw_at\fP (double se) const"
+.br
+.ti -1c
+.RI "double \fBdsdpc_at\fP (double se) const"
+.br
+.ti -1c
+.RI "virtual double \fBdlwds_numerical\fP (double \fBh\fP=0\&.001) const"
+.br
+.RI "Numerical derivatives\&. "
+.ti -1c
+.RI "virtual double \fBdlnds_numerical\fP (double \fBh\fP=0\&.001) const"
+.br
+.RI "derivative of non-wetting phase mobility "
+.ti -1c
+.RI "virtual double \fBdkrwds_numerical\fP (double \fBh\fP=0\&.001) const"
+.br
+.ti -1c
+.RI "virtual double \fBdkrnds_numerical\fP (double \fBh\fP=0\&.001) const"
+.br
+.ti -1c
+.RI "virtual double \fBdfds_numerical\fP (double \fBh\fP=0\&.001) const"
+.br
+.ti -1c
+.RI "virtual double \fBdGds_numerical\fP (double \fBh\fP=0\&.000001) const"
+.br
+.ti -1c
+.RI "virtual double \fBdpcds_numerical\fP (double \fBh\fP=0\&.00001) const"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "enum csmp::HeterogeneityAndRateAwareModel::FLOW_DIRECTION \fBflow_direction_\fP"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Attributes inherited from \fBcsmp::TwoPhaseModel< dim >\fP
+.in +1c
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBperm_key_\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBsat_key_\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBsnr_key_\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBswr_key_\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBift_key_\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBmun_key_\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBmuw_key_\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBrhw_key_\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBrhn_key_\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBlt_key_\fP"
+.br
+.ti -1c
+.RI "double \fBswr_\fP"
+.br
+.ti -1c
+.RI "double \fBsnr_\fP"
+.br
+.ti -1c
+.RI "double \fBk_\fP"
+.br
+.ti -1c
+.RI "double \fBift_\fP"
+.br
+.ti -1c
+.RI "double \fBmun_\fP"
+.br
+.ti -1c
+.RI "double \fBmuw_\fP"
+.br
+.ti -1c
+.RI "double \fBrhn_\fP"
+.br
+.ti -1c
+.RI "double \fBrhw_\fP"
+.br
+.ti -1c
+.RI "\fBTensorVariable\fP< dim > \fBK_\fP"
+.br
+.ti -1c
+.RI "double \fBsat_\fP"
+.br
+.ti -1c
+.RI "double \fBseff_\fP"
+.br
+.ti -1c
+.RI "const double \fBacc_gravity_\fP"
+.br
+.ti -1c
+.RI "const double \fBtolerance_\fP"
+.br
+.ti -1c
+.RI "const double \fBMAX_CAPILLARY_PRESSURE_\fP"
+.br
+.ti -1c
+.RI "const double \fBMAX_CAPILLARY_PRESSURE_SLOPE_\fP"
+.br
+.ti -1c
+.RI "const bool \fBinterpolate_fluid_properties_\fP"
+.br
+.ti -1c
+.RI "const bool \fBsw_ro_mu_placement_\fP"
+.br
+.ti -1c
+.RI "bool \fBtensor_permeability_\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim>
+.br
+class csmp::HeterogeneityAndRateAwareModel< dim >"Maartje Boons & Sally Benson (Stanford visit May 16-23, 2019), model for a layered composite\&. Material parameters are inferred from rocktype\&. The composite is a dual of averages for the high-k laminations and the w-k ones\&.
+
+.PP
+\fBModel\fP Concept
+
+.PP
+.IP "\(bu" 2
+compute the flow rate dependent saturations in the sublayers of the composite
+.IP "  \(bu" 4
+end-member cases:
+.IP "    \(bu" 6
+viscous limit (VL) where all saturations are the same, i\&.e\&. the saturation is uniform and equal to that of the cell
+.IP "    \(bu" 6
+CL where pc(sw_cell_average) is the same everywhere, but the saturations in the layers reflect their pc curves these limiting cases are not directionaly dependent
+.PP
+
+.PP
+
+.IP "\(bu" 2
+compute the relperms, layer by layer
+.IP "\(bu" 2
+apply averaging to find the horizontal (weighted mean) and vertical (harmonic mean) relative permeability pairs
+.IP "\(bu" 2
+since this model does drainage only, relperm effects of spontaneous imbibition can be ignored
+.PP
+
+.PP
+Implementation
+
+.PP
+.IP "\(bu" 2
+extended curve fitting and interpolation between the curves
+.IP "\(bu" 2
+there are only 2 flow directions: horizontal and vertical, switch occurs at 45o
+.IP "\(bu" 2
+the anisotropy of the absolute permeability, is treated by scaling the vertical relative permeabilities with Kv/Kh ratio
+.IP "\(bu" 2
+capillary pressure is also averaged, but for the vertical CL case a Brooks-Corey model is used, parameterised with the properties of the low permeability layer\&.
+.IP "\(bu" 2
+for primary drainage, the capillary entry pressure, pd of the lowest permeability layer is used
+.PP
+
+.PP
+see Maple worksheet 'BHP/Stanford-visit/IMPLEMENTATION/HeterogeneityAwareSaturationFunctions'
+
+.PP
+\fBNote\fP
+.RS 4
+thus far, this is a drainage only model 
+
+.PP
+an alternative capillary number: k ||grad p|| / sigma is used to get around the viscosity problem
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+MUST WE BLEND BETWEEN HORIZONTAL AND VERTICAL FLOW?
+.RE
+.PP
+
+.PP
+\fBTodo\fP
+.RS 4
+: perhaps define irreducible water saturation and use it in relperm model 
+
+.PP
+: check how this can be handled efficiently for a suite of composite rocktypes 
+
+.PP
+: think about what parameters to keep rather than using functions to compute them on the fly when needed
+.RE
+.PP
+
+.PP
+\fBTodo\fP
+.RS 4
+: change FlowRateDependentLayerSaturations that it deals with horizontal and vertical flow and all funky cases
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim> double \fBcsmp::HeterogeneityAndRateAwareModel\fP< dim >::dpcds_Phase () const\fR [virtual]\fP"
+
+.PP
+numeric implementation of capillary pressure derivative; cap value is applied Capillary pressure - saturation derivative estimated numerically\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+the capillary pressure saturation derivative is capped to a minimum value of 10 bars/m to limit slowdown of simulator during pc spreading\&.
+.RE
+.PP
+\fBNote\fP
+.RS 4
+this method is never called by Shao's FECFVM simulator as it only uses the absolute values of pc\&.
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+dpcdsw is zero as soon as one of the phases is immobile to avoid that CFL is influenced while capillary spreading is not possible\&. 
+.RE
+.PP
+
+.PP
+Implements \fBcsmp::TwoPhaseModel< dim >\fP\&.
+.SS "template<uint32_t dim> double \fBcsmp::HeterogeneityAndRateAwareModel\fP< dim >::EffectiveSaturation () const\fR [virtual]\fP"
+
+.PP
+average effective saturation as required by 2-phase model SKM: thickness-weighted average of the effective saturations in the high and the low k laminations\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+must always be called first because Seff must be communicated with the base class\&. 
+
+.PP
+this method just transfers the saturation because the effective saturation is calculated later 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBcsmp::TwoPhaseModel< dim >\fP\&.
+.SS "template<uint32_t dim> void \fBcsmp::HeterogeneityAndRateAwareModel\fP< dim >::Initialize (const \fBElement\fP< dim > & e)\fR [virtual]\fP"
+Computes all relevant values for the single-valued average saturation inside of the element\&. Dependent on flow direction and kv/kh ratio, averaging and scaling is done later inside of the saturation functions\&.
+
+.PP
+Computing the magnitude of the capillary pressure gradient\&. and reading rocktype and parameters for the van Genuchten relperm model\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+this method ignores any end-point saturations provided in the input dataset (discretised on the model)
+
+.PP
+this method only deals with horizontal or vertical laminations; oblique directions are not considered\&. 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBcsmp::TwoPhaseModel< dim >\fP\&.
+.SS "template<uint32_t dim> void \fBcsmp::HeterogeneityAndRateAwareModel\fP< dim >::Initialize (long rocktype, double Sw, const \fBVectorVariable\fP< dim > & vt)"
+
+.PP
+updating model parameters for testing and plotting Intialises model for testing and plotting 
+.SS "template<uint32_t dim> void \fBcsmp::HeterogeneityAndRateAwareModel\fP< dim >::InitializeVelocity (const \fBElement\fP< dim > & e)"
+
+.PP
+reads vt and makes some initiaisations Reads velocity variable, vt_, normalises it (vt_normalised_) and computes magnitude (vt_magnitude_)\&. If the velocity is zero, horizontal flow will be indicated\&. 
+.SS "template<uint32_t dim> double \fBcsmp::HeterogeneityAndRateAwareModel\fP< dim >::krn_Phase () const\fR [virtual]\fP"
+CO2 relative permeability 
+.PP
+Implements \fBcsmp::TwoPhaseModel< dim >\fP\&.
+.SS "template<uint32_t dim> double \fBcsmp::HeterogeneityAndRateAwareModel\fP< dim >::krw_Phase () const\fR [virtual]\fP"
+
+.PP
+heterogeneity-aware, rate-dependent versions, Nc is calculated in the background Agreed weighting procedure in which the flow-direction based average of the relative permeability is weighted lumping in the Kv/Kh ratio\&. The result is limited to greater than or equal to zero\&. 
+.PP
+Implements \fBcsmp::TwoPhaseModel< dim >\fP\&.
+.SS "template<uint32_t dim> double \fBcsmp::HeterogeneityAndRateAwareModel\fP< dim >::MaxFractionalFlowDerivative () const\fR [virtual]\fP"
+
+.PP
+for the wetting phase 
+.PP
+Reimplemented from \fBcsmp::TwoPhaseModel< dim >\fP\&.
+.SS "template<uint32_t dim> void \fBcsmp::HeterogeneityAndRateAwareModel\fP< dim >::Out (uint32_t phase) const\fR [virtual]\fP"
+
+.PP
+default is the wetting phase 
+.PP
+Reimplemented from \fBcsmp::TwoPhaseModel< dim >\fP\&.
+.SS "template<uint32_t dim> double \fBcsmp::HeterogeneityAndRateAwareModel\fP< dim >::pc_Phase () const\fR [virtual]\fP"
+
+.PP
+capillary pressure of the non-wetting phase; cap value is applied Not directionally dependent\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+pc covers the full saturation range, pc(sw) is capped based on maximum dpcds\&.
+
+.PP
+this pc function takes into account the effect of flow rate, which also shifts the irreducible saturations\&. 
+.RE
+.PP
+
+.PP
+Implements \fBcsmp::TwoPhaseModel< dim >\fP\&.
+.SS "template<uint32_t dim> void \fBcsmp::HeterogeneityAndRateAwareModel\fP< dim >::WriteRelativePermeabilityTable (const char * filename, long RT, const \fBVectorVariable\fP< dim > & vt)"
+
+.PP
+Outputs the relperms for the current model initialisation to a plot for visual examination; filename appends rocktype and Ncap calculated\&. writes textfile with sw, krw(sw,Nc), krn(sw,Nc), and pc(sw) values computed for (composite) rocktype in 0\&.05 saturation increments 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

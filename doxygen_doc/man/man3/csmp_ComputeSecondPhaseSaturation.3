@@ -1,0 +1,144 @@
+.TH "csmp::ComputeSecondPhaseSaturation< dim >" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::ComputeSecondPhaseSaturation< dim >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+Inherits \fBcsmp::Interrelation< dim >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBComputeSecondPhaseSaturation\fP (const \fBPropertyDatabase\fP< dim > &p, const char *reference_saturation, const char *new_saturation)"
+.br
+.ti -1c
+.RI "void \fBCalculate\fP ()"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::Interrelation< dim >\fP
+.in +1c
+.ti -1c
+.RI "\fBInterrelation\fP (const \fBPropertyDatabase\fP< dim > &p)"
+.br
+.ti -1c
+.RI "void \fBName\fP (const char *s)"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBApplicationLevel\fP () const"
+.br
+.ti -1c
+.RI "void \fBApply\fP (\fBModel\fP< dim > &)"
+.br
+.ti -1c
+.RI "template<template< uint32_t > class CELL> void \fBApply\fP (\fBModelSubDomain\fP< dim, CELL > &)"
+.br
+.RI "a simplex is any geometrical association of points "
+.ti -1c
+.RI "bool \fBResultWithinRange\fP ()"
+.br
+.ti -1c
+.RI "std::map< std::string, \fBOperand\fP< dim > >::const_iterator \fBOperandsBegin\fP () const"
+.br
+.ti -1c
+.RI "std::map< std::string, \fBOperand\fP< dim > >::const_iterator \fBOperandsEnd\fP () const"
+.br
+.ti -1c
+.RI "std::map< std::string, \fBOperand\fP< dim > >::iterator \fBResult\fP ()"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Member Functions inherited from \fBcsmp::Interrelation< dim >\fP
+.in +1c
+.ti -1c
+.RI "\fBOperand\fP< dim > & \fBGlobalProperty\fP (const char *var)"
+.br
+.ti -1c
+.RI "void \fBResultProperty\fP (const char *var)"
+.br
+.ti -1c
+.RI "void \fBOutputCondition\fP (\fBOperand\fP< dim > &var, \fBVARIABLE_FLAG\fP output)"
+.br
+.in -1c
+
+Protected Attributes inherited from \fBcsmp::Interrelation< dim >\fP
+.in +1c
+.ti -1c
+.RI "const \fBPropertyDatabase\fP< dim > & \fBp_ref\fP"
+.br
+.ti -1c
+.RI "std::string \fBname_\fP"
+.br
+.ti -1c
+.RI "std::string \fBresult_property_\fP"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBapplication_level_\fP"
+.br
+.ti -1c
+.RI "std::map< std::string, \fBOperand\fP< dim > > \fBoperand_list_\fP"
+.br
+.ti -1c
+.RI "std::map< std::string, \fBOperand\fP< dim > >::iterator \fBresult_\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim>
+.br
+class csmp::ComputeSecondPhaseSaturation< dim >"
+.PP
+\fBAuthor\fP
+.RS 4
+S\&.K\&. Matthaei 
+
+.PP
+S\&. Geiger 
+
+.PP
+S\&. Roberts 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2001
+.RE
+.PP
+.SH "Motivation"
+.PP
+Since only one phase is propagated in the FiniteVolumeFluidPhaseVisitor, the saturation of the second phase must be computed afterwards, which is done by this simple interrelation, such that all saturation dependend properties can be computed afterwards\&. The user must define in the constructor of this object the saturation that was computed in the FiniteVolumeFluidPhaseVisitor (i\&.e\&., reference saturation) and the saturation which shall be computed by this interrelation (i\&.e\&., new oder second phase saturation) by subtracting the reference saturation from 1\&.0\&.
+
+.PP
+Of course, the saturation of the second phase can also be computed by the FiniteVolumeFluidPhaseVisitor, which is, however, computationally more expensive than applying this interrelation\&.
+.SH "Implementation"
+.PP
+The user must provide the character strings of the reference saturation (first character string in the constructor) and the saturation to be computed (second character string in the constructor) to the constructor of this interrelation\&.
+
+.PP
+As part of the \fBInterrelation\fP base class, this interrelation is passed to the \fBModel\fP in the main() program\&. It should be done during the transient loop, such that the saturations are both constantly updated\&. Some functions of the FiniteVolumeFluidPhaseVisitor also require a reference to this interrelation, since the saturation of the second phase must be updated within the time-loop constantly\&. See the CSMP documentation for more detail on the \fBInterrelation\fP base class and their derived classes and the FiniteVolumeFluidPhaseVisitor documentation for details on the different member functions\&.
+.SH "Application Examples"
+.PP
+.PP
+.nf
+// oil is propagated, computing the water saturation <br>
+// when the interrelation is passed to the Model <br>
+ComputeSecondPhaseSaturation second_phase( p_ref, "saturation oil", "saturation water" );  
+.fi
+.PP
+ 
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim> void \fBcsmp::ComputeSecondPhaseSaturation\fP< dim >::Calculate ()\fR [virtual]\fP"
+The saturation of the first phase is adjusted such that the two saturations add up to one 
+.PP
+Reimplemented from \fBcsmp::Interrelation< dim >\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

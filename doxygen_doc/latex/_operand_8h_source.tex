@@ -1,0 +1,329 @@
+\doxysection{Operand.\+h}
+\hypertarget{_operand_8h_source}{}\label{_operand_8h_source}\index{source/includes/model/Operand.h@{source/includes/model/Operand.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_OPERAND\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_OPERAND\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_index_8h}{"{}Index.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_tensor_variable_8h}{"{}TensorVariable.h"{}}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_array_variable_8h}{"{}ArrayVariable.h"{}}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_flagged_array_variable_8h}{"{}FlaggedArrayVariable.h"{}}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_error_handler_8h}{"{}ErrorHandler.h"{}}}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_property_database}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}};}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00016\ \textcolor{comment}{@brief\ Interface\ for\ all\ of\ CSMP's\ variable\ types\ facilitating\ that\ they}}
+\DoxyCodeLine{00017\ \textcolor{comment}{can\ be\ used\ together\ in\ computations;\ currently\ used\ only\ by\ Interrelation;\ outdated\ design,\ refactoring\ required.}}
+\DoxyCodeLine{00018\ \textcolor{comment}{}}
+\DoxyCodeLine{00019\ \textcolor{comment}{@author\ S.K.\ Matthai}}
+\DoxyCodeLine{00020\ \textcolor{comment}{@author\ Stephen\ G.\ Roberts}}
+\DoxyCodeLine{00021\ \textcolor{comment}{@date\ 1999}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00023\ \textcolor{comment}{@section\ motivation\ Motivation}}
+\DoxyCodeLine{00024\ \textcolor{comment}{}}
+\DoxyCodeLine{00025\ \textcolor{comment}{Forget\ for\ a\ moment\ all\ about\ the\ rest\ of\ the\ CSMP\ code\ except\ for\ the\ basic\ }}
+\DoxyCodeLine{00026\ \textcolor{comment}{variables\ ScalarVariable,\ VectorVariable\ and\ TensorVariable\ and\ think\ of\ }}
+\DoxyCodeLine{00027\ \textcolor{comment}{the\ possibility\ of\ creating\ objects\ that\ are\ overloaded\ such\ that\ you\ can}}
+\DoxyCodeLine{00028\ \textcolor{comment}{write\ expressions\ for\ the\ whole\ mesh\ object\ or\ sub-\/regions\ thereof,\ which\ }}
+\DoxyCodeLine{00029\ \textcolor{comment}{read\ like\ mathematical\ equations\ in\ which\ the\ variables\ refer\ to\ local}}
+\DoxyCodeLine{00030\ \textcolor{comment}{or\ distributed\ data.\ \ }}
+\DoxyCodeLine{00031\ \textcolor{comment}{}}
+\DoxyCodeLine{00032\ \textcolor{comment}{This\ quest\ was\ the\ design\ intent\ of\ the\ Operand\ class\ and\ it\ brings\ CSP}}
+\DoxyCodeLine{00033\ \textcolor{comment}{users\ close\ to\ this\ goal\ when\ they\ are\ prepared\ to\ write\ their\ own}}
+\DoxyCodeLine{00034\ \textcolor{comment}{Interrelation\ subclasses.\ The\ goal\ is\ fully\ realized\ through\ the\ new}}
+\DoxyCodeLine{00035\ \textcolor{comment}{PropertyHandle\ classes\ for\ use\ in\ main()\ programs.\ These\ are\ however\ only\ }}
+\DoxyCodeLine{00036\ \textcolor{comment}{complementary\ to\ the\ Operand\ and\ Interrelation\ mechanism,\ because\ they}}
+\DoxyCodeLine{00037\ \textcolor{comment}{do\ not\ encapsulate\ the\ calculations\ which\ Interrelations\ do.\ }}
+\DoxyCodeLine{00038\ \textcolor{comment}{}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00040\ \textcolor{comment}{@section\ design\ Design\ Intent}}
+\DoxyCodeLine{00041\ \textcolor{comment}{}}
+\DoxyCodeLine{00042\ \textcolor{comment}{Apart\ from\ being\ able\ to\ write\ mathematical\ expressions\ which\ are\ applied\ to}}
+\DoxyCodeLine{00043\ \textcolor{comment}{the\ whole\ Model\ or\ sub-\/Regions\ thereof\ (as\ is\ facilitated\ through}}
+\DoxyCodeLine{00044\ \textcolor{comment}{the\ PropertyHandle\ class),\ there\ is\ a\ need\ to\ use\ distributed\ instances\ of\ }}
+\DoxyCodeLine{00045\ \textcolor{comment}{properties\ in\ calculations\ inside\ objects\ which\ are\ still\ efficient\ and\ }}
+\DoxyCodeLine{00046\ \textcolor{comment}{allow\ the\ user\ to\ partially\ ignore\ variable\ IDs\ and\ the\ variable\ placement\ }}
+\DoxyCodeLine{00047\ \textcolor{comment}{in\ the\ mesh\ (Node,\ IntegrationPoint\ or\ Element).\ \ This\ requires\ (1)\ the\ use\ }}
+\DoxyCodeLine{00048\ \textcolor{comment}{of\ a\ notation\ to\ represent\ the\ variable\ in\ mathematical\ expressions,}}
+\DoxyCodeLine{00049\ \textcolor{comment}{and\ (2)\ an\ association\ of\ the\ csmp::Index\ of\ the\ variable\ with\ the\ notation\ such}}
+\DoxyCodeLine{00050\ \textcolor{comment}{that\ it\ does\ not\ need\ to\ be\ requested\ from\ the\ PropertyDatabase\ every\ time}}
+\DoxyCodeLine{00051\ \textcolor{comment}{the\ expression\ is\ evaluated.\ Finally\ (3),\ temporary\ variable\ storage\ is\ }}
+\DoxyCodeLine{00052\ \textcolor{comment}{needed\ to\ allow\ that\ a\ value\ can\ be\ range-\/checked\ before}}
+\DoxyCodeLine{00053\ \textcolor{comment}{it\ is\ written\ back\ into\ the\ Model\ storage.\ This\ buffer\ is\ essential\ }}
+\DoxyCodeLine{00054\ \textcolor{comment}{when\ it\ comes\ to\ checking\ where\ in\ a\ chain\ of\ expressions,\ a\ physically\ }}
+\DoxyCodeLine{00055\ \textcolor{comment}{meaningless\ value\ was\ produced.}}
+\DoxyCodeLine{00056\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00057\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00058\ \textcolor{comment}{@section\ applicability\ Applicability}}
+\DoxyCodeLine{00059\ \textcolor{comment}{}}
+\DoxyCodeLine{00060\ \textcolor{comment}{Operands\ are\ used\ in\ Interrelations,\ Algorithms,\ Algorithms,\ and}}
+\DoxyCodeLine{00061\ \textcolor{comment}{Visitor\ objects.}}
+\DoxyCodeLine{00062\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00063\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00064\ \textcolor{comment}{@section\ structure\ Structure}}
+\DoxyCodeLine{00065\ \textcolor{comment}{}}
+\DoxyCodeLine{00066\ \textcolor{comment}{The\ Operand\ is\ a\ simple\ class\ object\ with\ a\ String\ containing\ its}}
+\DoxyCodeLine{00067\ \textcolor{comment}{name,\ a\ csmp::Index\ describing\ the\ represented\ variable,\ and\ }}
+\DoxyCodeLine{00068\ \textcolor{comment}{each\ one\ of\ the\ basic\ CSMP\ variables\ as\ well\ as\ an\ output\ condition}}
+\DoxyCodeLine{00069\ \textcolor{comment}{flag\ which\ specifies\ the\ VARIABLE\_FLAG\ of\ the\ property\ locations\ which}}
+\DoxyCodeLine{00070\ \textcolor{comment}{the\ variable\ is\ permitted\ to\ overwrite\ if\ the\ calculation\ yielded\ a\ }}
+\DoxyCodeLine{00071\ \textcolor{comment}{result\ which\ is\ within\ the\ permitted\ range.}}
+\DoxyCodeLine{00072\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00073\ \textcolor{comment}{@section\ participants\ Participants}}
+\DoxyCodeLine{00074\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00075\ \textcolor{comment}{A\ csmp::Index,\ a\ String,\ an\ output\ VARIABLE\_FLAG\ and\ CSP\ basic\ variables}}
+\DoxyCodeLine{00076\ \textcolor{comment}{(ScalarVariable,\ VectorVariable,\ and\ TensorVariable).}}
+\DoxyCodeLine{00077\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00078\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00079\ \textcolor{comment}{@section\ collaborations\ Collaborations}}
+\DoxyCodeLine{00080\ \textcolor{comment}{}}
+\DoxyCodeLine{00081\ \textcolor{comment}{Operands\ collaborate\ with\ CSP\ basic\ variables\ and\ the}}
+\DoxyCodeLine{00082\ \textcolor{comment}{enumerations\ which\ are\ defined\ in\ CSMP\_definitions.h\ (e.g.,\ VARIABLE\_FLAG...).}}
+\DoxyCodeLine{00083\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00084\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00085\ \textcolor{comment}{@section\ consequences\ Consequences}}
+\DoxyCodeLine{00086\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00087\ \textcolor{comment}{}}
+\DoxyCodeLine{00088\ \textcolor{comment}{The\ operators\ \(\backslash\)f\$+,\ -\/,\ *,\ /,\ +=,\ -\/=,\ *=,\ /=\ \(\backslash\)f\$\ are\ overloaded\ for\ Operands\ such}}
+\DoxyCodeLine{00089\ \textcolor{comment}{that\ they\ can\ interact\ with\ eachother,\ double\ data,\ and\ the\ CSP\ basic}}
+\DoxyCodeLine{00090\ \textcolor{comment}{variables.\ One\ should\ not\ write\ expressions\ like\ A\ =\ C.\ Following\ the\ logic}}
+\DoxyCodeLine{00091\ \textcolor{comment}{of\ an\ assignment,\ A\ =\ B\ means:\ The\ Operand\ A\ now\ }}
+\DoxyCodeLine{00092\ \textcolor{comment}{refers\ to\ exactly\ the\ same\ variable\ as\ B\ and\ it\ will\ also\ contain\ the\ same\ }}
+\DoxyCodeLine{00093\ \textcolor{comment}{values.\ If\ Operand\ A\ represents\ a\ property\ stored\ in\ the\ Model,\ the\ }}
+\DoxyCodeLine{00094\ \textcolor{comment}{variable\ A\ will\ no\ longer\ exist\ following\ the\ assignment.\ \ }}
+\DoxyCodeLine{00095\ \textcolor{comment}{}}
+\DoxyCodeLine{00096\ \textcolor{comment}{Importantly,\ scalar-\/,\ vector-\/,\ and\ tensor\ variables\ are\ more\ than\ }}
+\DoxyCodeLine{00097\ \textcolor{comment}{just\ mathematical\ variables\ in\ that\ they\ also\ contain\ a\ STATUS\ flag\ which\ }}
+\DoxyCodeLine{00098\ \textcolor{comment}{specifies\ how\ they\ are\ treated\ in\ the\ assembly\ of\ the\ finite-\/element\ }}
+\DoxyCodeLine{00099\ \textcolor{comment}{equations.\ This\ requires\ some\ rules\ about\ the\ flag\ assignment:\ If\ you\ say}}
+\DoxyCodeLine{00100\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00101\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00102\ \textcolor{comment}{A\ =\ C\ +\ B;}}
+\DoxyCodeLine{00103\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00104\ \textcolor{comment}{}}
+\DoxyCodeLine{00105\ \textcolor{comment}{the\ temporary\ variable\ that\ is\ created\ will\ be\ flagged\ like\ the\ lefthand\ }}
+\DoxyCodeLine{00106\ \textcolor{comment}{operator\ before\ the\ assigment.\ If\ \(\backslash\)f\$C\ =\ PLAIN\(\backslash\)f\$\ and\ \(\backslash\)f\$B=DIRICH\(\backslash\)f\$,\ A\ will\ be}}
+\DoxyCodeLine{00107\ \textcolor{comment}{\(\backslash\)f\$PLAIN\(\backslash\)f\$.\ If\ the\ combined\ operator\ +=\ is\ used,\ A\ will\ retain\ its\ original\ flag}}
+\DoxyCodeLine{00108\ \textcolor{comment}{because\ the\ assignment\ here\ uses\ the\ assignment\ as\ defined\ for\ scalar}}
+\DoxyCodeLine{00109\ \textcolor{comment}{variables.\ \ }}
+\DoxyCodeLine{00110\ \textcolor{comment}{}}
+\DoxyCodeLine{00111\ \textcolor{comment}{If\ you\ compare\ an\ Operand\ with\ a\ VARIABLE\_FLAG\ enumeration,\ the\ comparison}}
+\DoxyCodeLine{00112\ \textcolor{comment}{will\ be\ carried\ out\ using\ all\ flag(s)\ of\ the\ underlying\ variable.\ Thus,\ }}
+\DoxyCodeLine{00113\ \textcolor{comment}{if\ a\ vector\ variable\ in\ a\ 2D\ calculation\ has\ two\ different\ flags\ (for\ instance,\ }}
+\DoxyCodeLine{00114\ \textcolor{comment}{a\ DIRICH\ flag\ for\ the\ X\ displacement\ and\ a\ PLAIN\ flag\ for\ the\ Y\ displacement)\ }}
+\DoxyCodeLine{00115\ \textcolor{comment}{a\ comparison\ will\ evaluate\ as\ false.\ In\ this\ case\ one\ should\ use\ }}
+\DoxyCodeLine{00116\ \textcolor{comment}{VectorVariable::Flag(\ int\ i)\ to\ carry\ out\ a\ more\ specific\ comparison.\ }}
+\DoxyCodeLine{00117\ \textcolor{comment}{Any\ comparisons\ with\ not\ initialized\ Operands\ or\ Operands\ that\ }}
+\DoxyCodeLine{00118\ \textcolor{comment}{store\ NAN\ values\ in\ the\ variables\ will\ evaluate\ as\ false.\ }}
+\DoxyCodeLine{00119\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00120\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00121\ \textcolor{comment}{@section\ implementation\ Implementation}}
+\DoxyCodeLine{00122\ \textcolor{comment}{}}
+\DoxyCodeLine{00123\ \textcolor{comment}{By\ default,\ Operands\ have\ storage\ for\ a\ single\ variable\ value\ of\ type\ }}
+\DoxyCodeLine{00124\ \textcolor{comment}{ScalarVariable,\ VectorVariable,\ or\ TensorVariable,\ but\ only\ if\ this\ variable\ }}
+\DoxyCodeLine{00125\ \textcolor{comment}{exists\ in\ the\ PropertyDatabase\ (in\ contrast,\ PropertyHandles\ spawn\ the}}
+\DoxyCodeLine{00126\ \textcolor{comment}{generation\ of\ a\ new\ variable\ in\ the\ PropertyDatabase\ if\ the\ variable\ does\ }}
+\DoxyCodeLine{00127\ \textcolor{comment}{not\ exist).\ \ \ }}
+\DoxyCodeLine{00128\ \textcolor{comment}{}}
+\DoxyCodeLine{00129\ \textcolor{comment}{The\ need\ for\ large\ computations\ imposes\ stringend\ constraints\ on\ the\ properties}}
+\DoxyCodeLine{00130\ \textcolor{comment}{of\ Operands.\ They\ may\ be\ big\ in\ size\ because\ there\ will\ only\ be\ a\ few,\ but\ their\ }}
+\DoxyCodeLine{00131\ \textcolor{comment}{overloaded\ operators\ have\ to\ be\ efficient\ since\ single\ calculations\ may\ involve\ }}
+\DoxyCodeLine{00132\ \textcolor{comment}{millions\ of\ calls\ to\ those.\ Already\ a\ function\ call\ overhead\ is\ significant\ for\ }}
+\DoxyCodeLine{00133\ \textcolor{comment}{the\ overloaded\ operators.\ To\ avoid\ this\ overhead\ auto-\/inlining\ is\ used\ in\ the}}
+\DoxyCodeLine{00134\ \textcolor{comment}{compilation.\ }}
+\DoxyCodeLine{00135\ \textcolor{comment}{}}
+\DoxyCodeLine{00136\ \textcolor{comment}{The\ construction\ of\ temporary\ 'Operands'\ in\ expressions\ like:}}
+\DoxyCodeLine{00137\ \textcolor{comment}{}}
+\DoxyCodeLine{00138\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00139\ \textcolor{comment}{C\ =\ A\ +\ 32.5;}}
+\DoxyCodeLine{00140\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00141\ \textcolor{comment}{}}
+\DoxyCodeLine{00142\ \textcolor{comment}{should\ also\ be\ avoided.\ In\ those\ cases\ the\ construction\ by\ the\ compiler}}
+\DoxyCodeLine{00143\ \textcolor{comment}{of\ temporary\ objects\ (object\ x\ which\ will\ be\ assigned\ to\ C)\ can\ be\ avoided\ }}
+\DoxyCodeLine{00144\ \textcolor{comment}{only\ in\ some\ cases\ through\ construction\ of\ the\ Operands\ in\ the\ return\ }}
+\DoxyCodeLine{00145\ \textcolor{comment}{statements\ of\ the\ overloaded\ operators.\ \ }}
+\DoxyCodeLine{00146\ \textcolor{comment}{}}
+\DoxyCodeLine{00147\ \textcolor{comment}{To\ avoid\ the\ creation\ of\ temporaries\ you\ should\ rather\ write:\ \ }}
+\DoxyCodeLine{00148\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00149\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00150\ \textcolor{comment}{C\ =\ 32.5;\(\backslash\)}}
+\DoxyCodeLine{00151\ \textcolor{comment}{C\ +=\ A;}}
+\DoxyCodeLine{00152\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00153\ \textcolor{comment}{}}
+\DoxyCodeLine{00154\ \textcolor{comment}{Operands\ also\ store\ a\ 'calculation\ offset'\ which\ is\ used\ by\ Algorithms}}
+\DoxyCodeLine{00155\ \textcolor{comment}{to\ modify\ the\ placement\ of\ dependent\ variables\ in\ computations\ }}
+\DoxyCodeLine{00156\ \textcolor{comment}{involving\ the\ Operand\ variable,\ when\ coupled\ systems\ of\ equations\ }}
+\DoxyCodeLine{00157\ \textcolor{comment}{are\ solved.\ }}
+\DoxyCodeLine{00158\ \textcolor{comment}{}}
+\DoxyCodeLine{00159\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00160\ \textcolor{comment}{@section\ application\ Application\ Examples}}
+\DoxyCodeLine{00161\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00162\ \textcolor{comment}{}}
+\DoxyCodeLine{00163\ \textcolor{comment}{Operands\ are\ typically\ used\ in\ Algorithms\ and\ Interrelations.\ When\ you}}
+\DoxyCodeLine{00164\ \textcolor{comment}{derive\ a\ subclass\ from\ an\ Interrelation,\ you\ first\ create\ a\ Operand\ }}
+\DoxyCodeLine{00165\ \textcolor{comment}{reference\ to\ a\ physical\ variable\ in\ your\ model:}}
+\DoxyCodeLine{00166\ \textcolor{comment}{}}
+\DoxyCodeLine{00167\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00168\ \textcolor{comment}{Operand\&\ \ K;}}
+\DoxyCodeLine{00169\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00170\ \textcolor{comment}{}}
+\DoxyCodeLine{00171\ \textcolor{comment}{You\ then\ associate\ the\ Operand\ with\ a\ property\ which\ has\ been\ defined}}
+\DoxyCodeLine{00172\ \textcolor{comment}{before\ as\ a\ member\ of\ the\ PropertyDatabase.\ This\ happens\ in\ your\ }}
+\DoxyCodeLine{00173\ \textcolor{comment}{interrelation\ constructor.}}
+\DoxyCodeLine{00174\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00175\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00176\ \textcolor{comment}{K(\ GlobalProperty("{}conductivity"{})\ )}}
+\DoxyCodeLine{00177\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00178\ \textcolor{comment}{}}
+\DoxyCodeLine{00179\ \textcolor{comment}{This\ defines\ K\ as\ a\ notation\ for\ 'conductivity'.\ You\ can\ }}
+\DoxyCodeLine{00180\ \textcolor{comment}{now\ use\ K\ in\ expressions\ using\ CSMP\ basic\ variables\ and\ other\ Operands:}}
+\DoxyCodeLine{00181\ \textcolor{comment}{}}
+\DoxyCodeLine{00182\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00183\ \textcolor{comment}{K\ +=\ PHI\ /\ 322.1\ -\/\ 45.0;}}
+\DoxyCodeLine{00184\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00185\ \textcolor{comment}{}}
+\DoxyCodeLine{00186\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00187\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00188\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\ \{}
+\DoxyCodeLine{00189\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00190\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand_a48005bae4b03d67afba4c6b0553d0d6b}{Operand}}();}
+\DoxyCodeLine{00191\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classcsmp_1_1_operand_a92a10ac26f83bcd4a776225047a76df6}{Operand}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\&\ );}
+\DoxyCodeLine{00192\ \ \ \ \ Operand(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ \ );}
+\DoxyCodeLine{00193\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand_a75ebcca862c5e2df0ad300df9d6d68f8}{Operand}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ var,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&\ );}
+\DoxyCodeLine{00194\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand_a06dfe7cde6038d4bb1ab38d90d1c57f6}{Operand}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\&\ );}
+\DoxyCodeLine{00195\ \ \ \ \ Operand(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\&\ );}
+\DoxyCodeLine{00196\ \ \ \ \ Operand(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<dim>\&\ );}
+\DoxyCodeLine{00197\ \ \ \ \ Operand(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\&\ \ );}
+\DoxyCodeLine{00198\ \ \ \ \ Operand(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{FlaggedArrayVariable}}\&\ \ );}
+\DoxyCodeLine{00199\ \ \ \ \ \string~Operand();}
+\DoxyCodeLine{00200\ \ \ \ \ \textcolor{comment}{//\ these\ calculate\ using\ 'val'\ on\ right\ and\ object\ specs\ on\ the\ left}}
+\DoxyCodeLine{00201\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\ \ \ \mbox{\hyperlink{classcsmp_1_1_operand_a2c2b6807fbcee7edd9810c1a7489c2ae}{operator}}+(\ \textcolor{keywordtype}{double}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00202\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\ \ \ operator-\/(\ \textcolor{keywordtype}{double}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00203\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\ \ \ operator*(\ \textcolor{keywordtype}{double}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00204\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\ \ \ operator/(\ \textcolor{keywordtype}{double}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00205\ \ \ \ \ \textcolor{comment}{//\ these\ will\ create\ copies\ of\ the\ specifications\ of\ object\ on\ the\ right\ }}
+\DoxyCodeLine{00206\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\ \ \ \mbox{\hyperlink{classcsmp_1_1_operand_af8ba545291e5a0248e851172b3e21ecf}{operator}}+(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00207\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\ \ \ operator-\/(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00208\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\ \ \ operator*(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00209\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\ \ \ operator/(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00210\ \ \ \ \ \textcolor{comment}{//\ these\ will\ "{}self-\/assign"{}\ calculation\ result\ to\ object\ on\ the\ left}}
+\DoxyCodeLine{00211\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ \ \mbox{\hyperlink{classcsmp_1_1_operand_a3aae09b80758842342bf5225c87ddd06}{operator}}+=(\ \textcolor{keywordtype}{double}\ );}
+\DoxyCodeLine{00212\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ \ operator-\/=(\ \textcolor{keywordtype}{double}\ );}
+\DoxyCodeLine{00213\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ \ operator*=(\ \textcolor{keywordtype}{double}\ );}
+\DoxyCodeLine{00214\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ \ operator/=(\ \textcolor{keywordtype}{double}\ );}
+\DoxyCodeLine{00215\ \ \ \ \ \textcolor{comment}{//\ with\ ScalarVariables}}
+\DoxyCodeLine{00216\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ \ \mbox{\hyperlink{classcsmp_1_1_operand_a600887200a8af809db443ae60b90ad72}{operator}}+=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\&\ );}
+\DoxyCodeLine{00217\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ \ operator-\/=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\&\ );}
+\DoxyCodeLine{00218\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ \ operator*=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\&\ );}
+\DoxyCodeLine{00219\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ \ operator/=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\&\ );}
+\DoxyCodeLine{00220\ \ \ \ \ \textcolor{comment}{//\ with\ VectorVariables}}
+\DoxyCodeLine{00221\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ \ \mbox{\hyperlink{classcsmp_1_1_operand_a028dabb41c8343f4c1c5a369f45a25c9}{operator}}+=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\&\ );}
+\DoxyCodeLine{00222\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ \ operator-\/=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\&\ );}
+\DoxyCodeLine{00223\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ \ operator*=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\&\ );}
+\DoxyCodeLine{00224\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ \ operator/=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\&\ );}
+\DoxyCodeLine{00225\ \ \ \ \ \textcolor{comment}{//\ with\ TensorVariables}}
+\DoxyCodeLine{00226\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ \ \mbox{\hyperlink{classcsmp_1_1_operand_ac4c9b5f5c26a7e81250dab1dae550b09}{operator}}+=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<dim>\&\ );}
+\DoxyCodeLine{00227\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ \ operator-\/=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<dim>\&\ );}
+\DoxyCodeLine{00228\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ \ operator*=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<dim>\&\ );}
+\DoxyCodeLine{00229\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ \ operator/=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<dim>\&\ );}
+\DoxyCodeLine{00230\ \ \ \ \ \textcolor{comment}{//\ with\ ArrayVariables}}
+\DoxyCodeLine{00231\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ \ \mbox{\hyperlink{classcsmp_1_1_operand_a278a52f89e123896f7b147287eab8476}{operator}}+=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\&\ );}
+\DoxyCodeLine{00232\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ \ operator-\/=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\&\ );}
+\DoxyCodeLine{00233\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ \ operator*=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\&\ );}
+\DoxyCodeLine{00234\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ \ operator/=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\&\ );}
+\DoxyCodeLine{00235\ \ \ \ \ \textcolor{comment}{//\ with\ FlaggedArrayVariables}}
+\DoxyCodeLine{00236\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ \ \mbox{\hyperlink{classcsmp_1_1_operand_aa859653b7bfae9b166f189148bcb6411}{operator}}+=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{FlaggedArrayVariable}}\&\ );}
+\DoxyCodeLine{00237\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ \ operator-\/=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{FlaggedArrayVariable}}\&\ );}
+\DoxyCodeLine{00238\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ \ operator*=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{FlaggedArrayVariable}}\&\ );}
+\DoxyCodeLine{00239\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ \ operator/=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{FlaggedArrayVariable}}\&\ );}
+\DoxyCodeLine{00240\ \ \ \ \ \textcolor{comment}{//\ with\ Operands}}
+\DoxyCodeLine{00241\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ \ \mbox{\hyperlink{classcsmp_1_1_operand_a2cecaf7c9c8e9f86c0375f57bddb6cb1}{operator}}+=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ );}
+\DoxyCodeLine{00242\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ \ operator-\/=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ );}
+\DoxyCodeLine{00243\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ \ operator*=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ );}
+\DoxyCodeLine{00244\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ \ operator/=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ );}
+\DoxyCodeLine{00245\ \ \ \ \ \textcolor{comment}{//\ logical}}
+\DoxyCodeLine{00246\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand_ad369cd72c023678737e5c82e68ddf4e1}{operator}}>(\ \ \textcolor{keywordtype}{double}\ val\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00247\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ operator<(\ \ \textcolor{keywordtype}{double}\ val\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00248\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ operator>=(\ \textcolor{keywordtype}{double}\ val\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00249\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ operator<=(\ \textcolor{keywordtype}{double}\ val\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00250\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ operator==(\ \textcolor{keywordtype}{double}\ val\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00251\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ operator!=(\ \textcolor{keywordtype}{double}\ val\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00252\ }
+\DoxyCodeLine{00253\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ operator==(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\&\ )\ \ \ \ \ \ \textcolor{keyword}{const};}
+\DoxyCodeLine{00254\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ operator!=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\&\ )\ \ \ \ \ \ \textcolor{keyword}{const};}
+\DoxyCodeLine{00255\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ operator==(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00256\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ operator!=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00257\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ operator==(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<dim>\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00258\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ operator!=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<dim>\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00259\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ operator==(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\&\ )\ \ \ \ \ \ \ \textcolor{keyword}{const};}
+\DoxyCodeLine{00260\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ operator!=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\&\ )\ \ \ \ \ \ \ \textcolor{keyword}{const};}
+\DoxyCodeLine{00261\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ operator==(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{FlaggedArrayVariable}}\&\ )\textcolor{keyword}{const};}
+\DoxyCodeLine{00262\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ operator!=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{FlaggedArrayVariable}}\&\ )\textcolor{keyword}{const};}
+\DoxyCodeLine{00263\ }
+\DoxyCodeLine{00264\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ operator>(\ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00265\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ operator<(\ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00266\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ operator>=(\ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00267\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ operator<=(\ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00268\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ operator==(\ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00269\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ operator!=(\ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00270\ \ \ \ \ \textcolor{comment}{//\ assignment}}
+\DoxyCodeLine{00271\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ \ \ \mbox{\hyperlink{classcsmp_1_1_operand_aabb7a6031229f0dc5d6b8b16ddbf10f8}{operator}}=(\ \textcolor{keywordtype}{double}\ );}
+\DoxyCodeLine{00272\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ \ \ operator=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\&\ );}
+\DoxyCodeLine{00273\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ \ \ operator=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\&\ );}
+\DoxyCodeLine{00274\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ \ \ operator=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<dim>\&\ );}
+\DoxyCodeLine{00275\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ \ \ operator=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\&\ );}
+\DoxyCodeLine{00276\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ \ \ operator=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{FlaggedArrayVariable}}\&\ );}
+\DoxyCodeLine{00277\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ \ \ \mbox{\hyperlink{classcsmp_1_1_operand_ac0789c557287e37c95397ebd41f4c6bd}{operator}}=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}\&\ );}
+\DoxyCodeLine{00278\ }
+\DoxyCodeLine{00279\ \ \ \ \ \textcolor{comment}{//\ methods}}
+\DoxyCodeLine{00280\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Name(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ );}
+\DoxyCodeLine{00281\ \ \ \ \ std::string\ \ \ \ \ \ \ \ \ Name()\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const};}
+\DoxyCodeLine{00282\ \ \ \ \ size\_t\ \ \ \ \ \ \ \ \ \ \ \ \ \ Size(\ );}
+\DoxyCodeLine{00283\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand_a74bd1baa50881000d06a5cdc8a3861ea}{IsWithinRange}}()\ \ \ \ \ \textcolor{keyword}{const};}
+\DoxyCodeLine{00284\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ cspT>\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_operand_ab159a909fbb03f2bac6f0fd7a25816e0}{IsWithinRange}}(\ \textcolor{keyword}{const}\ cspT\&\ val\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00285\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ MaxValue()\ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const};}
+\DoxyCodeLine{00286\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ MinValue()\ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const};}
+\DoxyCodeLine{00287\ }
+\DoxyCodeLine{00288\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\&\ \ Key()\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const};}
+\DoxyCodeLine{00289\ \ \ \ \ size\_t\ \ \ \ \ \ \ \ \ \ \ \ \ \ Index()\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const};}
+\DoxyCodeLine{00290\ \ \ \ \ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}\ \ \ \ \ \ \ \ \ \ \ Placement()\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const};}
+\DoxyCodeLine{00291\ \ \ \ \ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\_TYPE}}\ \ \ \ \ \ \ Type()\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const};}
+\DoxyCodeLine{00292\ \ \ \ \ size\_t\ \ \ \ \ \ \ \ \ \ \ \ \ \ CalculationOffset()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00293\ \ \ \ \ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\_FLAG}}\ \ \ \ \ \ \ OutputCondition()\ \ \ \textcolor{keyword}{const};}
+\DoxyCodeLine{00294\ \ \ \ \ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\_FLAG}}\ \ \ \ \ \ \ EssentialCondition()\textcolor{keyword}{const};}
+\DoxyCodeLine{00295\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CalculationOffset(\ size\_t\ );}
+\DoxyCodeLine{00296\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ OutputCondition(\ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\_FLAG}}\ );}
+\DoxyCodeLine{00297\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ EssentialCondition(\ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\_FLAG}}\ );}
+\DoxyCodeLine{00298\ }
+\DoxyCodeLine{00299\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand_a5165c41996d9bd8a79ee9b6b1d08d1e0}{AssignTo}}(\ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\&\ )\ \ \ \ \ \ \ \ \textcolor{keyword}{const};}
+\DoxyCodeLine{00300\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ AssignTo(\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\&\ )\ \ \ \textcolor{keyword}{const};}
+\DoxyCodeLine{00301\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ AssignTo(\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<dim>\&\ )\ \ \ \textcolor{keyword}{const};}
+\DoxyCodeLine{00302\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ AssignTo(\ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\&\ )\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const};}
+\DoxyCodeLine{00303\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ AssignTo(\ \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{FlaggedArrayVariable}}\&\ )\ \ \textcolor{keyword}{const};}
+\DoxyCodeLine{00304\ }
+\DoxyCodeLine{00305\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand_ab6f1b0fc42a00c4d288a275d7510e0ce}{PrintValue}}()\ \ \ \ \ \ \ \ \textcolor{keyword}{const};}
+\DoxyCodeLine{00306\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand_a254847c0ee69f0886faf9e8a61c00702}{Out}}()\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const};}
+\DoxyCodeLine{00307\ }
+\DoxyCodeLine{00308\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00309\ \ \ \ \ std::string\ \ \ \ \ \ \ \ \ \ name\_;}
+\DoxyCodeLine{00310\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ prop\_key\_;}
+\DoxyCodeLine{00311\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ omin,\ omax;}
+\DoxyCodeLine{00312\ \ \ \ \ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\_FLAG}}\ \ \ \ \ \ \ \ flag\_essential\_,\ flag\_output\_;}
+\DoxyCodeLine{00313\ \ \ \ \ size\_t\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ calc\_offset\_;}
+\DoxyCodeLine{00314\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ \ \ scalar\_storage\_;}
+\DoxyCodeLine{00315\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\ \ vector\_storage\_;}
+\DoxyCodeLine{00316\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<dim>\ \ tensor\_storage\_;}
+\DoxyCodeLine{00317\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\ \ \ \ \ \ \ \ array\_storage\_;}
+\DoxyCodeLine{00318\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{FlaggedArrayVariable}}\ flagged\_array\_storage\_;}
+\DoxyCodeLine{00319\ \};}
+\DoxyCodeLine{00320\ }
+\DoxyCodeLine{00321\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00322\ }
+\DoxyCodeLine{00323\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

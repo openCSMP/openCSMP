@@ -85,7 +85,7 @@ class ExplicitFiniteVolumeTransportPHX : public NodeCenteredFiniteVolumeTranspor
     double GetFluxIn(  size_t idx, uint32_t property ); // returns the indicated property of the property-vector
     double GetMainPropertyLHS( size_t idx );
     double GetFacetFlux( Element<dim>& e, uint32_t facet_idx, uint32_t property = 0U);
-    std::vector<double> GetUpwindCoefficients( size_t eidx );
+    // TODO: not defined: std::vector<double> GetUpwindCoefficients( size_t eidx );
     double GetProjectedVelocities( Element<dim>& e, uint32_t i );
 
     double GetFacetNormalVelocity( size_t element, uint32_t facet );

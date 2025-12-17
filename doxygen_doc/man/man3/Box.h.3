@@ -1,0 +1,243 @@
+.TH "source/includes/model/Box.h" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+source/includes/model/Box.h \- Anything to do with definitions and operations on rectangular and box-shaped models(2D and 3D that is)\&. This also includes stand-alone functions for the processing of Boundary flags and values\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fR#include <set>\fP
+.br
+\fR#include 'Point\&.h'\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBcsmp::Box\fP"
+.br
+.RI "brings together all functionality needed to deal with \fBBox\fP shaped models whose boundaries are identified by \fBBOX_BOUNDARY\fP flags\&. "
+.in -1c
+.SS "Namespaces"
+
+.in +1c
+.ti -1c
+.RI "namespace \fBcsmp\fP"
+.br
+.RI "Complex System Modeling Platform\&. "
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBcsmp::BOX_BOUNDARY\fP : std::int8_t { \fBcsmp::NOT\fP = 0, \fBcsmp::IRREGULAR\fP = IRREGULAR_OUTSIDE, \fBTOP\fP = TOP_OUTSIDE, \fBBOTTOM\fP = BOTTOM_OUTSIDE, \fBLEFT\fP = LEFT_OUTSIDE, \fBRIGHT\fP = RIGHT_OUTSIDE, \fBFRONT\fP = FRONT_OUTSIDE, \fBBACK\fP = BACK_OUTSIDE, \fBCNR1\fP = CNR_MIN, \fBCNR2\fP = CNR_MIN_MAXX, \fBCNR3\fP = CNR_MAX_MAXX, \fBCNR4\fP = CNR_MAX_MINXZ, \fBCNR5\fP = CNR_MIN_MAXZ, \fBCNR6\fP = CNR_MIN_MAXXZ, \fBCNR7\fP = CNR_MAX, \fBCNR8\fP = CNR_MAX_MAXZ, \fBEDGE1\fP = BACK_BOTTOM, \fBEDGE2\fP = BACK_RIGHT, \fBEDGE3\fP = BACK_TOP, \fBEDGE4\fP = BACK_LEFT, \fBEDGE5\fP = BOTTOM_LEFT, \fBEDGE6\fP = BOTTOM_RIGHT, \fBEDGE7\fP = TOP_RIGHT, \fBEDGE8\fP = TOP_LEFT, \fBEDGE9\fP = FRONT_BOTTOM, \fBEDGE10\fP = FRONT_RIGHT, \fBEDGE11\fP = FRONT_TOP, \fBEDGE12\fP = FRONT_LEFT, \fBcsmp::INTERNAL\fP = REGION_BOUNDARY, \fBcsmp::MULTIPLE\fP = MULTIPLE_BOUNDARIES }"
+.br
+.RI "uniquely identifies placement of nodes on the boundary of a box-shaped model "
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBBOX_BOUNDARY\fP \fBcsmp::intToBOX_BOUNDARY\fP (int8_t i)"
+.br
+.ti -1c
+.RI "std::string \fBcsmp::parseBoundary\fP (\fBBOX_BOUNDARY\fP)"
+.br
+.RI "turn enumeration into string "
+.ti -1c
+.RI "\fBBOX_BOUNDARY\fP \fBcsmp::parseBoundary\fP (const std::string &box_boundary_name)"
+.br
+.RI "interprets enumeration from string "
+.ti -1c
+.RI "bool \fBcsmp::isEdge\fP (\fBBOX_BOUNDARY\fP)"
+.br
+.RI "returns whether supplied boundary flag refers to a model edge "
+.ti -1c
+.RI "bool \fBcsmp::isCorner\fP (\fBBOX_BOUNDARY\fP)"
+.br
+.RI "returns whether flag is a corner "
+.ti -1c
+.RI "bool \fBcsmp::isSide\fP (\fBBOX_BOUNDARY\fP)"
+.br
+.RI "returns whether flag is a side of the model "
+.ti -1c
+.RI "bool \fBcsmp::belongsToEdge\fP (\fBBOX_BOUNDARY\fP edge, \fBBOX_BOUNDARY\fP)"
+.br
+.RI "returns whether supplied boundary flag is located at a model boundary edge "
+.ti -1c
+.RI "bool \fBcsmp::belongsToSide\fP (\fBBOX_BOUNDARY\fP side, \fBBOX_BOUNDARY\fP)"
+.br
+.RI "returns whether supplied boundary flag is located at a model boundary side "
+.ti -1c
+.RI "bool \fBcsmp::isLEFT\fP (\fBBOX_BOUNDARY\fP)"
+.br
+.RI "returns whether boundary flag belongs to boundary LEFT "
+.ti -1c
+.RI "bool \fBcsmp::isRIGHT\fP (\fBBOX_BOUNDARY\fP)"
+.br
+.RI "returns whether boundary flag belongs to boundary RIGHT "
+.ti -1c
+.RI "bool \fBcsmp::isTOP\fP (\fBBOX_BOUNDARY\fP)"
+.br
+.RI "returns whether boundary flag belongs to boundary TOP "
+.ti -1c
+.RI "bool \fBcsmp::isBOTTOM\fP (\fBBOX_BOUNDARY\fP)"
+.br
+.RI "returns whether boundary flag belongs to boundary BOTTOM "
+.ti -1c
+.RI "bool \fBcsmp::isFRONT\fP (\fBBOX_BOUNDARY\fP)"
+.br
+.RI "returns whether boundary flag belongs to boundary FRONT (3D only) "
+.ti -1c
+.RI "bool \fBcsmp::isBACK\fP (\fBBOX_BOUNDARY\fP)"
+.br
+.RI "returns whether boundary flag belongs to boundary BACK (3D only) "
+.ti -1c
+.RI "bool \fBcsmp::canBeIRREGULAR\fP (\fBBOX_BOUNDARY\fP)"
+.br
+.RI "returns true also for edges and corners "
+.ti -1c
+.RI "\fBNode\fP< 1U > *const \fBcsmp::cornerFlaggedNode\fP (\fBModel\fP< 1U > &, \fBBOX_BOUNDARY\fP)"
+.br
+.RI "returns nodes that are either flagged CNR1 or CNR2 from one-dimensional model "
+.ti -1c
+.RI "template<uint32_t dim, template< uint32_t > class CELL> \fBBOX_BOUNDARY\fP \fBcsmp::atBoundary\fP (const CELL< dim > *const, uint32_t boundary_face)"
+.br
+.RI "infers from node flags and cell type, which boundary the element face lies on including INTERNAL boundaries "
+.ti -1c
+.RI "template<uint32_t dim, template< uint32_t > class CELL> bool \fBcsmp::atBoundary\fP (const CELL< dim > *const)"
+.br
+.RI "is the cell located at a model boundary? - for line or surface element in 3D models this is inferred when all their nodes are on boundary; for volume elements all nodes of one face must be "
+.ti -1c
+.RI "template<uint32_t dim> \fBBOX_BOUNDARY\fP \fBcsmp::atBoundary\fP (const std::set< \fBBOX_BOUNDARY\fP > &node_flags, uint32_t boundary_face_corner_nodes)"
+.br
+.RI "identifies which boundary a lower dimensional element is located on using the node flags of this element "
+.ti -1c
+.RI "template<uint32_t dim> void \fBcsmp::printBoxBoundaryFlags\fP (const \fBModel\fP< dim > &)"
+.br
+.RI "prints a summary of the current flags of the nodes and elements to screen\&. "
+.ti -1c
+.RI "void \fBcsmp::boundaryMinMaxCoordinates\fP (\fBBOX_BOUNDARY\fP, \fBcsmp::Point\fP< 1U > &model_coord_min, \fBcsmp::Point\fP< 1U > &model_coord_max)"
+.br
+.RI "gives the extreme coordinates of the bounding box of the BOUNDARY (not the model!) - 1D model "
+.ti -1c
+.RI "void \fBcsmp::boundaryMinMaxCoordinates\fP (\fBBOX_BOUNDARY\fP, \fBcsmp::Point\fP< 2U > &, \fBcsmp::Point\fP< 2U > &)"
+.br
+.RI "gives the extreme coordinates of the bounding box of the BOUNDARY (not the model!) - 2D model "
+.ti -1c
+.RI "void \fBcsmp::boundaryMinMaxCoordinates\fP (\fBBOX_BOUNDARY\fP, \fBcsmp::Point\fP< 3U > &, \fBcsmp::Point\fP< 3U > &)"
+.br
+.RI "gives the extreme coordinates of the bounding box of the BOUNDARY (not the model!) - 3D model "
+.ti -1c
+.RI "bool \fBcsmp::isDiagnosticBoxBoundaryClassifier\fP (const std::string &)"
+.br
+.RI "compares the supplied string with valid \fBBOX_BOUNDARY\fP classifications; returns true if it is among them "
+.ti -1c
+.RI "template<uint32_t dim> void \fBcsmp::establishBoundaryFlagsForBoxModel\fP (\fBVSet\fP< dim > &vset, double tolerance)"
+.br
+.RI "Applies box boundary flags assuming that the model stored in the \fBVSet\fP is box-shaped with the sides aligned with the coordinate axes\&. "
+.ti -1c
+.RI "void \fBcsmp::recreateBoxBoundaryFlags\fP (\fBModel\fP< 1U > &)"
+.br
+.RI "using existing \fBBoundary\fP objects, establish node and element \fBBOX_BOUNDARY\fP flagging "
+.ti -1c
+.RI "void \fBcsmp::recreateBoxBoundaryFlags\fP (\fBModel\fP< 2U > &)"
+.br
+.ti -1c
+.RI "void \fBcsmp::recreateBoxBoundaryFlags\fP (\fBModel\fP< 3U > &)"
+.br
+.ti -1c
+.RI "void \fBcsmp::recreateBoxBoundaryFlagsForQuadrilateralModel\fP (\fBModel\fP< 2U > &)"
+.br
+.RI "boundary flags for 2D models consisting of quadrilaterals only; since these models are regular method is rather fast "
+.ti -1c
+.RI "void \fBcsmp::recreateBoxBoundaryFlagsForHexahedralModel\fP (\fBModel\fP< 3U > &)"
+.br
+.RI "boundary flags for 3D models consisting of hexahedra only; since these models are regular method is rather fast "
+.ti -1c
+.RI "template<uint32_t dim> void \fBcsmp::boxFlagsToVariable\fP (\fBModel\fP< dim > &, const char *node_variable, const char *elmt_variable)"
+.br
+.RI "permits to create variables values from \fBBOX_BOUNDARY\fP flag enumeration values "
+.ti -1c
+.RI "template<uint32_t dim> void \fBcsmp::flagCornerNodes\fP (\fBVSet\fP< dim > &, double tol, double xmin, double xmax, double ymin, double ymax, double zmin, double zmax)"
+.br
+.RI "using the coordinate locations of the vertices defining the bounding rectangle; node flagging is performed; error prone method! "
+.ti -1c
+.RI "template<uint32_t dim> void \fBcsmp::flagEdges\fP (\fBVSet\fP< dim > &, double tol, double xmin, double xmax, double ymin, double ymax, double zmin, double zmax)"
+.br
+.RI "Finds edges in boxed shaped model and gibes them a BOX_BOUDARY_FLAG\&. "
+.ti -1c
+.RI "bool \fBcsmp::hasAllSideBoundaries\fP (const \fBModel\fP< 2U > &)"
+.br
+.RI "returns true if the model contains some box boundary identifiers, but also irregular boundaries "
+.ti -1c
+.RI "bool \fBcsmp::hasAllSideBoundaries\fP (const \fBModel\fP< 3U > &)"
+.br
+.ti -1c
+.RI "bool \fBcsmp::isStrictlyBoxShaped\fP (const \fBModel\fP< 2U > &)"
+.br
+.RI "returns true if the model contains the complete set of box boundary identifiers "
+.ti -1c
+.RI "bool \fBcsmp::isStrictlyBoxShaped\fP (const \fBModel\fP< 3U > &)"
+.br
+.ti -1c
+.RI "\fBBOX_BOUNDARY\fP \fBcsmp::whichEdge\fP (\fBBOX_BOUNDARY\fP side1, \fBBOX_BOUNDARY\fP side2)"
+.br
+.RI "returns the dim-2 edge (if any) that lies between the sides of the box that are given as arguments "
+.ti -1c
+.RI "\fBBOX_BOUNDARY\fP \fBcsmp::whichCorner\fP (\fBBOX_BOUNDARY\fP side1, \fBBOX_BOUNDARY\fP side2, \fBBOX_BOUNDARY\fP side3)"
+.br
+.RI "returns the corner of the BOX (1-6) that is shared by the side boundaries "
+.ti -1c
+.RI "\fBBOX_BOUNDARY\fP \fBcsmp::whichBoundary\fP (\fBBOX_BOUNDARY\fP node_flag1, \fBBOX_BOUNDARY\fP node_flag2)"
+.br
+.RI "return which boundary the edge or lower-dim face with the two end-node flags is on "
+.ti -1c
+.RI "template<uint32_t dim> void \fBcsmp::boxBoundaryPropertyRange\fP (const \fBModel\fP< dim > &sg, \fBBOX_BOUNDARY\fP boundary, const char *node_property, double &bmin, double &bmax)"
+.br
+.RI "reports the range of property values on the nodes flagged with the \fBBOX_BOUNDARY\fP identifier "
+.ti -1c
+.RI "double \fBcsmp::linearInterpolate\fP (const std::pair< \fBPoint\fP< 1U >, double > &, const std::pair< \fBPoint\fP< 1U >, double > &, const \fBPoint\fP< 1U > &)"
+.br
+.RI "linear interpolation of values to point between 2 points in 1D (use for assigning property gradients along straight boundaries) "
+.ti -1c
+.RI "double \fBcsmp::linearInterpolate\fP (const std::pair< \fBPoint\fP< 2U >, double > &, const std::pair< \fBPoint\fP< 2U >, double > &, const \fBPoint\fP< 2U > &)"
+.br
+.RI "bilinear interpolation to point between 2 points in 2D "
+.ti -1c
+.RI "double \fBcsmp::linearInterpolate\fP (const std::pair< \fBPoint\fP< 3U >, double > &, const std::pair< \fBPoint\fP< 3U >, double > &, const \fBPoint\fP< 3U > &)"
+.br
+.RI "3D trilinear interpolation "
+.ti -1c
+.RI "double \fBcsmp::bilinearInterpolate\fP (uint32_t idx_x, uint32_t idx_y, const \fBPoint\fP< 1U > &xy1, const \fBPoint\fP< 1U > &xy2, const \fBPoint\fP< 1U > &coord, double p1, double p2, double, double)"
+.br
+.RI "just a stub (ignores the bilinear) "
+.ti -1c
+.RI "double \fBcsmp::bilinearInterpolate\fP (uint32_t idx_x, uint32_t idx_y, const \fBPoint\fP< 2U > &xy1, const \fBPoint\fP< 2U > &xy2, const \fBPoint\fP< 2U > &coord, double p1, double p2, double p3, double p4)"
+.br
+.ti -1c
+.RI "double \fBcsmp::bilinearInterpolate\fP (uint32_t idx_x, uint32_t idx_y, const \fBPoint\fP< 3U > &xy1, const \fBPoint\fP< 3U > &xy2, const \fBPoint\fP< 3U > &coord, double p1, double p2, double p3, double p4)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Anything to do with definitions and operations on rectangular and box-shaped models(2D and 3D that is)\&. This also includes stand-alone functions for the processing of Boundary flags and values\&. 
+
+
+.PP
+\fBAuthor\fP
+.RS 4
+S\&.K\&. Matthai 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+1997 
+.RE
+.PP
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

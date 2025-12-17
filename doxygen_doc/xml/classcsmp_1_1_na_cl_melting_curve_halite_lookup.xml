@@ -1,0 +1,525 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_na_cl_melting_curve_halite_lookup" kind="class" language="C++" prot="public">
+    <compoundname>csmp::NaClMeltingCurveHaliteLookup</compoundname>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1aa407f1ff99895bc894477cf8e0134d80" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::NaClMeltingCurveHaliteLookup::temperature</definition>
+        <argsstring></argsstring>
+        <name>temperature</name>
+        <qualifiedname>csmp::NaClMeltingCurveHaliteLookup::temperature</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveHaliteLookup.h" line="32" column="25" bodyfile="source/includes/eos/NaClMeltingCurveHaliteLookup.h" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1ab97713d86713d84b9e2da589b7977c78" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::NaClMeltingCurveHaliteLookup::pressure</definition>
+        <argsstring></argsstring>
+        <name>pressure</name>
+        <qualifiedname>csmp::NaClMeltingCurveHaliteLookup::pressure</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveHaliteLookup.h" line="33" column="25" bodyfile="source/includes/eos/NaClMeltingCurveHaliteLookup.h" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1a5306cdeee6dd96d816b39f01109cf65d" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClMeltingCurveHaliteLookup::tcurrent</definition>
+        <argsstring></argsstring>
+        <name>tcurrent</name>
+        <qualifiedname>csmp::NaClMeltingCurveHaliteLookup::tcurrent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveHaliteLookup.h" line="35" column="26" bodyfile="source/includes/eos/NaClMeltingCurveHaliteLookup.h" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1aaf2d28cd798fa254cce9a85a801d0b96" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClMeltingCurveHaliteLookup::pcurrent</definition>
+        <argsstring></argsstring>
+        <name>pcurrent</name>
+        <qualifiedname>csmp::NaClMeltingCurveHaliteLookup::pcurrent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveHaliteLookup.h" line="36" column="26" bodyfile="source/includes/eos/NaClMeltingCurveHaliteLookup.h" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1a294afbbcb12a40cee1b88fc0999e8ac7" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClMeltingCurveHaliteLookup::xcurrent</definition>
+        <argsstring></argsstring>
+        <name>xcurrent</name>
+        <qualifiedname>csmp::NaClMeltingCurveHaliteLookup::xcurrent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveHaliteLookup.h" line="37" column="26" bodyfile="source/includes/eos/NaClMeltingCurveHaliteLookup.h" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1aeb0c7e485f76ac0139e7d47f39e7089f" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClMeltingCurveHaliteLookup::t_res</definition>
+        <argsstring></argsstring>
+        <name>t_res</name>
+        <qualifiedname>csmp::NaClMeltingCurveHaliteLookup::t_res</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveHaliteLookup.h" line="38" column="26" bodyfile="source/includes/eos/NaClMeltingCurveHaliteLookup.h" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1a45f902492b47fca743c6de5c1cfceb2c" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClMeltingCurveHaliteLookup::tnorm</definition>
+        <argsstring></argsstring>
+        <name>tnorm</name>
+        <qualifiedname>csmp::NaClMeltingCurveHaliteLookup::tnorm</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveHaliteLookup.h" line="39" column="26" bodyfile="source/includes/eos/NaClMeltingCurveHaliteLookup.h" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1a115ec47278be39b26235f1884587000a" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClMeltingCurveHaliteLookup::pnorm</definition>
+        <argsstring></argsstring>
+        <name>pnorm</name>
+        <qualifiedname>csmp::NaClMeltingCurveHaliteLookup::pnorm</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveHaliteLookup.h" line="40" column="26" bodyfile="source/includes/eos/NaClMeltingCurveHaliteLookup.h" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1a46c12c54b098c4ddc9bd3ef325f8d0c1" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClMeltingCurveHaliteLookup::tmin</definition>
+        <argsstring></argsstring>
+        <name>tmin</name>
+        <qualifiedname>csmp::NaClMeltingCurveHaliteLookup::tmin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveHaliteLookup.h" line="41" column="26" bodyfile="source/includes/eos/NaClMeltingCurveHaliteLookup.h" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1a1b720d210ae2c453933c8c8e06422d43" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::NaClMeltingCurveHaliteLookup::it</definition>
+        <argsstring></argsstring>
+        <name>it</name>
+        <qualifiedname>csmp::NaClMeltingCurveHaliteLookup::it</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveHaliteLookup.h" line="43" column="28" bodyfile="source/includes/eos/NaClMeltingCurveHaliteLookup.h" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1a9d37ac5ebf445cbc65e4a5e315c2be4a" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::NaClMeltingCurveHaliteLookup::t_dim</definition>
+        <argsstring></argsstring>
+        <name>t_dim</name>
+        <qualifiedname>csmp::NaClMeltingCurveHaliteLookup::t_dim</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveHaliteLookup.h" line="44" column="28" bodyfile="source/includes/eos/NaClMeltingCurveHaliteLookup.h" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1ab5db80b2b10f88c3d724021d91ab1d9b" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::NaClMeltingCurveHaliteLookup::i_guess</definition>
+        <argsstring></argsstring>
+        <name>i_guess</name>
+        <qualifiedname>csmp::NaClMeltingCurveHaliteLookup::i_guess</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveHaliteLookup.h" line="45" column="28" bodyfile="source/includes/eos/NaClMeltingCurveHaliteLookup.h" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1a9679a1dea10fceaee6951af3d18f27ba" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::NaClMeltingCurveHaliteLookup::i_max</definition>
+        <argsstring></argsstring>
+        <name>i_max</name>
+        <qualifiedname>csmp::NaClMeltingCurveHaliteLookup::i_max</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveHaliteLookup.h" line="46" column="28" bodyfile="source/includes/eos/NaClMeltingCurveHaliteLookup.h" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1a39e73e54a1a402a6b2da6ec0fa00ecbc" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::NaClMeltingCurveHaliteLookup::i_min</definition>
+        <argsstring></argsstring>
+        <name>i_min</name>
+        <qualifiedname>csmp::NaClMeltingCurveHaliteLookup::i_min</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveHaliteLookup.h" line="47" column="28" bodyfile="source/includes/eos/NaClMeltingCurveHaliteLookup.h" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1a7e3b5891f266087c4b20d22386b8d125" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::NaClMeltingCurveHaliteLookup::it_max</definition>
+        <argsstring></argsstring>
+        <name>it_max</name>
+        <qualifiedname>csmp::NaClMeltingCurveHaliteLookup::it_max</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveHaliteLookup.h" line="48" column="28" bodyfile="source/includes/eos/NaClMeltingCurveHaliteLookup.h" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1a6c72d819696c2d37db967c4c95a0e68a" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::NaClMeltingCurveHaliteLookup::it_min</definition>
+        <argsstring></argsstring>
+        <name>it_min</name>
+        <qualifiedname>csmp::NaClMeltingCurveHaliteLookup::it_min</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveHaliteLookup.h" line="49" column="28" bodyfile="source/includes/eos/NaClMeltingCurveHaliteLookup.h" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1ad59179849d9c366e5db081fc8c574e46" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int csmp::NaClMeltingCurveHaliteLookup::state</definition>
+        <argsstring></argsstring>
+        <name>state</name>
+        <qualifiedname>csmp::NaClMeltingCurveHaliteLookup::state</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveHaliteLookup.h" line="50" column="28" bodyfile="source/includes/eos/NaClMeltingCurveHaliteLookup.h" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1af39a8a833c0939e8da1747fde45e955b" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::NaClMeltingCurveHaliteLookup::storage_vector</definition>
+        <argsstring></argsstring>
+        <name>storage_vector</name>
+        <qualifiedname>csmp::NaClMeltingCurveHaliteLookup::storage_vector</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveHaliteLookup.h" line="52" column="18" bodyfile="source/includes/eos/NaClMeltingCurveHaliteLookup.h" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1ab72706df8e6e6f931c31907415be5d7e" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_triple_point_na_cl" kindref="compound">TriplePointNaCl</ref></type>
+        <definition>TriplePointNaCl csmp::NaClMeltingCurveHaliteLookup::tp_nacl</definition>
+        <argsstring></argsstring>
+        <name>tp_nacl</name>
+        <qualifiedname>csmp::NaClMeltingCurveHaliteLookup::tp_nacl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveHaliteLookup.h" line="54" column="28" bodyfile="source/includes/eos/NaClMeltingCurveHaliteLookup.h" bodystart="54" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1afee56b83e2bd55f230c973ce3202cf1a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::NaClMeltingCurveHaliteLookup::NaClMeltingCurveHaliteLookup</definition>
+        <argsstring>(const double &amp;externaltemperature, const double &amp;externalpressure)</argsstring>
+        <name>NaClMeltingCurveHaliteLookup</name>
+        <qualifiedname>csmp::NaClMeltingCurveHaliteLookup::NaClMeltingCurveHaliteLookup</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>externaltemperature</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>externalpressure</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveHaliteLookup.h" line="15" column="5" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClMeltingCurveHaliteLookup.cpp" bodystart="14" bodyend="150"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1ae9e56877d2838bac3b79dff4c0bc4ae1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::NaClMeltingCurveHaliteLookup::~NaClMeltingCurveHaliteLookup</definition>
+        <argsstring>()</argsstring>
+        <name>~NaClMeltingCurveHaliteLookup</name>
+        <qualifiedname>csmp::NaClMeltingCurveHaliteLookup::~NaClMeltingCurveHaliteLookup</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveHaliteLookup.h" line="17" column="5" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClMeltingCurveHaliteLookup.cpp" bodystart="152" bodyend="154"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1aee40b9cf76662b7d030e3466f8695318" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NaClMeltingCurveHaliteLookup::TmeltFromP</definition>
+        <argsstring>()</argsstring>
+        <name>TmeltFromP</name>
+        <qualifiedname>csmp::NaClMeltingCurveHaliteLookup::TmeltFromP</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveHaliteLookup.h" line="19" column="26" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClMeltingCurveHaliteLookup.cpp" bodystart="159" bodyend="159"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1a40c9136a73b373318cf5d29df94a7b47" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NaClMeltingCurveHaliteLookup::PmeltFromT</definition>
+        <argsstring>()</argsstring>
+        <name>PmeltFromT</name>
+        <qualifiedname>csmp::NaClMeltingCurveHaliteLookup::PmeltFromT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveHaliteLookup.h" line="20" column="26" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClMeltingCurveHaliteLookup.cpp" bodystart="160" bodyend="160"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1aabdf7bc4054cb42a68137074e10a5c0e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NaClMeltingCurveHaliteLookup::MassFractionNaCl</definition>
+        <argsstring>()</argsstring>
+        <name>MassFractionNaCl</name>
+        <qualifiedname>csmp::NaClMeltingCurveHaliteLookup::MassFractionNaCl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveHaliteLookup.h" line="21" column="26" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClMeltingCurveHaliteLookup.cpp" bodystart="161" bodyend="161"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1a7822e3d8a8a558b4059a17c3314c6259" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NaClMeltingCurveHaliteLookup::Density</definition>
+        <argsstring>()</argsstring>
+        <name>Density</name>
+        <qualifiedname>csmp::NaClMeltingCurveHaliteLookup::Density</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveHaliteLookup.h" line="22" column="26" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClMeltingCurveHaliteLookup.cpp" bodystart="162" bodyend="162"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1abf01c4dc68788c65273e2f0ecead4900" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NaClMeltingCurveHaliteLookup::Enthalpy</definition>
+        <argsstring>()</argsstring>
+        <name>Enthalpy</name>
+        <qualifiedname>csmp::NaClMeltingCurveHaliteLookup::Enthalpy</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveHaliteLookup.h" line="23" column="26" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClMeltingCurveHaliteLookup.cpp" bodystart="163" bodyend="163"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1a05572f3240cd56a4f684457cf9a5e7e6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NaClMeltingCurveHaliteLookup::HeatCapacity</definition>
+        <argsstring>()</argsstring>
+        <name>HeatCapacity</name>
+        <qualifiedname>csmp::NaClMeltingCurveHaliteLookup::HeatCapacity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveHaliteLookup.h" line="24" column="26" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClMeltingCurveHaliteLookup.cpp" bodystart="164" bodyend="164"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1a73af0e49f9320d90e562e1294a1bdf3c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NaClMeltingCurveHaliteLookup::Compressibility</definition>
+        <argsstring>()</argsstring>
+        <name>Compressibility</name>
+        <qualifiedname>csmp::NaClMeltingCurveHaliteLookup::Compressibility</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveHaliteLookup.h" line="25" column="26" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClMeltingCurveHaliteLookup.cpp" bodystart="165" bodyend="165"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1a0eef06136110f0a7df0d7404e1e98920" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NaClMeltingCurveHaliteLookup::Viscosity</definition>
+        <argsstring>()</argsstring>
+        <name>Viscosity</name>
+        <qualifiedname>csmp::NaClMeltingCurveHaliteLookup::Viscosity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveHaliteLookup.h" line="26" column="26" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClMeltingCurveHaliteLookup.cpp" bodystart="166" bodyend="166"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1a510fc691e6904e8cc8821f0012cc06b6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NaClMeltingCurveHaliteLookup::TfromP</definition>
+        <argsstring>(const double &amp;press)</argsstring>
+        <name>TfromP</name>
+        <qualifiedname>csmp::NaClMeltingCurveHaliteLookup::TfromP</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>press</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveHaliteLookup.h" line="27" column="26" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClMeltingCurveHaliteLookup.cpp" bodystart="201" bodyend="234"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1a349954d34565163d72c5a17e67dcc380" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NaClMeltingCurveHaliteLookup::ValueOf</definition>
+        <argsstring>(const int &amp;property_index)</argsstring>
+        <name>ValueOf</name>
+        <qualifiedname>csmp::NaClMeltingCurveHaliteLookup::ValueOf</qualifiedname>
+        <param>
+          <type>const int &amp;</type>
+          <declname>property_index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveHaliteLookup.h" line="28" column="26" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClMeltingCurveHaliteLookup.cpp" bodystart="169" bodyend="176"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1ac3de7da997a384c4710dd9c527f03544" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::NaClMeltingCurveHaliteLookup::GetTemperatureIndex</definition>
+        <argsstring>(const double &amp;myt)</argsstring>
+        <name>GetTemperatureIndex</name>
+        <qualifiedname>csmp::NaClMeltingCurveHaliteLookup::GetTemperatureIndex</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>myt</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveHaliteLookup.h" line="56" column="10" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClMeltingCurveHaliteLookup.cpp" bodystart="180" bodyend="198"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::NaClMeltingCurveHaliteLookup</label>
+        <link refid="classcsmp_1_1_na_cl_melting_curve_halite_lookup"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/eos/NaClMeltingCurveHaliteLookup.h" line="11" column="3" bodyfile="source/includes/eos/NaClMeltingCurveHaliteLookup.h" bodystart="12" bodyend="58"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1a73af0e49f9320d90e562e1294a1bdf3c" prot="public" virt="non-virtual"><scope>csmp::NaClMeltingCurveHaliteLookup</scope><name>Compressibility</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1a7822e3d8a8a558b4059a17c3314c6259" prot="public" virt="non-virtual"><scope>csmp::NaClMeltingCurveHaliteLookup</scope><name>Density</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1abf01c4dc68788c65273e2f0ecead4900" prot="public" virt="non-virtual"><scope>csmp::NaClMeltingCurveHaliteLookup</scope><name>Enthalpy</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1ac3de7da997a384c4710dd9c527f03544" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurveHaliteLookup</scope><name>GetTemperatureIndex</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1a05572f3240cd56a4f684457cf9a5e7e6" prot="public" virt="non-virtual"><scope>csmp::NaClMeltingCurveHaliteLookup</scope><name>HeatCapacity</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1ab5db80b2b10f88c3d724021d91ab1d9b" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurveHaliteLookup</scope><name>i_guess</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1a9679a1dea10fceaee6951af3d18f27ba" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurveHaliteLookup</scope><name>i_max</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1a39e73e54a1a402a6b2da6ec0fa00ecbc" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurveHaliteLookup</scope><name>i_min</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1a1b720d210ae2c453933c8c8e06422d43" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurveHaliteLookup</scope><name>it</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1a7e3b5891f266087c4b20d22386b8d125" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurveHaliteLookup</scope><name>it_max</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1a6c72d819696c2d37db967c4c95a0e68a" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurveHaliteLookup</scope><name>it_min</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1aabdf7bc4054cb42a68137074e10a5c0e" prot="public" virt="non-virtual"><scope>csmp::NaClMeltingCurveHaliteLookup</scope><name>MassFractionNaCl</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1afee56b83e2bd55f230c973ce3202cf1a" prot="public" virt="non-virtual"><scope>csmp::NaClMeltingCurveHaliteLookup</scope><name>NaClMeltingCurveHaliteLookup</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1aaf2d28cd798fa254cce9a85a801d0b96" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurveHaliteLookup</scope><name>pcurrent</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1a40c9136a73b373318cf5d29df94a7b47" prot="public" virt="non-virtual"><scope>csmp::NaClMeltingCurveHaliteLookup</scope><name>PmeltFromT</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1a115ec47278be39b26235f1884587000a" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurveHaliteLookup</scope><name>pnorm</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1ab97713d86713d84b9e2da589b7977c78" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurveHaliteLookup</scope><name>pressure</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1ad59179849d9c366e5db081fc8c574e46" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurveHaliteLookup</scope><name>state</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1af39a8a833c0939e8da1747fde45e955b" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurveHaliteLookup</scope><name>storage_vector</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1a9d37ac5ebf445cbc65e4a5e315c2be4a" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurveHaliteLookup</scope><name>t_dim</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1aeb0c7e485f76ac0139e7d47f39e7089f" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurveHaliteLookup</scope><name>t_res</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1a5306cdeee6dd96d816b39f01109cf65d" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurveHaliteLookup</scope><name>tcurrent</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1aa407f1ff99895bc894477cf8e0134d80" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurveHaliteLookup</scope><name>temperature</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1a510fc691e6904e8cc8821f0012cc06b6" prot="public" virt="non-virtual"><scope>csmp::NaClMeltingCurveHaliteLookup</scope><name>TfromP</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1aee40b9cf76662b7d030e3466f8695318" prot="public" virt="non-virtual"><scope>csmp::NaClMeltingCurveHaliteLookup</scope><name>TmeltFromP</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1a46c12c54b098c4ddc9bd3ef325f8d0c1" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurveHaliteLookup</scope><name>tmin</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1a45f902492b47fca743c6de5c1cfceb2c" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurveHaliteLookup</scope><name>tnorm</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1ab72706df8e6e6f931c31907415be5d7e" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurveHaliteLookup</scope><name>tp_nacl</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1a349954d34565163d72c5a17e67dcc380" prot="public" virt="non-virtual"><scope>csmp::NaClMeltingCurveHaliteLookup</scope><name>ValueOf</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1a0eef06136110f0a7df0d7404e1e98920" prot="public" virt="non-virtual"><scope>csmp::NaClMeltingCurveHaliteLookup</scope><name>Viscosity</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1a294afbbcb12a40cee1b88fc0999e8ac7" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurveHaliteLookup</scope><name>xcurrent</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_halite_lookup_1ae9e56877d2838bac3b79dff4c0bc4ae1" prot="public" virt="non-virtual"><scope>csmp::NaClMeltingCurveHaliteLookup</scope><name>~NaClMeltingCurveHaliteLookup</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

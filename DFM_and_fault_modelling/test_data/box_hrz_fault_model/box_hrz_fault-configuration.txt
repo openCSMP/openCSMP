@@ -1,0 +1,13 @@
+‘box_hrz-configuration.txt' 50 x 100 x 200 m, with horizontal fracture
+
+# default: matrix properties
+porosity	0.1
+permeability	1.0e-13
+thickness	1.
+fluid pressure	0.
+
+# fractures
+FRACTURE	complete	permeability	1.0E-9
+FRACTURE	complete	porosity	1.
+FRACTURE	complete	thickness	1.0e-3
+

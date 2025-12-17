@@ -1,0 +1,176 @@
+\doxysection{Property\+Data.\+h}
+\hypertarget{_property_data_8h_source}{}\label{_property_data_8h_source}\index{source/includes/model/PropertyData.h@{source/includes/model/PropertyData.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_PROPERTY\_DATA\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_PROPERTY\_DATA\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}};}
+\DoxyCodeLine{00009\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}};}
+\DoxyCodeLine{00010\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{FlaggedArrayVariable}};}
+\DoxyCodeLine{00011\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_vector_variable}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}};}
+\DoxyCodeLine{00012\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_tensor_variable}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}};}
+\DoxyCodeLine{00013\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_property_data}{PropertyData}};}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{comment}{///\ prototypes\ for\ appending\ variable\ values\ to\ container}}
+\DoxyCodeLine{00016\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp_ae8b31696d9894a90cc531500d1088572}{pushBack}}(\ \mbox{\hyperlink{classcsmp_1_1_property_data}{PropertyData}}\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\&\ );}
+\DoxyCodeLine{00017\ \textcolor{keywordtype}{void}\ pushBack(\ \mbox{\hyperlink{classcsmp_1_1_property_data}{PropertyData}}\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\&\ );}
+\DoxyCodeLine{00018\ \textcolor{keywordtype}{void}\ pushBack(\ \mbox{\hyperlink{classcsmp_1_1_property_data}{PropertyData}}\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{FlaggedArrayVariable}}\&\ );}
+\DoxyCodeLine{00019\ \textcolor{keyword}{template}<uint32\_t\ dim>\ \textcolor{keywordtype}{void}\ pushBack(\ \mbox{\hyperlink{classcsmp_1_1_property_data}{PropertyData}}\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\&\ );}
+\DoxyCodeLine{00020\ \textcolor{keyword}{template}<uint32\_t\ dim>\ \textcolor{keywordtype}{void}\ pushBack(\ \mbox{\hyperlink{classcsmp_1_1_property_data}{PropertyData}}\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<dim>\&\ );}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{comment}{///\ storing\ the\ PropertyData\ data:\ \ store(\ data,\ i,\ makeScalar(ANY,0.)\ );}}
+\DoxyCodeLine{00023\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ csmp\_var\_type>\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp_a7e1fb631510192d4a0bb05c36cbf14ec}{store}}(\ \mbox{\hyperlink{classcsmp_1_1_property_data}{PropertyData}}\&,\ size\_t\ position,\ \textcolor{keyword}{const}\ csmp\_var\_type\&\ );}
+\DoxyCodeLine{00024\ \textcolor{keyword}{template}<uint32\_t\ dim>\ \textcolor{keywordtype}{void}\ store(\ \mbox{\hyperlink{classcsmp_1_1_property_data}{PropertyData}}\&,\ size\_t\ position,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\&\ );}
+\DoxyCodeLine{00025\ \textcolor{keyword}{template}<uint32\_t\ dim>\ \textcolor{keywordtype}{void}\ store(\ \mbox{\hyperlink{classcsmp_1_1_property_data}{PropertyData}}\&,\ size\_t\ position,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<dim>\&\ );}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \textcolor{comment}{///\ reading\ PropertyData\ data:\ VectorVariable<3U>\ a;\ \ read(\ data,\ i,\ a\ );}}
+\DoxyCodeLine{00028\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ csmp\_var\_type>\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp_ac76d03a8153fa83afdc1758b9bdc9507}{read}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_data}{PropertyData}}\&,\ size\_t\ position,\ csmp\_var\_type\&\ );}
+\DoxyCodeLine{00029\ \textcolor{keyword}{template}<uint32\_t\ dim>\ \textcolor{keywordtype}{void}\ read(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_data}{PropertyData}}\&,\ size\_t\ position,\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\&\ );}
+\DoxyCodeLine{00030\ \textcolor{keyword}{template}<uint32\_t\ dim>\ \textcolor{keywordtype}{void}\ read(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_data}{PropertyData}}\&,\ size\_t\ position,\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<dim>\&\ );}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00033\ \textcolor{comment}{}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ \ @brief\ flexible-\/size\ container\ for\ CSMP\ data\ types,\ providing\ range-\/check\ and\ conversion\ functions}}
+\DoxyCodeLine{00035\ \textcolor{comment}{}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ \ @author\ S.K.\ Matthai}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ \ @date\ 8/4/2016}}
+\DoxyCodeLine{00038\ \textcolor{comment}{}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ \ @section\ motivation\ Motivation}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ \ }}
+\DoxyCodeLine{00041\ \textcolor{comment}{\ \ Efficient\ data\ transfer\ object\ with\ an\ efficient\ binary\ interface\ to\ }}
+\DoxyCodeLine{00042\ \textcolor{comment}{\ \ store\ variables\ to\ disk.}}
+\DoxyCodeLine{00043\ \textcolor{comment}{}}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ \ @section\ design\ Design\ Intent}}
+\DoxyCodeLine{00045\ \textcolor{comment}{}}
+\DoxyCodeLine{00046\ \textcolor{comment}{\ \ More\ disk\ storage-\/size\ efficient\ alternative\ to\ FEM\_Data\ in\ VSet\ to\ streamline\ variable\ exchange\ and\ storage}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ \ to\ disk;\ make\ it\ possible\ to\ read\ variables\ selectively\ from\ file.}}
+\DoxyCodeLine{00048\ \textcolor{comment}{}}
+\DoxyCodeLine{00049\ \textcolor{comment}{\ \ @section\ examples\ Application\ Examples}}
+\DoxyCodeLine{00050\ \textcolor{comment}{}}
+\DoxyCodeLine{00051\ \textcolor{comment}{\ \ Create\ contained\ for\ 1000\ arrays,\ initialize\ it\ and\ write\ it\ to\ disk,\ for\ example:}}
+\DoxyCodeLine{00052\ \textcolor{comment}{}}
+\DoxyCodeLine{00053\ \textcolor{comment}{\ \ @code}}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ \ PropertyData\ data(\ NODE,\ ARRAY,\ DIM3,\ 21\ );}}
+\DoxyCodeLine{00055\ \textcolor{comment}{\ \ data.Reserve(1000);}}
+\DoxyCodeLine{00056\ \textcolor{comment}{\ \ ArrayVariable\ \ array(1000);}}
+\DoxyCodeLine{00057\ \textcolor{comment}{\ \ ...}}
+\DoxyCodeLine{00058\ \textcolor{comment}{\ \ for(\ a\ :\ 1000\ )\ \ data.PushBack(\ array\ );}}
+\DoxyCodeLine{00059\ \textcolor{comment}{\ \ data.OutBinary(\ FILE\ );\ \ }}
+\DoxyCodeLine{00060\ \textcolor{comment}{\ \ @endcode}}
+\DoxyCodeLine{00061\ \textcolor{comment}{}}
+\DoxyCodeLine{00062\ \textcolor{comment}{\ \ @attention\ use\ read()\ and\ store()\ from\ above\ to\ retrieve\ entire\ csmp\ variables,}}
+\DoxyCodeLine{00063\ \textcolor{comment}{\ \ there\ are\ no\ member\ accessors\ Read()\ or\ Store()}}
+\DoxyCodeLine{00064\ \textcolor{comment}{}}
+\DoxyCodeLine{00065\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00066\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_property_data}{PropertyData}}\ \{}
+\DoxyCodeLine{00067\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{comment}{///\ custom\ constructor\ (but\ not\ initializer)\ for\ csmp\ variable\ types;\ array\ length\ gives\ the\ number\ of\ elements\ in\ array\ or\ flagged\ array\ variable}}
+\DoxyCodeLine{00070\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_data_a865879f690f42d28e1236f5801d4e89a}{PropertyData}}(\ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}},\ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\_TYPE}},\ uint32\_t\ dim,\ uint32\_t\ array\_length=0U\ );}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{comment}{///\ compare\ to\ another\ dataset\ of\ this\ sort}}
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_property_data_a00c6240da40e2e9306445284a3f85905}{operator}}==(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_data}{PropertyData}}\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \ \ \ \ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}\ \ \ \ \ Placement()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ place\_;\ \}}
+\DoxyCodeLine{00076\ \ \ \ \ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\_TYPE}}\ Type()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ type\_;\ \}}
+\DoxyCodeLine{00077\ \ \ \ \ uint32\_t\ \ \ \ \ \ Dim()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ dim\_;\ \}}
+\DoxyCodeLine{00078\ \ \ \ \ size\_t\ \ \ \ \ \ \ \ Size()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ data\_.size();\ \}}
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{comment}{///\ number\ of\ value\ entries\ stored\ in\ the\ variable\ (=size\ of\ array)}}
+\DoxyCodeLine{00080\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_data_a13d2570bdc4a02ac3d49490429794d47}{uint32\_t}}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_data_a13d2570bdc4a02ac3d49490429794d47}{Components}}()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ data\_stride\_;\ \};}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{comment}{///\ changing\ container\ size}}
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_property_data_a6677a39d83f72a7d878cda244351e036}{Clear}}();}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{comment}{///\ for\ a\ user-\/defined\ number\ of\ objects\ of\ the\ type\ the\ property\ data\ was\ constructed\ for}}
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_property_data_a6b3ac048510eb250adb510040f99ab8f}{Reserve}}(\ size\_t\ n\_objects\ );}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{comment}{///\ sheer\ storage\ not\ considering\ types\ of\ variables}}
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_property_data_a0613f79874149630ce5f198a8c07150b}{Reserve}}(\ size\_t\ flag\_capacity,\ size\_t\ value\_capacity\ );}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{comment}{///\ for\ a\ user-\/defined\ number\ of\ objects\ of\ the\ type\ the\ property\ data\ was\ constructed\ for}}
+\DoxyCodeLine{00092\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_property_data_a89e8485e10066602dbc876f7843efa06}{Resize}}(\ size\_t\ n\_objects\ );}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{comment}{///\ sheer\ storage\ size\ not\ considering\ types\ of\ variables}}
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_property_data_a4b47f4fb493dee7381b82b2899db953f}{Resize}}(\ size\_t\ n\_flags,\ size\_t\ n\_values\ );}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{comment}{///\ change\ the\ size\ if\ this\ required\ by\ parent\ container,\ e.g.,\ VSet}}
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_property_data_a3d47ce3a5c14576b43c08310494faafe}{ReduceTo}}(\ \textcolor{keyword}{const}\ std::map<size\_t,size\_t>\&\ o\_n\_elmt\_ids\ );}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{comment}{//\ accessors\ /\ mutators\ for\ values\ (operator[]\ cannot\ be\ overloaded\ for\ this)}}
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{comment}{///\ @attention\ use\ read()\ and\ store()\ from\ above\ to\ retrieve\ entire\ csmp\ variables}}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{comment}{///\ 'raw'\ inserter\ for\ flags\ (user\ must\ ascertain\ that\ stride\ is\ correct);\ use\ pushBack()\ for\ objects}}
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_property_data_ac744a416927ff51be7cfe4636fc1ec4e}{PushBack}}(\ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\_FLAG}}\ );}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ \ \ \ \ \textcolor{comment}{///\ 'raw'\ inserter\ for\ values\ (user\ must\ ascertain\ that\ stride\ is\ correct);\ use\ pushBack()\ for\ objects}}
+\DoxyCodeLine{00107\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_property_data_ab7debc3c38d32ccccd943ca61c42d024}{PushBack}}(\ \textcolor{keywordtype}{double}\ );}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{comment}{///\ inserter\ from\ another\ PropertyData}}
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_property_data_a46a23d9e0bf89c073a69d0ef7e3a1316}{PushBackFrom}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_data}{PropertyData}}\&\ data,\ size\_t\ nth\_value\ );}
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{comment}{///\ accessors\ /\ mutators\ for\ flags}}
+\DoxyCodeLine{00113\ \ \ \ \ \textcolor{comment}{///\ scalars}}
+\DoxyCodeLine{00114\ \ \ \ \ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\_FLAG}}\&\ \mbox{\hyperlink{classcsmp_1_1_property_data_a7b4d6cda76a21d4fc09f69ef1c7c7acd}{Flag}}(\ size\_t\ nth\_value\ );}
+\DoxyCodeLine{00115\ \ \ \ \ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\_FLAG}}\ \ \mbox{\hyperlink{classcsmp_1_1_property_data_aa1074f383697f4bf2ea379d7aecc8951}{Flag}}(\ size\_t\ nth\_value\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{comment}{///\ vectors\ and\ array\ variables}}
+\DoxyCodeLine{00117\ \ \ \ \ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\_FLAG}}\&\ \mbox{\hyperlink{classcsmp_1_1_property_data_afef58fdb70341e997f2d2d7cc3f20a41}{Flag}}(\ size\_t\ nth\_value,\ uint32\_t\ ith\_dim\ );}
+\DoxyCodeLine{00118\ \ \ \ \ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\_FLAG}}\ \ \mbox{\hyperlink{classcsmp_1_1_property_data_ae57154253ada7526df9c04e1bb6e2ebd}{Flag}}(\ size\_t\ nth\_value,\ uint32\_t\ ith\_dim\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00119\ \ \ \ \ \textcolor{comment}{///\ tensors}}
+\DoxyCodeLine{00120\ \ \ \ \ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\_FLAG}}\&\ \mbox{\hyperlink{classcsmp_1_1_property_data_af53bd010f3cad7f23fc3b863826826b8}{Flag}}(\ size\_t\ nth\_value,\ uint32\_t\ ith\_row,\ uint32\_t\ jth\_col\ );}
+\DoxyCodeLine{00121\ \ \ \ \ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\_FLAG}}\ \ \mbox{\hyperlink{classcsmp_1_1_property_data_a81deef1b096e45cbbf03bd23416528a1}{Flag}}(\ size\_t\ nth\_value,\ uint32\_t\ ith\_row,\ uint32\_t\ jth\_col\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ \ \ \ \ \textcolor{comment}{///\ scalars}}
+\DoxyCodeLine{00124\ \ \ \ \ \textcolor{keywordtype}{double}\&\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_data_a890b42c600b15f43dd3e84b362a13e00}{Value}}(\ size\_t\ nth\_value\ );}
+\DoxyCodeLine{00125\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ Value(\ size\_t\ nth\_value\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00126\ \ \ \ \ \textcolor{comment}{///\ vectors\ and\ array\ variables}}
+\DoxyCodeLine{00127\ \ \ \ \ \textcolor{keywordtype}{double}\&\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_data_a1ed5e1a202e7686c624a7504bbb6711e}{Value}}(\ size\_t\ nth\_value,\ uint32\_t\ ith\_dim\ );}
+\DoxyCodeLine{00128\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_data_a18d9ec5a488d740fa6149d3eff5ea26e}{Value}}(\ size\_t\ nth\_value,\ uint32\_t\ ith\_dim\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00129\ \ \ \ \ \textcolor{comment}{///\ tensors}}
+\DoxyCodeLine{00130\ \ \ \ \ \textcolor{keywordtype}{double}\&\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_data_a80320046cf21d1c86a8dd80401f5116f}{Value}}(\ size\_t\ nth\_value,\ uint32\_t\ ith\_row,\ uint32\_t\ jth\_col\ );}
+\DoxyCodeLine{00131\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ Value(\ size\_t\ nth\_value,\ uint32\_t\ ith\_row,\ uint32\_t\ jth\_col\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ \ \ \ \ \textcolor{comment}{///\ checks\ range;\ all\ values\ included}}
+\DoxyCodeLine{00134\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_property_data_a400079960fab770440da35d102d1d3e7}{MinMaxOf}}(\ \textcolor{keywordtype}{double}\&\ tmin,\ \textcolor{keywordtype}{double}\&\ tmax\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00135\ }
+\DoxyCodeLine{00136\ \ \ \ \ \textcolor{comment}{///\ scales\ the\ current\ variable\ range\ to\ the\ new\ one;\ all\ values\ are\ scaled}}
+\DoxyCodeLine{00137\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_property_data_a6126b9ecb9ad1426b85b679cb0bedd50}{ScaleRangeTo}}(\ \textcolor{keywordtype}{double}\ tmin,\ \textcolor{keywordtype}{double}\ tmax\ );}
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00139\ \ \ \ \ \textcolor{comment}{///\ add\ supplied\ value\ to\ all\ entries\ (look\ at\ conventions\ for\ vectors\ and\ tensors\ in\ the\ doc\ of\ these\ classes)}}
+\DoxyCodeLine{00140\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_property_data_a43730b1cb8f1d6870e16ead968ee8979}{OffsetRangeBy}}(\ \textcolor{keywordtype}{double}\ offset\_value\ );}
+\DoxyCodeLine{00141\ }
+\DoxyCodeLine{00142\ \ \ \ \ \textcolor{comment}{///\ takes\ a\ pointer\ to\ a\ typical\ math\ function\ like\ double\ sqrt(double)\ as\ argument;\ applied\ this\ function\ to\ all\ values}}
+\DoxyCodeLine{00143\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_property_data_a7ca06e800e251f0cd15df40f05c38557}{TransformValues}}(\ \textcolor{keywordtype}{double}\ (*f)(\textcolor{keywordtype}{double})\ );}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ \ \ \ \ \textcolor{comment}{///\ writing\ stored\ flag\ and\ data\ values\ to\ file}}
+\DoxyCodeLine{00146\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_property_data_a45ad6ffda2416e4dce7b82b929284781}{OutBinary}}(\ std::fstream\&\ fp\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00147\ }
+\DoxyCodeLine{00148\ \ \ \ \ \textcolor{keywordtype}{void}\ Out()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00149\ }
+\DoxyCodeLine{00150\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00151\ \ \ \ \ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ place\_\ =\ ELEMENT;\ \ \textcolor{comment}{///<\ placement\ of\ variable}}
+\DoxyCodeLine{00152\ \ \ \ \ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\_TYPE}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ type\_\ \ =\ SCALAR;\ \ \ \textcolor{comment}{///<\ any\ of\ scalar..flagged\ array}}
+\DoxyCodeLine{00153\ \ \ \ \ uint32\_t\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dim\_\ \ \ =\ 3;\ \ \ \ \ \ \ \ \textcolor{comment}{///<\ spatial\ dimension}}
+\DoxyCodeLine{00154\ \ \ \ \ uint32\_t\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ flag\_stride\_\ =\ 1;\ \ \textcolor{comment}{///<\ variable\ to\ variable\ offset\ (e.g.\ dim\ in\ a\ vector\ var)}}
+\DoxyCodeLine{00155\ \ \ \ \ uint32\_t\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ data\_stride\_\ =\ 1;\ \ \textcolor{comment}{///<\ variable\ to\ variable\ offset\ (e.g.\ dim\ in\ a\ vector\ var)}}
+\DoxyCodeLine{00156\ \ \ \ \ std::vector<VARIABLE\_FLAG>\ flags\_;\ \ \ \ \ \ \ \ \textcolor{comment}{///<\ variable\ flags}}
+\DoxyCodeLine{00157\ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\ \ \ \ \ \ \ \ data\_;\ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ variable\ values}}
+\DoxyCodeLine{00158\ \ \};}
+\DoxyCodeLine{00159\ }
+\DoxyCodeLine{00160\ }
+\DoxyCodeLine{00161\ \textcolor{comment}{///\ reading\ stored\ flag\ and\ data\ vaues\ from\ file}}
+\DoxyCodeLine{00162\ \mbox{\hyperlink{classcsmp_1_1_property_data}{PropertyData}}\ \mbox{\hyperlink{namespacecsmp_a650331e69cc79ca9091c5dc164d8f1a5}{inBinaryPropertyData}}(\ std::fstream\&\ fp\ );}
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00164\ \textcolor{comment}{///\ calculating\ the\ distance\ bwetween\ consecutive\ data\ entries\ in\ the\ container}}
+\DoxyCodeLine{00165\ \mbox{\hyperlink{namespacecsmp_a838b4862008d2b6fc7e44158cb907a80}{uint32\_t}}\ \mbox{\hyperlink{namespacecsmp_a838b4862008d2b6fc7e44158cb907a80}{flagOffset}}(\ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\_TYPE}},\ uint32\_t\ spatial\_dimension,\ uint32\_t\ array\_length\ );}
+\DoxyCodeLine{00166\ uint32\_t\ valueOffset(\ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\_TYPE}},\ uint32\_t\ spatial\_dimension,\ uint32\_t\ array\_length\ );}
+\DoxyCodeLine{00167\ }
+\DoxyCodeLine{00168\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00169\ }
+\DoxyCodeLine{00170\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_245f154f01a9c41b48017cf1f56a4b62" kind="dir">
+    <compoundname>build/CMakeFiles/open-csmp-core.dir/source/modules/discretisation</compoundname>
+    <innerfile refid="_convex_polygon_8cpp_8o_8d">ConvexPolygon.cpp.o.d</innerfile>
+    <innerfile refid="geometric_calculations_8cpp_8o_8d">geometricCalculations.cpp.o.d</innerfile>
+    <innerfile refid="_line_element_mesher_8cpp_8o_8d">LineElementMesher.cpp.o.d</innerfile>
+    <innerfile refid="_m_j_l___edge_8cpp_8o_8d">MJL_Edge.cpp.o.d</innerfile>
+    <innerfile refid="_m_j_l___edge3_d_8cpp_8o_8d">MJL_Edge3D.cpp.o.d</innerfile>
+    <innerfile refid="_m_j_l__functions_8cpp_8o_8d">MJL_functions.cpp.o.d</innerfile>
+    <innerfile refid="_m_j_l___node_8cpp_8o_8d">MJL_Node.cpp.o.d</innerfile>
+    <innerfile refid="_m_j_l___plane3_d_8cpp_8o_8d">MJL_Plane3D.cpp.o.d</innerfile>
+    <innerfile refid="_m_j_l___point_8cpp_8o_8d">MJL_Point.cpp.o.d</innerfile>
+    <innerfile refid="_m_j_l___point3_d_8cpp_8o_8d">MJL_Point3D.cpp.o.d</innerfile>
+    <innerfile refid="_m_j_l___polygon_8cpp_8o_8d">MJL_Polygon.cpp.o.d</innerfile>
+    <innerfile refid="_m_j_l___triangle3_d_8cpp_8o_8d">MJL_Triangle3D.cpp.o.d</innerfile>
+    <innerfile refid="_m_j_l___vertex_8cpp_8o_8d">MJL_Vertex.cpp.o.d</innerfile>
+    <innerfile refid="_quadrilaterator_8cpp_8o_8d">Quadrilaterator.cpp.o.d</innerfile>
+    <innerfile refid="_triangulator_8cpp_8o_8d">Triangulator.cpp.o.d</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="build/CMakeFiles/open-csmp-core.dir/source/modules/discretisation/"/>
+  </compounddef>
+</doxygen>

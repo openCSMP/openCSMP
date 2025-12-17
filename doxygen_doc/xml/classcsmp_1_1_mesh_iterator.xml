@@ -1,0 +1,229 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_mesh_iterator" kind="class" language="C++" prot="public">
+    <compoundname>csmp::MeshIterator</compoundname>
+    <includes refid="_mesh_iterator_8h" local="no">MeshIterator.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+      <param>
+        <type>template&lt; uint32_t &gt; class</type>
+        <declname>CELL</declname>
+        <defname>CELL</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_mesh_iterator_1ab5a82a2b51082dda3dfd1afd0e09982d" prot="private" static="no" mutable="no">
+        <type>std::set&lt; CELL&lt; dim &gt; * &gt;</type>
+        <definition>std::set&lt;CELL&lt;dim&gt;*&gt; csmp::MeshIterator&lt; dim, CELL &gt;::discovered_cells_</definition>
+        <argsstring></argsstring>
+        <name>discovered_cells_</name>
+        <qualifiedname>csmp::MeshIterator::discovered_cells_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MeshIterator.h" line="48" column="23" bodyfile="source/includes/model/MeshIterator.h" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_mesh_iterator_1a0dd352deaaf57b90345f90c293a56afe" prot="private" static="no" mutable="no">
+        <type>std::set&lt; <ref refid="classcsmp_1_1_node" kindref="compound">csmp::Node</ref>&lt; dim &gt; * &gt;</type>
+        <definition>std::set&lt;csmp::Node&lt;dim&gt;*&gt; csmp::MeshIterator&lt; dim, CELL &gt;::discovered_nodes_</definition>
+        <argsstring></argsstring>
+        <name>discovered_nodes_</name>
+        <qualifiedname>csmp::MeshIterator::discovered_nodes_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MeshIterator.h" line="49" column="17" bodyfile="source/includes/model/MeshIterator.h" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_mesh_iterator_1ab877b419feceb215b46d845f0b60a0c4" prot="private" static="no" mutable="no">
+        <type>std::deque&lt; <ref refid="classcsmp_1_1_node" kindref="compound">csmp::Node</ref>&lt; dim &gt; * &gt;</type>
+        <definition>std::deque&lt;csmp::Node&lt;dim&gt;*&gt; csmp::MeshIterator&lt; dim, CELL &gt;::current_nodes_</definition>
+        <argsstring></argsstring>
+        <name>current_nodes_</name>
+        <qualifiedname>csmp::MeshIterator::current_nodes_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MeshIterator.h" line="50" column="17" bodyfile="source/includes/model/MeshIterator.h" bodystart="50" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_mesh_iterator_1a834e1862083b9d121f0d785a13881a20" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::MeshIterator&lt; dim, CELL &gt;::MeshIterator</definition>
+        <argsstring>(Node&lt; dim &gt; *mesh_node)</argsstring>
+        <name>MeshIterator</name>
+        <qualifiedname>csmp::MeshIterator::MeshIterator</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; dim &gt; *</type>
+          <declname>mesh_node</declname>
+        </param>
+        <briefdescription>
+<para>discovers interconnected mesh patch initiaising the member cells </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MeshIterator.h" line="32" column="14" bodyfile="source/modules/model/MeshIterator.cpp" bodystart="20" bodyend="46"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_mesh_iterator_1a6e5c022f189cb5df3e65824afb153a29" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::set&lt; CELL&lt; dim &gt; * &gt;::const_iterator</type>
+        <definition>std::set&lt; CELL&lt; dim &gt; * &gt;::const_iterator csmp::MeshIterator&lt; dim, CELL &gt;::CellsBegin</definition>
+        <argsstring>() const</argsstring>
+        <name>CellsBegin</name>
+        <qualifiedname>csmp::MeshIterator::CellsBegin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MeshIterator.h" line="34" column="40" bodyfile="source/includes/model/MeshIterator.h" bodystart="34" bodyend="34"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_mesh_iterator_1ab7d4c41f7577ac4cc65b2794ca9d736e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::set&lt; CELL&lt; dim &gt; * &gt;::const_iterator</type>
+        <definition>std::set&lt; CELL&lt; dim &gt; * &gt;::const_iterator csmp::MeshIterator&lt; dim, CELL &gt;::CellsEnd</definition>
+        <argsstring>() const</argsstring>
+        <name>CellsEnd</name>
+        <qualifiedname>csmp::MeshIterator::CellsEnd</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MeshIterator.h" line="35" column="40" bodyfile="source/includes/model/MeshIterator.h" bodystart="35" bodyend="35"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_mesh_iterator_1ab35359d00eecc4a386dd027fe5f3f531" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::set&lt; CELL&lt; dim &gt; * &gt;::iterator</type>
+        <definition>std::set&lt; CELL&lt; dim &gt; * &gt;::iterator csmp::MeshIterator&lt; dim, CELL &gt;::CellsBegin</definition>
+        <argsstring>()</argsstring>
+        <name>CellsBegin</name>
+        <qualifiedname>csmp::MeshIterator::CellsBegin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MeshIterator.h" line="37" column="34" bodyfile="source/includes/model/MeshIterator.h" bodystart="37" bodyend="37"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_mesh_iterator_1ac3dd64effdb72c91049f5577109c6ee2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::set&lt; CELL&lt; dim &gt; * &gt;::iterator</type>
+        <definition>std::set&lt; CELL&lt; dim &gt; * &gt;::iterator csmp::MeshIterator&lt; dim, CELL &gt;::CellsEnd</definition>
+        <argsstring>()</argsstring>
+        <name>CellsEnd</name>
+        <qualifiedname>csmp::MeshIterator::CellsEnd</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MeshIterator.h" line="38" column="34" bodyfile="source/includes/model/MeshIterator.h" bodystart="38" bodyend="38"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_mesh_iterator_1a93ec318af29cfd6cf1b803b1e921204f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::set&lt; <ref refid="classcsmp_1_1_node" kindref="compound">csmp::Node</ref>&lt; dim &gt; * &gt;::const_iterator</type>
+        <definition>std::set&lt; csmp::Node&lt; dim &gt; * &gt;::const_iterator csmp::MeshIterator&lt; dim, CELL &gt;::NodesBegin</definition>
+        <argsstring>() const</argsstring>
+        <name>NodesBegin</name>
+        <qualifiedname>csmp::MeshIterator::NodesBegin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MeshIterator.h" line="40" column="40" bodyfile="source/includes/model/MeshIterator.h" bodystart="40" bodyend="40"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_mesh_iterator_1a848b922fc133cfa5bcdf1786c0ffef4a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::set&lt; <ref refid="classcsmp_1_1_node" kindref="compound">csmp::Node</ref>&lt; dim &gt; * &gt;::const_iterator</type>
+        <definition>std::set&lt; csmp::Node&lt; dim &gt; * &gt;::const_iterator csmp::MeshIterator&lt; dim, CELL &gt;::NodesEnd</definition>
+        <argsstring>() const</argsstring>
+        <name>NodesEnd</name>
+        <qualifiedname>csmp::MeshIterator::NodesEnd</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MeshIterator.h" line="41" column="40" bodyfile="source/includes/model/MeshIterator.h" bodystart="41" bodyend="41"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_mesh_iterator_1af8368a9826995e443b24114197759bbf" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::set&lt; <ref refid="classcsmp_1_1_node" kindref="compound">csmp::Node</ref>&lt; dim &gt; * &gt;::iterator</type>
+        <definition>std::set&lt; csmp::Node&lt; dim &gt; * &gt;::iterator csmp::MeshIterator&lt; dim, CELL &gt;::NodesBegin</definition>
+        <argsstring>()</argsstring>
+        <name>NodesBegin</name>
+        <qualifiedname>csmp::MeshIterator::NodesBegin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MeshIterator.h" line="43" column="34" bodyfile="source/includes/model/MeshIterator.h" bodystart="43" bodyend="43"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_mesh_iterator_1a3340d8446a7abbd92a20cbfefd29b472" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::set&lt; <ref refid="classcsmp_1_1_node" kindref="compound">csmp::Node</ref>&lt; dim &gt; * &gt;::iterator</type>
+        <definition>std::set&lt; csmp::Node&lt; dim &gt; * &gt;::iterator csmp::MeshIterator&lt; dim, CELL &gt;::NodesEnd</definition>
+        <argsstring>()</argsstring>
+        <name>NodesEnd</name>
+        <qualifiedname>csmp::MeshIterator::NodesEnd</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MeshIterator.h" line="44" column="34" bodyfile="source/includes/model/MeshIterator.h" bodystart="44" bodyend="44"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Interator to perform a breadth-first traversal of contiguous mesh patch during its construction and then contain cell and node sets that can be used to iterate over the mesh tree.</para>
+<para><simplesect kind="author"><para>SKM </para>
+</simplesect>
+<simplesect kind="date"><para>15/3/2017</para>
+</simplesect>
+<xrefsect id="todo_1_todo000157"><xreftitle>Todo</xreftitle><xrefdescription><para>needs to be completed to become useful </para>
+<para>use this breadth-first graph traversal rather than any other method to discover patch of CELLs. </para>
+</xrefdescription></xrefsect></para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::MeshIterator&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_mesh_iterator"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/model/MeshIterator.h" line="29" column="1" bodyfile="source/includes/model/MeshIterator.h" bodystart="29" bodyend="51"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_mesh_iterator_1a6e5c022f189cb5df3e65824afb153a29" prot="public" virt="non-virtual"><scope>csmp::MeshIterator</scope><name>CellsBegin</name></member>
+      <member refid="classcsmp_1_1_mesh_iterator_1ab35359d00eecc4a386dd027fe5f3f531" prot="public" virt="non-virtual"><scope>csmp::MeshIterator</scope><name>CellsBegin</name></member>
+      <member refid="classcsmp_1_1_mesh_iterator_1ab7d4c41f7577ac4cc65b2794ca9d736e" prot="public" virt="non-virtual"><scope>csmp::MeshIterator</scope><name>CellsEnd</name></member>
+      <member refid="classcsmp_1_1_mesh_iterator_1ac3dd64effdb72c91049f5577109c6ee2" prot="public" virt="non-virtual"><scope>csmp::MeshIterator</scope><name>CellsEnd</name></member>
+      <member refid="classcsmp_1_1_mesh_iterator_1ab877b419feceb215b46d845f0b60a0c4" prot="private" virt="non-virtual"><scope>csmp::MeshIterator</scope><name>current_nodes_</name></member>
+      <member refid="classcsmp_1_1_mesh_iterator_1ab5a82a2b51082dda3dfd1afd0e09982d" prot="private" virt="non-virtual"><scope>csmp::MeshIterator</scope><name>discovered_cells_</name></member>
+      <member refid="classcsmp_1_1_mesh_iterator_1a0dd352deaaf57b90345f90c293a56afe" prot="private" virt="non-virtual"><scope>csmp::MeshIterator</scope><name>discovered_nodes_</name></member>
+      <member refid="classcsmp_1_1_mesh_iterator_1a834e1862083b9d121f0d785a13881a20" prot="public" virt="non-virtual"><scope>csmp::MeshIterator</scope><name>MeshIterator</name></member>
+      <member refid="classcsmp_1_1_mesh_iterator_1a93ec318af29cfd6cf1b803b1e921204f" prot="public" virt="non-virtual"><scope>csmp::MeshIterator</scope><name>NodesBegin</name></member>
+      <member refid="classcsmp_1_1_mesh_iterator_1af8368a9826995e443b24114197759bbf" prot="public" virt="non-virtual"><scope>csmp::MeshIterator</scope><name>NodesBegin</name></member>
+      <member refid="classcsmp_1_1_mesh_iterator_1a848b922fc133cfa5bcdf1786c0ffef4a" prot="public" virt="non-virtual"><scope>csmp::MeshIterator</scope><name>NodesEnd</name></member>
+      <member refid="classcsmp_1_1_mesh_iterator_1a3340d8446a7abbd92a20cbfefd29b472" prot="public" virt="non-virtual"><scope>csmp::MeshIterator</scope><name>NodesEnd</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

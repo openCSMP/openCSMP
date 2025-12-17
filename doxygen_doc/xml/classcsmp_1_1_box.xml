@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_box" kind="class" language="C++" prot="public">
+    <compoundname>csmp::Box</compoundname>
+    <includes refid="_box_8h" local="no">Box.h</includes>
+    <sectiondef kind="public-func">
+      <member refid="group___c_s_m_pglobal_functions_1ga64fa56c35e598036583aa92ebdb14fc8" kind="function"><name>UnitNormalTo</name></member>
+    </sectiondef>
+    <briefdescription>
+<para>brings together all functionality needed to deal with <ref refid="classcsmp_1_1_box" kindref="compound">Box</ref> shaped models whose boundaries are identified by <ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref> flags. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::Box</label>
+        <link refid="classcsmp_1_1_box"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/model/Box.h" line="103" column="1" bodyfile="source/includes/model/Box.h" bodystart="103" bodyend="108"/>
+    <listofallmembers>
+      <member refid="group___c_s_m_pglobal_functions_1ga64fa56c35e598036583aa92ebdb14fc8" prot="public" virt="non-virtual"><scope>csmp::Box</scope><name>UnitNormalTo</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

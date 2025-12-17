@@ -1,0 +1,617 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_property_constraints" kind="class" language="C++" prot="public">
+    <compoundname>csmp::PropertyConstraints</compoundname>
+    <includes refid="_property_constraints_8h" local="no">PropertyConstraints.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_property_constraints_1a03725df5c30a0a8cc9535f8a1b60274e" prot="private" static="no" mutable="no">
+        <type>std::map&lt; std::string, std::pair&lt; double, double &gt; &gt;</type>
+        <definition>std::map&lt;std::string,std::pair&lt;double,double&gt; &gt; csmp::PropertyConstraints::criteria</definition>
+        <argsstring></argsstring>
+        <name>criteria</name>
+        <qualifiedname>csmp::PropertyConstraints::criteria</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyConstraints.h" line="73" column="15" bodyfile="source/includes/model/PropertyConstraints.h" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_constraints_1a71e840b3e96297f92a60f12d7c2b30bc" prot="private" static="no" mutable="no">
+        <type>std::map&lt; <ref refid="structcsmp_1_1_index" kindref="compound">Index</ref>, std::pair&lt; double, double &gt; &gt;</type>
+        <definition>std::map&lt;Index,std::pair&lt;double,double&gt; &gt; csmp::PropertyConstraints::check_list</definition>
+        <argsstring></argsstring>
+        <name>check_list</name>
+        <qualifiedname>csmp::PropertyConstraints::check_list</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyConstraints.h" line="74" column="21" bodyfile="source/includes/model/PropertyConstraints.h" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_constraints_1a15c39782ca587075db5444d19829448b" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::PropertyConstraints::vector_length_check</definition>
+        <argsstring></argsstring>
+        <name>vector_length_check</name>
+        <qualifiedname>csmp::PropertyConstraints::vector_length_check</qualifiedname>
+        <initializer>= true</initializer>
+        <briefdescription>
+<para>for <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref> uses length as constraint </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyConstraints.h" line="75" column="54" bodyfile="source/includes/model/PropertyConstraints.h" bodystart="75" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_constraints_1a67232024b76b15a662a653eea9eeab5f" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::PropertyConstraints::one_node_only</definition>
+        <argsstring></argsstring>
+        <name>one_node_only</name>
+        <qualifiedname>csmp::PropertyConstraints::one_node_only</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+<para>will include elements even if only a single node falls into range </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyConstraints.h" line="76" column="54" bodyfile="source/includes/model/PropertyConstraints.h" bodystart="76" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_constraints_1a71c2be8695ec6e8661e021f71351ba7e" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::PropertyConstraints::nodal_average</definition>
+        <argsstring></argsstring>
+        <name>nodal_average</name>
+        <qualifiedname>csmp::PropertyConstraints::nodal_average</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+<para>will use the average of node properties to apply constraints </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyConstraints.h" line="77" column="54" bodyfile="source/includes/model/PropertyConstraints.h" bodystart="77" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_property_constraints_1aadc5852ca3d1c12c1359b582e24966a5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::PropertyConstraints::PropertyConstraints</definition>
+        <argsstring>()</argsstring>
+        <name>PropertyConstraints</name>
+        <qualifiedname>csmp::PropertyConstraints::PropertyConstraints</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyConstraints.h" line="30" column="5" bodyfile="source/modules/model/PropertyConstraints.cpp" bodystart="13" bodyend="15"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_constraints_1a0a9b761efe6c8071c6a9d6b3431bd46e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::PropertyConstraints::PropertyConstraints</definition>
+        <argsstring>(const PropertyConstraints &amp;cr)</argsstring>
+        <name>PropertyConstraints</name>
+        <qualifiedname>csmp::PropertyConstraints::PropertyConstraints</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_property_constraints" kindref="compound">PropertyConstraints</ref> &amp;</type>
+          <declname>cr</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyConstraints.h" line="31" column="5" bodyfile="source/modules/model/PropertyConstraints.cpp" bodystart="18" bodyend="21"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_constraints_1a295110f03dba2e3905e2269048d29b6c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::PropertyConstraints::PropertyConstraints</definition>
+        <argsstring>(const char *prop_name, double pmin, double pmax)</argsstring>
+        <name>PropertyConstraints</name>
+        <qualifiedname>csmp::PropertyConstraints::PropertyConstraints</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>prop_name</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>pmin</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>pmax</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyConstraints.h" line="32" column="5" bodyfile="source/modules/model/PropertyConstraints.cpp" bodystart="24" bodyend="27"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_constraints_1af0533ec1db44c9beadd344f08b1cfb72" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_property_constraints" kindref="compound">PropertyConstraints</ref> &amp;</type>
+        <definition>PropertyConstraints &amp; csmp::PropertyConstraints::operator=</definition>
+        <argsstring>(const PropertyConstraints &amp;cr)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::PropertyConstraints::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_property_constraints" kindref="compound">PropertyConstraints</ref> &amp;</type>
+          <declname>cr</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyConstraints.h" line="33" column="25" bodyfile="source/modules/model/PropertyConstraints.cpp" bodystart="30" bodyend="40"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_constraints_1a2bd5207d20ff6862c253a36bfcbe968c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::PropertyConstraints::~PropertyConstraints</definition>
+        <argsstring>()</argsstring>
+        <name>~PropertyConstraints</name>
+        <qualifiedname>csmp::PropertyConstraints::~PropertyConstraints</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyConstraints.h" line="34" column="5" bodyfile="source/modules/model/PropertyConstraints.cpp" bodystart="43" bodyend="45"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_constraints_1ae31b0b43dbc95e4184d7885ceb130ef8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::PropertyConstraints::WithIndexes</definition>
+        <argsstring>() const</argsstring>
+        <name>WithIndexes</name>
+        <qualifiedname>csmp::PropertyConstraints::WithIndexes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyConstraints.h" line="35" column="13" bodyfile="source/modules/model/PropertyConstraints.cpp" bodystart="48" bodyend="51"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_constraints_1a144c5cdc9a2ba2ccbac42c59551ba450" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::PropertyConstraints::Constraints</definition>
+        <argsstring>() const</argsstring>
+        <name>Constraints</name>
+        <qualifiedname>csmp::PropertyConstraints::Constraints</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyConstraints.h" line="36" column="15" bodyfile="source/modules/model/PropertyConstraints.cpp" bodystart="355" bodyend="355"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_constraints_1aed130d684f7be6243061542b152ae457" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyConstraints::CheckLengthOfVectorVariables</definition>
+        <argsstring>(bool check)</argsstring>
+        <name>CheckLengthOfVectorVariables</name>
+        <qualifiedname>csmp::PropertyConstraints::CheckLengthOfVectorVariables</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>check</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyConstraints.h" line="37" column="13" bodyfile="source/modules/model/PropertyConstraints.cpp" bodystart="357" bodyend="357"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_constraints_1a16e67e38f81543155102f82e701a68e1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::PropertyConstraints::AddConstraint</definition>
+        <argsstring>(const char *prop_name, double pmin, double pmax)</argsstring>
+        <name>AddConstraint</name>
+        <qualifiedname>csmp::PropertyConstraints::AddConstraint</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>prop_name</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>pmin</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>pmax</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyConstraints.h" line="39" column="10" bodyfile="source/modules/model/PropertyConstraints.cpp" bodystart="68" bodyend="76"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_constraints_1afefea043f8b5add99aefa2987dfe0f45" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyConstraints::ChangeConstraint</definition>
+        <argsstring>(const char *prop_name, double pmin, double pmax)</argsstring>
+        <name>ChangeConstraint</name>
+        <qualifiedname>csmp::PropertyConstraints::ChangeConstraint</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>prop_name</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>pmin</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>pmax</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyConstraints.h" line="40" column="10" bodyfile="source/modules/model/PropertyConstraints.cpp" bodystart="79" bodyend="94"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_constraints_1a5360f2653db35717d34104473ed0ff31" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>template bool csmp::PropertyConstraints::InitializePropertyIndices</definition>
+        <argsstring>(const PropertyDatabase&lt; dim &gt; &amp;)</argsstring>
+        <name>InitializePropertyIndices</name>
+        <qualifiedname>csmp::PropertyConstraints::InitializePropertyIndices</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>&lt; dim &gt; &amp;</type>
+          <defname>pref</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyConstraints.h" line="43" column="10" bodyfile="source/modules/model/PropertyConstraints.cpp" bodystart="99" bodyend="114"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_constraints_1a461ce107234de1740c818ddb7ef633e8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>template void csmp::PropertyConstraints::DeleteConstraint</definition>
+        <argsstring>(const PropertyDatabase&lt; dim &gt; &amp;, const char *prop_name)</argsstring>
+        <name>DeleteConstraint</name>
+        <qualifiedname>csmp::PropertyConstraints::DeleteConstraint</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>&lt; dim &gt; &amp;</type>
+          <defname>pref</defname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>prop_name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyConstraints.h" line="46" column="10" bodyfile="source/modules/model/PropertyConstraints.cpp" bodystart="124" bodyend="128"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_constraints_1a7d9b86f8c1f01bc128ff95c25d50b329" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+          <param>
+            <type>template&lt; uint32_t &gt; class</type>
+            <declname>CELL</declname>
+            <defname>CELL</defname>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool csmp::PropertyConstraints::CheckConstraints</definition>
+        <argsstring>(const CELL&lt; dim &gt; *) const</argsstring>
+        <name>CheckConstraints</name>
+        <qualifiedname>csmp::PropertyConstraints::CheckConstraints</qualifiedname>
+        <param>
+          <type>const CELL&lt; dim &gt; *</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyConstraints.h" line="49" column="10" bodyfile="source/modules/model/PropertyConstraints.cpp" bodystart="310" bodyend="347"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_constraints_1a1d30ff2462d74d8a7738369ed5528fa3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+          <param>
+            <type>template&lt; uint32_t &gt; class</type>
+            <declname>CELL</declname>
+            <defname>CELL</defname>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool csmp::PropertyConstraints::CheckConstraints</definition>
+        <argsstring>(const CELL&lt; dim &gt; *, Index &amp;idx) const</argsstring>
+        <name>CheckConstraints</name>
+        <qualifiedname>csmp::PropertyConstraints::CheckConstraints</qualifiedname>
+        <param>
+          <type>const CELL&lt; dim &gt; *</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref> &amp;</type>
+          <declname>idx</declname>
+          <defname>failed_upon</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>For all constraints the checks are performed until a check fails. Since the constraints scalar ranges, vector and tensor variables are checked for their individual components unless specific check instructions were specified. If so, for instance, vectors can be checked for <linebreak/>
+ their length and tensors for their Eigenvalues. <linebreak/>
+</para>
+<para><simplesect kind="return"><para>whether the element satisfies the user-supplied constraints. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyConstraints.h" line="52" column="10" bodyfile="source/modules/model/PropertyConstraints.cpp" bodystart="146" bodyend="302"/>
+        <references refid="classcsmp_1_1_scalar_variable_1a7f0ab5431406d975d6e1de988f369176" compoundref="_scalar_variable_8cpp" startline="6" endline="6">csmp::ScalarVariable::operator()</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_constraints_1a1f8b2a3c14c79c1f6fd4e389139855b8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyConstraints::SatisfyConstraintsForAtLeastOneNode</definition>
+        <argsstring>(bool satisfy)</argsstring>
+        <name>SatisfyConstraintsForAtLeastOneNode</name>
+        <qualifiedname>csmp::PropertyConstraints::SatisfyConstraintsForAtLeastOneNode</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>satisfy</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyConstraints.h" line="55" column="10" bodyfile="source/modules/model/PropertyConstraints.cpp" bodystart="54" bodyend="57"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_constraints_1afba6414595c35c74a12c672efec90af0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyConstraints::SatisfyConstraintsForNodalAverage</definition>
+        <argsstring>(bool satisfy)</argsstring>
+        <name>SatisfyConstraintsForNodalAverage</name>
+        <qualifiedname>csmp::PropertyConstraints::SatisfyConstraintsForNodalAverage</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>satisfy</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyConstraints.h" line="56" column="10" bodyfile="source/modules/model/PropertyConstraints.cpp" bodystart="60" bodyend="63"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_constraints_1a5413f3260232e449fe30b88ba5f7fbf6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyConstraints::Erase</definition>
+        <argsstring>()</argsstring>
+        <name>Erase</name>
+        <qualifiedname>csmp::PropertyConstraints::Erase</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyConstraints.h" line="58" column="10" bodyfile="source/modules/model/PropertyConstraints.cpp" bodystart="360" bodyend="364"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_constraints_1ab196b0f201ad4b304fe3e02b3a1c710c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyConstraints::Out</definition>
+        <argsstring>() const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::PropertyConstraints::Out</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyConstraints.h" line="60" column="10" bodyfile="source/modules/model/PropertyConstraints.cpp" bodystart="501" bodyend="517"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_property_constraints_1ab635c76ffea387573b935bb1b96f5fc5" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+          <param>
+            <type>template&lt; uint32_t &gt; class</type>
+            <declname>CELL</declname>
+            <defname>CELL</defname>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>template bool csmp::PropertyConstraints::CheckSingleNodeConstraints&lt; 3U &gt;</definition>
+        <argsstring>(const CELL&lt; dim &gt; *) const</argsstring>
+        <name>CheckSingleNodeConstraints</name>
+        <qualifiedname>csmp::PropertyConstraints::CheckSingleNodeConstraints</qualifiedname>
+        <param>
+          <type>const CELL&lt; dim &gt; *</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyConstraints.h" line="64" column="10" bodyfile="source/modules/model/PropertyConstraints.cpp" bodystart="371" bodyend="403"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_constraints_1a22f2b9af30c44fe73359d77cb6583c16" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+          <param>
+            <type>template&lt; uint32_t &gt; class</type>
+            <declname>CELL</declname>
+            <defname>CELL</defname>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>template bool csmp::PropertyConstraints::CheckNodeAverageConstraints&lt; 3U &gt;</definition>
+        <argsstring>(const CELL&lt; dim &gt; *) const</argsstring>
+        <name>CheckNodeAverageConstraints</name>
+        <qualifiedname>csmp::PropertyConstraints::CheckNodeAverageConstraints</qualifiedname>
+        <param>
+          <type>const CELL&lt; dim &gt; *</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyConstraints.h" line="67" column="10" bodyfile="source/modules/model/PropertyConstraints.cpp" bodystart="410" bodyend="453"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_constraints_1af9bc833f27d2f8e915c8420616613d70" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+          <param>
+            <type>template&lt; uint32_t &gt; class</type>
+            <declname>CELL</declname>
+            <defname>CELL</defname>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>template bool csmp::PropertyConstraints::VectorLengthCheck&lt; 3U &gt;</definition>
+        <argsstring>(const CELL&lt; dim &gt; *, const csmp::Index &amp;, double vmin, double vmax) const</argsstring>
+        <name>VectorLengthCheck</name>
+        <qualifiedname>csmp::PropertyConstraints::VectorLengthCheck</qualifiedname>
+        <param>
+          <type>const CELL&lt; dim &gt; *</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <defname>idx</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>vmin</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>vmax</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyConstraints.h" line="70" column="10" bodyfile="source/modules/model/PropertyConstraints.cpp" bodystart="459" bodyend="497"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para><ref refid="classcsmp_1_1_property_constraints" kindref="compound">PropertyConstraints</ref> permits to combine multiple criteria on the basis of which non-unique regions can be formed. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>In the terminology of this class, a criterion is called a constraint. This class stores user-defined constraints that may include, for instance, the magnitude of a vector.</para>
+<para><simplesect kind="note"><para>look in the region interface to see how to build regions using <ref refid="classcsmp_1_1_property_constraints" kindref="compound">PropertyConstraints</ref>.</para>
+</simplesect>
+<simplesect kind="author"><para>SKM </para>
+</simplesect>
+<simplesect kind="date"><para>15/6/1999 </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::PropertyConstraints</label>
+        <link refid="classcsmp_1_1_property_constraints"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/model/PropertyConstraints.h" line="28" column="1" bodyfile="source/includes/model/PropertyConstraints.h" bodystart="28" bodyend="78"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_property_constraints_1a16e67e38f81543155102f82e701a68e1" prot="public" virt="non-virtual"><scope>csmp::PropertyConstraints</scope><name>AddConstraint</name></member>
+      <member refid="classcsmp_1_1_property_constraints_1afefea043f8b5add99aefa2987dfe0f45" prot="public" virt="non-virtual"><scope>csmp::PropertyConstraints</scope><name>ChangeConstraint</name></member>
+      <member refid="classcsmp_1_1_property_constraints_1a71e840b3e96297f92a60f12d7c2b30bc" prot="private" virt="non-virtual"><scope>csmp::PropertyConstraints</scope><name>check_list</name></member>
+      <member refid="classcsmp_1_1_property_constraints_1a7d9b86f8c1f01bc128ff95c25d50b329" prot="public" virt="non-virtual"><scope>csmp::PropertyConstraints</scope><name>CheckConstraints</name></member>
+      <member refid="classcsmp_1_1_property_constraints_1a1d30ff2462d74d8a7738369ed5528fa3" prot="public" virt="non-virtual"><scope>csmp::PropertyConstraints</scope><name>CheckConstraints</name></member>
+      <member refid="classcsmp_1_1_property_constraints_1aed130d684f7be6243061542b152ae457" prot="public" virt="non-virtual"><scope>csmp::PropertyConstraints</scope><name>CheckLengthOfVectorVariables</name></member>
+      <member refid="classcsmp_1_1_property_constraints_1a22f2b9af30c44fe73359d77cb6583c16" prot="private" virt="non-virtual"><scope>csmp::PropertyConstraints</scope><name>CheckNodeAverageConstraints</name></member>
+      <member refid="classcsmp_1_1_property_constraints_1ab635c76ffea387573b935bb1b96f5fc5" prot="private" virt="non-virtual"><scope>csmp::PropertyConstraints</scope><name>CheckSingleNodeConstraints</name></member>
+      <member refid="classcsmp_1_1_property_constraints_1a144c5cdc9a2ba2ccbac42c59551ba450" prot="public" virt="non-virtual"><scope>csmp::PropertyConstraints</scope><name>Constraints</name></member>
+      <member refid="classcsmp_1_1_property_constraints_1a03725df5c30a0a8cc9535f8a1b60274e" prot="private" virt="non-virtual"><scope>csmp::PropertyConstraints</scope><name>criteria</name></member>
+      <member refid="classcsmp_1_1_property_constraints_1a461ce107234de1740c818ddb7ef633e8" prot="public" virt="non-virtual"><scope>csmp::PropertyConstraints</scope><name>DeleteConstraint</name></member>
+      <member refid="classcsmp_1_1_property_constraints_1a5413f3260232e449fe30b88ba5f7fbf6" prot="public" virt="non-virtual"><scope>csmp::PropertyConstraints</scope><name>Erase</name></member>
+      <member refid="classcsmp_1_1_property_constraints_1a5360f2653db35717d34104473ed0ff31" prot="public" virt="non-virtual"><scope>csmp::PropertyConstraints</scope><name>InitializePropertyIndices</name></member>
+      <member refid="classcsmp_1_1_property_constraints_1a71c2be8695ec6e8661e021f71351ba7e" prot="private" virt="non-virtual"><scope>csmp::PropertyConstraints</scope><name>nodal_average</name></member>
+      <member refid="classcsmp_1_1_property_constraints_1a67232024b76b15a662a653eea9eeab5f" prot="private" virt="non-virtual"><scope>csmp::PropertyConstraints</scope><name>one_node_only</name></member>
+      <member refid="classcsmp_1_1_property_constraints_1af0533ec1db44c9beadd344f08b1cfb72" prot="public" virt="non-virtual"><scope>csmp::PropertyConstraints</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_property_constraints_1ab196b0f201ad4b304fe3e02b3a1c710c" prot="public" virt="non-virtual"><scope>csmp::PropertyConstraints</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_property_constraints_1aadc5852ca3d1c12c1359b582e24966a5" prot="public" virt="non-virtual"><scope>csmp::PropertyConstraints</scope><name>PropertyConstraints</name></member>
+      <member refid="classcsmp_1_1_property_constraints_1a0a9b761efe6c8071c6a9d6b3431bd46e" prot="public" virt="non-virtual"><scope>csmp::PropertyConstraints</scope><name>PropertyConstraints</name></member>
+      <member refid="classcsmp_1_1_property_constraints_1a295110f03dba2e3905e2269048d29b6c" prot="public" virt="non-virtual"><scope>csmp::PropertyConstraints</scope><name>PropertyConstraints</name></member>
+      <member refid="classcsmp_1_1_property_constraints_1a1f8b2a3c14c79c1f6fd4e389139855b8" prot="public" virt="non-virtual"><scope>csmp::PropertyConstraints</scope><name>SatisfyConstraintsForAtLeastOneNode</name></member>
+      <member refid="classcsmp_1_1_property_constraints_1afba6414595c35c74a12c672efec90af0" prot="public" virt="non-virtual"><scope>csmp::PropertyConstraints</scope><name>SatisfyConstraintsForNodalAverage</name></member>
+      <member refid="classcsmp_1_1_property_constraints_1a15c39782ca587075db5444d19829448b" prot="private" virt="non-virtual"><scope>csmp::PropertyConstraints</scope><name>vector_length_check</name></member>
+      <member refid="classcsmp_1_1_property_constraints_1af9bc833f27d2f8e915c8420616613d70" prot="private" virt="non-virtual"><scope>csmp::PropertyConstraints</scope><name>VectorLengthCheck</name></member>
+      <member refid="classcsmp_1_1_property_constraints_1ae31b0b43dbc95e4184d7885ceb130ef8" prot="public" virt="non-virtual"><scope>csmp::PropertyConstraints</scope><name>WithIndexes</name></member>
+      <member refid="classcsmp_1_1_property_constraints_1a2bd5207d20ff6862c253a36bfcbe968c" prot="public" virt="non-virtual"><scope>csmp::PropertyConstraints</scope><name>~PropertyConstraints</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

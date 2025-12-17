@@ -311,7 +311,7 @@ InterFace<dim>&  InterFace<dim>::operator=( InterFace<dim>&& ifc )
      That must be reference to inner and outer parent Elements, inner and outer parent face ID's
 */
 template<uint32_t dim>
-bool  InterFace<dim>::operator==( const InterFace<dim>& ifc )
+bool  InterFace<dim>::operator==( const InterFace<dim>& ifc ) const
 {
   if ( &ifc != this )
     if ( innerParent_ != ifc.innerParent_ ||
@@ -345,14 +345,14 @@ void InterFace<dim>::operator delete( void* p )
 
 /// iterator to the element nodes
 template<uint32_t dim>
-typename vector<csmp::Node<dim>*>::const_iterator  InterFace<dim>::NodesBegin() const
+typename vector<csmp::Node<dim>*>::const_iterator  InterFace<dim>::NodesBegin() const noexcept
 {
    if ( current_side_ == INSIDE ) return node_connector_.begin();
    return next( node_connector_.begin(), this->FE()->Nodes() );
 }
 
 template<uint32_t dim>
-typename vector<csmp::Node<dim>*>::const_iterator  InterFace<dim>::NodesEnd() const
+typename vector<csmp::Node<dim>*>::const_iterator  InterFace<dim>::NodesEnd() const noexcept
 {
   if ( current_side_ == INSIDE ) return next( node_connector_.begin(), this->FE()->Nodes() );
   return node_connector_.end();
@@ -361,7 +361,7 @@ typename vector<csmp::Node<dim>*>::const_iterator  InterFace<dim>::NodesEnd() co
 
 
 template<uint32_t dim>
-typename vector<csmp::Node<dim>*>::const_iterator InterFace<dim>::CornerNodesBegin() const
+typename vector<csmp::Node<dim>*>::const_iterator InterFace<dim>::CornerNodesBegin() const noexcept
 {
    if ( current_side_ == INSIDE ) return node_connector_.begin();
    return next( node_connector_.begin(), this->FE()->Nodes() );
@@ -369,7 +369,7 @@ typename vector<csmp::Node<dim>*>::const_iterator InterFace<dim>::CornerNodesBeg
 
 
 template<uint32_t dim>
-typename vector<csmp::Node<dim>*>::const_iterator InterFace<dim>::CornerNodesEnd() const
+typename vector<csmp::Node<dim>*>::const_iterator InterFace<dim>::CornerNodesEnd() const noexcept
 {
   if ( current_side_ == INSIDE ) return next( node_connector_.begin(), this->FE()->Nodes() );
   return next(node_connector_.begin(),this->FE()->Nodes() + this->FE()->CornerNodes());
@@ -378,13 +378,13 @@ typename vector<csmp::Node<dim>*>::const_iterator InterFace<dim>::CornerNodesEnd
 
 
 template<uint32_t dim>
-typename vector<InterFace<dim>*>::const_iterator  InterFace<dim>::NeighborsBegin() const
+typename vector<InterFace<dim>*>::const_iterator  InterFace<dim>::NeighborsBegin() const noexcept
 {
   return interface_connector_.begin();
 }
 
 template<uint32_t dim>
-typename vector<InterFace<dim>*>::const_iterator  InterFace<dim>::NeighborsEnd() const
+typename vector<InterFace<dim>*>::const_iterator  InterFace<dim>::NeighborsEnd() const noexcept
 {
   return interface_connector_.end();
 }
@@ -578,7 +578,7 @@ void InterFace<dim>::UnassignNeighbor( uint32_t nbor )
     return the number of the Interface object neighbors which are connected with the InterFace and not null.
 */
 template<uint32_t dim>
-uint32_t InterFace<dim>::ConnectedNeighbors() const
+uint32_t InterFace<dim>::ConnectedNeighbors() const noexcept
 {
   uint32_t connections = static_cast<uint32_t>(interface_connector_.size());
   for ( auto& f : interface_connector_ )
@@ -590,7 +590,7 @@ uint32_t InterFace<dim>::ConnectedNeighbors() const
 
   /// node_connector_.size() = total nodes on both sides of InterFace
 template<uint32_t dim>
-uint32_t  InterFace<dim>::Nodes() const
+uint32_t  InterFace<dim>::Nodes() const noexcept
  { 
     assert( this->FE()!=nullptr ); 
     assert( (this->FE()->Nodes()*2) == node_connector_.size() );
@@ -605,7 +605,7 @@ uint32_t  InterFace<dim>::Nodes() const
    has different nodes.
 */
 template<uint32_t dim>
-uint32_t  InterFace<dim>::Neighbors() const
+uint32_t  InterFace<dim>::Neighbors() const noexcept
   {
      assert( this->FE()!=nullptr ); 
      assert( this->FE()->Neighbors() == interface_connector_.size() );
@@ -619,7 +619,7 @@ uint32_t  InterFace<dim>::Neighbors() const
     inspite of the fact that the InterFace has two sides.
 */
 template<uint32_t dim>
-uint32_t  InterFace<dim>::Faces() const
+uint32_t  InterFace<dim>::Faces() const noexcept
  { 
     assert( this->FE()!=nullptr ); 
     assert( this->FE()->Faces() == interface_connector_.size() );
@@ -749,7 +749,7 @@ void InterFace<dim>::InitialiseNodeVector()
 
 
 template<uint32_t dim>
-void  InterFace<dim>::CurrentSide( INTERFACE_SIDE side_to_assign )
+void  InterFace<dim>::CurrentSide( INTERFACE_SIDE side_to_assign ) noexcept
 {
   current_side_ = side_to_assign;
 }
@@ -757,19 +757,19 @@ void  InterFace<dim>::CurrentSide( INTERFACE_SIDE side_to_assign )
 
 // ACCESSORS
 template<uint32_t dim>
-void  InterFace<dim>::Idx( size_t idx_to_assign ) const
+void  InterFace<dim>::Idx( size_t idx_to_assign ) const noexcept
 {
   idx_ = idx_to_assign;
 }
 
 template<uint32_t dim>
-size_t  InterFace<dim>::Idx() const
+size_t  InterFace<dim>::Idx() const noexcept
 {
   return idx_;
 }
 
 template<uint32_t dim>
-INTERFACE_SIDE  InterFace<dim>::CurrentSide() const
+INTERFACE_SIDE  InterFace<dim>::CurrentSide() const noexcept
 {
   return current_side_;
 }
@@ -886,13 +886,13 @@ csmp::Node<dim>* const InterFace<dim>::N( uint32_t n, INTERFACE_SIDE side ) cons
 
 /**
     Access to nodes on the CURRENT_SIDE of the interface. Taken from member current_side_
-    @param n must be the local node index counting from 0 to the number of nodes on one side of the element
+    @param n_local must be the local node index counting from 0 to the number of nodes on one side of the element
 */
 template<uint32_t dim>
-csmp::Node<dim>* const InterFace<dim>::N( uint32_t n ) const
+csmp::Node<dim>* const InterFace<dim>::N( uint32_t n_local ) const noexcept
 {
-  assert( n < this->FE()->Nodes() );
-  return this->N(n,current_side_);
+  assert( n_local < this->FE()->Nodes() );
+  return this->N(n_local,current_side_);
 }
 
 
@@ -939,7 +939,7 @@ csmp::Node<dim>* const InterFace<dim>::MatchingN( uint32_t n, INTERFACE_SIDE sid
     }
 
     //Then we are on the midside nodes
-    int one{1}, md_nodes = this->FE()->MidSideNodes();
+    uint32_t one{1}, md_nodes = this->FE()->MidSideNodes();
     if (n < cn_nodes + md_nodes ){
      //Traverse the midside  nodes in reverse, but starting one node before the last node
       const uint32_t outside_idx = fe_nodes + cn_nodes + md_nodes - 1 - static_cast<uint32_t>(one % md_nodes) - (n-cn_nodes);
@@ -971,7 +971,7 @@ csmp::Node<dim>* const InterFace<dim>::MatchingN( uint32_t n, INTERFACE_SIDE sid
     Returns the equal dimensional neighbor of the InterFace which also is an interface element.
 */
 template<uint32_t dim>
-csmp::InterFace<dim>* const InterFace<dim>::Neighbor( uint32_t n ) const
+csmp::InterFace<dim>* const InterFace<dim>::Neighbor( uint32_t n ) const noexcept
 {
   assert( interface_connector_.size() == this->Neighbors() );
   assert( n < this->Neighbors() );
@@ -1017,7 +1017,7 @@ uint32_t  InterFace<dim>::ParentNodeNumber( uint32_t n, INTERFACE_SIDE side ) co
 
 // watch out if there is no base element this returns a nullptr pointer
 template<uint32_t dim>
-Element<dim>* const InterFace<dim>::Parent( INTERFACE_SIDE side ) const
+Element<dim>* const InterFace<dim>::Parent( INTERFACE_SIDE side ) const noexcept
 {
   if ( side == INSIDE )
     return innerParent_;
@@ -1027,24 +1027,24 @@ Element<dim>* const InterFace<dim>::Parent( INTERFACE_SIDE side ) const
 }
 
 template<uint32_t dim>
-Element<dim>* const InterFace<dim>::InnerParent() const
+Element<dim>* const InterFace<dim>::InnerParent() const noexcept
 {
   return innerParent_;
 }
 template<uint32_t dim>
-Element<dim>* const InterFace<dim>::OuterParent() const
+Element<dim>* const InterFace<dim>::OuterParent() const noexcept
 {
   return outerParent_;
 }
 
 template<uint32_t dim>
-Element<dim>*  InterFace<dim>::InterveningElement()
+Element<dim>*  InterFace<dim>::InterveningElement() noexcept
 {
   return middleElement_;
 }
 
 template<uint32_t dim>
-const Element<dim>*  InterFace<dim>::InterveningElement() const
+const Element<dim>*  InterFace<dim>::InterveningElement() const noexcept
 {
   return middleElement_;
 }
@@ -1052,7 +1052,7 @@ const Element<dim>*  InterFace<dim>::InterveningElement() const
 
 /// return face ID of inner parent element
 template<uint32_t dim>
-uint32_t  InterFace<dim>::InnerParentFaceID() const
+uint32_t  InterFace<dim>::InnerParentFaceID() const noexcept
 {
   if ( innerParent_ == nullptr ) return NULL_IDX;
   return inner_parent_face_id_;
@@ -1061,7 +1061,7 @@ uint32_t  InterFace<dim>::InnerParentFaceID() const
 
 /// return face ID of outer parent element
 template<uint32_t dim>
-uint32_t  InterFace<dim>::OuterParentFaceID() const
+uint32_t  InterFace<dim>::OuterParentFaceID() const noexcept
 {
   if ( outerParent_ == nullptr ) return NULL_IDX;
   return outer_parent_face_id_;

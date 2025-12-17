@@ -1,0 +1,49 @@
+\doxysection{Property\+Constraints\+\_\+\+Test.\+h}
+\hypertarget{_property_constraints___test_8h_source}{}\label{_property_constraints___test_8h_source}\index{tests/unit/PropertyConstraints\_Test.h@{tests/unit/PropertyConstraints\_Test.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{\ *\ \ PropertyConstraints\_Test.h}}
+\DoxyCodeLine{00003\ \textcolor{comment}{\ *\ \ csmp\_core}}
+\DoxyCodeLine{00004\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00005\ \textcolor{comment}{\ *\ \ Created\ by\ SKM\ 2/2/2022.}}
+\DoxyCodeLine{00006\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00007\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_PROPERTY\_CONSTRAINTS\_TEST\_H}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_PROPERTY\_CONSTRAINTS\_TEST\_H}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_test_8h}{"{}Test.h"{}}}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_model}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}};}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ \ \ \ Unit\ test\ for\ PropertyConstraints\ object.}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ \ \ \ @note\ Dependent\ functionality\ 2:\ needs\ to\ be\ able\ o\ work\ with\ any\ kind\ of\ CSMP\ model}}
+\DoxyCodeLine{00022\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00023\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_property_constraints___test}{PropertyConstraints\_Test}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_test}{Test}}\ \{}
+\DoxyCodeLine{00024\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ PropertyConstraints\_Test(\ \textcolor{keywordtype}{bool}\ verbose=\textcolor{keyword}{false}\ );}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \string~PropertyConstraints\_Test();}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_property_constraints___test_ae64d3e8974a93a7d93f4613c3560d313}{run}}();}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00031\ \ \ \ \ \ \textcolor{keywordtype}{bool}\ TestBuildRegionsFromPropertyConstraints();}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \ \textcolor{comment}{///\ tests\ that\ 'pointInVolumeElement()'\ \ actually\ works\ using\ 'prism\_test'}}
+\DoxyCodeLine{00034\ \ \ \ \ \ \textcolor{keywordtype}{bool}\ PointInVolumeElementTest();}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keywordtype}{bool}\ verbose\_;}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \};}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \}\ \textcolor{comment}{//\ end\ csmp}}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{/*\ CSMP\_PROPERTY\_CONSTRAINTS\_TEST\_H\ */}}
+
+\end{DoxyCode}

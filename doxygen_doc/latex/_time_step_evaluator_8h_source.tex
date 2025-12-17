@@ -1,0 +1,88 @@
+\doxysection{Time\+Step\+Evaluator.\+h}
+\hypertarget{_time_step_evaluator_8h_source}{}\label{_time_step_evaluator_8h_source}\index{source/includes/integration/finite\_volumes/generic\_transport\_scheme/TimeStepEvaluator.h@{source/includes/integration/finite\_volumes/generic\_transport\_scheme/TimeStepEvaluator.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{TIME\_STEP\_EVALUATOR\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{TIME\_STEP\_EVALUATOR\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_node}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}};}
+\DoxyCodeLine{00009\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_element}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}};}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{comment}{///\ for\ application\ to\ individual\ FVs}}
+\DoxyCodeLine{00012\ \textcolor{keyword}{template}<uint32\_t\ dim,\ \textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ USER>}
+\DoxyCodeLine{00013\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_time_step_evaluator}{TimeStepEvaluator}}\ \{}
+\DoxyCodeLine{00014\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keyword}{explicit}\ TimeStepEvaluator(\ \textcolor{keywordtype}{double}\ step\_size\_reduction\_factor=0.5,\ \textcolor{keywordtype}{double}\ max\_time\_increment=86400.\ *\ 365.\ );}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{comment}{///\ returns\ robust\ delta\_t\ criterion\ in\ the\ presence\ of\ fluid\ sources\ and\ sinks;\ also\ computes\ and\ stores\ flux\ balance}}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_time_step_evaluator_a53957c45ebe0604c44166069d27a247e}{OutFlowLessThanContentIncrement}}(\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>*\ \textcolor{keyword}{const},\ \textcolor{keywordtype}{double}\ outflow\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{comment}{///\ returns\ robust\ delta\_t\ criterion\ in\ the\ presence\ of\ fluid\ sources\ and\ sinks\ at\ model\ boundary\ (no\ variables\ are\ touched)}}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_time_step_evaluator_affb53a4c2312861a7fbde2f0f92fe8a3}{OutFlowLessThanContentIncrementBoundary}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>*\ \textcolor{keyword}{const},\ \textcolor{keywordtype}{double}\ outflow\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{comment}{///\ anisotropic\ CFL\ for\ the\ strictly\ hyperbolic\ case;\ also\ computes\ and\ stores\ flux\ balance}}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_time_step_evaluator_a2720b6533d5a66a6df4aab74a669d6f1}{StreamlineCFL}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{comment}{///\ adjust\ setting\ for\ the\ solve\ (default=0.5)}}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_time_step_evaluator_abf66bdc0fdac41bd8bb65c96464f1960}{StepSizeReductionFactor}}(\ \textcolor{keywordtype}{double}=0.5\ );}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{double}\ StepSizeReductionFactor()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{comment}{///\ return\ maximum\ time-\/increment\ that\ is\ applied\ if\ there\ is\ \string~no\ flow}}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_time_step_evaluator_aaa2371cf5c9b7140722ce10aebe6e8d1}{MaxTimeIncrement}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{comment}{///\ shorthand\ for\ accessing\ the\ class\ that\ FacetFlux\_TracerTransferExplicit\ is\ a\ policy\ of}}
+\DoxyCodeLine{00035\ \ \ \ \ USER<dim>*\ User()\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<USER<dim>*>(\textcolor{keyword}{this});\ \}}
+\DoxyCodeLine{00036\ \ \ \ \ USER<dim>\ \textcolor{keyword}{const}*\ User()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<\textcolor{keyword}{const}\ USER<dim>*>(\textcolor{keyword}{this});\ \}}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ max\_time\_increment\_;\ \ \ \ \textcolor{comment}{///<\ set\ through\ constructor\ argument}}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{double}\ step\_size\_reduction\_factor\_;\ \ \textcolor{comment}{///<\ CFL\ multiplier\ set\ through\ constructor\ argument}}
+\DoxyCodeLine{00041\ \};}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00044\ \textcolor{comment}{@class\ TimeStepEvaluator\ TimeStepEvaluator\ \ "{}reservoir\_simulator/TimeStepEvaluator.h"{}}}
+\DoxyCodeLine{00045\ \textcolor{comment}{}}
+\DoxyCodeLine{00046\ \textcolor{comment}{\(\backslash\)brief\ \ \ \ \ Face-\/by-\/face\ calculation\ of\ CFL\ like\ timestepping\ criteria.}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\(\backslash\)details\ \ \ Part\ of\ Colleoli\ transport\ scheme.}}
+\DoxyCodeLine{00048\ \textcolor{comment}{\(\backslash\)author\ \ \ \ Stephan\ K.\ Matthai}}
+\DoxyCodeLine{00049\ \textcolor{comment}{\(\backslash\)version\ \ \ 1a}}
+\DoxyCodeLine{00050\ \textcolor{comment}{\(\backslash\)date\ \ \ \ \ \ 21/2/2013}}
+\DoxyCodeLine{00051\ \textcolor{comment}{\(\backslash\)pre\ \ \ \ \ \ \ high-\/level\ class\ depending\ on\ CSMP++\ API}}
+\DoxyCodeLine{00052\ \textcolor{comment}{\(\backslash\)bug}}
+\DoxyCodeLine{00053\ \textcolor{comment}{\(\backslash\)warning}}
+\DoxyCodeLine{00054\ \textcolor{comment}{\(\backslash\)copyright\ Stephan\ K.\ Matthai}}
+\DoxyCodeLine{00055\ \textcolor{comment}{}}
+\DoxyCodeLine{00056\ \textcolor{comment}{@section\ motivation\ Motivation}}
+\DoxyCodeLine{00057\ \textcolor{comment}{}}
+\DoxyCodeLine{00058\ \textcolor{comment}{}}
+\DoxyCodeLine{00059\ \textcolor{comment}{@section\ design\ Design\ Intent}}
+\DoxyCodeLine{00060\ \textcolor{comment}{}}
+\DoxyCodeLine{00061\ \textcolor{comment}{}}
+\DoxyCodeLine{00062\ \textcolor{comment}{@section\ applicability\ Applicability}}
+\DoxyCodeLine{00063\ \textcolor{comment}{}}
+\DoxyCodeLine{00064\ \textcolor{comment}{}}
+\DoxyCodeLine{00065\ \textcolor{comment}{@section\ collaborations\ Collaborations}}
+\DoxyCodeLine{00066\ \textcolor{comment}{}}
+\DoxyCodeLine{00067\ \textcolor{comment}{}}
+\DoxyCodeLine{00068\ \textcolor{comment}{@section\ implementation\ Implementation}}
+\DoxyCodeLine{00069\ \textcolor{comment}{}}
+\DoxyCodeLine{00070\ \textcolor{comment}{}}
+\DoxyCodeLine{00071\ \textcolor{comment}{@section\ examples\ Application\ Examples}}
+\DoxyCodeLine{00072\ \textcolor{comment}{}}
+\DoxyCodeLine{00073\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00074\ \textcolor{comment}{}}
+\DoxyCodeLine{00075\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00076\ \textcolor{comment}{}}
+\DoxyCodeLine{00077\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \}\ \textcolor{comment}{//\ end\ csmp}}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{/*\ TIME\_STEP\_EVALUATOR\_H\ */}}
+
+\end{DoxyCode}

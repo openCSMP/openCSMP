@@ -1,0 +1,1183 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_boundary" kind="class" language="C++" prot="public">
+    <compoundname>csmp::Boundary</compoundname>
+    <basecompoundref refid="classcsmp_1_1_model_sub_domain" prot="public" virt="non-virtual">csmp::ModelSubDomain&lt; dim, Face &gt;</basecompoundref>
+    <basecompoundref refid="classcsmp_1_1_local_variable_storage" prot="public" virt="non-virtual">csmp::LocalVariableStorage&lt; dim, Boundary &gt;</basecompoundref>
+    <includes refid="_boundary_8h" local="no">Boundary.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_boundary_1ae8cf7ccb32714478f6b98d5806000571" prot="protected" static="no" mutable="no">
+        <type><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref></type>
+        <definition>BOX_BOUNDARY csmp::Boundary&lt; dim &gt;::boundaryFlag_</definition>
+        <argsstring></argsstring>
+        <name>boundaryFlag_</name>
+        <qualifiedname>csmp::Boundary::boundaryFlag_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Boundary.h" line="187" column="18" bodyfile="source/includes/model/Boundary.h" bodystart="187" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_boundary_1a43d14699165dbfb7ab7ee6ca1106d28f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Boundary&lt; dim &gt;::Boundary</definition>
+        <argsstring>()=delete</argsstring>
+        <name>Boundary</name>
+        <qualifiedname>csmp::Boundary::Boundary</qualifiedname>
+        <briefdescription>
+<para>there is no sensible default contruction </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Boundary.h" line="68" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_1acbec2a7ba7df895bd36ec43e402c517a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Boundary&lt; dim &gt;::Boundary</definition>
+        <argsstring>(const std::string &amp;boundary_name, const PropertyDatabase&lt; dim &gt; &amp;, typename std::vector&lt; Face&lt; dim &gt; * &gt;::iterator facesBegin, typename std::vector&lt; Face&lt; dim &gt; * &gt;::iterator facesEnd, BOX_BOUNDARY)</argsstring>
+        <name>Boundary</name>
+        <qualifiedname>csmp::Boundary::Boundary</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>boundary_name</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>&lt; dim &gt; &amp;</type>
+        </param>
+        <param>
+          <type>typename std::vector&lt; <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>&lt; dim &gt; * &gt;::iterator</type>
+          <declname>facesBegin</declname>
+        </param>
+        <param>
+          <type>typename std::vector&lt; <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>&lt; dim &gt; * &gt;::iterator</type>
+          <declname>facesEnd</declname>
+        </param>
+        <param>
+          <type><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref></type>
+        </param>
+        <briefdescription>
+<para>constructor: creating boundary from supplied vector of faces </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Boundary.h" line="71" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_1a16c906340ec770bfc4c23d3770ec884c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Boundary&lt; dim &gt;::Boundary</definition>
+        <argsstring>(std::string boundaryname, const PropertyDatabase&lt; dim &gt; &amp;, BOX_BOUNDARY flag)</argsstring>
+        <name>Boundary</name>
+        <qualifiedname>csmp::Boundary::Boundary</qualifiedname>
+        <param>
+          <type>std::string</type>
+          <declname>boundaryname</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>&lt; dim &gt; &amp;</type>
+          <defname>pref</defname>
+        </param>
+        <param>
+          <type><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref></type>
+          <declname>flag</declname>
+        </param>
+        <briefdescription>
+<para>create empty boundary with appropriately resized property storage </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Constructor for an empty boundary (no faces yet). </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Boundary.h" line="78" column="5" bodyfile="source/modules/model/Boundary.cpp" bodystart="34" bodyend="41"/>
+        <references refid="classcsmp_1_1_boundary_1a16c906340ec770bfc4c23d3770ec884c" compoundref="_boundary_8cpp" startline="34" endline="41">csmp::Boundary&lt; dim &gt;::Boundary</references>
+        <references refid="classcsmp_1_1_boundary_1aaaaaee85f55950c3c6564dd098ecf1da" compoundref="_boundary_8h" startline="89" endline="89">csmp::Boundary&lt; dim &gt;::Placement</references>
+        <referencedby refid="classcsmp_1_1_boundary_1a16c906340ec770bfc4c23d3770ec884c" compoundref="_boundary_8cpp" startline="34" endline="41">csmp::Boundary&lt; dim &gt;::Boundary</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_1a6361f773e20c2be566608fa7f4027a27" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Boundary&lt; dim &gt;::Boundary</definition>
+        <argsstring>(const Boundary &amp;)</argsstring>
+        <name>Boundary</name>
+        <qualifiedname>csmp::Boundary::Boundary</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> &amp;</type>
+          <defname>ed</defname>
+        </param>
+        <briefdescription>
+<para>copy constructor </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Boundary.h" line="80" column="5" bodyfile="source/modules/model/Boundary.cpp" bodystart="46" bodyend="51"/>
+        <references refid="classcsmp_1_1_boundary_1a6361f773e20c2be566608fa7f4027a27" compoundref="_boundary_8cpp" startline="46" endline="51">csmp::Boundary&lt; dim &gt;::Boundary</references>
+        <referencedby refid="classcsmp_1_1_boundary_1a6361f773e20c2be566608fa7f4027a27" compoundref="_boundary_8cpp" startline="46" endline="51">csmp::Boundary&lt; dim &gt;::Boundary</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_1ae39887f12c3fdd6c8f014ad1b06cacb2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Boundary&lt; dim &gt;::Boundary</definition>
+        <argsstring>(Boundary &amp;&amp;)</argsstring>
+        <name>Boundary</name>
+        <qualifiedname>csmp::Boundary::Boundary</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> &amp;&amp;</type>
+          <defname>ed</defname>
+        </param>
+        <briefdescription>
+<para>move constructor </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Boundary.h" line="81" column="5" bodyfile="source/modules/model/Boundary.cpp" bodystart="56" bodyend="61"/>
+        <references refid="classcsmp_1_1_boundary_1ae39887f12c3fdd6c8f014ad1b06cacb2" compoundref="_boundary_8cpp" startline="56" endline="61">csmp::Boundary&lt; dim &gt;::Boundary</references>
+        <referencedby refid="classcsmp_1_1_boundary_1ae39887f12c3fdd6c8f014ad1b06cacb2" compoundref="_boundary_8cpp" startline="56" endline="61">csmp::Boundary&lt; dim &gt;::Boundary</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_1a1796d66b97f58b8901989a0284aa714c" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>csmp::Boundary&lt; dim &gt;::~Boundary</definition>
+        <argsstring>()</argsstring>
+        <name>~Boundary</name>
+        <qualifiedname>csmp::Boundary::~Boundary</qualifiedname>
+        <briefdescription>
+<para>gets <ref refid="classcsmp_1_1_mesh_manager" kindref="compound">MeshManager</ref> to delete the boundary including Faces </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Default dtor does not delete faces, even though constructed by <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref>. Need to call DeleteFaces explicitly! <xrefsect id="todo_1_todo000137"><xreftitle>Todo</xreftitle><xrefdescription><para>FIX THIS CONCEPTUAL MISUNDERSTANDING ALL THE WAY THROUGH: the faces are managed by the <ref refid="classcsmp_1_1_mesh_manager" kindref="compound">MeshManager</ref> </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Boundary.h" line="84" column="13" bodyfile="source/modules/model/Boundary.cpp" bodystart="186" bodyend="188"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_1ae5055a5c5da06cc1fb4e235b71384095" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref>&lt; dim &gt; &amp;</type>
+        <definition>Boundary&lt; dim &gt; &amp; csmp::Boundary&lt; dim &gt;::operator=</definition>
+        <argsstring>(const Boundary &amp;)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::Boundary::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> &amp;</type>
+          <defname>ed</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Boundary.h" line="86" column="15" bodyfile="source/modules/model/Boundary.cpp" bodystart="191" bodyend="199"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_1aaaaaee85f55950c3c6564dd098ecf1da" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">PLACEMENT</ref></type>
+        <definition>virtual PLACEMENT csmp::Boundary&lt; dim &gt;::Placement</definition>
+        <argsstring>() const override</argsstring>
+        <name>Placement</name>
+        <qualifiedname>csmp::Boundary::Placement</qualifiedname>
+        <reimplements refid="classcsmp_1_1_model_sub_domain_1a74ddc3c010264bef70bd0604ec19ff11">Placement</reimplements>
+        <briefdescription>
+<para>methods required for the <ref refid="classcsmp_1_1_local_variable_storage" kindref="compound">LocalVariableStorage</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Boundary.h" line="89" column="23" bodyfile="source/includes/model/Boundary.h" bodystart="89" bodyend="89"/>
+        <referencedby refid="classcsmp_1_1_boundary_1a16c906340ec770bfc4c23d3770ec884c" compoundref="_boundary_8cpp" startline="34" endline="41">csmp::Boundary&lt; dim &gt;::Boundary</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_1a1d239786e2d3d54c7bde6d2f096afe9a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool csmp::Boundary&lt; dim &gt;::ValidVariable</definition>
+        <argsstring>(const char *variableName) const override</argsstring>
+        <name>ValidVariable</name>
+        <qualifiedname>csmp::Boundary::ValidVariable</qualifiedname>
+        <reimplements refid="classcsmp_1_1_model_sub_domain_1a08bfac55b1199d3b1b2271cc207baa1f">ValidVariable</reimplements>
+        <param>
+          <type>const char *</type>
+          <declname>variableName</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Boundary.h" line="90" column="23" bodyfile="source/modules/model/Boundary.cpp" bodystart="204" bodyend="210"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_1a4f582c675f0ffff76fa163004c68067d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Boundary&lt; dim &gt;::Boundary</definition>
+        <argsstring>(const PropertyDatabase&lt; dim &gt; &amp;, MeshManager&lt; dim &gt; &amp;, const SubDomainInfo &amp;, BOX_BOUNDARY=IRREGULAR)</argsstring>
+        <name>Boundary</name>
+        <qualifiedname>csmp::Boundary::Boundary</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>&lt; dim &gt; &amp;</type>
+          <defname>pref</defname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_mesh_manager" kindref="compound">MeshManager</ref>&lt; dim &gt; &amp;</type>
+          <defname>mesh</defname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_sub_domain_info" kindref="compound">SubDomainInfo</ref> &amp;</type>
+          <defname>info</defname>
+          <briefdescription><para>contains correctly partitioned vectors and boundary faces </para>
+</briefdescription>
+        </param>
+        <param>
+          <type><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref></type>
+          <defname>bflag</defname>
+          <defval><ref refid="group___c_s_m_pglobal_enums_1gga8e4421c3cd02f67e535bceb2dc74bfb6a06df978a517113d47cf3375e7d0a978a" kindref="member">IRREGULAR</ref></defval>
+        </param>
+        <briefdescription>
+<para>RECONSTRUCTOR of boundary from index data stored in <ref refid="structcsmp_1_1_sub_domain_info" kindref="compound">SubDomainInfo</ref> (call only prior to deleting anythin from colonies) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>RECONSTRUCTOR of boundary from the mesh manager in the model</para>
+<para><simplesect kind="attention"><para>expects that the face numbering is unique and that all faces are numbered consecutivly.</para>
+</simplesect>
+<simplesect kind="author"><para>SKM 4/5/2016</para>
+</simplesect>
+<simplesect kind="attention"><para>assumes that the index for the first <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> is equivalent to the number of elements in the model.</para>
+</simplesect>
+<xrefsect id="test_1_test000033"><xreftitle>Test</xreftitle><xrefdescription><para>nodes are assigned correctly, <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> objects are not </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Boundary.h" line="93" column="5" bodyfile="source/modules/model/Boundary.cpp" bodystart="79" bodyend="124"/>
+        <references refid="classcsmp_1_1_boundary_1a4f582c675f0ffff76fa163004c68067d" compoundref="_boundary_8cpp" startline="79" endline="124">csmp::Boundary&lt; dim &gt;::Boundary</references>
+        <referencedby refid="classcsmp_1_1_boundary_1a4f582c675f0ffff76fa163004c68067d" compoundref="_boundary_8cpp" startline="79" endline="124">csmp::Boundary&lt; dim &gt;::Boundary</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_1a0361c6061015a829c3795b5e6db74b62" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::Boundary&lt; dim &gt;::Accept</definition>
+        <argsstring>(Visitor&lt; dim &gt; &amp;) override</argsstring>
+        <name>Accept</name>
+        <qualifiedname>csmp::Boundary::Accept</qualifiedname>
+        <reimplements refid="classcsmp_1_1_model_sub_domain_1ad584415f46a55043ff7f3ca6aedede95">Accept</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_visitor" kindref="compound">Visitor</ref>&lt; dim &gt; &amp;</type>
+          <defname>v</defname>
+        </param>
+        <briefdescription>
+<para>Visitors. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Visitation of boundary, like for any visitation, the application level determines where the visitation starts and where it ends. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Boundary.h" line="99" column="18" bodyfile="source/modules/model/Boundary.cpp" bodystart="221" bodyend="246"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_1aab520b7cae6c891bc4424929b98ced4b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Var</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::Boundary&lt; dim &gt;::InputPropertyValue</definition>
+        <argsstring>(const char *input_prop, const Var &amp;new_value, SUBDOMAIN_PART sd=COMPLETE)</argsstring>
+        <name>InputPropertyValue</name>
+        <qualifiedname>csmp::Boundary::InputPropertyValue</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>input_prop</declname>
+        </param>
+        <param>
+          <type>const Var &amp;</type>
+          <declname>new_value</declname>
+        </param>
+        <param>
+          <type><ref refid="namespacecsmp_1a4b8f1ad9f1a09a957714679ce72aee3f" kindref="member">SUBDOMAIN_PART</ref></type>
+          <declname>sd</declname>
+          <defval>COMPLETE</defval>
+        </param>
+        <briefdescription>
+<para>for the assignment of properties that are unique to the instance of this subclass </para>
+        </briefdescription>
+        <detaileddescription>
+<para>for the assignment of properties that are unique to the instance of this subclass</para>
+<para><simplesect kind="author"><para>SKM </para>
+</simplesect>
+<simplesect kind="date"><para>7/6/2020 </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Boundary.h" line="108" column="10" bodyfile="source/modules/model/Boundary.cpp" bodystart="263" bodyend="285"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_1a56c843169f25e074b0081bb4095eda2f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Var</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::Boundary&lt; dim &gt;::InputPropertyValue</definition>
+        <argsstring>(const char *input_prop, const Var &amp;new_value, VARIABLE_FLAG do_not_overwrite, SUBDOMAIN_PART sd=COMPLETE)</argsstring>
+        <name>InputPropertyValue</name>
+        <qualifiedname>csmp::Boundary::InputPropertyValue</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>input_prop</declname>
+        </param>
+        <param>
+          <type>const Var &amp;</type>
+          <declname>new_value</declname>
+        </param>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref></type>
+          <declname>do_not_overwrite</declname>
+        </param>
+        <param>
+          <type><ref refid="namespacecsmp_1a4b8f1ad9f1a09a957714679ce72aee3f" kindref="member">SUBDOMAIN_PART</ref></type>
+          <declname>sd</declname>
+          <defval>COMPLETE</defval>
+        </param>
+        <briefdescription>
+<para>as InputPropertyValue, but with overwrite protection for variable components that have the flag &apos;do_not_overwrite&apos; </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Boundary.h" line="112" column="10" bodyfile="source/modules/model/Boundary.cpp" bodystart="309" bodyend="334"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_1a1b1d8b518c71ff8a8f73cb3ef8399a8e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Var</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>template void csmp::Boundary&lt; dim &gt;::InputVariableFrom&lt; TensorVariable&lt; 3U &gt; &gt;</definition>
+        <argsstring>(const char *property, const FEM_Data&lt; Var &gt; &amp;)</argsstring>
+        <name>InputVariableFrom</name>
+        <qualifiedname>csmp::Boundary::InputVariableFrom</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>property</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_f_e_m___data" kindref="compound">FEM_Data</ref>&lt; Var &gt; &amp;</type>
+          <defname>vdata</defname>
+        </param>
+        <briefdescription>
+<para>assigning the variable values from the FEM_DATA container to the corresponding property of the <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Inputs geometry and property data from an <ref refid="classcsmp_1_1_f_e_m___data" kindref="compound">FEM_Data</ref> object into this group.</para>
+<para>The expectation is that nodes and element numbers in the <ref refid="classcsmp_1_1_v_data" kindref="compound">VData</ref> set correspond to these in the current <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref> and that elements / nodes in the model have the same ordering as in the input dataset!</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The name of the property which shall be input to <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>.</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>The current element and node indices are used to retrieve the data from from the data container.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Enable to store data to disk to faciliate persistance. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Boundary.h" line="116" column="10" bodyfile="source/modules/model/Boundary.cpp" bodystart="556" bodyend="605"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_1abe8b9999ff9629d466e810c4c92852dd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Var</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>template void csmp::Boundary&lt; dim &gt;::OutputVariableTo&lt; TensorVariable&lt; 3U &gt; &gt;</definition>
+        <argsstring>(const char *property, FEM_Data&lt; Var &gt; &amp;) const</argsstring>
+        <name>OutputVariableTo</name>
+        <qualifiedname>csmp::Boundary::OutputVariableTo</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>property</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_f_e_m___data" kindref="compound">FEM_Data</ref>&lt; Var &gt; &amp;</type>
+          <defname>data</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Outputs specific property data to a <ref refid="classcsmp_1_1_f_e_m___data" kindref="compound">FEM_Data</ref> container. This function is a nested template: the outer template provides double = data type and dim = dimension, and Var the data type of the property (<ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref>, <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>, or <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref>).</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>property</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the name of the variable from <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref> </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>data</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The <ref refid="classcsmp_1_1_f_e_m___data" kindref="compound">FEM_Data</ref> container with the data that corresponds to the given property is returned into the second method argument.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>Only data pertinent to this local group is output. A new data container containing only group relevant data is returned.</para>
+<para>Thus, the data extracted only corresponds to -this- group and is organized by local id numbers.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>The idea is to extract the property data that corresponds to this group only. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Boundary.h" line="119" column="10" bodyfile="source/modules/model/Boundary.cpp" bodystart="421" bodyend="473"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_1add3eaca57719f3f5b7023a7fa0b93798" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::Boundary&lt; dim &gt;::AccumulateByNumber</definition>
+        <argsstring>(MeshManager&lt; dim &gt; &amp;, std::vector&lt; size_t &gt; &amp;cell_ids)</argsstring>
+        <name>AccumulateByNumber</name>
+        <qualifiedname>csmp::Boundary::AccumulateByNumber</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_mesh_manager" kindref="compound">MeshManager</ref>&lt; dim &gt; &amp;</type>
+          <defname>mesh</defname>
+        </param>
+        <param>
+          <type>std::vector&lt; size_t &gt; &amp;</type>
+          <declname>cell_ids</declname>
+        </param>
+        <briefdescription>
+<para>creates pointers to existing <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> objects assuming that these have consecutive ID numbers starting with that of the last <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> object </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Accumulates existing <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> objects, identified by their ID number into a new <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> object. The <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> ids are expected to be in the the range between n_elements and n_interfaces-1.</para>
+<para>Method assumes that face numbers follow consecutively on the element numbers and before the interface numbers in the mesh. Thus, the first <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> is expected to have the index &apos;n_elements&apos; </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Boundary.h" line="127" column="12" bodyfile="source/modules/model/Boundary.cpp" bodystart="865" bodyend="932"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_1abd78a206b0220110f76c6ec3a50539f1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Boundary&lt; dim &gt;::CreateFrom</definition>
+        <argsstring>(const typename std::vector&lt; Face&lt; dim &gt; * &gt;::const_iterator facesBegin, const typename std::vector&lt; Face&lt; dim &gt; * &gt;::const_iterator facesEnd)</argsstring>
+        <name>CreateFrom</name>
+        <qualifiedname>csmp::Boundary::CreateFrom</qualifiedname>
+        <param>
+          <type>const typename std::vector&lt; <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>&lt; dim &gt; * &gt;::const_iterator</type>
+          <declname>facesBegin</declname>
+        </param>
+        <param>
+          <type>const typename std::vector&lt; <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>&lt; dim &gt; * &gt;::const_iterator</type>
+          <declname>facesEnd</declname>
+        </param>
+        <briefdescription>
+<para>creating from supplied vector of faces </para>
+        </briefdescription>
+        <detaileddescription>
+<para>To create <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> from an existing range of <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> objecgts.</para>
+<para><simplesect kind="attention"><para>the method assumes that the faces are already interconnected. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Boundary.h" line="130" column="10" bodyfile="source/modules/model/Boundary.cpp" bodystart="944" bodyend="969"/>
+        <references refid="classcsmp_1_1_boundary_1ae15c93c5e4ce935f481648789afc23a1" compoundref="_boundary_8cpp" startline="657" endline="670">csmp::Boundary&lt; dim &gt;::InitializeBoundaryFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_1adf067840529977ad49b0a00a4c5316d7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Boundary&lt; dim &gt;::CreateFrom</definition>
+        <argsstring>(Region&lt; dim &gt; &amp;lower_dimensional_region, MeshManager&lt; dim &gt; &amp;meshManager, BOX_BOUNDARY boxBoundary)</argsstring>
+        <name>CreateFrom</name>
+        <qualifiedname>csmp::Boundary::CreateFrom</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_region" kindref="compound">Region</ref>&lt; dim &gt; &amp;</type>
+          <declname>lower_dimensional_region</declname>
+          <defname>region</defname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_mesh_manager" kindref="compound">MeshManager</ref>&lt; dim &gt; &amp;</type>
+          <declname>meshManager</declname>
+        </param>
+        <param>
+          <type><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref></type>
+          <declname>boxBoundary</declname>
+        </param>
+        <briefdescription>
+<para>create faces from lower dimensional region, deleting these and assigning nullptr values </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Creates faces matching the elements of the supplied (lower dimensional) region.</para>
+<para><simplesect kind="author"><para>P. Lang - SKM refactored 2016, 2021 </para>
+</simplesect>
+<simplesect kind="date"><para>30/8/2011</para>
+</simplesect>
+This method requires the supplied region to be of lower dimensional representation, throws otherwise. Storage for both, the faces and boundary, is established. If a box boundary is supplied, the flag of the <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> will be set accordingly; whether it actually represents a valid box boundary is not checked for.</para>
+<para>When establishing face connectivity(parent elements) the convention is as outlined:</para>
+<para><simplesect kind="attention"><para>If the element is on the model boundary(attached to a single higher dimensional parent element only), the unit normal of the created face will point outward.</para>
+</simplesect>
+<simplesect kind="attention"><para>the elements of the input region are removed and this region must therefore be deleted </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Boundary.h" line="134" column="10" bodyfile="source/modules/model/Boundary.cpp" bodystart="748" bodyend="827"/>
+        <references refid="classcsmp_1_1_boundary_1a2659398d8dd019df44213d161adf1ba0" compoundref="_boundary_8cpp" startline="133" endline="134">csmp::Boundary&lt; dim &gt;::FaceIntegrationPointVariables</references>
+        <references refid="classcsmp_1_1_boundary_1ae07661ed0e4b5b7aeb7a191f1ac91420" compoundref="_boundary_8cpp" startline="137" endline="138">csmp::Boundary&lt; dim &gt;::FaceVariables</references>
+        <references refid="classcsmp_1_1_boundary_1ae15c93c5e4ce935f481648789afc23a1" compoundref="_boundary_8cpp" startline="657" endline="670">csmp::Boundary&lt; dim &gt;::InitializeBoundaryFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_1a8333a5b3824399c3d417984a31f4efb3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Boundary&lt; dim &gt;::Length</definition>
+        <argsstring>() const</argsstring>
+        <name>Length</name>
+        <qualifiedname>csmp::Boundary::Length</qualifiedname>
+        <briefdescription>
+<para>in case the boundary consists of line segments </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Sums the length of line elements in the boundary, if any. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Boundary.h" line="144" column="13" bodyfile="source/modules/model/Boundary.cpp" bodystart="1023" bodyend="1032"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_1a7f6449fcaac1954e46f9419fa766adda" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Boundary&lt; dim &gt;::Area</definition>
+        <argsstring>() const</argsstring>
+        <name>Area</name>
+        <qualifiedname>csmp::Boundary::Area</qualifiedname>
+        <briefdescription>
+<para>surface area of the boundary </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Sums the area of surface elements in the boundary, if any. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Boundary.h" line="147" column="13" bodyfile="source/modules/model/Boundary.cpp" bodystart="1039" bodyend="1048"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_1adad7839fbc3912bd951f6cc1d4c3edd7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Boundary&lt; dim &gt;::Perimeter</definition>
+        <argsstring>() const</argsstring>
+        <name>Perimeter</name>
+        <qualifiedname>csmp::Boundary::Perimeter</qualifiedname>
+        <briefdescription>
+<para>length of the boundary perimeter in 3D, else NaN </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns the length of the perimeter line of the boundary.</para>
+<para><simplesect kind="return"><para>returns either the length of the perimeter of the boundary or NaN if the boundary is an edge.</para>
+</simplesect>
+<simplesect kind="attention"><para>method can only be applied in 3D and only on boundaries which are not lines themselves else the perimeter is not defined. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Boundary.h" line="150" column="13" bodyfile="source/modules/model/Boundary.cpp" bodystart="994" bodyend="1016"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_1abd6002f8634b035c0181f117b6a80fde" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Boundary&lt; dim &gt;::SurfaceIntegral</definition>
+        <argsstring>(const PropertyDatabase&lt; dim &gt; &amp;, const char *property) const</argsstring>
+        <name>SurfaceIntegral</name>
+        <qualifiedname>csmp::Boundary::SurfaceIntegral</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>&lt; dim &gt; &amp;</type>
+          <defname>p</defname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>property</declname>
+        </param>
+        <briefdescription>
+<para>surface integral over the variable of interest </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Boundary.h" line="153" column="13" bodyfile="source/modules/model/Boundary.cpp" bodystart="1054" bodyend="1122"/>
+        <references refid="classcsmp_1_1_scalar_variable_1a7f0ab5431406d975d6e1de988f369176" compoundref="_scalar_variable_8cpp" startline="6" endline="6">csmp::ScalarVariable::operator()</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_1a50307f5af921f1fd38d1f563fea5c037" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Boundary&lt; dim &gt;::IsExternal</definition>
+        <argsstring>() const</argsstring>
+        <name>IsExternal</name>
+        <qualifiedname>csmp::Boundary::IsExternal</qualifiedname>
+        <briefdescription>
+<para>reports whether the boundary lies on the outside of the whole model </para>
+        </briefdescription>
+        <detaileddescription>
+<para>If one of the <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> objects in the boundary has no outer higher-dim neighbor, the boundary is located on the model boundary.</para>
+<para><simplesect kind="return"><para>returns true when part or all of the boundary is located on the model boundary. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Boundary.h" line="156" column="10" bodyfile="source/modules/model/Boundary.cpp" bodystart="683" bodyend="689"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_1af52b3aff9b85946ec523c106bc8f3f0d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Boundary&lt; dim &gt;::AtBoundary</definition>
+        <argsstring>(BOX_BOUNDARY boxBoundary)</argsstring>
+        <name>AtBoundary</name>
+        <qualifiedname>csmp::Boundary::AtBoundary</qualifiedname>
+        <param>
+          <type><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref></type>
+          <declname>boxBoundary</declname>
+        </param>
+        <briefdescription>
+<para>application of single-value <ref refid="classcsmp_1_1_box" kindref="compound">Box</ref> boundary flagging </para>
+        </briefdescription>
+        <detaileddescription>
+<para>adds boundary flags to boundary nodes and elements if not already flagged as box boundary entity</para>
+<para><simplesect kind="note"><para>changes BOX boundary flags for INTERIOR nodes along the boundary </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Boundary.h" line="159" column="10" bodyfile="source/modules/model/Boundary.cpp" bodystart="700" bodyend="703"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_1a36dd2a7b526e8c91beccbfe17771b84f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref></type>
+        <definition>BOX_BOUNDARY csmp::Boundary&lt; dim &gt;::AtBoundary</definition>
+        <argsstring>() const</argsstring>
+        <name>AtBoundary</name>
+        <qualifiedname>csmp::Boundary::AtBoundary</qualifiedname>
+        <briefdescription>
+<para>reports the flagging of the boundary with respect to <ref refid="classcsmp_1_1_box" kindref="compound">csmp::Box</ref> boundary convention </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Boundary.h" line="162" column="18" bodyfile="source/includes/model/Boundary.h" bodystart="162" bodyend="162"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_1a17a39d98cbaf8c712c100d3fc3243322" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::pair&lt; int32_t, int32_t &gt;</type>
+        <definition>pair&lt; int32_t, int32_t &gt; csmp::Boundary&lt; dim &gt;::FaceSpatialDimensions</definition>
+        <argsstring>() const</argsstring>
+        <name>FaceSpatialDimensions</name>
+        <qualifiedname>csmp::Boundary::FaceSpatialDimensions</qualifiedname>
+        <briefdescription>
+<para>returns 1) elements of how many different spatial dimensions are contained, and 2) the highest element spatial dimension in boundary </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Detects of how many spatial dimensions element types are contained in model. It returns a pair: first value gives number of different spatial dimensions contained, second value returns the highest spatial dimension contained.</para>
+<para><simplesect kind="author"><para>SKM 1/11/2013 </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Boundary.h" line="165" column="16" bodyfile="source/modules/model/Boundary.cpp" bodystart="716" bodyend="720"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_1ac7b32e95546cc66ca4b9c9ed55cdf88c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Boundary&lt; dim &gt;::Out</definition>
+        <argsstring>() const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::Boundary::Out</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Boundary.h" line="167" column="10" bodyfile="source/modules/model/Boundary.cpp" bodystart="1136" bodyend="1181"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_1a1554afd6762d3dd19575ede5e504c970" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Var</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool csmp::Boundary&lt; dim &gt;::Out</definition>
+        <argsstring>(fstream &amp;fp, PLACEMENT place, VARIABLE_TYPE vtype) const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::Boundary::Out</qualifiedname>
+        <param>
+          <type>fstream &amp;</type>
+          <declname>fp</declname>
+        </param>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">PLACEMENT</ref></type>
+          <declname>place</declname>
+        </param>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1gacbf62c758c46dc45b3f024638bb89274" kindref="member">VARIABLE_TYPE</ref></type>
+          <declname>vtype</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Outs <ref refid="classcsmp_1_1_f_e_m___data" kindref="compound">FEM_Data</ref> of provided variable type and placement to binary</para>
+<para><simplesect kind="author"><para>P. Lang </para>
+</simplesect>
+<simplesect kind="date"><para>9/30/2012</para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">fp</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>If non-null, the binary file pointer </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>place</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The placement of variables </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>vtype</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The vtype of variables</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>true if it succeeds, false if it fails. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/model/Boundary.cpp" line="371" column="15" bodyfile="source/modules/model/Boundary.cpp" bodystart="371" bodyend="390"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_1a3da45e3ccaf0af879921ac964923f84b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Var</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool csmp::Boundary&lt; dim &gt;::In</definition>
+        <argsstring>(fstream &amp;fp, PLACEMENT, VARIABLE_TYPE)</argsstring>
+        <name>In</name>
+        <qualifiedname>csmp::Boundary::In</qualifiedname>
+        <param>
+          <type>fstream &amp;</type>
+          <declname>fp</declname>
+        </param>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">PLACEMENT</ref></type>
+        </param>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1gacbf62c758c46dc45b3f024638bb89274" kindref="member">VARIABLE_TYPE</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Ins <ref refid="classcsmp_1_1_f_e_m___data" kindref="compound">FEM_Data</ref> of provided variable type and placement from binary</para>
+<para>Complimentary to Out(...) function.</para>
+<para><simplesect kind="author"><para>P. Lang </para>
+</simplesect>
+<simplesect kind="date"><para>9/30/2012</para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">fp</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>If non-null, the binary file pointer</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>true if it succeeds, false if it fails. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/model/Boundary.cpp" line="515" column="15" bodyfile="source/modules/model/Boundary.cpp" bodystart="515" bodyend="531"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-func">
+      <memberdef kind="function" id="classcsmp_1_1_boundary_1ae15c93c5e4ce935f481648789afc23a1" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Boundary&lt; dim &gt;::InitializeBoundaryFlags</definition>
+        <argsstring>(BOX_BOUNDARY boxBoundary)</argsstring>
+        <name>InitializeBoundaryFlags</name>
+        <qualifiedname>csmp::Boundary::InitializeBoundaryFlags</qualifiedname>
+        <param>
+          <type><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref></type>
+          <declname>boxBoundary</declname>
+        </param>
+        <briefdescription>
+<para>assigns box boundary flags to nodes unless they do not have a NOT value </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Dispatched initialize method to establish node vector, perimeter entities, bflags and entity sorting.</para>
+<para><simplesect kind="attention"><para>Only assigns boundary flags if they have not already been set. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Boundary.h" line="172" column="10" bodyfile="source/modules/model/Boundary.cpp" bodystart="657" bodyend="670"/>
+        <referencedby refid="classcsmp_1_1_boundary_1abd78a206b0220110f76c6ec3a50539f1" compoundref="_boundary_8cpp" startline="944" endline="969">csmp::Boundary&lt; dim &gt;::CreateFrom</referencedby>
+        <referencedby refid="classcsmp_1_1_boundary_1adf067840529977ad49b0a00a4c5316d7" compoundref="_boundary_8cpp" startline="748" endline="827">csmp::Boundary&lt; dim &gt;::CreateFrom</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_1a2659398d8dd019df44213d161adf1ba0" prot="protected" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structcsmp_1_1_integration_point_variables" kindref="compound">IntegrationPointVariables</ref></type>
+        <definition>IntegrationPointVariables csmp::Boundary&lt; dim &gt;::FaceIntegrationPointVariables</definition>
+        <argsstring>() const</argsstring>
+        <name>FaceIntegrationPointVariables</name>
+        <qualifiedname>csmp::Boundary::FaceIntegrationPointVariables</qualifiedname>
+        <briefdescription>
+<para>returns local variables stored at face integration points </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Boundary.h" line="175" column="31" bodyfile="source/modules/model/Boundary.cpp" bodystart="133" bodyend="134"/>
+        <referencedby refid="classcsmp_1_1_boundary_1adf067840529977ad49b0a00a4c5316d7" compoundref="_boundary_8cpp" startline="748" endline="827">csmp::Boundary&lt; dim &gt;::CreateFrom</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_1ae07661ed0e4b5b7aeb7a191f1ac91420" prot="protected" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structcsmp_1_1_local_variables" kindref="compound">LocalVariables</ref></type>
+        <definition>LocalVariables csmp::Boundary&lt; dim &gt;::FaceVariables</definition>
+        <argsstring>() const</argsstring>
+        <name>FaceVariables</name>
+        <qualifiedname>csmp::Boundary::FaceVariables</qualifiedname>
+        <briefdescription>
+<para>returns local variables stored at on the boundary faces </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Boundary.h" line="178" column="20" bodyfile="source/modules/model/Boundary.cpp" bodystart="137" bodyend="138"/>
+        <referencedby refid="classcsmp_1_1_boundary_1adf067840529977ad49b0a00a4c5316d7" compoundref="_boundary_8cpp" startline="748" endline="827">csmp::Boundary&lt; dim &gt;::CreateFrom</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_1ae08b82028a32fc60beb5d7804f287385" prot="protected" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Var</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool csmp::Boundary&lt; dim &gt;::Out</definition>
+        <argsstring>(std::fstream &amp;fp, PLACEMENT place, VARIABLE_TYPE vtype) const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::Boundary::Out</qualifiedname>
+        <param>
+          <type>std::fstream &amp;</type>
+          <declname>fp</declname>
+        </param>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">PLACEMENT</ref></type>
+          <declname>place</declname>
+        </param>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1gacbf62c758c46dc45b3f024638bb89274" kindref="member">VARIABLE_TYPE</ref></type>
+          <declname>vtype</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Boundary.h" line="183" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_1a8de35af2fad4cbd83d4b340f69a940b4" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Var</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool csmp::Boundary&lt; dim &gt;::In</definition>
+        <argsstring>(std::fstream &amp;fp, PLACEMENT place, VARIABLE_TYPE vtype)</argsstring>
+        <name>In</name>
+        <qualifiedname>csmp::Boundary::In</qualifiedname>
+        <param>
+          <type>std::fstream &amp;</type>
+          <declname>fp</declname>
+        </param>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">PLACEMENT</ref></type>
+          <declname>place</declname>
+        </param>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1gacbf62c758c46dc45b3f024638bb89274" kindref="member">VARIABLE_TYPE</ref></type>
+          <declname>vtype</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Boundary.h" line="185" column="10"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>A <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> is lower-dimensional <ref refid="classcsmp_1_1_model_sub_domain" kindref="compound">ModelSubDomain</ref>, consisting of <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> objects. Consisting of Faces endows the boundary with special functionality such as access to higer-dimensional elements on either side and a distinct treatment in the accumulation of PDE operators such as surface integrals for a domain. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Like for the <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> or <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref>, properties can be placed directly on them saving storage and supporting subdomain specific treatment of processes.</para>
+<para>Boundaries have <ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref> flags, telling whether they are internal or external (box flags including IRREGULAR) boundaries. Their nodes are flagged correspondingly, which is important because it helps in the progressive construction of Boundaries to avoid accidential duplication.</para>
+<para>The nodes of a boundary have the same flag as the box boundary. Nodes within a model are thus flagged INTERNAL unless they already have a !NOT box-boundary flag.</para>
+<para>Boundaries creation and removal are managed via the <ref refid="classcsmp_1_1_boundary_interface" kindref="compound">BoundaryInterface</ref> of the <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> class.</para>
+<para><simplesect kind="note"><para>Since <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> is a separate variable placement variables placed on the element are accessible via Read, Store or Status operations. In practice, however, one always has access to the adjacent higher-dimensional <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> from which element properties can be obtained, for instance, to compute 2D solutions of the governing equations on the <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref>.</para>
+</simplesect>
+</para>
+<sect1 id="compare_floats_8h_1motivation">
+<title>Motivation</title><para>To apply areal boundary conditions, carry out computations or monitor processes at material interfaces or model side boundaries.</para>
+<para>To distinguish surface elements by turning them into <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> objects for specific processing, and treating boundary-specific calculations separately.</para>
+<para><simplesect kind="author"><para>S.K. Matthai </para>
+</simplesect>
+<simplesect kind="author"><para>P. Lang </para>
+</simplesect>
+<simplesect kind="date"><para>2010 </para>
+</simplesect>
+<simplesect kind="date"><para>2022 major revision </para>
+</simplesect>
+</para>
+</sect1>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::Boundary&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_boundary"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>csmp::LocalVariableStorage&lt; dim, STOREE &gt;</label>
+        <link refid="classcsmp_1_1_local_variable_storage"/>
+      </node>
+      <node id="4">
+        <label>csmp::LocalVariableStorage&lt; dim, Boundary &gt;</label>
+        <link refid="classcsmp_1_1_local_variable_storage"/>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; dim, Boundary &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::ModelSubDomain&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_model_sub_domain"/>
+      </node>
+      <node id="2">
+        <label>csmp::ModelSubDomain&lt; dim, Face &gt;</label>
+        <link refid="classcsmp_1_1_model_sub_domain"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; dim, Face &gt;</edgelabel>
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::Boundary&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_boundary"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>csmp::LocalVariableStorage&lt; dim, STOREE &gt;</label>
+        <link refid="classcsmp_1_1_local_variable_storage"/>
+      </node>
+      <node id="4">
+        <label>csmp::LocalVariableStorage&lt; dim, Boundary &gt;</label>
+        <link refid="classcsmp_1_1_local_variable_storage"/>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; dim, Boundary &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::ModelSubDomain&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_model_sub_domain"/>
+      </node>
+      <node id="2">
+        <label>csmp::ModelSubDomain&lt; dim, Face &gt;</label>
+        <link refid="classcsmp_1_1_model_sub_domain"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; dim, Face &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/model/Boundary.h" line="64" column="1" bodyfile="source/includes/model/Boundary.h" bodystart="66" bodyend="188"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_boundary_1a0361c6061015a829c3795b5e6db74b62" prot="public" virt="virtual"><scope>csmp::Boundary</scope><name>Accept</name></member>
+      <member refid="classcsmp_1_1_boundary_1add3eaca57719f3f5b7023a7fa0b93798" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>AccumulateByNumber</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1ae81c2b297f4166821bc3de2856e055ae" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>AddProperty</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1ac2e34ce178d5896bdff2826e02e022d5" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>Apply</name></member>
+      <member refid="classcsmp_1_1_boundary_1a7f6449fcaac1954e46f9419fa766adda" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>Area</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a0f98d57cdb8354375492e1ecab895b05" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>AssertFiniteVolumeIntegrationPointPlacement</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a5143bb03ae0bda92a0c01260dee54615" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>AssertIntegrationPointPlacement</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a4cc75be181f8519badea275810fe8275" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>AssertPlacement</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1affe9c994091a81214bffdec3b1eb379d" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>AssignCellCharacteristicsTo</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1ae5f0861ac366755bbc9a7bedd3c7eb79" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>AssignNodeCoordinatesTo</name></member>
+      <member refid="classcsmp_1_1_boundary_1af52b3aff9b85946ec523c106bc8f3f0d" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>AtBoundary</name></member>
+      <member refid="classcsmp_1_1_boundary_1a36dd2a7b526e8c91beccbfe17771b84f" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>AtBoundary</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1ad56987658b3732e443a349b49445792b" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>Average</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1af2350a5f4c5d02d924da9ea8054512ed" prot="protected" virt="non-virtual"><scope>csmp::Boundary</scope><name>bd_face_vec_</name></member>
+      <member refid="classcsmp_1_1_boundary_1a43d14699165dbfb7ab7ee6ca1106d28f" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>Boundary</name></member>
+      <member refid="classcsmp_1_1_boundary_1acbec2a7ba7df895bd36ec43e402c517a" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>Boundary</name></member>
+      <member refid="classcsmp_1_1_boundary_1a16c906340ec770bfc4c23d3770ec884c" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>Boundary</name></member>
+      <member refid="classcsmp_1_1_boundary_1a6361f773e20c2be566608fa7f4027a27" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>Boundary</name></member>
+      <member refid="classcsmp_1_1_boundary_1ae39887f12c3fdd6c8f014ad1b06cacb2" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>Boundary</name></member>
+      <member refid="classcsmp_1_1_boundary_1a4f582c675f0ffff76fa163004c68067d" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>Boundary</name></member>
+      <member refid="classcsmp_1_1_boundary_1ae8cf7ccb32714478f6b98d5806000571" prot="protected" virt="non-virtual"><scope>csmp::Boundary</scope><name>boundaryFlag_</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a03118649c3f6254773d9e9ed34f33aea" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>BuildPerimeterFaceVector</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1abf921fd0d1ea0635f584cf909b85f411" prot="protected" virt="non-virtual"><scope>csmp::Boundary</scope><name>cell_vec_</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a1416cc39817905728054ef506337bc49" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>Cells</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1aaec5934bc82b9d02e7c783d8afa86971" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>CellsBegin</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a77777e11388d26a4c938fc493f775471" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>CellsEnd</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a82cbf631efd523e2d7ba277294950c85" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>CellVector</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a88ef5a0e3360ff49b5108e668a36225b" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>ChangePropertyStatus</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a53c1ced2c270e2ae96ffffda70f28ac1" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>ChangePropertyStatusWhere</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a347ab9b03b1dfa44c93f1b99956bc47b" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>Contains</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1af7671cce5f309418f3b52d5a1d3ab02e" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>CopyGradientOfProperty_A_To_B</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a2b3e93fec007ff7f132b34387678b478" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>CopyReplace</name></member>
+      <member refid="classcsmp_1_1_boundary_1abd78a206b0220110f76c6ec3a50539f1" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>CreateFrom</name></member>
+      <member refid="classcsmp_1_1_boundary_1adf067840529977ad49b0a00a4c5316d7" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>CreateFrom</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1aaf3ef248874090a67fe87e50d8bd5873" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>CreateNodePointerVector</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a3b56bab7bc4a1db37bfc4d4176457349" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>DeleteProperty</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a410a2e7773096122dc005ce7332c56ee" prot="protected" virt="non-virtual"><scope>csmp::Boundary</scope><name>domain_count_</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a6147d916c36176edc6f20745772d5469" prot="protected" virt="non-virtual"><scope>csmp::Boundary</scope><name>domain_idx_</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a7ff2a29db10191df6e4ea7c0a0caa8c4" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>DomainIndex</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a3d7b51c9fab4a9e77f6e2f704d87ed6a" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>E</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1ae22732985cad72f47f024b61e6dee131" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>Empty</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a110040be6c3f197163729b7c4ea81069" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>EmptyLVS</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a573747a48a3a282619daf86498a88ed9" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>ExtrapolateCellToFacetIntegrationPointProperty</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1affc9d80a10e0fd66e6c0708a240e0e6d" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>ExtrapolateCellToIntegrationPointProperty</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a0646dd865affebcbae44e00f4d00aa21" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>ExtrapolateCellToNodeProperty</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1aecc9505535c81b0151704fc5b9fac09e" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>ExtrapolateIntegrationPointToNodeProperty</name></member>
+      <member refid="classcsmp_1_1_boundary_1a2659398d8dd019df44213d161adf1ba0" prot="protected" virt="non-virtual"><scope>csmp::Boundary</scope><name>FaceIntegrationPointVariables</name></member>
+      <member refid="classcsmp_1_1_boundary_1a17a39d98cbaf8c712c100d3fc3243322" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>FaceSpatialDimensions</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a9abe3025b86bfd036c23ecaff02ad213" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>FacetIntegrationPoints</name></member>
+      <member refid="classcsmp_1_1_boundary_1ae07661ed0e4b5b7aeb7a191f1ac91420" prot="protected" virt="non-virtual"><scope>csmp::Boundary</scope><name>FaceVariables</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a6fd65f017bd632530c92f69810da8aa9" prot="protected" virt="non-virtual"><scope>csmp::Boundary</scope><name>first_bd_node_</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a558d771a7d76ff360397d9c2383d89fc" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>IdentifyPerimeter</name></member>
+      <member refid="classcsmp_1_1_boundary_1a8de35af2fad4cbd83d4b340f69a940b4" prot="protected" virt="non-virtual"><scope>csmp::Boundary</scope><name>In</name></member>
+      <member refid="classcsmp_1_1_boundary_1a3da45e3ccaf0af879921ac964923f84b" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>In</name></member>
+      <member refid="classcsmp_1_1_boundary_1ae15c93c5e4ce935f481648789afc23a1" prot="protected" virt="non-virtual"><scope>csmp::Boundary</scope><name>InitializeBoundaryFlags</name></member>
+      <member refid="classcsmp_1_1_boundary_1aab520b7cae6c891bc4424929b98ced4b" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>InputPropertyValue</name></member>
+      <member refid="classcsmp_1_1_boundary_1a56c843169f25e074b0081bb4095eda2f" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>InputPropertyValue</name></member>
+      <member refid="classcsmp_1_1_boundary_1a1b1d8b518c71ff8a8f73cb3ef8399a8e" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>InputVariableFrom</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1ab3d5c3d8b32d351a7d4e5ce3f1eafbf8" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>IntegrationPoints</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a8becdb30330150d613f289bc1925f857" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>InteriorCells</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a40a10e4804594fa37dd06a401c5ab9b8" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>InteriorNodes</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a1a884652fb9c34a64d55665a19939b22" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>InterpolateIntegrationPointToCellProperty</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a4e074800bd8dbe5099bc9a3b71089f44" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>InterpolateNodeToCellProperty</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a765f7d15742fb4606b46cce678ca1c0d" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>InterpolateNodeToIntegrationPointProperty</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a2f8fe3782a143a775c253d3c6191fc62" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>IsContiguous</name></member>
+      <member refid="classcsmp_1_1_boundary_1a50307f5af921f1fd38d1f563fea5c037" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>IsExternal</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a2068d211fbab52cf0bdc86fa5d446b75" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>IsPerimeterCell</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a051e3ff5257401093619a9fb85ac1eaa" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>IsPerimeterNode</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1aa8f995011429356bfd7e7744794c9b9b" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>IsWithinRange</name></member>
+      <member refid="classcsmp_1_1_boundary_1a8333a5b3824399c3d417984a31f4efb3" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>Length</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1aa711649557c9cd84c0a69e7e1ffe301b" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>LocalVariableStorage</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a3568b1d87af863a457f038ca8982bcea" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>LVS</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a67e17a74c2386395bb019a4c9e440be0" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>MemberCellIndexes</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a68dd9c88e06295fb1f8d7145e9b642ea" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>MinMaxCoordinates</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a427056542aa764b22ca3284fc77e170f" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>MinMaxOf</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a381ef688858074ec3f9826ad81f2e449" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>ModelSubDomain</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a010f14b108721967ca9978df1499d52f" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>N</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a64ccf77081642653fffc40c1769fb00f" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>Name</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1ad591b048ddc2a7fe5bcde17dd4b755d5" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>NeedsRebuild</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a087f5475188c230492ce792812a5f5eb" prot="protected" virt="non-virtual"><scope>csmp::Boundary</scope><name>node_vec_</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a67ef0c828a71395fd0fe06c01c0ada6e" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>NodeAttributesToCSV</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1abd1e2486c410e25b6d0b8e14496cf2f6" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>Nodes</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1aaa468b295f19b75a259aa748a945e4cb" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>NodesBegin</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1ad3e5d4c406b24aca17d071ad4251b801" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>NodesEnd</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a4af00d46e863a987f097854c723ebfab" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>NodeVector</name></member>
+      <member refid="classcsmp_1_1_boundary_1ae5055a5c5da06cc1fb4e235b71384095" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1ae98bf548cc6255ac484a1c256a1ad1de" prot="public" virt="non-virtual" ambiguityscope="csmp::ModelSubDomain&lt; dim, Face &gt;::"><scope>csmp::Boundary</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1add3acd9ec49db71e0e5bf4f8dda13744" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>operator==</name></member>
+      <member refid="classcsmp_1_1_boundary_1ac7b32e95546cc66ca4b9c9ed55cdf88c" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_boundary_1ae08b82028a32fc60beb5d7804f287385" prot="protected" virt="non-virtual"><scope>csmp::Boundary</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_boundary_1a1554afd6762d3dd19575ede5e504c970" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1ade5ec5a8e9afb482c1619924cf8259b2" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>OutLVS</name></member>
+      <member refid="classcsmp_1_1_boundary_1abe8b9999ff9629d466e810c4c92852dd" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>OutputVariableTo</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a3e4530100fdef7bf13ba9fd963f83fd0" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>OutputVariableToScreen</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a9d850f869aa6838cecb95fb492a02568" prot="protected" virt="non-virtual"><scope>csmp::Boundary</scope><name>PartitionCellVector</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1aff4cdf6a7d3daed37780ea20b85716d2" prot="protected" virt="non-virtual"><scope>csmp::Boundary</scope><name>PartitionCellVectorForBoundary</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a904d6aadb464a0662f53e76baf6f89f5" prot="protected" virt="non-virtual"><scope>csmp::Boundary</scope><name>PartitionCellVectorForSplitBoundary</name></member>
+      <member refid="classcsmp_1_1_boundary_1adad7839fbc3912bd951f6cc1d4c3edd7" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>Perimeter</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a4c74feec24b156d8fbafe71ba6dc1939" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>PerimeterCells</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1ad496f92a80ef891f0e4c11763c2bae64" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>PerimeterCellsBegin</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a1a759eb5ea8a606b18524cb1fbd133f6" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>PerimeterFace</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a57da45c091a50ea8cbbb337fdc6a64c6" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>PerimeterFaces</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a6610189b16853a70fefede9980f5cf23" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>PerimeterNodes</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a64f588b169737d4c2e39cdcc1ec2c771" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>PerimeterNodesBegin</name></member>
+      <member refid="classcsmp_1_1_boundary_1aaaaaee85f55950c3c6564dd098ecf1da" prot="public" virt="virtual"><scope>csmp::Boundary</scope><name>Placement</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1ae3937fd965a1a5e43f03b8582e0f1518" prot="protected" virt="non-virtual"><scope>csmp::Boundary</scope><name>pref_</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1ababfefdacbec60ddd809e37ec764997b" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>PropertyStatus</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a4387c2c28afd79c9142834fc4a976b48" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>Read</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a15454666d6c782ff34dc7cbcd5654881" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>ReadArrayEntry</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a23464a6c34ba9416419f87036a813d68" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>RebuildCellAndPerimeterFaceVector</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a028f4a5b3dc58fb6b59ac9237b7f519c" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>RebuildNodeVector</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1aedad5f8e462b7e645c1745f5c674e39c" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>RebuildSubDomainAfterChangeOfCellVector</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a1ad43d5a139bb75dbf945808dd33598a" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>RebuildSubDomainAfterChangeOfNodeVector</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a2715a105ea0b1055cacc175c4782e62e" prot="protected" virt="non-virtual"><scope>csmp::Boundary</scope><name>rebuilt_needed_</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a17520db92d9751e03853275afc84fa09" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>RenumberCells</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1ad79aeada5222861dabe5c81323c59507" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>RenumberNodes</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a7a7f6185d60844c2f5acc1bcf475e215" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>ResizePropertyStorage</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1aeffc17e357e44a5386bcf9c285741401" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>ScheduleForRebuild</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a80b31818022be4fb43132f9ae3f54242" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>SectorIntegrationPoints</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1ad09876ac74479c2fce0230ca4eb623fd" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>SharedPerimeterNodes</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a6a2bf3c96a66498cc330c4c25a0d7413" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>SingleCellShapeDomain</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a3757b2383895058cff32c8e3ea1a7b3c" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>SortVectors</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1ab4c56e525a0880281af8173c8538565e" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>SpatialDimensions</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a13c8a3dae3a8ba916f712f7e96d000d1" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>Status</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a8642fe6f83bb6981e7c0d6ab5b2c0248" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>Store</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a0e9b7ddb382ce5e6bbb03158289dd5d4" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>StoreArrayEntry</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a482c445697287f2ae4d8b76319725d7a" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>StoreLocalState</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a203a3e4ddf9905cd03fbf10781b05778" prot="protected" virt="non-virtual"><scope>csmp::Boundary</scope><name>subdomain_name_</name></member>
+      <member refid="classcsmp_1_1_boundary_1abd6002f8634b035c0181f117b6a80fde" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>SurfaceIntegral</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a3491b83e51e7f2595c8136109af1f9b6" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>UpdateCellMembershipApplyingConstraints</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1af44335d9a2ce08027b18924e2a10927c" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>UpdateMemberIndexes</name></member>
+      <member refid="classcsmp_1_1_boundary_1a1d239786e2d3d54c7bde6d2f096afe9a" prot="public" virt="virtual"><scope>csmp::Boundary</scope><name>ValidVariable</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a45a54f8e5670d4b1d110d0dd0b80cfff" prot="protected" virt="non-virtual"><scope>csmp::Boundary</scope><name>verbose_</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1a472e8d79822b50bf470b3faf71266cb0" prot="public" virt="non-virtual"><scope>csmp::Boundary</scope><name>WriteDomainIndexesToBinaryFile</name></member>
+      <member refid="classcsmp_1_1_boundary_1a1796d66b97f58b8901989a0284aa714c" prot="public" virt="virtual"><scope>csmp::Boundary</scope><name>~Boundary</name></member>
+      <member refid="classcsmp_1_1_model_sub_domain_1afd03f96413fef9382de0064b0ec8137c" prot="public" virt="virtual"><scope>csmp::Boundary</scope><name>~ModelSubDomain</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

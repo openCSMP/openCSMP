@@ -1,0 +1,79 @@
+.TH "csmp::FluidCompressibilitySourceLHS< dim >" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::FluidCompressibilitySourceLHS< dim >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <FluidCompressibilitySourceLHS\&.h>\fP
+.PP
+Inherits \fBcsmp::MatrixOperator< dim >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBFluidCompressibilitySourceLHS\fP (const \fBcsmp::INDEX\fP< SCALAR, SECTOR_INTEGRATION_POINT > &key_SPV, const \fBcsmp::INDEX\fP< SCALAR, ELEMENT > &key_PHI, const \fBcsmp::INDEX\fP< SCALAR, ELEMENT > &key_CT, const \fBcsmp::INDEX\fP< SCALAR, NODE > &key_PF0, const \fBcsmp::INDEX\fP< SCALAR, NODE > &key_PF1, bool interpolate_pf_to_sector_ip)"
+.br
+.ti -1c
+.RI "virtual void \fBAccumulateFiniteVolume\fP (const \fBNode\fP< dim > &, \fBSparseMatrix\fP &) const"
+.br
+.ti -1c
+.RI "virtual void \fBAccumulateStencil\fP (const \fBElement\fP< dim > &, \fBSparseMatrix\fP &) const"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::MatrixOperator< dim >\fP
+.in +1c
+.ti -1c
+.RI "void \fBMultiplyWithTimeIncrement\fP (double dt)"
+.br
+.RI "includes the time increment in the multiplication factor for this operator "
+.ti -1c
+.RI "void \fBFactor\fP (double value)"
+.br
+.RI "set factor to achieve multiplication with time increment (fac=dt), subtraction (fac=-1), multiplication or division (fac=1/value) "
+.ti -1c
+.RI "double \fBFactor\fP () const"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim>
+.br
+class csmp::FluidCompressibilitySourceLHS< dim >"Volumetric source and sink terms that arise as the fluid expands or compresses due to pressure changes\&.
+
+.PP
+\fBNote\fP
+.RS 4
+this version uses sector-pore volume and total systems compressibilities of rocktypes that are associated with the elements\&.
+
+.PP
+fluid pressure is either taken from the node(FV) or interpolated with the finite-element interpolation to sector integration points\&. 
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim> void \fBcsmp::FluidCompressibilitySourceLHS\fP< dim >::AccumulateFiniteVolume (const \fBNode\fP< dim > & fv, \fBSparseMatrix\fP & mat) const\fR [virtual]\fP"
+Since each sector of the finite volume may consist of a different rock type, the total systems compressibility must be summed up sector-by-sector, honouring the different contributions\&. 
+.PP
+.nf
+@note using a single pressure value is perhaps not rigorous enough\&. One should rather interpolate
+the pressure to the sector integration in order to capture the source term more accurately\&.
+
+.fi
+.PP
+ 
+.PP
+Implements \fBcsmp::MatrixOperator< dim >\fP\&.
+.SS "template<uint32_t dim> void \fBcsmp::FluidCompressibilitySourceLHS\fP< dim >::AccumulateStencil (const \fBElement\fP< dim > & e, \fBSparseMatrix\fP & mat) const\fR [virtual]\fP"
+Element-wise accumulation of source term/ 
+.PP
+Implements \fBcsmp::MatrixOperator< dim >\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

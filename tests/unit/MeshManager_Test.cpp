@@ -138,10 +138,10 @@ bool MeshManager_Test::CheckConnectivityOfModel3D( Model<3>& model )
         _test( findContiguousMeshPatches( mesh.FacesBegin(), mesh.FacesEnd(), face_map3 ) >= 1 );
         cout << "\nInterconnected faces: " << (*face_map3.begin()).second.size() << "\n";
       }
-    if ( mesh.InterFaces() > 0 ) {
-       cout << "\nExamining the connectivity of  Interfaces: " << mesh.InterFaces() << "\n";
+    if ( mesh.Interfaces() > 0 ) {
+       cout << "\nExamining the connectivity of  Interfaces: " << mesh.Interfaces() << "\n";
         map<string,vector<InterFace<3U>*> >  iface_map3;
-        _test( findContiguousMeshPatches( mesh.InterFacesBegin(), mesh.InterFacesEnd(), iface_map3 ) >= 1 );
+        _test( findContiguousMeshPatches( mesh.InterfacesBegin(), mesh.InterfacesEnd(), iface_map3 ) >= 1 );
         cout << "\nInterconnected Interfaces: " << (*iface_map3.begin()).second.size() << "\n";
       }
     
@@ -345,7 +345,7 @@ bool MeshManager_Test::Test_detachNeighborsFrom()
 
 /**
     Checks that numbers of elements etc. in mesh manager do indeed reflect those of input model
-    Tests: Nodes(), Elements(), Faces(), InterFaces(), HybridElementMesh(), IsContiguous(), OutputMeshTo(vset) and node-nbor connectivity;
+    Tests: Nodes(), Elements(), Faces(), Interfaces(), HybridElementMesh(), IsContiguous(), OutputMeshTo(vset) and node-nbor connectivity;
     detachNeighborsFrom()
 */
 void MeshManager_Test::TestBasics()
@@ -382,7 +382,7 @@ void MeshManager_Test::TestBasics()
   _test(mesh.Faces() == 0);
 
   // returns number of interfaces=faces with multiplicated nodes
-  _test(mesh.InterFaces() == 0);
+  _test(mesh.Interfaces() == 0);
   
   _test( Test_detachNeighborsFrom() );
   
@@ -1067,7 +1067,7 @@ bool MeshManager_Test::TestFaceDeletionAndInsertion(/* "PyramidHexaPatch" */)
   cout<<"\n\tcreated "<<  ptrs_to_ifaces_created.size() <<" interfaces."<< endl;
     
   _test( mesh.Faces() == 0 );
-  _test( mesh.InterFaces() == ptrs_to_faces_created.size() );
+  _test( mesh.Interfaces() == ptrs_to_faces_created.size() );
 	
 	// delete the new interface(s) again and repair the mesh connectivity
 	mesh.DeleteInterfacesAndRepairConnnectivity( ptrs_to_ifaces_created.begin(), ptrs_to_ifaces_created.end() );
@@ -1081,7 +1081,7 @@ bool MeshManager_Test::TestFaceDeletionAndInsertion(/* "PyramidHexaPatch" */)
   
 	cout << "\nMeshManager_Test::TestFaceDeletionAndInsertion: model '" << model.Name() << "' (after deletion of faces):\n";
   cout << "\n\tFaces:      " << mesh.Faces() << "\n";
-	cout << "\n\tInterFaces: " << mesh.InterFaces() << "\n";
+	cout << "\n\tInterfaces: " << mesh.Interfaces() << "\n";
 
 	return true;
   
@@ -1116,7 +1116,7 @@ bool MeshManager_Test::TestInterFaceDeletionAndInsertion(/* "PyramidHexaPatch" *
   IntegrationPointVariables  iivars = model.Database().IntegrationPointVariablesAt(INTER_FACE);
   LocalVariables				     evars = model.Database().LocalVariablesAt(ELEMENT);
 	IntegrationPointVariables	 eivars = model.Database().IntegrationPointVariablesAt(ELEMENT);
-  const size_t n_original_ifaces = mesh.InterFaces();
+  const size_t n_original_ifaces = mesh.Interfaces();
 
   // puts interfaces between the interior faces of Element # and Element #
   Element<3U>* const eptr( &(*next(mesh.ElementsBegin(),4)) );
@@ -1173,9 +1173,9 @@ bool MeshManager_Test::TestInterFaceDeletionAndInsertion(/* "PyramidHexaPatch" *
 	// delete the new interface(s) again
 	mesh.DeleteInterfacesAndRepairConnnectivity( iface_ptrs.begin(), iface_ptrs.end() );
 	cout << "\nMeshManager_Test::TestInterFaceDeletionAndInsertion: model '" << model.Name() << "' (after deletion of interfaces):\n";
-	cout << "\nFaces: " << mesh.InterFaces() << "\n";
+	cout << "\nFaces: " << mesh.Interfaces() << "\n";
 
-	_test( mesh.InterFaces() == n_original_ifaces );
+	_test( mesh.Interfaces() == n_original_ifaces );
 
 	return true;
 }
@@ -1193,14 +1193,14 @@ bool MeshManager_Test::TestEraseAllPrimitives()
    MeshManager<2U>& mesh(model2d_->Mesh());
    const size_t     n_original_elmts(mesh.Elements());
    const size_t     n_original_faces(mesh.Faces());
-   const size_t     n_orig_interfaces(mesh.InterFaces());
+   const size_t     n_orig_interfaces(mesh.Interfaces());
 	 cout << "\nElements: " << model2d_->Mesh().Elements() << "\n";
    _test( mesh.Erase( mesh.NodesBegin(),      mesh.NodesEnd() )      == n_original_elmts );
    _test( mesh.Erase( mesh.ElementsBegin(),   mesh.ElementsEnd() )   == n_original_elmts );
    _test( mesh.Erase( mesh.FacesBegin(),      mesh.FacesEnd() )      == n_original_faces );
-   _test( mesh.Erase( mesh.InterFacesBegin(), mesh.InterFacesEnd() ) == n_orig_interfaces );
+   _test( mesh.Erase( mesh.InterfacesBegin(), mesh.InterfacesEnd() ) == n_orig_interfaces );
 	 cout << "\nElements: " << model2d_->Mesh().Elements() << "\n";
-	 _test( mesh.Elements() + mesh.Faces() + mesh.InterFaces() + mesh.Nodes() == 0 );
+	 _test( mesh.Elements() + mesh.Faces() + mesh.Interfaces() + mesh.Nodes() == 0 );
   */
 	return true;
 }

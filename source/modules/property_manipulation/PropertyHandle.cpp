@@ -4168,7 +4168,7 @@ template class PropertyHandle<2U>;
 template class PropertyHandle<3U>;
 
 
-} // end namespace csp
+} // end namespace csmp
 
 
 

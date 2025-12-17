@@ -1,0 +1,281 @@
+\doxysection{Region\+Interface.\+h}
+\hypertarget{_region_interface_8h_source}{}\label{_region_interface_8h_source}\index{source/includes/model/RegionInterface.h@{source/includes/model/RegionInterface.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{REGIONS\_INTERFACE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{REGIONS\_INTERFACE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_property_constraints}{PropertyConstraints}};}
+\DoxyCodeLine{00009\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model_topology}{ModelTopology}};}
+\DoxyCodeLine{00010\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_region}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_region}{Region}};}
+\DoxyCodeLine{00011\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_element}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}};}
+\DoxyCodeLine{00012\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_node}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}};}
+\DoxyCodeLine{00013\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_point}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}};}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00016\ \textcolor{comment}{@brief\ Policy\ of\ the\ class\ model\ for\ the\ management\ of\ its\ labeled\ subdomains\ that}}
+\DoxyCodeLine{00017\ \textcolor{comment}{are\ equivalent\ to\ the\ parts\ (CAD)\ or\ geobodies\ of\ the\ input\ model.}}
+\DoxyCodeLine{00018\ \textcolor{comment}{}}
+\DoxyCodeLine{00019\ \textcolor{comment}{@author\ S.K.\ Matthai}}
+\DoxyCodeLine{00020\ \textcolor{comment}{@author\ P.\ Lang}}
+\DoxyCodeLine{00021\ \textcolor{comment}{@date\ 2010}}
+\DoxyCodeLine{00022\ \textcolor{comment}{}}
+\DoxyCodeLine{00023\ \textcolor{comment}{@section\ motivation\ Motivation}}
+\DoxyCodeLine{00024\ \textcolor{comment}{}}
+\DoxyCodeLine{00025\ \textcolor{comment}{Break\ the\ complex\ interface\ of\ the\ model\ down\ into\ functional\ units.}}
+\DoxyCodeLine{00026\ \textcolor{comment}{}}
+\DoxyCodeLine{00027\ \textcolor{comment}{@section\ design\ Design\ Intent\ and\ Rules}}
+\DoxyCodeLine{00028\ \textcolor{comment}{}}
+\DoxyCodeLine{00029\ \textcolor{comment}{Policy\ of\ the\ Model\ that\ manages\ any\ kind\ of\ Region\ objects,\ i.e.\ ModelSubDomain\ objects}}
+\DoxyCodeLine{00030\ \textcolor{comment}{that\ consist\ of\ Elements.}}
+\DoxyCodeLine{00031\ \textcolor{comment}{}}
+\DoxyCodeLine{00032\ \textcolor{comment}{@attention\ there\ can\ be\ unique\ (non-\/overlapping)\ and\ non-\/unique\ regions.\ A\ region\ "{}Model"{}}}
+\DoxyCodeLine{00033\ \textcolor{comment}{that\ encompasses\ all\ elements\ that\ form\ part\ of\ the\ Model\ class'\ computational\ domain}}
+\DoxyCodeLine{00034\ \textcolor{comment}{is\ either\ unique\ or\ non-\/unique,\ depending\ on\ whether\ there\ are\ other\ unique\ regions}}
+\DoxyCodeLine{00035\ \textcolor{comment}{(in\ this\ latter\ case\ it\ is\ non-\/unique).}}
+\DoxyCodeLine{00036\ \textcolor{comment}{}}
+\DoxyCodeLine{00037\ \textcolor{comment}{@attention\ there\ is\ a\ second\ "{}fixed"{}\ master\ region\ that\ is\ always\ there.\ It\ is\ always\ called\ "{}Model"{}\ and}}
+\DoxyCodeLine{00038\ \textcolor{comment}{its\ purpose\ is\ as\ the\ default\ computational\ domain,\ i.e.\ when\ you\ compute\ something\ on\ the\ mdel}}
+\DoxyCodeLine{00039\ \textcolor{comment}{this\ region\ called\ "{}Model"{}\ will\ include\ all\ parts\ of\ the\ model's\ computational\ domain.}}
+\DoxyCodeLine{00040\ \textcolor{comment}{However,\ the\ "{}Model"{}\ region\ does\ not\ automatically\ include\ the\ other\ non-\/unique\ regions}}
+\DoxyCodeLine{00041\ \textcolor{comment}{nor\ Faces\ or\ InterFace\ objects\ which\ are\ managed\ by\ the\ Boundary\ and\ SplitBoundary\ classes.}}
+\DoxyCodeLine{00042\ \textcolor{comment}{}}
+\DoxyCodeLine{00043\ \textcolor{comment}{@section\ collaborations\ Collaborations}}
+\DoxyCodeLine{00044\ \textcolor{comment}{}}
+\DoxyCodeLine{00045\ \textcolor{comment}{The\ RegionInterface\ relies\ on\ the\ functionality\ of\ the\ Region\ derived\ from\ the\ ModelSubDomain\ class.}}
+\DoxyCodeLine{00046\ \textcolor{comment}{}}
+\DoxyCodeLine{00047\ \textcolor{comment}{@section\ examples\ Application\ Examples}}
+\DoxyCodeLine{00048\ \textcolor{comment}{}}
+\DoxyCodeLine{00049\ \textcolor{comment}{Interface\ allows\ to\ construct\ a\ region\ or\ reference\ regions,\ for\ example:}}
+\DoxyCodeLine{00050\ \textcolor{comment}{}}
+\DoxyCodeLine{00051\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00052\ \textcolor{comment}{//\ for\ each\ distinct\ value\ of\ the\ 'permeability'\ a\ region\ is\ created}}
+\DoxyCodeLine{00053\ \textcolor{comment}{set<string>\ \ group\_names;}}
+\DoxyCodeLine{00054\ \textcolor{comment}{model.FormRegionsFromPropertyValues(\ "{}permeability"{},\ group\_names\ );}}
+\DoxyCodeLine{00055\ \textcolor{comment}{//\ \ \ \ \string^\string^\string^\string^\string^\string^\string^\string^\string^\string^\string^\string^\string^\string^\string^\string^\string^\string^\string^\string^\string^\string^\string^\string^\string^\string^\string^\string^\string^}}
+\DoxyCodeLine{00056\ \textcolor{comment}{cout\ <<"{}\(\backslash\)n\(\backslash\)n\(\backslash\)nmain:\ FormRegionsFromPropertyValues()\ \ creating\ 'permeability'\ regions:\ "{};}}
+\DoxyCodeLine{00057\ \textcolor{comment}{for\ (\ set<string>::const\_iterator\ it=group\_names.begin();\ it!=group\_names.end();\ it++\ )\ cout\ <<\ (*it)\ <<"{}\ "{};}}
+\DoxyCodeLine{00058\ \textcolor{comment}{cout\ <<\ endl;}}
+\DoxyCodeLine{00059\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00060\ \textcolor{comment}{}}
+\DoxyCodeLine{00061\ \textcolor{comment}{@bug\ the\ value\ of\ region\ properties\ values\ \ that\ were\ generated\ by\ boolean\ operators\ or\ when\ merging\ regions}}
+\DoxyCodeLine{00062\ \textcolor{comment}{are\ not\ defined.\ A\ rule\ is\ needed\ to\ assign\ them\ in\ a\ consistent\ fashion}}
+\DoxyCodeLine{00063\ \textcolor{comment}{}}
+\DoxyCodeLine{00064\ \textcolor{comment}{TODO:\ @todo\ !!!\ all\ methods\ that\ create\ regions\ from\ regions\ must\ also\ copy\ potential\ regional\ property\ values\ to\ these}}
+\DoxyCodeLine{00065\ \textcolor{comment}{}}
+\DoxyCodeLine{00066\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00067\ \textcolor{keyword}{template}<uint32\_t\ dim,\ \textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ REGION\_COMPLEX>}
+\DoxyCodeLine{00068\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_region_interface}{RegionInterface}}\ \{}
+\DoxyCodeLine{00069\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00070\ \ \ \ \ RegionInterface()\ \{\}}
+\DoxyCodeLine{00071\ \ \ \ \ RegionInterface(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_region_interface}{RegionInterface}}\&\ )\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00072\ \ \ \ \ \string~RegionInterface()\ \{\}}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{comment}{///\ checks\ whether\ region\ exists\ considering\ both\ unique\ and\ non-\/unique\ regions}}
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_region_interface_aad7bc91dc4450d45f48103c85ae940e5}{ContainsRegion}}(\ \textcolor{keyword}{const}\ std::string\&\ regionname\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{comment}{///\ returns\ const\ reference\ to\ region}}
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_region}{Region}}<dim>\&\ \ Region(\ \textcolor{keyword}{const}\ std::string\&\ region\_name\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{comment}{///\ returns\ reference\ to\ region}}
+\DoxyCodeLine{00081\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_region}{Region}}<dim>\&\ \ Region(\ \textcolor{keyword}{const}\ std::string\&\ region\_name\ );}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{comment}{///\ checks\ whether\ the\ region\ is\ space\ exclusive,\ i.e.\ does\ not\ contain\ any\ other\ regions}}
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_region_interface_a6ee3292130db84d62ea9b3ddbb81461d}{IsUnique}}(\ \textcolor{keyword}{const}\ std::string\&\ regionname\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{comment}{///\ checks\ whether\ all\ elements\ within\ the\ region\ are\ interconnected\ (if\ the\ region\ has\ multi-\/dimensional\ elements\ this\ is\ never\ the\ case)}}
+\DoxyCodeLine{00087\ \ \ \ \ \textcolor{comment}{//\ see\ model\ subdomain:\ bool\ IsContiguous(\ const\ std::string\&\ regionname\ )\ const;}}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \ \ \ \ \ \textcolor{comment}{///\ using\ the\ unique\ region\ ID\ (=domain\ idx)\ assigned\ to\ any\ ModelSubDomain\ upon\ creation,\ this\ method\ searches\ for\ the\ corresponding\ unique\ region}}
+\DoxyCodeLine{00090\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_region}{Region}}<dim>\&\ \ \mbox{\hyperlink{classcsmp_1_1_region_interface_a76b7f2f0b92cb59c95116e06d31a120a}{RegionByDomainIndex}}(\ int32\_t\ domain\_index\ );}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \ \ \ \ \textcolor{comment}{///\ checks\ that\ there\ is\ a\ model\ region\ and\ that\ it\ contains\ elements}}
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_region_interface_a4e541b2682544636c2cd62d569716946}{HasValidModelRegion}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{comment}{//\ \ Input/output}}
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \ \ \ \ size\_t\ RegionsOut()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{comment}{///\ prints\ ModelSubDomain::domain\_idx\_\ assigned\ automatically\ using\ reference\ count\ mechanism}}
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_region_interface_a7317f73445deb0ffe24f8d7c2d8fa705}{PrintDomainIndices}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ \ \ \ \ \textcolor{comment}{///\ writes\ unique\ and\ non-\/unique\ regions\ to\ binary\ file,\ including,\ interior/perimeter/boundary\ face\ information;\ relies\ on\ unique\ indexes}}
+\DoxyCodeLine{00106\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_region_interface_a4baedc0566e529f2a54d46a56e62a138}{OutputRegionsToBinary}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file\_name\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \ \ \ \ \textcolor{comment}{///\ Reads\ unique\ and\ non-\/unique\ regions\ from\ binary\ file\ as\ written\ by\ OutputAllRegionsToBinary();\ it\ can\ also\ read\ only\ a\ subset\ of\ variables}}
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_region_interface_abf1c6bc80311fc070ff4da11211093d8}{InputRegionsFromBinary}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file\_name,\ \textcolor{keyword}{const}\ std::set<std::string>\&\ subset\_variables\ );}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00113\ \ \ \ \ \textcolor{comment}{//\ \ Regions\ access\ and\ manipulations\ with\ the\ list\ of\ Regions}}
+\DoxyCodeLine{00114\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{comment}{///\ iterators\ to\ associative\ containers\ of\ regions}}
+\DoxyCodeLine{00117\ \ \ \ \ \textcolor{keyword}{typedef}\ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_region_interface}{std}}::\mbox{\hyperlink{classcsmp_1_1_region_interface}{map}}<\mbox{\hyperlink{classcsmp_1_1_region_interface}{std}}::\mbox{\hyperlink{classcsmp_1_1_region_interface}{string}},\ \mbox{\hyperlink{classcsmp_1_1_region_interface}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_region_interface}{Region}}<\mbox{\hyperlink{classcsmp_1_1_region_interface}{dim}}>\ >::\mbox{\hyperlink{classcsmp_1_1_region_interface}{iterator}}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_interface}{regionIterator}};}
+\DoxyCodeLine{00118\ \ \ \ \ \textcolor{keyword}{typedef}\ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_region_interface}{std}}::\mbox{\hyperlink{classcsmp_1_1_region_interface}{map}}<\mbox{\hyperlink{classcsmp_1_1_region_interface}{std}}::\mbox{\hyperlink{classcsmp_1_1_region_interface}{string}},\ \mbox{\hyperlink{classcsmp_1_1_region_interface}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_region_interface}{Region}}<\mbox{\hyperlink{classcsmp_1_1_region_interface}{dim}}>\ >::\mbox{\hyperlink{classcsmp_1_1_region_interface}{const\_iterator}}\ \ \mbox{\hyperlink{classcsmp_1_1_region_interface}{regionConstIterator}};}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00120\ \ \ \ \ \textcolor{comment}{//\ non-\/unique\ (potentially\ overlapping)\ regions}}
+\DoxyCodeLine{00121\ \ \ \ \ regionIterator\ \ \ \ \ \ \ \ \ \ \ \ RegionsBegin();}
+\DoxyCodeLine{00122\ \ \ \ \ regionIterator\ \ \ \ \ \ \ \ \ \ \ \ RegionsEnd();}
+\DoxyCodeLine{00123\ \ \ \ \ regionConstIterator\ \ \ \ \ \ \ RegionsBegin()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00124\ \ \ \ \ regionConstIterator\ \ \ \ \ \ \ RegionsEnd()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00126\ \ \ \ \ \textcolor{comment}{//\ unique\ (spatially\ exclusive)\ regions}}
+\DoxyCodeLine{00127\ \ \ \ \ regionIterator\ \ \ \ \ \ \ \ \ \ \ \ UniqueRegionsBegin();}
+\DoxyCodeLine{00128\ \ \ \ \ regionIterator\ \ \ \ \ \ \ \ \ \ \ \ UniqueRegionsEnd();}
+\DoxyCodeLine{00129\ \ \ \ \ regionConstIterator\ \ \ \ \ \ \ UniqueRegionsBegin()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00130\ \ \ \ \ regionConstIterator\ \ \ \ \ \ \ UniqueRegionsEnd()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00132\ \ \ \ \ \textcolor{comment}{///\ number\ of\ non-\/unique\ regions\ that\ potentially\ overlap}}
+\DoxyCodeLine{00133\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_interface_ab4e46d0953e5ac0004b53d240b4c79dc}{size\_t}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_interface_ab4e46d0953e5ac0004b53d240b4c79dc}{Regions}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00134\ \ \ \ \ \textcolor{comment}{///\ number\ of\ regions\ that\ are\ space\ eclusive\ like\ the\ subvolumes\ of\ a\ water\ tight\ CAD\ model}}
+\DoxyCodeLine{00135\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_interface_ac86acab5c8c0c3412e429f321f9b3553}{size\_t}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_interface_ac86acab5c8c0c3412e429f321f9b3553}{UniqueRegions}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00137\ \ \ \ \ \textcolor{comment}{///\ changes\ the\ subdomain\ name\ and\ the\ search\ key\ in\ the\ region\ map\ with\ deletion\ or\ copying\ of\ elements}}
+\DoxyCodeLine{00138\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_interface_a0a622ed266b74e15e39f8ad734ad7a3d}{RenameRegion}}(\ \textcolor{keyword}{const}\ std::string\&\ old\_name,\ \textcolor{keyword}{const}\ std::string\&\ new\_name\ );}
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00141\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00142\ \ \ \ \ \textcolor{comment}{//\ Region\ creation}}
+\DoxyCodeLine{00143\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ \ \ \ \ \textcolor{comment}{///\ builds\ master\ region\ 'Model'\ (discontigous\ or\ not)\ including\ all\ elements\ (line,\ surface,\ or\ volume\ if\ any);\ this\ regions\ is\ then\ used\ to\ build\ others}}
+\DoxyCodeLine{00146\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_interface_a01c89d70b2cc76f81224c318f0840bb8}{size\_t}}\ \mbox{\hyperlink{classcsmp_1_1_region_interface_a01c89d70b2cc76f81224c318f0840bb8}{FormModelRegion}}(\ \textcolor{keywordtype}{bool}\ is\_unique\ );}
+\DoxyCodeLine{00147\ }
+\DoxyCodeLine{00148\ \ \ \ \ \textcolor{comment}{///\ forms\ unique\ or\ non-\/unique\ region\ including\ entire\ range\ of\ elements;\ returns\ number\ of\ elements\ created\ (USED\ TO\ CREATE\ MODEL\ REGION\ 22/5/21)}}
+\DoxyCodeLine{00149\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_interface_a54852db0700b343b2c21d420fa387797}{size\_t}}\ \mbox{\hyperlink{classcsmp_1_1_region_interface_a54852db0700b343b2c21d420fa387797}{FormRegionFrom}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ regionname,}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_region_interface_a54852db0700b343b2c21d420fa387797}{std}}::\mbox{\hyperlink{classcsmp_1_1_region_interface_a54852db0700b343b2c21d420fa387797}{vector}}<\mbox{\hyperlink{classcsmp_1_1_region_interface_a54852db0700b343b2c21d420fa387797}{Element}}<\mbox{\hyperlink{classcsmp_1_1_region_interface_a54852db0700b343b2c21d420fa387797}{dim}}>*>::\mbox{\hyperlink{classcsmp_1_1_region_interface_a54852db0700b343b2c21d420fa387797}{iterator}}\ \mbox{\hyperlink{classcsmp_1_1_region_interface_a54852db0700b343b2c21d420fa387797}{first}},}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_region_interface_a54852db0700b343b2c21d420fa387797}{std}}::\mbox{\hyperlink{classcsmp_1_1_region_interface_a54852db0700b343b2c21d420fa387797}{vector}}<\mbox{\hyperlink{classcsmp_1_1_region_interface_a54852db0700b343b2c21d420fa387797}{Element}}<\mbox{\hyperlink{classcsmp_1_1_region_interface_a54852db0700b343b2c21d420fa387797}{dim}}>*>::\mbox{\hyperlink{classcsmp_1_1_region_interface_a54852db0700b343b2c21d420fa387797}{iterator}}\ \mbox{\hyperlink{classcsmp_1_1_region_interface_a54852db0700b343b2c21d420fa387797}{last}},}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_region_interface_a54852db0700b343b2c21d420fa387797}{unique}}\ =\ \textcolor{keyword}{false}\ );}
+\DoxyCodeLine{00153\ }
+\DoxyCodeLine{00154\ \ \ \ \ \textcolor{comment}{///\ treats\ the\ values\ of\ the\ property\ as\ discrete,\ forming\ one\ region\ per\ value\ and\ returning\ their\ names\ into\ the\ set;\ returns\ number\ of\ regions}}
+\DoxyCodeLine{00155\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_interface_a893076f9f7bf4711e6d4897f719bb2b5}{size\_t}}\ \mbox{\hyperlink{classcsmp_1_1_region_interface_a893076f9f7bf4711e6d4897f719bb2b5}{FormRegionsFromPropertyValues}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ prop,\ std::set<std::string>\&\ region\_names\ );}
+\DoxyCodeLine{00156\ }
+\DoxyCodeLine{00157\ \ \ \ \ \textcolor{comment}{///\ forms\ unique\ regions\ from\ the\ supplied\ element\ ids\ (0..n-\/1)\ stored\ in\ ModelTopology;\ assigns\ region\ number\ to\ element\ material\ IDs\ if\ empty;\ returns\ \#\ of\ regions\ formed}}
+\DoxyCodeLine{00158\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_interface_aefd55525755bb027d8b6204b2ce604c3}{size\_t}}\ \mbox{\hyperlink{classcsmp_1_1_region_interface_aefd55525755bb027d8b6204b2ce604c3}{FormRegionsFrom}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model_topology}{ModelTopology}}\&,\ \textcolor{keywordtype}{bool}\ ignore\_domain\_type\_identifiers=\textcolor{keyword}{false}\ );}
+\DoxyCodeLine{00159\ }
+\DoxyCodeLine{00160\ \ \ \ \ \textcolor{comment}{//\ FROM\ THE\ 'MODEL'\ REGION\ THAT\ NEEDS\ TO\ BE\ CREATED\ BEFORE}}
+\DoxyCodeLine{00161\ }
+\DoxyCodeLine{00162\ \ \ \ \ \textcolor{comment}{///\ creates\ unique\ regions\ from\ material\ IDs\ which\ must\ have\ been\ defined\ earlier;\ returns\ number\ of\ regions\ formed;\ returns\ number\ of\ regions}}
+\DoxyCodeLine{00163\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_interface_aba5ce4ad7998c91591500e6385bd5fe3}{size\_t}}\ \mbox{\hyperlink{classcsmp_1_1_region_interface_aba5ce4ad7998c91591500e6385bd5fe3}{FormRegionsFromMaterialIDs}}();}
+\DoxyCodeLine{00164\ }
+\DoxyCodeLine{00165\ \ \ \ \ \textcolor{comment}{///\ Assuming\ that\ elements\ have\ been\ numbered\ as\ required\ by\ caller,\ method\ forms\ region\ of\ elements\ with\ this\ Idx()\ values;\ returns\ \#\ of\ elements\ in\ region;\ returns\ number\ of\ elements}}
+\DoxyCodeLine{00166\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_interface_ab4bde99da0fcfcb51e0fee435523fb3e}{size\_t}}\ \mbox{\hyperlink{classcsmp_1_1_region_interface_ab4bde99da0fcfcb51e0fee435523fb3e}{FormRegionFrom}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ regionname,\ std::vector<size\_t>\&\ elmt\_ids,\ \textcolor{keywordtype}{bool}\ is\_unique=\textcolor{keyword}{true}\ );}
+\DoxyCodeLine{00167\ }
+\DoxyCodeLine{00168\ \ \ \ \ \textcolor{comment}{///\ forms\ a\ new\ non-\/unique\ region\ from\ elements\ whose\ property\ value\ falls\ into\ the\ user-\/defined\ range;\ returns\ number\ of\ elements}}
+\DoxyCodeLine{00169\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_interface_af0f5afca52fe8cd95f2728efb5661d2e}{size\_t}}\ \mbox{\hyperlink{classcsmp_1_1_region_interface_af0f5afca52fe8cd95f2728efb5661d2e}{FormRegionFrom}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ regionname,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ prop,\ \textcolor{keywordtype}{double}\ pmin,\ \textcolor{keywordtype}{double}\ pmax,\ \textcolor{keywordtype}{bool}\ unique\ =\ \textcolor{keyword}{false}\ );}
+\DoxyCodeLine{00170\ }
+\DoxyCodeLine{00171\ \ \ \ \ \textcolor{comment}{///\ forms\ region\ from\ complex\ value\ constraints\ as\ provided\ via\ a\ PropertyContraints\ object\ that\ has\ to\ be\ configured\ before;\ returns\ number\ of\ elements}}
+\DoxyCodeLine{00172\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_interface_ab9b051d353d0c09e5f7631ef704d0c77}{size\_t}}\ \mbox{\hyperlink{classcsmp_1_1_region_interface_ab9b051d353d0c09e5f7631ef704d0c77}{FormRegionFrom}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ regionname,\ \mbox{\hyperlink{classcsmp_1_1_property_constraints}{PropertyConstraints}}\&,\ \textcolor{keywordtype}{bool}\ unique\ =\ \textcolor{keyword}{false}\ );}
+\DoxyCodeLine{00173\ }
+\DoxyCodeLine{00174\ \ \ \ \ \textcolor{comment}{///\ forms\ region\ that\ represents\ union\ of\ preexisting\ regions.\ @todo\ SKM\ remove\ method\ as\ it\ duplicates\ MergeRegions();\ returns\ number\ of\ elements}}
+\DoxyCodeLine{00175\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_interface_ad6d52661a17c12ab621263e9ff377462}{size\_t}}\ \mbox{\hyperlink{classcsmp_1_1_region_interface_ad6d52661a17c12ab621263e9ff377462}{FormRegionFrom}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ regionname,\ \textcolor{keyword}{const}\ std::set<std::string>\&\ region\_names\ );}
+\DoxyCodeLine{00176\ }
+\DoxyCodeLine{00177\ \ \ \ \ \textcolor{comment}{///\ ;\ returns\ number\ of\ elements}}
+\DoxyCodeLine{00178\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ ElementComp>}
+\DoxyCodeLine{00179\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_interface_a95c5ff8625d4c62c40c3606090911762}{size\_t}}\ \mbox{\hyperlink{classcsmp_1_1_region_interface_a95c5ff8625d4c62c40c3606090911762}{FormRegionFrom}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ regionname,\ ElementComp<dim>\ \textcolor{keyword}{const}\&\ elementComp,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ hostRegion\ =\ \textcolor{stringliteral}{"{}Model"{}}\ );}
+\DoxyCodeLine{00180\ }
+\DoxyCodeLine{00181\ \ \ \ \ \textcolor{comment}{///\ Assuming\ that\ the\ supplied\ n-\/nodes\ are\ in\ sequence\ of\ a\ polyline,\ method\ forms\ n-\/1\ line\ elements\ putting\ them\ into\ a\ now\ limer-\/dimensional\ region}}
+\DoxyCodeLine{00182\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_interface_ab4bde99da0fcfcb51e0fee435523fb3e}{size\_t}}\ \mbox{\hyperlink{classcsmp_1_1_region_interface_ab4bde99da0fcfcb51e0fee435523fb3e}{FormRegionFrom}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ regionname,\ std::vector<Node<dim>*>\&\ nodes,\ \textcolor{keywordtype}{bool}\ is\_unique=\textcolor{keyword}{true}\ );}
+\DoxyCodeLine{00183\ }
+\DoxyCodeLine{00184\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_interface_a47865ffc9553be4af8b2f5ed92bb5061}{size\_t}}\ \mbox{\hyperlink{classcsmp_1_1_region_interface_a47865ffc9553be4af8b2f5ed92bb5061}{FormRegionInBoundingBox}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ regionName,}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\&\ cnr\_min,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\&\ cnr\_max,}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ all\_nodes\_must\_be\_within\ );}
+\DoxyCodeLine{00187\ }
+\DoxyCodeLine{00188\ }
+\DoxyCodeLine{00189\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00190\ \ \ \ \ \textcolor{comment}{//\ Manipulations\ with\ already\ existed\ Regions}}
+\DoxyCodeLine{00191\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00192\ }
+\DoxyCodeLine{00193\ \ \ \ \ \textcolor{comment}{///\ assigns\ unique\ region-\/indicative\ variable\ values\ to\ the\ elements\ of\ all\ unique\ regions\ and\ returns\ name\ value\ mapping\ vector[value]=name}}
+\DoxyCodeLine{00194\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_interface_adf554e6b22902ffe7e6793538a05f8d4}{size\_t}}\ \ \mbox{\hyperlink{classcsmp_1_1_region_interface_adf554e6b22902ffe7e6793538a05f8d4}{CountAndLabelUniqueRegions}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ region\_identifier,\ std::vector<std::string>\&\ region\_names\ );}
+\DoxyCodeLine{00195\ }
+\DoxyCodeLine{00196\ \ \ \ \ \textcolor{comment}{//\ E.P\ Compares\ material\ identifier\ with\ number\ of\ unique\ regions\ in\ model\ (this\ must\ match\ unless\ regions\ have\ been\ eliminated)}}
+\DoxyCodeLine{00197\ \ \ \ \ \textcolor{keywordtype}{bool}\ CheckRegionIdentifierIsUpToDate(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ region\_identifier\ );}
+\DoxyCodeLine{00198\ }
+\DoxyCodeLine{00199\ \ \ \ \ \textcolor{comment}{///\ finds\ disconnected\ subregions\ in\ region,\ dividing\ it\ into\ these.\ The\ new\ subregion\ are\ numbered\ and\ their\ total\ \#\ is\ returned}}
+\DoxyCodeLine{00200\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_interface_ac9096a4b2be14096aafa13fc61322bce}{size\_t}}\ \ \mbox{\hyperlink{classcsmp_1_1_region_interface_ac9096a4b2be14096aafa13fc61322bce}{PartitionRegionIntoContiguousSubRegions}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ region\ );}
+\DoxyCodeLine{00201\ }
+\DoxyCodeLine{00202\ \ \ \ \ \textcolor{comment}{//\ Andrew\ Bromage\ implementation\ using\ UnionFind}}
+\DoxyCodeLine{00203\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_interface_a1261d193620bc36dfed780945f7f6751}{size\_t}}\ \ \mbox{\hyperlink{classcsmp_1_1_region_interface_a1261d193620bc36dfed780945f7f6751}{PartitionRegionIntoContiguousSubRegions\_Bromage}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ region\ );}
+\DoxyCodeLine{00204\ }
+\DoxyCodeLine{00205\ \ \ \ \ \textcolor{comment}{///\ removes\ all\ regions\ with\ the\ given\ name\ followed\ by\ an\ arbitrary\ number;\ returns\ number\ of\ removed\ regions=partitions}}
+\DoxyCodeLine{00206\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_interface_a830b59da55e4235995ebfc6affa254e6}{size\_t}}\ \ \mbox{\hyperlink{classcsmp_1_1_region_interface_a830b59da55e4235995ebfc6affa254e6}{RemoveRegionPartitionsFor}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ name\ );}
+\DoxyCodeLine{00207\ }
+\DoxyCodeLine{00208\ \ \ \ \ \textcolor{comment}{///\ forms\ a\ non-\/unique\ rectangular\ region\ of\ elements\ whose\ barycenter\ falls\ into\ the\ bounding\ box\ defined\ by\ the\ points}}
+\DoxyCodeLine{00209\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_interface_afdab232b6b3ef6880224f6f72ade4cb5}{size\_t}}\ \ \mbox{\hyperlink{classcsmp_1_1_region_interface_afdab232b6b3ef6880224f6f72ade4cb5}{FormRectangularRegion}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ regionname,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\&\ xyz\_min,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\&\ xyz\_max\ );}
+\DoxyCodeLine{00210\ }
+\DoxyCodeLine{00211\ \ \ \ \ \textcolor{comment}{///\ replicates\ region\ and\ gives\ duplicate\ a\ new\ name\ (@attention\ now\ you\ also\ have\ new\ property\ storage\ for\ regional\ variables)}}
+\DoxyCodeLine{00212\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_interface_ad6890490309612e7b94004a89026b392}{CopyRegion}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ existing\_region,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ copied\_region,\ \textcolor{keywordtype}{bool}\ place\_copy\_in\_unique\_regions\ =\ \textcolor{keyword}{false}\ );}
+\DoxyCodeLine{00213\ }
+\DoxyCodeLine{00214\ \ \ \ \ \textcolor{comment}{///\ adds\ the\ region\ specified\ by\ first\ argument\ to\ the\ existing\ region\ given\ by\ second\ argument}}
+\DoxyCodeLine{00215\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_interface_a3a5c416879b0f17829f989a65c4a18a1}{AssimilateRegion}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ region\_to\_add,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ region\_to\_be\_added\_to\ );}
+\DoxyCodeLine{00216\ }
+\DoxyCodeLine{00217\ \ \ \ \ \textcolor{comment}{///\ merges\ multiple\ regions\ as\ identified\ by\ their\ names\ into\ a\ new\ master\ region}}
+\DoxyCodeLine{00218\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_interface_accd91c4d081a411697194ba99b0b9d88}{MergeRegions}}(\ \textcolor{keyword}{const}\ std::set<std::string>\&\ input\_regions,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ ensemble\_region\ );}
+\DoxyCodeLine{00219\ \ \ \ \ size\_t\ \ MergeRegions(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ region\_name\_tag,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ ensemble\_region\ );}
+\DoxyCodeLine{00220\ }
+\DoxyCodeLine{00221\ \ \ \ \ \textcolor{comment}{///\ removes\ region\ and\ associated\ variable\ storage;\ \ MeshManager\ removes\ elements\ and\ rebuilds\ connectivity\ if\ requested,\ but\ only\ if\ \ region\ is\ unique}}
+\DoxyCodeLine{00222\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_interface_a753c2b6332c5c14f228abbf81568123c}{RemoveRegion}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ regionname,\ \textcolor{keywordtype}{bool}\ erase\_elements\ =\ \textcolor{keyword}{false}\ );}
+\DoxyCodeLine{00223\ }
+\DoxyCodeLine{00224\ \ \ \ \ \textcolor{comment}{///\ excludes\ the\ intersection\ of\ elements\ of\ the\ 2\ regions\ from\ the\ non-\/unique\ region}}
+\DoxyCodeLine{00225\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_interface_afdc209398fea9597da430153ace32208}{RemoveFromRegion}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ region,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ region\_to\_subtract\ );}
+\DoxyCodeLine{00226\ }
+\DoxyCodeLine{00227\ \ \ \ \ \textcolor{comment}{///\ removes\ the\ elements\ shared\ with\ the\ supplied\ set\ from\ the\ region}}
+\DoxyCodeLine{00228\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_interface_a0744c884f63b7f439913950cfadabe66}{RemoveFromRegion}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ region,\ \textcolor{keyword}{const}\ std::set<Element<dim>*>\&\ elmt\_set\ );}
+\DoxyCodeLine{00229\ }
+\DoxyCodeLine{00230\ \ \ \ \ \textcolor{comment}{///\ moves\ region\ to\ from\ the\ unique-\/\ to\ the\ non-\/unique\ regions\ map}}
+\DoxyCodeLine{00231\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_interface_afc081b026c8c072b1fef0c9df85b6ce6}{MoveToNonUniqueRegions}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ unique\_region\ );}
+\DoxyCodeLine{00232\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ MoveToUniqueRegions(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ non\_unique\_region\ );}
+\DoxyCodeLine{00233\ }
+\DoxyCodeLine{00234\ \ \ \ \ \textcolor{comment}{///\ boolean\ operation:\ include}}
+\DoxyCodeLine{00235\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_interface_a4167afbf2ee98fda0fd380bcbcbb1fb8}{RegionIncludes}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ region\_a,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ region\_b\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00236\ }
+\DoxyCodeLine{00237\ \ \ \ \ \textcolor{comment}{///\ boolean\ operation:\ union}}
+\DoxyCodeLine{00238\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_interface_a02754829ba2beb42af7bdf232f646188}{RegionUnion}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ region\_a,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ region\_b,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ region\_union\ );}
+\DoxyCodeLine{00239\ }
+\DoxyCodeLine{00240\ \ \ \ \ \textcolor{comment}{///\ boolean\ operation:\ intersection}}
+\DoxyCodeLine{00241\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_interface_a35cbd8c6094105001f9b2bc740263939}{RegionIntersection}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ region\_a,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ region\_b,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ region\_intersection\ );}
+\DoxyCodeLine{00242\ }
+\DoxyCodeLine{00243\ \ \ \ \ \textcolor{comment}{///\ boolean\ operation:\ difference\ (returns\ the\ data\ in\ region\ a\ that\ is\ not\ in\ region\ b)}}
+\DoxyCodeLine{00244\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_interface_a24356853ec2de423c20a55b22c7244b8}{RegionDifference}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ region\_a,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ region\_b,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ region\_diff\ );}
+\DoxyCodeLine{00245\ }
+\DoxyCodeLine{00246\ \ \ \ \ \textcolor{comment}{///\ boolean\ operation:\ symmetric\ difference\ (the\ symmetric\ difference\ is\ the\ union\ without\ the\ intersection)}}
+\DoxyCodeLine{00247\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_interface_a8b2d9d622d7203e8e050cb9ca7811b46}{RegionSymmetricDifference}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ region\_a,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ region\_b,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ region\_symdiff\ );}
+\DoxyCodeLine{00248\ }
+\DoxyCodeLine{00249\ \ \ \ \ \textcolor{comment}{///\ finds\ the\ contact\ area\ between\ regions\ a\ and\ b,\ logging\ pairs\ of\ element\ pointers\ and\ face\ numbers;\ @return\ number\ of\ shared\ faces}}
+\DoxyCodeLine{00250\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_interface_a6eb99206ead464836c322df187ef4d2f}{size\_t}}\ \ \mbox{\hyperlink{classcsmp_1_1_region_interface_a6eb99206ead464836c322df187ef4d2f}{SharedPerimeterFaces}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ region\_a,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ region\_b,}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<std::tuple<Element<dim>*,\ Element<dim>*,\ \mbox{\hyperlink{classcsmp_1_1_region_interface_a6eb99206ead464836c322df187ef4d2f}{size\_t}},\ \mbox{\hyperlink{classcsmp_1_1_region_interface_a6eb99206ead464836c322df187ef4d2f}{size\_t}}>\ >\&\ \mbox{\hyperlink{classcsmp_1_1_region_interface_a6eb99206ead464836c322df187ef4d2f}{shared}}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00252\ }
+\DoxyCodeLine{00253\ \ \ \ \ \textcolor{comment}{///\ if\ the\ mesh\ changed\ this\ safe\ but\ model-\/wide\ method\ rebuilds\ the\ node\ and\ element\ vectors\ of\ all\ regions}}
+\DoxyCodeLine{00254\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_region_interface_a0f61dad58f69e668195d5a8bbcfdc9cf}{UpdateRegions}}();}
+\DoxyCodeLine{00255\ }
+\DoxyCodeLine{00256\ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00257\ \ \ \ \ \textcolor{comment}{///\ rebuilds\ unique\ regions,\ but\ only\ if\ they\ contain\ some\ nulled\ element\ pointers}}
+\DoxyCodeLine{00258\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_region_interface_aa4904242d78be33ce82cca5065e35c5b}{RebuildUniqueRegions}}();}
+\DoxyCodeLine{00259\ }
+\DoxyCodeLine{00260\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ region\ name\ \ region\ /\ creation\ constraints}}
+\DoxyCodeLine{00261\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_interface}{std}}::\mbox{\hyperlink{classcsmp_1_1_region_interface}{map}}<\mbox{\hyperlink{classcsmp_1_1_region_interface}{std}}::\mbox{\hyperlink{classcsmp_1_1_region_interface}{string}},\ \mbox{\hyperlink{classcsmp_1_1_region_interface}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_region_interface}{Region}}<\mbox{\hyperlink{classcsmp_1_1_region_interface}{dim}}>\ >\ \ \ \mbox{\hyperlink{classcsmp_1_1_region_interface}{uniqueRegionMap\_}};\ \ \textcolor{comment}{///<\ \ map\ of\ unique\ regions\ that\ do\ not\ overlap}}
+\DoxyCodeLine{00262\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_interface}{std}}::\mbox{\hyperlink{classcsmp_1_1_region_interface}{map}}<\mbox{\hyperlink{classcsmp_1_1_region_interface}{std}}::\mbox{\hyperlink{classcsmp_1_1_region_interface}{string}},\ \mbox{\hyperlink{classcsmp_1_1_region_interface}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_region_interface}{Region}}<\mbox{\hyperlink{classcsmp_1_1_region_interface}{dim}}>\ >\ \ \ \mbox{\hyperlink{classcsmp_1_1_region_interface}{regionMap\_}};\ \ \ \ \ \ \ \ \textcolor{comment}{///<\ \ map\ of\ non-\/unique\ (potentially\ overlapping)\ regions}}
+\DoxyCodeLine{00263\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_interface_a21a8c8d8c50e40797b13e059d83a0773}{std}}::\mbox{\hyperlink{classcsmp_1_1_region_interface_a21a8c8d8c50e40797b13e059d83a0773}{map}}<\mbox{\hyperlink{classcsmp_1_1_region_interface_a21a8c8d8c50e40797b13e059d83a0773}{std}}::\mbox{\hyperlink{classcsmp_1_1_region_interface_a21a8c8d8c50e40797b13e059d83a0773}{string}},\ \mbox{\hyperlink{classcsmp_1_1_region_interface_a21a8c8d8c50e40797b13e059d83a0773}{PropertyConstraints}}>\ \ \mbox{\hyperlink{classcsmp_1_1_region_interface_a21a8c8d8c50e40797b13e059d83a0773}{regionTraits\_}};\ \ \ \ \ \textcolor{comment}{///<\ \ criteria\ how\ non-\/unique\ regions\ were\ created}}
+\DoxyCodeLine{00264\ \};}
+\DoxyCodeLine{00265\ }
+\DoxyCodeLine{00266\ }
+\DoxyCodeLine{00267\ \textcolor{comment}{//\ NOn-\/MEMBER\ FUNCTIONS}}
+\DoxyCodeLine{00268\ }
+\DoxyCodeLine{00269\ \textcolor{comment}{///\ Returns\ those\ elements\ from\ outside\ Region\ 2,\ which\ share\ a\ face\ or\ touch\ (with\ a\ node)\ the\ perimeter\ of\ the\ inside\ Region\ 1}}
+\DoxyCodeLine{00270\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00271\ \mbox{\hyperlink{namespacecsmp_a478d250c2505746291a1eb70e63b5ede}{size\_t}}\ \mbox{\hyperlink{namespacecsmp_a478d250c2505746291a1eb70e63b5ede}{haloElements}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_region}{Region}}<dim>\&\ region1,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_region}{Region}}<dim>\&\ region2,\ std::unordered\_set<Element<dim>*>\&\ halo\_elmts\ );}
+\DoxyCodeLine{00272\ }
+\DoxyCodeLine{00273\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00274\ }
+\DoxyCodeLine{00275\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

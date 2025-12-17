@@ -167,7 +167,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 size_t ModelSubDomain<dim,CELL>::RebuildCellAndPerimeterFaceVector()
   {
      // removing null-pointer cell range by range to keep track of the new beginning of perimeter cells
-     const long n_interior_cells  = InteriorCells();
+     const long n_interior_cells  = static_cast<long>(InteriorCells());
      //const long n_perimeter_cells = PerimeterCells();
      auto new_end_interior = remove_if( cell_vec_.begin(), next(cell_vec_.begin(),n_interior_cells),
                                         []( CELL<dim>* const ptr ) {
@@ -200,7 +200,7 @@ size_t ModelSubDomain<dim,CELL>::RebuildCellAndPerimeterFaceVector()
      if ( range2_remove_count > 0 )
        BuildPerimeterFaceVector( n_interior_cells - range1_remove_count );
 
-     return n_cells_removed;
+     return static_cast<size_t>(n_cells_removed);
      
   } // end RebuildCellAndPerimeterFaceVector
      
@@ -216,18 +216,18 @@ template<uint32_t dim, template<uint32_t> class CELL>
 size_t ModelSubDomain<dim,CELL>::RebuildNodeVector()
   {
      // removing null-pointer cell range by range to keep track of the new beginning of perimeter cells
-     auto new_end_interior = remove_if( node_vec_.begin(), next(node_vec_.begin(),first_bd_node_),
+     auto new_end_interior = remove_if( node_vec_.begin(), next(node_vec_.begin(),static_cast<long>(first_bd_node_)),
                                         []( Node<dim>* const nptr ) {
                                               return nptr == nullptr;
                                           } );
      // get number of removed cells
-     long range1_remove_count = distance( new_end_interior, next(node_vec_.begin(),first_bd_node_) );
+     long range1_remove_count = distance( new_end_interior, next(node_vec_.begin(),static_cast<long>(first_bd_node_)) );
      
      // shifting the perimeter cell range based on how many cells were removed from the first range
-     std::move( next(node_vec_.begin(),first_bd_node_), node_vec_.end(), new_end_interior );
+     std::move( next(node_vec_.begin(),static_cast<long>(first_bd_node_)), node_vec_.end(), new_end_interior );
 
      // removing null pointer cells from perimeter range
-     auto new_end_perimeter = remove_if( next(node_vec_.begin(),first_bd_node_-range1_remove_count), node_vec_.end(),
+     auto new_end_perimeter = remove_if( next(node_vec_.begin(),static_cast<long>(first_bd_node_)-range1_remove_count), node_vec_.end(),
                                          []( Node<dim>* const nptr ) {
                                               return nptr == nullptr;
                                            } );
@@ -236,11 +236,11 @@ size_t ModelSubDomain<dim,CELL>::RebuildNodeVector()
 
      // erase the "removed" cells beyond the new logical end of the second range
      const long n_node_ptrs_removed = range1_remove_count + range2_remove_count;
-     node_vec_.erase( next(node_vec_.end(),-n_node_ptrs_removed), node_vec_.end() );
+     node_vec_.erase( next(node_vec_.end(),static_cast<long>(-n_node_ptrs_removed)), node_vec_.end() );
 
-     first_bd_node_ -= range1_remove_count;
+     first_bd_node_ -= static_cast<size_t>(range1_remove_count);
  
-     return n_node_ptrs_removed;
+     return static_cast<size_t>(n_node_ptrs_removed);
      
   } // end RebuildNodeVector
 
@@ -248,43 +248,43 @@ size_t ModelSubDomain<dim,CELL>::RebuildNodeVector()
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-size_t ModelSubDomain<dim,CELL>::Nodes() const
+size_t ModelSubDomain<dim,CELL>::Nodes() const noexcept
   {
      return node_vec_.size();
   }
 
 template<uint32_t dim, template<uint32_t> class CELL>
-size_t ModelSubDomain<dim,CELL>::InteriorNodes() const
+size_t ModelSubDomain<dim,CELL>::InteriorNodes() const noexcept
   {
      return first_bd_node_;
   }
 
 template<uint32_t dim, template<uint32_t> class CELL>
-size_t ModelSubDomain<dim,CELL>::PerimeterNodes() const
+size_t ModelSubDomain<dim,CELL>::PerimeterNodes() const noexcept
   {
      return node_vec_.size() - InteriorNodes();
   }
 
 template<uint32_t dim, template<uint32_t> class CELL>
-size_t ModelSubDomain<dim,CELL>::Cells() const
+size_t ModelSubDomain<dim,CELL>::Cells() const noexcept
   {
      return cell_vec_.size();
   }
 
 template<uint32_t dim, template<uint32_t> class CELL>
-size_t ModelSubDomain<dim,CELL>::InteriorCells() const
+size_t ModelSubDomain<dim,CELL>::InteriorCells() const noexcept
   {
      return cell_vec_.size() - bd_face_vec_.size();
   }
 
 template<uint32_t dim, template<uint32_t> class CELL>
-size_t ModelSubDomain<dim,CELL>::PerimeterCells() const
+size_t ModelSubDomain<dim,CELL>::PerimeterCells() const noexcept
   {
      return bd_face_vec_.size();
   }
 
 template<uint32_t dim, template<uint32_t> class CELL>
-bool ModelSubDomain<dim,CELL>::Empty() const
+bool ModelSubDomain<dim,CELL>::Empty() const noexcept
   {
      return cell_vec_.empty();
   }
@@ -340,56 +340,56 @@ uint32_t  ModelSubDomain<dim,CELL>::PerimeterFace( size_t e, uint32_t face ) con
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-csmp::Node<dim>*  ModelSubDomain<dim,CELL>::N( size_t nd ) const
+csmp::Node<dim>*  ModelSubDomain<dim,CELL>::N( size_t nd ) const noexcept
  { assert( nd < node_vec_.size() ); return node_vec_[nd]; }
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-CELL<dim>*  ModelSubDomain<dim,CELL>::E( size_t e ) const
+CELL<dim>*  ModelSubDomain<dim,CELL>::E( size_t e ) const noexcept
  { assert( e < cell_vec_.size() ); return cell_vec_[e]; }
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-const typename std::vector<CELL<dim>*>&  ModelSubDomain<dim,CELL>::CellVector() const
+const typename std::vector<CELL<dim>*>&  ModelSubDomain<dim,CELL>::CellVector() const noexcept
  { return cell_vec_; }
 
 template<uint32_t dim, template<uint32_t> class CELL>
-typename std::vector<CELL<dim>*>&  ModelSubDomain<dim,CELL>::CellVector()
+typename std::vector<CELL<dim>*>&  ModelSubDomain<dim,CELL>::CellVector() noexcept
  { return cell_vec_; }
 
 template<uint32_t dim, template<uint32_t> class CELL>
-const typename std::vector<Node<dim>*>&  ModelSubDomain<dim,CELL>::NodeVector() const
+const typename std::vector<Node<dim>*>&  ModelSubDomain<dim,CELL>::NodeVector() const noexcept
   { return node_vec_; }
 
 template<uint32_t dim, template<uint32_t> class CELL>
-typename std::vector<Node<dim>*>&  ModelSubDomain<dim,CELL>::NodeVector()
+typename std::vector<Node<dim>*>&  ModelSubDomain<dim,CELL>::NodeVector() noexcept
   { return node_vec_; }
 
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::NodesBegin() const
+typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::NodesBegin() const noexcept
  { return node_vec_.begin(); }
 
 template<uint32_t dim, template<uint32_t> class CELL>
-typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::NodesEnd() const
+typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::NodesEnd() const noexcept
  { return node_vec_.end(); }
 
 template<uint32_t dim, template<uint32_t> class CELL>
-typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::PerimeterNodesBegin() const
- { return std::next( node_vec_.begin(), InteriorNodes() ); }
+typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::PerimeterNodesBegin() const noexcept
+ { return std::next( node_vec_.begin(), static_cast<long>(InteriorNodes()) ); }
 
 template<uint32_t dim, template<uint32_t> class CELL>
-typename std::vector<CELL<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::CellsBegin() const
+typename std::vector<CELL<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::CellsBegin() const noexcept
  { return cell_vec_.begin(); }
 
 template<uint32_t dim, template<uint32_t> class CELL>
-typename std::vector<CELL<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::CellsEnd() const
+typename std::vector<CELL<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::CellsEnd() const noexcept
  { return cell_vec_.end(); }
 
 template<uint32_t dim, template<uint32_t> class CELL>
-typename std::vector<CELL<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::PerimeterCellsBegin() const
-  { return std::next( cell_vec_.begin(), InteriorCells() ); }
+typename std::vector<CELL<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::PerimeterCellsBegin() const noexcept
+  { return std::next( cell_vec_.begin(), static_cast<long>(InteriorCells()) ); }
    
 
 
@@ -1433,16 +1433,16 @@ void ModelSubDomain<dim,CELL>::SortVectors( size_t interior_cells, size_t interi
           sort( node_vec_.begin(), node_vec_.end() );
        }
      else {
-         sort( node_vec_.begin(), next(node_vec_.begin(),interior_nodes) );
-         sort( next(node_vec_.begin(),interior_nodes), node_vec_.end() );
+         sort( node_vec_.begin(), next(node_vec_.begin(),static_cast<long>(interior_nodes)) );
+         sort( next(node_vec_.begin(),static_cast<long>(interior_nodes)), node_vec_.end() );
        }
      
      if ( interior_cells == 0 ) {
           sort( cell_vec_.begin(), cell_vec_.end() );
        }
      else {
-         sort( cell_vec_.begin(), next(cell_vec_.begin(),interior_cells) );
-         sort( next(cell_vec_.begin(),interior_cells), cell_vec_.end() );
+         sort( cell_vec_.begin(), next(cell_vec_.begin(),static_cast<long>(interior_cells)) );
+         sort( next(cell_vec_.begin(),static_cast<long>(interior_cells)), cell_vec_.end() );
        }
 
   } // end SortVectors
@@ -1524,7 +1524,7 @@ void ModelSubDomain<dim,CELL>::Accept( csmp::Visitor<dim>& )
 // INTEGRATION POINTS
 
 template<uint32_t dim, template<uint32_t> class CELL>
-size_t ModelSubDomain<dim,CELL>::IntegrationPoints() const
+size_t ModelSubDomain<dim,CELL>::IntegrationPoints() const noexcept
  {
     if ( !(*cell_vec_.begin())->FE()->UsesLocalCoordinates() ) return 0U;
 
@@ -1538,7 +1538,7 @@ size_t ModelSubDomain<dim,CELL>::IntegrationPoints() const
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-size_t ModelSubDomain<dim,CELL>::SectorIntegrationPoints() const
+size_t ModelSubDomain<dim,CELL>::SectorIntegrationPoints() const noexcept
   {
   if ( !(*cell_vec_.begin())->FE()->UsesLocalCoordinates() ) return 0U;
 
@@ -1551,7 +1551,7 @@ size_t ModelSubDomain<dim,CELL>::SectorIntegrationPoints() const
   }
 
 template<uint32_t dim, template<uint32_t> class CELL>
-size_t ModelSubDomain<dim,CELL>::FacetIntegrationPoints() const
+size_t ModelSubDomain<dim,CELL>::FacetIntegrationPoints() const noexcept
   {
   if ( !(*cell_vec_.begin())->FE()->UsesLocalCoordinates() ) return 0U;
 
@@ -1569,7 +1569,7 @@ size_t ModelSubDomain<dim,CELL>::FacetIntegrationPoints() const
 // INDEXES
 
 template<uint32_t dim, template<uint32_t> class CELL>
-int32_t  ModelSubDomain<dim,CELL>::DomainIndex() const
+int32_t  ModelSubDomain<dim,CELL>::DomainIndex() const noexcept
 {
   return domain_idx_;
 }
@@ -1645,15 +1645,15 @@ void ModelSubDomain<dim,CELL>::UpdateMemberIndexes() const
     returns true or false.
 */
 template<uint32_t dim, template<uint32_t> class CELL>
-bool ModelSubDomain<dim,CELL>::Contains( const CELL<dim>* const eptr ) const
+bool ModelSubDomain<dim,CELL>::Contains( const CELL<dim>* const eptr ) const noexcept
  {
     assert( eptr != nullptr );
 
     // search perimeter first
-    if ( binary_search( next(cell_vec_.begin(),InteriorCells()), cell_vec_.end(), eptr ) )
+    if ( binary_search( next(cell_vec_.begin(),static_cast<long>(InteriorCells())), cell_vec_.end(), eptr ) )
        return true;
 
-    if ( binary_search( cell_vec_.begin(), next(cell_vec_.begin(),InteriorCells()), eptr ) )
+    if ( binary_search( cell_vec_.begin(), next(cell_vec_.begin(),static_cast<long>(InteriorCells())), eptr ) )
        return true;
 
     return false;
@@ -1666,14 +1666,14 @@ bool ModelSubDomain<dim,CELL>::Contains( const CELL<dim>* const eptr ) const
     returns true or false.
 */
 template<uint32_t dim, template<uint32_t> class CELL>
-bool ModelSubDomain<dim,CELL>::Contains( const Node<dim>* const nptr ) const
+bool ModelSubDomain<dim,CELL>::Contains( const Node<dim>* const nptr ) const noexcept
  {
     assert( nptr != nullptr );
 
-    if ( binary_search( next(node_vec_.begin(), InteriorNodes()), node_vec_.end(), nptr ) )
+    if ( binary_search( next(node_vec_.begin(), static_cast<long>(InteriorNodes())), node_vec_.end(), nptr ) )
        return true;
 
-    if ( binary_search( node_vec_.begin(), next(node_vec_.begin(), InteriorNodes()), nptr ) )
+    if ( binary_search( node_vec_.begin(), next(node_vec_.begin(), static_cast<long>(InteriorNodes())), nptr ) )
        return true;
 
     return false;
@@ -1681,7 +1681,7 @@ bool ModelSubDomain<dim,CELL>::Contains( const Node<dim>* const nptr ) const
  } // end
 
 template<uint32_t dim, template<uint32_t> class CELL>
-bool ModelSubDomain<dim,CELL>::IsPerimeterNode( const csmp::Node<dim>* const nd_ptr ) const
+bool ModelSubDomain<dim,CELL>::IsPerimeterNode( const csmp::Node<dim>* const nd_ptr ) const noexcept
  {
     assert( nd_ptr != nullptr );
     return std::binary_search( PerimeterNodesBegin(), NodesEnd(), nd_ptr );
@@ -1689,7 +1689,7 @@ bool ModelSubDomain<dim,CELL>::IsPerimeterNode( const csmp::Node<dim>* const nd_
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-bool  ModelSubDomain<dim,CELL>::IsPerimeterCell( const CELL<dim>* const e_ptr ) const
+bool  ModelSubDomain<dim,CELL>::IsPerimeterCell( const CELL<dim>* const e_ptr ) const noexcept
  {
     assert( e_ptr != nullptr );
     return std::binary_search( PerimeterCellsBegin(), CellsEnd(), e_ptr );
@@ -1990,7 +1990,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const char* property, double& gmin, dou
           csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::MinMaxOf", property, "is undefined; nothing could be done" );
           return;
       }
-    csmp::Index  gprop_key(pref_.StorageKey(property));
+    const csmp::Index  gprop_key(pref_.StorageKey(property));
     MinMaxOf( gprop_key, gmin, gmax );
 
  } // end MinMaxOf
@@ -2009,7 +2009,7 @@ void minMaxEigenValues( const TensorVariable<dim>& ts, double& tmin, double& tma
     VectorVariable<dim>  evals;
     ts.EigenValues( evals );
     std::set<double> min_max;
-    for ( auto i{0U}; i<dim; i++ ) min_max.insert( evals[i] );
+    for ( uint32_t i{0U}; i<dim; i++ ) min_max.insert( evals[i] );
     tmin = (*min_max.begin());
     tmax = (*min_max.rbegin());
  }
@@ -2026,11 +2026,11 @@ void minMaxEigenValues( const TensorVariable<dim>& ts, double& tmin, double& tma
 template<uint32_t dim, template<uint32_t> class CELL>
 void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double& vmin, double& vmax ) const
  {
-     if( prop_key.place == REGION || prop_key.place == BOUNDARY || prop_key.place == SPLIT_BOUNDARY || prop_key.place == MODEL )
+    csmp::ErrorHandler& csmp_error( ErrorHandler::Instance() );
+    
+     if ( prop_key.place == REGION || prop_key.place == BOUNDARY || prop_key.place == SPLIT_BOUNDARY || prop_key.place == MODEL )
        throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::MinMaxOf",
-                             "Model/Region/SplitBoundary/Boundary properties have constant values within individual model subdomains; read directly!");
-
-   // the 'Model' region was already dealt with by Model::MinMaxOf
+                             "Model/Region/SplitBoundary/Boundary properties must be handled by class Model");
 
    // node properties of any kind
    if ( prop_key.place == NODE ) {
@@ -2181,7 +2181,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double& vm
        if ( prop_key.type == SCALAR ) {
             vmin = vmax = (*eit)->Read(0U,prop_key); eit++;
             while ( eit!=cell_vec_.end() ) {
-                for ( auto i=1U; i<(*eit)->IntegrationPoints(); i++ ) {
+                for ( uint32_t i=1U; i<(*eit)->IntegrationPoints(); i++ ) {
                      vmin = std::min( vmin, (*eit)->Read(i,prop_key) );
                      vmax = std::max( vmax, (*eit)->Read(i,prop_key) );
                   }
@@ -2194,7 +2194,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double& vm
             (*eit)->Read(0U,prop_key,vc); eit++;
             vmin = vmax = vc.Length();
             while ( eit!=cell_vec_.end() ) {
-                for ( auto i=1U; i<(*eit)->IntegrationPoints(); i++ ) {
+                for ( uint32_t i=1U; i<(*eit)->IntegrationPoints(); i++ ) {
                      (*eit)->Read( i, prop_key, vc );
                      const double  vlength(vc.Length());
                      vmin = std::min( vmin, vlength );
@@ -2210,7 +2210,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double& vm
             minMaxEigenValues( ts, vmin, vmax );
             double tmin, tmax;
             while ( eit!=cell_vec_.end() ) {
-                for ( auto i=1U; i<(*eit)->IntegrationPoints(); i++ ) {
+                for ( uint32_t i=1U; i<(*eit)->IntegrationPoints(); i++ ) {
                      (*eit)->Read( i, prop_key, ts );
                      minMaxEigenValues( ts, tmin, tmax );
                      vmin = std::min( vmin, tmin );
@@ -2226,7 +2226,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double& vm
             a.MinMax( vmin, vmax );
             double  amin, amax;
             while ( eit!=cell_vec_.end() ) {
-                for ( auto i=1U; i<(*eit)->IntegrationPoints(); i++ ) {
+                for ( uint32_t i=1U; i<(*eit)->IntegrationPoints(); i++ ) {
                      (*eit)->Read( i, prop_key, a );
                      a.MinMax( amin, amax );
                      vmin = std::min( vmin, amin );
@@ -2242,7 +2242,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double& vm
             a.MinMax( vmin, vmax );
             double  amin, amax;
             while ( eit!=cell_vec_.end() ) {
-                for ( auto i=1U; i<(*eit)->IntegrationPoints(); i++ ) {
+                for ( uint32_t i=1U; i<(*eit)->IntegrationPoints(); i++ ) {
                      (*eit)->Read( i, prop_key, a );
                      a.MinMax( amin, amax );
                      vmin = std::min( vmin, amin );
@@ -2265,8 +2265,8 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double& vm
        if ( prop_key.type == SCALAR ) {
             vmin = vmax = (*eit)->Read(0U,0U,prop_key); eit++;
             while ( eit!=cell_vec_.end() ) {
-                for ( auto i{0U}; i<(*eit)->Facets(); i++ )
-                  for ( auto j{0U}; j<(*eit)->IntegrationPointsPerFacet(); j++ ) {
+                for ( uint32_t i{0U}; i<(*eit)->Facets(); i++ )
+                  for ( uint32_t j{0U}; j<(*eit)->IntegrationPointsPerFacet(); j++ ) {
                      vmin = std::min( vmin, (*eit)->Read(i,j,prop_key) );
                      vmax = std::max( vmax, (*eit)->Read(i,j,prop_key) );
                   }
@@ -2279,8 +2279,8 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double& vm
             (*eit)->Read(0U,0U,prop_key,vc); eit++;
             vmin = vmax = vc.Length();
             while ( eit!=cell_vec_.end() ) {
-                for ( auto i{0U}; i<(*eit)->Facets(); i++ )
-                  for ( auto j{0U}; j<(*eit)->IntegrationPointsPerFacet(); j++ ) {
+                for ( uint32_t i{0U}; i<(*eit)->Facets(); i++ )
+                  for ( uint32_t j{0U}; j<(*eit)->IntegrationPointsPerFacet(); j++ ) {
                      (*eit)->Read( i, j, prop_key, vc );
                      const double  vlength(vc.Length());
                      vmin = std::min( vmin, vlength );
@@ -2296,8 +2296,8 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double& vm
             minMaxEigenValues( ts, vmin, vmax );
             double tmin, tmax;
             while ( eit!=cell_vec_.end() ) {
-                for ( auto i{0U}; i<(*eit)->Facets(); i++ )
-                  for ( auto j{0U}; j<(*eit)->IntegrationPointsPerFacet(); j++ ) {
+                for ( uint32_t i{0U}; i<(*eit)->Facets(); i++ )
+                  for ( uint32_t j{0U}; j<(*eit)->IntegrationPointsPerFacet(); j++ ) {
                      (*eit)->Read( i, j, prop_key, ts );
                      minMaxEigenValues( ts, tmin, tmax );
                      vmin = std::min( vmin, tmin );
@@ -2313,8 +2313,8 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double& vm
             a.MinMax( vmin, vmax );
             double  amin, amax;
             while ( eit!=cell_vec_.end() ) {
-                for ( auto i{0U}; i<(*eit)->Facets(); i++ )
-                  for ( auto j{0U}; j<(*eit)->IntegrationPointsPerFacet(); j++ ) {
+                for ( uint32_t i{0U}; i<(*eit)->Facets(); i++ )
+                  for ( uint32_t j{0U}; j<(*eit)->IntegrationPointsPerFacet(); j++ ) {
                      (*eit)->Read( i, j, prop_key, a );
                      a.MinMax( amin, amax );
                      vmin = std::min( vmin, amin );
@@ -2330,8 +2330,8 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double& vm
             a.MinMax( vmin, vmax );
             double  amin, amax;
             while ( eit!=cell_vec_.end() ) {
-                for ( auto i{0U}; i<(*eit)->Facets(); i++ )
-                  for ( auto j{0U}; j<(*eit)->IntegrationPointsPerFacet(); j++ ) {
+                for ( uint32_t i{0U}; i<(*eit)->Facets(); i++ )
+                  for ( uint32_t j{0U}; j<(*eit)->IntegrationPointsPerFacet(); j++ ) {
                      (*eit)->Read( i, j, prop_key, a );
                      a.MinMax( amin, amax );
                      vmin = std::min( vmin, amin );
@@ -2354,8 +2354,8 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double& vm
        if ( prop_key.type == SCALAR ) {
             vmin = vmax = (*eit)->Read(0U,0U,prop_key); eit++;
             while ( eit!=cell_vec_.end() ) {
-                for ( auto i{0U}; i<(*eit)->Sectors(); i++ )
-                  for ( auto j{0U}; j<(*eit)->IntegrationPointsPerSector(); j++ ) {
+                for ( uint32_t i{0U}; i<(*eit)->Sectors(); i++ )
+                  for ( uint32_t j{0U}; j<(*eit)->IntegrationPointsPerSector(); j++ ) {
                      vmin = std::min( vmin, (*eit)->Read(i,j,prop_key) );
                      vmax = std::max( vmax, (*eit)->Read(i,j,prop_key) );
                   }
@@ -2368,8 +2368,8 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double& vm
             (*eit)->Read(0U,0U,prop_key,vc); eit++;
             vmin = vmax = vc.Length();
             while ( eit!=cell_vec_.end() ) {
-                for ( auto i{0U}; i<(*eit)->Sectors(); i++ )
-                  for ( auto j{0U}; j<(*eit)->IntegrationPointsPerSector(); j++ ) {
+                for ( uint32_t i{0U}; i<(*eit)->Sectors(); i++ )
+                  for ( uint32_t j{0U}; j<(*eit)->IntegrationPointsPerSector(); j++ ) {
                      (*eit)->Read( i, j, prop_key, vc );
                      const double  vlength(vc.Length());
                      vmin = std::min( vmin, vlength );
@@ -2385,8 +2385,8 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double& vm
             minMaxEigenValues( ts, vmin, vmax );
             double tmin, tmax;
             while ( eit!=cell_vec_.end() ) {
-                for ( auto i{0U}; i<(*eit)->Sectors(); i++ )
-                  for ( auto j{0U}; j<(*eit)->IntegrationPointsPerSector(); j++ ) {
+                for ( uint32_t i{0U}; i<(*eit)->Sectors(); i++ )
+                  for ( uint32_t j{0U}; j<(*eit)->IntegrationPointsPerSector(); j++ ) {
                      (*eit)->Read( i, j, prop_key, ts );
                      minMaxEigenValues( ts, tmin, tmax );
                      vmin = std::min( vmin, tmin );
@@ -2402,8 +2402,8 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double& vm
             a.MinMax( vmin, vmax );
             double  amin, amax;
             while ( eit!=cell_vec_.end() ) {
-                for ( auto i{0U}; i<(*eit)->Sectors(); i++ )
-                  for ( auto j{0U}; j<(*eit)->IntegrationPointsPerSector(); j++ ) {
+                for ( uint32_t i{0U}; i<(*eit)->Sectors(); i++ )
+                  for ( uint32_t j{0U}; j<(*eit)->IntegrationPointsPerSector(); j++ ) {
                      (*eit)->Read( i, j, prop_key, a );
                      a.MinMax( amin, amax );
                      vmin = std::min( vmin, amin );
@@ -2419,8 +2419,8 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double& vm
             a.MinMax( vmin, vmax );
             double  amin, amax;
             while ( eit!=cell_vec_.end() ) {
-                for ( auto i{0U}; i<(*eit)->Sectors(); i++ )
-                  for ( auto j{0U}; j<(*eit)->IntegrationPointsPerSector(); j++ ) {
+                for ( uint32_t i{0U}; i<(*eit)->Sectors(); i++ )
+                  for ( uint32_t j{0U}; j<(*eit)->IntegrationPointsPerSector(); j++ ) {
                      (*eit)->Read( i, j, prop_key, a );
                      a.MinMax( amin, amax );
                      vmin = std::min( vmin, amin );
@@ -2434,7 +2434,6 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double& vm
 
     vmin = vmax = std::numeric_limits<double>::signaling_NaN();
 
-    ErrorHandler&  csmp_error(ErrorHandler::Instance());
     csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::MinMaxOf(index)",
                       "placement of property coould not be indentified");
 
@@ -4663,12 +4662,12 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty( const
 Takes the arithmetic (not cell size weighted) average of all property values of nodes, integration points,
 or cells that belong to the region, depending on where the target property is placed.
 
-@param prop The name of the property which shall be averaged.
+@param property The name of the property which shall be averaged.
 */
 template<uint32_t dim, template<uint32_t> class CELL>
-double  ModelSubDomain<dim,CELL>::Average( const char* prop ) const
+double  ModelSubDomain<dim,CELL>::Average( const char* property ) const
  {
-    const csmp::Index  idx = pref_.StorageKey(prop);
+    const csmp::Index  idx = pref_.StorageKey(property);
     size_t             counter(0U);
 
      if ( (cell_vec_.empty()) ) {
@@ -4916,12 +4915,12 @@ bool  ModelSubDomain<dim,CELL>::CopyGradientOfProperty_A_To_B( const char* a, co
 
                   const auto ipoints(eit->IntegrationPoints());
                   const auto nodes(eit->Nodes());
-                  for ( auto i=0U; i<ipoints; ++i )
+                  for ( uint32_t i=0U; i<ipoints; ++i )
                     {
                        eit->dN_AtIntegrationPoint( DN, i );
                        vc = 0.;
-                       for ( auto l{0}; l<nodes; l++ )
-                         for ( auto j{0U}; j<dim; j++ )
+                       for ( uint32_t l{0u}; l<nodes; l++ )
+                         for ( uint32_t j{0U}; j<dim; j++ )
                            vc(j) += DN(j,l) * SC[i]();
 
                        eit->Store( i, b_key, vc );
@@ -4973,15 +4972,15 @@ bool  ModelSubDomain<dim,CELL>::CopyGradientOfProperty_A_To_B( const char* a, co
                {
                   eit->NodePropertyVector( a_key, VC );
                   // the gradients become rows of the tensor
-                  const size_t ipoints(eit->IntegrationPoints());
-                  const size_t nodes(eit->Nodes());
-                  for ( auto i{0U}; i<ipoints; ++i )
+                  const uint32_t ipoints(eit->IntegrationPoints());
+                  const uint32_t nodes(eit->Nodes());
+                  for ( uint32_t i{0U}; i<ipoints; ++i )
                     {
                       eit->dN_AtIntegrationPoint( DN, i );
                       ts = 0.;
-                      for ( auto n=0U; n<nodes; n++ )
-                        for ( auto l{0}; l<dim; l++ )
-                          for ( auto j{0U}; j<dim; j++ )
+                      for ( uint32_t n=0U; n<nodes; n++ )
+                        for ( uint32_t l{0}; l<dim; l++ )
+                          for ( uint32_t j{0U}; j<dim; j++ )
                             ts(i,j) += DN(l,n) * VC[n][j];
 
                       // saving the resulting vector<double>
@@ -5299,13 +5298,13 @@ void ModelSubDomain<dim,CELL>::WriteDomainIndexesToBinaryFile( fstream& fp ) con
     binaryFileWrite( fp, Name() );
    
     // 2. writing the interior cell records of the region
-    std::vector<size_t> IDs( distance(CellsBegin(), PerimeterCellsBegin() ) );
+    std::vector<size_t> IDs( static_cast<size_t>(distance(CellsBegin(), PerimeterCellsBegin() )) );
     transform( CellsBegin(), PerimeterCellsBegin(),
                IDs.begin(), []( const CELL<dim>* const ptr ){ return ptr->Idx(); } ); // tested: OK
     binaryFileWrite( fp, IDs );
 
     // 3. writing the perimeter cell records of the region
-    IDs.resize( distance(PerimeterCellsBegin(), CellsEnd()) );
+    IDs.resize( static_cast<size_t>(distance(PerimeterCellsBegin(), CellsEnd())) );
     transform( PerimeterCellsBegin(), CellsEnd(),
                IDs.begin(), []( const CELL<dim>* const ptr ){ return ptr->Idx(); } );
     binaryFileWrite( fp, IDs );
@@ -5562,7 +5561,96 @@ size_t ModelSubDomain<dim,CELL>::SharedPerimeterNodes( typename vector<csmp::Nod
  }
 
 
+/**
+      Computes the centroid of a mesh object (Region or Boundary) as the volume weighted average of the element barycentres.
+      
+      @attention Boundary objects are detected by their name.
+*/
+template<uint32_t dim, template<uint32_t> class CELL>
+Point<dim> ModelSubDomain<dim,CELL>::Centroid() const
+ {
+    Point<dim> centroid; centroid = 0.;
+    
+    // if this is a boundary we assume it is the hull of the object
+    double total_area{0.};
+    for ( const auto& it : CellVector() ) {
+        const double vol = it->Volume();
+        centroid   += it->BaryCenter() * vol;
+        total_area += vol;
+      }
+    return centroid / total_area;
+    
+ } // end Centroid
+
+
+
+/**
+      Computes the centre of gravity of a mesh object (Region) as the volume*density weighted average of the element barycentres.
+      
+      @attention method assumes that density is an Element property (of the inner parent element)
+      @attention method does not work for boundaries
+*/
+template<uint32_t dim, template<uint32_t> class CELL>
+Point<dim> ModelSubDomain<dim,CELL>::CenterOfGravity( const csmp::Index& rho_key ) const
+ {
+    ErrorHandler& csmp_error( ErrorHandler::Instance() );
+    
+    if ( rho_key.type != SCALAR ) {
+         csmp_error.Note( ERROR, "centerOfGravity", "density property must be a scalar" );
+         return Point<dim>();
+      }
+    if ( rho_key.place != NODE && rho_key.place != ELEMENT ) {
+         csmp_error.Note( ERROR, "centerOfGravity", "density property must be placed on node or element" );
+         return Point<dim>();
+      }
+
+    Point<dim> centroid; centroid = 0.;
+    
+    // if it is a region
+    double total_mass{0.};
+    for ( const auto& elmt : CellVector() ) {
+         const double volume  = elmt->Volume();
+         const double density = (rho_key.place == ELEMENT ) ? elmt->Read( rho_key ) :
+                                          elmt->PropertyValueAtBaryCenter( rho_key );
+         centroid   += elmt->BaryCenter() * volume * density;
+         total_mass += volume * density;
+      }
+    return centroid / total_mass;
+    
+ } // end centerOfGravity
+
+/* PARALLEL VERSION
+#include <numeric>       // for std::transform_reduce
+#include <execution>     // for execution policies
+
+template <uint32_t dim, template<uint32_t> class CELL>
+double ComputeVolume(const csmp::ModelSubDomain<dim, CELL>& subdomain) {
+    const auto& cells = subdomain.CellVector();
+
+    return std::transform_reduce(
+        std::execution::par,                 // change to par_unseq (for vectorisation) later
+        cells.begin(), cells.end(),
+        0.0,                                 // initial value
+        std::plus<>(),                       // reduction
+        [](const CELL<dim>* cell) {          // transform: compute cell volume
+            double vol = 0.0;
+            const uint32_t n_ips = cell->IntegrationPoints();
+            for (uint32_t ip = 0; ip < n_ips; ++ip) {
+                vol += cell->DetJAtIntegrationPoint(ip) *
+                       cell->WeightAtIntegrationPoint(ip);
+            }
+            return vol;
+        }
+    );
+}
+*/
+
+
+
 // NON-MEMBER FUNCTIONS
+
+
+
 
 /// distinguishes between Region, Boundary and SplitBoundary on the basis of the name string
 PLACEMENT modelSubdomainType( const std::string& subdomain_name )

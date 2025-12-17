@@ -1,0 +1,177 @@
+.TH "csmp::Parameter" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::Parameter \- Record that describes the physical variables that are stored on a model:  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <Parameter\&.h>\fP
+.PP
+Inherited by \fBcsmp::SimulatorSetupParameter\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBParameter\fP ()"
+.br
+.ti -1c
+.RI "\fBParameter\fP (const \fBParameter\fP &)"
+.br
+.ti -1c
+.RI "\fBParameter\fP & \fBoperator=\fP (const \fBParameter\fP &)"
+.br
+.ti -1c
+.RI "bool \fBoperator==\fP (const \fBcsmp::Parameter\fP &) const"
+.br
+.RI "comparitor (to verify uniqueness of a new parameter definition "
+.ti -1c
+.RI "bool \fBoperator!=\fP (const \fBcsmp::Parameter\fP &) const"
+.br
+.ti -1c
+.RI "bool \fBoperator<\fP (const \fBcsmp::Parameter\fP &) const"
+.br
+.RI "less-than operator so that Parameters can be stored in STL associative containers "
+.ti -1c
+.RI "void \fBDefineFromStdin\fP ()"
+.br
+.RI "define a physical variable at runtime, using console input (stdin) "
+.ti -1c
+.RI "bool \fBIsWithinRange\fP (double) const"
+.br
+.RI "checks whether the supplied value lies within min/max defined for this parameter "
+.ti -1c
+.RI "void \fBRange\fP (double &vmin, double &vmax) const"
+.br
+.RI "expected range of this parameter in the specific simulation "
+.ti -1c
+.RI "double \fBMinValue\fP () const"
+.br
+.ti -1c
+.RI "double \fBMaxValue\fP () const"
+.br
+.ti -1c
+.RI "void \fBOut\fP () const"
+.br
+.RI "prints parameter record to screen "
+.ti -1c
+.RI "bool \fBOut\fP (std::fstream &fp) const"
+.br
+.RI "writes parameter record to a binary file "
+.ti -1c
+.RI "bool \fBIn\fP (std::fstream &fp)"
+.br
+.RI "reads parameter record from a binary file "
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::string \fBname\fP"
+.br
+.RI "typically a human-readable name like 'fluid pressure' that can contain blanks (no tabs or line breaks) "
+.ti -1c
+.RI "std::string \fBnotation\fP"
+.br
+.RI "e\&.g\&., k for permeability, v for velocity etc\&. "
+.ti -1c
+.RI "std::string \fBunit\fP"
+.br
+.RI "normally SI unit like kg/m2 "
+.ti -1c
+.RI "double \fBmin\fP"
+.br
+.ti -1c
+.RI "double \fBmax\fP"
+.br
+.RI "physically meaningful value range, specific to simulation problem "
+.ti -1c
+.RI "std::string \fBusage\fP"
+.br
+.RI "with regard to computation: INPUT, COMPUTED etc\&. "
+.ti -1c
+.RI "std::string \fBexplanation\fP"
+.br
+.RI "how property is used, e\&.g\&., stress calculation etc\&. "
+.ti -1c
+.RI "std::string \fBreference\fP"
+.br
+.RI "to a paper that describes a related calculation "
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBkey\fP"
+.br
+.RI "variable accessor for this parameter as calculated and assigned by \fBPropertyDatabase\fP "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Record that describes the physical variables that are stored on a model: 
+
+Stores variable name and notation (potential in correspondance with publications), SI unit, type, range (simulaton-specific physically meaningful minimum and maximum value, and background information on the variable and its usage\&.
+
+.PP
+Usage can be used to tell a GUI which parameters have to be input by the user, distinguishing them from dependent (computed) values and/or the result of constitutive relation calculations\&. However, there is no fixed terminology communicating this yet\&.
+
+.PP
+\fBParameter\fP records are managed by the \fBPropertyDatabase\fP class\&.
+
+.PP
+\fBAuthor\fP
+.RS 4
+Stephan K\&. Matthai 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+1994 
+.RE
+.PP
+
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "csmp::Parameter::Parameter ()"
+default constructor
+
+.PP
+leaves \fBParameter\fP 'unspecified' without notation or unit, range -1e25 to 1e25, no usage, explanation, reference etc\&. 
+.SH "Member Function Documentation"
+.PP 
+.SS "void csmp::Parameter::DefineFromStdin ()"
+
+.PP
+define a physical variable at runtime, using console input (stdin) Roman, 2013: Added explicit type identifications
+.SS "bool csmp::Parameter::In (std::fstream & fp)"
+
+.PP
+reads parameter record from a binary file 
+.PP
+\fBTodo\fP
+.RS 4
+(1-C) Meaningless return statement 
+.RE
+.PP
+
+.SS "bool csmp::Parameter::IsWithinRange (double value) const"
+
+.PP
+checks whether the supplied value lies within min/max defined for this parameter checks whether the supplied value is in the range stored in the parameter data 
+.SS "bool csmp::Parameter::operator< (const \fBcsmp::Parameter\fP & p) const"
+
+.PP
+less-than operator so that Parameters can be stored in STL associative containers comparison operator for associative STL containers, relying on a key comparison 
+.SS "bool csmp::Parameter::Out (std::fstream & fp) const"
+
+.PP
+writes parameter record to a binary file 
+.PP
+\fBTodo\fP
+.RS 4
+(1-C) Meaningless return statement 
+.RE
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

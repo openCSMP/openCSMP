@@ -22,7 +22,7 @@ void UG4_ProMeshOutput_Example::Specifications()
 {
   SetTitle( "Output of CSMP Model to ProMesh Pre-Processor for UG4" );
   SetDifficulty( 1 );
-  SetCategory( "Software Interfaces" );
+  SetCategory( "Meshing Interfaces" );
   AddAuthor( "SKM" );
   AddDescription( "Demonstrates the use of interfaces/UG4_UGX_FileExport" );
   AddDescription( "source in: UG4_ProMeshOutput_Example.cpp" );

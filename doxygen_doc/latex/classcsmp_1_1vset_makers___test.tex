@@ -1,0 +1,131 @@
+\doxysection{csmp\+::vset\+Makers\+\_\+\+Test Class Reference}
+\hypertarget{classcsmp_1_1vset_makers___test}{}\label{classcsmp_1_1vset_makers___test}\index{csmp::vsetMakers\_Test@{csmp::vsetMakers\_Test}}
+
+
+{\ttfamily \#include $<$vset\+Makers\+\_\+\+Test.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::vset\+Makers\+\_\+\+Test\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=221pt]{classcsmp_1_1vset_makers___test__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::vset\+Makers\+\_\+\+Test\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=221pt]{classcsmp_1_1vset_makers___test__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1vset_makers___test_a0af6b26f5fbd7bda998878a8c0924953}{run}} ()
+\item 
+{\footnotesize template$<$uint32\+\_\+t dim$>$ }\\bool \mbox{\hyperlink{classcsmp_1_1vset_makers___test_a6d3a611d978efaaf7956b2e94c0cbbb4}{Test\+Consistency\+With\+CSMP\+\_\+\+Conventions}} (const \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em test numbering/faces/neighbors/segments compliance of single element meshes with element numbering etc. for CSMP\+\_\+\+FEM\+\_\+conventions.\+pdf \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1vset_makers___test_a2eedac459f9c86ae0a16a37642c283c9}\label{classcsmp_1_1vset_makers___test_a2eedac459f9c86ae0a16a37642c283c9} 
+{\footnotesize template$<$uint32\+\_\+t dim$>$ }\\\mbox{\hyperlink{classvector}{vector}}$<$ \mbox{\hyperlink{classvector}{vector}}$<$ uint32\+\_\+t $>$ $>$ {\bfseries Nodes\+Of\+Element\+Faces} (const \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}$<$ dim $>$ \&vset, size\+\_\+t elmt)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Test} (std\+::ostream \texorpdfstring{$\ast$}{*}osptr=0)
+\item 
+long {\bfseries get\+Num\+Passed} () const
+\item 
+long {\bfseries get\+Num\+Failed} () const
+\item 
+const std\+::ostream \texorpdfstring{$\ast$}{*} {\bfseries get\+Stream} () const
+\item 
+void {\bfseries set\+Stream} (std\+::ostream \texorpdfstring{$\ast$}{*}osptr)
+\item 
+void {\bfseries set\+Name} (std\+::string test\+Name)
+\item 
+std\+::string {\bfseries get\+Name} () const
+\item 
+bool {\bfseries has\+Name} () const
+\item 
+void {\bfseries do\+\_\+succeed} ()
+\item 
+long {\bfseries report} () const
+\item 
+virtual void {\bfseries reset} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1vset_makers___test_a59644cbc89aae0b682e0c7a47c17737b}\label{classcsmp_1_1vset_makers___test_a59644cbc89aae0b682e0c7a47c17737b} 
+static const bool {\bfseries verbose\+\_\+} = false
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}}
+\begin{DoxyCompactItemize}
+\item 
+void {\bfseries do\+\_\+equal} (double expr, double value, double tol, const std\+::string \&lbl, const char \texorpdfstring{$\ast$}{*}fname, long lineno)
+\item 
+void {\bfseries do\+\_\+test} (bool cond, const std\+::string \&lbl, const char \texorpdfstring{$\ast$}{*}fname, long lineno)
+\item 
+void {\bfseries do\+\_\+fail} (const std\+::string \&lbl, const char \texorpdfstring{$\ast$}{*}fname, long lineno)
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}}
+\begin{DoxyCompactItemize}
+\item 
+const char \texorpdfstring{$\ast$}{*} {\bfseries prefix\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Tests the suite of meshes/boundary flags, data etc. that serve as the input for many of the unit tests created for the CSMP library.
+
+TODO\+: test prism\+\_\+test for \textquotesingle{}invalid\textquotesingle{} elements using geometric calculations TODO\+: test whether the faces are in the expected place 
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1vset_makers___test_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1vset_makers___test_a0af6b26f5fbd7bda998878a8c0924953}\index{csmp::vsetMakers\_Test@{csmp::vsetMakers\_Test}!run@{run}}
+\index{run@{run}!csmp::vsetMakers\_Test@{csmp::vsetMakers\_Test}}
+\doxysubsubsection{\texorpdfstring{run()}{run()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1vset_makers___test_a0af6b26f5fbd7bda998878a8c0924953} 
+void csmp\+::vset\+Makers\+\_\+\+Test\+::run (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Rectangle-\/shaped MODEL\+\_\+\+TINY, consisting of 1 line element two triangles, 1 quadrilateral and 6 face object marking the box boundary.
+
+Rectangle shaped mixed model with 2 intersecting line element regions (USED IN UNIT TESTS)
+
+model SPLIT22\+\_\+\+BASIC with box boundaries (Faces) and one through-\/going and one internal crossing split boundary (USED IN UNIT TESTS)
+
+Implements \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}.
+
+\Hypertarget{classcsmp_1_1vset_makers___test_a6d3a611d978efaaf7956b2e94c0cbbb4}\index{csmp::vsetMakers\_Test@{csmp::vsetMakers\_Test}!TestConsistencyWithCSMP\_Conventions@{TestConsistencyWithCSMP\_Conventions}}
+\index{TestConsistencyWithCSMP\_Conventions@{TestConsistencyWithCSMP\_Conventions}!csmp::vsetMakers\_Test@{csmp::vsetMakers\_Test}}
+\doxysubsubsection{\texorpdfstring{TestConsistencyWithCSMP\_Conventions()}{TestConsistencyWithCSMP\_Conventions()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1vset_makers___test_a6d3a611d978efaaf7956b2e94c0cbbb4} 
+template$<$uint32\+\_\+t dim$>$ \\
+template bool csmp\+::vset\+Makers\+\_\+\+Test\+::\+Test\+Consistency\+With\+CSMP\+\_\+\+Conventions (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}$<$ dim $>$ \&}]{}{}\end{DoxyParamCaption})}
+
+
+
+test numbering/faces/neighbors/segments compliance of single element meshes with element numbering etc. for CSMP\+\_\+\+FEM\+\_\+conventions.\+pdf 
+
+For single element meshes only. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1vset_makers___test_a6d3a611d978efaaf7956b2e94c0cbbb4_cgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+tests/unit/vset\+Makers\+\_\+\+Test.\+h\item 
+tests/unit/vset\+Makers\+\_\+\+Test.\+cpp\end{DoxyCompactItemize}

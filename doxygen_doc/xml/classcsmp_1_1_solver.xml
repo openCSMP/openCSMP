@@ -1,0 +1,546 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_solver" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>csmp::Solver</compoundname>
+    <derivedcompoundref refid="classcsmp_1_1_eigen_solver" prot="public" virt="non-virtual">csmp::EigenSolver</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_gauss_jordan___solver" prot="public" virt="non-virtual">csmp::GaussJordan_Solver</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_l_udcmp___solver" prot="public" virt="non-virtual">csmp::LUdcmp_Solver</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_p_a_r_d_i_s_o___solver" prot="public" virt="non-virtual">csmp::PARDISO_Solver</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_s_a_m_g___solver" prot="public" virt="non-virtual">csmp::SAMG_Solver</derivedcompoundref>
+    <includes refid="_solver_8h" local="no">Solver.h</includes>
+    <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_solver_1a52350f4db63c9e48f7354146d9c12d79" prot="protected" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_solver_settings" kindref="compound">SolverSettings</ref> *</type>
+        <definition>SolverSettings* csmp::Solver::solver_settings_</definition>
+        <argsstring></argsstring>
+        <name>solver_settings_</name>
+        <qualifiedname>csmp::Solver::solver_settings_</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/Solver.h" line="118" column="18" bodyfile="source/includes/integration/solver/Solver.h" bodystart="118" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_solver_1abe6e2cfa7b678ea33fe6fed3ef0fd974" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::Solver::verbose_</definition>
+        <argsstring></argsstring>
+        <name>verbose_</name>
+        <qualifiedname>csmp::Solver::verbose_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/Solver.h" line="121" column="9" bodyfile="source/includes/integration/solver/Solver.h" bodystart="121" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_solver_1a331d12fc9b8cb28b1d9614fdd1059a48" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Solver::Solver</definition>
+        <argsstring>()</argsstring>
+        <name>Solver</name>
+        <qualifiedname>csmp::Solver::Solver</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Default constructor chooses the algebraic multigrid method as solution method, sets the pivot factor to 0.5, and the residual multiplication factor to 1.0e-15. Verbose is disabled and therefore no solution matrices or vectors will be printed. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/Solver.h" line="75" column="3" bodyfile="source/modules/integration/solver/Solver.cpp" bodystart="20" bodyend="24"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_solver_1af729d5eb6bc55bdbe950f5eb1b7cd11b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Solver::Solver</definition>
+        <argsstring>(SolverSettings *settings)</argsstring>
+        <name>Solver</name>
+        <qualifiedname>csmp::Solver::Solver</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_solver_settings" kindref="compound">SolverSettings</ref> *</type>
+          <declname>settings</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/Solver.h" line="76" column="3" bodyfile="source/modules/integration/solver/Solver.cpp" bodystart="26" bodyend="30"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_solver_1a1bc444c360ad5d45efcfe56f72bdd45b" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>csmp::Solver::~Solver</definition>
+        <argsstring>()</argsstring>
+        <name>~Solver</name>
+        <qualifiedname>csmp::Solver::~Solver</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/Solver.h" line="77" column="11" bodyfile="source/modules/integration/solver/Solver.cpp" bodystart="33" bodyend="35"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_solver_1a7707a8bf03e9dde6396aecc144730c68" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Solver::Verbose</definition>
+        <argsstring>(bool verb)</argsstring>
+        <name>Verbose</name>
+        <qualifiedname>csmp::Solver::Verbose</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>verb</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>When verbose is switched on, the <ref refid="classcsmp_1_1_solver" kindref="compound">Solver</ref> will print the global solution matrix, the solution vector, and the righthand side to stdout. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/Solver.h" line="79" column="9" bodyfile="source/modules/integration/solver/Solver.cpp" bodystart="44" bodyend="44"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_solver_1aa6ac00a1cf7acf5b7aae4df7b8ac4c80" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Solver::Verbose</definition>
+        <argsstring>() const</argsstring>
+        <name>Verbose</name>
+        <qualifiedname>csmp::Solver::Verbose</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/Solver.h" line="80" column="9" bodyfile="source/modules/integration/solver/Solver.cpp" bodystart="46" bodyend="46"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_solver_1a00f2d834fa620f56e50a8cf37808c466" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Solver::Solve</definition>
+        <argsstring>(SparseMatrix &amp;G, std::vector&lt; double &gt; &amp;rh, std::vector&lt; double &gt; &amp;x, size_t no_unknowns=1U)</argsstring>
+        <name>Solve</name>
+        <qualifiedname>csmp::Solver::Solve</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_sparse_matrix" kindref="compound">SparseMatrix</ref> &amp;</type>
+          <declname>G</declname>
+          <defname>A</defname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>rh</declname>
+          <defname>b</defname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>no_unknowns</declname>
+          <defval>1U</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Calls solution methods from the Meschach++ and algebraic multigrid libraries to invert the global solution matrix. If the solution process fails, the solution matrix and the righthand vector are output to textfiles whose name contains the runtime in seconds and which have the extension &apos;.text&apos;.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>A</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The sparse solution matrix A, </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>b</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the righthand vector &apos;b&apos; with boundary conditions, </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>x</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the solution vector.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+After successful matrix inversion, the solution vector is returned into &apos;x&apos;.</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>SolveMatrixEquation() first tries to calculate a &quot;typical&quot; size of the residual (the difference between the exact and the numerical solution). Secondly, based on this residual it sets the &apos;tolerance&apos; for the matrix inversion. This involves an initial guess with correct boundary conditions and assumes that the righthand vector b has been setup with Dirichlet boundary conditions and the solution matrix with corresponding 1&apos;s on its diagonal.</para>
+<para>If the matrix inversion fails, SolveMatrixEquation() calls the method <ref refid="classcsmp_1_1_solver_1afb9380e536b4d7080c89cf143421c6f2" kindref="member">Out()</ref> on the solution matrix and the righthand vector.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Everytime an Algorithm is passed to the <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>, its computation involves the solution of a matrix equation.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>If verbose is enabled the method will print out the solution matrix, the solution vector, and the righthand vector. Also it will report a gues of the initial residual and the actual residual of the obtained solution:</para>
+<para><programlisting><codeline><highlight class="normal">Typical<sp/>initial<sp/>Residue<sp/><sp/><sp/>=<sp/>5.21798</highlight></codeline>
+<codeline><highlight class="normal">Residual<sp/>after<sp/>solution<sp/><sp/><sp/>=<sp/>3.58661e-16</highlight></codeline>
+</programlisting></para>
+<para>Important is that this output gives the ratio between the typical initial residue and the residual after the solution (here 1.0e+16). This ratio is essentially the signal-to-noise ratio and must (as a minimum for the solution to be meaningful), be greater than the ratio between the largest and the smallest dependent-variable value which was specified as initial or as boundary condition. <linebreak/>
+</para>
+<para>When the AMG solver is used, the residual relative to the initial residual is given inside of the AMG output (see above). It is found as the L2 vector norm. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/Solver.h" line="82" column="9" bodyfile="source/modules/integration/solver/Solver.cpp" bodystart="105" bodyend="146"/>
+        <references refid="classcsmp_1_1_sparse_matrix_1afb371082ecc3edbdf38176a40d8044a2" compoundref="_sparse_matrix_8cpp" startline="871" endline="909">csmp::SparseMatrix::Out</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_solver_1aad63f80f59d6763b4d0a4c93677df7f9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Solver::Solve</definition>
+        <argsstring>(CompressedRowMatrix &amp;G, std::vector&lt; double &gt; &amp;rh, std::vector&lt; double &gt; &amp;x, size_t no_unknowns=1U)</argsstring>
+        <name>Solve</name>
+        <qualifiedname>csmp::Solver::Solve</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_compressed_row_matrix" kindref="compound">CompressedRowMatrix</ref> &amp;</type>
+          <declname>G</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>rh</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>no_unknowns</declname>
+          <defval>1U</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/Solver.h" line="87" column="9" bodyfile="source/modules/integration/solver/Solver.cpp" bodystart="153" bodyend="191"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_solver_1afb9380e536b4d7080c89cf143421c6f2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Solver::Out</definition>
+        <argsstring>(const SparseMatrix &amp;mat, const char *fname=&quot;SparseMatrix&quot;) const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::Solver::Out</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_sparse_matrix" kindref="compound">SparseMatrix</ref> &amp;</type>
+          <declname>mat</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>fname</declname>
+          <defval>&quot;SparseMatrix&quot;</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Outputs the solution matrix to a textfile in <ref refid="classcsmp_1_1_sparse_matrix" kindref="compound">SparseMatrix</ref> output format.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The first argument is a constant reference to the solution matrix and the second argument is the name of the file which the matrix will be output to. To this file name, the global runtime of the model and the extension &apos;.text&apos; will be appended. <linebreak/>
+</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para><ref refid="classcsmp_1_1_solver_1afb9380e536b4d7080c89cf143421c6f2" kindref="member">Out()</ref> calls the Meschach function sp_foutput().</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>To independently test the solution matrix or to transfer it to another solver.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>A successful write will be reported. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/Solver.h" line="92" column="9" bodyfile="source/modules/integration/solver/Solver.cpp" bodystart="218" bodyend="234"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_solver_1a38054ec4ca8ea1fca61e4e32abf82c0e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Solver::Out</definition>
+        <argsstring>(const std::vector&lt; double &gt; &amp;vec, const char *fname=&quot;CSP_Vec&quot;) const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::Solver::Out</qualifiedname>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>vec</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>fname</declname>
+          <defval>&quot;CSP_Vec&quot;</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Outputs the Meschach++ vector &apos;vec&apos; to a textfile in Meschach++ output format.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The first argument is a constant reference to the Meschach vector and the second argument is the name of the file which the vector will be output to. To this file name, the global runtime of the model and the extension &apos;.text&apos; will be appended. <linebreak/>
+</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para><ref refid="classcsmp_1_1_solver_1afb9380e536b4d7080c89cf143421c6f2" kindref="member">Out()</ref> calls the Meschach function v_foutput() on a standard C filestream.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>To independently examine a solution or righthand vector or to transfer it to another solver.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>A failure to open the output file or a successful write will be reported. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/Solver.h" line="95" column="9" bodyfile="source/modules/integration/solver/Solver.cpp" bodystart="263" bodyend="284"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_solver_1a352359e5ec450c03b8cf8b4fa2d06c2a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Solver::CalculateResidual</definition>
+        <argsstring>(const SparseMatrix &amp;A, const std::vector&lt; double &gt; &amp;b, const std::vector&lt; double &gt; &amp;x) const</argsstring>
+        <name>CalculateResidual</name>
+        <qualifiedname>csmp::Solver::CalculateResidual</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_sparse_matrix" kindref="compound">SparseMatrix</ref> &amp;</type>
+          <declname>A</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>b</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>x</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Calculates the size of the residual error by comparing the product A*x with the righthand vector b. <linebreak/>
+</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The global solution matrix, the righthand vector, and the solution vector.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>To calculate the residual of a solution to see whether the solver reached some convergence and how good the solution actually is. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/Solver.h" line="98" column="11" bodyfile="source/modules/integration/solver/Solver.cpp" bodystart="304" bodyend="326"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_solver_1aa134b5de63e32e0a305f9ed4c660a16c" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::Solver::InputSolverSettings</definition>
+        <argsstring>(SolverSettings &amp;settings)</argsstring>
+        <name>InputSolverSettings</name>
+        <qualifiedname>csmp::Solver::InputSolverSettings</qualifiedname>
+        <reimplementedby refid="classcsmp_1_1_s_a_m_g___solver_1a387f3ebfa2fb98fb9b24c4f9ef4b37e0">InputSolverSettings</reimplementedby>
+        <param>
+          <type><ref refid="classcsmp_1_1_solver_settings" kindref="compound">SolverSettings</ref> &amp;</type>
+          <declname>settings</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/Solver.h" line="102" column="16" bodyfile="source/modules/integration/solver/Solver.cpp" bodystart="332" bodyend="334"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_solver_1abf2c92c54a1e3b493ce1cd8ce981cf8e" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="classcsmp_1_1_solver_settings" kindref="compound">SolverSettings</ref> *</type>
+        <definition>SolverSettings * csmp::Solver::GetSolverSettings</definition>
+        <argsstring>()</argsstring>
+        <name>GetSolverSettings</name>
+        <qualifiedname>csmp::Solver::GetSolverSettings</qualifiedname>
+        <reimplementedby refid="classcsmp_1_1_s_a_m_g___solver_1aa171eefe6041c5d3b2a65c93df285c83">GetSolverSettings</reimplementedby>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/Solver.h" line="103" column="26" bodyfile="source/modules/integration/solver/Solver.cpp" bodystart="328" bodyend="330"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-func">
+      <memberdef kind="function" id="classcsmp_1_1_solver_1a027b3b616917c0fcd7a300b8a51b6c41" prot="protected" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void csmp::Solver::SolveMatrixEquation</definition>
+        <argsstring>(SparseMatrix &amp;A, std::vector&lt; double &gt; &amp;b, std::vector&lt; double &gt; &amp;x, size_t no_unknowns)=0</argsstring>
+        <name>SolveMatrixEquation</name>
+        <qualifiedname>csmp::Solver::SolveMatrixEquation</qualifiedname>
+        <reimplementedby refid="classcsmp_1_1_eigen_solver_1a0ffb14a664cea504c82d0ea803ffd424">SolveMatrixEquation</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_gauss_jordan___solver_1af3fb776a09e01d35a3221c2949d5f0b8">SolveMatrixEquation</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_l_udcmp___solver_1a49f4efa710edc9f3145854786d321c9d">SolveMatrixEquation</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_s_a_m_g___solver_1a6a4dbbe3dd011d95514026e4bcd52e33">SolveMatrixEquation</reimplementedby>
+        <param>
+          <type><ref refid="classcsmp_1_1_sparse_matrix" kindref="compound">SparseMatrix</ref> &amp;</type>
+          <declname>A</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>b</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>no_unknowns</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/Solver.h" line="106" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_solver_1ad6e05cc358ab9c92cf037cfa24e9f8f9" prot="protected" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void csmp::Solver::SolveMatrixEquation</definition>
+        <argsstring>(CompressedRowMatrix &amp;A, std::vector&lt; double &gt; &amp;b, std::vector&lt; double &gt; &amp;x, size_t no_unknowns)=0</argsstring>
+        <name>SolveMatrixEquation</name>
+        <qualifiedname>csmp::Solver::SolveMatrixEquation</qualifiedname>
+        <reimplementedby refid="classcsmp_1_1_eigen_solver_1a8df8bd92d6690e611ad4ab597bb4b787">SolveMatrixEquation</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_gauss_jordan___solver_1a7b514ef0591ac7c61b97dd6f40c0569c">SolveMatrixEquation</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_l_udcmp___solver_1a49a2286f857025b81f074e5020ec8c4a">SolveMatrixEquation</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_s_a_m_g___solver_1af849b38b8bf9f8500590777e5fd1e7d7">SolveMatrixEquation</reimplementedby>
+        <param>
+          <type><ref refid="classcsmp_1_1_compressed_row_matrix" kindref="compound">CompressedRowMatrix</ref> &amp;</type>
+          <declname>A</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>b</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>no_unknowns</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/Solver.h" line="111" column="17"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Inverts global solution matrices matrices of the finite-element computations using a variety of solution procedures sparse matrices (class <ref refid="classcsmp_1_1_sparse_matrix" kindref="compound">SparseMatrix</ref>). <ref refid="classcsmp_1_1_solver" kindref="compound">Solver</ref> base class in strategy pattern. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>S.K. Matthaei </para>
+</simplesect>
+<simplesect kind="author"><para>Stephen G. Roberts </para>
+</simplesect>
+<simplesect kind="date"><para>1999</para>
+</simplesect>
+</para>
+<sect1 id="classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_1design">
+<title>Design Intent</title><para>To encapsulate numerical algebraic methods in an object which services the <ref refid="classcsmp_1_1_p_d_e___integrator" kindref="compound">PDE_Integrator</ref> and other class objects.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_visitor_1applicability">
+<title>Applicability</title><para>Currently the solver offers an algebraic multigrid method (AMG), a conjugate gradient method (CG), and a Gaussian elimination method (GE) as solution schemes. Gaussian elimination can be applied to non-symmetric matrices as they arise if advection-dispersion matrices are accumulated into the global solution matrix. The algebraic multigrid and conjugate gradient methods require symmetric positive-definite (no negative elements in the diagonal) solution matrices in order to be applicable.</para>
+<para>Dependent on the size of the computation different solution methods are appropriate: If you have a very small test problem, like a 30 x 30 matrix, CG ist as fast or faster than AMG and it will require less storage. Above a size of 50 x 50, AMG becomes much faster than the other methods.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_solver_1participants">
+<title>Participants</title><para>Each inversion involves a sparse global solution matrix of type SpMat, a righthand, and a solution vector of type <ref refid="classvector" kindref="compound">vector&lt;double&gt;</ref>.</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>The <ref refid="classcsmp_1_1_solver" kindref="compound">Solver</ref> uses the Meschach++ and the AMG libraries to carry out the matrix operations. The user sets the private variable solution method, whose default is algebraic multigrid.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_visitor_1examples">
+<title>Application Examples</title><para>The <ref refid="classcsmp_1_1_solver" kindref="compound">Solver</ref> is called by the Algorithm and Algorithm objects, when they are submitted to the <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> through its Apply() interfaces. In this process the Algorithm hands the solver the global solution matrix &apos;G&apos;, the solution vector &apos;x&apos; and the righthand vector &apos;rh&apos;.:</para>
+<para><programlisting><codeline><highlight class="normal">SolveMatrixEquation(<sp/>G,<sp/>rh,<sp/>x<sp/>);</highlight></codeline>
+</programlisting></para>
+<para>The <ref refid="classcsmp_1_1_solver" kindref="compound">Solver</ref> then returns the solution into &apos;x&apos; and it is tested further by the Algorithm before it is mapped back to the <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> variable storage. </para>
+</sect1>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>csmp::EigenSolver</label>
+        <link refid="classcsmp_1_1_eigen_solver"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::GaussJordan_Solver</label>
+        <link refid="classcsmp_1_1_gauss_jordan___solver"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>csmp::LUdcmp_Solver</label>
+        <link refid="classcsmp_1_1_l_udcmp___solver"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>csmp::PARDISO_Solver</label>
+        <link refid="classcsmp_1_1_p_a_r_d_i_s_o___solver"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>csmp::SAMG_Solver</label>
+        <link refid="classcsmp_1_1_s_a_m_g___solver"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::Solver</label>
+        <link refid="classcsmp_1_1_solver"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::Solver</label>
+        <link refid="classcsmp_1_1_solver"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>#solver_settings_</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::SolverSettings</label>
+        <link refid="classcsmp_1_1_solver_settings"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/integration/solver/Solver.h" line="73" column="1" bodyfile="source/includes/integration/solver/Solver.h" bodystart="73" bodyend="122"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_solver_1a352359e5ec450c03b8cf8b4fa2d06c2a" prot="public" virt="non-virtual"><scope>csmp::Solver</scope><name>CalculateResidual</name></member>
+      <member refid="classcsmp_1_1_solver_1abf2c92c54a1e3b493ce1cd8ce981cf8e" prot="public" virt="virtual"><scope>csmp::Solver</scope><name>GetSolverSettings</name></member>
+      <member refid="classcsmp_1_1_solver_1aa134b5de63e32e0a305f9ed4c660a16c" prot="public" virt="virtual"><scope>csmp::Solver</scope><name>InputSolverSettings</name></member>
+      <member refid="classcsmp_1_1_solver_1afb9380e536b4d7080c89cf143421c6f2" prot="public" virt="non-virtual"><scope>csmp::Solver</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_solver_1a38054ec4ca8ea1fca61e4e32abf82c0e" prot="public" virt="non-virtual"><scope>csmp::Solver</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_solver_1a00f2d834fa620f56e50a8cf37808c466" prot="public" virt="non-virtual"><scope>csmp::Solver</scope><name>Solve</name></member>
+      <member refid="classcsmp_1_1_solver_1aad63f80f59d6763b4d0a4c93677df7f9" prot="public" virt="non-virtual"><scope>csmp::Solver</scope><name>Solve</name></member>
+      <member refid="classcsmp_1_1_solver_1a027b3b616917c0fcd7a300b8a51b6c41" prot="protected" virt="pure-virtual"><scope>csmp::Solver</scope><name>SolveMatrixEquation</name></member>
+      <member refid="classcsmp_1_1_solver_1ad6e05cc358ab9c92cf037cfa24e9f8f9" prot="protected" virt="pure-virtual"><scope>csmp::Solver</scope><name>SolveMatrixEquation</name></member>
+      <member refid="classcsmp_1_1_solver_1a331d12fc9b8cb28b1d9614fdd1059a48" prot="public" virt="non-virtual"><scope>csmp::Solver</scope><name>Solver</name></member>
+      <member refid="classcsmp_1_1_solver_1af729d5eb6bc55bdbe950f5eb1b7cd11b" prot="public" virt="non-virtual"><scope>csmp::Solver</scope><name>Solver</name></member>
+      <member refid="classcsmp_1_1_solver_1a52350f4db63c9e48f7354146d9c12d79" prot="protected" virt="non-virtual"><scope>csmp::Solver</scope><name>solver_settings_</name></member>
+      <member refid="classcsmp_1_1_solver_1a7707a8bf03e9dde6396aecc144730c68" prot="public" virt="non-virtual"><scope>csmp::Solver</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_solver_1aa6ac00a1cf7acf5b7aae4df7b8ac4c80" prot="public" virt="non-virtual"><scope>csmp::Solver</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_solver_1abe6e2cfa7b678ea33fe6fed3ef0fd974" prot="private" virt="non-virtual"><scope>csmp::Solver</scope><name>verbose_</name></member>
+      <member refid="classcsmp_1_1_solver_1a1bc444c360ad5d45efcfe56f72bdd45b" prot="public" virt="virtual"><scope>csmp::Solver</scope><name>~Solver</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

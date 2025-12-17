@@ -1,0 +1,46 @@
+.TH "csmp::Operation" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::Operation
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <Operation\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBOperation\fP (const std::string &name, \fBOPERATION_TYPE\fP, int execution_level, bool multiply_with_dt)"
+.br
+.RI "the operation type, execution level and name, are strung together into a key "
+.ti -1c
+.RI "bool \fBoperator<\fP (const \fBOperation\fP &op) const"
+.br
+.RI "to determine place of operation in the sequence of operations "
+.ti -1c
+.RI "\fBOPERATION_TYPE\fP \fBOperationType\fP () const"
+.br
+.RI "addition, subtraction, multiplication, division "
+.ti -1c
+.RI "int \fBExecutionLevel\fP () const"
+.br
+.RI "when (in a sequence) the operation shall be performed "
+.ti -1c
+.RI "void \fBMultiplyWithTimeIncrement\fP (bool multiply)"
+.br
+.ti -1c
+.RI "bool \fBMultiplyWithTimeIncrement\fP () const"
+.br
+.ti -1c
+.RI "void \fBOut\fP () const"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Specifies how to accumulate the Matrix- or Vector operators\&. TODO: add factor for the case where multiplication or division is the operation type? 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

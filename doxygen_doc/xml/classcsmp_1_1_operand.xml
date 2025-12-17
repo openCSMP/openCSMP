@@ -1,0 +1,2463 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_operand" kind="class" language="C++" prot="public">
+    <compoundname>csmp::Operand</compoundname>
+    <includes refid="_operand_8h" local="no">Operand.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_operand_1ab527220b522803d8891f50eed560f905" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::Operand&lt; dim &gt;::name_</definition>
+        <argsstring></argsstring>
+        <name>name_</name>
+        <qualifiedname>csmp::Operand::name_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="309" column="26" bodyfile="source/includes/model/Operand.h" bodystart="309" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_operand_1a998aa792d003ef9db46dc8109f60a8b9" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::Operand&lt; dim &gt;::prop_key_</definition>
+        <argsstring></argsstring>
+        <name>prop_key_</name>
+        <qualifiedname>csmp::Operand::prop_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="310" column="26" bodyfile="source/includes/model/Operand.h" bodystart="310" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_operand_1a312e9ebaa419c4d3b33dd57e76dda527" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Operand&lt; dim &gt;::omin</definition>
+        <argsstring></argsstring>
+        <name>omin</name>
+        <qualifiedname>csmp::Operand::omin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="311" column="26" bodyfile="source/includes/model/Operand.h" bodystart="311" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_operand_1a9d01d75581e062dbf563b7ab7a11e2c7" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Operand&lt; dim &gt;::omax</definition>
+        <argsstring></argsstring>
+        <name>omax</name>
+        <qualifiedname>csmp::Operand::omax</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="311" column="31" bodyfile="source/includes/model/Operand.h" bodystart="311" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_operand_1a47d8962a75420ff681dbfed964245f9f" prot="private" static="no" mutable="no">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref></type>
+        <definition>VARIABLE_FLAG csmp::Operand&lt; dim &gt;::flag_essential_</definition>
+        <argsstring></argsstring>
+        <name>flag_essential_</name>
+        <qualifiedname>csmp::Operand::flag_essential_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="312" column="26" bodyfile="source/includes/model/Operand.h" bodystart="312" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_operand_1ab9fd0cf43848fc379f289dbcef34366a" prot="private" static="no" mutable="no">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref></type>
+        <definition>VARIABLE_FLAG csmp::Operand&lt; dim &gt;::flag_output_</definition>
+        <argsstring></argsstring>
+        <name>flag_output_</name>
+        <qualifiedname>csmp::Operand::flag_output_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="312" column="42" bodyfile="source/includes/model/Operand.h" bodystart="312" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_operand_1a2da4088378bb3166924c89aa9d3368c9" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::Operand&lt; dim &gt;::calc_offset_</definition>
+        <argsstring></argsstring>
+        <name>calc_offset_</name>
+        <qualifiedname>csmp::Operand::calc_offset_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="313" column="26" bodyfile="source/includes/model/Operand.h" bodystart="313" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_operand_1aae7113d410998fbff040f27a828d790e" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::Operand&lt; dim &gt;::scalar_storage_</definition>
+        <argsstring></argsstring>
+        <name>scalar_storage_</name>
+        <qualifiedname>csmp::Operand::scalar_storage_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="314" column="26" bodyfile="source/includes/model/Operand.h" bodystart="314" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_operand_1a317bb6853a1c6fe2b2e0ded8efb02793" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; dim &gt;</type>
+        <definition>VectorVariable&lt;dim&gt; csmp::Operand&lt; dim &gt;::vector_storage_</definition>
+        <argsstring></argsstring>
+        <name>vector_storage_</name>
+        <qualifiedname>csmp::Operand::vector_storage_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="315" column="21" bodyfile="source/includes/model/Operand.h" bodystart="315" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_operand_1a75295dfe29e9f1eb929e36ba10377b74" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref>&lt; dim &gt;</type>
+        <definition>TensorVariable&lt;dim&gt; csmp::Operand&lt; dim &gt;::tensor_storage_</definition>
+        <argsstring></argsstring>
+        <name>tensor_storage_</name>
+        <qualifiedname>csmp::Operand::tensor_storage_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="316" column="21" bodyfile="source/includes/model/Operand.h" bodystart="316" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_operand_1a9afdc6a3fc4aa07c0bbbe68a2600f4ba" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref></type>
+        <definition>ArrayVariable csmp::Operand&lt; dim &gt;::array_storage_</definition>
+        <argsstring></argsstring>
+        <name>array_storage_</name>
+        <qualifiedname>csmp::Operand::array_storage_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="317" column="26" bodyfile="source/includes/model/Operand.h" bodystart="317" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_operand_1a836dd93ea91625306f4b32946bb0d30c" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref></type>
+        <definition>FlaggedArrayVariable csmp::Operand&lt; dim &gt;::flagged_array_storage_</definition>
+        <argsstring></argsstring>
+        <name>flagged_array_storage_</name>
+        <qualifiedname>csmp::Operand::flagged_array_storage_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="318" column="26" bodyfile="source/includes/model/Operand.h" bodystart="318" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a48005bae4b03d67afba4c6b0553d0d6b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Operand&lt; dim &gt;::Operand</definition>
+        <argsstring>()</argsstring>
+        <name>Operand</name>
+        <qualifiedname>csmp::Operand::Operand</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The default constructor of the <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> sets the <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> type to SCALAR, the placement to MODEL and the index to ULONG_MAX. The <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> will have no name, its output flag will be PLAIN, the essential flag DIRICH, and the value rangle will be -1.0e+50 to 1.0e+50. The calculation offset will be zero. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="190" column="5" bodyfile="source/modules/model/Operand.cpp" bodystart="18" bodyend="26"/>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9a2d373b048f997a96c661862c40f2fcae" compoundref="_c_s_m_p__global__enumerations_8h" startline="64">csmp::DIRICH</references>
+        <references refid="classcsmp_1_1_operand_1a48005bae4b03d67afba4c6b0553d0d6b" compoundref="_operand_8cpp" startline="18" endline="26">csmp::Operand&lt; dim &gt;::Operand</references>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6" compoundref="_c_s_m_p__global__enumerations_8h" startline="58">csmp::PLAIN</references>
+        <referencedby refid="classcsmp_1_1_operand_1a48005bae4b03d67afba4c6b0553d0d6b" compoundref="_operand_8cpp" startline="18" endline="26">csmp::Operand&lt; dim &gt;::Operand</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a92a10ac26f83bcd4a776225047a76df6" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Operand&lt; dim &gt;::Operand</definition>
+        <argsstring>(const csmp::Index &amp;)</argsstring>
+        <name>Operand</name>
+        <qualifiedname>csmp::Operand::Operand</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <defname>idx</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Operands can be constructed efficiently using only a <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> as argument. In this case they will have no name, a variable range from -1.0e+50 to 1.0e+50, and a calculation offset of zero. The output flag will be PLAIN and the essential flag will be DIRICH.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>idx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>name of the <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> of the variable with which the <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> shall be associated. This index must correspond to a physical variable which is already known to the <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="191" column="14" bodyfile="source/modules/model/Operand.cpp" bodystart="43" bodyend="52"/>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9a2d373b048f997a96c661862c40f2fcae" compoundref="_c_s_m_p__global__enumerations_8h" startline="64">csmp::DIRICH</references>
+        <references refid="classcsmp_1_1_operand_1a92a10ac26f83bcd4a776225047a76df6" compoundref="_operand_8cpp" startline="43" endline="52">csmp::Operand&lt; dim &gt;::Operand</references>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6" compoundref="_c_s_m_p__global__enumerations_8h" startline="58">csmp::PLAIN</references>
+        <referencedby refid="classcsmp_1_1_operand_1a92a10ac26f83bcd4a776225047a76df6" compoundref="_operand_8cpp" startline="43" endline="52">csmp::Operand&lt; dim &gt;::Operand</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a62bd0037e59fff6a7bb71764f49c7e2a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Operand&lt; dim &gt;::Operand</definition>
+        <argsstring>(const Operand &amp;)</argsstring>
+        <name>Operand</name>
+        <qualifiedname>csmp::Operand::Operand</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+          <defname>op</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="192" column="5" bodyfile="source/modules/model/Operand.cpp" bodystart="56" bodyend="59"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a75ebcca862c5e2df0ad300df9d6d68f8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Operand&lt; dim &gt;::Operand</definition>
+        <argsstring>(const char *var, const PropertyDatabase&lt; dim &gt; &amp;)</argsstring>
+        <name>Operand</name>
+        <qualifiedname>csmp::Operand::Operand</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>var</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>&lt; dim &gt; &amp;</type>
+          <defname>p</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>This constructor will fully initialize an <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> using the current variable data from the <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>. The <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> name will be that of the supplied variable, the calculation offset will be zero. The output flag will be PLAIN and the essential flag will be DIRICH.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>var</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the name of the variable with which the <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> shall be associated. This name must be already known to the <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref> a reference of which is passed as a second argument to the constructor.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>If the property database cannot identify the variable by its name, it will report an error and the <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> will not be initialized properly. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="193" column="5" bodyfile="source/modules/model/Operand.cpp" bodystart="79" bodyend="87"/>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9a2d373b048f997a96c661862c40f2fcae" compoundref="_c_s_m_p__global__enumerations_8h" startline="64">csmp::DIRICH</references>
+        <references refid="classcsmp_1_1_operand_1a75ebcca862c5e2df0ad300df9d6d68f8" compoundref="_operand_8cpp" startline="79" endline="87">csmp::Operand&lt; dim &gt;::Operand</references>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6" compoundref="_c_s_m_p__global__enumerations_8h" startline="58">csmp::PLAIN</references>
+        <referencedby refid="classcsmp_1_1_operand_1a75ebcca862c5e2df0ad300df9d6d68f8" compoundref="_operand_8cpp" startline="79" endline="87">csmp::Operand&lt; dim &gt;::Operand</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a06dfe7cde6038d4bb1ab38d90d1c57f6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Operand&lt; dim &gt;::Operand</definition>
+        <argsstring>(const csmp::Index &amp;, const ScalarVariable &amp;)</argsstring>
+        <name>Operand</name>
+        <qualifiedname>csmp::Operand::Operand</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <defname>idx</defname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &amp;</type>
+          <defname>sc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Efficient constructor for temporary operands needed in mathematical expressions like:</para>
+<para><programlisting><codeline><highlight class="normal">Op_A<sp/>=<sp/>Op_B<sp/>+<sp/>Op_C;</highlight></codeline>
+</programlisting></para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>idx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the name of the <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> of the variable with which the <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> shall be associated. This index must correspond to a physical variable which is already known to the <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>.</para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>sc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>an initialized CSP variable, the type of which must be equivalent to the type specified in the <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref>&gt;</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>These seemingly &apos;weird&apos; constructors have been created only because they allow a smart compiler to create temporaries in the place of their application (return value optimization).</para>
+<para>The resulting temporary Operands have the name &apos;tmp&apos; (also remember that, in large computations, one should write x = 0; x += <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> + <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref>; if one can, to avoid the creation of temporaries all together.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Temporary variables in mathematical expressions involving Operands. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="194" column="5" bodyfile="source/modules/model/Operand.cpp" bodystart="122" bodyend="131"/>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9a2d373b048f997a96c661862c40f2fcae" compoundref="_c_s_m_p__global__enumerations_8h" startline="64">csmp::DIRICH</references>
+        <references refid="classcsmp_1_1_operand_1a06dfe7cde6038d4bb1ab38d90d1c57f6" compoundref="_operand_8cpp" startline="122" endline="131">csmp::Operand&lt; dim &gt;::Operand</references>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6" compoundref="_c_s_m_p__global__enumerations_8h" startline="58">csmp::PLAIN</references>
+        <referencedby refid="classcsmp_1_1_operand_1a06dfe7cde6038d4bb1ab38d90d1c57f6" compoundref="_operand_8cpp" startline="122" endline="131">csmp::Operand&lt; dim &gt;::Operand</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a8756b218f08a7450c23a2a5ea5fe8968" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Operand&lt; dim &gt;::Operand</definition>
+        <argsstring>(const csmp::Index &amp;, const VectorVariable&lt; dim &gt; &amp;)</argsstring>
+        <name>Operand</name>
+        <qualifiedname>csmp::Operand::Operand</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <defname>idx</defname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; dim &gt; &amp;</type>
+          <defname>vc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="195" column="5" bodyfile="source/modules/model/Operand.cpp" bodystart="135" bodyend="144"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a36ff780cb4da9bbf5f2ecafa50451037" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Operand&lt; dim &gt;::Operand</definition>
+        <argsstring>(const csmp::Index &amp;, const TensorVariable&lt; dim &gt; &amp;)</argsstring>
+        <name>Operand</name>
+        <qualifiedname>csmp::Operand::Operand</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <defname>idx</defname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref>&lt; dim &gt; &amp;</type>
+          <defname>ts</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="196" column="5" bodyfile="source/modules/model/Operand.cpp" bodystart="148" bodyend="157"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1ad9b22cad41cdab9e5a482e11b7cfc761" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Operand&lt; dim &gt;::Operand</definition>
+        <argsstring>(const csmp::Index &amp;, const ArrayVariable &amp;)</argsstring>
+        <name>Operand</name>
+        <qualifiedname>csmp::Operand::Operand</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <defname>idx</defname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> &amp;</type>
+          <defname>ar</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="197" column="5" bodyfile="source/modules/model/Operand.cpp" bodystart="161" bodyend="170"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a8422ae7c13bf1bdca9a7b9bd6d1c75f4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Operand&lt; dim &gt;::Operand</definition>
+        <argsstring>(const csmp::Index &amp;, const FlaggedArrayVariable &amp;)</argsstring>
+        <name>Operand</name>
+        <qualifiedname>csmp::Operand::Operand</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <defname>idx</defname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &amp;</type>
+          <defname>ar</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="198" column="5" bodyfile="source/modules/model/Operand.cpp" bodystart="173" bodyend="182"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1ad3b0ad4c52cbf0209fea1feadbff2656" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Operand&lt; dim &gt;::~Operand</definition>
+        <argsstring>()</argsstring>
+        <name>~Operand</name>
+        <qualifiedname>csmp::Operand::~Operand</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="199" column="5" bodyfile="source/modules/model/Operand.cpp" bodystart="185" bodyend="187"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a2c2b6807fbcee7edd9810c1a7489c2ae" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref></type>
+        <definition>Operand&lt; dim &gt; csmp::Operand&lt; dim &gt;::operator+</definition>
+        <argsstring>(double) const</argsstring>
+        <name>operator+</name>
+        <qualifiedname>csmp::Operand::operator+</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Create temporary Operands with the same <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> as the <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> on the left of the operator in the mathematical expression. The basic CSP variable of the temporary Operands will have been transformed using the operator an the right-side argument of it.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>val</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A double value typically typedef&apos;ed as a fT. The value will appear on the right of the operator in the mathematical expression involving the <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref>.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>NOTE: These overloaded Operands will return Operands which have exactly the same <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> as the <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> on the lefthandside of the operator sign in the expression in which they are used. Thus beware of writing something like:</para>
+<para><programlisting><codeline><highlight class="normal">Op1<sp/>=<sp/>Op2<sp/>*<sp/>322.4;</highlight></codeline>
+</programlisting></para>
+<para>This will overwrite the Op1 with the <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> of Op2 because the assignment operator is used. The overloaded operators are still useful for expressions like:</para>
+<para><programlisting><codeline><highlight class="normal">Op1<sp/>+=<sp/>Op2<sp/>*<sp/>322.4;</highlight></codeline>
+</programlisting> </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="201" column="15" bodyfile="source/modules/model/Operand.cpp" bodystart="536" bodyend="550"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a1a07efcbd546e0365839c3e5fb5e408f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref></type>
+        <definition>Operand&lt; dim &gt; csmp::Operand&lt; dim &gt;::operator-</definition>
+        <argsstring>(double) const</argsstring>
+        <name>operator-</name>
+        <qualifiedname>csmp::Operand::operator-</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="202" column="15" bodyfile="source/modules/model/Operand.cpp" bodystart="554" bodyend="568"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1aaed95790548f2f150be306fffc9d712c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref></type>
+        <definition>Operand&lt; dim &gt; csmp::Operand&lt; dim &gt;::operator*</definition>
+        <argsstring>(double) const</argsstring>
+        <name>operator*</name>
+        <qualifiedname>csmp::Operand::operator*</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="203" column="15" bodyfile="source/modules/model/Operand.cpp" bodystart="572" bodyend="586"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1adb5a234d5ade1f15f2b3bec9bb3a7da8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref></type>
+        <definition>Operand&lt; dim &gt; csmp::Operand&lt; dim &gt;::operator/</definition>
+        <argsstring>(double) const</argsstring>
+        <name>operator/</name>
+        <qualifiedname>csmp::Operand::operator/</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="204" column="15" bodyfile="source/modules/model/Operand.cpp" bodystart="590" bodyend="604"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1af8ba545291e5a0248e851172b3e21ecf" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref></type>
+        <definition>Operand&lt; dim &gt; csmp::Operand&lt; dim &gt;::operator+</definition>
+        <argsstring>(const Operand &amp;) const</argsstring>
+        <name>operator+</name>
+        <qualifiedname>csmp::Operand::operator+</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+          <defname>op</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Create temporary Operands with the same <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> as the <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> on the left of the operator in the mathematical expression. The basic CSP variable of the temporary Operands will have been transformed using the operator an the right-side argument of it.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>op</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>An <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> which will appear on the right of the operator in the mathematical expression involving the lefthand <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref>.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>NOTE: These overloaded Operands will return Operands which have exactly the same <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> as the <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> on the lefthandside of the operator sign in the expression in which they are used. Thus beware of writing something like:</para>
+<para><programlisting><codeline><highlight class="normal">Op1<sp/>=<sp/>Op2<sp/>*<sp/>322.4;</highlight></codeline>
+</programlisting></para>
+<para>This will overwrite the Op1 with the <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> of Op2 because the assignment operator is used. The overloaded operators are still useful for expressions like:</para>
+<para><programlisting><codeline><highlight class="normal">Op1<sp/>+=<sp/>Op2<sp/>*<sp/>322.4;</highlight></codeline>
+</programlisting></para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>These overloaded operators use the overloaded operators of CSP basic variables.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>Depending on the basic variable types of the left and rigth Operands errors may be reported, for instance, when you try to add a tensor to a scalar variable. Mathematically meaningful operations, like multiplying a right-side vector with a left-side tensor, are enabled. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="206" column="15" bodyfile="source/modules/model/Operand.cpp" bodystart="651" bodyend="665"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a4ab7fd5d00675ca299ad81459a699662" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref></type>
+        <definition>Operand&lt; dim &gt; csmp::Operand&lt; dim &gt;::operator-</definition>
+        <argsstring>(const Operand &amp;) const</argsstring>
+        <name>operator-</name>
+        <qualifiedname>csmp::Operand::operator-</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+          <defname>op</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="207" column="15" bodyfile="source/modules/model/Operand.cpp" bodystart="669" bodyend="683"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a582155e65a28b5a0a3d2af84cb73705f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref></type>
+        <definition>Operand&lt; dim &gt; csmp::Operand&lt; dim &gt;::operator*</definition>
+        <argsstring>(const Operand &amp;) const</argsstring>
+        <name>operator*</name>
+        <qualifiedname>csmp::Operand::operator*</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+          <defname>op</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="208" column="15" bodyfile="source/modules/model/Operand.cpp" bodystart="687" bodyend="701"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a3ce9d7d71b43f577cd08cae058df61ed" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref></type>
+        <definition>Operand&lt; dim &gt; csmp::Operand&lt; dim &gt;::operator/</definition>
+        <argsstring>(const Operand &amp;) const</argsstring>
+        <name>operator/</name>
+        <qualifiedname>csmp::Operand::operator/</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+          <defname>op</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="209" column="15" bodyfile="source/modules/model/Operand.cpp" bodystart="705" bodyend="719"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a3aae09b80758842342bf5225c87ddd06" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+        <definition>Operand&lt; dim &gt; &amp; csmp::Operand&lt; dim &gt;::operator+=</definition>
+        <argsstring>(double)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>csmp::Operand::operator+=</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Transforms the basic variable associated with the lefthand <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> by the right-side double using the arithmetic operators +, -, *, or / . The C++ short form for writing a = a + b; as a += b; is used in such expressions.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>val</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A double value typically typedef&apos;ed as a fT. The value will appear on the right of the operator in the mathematical expression involving the <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref>.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Avoids the creation of temporaries and should therefore be prefered in mathematical expressions involving Operands. <linebreak/>
+</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>The overloaded operators use the overloaded operators of CSP basic variables.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>Depending on the basic variable types of the left and rigth Operands errors may be reported, for instance, when you try to add a tensor to a scalar variable. Mathematically meaningful operations, like multiplying a right-side vector with a left-side tensor, are enabled. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="211" column="14" bodyfile="source/modules/model/Operand.cpp" bodystart="752" bodyend="761"/>
+        <references refid="classcsmp_1_1_array_variable_1aaa61fe7923f28de7adf847eeac94d05c" compoundref="_array_variable_8cpp" startline="202" endline="206">csmp::ArrayVariable::operator+=</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a36564f6c291016ea145a3381b930a725" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+        <definition>Operand&lt; dim &gt; &amp; csmp::Operand&lt; dim &gt;::operator-=</definition>
+        <argsstring>(double)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>csmp::Operand::operator-=</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="212" column="14" bodyfile="source/modules/model/Operand.cpp" bodystart="765" bodyend="774"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a90933a76f0477a396384740a52c70783" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+        <definition>Operand&lt; dim &gt; &amp; csmp::Operand&lt; dim &gt;::operator*=</definition>
+        <argsstring>(double)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>csmp::Operand::operator*=</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="213" column="14" bodyfile="source/modules/model/Operand.cpp" bodystart="778" bodyend="787"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1ae22f78f2db7628021ff7dff3fbdfcb82" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+        <definition>Operand&lt; dim &gt; &amp; csmp::Operand&lt; dim &gt;::operator/=</definition>
+        <argsstring>(double)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>csmp::Operand::operator/=</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="214" column="14" bodyfile="source/modules/model/Operand.cpp" bodystart="791" bodyend="800"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a600887200a8af809db443ae60b90ad72" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+        <definition>Operand&lt; dim &gt; &amp; csmp::Operand&lt; dim &gt;::operator+=</definition>
+        <argsstring>(const ScalarVariable &amp;)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>csmp::Operand::operator+=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &amp;</type>
+          <defname>sc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Transforms the basic variable associated with the lefthand <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> by the right-side <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> using the arithmetic operators +, -, *, or / . The C++ short form for writing a = a + b; as a += b; is used in such expressions.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>sc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> value typically typedef&apos;ed as a fT. The value will appear on the right of the operator in the mathematical expression involving the <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref>.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Avoids the creation of temporaries and should therefore be prefered in mathematical expressions involving Operands. <linebreak/>
+</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>The overloaded operators use the overloaded operators of CSP basic variables.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>Depending on the basic variable types of the left and rigth Operands errors may be reported, for instance, when you try to add a tensor to a scalar variable. Mathematically meaningful operations, like multiplying a right-side vector with a left-side tensor, are enabled. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="216" column="14" bodyfile="source/modules/model/Operand.cpp" bodystart="834" bodyend="843"/>
+        <references refid="classcsmp_1_1_array_variable_1af894e2cac20e792eadf4483192c35a9c" compoundref="_array_variable_8cpp" startline="229" endline="233">csmp::ArrayVariable::operator+=</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1aa4de9176754756a67ba2695e0459d0c8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+        <definition>Operand&lt; dim &gt; &amp; csmp::Operand&lt; dim &gt;::operator-=</definition>
+        <argsstring>(const ScalarVariable &amp;)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>csmp::Operand::operator-=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &amp;</type>
+          <defname>sc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="217" column="14" bodyfile="source/modules/model/Operand.cpp" bodystart="847" bodyend="856"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1acdb1b12c5cd47c1b570e053aad648efa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+        <definition>Operand&lt; dim &gt; &amp; csmp::Operand&lt; dim &gt;::operator*=</definition>
+        <argsstring>(const ScalarVariable &amp;)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>csmp::Operand::operator*=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &amp;</type>
+          <defname>sc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="218" column="14" bodyfile="source/modules/model/Operand.cpp" bodystart="860" bodyend="869"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1ab8febcc8c0962c6dfaf5713bbd96ecf6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+        <definition>Operand&lt; dim &gt; &amp; csmp::Operand&lt; dim &gt;::operator/=</definition>
+        <argsstring>(const ScalarVariable &amp;)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>csmp::Operand::operator/=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &amp;</type>
+          <defname>sc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="219" column="14" bodyfile="source/modules/model/Operand.cpp" bodystart="873" bodyend="882"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a028dabb41c8343f4c1c5a369f45a25c9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+        <definition>Operand&lt; dim &gt; &amp; csmp::Operand&lt; dim &gt;::operator+=</definition>
+        <argsstring>(const VectorVariable&lt; dim &gt; &amp;)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>csmp::Operand::operator+=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; dim &gt; &amp;</type>
+          <defname>vc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Transforms the basic variable associated with the lefthand <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> by the right-side <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref> using the arithmetic operators +, -, *, or / . The C++ short form for writing a = a + b; as a += b; is used in such expressions.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>vc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref> which will appear on the right of the operator in the mathematical expression involving the <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref>.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Avoids the creation of temporaries and should therefore be prefered in mathematical expressions involving Operands. <linebreak/>
+</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>The overloaded operators use the overloaded operators of CSP basic variables.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>Depending on the basic variable types of the left and rigth Operands errors may be reported, for instance, when you try to add a tensor to a scalar variable. Mathematically meaningful operations, like multiplying a right-side vector with a left-side tensor, are enabled.</para>
+<para>For the addition (+) and subtraction (-) operators the application is restricted to the case where the variable associated with the <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> is also a vector. If this is not the case the program will be terminated and a fatal error will be reported. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="221" column="14" bodyfile="source/modules/model/Operand.cpp" bodystart="920" bodyend="937"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1aef1a52f3a11c42e91fff256becca5870" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+        <definition>Operand&lt; dim &gt; &amp; csmp::Operand&lt; dim &gt;::operator-=</definition>
+        <argsstring>(const VectorVariable&lt; dim &gt; &amp;)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>csmp::Operand::operator-=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; dim &gt; &amp;</type>
+          <defname>vc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="222" column="14" bodyfile="source/modules/model/Operand.cpp" bodystart="941" bodyend="958"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1aecf894a9cd13580867c0d72068836f03" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+        <definition>Operand&lt; dim &gt; &amp; csmp::Operand&lt; dim &gt;::operator*=</definition>
+        <argsstring>(const VectorVariable&lt; dim &gt; &amp;)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>csmp::Operand::operator*=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; dim &gt; &amp;</type>
+          <defname>vc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="223" column="14" bodyfile="source/modules/model/Operand.cpp" bodystart="962" bodyend="979"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1ae9f7feb559c5b178cc5c456feabbf24a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+        <definition>Operand&lt; dim &gt; &amp; csmp::Operand&lt; dim &gt;::operator/=</definition>
+        <argsstring>(const VectorVariable&lt; dim &gt; &amp;)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>csmp::Operand::operator/=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; dim &gt; &amp;</type>
+          <defname>vc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="224" column="14" bodyfile="source/modules/model/Operand.cpp" bodystart="983" bodyend="999"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1ac4c9b5f5c26a7e81250dab1dae550b09" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+        <definition>Operand&lt; dim &gt; &amp; csmp::Operand&lt; dim &gt;::operator+=</definition>
+        <argsstring>(const TensorVariable&lt; dim &gt; &amp;)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>csmp::Operand::operator+=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref>&lt; dim &gt; &amp;</type>
+          <defname>ts</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Transforms the basic variable associated with the lefthand <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> by the right-side <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> using the arithmetic operators +, -, *, or / . The C++ short form for writing a = a + b; as a += b; is used in such expressions.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ts</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> which will appear on the right of the operator in the mathematical expression involving the <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref>.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Avoids the creation of temporaries and should therefore be prefered in mathematical expressions involving Operands. <linebreak/>
+</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>The overloaded operators use the overloaded operators of CSP basic variables.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>Depending on the basic variable types of the left and rigth Operands errors may be reported, for instance, when you try to add a tensor to a scalar variable. Mathematically meaningful operations, like multiplying a right-side vector with a left-side tensor, are enabled.</para>
+<para>Right-side TensorVariables can only be added to, subtracted from, multiplied with or divide other TensorVariables. The left-side <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> must therefore also be a <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref>. If this is not the case the program will be terminated and a fatal error will be reported. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="226" column="14" bodyfile="source/modules/model/Operand.cpp" bodystart="1203" bodyend="1220"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1af9d8ce82d619e06f6cd9d42fa205a400" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+        <definition>Operand&lt; dim &gt; &amp; csmp::Operand&lt; dim &gt;::operator-=</definition>
+        <argsstring>(const TensorVariable&lt; dim &gt; &amp;)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>csmp::Operand::operator-=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref>&lt; dim &gt; &amp;</type>
+          <defname>ts</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="227" column="14" bodyfile="source/modules/model/Operand.cpp" bodystart="1224" bodyend="1241"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a3437f555b53cf35afc1effc51d7b9bfd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+        <definition>Operand&lt; dim &gt; &amp; csmp::Operand&lt; dim &gt;::operator*=</definition>
+        <argsstring>(const TensorVariable&lt; dim &gt; &amp;)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>csmp::Operand::operator*=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref>&lt; dim &gt; &amp;</type>
+          <defname>ts</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="228" column="14" bodyfile="source/modules/model/Operand.cpp" bodystart="1245" bodyend="1262"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a3dc798861b245f306a2b6ea9ca932c33" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+        <definition>Operand&lt; dim &gt; &amp; csmp::Operand&lt; dim &gt;::operator/=</definition>
+        <argsstring>(const TensorVariable&lt; dim &gt; &amp;)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>csmp::Operand::operator/=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref>&lt; dim &gt; &amp;</type>
+          <defname>ts</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="229" column="14" bodyfile="source/modules/model/Operand.cpp" bodystart="1266" bodyend="1283"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a278a52f89e123896f7b147287eab8476" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+        <definition>Operand&lt; dim &gt; &amp; csmp::Operand&lt; dim &gt;::operator+=</definition>
+        <argsstring>(const ArrayVariable &amp;)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>csmp::Operand::operator+=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> &amp;</type>
+          <defname>ar</defname>
+        </param>
+        <briefdescription>
+<para>Array. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="231" column="14" bodyfile="source/modules/model/Operand.cpp" bodystart="1003" bodyend="1020"/>
+        <references refid="classcsmp_1_1_array_variable_1a949a97887ed84660ddf86eda34567c0a" compoundref="_array_variable_8cpp" startline="254" endline="258">csmp::ArrayVariable::operator+=</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1aea46118facbb9828f4c47d85810010d6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+        <definition>Operand&lt; dim &gt; &amp; csmp::Operand&lt; dim &gt;::operator-=</definition>
+        <argsstring>(const ArrayVariable &amp;)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>csmp::Operand::operator-=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> &amp;</type>
+          <defname>ar</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="232" column="14" bodyfile="source/modules/model/Operand.cpp" bodystart="1024" bodyend="1041"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a1f7fe2816266849f6f316123bdc41619" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+        <definition>Operand&lt; dim &gt; &amp; csmp::Operand&lt; dim &gt;::operator*=</definition>
+        <argsstring>(const ArrayVariable &amp;)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>csmp::Operand::operator*=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> &amp;</type>
+          <defname>ar</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="233" column="14" bodyfile="source/modules/model/Operand.cpp" bodystart="1045" bodyend="1062"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a8579fbbc200f80660a73fa9b0355f258" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+        <definition>Operand&lt; dim &gt; &amp; csmp::Operand&lt; dim &gt;::operator/=</definition>
+        <argsstring>(const ArrayVariable &amp;)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>csmp::Operand::operator/=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> &amp;</type>
+          <defname>ar</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="234" column="14" bodyfile="source/modules/model/Operand.cpp" bodystart="1066" bodyend="1083"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1aa859653b7bfae9b166f189148bcb6411" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+        <definition>Operand&lt; dim &gt; &amp; csmp::Operand&lt; dim &gt;::operator+=</definition>
+        <argsstring>(const FlaggedArrayVariable &amp;)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>csmp::Operand::operator+=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &amp;</type>
+          <defname>ar</defname>
+        </param>
+        <briefdescription>
+<para>Flagged Array. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="236" column="14" bodyfile="source/modules/model/Operand.cpp" bodystart="1087" bodyend="1104"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a8cc196a0dce2483b8da39fe7d6f8bea9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+        <definition>Operand&lt; dim &gt; &amp; csmp::Operand&lt; dim &gt;::operator-=</definition>
+        <argsstring>(const FlaggedArrayVariable &amp;)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>csmp::Operand::operator-=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &amp;</type>
+          <defname>ar</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="237" column="14" bodyfile="source/modules/model/Operand.cpp" bodystart="1108" bodyend="1125"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a19da35fc0ea788271456f18f50b77f73" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+        <definition>Operand&lt; dim &gt; &amp; csmp::Operand&lt; dim &gt;::operator*=</definition>
+        <argsstring>(const FlaggedArrayVariable &amp;)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>csmp::Operand::operator*=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &amp;</type>
+          <defname>ar</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="238" column="14" bodyfile="source/modules/model/Operand.cpp" bodystart="1129" bodyend="1146"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1aa20b47df3ac512ac0297adb204871fe1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+        <definition>Operand&lt; dim &gt; &amp; csmp::Operand&lt; dim &gt;::operator/=</definition>
+        <argsstring>(const FlaggedArrayVariable &amp;)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>csmp::Operand::operator/=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &amp;</type>
+          <defname>ar</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="239" column="14" bodyfile="source/modules/model/Operand.cpp" bodystart="1150" bodyend="1167"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a2cecaf7c9c8e9f86c0375f57bddb6cb1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+        <definition>Operand&lt; dim &gt; &amp; csmp::Operand&lt; dim &gt;::operator+=</definition>
+        <argsstring>(const Operand &amp;)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>csmp::Operand::operator+=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+          <defname>op</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Transforms the basic variable associated with the lefthand <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> by the right-side <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> variable using the arithmetic operators +, -, *, or / . The C++ short form for writing a = a + b; as a += b; is used in such expressions. Since only the mathematical transformation is defined, the other internal variables of the lefthand <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> will not be affected by a call to one of these operators.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>op</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A constant reference to an <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> which will appear on the right of the operator in the mathematical expression involving the <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref>.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Avoids the creation of temporaries and should therefore be prefered in mathematical expressions involving Operands. This is also the safe way of writing expressions involving several Operands, because the possibility of accidentially overwriting an <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> with another is ruled out. <linebreak/>
+</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>The overloaded operators use the overloaded operators of CSP basic variables.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>Depending on the basic variable types of the left and rigth Operands errors may be reported, for instance, when you try to add a tensor to a scalar variable. Mathematically meaningful operations, like multiplying a right-side vector with a left-side tensor, are enabled. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="241" column="14" bodyfile="source/modules/model/Operand.cpp" bodystart="1320" bodyend="1365"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1af44b21be8c2641fae3dbb43b8fabd600" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+        <definition>Operand&lt; dim &gt; &amp; csmp::Operand&lt; dim &gt;::operator-=</definition>
+        <argsstring>(const Operand &amp;)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>csmp::Operand::operator-=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+          <defname>op</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="242" column="14" bodyfile="source/modules/model/Operand.cpp" bodystart="1369" bodyend="1413"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a05311408382a0201cf785862c3b17bee" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+        <definition>Operand&lt; dim &gt; &amp; csmp::Operand&lt; dim &gt;::operator*=</definition>
+        <argsstring>(const Operand &amp;)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>csmp::Operand::operator*=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+          <defname>op</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="243" column="14" bodyfile="source/modules/model/Operand.cpp" bodystart="1417" bodyend="1460"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a30e078442a9fcf63b0a8d9916e8846ef" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+        <definition>Operand&lt; dim &gt; &amp; csmp::Operand&lt; dim &gt;::operator/=</definition>
+        <argsstring>(const Operand &amp;)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>csmp::Operand::operator/=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+          <defname>op</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="244" column="14" bodyfile="source/modules/model/Operand.cpp" bodystart="1464" bodyend="1508"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1ad369cd72c023678737e5c82e68ddf4e1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Operand&lt; dim &gt;::operator&gt;</definition>
+        <argsstring>(double val) const</argsstring>
+        <name>operator&gt;</name>
+        <qualifiedname>csmp::Operand::operator&gt;</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Operands can be compared with other Operands, double values, and CSP basic variables. Whether this comparison is meaningful, depends on the variable types on the left and right-side of the comparitors, and errors will be reported for obviously nonsensical comparisons. Comparisons of variables of the same type are straightforward and the comparison of a <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> with a double is as well.</para>
+<para>If a vector variable is compared with a scalar, this implementation of comparitors will compare the length of the vector with the scalar, since in most cases this is a physically sensible thing to do. <linebreak/>
+</para>
+<para>If you compare a tensor variable with a scalar, this comparison will use the largest or the smallest element in the tensor, but the comparitors &apos;==&apos; and &apos;!=&apos; are not defined. Vectors can <linebreak/>
+ not be compared with tensors. <linebreak/>
+</para>
+<para>Only Operands with the same type of associated variables can be compared.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>val</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A constant reference to any of the types, double, <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref>, <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref>, <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>, or <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref>. <linebreak/>
+</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>A boolean variable which evaluates to true or false.</para>
+</simplesect>
+</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>In as far as possible, the overloaded operators of the basic CSP variables are used to ascertain consistency of CSP variable behaviour. No provisions are made for the comparison of enumeration <ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref> flags. This would open a confusing array of possibilities. All comparitors are constant methods which means that they do not change the state of Operands.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Typically, you want to compare Operands with floating-point numbers in &apos;if&apos; statements inside of Calculate() methods of <ref refid="classcsmp_1_1_interrelation" kindref="compound">Interrelation</ref> subclasses. This may involve statements like if ( T &gt; 500.0 )... This type of comparisons is fully supported by the overloaded comparitors of the <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> class.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>The most common runtime message that you may get using a comparitor is</para>
+<para>&apos;cannot compare * variable with * variable&apos;</para>
+<para>To make it easier to track down where this error occurred, the name of the <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> involved in the comparison will be reported as well. Remember, however, that temporary Operands have no distinct names. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="246" column="16" bodyfile="source/modules/model/Operand.cpp" bodystart="1565" bodyend="1572"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a8b0c8d4d847804dd09ccd385f8d547c8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Operand&lt; dim &gt;::operator&lt;</definition>
+        <argsstring>(double val) const</argsstring>
+        <name>operator&lt;</name>
+        <qualifiedname>csmp::Operand::operator&lt;</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="247" column="5" bodyfile="source/modules/model/Operand.cpp" bodystart="1576" bodyend="1583"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1aa07ceee335d7c3e7d83368572dfbf074" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Operand&lt; dim &gt;::operator&gt;=</definition>
+        <argsstring>(double val) const</argsstring>
+        <name>operator&gt;=</name>
+        <qualifiedname>csmp::Operand::operator&gt;=</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="248" column="16" bodyfile="source/modules/model/Operand.cpp" bodystart="1587" bodyend="1594"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1abf51ec323e866f42b725537bd277157b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Operand&lt; dim &gt;::operator&lt;=</definition>
+        <argsstring>(double val) const</argsstring>
+        <name>operator&lt;=</name>
+        <qualifiedname>csmp::Operand::operator&lt;=</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="249" column="5" bodyfile="source/modules/model/Operand.cpp" bodystart="1598" bodyend="1605"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a4d33cf321f6a17e76f3d4d96ed06c938" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Operand&lt; dim &gt;::operator==</definition>
+        <argsstring>(double val) const</argsstring>
+        <name>operator==</name>
+        <qualifiedname>csmp::Operand::operator==</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="250" column="16" bodyfile="source/modules/model/Operand.cpp" bodystart="1609" bodyend="1616"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1ac1a4b54d08c9706ebb159a55a5da3460" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Operand&lt; dim &gt;::operator!=</definition>
+        <argsstring>(double val) const</argsstring>
+        <name>operator!=</name>
+        <qualifiedname>csmp::Operand::operator!=</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="251" column="16" bodyfile="source/modules/model/Operand.cpp" bodystart="1620" bodyend="1628"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1afa765c808571484fa346fe5168166622" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Operand&lt; dim &gt;::operator==</definition>
+        <argsstring>(const ScalarVariable &amp;) const</argsstring>
+        <name>operator==</name>
+        <qualifiedname>csmp::Operand::operator==</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &amp;</type>
+          <defname>sc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="253" column="16" bodyfile="source/modules/model/Operand.cpp" bodystart="1632" bodyend="1639"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1ab79f0a48aac47ac9156b42ca80fb30e3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Operand&lt; dim &gt;::operator!=</definition>
+        <argsstring>(const ScalarVariable &amp;) const</argsstring>
+        <name>operator!=</name>
+        <qualifiedname>csmp::Operand::operator!=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &amp;</type>
+          <defname>sc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="254" column="16" bodyfile="source/modules/model/Operand.cpp" bodystart="1642" bodyend="1649"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a792f96af62752719c71e4af573c67b9c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Operand&lt; dim &gt;::operator==</definition>
+        <argsstring>(const VectorVariable&lt; dim &gt; &amp;) const</argsstring>
+        <name>operator==</name>
+        <qualifiedname>csmp::Operand::operator==</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; dim &gt; &amp;</type>
+          <defname>vc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="255" column="16" bodyfile="source/modules/model/Operand.cpp" bodystart="1653" bodyend="1660"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a0f9a1d370c33ad7046088a996b79e2b4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Operand&lt; dim &gt;::operator!=</definition>
+        <argsstring>(const VectorVariable&lt; dim &gt; &amp;) const</argsstring>
+        <name>operator!=</name>
+        <qualifiedname>csmp::Operand::operator!=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; dim &gt; &amp;</type>
+          <defname>vc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="256" column="16" bodyfile="source/modules/model/Operand.cpp" bodystart="1664" bodyend="1671"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1abb3f4e951c1f5a30a1e8e1ce673b4492" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Operand&lt; dim &gt;::operator==</definition>
+        <argsstring>(const TensorVariable&lt; dim &gt; &amp;) const</argsstring>
+        <name>operator==</name>
+        <qualifiedname>csmp::Operand::operator==</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref>&lt; dim &gt; &amp;</type>
+          <defname>ts</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="257" column="16" bodyfile="source/modules/model/Operand.cpp" bodystart="1675" bodyend="1682"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a53da28df1eea8cb5d9803c68d4aacf6d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Operand&lt; dim &gt;::operator!=</definition>
+        <argsstring>(const TensorVariable&lt; dim &gt; &amp;) const</argsstring>
+        <name>operator!=</name>
+        <qualifiedname>csmp::Operand::operator!=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref>&lt; dim &gt; &amp;</type>
+          <defname>ts</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="258" column="16" bodyfile="source/modules/model/Operand.cpp" bodystart="1686" bodyend="1693"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1add3b6fbdc15f1cd776f3236ced53e015" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Operand&lt; dim &gt;::operator==</definition>
+        <argsstring>(const ArrayVariable &amp;) const</argsstring>
+        <name>operator==</name>
+        <qualifiedname>csmp::Operand::operator==</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> &amp;</type>
+          <defname>ar</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="259" column="16" bodyfile="source/modules/model/Operand.cpp" bodystart="1696" bodyend="1703"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a2ad4740d38369e89d416d572f87c81f1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Operand&lt; dim &gt;::operator!=</definition>
+        <argsstring>(const ArrayVariable &amp;) const</argsstring>
+        <name>operator!=</name>
+        <qualifiedname>csmp::Operand::operator!=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> &amp;</type>
+          <defname>ar</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="260" column="16" bodyfile="source/modules/model/Operand.cpp" bodystart="1707" bodyend="1714"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1adedea74d676e6395efbc5127e3c9104a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Operand&lt; dim &gt;::operator==</definition>
+        <argsstring>(const FlaggedArrayVariable &amp;) const</argsstring>
+        <name>operator==</name>
+        <qualifiedname>csmp::Operand::operator==</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &amp;</type>
+          <defname>ar</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="261" column="16" bodyfile="source/modules/model/Operand.cpp" bodystart="1717" bodyend="1724"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1aa672b1c273284557bfab93c83dc2cbbf" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Operand&lt; dim &gt;::operator!=</definition>
+        <argsstring>(const FlaggedArrayVariable &amp;) const</argsstring>
+        <name>operator!=</name>
+        <qualifiedname>csmp::Operand::operator!=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &amp;</type>
+          <defname>ar</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="262" column="16" bodyfile="source/modules/model/Operand.cpp" bodystart="1728" bodyend="1735"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1aa2802d4113e9842e209a49be20824836" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Operand&lt; dim &gt;::operator&gt;</definition>
+        <argsstring>(Operand &amp;) const</argsstring>
+        <name>operator&gt;</name>
+        <qualifiedname>csmp::Operand::operator&gt;</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+          <defname>op</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="264" column="16" bodyfile="source/modules/model/Operand.cpp" bodystart="1738" bodyend="1760"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1af94896dad6df9e226e19e7bd3bd11307" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Operand&lt; dim &gt;::operator&lt;</definition>
+        <argsstring>(Operand &amp;) const</argsstring>
+        <name>operator&lt;</name>
+        <qualifiedname>csmp::Operand::operator&lt;</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+          <defname>op</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="265" column="5" bodyfile="source/modules/model/Operand.cpp" bodystart="1764" bodyend="1786"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a70dca91b124e15ff9ff48339de87a40e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Operand&lt; dim &gt;::operator&gt;=</definition>
+        <argsstring>(Operand &amp;) const</argsstring>
+        <name>operator&gt;=</name>
+        <qualifiedname>csmp::Operand::operator&gt;=</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+          <defname>op</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="266" column="16" bodyfile="source/modules/model/Operand.cpp" bodystart="1790" bodyend="1812"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1aaea9bc5055ba358ee176e327f86bc8ec" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Operand&lt; dim &gt;::operator&lt;=</definition>
+        <argsstring>(Operand &amp;) const</argsstring>
+        <name>operator&lt;=</name>
+        <qualifiedname>csmp::Operand::operator&lt;=</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+          <defname>op</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="267" column="5" bodyfile="source/modules/model/Operand.cpp" bodystart="1816" bodyend="1838"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1ae88ac902f04dbc52d0de7510346cdc52" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Operand&lt; dim &gt;::operator==</definition>
+        <argsstring>(Operand &amp;) const</argsstring>
+        <name>operator==</name>
+        <qualifiedname>csmp::Operand::operator==</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+          <defname>op</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="268" column="16" bodyfile="source/modules/model/Operand.cpp" bodystart="1842" bodyend="1863"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a04fb50b464b09834adba48a768cb266d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Operand&lt; dim &gt;::operator!=</definition>
+        <argsstring>(Operand &amp;) const</argsstring>
+        <name>operator!=</name>
+        <qualifiedname>csmp::Operand::operator!=</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+          <defname>op</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="269" column="16" bodyfile="source/modules/model/Operand.cpp" bodystart="1867" bodyend="1870"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1aabb7a6031229f0dc5d6b8b16ddbf10f8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+        <definition>Operand&lt; dim &gt; &amp; csmp::Operand&lt; dim &gt;::operator=</definition>
+        <argsstring>(double)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::Operand::operator=</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Assignments of CSP basic variables to Operands are implemented as assignment operators in which the type of the variable which is associated with the <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> determines the outcome of the assignment. This restricts the number of meaningful assignments for CSP basic variables: Scalars can be assigned to vectors and tensors but not the other way around. Vectors cannot be assigned to tensors and vice versa.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>val</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Constant references to double, <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref>, <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>, and <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref>.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>The assignments are implemented using the overloaded operators of the CSP basic variables.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>Erratic assignments may halt the program and lead to an error report including the name of the <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> to which the assignment was attempted. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="271" column="15" bodyfile="source/modules/model/Operand.cpp" bodystart="477" bodyend="501"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a47734a94e10926cf1113bd273bf51bbf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+        <definition>Operand&lt; dim &gt; &amp; csmp::Operand&lt; dim &gt;::operator=</definition>
+        <argsstring>(const ScalarVariable &amp;)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::Operand::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &amp;</type>
+          <defname>s</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="272" column="15" bodyfile="source/modules/model/Operand.cpp" bodystart="352" bodyend="362"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a3beeee8940f7bc6fff9382ebbef82234" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+        <definition>Operand&lt; dim &gt; &amp; csmp::Operand&lt; dim &gt;::operator=</definition>
+        <argsstring>(const VectorVariable&lt; dim &gt; &amp;)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::Operand::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; dim &gt; &amp;</type>
+          <defname>vc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="273" column="15" bodyfile="source/modules/model/Operand.cpp" bodystart="366" bodyend="374"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1ab26cc4109f28f10d0c849a0310cbe3c3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+        <definition>Operand&lt; dim &gt; &amp; csmp::Operand&lt; dim &gt;::operator=</definition>
+        <argsstring>(const TensorVariable&lt; dim &gt; &amp;)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::Operand::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref>&lt; dim &gt; &amp;</type>
+          <defname>ts</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="274" column="15" bodyfile="source/modules/model/Operand.cpp" bodystart="378" bodyend="386"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a4fb25ac10336a9a6185c0f179ddda0de" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+        <definition>Operand&lt; dim &gt; &amp; csmp::Operand&lt; dim &gt;::operator=</definition>
+        <argsstring>(const ArrayVariable &amp;)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::Operand::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> &amp;</type>
+          <defname>ar</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="275" column="15" bodyfile="source/modules/model/Operand.cpp" bodystart="389" bodyend="397"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a8afa3d8a0a30aff6565de1125d3856eb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+        <definition>Operand&lt; dim &gt; &amp; csmp::Operand&lt; dim &gt;::operator=</definition>
+        <argsstring>(const FlaggedArrayVariable &amp;)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::Operand::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &amp;</type>
+          <defname>ar</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="276" column="15" bodyfile="source/modules/model/Operand.cpp" bodystart="400" bodyend="408"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1ac0789c557287e37c95397ebd41f4c6bd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+        <definition>Operand&lt; dim &gt; &amp; csmp::Operand&lt; dim &gt;::operator=</definition>
+        <argsstring>(const Operand &amp;)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::Operand::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> &amp;</type>
+          <defname>op</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>This assignment operator creates an <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> that is exactly identical to the <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> on the left side of the expression. Thus, it will overwrite whatever definition the <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> on the left side of the expression had and using this operator for</para>
+<para>K = Pf</para>
+<para>While this is exactly the functionality which one expects from a C++ assignment operator, it means that K will refer to Pf from now on and the variable with which K was associated, will not be accessible anymore by this <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref>.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>op</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A reference to the <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> which will be assigned.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>The method checks for self-assigment before setting the internal data.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>The copy constructor and for duplication of Operands. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="277" column="15" bodyfile="source/modules/model/Operand.cpp" bodystart="328" bodyend="347"/>
+        <references refid="classcsmp_1_1_array_variable_1a9500b9686a63485d0dd3e6d9fe9eee99" compoundref="_array_variable_8cpp" startline="129" endline="136">csmp::ArrayVariable::operator=</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a08f1673bf3f7a2793a6716d976f1a6a7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Operand&lt; dim &gt;::Name</definition>
+        <argsstring>(const char *)</argsstring>
+        <name>Name</name>
+        <qualifiedname>csmp::Operand::Name</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <defname>s</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="280" column="25" bodyfile="source/modules/model/Operand.cpp" bodystart="418" bodyend="418"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a5c49bf1caf484be42677207e488ced28" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>std::string csmp::Operand&lt; dim &gt;::Name</definition>
+        <argsstring>() const</argsstring>
+        <name>Name</name>
+        <qualifiedname>csmp::Operand::Name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="281" column="25" bodyfile="source/modules/model/Operand.cpp" bodystart="415" bodyend="415"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1ae9f2aff4687d59e7e33a2aa7a1404969" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::Operand&lt; dim &gt;::Size</definition>
+        <argsstring>()</argsstring>
+        <name>Size</name>
+        <qualifiedname>csmp::Operand::Size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="282" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a74bd1baa50881000d06a5cdc8a3861ea" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Operand&lt; dim &gt;::IsWithinRange</definition>
+        <argsstring>() const</argsstring>
+        <name>IsWithinRange</name>
+        <qualifiedname>csmp::Operand::IsWithinRange</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Tests whether the value of the physical variable is within the bounds that were specified for that variable inside the <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref> record. If <ref refid="classcsmp_1_1_operand_1a74bd1baa50881000d06a5cdc8a3861ea" kindref="member">IsWithinRange()</ref> is called for a temporary <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref>, the positions of the variable value relative to the default variable range of -1e+50 to 1e+50 will be tested for. If the variable type is a vector, its length will be compared with the range, and if the variable type is a tensor its largest and its smallest element will be range-checked.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>Optionally, rather than testing the variable which is associated with the <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref>, external CSP basic variables can be tested for the range specified for the <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref>. Just supply a constant reference to the test variable to <ref refid="classcsmp_1_1_operand_1a74bd1baa50881000d06a5cdc8a3861ea" kindref="member">IsWithinRange()</ref>.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>A range check is performed automatically on output variables in subclasses of Interrelations, before the calculated values are stored in the MemoryManager. This is a fundamental CSP feature, prohibiting error propagation in complex simulations. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="283" column="25" bodyfile="source/modules/model/Operand.cpp" bodystart="1898" bodyend="1917"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1ab159a909fbb03f2bac6f0fd7a25816e0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class cspT</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool csmp::Operand&lt; dim &gt;::IsWithinRange</definition>
+        <argsstring>(const cspT &amp;val) const</argsstring>
+        <name>IsWithinRange</name>
+        <qualifiedname>csmp::Operand::IsWithinRange</qualifiedname>
+        <param>
+          <type>const cspT &amp;</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Tests the supplied value or components thereof for whether it lies within the physical meaninful range which was assigned to the <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> when it was constructed.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The value which shall be tested is supplied as first argument to the overloaded method <ref refid="classcsmp_1_1_operand_1a74bd1baa50881000d06a5cdc8a3861ea" kindref="member">IsWithinRange()</ref>. The supported argument types are double, and the basic CSP variables <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref>, <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>, and <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref>.</para>
+<para><simplesect kind="return"><para>The method returns the boolean variable &apos;true&apos; if the argument value is in the physical meaningful range; else it returns &apos;false&apos;.</para>
+</simplesect>
+</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para><ref refid="classcsmp_1_1_operand_1a74bd1baa50881000d06a5cdc8a3861ea" kindref="member">IsWithinRange()</ref> tests each component of its argument for whether it lies in the specified range. Thus, for a tensor argument, 9 checks are performed if the model is three dimensional.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Before a property value is returned to the <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> storage, it is tested for whether it lies in the permitted range.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>If the value is out of range the method prints a message to &apos;stderr&apos; and outputs the violating variable value(s). </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="284" column="21" bodyfile="source/modules/model/Operand.cpp" bodystart="1957" bodyend="1971"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a09ba0d050059c268bebd894afc65ffd4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Operand&lt; dim &gt;::MaxValue</definition>
+        <argsstring>() const</argsstring>
+        <name>MaxValue</name>
+        <qualifiedname>csmp::Operand::MaxValue</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="285" column="23" bodyfile="source/modules/model/Operand.cpp" bodystart="1982" bodyend="1986"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1adb3333147573977e6dbec86efedb47bd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Operand&lt; dim &gt;::MinValue</definition>
+        <argsstring>() const</argsstring>
+        <name>MinValue</name>
+        <qualifiedname>csmp::Operand::MinValue</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="286" column="23" bodyfile="source/modules/model/Operand.cpp" bodystart="1975" bodyend="1979"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1af0116870e4e1f81d1f21e2a817505f04" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+        <definition>const csmp::Index &amp; csmp::Operand&lt; dim &gt;::Key</definition>
+        <argsstring>() const</argsstring>
+        <name>Key</name>
+        <qualifiedname>csmp::Operand::Key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="288" column="24" bodyfile="source/modules/model/Operand.cpp" bodystart="421" bodyend="421"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a72eafa779bab03fb6b03f7f9a5337191" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::Operand&lt; dim &gt;::Index</definition>
+        <argsstring>() const</argsstring>
+        <name>Index</name>
+        <qualifiedname>csmp::Operand::Index</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="289" column="25" bodyfile="source/modules/model/Operand.cpp" bodystart="424" bodyend="424"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1aa73a2279c5a433d99aa0b2f5f7328dcc" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">PLACEMENT</ref></type>
+        <definition>PLACEMENT csmp::Operand&lt; dim &gt;::Placement</definition>
+        <argsstring>() const</argsstring>
+        <name>Placement</name>
+        <qualifiedname>csmp::Operand::Placement</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="290" column="25" bodyfile="source/modules/model/Operand.cpp" bodystart="427" bodyend="427"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a2f9131dc3f25b681c6630b5ffff8d91c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1gacbf62c758c46dc45b3f024638bb89274" kindref="member">VARIABLE_TYPE</ref></type>
+        <definition>VARIABLE_TYPE csmp::Operand&lt; dim &gt;::Type</definition>
+        <argsstring>() const</argsstring>
+        <name>Type</name>
+        <qualifiedname>csmp::Operand::Type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="291" column="25" bodyfile="source/modules/model/Operand.cpp" bodystart="430" bodyend="430"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a249828fd68656c98582819c03b342be2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::Operand&lt; dim &gt;::CalculationOffset</definition>
+        <argsstring>() const</argsstring>
+        <name>CalculationOffset</name>
+        <qualifiedname>csmp::Operand::CalculationOffset</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="292" column="25" bodyfile="source/modules/model/Operand.cpp" bodystart="433" bodyend="433"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1ad22fc810f5c9ebb3785baeb37b437048" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref></type>
+        <definition>VARIABLE_FLAG csmp::Operand&lt; dim &gt;::OutputCondition</definition>
+        <argsstring>() const</argsstring>
+        <name>OutputCondition</name>
+        <qualifiedname>csmp::Operand::OutputCondition</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="293" column="25" bodyfile="source/modules/model/Operand.cpp" bodystart="442" bodyend="442"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1ab21ab3eaf5497edfaf3fb4a42f458e10" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref></type>
+        <definition>VARIABLE_FLAG csmp::Operand&lt; dim &gt;::EssentialCondition</definition>
+        <argsstring>() const</argsstring>
+        <name>EssentialCondition</name>
+        <qualifiedname>csmp::Operand::EssentialCondition</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="294" column="25" bodyfile="source/modules/model/Operand.cpp" bodystart="445" bodyend="445"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a8ebb0b905faf7ddcbcc159f557f901a1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Operand&lt; dim &gt;::CalculationOffset</definition>
+        <argsstring>(size_t)</argsstring>
+        <name>CalculationOffset</name>
+        <qualifiedname>csmp::Operand::CalculationOffset</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <defname>o</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="295" column="25" bodyfile="source/modules/model/Operand.cpp" bodystart="436" bodyend="436"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1adffa3099eea61748055dc107e01af0be" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Operand&lt; dim &gt;::OutputCondition</definition>
+        <argsstring>(VARIABLE_FLAG)</argsstring>
+        <name>OutputCondition</name>
+        <qualifiedname>csmp::Operand::OutputCondition</qualifiedname>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref></type>
+          <defname>c</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="296" column="25" bodyfile="source/modules/model/Operand.cpp" bodystart="439" bodyend="439"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a7ec943cd7118cd288a4c13ddee479f2f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Operand&lt; dim &gt;::EssentialCondition</definition>
+        <argsstring>(VARIABLE_FLAG)</argsstring>
+        <name>EssentialCondition</name>
+        <qualifiedname>csmp::Operand::EssentialCondition</qualifiedname>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref></type>
+          <defname>c</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="297" column="25" bodyfile="source/modules/model/Operand.cpp" bodystart="448" bodyend="448"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a5165c41996d9bd8a79ee9b6b1d08d1e0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Operand&lt; dim &gt;::AssignTo</definition>
+        <argsstring>(ScalarVariable &amp;) const</argsstring>
+        <name>AssignTo</name>
+        <qualifiedname>csmp::Operand::AssignTo</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &amp;</type>
+          <defname>s</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Inputs the CSMP basic variable associated with the <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> into the supplied variable.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>s</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A CSMP variable, ie., a <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref>, <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref> or <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref>.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>When you cannot use any of the overloaded operators of the <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> class for your specific calculation, just output the <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> variable into a basic CSMP variable and manipulate it directly.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para><ref refid="classcsmp_1_1_operand_1a5165c41996d9bd8a79ee9b6b1d08d1e0" kindref="member">AssignTo()</ref> will cause the program to terminate if you try to assign an <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> variable to a variable of the wrong type. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="299" column="25" bodyfile="source/modules/model/Operand.cpp" bodystart="209" bodyend="224"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a197b5c86d535babb46fa7b209b2b10ab" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Operand&lt; dim &gt;::AssignTo</definition>
+        <argsstring>(VectorVariable&lt; dim &gt; &amp;) const</argsstring>
+        <name>AssignTo</name>
+        <qualifiedname>csmp::Operand::AssignTo</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; dim &gt; &amp;</type>
+          <defname>v</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="300" column="25" bodyfile="source/modules/model/Operand.cpp" bodystart="228" bodyend="243"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a19ff9f17bdb35d875c93c58fb9c08256" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Operand&lt; dim &gt;::AssignTo</definition>
+        <argsstring>(TensorVariable&lt; dim &gt; &amp;) const</argsstring>
+        <name>AssignTo</name>
+        <qualifiedname>csmp::Operand::AssignTo</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref>&lt; dim &gt; &amp;</type>
+          <defname>t</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="301" column="25" bodyfile="source/modules/model/Operand.cpp" bodystart="247" bodyend="262"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1ad2ceaf65ac32e222d32af90b0f6f6526" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Operand&lt; dim &gt;::AssignTo</definition>
+        <argsstring>(ArrayVariable &amp;) const</argsstring>
+        <name>AssignTo</name>
+        <qualifiedname>csmp::Operand::AssignTo</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> &amp;</type>
+          <defname>a</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="302" column="25" bodyfile="source/modules/model/Operand.cpp" bodystart="266" bodyend="281"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a39bcb0ffec834c54fefe704b1522612b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Operand&lt; dim &gt;::AssignTo</definition>
+        <argsstring>(FlaggedArrayVariable &amp;) const</argsstring>
+        <name>AssignTo</name>
+        <qualifiedname>csmp::Operand::AssignTo</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &amp;</type>
+          <defname>a</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="303" column="25" bodyfile="source/modules/model/Operand.cpp" bodystart="285" bodyend="300"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1ab6f1b0fc42a00c4d288a275d7510e0ce" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Operand&lt; dim &gt;::PrintValue</definition>
+        <argsstring>() const</argsstring>
+        <name>PrintValue</name>
+        <qualifiedname>csmp::Operand::PrintValue</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Calls the <ref refid="classcsmp_1_1_operand_1a254847c0ee69f0886faf9e8a61c00702" kindref="member">Out()</ref> method of the current variable of the <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref>. This will print the CSP basic variable values and the <ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref> flags which is useful for testing a derived <ref refid="classcsmp_1_1_interrelation" kindref="compound">Interrelation</ref> before using it in computations. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="305" column="25" bodyfile="source/modules/model/Operand.cpp" bodystart="2008" bodyend="2016"/>
+        <references refid="classcsmp_1_1_array_variable_1affcda14da2f24f099b2f4a9ae8e476f3" compoundref="_array_variable_8cpp" startline="346" endline="371">csmp::ArrayVariable::Out</references>
+        <references refid="classcsmp_1_1_scalar_variable_1a362899365c5e63b03c5f68526ff6b160" compoundref="_scalar_variable_8cpp" startline="245" endline="252">csmp::ScalarVariable::Out</references>
+        <referencedby refid="classcsmp_1_1_operand_1a254847c0ee69f0886faf9e8a61c00702" compoundref="_operand_8cpp" startline="2025" endline="2043">csmp::Operand&lt; dim &gt;::Out</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operand_1a254847c0ee69f0886faf9e8a61c00702" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Operand&lt; dim &gt;::Out</definition>
+        <argsstring>() const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::Operand::Out</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Standard CSP method to check the state of an <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> by printing it to stdout. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Operand.h" line="306" column="25" bodyfile="source/modules/model/Operand.cpp" bodystart="2025" bodyend="2043"/>
+        <references refid="group___c_s_m_p__global__enumerations_1ga8fd43146bc660760341ab2ec2d179525" compoundref="_c_s_m_p__global__enumerations_8cpp" startline="454" endline="468">csmp::parseStatus</references>
+        <references refid="classcsmp_1_1_operand_1ab6f1b0fc42a00c4d288a275d7510e0ce" compoundref="_operand_8cpp" startline="2008" endline="2016">csmp::Operand&lt; dim &gt;::PrintValue</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Interface for all of CSMP&apos;s variable types facilitating that they can be used together in computations; currently used only by <ref refid="classcsmp_1_1_interrelation" kindref="compound">Interrelation</ref>; outdated design, refactoring required. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>S.K. Matthai </para>
+</simplesect>
+<simplesect kind="author"><para>Stephen G. Roberts </para>
+</simplesect>
+<simplesect kind="date"><para>1999</para>
+</simplesect>
+</para>
+<sect1 id="compare_floats_8h_1motivation">
+<title>Motivation</title><para>Forget for a moment all about the rest of the CSMP code except for the basic variables <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref>, <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref> and <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> and think of the possibility of creating objects that are overloaded such that you can write expressions for the whole mesh object or sub-regions thereof, which read like mathematical equations in which the variables refer to local or distributed data. <linebreak/>
+</para>
+<para>This quest was the design intent of the <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> class and it brings CSP users close to this goal when they are prepared to write their own <ref refid="classcsmp_1_1_interrelation" kindref="compound">Interrelation</ref> subclasses. The goal is fully realized through the new <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> classes for use in main() programs. These are however only complementary to the <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> and <ref refid="classcsmp_1_1_interrelation" kindref="compound">Interrelation</ref> mechanism, because they do not encapsulate the calculations which Interrelations do.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_1design">
+<title>Design Intent</title><para>Apart from being able to write mathematical expressions which are applied to the whole <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> or sub-Regions thereof (as is facilitated through the <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> class), there is a need to use distributed instances of properties in calculations inside objects which are still efficient and allow the user to partially ignore variable IDs and the variable placement in the mesh (<ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>, IntegrationPoint or <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>). This requires (1) the use of a notation to represent the variable in mathematical expressions, and (2) an association of the <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> of the variable with the notation such that it does not need to be requested from the <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref> every time the expression is evaluated. Finally (3), temporary variable storage is needed to allow that a value can be range-checked before it is written back into the <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> storage. This buffer is essential when it comes to checking where in a chain of expressions, a physically meaningless value was produced.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_visitor_1applicability">
+<title>Applicability</title><para>Operands are used in Interrelations, Algorithms, Algorithms, and <ref refid="classcsmp_1_1_visitor" kindref="compound">Visitor</ref> objects.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_v_data_1structure">
+<title>Structure</title><para>The <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> is a simple class object with a String containing its name, a <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> describing the represented variable, and each one of the basic CSMP variables as well as an output condition flag which specifies the <ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref> of the property locations which the variable is permitted to overwrite if the calculation yielded a result which is within the permitted range.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_solver_1participants">
+<title>Participants</title><para>A <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref>, a String, an output <ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref> and CSP basic variables (<ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref>, <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>, and <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref>).</para>
+</sect1>
+<sect1 id="classcsmp_1_1_time_step_evaluator_1collaborations">
+<title>Collaborations</title><para>Operands collaborate with CSP basic variables and the enumerations which are defined in <ref refid="_c_s_m_p__definitions_8h" kindref="compound">CSMP_definitions.h</ref> (e.g., <ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref>...).</para>
+</sect1>
+<sect1 id="classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_1consequences">
+<title>Consequences</title><para>The operators <formula id="0">$+, -, *, /, +=, -=, *=, /= $</formula> are overloaded for Operands such that they can interact with eachother, double data, and the CSP basic variables. One should not write expressions like A = C. Following the logic of an assignment, A = B means: The <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> A now refers to exactly the same variable as B and it will also contain the same values. If <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> A represents a property stored in the <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>, the variable A will no longer exist following the assignment. <linebreak/>
+</para>
+<para>Importantly, scalar-, vector-, and tensor variables are more than just mathematical variables in that they also contain a STATUS flag which specifies how they are treated in the assembly of the finite-element equations. This requires some rules about the flag assignment: If you say</para>
+<para><programlisting><codeline><highlight class="normal">A<sp/>=<sp/>C<sp/>+<sp/>B;</highlight></codeline>
+</programlisting></para>
+<para>the temporary variable that is created will be flagged like the lefthand operator before the assigment. If <formula id="1">$C = PLAIN$</formula> and <formula id="2">$B=DIRICH$</formula>, A will be <formula id="3">$PLAIN$</formula>. If the combined operator += is used, A will retain its original flag because the assignment here uses the assignment as defined for scalar variables. <linebreak/>
+</para>
+<para>If you compare an <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> with a <ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref> enumeration, the comparison will be carried out using all flag(s) of the underlying variable. Thus, if a vector variable in a 2D calculation has two different flags (for instance, a DIRICH flag for the X displacement and a PLAIN flag for the Y displacement) a comparison will evaluate as false. In this case one should use VectorVariable::Flag( int i) to carry out a more specific comparison. Any comparisons with not initialized Operands or Operands that store NAN values in the variables will evaluate as false.</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>By default, Operands have storage for a single variable value of type <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref>, <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>, or <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref>, but only if this variable exists in the <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref> (in contrast, PropertyHandles spawn the generation of a new variable in the <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref> if the variable does not exist). <linebreak/>
+</para>
+<para>The need for large computations imposes stringend constraints on the properties of Operands. They may be big in size because there will only be a few, but their overloaded operators have to be efficient since single calculations may involve millions of calls to those. Already a function call overhead is significant for the overloaded operators. To avoid this overhead auto-inlining is used in the compilation.</para>
+<para>The construction of temporary &apos;Operands&apos; in expressions like:</para>
+<para><programlisting><codeline><highlight class="normal">C<sp/>=<sp/>A<sp/>+<sp/>32.5;</highlight></codeline>
+</programlisting></para>
+<para>should also be avoided. In those cases the construction by the compiler of temporary objects (object x which will be assigned to C) can be avoided only in some cases through construction of the Operands in the return statements of the overloaded operators. <linebreak/>
+</para>
+<para>To avoid the creation of temporaries you should rather write: <linebreak/>
+</para>
+<para><programlisting><codeline><highlight class="normal">C<sp/>=<sp/>32.5;\</highlight></codeline>
+<codeline><highlight class="normal">C<sp/>+=<sp/>A;</highlight></codeline>
+</programlisting></para>
+<para>Operands also store a &apos;calculation offset&apos; which is used by Algorithms to modify the placement of dependent variables in computations involving the <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> variable, when coupled systems of equations are solved.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Operands are typically used in Algorithms and Interrelations. When you derive a subclass from an <ref refid="classcsmp_1_1_interrelation" kindref="compound">Interrelation</ref>, you first create a <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> reference to a physical variable in your model:</para>
+<para><programlisting><codeline><highlight class="normal"><ref refid="classcsmp_1_1_operand_1a48005bae4b03d67afba4c6b0553d0d6b" kindref="member">Operand</ref>&amp;<sp/><sp/>K;</highlight></codeline>
+</programlisting></para>
+<para>You then associate the <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> with a property which has been defined before as a member of the <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>. This happens in your interrelation constructor.</para>
+<para><programlisting><codeline><highlight class="normal">K(<sp/>GlobalProperty(</highlight><highlight class="stringliteral">&quot;conductivity&quot;</highlight><highlight class="normal">)<sp/>)</highlight></codeline>
+</programlisting></para>
+<para>This defines K as a notation for &apos;conductivity&apos;. You can now use K in expressions using CSMP basic variables and other Operands:</para>
+<para><programlisting><codeline><highlight class="normal">K<sp/>+=<sp/>PHI<sp/>/<sp/>322.1<sp/>-<sp/>45.0;</highlight></codeline>
+</programlisting> </para>
+</sect1>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::Operand&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_operand"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/model/Operand.h" line="188" column="1" bodyfile="source/includes/model/Operand.h" bodystart="188" bodyend="319"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_operand_1a9afdc6a3fc4aa07c0bbbe68a2600f4ba" prot="private" virt="non-virtual"><scope>csmp::Operand</scope><name>array_storage_</name></member>
+      <member refid="classcsmp_1_1_operand_1a5165c41996d9bd8a79ee9b6b1d08d1e0" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>AssignTo</name></member>
+      <member refid="classcsmp_1_1_operand_1a197b5c86d535babb46fa7b209b2b10ab" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>AssignTo</name></member>
+      <member refid="classcsmp_1_1_operand_1a19ff9f17bdb35d875c93c58fb9c08256" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>AssignTo</name></member>
+      <member refid="classcsmp_1_1_operand_1ad2ceaf65ac32e222d32af90b0f6f6526" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>AssignTo</name></member>
+      <member refid="classcsmp_1_1_operand_1a39bcb0ffec834c54fefe704b1522612b" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>AssignTo</name></member>
+      <member refid="classcsmp_1_1_operand_1a2da4088378bb3166924c89aa9d3368c9" prot="private" virt="non-virtual"><scope>csmp::Operand</scope><name>calc_offset_</name></member>
+      <member refid="classcsmp_1_1_operand_1a249828fd68656c98582819c03b342be2" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>CalculationOffset</name></member>
+      <member refid="classcsmp_1_1_operand_1a8ebb0b905faf7ddcbcc159f557f901a1" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>CalculationOffset</name></member>
+      <member refid="classcsmp_1_1_operand_1ab21ab3eaf5497edfaf3fb4a42f458e10" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>EssentialCondition</name></member>
+      <member refid="classcsmp_1_1_operand_1a7ec943cd7118cd288a4c13ddee479f2f" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>EssentialCondition</name></member>
+      <member refid="classcsmp_1_1_operand_1a47d8962a75420ff681dbfed964245f9f" prot="private" virt="non-virtual"><scope>csmp::Operand</scope><name>flag_essential_</name></member>
+      <member refid="classcsmp_1_1_operand_1ab9fd0cf43848fc379f289dbcef34366a" prot="private" virt="non-virtual"><scope>csmp::Operand</scope><name>flag_output_</name></member>
+      <member refid="classcsmp_1_1_operand_1a836dd93ea91625306f4b32946bb0d30c" prot="private" virt="non-virtual"><scope>csmp::Operand</scope><name>flagged_array_storage_</name></member>
+      <member refid="classcsmp_1_1_operand_1a72eafa779bab03fb6b03f7f9a5337191" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>Index</name></member>
+      <member refid="classcsmp_1_1_operand_1a74bd1baa50881000d06a5cdc8a3861ea" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>IsWithinRange</name></member>
+      <member refid="classcsmp_1_1_operand_1ab159a909fbb03f2bac6f0fd7a25816e0" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>IsWithinRange</name></member>
+      <member refid="classcsmp_1_1_operand_1af0116870e4e1f81d1f21e2a817505f04" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>Key</name></member>
+      <member refid="classcsmp_1_1_operand_1a09ba0d050059c268bebd894afc65ffd4" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>MaxValue</name></member>
+      <member refid="classcsmp_1_1_operand_1adb3333147573977e6dbec86efedb47bd" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>MinValue</name></member>
+      <member refid="classcsmp_1_1_operand_1a08f1673bf3f7a2793a6716d976f1a6a7" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>Name</name></member>
+      <member refid="classcsmp_1_1_operand_1a5c49bf1caf484be42677207e488ced28" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>Name</name></member>
+      <member refid="classcsmp_1_1_operand_1ab527220b522803d8891f50eed560f905" prot="private" virt="non-virtual"><scope>csmp::Operand</scope><name>name_</name></member>
+      <member refid="classcsmp_1_1_operand_1a9d01d75581e062dbf563b7ab7a11e2c7" prot="private" virt="non-virtual"><scope>csmp::Operand</scope><name>omax</name></member>
+      <member refid="classcsmp_1_1_operand_1a312e9ebaa419c4d3b33dd57e76dda527" prot="private" virt="non-virtual"><scope>csmp::Operand</scope><name>omin</name></member>
+      <member refid="classcsmp_1_1_operand_1a48005bae4b03d67afba4c6b0553d0d6b" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>Operand</name></member>
+      <member refid="classcsmp_1_1_operand_1a92a10ac26f83bcd4a776225047a76df6" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>Operand</name></member>
+      <member refid="classcsmp_1_1_operand_1a62bd0037e59fff6a7bb71764f49c7e2a" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>Operand</name></member>
+      <member refid="classcsmp_1_1_operand_1a75ebcca862c5e2df0ad300df9d6d68f8" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>Operand</name></member>
+      <member refid="classcsmp_1_1_operand_1a06dfe7cde6038d4bb1ab38d90d1c57f6" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>Operand</name></member>
+      <member refid="classcsmp_1_1_operand_1a8756b218f08a7450c23a2a5ea5fe8968" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>Operand</name></member>
+      <member refid="classcsmp_1_1_operand_1a36ff780cb4da9bbf5f2ecafa50451037" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>Operand</name></member>
+      <member refid="classcsmp_1_1_operand_1ad9b22cad41cdab9e5a482e11b7cfc761" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>Operand</name></member>
+      <member refid="classcsmp_1_1_operand_1a8422ae7c13bf1bdca9a7b9bd6d1c75f4" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>Operand</name></member>
+      <member refid="classcsmp_1_1_operand_1ac1a4b54d08c9706ebb159a55a5da3460" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator!=</name></member>
+      <member refid="classcsmp_1_1_operand_1ab79f0a48aac47ac9156b42ca80fb30e3" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator!=</name></member>
+      <member refid="classcsmp_1_1_operand_1a0f9a1d370c33ad7046088a996b79e2b4" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator!=</name></member>
+      <member refid="classcsmp_1_1_operand_1a53da28df1eea8cb5d9803c68d4aacf6d" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator!=</name></member>
+      <member refid="classcsmp_1_1_operand_1a2ad4740d38369e89d416d572f87c81f1" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator!=</name></member>
+      <member refid="classcsmp_1_1_operand_1aa672b1c273284557bfab93c83dc2cbbf" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator!=</name></member>
+      <member refid="classcsmp_1_1_operand_1a04fb50b464b09834adba48a768cb266d" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator!=</name></member>
+      <member refid="classcsmp_1_1_operand_1aaed95790548f2f150be306fffc9d712c" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator*</name></member>
+      <member refid="classcsmp_1_1_operand_1a582155e65a28b5a0a3d2af84cb73705f" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator*</name></member>
+      <member refid="classcsmp_1_1_operand_1a90933a76f0477a396384740a52c70783" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator*=</name></member>
+      <member refid="classcsmp_1_1_operand_1acdb1b12c5cd47c1b570e053aad648efa" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator*=</name></member>
+      <member refid="classcsmp_1_1_operand_1aecf894a9cd13580867c0d72068836f03" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator*=</name></member>
+      <member refid="classcsmp_1_1_operand_1a3437f555b53cf35afc1effc51d7b9bfd" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator*=</name></member>
+      <member refid="classcsmp_1_1_operand_1a1f7fe2816266849f6f316123bdc41619" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator*=</name></member>
+      <member refid="classcsmp_1_1_operand_1a19da35fc0ea788271456f18f50b77f73" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator*=</name></member>
+      <member refid="classcsmp_1_1_operand_1a05311408382a0201cf785862c3b17bee" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator*=</name></member>
+      <member refid="classcsmp_1_1_operand_1a2c2b6807fbcee7edd9810c1a7489c2ae" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator+</name></member>
+      <member refid="classcsmp_1_1_operand_1af8ba545291e5a0248e851172b3e21ecf" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator+</name></member>
+      <member refid="classcsmp_1_1_operand_1a3aae09b80758842342bf5225c87ddd06" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator+=</name></member>
+      <member refid="classcsmp_1_1_operand_1a600887200a8af809db443ae60b90ad72" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator+=</name></member>
+      <member refid="classcsmp_1_1_operand_1a028dabb41c8343f4c1c5a369f45a25c9" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator+=</name></member>
+      <member refid="classcsmp_1_1_operand_1ac4c9b5f5c26a7e81250dab1dae550b09" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator+=</name></member>
+      <member refid="classcsmp_1_1_operand_1a278a52f89e123896f7b147287eab8476" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator+=</name></member>
+      <member refid="classcsmp_1_1_operand_1aa859653b7bfae9b166f189148bcb6411" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator+=</name></member>
+      <member refid="classcsmp_1_1_operand_1a2cecaf7c9c8e9f86c0375f57bddb6cb1" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator+=</name></member>
+      <member refid="classcsmp_1_1_operand_1a1a07efcbd546e0365839c3e5fb5e408f" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator-</name></member>
+      <member refid="classcsmp_1_1_operand_1a4ab7fd5d00675ca299ad81459a699662" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator-</name></member>
+      <member refid="classcsmp_1_1_operand_1a36564f6c291016ea145a3381b930a725" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator-=</name></member>
+      <member refid="classcsmp_1_1_operand_1aa4de9176754756a67ba2695e0459d0c8" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator-=</name></member>
+      <member refid="classcsmp_1_1_operand_1aef1a52f3a11c42e91fff256becca5870" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator-=</name></member>
+      <member refid="classcsmp_1_1_operand_1af9d8ce82d619e06f6cd9d42fa205a400" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator-=</name></member>
+      <member refid="classcsmp_1_1_operand_1aea46118facbb9828f4c47d85810010d6" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator-=</name></member>
+      <member refid="classcsmp_1_1_operand_1a8cc196a0dce2483b8da39fe7d6f8bea9" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator-=</name></member>
+      <member refid="classcsmp_1_1_operand_1af44b21be8c2641fae3dbb43b8fabd600" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator-=</name></member>
+      <member refid="classcsmp_1_1_operand_1adb5a234d5ade1f15f2b3bec9bb3a7da8" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator/</name></member>
+      <member refid="classcsmp_1_1_operand_1a3ce9d7d71b43f577cd08cae058df61ed" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator/</name></member>
+      <member refid="classcsmp_1_1_operand_1ae22f78f2db7628021ff7dff3fbdfcb82" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator/=</name></member>
+      <member refid="classcsmp_1_1_operand_1ab8febcc8c0962c6dfaf5713bbd96ecf6" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator/=</name></member>
+      <member refid="classcsmp_1_1_operand_1ae9f7feb559c5b178cc5c456feabbf24a" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator/=</name></member>
+      <member refid="classcsmp_1_1_operand_1a3dc798861b245f306a2b6ea9ca932c33" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator/=</name></member>
+      <member refid="classcsmp_1_1_operand_1a8579fbbc200f80660a73fa9b0355f258" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator/=</name></member>
+      <member refid="classcsmp_1_1_operand_1aa20b47df3ac512ac0297adb204871fe1" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator/=</name></member>
+      <member refid="classcsmp_1_1_operand_1a30e078442a9fcf63b0a8d9916e8846ef" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator/=</name></member>
+      <member refid="classcsmp_1_1_operand_1a8b0c8d4d847804dd09ccd385f8d547c8" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator&lt;</name></member>
+      <member refid="classcsmp_1_1_operand_1af94896dad6df9e226e19e7bd3bd11307" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator&lt;</name></member>
+      <member refid="classcsmp_1_1_operand_1abf51ec323e866f42b725537bd277157b" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator&lt;=</name></member>
+      <member refid="classcsmp_1_1_operand_1aaea9bc5055ba358ee176e327f86bc8ec" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator&lt;=</name></member>
+      <member refid="classcsmp_1_1_operand_1aabb7a6031229f0dc5d6b8b16ddbf10f8" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_operand_1a47734a94e10926cf1113bd273bf51bbf" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_operand_1a3beeee8940f7bc6fff9382ebbef82234" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_operand_1ab26cc4109f28f10d0c849a0310cbe3c3" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_operand_1a4fb25ac10336a9a6185c0f179ddda0de" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_operand_1a8afa3d8a0a30aff6565de1125d3856eb" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_operand_1ac0789c557287e37c95397ebd41f4c6bd" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_operand_1a4d33cf321f6a17e76f3d4d96ed06c938" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator==</name></member>
+      <member refid="classcsmp_1_1_operand_1afa765c808571484fa346fe5168166622" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator==</name></member>
+      <member refid="classcsmp_1_1_operand_1a792f96af62752719c71e4af573c67b9c" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator==</name></member>
+      <member refid="classcsmp_1_1_operand_1abb3f4e951c1f5a30a1e8e1ce673b4492" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator==</name></member>
+      <member refid="classcsmp_1_1_operand_1add3b6fbdc15f1cd776f3236ced53e015" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator==</name></member>
+      <member refid="classcsmp_1_1_operand_1adedea74d676e6395efbc5127e3c9104a" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator==</name></member>
+      <member refid="classcsmp_1_1_operand_1ae88ac902f04dbc52d0de7510346cdc52" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator==</name></member>
+      <member refid="classcsmp_1_1_operand_1ad369cd72c023678737e5c82e68ddf4e1" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator&gt;</name></member>
+      <member refid="classcsmp_1_1_operand_1aa2802d4113e9842e209a49be20824836" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator&gt;</name></member>
+      <member refid="classcsmp_1_1_operand_1aa07ceee335d7c3e7d83368572dfbf074" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator&gt;=</name></member>
+      <member refid="classcsmp_1_1_operand_1a70dca91b124e15ff9ff48339de87a40e" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>operator&gt;=</name></member>
+      <member refid="classcsmp_1_1_operand_1a254847c0ee69f0886faf9e8a61c00702" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_operand_1ad22fc810f5c9ebb3785baeb37b437048" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>OutputCondition</name></member>
+      <member refid="classcsmp_1_1_operand_1adffa3099eea61748055dc107e01af0be" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>OutputCondition</name></member>
+      <member refid="classcsmp_1_1_operand_1aa73a2279c5a433d99aa0b2f5f7328dcc" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>Placement</name></member>
+      <member refid="classcsmp_1_1_operand_1ab6f1b0fc42a00c4d288a275d7510e0ce" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>PrintValue</name></member>
+      <member refid="classcsmp_1_1_operand_1a998aa792d003ef9db46dc8109f60a8b9" prot="private" virt="non-virtual"><scope>csmp::Operand</scope><name>prop_key_</name></member>
+      <member refid="classcsmp_1_1_operand_1aae7113d410998fbff040f27a828d790e" prot="private" virt="non-virtual"><scope>csmp::Operand</scope><name>scalar_storage_</name></member>
+      <member refid="classcsmp_1_1_operand_1ae9f2aff4687d59e7e33a2aa7a1404969" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>Size</name></member>
+      <member refid="classcsmp_1_1_operand_1a75295dfe29e9f1eb929e36ba10377b74" prot="private" virt="non-virtual"><scope>csmp::Operand</scope><name>tensor_storage_</name></member>
+      <member refid="classcsmp_1_1_operand_1a2f9131dc3f25b681c6630b5ffff8d91c" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>Type</name></member>
+      <member refid="classcsmp_1_1_operand_1a317bb6853a1c6fe2b2e0ded8efb02793" prot="private" virt="non-virtual"><scope>csmp::Operand</scope><name>vector_storage_</name></member>
+      <member refid="classcsmp_1_1_operand_1ad3b0ad4c52cbf0209fea1feadbff2656" prot="public" virt="non-virtual"><scope>csmp::Operand</scope><name>~Operand</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

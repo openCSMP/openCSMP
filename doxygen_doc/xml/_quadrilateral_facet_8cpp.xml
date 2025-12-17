@@ -1,0 +1,539 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="_quadrilateral_facet_8cpp" kind="file" language="C++">
+    <compoundname>QuadrilateralFacet.cpp</compoundname>
+    <includes refid="_quadrilateral_facet_8h" local="yes">QuadrilateralFacet.h</includes>
+    <incdepgraph>
+      <node id="3">
+        <label>CSMP_definitions.h</label>
+        <link refid="_c_s_m_p__definitions_8h"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="43" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+      </node>
+      <node id="45">
+        <label>CSMP_global_enumerations.h</label>
+        <link refid="_c_s_m_p__global__enumerations_8h_source"/>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+      </node>
+      <node id="44">
+        <label>Index.h</label>
+        <link refid="_index_8h_source"/>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+      </node>
+      <node id="48">
+        <label>IntegrationPointVariables.h</label>
+        <link refid="_integration_point_variables_8h_source"/>
+        <childnode refid="47" relation="include">
+        </childnode>
+      </node>
+      <node id="47">
+        <label>LocalVariables.h</label>
+        <link refid="_local_variables_8h_source"/>
+      </node>
+      <node id="49">
+        <label>Point.h</label>
+        <link refid="_point_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>QuadrilateralFacet.h</label>
+        <link refid="_quadrilateral_facet_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="49" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>source/modules/model/QuadrilateralFacet.cpp</label>
+        <link refid="_quadrilateral_facet_8cpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="15">
+        <label>algorithm</label>
+      </node>
+      <node id="16">
+        <label>array</label>
+      </node>
+      <node id="14">
+        <label>cassert</label>
+      </node>
+      <node id="9">
+        <label>cctype</label>
+      </node>
+      <node id="12">
+        <label>cfloat</label>
+      </node>
+      <node id="17">
+        <label>chrono</label>
+      </node>
+      <node id="13">
+        <label>climits</label>
+      </node>
+      <node id="4">
+        <label>cmath</label>
+      </node>
+      <node id="8">
+        <label>cstdarg</label>
+      </node>
+      <node id="7">
+        <label>cstddef</label>
+      </node>
+      <node id="46">
+        <label>cstdint</label>
+      </node>
+      <node id="5">
+        <label>cstdio</label>
+      </node>
+      <node id="6">
+        <label>cstdlib</label>
+      </node>
+      <node id="10">
+        <label>cstring</label>
+      </node>
+      <node id="11">
+        <label>ctime</label>
+      </node>
+      <node id="18">
+        <label>deque</label>
+      </node>
+      <node id="19">
+        <label>exception</label>
+      </node>
+      <node id="20">
+        <label>filesystem</label>
+      </node>
+      <node id="21">
+        <label>fstream</label>
+      </node>
+      <node id="22">
+        <label>functional</label>
+      </node>
+      <node id="23">
+        <label>iomanip</label>
+      </node>
+      <node id="24">
+        <label>iostream</label>
+      </node>
+      <node id="25">
+        <label>istream</label>
+      </node>
+      <node id="26">
+        <label>iterator</label>
+      </node>
+      <node id="27">
+        <label>limits</label>
+      </node>
+      <node id="28">
+        <label>list</label>
+      </node>
+      <node id="29">
+        <label>map</label>
+      </node>
+      <node id="30">
+        <label>memory</label>
+      </node>
+      <node id="31">
+        <label>numeric</label>
+      </node>
+      <node id="32">
+        <label>ostream</label>
+      </node>
+      <node id="33">
+        <label>random</label>
+      </node>
+      <node id="34">
+        <label>set</label>
+      </node>
+      <node id="35">
+        <label>sstream</label>
+      </node>
+      <node id="36">
+        <label>stdexcept</label>
+      </node>
+      <node id="37">
+        <label>string</label>
+      </node>
+      <node id="39">
+        <label>type_traits</label>
+      </node>
+      <node id="38">
+        <label>typeinfo</label>
+      </node>
+      <node id="43">
+        <label>unordered_map</label>
+      </node>
+      <node id="42">
+        <label>unordered_set</label>
+      </node>
+      <node id="40">
+        <label>utility</label>
+      </node>
+      <node id="41">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <innernamespace refid="namespacecsmp">csmp</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#include<sp/>&quot;QuadrilateralFacet.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="keyword">using<sp/>namespace<sp/></highlight><highlight class="normal">std;</highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacecsmp" kindref="compound">csmp</ref><sp/>{</highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Private<sp/>default<sp/>constructor,<sp/>should<sp/>never<sp/>be<sp/>used</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal">QuadrilateralFacet::QuadrilateralFacet()</highlight></codeline>
+<codeline lineno="10"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="11"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>end<sp/>constructor</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal">QuadrilateralFacet::QuadrilateralFacet(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;3U&gt;</ref>&amp;<sp/>p0,</highlight></codeline>
+<codeline lineno="15"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;3U&gt;</ref>&amp;<sp/>p1,</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;3U&gt;</ref>&amp;<sp/>p2,</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;3U&gt;</ref>&amp;<sp/>p3<sp/>)</highlight></codeline>
+<codeline lineno="18"><highlight class="normal">:<sp/>pt0_(p0),</highlight></codeline>
+<codeline lineno="19"><highlight class="normal"><sp/><sp/>pt1_(p1),</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"><sp/><sp/>pt2_(p2),</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/>pt3_(p3)</highlight></codeline>
+<codeline lineno="22"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="23"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>end<sp/>constructor</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal">QuadrilateralFacet::~QuadrilateralFacet()</highlight></codeline>
+<codeline lineno="28"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="29"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>QuadrilateralFacet::Area()</highlight><highlight class="keyword"><sp/>const</highlight></codeline>
+<codeline lineno="33"><highlight class="keyword"><sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="namespacecsmp_1a236430179530366a2d8824e0054eeb97" kindref="member">facetArea4</ref>(<sp/>pt0_,<sp/>pt1_,<sp/>pt2_,<sp/>pt3_<sp/>);</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/>}</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight></codeline>
+<codeline lineno="39" refid="classcsmp_1_1_quadrilateral_facet_1a9049cfa2a981e0403432b01d49c25e92" refkind="member"><highlight class="normal"><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;3U&gt;</ref><sp/><ref refid="classcsmp_1_1_quadrilateral_facet_1a9049cfa2a981e0403432b01d49c25e92" kindref="member">QuadrilateralFacet::NormalAtCenter</ref>()</highlight><highlight class="keyword"><sp/>const</highlight></codeline>
+<codeline lineno="40"><highlight class="keyword"><sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="namespacecsmp_1a513764b7b083fabb98f5296a7475c9f0" kindref="member">normalAtFacetCenter</ref>(<sp/>pt0_,<sp/>pt1_,<sp/>pt2_,<sp/>pt3_<sp/>);</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/>}</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"></highlight></codeline>
+<codeline lineno="52" refid="namespacecsmp_1a513764b7b083fabb98f5296a7475c9f0" refkind="member"><highlight class="normal"><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;3U&gt;</ref><sp/><sp/><ref refid="namespacecsmp_1a513764b7b083fabb98f5296a7475c9f0" kindref="member">normalAtFacetCenter</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;3U&gt;</ref>&amp;<sp/>pt0,<sp/></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;3U&gt;</ref>&amp;<sp/>pt1,<sp/></highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;3U&gt;</ref>&amp;<sp/>pt2,<sp/></highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;3U&gt;</ref>&amp;<sp/>pt3<sp/>)</highlight></codeline>
+<codeline lineno="56"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>x<sp/>-<sp/>coordinate</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>jac00(0.25<sp/>*<sp/>(-pt0[0]<sp/>+<sp/>pt1[0]<sp/>+<sp/>pt2[0]<sp/>-<sp/>pt3[0]));<sp/></highlight><highlight class="comment">//<sp/>dnr</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>jac10(0.25<sp/>*<sp/>(-pt0[0]<sp/>-<sp/>pt1[0]<sp/>+<sp/>pt2[0]<sp/>+<sp/>pt3[0]));<sp/></highlight><highlight class="comment">//<sp/>dns</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>y<sp/>-<sp/>coordinate</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>jac01(0.25<sp/>*<sp/>(-pt0[1]<sp/>+<sp/>pt1[1]<sp/>+<sp/>pt2[1]<sp/>-<sp/>pt3[1]));</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>jac11(0.25<sp/>*<sp/>(-pt0[1]<sp/>-<sp/>pt1[1]<sp/>+<sp/>pt2[1]<sp/>+<sp/>pt3[1]));</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"></highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>z<sp/>-<sp/>coordinate</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>jac02(0.25<sp/>*<sp/>(-pt0[2]<sp/>+<sp/>pt1[2]<sp/>+<sp/>pt2[2]<sp/>-<sp/>pt3[2]));</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>jac12(0.25<sp/>*<sp/>(-pt0[2]<sp/>-<sp/>pt1[2]<sp/>+<sp/>pt2[2]<sp/>+<sp/>pt3[2]));</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;3U&gt;</ref><sp/>vecNormal(<sp/>jac01*jac12-jac02*jac11,</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>jac02*jac10-jac00*jac12,</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>jac00*jac11-jac01*jac10<sp/>);</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"></highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/>vecNormal.<ref refid="classcsmp_1_1_point_1a55d74bccc5726c0d398827964b9fde83" kindref="member">NormalizeLengthTo</ref>(1.);<sp/></highlight></codeline>
+<codeline lineno="74"><highlight class="normal"></highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>vecNormal;</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="77"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>end<sp/>normalAtFacetCenter</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="78"><highlight class="normal"></highlight></codeline>
+<codeline lineno="80" refid="namespacecsmp_1a2c0342f08d5ce0f58cc6120e9298ac27" refkind="member"><highlight class="normal"><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;2U&gt;</ref><sp/><sp/><ref refid="namespacecsmp_1a513764b7b083fabb98f5296a7475c9f0" kindref="member">normalAtFacetCenter</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;2U&gt;</ref>&amp;<sp/>pt0,</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;2U&gt;</ref>&amp;<sp/>pt1,</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;2U&gt;</ref>&amp;<sp/>pt2,</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;2U&gt;</ref>&amp;<sp/>pt3<sp/>)</highlight></codeline>
+<codeline lineno="84"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;2U&gt;</ref>();</highlight></codeline>
+<codeline lineno="86"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"></highlight></codeline>
+<codeline lineno="89" refid="namespacecsmp_1a532c59d2a10366bb83d158b2eaac6569" refkind="member"><highlight class="normal"><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;1U&gt;</ref><sp/><sp/><ref refid="namespacecsmp_1a513764b7b083fabb98f5296a7475c9f0" kindref="member">normalAtFacetCenter</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;1U&gt;</ref>&amp;<sp/>pt0,</highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;1U&gt;</ref>&amp;<sp/>pt1,</highlight></codeline>
+<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;1U&gt;</ref>&amp;<sp/>pt2,</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;1U&gt;</ref>&amp;<sp/>pt3<sp/>)</highlight></codeline>
+<codeline lineno="93"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;1U&gt;</ref>();</highlight></codeline>
+<codeline lineno="95"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="96"><highlight class="normal"></highlight></codeline>
+<codeline lineno="98" refid="namespacecsmp_1af28309ac5a4f758e4615f754ecb8c5d5" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><sp/><ref refid="namespacecsmp_1af28309ac5a4f758e4615f754ecb8c5d5" kindref="member">facetArea1</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;3U&gt;</ref>&amp;<sp/>pt0,<sp/></highlight></codeline>
+<codeline lineno="99"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;3U&gt;</ref>&amp;<sp/>pt1,</highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;3U&gt;</ref>&amp;<sp/>pt2,</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;3U&gt;</ref>&amp;<sp/>pt3<sp/>)</highlight></codeline>
+<codeline lineno="102"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>x<sp/>-<sp/>coordinate</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="104"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>jac00(0.25<sp/>*<sp/>(-pt0[0]<sp/>+<sp/>pt1[0]<sp/>+<sp/>pt2[0]<sp/>-<sp/>pt3[0]));<sp/></highlight><highlight class="comment">//<sp/>dnr</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="105"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>jac10(0.25<sp/>*<sp/>(-pt0[0]<sp/>-<sp/>pt1[0]<sp/>+<sp/>pt2[0]<sp/>+<sp/>pt3[0]));<sp/></highlight><highlight class="comment">//<sp/>dns</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="106"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="107"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>y<sp/>-<sp/>coordinate</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="108"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>jac01(0.25<sp/>*<sp/>(-pt0[1]<sp/>+<sp/>pt1[1]<sp/>+<sp/>pt2[1]<sp/>-<sp/>pt3[1]));</highlight></codeline>
+<codeline lineno="109"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>jac11(0.25<sp/>*<sp/>(-pt0[1]<sp/>-<sp/>pt1[1]<sp/>+<sp/>pt2[1]<sp/>+<sp/>pt3[1]));</highlight></codeline>
+<codeline lineno="110"><highlight class="normal"></highlight></codeline>
+<codeline lineno="111"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>z<sp/>-<sp/>coordinate</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="112"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>jac02(0.25<sp/>*<sp/>(-pt0[2]<sp/>+<sp/>pt1[2]<sp/>+<sp/>pt2[2]<sp/>-<sp/>pt3[2]));</highlight></codeline>
+<codeline lineno="113"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>jac12(0.25<sp/>*<sp/>(-pt0[2]<sp/>-<sp/>pt1[2]<sp/>+<sp/>pt2[2]<sp/>+<sp/>pt3[2]));</highlight></codeline>
+<codeline lineno="114"><highlight class="normal"><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="115"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>efg0(jac00<sp/>*<sp/>jac00<sp/>+<sp/>jac01<sp/>*<sp/>jac01<sp/>+<sp/>jac02<sp/>*<sp/>jac02);</highlight></codeline>
+<codeline lineno="116"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>efg1(jac00<sp/>*<sp/>jac10<sp/>+<sp/>jac01<sp/>*<sp/>jac11<sp/>+<sp/>jac02<sp/>*<sp/>jac12);</highlight></codeline>
+<codeline lineno="117"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>efg2(jac10<sp/>*<sp/>jac10<sp/>+<sp/>jac11<sp/>*<sp/>jac11<sp/>+<sp/>jac12<sp/>*<sp/>jac12);</highlight></codeline>
+<codeline lineno="118"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="119"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>4.<sp/>*<sp/>sqrt(efg0<sp/>*<sp/>efg2<sp/>-<sp/>efg1<sp/>*<sp/>efg1);</highlight></codeline>
+<codeline lineno="120"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="121"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>end<sp/>facetArea1</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="122"><highlight class="normal"></highlight></codeline>
+<codeline lineno="123"><highlight class="normal"></highlight></codeline>
+<codeline lineno="124"><highlight class="normal"></highlight></codeline>
+<codeline lineno="125"><highlight class="normal"></highlight><highlight class="comment">//<sp/>area<sp/>of<sp/>the<sp/>2D<sp/>quadrilateral</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="126" refid="namespacecsmp_1ae3b97788a5d91b1eacbfa3a5b937b622" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><sp/><ref refid="namespacecsmp_1af28309ac5a4f758e4615f754ecb8c5d5" kindref="member">facetArea1</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;2U&gt;</ref>&amp;<sp/>pt0,</highlight></codeline>
+<codeline lineno="127"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;2U&gt;</ref>&amp;<sp/>pt1,</highlight></codeline>
+<codeline lineno="128"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;2U&gt;</ref>&amp;<sp/>pt2,</highlight></codeline>
+<codeline lineno="129"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;2U&gt;</ref>&amp;<sp/>pt3<sp/>)</highlight></codeline>
+<codeline lineno="130"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="131"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>a(pt0.<ref refid="classcsmp_1_1_point_1a351e32b363857b23fdc719a6946ed935" kindref="member">DistanceTo</ref>(pt3)),<sp/>b(pt0.<ref refid="classcsmp_1_1_point_1a351e32b363857b23fdc719a6946ed935" kindref="member">DistanceTo</ref>(pt1)),<sp/></highlight><highlight class="comment">//<sp/>left<sp/>triangle</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="132"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>c(pt2.<ref refid="classcsmp_1_1_point_1a351e32b363857b23fdc719a6946ed935" kindref="member">DistanceTo</ref>(pt3)),<sp/>d(pt2.<ref refid="classcsmp_1_1_point_1a351e32b363857b23fdc719a6946ed935" kindref="member">DistanceTo</ref>(pt1)),<sp/></highlight><highlight class="comment">//<sp/>righ<sp/>triangle</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="133"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ab(pt3.<ref refid="classcsmp_1_1_point_1a351e32b363857b23fdc719a6946ed935" kindref="member">DistanceTo</ref>(pt1));<sp/></highlight><highlight class="comment">//<sp/>shared<sp/>edge</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="134"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>theta_ab<sp/>=<sp/>2*atan(<sp/>sqrt(<sp/>(ab*ab<sp/>-<sp/>(a<sp/>-<sp/>b)*(a<sp/>-<sp/>b)<sp/>)/(<sp/>(b+a)*(b+a)<sp/>-<sp/>ab*ab)<sp/>)<sp/>);</highlight></codeline>
+<codeline lineno="135"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>theta_bc<sp/>=<sp/>2*atan(<sp/>sqrt(<sp/>(ab*ab<sp/>-<sp/>(c<sp/>-<sp/>d)*(c<sp/>-<sp/>d)<sp/>)/(<sp/>(c+d)*(c+d)<sp/>-<sp/>ab*ab)<sp/>)<sp/>);</highlight></codeline>
+<codeline lineno="136"><highlight class="normal"></highlight></codeline>
+<codeline lineno="137"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="comment">/*<sp/>Area<sp/>*/</highlight><highlight class="normal"><sp/>0.5*a*b*sin(theta_ab)<sp/>+<sp/>0.5*b*c*sin(theta_bc);</highlight></codeline>
+<codeline lineno="138"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="139"><highlight class="normal"></highlight></codeline>
+<codeline lineno="140"><highlight class="normal"></highlight></codeline>
+<codeline lineno="141"><highlight class="normal"></highlight></codeline>
+<codeline lineno="178" refid="namespacecsmp_1a236430179530366a2d8824e0054eeb97" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><sp/><ref refid="namespacecsmp_1a236430179530366a2d8824e0054eeb97" kindref="member">facetArea4</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;3U&gt;</ref>&amp;<sp/>p0,<sp/></highlight></codeline>
+<codeline lineno="179"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;3U&gt;</ref>&amp;<sp/>p1,</highlight></codeline>
+<codeline lineno="180"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;3U&gt;</ref>&amp;<sp/>p2,</highlight></codeline>
+<codeline lineno="181"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;3U&gt;</ref>&amp;<sp/>p3<sp/>)</highlight></codeline>
+<codeline lineno="182"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="183"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>integration<sp/>point<sp/>1</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="184"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>-------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="185"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Jacobian<sp/>column<sp/>1<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>dnr1<sp/>*<sp/>x1<sp/>+<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>dnr2<sp/>*<sp/>x2<sp/></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="186"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>jac00(-0.105662432702594*p0[0]<sp/>+<sp/>0.105662432702594*p1[0]<sp/>+<sp/>0.394337567297406*p2[0]<sp/>-<sp/>0.394337567297406*p3[0]);<sp/></highlight><highlight class="comment">//<sp/>dnr</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="187"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>jac10(-0.105662432702594*p0[0]<sp/>-<sp/>0.394337567297406*p1[0]<sp/>+<sp/>0.394337567297406*p2[0]<sp/>+<sp/>0.105662432702594*p3[0]);<sp/></highlight><highlight class="comment">//<sp/>dns</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="188"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="189"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>column<sp/>2</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="190"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>jac01(-0.105662432702594*p0[1]<sp/>+<sp/>0.105662432702594*p1[1]<sp/>+<sp/>0.394337567297406*p2[1]<sp/>-<sp/>0.394337567297406*p3[1]);</highlight></codeline>
+<codeline lineno="191"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>jac11(-0.105662432702594*p0[1]<sp/>-<sp/>0.394337567297406*p1[1]<sp/>+<sp/>0.394337567297406*p2[1]<sp/>+<sp/>0.105662432702594*p3[1]);</highlight></codeline>
+<codeline lineno="192"><highlight class="normal"></highlight></codeline>
+<codeline lineno="193"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>column<sp/>3</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="194"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>jac02(-0.105662432702594*p0[2]<sp/>+<sp/>0.105662432702594*p1[2]<sp/>+<sp/>0.394337567297406*p2[2]<sp/>-<sp/>0.394337567297406*p3[2]);</highlight></codeline>
+<codeline lineno="195"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>jac12(-0.105662432702594*p0[2]<sp/>-<sp/>0.394337567297406*p1[2]<sp/>+<sp/>0.394337567297406*p2[2]<sp/>+<sp/>0.105662432702594*p3[2]);</highlight></codeline>
+<codeline lineno="196"><highlight class="normal"><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="197"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>compute<sp/>J&apos;<sp/>1<sp/></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="198"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>efg0(jac00<sp/>*<sp/>jac00<sp/>+<sp/>jac01<sp/>*<sp/>jac01<sp/>+<sp/>jac02<sp/>*<sp/>jac02);</highlight></codeline>
+<codeline lineno="199"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>efg1(jac00<sp/>*<sp/>jac10<sp/>+<sp/>jac01<sp/>*<sp/>jac11<sp/>+<sp/>jac02<sp/>*<sp/>jac12);</highlight></codeline>
+<codeline lineno="200"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>efg2(jac10<sp/>*<sp/>jac10<sp/>+<sp/>jac11<sp/>*<sp/>jac11<sp/>+<sp/>jac12<sp/>*<sp/>jac12);</highlight></codeline>
+<codeline lineno="201"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>detJ(sqrt(efg0<sp/>*<sp/>efg2<sp/>-<sp/>efg1<sp/>*<sp/>efg1));</highlight></codeline>
+<codeline lineno="202"><highlight class="normal"></highlight></codeline>
+<codeline lineno="203"><highlight class="normal"></highlight></codeline>
+<codeline lineno="204"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>integration<sp/>point<sp/>2</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="205"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>-------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="206"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>x<sp/>-<sp/>coordinate</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="207"><highlight class="normal"><sp/><sp/>jac00<sp/>=<sp/>-0.105662432702594*p0[0]<sp/>+<sp/>0.105662432702594*p1[0]<sp/>+<sp/>0.394337567297406*p2[0]<sp/>-<sp/>0.394337567297406*p3[0];<sp/></highlight><highlight class="comment">//<sp/>dnr</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="208"><highlight class="normal"><sp/><sp/>jac10<sp/>=<sp/>-0.394337567297406*p0[0]<sp/>-<sp/>0.105662432702594*p1[0]<sp/>+<sp/>0.105662432702594*p2[0]<sp/>+<sp/>0.394337567297406*p3[0];<sp/></highlight><highlight class="comment">//<sp/>dns</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="209"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="210"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>y<sp/>-<sp/>coordinate</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="211"><highlight class="normal"><sp/><sp/>jac01<sp/>=<sp/>-0.105662432702594*p0[1]<sp/>+<sp/>0.105662432702594*p1[1]<sp/>+<sp/>0.394337567297406*p2[1]<sp/>-<sp/>0.394337567297406*p3[1];</highlight></codeline>
+<codeline lineno="212"><highlight class="normal"><sp/><sp/>jac11<sp/>=<sp/>-0.394337567297406*p0[1]<sp/>-<sp/>0.105662432702594*p1[1]<sp/>+<sp/>0.105662432702594*p2[1]<sp/>+<sp/>0.394337567297406*p3[1];</highlight></codeline>
+<codeline lineno="213"><highlight class="normal"></highlight></codeline>
+<codeline lineno="214"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>z<sp/>-<sp/>coordinate</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="215"><highlight class="normal"><sp/><sp/>jac02<sp/>=<sp/>-0.105662432702594*p0[2]<sp/>+<sp/>0.105662432702594*p1[2]<sp/>+<sp/>0.394337567297406*p2[2]<sp/>-<sp/>0.394337567297406*p3[2];</highlight></codeline>
+<codeline lineno="216"><highlight class="normal"><sp/><sp/>jac12<sp/>=<sp/>-0.394337567297406*p0[2]<sp/>-<sp/>0.105662432702594*p1[2]<sp/>+<sp/>0.105662432702594*p2[2]<sp/>+<sp/>0.394337567297406*p3[2];</highlight></codeline>
+<codeline lineno="217"><highlight class="normal"></highlight></codeline>
+<codeline lineno="218"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>compute<sp/>J&apos;<sp/>2<sp/></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="219"><highlight class="normal"><sp/><sp/>efg0<sp/>=<sp/>jac00<sp/>*<sp/>jac00<sp/>+<sp/>jac01<sp/>*<sp/>jac01<sp/>+<sp/>jac02<sp/>*<sp/>jac02;</highlight></codeline>
+<codeline lineno="220"><highlight class="normal"><sp/><sp/>efg1<sp/>=<sp/>jac00<sp/>*<sp/>jac10<sp/>+<sp/>jac01<sp/>*<sp/>jac11<sp/>+<sp/>jac02<sp/>*<sp/>jac12;</highlight></codeline>
+<codeline lineno="221"><highlight class="normal"><sp/><sp/>efg2<sp/>=<sp/>jac10<sp/>*<sp/>jac10<sp/>+<sp/>jac11<sp/>*<sp/>jac11<sp/>+<sp/>jac12<sp/>*<sp/>jac12;</highlight></codeline>
+<codeline lineno="222"><highlight class="normal"><sp/><sp/>detJ<sp/>+=<sp/>sqrt(efg0<sp/>*<sp/>efg2<sp/>-<sp/>efg1<sp/>*<sp/>efg1);</highlight></codeline>
+<codeline lineno="223"><highlight class="normal"></highlight></codeline>
+<codeline lineno="224"><highlight class="normal"></highlight></codeline>
+<codeline lineno="225"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>integration<sp/>point<sp/>3</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="226"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>-------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="227"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>x<sp/>-<sp/>coordinate</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="228"><highlight class="normal"><sp/><sp/>jac00<sp/>=<sp/>-0.394337567297406*p0[0]<sp/>+<sp/>0.394337567297406*p1[0]<sp/>+<sp/>0.105662432702594*p2[0]<sp/>-<sp/>0.105662432702594*p3[0];<sp/></highlight><highlight class="comment">//<sp/>dnr</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="229"><highlight class="normal"><sp/><sp/>jac10<sp/>=<sp/>-0.394337567297406*p0[0]<sp/>-<sp/>0.105662432702594*p1[0]<sp/>+<sp/>0.105662432702594*p2[0]<sp/>+<sp/>0.394337567297406*p3[0];<sp/></highlight><highlight class="comment">//<sp/>dns</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="230"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="231"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>y<sp/>-<sp/>coordinate</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="232"><highlight class="normal"><sp/><sp/>jac01<sp/>=<sp/>-0.394337567297406*p0[1]<sp/>+<sp/>0.394337567297406*p1[1]<sp/>+<sp/>0.105662432702594*p2[1]<sp/>-<sp/>0.105662432702594*p3[1];</highlight></codeline>
+<codeline lineno="233"><highlight class="normal"><sp/><sp/>jac11<sp/>=<sp/>-0.394337567297406*p0[1]<sp/>-<sp/>0.105662432702594*p1[1]<sp/>+<sp/>0.105662432702594*p2[1]<sp/>+<sp/>0.394337567297406*p3[1];</highlight></codeline>
+<codeline lineno="234"><highlight class="normal"></highlight></codeline>
+<codeline lineno="235"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>z<sp/>-<sp/>coordinate</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="236"><highlight class="normal"><sp/><sp/>jac02<sp/>=<sp/>-0.394337567297406*p0[2]<sp/>+<sp/>0.394337567297406*p1[2]<sp/>+<sp/>0.105662432702594*p2[2]<sp/>-<sp/>0.105662432702594*p3[2];</highlight></codeline>
+<codeline lineno="237"><highlight class="normal"><sp/><sp/>jac12<sp/>=<sp/>-0.394337567297406*p0[2]<sp/>-<sp/>0.105662432702594*p1[2]<sp/>+<sp/>0.105662432702594*p2[2]<sp/>+<sp/>0.394337567297406*p3[2];</highlight></codeline>
+<codeline lineno="238"><highlight class="normal"></highlight></codeline>
+<codeline lineno="239"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>compute<sp/>J&apos;<sp/>3<sp/></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="240"><highlight class="normal"><sp/><sp/>efg0<sp/>=<sp/>jac00<sp/>*<sp/>jac00<sp/>+<sp/>jac01<sp/>*<sp/>jac01<sp/>+<sp/>jac02<sp/>*<sp/>jac02;</highlight></codeline>
+<codeline lineno="241"><highlight class="normal"><sp/><sp/>efg1<sp/>=<sp/>jac00<sp/>*<sp/>jac10<sp/>+<sp/>jac01<sp/>*<sp/>jac11<sp/>+<sp/>jac02<sp/>*<sp/>jac12;</highlight></codeline>
+<codeline lineno="242"><highlight class="normal"><sp/><sp/>efg2<sp/>=<sp/>jac10<sp/>*<sp/>jac10<sp/>+<sp/>jac11<sp/>*<sp/>jac11<sp/>+<sp/>jac12<sp/>*<sp/>jac12;</highlight></codeline>
+<codeline lineno="243"><highlight class="normal"><sp/><sp/>detJ<sp/>+=<sp/>sqrt(efg0<sp/>*<sp/>efg2<sp/>-<sp/>efg1<sp/>*<sp/>efg1);</highlight></codeline>
+<codeline lineno="244"><highlight class="normal"></highlight></codeline>
+<codeline lineno="245"><highlight class="normal"></highlight></codeline>
+<codeline lineno="246"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>integration<sp/>point<sp/>4</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="247"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>-------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="248"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>x<sp/>-<sp/>coordinate</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="249"><highlight class="normal"><sp/><sp/>jac00<sp/>=<sp/>-0.394337567297406*p0[0]<sp/>+<sp/>0.394337567297406*p1[0]<sp/>+<sp/>0.105662432702594*p2[0]<sp/>-<sp/>0.105662432702594*p3[0];<sp/></highlight></codeline>
+<codeline lineno="250"><highlight class="normal"><sp/><sp/>jac10<sp/>=<sp/>-0.105662432702594*p0[0]<sp/>-<sp/>0.394337567297406*p1[0]<sp/>+<sp/>0.394337567297406*p2[0]<sp/>+<sp/>0.105662432702594*p3[0];<sp/></highlight></codeline>
+<codeline lineno="251"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="252"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>y<sp/>-<sp/>coordinate</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="253"><highlight class="normal"><sp/><sp/>jac01<sp/>=<sp/>-0.394337567297406*p0[1]<sp/>+<sp/>0.394337567297406*p1[1]<sp/>+<sp/>0.105662432702594*p2[1]<sp/>-<sp/>0.105662432702594*p3[1];</highlight></codeline>
+<codeline lineno="254"><highlight class="normal"><sp/><sp/>jac11<sp/>=<sp/>-0.105662432702594*p0[1]<sp/>-<sp/>0.394337567297406*p1[1]<sp/>+<sp/>0.394337567297406*p2[1]<sp/>+<sp/>0.105662432702594*p3[1];</highlight></codeline>
+<codeline lineno="255"><highlight class="normal"></highlight></codeline>
+<codeline lineno="256"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>z<sp/>-<sp/>coordinate</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="257"><highlight class="normal"><sp/><sp/>jac02<sp/>=<sp/>-0.394337567297406*p0[2]<sp/>+<sp/>0.394337567297406*p1[2]<sp/>+<sp/>0.105662432702594*p2[2]<sp/>-<sp/>0.105662432702594*p3[2];</highlight></codeline>
+<codeline lineno="258"><highlight class="normal"><sp/><sp/>jac12<sp/>=<sp/>-0.105662432702594*p0[2]<sp/>-<sp/>0.394337567297406*p1[2]<sp/>+<sp/>0.394337567297406*p2[2]<sp/>+<sp/>0.105662432702594*p3[2];</highlight></codeline>
+<codeline lineno="259"><highlight class="normal"></highlight></codeline>
+<codeline lineno="260"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>compute<sp/>J&apos;<sp/>4<sp/></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="261"><highlight class="normal"><sp/><sp/>efg0<sp/>=<sp/>jac00<sp/>*<sp/>jac00<sp/>+<sp/>jac01<sp/>*<sp/>jac01<sp/>+<sp/>jac02<sp/>*<sp/>jac02;</highlight></codeline>
+<codeline lineno="262"><highlight class="normal"><sp/><sp/>efg1<sp/>=<sp/>jac00<sp/>*<sp/>jac10<sp/>+<sp/>jac01<sp/>*<sp/>jac11<sp/>+<sp/>jac02<sp/>*<sp/>jac12;</highlight></codeline>
+<codeline lineno="263"><highlight class="normal"><sp/><sp/>efg2<sp/>=<sp/>jac10<sp/>*<sp/>jac10<sp/>+<sp/>jac11<sp/>*<sp/>jac11<sp/>+<sp/>jac12<sp/>*<sp/>jac12;</highlight></codeline>
+<codeline lineno="264"><highlight class="normal"><sp/><sp/>detJ<sp/>+=<sp/>sqrt(efg0<sp/>*<sp/>efg2<sp/>-<sp/>efg1<sp/>*<sp/>efg1);</highlight></codeline>
+<codeline lineno="265"><highlight class="normal"></highlight></codeline>
+<codeline lineno="266"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<sp/>detJ<sp/>&lt;=<sp/>0.<sp/>)<sp/>{</highlight></codeline>
+<codeline lineno="267"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>std::cout<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;\nfacetArea:<sp/>Erroneous<sp/>determinant<sp/>of<sp/>2-3D<sp/>Jacobian<sp/>matrix:<sp/>&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="268"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>std::cout<sp/>&lt;&lt;<sp/>detJ<sp/>&lt;&lt;<sp/>endl;</highlight></codeline>
+<codeline lineno="269"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>cout.flush();</highlight></codeline>
+<codeline lineno="270"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">throw</highlight><highlight class="normal"><sp/>std::range_error(</highlight><highlight class="stringliteral">&quot;facetArea&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="271"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="272"><highlight class="normal"><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="273"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>detJ;</highlight></codeline>
+<codeline lineno="274"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="275"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>end<sp/>facetArea</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="276"><highlight class="normal"></highlight></codeline>
+<codeline lineno="277"><highlight class="normal"></highlight></codeline>
+<codeline lineno="278"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><sp/>facetArea4(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Point&lt;2U&gt;&amp;<sp/>pt0,</highlight></codeline>
+<codeline lineno="279"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Point&lt;2U&gt;&amp;<sp/>pt1,</highlight></codeline>
+<codeline lineno="280"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Point&lt;2U&gt;&amp;<sp/>pt2,</highlight></codeline>
+<codeline lineno="281"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Point&lt;2U&gt;&amp;<sp/>pt3<sp/>)</highlight></codeline>
+<codeline lineno="282"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="283"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>1.;</highlight></codeline>
+<codeline lineno="284"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="285"><highlight class="normal"></highlight></codeline>
+<codeline lineno="286"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><sp/><ref refid="namespacecsmp_1a236430179530366a2d8824e0054eeb97" kindref="member">facetArea4</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Point&lt;1U&gt;&amp;<sp/>pt0,</highlight></codeline>
+<codeline lineno="287"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Point&lt;1U&gt;&amp;<sp/>pt1,</highlight></codeline>
+<codeline lineno="288"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Point&lt;1U&gt;&amp;<sp/>pt2,</highlight></codeline>
+<codeline lineno="289"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Point&lt;1U&gt;&amp;<sp/>pt3<sp/>)</highlight></codeline>
+<codeline lineno="290"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="291"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>1.;</highlight></codeline>
+<codeline lineno="292"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="293"><highlight class="normal"></highlight></codeline>
+<codeline lineno="294"><highlight class="normal"></highlight></codeline>
+<codeline lineno="295"><highlight class="normal"></highlight></codeline>
+<codeline lineno="296"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>end<sp/>namespace<sp/>csmp</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="source/modules/model/QuadrilateralFacet.cpp"/>
+  </compounddef>
+</doxygen>

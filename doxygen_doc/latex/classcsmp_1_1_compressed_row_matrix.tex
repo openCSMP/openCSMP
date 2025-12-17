@@ -1,0 +1,355 @@
+\doxysection{csmp\+::Compressed\+Row\+Matrix Class Reference}
+\hypertarget{classcsmp_1_1_compressed_row_matrix}{}\label{classcsmp_1_1_compressed_row_matrix}\index{csmp::CompressedRowMatrix@{csmp::CompressedRowMatrix}}
+
+
+CSMP\textquotesingle{}s implementation of a compressed-\/row storage container for sparse matrices.  
+
+
+
+
+{\ttfamily \#include $<$Compressed\+Row\+Matrix.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Compressed\+Row\+Matrix\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=239pt]{classcsmp_1_1_compressed_row_matrix__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Compressed\+Row\+Matrix\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=221pt]{classcsmp_1_1_compressed_row_matrix__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_compressed_row_matrix_a33f63886c9c671505c90f622f929ddc9}{Compressed\+Row\+Matrix}} (\mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{csmp\+::\+Sparse\+Matrix}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_compressed_row_matrix_ae2da20b879a81f70c92d96b3c24bbf51}\label{classcsmp_1_1_compressed_row_matrix_ae2da20b879a81f70c92d96b3c24bbf51} 
+{\bfseries Compressed\+Row\+Matrix} (std\+::vector$<$ int32\+\_\+t $>$ \&\&\mbox{\hyperlink{classcsmp_1_1_compressed_row_matrix_a1611d70fbf30774e9cdfc3b691c174fc}{ia}}, std\+::vector$<$ int32\+\_\+t $>$ \&\&\mbox{\hyperlink{classcsmp_1_1_compressed_row_matrix_a8d7b28ce3d544e34bbb47283eaef3907}{ja}}, std\+::vector$<$ double $>$ \&\&\mbox{\hyperlink{classcsmp_1_1_compressed_row_matrix_a9fc00fc9121ab81b0b0eac3e967a5d56}{a}})
+\begin{DoxyCompactList}\small\item\em custom move constructor \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_compressed_row_matrix_afdfb9d6e1cfbb296ca0e8bd1abfd290d}\label{classcsmp_1_1_compressed_row_matrix_afdfb9d6e1cfbb296ca0e8bd1abfd290d} 
+double {\bfseries operator()} (uint32\+\_\+t, uint32\+\_\+t) const
+\begin{DoxyCompactList}\small\item\em standard accessor of matrix elements (asserts i,j in debug mode) \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_compressed_row_matrix_ae3dc20d47e64b509c96a2c1c25ff7bd5}{At}} (uint32\+\_\+t, uint32\+\_\+t) const
+\begin{DoxyCompactList}\small\item\em range-\/checked accessor for matrix elements \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_compressed_row_matrix_a479a715fc26968137514e349d3f543e5}{Assign}} (uint32\+\_\+t i, uint32\+\_\+t j, double val)
+\begin{DoxyCompactList}\small\item\em use to assign matrix elements during accumulation; \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_compressed_row_matrix_aacd79586da394a882d78b599fc8bb322}\label{classcsmp_1_1_compressed_row_matrix_aacd79586da394a882d78b599fc8bb322} 
+void {\bfseries Multiply\+Entry\+With} (uint32\+\_\+t i, uint32\+\_\+t j, double val)
+\item 
+\Hypertarget{classcsmp_1_1_compressed_row_matrix_a58229257d6659d5166f1a2f8f2fa5904}\label{classcsmp_1_1_compressed_row_matrix_a58229257d6659d5166f1a2f8f2fa5904} 
+void {\bfseries Add} (uint32\+\_\+t i, uint32\+\_\+t j, double val)
+\item 
+\Hypertarget{classcsmp_1_1_compressed_row_matrix_a2ed7976b8c5e49c4bb935adc727f209e}\label{classcsmp_1_1_compressed_row_matrix_a2ed7976b8c5e49c4bb935adc727f209e} 
+void {\bfseries Zero\+Row} (size\+\_\+t row)
+\item 
+\Hypertarget{classcsmp_1_1_compressed_row_matrix_abc6ace7562e8af52859271cc36f4a9f1}\label{classcsmp_1_1_compressed_row_matrix_abc6ace7562e8af52859271cc36f4a9f1} 
+void {\bfseries Zero} ()
+\item 
+\Hypertarget{classcsmp_1_1_compressed_row_matrix_acf49d6f108eec0b042041d01fbb89808}\label{classcsmp_1_1_compressed_row_matrix_acf49d6f108eec0b042041d01fbb89808} 
+void {\bfseries Add\+Row\+By\+Another\+Row} (uint32\+\_\+t i, uint32\+\_\+t j)
+\item 
+\Hypertarget{classcsmp_1_1_compressed_row_matrix_a0cbb72e6d97b7a34174ea9bb7e3d2ef4}\label{classcsmp_1_1_compressed_row_matrix_a0cbb72e6d97b7a34174ea9bb7e3d2ef4} 
+void {\bfseries Assign\+Row\+By\+Another\+Row} (uint32\+\_\+t i, uint32\+\_\+t j)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_compressed_row_matrix_a4efa13a821b88a66dcd6e295bb42c33d}{Initialize}} (const \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{csmp\+::\+Sparse\+Matrix}} \&)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_compressed_row_matrix_ab08768fbe9ee9fc44c9f8ee51788fb07}{Initialize\+Point\+Based}} (const \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{Sparse\+Matrix}} \&, size\+\_\+t nsys)
+\item 
+\Hypertarget{classcsmp_1_1_compressed_row_matrix_a705634e1eb793452a71bad6971a04220}\label{classcsmp_1_1_compressed_row_matrix_a705634e1eb793452a71bad6971a04220} 
+uint32\+\_\+t {\bfseries Rows} () const
+\item 
+\Hypertarget{classcsmp_1_1_compressed_row_matrix_ae0607dbae6b07f9548f03695bec7b97b}\label{classcsmp_1_1_compressed_row_matrix_ae0607dbae6b07f9548f03695bec7b97b} 
+uint32\+\_\+t {\bfseries Cols} () const
+\item 
+\Hypertarget{classcsmp_1_1_compressed_row_matrix_a565ab698ba86a39c626f3dcf0497ebbf}\label{classcsmp_1_1_compressed_row_matrix_a565ab698ba86a39c626f3dcf0497ebbf} 
+size\+\_\+t {\bfseries Total\+Existing\+Entries} () const
+\item 
+\Hypertarget{classcsmp_1_1_compressed_row_matrix_af27351d85603acdeceb62bd3f45b2684}\label{classcsmp_1_1_compressed_row_matrix_af27351d85603acdeceb62bd3f45b2684} 
+size\+\_\+t {\bfseries Non\+Zero\+Entries} () const
+\begin{DoxyCompactList}\small\item\em total number of available storage sites for non-\/zero matrix elements \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_compressed_row_matrix_ae38e7687e92b82e4ae2e81685243cc72}\label{classcsmp_1_1_compressed_row_matrix_ae38e7687e92b82e4ae2e81685243cc72} 
+void {\bfseries Erase} ()
+\begin{DoxyCompactList}\small\item\em this function erases all elements in ia, ja and a \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_compressed_row_matrix_abbf5a48708eda97af5463d507a93c9f3}{Is\+Formatted\+For\+SAMG}} () const
+\begin{DoxyCompactList}\small\item\em check whether matrix has been converted to SAMG format \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_compressed_row_matrix_a5872bd2e7bc86a6f10aa67e61a793a97}{Out}} () const
+\item 
+\Hypertarget{classcsmp_1_1_compressed_row_matrix_a10bde617f47f51d892dc3f5a0cb27a18}\label{classcsmp_1_1_compressed_row_matrix_a10bde617f47f51d892dc3f5a0cb27a18} 
+void {\bfseries Out} (const std\+::string \&outfile) const
+\item 
+\Hypertarget{classcsmp_1_1_compressed_row_matrix_aebd294b1e0e4313410824a6c2aeabee9}\label{classcsmp_1_1_compressed_row_matrix_aebd294b1e0e4313410824a6c2aeabee9} 
+void {\bfseries Convert\+From\+Sparse\+Matrix} (const \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{csmp\+::\+Sparse\+Matrix}} \&)
+\begin{DoxyCompactList}\small\item\em this function converts the supplies sparse matrix to compressed row matrix, but does not convert it to SAMG format \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_compressed_row_matrix_a1817e8979927df017b734bd08267bc56}\label{classcsmp_1_1_compressed_row_matrix_a1817e8979927df017b734bd08267bc56} 
+void {\bfseries Convert\+To\+SAMGFormat} ()
+\begin{DoxyCompactList}\small\item\em this function converts a compressed row matrix to SAMG format \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::vector$<$ int32\+\_\+t $>$ \mbox{\hyperlink{classcsmp_1_1_compressed_row_matrix_a1611d70fbf30774e9cdfc3b691c174fc}{ia}}
+\begin{DoxyCompactList}\small\item\em \doxylink{classcsmp_1_1_compressed_row_matrix_a1611d70fbf30774e9cdfc3b691c174fc}{ia(ilo)} and the last row ends at position ia(ihi+1)-\/1 (see next). \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_compressed_row_matrix_a8d7b28ce3d544e34bbb47283eaef3907}\label{classcsmp_1_1_compressed_row_matrix_a8d7b28ce3d544e34bbb47283eaef3907} 
+std\+::vector$<$ int32\+\_\+t $>$ {\bfseries ja}
+\begin{DoxyCompactList}\small\item\em ja -\/ pointer array pointing to the column indices. that is, for each matrix element \doxylink{classcsmp_1_1_compressed_row_matrix_a9fc00fc9121ab81b0b0eac3e967a5d56}{a(j)} with \doxylink{classcsmp_1_1_compressed_row_matrix_a1611d70fbf30774e9cdfc3b691c174fc}{ia(ilo)}\texorpdfstring{$<$}{<}=j\texorpdfstring{$<$}{<}=ia(ihi+1)-\/1, \doxylink{classcsmp_1_1_compressed_row_matrix_a8d7b28ce3d544e34bbb47283eaef3907}{ja(j)} contains the column index of that element. since, within each row, the diagonal element is stored first (see above), we always have \doxylink{classcsmp_1_1_compressed_row_matrix_a8d7b28ce3d544e34bbb47283eaef3907}{ja(ia(i))}=i. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_compressed_row_matrix_a9fc00fc9121ab81b0b0eac3e967a5d56}\label{classcsmp_1_1_compressed_row_matrix_a9fc00fc9121ab81b0b0eac3e967a5d56} 
+std\+::vector$<$ double $>$ {\bfseries a}
+\begin{DoxyCompactList}\small\item\em array containing the rows of the matrix, one after the other, each row starting with its diagonal element. the first row starts at position \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_compressed_row_matrix_a0d47dce5fff5bed6cfa87ef5cbd5c79c}\label{classcsmp_1_1_compressed_row_matrix_a0d47dce5fff5bed6cfa87ef5cbd5c79c} 
+static const bool {\bfseries verbose\+\_\+} = true
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_compressed_row_matrix_abb061edab6574baf3c48e13830eb98ed}\label{classcsmp_1_1_compressed_row_matrix_abb061edab6574baf3c48e13830eb98ed} 
+class {\bfseries Eigen\+Solver}
+\item 
+\Hypertarget{classcsmp_1_1_compressed_row_matrix_a097ded50c468e188d42aabb7e05cc191}\label{classcsmp_1_1_compressed_row_matrix_a097ded50c468e188d42aabb7e05cc191} 
+class {\bfseries SAMG\+\_\+\+Solver}
+\item 
+\Hypertarget{classcsmp_1_1_compressed_row_matrix_aa7500d75dcfa73edfcd8d5b7c84546a1}\label{classcsmp_1_1_compressed_row_matrix_aa7500d75dcfa73edfcd8d5b7c84546a1} 
+class {\bfseries Compressed\+Row\+Matrix\+\_\+\+Test}
+\item 
+{\footnotesize template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELLTYPE$>$ }\\void \mbox{\hyperlink{classcsmp_1_1_compressed_row_matrix_af7904a9c245bfc925a251e01d94e99cb}{generate\+Sparsity\+Pattern\+Eliminating\+Essential\+Conditions}} (\mbox{\hyperlink{classcsmp_1_1_compressed_row_matrix}{Compressed\+Row\+Matrix}} \&G, const std\+::map$<$ \mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}}, size\+\_\+t $>$ \&test\+\_\+operands, std\+::vector$<$ size\+\_\+t $>$ \&DOF\+\_\+indexes, const \mbox{\hyperlink{classcsmp_1_1_model_sub_domain}{Model\+Sub\+Domain}}$<$ dim, CELLTYPE $>$ \&gref)
+\begin{DoxyCompactList}\small\item\em this standalone function generates sparsity pattern for a compressed row matrix from supplied test\+\_\+operands\+\_\+, DOF\+\_\+indexes\+\_\+ and computational domain, taking into account elimination of essential conditions \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+CSMP\textquotesingle{}s implementation of a compressed-\/row storage container for sparse matrices. 
+
+\begin{DoxyAuthor}{Author}
+S.\+K. Matthai 
+
+SS. Geiger 
+
+Coumou, D. 
+
+Stephen G. Roberts 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2006 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+Qi Shao 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2022(modified)
+\end{DoxyDate}
+This class implements the classic condensed row storage format for sparse matrices that is common to many linear algebra packages. This matrix is always square.
+
+Currently used to convert \doxylink{classcsmp_1_1_sparse_matrix}{csmp\+::\+Sparse\+Matrix} objects before they are passed to the SAMG solver. Now also directly used in \doxylink{classcsmp_1_1_p_d_e___integrator}{PDE\+\_\+\+Integrator} (2022, Qi Shao) 
+
+\label{doc-constructors}
+\Hypertarget{classcsmp_1_1_compressed_row_matrix_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcsmp_1_1_compressed_row_matrix_a33f63886c9c671505c90f622f929ddc9}\index{csmp::CompressedRowMatrix@{csmp::CompressedRowMatrix}!CompressedRowMatrix@{CompressedRowMatrix}}
+\index{CompressedRowMatrix@{CompressedRowMatrix}!csmp::CompressedRowMatrix@{csmp::CompressedRowMatrix}}
+\doxysubsubsection{\texorpdfstring{CompressedRowMatrix()}{CompressedRowMatrix()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_compressed_row_matrix_a33f63886c9c671505c90f622f929ddc9} 
+csmp\+::\+Compressed\+Row\+Matrix\+::\+Compressed\+Row\+Matrix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{csmp\+::\+Sparse\+Matrix}} \&}]{spmat}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+this constructor constructs a compressed row matrix from the supplied sparse matrix by calling the Initialise function the constructed compressed row matrix is in SAMG format which has the diagonal term at the beginning of each row and fortran indexes. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_compressed_row_matrix_a33f63886c9c671505c90f622f929ddc9_cgraph}
+\end{center}
+\end{figure}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_compressed_row_matrix_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_compressed_row_matrix_a479a715fc26968137514e349d3f543e5}\index{csmp::CompressedRowMatrix@{csmp::CompressedRowMatrix}!Assign@{Assign}}
+\index{Assign@{Assign}!csmp::CompressedRowMatrix@{csmp::CompressedRowMatrix}}
+\doxysubsubsection{\texorpdfstring{Assign()}{Assign()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_compressed_row_matrix_a479a715fc26968137514e349d3f543e5} 
+void csmp\+::\+Compressed\+Row\+Matrix\+::\+Assign (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{i}{, }\item[{uint32\+\_\+t}]{j}{, }\item[{double}]{val}{}\end{DoxyParamCaption})}
+
+
+
+use to assign matrix elements during accumulation; 
+
+\begin{DoxyAttention}{Attention}
+matrix sparsity pattern must be established before 
+\end{DoxyAttention}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_compressed_row_matrix_a479a715fc26968137514e349d3f543e5_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_compressed_row_matrix_ae3dc20d47e64b509c96a2c1c25ff7bd5}\index{csmp::CompressedRowMatrix@{csmp::CompressedRowMatrix}!At@{At}}
+\index{At@{At}!csmp::CompressedRowMatrix@{csmp::CompressedRowMatrix}}
+\doxysubsubsection{\texorpdfstring{At()}{At()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_compressed_row_matrix_ae3dc20d47e64b509c96a2c1c25ff7bd5} 
+double csmp\+::\+Compressed\+Row\+Matrix\+::\+At (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{i}{, }\item[{uint32\+\_\+t}]{j}{}\end{DoxyParamCaption}) const}
+
+
+
+range-\/checked accessor for matrix elements 
+
+range checked random access function that reports out of bound and missing element errors 
+\begin{DoxyParams}{Parameters}
+{\em i} & row index \\
+\hline
+{\em j} & column index \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+double matrix element 
+\end{DoxyReturn}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_compressed_row_matrix_ae3dc20d47e64b509c96a2c1c25ff7bd5_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_compressed_row_matrix_a4efa13a821b88a66dcd6e295bb42c33d}\index{csmp::CompressedRowMatrix@{csmp::CompressedRowMatrix}!Initialize@{Initialize}}
+\index{Initialize@{Initialize}!csmp::CompressedRowMatrix@{csmp::CompressedRowMatrix}}
+\doxysubsubsection{\texorpdfstring{Initialize()}{Initialize()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_compressed_row_matrix_a4efa13a821b88a66dcd6e295bb42c33d} 
+void csmp\+::\+Compressed\+Row\+Matrix\+::\+Initialize (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{csmp\+::\+Sparse\+Matrix}} \&}]{A}{}\end{DoxyParamCaption})}
+
+Initialize function called by constructor to initialize a compressed row matrix from a supplied sparse matrix it also converts the matrix to SAMG format which has the diagonal term at the beginning of each row and fortran indexes.
+
+Initialises the public \doxylink{classcsmp_1_1_compressed_row_matrix}{Compressed\+Row\+Matrix} vectors ia, ja, a from the given \doxylink{classcsmp_1_1_sparse_matrix}{csmp\+::\+Sparse\+Matrix}. ~\newline
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em A} & The fully accumulated global solution matrix.\\
+\hline
+\end{DoxyParams}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+If nnu denotes the number of rows (variables), the non-\/zero entries of the i-\/th row (1 ≤ i ≤ nnu) are stored in \doxylink{classcsmp_1_1_compressed_row_matrix_a9fc00fc9121ab81b0b0eac3e967a5d56}{a(j)} where
+
+\doxylink{classcsmp_1_1_compressed_row_matrix_a1611d70fbf30774e9cdfc3b691c174fc}{ia(i)} ≤ j ≤ ia(i+1)-\/1.
+
+In particular, according to the above-\/mentioned convention about the location of the diagonal element, \doxylink{classcsmp_1_1_compressed_row_matrix_a9fc00fc9121ab81b0b0eac3e967a5d56}{a(ia(i))} contains the diagonal entry of row i. Note that \doxylink{classcsmp_1_1_compressed_row_matrix_a1611d70fbf30774e9cdfc3b691c174fc}{ia(1)} = 1 and ia(nnu+1) = nna+1 where nna denotes the total number of matrix entries stored.
+
+ia, ja define the order of the off-\/diagonal elements in the solution matrix storage vector a (that holds them row by row).
+
+The pointer vector ja has to be defined so that \doxylink{classcsmp_1_1_compressed_row_matrix_a8d7b28ce3d544e34bbb47283eaef3907}{ja(j)} (1 ≤ j ≤ nna) equals the original matrix’ column index of \doxylink{classcsmp_1_1_compressed_row_matrix_a9fc00fc9121ab81b0b0eac3e967a5d56}{a(j)}, ie, \doxylink{classcsmp_1_1_compressed_row_matrix_a9fc00fc9121ab81b0b0eac3e967a5d56}{a(j)} corresponds to the variable u(ja(j)). In particular, since \doxylink{classcsmp_1_1_compressed_row_matrix_a9fc00fc9121ab81b0b0eac3e967a5d56}{a(ia(i))} contains the diagonal entry of row i, we have \doxylink{classcsmp_1_1_compressed_row_matrix_a8d7b28ce3d544e34bbb47283eaef3907}{ja(ia(i))}=i.
+
+While, in the compressed row format, all diagonal entries must be stored, off-\/diagonal entries are only stored if they are non-\/zero. ~\newline
+\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+Transfer of the global solution matrix to conventional solvers. ~\newline
+\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+Reports if the solution matrix contains zero diagonal entries. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_compressed_row_matrix_a4efa13a821b88a66dcd6e295bb42c33d_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_compressed_row_matrix_a4efa13a821b88a66dcd6e295bb42c33d_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_compressed_row_matrix_ab08768fbe9ee9fc44c9f8ee51788fb07}\index{csmp::CompressedRowMatrix@{csmp::CompressedRowMatrix}!InitializePointBased@{InitializePointBased}}
+\index{InitializePointBased@{InitializePointBased}!csmp::CompressedRowMatrix@{csmp::CompressedRowMatrix}}
+\doxysubsubsection{\texorpdfstring{InitializePointBased()}{InitializePointBased()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_compressed_row_matrix_ab08768fbe9ee9fc44c9f8ee51788fb07} 
+void csmp\+::\+Compressed\+Row\+Matrix\+::\+Initialize\+Point\+Based (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{Sparse\+Matrix}} \&}]{A}{, }\item[{size\+\_\+t}]{nsys}{}\end{DoxyParamCaption})}
+
+Initialises the public \doxylink{classcsmp_1_1_compressed_row_matrix}{Compressed\+Row\+Matrix} vectors ia, ja, a for given \doxylink{classcsmp_1_1_sparse_matrix}{Sparse\+Matrix} in case the Point-\/based approach is selected. \Hypertarget{classcsmp_1_1_compressed_row_matrix_abbf5a48708eda97af5463d507a93c9f3}\index{csmp::CompressedRowMatrix@{csmp::CompressedRowMatrix}!IsFormattedForSAMG@{IsFormattedForSAMG}}
+\index{IsFormattedForSAMG@{IsFormattedForSAMG}!csmp::CompressedRowMatrix@{csmp::CompressedRowMatrix}}
+\doxysubsubsection{\texorpdfstring{IsFormattedForSAMG()}{IsFormattedForSAMG()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_compressed_row_matrix_abbf5a48708eda97af5463d507a93c9f3} 
+bool csmp\+::\+Compressed\+Row\+Matrix\+::\+Is\+Formatted\+For\+SAMG (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+check whether matrix has been converted to SAMG format 
+
+Check whether the compressed row matrix has been converted into SAMG format. Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_compressed_row_matrix_abbf5a48708eda97af5463d507a93c9f3_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_compressed_row_matrix_a5872bd2e7bc86a6f10aa67e61a793a97}\index{csmp::CompressedRowMatrix@{csmp::CompressedRowMatrix}!Out@{Out}}
+\index{Out@{Out}!csmp::CompressedRowMatrix@{csmp::CompressedRowMatrix}}
+\doxysubsubsection{\texorpdfstring{Out()}{Out()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_compressed_row_matrix_a5872bd2e7bc86a6f10aa67e61a793a97} 
+void csmp\+::\+Compressed\+Row\+Matrix\+::\+Out (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+Outputs matrix to screen. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_compressed_row_matrix_a5872bd2e7bc86a6f10aa67e61a793a97_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_compressed_row_matrix_a5872bd2e7bc86a6f10aa67e61a793a97_icgraph}
+\end{center}
+\end{figure}
+
+
+\label{doc-related-members}
+\Hypertarget{classcsmp_1_1_compressed_row_matrix_doc-related-members}
+\doxysubsection{Friends And Related Symbol Documentation}
+\Hypertarget{classcsmp_1_1_compressed_row_matrix_af7904a9c245bfc925a251e01d94e99cb}\index{csmp::CompressedRowMatrix@{csmp::CompressedRowMatrix}!generateSparsityPatternEliminatingEssentialConditions@{generateSparsityPatternEliminatingEssentialConditions}}
+\index{generateSparsityPatternEliminatingEssentialConditions@{generateSparsityPatternEliminatingEssentialConditions}!csmp::CompressedRowMatrix@{csmp::CompressedRowMatrix}}
+\doxysubsubsection{\texorpdfstring{generateSparsityPatternEliminatingEssentialConditions}{generateSparsityPatternEliminatingEssentialConditions}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_compressed_row_matrix_af7904a9c245bfc925a251e01d94e99cb} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELLTYPE$>$ \\
+void generate\+Sparsity\+Pattern\+Eliminating\+Essential\+Conditions (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_compressed_row_matrix}{Compressed\+Row\+Matrix}} \&}]{G}{, }\item[{const std\+::map$<$ \mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}}, size\+\_\+t $>$ \&}]{test\+\_\+operands}{, }\item[{std\+::vector$<$ size\+\_\+t $>$ \&}]{DOF\+\_\+indexes}{, }\item[{const \mbox{\hyperlink{classcsmp_1_1_model_sub_domain}{Model\+Sub\+Domain}}$<$ dim, CELLTYPE $>$ \&}]{gref}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+this standalone function generates sparsity pattern for a compressed row matrix from supplied test\+\_\+operands\+\_\+, DOF\+\_\+indexes\+\_\+ and computational domain, taking into account elimination of essential conditions 
+
+generates sparsity pattern based on mesh connectivity information (i.\+e., neighbouring nodes) manifold nodes are also taken into account ia and ja are initialised, and values in a are initialised to zeros elimination of essential conditions is taken into account 
+
+\label{doc-variable-members}
+\Hypertarget{classcsmp_1_1_compressed_row_matrix_doc-variable-members}
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classcsmp_1_1_compressed_row_matrix_a1611d70fbf30774e9cdfc3b691c174fc}\index{csmp::CompressedRowMatrix@{csmp::CompressedRowMatrix}!ia@{ia}}
+\index{ia@{ia}!csmp::CompressedRowMatrix@{csmp::CompressedRowMatrix}}
+\doxysubsubsection{\texorpdfstring{ia}{ia}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_compressed_row_matrix_a1611d70fbf30774e9cdfc3b691c174fc} 
+std\+::vector$<$int32\+\_\+t$>$ csmp\+::\+Compressed\+Row\+Matrix\+::ia\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+\doxylink{classcsmp_1_1_compressed_row_matrix_a1611d70fbf30774e9cdfc3b691c174fc}{ia(ilo)} and the last row ends at position ia(ihi+1)-\/1 (see next). 
+
+ia stores the starting point/index for each row; its size equals num\+\_\+rows + 1 ja stores the column indices of all non-\/zero entries a stores the values of all non-\/zero entries 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/math/Compressed\+Row\+Matrix.\+h\item 
+source/modules/math/Compressed\+Row\+Matrix.\+cpp\end{DoxyCompactItemize}

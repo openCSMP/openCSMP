@@ -1,0 +1,108 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_test_singleton" kind="class" language="C++" prot="public">
+    <compoundname>csmp::TestSingleton</compoundname>
+    <basecompoundref refid="classcsmp_1_1_generic_singleton" prot="public" virt="non-virtual">csmp::GenericSingleton&lt; TestSingleton &gt;</basecompoundref>
+    <sectiondef kind="friend">
+      <memberdef kind="friend" id="classcsmp_1_1_test_singleton_1a9a0c42ff3eceb8bd98400684e2fd3538" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class GenericSingleton&lt; TestSingleton &gt;</definition>
+        <argsstring></argsstring>
+        <name>GenericSingleton&lt; TestSingleton &gt;</name>
+        <qualifiedname>csmp::TestSingleton::GenericSingleton&lt; TestSingleton &gt;</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_generic_singleton" kindref="compound">GenericSingleton</ref>&lt; <ref refid="classcsmp_1_1_test_singleton" kindref="compound">TestSingleton</ref> &gt;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/GenericSingleton_Test.h" line="12" column="16" bodyfile="tests/unit/GenericSingleton_Test.h" bodystart="20" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_test_singleton_1a89a4c8a78f79a0ca5bc6e891e64abb67" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int csmp::TestSingleton::i</definition>
+        <argsstring></argsstring>
+        <name>i</name>
+        <qualifiedname>csmp::TestSingleton::i</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/GenericSingleton_Test.h" line="26" column="9" bodyfile="tests/unit/GenericSingleton_Test.h" bodystart="26" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_test_singleton_1aa6cdd8d57e28dafabd69d23dc8f0b2a1" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::TestSingleton::TestSingleton</definition>
+        <argsstring>()</argsstring>
+        <name>TestSingleton</name>
+        <qualifiedname>csmp::TestSingleton::TestSingleton</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/GenericSingleton_Test.h" line="23" column="5" bodyfile="tests/unit/GenericSingleton_Test.h" bodystart="23" bodyend="23"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>csmp::GenericSingleton&lt; CT &gt;</label>
+        <link refid="classcsmp_1_1_generic_singleton"/>
+      </node>
+      <node id="2">
+        <label>csmp::GenericSingleton&lt; TestSingleton &gt;</label>
+        <link refid="classcsmp_1_1_generic_singleton"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; TestSingleton &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::TestSingleton</label>
+        <link refid="classcsmp_1_1_test_singleton"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3">
+        <label>csmp::GenericSingleton&lt; CT &gt;</label>
+        <link refid="classcsmp_1_1_generic_singleton"/>
+      </node>
+      <node id="2">
+        <label>csmp::GenericSingleton&lt; TestSingleton &gt;</label>
+        <link refid="classcsmp_1_1_generic_singleton"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; TestSingleton &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::TestSingleton</label>
+        <link refid="classcsmp_1_1_test_singleton"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="tests/unit/GenericSingleton_Test.h" line="18" column="1" bodyfile="tests/unit/GenericSingleton_Test.h" bodystart="19" bodyend="27"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_generic_singleton_1a0b7cd595e8d403cc96bcab72897defd9" prot="protected" virt="non-virtual"><scope>csmp::TestSingleton</scope><name>GenericSingleton</name></member>
+      <member refid="classcsmp_1_1_test_singleton_1a9a0c42ff3eceb8bd98400684e2fd3538" prot="private" virt="non-virtual"><scope>csmp::TestSingleton</scope><name>GenericSingleton&lt; TestSingleton &gt;</name></member>
+      <member refid="classcsmp_1_1_test_singleton_1a89a4c8a78f79a0ca5bc6e891e64abb67" prot="public" virt="non-virtual"><scope>csmp::TestSingleton</scope><name>i</name></member>
+      <member refid="classcsmp_1_1_generic_singleton_1aa9bfbd3b38562f40cb1dd3b29b57a4c1" prot="public" virt="non-virtual"><scope>csmp::TestSingleton</scope><name>Instance</name></member>
+      <member refid="classcsmp_1_1_test_singleton_1aa6cdd8d57e28dafabd69d23dc8f0b2a1" prot="private" virt="non-virtual"><scope>csmp::TestSingleton</scope><name>TestSingleton</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

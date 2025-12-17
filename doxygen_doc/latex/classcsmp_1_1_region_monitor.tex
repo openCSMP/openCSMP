@@ -1,0 +1,131 @@
+\doxysection{csmp\+::Region\+Monitor\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_region_monitor}{}\label{classcsmp_1_1_region_monitor}\index{csmp::RegionMonitor$<$ dim $>$@{csmp::RegionMonitor$<$ dim $>$}}
+
+
+Monitors value ranges and integrated property values in all regions of a model.  
+
+
+
+
+{\ttfamily \#include $<$Region\+Monitor.\+h$>$}
+
+
+
+Collaboration diagram for csmp\+::Region\+Monitor\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=213pt]{classcsmp_1_1_region_monitor__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_region_monitor_a5a66e3bc501aad67adaf1e626e07920b}\label{classcsmp_1_1_region_monitor_a5a66e3bc501aad67adaf1e626e07920b} 
+{\bfseries Region\+Monitor} (const \mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&, const std\+::string \&first\+\_\+integral\+\_\+property, const std\+::string \&first\+\_\+range\+\_\+property, bool integrate\+\_\+pore\+\_\+volume\+\_\+only=true)
+\begin{DoxyCompactList}\small\item\em construct with 2 properties to monitor \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_region_monitor_a203447f3fe2a1ce0d942c2b28d6b676b}\label{classcsmp_1_1_region_monitor_a203447f3fe2a1ce0d942c2b28d6b676b} 
+{\bfseries Region\+Monitor} (const \mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&, const std\+::list$<$ std\+::string $>$ \&to\+\_\+integrate\+\_\+over\+\_\+groups, const std\+::list$<$ std\+::string $>$ \&to\+\_\+find\+\_\+ranges\+\_\+in\+\_\+groups, bool integrate\+\_\+pore\+\_\+volume\+\_\+only=true)
+\begin{DoxyCompactList}\small\item\em construct with lists of multiple range and/or integral properties \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_region_monitor_a6d9a525c4d086c9236c39ca666f0bd0f}\label{classcsmp_1_1_region_monitor_a6d9a525c4d086c9236c39ca666f0bd0f} 
+void {\bfseries Define\+Properties} (const \mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&, const std\+::list$<$ std\+::string $>$ \&to\+\_\+integrate\+\_\+over\+\_\+groups, const std\+::list$<$ std\+::string $>$ \&to\+\_\+find\+\_\+ranges\+\_\+in\+\_\+groups, bool integrate\+\_\+pore\+\_\+volume\+\_\+only=true)
+\begin{DoxyCompactList}\small\item\em tell \doxylink{classcsmp_1_1_region_monitor}{Region\+Monitor} which properties it should track \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_region_monitor_aa0bab746a56979294516331a287d08ed}\label{classcsmp_1_1_region_monitor_aa0bab746a56979294516331a287d08ed} 
+void {\bfseries Divide\+Integral\+Properties\+By\+Region\+Volumes} (bool divide)
+\begin{DoxyCompactList}\small\item\em switches on normalisation by volume for all property value integrations \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_region_monitor_aed5f0feb4951220654920a9cf71d89ac}\label{classcsmp_1_1_region_monitor_aed5f0feb4951220654920a9cf71d89ac} 
+bool {\bfseries Data\+Exists} () const
+\begin{DoxyCompactList}\small\item\em returns true when there are already monitoring data stored in respective containers \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_region_monitor_a4c0f6f66e3e8a5d372745702acb059cf}{Scalar\+Property\+Integrals}} (const \mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&, double current\+\_\+time=0.)
+\begin{DoxyCompactList}\small\item\em calculates integrals over current property values and stores these for the current time-\/step and property name \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_region_monitor_ab19a4bda6f9ace0a4ee64f28d0864bc5}{Scalar\+Property\+Ranges}} (const \mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&, double current\+\_\+time=0.)
+\begin{DoxyCompactList}\small\item\em monitors current ranges of the the scalar values \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_region_monitor_aa3bae5ced5a8ced7c7c85ec69cc34106}{Insert\+Externally\+Calculated\+Property}} (std\+::string property, std\+::string regionname)
+\item 
+\Hypertarget{classcsmp_1_1_region_monitor_a9ebf1b1b2722f4a0acfa77da6d324f77}\label{classcsmp_1_1_region_monitor_a9ebf1b1b2722f4a0acfa77da6d324f77} 
+void {\bfseries Insert\+Externally\+Calculated\+Property} (std\+::string property\+\_\+regionname)
+\item 
+\Hypertarget{classcsmp_1_1_region_monitor_a28f0432fc92a7f511c16ece5ed2823d7}\label{classcsmp_1_1_region_monitor_a28f0432fc92a7f511c16ece5ed2823d7} 
+void {\bfseries Insert\+Pre\+Calculated\+Property\+Value} (double time, std\+::string property, std\+::string regionname, double value)
+\item 
+\Hypertarget{classcsmp_1_1_region_monitor_ae5806e1032d997bb95a4152031e3697c}\label{classcsmp_1_1_region_monitor_ae5806e1032d997bb95a4152031e3697c} 
+void {\bfseries Insert\+Pre\+Calculated\+Property\+Value} (double time, std\+::string property\+\_\+regionname, double value)
+\item 
+\Hypertarget{classcsmp_1_1_region_monitor_ad3e12040d6ebf263edba97db9f7d0493}\label{classcsmp_1_1_region_monitor_ad3e12040d6ebf263edba97db9f7d0493} 
+void {\bfseries Reset} ()
+\begin{DoxyCompactList}\small\item\em zap all recorded values and property names \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_region_monitor_a5757ba47fae09aa44d1ddf5e65e62898}\label{classcsmp_1_1_region_monitor_a5757ba47fae09aa44d1ddf5e65e62898} 
+void {\bfseries Erase\+Data} ()
+\begin{DoxyCompactList}\small\item\em zap all recorded values \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_region_monitor_ae21d32e533bf63b985e80104f45a78fd}\label{classcsmp_1_1_region_monitor_ae21d32e533bf63b985e80104f45a78fd} 
+void {\bfseries Out} (const char \texorpdfstring{$\ast$}{*}text\+\_\+file) const
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim$>$\newline
+class csmp\+::\+Region\+Monitor$<$ dim $>$}
+Monitors value ranges and integrated property values in all regions of a model. 
+
+Among the non-\/unique (potentially overlapping) regions those with names identical to \doxylink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\+\_\+\+BOUNDARY} flags and the "{}\+All Element"{} region are ignored.
+
+\begin{DoxyAttention}{Attention}
+if the model contains lower-\/dimensional regions, a thickness attribute called "{}thickness"{} must be specified for these in order to get their volume right. For the regions with the same dimension as the model, the thickness attribute should have a value of 1.
+\end{DoxyAttention}
+\begin{DoxyAuthor}{Author}
+Stephan Matthai 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+1999 
+\end{DoxyDate}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_region_monitor_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_region_monitor_aa3bae5ced5a8ced7c7c85ec69cc34106}\index{csmp::RegionMonitor$<$ dim $>$@{csmp::RegionMonitor$<$ dim $>$}!InsertExternallyCalculatedProperty@{InsertExternallyCalculatedProperty}}
+\index{InsertExternallyCalculatedProperty@{InsertExternallyCalculatedProperty}!csmp::RegionMonitor$<$ dim $>$@{csmp::RegionMonitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{InsertExternallyCalculatedProperty()}{InsertExternallyCalculatedProperty()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_region_monitor_aa3bae5ced5a8ced7c7c85ec69cc34106} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_region_monitor}{csmp\+::\+Region\+Monitor}}$<$ dim $>$\+::\+Insert\+Externally\+Calculated\+Property (\begin{DoxyParamCaption}\item[{std\+::string}]{property}{, }\item[{std\+::string}]{regionname}{}\end{DoxyParamCaption})}
+
+adds in values in a separate container, to be output to a separate file with the same prefix name as the other monitoring file, except with the "{}\+\_\+ext"{} added to its name. \Hypertarget{classcsmp_1_1_region_monitor_a4c0f6f66e3e8a5d372745702acb059cf}\index{csmp::RegionMonitor$<$ dim $>$@{csmp::RegionMonitor$<$ dim $>$}!ScalarPropertyIntegrals@{ScalarPropertyIntegrals}}
+\index{ScalarPropertyIntegrals@{ScalarPropertyIntegrals}!csmp::RegionMonitor$<$ dim $>$@{csmp::RegionMonitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{ScalarPropertyIntegrals()}{ScalarPropertyIntegrals()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_region_monitor_a4c0f6f66e3e8a5d372745702acb059cf} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_region_monitor}{csmp\+::\+Region\+Monitor}}$<$ dim $>$\+::\+Scalar\+Property\+Integrals (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&}]{sg}{, }\item[{double}]{time}{ = {\ttfamily 0.}}\end{DoxyParamCaption})}
+
+
+
+calculates integrals over current property values and stores these for the current time-\/step and property name 
+
+calculates property integrals and stores these for the current time-\/step and property name if the variable \textquotesingle{}thickness\textquotesingle{} is defined in the \doxylink{classcsmp_1_1_property_database}{Property\+Database}, it is used to scale the element by element integrals.
+
+\begin{DoxyAttention}{Attention}
+non-\/unique regions that bear the name of model boundaries are ignored. 
+\end{DoxyAttention}
+\Hypertarget{classcsmp_1_1_region_monitor_ab19a4bda6f9ace0a4ee64f28d0864bc5}\index{csmp::RegionMonitor$<$ dim $>$@{csmp::RegionMonitor$<$ dim $>$}!ScalarPropertyRanges@{ScalarPropertyRanges}}
+\index{ScalarPropertyRanges@{ScalarPropertyRanges}!csmp::RegionMonitor$<$ dim $>$@{csmp::RegionMonitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{ScalarPropertyRanges()}{ScalarPropertyRanges()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_region_monitor_ab19a4bda6f9ace0a4ee64f28d0864bc5} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_region_monitor}{csmp\+::\+Region\+Monitor}}$<$ dim $>$\+::\+Scalar\+Property\+Ranges (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&}]{sg}{, }\item[{double}]{time}{ = {\ttfamily 0.}}\end{DoxyParamCaption})}
+
+
+
+monitors current ranges of the the scalar values 
+
+Records the ranges of the target variables in each region.
+
+\begin{DoxyAttention}{Attention}
+non-\/unique regions that bear the name of model boundaries are ignored. 
+\end{DoxyAttention}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/analysis/Region\+Monitor.\+h\item 
+source/modules/analysis/Region\+Monitor.\+cpp\end{DoxyCompactItemize}

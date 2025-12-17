@@ -151,7 +151,7 @@ template<uint32_t> class PropertyDatabase;
 
       /// printing array values to screen
       void           Out( long digits=3 ) const;
-      bool           Out( const char* filename, size_t precision = 9 ) const;
+      bool           Out( const char* filename, long precision = 9 ) const;
       
       /// filestream I/O used for domain variables (not recommended because padding creates large storage overhead; use PropertyData instead)
       bool           Out( std::fstream& ) const;

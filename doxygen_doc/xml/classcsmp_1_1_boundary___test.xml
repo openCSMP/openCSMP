@@ -1,0 +1,439 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_boundary___test" kind="class" language="C++" prot="public">
+    <compoundname>csmp::Boundary_Test</compoundname>
+    <basecompoundref refid="classcsmp_1_1_test" prot="public" virt="non-virtual">csmp::Test</basecompoundref>
+    <includes refid="_boundary___test_8h" local="no">Boundary_Test.h</includes>
+    <sectiondef kind="private-static-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_boundary___test_1a2d7215c9ac6e33406e3152784c87eefb" prot="private" static="yes" mutable="no">
+        <type>const bool</type>
+        <definition>const bool csmp::Boundary_Test::verbose_</definition>
+        <argsstring></argsstring>
+        <name>verbose_</name>
+        <qualifiedname>csmp::Boundary_Test::verbose_</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/Boundary_Test.h" line="23" column="21" bodyfile="tests/unit/Boundary_Test.h" bodystart="23" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_boundary___test_1adc5e646de2a73207f0d651bdfcb61ffa" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::Boundary_Test::run</definition>
+        <argsstring>()</argsstring>
+        <name>run</name>
+        <qualifiedname>csmp::Boundary_Test::run</qualifiedname>
+        <reimplements refid="classcsmp_1_1_test_1af63cd2af47d8d03819b05cf8bfb27eac">run</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/Boundary_Test.h" line="20" column="16" bodyfile="tests/unit/Boundary_Test.cpp" bodystart="71" bodyend="77"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary___test_1abf60fc6108683558fb214a965880412f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::Boundary_Test::TestBoxBoundary</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;model, const string &amp;boxBoundary, VTU_Interface&lt; dim &gt; &amp;vtu)</argsstring>
+        <name>TestBoxBoundary</name>
+        <qualifiedname>csmp::Boundary_Test::TestBoxBoundary</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <declname>model</declname>
+        </param>
+        <param>
+          <type>const string &amp;</type>
+          <declname>boxBoundary</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_t_u___interface" kindref="compound">VTU_Interface</ref>&lt; dim &gt; &amp;</type>
+          <declname>vtu</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/Boundary_Test.cpp" line="100" column="6" bodyfile="tests/unit/Boundary_Test.cpp" bodystart="100" bodyend="131"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_boundary___test_1a88d16cba11fe1843fb0fc9989bfbb94a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Boundary_Test::runLegacy</definition>
+        <argsstring>()</argsstring>
+        <name>runLegacy</name>
+        <qualifiedname>csmp::Boundary_Test::runLegacy</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para>getting rid of the boundary so that a new one can be created</para>
+        </inbodydescription>
+        <location file="tests/unit/Boundary_Test.h" line="25" column="8" bodyfile="tests/unit/Boundary_Test.cpp" bodystart="305" bodyend="546"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary___test_1a06b14bd7e77fc8b9a7f800434042f726" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Boundary_Test::runCurrent</definition>
+        <argsstring>()</argsstring>
+        <name>runCurrent</name>
+        <qualifiedname>csmp::Boundary_Test::runCurrent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>refactored tests from Philip Lang </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/Boundary_Test.h" line="26" column="8" bodyfile="tests/unit/Boundary_Test.cpp" bodystart="555" bodyend="617"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary___test_1a7ddbcd50d0783e16f972e7d42815eac7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>size_t</type>
+        <definition>size_t csmp::Boundary_Test::InputElementAreaAsVolumeVariable</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;, Boundary&lt; dim &gt; &amp;, const char *variableName)</argsstring>
+        <name>InputElementAreaAsVolumeVariable</name>
+        <qualifiedname>csmp::Boundary_Test::InputElementAreaAsVolumeVariable</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <defname>model</defname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref>&lt; dim &gt; &amp;</type>
+          <defname>boundary</defname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>variableName</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/Boundary_Test.h" line="29" column="10" bodyfile="tests/unit/Boundary_Test.cpp" bodystart="135" bodyend="152"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary___test_1a12d7f9eb88ff508db7f1c6a59362bc15" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::Boundary_Test::TestBoxBoundary</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;, const std::string &amp;boundary, VTU_Interface&lt; dim &gt; &amp;)</argsstring>
+        <name>TestBoxBoundary</name>
+        <qualifiedname>csmp::Boundary_Test::TestBoxBoundary</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>boundary</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_t_u___interface" kindref="compound">VTU_Interface</ref>&lt; dim &gt; &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/Boundary_Test.h" line="32" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary___test_1a15b5678d51f9f5093e310fad2f114544" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::Boundary_Test::CheckFaceNeighbors</definition>
+        <argsstring>(const Boundary&lt; dim &gt; &amp;)</argsstring>
+        <name>CheckFaceNeighbors</name>
+        <qualifiedname>csmp::Boundary_Test::CheckFaceNeighbors</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref>&lt; dim &gt; &amp;</type>
+          <defname>boundary</defname>
+        </param>
+        <briefdescription>
+<para>checks that at least one neighbor is present </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/Boundary_Test.h" line="35" column="8" bodyfile="tests/unit/Boundary_Test.cpp" bodystart="157" bodyend="176"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary___test_1ae6a84192a098a90d5338e570db8d115e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::Boundary_Test::CheckNodeFlags</definition>
+        <argsstring>(const Boundary&lt; dim &gt; &amp;, BOX_BOUNDARY flag, bool interiorOnly=false)</argsstring>
+        <name>CheckNodeFlags</name>
+        <qualifiedname>csmp::Boundary_Test::CheckNodeFlags</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref>&lt; dim &gt; &amp;</type>
+          <defname>boundary</defname>
+        </param>
+        <param>
+          <type><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref></type>
+          <declname>flag</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>interiorOnly</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>checks for flags of the boundary nodes </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/Boundary_Test.h" line="38" column="8" bodyfile="tests/unit/Boundary_Test.cpp" bodystart="279" bodyend="291"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary___test_1ae6e6ecff12c761400c0f47c4c74a27cd" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::Boundary_Test::CheckFaceUnitNormalOrientation</definition>
+        <argsstring>(const Boundary&lt; dim &gt; &amp;)</argsstring>
+        <name>CheckFaceUnitNormalOrientation</name>
+        <qualifiedname>csmp::Boundary_Test::CheckFaceUnitNormalOrientation</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref>&lt; dim &gt; &amp;</type>
+          <defname>boundary</defname>
+        </param>
+        <briefdescription>
+<para>checks for that face unit normal points toward outer parent element </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/Boundary_Test.h" line="41" column="8" bodyfile="tests/unit/Boundary_Test.cpp" bodystart="181" bodyend="211"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary___test_1ab10b814a45e18c1235827ffd68f58c7e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Boundary_Test::UnitNormalTest3D</definition>
+        <argsstring>()</argsstring>
+        <name>UnitNormalTest3D</name>
+        <qualifiedname>csmp::Boundary_Test::UnitNormalTest3D</qualifiedname>
+        <briefdescription>
+<para>using prism_test because it has a host of element types </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Tests <ref refid="classcsmp_1_1_finite_volume_policy" kindref="compound">FiniteVolumePolicy</ref>:<itemizedlist>
+<listitem><para>UnitNormalToFace( size_t face, std::vector&lt;double&gt;&amp; );</para>
+</listitem></itemizedlist>
+</para>
+<para>Tests prism_test model because it contains elements of all types.</para>
+<para><xrefsect id="todo_1_todo000256"><xreftitle>Todo</xreftitle><xrefdescription><para>2D model has to be tested as well </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/Boundary_Test.h" line="44" column="8" bodyfile="tests/unit/Boundary_Test.cpp" bodystart="224" bodyend="269"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary___test_1a5605ee7e5d7b24cade841b357dfaef0e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::Boundary_Test::CheckNodeParents</definition>
+        <argsstring>(const Boundary&lt; dim &gt; &amp;)</argsstring>
+        <name>CheckNodeParents</name>
+        <qualifiedname>csmp::Boundary_Test::CheckNodeParents</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref>&lt; dim &gt; &amp;</type>
+          <defname>boundary</defname>
+        </param>
+        <briefdescription>
+<para>checks for flags of the boundary nodes </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/Boundary_Test.h" line="47" column="8" bodyfile="tests/unit/Boundary_Test.cpp" bodystart="296" bodyend="301"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary___test_1a4716380652f4851e82d4fd7cd0241cec" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::Boundary_Test::ElementNodes</definition>
+        <argsstring>(const csmp::Region&lt; dim &gt; &amp;)</argsstring>
+        <name>ElementNodes</name>
+        <qualifiedname>csmp::Boundary_Test::ElementNodes</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_region" kindref="compound">csmp::Region</ref>&lt; dim &gt; &amp;</type>
+          <defname>region</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/Boundary_Test.h" line="50" column="8" bodyfile="tests/unit/Boundary_Test.cpp" bodystart="81" bodyend="86"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary___test_1a5993d9b9cbd20e4f511dc273616a1185" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::Boundary_Test::NoSurfaceElementsAsNodeParents</definition>
+        <argsstring>(const Region&lt; dim &gt; &amp;)</argsstring>
+        <name>NoSurfaceElementsAsNodeParents</name>
+        <qualifiedname>csmp::Boundary_Test::NoSurfaceElementsAsNodeParents</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref>&lt; dim &gt; &amp;</type>
+          <defname>region</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/Boundary_Test.h" line="53" column="8" bodyfile="tests/unit/Boundary_Test.cpp" bodystart="90" bodyend="96"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary___test_1a2f46990ab2d3460134b84ea549c22df6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Boundary_Test::Test_ChangeBoundaryStatus</definition>
+        <argsstring>()</argsstring>
+        <name>Test_ChangeBoundaryStatus</name>
+        <qualifiedname>csmp::Boundary_Test::Test_ChangeBoundaryStatus</qualifiedname>
+        <briefdescription>
+<para>checks that variable flags are set correctly for INTERIOR, PERIMETER and COMPLETE discriminators </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/Boundary_Test.h" line="56" column="8" bodyfile="tests/unit/Boundary_Test.cpp" bodystart="623" bodyend="712"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>tests integrity of boundary also after retrieval from CSMP native binary model <verbatim>@author P. Lang
+@date 2011
+
+@author SKM (adding extra tests)
+@date 2024
+</verbatim> </para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::Boundary_Test</label>
+        <link refid="classcsmp_1_1_boundary___test"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Test</label>
+        <link refid="classcsmp_1_1_test"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::Boundary_Test</label>
+        <link refid="classcsmp_1_1_boundary___test"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Test</label>
+        <link refid="classcsmp_1_1_test"/>
+      </node>
+    </collaborationgraph>
+    <location file="tests/unit/Boundary_Test.h" line="18" column="1" bodyfile="tests/unit/Boundary_Test.h" bodystart="18" bodyend="57"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_boundary___test_1a15b5678d51f9f5093e310fad2f114544" prot="private" virt="non-virtual"><scope>csmp::Boundary_Test</scope><name>CheckFaceNeighbors</name></member>
+      <member refid="classcsmp_1_1_boundary___test_1ae6e6ecff12c761400c0f47c4c74a27cd" prot="private" virt="non-virtual"><scope>csmp::Boundary_Test</scope><name>CheckFaceUnitNormalOrientation</name></member>
+      <member refid="classcsmp_1_1_boundary___test_1ae6a84192a098a90d5338e570db8d115e" prot="private" virt="non-virtual"><scope>csmp::Boundary_Test</scope><name>CheckNodeFlags</name></member>
+      <member refid="classcsmp_1_1_boundary___test_1a5605ee7e5d7b24cade841b357dfaef0e" prot="private" virt="non-virtual"><scope>csmp::Boundary_Test</scope><name>CheckNodeParents</name></member>
+      <member refid="classcsmp_1_1_test_1ad3346b23b36fbe34ac5f306a2a5d0e28" prot="protected" virt="non-virtual"><scope>csmp::Boundary_Test</scope><name>do_equal</name></member>
+      <member refid="classcsmp_1_1_test_1aee0da28e82775ce7d1ebd3b9fae9bf7d" prot="protected" virt="non-virtual"><scope>csmp::Boundary_Test</scope><name>do_fail</name></member>
+      <member refid="classcsmp_1_1_test_1a9976e7601c20a057d2f0ed2f8318c862" prot="public" virt="non-virtual"><scope>csmp::Boundary_Test</scope><name>do_succeed</name></member>
+      <member refid="classcsmp_1_1_test_1a0bf5d355d1455b2bc113ba2572e95ad8" prot="protected" virt="non-virtual"><scope>csmp::Boundary_Test</scope><name>do_test</name></member>
+      <member refid="classcsmp_1_1_boundary___test_1a4716380652f4851e82d4fd7cd0241cec" prot="private" virt="non-virtual"><scope>csmp::Boundary_Test</scope><name>ElementNodes</name></member>
+      <member refid="classcsmp_1_1_test_1ab8d7cbdfd0588aa57d7ce4d2574d665b" prot="public" virt="non-virtual"><scope>csmp::Boundary_Test</scope><name>getName</name></member>
+      <member refid="classcsmp_1_1_test_1a47920cfd13f92f0860ca62ade4f2e150" prot="public" virt="non-virtual"><scope>csmp::Boundary_Test</scope><name>getNumFailed</name></member>
+      <member refid="classcsmp_1_1_test_1af0f3b897ba4ff0cb7c94cde8be1fb32b" prot="public" virt="non-virtual"><scope>csmp::Boundary_Test</scope><name>getNumPassed</name></member>
+      <member refid="classcsmp_1_1_test_1ac340370a07ff5fd4bd85bae93f0a3dac" prot="public" virt="non-virtual"><scope>csmp::Boundary_Test</scope><name>getStream</name></member>
+      <member refid="classcsmp_1_1_test_1adfad3f1f85aa766958ffcc59070e2d2d" prot="public" virt="non-virtual"><scope>csmp::Boundary_Test</scope><name>hasName</name></member>
+      <member refid="classcsmp_1_1_boundary___test_1a7ddbcd50d0783e16f972e7d42815eac7" prot="private" virt="non-virtual"><scope>csmp::Boundary_Test</scope><name>InputElementAreaAsVolumeVariable</name></member>
+      <member refid="classcsmp_1_1_boundary___test_1a5993d9b9cbd20e4f511dc273616a1185" prot="private" virt="non-virtual"><scope>csmp::Boundary_Test</scope><name>NoSurfaceElementsAsNodeParents</name></member>
+      <member refid="classcsmp_1_1_test_1a73afdd22caa8aac000b0d07fb3ae42e5" prot="protected" virt="non-virtual"><scope>csmp::Boundary_Test</scope><name>prefix_</name></member>
+      <member refid="classcsmp_1_1_test_1aa241dcb3adf0ec6716ed08739bd3f79b" prot="public" virt="non-virtual"><scope>csmp::Boundary_Test</scope><name>report</name></member>
+      <member refid="classcsmp_1_1_test_1a5d334e867a3de4afd434dd9b0034234c" prot="public" virt="virtual"><scope>csmp::Boundary_Test</scope><name>reset</name></member>
+      <member refid="classcsmp_1_1_boundary___test_1adc5e646de2a73207f0d651bdfcb61ffa" prot="public" virt="virtual"><scope>csmp::Boundary_Test</scope><name>run</name></member>
+      <member refid="classcsmp_1_1_boundary___test_1a06b14bd7e77fc8b9a7f800434042f726" prot="private" virt="non-virtual"><scope>csmp::Boundary_Test</scope><name>runCurrent</name></member>
+      <member refid="classcsmp_1_1_boundary___test_1a88d16cba11fe1843fb0fc9989bfbb94a" prot="private" virt="non-virtual"><scope>csmp::Boundary_Test</scope><name>runLegacy</name></member>
+      <member refid="classcsmp_1_1_test_1a3e006cad54b35d9e20561f4a64843b4e" prot="public" virt="non-virtual"><scope>csmp::Boundary_Test</scope><name>setName</name></member>
+      <member refid="classcsmp_1_1_test_1a20ba6ab18fcaaf806df6348a3b2e032b" prot="public" virt="non-virtual"><scope>csmp::Boundary_Test</scope><name>setStream</name></member>
+      <member refid="classcsmp_1_1_test_1aa4e274174d16215448eab6198bdb5979" prot="public" virt="non-virtual"><scope>csmp::Boundary_Test</scope><name>Test</name></member>
+      <member refid="classcsmp_1_1_boundary___test_1a2f46990ab2d3460134b84ea549c22df6" prot="private" virt="non-virtual"><scope>csmp::Boundary_Test</scope><name>Test_ChangeBoundaryStatus</name></member>
+      <member refid="classcsmp_1_1_boundary___test_1a12d7f9eb88ff508db7f1c6a59362bc15" prot="private" virt="non-virtual"><scope>csmp::Boundary_Test</scope><name>TestBoxBoundary</name></member>
+      <member refid="classcsmp_1_1_boundary___test_1abf60fc6108683558fb214a965880412f" prot="public" virt="non-virtual"><scope>csmp::Boundary_Test</scope><name>TestBoxBoundary</name></member>
+      <member refid="classcsmp_1_1_boundary___test_1ab10b814a45e18c1235827ffd68f58c7e" prot="private" virt="non-virtual"><scope>csmp::Boundary_Test</scope><name>UnitNormalTest3D</name></member>
+      <member refid="classcsmp_1_1_boundary___test_1a2d7215c9ac6e33406e3152784c87eefb" prot="private" virt="non-virtual"><scope>csmp::Boundary_Test</scope><name>verbose_</name></member>
+      <member refid="classcsmp_1_1_test_1ac154a16a5e086fe52e032c30722f5060" prot="public" virt="virtual"><scope>csmp::Boundary_Test</scope><name>~Test</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,67 @@
+\doxysection{Go\+Cad\+Interface.\+h}
+\hypertarget{_go_cad_interface_8h_source}{}\label{_go_cad_interface_8h_source}\index{source/includes/interfaces/gOcad\_SKUA/GoCadInterface.h@{source/includes/interfaces/gOcad\_SKUA/GoCadInterface.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_GOCAD\_INTERFACE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_GOCAD\_INTERFACE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_gocad_header_8h}{"{}GocadHeader.h"{}}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_gocad_property_class_header_8h}{"{}GocadPropertyClassHeader.h"{}}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_box_8h}{"{}Box.h"{}}}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_v_set}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}};}
+\DoxyCodeLine{00012\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_model}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}};}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00015\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_go_cad_interface}{GoCadInterface}}\ \{}
+\DoxyCodeLine{00016\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00017\ \ \ \ \ GoCadInterface();}
+\DoxyCodeLine{00018\ \ \ \ \ \string~GoCadInterface();}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{comment}{///\ input\ of\ data\ from\ GoCad\ to\ CSMP}}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{classcsmp_1_1_go_cad_interface_a6fd20679b22d894ba5d1db4cbbdde30f}{ReadTetrahedralGocad3DSurface}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fname,\ \mbox{\hyperlink{classcsmp_1_1_gocad_header}{GocadHeader}}\&\ header,\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ vset\ );}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{classcsmp_1_1_go_cad_interface_a8582e002e2c5c4b0b8872dbf4ebfbf8d}{ReadTetrahedralGocad3DMesh}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fname,\ \mbox{\hyperlink{classcsmp_1_1_gocad_header}{GocadHeader}}\&\ header,\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ vset\ );}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{comment}{///\ output\ of\ data\ from\ CSMP\ to\ GoCad}}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_go_cad_interface_ad53bbd900d0f59ef4cf9224d05f8d4c4}{OutputVariableToTSurface}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fname,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ var,}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{long}\ timestep=0\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_go_cad_interface_abcfa60d18d24849fdd2ed2dc6d9d0951}{OutputVariableToTSurface}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fname,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ group\_name,}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ var,\ \textcolor{keywordtype}{long}\ timestep=0\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_go_cad_interface_a6d5c70c99f9485be33607b6fab605db0}{OutputVariablesToTSurface}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fname,\ \textcolor{keywordtype}{long}\ timestep=0\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_go_cad_interface_aa2fce00574c73522de5050bad574c87a}{OutputVariableToTSolid}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ sg,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fname,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ var,}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{long}\ timestep=0\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_go_cad_interface_a752851bdc7e233e03f116c3645da6eff}{OutputVariableToTSolid}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fname,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ group\_name,}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ var,\ \textcolor{keywordtype}{long}\ timestep=0\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \mbox{\hyperlink{classcsmp_1_1_go_cad_interface_af531b357faad34cd53deb390d718afaa}{OutputRegionsToGoCadFiles}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ property,\ \textcolor{keywordtype}{long}\ timestep=0\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordtype}{bool}\ IsInNextLine(\ std::ifstream\&\ ifs,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ search\_string\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}}\ \ IdentifyTetrahedronBoundary(\ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ nd1,}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ nd2,}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ nd3\ );}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keywordtype}{bool}\ ReadTSurface(\ std::ifstream\&\ ifs,}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::list<GocadPropertyClassHeader>\&\ properties,}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ vset\ );}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordtype}{void}\ ReadTSolid(\ std::ifstream\&\ ifs,\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ vset,\ \textcolor{keywordtype}{bool}\ with\_node\_prop=\textcolor{keyword}{false}\ );}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordtype}{void}\ FlagEdgeNodesOfBoxShapedModel(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ vset\ );}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keywordtype}{bool}\ VerifyConsecutiveNodeNumbering(\ std::map<size\_t,std::vector<size\_t>\ >\&\ plist\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00057\ \};}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

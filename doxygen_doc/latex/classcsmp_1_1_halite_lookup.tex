@@ -1,0 +1,94 @@
+\doxysection{csmp\+::Halite\+Lookup Class Reference}
+\hypertarget{classcsmp_1_1_halite_lookup}{}\label{classcsmp_1_1_halite_lookup}\index{csmp::HaliteLookup@{csmp::HaliteLookup}}
+
+
+Build and/or query lookup tables for thermodynamic properties of halite (crystalline Na\+Cl)  
+
+
+
+
+{\ttfamily \#include "{}eos/h2o\+\_\+nacl/\+Halite\+Lookup.\+h"{}}
+
+
+
+Collaboration diagram for csmp\+::Halite\+Lookup\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=186pt]{classcsmp_1_1_halite_lookup__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_halite_lookup_a5c5fd3ddd636902abd71ec8de5ea4b25}\label{classcsmp_1_1_halite_lookup_a5c5fd3ddd636902abd71ec8de5ea4b25} 
+{\bfseries Halite\+Lookup} (const double \&externaltemperature, const double \&externalpressure)
+\item 
+\Hypertarget{classcsmp_1_1_halite_lookup_a7203568a03e65ac0a249a83c415aa6ce}\label{classcsmp_1_1_halite_lookup_a7203568a03e65ac0a249a83c415aa6ce} 
+double {\bfseries Mass\+Fraction\+Na\+Cl} ()
+\item 
+\Hypertarget{classcsmp_1_1_halite_lookup_a974c046cc6409315017e4e20413e1d2e}\label{classcsmp_1_1_halite_lookup_a974c046cc6409315017e4e20413e1d2e} 
+double {\bfseries Density} ()
+\item 
+\Hypertarget{classcsmp_1_1_halite_lookup_a8378d75c07b77404cf9be1912607fe55}\label{classcsmp_1_1_halite_lookup_a8378d75c07b77404cf9be1912607fe55} 
+double {\bfseries Enthalpy} ()
+\item 
+\Hypertarget{classcsmp_1_1_halite_lookup_ab932539ea58789628ff0718ebdb18dd2}\label{classcsmp_1_1_halite_lookup_ab932539ea58789628ff0718ebdb18dd2} 
+double {\bfseries Heat\+Capacity} ()
+\item 
+\Hypertarget{classcsmp_1_1_halite_lookup_a682b9f13437809d533e062c9bbad3f3a}\label{classcsmp_1_1_halite_lookup_a682b9f13437809d533e062c9bbad3f3a} 
+double {\bfseries Compressibility} ()
+\item 
+\Hypertarget{classcsmp_1_1_halite_lookup_a877685eed7ed09b2c8402d52552d8525}\label{classcsmp_1_1_halite_lookup_a877685eed7ed09b2c8402d52552d8525} 
+double {\bfseries Viscosity} ()
+\item 
+\Hypertarget{classcsmp_1_1_halite_lookup_a1e663ac22529ce05f7715952d1551c02}\label{classcsmp_1_1_halite_lookup_a1e663ac22529ce05f7715952d1551c02} 
+double {\bfseries Value\+Of} (const int \&property\+\_\+index)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Build and/or query lookup tables for thermodynamic properties of halite (crystalline Na\+Cl) 
+
+\begin{DoxyAuthor}{Author}
+Thomas Driesner, ETH Zuerich 
+\end{DoxyAuthor}
+\hypertarget{compare_floats_8h_contact}{}\doxysubsection{\texorpdfstring{Contact}{Contact}}\label{compare_floats_8h_contact}
+\href{mailto:thomas.driesner@erdw.ethz.ch}{\texttt{thomas.\+driesner@erdw.\+ethz.\+ch}}
+
+@changes changes Latest Changes Jan 28, 2013\+: ported to CSMP++, changed all pressure units to Pa. Sep 10, 2014\+: adapted to CSMP++ coding style, updated doxygen comments\hypertarget{compare_floats_8h_motivation}{}\doxysubsection{\texorpdfstring{Motivation}{Motivation}}\label{compare_floats_8h_motivation}
+"{}\+Halite\+Lookup"{} stores various properties of the mineral halite (solid crystalline salt, Na\+Cl) in lookup tables, as a function of temperature-\/pressure-\/composition \mbox{[}Celsius, Pa, mole fraction Na\+Cl\mbox{]} according to the papers
+
+Driesner T. and Heinrich C.\+A. (2007)\+: The system H2\+O-\/\+Na\+Cl. Part I\+: Correlation formulae for phase relations in temperature-\/pressure-\/composition space from 0 to 1000oC, 0 to 5000 bar, and 0 to 1 XNa\+Cl. Geochimica et Cosmochimica Acta 71, 4880-\/4901.
+
+Driesner T. (2007)\+: The system H2\+O-\/\+Na\+Cl. Part II\+: Correlations for molar volume, enthalpy, and isobaric heat capacity from 0 to 1000oC, 1 to 5000 bar, and 0 to 1 XNa\+Cl. Geochimica et Cosmochimica Acta 71, 4902-\/4919.\hypertarget{classcsmp_1_1_upwind_control_visitor_usage}{}\doxysubsection{\texorpdfstring{Usage}{Usage}}\label{classcsmp_1_1_upwind_control_visitor_usage}
+~\newline
+ Construct an instance of "{}\+Halite\+Lookup"{} with temperature (in C) and pressure (in Pa) as they exist in the code that is supposed to use "{}\+Halite\+Lookup"{} as constructor variables. "{}\+Halite\+Lookup"{} has an internal mechanism to make sure that it always uses the current values of temperature and pressure . Public member names should be self-\/explanatory, I hope.
+
+Upon construction, \doxylink{classcsmp_1_1_halite_lookup}{Halite\+Lookup} will check if the lookup tables do already exist. If not, they will be re-\/computed and written. The respective files are "{}\+Halite\+Properties\+Lookup\+Table.\+bin"{} and "{}\+Halite\+State\+Lookup\+Table.\+bin"{}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{double}\ t;\ \textcolor{comment}{//\ temperature\ [C]\ in\ user's\ application}}
+\DoxyCodeLine{\textcolor{keywordtype}{double}\ p;\ \textcolor{comment}{//\ pressure\ [Pa]\ in\ user's\ application\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{HaliteLookup\ haliteLookup(t,p);}
+\DoxyCodeLine{...}
+\DoxyCodeLine{t\ =\ some\_value;}
+\DoxyCodeLine{p\ =\ some\_other\_value;}
+\DoxyCodeLine{cout\ <<\ haliteLookup.Density()\ <<\ endl;\ \textcolor{comment}{//\ will\ return\ density\ at\ the\ new\ t\ and\ p\ conditions}}
+
+\end{DoxyCode}
+\hypertarget{classcsmp_1_1_upwind_control_visitor_dependencies}{}\doxysubsection{\texorpdfstring{Dependencies}{Dependencies}}\label{classcsmp_1_1_upwind_control_visitor_dependencies}
+~\newline
+ requires "{}\+Convert\+Concentration\+Units\+Na\+Cl.\+h"{} to ensure consistent unit conversions ~\newline
+\hypertarget{classcsmp_1_1_upwind_control_visitor_issues}{}\doxysubsection{\texorpdfstring{Known issues}{Known issues}}\label{classcsmp_1_1_upwind_control_visitor_issues}
+Composition() is in mole fraction Na\+Cl, to convert to other units, the functions in "{}\+Convert\+Concentration\+Units\+Na\+Cl.\+h"{} may be useful.
+
+To do\+: interpolation near the halite melting curve has not been coded optimally. Hence at extreme conditions (t \texorpdfstring{$>$}{>} 800.\+7 C and salinities very close to 100\%) tiny mismatches in fluid properties may appear and cause problems.\hypertarget{compare_floats_8h_testing}{}\doxysubsection{\texorpdfstring{Testing}{Testing}}\label{compare_floats_8h_testing}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/eos/Halite\+Lookup.\+h\item 
+source/modules/eos/h2o\+\_\+nacl\+\_\+lookup/Halite\+Lookup.\+cpp\end{DoxyCompactItemize}

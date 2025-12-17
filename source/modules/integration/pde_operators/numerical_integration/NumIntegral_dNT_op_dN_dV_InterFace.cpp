@@ -128,15 +128,15 @@ void NumIntegral_dNT_op_dN_dV_InterFace<dim>::InitialiseCoordinateMatrix( const 
 
      // assigning the inside nodes
      // --------------------------
-     const uint32_t n_side_nodes{ iface.FE()->Nodes() };
+     const auto n_side_nodes{ iface.FE()->Nodes() };
      for ( uint32_t i{0U}; i<n_side_nodes; i++ )
        XYX.AssignRow( i, iface.N(i,INSIDE)->Coordinate() );
 
      // assigning the outside nodes extruding their position by interface thickness along the unit normal
      // -------------------------------------------------------------------------------------------------
      uint32_t node{ 0U };
-     for ( int32_t i{ static_cast<int32_t>(n_side_nodes * 2 - 1) }; i>=0; i-- ) {
-          Point<dim> extr_coord = iface.N(i,OUTSIDE)->Coordinate() + unrml;
+     for ( int32_t i{ static_cast<int32_t>(n_side_nodes) * 2 - 1 }; i>=0; i-- ) {
+          Point<dim> extr_coord = iface.N(static_cast<uint32_t>(i),OUTSIDE)->Coordinate() + unrml;
           XYX.AssignRow( node++, extr_coord );
        }
     
@@ -157,7 +157,7 @@ void NumIntegral_dNT_op_dN_dV_InterFace<dim>::InitialiseCoordinateMatrix( const 
     @todo in GetOperands implement the collection of material operands from integration points otherwise second part of method will not work
 */
 template<uint32_t dim>
-void NumIntegral_dNT_op_dN_dV_InterFace<dim>::ComputeContribution( InterFace<dim>& iface )
+void NumIntegral_dNT_op_dN_dV_InterFace<dim>::ComputeContribution( const InterFace<dim>& iface )
  {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( iface.UsesLocalCoordinates() == true );
@@ -179,9 +179,9 @@ void NumIntegral_dNT_op_dN_dV_InterFace<dim>::ComputeContribution( InterFace<dim
     FiniteElement* fptr = iface.FE();
     if ( isTriangular( iface.FE_Type() ) )
       // ugly way to get to the base class!
-      static_cast<FiniteElementPolicy<dim,InterFace>&>(iface).Assign( pris_ptr_ );
+      FiniteElementPolicy<dim,InterFace>(iface).Assign( pris_ptr_ );
     else
-      static_cast<FiniteElementPolicy<dim,InterFace>&>(iface).Assign( hexa_ptr_ );
+      FiniteElementPolicy<dim,InterFace>(iface).Assign( hexa_ptr_ );
    
     // 1. Two cases exist: The first is when the material property is an
     //    element property. In this case the material property matrix can
@@ -220,7 +220,7 @@ void NumIntegral_dNT_op_dN_dV_InterFace<dim>::ComputeContribution( InterFace<dim
       }
 
    // 3. reassigning the FE pointer
-   static_cast<FiniteElementPolicy<dim,InterFace>&>(iface).Assign( fptr );
+   FiniteElementPolicy<dim,InterFace>(iface).Assign( fptr );
 
 } // end ComputeContribution
 

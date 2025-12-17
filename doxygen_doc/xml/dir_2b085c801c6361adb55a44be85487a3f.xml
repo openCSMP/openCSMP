@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_2b085c801c6361adb55a44be85487a3f" kind="dir">
+    <compoundname>source/includes/eos</compoundname>
+    <innerfile refid="_brine_8h">Brine.h</innerfile>
+    <innerfile refid="_convert_concentration_units_na_cl_8h">ConvertConcentrationUnitsNaCl.h</innerfile>
+    <innerfile refid="_critical_curve_8h">CriticalCurve.h</innerfile>
+    <innerfile refid="_critical_curve_lookup_8h">CriticalCurveLookup.h</innerfile>
+    <innerfile refid="_critical_point_h2_o_8h">CriticalPointH2O.h</innerfile>
+    <innerfile refid="_dynamic_viscosity_8h">DynamicViscosity.h</innerfile>
+    <innerfile refid="_e_o_s___c_o2_h2_o_na_cl___spycher2004_8h">EOS_CO2H2ONaCl_Spycher2004.h</innerfile>
+    <innerfile refid="_fluidproperties_8h">Fluidproperties.h</innerfile>
+    <innerfile refid="_get_lookup_indices_8h">GetLookupIndices.h</innerfile>
+    <innerfile refid="_h2_o_fluid_properties_8h">H2OFluidProperties.h</innerfile>
+    <innerfile refid="_h2_o_lookup_8h">H2OLookup.h</innerfile>
+    <innerfile refid="_h2_o_na_cl_fluid_properties_8h">H2ONaClFluidProperties.h</innerfile>
+    <innerfile refid="_h2_o_na_cl_lookup_8h">H2ONaClLookup.h</innerfile>
+    <innerfile refid="_h2_o_na_cl_thermal_equilibrator_8h">H2ONaClThermalEquilibrator.h</innerfile>
+    <innerfile refid="_h2_o_properties_look_up_table_8h">H2OPropertiesLookUpTable.h</innerfile>
+    <innerfile refid="_h2_o_thermal_equilibrator_8h">H2OThermalEquilibrator.h</innerfile>
+    <innerfile refid="_halite_8h">Halite.h</innerfile>
+    <innerfile refid="_halite_liquidus_8h">HaliteLiquidus.h</innerfile>
+    <innerfile refid="_halite_liquidus_lookup_8h">HaliteLiquidusLookup.h</innerfile>
+    <innerfile refid="_halite_lookup_8h">HaliteLookup.h</innerfile>
+    <innerfile refid="_i_a_p_w_s___h2_o___conductivity_8h">IAPWS_H2O_Conductivity.h</innerfile>
+    <innerfile refid="_i_a_p_w_s___h2_o___density_8h">IAPWS_H2O_Density.h</innerfile>
+    <innerfile refid="_i_a_p_w_s___h2_o__d_vd_t___source_8h">IAPWS_H2O_dVdT_Source.h</innerfile>
+    <innerfile refid="_i_a_p_w_s___h2_o___heat_transfer_velocity_8h">IAPWS_H2O_HeatTransferVelocity.h</innerfile>
+    <innerfile refid="_i_a_p_w_s___h2_o___storativity_8h">IAPWS_H2O_Storativity.h</innerfile>
+    <innerfile refid="_i_a_p_w_s___h2_o_properties_visitor_8h">IAPWS_H2OPropertiesVisitor.h</innerfile>
+    <innerfile refid="_l_h___halite_lookup_8h">LH_HaliteLookup.h</innerfile>
+    <innerfile refid="_lookup_property_index_8h">LookupPropertyIndex.h</innerfile>
+    <innerfile refid="_look_up_storage_8h">LookUpStorage.h</innerfile>
+    <innerfile refid="_na_cl_boiling_curve_8h">NaClBoilingCurve.h</innerfile>
+    <innerfile refid="_na_cl_melting_curve_8h">NaClMeltingCurve.h</innerfile>
+    <innerfile refid="_na_cl_melting_curve_halite_lookup_8h">NaClMeltingCurveHaliteLookup.h</innerfile>
+    <innerfile refid="_na_cl_melting_curve_liquid_lookup_8h">NaClMeltingCurveLiquidLookup.h</innerfile>
+    <innerfile refid="_na_cl_saturated_vapor_8h">NaClSaturatedVapor.h</innerfile>
+    <innerfile refid="_na_cl_saturated_vapor_lookup_8h">NaClSaturatedVaporLookup.h</innerfile>
+    <innerfile refid="_na_cl_sublimation_curve_8h">NaClSublimationCurve.h</innerfile>
+    <innerfile refid="_phase_state_finder___h2_o___c_o2___na_cl_8h">PhaseStateFinder_H2O_CO2_NaCl.h</innerfile>
+    <innerfile refid="_p_v_t_x___calculator___h2_o___c_o2___na_cl_8h">PVTX_Calculator_H2O_CO2_NaCl.h</innerfile>
+    <innerfile refid="_rock_8h">Rock.h</innerfile>
+    <innerfile refid="_states_8h">States.h</innerfile>
+    <innerfile refid="_threephase_h_l_v_8h">ThreephaseHLV.h</innerfile>
+    <innerfile refid="_triple_point_h2_o_8h">TriplePointH2O.h</innerfile>
+    <innerfile refid="_triple_point_na_cl_8h">TriplePointNaCl.h</innerfile>
+    <innerfile refid="_twophase_liquid_8h">TwophaseLiquid.h</innerfile>
+    <innerfile refid="_twophase_liquid_lookup_8h">TwophaseLiquidLookup.h</innerfile>
+    <innerfile refid="_twophase_vapor_8h">TwophaseVapor.h</innerfile>
+    <innerfile refid="_twophase_vapor_lookup_8h">TwophaseVaporLookup.h</innerfile>
+    <innerfile refid="_v_h___halite_lookup_8h">VH_HaliteLookup.h</innerfile>
+    <innerfile refid="_v_l_h___halite_lookup_8h">VLH_HaliteLookup.h</innerfile>
+    <innerfile refid="_v_l_h___liquid_lookup_8h">VLH_LiquidLookup.h</innerfile>
+    <innerfile refid="_v_l_h___vapor_lookup_8h">VLH_VaporLookup.h</innerfile>
+    <innerfile refid="_water_8h">Water.h</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="source/includes/eos/"/>
+  </compounddef>
+</doxygen>

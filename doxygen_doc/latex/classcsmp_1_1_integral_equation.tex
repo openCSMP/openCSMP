@@ -1,0 +1,164 @@
+\doxysection{csmp\+::Integral\+Equation\texorpdfstring{$<$}{<} dim, VARIABLE\+\_\+\+SET \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_integral_equation}{}\label{classcsmp_1_1_integral_equation}\index{csmp::IntegralEquation$<$ dim, VARIABLE\_SET $>$@{csmp::IntegralEquation$<$ dim, VARIABLE\_SET $>$}}
+
+
+{\ttfamily \#include $<$Integral\+Equation.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Integral\+Equation\texorpdfstring{$<$}{<} dim, VARIABLE\+\_\+\+SET \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_integral_equation__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Integral\+Equation\texorpdfstring{$<$}{<} dim, VARIABLE\+\_\+\+SET \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=241pt]{classcsmp_1_1_integral_equation__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_integral_equation_a58d75915a6cb0ebadc7f8052d1e1c869}\label{classcsmp_1_1_integral_equation_a58d75915a6cb0ebadc7f8052d1e1c869} 
+typedef std\+::map$<$ \mbox{\hyperlink{classcsmp_1_1_operation}{Operation}}, \mbox{\hyperlink{classcsmp_1_1_matrix_operator}{Matrix\+Operator}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator {\bfseries Matrix\+Operator\+Const\+Iterator}
+\item 
+\Hypertarget{classcsmp_1_1_integral_equation_adf12bd04ba10876b6a4be1500ee82661}\label{classcsmp_1_1_integral_equation_adf12bd04ba10876b6a4be1500ee82661} 
+typedef std\+::map$<$ \mbox{\hyperlink{classcsmp_1_1_operation}{Operation}}, \mbox{\hyperlink{classcsmp_1_1_vector_operator}{Vector\+Operator}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator {\bfseries Vector\+Operator\+Const\+Iterator}
+\item 
+\Hypertarget{classcsmp_1_1_integral_equation_a4e179ca7abc59b7861b73a9fefa68629}\label{classcsmp_1_1_integral_equation_a4e179ca7abc59b7861b73a9fefa68629} 
+typedef std\+::map$<$ std\+::string, \mbox{\hyperlink{classcsmp_1_1_matrix_operator}{Matrix\+Operator}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator {\bfseries Post\+Processing\+Operator\+Const\+Iterator}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_integral_equation_abe8f991a364d893ff85ca81f3d99791e}{Integral\+Equation}} (const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em advection with sources and sinks \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_integral_equation_a0a4fbb3b6ad8c2184a9cad4876ed59e3}\label{classcsmp_1_1_integral_equation_a0a4fbb3b6ad8c2184a9cad4876ed59e3} 
+{\bfseries Integral\+Equation} (const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&, const std\+::set$<$ csmp\+::\+ADE\+\_\+\+TERM $>$ \&ADE\+\_\+components)
+\begin{DoxyCompactList}\small\item\em builds equation for one of the available options and using the variables supplied in the set \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_integral_equation_a3063677b14de0cd800cd4d33d864d8d0}{\texorpdfstring{$\sim$}{\string~}\+Integral\+Equation}} ()
+\begin{DoxyCompactList}\small\item\em deletes all copies of Math\+Operators \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_integral_equation_a5954014d82d68575b13b50537607bc4b}{Add}} (const \mbox{\hyperlink{classcsmp_1_1_operation}{Operation}} \&, \mbox{\hyperlink{classcsmp_1_1_matrix_operator}{Matrix\+Operator}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\begin{DoxyCompactList}\small\item\em operators are added in the user-\/specified sequence (add, subtract, multiply, specified in operators \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_integral_equation_aa6fc85db4d25454a968c1fb52745b346}\label{classcsmp_1_1_integral_equation_aa6fc85db4d25454a968c1fb52745b346} 
+void {\bfseries Add} (const \mbox{\hyperlink{classcsmp_1_1_operation}{Operation}} \&, \mbox{\hyperlink{classcsmp_1_1_vector_operator}{Vector\+Operator}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+\Hypertarget{classcsmp_1_1_integral_equation_aa658d1d2afe0e81d3d48e098f36cfbf2}\label{classcsmp_1_1_integral_equation_aa658d1d2afe0e81d3d48e098f36cfbf2} 
+void {\bfseries Add\+Post\+Process} (\mbox{\hyperlink{classcsmp_1_1_matrix_operator}{Matrix\+Operator}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\begin{DoxyCompactList}\small\item\em post-\/processing operations involving the solution variable (these will never have to be modified) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_integral_equation_acdf14ee8b30869630d0f4929ab952831}\label{classcsmp_1_1_integral_equation_acdf14ee8b30869630d0f4929ab952831} 
+Matrix\+Operator\+Const\+Iterator {\bfseries LHS\+\_\+\+Operators\+Begin} () const
+\item 
+\Hypertarget{classcsmp_1_1_integral_equation_aa7f6cb0c0b9eef250bac6d2328cfeb4a}\label{classcsmp_1_1_integral_equation_aa7f6cb0c0b9eef250bac6d2328cfeb4a} 
+Matrix\+Operator\+Const\+Iterator {\bfseries LHS\+\_\+\+Operators\+End} () const
+\item 
+\Hypertarget{classcsmp_1_1_integral_equation_a9e19a1839808418776957dc23fe73eb1}\label{classcsmp_1_1_integral_equation_a9e19a1839808418776957dc23fe73eb1} 
+Vector\+Operator\+Const\+Iterator {\bfseries RHS\+\_\+\+Operators\+Begin} () const
+\item 
+\Hypertarget{classcsmp_1_1_integral_equation_af47e13d834bc61f3494173d389adfb75}\label{classcsmp_1_1_integral_equation_af47e13d834bc61f3494173d389adfb75} 
+Vector\+Operator\+Const\+Iterator {\bfseries RHS\+\_\+\+Operators\+End} () const
+\item 
+\Hypertarget{classcsmp_1_1_integral_equation_a33b412dfa442d6e16bbf172ca6bec56c}\label{classcsmp_1_1_integral_equation_a33b412dfa442d6e16bbf172ca6bec56c} 
+Post\+Processing\+Operator\+Const\+Iterator {\bfseries Post\+Processing\+Operators\+Begin} () const
+\item 
+\Hypertarget{classcsmp_1_1_integral_equation_a774dca653ae25349bc9de07b59601e1f}\label{classcsmp_1_1_integral_equation_a774dca653ae25349bc9de07b59601e1f} 
+Post\+Processing\+Operator\+Const\+Iterator {\bfseries Post\+Processing\+Operators\+End} () const
+\item 
+\Hypertarget{classcsmp_1_1_integral_equation_a51667de93fb58146df9ac840571a2690}\label{classcsmp_1_1_integral_equation_a51667de93fb58146df9ac840571a2690} 
+void {\bfseries Out} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_integral_equation_afc3ac9ae2bcbb4b55a0703bff153c17e}\label{classcsmp_1_1_integral_equation_afc3ac9ae2bcbb4b55a0703bff153c17e} 
+const VARIABLE\+\_\+\+SET \& {\bfseries Notation}
+\begin{DoxyCompactList}\small\item\em access to the \doxylink{structcsmp_1_1_i_n_d_e_x}{INDEX} keys for the variables used in this equation \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim, class VARIABLE\+\_\+\+SET$>$\newline
+class csmp\+::\+Integral\+Equation$<$ dim, VARIABLE\+\_\+\+SET $>$}
+To build an equation add terms in the desired sequence into the LHS and RHS.
+
+This class depends on the supply of \doxylink{structcsmp_1_1_i_n_d_e_x}{INDEX} keys for the transport problem, from the USER template parameter.
+
+\doxylink{classcsmp_1_1_integral_equation}{Integral\+Equation} (policy) Operations
+\begin{DoxyItemize}
+\item Add( operator\& )
+\item Subtract( operator\& )
+\item Multiply\+With( operator\& )
+\item Add\+Post\+Process( domain ); Attributes
+\item map\texorpdfstring{$<$}{<}pair$<$\+Operator\+LHS,enum\+:\+Operation$>$ \texorpdfstring{$>$}{>};
+\item map\texorpdfstring{$<$}{<}pair$<$\+Operator\+RHS,enum\+:\+Operation$>$ \texorpdfstring{$>$}{>};
+\item enum OPERATION \{\}; 
+\end{DoxyItemize}
+
+\label{doc-constructors}
+\Hypertarget{classcsmp_1_1_integral_equation_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcsmp_1_1_integral_equation_abe8f991a364d893ff85ca81f3d99791e}\index{csmp::IntegralEquation$<$ dim, VARIABLE\_SET $>$@{csmp::IntegralEquation$<$ dim, VARIABLE\_SET $>$}!IntegralEquation@{IntegralEquation}}
+\index{IntegralEquation@{IntegralEquation}!csmp::IntegralEquation$<$ dim, VARIABLE\_SET $>$@{csmp::IntegralEquation$<$ dim, VARIABLE\_SET $>$}}
+\doxysubsubsection{\texorpdfstring{IntegralEquation()}{IntegralEquation()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_integral_equation_abe8f991a364d893ff85ca81f3d99791e} 
+template$<$uint32\+\_\+t dim, class VARIABLE\+\_\+\+SET$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_integral_equation}{csmp\+::\+Integral\+Equation}}$<$ dim, VARIABLE\+\_\+\+SET $>$\+::\+Integral\+Equation (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&}]{pref}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+advection with sources and sinks 
+
+\begin{DoxyVerb}Default constructor - advection with sources and sinks.
+\end{DoxyVerb}
+
+
+upstream weighted first-\/order space-\/time fluxes \Hypertarget{classcsmp_1_1_integral_equation_a3063677b14de0cd800cd4d33d864d8d0}\index{csmp::IntegralEquation$<$ dim, VARIABLE\_SET $>$@{csmp::IntegralEquation$<$ dim, VARIABLE\_SET $>$}!````~IntegralEquation@{\texorpdfstring{$\sim$}{\string~}IntegralEquation}}
+\index{````~IntegralEquation@{\texorpdfstring{$\sim$}{\string~}IntegralEquation}!csmp::IntegralEquation$<$ dim, VARIABLE\_SET $>$@{csmp::IntegralEquation$<$ dim, VARIABLE\_SET $>$}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}IntegralEquation()}{\string~IntegralEquation()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_integral_equation_a3063677b14de0cd800cd4d33d864d8d0} 
+template$<$uint32\+\_\+t dim, class VARIABLE\+\_\+\+SET$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_integral_equation}{csmp\+::\+Integral\+Equation}}$<$ dim, VARIABLE\+\_\+\+SET $>$\+::\texorpdfstring{$\sim$}{\string~}\mbox{\hyperlink{classcsmp_1_1_integral_equation}{Integral\+Equation}} (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+deletes all copies of Math\+Operators 
+
+delete all dynamic copies of Math\+Operators from the heap 
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_integral_equation_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_integral_equation_a5954014d82d68575b13b50537607bc4b}\index{csmp::IntegralEquation$<$ dim, VARIABLE\_SET $>$@{csmp::IntegralEquation$<$ dim, VARIABLE\_SET $>$}!Add@{Add}}
+\index{Add@{Add}!csmp::IntegralEquation$<$ dim, VARIABLE\_SET $>$@{csmp::IntegralEquation$<$ dim, VARIABLE\_SET $>$}}
+\doxysubsubsection{\texorpdfstring{Add()}{Add()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_integral_equation_a5954014d82d68575b13b50537607bc4b} 
+template$<$uint32\+\_\+t dim, class VARIABLE\+\_\+\+SET$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_integral_equation}{csmp\+::\+Integral\+Equation}}$<$ dim, VARIABLE\+\_\+\+SET $>$\+::\+Add (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_operation}{Operation}} \&}]{operation}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_matrix_operator}{Matrix\+Operator}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}}]{mop}{}\end{DoxyParamCaption})}
+
+
+
+operators are added in the user-\/specified sequence (add, subtract, multiply, specified in operators 
+
+operators are added in the user-\/specified sequence (add, subtract, multiply, specified in operators
+
+\begin{ \mathbf{u}_{\alpha} = -\frac{k_{r\alpha}}{\mu_\alpha} \mathbb{K}\left( \nabla p_\alpha - \rho_\alpha \mathbf{g}\right)\end{ \mathbf{u} Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_integral_equation_a5954014d82d68575b13b50537607bc4b_cgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/integration/finite\+\_\+volumes/generic\+\_\+transport\+\_\+scheme/Integral\+Equation.\+h\item 
+source/modules/integration/finite\+\_\+volumes/generic\+\_\+transport\+\_\+scheme/source/Integral\+Equation.\+cpp\end{DoxyCompactItemize}

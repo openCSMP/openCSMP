@@ -1,0 +1,83 @@
+\doxysection{Integrator.\+h}
+\hypertarget{_integrator_8h_source}{}\label{_integrator_8h_source}\index{source/includes/integration/finite\_volumes/generic\_transport\_scheme/Integrator.h@{source/includes/integration/finite\_volumes/generic\_transport\_scheme/Integrator.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ \ Integrator.h}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ \ CSMP\_unit\_tests}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ \ Created\ by\ Stephan\ Matthai\ on\ 19/7/20.}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//\ \ Copyright\ ©\ 2020\ Stephan\ Matthai.\ All\ rights\ reserved.}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_INTEGRATOR\_H}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_INTEGRATOR\_H}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_integral_equation_8h}{"{}IntegralEquation.h"{}}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_linear_solver_8h}{"{}LinearSolver.h"{}}}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___solver}{SAMG\_Solver}};}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ \ \ \ Integrator\ -\/\ to\ solve\ the\ linear\ algebraic\ system\ arising\ from\ the\ upwind\ implicit\ form\ of\ the\ transport\ equations.}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ \ \ \ Operations\ }}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ \ \ \ +\ IntegrateOver(\ equation,\ domain,\ time\ )}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ \ \ \ +\ AssignInitialConditions(\ domain\ )}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ \ \ +\ AssignEssentialConditions(\ domain\ )}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ \ \ \ +\ InsertInMatrix()}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ \ \ \ +\ InsertInVector()}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ \ \ \ +\ Solve(\ solver\ );}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ \ \ \ +\ PostProcess(\ domain\ );}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ \ \ \ +\ OutputResults(\ domain\ );}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ \ \ \ Attributes}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ \ \ \ +\ SparseMatrix\ \ A\_;}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ \ \ \ +\ Vector\ \ \ \ \ \ \ \ \ \ \ \ \ rhs\_;}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ +\ Vector\ \ \ \ \ \ \ \ \ \ \ \ \ x\_;}}
+\DoxyCodeLine{00035\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00036\ \textcolor{keyword}{template}<uint32\_t\ dim,\ \textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ USER>}
+\DoxyCodeLine{00037\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_integrator}{Integrator}}\ \{}
+\DoxyCodeLine{00038\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{comment}{///\ m=n\ since\ solution\ matrix\ is\ square,\ limits\ should\ include\ permitted\ tolerances}}
+\DoxyCodeLine{00040\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_integrator_abc39fad70f47beb4e4382acf06cd4afd}{Integrator}}(\ size\_t\ m\_x\_n,\ \textcolor{keywordtype}{double}\ lower\_limit,\ \textcolor{keywordtype}{double}\ upper\_limit\ );}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{comment}{///\ uses\ IntegralEquation\ and\ Accumulator\ to\ build\ system\ and\ Solver\ to\ solve\ it}}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_integrator_a2a14bd76ac1e8f602ab413427ba41c54}{IntegrateOver}}(\ \textcolor{keywordtype}{double}\ time\_increment\ );}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{comment}{///\ transform\ solver\ settings\ from\ initial\ use\ to\ reuse\ of\ settings\ and\ previous\ solution\ }}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_integrator_af64619cd73000e47ae39e8e4b0b67f8f}{ReconfigureSolverForRepeatedUse}}();}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keywordtype}{void}\ AssignInitialConditions();}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keywordtype}{void}\ AssignEssentialConditions();}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordtype}{void}\ SolveLinearAlgebraicSystem();}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{comment}{///\ transfer\ results\ updating\ concentration,\ zeroing\ out\ 'new\ concentration'\ values,\ and\ performing\ range\ checks;\ returns\ error}}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_integrator_a4fc5423f07ad3f484394a04abb34d033}{VerifyAndAssignResults}}(\ \textcolor{keywordtype}{bool}\ show\_range,\ \textcolor{keywordtype}{bool}\ do\_range\_check\ );}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{comment}{///\ shorthand\ for\ accessing\ the\ class\ that\ this\ is\ a\ policy\ of}}
+\DoxyCodeLine{00059\ \ \ \ \ USER<dim>*\ User()\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<USER<dim>*>(\textcolor{keyword}{this});\ \}}
+\DoxyCodeLine{00060\ \ \ \ \ USER<dim>\ \textcolor{keyword}{const}*\ User()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<\textcolor{keyword}{const}\ USER<dim>*>(\textcolor{keyword}{this});\ \}}
+\DoxyCodeLine{00061\ \ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \textcolor{preprocessor}{CSMP\_WITH\_SAMG}}
+\DoxyCodeLine{00062\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_integrator}{SAMG\_Settings}}\ \ \ \mbox{\hyperlink{classcsmp_1_1_integrator}{settings\_}};}
+\DoxyCodeLine{00063\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_integrator}{SAMG\_Solver}}\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_integrator}{solver\_}};}
+\DoxyCodeLine{00064\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{else}}
+\DoxyCodeLine{00065\ \ \ \ \ \mbox{\hyperlink{_linear_solver_8h_a75db968be5e201643bdb320da375fa69}{CSMP\_DEFAULT\_LINEAR\_SOLVER\_SETTINGS}}\ settings\_;}
+\DoxyCodeLine{00066\ \ \ \ \ \mbox{\hyperlink{_linear_solver_8h_a67f69281c4c153f5d049253c34561031}{CSMP\_DEFAULT\_LINEAR\_SOLVER}}\ \ \ \ \ \ \ \ \ \ solver\_;}
+\DoxyCodeLine{00067\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \ upper\_limit\_,\ lower\_limit\_;\ \textcolor{comment}{///<\ range\ in\ which\ the\ result\ is\ allowed\ to\ vary}}
+\DoxyCodeLine{00069\ \};}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \}\ \textcolor{comment}{//\ end\ csmp}}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{/*\ CSMP\_INTEGRATOR\_H\ */}}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \textcolor{comment}{//\ \ \ void\ InsertInMatrix(\ size\_t\ i,\ siz\_t\ j\ );}}
+\DoxyCodeLine{00077\ \textcolor{comment}{//\ \ \ void\ InsertInVector(\ size\_t\ i\ );}}
+
+\end{DoxyCode}

@@ -1,0 +1,318 @@
+\doxysection{csmp\+::Velocity\+And\+Volume\+Flux\texorpdfstring{$<$}{<} dim, CELL \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_velocity_and_volume_flux}{}\label{classcsmp_1_1_velocity_and_volume_flux}\index{csmp::VelocityAndVolumeFlux$<$ dim, CELL $>$@{csmp::VelocityAndVolumeFlux$<$ dim, CELL $>$}}
+
+
+Post-\/processes flow "{}velocity"{} \& "{}volume flux"{} that are output as \doxylink{classvector}{vector$<$double$>$} and scalar variables, respectively upon request these properties are extrapolated to the nodes and averaged between adjacent elements.  
+
+
+
+
+{\ttfamily \#include $<$Velocity\+And\+Volume\+Flux.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Velocity\+And\+Volume\+Flux\texorpdfstring{$<$}{<} dim, CELL \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_velocity_and_volume_flux__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Velocity\+And\+Volume\+Flux\texorpdfstring{$<$}{<} dim, CELL \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_velocity_and_volume_flux__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_velocity_and_volume_flux_a351492d984d1c51089a440b7b58552de}{Velocity\+And\+Volume\+Flux}} (const \mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&, const char \texorpdfstring{$\ast$}{*}oper, const char \texorpdfstring{$\ast$}{*}basic, const char \texorpdfstring{$\ast$}{*}test, bool node\+\_\+averaging=false, const char \texorpdfstring{$\ast$}{*}velocity="{}velocity"{}, const char \texorpdfstring{$\ast$}{*}pore\+\_\+velocity="{}pore velocity"{}, const char \texorpdfstring{$\ast$}{*}volume\+\_\+flux="{}volume flux"{}, const char \texorpdfstring{$\ast$}{*}nodal\+\_\+velocity="{}nodal velocity"{}, const char \texorpdfstring{$\ast$}{*}nodal\+\_\+pore\+\_\+velocity="{}nodal pore velocity"{}, const char \texorpdfstring{$\ast$}{*}nodal\+\_\+volume\+\_\+flux="{}nodal volume flux"{})
+\item 
+\mbox{\hyperlink{classcsmp_1_1_velocity_and_volume_flux_ab8545296d053c57974dd1a3763cf1c32}{Velocity\+And\+Volume\+Flux}} (const \mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&, const char \texorpdfstring{$\ast$}{*}oper, const char \texorpdfstring{$\ast$}{*}basic, const char \texorpdfstring{$\ast$}{*}test, const char \texorpdfstring{$\ast$}{*}relative\+\_\+density, bool node\+\_\+averaging=false, const char \texorpdfstring{$\ast$}{*}velocity="{}velocity"{}, const char \texorpdfstring{$\ast$}{*}pore\+\_\+velocity="{}pore velocity"{}, const char \texorpdfstring{$\ast$}{*}volume\+\_\+flux="{}volume flux"{}, const char \texorpdfstring{$\ast$}{*}nodal\+\_\+velocity="{}nodal velocity"{}, const char \texorpdfstring{$\ast$}{*}nodal\+\_\+pore\+\_\+velocity="{}nodal pore velocity"{}, const char \texorpdfstring{$\ast$}{*}nodal\+\_\+volume\+\_\+flux="{}nodal volume flux"{})
+\item 
+\Hypertarget{classcsmp_1_1_velocity_and_volume_flux_ab258a1c62ea856c2b013b35d016962ba}\label{classcsmp_1_1_velocity_and_volume_flux_ab258a1c62ea856c2b013b35d016962ba} 
+{\bfseries Velocity\+And\+Volume\+Flux} (const \mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&, const char \texorpdfstring{$\ast$}{*}oper, const char \texorpdfstring{$\ast$}{*}basic, const char \texorpdfstring{$\ast$}{*}test, const char \texorpdfstring{$\ast$}{*}relative\+\_\+density, const char \texorpdfstring{$\ast$}{*}prop\+\_\+multiplier, bool node\+\_\+averaging=false, const char \texorpdfstring{$\ast$}{*}velocity="{}velocity"{}, const char \texorpdfstring{$\ast$}{*}pore\+\_\+velocity="{}pore velocity"{}, const char \texorpdfstring{$\ast$}{*}volume\+\_\+flux="{}volume flux"{}, const char \texorpdfstring{$\ast$}{*}nodal\+\_\+velocity="{}nodal velocity"{}, const char \texorpdfstring{$\ast$}{*}nodal\+\_\+pore\+\_\+velocity="{}nodal pore velocity"{}, const char \texorpdfstring{$\ast$}{*}nodal\+\_\+volume\+\_\+flux="{}nodal volume flux"{})
+\begin{DoxyCompactList}\small\item\em as previous but offering possibility to multiply operand by a distributed variable \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_velocity_and_volume_flux_a4294d944249453f59d740c5dd8451dad}{Verbose}} (bool stdoutput)
+\item 
+\Hypertarget{classcsmp_1_1_velocity_and_volume_flux_a7ab86424f42b2dddc8fa1683086e4fb1}\label{classcsmp_1_1_velocity_and_volume_flux_a7ab86424f42b2dddc8fa1683086e4fb1} 
+void {\bfseries Get\+Operands} (const CELL$<$ dim $>$ \&) override final
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_velocity_and_volume_flux_a563d33d2eb173a421bd0e522dca51bba}{Compute\+Contribution}} (const CELL$<$ dim $>$ \&) override final
+\begin{DoxyCompactList}\small\item\em \{V\} = \mbox{[}grad P\mbox{]}\{k\} \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_velocity_and_volume_flux_a8d2461f909c1c818dd99fcc41588a211}{Write\+Operands}} (CELL$<$ dim $>$ \&) override final
+\item 
+\mbox{\hyperlink{classcsmp_1_1_velocity_and_volume_flux}{Velocity\+And\+Volume\+Flux}}$<$ dim, CELL $>$ \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classcsmp_1_1_velocity_and_volume_flux_a2e8f5c7cb49c112a5ddb7581a5710ded}{clone}} () const override final
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_math_operator_l_h_s}{csmp\+::\+Math\+Operator\+LHS$<$ dim, Element $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Math\+Operator\+LHS} (const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&, const char \texorpdfstring{$\ast$}{*}basic, const char \texorpdfstring{$\ast$}{*}test)
+\item 
+\mbox{\hyperlink{classcsmp_1_1_math_operator_l_h_s}{Math\+Operator\+LHS}} \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_math_operator_l_h_s}{Math\+Operator\+LHS}} \&)
+\item 
+std\+::string {\bfseries Name} () const
+\begin{DoxyCompactList}\small\item\em \doxylink{classcsmp_1_1_operand}{Operand} Functions. \end{DoxyCompactList}\item 
+virtual void {\bfseries Out} () const
+\item 
+const \mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}} \& {\bfseries Material\+Operand} () const
+\item 
+const \mbox{\hyperlink{structcsmp_1_1_index}{Index}} \& {\bfseries Material\+Operand\+Key} () const
+\item 
+std\+::string {\bfseries Material\+Operand\+Name} () const
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}} {\bfseries Material\+Operand\+Type} () const
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Material\+Operand\+Placement} () const
+\item 
+uint32\+\_\+t {\bfseries Material\+Operand\+Data\+Depth} () const
+\item 
+const \mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}} \& {\bfseries Basic\+Operand} () const
+\item 
+const \mbox{\hyperlink{structcsmp_1_1_index}{Index}} \& {\bfseries Basic\+Operand\+Key} () const
+\item 
+std\+::string {\bfseries Basic\+Operand\+Name} () const
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}} {\bfseries Basic\+Operand\+Type} () const
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Basic\+Operand\+Placement} () const
+\item 
+uint32\+\_\+t {\bfseries Basic\+Operand\+Data\+Depth} () const
+\item 
+size\+\_\+t {\bfseries Basic\+Operand\+Offset} () const
+\item 
+const \mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}} \& {\bfseries Test\+Operand} () const
+\item 
+const \mbox{\hyperlink{structcsmp_1_1_index}{Index}} \& {\bfseries Test\+Operand\+Key} () const
+\item 
+std\+::string {\bfseries Test\+Operand\+Name} () const
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}} {\bfseries Test\+Operand\+Type} () const
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Test\+Operand\+Placement} () const
+\item 
+uint32\+\_\+t {\bfseries Test\+Operand\+Data\+Depth} () const
+\item 
+size\+\_\+t {\bfseries Test\+Operand\+Offset} () const
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_math_operator_l_h_s_a071174805944988e79eb90d220825fc6}{Add}} () const
+\begin{DoxyCompactList}\small\item\em Accumulation Process Settings. \end{DoxyCompactList}\item 
+bool {\bfseries Subtract} () const
+\item 
+bool {\bfseries Add\+Later} () const
+\item 
+bool {\bfseries Subtract\+Later} () const
+\item 
+bool {\bfseries Multiply} () const
+\item 
+bool {\bfseries Lumped\+Formulation} () const
+\item 
+uint32\+\_\+t {\bfseries Application\+Cycle} () const
+\item 
+uint32\+\_\+t {\bfseries Application\+Cycles} () const
+\item 
+double {\bfseries Multiply\+By} () const
+\item 
+bool {\bfseries Multiply\+With\+Time\+Increment} () const
+\item 
+bool {\bfseries Divide\+By\+Time\+Increment} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_math_operator_l_h_s_a656e2058fe8befd10867c14daf913fb4}{Add\+Accumulate}} ()
+\begin{DoxyCompactList}\small\item\em Set flags and properties. \end{DoxyCompactList}\item 
+void {\bfseries Subtract\+Accumulate} ()
+\item 
+void {\bfseries Add\+Accumulate\+Later} ()
+\item 
+void {\bfseries Subtract\+Accumulate\+Later} ()
+\item 
+void {\bfseries Multiply\+Accumulate} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_math_operator_l_h_s_a3e0f634988ada2fc5655833a1d0b8ded}{Property\+At\+Integration\+Point}} (const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, uint32\+\_\+t ip, \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&)
+\begin{DoxyCompactList}\small\item\em interpolation of property if isoparametric elements are used \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_math_operator_l_h_s_acaaa0a607351dfb0c857249573a26e47}{Get\+Operands}} (const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em getting data from the \doxylink{classcsmp_1_1_element}{Element}, \doxylink{classcsmp_1_1_face}{Face}, \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} \end{DoxyCompactList}\item 
+virtual void {\bfseries Multiply\+With\+Time\+Factor} (double dt)
+\begin{DoxyCompactList}\small\item\em multiply with time increment if this is desired \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_math_operator_l_h_s_ab63fa0d4cdd2e842a7bd9e72cad20760}{Assign\+To\+Global}} (const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&, \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{Sparse\+Matrix}} \&)
+\begin{DoxyCompactList}\small\item\em assigment to the left hand side global matrix (after everything was calculated ) \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_math_operator_l_h_s}{csmp\+::\+Math\+Operator\+LHS$<$ dim, Element $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string {\bfseries name\+\_\+}
+\begin{DoxyCompactList}\small\item\em name of operator \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}} {\bfseries op}
+\begin{DoxyCompactList}\small\item\em material property operand \end{DoxyCompactList}\item 
+std\+::pair$<$ \mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}}, size\+\_\+t $>$ {\bfseries bop}
+\begin{DoxyCompactList}\small\item\em basic function operand and calculation offset \end{DoxyCompactList}\item 
+std\+::pair$<$ \mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}}, size\+\_\+t $>$ {\bfseries top}
+\begin{DoxyCompactList}\small\item\em test function operand and calculation offset \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ {\bfseries LHS}
+\begin{DoxyCompactList}\small\item\em solution matrix to be accumulated \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ $>$ {\bfseries MTRL}
+\begin{DoxyCompactList}\small\item\em material property matrix(es) needed for PDE operand \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ {\bfseries DERIV}
+\begin{DoxyCompactList}\small\item\em shape function derivative matrix \end{DoxyCompactList}\item 
+std\+::vector$<$ double $>$ {\bfseries IPOL}
+\begin{DoxyCompactList}\small\item\em shape function vector \end{DoxyCompactList}\item 
+double {\bfseries factor\+\_\+}
+\begin{DoxyCompactList}\small\item\em constant scaling factor \end{DoxyCompactList}\item 
+bool {\bfseries add\+\_\+accumulate\+\_\+}
+\item 
+bool {\bfseries subtract\+\_\+accumulate\+\_\+}
+\item 
+bool {\bfseries add\+\_\+accumulate\+\_\+later\+\_\+}
+\item 
+bool {\bfseries subtract\+\_\+accumulate\+\_\+later\+\_\+}
+\item 
+bool {\bfseries multiply\+\_\+accumulate\+\_\+}
+\item 
+bool {\bfseries lump\+\_\+matrices\+\_\+}
+\item 
+uint32\+\_\+t {\bfseries application\+\_\+cycles\+\_\+}
+\item 
+uint32\+\_\+t {\bfseries application\+\_\+cycle\+\_\+}
+\item 
+bool {\bfseries time\+\_\+multiply\+\_\+}
+\item 
+bool {\bfseries time\+\_\+divide\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL = Element$>$\newline
+class csmp\+::\+Velocity\+And\+Volume\+Flux$<$ dim, CELL $>$}
+Post-\/processes flow "{}velocity"{} \& "{}volume flux"{} that are output as \doxylink{classvector}{vector$<$double$>$} and scalar variables, respectively upon request these properties are extrapolated to the nodes and averaged between adjacent elements. 
+
+\begin{DoxyAuthor}{Author}
+S.\+K. Matthai 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2005
+\end{DoxyDate}
+\hypertarget{compare_floats_8h_motivation}{}\doxysubsection{\texorpdfstring{Motivation}{Motivation}}\label{compare_floats_8h_motivation}
+Post-\/\+Processing\+: Compute flow velocities and their magnitudes from the fluid pressure field, the conductivity, and the porosity of the medium. The flow velocities are computed at the element centers or integration points but they can be extrapolated to the nodes if this option is chosen. The variable names which are hardwired into this math operator are\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{stringliteral}{"{}velocity"{}}\ \ \ \ \ \ \ \ \ \ \ \ element\ \ \ vector}
+\DoxyCodeLine{\textcolor{stringliteral}{"{}pore\ velocity"{}}\ \ \ \ \ \ \ \ \ \ \ element\ \ \ \ \ \ \ vector}
+\DoxyCodeLine{\textcolor{stringliteral}{"{}volume\ flux"{}}\ \ \ \ \ \ \ \ \ element\ \ \ \ \ \ \ scalar}
+\DoxyCodeLine{\textcolor{stringliteral}{"{}nodal\ velocity"{}}\ \ \ \ \ \ node\ \ \ \ \ \ vector}
+\DoxyCodeLine{\textcolor{stringliteral}{"{}nodal\ pore\ velocity"{}}\ \ \ node\ \ \ \ \ \ vector}
+\DoxyCodeLine{\textcolor{stringliteral}{"{}nodal\ volume\ flux"{}}\ \ \ \ \ element\ \ \ \ \ scalar}
+
+\end{DoxyCode}
+
+
+Those with a the "{}nodal"{} prefix are used only when the option for output to the nodes is chosen. ~\newline
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+Procedure\+: In 2 post-\/processing application cycles of this class object the following is performed\+:
+
+
+\begin{DoxyEnumerate}
+\item From the nodal "{}fluid pressure"{} and the shape function derivatives, the "{}fluid pressure gradient"{} at the element center (for elements with linear interpolation functions), or at the integration points is computed. For higher order elements these locations are optimal locations, see Barlow, 1977). ~\newline
+
+\item The product of the fluid pressure gradient, the conductivity, and the porosity (in case of the interstitial velocity) and -\/1.\+0, gives the flow velocity. The volume flux, as a scalar property, is given by the magnitude of the Darcy velocity vector. ~\newline
+
+\item If the properties shall be mapped to the nodes, they are linearly extrapolated to these from the element center or the integration points. In the case of linear elements, nodal velocities represent the averages of adjacent elements. These are not weighted by element area !
+
+For quadratic elements, bilinear extrapolation is carried out by the specific finite element used. Only linear variations in the velocity over the element are supported at this stage. The nodal velocities are averaged among the adjacent elements since they diverge at these locations from one-\/another. ~\newline
+
+\end{DoxyEnumerate}
+
+Steps 1 and 2 are accomplished in the first application cycle of the post-\/processing operator. The nodal averaging and following operations are done in a second cycle. 
+
+\label{doc-constructors}
+\Hypertarget{classcsmp_1_1_velocity_and_volume_flux_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcsmp_1_1_velocity_and_volume_flux_a351492d984d1c51089a440b7b58552de}\index{csmp::VelocityAndVolumeFlux$<$ dim, CELL $>$@{csmp::VelocityAndVolumeFlux$<$ dim, CELL $>$}!VelocityAndVolumeFlux@{VelocityAndVolumeFlux}}
+\index{VelocityAndVolumeFlux@{VelocityAndVolumeFlux}!csmp::VelocityAndVolumeFlux$<$ dim, CELL $>$@{csmp::VelocityAndVolumeFlux$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{VelocityAndVolumeFlux()}{VelocityAndVolumeFlux()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_velocity_and_volume_flux_a351492d984d1c51089a440b7b58552de} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_velocity_and_volume_flux}{csmp\+::\+Velocity\+And\+Volume\+Flux}}$<$ dim, CELL $>$\+::\+Velocity\+And\+Volume\+Flux (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&}]{sg}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{oper}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{basic}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{test}{, }\item[{bool}]{node\+\_\+averaging}{ = {\ttfamily false}, }\item[{const char \texorpdfstring{$\ast$}{*}}]{velocity}{ = {\ttfamily "{}velocity"{}}, }\item[{const char \texorpdfstring{$\ast$}{*}}]{pore\+\_\+velocity}{ = {\ttfamily "{}pore~velocity"{}}, }\item[{const char \texorpdfstring{$\ast$}{*}}]{volume\+\_\+flux}{ = {\ttfamily "{}volume~flux"{}}, }\item[{const char \texorpdfstring{$\ast$}{*}}]{nodal\+\_\+velocity}{ = {\ttfamily "{}nodal~velocity"{}}, }\item[{const char \texorpdfstring{$\ast$}{*}}]{nodal\+\_\+pore\+\_\+velocity}{ = {\ttfamily "{}nodal~pore~velocity"{}}, }\item[{const char \texorpdfstring{$\ast$}{*}}]{nodal\+\_\+volume\+\_\+flux}{ = {\ttfamily "{}nodal~volume~flux"{}}}\end{DoxyParamCaption})}
+
+Constructs the post-\/processing math operator for velocity/ flux calculations.\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+Three character strings for the input variables of the calculation \textquotesingle{}conductivity\textquotesingle{}, \textquotesingle{}porosity\textquotesingle{}, and \textquotesingle{}fluid pressure\textquotesingle{}, a boolean variable to toggle node averaging on in which case the velocities and fluxes are extrapolated to the nodes. ~\newline
+\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+The names of the output variables are hard-\/wired in this operator. Thus, checks are performed whether these variables actually exist in the variable database and errors are reported if they don\textquotesingle{}t or if they have the wrong placement or type. ~\newline
+
+
+tested\+: \Hypertarget{classcsmp_1_1_velocity_and_volume_flux_ab8545296d053c57974dd1a3763cf1c32}\index{csmp::VelocityAndVolumeFlux$<$ dim, CELL $>$@{csmp::VelocityAndVolumeFlux$<$ dim, CELL $>$}!VelocityAndVolumeFlux@{VelocityAndVolumeFlux}}
+\index{VelocityAndVolumeFlux@{VelocityAndVolumeFlux}!csmp::VelocityAndVolumeFlux$<$ dim, CELL $>$@{csmp::VelocityAndVolumeFlux$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{VelocityAndVolumeFlux()}{VelocityAndVolumeFlux()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_velocity_and_volume_flux_ab8545296d053c57974dd1a3763cf1c32} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_velocity_and_volume_flux}{csmp\+::\+Velocity\+And\+Volume\+Flux}}$<$ dim, CELL $>$\+::\+Velocity\+And\+Volume\+Flux (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&}]{sg}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{oper}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{basic}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{test}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{relative\+\_\+density}{, }\item[{bool}]{node\+\_\+averaging}{ = {\ttfamily false}, }\item[{const char \texorpdfstring{$\ast$}{*}}]{velocity}{ = {\ttfamily "{}velocity"{}}, }\item[{const char \texorpdfstring{$\ast$}{*}}]{pore\+\_\+velocity}{ = {\ttfamily "{}pore~velocity"{}}, }\item[{const char \texorpdfstring{$\ast$}{*}}]{volume\+\_\+flux}{ = {\ttfamily "{}volume~flux"{}}, }\item[{const char \texorpdfstring{$\ast$}{*}}]{nodal\+\_\+velocity}{ = {\ttfamily "{}nodal~velocity"{}}, }\item[{const char \texorpdfstring{$\ast$}{*}}]{nodal\+\_\+pore\+\_\+velocity}{ = {\ttfamily "{}nodal~pore~velocity"{}}, }\item[{const char \texorpdfstring{$\ast$}{*}}]{nodal\+\_\+volume\+\_\+flux}{ = {\ttfamily "{}nodal~volume~flux"{}}}\end{DoxyParamCaption})}
+
+Like in first case, but considering buoyancy forces.
+
+
+\begin{DoxyParams}{Parameters}
+{\em relative\+\_\+density} & \textquotesingle{}relative density\textquotesingle{} is the fluid density -\/ a reference density, for instance 1000 kg/m3 \\
+\hline
+\end{DoxyParams}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_velocity_and_volume_flux_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_velocity_and_volume_flux_a2e8f5c7cb49c112a5ddb7581a5710ded}\index{csmp::VelocityAndVolumeFlux$<$ dim, CELL $>$@{csmp::VelocityAndVolumeFlux$<$ dim, CELL $>$}!clone@{clone}}
+\index{clone@{clone}!csmp::VelocityAndVolumeFlux$<$ dim, CELL $>$@{csmp::VelocityAndVolumeFlux$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{clone()}{clone()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_velocity_and_volume_flux_a2e8f5c7cb49c112a5ddb7581a5710ded} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL = Element$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_velocity_and_volume_flux}{Velocity\+And\+Volume\+Flux}}$<$ dim, CELL $>$ \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classcsmp_1_1_velocity_and_volume_flux}{csmp\+::\+Velocity\+And\+Volume\+Flux}}$<$ dim, CELL $>$\+::clone (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [final]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classcsmp_1_1_math_operator_l_h_s}{csmp\+::\+Math\+Operator\+LHS$<$ dim, Element $>$}}.
+
+\Hypertarget{classcsmp_1_1_velocity_and_volume_flux_a563d33d2eb173a421bd0e522dca51bba}\index{csmp::VelocityAndVolumeFlux$<$ dim, CELL $>$@{csmp::VelocityAndVolumeFlux$<$ dim, CELL $>$}!ComputeContribution@{ComputeContribution}}
+\index{ComputeContribution@{ComputeContribution}!csmp::VelocityAndVolumeFlux$<$ dim, CELL $>$@{csmp::VelocityAndVolumeFlux$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{ComputeContribution()}{ComputeContribution()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_velocity_and_volume_flux_a563d33d2eb173a421bd0e522dca51bba} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_velocity_and_volume_flux}{csmp\+::\+Velocity\+And\+Volume\+Flux}}$<$ dim, CELL $>$\+::\+Compute\+Contribution (\begin{DoxyParamCaption}\item[{const CELL$<$ dim $>$ \&}]{e}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [final]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+\{V\} = \mbox{[}grad P\mbox{]}\{k\} 
+
+\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+A reference to the \doxylink{classcsmp_1_1_element}{Element} for which the post-\/processing is done. 
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_math_operator_l_h_s_ad218c9a90bfa910a988f540a8fe802ea}{csmp\+::\+Math\+Operator\+LHS$<$ dim, Element $>$}}.
+
+\Hypertarget{classcsmp_1_1_velocity_and_volume_flux_a4294d944249453f59d740c5dd8451dad}\index{csmp::VelocityAndVolumeFlux$<$ dim, CELL $>$@{csmp::VelocityAndVolumeFlux$<$ dim, CELL $>$}!Verbose@{Verbose}}
+\index{Verbose@{Verbose}!csmp::VelocityAndVolumeFlux$<$ dim, CELL $>$@{csmp::VelocityAndVolumeFlux$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{Verbose()}{Verbose()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_velocity_and_volume_flux_a4294d944249453f59d740c5dd8451dad} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_velocity_and_volume_flux}{csmp\+::\+Velocity\+And\+Volume\+Flux}}$<$ dim, CELL $>$\+::\+Verbose (\begin{DoxyParamCaption}\item[{bool}]{stdoutput}{}\end{DoxyParamCaption})}
+
+Switch to verbose mode (results are reported to stdout). \Hypertarget{classcsmp_1_1_velocity_and_volume_flux_a8d2461f909c1c818dd99fcc41588a211}\index{csmp::VelocityAndVolumeFlux$<$ dim, CELL $>$@{csmp::VelocityAndVolumeFlux$<$ dim, CELL $>$}!WriteOperands@{WriteOperands}}
+\index{WriteOperands@{WriteOperands}!csmp::VelocityAndVolumeFlux$<$ dim, CELL $>$@{csmp::VelocityAndVolumeFlux$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{WriteOperands()}{WriteOperands()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_velocity_and_volume_flux_a8d2461f909c1c818dd99fcc41588a211} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_velocity_and_volume_flux}{csmp\+::\+Velocity\+And\+Volume\+Flux}}$<$ dim, CELL $>$\+::\+Write\+Operands (\begin{DoxyParamCaption}\item[{CELL$<$ dim $>$ \&}]{e}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [final]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Outputs the computed velocities and fluxes to the \doxylink{classcsmp_1_1_model}{Model} storage checking the range of each variable using the ranges associated with each of the Operands.\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+A reference to the property memory manager and the \doxylink{classcsmp_1_1_element}{Element} for which the variables are output. 
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_math_operator_l_h_s_a0972c226f26ae57084c7d22343560e3e}{csmp\+::\+Math\+Operator\+LHS$<$ dim, Element $>$}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/thmc/single\+\_\+phase\+\_\+flow/Velocity\+And\+Volume\+Flux.\+h\item 
+source/modules/thmc/single\+\_\+phase\+\_\+flow/Velocity\+And\+Volume\+Flux.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,185 @@
+\doxysection{Array\+Variable.\+h}
+\hypertarget{_array_variable_8h_source}{}\label{_array_variable_8h_source}\index{source/includes/model/ArrayVariable.h@{source/includes/model/ArrayVariable.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{ARRAY\_VARIABLE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{ARRAY\_VARIABLE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_flagged_array_variable_8h}{"{}FlaggedArrayVariable.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}};}
+\DoxyCodeLine{00010\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{FlaggedArrayVariable}};}
+\DoxyCodeLine{00011\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_property_database}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}};}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00014\ \textcolor{comment}{}}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ \ @brief\ Storage\ for\ an\ arbitrary\ number\ of\ variables\ with\ a\ single\ flag;\ array\ size}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ \ is\ not\ predefined\ or\ dependent\ on\ model\ dimensions,\ but\ can\ be\ determined\ at\ runtime.}}
+\DoxyCodeLine{00017\ \textcolor{comment}{}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ \ @author\ P.\ Lang}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ \ @date\ 2012}}
+\DoxyCodeLine{00020\ \textcolor{comment}{}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ \ In\ order\ to\ support\ arbitrary\ sized\ variables\ to\ be\ discretized\ in\ CSMP.}}
+\DoxyCodeLine{00022\ \textcolor{comment}{}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ \ @section\ usage\ Usage}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ \ If\ used\ to\ read/store\ arrays\ from/on\ entities\ featuring\ a\ VariableStorage,\ the\ size\ of}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ the\ ArrayVariable\ has\ to\ equal\ that\ specified\ in\ the\ variables\ file,\ since\ in\ the\ current}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ \ version\ (9/4/2012)\ runtime\ changes\ regarding\ the\ PropertyDatabase\ and\ ArrayVariables\ are\ }}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ \ not\ supported.}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ \ }}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ \ To\ instantiate\ an\ ArrayVariable\ of\ arbitrary\ size:}}
+\DoxyCodeLine{00030\ \textcolor{comment}{}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ \ @code}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ \ ArrayVariable\ av;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //\ 0\ entries,\ flag\ set\ to\ Plain}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ \ ArrayVariable\ av(4,\ 10.,\ DIRICH\ );\ //\ 4\ entries\ with\ value\ 10.,\ flag\ set\ to\ Dirichlet}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ \ @endcode}}
+\DoxyCodeLine{00035\ \textcolor{comment}{}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ \ When\ using\ ArrayVariable\ in\ Store/Read\ operations,\ we\ need\ to\ first\ create\ an\ instance\ of}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ \ appropriate\ size,\ i.e.\ the\ same\ size\ as\ provided\ in\ the\ PropertyDatabase.\ A\ ctor\ which}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ \ does\ exactly\ this\ is:}}
+\DoxyCodeLine{00039\ \textcolor{comment}{}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ \ @code}}
+\DoxyCodeLine{00041\ \textcolor{comment}{\ \ ArrayVariable\ av(\ "{}element\ array"{},\ model.Database()\ );\ //\ size\ as\ specified\ in\ PropertyDatabase,\ values\ =\ 0.,\ flag\ =\ plain}}
+\DoxyCodeLine{00042\ \textcolor{comment}{\ \ @endcode}}
+\DoxyCodeLine{00043\ \textcolor{comment}{}}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ \ Again,\ the\ alternative\ would\ be\ to\ manually\ initiate\ the\ correct\ size.}}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ \ With\ an\ ArrayVariable\ of\ appropriate\ size,\ you\ may\ use\ functions\ like}}
+\DoxyCodeLine{00046\ \textcolor{comment}{}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ \ @code}}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ \ model.InputPropertyValue(\ "{}element\ array"{},\ av\ );}}
+\DoxyCodeLine{00049\ \textcolor{comment}{\ \ @endcode}}
+\DoxyCodeLine{00050\ \textcolor{comment}{}}
+\DoxyCodeLine{00051\ \textcolor{comment}{\ \ Or\ something\ low\ level\ in\ the\ likes\ of}}
+\DoxyCodeLine{00052\ \textcolor{comment}{}}
+\DoxyCodeLine{00053\ \textcolor{comment}{\ \ @code}}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ \ Index\ eaKey(\ model.Database().StorageKey("{}element\ array"{})\ );}}
+\DoxyCodeLine{00055\ \textcolor{comment}{\ \ for(\ vector<Element<3>*>::const\_iterator\ it(\ model.Region("{}Model"{}).CellsBegin()\ );\ it\ !=\ model.Region("{}Model"{}).CellsEnd();\ ++it\ )}}
+\DoxyCodeLine{00056\ \textcolor{comment}{\ \ \ \ (*it)-\/>Read(\ eaKey,\ av\ );}}
+\DoxyCodeLine{00057\ \textcolor{comment}{\ \ @endcode}}
+\DoxyCodeLine{00058\ \textcolor{comment}{}}
+\DoxyCodeLine{00059\ \textcolor{comment}{\ \ ArrayVariable\ operations\ are\ possible\ as\ defined\ through\ the\ interface}}
+\DoxyCodeLine{00060\ \textcolor{comment}{}}
+\DoxyCodeLine{00061\ \textcolor{comment}{\ \ }}
+\DoxyCodeLine{00062\ \textcolor{comment}{\ \ //\ TODO:\ why\ can\ this\ not\ be\ of\ a\ size\ that\ is\ known\ at\ compile\ time}}
+\DoxyCodeLine{00063\ \textcolor{comment}{\ \ //\ TODO:\ check\ whether\ <array>\ may\ be\ a\ good\ basis\ for\ refactoring}}
+\DoxyCodeLine{00064\ \textcolor{comment}{\ \ //\ TODO:\ why\ -\/\ as\ this\ is\ essentially\ a\ vector\ -\/\ is\ it\ not\ inherited\ from\ a\ vector?}}
+\DoxyCodeLine{00065\ \textcolor{comment}{}}
+\DoxyCodeLine{00066\ \textcolor{comment}{\ \ */}}
+\DoxyCodeLine{00067\ \ \ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}}
+\DoxyCodeLine{00068\ \ \ \ \ \{}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\_TYPE}}\ VariableType\ =\ ARRAY;}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \textcolor{keyword}{typedef}\ std::vector<\textcolor{keywordtype}{double}>\ ArrayContainer;}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \ \ \ \ \ \ ArrayVariable();}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_array_variable_a94de49b3df36ecce89fc3703f8018e1c}{ArrayVariable}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ arrayPropertyName,}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&,}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ defaultValue=\mbox{\hyperlink{classcsmp_1_1_array_variable_a94de49b3df36ecce89fc3703f8018e1c}{std}}::\mbox{\hyperlink{classcsmp_1_1_array_variable_a94de49b3df36ecce89fc3703f8018e1c}{numeric\_limits}}<\textcolor{keywordtype}{double}>::\mbox{\hyperlink{classcsmp_1_1_array_variable_a94de49b3df36ecce89fc3703f8018e1c}{quiet\_NaN}}(),}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\_FLAG}}\ flag\ =\ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gga98d2031b830da37499a1b512d9dca4b9a6c4de567ce41f96e0e61175ca75945b3}{ANY}}\ );}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \ \ \ \ \ \ ArrayVariable(\ uint32\_t\ arraySize,}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ defaultValue\ =\ 0.,}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\_FLAG}}\ flag\ =\ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gga98d2031b830da37499a1b512d9dca4b9a6c4de567ce41f96e0e61175ca75945b3}{ANY}}\ );}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_array_variable_a5c10162b2eb9333f2e2893da188211ea}{ArrayVariable}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcsmp_1_1_index}{Index}}\&\ arrayKey,}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ defaultValue\ =\ 0.,}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\_FLAG}}\ flag\ =\ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gga98d2031b830da37499a1b512d9dca4b9a6c4de567ce41f96e0e61175ca75945b3}{ANY}}\ );}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \ \ \ \ \ \ ArrayVariable(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\&\ );}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \textcolor{comment}{///\ assigments}}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\&\ \mbox{\hyperlink{classcsmp_1_1_array_variable_a9500b9686a63485d0dd3e6d9fe9eee99}{operator}}=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\&\ );}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ CopyValuesOnly(\ \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{FlaggedArrayVariable}}\&\ );}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\&\ operator=(\ \textcolor{keywordtype}{double}\ );}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\&\ operator=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\&\ );}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \textcolor{comment}{///\ standard\ operations}}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\ \mbox{\hyperlink{classcsmp_1_1_array_variable_a9ebb6922d9080efc9fa0e3b8169ea5a3}{operator}}+(\ \textcolor{keywordtype}{double}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\ operator-\/(\ \textcolor{keywordtype}{double}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\ operator*(\ \textcolor{keywordtype}{double}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\ operator/(\ \textcolor{keywordtype}{double}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\ operator\string^(\ \textcolor{keywordtype}{double}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\&\ \mbox{\hyperlink{classcsmp_1_1_array_variable_aaa61fe7923f28de7adf847eeac94d05c}{operator}}+=(\ \textcolor{keywordtype}{double}\ );}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\&\ operator-\/=(\ \textcolor{keywordtype}{double}\ );}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\&\ operator*=(\ \textcolor{keywordtype}{double}\ );}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\&\ operator/=(\ \textcolor{keywordtype}{double}\ );}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\&\ \mbox{\hyperlink{classcsmp_1_1_array_variable_af894e2cac20e792eadf4483192c35a9c}{operator}}+=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\&\ );}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\&\ operator-\/=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\&\ );}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\&\ operator*=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\&\ );}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\&\ operator/=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\&\ );}
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \textcolor{comment}{///\ value\ by\ value\ operations}}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\&\ \mbox{\hyperlink{classcsmp_1_1_array_variable_a949a97887ed84660ddf86eda34567c0a}{operator}}+=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\&\ );}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\&\ operator-\/=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\&\ );}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\&\ operator*=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\&\ );}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\&\ operator/=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\&\ );}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \textcolor{comment}{///\ element-\/by-\/element\ operations}}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\ \ \mbox{\hyperlink{classcsmp_1_1_array_variable_a8c3a2c23f95cf1fed730d2f7ee780f48}{operator}}-\/(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\ \ operator*(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\ \ operator+(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\ \ operator/(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \textcolor{comment}{///\ comparison\ of\ flags\ and\ values}}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_array_variable_ad7130f025f50fd2736c79d2582f43c30}{operator}}==(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ operator!=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \textcolor{comment}{///\ comparison\ of\ length\ (to\ allow\ ordering\ in\ containers)}}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_array_variable_a4869d2736cbdc403d339b603dd1136e1}{operator}}<(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \textcolor{comment}{///\ accessors\ to\ the\ data}}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\&\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_array_variable_af19ffd265e1e57fae184ecc45dc7b6d7}{operator}}()(\ \mbox{\hyperlink{classcsmp_1_1_array_variable_af19ffd265e1e57fae184ecc45dc7b6d7}{uint32\_t}}\ );}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ operator[](\ uint32\_t\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \textcolor{comment}{///\ functions\ needed\ to\ make\ CSMP\ variables\ interoperable;\ do\ not\ delete}}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_array_variable_a5b89320aaf1954216acf3cb317dd0c52}{Component}}(\ \mbox{\hyperlink{classcsmp_1_1_array_variable_a5b89320aaf1954216acf3cb317dd0c52}{uint32\_t}},\ \textcolor{keywordtype}{double}\ );}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ Component(\ uint32\_t\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \textcolor{comment}{///\ returns\ number\ of\ array\ elements}}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_array_variable_a416ecf28e0b2b46f965c39e1d958b29d}{uint32\_t}}\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_array_variable_a416ecf28e0b2b46f965c39e1d958b29d}{Size}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ Resize(\ uint32\_t\ newSize,\ \textcolor{keywordtype}{double}\ newValue\ =\ std::numeric\_limits<\textcolor{keywordtype}{double}>::quiet\_NaN()\ );}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\_FLAG}}\ \ Flag(\ \ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\_FLAG}}\&\ Flag(\ \ );}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ Flag(\ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\_FLAG}}\ flag\ );}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ IsWithinRange(\ \textcolor{keywordtype}{double}\ min,\ \textcolor{keywordtype}{double}\ max\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ Has\_NaN\_Values()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_array_variable_a9a97e3b3fe53fc22ed4100a11de314c6}{MinMax}}(\ \textcolor{keywordtype}{double}\&\ min,\ \textcolor{keywordtype}{double}\&\ max\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ Sort();}
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \textcolor{comment}{///\ printing\ array\ values\ to\ screen}}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_array_variable_affcda14da2f24f099b2f4a9ae8e476f3}{Out}}(\ \textcolor{keywordtype}{long}\ digits=3\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ Out(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ filename,\ \textcolor{keywordtype}{long}\ precision\ =\ 9\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00155\ }
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \textcolor{comment}{///\ filestream\ I/O\ used\ for\ domain\ variables\ (not\ recommended\ because\ padding\ creates\ large\ storage\ overhead;\ use\ PropertyData\ instead)}}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_array_variable_a4e0f758de8f8c5e56ee05d876343609a}{Out}}(\ std::fstream\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_array_variable_a17ea44f38e41ed94d7da666057da68fa}{In}}(\ std::fstream\&\ );}
+\DoxyCodeLine{00159\ }
+\DoxyCodeLine{00160\ \ \ \ \ \ \ ArrayContainer::const\_iterator\ Begin()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ ArrayContainer::const\_iterator\ End()\ \ \ \textcolor{keyword}{const};}
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \textcolor{comment}{///\ Julian\ 17-\/07-\/2014\ -\/\ This\ is\ to\ allow\ passing\ of\ array\ variables\ to\ GEMS.}}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\&\ \mbox{\hyperlink{classcsmp_1_1_array_variable_a2bd58c37267e90c5395cb58030834774}{Front}}()\{\ \textcolor{keywordflow}{return}\ data\_.front();\ \}}
+\DoxyCodeLine{00165\ }
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ NextLargestEntry(\textcolor{keywordtype}{double})\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ HasLargerEntry(\textcolor{keywordtype}{double})\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00168\ }
+\DoxyCodeLine{00169\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\_FLAG}}\ \ flag\_;}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ ArrayContainer\ data\_;}
+\DoxyCodeLine{00172\ \ \ \ \ \};}
+\DoxyCodeLine{00173\ }
+\DoxyCodeLine{00174\ \ \ std::ostream\&\ \ operator<<(\ std::ostream\&\ stream,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}}\&\ o\ );}
+\DoxyCodeLine{00175\ }
+\DoxyCodeLine{00176\ }
+\DoxyCodeLine{00177\ \ \ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00178\ }
+\DoxyCodeLine{00179\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

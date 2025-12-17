@@ -1,0 +1,266 @@
+.TH "csmp::PropertyData" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::PropertyData \- flexible-size container for CSMP data types, providing range-check and conversion functions  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <PropertyData\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPropertyData\fP (\fBPLACEMENT\fP, \fBVARIABLE_TYPE\fP, uint32_t dim, uint32_t array_length=0U)"
+.br
+.RI "custom constructor (but not initializer) for csmp variable types; array length gives the number of elements in array or flagged array variable "
+.ti -1c
+.RI "bool \fBoperator==\fP (const \fBPropertyData\fP &) const"
+.br
+.RI "compare to another dataset of this sort "
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBPlacement\fP () const"
+.br
+.ti -1c
+.RI "\fBVARIABLE_TYPE\fP \fBType\fP () const"
+.br
+.ti -1c
+.RI "uint32_t \fBDim\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBSize\fP () const"
+.br
+.ti -1c
+.RI "uint32_t \fBComponents\fP () const"
+.br
+.RI "number of value entries stored in the variable (=size of array) "
+.ti -1c
+.RI "void \fBClear\fP ()"
+.br
+.RI "changing container size "
+.ti -1c
+.RI "void \fBReserve\fP (size_t n_objects)"
+.br
+.RI "for a user-defined number of objects of the type the property data was constructed for "
+.ti -1c
+.RI "void \fBReserve\fP (size_t flag_capacity, size_t value_capacity)"
+.br
+.RI "sheer storage not considering types of variables "
+.ti -1c
+.RI "void \fBResize\fP (size_t n_objects)"
+.br
+.RI "for a user-defined number of objects of the type the property data was constructed for "
+.ti -1c
+.RI "void \fBResize\fP (size_t n_flags, size_t n_values)"
+.br
+.RI "sheer storage size not considering types of variables "
+.ti -1c
+.RI "void \fBReduceTo\fP (const std::map< size_t, size_t > &o_n_elmt_ids)"
+.br
+.RI "change the size if this required by parent container, e\&.g\&., \fBVSet\fP "
+.ti -1c
+.RI "void \fBPushBack\fP (\fBVARIABLE_FLAG\fP)"
+.br
+.RI "'raw' inserter for flags (user must ascertain that stride is correct); use \fBpushBack()\fP for objects "
+.ti -1c
+.RI "void \fBPushBack\fP (double)"
+.br
+.RI "'raw' inserter for values (user must ascertain that stride is correct); use \fBpushBack()\fP for objects "
+.ti -1c
+.RI "void \fBPushBackFrom\fP (const \fBPropertyData\fP &data, size_t nth_value)"
+.br
+.RI "inserter from another \fBPropertyData\fP "
+.ti -1c
+.RI "\fBVARIABLE_FLAG\fP & \fBFlag\fP (size_t nth_value)"
+.br
+.RI "scalars "
+.ti -1c
+.RI "\fBVARIABLE_FLAG\fP \fBFlag\fP (size_t nth_value) const"
+.br
+.RI "scalars "
+.ti -1c
+.RI "\fBVARIABLE_FLAG\fP & \fBFlag\fP (size_t nth_value, uint32_t ith_dim)"
+.br
+.RI "vectors and array variables "
+.ti -1c
+.RI "\fBVARIABLE_FLAG\fP \fBFlag\fP (size_t nth_value, uint32_t ith_dim) const"
+.br
+.RI "read flags: vectors and array variables "
+.ti -1c
+.RI "\fBVARIABLE_FLAG\fP & \fBFlag\fP (size_t nth_value, uint32_t ith_row, uint32_t jth_col)"
+.br
+.RI "tensors "
+.ti -1c
+.RI "\fBVARIABLE_FLAG\fP \fBFlag\fP (size_t nth_value, uint32_t ith_row, uint32_t jth_col) const"
+.br
+.RI "tensors (only their diagonal elements have flags) "
+.ti -1c
+.RI "double & \fBValue\fP (size_t nth_value)"
+.br
+.RI "scalars "
+.ti -1c
+.RI "double \fBValue\fP (size_t nth_value) const"
+.br
+.ti -1c
+.RI "double & \fBValue\fP (size_t nth_value, uint32_t ith_dim)"
+.br
+.RI "vectors and array variables "
+.ti -1c
+.RI "double \fBValue\fP (size_t nth_value, uint32_t ith_dim) const"
+.br
+.RI "retrieve values: vectors and array variables "
+.ti -1c
+.RI "double & \fBValue\fP (size_t nth_value, uint32_t ith_row, uint32_t jth_col)"
+.br
+.RI "tensors "
+.ti -1c
+.RI "double \fBValue\fP (size_t nth_value, uint32_t ith_row, uint32_t jth_col) const"
+.br
+.ti -1c
+.RI "void \fBMinMaxOf\fP (double &tmin, double &tmax) const"
+.br
+.RI "checks range; all values included "
+.ti -1c
+.RI "void \fBScaleRangeTo\fP (double tmin, double tmax)"
+.br
+.RI "scales the current variable range to the new one; all values are scaled "
+.ti -1c
+.RI "void \fBOffsetRangeBy\fP (double offset_value)"
+.br
+.RI "add supplied value to all entries (look at conventions for vectors and tensors in the doc of these classes) "
+.ti -1c
+.RI "void \fBTransformValues\fP (double(*f)(double))"
+.br
+.RI "takes a pointer to a typical math function like double sqrt(double) as argument; applied this function to all values "
+.ti -1c
+.RI "bool \fBOutBinary\fP (std::fstream &fp) const"
+.br
+.RI "writing stored flag and data values to file "
+.ti -1c
+.RI "void \fBOut\fP () const"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+flexible-size container for CSMP data types, providing range-check and conversion functions 
+
+
+.PP
+\fBAuthor\fP
+.RS 4
+S\&.K\&. Matthai 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+8/4/2016
+.RE
+.PP
+.SH "Motivation"
+.PP
+Efficient data transfer object with an efficient binary interface to store variables to disk\&.
+.SH "Design Intent"
+.PP
+More disk storage-size efficient alternative to \fBFEM_Data\fP in \fBVSet\fP to streamline variable exchange and storage to disk; make it possible to read variables selectively from file\&.
+.SH "Application Examples"
+.PP
+Create contained for 1000 arrays, initialize it and write it to disk, for example:
+
+.PP
+.PP
+.nf
+PropertyData data( NODE, ARRAY, DIM3, 21 );
+data\&.Reserve(1000);
+ArrayVariable  array(1000);
+\&.\&.\&.
+for( a : 1000 )  data\&.PushBack( array );
+data\&.OutBinary( FILE );  
+.fi
+.PP
+
+.PP
+\fBAttention\fP
+.RS 4
+use \fBread()\fP and \fBstore()\fP from above to retrieve entire csmp variables, there are no member accessors Read() or Store() 
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "void csmp::PropertyData::Clear ()"
+
+.PP
+changing container size you may only reset using a key of the same (i\&.e\&., ELEMENT ) 
+.SS "\fBVARIABLE_FLAG\fP & csmp::PropertyData::Flag (size_t nth_value)"
+
+.PP
+scalars accessors / mutators for flags scalars 
+.SS "\fBVARIABLE_FLAG\fP & csmp::PropertyData::Flag (size_t nth_value, uint32_t ith_dim)"
+
+.PP
+vectors and array variables set flags: vectors and array variables 
+.SS "void csmp::PropertyData::OffsetRangeBy (double offset)"
+
+.PP
+add supplied value to all entries (look at conventions for vectors and tensors in the doc of these classes) Adds offset to all data values in the container
+
+.PP
+TODO: make sure that this is done only where it makes sense! 
+.SS "bool csmp::PropertyData::OutBinary (std::fstream & fp) const"
+
+.PP
+writing stored flag and data values to file Out binary\&.
+
+.PP
+const \fBPLACEMENT\fP place_; ///< placement of variable const \fBVARIABLE_TYPE\fP type_; ///< any of scalar\&.\&.flagged array const size_t dim_; ///< spatial dimension const size_t flag_stride_; ///< variable to variable offset (e\&.g\&. dim in a vector var) const size_t data_stride_; ///< variable to variable offset (e\&.g\&. dim in a vector var) std::vector<VARIABLE_FLAG> flags_; ///< variable flags std::vector<double> data_; ///< variable values 
+.SS "void csmp::PropertyData::PushBack (\fBVARIABLE_FLAG\fP flag)"
+
+.PP
+'raw' inserter for flags (user must ascertain that stride is correct); use \fBpushBack()\fP for objects 
+.PP
+\fBAttention\fP
+.RS 4
+use \fBread()\fP and \fBstore()\fP from above to retrieve entire csmp variables 
+.RE
+.PP
+
+.SS "void csmp::PropertyData::ReduceTo (const std::map< size_t, size_t > & o_n_elmt_ids)"
+
+.PP
+change the size if this required by parent container, e\&.g\&., \fBVSet\fP keeps only those values with the indices stored in the map
+
+.PP
+indices are assumed to range between 0\&.\&.n-1 
+.SS "void csmp::PropertyData::Reserve (size_t flag_capacity, size_t value_capacity)"
+
+.PP
+sheer storage not considering types of variables if extra values are created they will be initialised to ANY and not-a-number (NaN) 
+.SS "void csmp::PropertyData::Reserve (size_t n_objects)"
+
+.PP
+for a user-defined number of objects of the type the property data was constructed for reserves storage for n-objects as opposed to determining the size of the sheer storage which is what the \fBReserve()\fP method with 2 arguments does\&. 
+.SS "void csmp::PropertyData::Resize (size_t n_flags, size_t n_values)"
+
+.PP
+sheer storage size not considering types of variables if extra values are created they will be initialised to ANY and not-a-number (NaN) 
+.SS "void csmp::PropertyData::Resize (size_t n_objects)"
+
+.PP
+for a user-defined number of objects of the type the property data was constructed for reserves storage for n-objects as opposed to determining the size of the sheer storage which is what the \fBReserve()\fP method with 2 arguments does\&. 
+.SS "void csmp::PropertyData::TransformValues (double(* f )(double))"
+
+.PP
+takes a pointer to a typical math function like double sqrt(double) as argument; applied this function to all values Applies any kind of function with the syntax double f(double) to the double entries of the stored data\&.
+
+.PP
+TODO: make sure that this is done only where it makes sense! 
+.SS "double & csmp::PropertyData::Value (size_t nth_value, uint32_t ith_dim)"
+
+.PP
+vectors and array variables assign values: vectors and array variables 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

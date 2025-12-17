@@ -84,13 +84,13 @@ void NumIntegral_NT_lhsop_N_dV<dim,CELL>::ComputeContribution( const CELL<dim>& 
          TEMP.Resize( e.Nodes(), e.Nodes() );    
 
          // consistent formulation
-         for ( auto i{0}; i < e.FE()->IntegrationPoints(); i++ )
+         for ( uint32_t i{0}; i < e.FE()->IntegrationPoints(); i++ )
            {
               e.N_AtIntegrationPoint( i, e.FE()->NRST );
               const double det = e.det_JINV_AtIntegrationPoint( i );
                    
-              for ( auto j{0U}; j<e.Nodes(); j++ )
-                for ( auto k{0U}; k<e.Nodes(); k++ )
+              for ( uint32_t j{0U}; j<e.Nodes(); j++ )
+                for ( uint32_t k{0U}; k<e.Nodes(); k++ )
                   {
                     if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT ||
                          MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == FACE ||

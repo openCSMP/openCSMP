@@ -1,0 +1,911 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_visitor" kind="class" language="C++" prot="public">
+    <compoundname>csmp::Visitor</compoundname>
+    <derivedcompoundref refid="classcsmp_1_1_alteration_visitor" prot="public" virt="non-virtual">csmp::AlterationVisitor&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_boundary_flux_visitor" prot="public" virt="non-virtual">csmp::BoundaryFluxVisitor&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_boundary_stress_visitor" prot="public" virt="non-virtual">csmp::BoundaryStressVisitor&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_boundary_stress_visitor" prot="public" virt="non-virtual">csmp::BoundaryStressVisitor&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_brittle_failure_visitor" prot="public" virt="non-virtual">csmp::BrittleFailureVisitor&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_c_v_f_e_m___pressure_gradient_visitor" prot="public" virt="non-virtual">csmp::CVFEM_PressureGradientVisitor&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_c_v_f_e_m___visitor" prot="public" virt="non-virtual">csmp::CVFEM_Visitor&lt; dim, CELL &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_capillary_number_visitor" prot="public" virt="non-virtual">csmp::CapillaryNumberVisitor&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_compute_gravity_term_visitor" prot="public" virt="non-virtual">csmp::ComputeGravityTermVisitor&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_compute_mixture_property_visitor" prot="public" virt="non-virtual">csmp::ComputeMixturePropertyVisitor&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_compute_single_phase_gravity_term_visitor" prot="public" virt="non-virtual">csmp::ComputeSinglePhaseGravityTermVisitor&lt; dim, CELL &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_conductivity_visitor" prot="public" virt="non-virtual">csmp::ConductivityVisitor&lt; dim, CELL &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_copy_replace_visitor" prot="public" virt="non-virtual">csmp::CopyReplaceVisitor&lt; Var, dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_data_input_visitor" prot="public" virt="non-virtual">csmp::DataInputVisitor&lt; Var, dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_dispersivity_visitor" prot="public" virt="non-virtual">csmp::DispersivityVisitor&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_effective_stress_visitor" prot="public" virt="non-virtual">csmp::EffectiveStressVisitor&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_element_to_node_property_visitor" prot="public" virt="non-virtual">csmp::ElementToNodePropertyVisitor&lt; Var, dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_f_e_m___data_input_visitor" prot="public" virt="non-virtual">csmp::FEM_DataInputVisitor&lt; Var, dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_f_e_m___data_output_visitor" prot="public" virt="non-virtual">csmp::FEM_DataOutputVisitor&lt; Var, dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_fem_from_grid_visitor" prot="public" virt="non-virtual">csmp::FemFromGridVisitor&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_fem_to_grid_visitor" prot="public" virt="non-virtual">csmp::FemToGridVisitor&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_flat_boundary_stress_visitor" prot="public" virt="non-virtual">csmp::FlatBoundaryStressVisitor&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_fracture_brooks_corey_parameter_visitor" prot="public" virt="non-virtual">csmp::FractureBrooksCoreyParameterVisitor&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_fracture_capillary_pressure_visitor" prot="public" virt="non-virtual">csmp::FractureCapillaryPressureVisitor&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_fracture_compute_capillary_gradient_visitor" prot="public" virt="non-virtual">csmp::FractureComputeCapillaryGradientVisitor&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_fracture_compute_velocity_visitor" prot="public" virt="non-virtual">csmp::FractureComputeVelocityVisitor&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_fracture_peclet_number_visitor" prot="public" virt="non-virtual">csmp::FracturePecletNumberVisitor&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_gravity_projection_visitor" prot="public" virt="non-virtual">csmp::GravityProjectionVisitor&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_hydro_fracture_visitor" prot="public" virt="non-virtual">csmp::HydroFractureVisitor&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor" prot="public" virt="non-virtual">csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_integration_point_to_node_property_visitor" prot="public" virt="non-virtual">csmp::IntegrationPointToNodePropertyVisitor&lt; Var, dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_inter_face_fracture_visitor" prot="public" virt="non-virtual">csmp::InterFaceFractureVisitor&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_mesh_renumber_visitor" prot="public" virt="non-virtual">csmp::MeshRenumberVisitor&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_mesh_renumber_visitor" prot="public" virt="non-virtual">csmp::MeshRenumberVisitor&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_mohr_coulomb_failure___visitor" prot="public" virt="non-virtual">csmp::MohrCoulombFailure_Visitor&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_na_cl_h2_o_properties_visitor_p_h_x" prot="public" virt="non-virtual">csmp::NaClH2OPropertiesVisitorPHX&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_overburden_pressure_visitor" prot="public" virt="non-virtual">csmp::OverburdenPressureVisitor&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_pore_volume_visitor" prot="public" virt="non-virtual">csmp::PoreVolumeVisitor&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_pressure_saturation_initializer" prot="public" virt="non-virtual">csmp::PressureSaturationInitializer&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_property_at_point_visitor" prot="public" virt="non-virtual">csmp::PropertyAtPointVisitor&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_region_boundary_flux_visitor" prot="public" virt="non-virtual">csmp::RegionBoundaryFluxVisitor&lt; dim, COMPUTATION_DOMAIN &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_single_phase_velocity_visitor" prot="public" virt="non-virtual">csmp::SinglePhaseVelocityVisitor&lt; dim, CELL &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_source_visitor" prot="public" virt="non-virtual">csmp::SourceVisitor&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_stabilization_parameter_visitor" prot="public" virt="non-virtual">csmp::StabilizationParameterVisitor&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_thermal_visitor" prot="public" virt="non-virtual">csmp::ThermalVisitor&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor" prot="public" virt="non-virtual">csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_upwind_control_visitor" prot="public" virt="non-virtual">csmp::UpwindControlVisitor&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_volume_output___visitor" prot="public" virt="non-virtual">csmp::VolumeOutput_Visitor&lt; dim &gt;</derivedcompoundref>
+    <includes refid="_visitor_8h" local="no">Visitor.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_visitor_1af785c6c9fdbe53d3edcb37e5eebf13ae" prot="protected" static="no" mutable="no">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">PLACEMENT</ref></type>
+        <definition>PLACEMENT csmp::Visitor&lt; dim &gt;::application_level_</definition>
+        <argsstring></argsstring>
+        <name>application_level_</name>
+        <qualifiedname>csmp::Visitor::application_level_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Visitor.h" line="90" column="18" bodyfile="source/includes/model/Visitor.h" bodystart="90" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_visitor_1a4ba2f25168d6531e7a850f5f2d0dc9bb" prot="protected" static="no" mutable="no">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">PLACEMENT</ref></type>
+        <definition>PLACEMENT csmp::Visitor&lt; dim &gt;::application_target_</definition>
+        <argsstring></argsstring>
+        <name>application_target_</name>
+        <qualifiedname>csmp::Visitor::application_target_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Visitor.h" line="91" column="18" bodyfile="source/includes/model/Visitor.h" bodystart="91" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_visitor_1a429e6f96872a2b0a7946a344caecb6cb" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::Visitor&lt; dim &gt;::verbose_</definition>
+        <argsstring></argsstring>
+        <name>verbose_</name>
+        <qualifiedname>csmp::Visitor::verbose_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Visitor.h" line="93" column="10" bodyfile="source/includes/model/Visitor.h" bodystart="93" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_visitor_1a1097abaa59d3a35d65c0cb6335e2719c" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Visitor&lt; dim &gt;::Visitor</definition>
+        <argsstring>(PLACEMENT level=MODEL, PLACEMENT target=ELEMENT)</argsstring>
+        <name>Visitor</name>
+        <qualifiedname>csmp::Visitor::Visitor</qualifiedname>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">PLACEMENT</ref></type>
+          <declname>level</declname>
+          <defval>MODEL</defval>
+        </param>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">PLACEMENT</ref></type>
+          <declname>target</declname>
+          <defval>ELEMENT</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Constructor of visitor object. The user can specify the application level and application target of the visitor by supplying enum <ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">PLACEMENT</ref> argument. Per default, visitors act on <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> objects. <linebreak/>
+</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>level</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">PLACEMENT</ref> that will be used to determine where in the object hierarchy the visitation begins, i.e. <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> or <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref> etc.</para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>target</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>for which the Visit() method will be called that actually carries out the computation, for instance on the <ref refid="classcsmp_1_1_node" kindref="compound">Node</ref> or on the <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Visitor.h" line="61" column="14" bodyfile="source/modules/model/Visitor.cpp" bodystart="24" bodyend="32"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_visitor_1ab83b6d2b06153f5b7b1050bfffdb2707" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>csmp::Visitor&lt; dim &gt;::~Visitor</definition>
+        <argsstring>()</argsstring>
+        <name>~Visitor</name>
+        <qualifiedname>csmp::Visitor::~Visitor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Visitor.h" line="62" column="13" bodyfile="source/modules/model/Visitor.cpp" bodystart="35" bodyend="37"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_visitor_1a04cef3d343b9721c4d636f5496ccfa42" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Visitor&lt; dim &gt;::ApplicationLevel</definition>
+        <argsstring>(PLACEMENT p)</argsstring>
+        <name>ApplicationLevel</name>
+        <qualifiedname>csmp::Visitor::ApplicationLevel</qualifiedname>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">PLACEMENT</ref></type>
+          <declname>p</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The application level determines the type of object that the visitor will be applied to by the <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>. The visitor itself may then still continue to migrate down the hierarchy of objects, but not upwards. This method sets, and or (without argument) returns the application level of the visitor on which it is called. <linebreak/>
+</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The class of object that the visitor shall be applied to.</para>
+<para><simplesect kind="attention"><para>If no argument is specified, the method will return the current setting of target. </para>
+</simplesect>
+</para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Visitor.h" line="66" column="18" bodyfile="source/modules/model/Visitor.cpp" bodystart="56" bodyend="57"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_visitor_1a221f8440bf8d6aa7ad970d60383f8b0c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">PLACEMENT</ref></type>
+        <definition>PLACEMENT csmp::Visitor&lt; dim &gt;::ApplicationLevel</definition>
+        <argsstring>() const</argsstring>
+        <name>ApplicationLevel</name>
+        <qualifiedname>csmp::Visitor::ApplicationLevel</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Visitor.h" line="67" column="18" bodyfile="source/modules/model/Visitor.cpp" bodystart="60" bodyend="61"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_visitor_1a05b9c8127e47ce0ca524e2804c14251a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Visitor&lt; dim &gt;::ApplicationTarget</definition>
+        <argsstring>(PLACEMENT p)</argsstring>
+        <name>ApplicationTarget</name>
+        <qualifiedname>csmp::Visitor::ApplicationTarget</qualifiedname>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">PLACEMENT</ref></type>
+          <declname>p</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The target of a visitation is the lowest level of the hierarchy it will be applied to, i.e. <ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>, IntegrationPoint, <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> or <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>. <linebreak/>
+</para>
+<para>If no argument is specified, the method will return the current setting of target.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>If the argument supplied is not applicable, the method reports an error. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Visitor.h" line="70" column="18" bodyfile="source/modules/model/Visitor.cpp" bodystart="79" bodyend="80"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_visitor_1ac7084587d6daea17badc51e2a0caddf8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">PLACEMENT</ref></type>
+        <definition>csmp::PLACEMENT csmp::Visitor&lt; dim &gt;::ApplicationTarget</definition>
+        <argsstring>() const</argsstring>
+        <name>ApplicationTarget</name>
+        <qualifiedname>csmp::Visitor::ApplicationTarget</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Visitor.h" line="71" column="18" bodyfile="source/modules/model/Visitor.cpp" bodystart="84" bodyend="85"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_visitor_1a005bb17978ed03376bc3f7c1c329c936" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::Visitor&lt; dim &gt;::SetInitialProperties</definition>
+        <argsstring>(Model&lt; dim &gt; *model)</argsstring>
+        <name>SetInitialProperties</name>
+        <qualifiedname>csmp::Visitor::SetInitialProperties</qualifiedname>
+        <reimplementedby refid="classcsmp_1_1_thermal_visitor_1aa869eeec7d556b382a67db630584a798">SetInitialProperties</reimplementedby>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; *</type>
+          <declname>model</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Visitor.h" line="73" column="18" bodyfile="source/modules/model/Visitor.cpp" bodystart="165" bodyend="170"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_visitor_1a07433f464353062d91f21684b9378dec" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::Visitor&lt; dim &gt;::Visit</definition>
+        <argsstring>(Model&lt; dim &gt; *)</argsstring>
+        <name>Visit</name>
+        <qualifiedname>csmp::Visitor::Visit</qualifiedname>
+        <reimplementedby refid="classcsmp_1_1_copy_replace_visitor_1acb55cf604af818c7ae75a99973d6b6e7">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_data_input_visitor_1a4906d861a87bfb4c39df20b125f10d5e">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_gravity_projection_visitor_1a4628806eb8df0432d6c11d75b2fd4fb9">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_hydro_fracture_visitor_1aa4083a77b14b9c5c5d7776d2f2a0bfbd">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a06e8e74a5425ff2f0a337a3e76946ab0">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_overburden_pressure_visitor_1a31c8a1265ab30f8ba80f5f46d66cf84b">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_property_at_point_visitor_1a6a0f87fa8b130276fb22d1464dd72fcc">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_source_visitor_1aeaa71ab02d84cc0816c028c5d3f9f3bf">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_stabilization_parameter_visitor_1a7c4c67109d1e516caaf5bef041b23a80">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_thermal_visitor_1a3ee1dce7aee71aa932c2c7c8d2dc8df2">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a1f0b3bb75f9f6f1f0f099748a88e50cf">Visit</reimplementedby>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; *</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Visitor.h" line="76" column="18" bodyfile="source/modules/model/Visitor.cpp" bodystart="159" bodyend="162"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_visitor_1ac71cf14aab11139d8b03b39d4e4709bc" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::Visitor&lt; dim &gt;::Visit</definition>
+        <argsstring>(Region&lt; dim &gt; *)</argsstring>
+        <name>Visit</name>
+        <qualifiedname>csmp::Visitor::Visit</qualifiedname>
+        <reimplementedby refid="classcsmp_1_1_copy_replace_visitor_1a5bcbe73892b6ae59189b295b9e270ca4">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_c_v_f_e_m___pressure_gradient_visitor_1adf21ca703db3a6207d8fa9faeb9fd0dc">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_data_input_visitor_1a6162b94ebe5181c010f61798c7543c47">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_f_e_m___data_input_visitor_1a449abdd460b59a4cd7996bdb4a4d0088">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_f_e_m___data_output_visitor_1ad81dab79f7bf0c785654b762a65b2b24">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_fem_to_grid_visitor_1aa48740ee809dc588c84be57b3d1cd55b">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_gravity_projection_visitor_1a497ab1d86b7cdf913e4365255e1a45cb">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_na_cl_h2_o_properties_visitor_p_h_x_1afe1edd674767db407d1f3a1984c72534">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_pore_volume_visitor_1a3632e6a7f773f77914cde2a9a9254999">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_upwind_control_visitor_1aa5444c545d3456822d3b4e9e46240f66">Visit</reimplementedby>
+        <param>
+          <type><ref refid="classcsmp_1_1_region" kindref="compound">Region</ref>&lt; dim &gt; *</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Visitor.h" line="77" column="18" bodyfile="source/modules/model/Visitor.cpp" bodystart="138" bodyend="142"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_visitor_1ac735e758870331b6639ea969504c47bf" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::Visitor&lt; dim &gt;::Visit</definition>
+        <argsstring>(Boundary&lt; dim &gt; *)</argsstring>
+        <name>Visit</name>
+        <qualifiedname>csmp::Visitor::Visit</qualifiedname>
+        <reimplementedby refid="classcsmp_1_1_boundary_flux_visitor_1a93885f50f5fcd1acd7b011f07c837b8b">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_boundary_stress_visitor_1abdad4e41ba17176143c7a3b36b04756e">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_boundary_stress_visitor_1a4ac8dc8426ad7ef7fd1bc52adef02c9d">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_flat_boundary_stress_visitor_1a4172f38f6156d888f95664eea28330a9">Visit</reimplementedby>
+        <param>
+          <type><ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref>&lt; dim &gt; *</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Visitor.h" line="78" column="18" bodyfile="source/modules/model/Visitor.cpp" bodystart="145" bodyend="149"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_visitor_1af861179da1638c602df6c753cb3026f6" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::Visitor&lt; dim &gt;::Visit</definition>
+        <argsstring>(SplitBoundary&lt; dim &gt; *)</argsstring>
+        <name>Visit</name>
+        <qualifiedname>csmp::Visitor::Visit</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_split_boundary" kindref="compound">SplitBoundary</ref>&lt; dim &gt; *</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Visitor.h" line="79" column="18" bodyfile="source/modules/model/Visitor.cpp" bodystart="152" bodyend="156"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_visitor_1a1a3ed57d253eef9a0097232c7359627c" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::Visitor&lt; dim &gt;::Visit</definition>
+        <argsstring>(Element&lt; dim &gt; *)</argsstring>
+        <name>Visit</name>
+        <qualifiedname>csmp::Visitor::Visit</qualifiedname>
+        <reimplementedby refid="classcsmp_1_1_brittle_failure_visitor_1a23f93dab10d3970cd4229b22691d1201">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_capillary_number_visitor_1ac061105ca75ef0bf8d5a18d2cd53e29c">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_compute_gravity_term_visitor_1a7e0770a6bcfcd39dca3d457a2e4f7936">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_compute_mixture_property_visitor_1a82140a656e749e741c61cefefe5eef9c">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_copy_replace_visitor_1a58be26f5c046e24132815136c80c2a19">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_c_v_f_e_m___pressure_gradient_visitor_1a906cc0826f2dc4c5cc9b397560b74a67">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_c_v_f_e_m___visitor_1af14e9df3ec4a7f6a1058799a36a9ad86">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_data_input_visitor_1a7da6dd51acbcae9a3269173badeedf60">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_dispersivity_visitor_1a1bb39254e1f63241a5f8d5546d1a75bc">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_effective_stress_visitor_1ad714989b81060786ee7f506d2a851187">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_element_to_node_property_visitor_1a19fd6af6adf383da7d46876b965c9b1e">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_f_e_m___data_input_visitor_1af461d1ac31ff5b6018cafa34fe03e7a7">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_f_e_m___data_output_visitor_1ab1c20341eb8f54be4a703e20a53ecc3d">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_fem_from_grid_visitor_1a7775d088f114882f6b8aaa33bf8b4bcc">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_fem_to_grid_visitor_1addc1ce4f8db391e7aa05aff234f0c9f9">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_fracture_brooks_corey_parameter_visitor_1a19281324cd0be01f19a19c7c011122df">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_fracture_capillary_pressure_visitor_1a927f8297bfad3fb889f0eaf777793a36">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_fracture_compute_capillary_gradient_visitor_1aa0660ca0f0278eb5806ec60880265f75">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_fracture_compute_velocity_visitor_1aa161e8cd26c37e64c81073024aaee905">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_fracture_peclet_number_visitor_1a719ba649e660820d5b950cd46b6b244c">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_gravity_projection_visitor_1a4575b9de13f99fa508a2c1f731ed14d5">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_hydro_fracture_visitor_1adc02603e1d4979443998760942974b22">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a7f134fc4a8eb13463bb5d2129f96552f">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_integration_point_to_node_property_visitor_1a6180554ce2e177a131be352467986380">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_mesh_renumber_visitor_1a305edd20532d1d2be732fd1aa3045f87">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_mesh_renumber_visitor_1aa290950079b42a35d96d44abbe2fb2df">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_mohr_coulomb_failure___visitor_1a8f7452556bff69e1630f4d5487ffc247">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_overburden_pressure_visitor_1a75363556448a210ef8d0a554f9734f03">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_property_at_point_visitor_1ad713c8cf371c38ab1033379d7c677f1c">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_source_visitor_1a67fe3a5000d3979d5a788d249ac529d7">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_stabilization_parameter_visitor_1ab6086e9645d5e60d1033c41095adc00b">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_upwind_control_visitor_1a2542e8cdbbe9525617a8209124b57129">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_volume_output___visitor_1a2044141ed9fca092955cd8ebad4e6327">Visit</reimplementedby>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; *</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Visitor.h" line="80" column="18" bodyfile="source/modules/model/Visitor.cpp" bodystart="131" bodyend="135"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_visitor_1abdca6daa1802e3727868d2d614c65015" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::Visitor&lt; dim &gt;::Visit</definition>
+        <argsstring>(Face&lt; dim &gt; *)</argsstring>
+        <name>Visit</name>
+        <qualifiedname>csmp::Visitor::Visit</qualifiedname>
+        <reimplementedby refid="classcsmp_1_1_boundary_stress_visitor_1a11abcc3f6b424d955ab388b6727c30dd">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_boundary_stress_visitor_1aacb2895678c4b568b478fdc619272e42">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_copy_replace_visitor_1a58fed041ea23b132cdb6764a201dbf86">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_data_input_visitor_1a4b28735f85bdb5514a1cb16730a6585b">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_flat_boundary_stress_visitor_1af6001434d2cc7cad0ef65bf1b0b18f5d">Visit</reimplementedby>
+        <param>
+          <type><ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>&lt; dim &gt; *</type>
+          <defname>f</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The key method of the visitor design pattern. Visit() must be defined for the target object (for instance <ref refid="classcsmp_1_1_node" kindref="compound">Node</ref> objects, or <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> objects). Since the argument is the actual object, its entire interface is accessible to the visitor in order to carry out operations. Overload this method in the derived class to gain access to target objects and perform the actions that are desired for the visitation. <linebreak/>
+</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>f</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>is a pointer to the target <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> (forming part of a boundary). </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Visitor.h" line="81" column="18" bodyfile="source/modules/model/Visitor.cpp" bodystart="101" bodyend="105"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_visitor_1a0f21f0cfcf5328584883eb38effb58d4" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::Visitor&lt; dim &gt;::Visit</definition>
+        <argsstring>(InterFace&lt; dim &gt; *)</argsstring>
+        <name>Visit</name>
+        <qualifiedname>csmp::Visitor::Visit</qualifiedname>
+        <reimplementedby refid="classcsmp_1_1_copy_replace_visitor_1a8b9b2fb263818c941a720411fbdf5f6b">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_data_input_visitor_1a520c27b9869505dc9809dfb9e9ea49e2">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_inter_face_fracture_visitor_1af6670221f5500dfeb4584027101633b7">Visit</reimplementedby>
+        <param>
+          <type><ref refid="classcsmp_1_1_inter_face" kindref="compound">InterFace</ref>&lt; dim &gt; *</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Visitor.h" line="82" column="18" bodyfile="source/modules/model/Visitor.cpp" bodystart="117" bodyend="121"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_visitor_1a8f1e9b73d04a90ad49171151bc233dbe" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::Visitor&lt; dim &gt;::Visit</definition>
+        <argsstring>(Edge&lt; dim &gt; *)</argsstring>
+        <name>Visit</name>
+        <qualifiedname>csmp::Visitor::Visit</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_edge" kindref="compound">Edge</ref>&lt; dim &gt; *</type>
+          <defname>f</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Visitor.h" line="83" column="18" bodyfile="source/modules/model/Visitor.cpp" bodystart="109" bodyend="113"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_visitor_1a46449d8a657dbe4a2db5f1126e08323d" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::Visitor&lt; dim &gt;::Visit</definition>
+        <argsstring>(Node&lt; dim &gt; *)</argsstring>
+        <name>Visit</name>
+        <qualifiedname>csmp::Visitor::Visit</qualifiedname>
+        <reimplementedby refid="classcsmp_1_1_alteration_visitor_1af6f6c494685fd0e92b0057787bcd8b4b">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_copy_replace_visitor_1ab2c95c3d7b0e607b4c793ccd6b23db54">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_data_input_visitor_1aa38e7ab086e4112093d2a9e648f520e9">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_element_to_node_property_visitor_1ab5866420246629ee7d269eb4c61806be">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_f_e_m___data_input_visitor_1a2535c2ba986dc96169c013afaf1cda43">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_f_e_m___data_output_visitor_1abbbc362eb52624d7be7ae67dea469d15">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1ab373a37dae4d5ebdf412f466e4265548">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_integration_point_to_node_property_visitor_1a69452f30e4841713dadff8b0344d36ee">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_na_cl_h2_o_properties_visitor_p_h_x_1a500e41925f25c7fff05ca16ed0bf9c64">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_pore_volume_visitor_1a13736ab4ca7daef2bf7aaa66a338ef8b">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_pressure_saturation_initializer_1a95859f42ccddef1e869f455cc10d1baa">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_region_boundary_flux_visitor_1a88fadf58e36c2bac7c00a7f077d9c52f">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_thermal_visitor_1a88f447191342709a98afffdfc1f3a92c">Visit</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1aab6d3747ed48268304fb052094876235">Visit</reimplementedby>
+        <param>
+          <type><ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; dim &gt; *</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Visitor.h" line="84" column="18" bodyfile="source/modules/model/Visitor.cpp" bodystart="124" bodyend="128"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_visitor_1a5dc481fceb0110431c4d1d6cbcc9ceff" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Visitor&lt; dim &gt;::Verbose</definition>
+        <argsstring>()</argsstring>
+        <name>Verbose</name>
+        <qualifiedname>csmp::Visitor::Verbose</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Visitor.h" line="86" column="10" bodyfile="source/includes/model/Visitor.h" bodystart="86" bodyend="86"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_visitor_1a9361155291d48571710c2a67406ce730" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Visitor&lt; dim &gt;::Verbose</definition>
+        <argsstring>(bool verbose)</argsstring>
+        <name>Verbose</name>
+        <qualifiedname>csmp::Visitor::Verbose</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>verbose</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Visitor.h" line="87" column="10" bodyfile="source/includes/model/Visitor.h" bodystart="87" bodyend="87"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Visitors are designed to facilitate computations on any of the objects that are contained inside a <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>. Thus, one may for instance derive an equation of state type visitor to go around the nodes looking up pressure and temperature and use this information to calculate nodal fluid densities. As an important difference to Interrelations, visitors are not restricted to the computation of a single variable and they can also be used to gain access to the full finite-element or finite-volume functionality of CSMP. Thus, one can use a visitor to find a specific finite element that contains a user-specified point. This is done by across mesh traversal. In contrast, interrelations are restricted to sequential node-by-node, element-by-element calculations. <linebreak/>
+</para>
+<para><simplesect kind="author"><para>S.K. Matthai </para>
+</simplesect>
+<simplesect kind="author"><para>Stephen G. Roberts </para>
+</simplesect>
+<simplesect kind="author"><para>S. Geiger </para>
+</simplesect>
+<simplesect kind="date"><para>2001</para>
+</simplesect>
+</para>
+<sect1 id="compare_floats_8h_1motivation">
+<title>Motivation</title><para>To make the classical <ref refid="classcsmp_1_1_visitor" kindref="compound">Visitor</ref> design pattern available to CSMP users (for documentation of pattern, refer to Gamma et al. 1996, Addison and Wesley, p. 331).</para>
+</sect1>
+<sect1 id="classcsmp_1_1_visitor_1applicability">
+<title>Applicability</title><para>Visitors in CSMP are designed to allow visitations of the <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> hierarchy of objects: <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> &gt; <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref> &gt; <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> &gt; &gt; <ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>, as well as interfaces. The user can derive visitors from this base class in order to perform different operations on any of the objects encountered during a visitation. <linebreak/>
+</para>
+</sect1>
+<sect1 id="classcsmp_1_1_visitor_1examples">
+<title>Application Examples</title><para>Have a look at the <ref refid="classcsmp_1_1_alteration_visitor" kindref="compound">AlterationVisitor</ref> of the equation of state visitors in order to understand this design pattern. </para>
+</sect1>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>csmp::AlterationVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_alteration_visitor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="49">
+        <label>csmp::AndersonianBoundaryStressVisitor</label>
+        <link refid="classcsmp_1_1_andersonian_boundary_stress_visitor"/>
+        <childnode refid="48" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::BoundaryFluxVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_boundary_flux_visitor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>csmp::BoundaryStressVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_boundary_stress_visitor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>csmp::BrittleFailureVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_brittle_failure_visitor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>csmp::CVFEM_PressureGradientVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_c_v_f_e_m___pressure_gradient_visitor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>csmp::CVFEM_Visitor&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_c_v_f_e_m___visitor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>csmp::CapillaryNumberVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_capillary_number_visitor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>csmp::ComputeGravityTermVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_compute_gravity_term_visitor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>csmp::ComputeMixturePropertyVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_compute_mixture_property_visitor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>csmp::ComputeSinglePhaseGravityTermVisitor&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_compute_single_phase_gravity_term_visitor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>csmp::ConductivityVisitor&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_conductivity_visitor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>csmp::CopyReplaceVisitor&lt; Var, dim &gt;</label>
+        <link refid="classcsmp_1_1_copy_replace_visitor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>csmp::DataInputVisitor&lt; Var, dim &gt;</label>
+        <link refid="classcsmp_1_1_data_input_visitor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="15">
+        <label>csmp::DispersivityVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_dispersivity_visitor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="16">
+        <label>csmp::EffectiveStressVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_effective_stress_visitor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="17">
+        <label>csmp::ElementToNodePropertyVisitor&lt; Var, dim &gt;</label>
+        <link refid="classcsmp_1_1_element_to_node_property_visitor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="18">
+        <label>csmp::FEM_DataInputVisitor&lt; Var, dim &gt;</label>
+        <link refid="classcsmp_1_1_f_e_m___data_input_visitor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="19">
+        <label>csmp::FEM_DataOutputVisitor&lt; Var, dim &gt;</label>
+        <link refid="classcsmp_1_1_f_e_m___data_output_visitor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="20">
+        <label>csmp::FemFromGridVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_fem_from_grid_visitor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="21">
+        <label>csmp::FemToGridVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_fem_to_grid_visitor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="22">
+        <label>csmp::FlatBoundaryStressVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_flat_boundary_stress_visitor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="23">
+        <label>csmp::FractureBrooksCoreyParameterVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_fracture_brooks_corey_parameter_visitor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="24">
+        <label>csmp::FractureCapillaryPressureVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_fracture_capillary_pressure_visitor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="25">
+        <label>csmp::FractureComputeCapillaryGradientVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_fracture_compute_capillary_gradient_visitor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="26">
+        <label>csmp::FractureComputeVelocityVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_fracture_compute_velocity_visitor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="27">
+        <label>csmp::FracturePecletNumberVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_fracture_peclet_number_visitor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="28">
+        <label>csmp::GravityProjectionVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_gravity_projection_visitor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="29">
+        <label>csmp::HydroFractureVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_hydro_fracture_visitor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="30">
+        <label>csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="31">
+        <label>csmp::IntegrationPointToNodePropertyVisitor&lt; Var, dim &gt;</label>
+        <link refid="classcsmp_1_1_integration_point_to_node_property_visitor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="32">
+        <label>csmp::InterFaceFractureVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_inter_face_fracture_visitor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="33">
+        <label>csmp::MeshRenumberVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_mesh_renumber_visitor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="34">
+        <label>csmp::MohrCoulombFailure_Visitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_mohr_coulomb_failure___visitor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="35">
+        <label>csmp::NaClH2OPropertiesVisitorPHX&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_na_cl_h2_o_properties_visitor_p_h_x"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="36">
+        <label>csmp::OverburdenPressureVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_overburden_pressure_visitor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="37">
+        <label>csmp::PoreVolumeVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_pore_volume_visitor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="38">
+        <label>csmp::PressureSaturationInitializer&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_pressure_saturation_initializer"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="39">
+        <label>csmp::PropertyAtPointVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_property_at_point_visitor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="40">
+        <label>csmp::RegionBoundaryFluxVisitor&lt; dim, COMPUTATION_DOMAIN &gt;</label>
+        <link refid="classcsmp_1_1_region_boundary_flux_visitor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="41">
+        <label>csmp::SinglePhaseVelocityVisitor&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_single_phase_velocity_visitor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="42">
+        <label>csmp::SourceVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_source_visitor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="43">
+        <label>csmp::StabilizationParameterVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_stabilization_parameter_visitor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="44">
+        <label>csmp::ThermalVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_thermal_visitor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="51">
+        <label>csmp::TransportVisitor2D</label>
+        <link refid="classcsmp_1_1_transport_visitor2_d"/>
+        <childnode refid="50" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="45">
+        <label>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="46">
+        <label>csmp::UpwindControlVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_upwind_control_visitor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="50">
+        <label>csmp::Visitor&lt; 2U &gt;</label>
+        <link refid="classcsmp_1_1_visitor"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; 2U &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="48">
+        <label>csmp::Visitor&lt; 3U &gt;</label>
+        <link refid="classcsmp_1_1_visitor"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; 3U &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::Visitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_visitor"/>
+      </node>
+      <node id="47">
+        <label>csmp::VolumeOutput_Visitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_volume_output___visitor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::Visitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_visitor"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/model/Visitor.h" line="59" column="1" bodyfile="source/includes/model/Visitor.h" bodystart="59" bodyend="94"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_visitor_1af785c6c9fdbe53d3edcb37e5eebf13ae" prot="protected" virt="non-virtual"><scope>csmp::Visitor</scope><name>application_level_</name></member>
+      <member refid="classcsmp_1_1_visitor_1a4ba2f25168d6531e7a850f5f2d0dc9bb" prot="protected" virt="non-virtual"><scope>csmp::Visitor</scope><name>application_target_</name></member>
+      <member refid="classcsmp_1_1_visitor_1a04cef3d343b9721c4d636f5496ccfa42" prot="public" virt="non-virtual"><scope>csmp::Visitor</scope><name>ApplicationLevel</name></member>
+      <member refid="classcsmp_1_1_visitor_1a221f8440bf8d6aa7ad970d60383f8b0c" prot="public" virt="non-virtual"><scope>csmp::Visitor</scope><name>ApplicationLevel</name></member>
+      <member refid="classcsmp_1_1_visitor_1a05b9c8127e47ce0ca524e2804c14251a" prot="public" virt="non-virtual"><scope>csmp::Visitor</scope><name>ApplicationTarget</name></member>
+      <member refid="classcsmp_1_1_visitor_1ac7084587d6daea17badc51e2a0caddf8" prot="public" virt="non-virtual"><scope>csmp::Visitor</scope><name>ApplicationTarget</name></member>
+      <member refid="classcsmp_1_1_visitor_1a005bb17978ed03376bc3f7c1c329c936" prot="public" virt="virtual"><scope>csmp::Visitor</scope><name>SetInitialProperties</name></member>
+      <member refid="classcsmp_1_1_visitor_1a5dc481fceb0110431c4d1d6cbcc9ceff" prot="public" virt="non-virtual"><scope>csmp::Visitor</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_visitor_1a9361155291d48571710c2a67406ce730" prot="public" virt="non-virtual"><scope>csmp::Visitor</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_visitor_1a429e6f96872a2b0a7946a344caecb6cb" prot="private" virt="non-virtual"><scope>csmp::Visitor</scope><name>verbose_</name></member>
+      <member refid="classcsmp_1_1_visitor_1a07433f464353062d91f21684b9378dec" prot="public" virt="virtual"><scope>csmp::Visitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1ac71cf14aab11139d8b03b39d4e4709bc" prot="public" virt="virtual"><scope>csmp::Visitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1ac735e758870331b6639ea969504c47bf" prot="public" virt="virtual"><scope>csmp::Visitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1af861179da1638c602df6c753cb3026f6" prot="public" virt="virtual"><scope>csmp::Visitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a1a3ed57d253eef9a0097232c7359627c" prot="public" virt="virtual"><scope>csmp::Visitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1abdca6daa1802e3727868d2d614c65015" prot="public" virt="virtual"><scope>csmp::Visitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a0f21f0cfcf5328584883eb38effb58d4" prot="public" virt="virtual"><scope>csmp::Visitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a8f1e9b73d04a90ad49171151bc233dbe" prot="public" virt="virtual"><scope>csmp::Visitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a46449d8a657dbe4a2db5f1126e08323d" prot="public" virt="virtual"><scope>csmp::Visitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a1097abaa59d3a35d65c0cb6335e2719c" prot="public" virt="non-virtual"><scope>csmp::Visitor</scope><name>Visitor</name></member>
+      <member refid="classcsmp_1_1_visitor_1ab83b6d2b06153f5b7b1050bfffdb2707" prot="public" virt="virtual"><scope>csmp::Visitor</scope><name>~Visitor</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

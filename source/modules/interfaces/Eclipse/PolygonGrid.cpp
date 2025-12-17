@@ -366,7 +366,8 @@ PolygonGrid::~PolygonGrid()
 
 GridNode* PolygonGrid::AddNode( GridNode& gn )
 {
-    typename deque<GridNode*>::iterator nit = find_if( nodes_.begin(), nodes_.end(), [&]( GridNode* n )->bool { return ( gn == *n ); } );
+    auto nit = find_if( nodes_.begin(), nodes_.end(), 
+                        [&gn]( const GridNode* n )->bool { return ( gn == *n ); } );
     if( nit != nodes_.end() )
         return (*nit);
     gn.AssignIdx( nodes_.size() );
@@ -377,7 +378,8 @@ GridNode* PolygonGrid::AddNode( GridNode& gn )
 
 GridFace* PolygonGrid::AddFace( GridFace& gf )
 {
-    typename deque<GridFace*>::iterator nit = find_if( faces_.begin(), faces_.end(), [&]( GridFace* f )->bool { return ( gf == *f ); } );
+    auto nit = find_if( faces_.begin(), faces_.end(), 
+                        [&gf]( const GridFace* f )->bool { return ( gf == *f ); } );
     if( nit != faces_.end() )
         return (*nit);
     gf.AssignIdx( faces_.size() );
@@ -388,7 +390,8 @@ GridFace* PolygonGrid::AddFace( GridFace& gf )
 
 GridElement* PolygonGrid::AddElement( GridElement& ge )
 {
-    typename deque<GridElement*>::iterator nit = find_if( elements_.begin(), elements_.end(), [&]( GridElement* e )->bool { return ( ge == *e ); } );
+    auto nit = find_if( elements_.begin(), elements_.end(), 
+                        [&ge]( const GridElement* e )->bool { return ( ge == *e ); } );
     if( nit != elements_.end() )
         return (*nit);
     ge.AssignIdx( elements_.size() );

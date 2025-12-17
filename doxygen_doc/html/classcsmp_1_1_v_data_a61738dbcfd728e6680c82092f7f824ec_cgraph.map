@@ -1,0 +1,9 @@
+<map id="csmp::VData::InText" name="csmp::VData::InText">
+<area shape="rect" id="Node000001" title="initialise VData=mesh connectivity structures from binary file" alt="" coords="5,55,148,80"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_v_data.html#ab682ddf35a3fb622b898a3d69db0d048" title="clear the container" alt="" coords="205,5,345,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="131,51,205,33,206,38,132,57"/>
+<area shape="rect" id="Node000003" href="$namespacecsmp.html#a6c42e9e0529dda9c61a77681f2735608" title="detects lines beginning with #, %, –; char* not constant because first comment char gets replaced by ..." alt="" coords="199,55,351,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="148,65,184,65,184,70,148,70"/>
+<area shape="rect" id="Node000004" href="$group___c_s_m_p__global__enumerations.html#ga8413f7c3b4f238c5a98a846198d49469" title="some fixed string sizes (max filename length on NTFS partition / arbitrary #&lt;32k)" alt="" coords="196,104,354,130"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="132,78,206,97,205,102,131,84"/>
+</map>

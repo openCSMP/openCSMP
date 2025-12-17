@@ -28,7 +28,6 @@ finite-element mesh for CSP computations.
 class Triangulator {
   public:
     Triangulator(); 
-    ~Triangulator(); 
 
     void TrianglesFromRegularGrid( const Matrix& grid, VSet<2U>& vs );
 

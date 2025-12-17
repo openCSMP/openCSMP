@@ -1,0 +1,263 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_fluid_compressibility_source_l_h_s" kind="class" language="C++" prot="public">
+    <compoundname>csmp::FluidCompressibilitySourceLHS</compoundname>
+    <basecompoundref refid="classcsmp_1_1_matrix_operator" prot="public" virt="non-virtual">csmp::MatrixOperator&lt; dim &gt;</basecompoundref>
+    <includes refid="_fluid_compressibility_source_l_h_s_8h" local="no">FluidCompressibilitySourceLHS.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_fluid_compressibility_source_l_h_s_1a2ba21caa3e495499795a999c2104dd0d" prot="private" static="no" mutable="no">
+        <type>const <ref refid="structcsmp_1_1_i_n_d_e_x" kindref="compound">csmp::INDEX</ref>&lt; SCALAR, SECTOR_INTEGRATION_POINT &gt; &amp;</type>
+        <definition>const csmp::INDEX&lt;SCALAR,SECTOR_INTEGRATION_POINT&gt;&amp; csmp::FluidCompressibilitySourceLHS&lt; dim &gt;::key_SPV_</definition>
+        <argsstring></argsstring>
+        <name>key_SPV_</name>
+        <qualifiedname>csmp::FluidCompressibilitySourceLHS::key_SPV_</qualifiedname>
+        <briefdescription>
+<para>sector pore volume </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/FluidCompressibilitySourceLHS.h" line="34" column="23" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/FluidCompressibilitySourceLHS.h" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_fluid_compressibility_source_l_h_s_1a7a14f32519623c683164f2300176884f" prot="private" static="no" mutable="no">
+        <type>const <ref refid="structcsmp_1_1_i_n_d_e_x" kindref="compound">csmp::INDEX</ref>&lt; SCALAR, ELEMENT &gt; &amp;</type>
+        <definition>const csmp::INDEX&lt;SCALAR,ELEMENT&gt;&amp; csmp::FluidCompressibilitySourceLHS&lt; dim &gt;::key_PHI_</definition>
+        <argsstring></argsstring>
+        <name>key_PHI_</name>
+        <qualifiedname>csmp::FluidCompressibilitySourceLHS::key_PHI_</qualifiedname>
+        <briefdescription>
+<para>porosity </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/FluidCompressibilitySourceLHS.h" line="36" column="23" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/FluidCompressibilitySourceLHS.h" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_fluid_compressibility_source_l_h_s_1a7ecddfe5a316485382c198e8a46636a1" prot="private" static="no" mutable="no">
+        <type>const <ref refid="structcsmp_1_1_i_n_d_e_x" kindref="compound">csmp::INDEX</ref>&lt; SCALAR, ELEMENT &gt; &amp;</type>
+        <definition>const csmp::INDEX&lt;SCALAR,ELEMENT&gt;&amp; csmp::FluidCompressibilitySourceLHS&lt; dim &gt;::key_CT_</definition>
+        <argsstring></argsstring>
+        <name>key_CT_</name>
+        <qualifiedname>csmp::FluidCompressibilitySourceLHS::key_CT_</qualifiedname>
+        <briefdescription>
+<para>total system compressibility </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/FluidCompressibilitySourceLHS.h" line="37" column="23" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/FluidCompressibilitySourceLHS.h" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_fluid_compressibility_source_l_h_s_1a20e87905e2f5da5df0d008092bbcc12d" prot="private" static="no" mutable="no">
+        <type>const <ref refid="structcsmp_1_1_i_n_d_e_x" kindref="compound">csmp::INDEX</ref>&lt; SCALAR, NODE &gt; &amp;</type>
+        <definition>const csmp::INDEX&lt;SCALAR,NODE&gt;&amp; csmp::FluidCompressibilitySourceLHS&lt; dim &gt;::key_PF0_</definition>
+        <argsstring></argsstring>
+        <name>key_PF0_</name>
+        <qualifiedname>csmp::FluidCompressibilitySourceLHS::key_PF0_</qualifiedname>
+        <briefdescription>
+<para>previous fluid pressure </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/FluidCompressibilitySourceLHS.h" line="39" column="23" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/FluidCompressibilitySourceLHS.h" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_fluid_compressibility_source_l_h_s_1a25023ba02c7ac852808a70f0e3d7e618" prot="private" static="no" mutable="no">
+        <type>const <ref refid="structcsmp_1_1_i_n_d_e_x" kindref="compound">csmp::INDEX</ref>&lt; SCALAR, NODE &gt; &amp;</type>
+        <definition>const csmp::INDEX&lt;SCALAR,NODE&gt;&amp; csmp::FluidCompressibilitySourceLHS&lt; dim &gt;::key_PF1_</definition>
+        <argsstring></argsstring>
+        <name>key_PF1_</name>
+        <qualifiedname>csmp::FluidCompressibilitySourceLHS::key_PF1_</qualifiedname>
+        <briefdescription>
+<para>current fluid pressure </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/FluidCompressibilitySourceLHS.h" line="40" column="23" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/FluidCompressibilitySourceLHS.h" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_fluid_compressibility_source_l_h_s_1aebdd1e10644cc5293f86f321d06a9783" prot="private" static="no" mutable="no">
+        <type>const bool</type>
+        <definition>const bool csmp::FluidCompressibilitySourceLHS&lt; dim &gt;::interpolate_pf_to_sector_ip_</definition>
+        <argsstring></argsstring>
+        <name>interpolate_pf_to_sector_ip_</name>
+        <qualifiedname>csmp::FluidCompressibilitySourceLHS::interpolate_pf_to_sector_ip_</qualifiedname>
+        <briefdescription>
+<para>sector by sector computation of source term using pressure interpolation </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/FluidCompressibilitySourceLHS.h" line="41" column="16" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/FluidCompressibilitySourceLHS.h" bodystart="41" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_fluid_compressibility_source_l_h_s_1a72575749993abef17cad5bc681d9f138" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::FluidCompressibilitySourceLHS&lt; dim &gt;::FluidCompressibilitySourceLHS</definition>
+        <argsstring>(const csmp::INDEX&lt; SCALAR, SECTOR_INTEGRATION_POINT &gt; &amp;key_SPV, const csmp::INDEX&lt; SCALAR, ELEMENT &gt; &amp;key_PHI, const csmp::INDEX&lt; SCALAR, ELEMENT &gt; &amp;key_CT, const csmp::INDEX&lt; SCALAR, NODE &gt; &amp;key_PF0, const csmp::INDEX&lt; SCALAR, NODE &gt; &amp;key_PF1, bool interpolate_pf_to_sector_ip)</argsstring>
+        <name>FluidCompressibilitySourceLHS</name>
+        <qualifiedname>csmp::FluidCompressibilitySourceLHS::FluidCompressibilitySourceLHS</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_i_n_d_e_x" kindref="compound">csmp::INDEX</ref>&lt; SCALAR, SECTOR_INTEGRATION_POINT &gt; &amp;</type>
+          <declname>key_SPV</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_i_n_d_e_x" kindref="compound">csmp::INDEX</ref>&lt; SCALAR, ELEMENT &gt; &amp;</type>
+          <declname>key_PHI</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_i_n_d_e_x" kindref="compound">csmp::INDEX</ref>&lt; SCALAR, ELEMENT &gt; &amp;</type>
+          <declname>key_CT</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_i_n_d_e_x" kindref="compound">csmp::INDEX</ref>&lt; SCALAR, NODE &gt; &amp;</type>
+          <declname>key_PF0</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_i_n_d_e_x" kindref="compound">csmp::INDEX</ref>&lt; SCALAR, NODE &gt; &amp;</type>
+          <declname>key_PF1</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>interpolate_pf_to_sector_ip</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/FluidCompressibilitySourceLHS.h" line="18" column="5" bodyfile="source/modules/integration/finite_volumes/generic_transport_scheme/source/FluidCompressibilitySourceLHS.cpp" bodystart="11" bodyend="24"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_fluid_compressibility_source_l_h_s_1ac64d0e3ea7b34bb20119706e07bde9fa" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type></type>
+        <definition>virtual csmp::FluidCompressibilitySourceLHS&lt; dim &gt;::~FluidCompressibilitySourceLHS</definition>
+        <argsstring>()</argsstring>
+        <name>~FluidCompressibilitySourceLHS</name>
+        <qualifiedname>csmp::FluidCompressibilitySourceLHS::~FluidCompressibilitySourceLHS</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/FluidCompressibilitySourceLHS.h" line="25" column="13" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/FluidCompressibilitySourceLHS.h" bodystart="25" bodyend="25"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_fluid_compressibility_source_l_h_s_1a1f6b9890da8453858b2c22028883a75f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::FluidCompressibilitySourceLHS&lt; dim &gt;::AccumulateFiniteVolume</definition>
+        <argsstring>(const Node&lt; dim &gt; &amp;, SparseMatrix &amp;) const</argsstring>
+        <name>AccumulateFiniteVolume</name>
+        <qualifiedname>csmp::FluidCompressibilitySourceLHS::AccumulateFiniteVolume</qualifiedname>
+        <reimplements refid="classcsmp_1_1_matrix_operator_1a184dfd2dd5b9ebc2e4863c88003194ba">AccumulateFiniteVolume</reimplements>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; dim &gt; &amp;</type>
+          <defname>fv</defname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_sparse_matrix" kindref="compound">SparseMatrix</ref> &amp;</type>
+          <defname>mat</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Since each sector of the finite volume may consist of a different rock type, the total systems compressibility must be summed up sector-by-sector, honouring the different contributions. <verbatim>@note using a single pressure value is perhaps not rigorous enough. One should rather interpolate
+the pressure to the sector integration in order to capture the source term more accurately.
+</verbatim> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/FluidCompressibilitySourceLHS.h" line="27" column="18" bodyfile="source/modules/integration/finite_volumes/generic_transport_scheme/source/FluidCompressibilitySourceLHS.cpp" bodystart="70" bodyend="100"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_fluid_compressibility_source_l_h_s_1a8c57dd0067041a9ba8fa9888394b9f23" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::FluidCompressibilitySourceLHS&lt; dim &gt;::AccumulateStencil</definition>
+        <argsstring>(const Element&lt; dim &gt; &amp;, SparseMatrix &amp;) const</argsstring>
+        <name>AccumulateStencil</name>
+        <qualifiedname>csmp::FluidCompressibilitySourceLHS::AccumulateStencil</qualifiedname>
+        <reimplements refid="classcsmp_1_1_matrix_operator_1af365983b58627f51ec745e3806ed7907">AccumulateStencil</reimplements>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; &amp;</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_sparse_matrix" kindref="compound">SparseMatrix</ref> &amp;</type>
+          <defname>mat</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Element-wise accumulation of source term/ </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/FluidCompressibilitySourceLHS.h" line="29" column="18" bodyfile="source/modules/integration/finite_volumes/generic_transport_scheme/source/FluidCompressibilitySourceLHS.cpp" bodystart="31" bodyend="59"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Volumetric source and sink terms that arise as the fluid expands or compresses due to pressure changes.</para>
+<para><simplesect kind="note"><para>this version uses sector-pore volume and total systems compressibilities of rocktypes that are associated with the elements.</para>
+</simplesect>
+<simplesect kind="note"><para>fluid pressure is either taken from the node(FV) or interpolated with the finite-element interpolation to sector integration points. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::FluidCompressibilitySourceLHS&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_fluid_compressibility_source_l_h_s"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::MatrixOperator&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_matrix_operator"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::FluidCompressibilitySourceLHS&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_fluid_compressibility_source_l_h_s"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::MatrixOperator&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_matrix_operator"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/integration/finite_volumes/generic_transport_scheme/FluidCompressibilitySourceLHS.h" line="16" column="1" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/FluidCompressibilitySourceLHS.h" bodystart="16" bodyend="42"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_fluid_compressibility_source_l_h_s_1a1f6b9890da8453858b2c22028883a75f" prot="public" virt="virtual"><scope>csmp::FluidCompressibilitySourceLHS</scope><name>AccumulateFiniteVolume</name></member>
+      <member refid="classcsmp_1_1_fluid_compressibility_source_l_h_s_1a8c57dd0067041a9ba8fa9888394b9f23" prot="public" virt="virtual"><scope>csmp::FluidCompressibilitySourceLHS</scope><name>AccumulateStencil</name></member>
+      <member refid="classcsmp_1_1_matrix_operator_1a78ba8b759b5466c57ab1a2e54f68b5c6" prot="public" virt="non-virtual"><scope>csmp::FluidCompressibilitySourceLHS</scope><name>Factor</name></member>
+      <member refid="classcsmp_1_1_matrix_operator_1a480e910a636495bbe16d7dd525c78c14" prot="public" virt="non-virtual"><scope>csmp::FluidCompressibilitySourceLHS</scope><name>Factor</name></member>
+      <member refid="classcsmp_1_1_fluid_compressibility_source_l_h_s_1a72575749993abef17cad5bc681d9f138" prot="public" virt="non-virtual"><scope>csmp::FluidCompressibilitySourceLHS</scope><name>FluidCompressibilitySourceLHS</name></member>
+      <member refid="classcsmp_1_1_fluid_compressibility_source_l_h_s_1aebdd1e10644cc5293f86f321d06a9783" prot="private" virt="non-virtual"><scope>csmp::FluidCompressibilitySourceLHS</scope><name>interpolate_pf_to_sector_ip_</name></member>
+      <member refid="classcsmp_1_1_fluid_compressibility_source_l_h_s_1a7ecddfe5a316485382c198e8a46636a1" prot="private" virt="non-virtual"><scope>csmp::FluidCompressibilitySourceLHS</scope><name>key_CT_</name></member>
+      <member refid="classcsmp_1_1_fluid_compressibility_source_l_h_s_1a20e87905e2f5da5df0d008092bbcc12d" prot="private" virt="non-virtual"><scope>csmp::FluidCompressibilitySourceLHS</scope><name>key_PF0_</name></member>
+      <member refid="classcsmp_1_1_fluid_compressibility_source_l_h_s_1a25023ba02c7ac852808a70f0e3d7e618" prot="private" virt="non-virtual"><scope>csmp::FluidCompressibilitySourceLHS</scope><name>key_PF1_</name></member>
+      <member refid="classcsmp_1_1_fluid_compressibility_source_l_h_s_1a7a14f32519623c683164f2300176884f" prot="private" virt="non-virtual"><scope>csmp::FluidCompressibilitySourceLHS</scope><name>key_PHI_</name></member>
+      <member refid="classcsmp_1_1_fluid_compressibility_source_l_h_s_1a2ba21caa3e495499795a999c2104dd0d" prot="private" virt="non-virtual"><scope>csmp::FluidCompressibilitySourceLHS</scope><name>key_SPV_</name></member>
+      <member refid="classcsmp_1_1_matrix_operator_1ae54dc96c70a30d5fa024dedd83cd5200" prot="public" virt="non-virtual"><scope>csmp::FluidCompressibilitySourceLHS</scope><name>MatrixOperator</name></member>
+      <member refid="classcsmp_1_1_matrix_operator_1ad1b8fb26dd687363354e9e1955e8c088" prot="public" virt="non-virtual"><scope>csmp::FluidCompressibilitySourceLHS</scope><name>MultiplyWithTimeIncrement</name></member>
+      <member refid="classcsmp_1_1_fluid_compressibility_source_l_h_s_1ac64d0e3ea7b34bb20119706e07bde9fa" prot="public" virt="virtual"><scope>csmp::FluidCompressibilitySourceLHS</scope><name>~FluidCompressibilitySourceLHS</name></member>
+      <member refid="classcsmp_1_1_matrix_operator_1a74ef293df8689c14308643fdb61eeba3" prot="public" virt="virtual"><scope>csmp::FluidCompressibilitySourceLHS</scope><name>~MatrixOperator</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

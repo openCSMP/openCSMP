@@ -171,7 +171,7 @@ bool MeshDiagnostics<dim>::ScrutinizeMesh( Model<3U>& sg ) const
           eit=sgroup.CellsBegin(); eit!=sgroup.CellsEnd(); eit++ )
       {
          (*eit)->NodeCoordinateMatrix( XY );
-         for ( auto i{0}; i<(*eit)->Nodes(); i++ )
+         for ( uint32_t i{0}; i<(*eit)->Nodes(); i++ )
            {
               if ( XY(i,0) > h_valmax ) h_valmax = XY(i,0);
               if ( XY(i,1) > v_valmax ) v_valmax = XY(i,1);
@@ -200,7 +200,7 @@ bool MeshDiagnostics<dim>::ScrutinizeMesh( Model<3U>& sg ) const
           eit=sgroup.CellsBegin(); eit!=sgroup.CellsEnd(); eit++ )
       {
          (*eit)->SegmentLengths( lengths );
-         for ( auto i{0}; i<lengths.size(); i++ )
+         for ( uint32_t i{0}; i<lengths.size(); i++ )
            {
               l_segm = lengths[i];
               if ( l_segm > sl_max )   sl_max   = l_segm;
@@ -541,7 +541,7 @@ bool MeshDiagnostics<dim>::DetectConflictingDirichletConditions( const Model<dim
       for ( auto eit=model_domain.CellsBegin(); eit!=model_domain.CellsEnd(); ++eit ) {
            double value(numeric_limits<double>::quiet_NaN());
            bool     detected_status(false);
-           for ( auto i{0}; i<(*eit)->Nodes(); ++i ) {
+           for ( uint32_t i{0}; i<(*eit)->Nodes(); ++i ) {
                 // finding status-flagged nodes and reading their stored values
                 if ( !detected_status && (*eit)->N(i)->Status(key) == status ) {
                      value           = (*eit)->N(i)->Read(key);
@@ -565,7 +565,7 @@ bool MeshDiagnostics<dim>::DetectConflictingDirichletConditions( const Model<dim
           for ( auto eit=model_domain.CellsBegin(); eit!=model_domain.CellsEnd(); ++eit ) {
                VectorVariable<dim> vc;
                bool     detected_status(false);
-               for ( auto i{0}; i<(*eit)->Nodes(); ++i ) {
+               for ( uint32_t i{0}; i<(*eit)->Nodes(); ++i ) {
                     // recovering the variable
                     (*eit)->N(i)->Read( key, vc );
                  
@@ -620,7 +620,7 @@ bool MeshDiagnostics<dim>::DetectNonMonotonicity( const Model<dim>& model, const
       for ( auto nit=model_domain.NodesBegin(); nit!=model_domain.NodesEnd(); ++nit ) {
            double n_value = (*nit)->Read(key);
            double val_min(1e30), val_max(-1e30);
-           for ( auto i{0}; i<(*nit)->Neighbors(); ++i ) {
+           for ( uint32_t i{0u}; i<(*nit)->Neighbors(); ++i ) {
                 val_min = std::min( val_min, (*nit)->Neighbor(i)->Read(key) );
                 val_max = std::max( val_max, (*nit)->Neighbor(i)->Read(key) );
              }
@@ -655,7 +655,7 @@ bool MeshDiagnostics<dim>::DetectOverConstrainedElements( const Model<dim>& mode
            const size_t nodes = (*eit)->Nodes();
            size_t status_constraints(0U);
            if ( key.type == SCALAR ) {
-                for ( auto i{0}; i<nodes; ++i )
+                for ( uint32_t i{0u}; i<nodes; ++i )
                   if ( (*eit)->N(i)->Status(key) == status )
                     status_constraints++;
               }

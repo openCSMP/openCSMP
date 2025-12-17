@@ -231,14 +231,18 @@ void LinearRectangle::Integral_dNT_K_dN(DenseMatrix<DM_MIN>& M, DenseMatrix<DM_M
 		vec = {L0 , L1, L0, L1};
 	}
 
-	void LinearRectangle::UnitNormal(std::vector<double>& vc) const
+vector<double> LinearRectangle::UnitNormal() const
 	{
 		if (dim == 2) {
+      vector<double> vc(2);
 			vc.resize(3); // points perpendicular to plane
 			vc[0] = vc[1] = static_cast<double>(0.0);
 			vc[2] = static_cast<double>(1.0);
-			return;
+			return vc;
 		}
+    
+    // 3D case
+    vector<double> vc(3);
 		// cross product of two vectors
 		// Vec1 = X1 - X0; Vec2 = X3 - X0 
 		double  X1 = XY(1, 0) - XY(0, 0), // X
@@ -257,5 +261,8 @@ void LinearRectangle::Integral_dNT_K_dN(DenseMatrix<DM_MIN>& M, DenseMatrix<DM_M
 		vc[0] /= length;
 		vc[1] /= length;
 		vc[2] /= length;
+  
+    return vc;
 	}
+  
 } // end csmp

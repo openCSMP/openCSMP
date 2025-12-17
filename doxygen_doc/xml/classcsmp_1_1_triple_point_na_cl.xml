@@ -1,0 +1,175 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_triple_point_na_cl" kind="class" language="C++" prot="public">
+    <compoundname>csmp::TriplePointNaCl</compoundname>
+    <includes refid="_triple_point_na_cl_8h" local="no">TriplePointNaCl.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_triple_point_na_cl_1adee17dc5946165840e111c0f217eb663" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::TriplePointNaCl::ttriple_nacl</definition>
+        <argsstring></argsstring>
+        <name>ttriple_nacl</name>
+        <qualifiedname>csmp::TriplePointNaCl::ttriple_nacl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TriplePointNaCl.h" line="30" column="18" bodyfile="source/includes/eos/TriplePointNaCl.h" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_triple_point_na_cl_1a893400c2acbd974f0034b4d9d9d96d89" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::TriplePointNaCl::ptriple_nacl</definition>
+        <argsstring></argsstring>
+        <name>ptriple_nacl</name>
+        <qualifiedname>csmp::TriplePointNaCl::ptriple_nacl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TriplePointNaCl.h" line="31" column="18" bodyfile="source/includes/eos/TriplePointNaCl.h" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_triple_point_na_cl_1a43e8cb6ed2efbd4caa2e0974e590e186" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::TriplePointNaCl::xtriple_nacl</definition>
+        <argsstring></argsstring>
+        <name>xtriple_nacl</name>
+        <qualifiedname>csmp::TriplePointNaCl::xtriple_nacl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TriplePointNaCl.h" line="32" column="18" bodyfile="source/includes/eos/TriplePointNaCl.h" bodystart="32" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_triple_point_na_cl_1af5a9c33b175e751fb68d2fdb25bc6bdc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::TriplePointNaCl::TriplePointNaCl</definition>
+        <argsstring>()</argsstring>
+        <name>TriplePointNaCl</name>
+        <qualifiedname>csmp::TriplePointNaCl::TriplePointNaCl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TriplePointNaCl.h" line="18" column="5" bodyfile="source/modules/eos/h2o_nacl/TriplePointNaCl.cpp" bodystart="8" bodyend="14"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_triple_point_na_cl_1a568fa04c96674f764d04ca8a578340e0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::TriplePointNaCl::~TriplePointNaCl</definition>
+        <argsstring>()</argsstring>
+        <name>~TriplePointNaCl</name>
+        <qualifiedname>csmp::TriplePointNaCl::~TriplePointNaCl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TriplePointNaCl.h" line="19" column="5" bodyfile="source/modules/eos/h2o_nacl/TriplePointNaCl.cpp" bodystart="16" bodyend="18"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_triple_point_na_cl_1a2037697d2c87dc23dcddc05292695842" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TriplePointNaCl::Temperature</definition>
+        <argsstring>() const</argsstring>
+        <name>Temperature</name>
+        <qualifiedname>csmp::TriplePointNaCl::Temperature</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TriplePointNaCl.h" line="21" column="12" bodyfile="source/includes/eos/TriplePointNaCl.h" bodystart="36" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_triple_point_na_cl_1a52361947c7ca0d06848538a258ed1fec" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TriplePointNaCl::Pressure</definition>
+        <argsstring>() const</argsstring>
+        <name>Pressure</name>
+        <qualifiedname>csmp::TriplePointNaCl::Pressure</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TriplePointNaCl.h" line="22" column="12" bodyfile="source/includes/eos/TriplePointNaCl.h" bodystart="37" bodyend="37"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_triple_point_na_cl_1ab32d7433d1820036ea8eb64ecd4ed602" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TriplePointNaCl::CompositionVapor</definition>
+        <argsstring>() const</argsstring>
+        <name>CompositionVapor</name>
+        <qualifiedname>csmp::TriplePointNaCl::CompositionVapor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TriplePointNaCl.h" line="24" column="12" bodyfile="source/includes/eos/TriplePointNaCl.h" bodystart="39" bodyend="39"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_triple_point_na_cl_1a0243c617dd085fbaadedb0aa9aa687da" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TriplePointNaCl::CompositionLiquid</definition>
+        <argsstring>() const</argsstring>
+        <name>CompositionLiquid</name>
+        <qualifiedname>csmp::TriplePointNaCl::CompositionLiquid</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TriplePointNaCl.h" line="25" column="12" bodyfile="source/includes/eos/TriplePointNaCl.h" bodystart="40" bodyend="40"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_triple_point_na_cl_1a8ae52b1edb32aad0464c37bf195a6b29" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TriplePointNaCl::CompositionHalite</definition>
+        <argsstring>() const</argsstring>
+        <name>CompositionHalite</name>
+        <qualifiedname>csmp::TriplePointNaCl::CompositionHalite</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TriplePointNaCl.h" line="26" column="12" bodyfile="source/includes/eos/TriplePointNaCl.h" bodystart="41" bodyend="41"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Temperature-Pressure-Composition coordinates of NaCl Triple <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::TriplePointNaCl</label>
+        <link refid="classcsmp_1_1_triple_point_na_cl"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/eos/TriplePointNaCl.h" line="14" column="3" bodyfile="source/includes/eos/TriplePointNaCl.h" bodystart="15" bodyend="34"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_triple_point_na_cl_1a8ae52b1edb32aad0464c37bf195a6b29" prot="public" virt="non-virtual"><scope>csmp::TriplePointNaCl</scope><name>CompositionHalite</name></member>
+      <member refid="classcsmp_1_1_triple_point_na_cl_1a0243c617dd085fbaadedb0aa9aa687da" prot="public" virt="non-virtual"><scope>csmp::TriplePointNaCl</scope><name>CompositionLiquid</name></member>
+      <member refid="classcsmp_1_1_triple_point_na_cl_1ab32d7433d1820036ea8eb64ecd4ed602" prot="public" virt="non-virtual"><scope>csmp::TriplePointNaCl</scope><name>CompositionVapor</name></member>
+      <member refid="classcsmp_1_1_triple_point_na_cl_1a52361947c7ca0d06848538a258ed1fec" prot="public" virt="non-virtual"><scope>csmp::TriplePointNaCl</scope><name>Pressure</name></member>
+      <member refid="classcsmp_1_1_triple_point_na_cl_1a893400c2acbd974f0034b4d9d9d96d89" prot="private" virt="non-virtual"><scope>csmp::TriplePointNaCl</scope><name>ptriple_nacl</name></member>
+      <member refid="classcsmp_1_1_triple_point_na_cl_1a2037697d2c87dc23dcddc05292695842" prot="public" virt="non-virtual"><scope>csmp::TriplePointNaCl</scope><name>Temperature</name></member>
+      <member refid="classcsmp_1_1_triple_point_na_cl_1af5a9c33b175e751fb68d2fdb25bc6bdc" prot="public" virt="non-virtual"><scope>csmp::TriplePointNaCl</scope><name>TriplePointNaCl</name></member>
+      <member refid="classcsmp_1_1_triple_point_na_cl_1adee17dc5946165840e111c0f217eb663" prot="private" virt="non-virtual"><scope>csmp::TriplePointNaCl</scope><name>ttriple_nacl</name></member>
+      <member refid="classcsmp_1_1_triple_point_na_cl_1a43e8cb6ed2efbd4caa2e0974e590e186" prot="private" virt="non-virtual"><scope>csmp::TriplePointNaCl</scope><name>xtriple_nacl</name></member>
+      <member refid="classcsmp_1_1_triple_point_na_cl_1a568fa04c96674f764d04ca8a578340e0" prot="public" virt="non-virtual"><scope>csmp::TriplePointNaCl</scope><name>~TriplePointNaCl</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

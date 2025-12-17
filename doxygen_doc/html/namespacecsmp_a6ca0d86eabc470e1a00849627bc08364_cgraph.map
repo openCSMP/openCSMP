@@ -1,0 +1,7 @@
+<map id="csmp::readEclipseCornerDepths" name="csmp::readEclipseCornerDepths">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,31,216,56"/>
+<area shape="rect" id="Node000002" href="$namespacecsmp.html#a34701d1c9fda79fddb23382772ee2859" title=" " alt="" coords="292,5,420,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="216,30,276,24,277,29,216,35"/>
+<area shape="rect" id="Node000003" href="$namespacecsmp.html#af8c2740a4e6be30bdfb4207bf22e8609" title="Eclipse ends its definitions with a forward slash." alt="" coords="264,55,448,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="216,51,249,54,248,60,216,56"/>
+</map>

@@ -1,0 +1,768 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_explicit_transport" kind="class" language="C++" prot="public">
+    <compoundname>csmp::ExplicitTransport</compoundname>
+    <basecompoundref refid="structcsmp_1_1variables_1_1_variable_set___tracer_transfer" prot="public" virt="non-virtual">csmp::variables::VariableSet_TracerTransfer</basecompoundref>
+    <basecompoundref refid="classcsmp_1_1_flux_evaluator" prot="public" virt="non-virtual">csmp::FluxEvaluator&lt; dim, ExplicitTransport &gt;</basecompoundref>
+    <basecompoundref refid="classcsmp_1_1_time_step_evaluator" prot="public" virt="non-virtual">csmp::TimeStepEvaluator&lt; dim, ExplicitTransport &gt;</basecompoundref>
+    <includes refid="_explicit_transport_8h" local="no">ExplicitTransport.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="friend">
+      <memberdef kind="friend" id="classcsmp_1_1_explicit_transport_1a40ca8c3a61cfbf756581ab91082ca271" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class ExplicitTransport_Test</definition>
+        <argsstring></argsstring>
+        <name>ExplicitTransport_Test</name>
+        <qualifiedname>csmp::ExplicitTransport::ExplicitTransport_Test</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_explicit_transport___test" kindref="compound">ExplicitTransport_Test</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/ExplicitTransport.h" line="44" column="18" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/ExplicitTransport.h" bodystart="44" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_explicit_transport_1ab650a9af484336f41ea9026d08c199e0" prot="public" static="no" mutable="no">
+        <type>const VariableSet_TracerTransfer &amp;</type>
+        <definition>const VariableSet_TracerTransfer&amp; csmp::ExplicitTransport&lt; dim &gt;::Notation</definition>
+        <argsstring></argsstring>
+        <name>Notation</name>
+        <qualifiedname>csmp::ExplicitTransport::Notation</qualifiedname>
+        <briefdescription>
+<para>shorthand to get to variable names </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/ExplicitTransport.h" line="47" column="39" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/ExplicitTransport.h" bodystart="47" bodyend="-1"/>
+        <referencedby refid="classcsmp_1_1_explicit_transport_1ab73e1bd128174fc85445e14f5d5accb3" compoundref="_explicit_transport_8cpp" startline="27" endline="54">csmp::ExplicitTransport&lt; dim &gt;::ExplicitTransport</referencedby>
+        <referencedby refid="classcsmp_1_1_explicit_transport_1a60b5e301ae9a44f822eb118ffa443e5c" compoundref="_explicit_transport_8cpp" startline="570" endline="601">csmp::ExplicitTransport&lt; dim &gt;::IncomingVolumetricFlow</referencedby>
+        <referencedby refid="classcsmp_1_1_explicit_transport_1aa747da759e6e9187279aa53d99217376" compoundref="_explicit_transport_8cpp" startline="611" endline="642">csmp::ExplicitTransport&lt; dim &gt;::OutgoingVolumetricFlow</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_explicit_transport_1aa7e7a1f7ddcc9ba6097b7242d9f0083a" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_region" kindref="compound">Region</ref>&lt; dim &gt; &amp;</type>
+        <definition>Region&lt;dim&gt;&amp; csmp::ExplicitTransport&lt; dim &gt;::subdomain_</definition>
+        <argsstring></argsstring>
+        <name>subdomain_</name>
+        <qualifiedname>csmp::ExplicitTransport::subdomain_</qualifiedname>
+        <briefdescription>
+<para>region to which transport algorithm is applied </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/ExplicitTransport.h" line="92" column="27" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/ExplicitTransport.h" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_explicit_transport_1af6b446b4b029f1db32732056fec04752" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * &gt;</type>
+        <definition>std::vector&lt;Element&lt;dim&gt;*&gt; csmp::ExplicitTransport&lt; dim &gt;::halo_elmts_</definition>
+        <argsstring></argsstring>
+        <name>halo_elmts_</name>
+        <qualifiedname>csmp::ExplicitTransport::halo_elmts_</qualifiedname>
+        <briefdescription>
+<para>elements outside of subdomain, contributing stencils to subdomain FVs </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/ExplicitTransport.h" line="93" column="18" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/ExplicitTransport.h" bodystart="93" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_explicit_transport_1afbf89f61973bc430c71510c411dc36c2" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::ExplicitTransport&lt; dim &gt;::upper_limit_</definition>
+        <argsstring></argsstring>
+        <name>upper_limit_</name>
+        <qualifiedname>csmp::ExplicitTransport::upper_limit_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/ExplicitTransport.h" line="94" column="13" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/ExplicitTransport.h" bodystart="94" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_explicit_transport_1ad06e0ab5783b67311f3c7704638baf82" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::ExplicitTransport&lt; dim &gt;::lower_limit_</definition>
+        <argsstring></argsstring>
+        <name>lower_limit_</name>
+        <qualifiedname>csmp::ExplicitTransport::lower_limit_</qualifiedname>
+        <briefdescription>
+<para>range in which the result is allowed to vary </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/ExplicitTransport.h" line="94" column="26" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/ExplicitTransport.h" bodystart="94" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_explicit_transport_1ab73e1bd128174fc85445e14f5d5accb3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::ExplicitTransport&lt; dim &gt;::ExplicitTransport</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;, const std::string &amp;target_region)</argsstring>
+        <name>ExplicitTransport</name>
+        <qualifiedname>csmp::ExplicitTransport::ExplicitTransport</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <defname>m</defname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>target_region</declname>
+        </param>
+        <briefdescription>
+<para>constructor for target region; by default all driving forces are considered; </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="attention"><para>if there is a velocity field, it is used to initialise facet fluxes</para>
+</simplesect>
+Custom constructor using an existing model and the default values of the policy classes. Halo stencils are created when the computaitonal region is smaller than the model. Finite volume and sector volumes are initialised. Facet fluxes and flux balances are initialised if the &apos;velocity&apos; is initialised. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/ExplicitTransport.h" line="50" column="5" bodyfile="source/modules/integration/finite_volumes/generic_transport_scheme/source/ExplicitTransport.cpp" bodystart="27" bodyend="54"/>
+        <references refid="namespacecsmp_1a045796fbaba7d5053c66ae8e794e5f9b" compoundref="_scalar_variable_8cpp" startline="222" endline="225">csmp::makeScalar</references>
+        <references refid="classcsmp_1_1_explicit_transport_1ab650a9af484336f41ea9026d08c199e0" compoundref="_explicit_transport_8h" startline="47">csmp::ExplicitTransport&lt; dim &gt;::Notation</references>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6" compoundref="_c_s_m_p__global__enumerations_8h" startline="58">csmp::PLAIN</references>
+        <references refid="classcsmp_1_1_explicit_transport_1aa08c34e0ead5f3f5999129f092ba22ef" compoundref="_explicit_transport_8cpp" startline="103" endline="106">csmp::ExplicitTransport&lt; dim &gt;::UpdateFluxesAndFluxBalances</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_explicit_transport_1aa08c34e0ead5f3f5999129f092ba22ef" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ExplicitTransport&lt; dim &gt;::UpdateFluxesAndFluxBalances</definition>
+        <argsstring>()</argsstring>
+        <name>UpdateFluxesAndFluxBalances</name>
+        <qualifiedname>csmp::ExplicitTransport::UpdateFluxesAndFluxBalances</qualifiedname>
+        <briefdescription>
+<para>initialises transport class for current pressure/velocity/transport variable field </para>
+        </briefdescription>
+        <detaileddescription>
+<para>initialises transport class for current pressure/velocity/transport variable field. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/ExplicitTransport.h" line="53" column="10" bodyfile="source/modules/integration/finite_volumes/generic_transport_scheme/source/ExplicitTransport.cpp" bodystart="103" bodyend="106"/>
+        <referencedby refid="classcsmp_1_1_explicit_transport_1ab73e1bd128174fc85445e14f5d5accb3" compoundref="_explicit_transport_8cpp" startline="27" endline="54">csmp::ExplicitTransport&lt; dim &gt;::ExplicitTransport</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_explicit_transport_1a2d206bfbbedfcc1061ad83991ecfbfd8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ExplicitTransport&lt; dim &gt;::TimeIncrement</definition>
+        <argsstring>() const</argsstring>
+        <name>TimeIncrement</name>
+        <qualifiedname>csmp::ExplicitTransport::TimeIncrement</qualifiedname>
+        <briefdescription>
+<para>computes the time constraint </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Computation of time increment (default limited to 1 year).</para>
+<para><simplesect kind="attention"><para>Assumes that the facet flows and tracer fluxes are initialised. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/ExplicitTransport.h" line="56" column="12" bodyfile="source/modules/integration/finite_volumes/generic_transport_scheme/source/ExplicitTransport.cpp" bodystart="285" bodyend="289"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_explicit_transport_1a3ba05be8f7eed8f1dc4c52fabaeaa6d6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ExplicitTransport&lt; dim &gt;::AdvectVariable</definition>
+        <argsstring>(double time_interval)</argsstring>
+        <name>AdvectVariable</name>
+        <qualifiedname>csmp::ExplicitTransport::AdvectVariable</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>time_interval</declname>
+        </param>
+        <briefdescription>
+<para>executes incremental time-stepping (a suitable time increment is computed by scheme) </para>
+        </briefdescription>
+        <detaileddescription>
+<para><orderedlist>
+<listitem><para><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> by element computation of (velocity), facet fluxes, flux balances and tracer balances</para>
+</listitem><listitem><para>Evaluation of time increment</para>
+</listitem><listitem><para>Assembly of solution</para>
+</listitem><listitem><para>Assignment of boundary conditions (treatment of truncated FVs at the boundary)</para>
+</listitem><listitem><para>tranfer of results into &apos;concentration&apos;, vacating &apos;new concentration&apos; for next assembly. </para>
+</listitem></orderedlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/ExplicitTransport.h" line="59" column="10" bodyfile="source/modules/integration/finite_volumes/generic_transport_scheme/source/ExplicitTransport.cpp" bodystart="489" bodyend="544"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_explicit_transport_1a60b5e301ae9a44f822eb118ffa443e5c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ExplicitTransport&lt; dim &gt;::IncomingVolumetricFlow</definition>
+        <argsstring>() const</argsstring>
+        <name>IncomingVolumetricFlow</name>
+        <qualifiedname>csmp::ExplicitTransport::IncomingVolumetricFlow</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Reports the volumetric flow into the computational region. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/ExplicitTransport.h" line="61" column="12" bodyfile="source/modules/integration/finite_volumes/generic_transport_scheme/source/ExplicitTransport.cpp" bodystart="570" bodyend="601"/>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9a2d373b048f997a96c661862c40f2fcae" compoundref="_c_s_m_p__global__enumerations_8h" startline="64">csmp::DIRICH</references>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9a024f07cd6361eadc6efee518fce8cdbc" compoundref="_c_s_m_p__global__enumerations_8h" startline="65">csmp::NEUMANN</references>
+        <references refid="group___c_s_m_pglobal_enums_1gga8e4421c3cd02f67e535bceb2dc74bfb6aa75032f56e77653ffaa7e2eb85566858" compoundref="_box_8h" startline="63">csmp::NOT</references>
+        <references refid="classcsmp_1_1_explicit_transport_1ab650a9af484336f41ea9026d08c199e0" compoundref="_explicit_transport_8h" startline="47">csmp::ExplicitTransport&lt; dim &gt;::Notation</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_explicit_transport_1aa747da759e6e9187279aa53d99217376" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ExplicitTransport&lt; dim &gt;::OutgoingVolumetricFlow</definition>
+        <argsstring>() const</argsstring>
+        <name>OutgoingVolumetricFlow</name>
+        <qualifiedname>csmp::ExplicitTransport::OutgoingVolumetricFlow</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Reports the volumetric flow outside of the computational region.</para>
+<para><xrefsect id="todo_1_todo000091"><xreftitle>Todo</xreftitle><xrefdescription><para>SKM check whether the variable &apos;outflow&apos; can be used for this, saving some computations. </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/ExplicitTransport.h" line="62" column="12" bodyfile="source/modules/integration/finite_volumes/generic_transport_scheme/source/ExplicitTransport.cpp" bodystart="611" bodyend="642"/>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9a2d373b048f997a96c661862c40f2fcae" compoundref="_c_s_m_p__global__enumerations_8h" startline="64">csmp::DIRICH</references>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9a024f07cd6361eadc6efee518fce8cdbc" compoundref="_c_s_m_p__global__enumerations_8h" startline="65">csmp::NEUMANN</references>
+        <references refid="group___c_s_m_pglobal_enums_1gga8e4421c3cd02f67e535bceb2dc74bfb6aa75032f56e77653ffaa7e2eb85566858" compoundref="_box_8h" startline="63">csmp::NOT</references>
+        <references refid="classcsmp_1_1_explicit_transport_1ab650a9af484336f41ea9026d08c199e0" compoundref="_explicit_transport_8h" startline="47">csmp::ExplicitTransport&lt; dim &gt;::Notation</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_explicit_transport_1a3f20d955a7ce3b4322eefa5e892af0c1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::ExplicitTransport&lt; dim &gt;::CollectHaloStencils</definition>
+        <argsstring>()</argsstring>
+        <name>CollectHaloStencils</name>
+        <qualifiedname>csmp::ExplicitTransport::CollectHaloStencils</qualifiedname>
+        <briefdescription>
+<para>identifies &quot;halo elements&quot;, i.e. which contribute to domain FVs, but are outside of domain, returns number </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Initialises the halo stencils vector and sorts it so that it can be searched.</para>
+<para><simplesect kind="attention"><para>memory management is left entirely to the vector. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/ExplicitTransport.h" line="66" column="12" bodyfile="source/modules/integration/finite_volumes/generic_transport_scheme/source/ExplicitTransport.cpp" bodystart="64" bodyend="95"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_explicit_transport_1a44fe15a39e541bb0cdf504681f11a8e5" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::ExplicitTransport&lt; dim &gt;::HasHaloStencils</definition>
+        <argsstring>() const</argsstring>
+        <name>HasHaloStencils</name>
+        <qualifiedname>csmp::ExplicitTransport::HasHaloStencils</qualifiedname>
+        <briefdescription>
+<para>true if the computational domain has parts that are removed from the model boundary </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/ExplicitTransport.h" line="69" column="10" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/ExplicitTransport.h" bodystart="69" bodyend="69"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_explicit_transport_1a98e1b15c5612c23df69d952ccf039b1f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ExplicitTransport&lt; dim &gt;::VolumetricFlowAndTransportVariableFluxBalances</definition>
+        <argsstring>()</argsstring>
+        <name>VolumetricFlowAndTransportVariableFluxBalances</name>
+        <qualifiedname>csmp::ExplicitTransport::VolumetricFlowAndTransportVariableFluxBalances</qualifiedname>
+        <briefdescription>
+<para>1.a computations of volumetric flows and (chemical) fluxes across facets using FacetFlux (facet flux) policy </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Volumetric facet flow and (chemical) flux calculation (element by element), for all elements in the domain</para>
+<para>Facet fluxes in the FV sectors outside the domain are considered. by Advective_O1_FluxesBoundary(). This method also writes the correct volumetric flow balances onto the nodes on the perimeter. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/ExplicitTransport.h" line="72" column="10" bodyfile="source/modules/integration/finite_volumes/generic_transport_scheme/source/ExplicitTransport.cpp" bodystart="118" bodyend="173"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_explicit_transport_1a3fc2f5bc612adb910d613c81d704f7ba" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ExplicitTransport&lt; dim &gt;::TransportVariableFluxBalances</definition>
+        <argsstring>()</argsstring>
+        <name>TransportVariableFluxBalances</name>
+        <qualifiedname>csmp::ExplicitTransport::TransportVariableFluxBalances</qualifiedname>
+        <briefdescription>
+<para>1.b recomputed transport-variable flux balance, stored in &apos;accumulation&apos;; assumes that transport velocity did not change </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Computes the distributed FV balances of products of the transported variable with the facet fluxes. The volumetric flux balance is not updated, aussuming that the volumetric facet flows did not change. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/ExplicitTransport.h" line="75" column="10" bodyfile="source/modules/integration/finite_volumes/generic_transport_scheme/source/ExplicitTransport.cpp" bodystart="196" bodyend="242"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_explicit_transport_1ad61ea5a7ea62fcf786b9028deef1dc6e" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ExplicitTransport&lt; dim &gt;::TimeIncrement_CFL_Outflow</definition>
+        <argsstring>(double max_time_increment) const</argsstring>
+        <name>TimeIncrement_CFL_Outflow</name>
+        <qualifiedname>csmp::ExplicitTransport::TimeIncrement_CFL_Outflow</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>max_time_increment</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><orderedlist>
+<listitem><para>calculates optimal time increment, flux balance, and in- and out flows for each FV</para>
+</listitem></orderedlist>
+</para>
+<para>Computation of time increment, flux balance, and temporary new concentration.</para>
+<para><simplesect kind="attention"><para>default is the most stringent time increment: outflux &lt; PV. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/ExplicitTransport.h" line="78" column="12" bodyfile="source/modules/integration/finite_volumes/generic_transport_scheme/source/ExplicitTransport.cpp" bodystart="255" bodyend="272"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_explicit_transport_1a99fc5f906ed386862dea0cac7b3b70da" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ExplicitTransport&lt; dim &gt;::Assemble1stOrderSolution</definition>
+        <argsstring>(double delta_t, bool enforce_divergence_free_vt_field)</argsstring>
+        <name>Assemble1stOrderSolution</name>
+        <qualifiedname>csmp::ExplicitTransport::Assemble1stOrderSolution</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>delta_t</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enforce_divergence_free_vt_field</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><orderedlist>
+<listitem><para>composes &apos;new concentration&apos;: C^t+1 = C^t - dt/(phi Vi) * sum_j^faces Aj n . [vi]</para>
+</listitem></orderedlist>
+</para>
+<para>AssembleSolution()</para>
+<para>C1^t+1 = C0^t - dt/(phi Vi) * (sum_j^faces Aj n . [C0 vt] + sources/sinks)</para>
+<para><itemizedlist>
+<listitem><para>a single loop over all nodes is required</para>
+</listitem><listitem><para>this steps also considers in and outflow of finite volume cells</para>
+</listitem><listitem><para>(distributed) sources and sinks will be considered in the future</para>
+</listitem></itemizedlist>
+</para>
+<para><simplesect kind="attention"><para>diffusion is not considered because scheme is highly diffusive anyway</para>
+</simplesect>
+<xrefsect id="todo_1_todo000090"><xreftitle>Todo</xreftitle><xrefdescription><para>build second-order in space version, considering diffusion</para>
+</xrefdescription></xrefsect></para>
+<para>TODO: account for finite-element &apos;fluid volume source&apos; terms by distributing contributions to the nodes (divide by # nodes) TODO: account for FV source terms (&apos;nodal fluid volume source&apos; directly TODO: make this more accurate use fractional step method where source is accounted for at 2 time levels using dt/2 and C0 and C1 </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/ExplicitTransport.h" line="81" column="10" bodyfile="source/modules/integration/finite_volumes/generic_transport_scheme/source/ExplicitTransport.cpp" bodystart="315" bodyend="352"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_explicit_transport_1af88632496b7c1b54a655aa12f3d8da8e" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ExplicitTransport&lt; dim &gt;::VerifyAndAssignResults</definition>
+        <argsstring>(bool show_range, bool do_range_check) const</argsstring>
+        <name>VerifyAndAssignResults</name>
+        <qualifiedname>csmp::ExplicitTransport::VerifyAndAssignResults</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>show_range</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>do_range_check</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><orderedlist>
+<listitem><para>transfer results updating concentration, zeroing out &apos;new concentration&apos; values, and performing range checks; returns error</para>
+</listitem></orderedlist>
+</para>
+<para>Checks the range of &apos;new saturation oil&apos; against that specified in the property database. Where the new values comply, they are used to replace the previous ones stored as &apos;saturation oil&apos;. If not, the deviations are reported and the nearest maximum or minimum permitted values of saturation are stored. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/ExplicitTransport.h" line="84" column="12" bodyfile="source/modules/integration/finite_volumes/generic_transport_scheme/source/ExplicitTransport.cpp" bodystart="419" bodyend="470"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_explicit_transport_1a303c67e09bf9b771f9f9c58cc9db6da5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ExplicitTransport&lt; dim &gt;::AdjustResultsAssumingDivergenceFreeVelocityField</definition>
+        <argsstring>(double time_interval)</argsstring>
+        <name>AdjustResultsAssumingDivergenceFreeVelocityField</name>
+        <qualifiedname>csmp::ExplicitTransport::AdjustResultsAssumingDivergenceFreeVelocityField</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>time_interval</declname>
+        </param>
+        <briefdescription>
+<para>if we know beforehand that velocity field will be divergence free, this method compensates for small abberations from this </para>
+        </briefdescription>
+        <detaileddescription>
+<para>For all nodes on the perimeter of the target region, this method loops over the finite-element sectors of the associated finite volume integrating facet fluxes based on total velocity.</para>
+<para>This flux balance is added to the node variable &apos;new saturation oil&apos; </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/ExplicitTransport.h" line="89" column="10" bodyfile="source/modules/integration/finite_volumes/generic_transport_scheme/source/ExplicitTransport.cpp" bodystart="380" bodyend="406"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>For implicit transport calculations. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Single-phase flow tracer, heat or other transport, taking into account the thickness attribute of lower-dimensional elements in the flux calculations.</para>
+<para><simplesect kind="attention"><para>terminology is super important:<itemizedlist>
+<listitem><para>flux refers to the total quantity that passes through the surface, i.e. (v . n_i) * A_i, where subscript i refers to the finite volume facet</para>
+</listitem><listitem><para>volume flux - refers to volumetric flow</para>
+</listitem><listitem><para>flux - refers to products of the advected quantity and the volumetric flow</para>
+</listitem></itemizedlist>
+</para>
+</simplesect>
+flux balance - sum over all finite-volume facet fluxes</para>
+<para><simplesect kind="author"><para>SKM </para>
+</simplesect>
+<simplesect kind="date"><para>25/6/2015</para>
+</simplesect>
+<simplesect kind="copyright"><para>Stephan K. Matthai</para>
+</simplesect>
+TODO: account for the effects of potential element based &apos;fluid volume source&apos; terms. TODO: return rates of solute influx/outflux into/from the model double InFlux() const; double OutFlux() const; TODO: add choice of transport scheme: 1st versus 2nd order in space TODO: Generalise scheme so that it can handle <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> and <ref refid="classcsmp_1_1_inter_face" kindref="compound">InterFace</ref> objects</para>
+<para>Part of the Colleoli transport scheme. <simplesect kind="author"><para>Stephan K. Matthai </para>
+</simplesect>
+<simplesect kind="version"><para>1a </para>
+</simplesect>
+<simplesect kind="date"><para>21/2/2013 </para>
+</simplesect>
+<simplesect kind="pre"><para>high-level class depending on CSMP++ API </para>
+</simplesect>
+<simplesect kind="warning"><para></para>
+</simplesect>
+<simplesect kind="copyright"><para>Stephan K. Matthai </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::ExplicitTransport&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_explicit_transport"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>csmp::FluxEvaluator&lt; dim, USER &gt;</label>
+        <link refid="classcsmp_1_1_flux_evaluator"/>
+      </node>
+      <node id="3">
+        <label>csmp::FluxEvaluator&lt; dim, ExplicitTransport &gt;</label>
+        <link refid="classcsmp_1_1_flux_evaluator"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; dim, ExplicitTransport &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>csmp::TimeStepEvaluator&lt; dim, USER &gt;</label>
+        <link refid="classcsmp_1_1_time_step_evaluator"/>
+      </node>
+      <node id="5">
+        <label>csmp::TimeStepEvaluator&lt; dim, ExplicitTransport &gt;</label>
+        <link refid="classcsmp_1_1_time_step_evaluator"/>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; dim, ExplicitTransport &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::variables::VariableSet_TracerTransfer</label>
+        <link refid="structcsmp_1_1variables_1_1_variable_set___tracer_transfer"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::ExplicitTransport&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_explicit_transport"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="16" relation="public-inheritance">
+        </childnode>
+        <childnode refid="18" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="17">
+        <label>csmp::FluxEvaluator&lt; dim, USER &gt;</label>
+        <link refid="classcsmp_1_1_flux_evaluator"/>
+      </node>
+      <node id="16">
+        <label>csmp::FluxEvaluator&lt; dim, ExplicitTransport &gt;</label>
+        <link refid="classcsmp_1_1_flux_evaluator"/>
+        <childnode refid="17" relation="template-instance">
+          <edgelabel>&lt; dim, ExplicitTransport &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>csmp::INDEX&lt; ty, pl &gt;</label>
+        <link refid="structcsmp_1_1_i_n_d_e_x"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>csmp::INDEX&lt; SCALAR, ELEMENT &gt;</label>
+        <link refid="structcsmp_1_1_i_n_d_e_x"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; SCALAR, ELEMENT &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="15">
+        <label>csmp::INDEX&lt; SCALAR, FACET_INTEGRATION_POINT &gt;</label>
+        <link refid="structcsmp_1_1_i_n_d_e_x"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; SCALAR, FACET_INTEGRATION_POINT &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>csmp::INDEX&lt; SCALAR, MODEL &gt;</label>
+        <link refid="structcsmp_1_1_i_n_d_e_x"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; SCALAR, MODEL &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::INDEX&lt; SCALAR, NODE &gt;</label>
+        <link refid="structcsmp_1_1_i_n_d_e_x"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; SCALAR, NODE &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>csmp::INDEX&lt; SCALAR, SECTOR_INTEGRATION_POINT &gt;</label>
+        <link refid="structcsmp_1_1_i_n_d_e_x"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; SCALAR, SECTOR_INTEGRATION_POINT &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>csmp::INDEX&lt; TENSOR, ELEMENT &gt;</label>
+        <link refid="structcsmp_1_1_i_n_d_e_x"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; TENSOR, ELEMENT &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>csmp::INDEX&lt; VECTOR, ELEMENT &gt;</label>
+        <link refid="structcsmp_1_1_i_n_d_e_x"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; VECTOR, ELEMENT &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>csmp::INDEX&lt; VECTOR, FACET_INTEGRATION_POINT &gt;</label>
+        <link refid="structcsmp_1_1_i_n_d_e_x"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; VECTOR, FACET_INTEGRATION_POINT &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>csmp::Index</label>
+        <link refid="structcsmp_1_1_index"/>
+        <childnode refid="5" relation="usage">
+          <edgelabel>+localVariables</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>+integrationPointVariables</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>+indexTracker</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>csmp::IndexTracker</label>
+        <link refid="classcsmp_1_1_index_tracker"/>
+      </node>
+      <node id="6">
+        <label>csmp::IntegrationPointVariables</label>
+        <link refid="structcsmp_1_1_integration_point_variables"/>
+        <childnode refid="5" relation="usage">
+          <edgelabel>+ipvCell</edgelabel>
+          <edgelabel>+ipvFacet</edgelabel>
+          <edgelabel>+ipvSector</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>csmp::LocalVariables</label>
+        <link refid="structcsmp_1_1_local_variables"/>
+      </node>
+      <node id="19">
+        <label>csmp::TimeStepEvaluator&lt; dim, USER &gt;</label>
+        <link refid="classcsmp_1_1_time_step_evaluator"/>
+      </node>
+      <node id="18">
+        <label>csmp::TimeStepEvaluator&lt; dim, ExplicitTransport &gt;</label>
+        <link refid="classcsmp_1_1_time_step_evaluator"/>
+        <childnode refid="19" relation="template-instance">
+          <edgelabel>&lt; dim, ExplicitTransport &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::variables::VariableSet_TracerTransfer</label>
+        <link refid="structcsmp_1_1variables_1_1_variable_set___tracer_transfer"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>+key_C</edgelabel>
+          <edgelabel>+key_C0</edgelabel>
+          <edgelabel>+key_C1</edgelabel>
+          <edgelabel>+key_FB</edgelabel>
+          <edgelabel>+key_FVPV</edgelabel>
+          <edgelabel>+key_NQV</edgelabel>
+          <edgelabel>+key_PF</edgelabel>
+          <edgelabel>+key_PF0</edgelabel>
+          <edgelabel>+key_acc_</edgelabel>
+          <edgelabel>+key_out_</edgelabel>
+          <edgelabel>  ...</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>+key_CT</edgelabel>
+          <edgelabel>+key_D</edgelabel>
+          <edgelabel>+key_PHI</edgelabel>
+          <edgelabel>+key_QV</edgelabel>
+          <edgelabel>+key_THI</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>+key_SPV</edgelabel>
+          <edgelabel>+key_SV</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>+key_K</edgelabel>
+          <edgelabel>+key_KK</edgelabel>
+          <edgelabel>+key_k</edgelabel>
+          <edgelabel>+key_kk</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>+key_fAk</edgelabel>
+          <edgelabel>+key_fn</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="usage">
+          <edgelabel>+key_V</edgelabel>
+        </childnode>
+        <childnode refid="14" relation="usage">
+          <edgelabel>+key_MU</edgelabel>
+          <edgelabel>+key_RHO</edgelabel>
+        </childnode>
+        <childnode refid="15" relation="usage">
+          <edgelabel>+key_fA</edgelabel>
+          <edgelabel>+key_ff</edgelabel>
+          <edgelabel>+key_ffC</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/integration/finite_volumes/generic_transport_scheme/ExplicitTransport.h" line="40" column="1" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/ExplicitTransport.h" bodystart="42" bodyend="95"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_explicit_transport_1a303c67e09bf9b771f9f9c58cc9db6da5" prot="private" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>AdjustResultsAssumingDivergenceFreeVelocityField</name></member>
+      <member refid="classcsmp_1_1_flux_evaluator_1a535457807f0d8bfa829126094e67cdf5" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>Advective_O1_FluxesAndBalances</name></member>
+      <member refid="classcsmp_1_1_explicit_transport_1a3ba05be8f7eed8f1dc4c52fabaeaa6d6" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>AdvectVariable</name></member>
+      <member refid="classcsmp_1_1_explicit_transport_1a99fc5f906ed386862dea0cac7b3b70da" prot="private" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>Assemble1stOrderSolution</name></member>
+      <member refid="classcsmp_1_1_explicit_transport_1a3f20d955a7ce3b4322eefa5e892af0c1" prot="private" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>CollectHaloStencils</name></member>
+      <member refid="classcsmp_1_1_explicit_transport_1ab73e1bd128174fc85445e14f5d5accb3" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>ExplicitTransport</name></member>
+      <member refid="classcsmp_1_1_explicit_transport_1a40ca8c3a61cfbf756581ab91082ca271" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>ExplicitTransport_Test</name></member>
+      <member refid="classcsmp_1_1_flux_evaluator_1a4c78926a0dd52165c1ec537343eeeb39" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>FluxBalanceAndOutFlow</name></member>
+      <member refid="classcsmp_1_1_flux_evaluator_1a7557a8a4f116ea3993179d376724380b" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>FluxBalancesAtBoundary</name></member>
+      <member refid="classcsmp_1_1_flux_evaluator_1a4e5f8297f7be37d653438d4fd0fbd66b" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>FluxBalancesFromFacetFluxes</name></member>
+      <member refid="classcsmp_1_1_flux_evaluator_1a03e3a90c87e41a85f191d0c8ada74678" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>FluxEvaluator</name></member>
+      <member refid="classcsmp_1_1_explicit_transport_1af6b446b4b029f1db32732056fec04752" prot="private" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>halo_elmts_</name></member>
+      <member refid="classcsmp_1_1_explicit_transport_1a44fe15a39e541bb0cdf504681f11a8e5" prot="private" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>HasHaloStencils</name></member>
+      <member refid="classcsmp_1_1_explicit_transport_1a60b5e301ae9a44f822eb118ffa443e5c" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>IncomingVolumetricFlow</name></member>
+      <member refid="classcsmp_1_1_flux_evaluator_1af8caa7567170e4eae992207c21ee555a" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>InFlow</name></member>
+      <member refid="structcsmp_1_1variables_1_1_variable_set___tracer_transfer_1a1608ab4a2c1041e5f00c0b38c911ffd8" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>key_acc_</name></member>
+      <member refid="structcsmp_1_1variables_1_1_variable_set___tracer_transfer_1aa8587c75c8e8c37a741e5fd4dab5ac88" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>key_C</name></member>
+      <member refid="structcsmp_1_1variables_1_1_variable_set___tracer_transfer_1a52f607e7c25677f2d2ae2af66876ebb7" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>key_C0</name></member>
+      <member refid="structcsmp_1_1variables_1_1_variable_set___tracer_transfer_1aa577cf220128ece7a20f95748da1dcff" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>key_C1</name></member>
+      <member refid="structcsmp_1_1variables_1_1_variable_set___tracer_transfer_1af3276a45f6d66e4faad0c9c13af23814" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>key_CT</name></member>
+      <member refid="structcsmp_1_1variables_1_1_variable_set___tracer_transfer_1aeb4341af09b00e9182ee1ff322e4fe2d" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>key_D</name></member>
+      <member refid="structcsmp_1_1variables_1_1_variable_set___tracer_transfer_1a73ca55adfba83e9ccc2785a0a8d92410" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>key_fA</name></member>
+      <member refid="structcsmp_1_1variables_1_1_variable_set___tracer_transfer_1af72270cb9a071ab333c798654cf1e85a" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>key_fAk</name></member>
+      <member refid="structcsmp_1_1variables_1_1_variable_set___tracer_transfer_1a27b6248d8c7f79af8f9a4f62e466dc78" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>key_FB</name></member>
+      <member refid="structcsmp_1_1variables_1_1_variable_set___tracer_transfer_1a8d9a139069af233944d7b8422a6525d4" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>key_ff</name></member>
+      <member refid="structcsmp_1_1variables_1_1_variable_set___tracer_transfer_1a993b38ca854d23fb66c916f1e5e8f8ec" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>key_ffC</name></member>
+      <member refid="structcsmp_1_1variables_1_1_variable_set___tracer_transfer_1a280dd095dd2afcf4002f8f9404bcdf7f" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>key_fn</name></member>
+      <member refid="structcsmp_1_1variables_1_1_variable_set___tracer_transfer_1af33f07d586dcd70bff2ac4fb7c4aa7ab" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>key_FVPV</name></member>
+      <member refid="structcsmp_1_1variables_1_1_variable_set___tracer_transfer_1a144e2a95d1422c40ba5b03f4b795371b" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>key_K</name></member>
+      <member refid="structcsmp_1_1variables_1_1_variable_set___tracer_transfer_1a58d32cddb7824e35f992d291c3f1b265" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>key_k</name></member>
+      <member refid="structcsmp_1_1variables_1_1_variable_set___tracer_transfer_1a455145cf7086432b284318911b91ca9a" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>key_KK</name></member>
+      <member refid="structcsmp_1_1variables_1_1_variable_set___tracer_transfer_1a2ba03f5e63af794b824364f864e50fff" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>key_kk</name></member>
+      <member refid="structcsmp_1_1variables_1_1_variable_set___tracer_transfer_1a03c20a5da25395def94d8e5934ebc5e4" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>key_MU</name></member>
+      <member refid="structcsmp_1_1variables_1_1_variable_set___tracer_transfer_1a3cc7193ae1fc8455dd2554acf3bc7412" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>key_NQV</name></member>
+      <member refid="structcsmp_1_1variables_1_1_variable_set___tracer_transfer_1a4bab69133c7494a14af41865eca59200" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>key_out_</name></member>
+      <member refid="structcsmp_1_1variables_1_1_variable_set___tracer_transfer_1a83c142235a61adbc239d5ccf6bec21c2" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>key_PF</name></member>
+      <member refid="structcsmp_1_1variables_1_1_variable_set___tracer_transfer_1a1f5ec00672e40dc2f3b9a3eb1480d87e" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>key_PF0</name></member>
+      <member refid="structcsmp_1_1variables_1_1_variable_set___tracer_transfer_1a4002363ca2c316edf20122840a6acafb" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>key_PHI</name></member>
+      <member refid="structcsmp_1_1variables_1_1_variable_set___tracer_transfer_1adf4de8788ec1abf65bb3f1d8a45b2efa" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>key_QV</name></member>
+      <member refid="structcsmp_1_1variables_1_1_variable_set___tracer_transfer_1a7eb7dfb806182582125d41f6bf8c51f7" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>key_RHO</name></member>
+      <member refid="structcsmp_1_1variables_1_1_variable_set___tracer_transfer_1a306d3b050e1f8086137a7d7841d3f588" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>key_SPV</name></member>
+      <member refid="structcsmp_1_1variables_1_1_variable_set___tracer_transfer_1a09388d8bdbb18d437b7cacd184b81584" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>key_SV</name></member>
+      <member refid="structcsmp_1_1variables_1_1_variable_set___tracer_transfer_1abeed41c59f39f21f69872b44c3881e85" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>key_THI</name></member>
+      <member refid="structcsmp_1_1variables_1_1_variable_set___tracer_transfer_1a7379622143b83d64d26508bc65cb3b2e" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>key_V</name></member>
+      <member refid="classcsmp_1_1_explicit_transport_1ad06e0ab5783b67311f3c7704638baf82" prot="private" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>lower_limit_</name></member>
+      <member refid="classcsmp_1_1_time_step_evaluator_1aaa2371cf5c9b7140722ce10aebe6e8d1" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>MaxTimeIncrement</name></member>
+      <member refid="classcsmp_1_1_explicit_transport_1ab650a9af484336f41ea9026d08c199e0" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>Notation</name></member>
+      <member refid="classcsmp_1_1_flux_evaluator_1a6042e91a6788818ed767555cad2d963e" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>OutFlow</name></member>
+      <member refid="classcsmp_1_1_time_step_evaluator_1a53957c45ebe0604c44166069d27a247e" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>OutFlowLessThanContentIncrement</name></member>
+      <member refid="classcsmp_1_1_time_step_evaluator_1affb53a4c2312861a7fbde2f0f92fe8a3" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>OutFlowLessThanContentIncrementBoundary</name></member>
+      <member refid="classcsmp_1_1_explicit_transport_1aa747da759e6e9187279aa53d99217376" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>OutgoingVolumetricFlow</name></member>
+      <member refid="classcsmp_1_1_time_step_evaluator_1abf66bdc0fdac41bd8bb65c96464f1960" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>StepSizeReductionFactor</name></member>
+      <member refid="classcsmp_1_1_time_step_evaluator_1a2720b6533d5a66a6df4aab74a669d6f1" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>StreamlineCFL</name></member>
+      <member refid="classcsmp_1_1_explicit_transport_1aa7e7a1f7ddcc9ba6097b7242d9f0083a" prot="private" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>subdomain_</name></member>
+      <member refid="classcsmp_1_1_explicit_transport_1a2d206bfbbedfcc1061ad83991ecfbfd8" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>TimeIncrement</name></member>
+      <member refid="classcsmp_1_1_explicit_transport_1ad61ea5a7ea62fcf786b9028deef1dc6e" prot="private" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>TimeIncrement_CFL_Outflow</name></member>
+      <member refid="classcsmp_1_1_time_step_evaluator_1ae54325d28e1d746d0d72e2ecda70861e" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>TimeStepEvaluator</name></member>
+      <member refid="classcsmp_1_1_explicit_transport_1a3fc2f5bc612adb910d613c81d704f7ba" prot="private" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>TransportVariableFluxBalances</name></member>
+      <member refid="classcsmp_1_1_flux_evaluator_1ae1a1b4be20b06e0aea7a444ee61a5d0f" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>TransportVariableFluxes</name></member>
+      <member refid="classcsmp_1_1_flux_evaluator_1af844f876b3498555c576d405b3186f0c" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>TransportVariableFluxesAndBalances</name></member>
+      <member refid="classcsmp_1_1_explicit_transport_1aa08c34e0ead5f3f5999129f092ba22ef" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>UpdateFluxesAndFluxBalances</name></member>
+      <member refid="classcsmp_1_1_explicit_transport_1afbf89f61973bc430c71510c411dc36c2" prot="private" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>upper_limit_</name></member>
+      <member refid="structcsmp_1_1variables_1_1_variable_set___tracer_transfer_1a1a1e814ac18fbd940f5ddb64be4488ba" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>VariableSet_TracerTransfer</name></member>
+      <member refid="classcsmp_1_1_explicit_transport_1af88632496b7c1b54a655aa12f3d8da8e" prot="private" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>VerifyAndAssignResults</name></member>
+      <member refid="classcsmp_1_1_explicit_transport_1a98e1b15c5612c23df69d952ccf039b1f" prot="private" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>VolumetricFlowAndTransportVariableFluxBalances</name></member>
+      <member refid="classcsmp_1_1_flux_evaluator_1a3a34a95941d6b6277ff691e5ef393f04" prot="public" virt="non-virtual" ambiguityscope="csmp::FluxEvaluator&lt; dim, ExplicitTransport &gt;::"><scope>csmp::ExplicitTransport</scope><name>VolumetricFlowAndTransportVariableFluxBalances</name></member>
+      <member refid="classcsmp_1_1_flux_evaluator_1a57fbf6ae0c0b3d82e3646b75b02426e4" prot="public" virt="non-virtual"><scope>csmp::ExplicitTransport</scope><name>VolumetricFlowBalance</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

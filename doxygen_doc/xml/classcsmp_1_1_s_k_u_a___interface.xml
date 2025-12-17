@@ -1,0 +1,312 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_s_k_u_a___interface" kind="class" language="C++" prot="public">
+    <compoundname>csmp::SKUA_Interface</compoundname>
+    <includes refid="_s_k_u_a___interface_8h" local="no">SKUA_Interface.h</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_s_k_u_a___interface_1a8a473017fb0298d15b2052d08426a12b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>template bool csmp::SKUA_Interface::ImportElementPropertyValuesFromSKUA</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;, const std::string &amp;data_file=std::string())</argsstring>
+        <name>ImportElementPropertyValuesFromSKUA</name>
+        <qualifiedname>csmp::SKUA_Interface::ImportElementPropertyValuesFromSKUA</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <defname>model</defname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>data_file</declname>
+          <defval>std::string()</defval>
+        </param>
+        <briefdescription>
+<para>region-by-region property assignment from column-based texfile (Kuncho Kurtev) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Using the supplied region names and &quot;element number&quot; values, maps the data from the input file onto the current model. The input file is expected to be named after the current model with the extension &quot;-element_barycentres.txt&quot;. Its expected format is:</para>
+<para>header line axes titles: region-name(string), region-id(number 0..n-1), element-id(number 0..n-1), - comma-separated list of property names comma-seperated data... EOF</para>
+<para><simplesect kind="attention"><para>properties are mapped region by region so that values do not spill across region boundaries; not found non-NON-DATA values are reported</para>
+</simplesect>
+<simplesect kind="attention"><para>property values are mapped only if they are within range; out-of range values are reported, but ignored.</para>
+</simplesect>
+<simplesect kind="attention"><para>if a region does not exist, an error is reported</para>
+</simplesect>
+<simplesect kind="attention"><para>property values will only be written to elements whose property flag is not DIRICH or fixed</para>
+</simplesect>
+<xrefsect id="todo_1_todo000125"><xreftitle>Todo</xreftitle><xrefdescription><para>TODO: expand to handle tensor properties as well</para>
+</xrefdescription></xrefsect></para>
+<para><simplesect kind="author"><para>SKM </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/SKUA_Interface.h" line="36" column="10" bodyfile="source/modules/interfaces/gOcad_SKUA/SKUA_Interface.cpp" bodystart="99" bodyend="277"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_k_u_a___interface_1af4a3eed756ca284b7e7e7301110dde68" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SKUA_Interface::OutputElementNumbersAndBaryCentresRegionByRegion</definition>
+        <argsstring>(const Model&lt; 3U &gt; &amp;)</argsstring>
+        <name>OutputElementNumbersAndBaryCentresRegionByRegion</name>
+        <qualifiedname>csmp::SKUA_Interface::OutputElementNumbersAndBaryCentresRegionByRegion</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; 3U &gt; &amp;</type>
+          <defname>model</defname>
+        </param>
+        <briefdescription>
+<para>output of element barycentre points transformed into SKUA (lefthanded) coordinate system for property interpolation and transfer to CSMP </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Writes file with the element barycentre coordinates, preceded by region-name(string), region-id(number), element-id(number). since SKUA doesn&apos;t import string type, a corresponding region-map and element-map will be generated to map their corresponding region-name and element-key from the region-id and the element-id.</para>
+<para>The file format is</para>
+<para>header line axes titles: region-name(string), region-id(number 0..n-1), element-id(number 0..n-1), x, y, z comma-seperated data... EOF</para>
+<para><simplesect kind="note"><para>to function correctly, the method needs the region id and the element invariable &quot;element number&quot; that must not change from run to run like CSMP&apos;s Idx() values do.</para>
+</simplesect>
+<simplesect kind="note"><para>ideally the region names should be echo&apos;ed back from SKUA, but because this is a string and a unique integer code is written out and read in backwards as an alternative.</para>
+</simplesect>
+<simplesect kind="author"><para>SKM </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/SKUA_Interface.h" line="42" column="10" bodyfile="source/modules/interfaces/gOcad_SKUA/SKUA_Interface.cpp" bodystart="42" bodyend="68"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_k_u_a___interface_1a58a64d5844240538e410fc3897523c7a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SKUA_Interface::VariableToPointCloud</definition>
+        <argsstring>(const Model&lt; 3U &gt; &amp;, const std::set&lt; std::string &gt; &amp;regions_of_interest, const char *filename, const char *element_var) const</argsstring>
+        <name>VariableToPointCloud</name>
+        <qualifiedname>csmp::SKUA_Interface::VariableToPointCloud</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; 3U &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const std::set&lt; std::string &gt; &amp;</type>
+          <declname>regions_of_interest</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>filename</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>element_var</declname>
+        </param>
+        <briefdescription>
+<para>exports element variable from selected regions to SKUA barycenter-point cloud (ASCII table) format </para>
+        </briefdescription>
+        <detaileddescription>
+<para>VariableToPointCloud</para>
+<para>Outputs any element variable from CSMP to SKUA point cloud (ASCII table) format. Variables discretized on volume, surface or line elements will be output as point data placed on the barycenter of respective elements. <linebreak/>
+</para>
+<para><simplesect kind="attention"><para>methods outputs coordinates in SKUA format where y=-z and z=-y </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/SKUA_Interface.h" line="45" column="10" bodyfile="source/modules/interfaces/gOcad_SKUA/SKUA_Interface.cpp" bodystart="299" bodyend="372"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_k_u_a___interface_1aa5e27c72931f7c1ade388167c9182d09" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SKUA_Interface::VariablesToPointCloud</definition>
+        <argsstring>(const Model&lt; 3U &gt; &amp;, const std::set&lt; std::string &gt; &amp;regions_of_interest, const char *filename, const std::set&lt; std::string &gt; &amp;element_var) const</argsstring>
+        <name>VariablesToPointCloud</name>
+        <qualifiedname>csmp::SKUA_Interface::VariablesToPointCloud</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; 3U &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const std::set&lt; std::string &gt; &amp;</type>
+          <declname>regions_of_interest</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>filename</declname>
+        </param>
+        <param>
+          <type>const std::set&lt; std::string &gt; &amp;</type>
+          <declname>element_var</declname>
+        </param>
+        <briefdescription>
+<para>exports multiple element variables from selected regions to SKUA barycenter-point cloud (ASCII table) format </para>
+        </briefdescription>
+        <detaileddescription>
+<para>like previous method, but for multiple output variables discretized on the elements </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/SKUA_Interface.h" line="50" column="10" bodyfile="source/modules/interfaces/gOcad_SKUA/SKUA_Interface.cpp" bodystart="381" bodyend="439"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_k_u_a___interface_1ab52a04a71e66f672a3c25d10dc072f37" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SKUA_Interface::SurfaceArrayVariableToPointCloud</definition>
+        <argsstring>(const Model&lt; 3U &gt; &amp;, const std::set&lt; std::string &gt; &amp;regions_of_interest, const char *filename, const char *element_var) const</argsstring>
+        <name>SurfaceArrayVariableToPointCloud</name>
+        <qualifiedname>csmp::SKUA_Interface::SurfaceArrayVariableToPointCloud</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; 3U &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const std::set&lt; std::string &gt; &amp;</type>
+          <declname>regions_of_interest</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>filename</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>element_var</declname>
+        </param>
+        <briefdescription>
+<para>creates cloud of points offset along the barycenter surface normal of the element of interest using the &apos;thickness&apos; attribute </para>
+        </briefdescription>
+        <detaileddescription>
+<para>creates point clouds around surface of interest using the &apos;thickness&apos; attribute </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/SKUA_Interface.h" line="55" column="10" bodyfile="source/modules/interfaces/gOcad_SKUA/SKUA_Interface.cpp" bodystart="450" bodyend="527"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_k_u_a___interface_1a1824f574f13dbf1b92c67c08b0ba8e12" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SKUA_Interface::ConvertRockTypesIntoRegions</definition>
+        <argsstring>(Model&lt; 3U &gt; &amp;, const std::string &amp;rocktype_info_file)</argsstring>
+        <name>ConvertRockTypesIntoRegions</name>
+        <qualifiedname>csmp::SKUA_Interface::ConvertRockTypesIntoRegions</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; 3U &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>rocktype_info_file</declname>
+        </param>
+        <briefdescription>
+<para>For each rock type the elements will be converted into regions with the corresponding name. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Reads file with the mapping from integer codes to region names and creates corresponding model regions. Elements with rocktype identifiers that are not contained in the regions file are ignore, but the unrecognised codes are reported to screen and file. The file has the following format:</para>
+<para><programlisting><codeline><highlight class="normal">headline<sp/>(printed<sp/>to<sp/>screen)</highlight></codeline>
+<codeline><highlight class="normal">identifier<sp/>value<sp/><sp/>tab<sp/><sp/>region<sp/>name<sp/>(can<sp/>contain<sp/>white<sp/>space)</highlight></codeline>
+</programlisting></para>
+<para><simplesect kind="attention"><para>if the rocktype file info file is omitted, the function will search for a file called: &quot;model_name-rocktype-identifiers.txt&quot;</para>
+</simplesect>
+<simplesect kind="note"><para>only the first 2 tokens in each line of the file are read, allowing the user to add comments afterwards</para>
+</simplesect>
+<simplesect kind="author"><para>SKM </para>
+</simplesect>
+<simplesect kind="date"><para>22/8/2018 </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/SKUA_Interface.h" line="62" column="10" bodyfile="source/modules/interfaces/gOcad_SKUA/SKUA_Interface.cpp" bodystart="702" bodyend="775"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_k_u_a___interface_1a58e4971de89e15fbf53f06c4652ea1dd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SKUA_Interface::Erase_NO_DATA_ElementsFromModel</definition>
+        <argsstring>(Model&lt; 3U &gt; &amp;, const std::string &amp;target_region, std::set&lt; size_t &gt; &amp;no_data_elmt_numbers)</argsstring>
+        <name>Erase_NO_DATA_ElementsFromModel</name>
+        <qualifiedname>csmp::SKUA_Interface::Erase_NO_DATA_ElementsFromModel</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; 3U &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>target_region</declname>
+        </param>
+        <param>
+          <type>std::set&lt; size_t &gt; &amp;</type>
+          <declname>no_data_elmt_numbers</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>removes the elements for which NO_DATA values (-9999, -99999) in the target region of the model. After removing the elements, the unique regions, boundaries, and split boundaries are updated accordingly.</para>
+<para><simplesect kind="author"><para>JC revised by SKM </para>
+</simplesect>
+<simplesect kind="date"><para>26/2/2019 </para>
+</simplesect>
+<simplesect kind="date"><para>22/5/2021 </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/SKUA_Interface.h" line="64" column="10" bodyfile="source/modules/interfaces/gOcad_SKUA/SKUA_Interface.cpp" bodystart="652" bodyend="677"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_s_k_u_a___interface_1a8c524cd12f663873304a2f9fdb79767b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::SKUA_Interface::Detect_NO_DATA_ElementsInDatasetFromSKUA</definition>
+        <argsstring>(const std::string &amp;input_txt_file, const std::string &amp;target_region, std::set&lt; size_t &gt; &amp;no_data_elmt_numbers)</argsstring>
+        <name>Detect_NO_DATA_ElementsInDatasetFromSKUA</name>
+        <qualifiedname>csmp::SKUA_Interface::Detect_NO_DATA_ElementsInDatasetFromSKUA</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>input_txt_file</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>target_region</declname>
+        </param>
+        <param>
+          <type>std::set&lt; size_t &gt; &amp;</type>
+          <declname>no_data_elmt_numbers</declname>
+        </param>
+        <briefdescription>
+<para>Enlists &apos;element number&apos;s of elements with NO_DATA values (-9999, -99999) in the target region. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Enlists the unique &apos;element number&apos; values of elements for which NO_DATA values (-9999, -99999) were reported in the input file in the target region.</para>
+<para>If the target region cannot be found of if there are no NO-DATA values in that region, the method returns false. Here, no-data values are expected for all the properties enlisted in the file header, e.g., rocktype, porosity and permeability.</para>
+<para><simplesect kind="attention"><para>the input data file is expected to have the extension: &apos;&quot;-element_barycentres_properties.txt&quot;</para>
+</simplesect>
+<simplesect kind="author"><para>SKM </para>
+</simplesect>
+<simplesect kind="date"><para>22/2/2019 </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/SKUA_Interface.h" line="71" column="10" bodyfile="source/modules/interfaces/gOcad_SKUA/SKUA_Interface.cpp" bodystart="553" bodyend="636"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<sect1 id="classcsmp_1_1_s_k_u_a___interface_1Some">
+<title>conventions regarding neighbor connectivity</title><para>In CSMP, only the neighbors of equidimensional elements are recorded: the volumetric neighbors of volumetric elements, the surface neighbors of surface elements and the line element neighbors of bar elements. Now, on the outer perimeter of the model, elements that make up the boundary surfaces would normally have the elements of adjacent boundary surfaces as neighbors. This connectivity is ignored. Instead, missing neighbors are indicated in the <ref refid="classcsmp_1_1_v_data_1aa671d43d9a394cb97787580ca3395c5e" kindref="member">VSet::VData</ref> by the <ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref> flags that correspond to the model edges. </para>
+</sect1>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::SKUA_Interface</label>
+        <link refid="classcsmp_1_1_s_k_u_a___interface"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/interfaces/gOcad_SKUA/SKUA_Interface.h" line="29" column="1" bodyfile="source/includes/interfaces/gOcad_SKUA/SKUA_Interface.h" bodystart="29" bodyend="74"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_s_k_u_a___interface_1a1824f574f13dbf1b92c67c08b0ba8e12" prot="public" virt="non-virtual"><scope>csmp::SKUA_Interface</scope><name>ConvertRockTypesIntoRegions</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___interface_1a8c524cd12f663873304a2f9fdb79767b" prot="private" virt="non-virtual"><scope>csmp::SKUA_Interface</scope><name>Detect_NO_DATA_ElementsInDatasetFromSKUA</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___interface_1a58e4971de89e15fbf53f06c4652ea1dd" prot="public" virt="non-virtual"><scope>csmp::SKUA_Interface</scope><name>Erase_NO_DATA_ElementsFromModel</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___interface_1a8a473017fb0298d15b2052d08426a12b" prot="public" virt="non-virtual"><scope>csmp::SKUA_Interface</scope><name>ImportElementPropertyValuesFromSKUA</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___interface_1af4a3eed756ca284b7e7e7301110dde68" prot="public" virt="non-virtual"><scope>csmp::SKUA_Interface</scope><name>OutputElementNumbersAndBaryCentresRegionByRegion</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___interface_1ab52a04a71e66f672a3c25d10dc072f37" prot="public" virt="non-virtual"><scope>csmp::SKUA_Interface</scope><name>SurfaceArrayVariableToPointCloud</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___interface_1aa5e27c72931f7c1ade388167c9182d09" prot="public" virt="non-virtual"><scope>csmp::SKUA_Interface</scope><name>VariablesToPointCloud</name></member>
+      <member refid="classcsmp_1_1_s_k_u_a___interface_1a58a64d5844240538e410fc3897523c7a" prot="public" virt="non-virtual"><scope>csmp::SKUA_Interface</scope><name>VariableToPointCloud</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

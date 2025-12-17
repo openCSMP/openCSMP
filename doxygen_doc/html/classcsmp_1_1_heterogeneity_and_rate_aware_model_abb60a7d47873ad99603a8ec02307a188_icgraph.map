@@ -1,0 +1,5 @@
+<map id="csmp::HeterogeneityAndRateAwareModel::krw_Phase" name="csmp::HeterogeneityAndRateAwareModel::krw_Phase">
+<area shape="rect" id="Node000001" title="heterogeneity&#45;aware, rate&#45;dependent versions, Nc is calculated in the background" alt="" coords="336,5,529,46"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_heterogeneity_and_rate_aware_model.html#aea6f571afb7b19dd3cd8b35edf74cc48" title="Outputs the relperms for the current model initialisation to a plot for visual examination; filename ..." alt="" coords="5,5,288,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="320,28,288,28,288,23,320,23"/>
+</map>

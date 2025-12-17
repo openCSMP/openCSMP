@@ -1,0 +1,1309 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_flagged_array_variable" kind="class" language="C++" prot="public">
+    <compoundname>csmp::FlaggedArrayVariable</compoundname>
+    <includes refid="_flagged_array_variable_8h" local="no">FlaggedArrayVariable.h</includes>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="classcsmp_1_1_flagged_array_variable_1ae6ad4446e88a452f70a23a2f024c225d" prot="public" static="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>typedef std::vector&lt;double&gt; csmp::FlaggedArrayVariable::FlaggedArrayContainer</definition>
+        <argsstring></argsstring>
+        <name>FlaggedArrayContainer</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::FlaggedArrayContainer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="64" column="27" bodyfile="source/includes/model/FlaggedArrayVariable.h" bodystart="64" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_flagged_array_variable_1a12c135b24dc8224ceda9be0b6dab97f9" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1gacbf62c758c46dc45b3f024638bb89274" kindref="member">VARIABLE_TYPE</ref></type>
+        <definition>VARIABLE_TYPE csmp::FlaggedArrayVariable::VariableType</definition>
+        <argsstring></argsstring>
+        <name>VariableType</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::VariableType</qualifiedname>
+        <initializer>= FLAGGEDARRAY</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="62" column="38" bodyfile="source/includes/model/FlaggedArrayVariable.h" bodystart="62" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_flagged_array_variable_1a480acfdafd6d0dac93cfaca7db778b0c" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref> &gt;</type>
+        <definition>std::vector&lt;VARIABLE_FLAG&gt; csmp::FlaggedArrayVariable::flags_</definition>
+        <argsstring></argsstring>
+        <name>flags_</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::flags_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="158" column="20" bodyfile="source/includes/model/FlaggedArrayVariable.h" bodystart="158" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_flagged_array_variable_1a7f4efbdff49a2de75309417695b6e3cc" prot="private" static="no" mutable="no">
+        <type>FlaggedArrayContainer</type>
+        <definition>FlaggedArrayContainer csmp::FlaggedArrayVariable::data_</definition>
+        <argsstring></argsstring>
+        <name>data_</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::data_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="159" column="35" bodyfile="source/includes/model/FlaggedArrayVariable.h" bodystart="159" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1a62b18957163af9789b5e9877fd97b709" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::FlaggedArrayVariable::FlaggedArrayVariable</definition>
+        <argsstring>()</argsstring>
+        <name>FlaggedArrayVariable</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::FlaggedArrayVariable</qualifiedname>
+        <briefdescription>
+<para>Default constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="66" column="7" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="10" bodyend="14"/>
+        <references refid="classcsmp_1_1_flagged_array_variable_1a62b18957163af9789b5e9877fd97b709" compoundref="_flagged_array_variable_8cpp" startline="10" endline="14">FlaggedArrayVariable</references>
+        <referencedby refid="classcsmp_1_1_flagged_array_variable_1a62b18957163af9789b5e9877fd97b709" compoundref="_flagged_array_variable_8cpp" startline="10" endline="14">FlaggedArrayVariable</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1aea3a8adc03b882cda1ecaf452498db3b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::FlaggedArrayVariable::FlaggedArrayVariable</definition>
+        <argsstring>(const FlaggedArrayVariable &amp;)</argsstring>
+        <name>FlaggedArrayVariable</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::FlaggedArrayVariable</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &amp;</type>
+          <defname>av</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="68" column="7" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="56" bodyend="60"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1a15894c7b3d905513d20a0340bd8f6fff" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>csmp::FlaggedArrayVariable::FlaggedArrayVariable</definition>
+        <argsstring>(const char *arrayPropertyName, const PropertyDatabase&lt; dim &gt; &amp;pd, double defaultValue=std::numeric_limits&lt; double &gt;::quiet_NaN(), VARIABLE_FLAG flag=ANY)</argsstring>
+        <name>FlaggedArrayVariable</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::FlaggedArrayVariable</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>arrayPropertyName</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>&lt; dim &gt; &amp;</type>
+          <declname>pd</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>defaultValue</declname>
+          <defval>std::numeric_limits&lt; double &gt;::quiet_NaN()</defval>
+        </param>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref></type>
+          <declname>flag</declname>
+          <defval><ref refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9a6c4de567ce41f96e0e61175ca75945b3" kindref="member">ANY</ref></defval>
+        </param>
+        <briefdescription>
+<para>Automatically sets size to corresponding index, flag to ANY. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="71" column="7" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="19" bodyend="26"/>
+        <references refid="classcsmp_1_1_flagged_array_variable_1a15894c7b3d905513d20a0340bd8f6fff" compoundref="_flagged_array_variable_8cpp" startline="19" endline="26">FlaggedArrayVariable</references>
+        <referencedby refid="classcsmp_1_1_flagged_array_variable_1a15894c7b3d905513d20a0340bd8f6fff" compoundref="_flagged_array_variable_8cpp" startline="19" endline="26">FlaggedArrayVariable</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1a14f5ffc11a0253f8b4f6333889327ef6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::FlaggedArrayVariable::FlaggedArrayVariable</definition>
+        <argsstring>(uint32_t arraySize, double defaultValue=0., VARIABLE_FLAG flag=ANY)</argsstring>
+        <name>FlaggedArrayVariable</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::FlaggedArrayVariable</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>arraySize</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>defaultValue</declname>
+          <defval>0.</defval>
+        </param>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref></type>
+          <declname>flag</declname>
+          <defval><ref refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9a6c4de567ce41f96e0e61175ca75945b3" kindref="member">ANY</ref></defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="76" column="7" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="46" bodyend="52"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1a9f58a1c098db8508d284b6fee2e67b43" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::FlaggedArrayVariable::FlaggedArrayVariable</definition>
+        <argsstring>(const Index &amp;arrayKey, double defaultValue=0., VARIABLE_FLAG flag=ANY)</argsstring>
+        <name>FlaggedArrayVariable</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::FlaggedArrayVariable</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">Index</ref> &amp;</type>
+          <declname>arrayKey</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>defaultValue</declname>
+          <defval>0.</defval>
+        </param>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref></type>
+          <declname>flag</declname>
+          <defval><ref refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9a6c4de567ce41f96e0e61175ca75945b3" kindref="member">ANY</ref></defval>
+        </param>
+        <briefdescription>
+<para>As <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref> constructor, but using index right away. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="80" column="7" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="36" bodyend="42"/>
+        <references refid="classcsmp_1_1_flagged_array_variable_1a9f58a1c098db8508d284b6fee2e67b43" compoundref="_flagged_array_variable_8cpp" startline="36" endline="42">FlaggedArrayVariable</references>
+        <referencedby refid="classcsmp_1_1_flagged_array_variable_1a9f58a1c098db8508d284b6fee2e67b43" compoundref="_flagged_array_variable_8cpp" startline="36" endline="42">FlaggedArrayVariable</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1a79f1dfcfd058e327ecfe41283ad6a82a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &amp;</type>
+        <definition>FlaggedArrayVariable &amp; csmp::FlaggedArrayVariable::operator=</definition>
+        <argsstring>(const FlaggedArrayVariable &amp;)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &amp;</type>
+          <defname>av</defname>
+        </param>
+        <briefdescription>
+<para>assignments </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="85" column="28" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="62" bodyend="70"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1a162c40cc3bbc62a44738a6e01befcb45" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FlaggedArrayVariable::CopyValuesOnly</definition>
+        <argsstring>(ArrayVariable &amp;av)</argsstring>
+        <name>CopyValuesOnly</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::CopyValuesOnly</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> &amp;</type>
+          <declname>av</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="86" column="12" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="72" bodyend="77"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1ae958073b65d4c4f2c9e515e93ba14308" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &amp;</type>
+        <definition>FlaggedArrayVariable &amp; csmp::FlaggedArrayVariable::operator=</definition>
+        <argsstring>(double)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::operator=</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="87" column="28" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="79" bodyend="83"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1a5a99fb87e711b7f9620d27963e58a4a6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &amp;</type>
+        <definition>FlaggedArrayVariable &amp; csmp::FlaggedArrayVariable::operator=</definition>
+        <argsstring>(const ScalarVariable &amp;)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &amp;</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="88" column="28" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="85" bodyend="89"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1a4641e9be026b303245d00b115273cb8d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref></type>
+        <definition>FlaggedArrayVariable csmp::FlaggedArrayVariable::operator+</definition>
+        <argsstring>(double) const</argsstring>
+        <name>operator+</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::operator+</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+<para>standard operations </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Standard Operations with temporary object. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="91" column="28" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="199" bodyend="205"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1a7c9946db4087a6af5d947b2e4e4dc7bf" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref></type>
+        <definition>FlaggedArrayVariable csmp::FlaggedArrayVariable::operator-</definition>
+        <argsstring>(double) const</argsstring>
+        <name>operator-</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::operator-</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="92" column="28" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="207" bodyend="214"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1a641eac1072431767dcfb145bba34f1d9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref></type>
+        <definition>FlaggedArrayVariable csmp::FlaggedArrayVariable::operator*</definition>
+        <argsstring>(double) const</argsstring>
+        <name>operator*</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::operator*</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="93" column="28" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="216" bodyend="222"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1a4d7d6f88d80ccf6474bba119d502c708" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref></type>
+        <definition>FlaggedArrayVariable csmp::FlaggedArrayVariable::operator/</definition>
+        <argsstring>(double) const</argsstring>
+        <name>operator/</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::operator/</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="94" column="28" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="224" bodyend="230"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1a81d102275cc40dfc9c6c98f5c5f8e34f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref></type>
+        <definition>FlaggedArrayVariable csmp::FlaggedArrayVariable::operator^</definition>
+        <argsstring>(double) const</argsstring>
+        <name>operator^</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::operator^</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="95" column="28" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="232" bodyend="241"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1a047b71f042099cd07dffbee03beca176" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &amp;</type>
+        <definition>FlaggedArrayVariable &amp; csmp::FlaggedArrayVariable::operator+=</definition>
+        <argsstring>(double)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::operator+=</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+<para>Standard Operations with current object. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="97" column="28" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="245" bodyend="249"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1a63fe88c78bf4d1294ab2746472335007" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &amp;</type>
+        <definition>FlaggedArrayVariable &amp; csmp::FlaggedArrayVariable::operator-=</definition>
+        <argsstring>(double)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::operator-=</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="98" column="28" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="251" bodyend="255"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1aaebb4fe80a102c4387f2c5d60e80a71b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &amp;</type>
+        <definition>FlaggedArrayVariable &amp; csmp::FlaggedArrayVariable::operator*=</definition>
+        <argsstring>(double)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::operator*=</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="99" column="28" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="257" bodyend="261"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1ae276184b1ac7578216b10858ff155ecc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &amp;</type>
+        <definition>FlaggedArrayVariable &amp; csmp::FlaggedArrayVariable::operator/=</definition>
+        <argsstring>(double)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::operator/=</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="100" column="28" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="263" bodyend="267"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1a340114754e8b45913120159e5b816d5f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &amp;</type>
+        <definition>FlaggedArrayVariable &amp; csmp::FlaggedArrayVariable::operator+=</definition>
+        <argsstring>(const ScalarVariable &amp;)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::operator+=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &amp;</type>
+          <defname>sc</defname>
+        </param>
+        <briefdescription>
+<para>Standard Operations with current object. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Operations with ScalarVariables </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="102" column="28" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="272" bodyend="276"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1a54bfed2f90ee6d8adca311ec59c09f1d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &amp;</type>
+        <definition>FlaggedArrayVariable &amp; csmp::FlaggedArrayVariable::operator-=</definition>
+        <argsstring>(const ScalarVariable &amp;)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::operator-=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &amp;</type>
+          <defname>sc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="103" column="28" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="278" bodyend="282"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1afb6cba8ca5558d059a41162681a50d3b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &amp;</type>
+        <definition>FlaggedArrayVariable &amp; csmp::FlaggedArrayVariable::operator*=</definition>
+        <argsstring>(const ScalarVariable &amp;)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::operator*=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &amp;</type>
+          <defname>sc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="104" column="28" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="284" bodyend="288"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1a261c69ad74c51c2033d37fd5b2d51c9f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &amp;</type>
+        <definition>FlaggedArrayVariable &amp; csmp::FlaggedArrayVariable::operator/=</definition>
+        <argsstring>(const ScalarVariable &amp;)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::operator/=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &amp;</type>
+          <defname>sc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="105" column="28" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="290" bodyend="294"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1ac218afc751177c750c7982126278f3b8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &amp;</type>
+        <definition>FlaggedArrayVariable &amp; csmp::FlaggedArrayVariable::operator+=</definition>
+        <argsstring>(const FlaggedArrayVariable &amp;)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::operator+=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &amp;</type>
+          <defname>av</defname>
+        </param>
+        <briefdescription>
+<para>value by value operations </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Operations with FlaggedArrayVariables. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="108" column="28" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="297" bodyend="302"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1afdfd1dd415acf0405c21a74a67b87341" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &amp;</type>
+        <definition>FlaggedArrayVariable &amp; csmp::FlaggedArrayVariable::operator-=</definition>
+        <argsstring>(const FlaggedArrayVariable &amp;)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::operator-=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &amp;</type>
+          <defname>av</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="109" column="28" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="304" bodyend="309"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1af6002d42c2b0e841b2b835da1fae074a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &amp;</type>
+        <definition>FlaggedArrayVariable &amp; csmp::FlaggedArrayVariable::operator*=</definition>
+        <argsstring>(const FlaggedArrayVariable &amp;)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::operator*=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &amp;</type>
+          <defname>av</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="110" column="28" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="311" bodyend="316"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1af51ddbf5ec91dba563a69380e783640c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &amp;</type>
+        <definition>FlaggedArrayVariable &amp; csmp::FlaggedArrayVariable::operator/=</definition>
+        <argsstring>(const FlaggedArrayVariable &amp;)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::operator/=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &amp;</type>
+          <defname>av</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="111" column="28" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="318" bodyend="323"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1a7aea6122e0964b1cffab0fd8d96f6942" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref></type>
+        <definition>FlaggedArrayVariable csmp::FlaggedArrayVariable::operator-</definition>
+        <argsstring>(const FlaggedArrayVariable &amp;) const</argsstring>
+        <name>operator-</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::operator-</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &amp;</type>
+          <defname>av</defname>
+        </param>
+        <briefdescription>
+<para>element-by-element operations </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="114" column="29" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="325" bodyend="334"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1a0c89ae84540d7a349d4c8f078abbbf35" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref></type>
+        <definition>FlaggedArrayVariable csmp::FlaggedArrayVariable::operator*</definition>
+        <argsstring>(const FlaggedArrayVariable &amp;) const</argsstring>
+        <name>operator*</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::operator*</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &amp;</type>
+          <defname>av</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="115" column="29" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="347" bodyend="356"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1a75ec9accef6b50f65bc7d9b8684c5a71" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref></type>
+        <definition>FlaggedArrayVariable csmp::FlaggedArrayVariable::operator+</definition>
+        <argsstring>(const FlaggedArrayVariable &amp;) const</argsstring>
+        <name>operator+</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::operator+</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &amp;</type>
+          <defname>av</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="116" column="29" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="336" bodyend="345"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1a04b554fb612f3f915076ad0258b6039c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref></type>
+        <definition>FlaggedArrayVariable csmp::FlaggedArrayVariable::operator/</definition>
+        <argsstring>(const FlaggedArrayVariable &amp;) const</argsstring>
+        <name>operator/</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::operator/</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &amp;</type>
+          <defname>av</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="117" column="29" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="359" bodyend="368"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1ab1c62f77bec9efd97ed939874cd9fff5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::FlaggedArrayVariable::operator==</definition>
+        <argsstring>(const FlaggedArrayVariable &amp;) const</argsstring>
+        <name>operator==</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::operator==</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &amp;</type>
+          <defname>av</defname>
+        </param>
+        <briefdescription>
+<para>arithmetical comparison of array values </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="120" column="22" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="143" bodyend="150"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1ac49766cdf4cddeabf1ef7f85d49b77dd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::FlaggedArrayVariable::operator!=</definition>
+        <argsstring>(const FlaggedArrayVariable &amp;) const</argsstring>
+        <name>operator!=</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::operator!=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &amp;</type>
+          <defname>av</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="121" column="22" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="152" bodyend="155"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1aeb4d0c1ae3e95e7ed0814522ebe77250" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::FlaggedArrayVariable::operator&lt;</definition>
+        <argsstring>(const FlaggedArrayVariable &amp;) const</argsstring>
+        <name>operator&lt;</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::operator&lt;</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &amp;</type>
+          <defname>av</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="122" column="7" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="157" bodyend="165"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1ade0dc102137689d4b4b68b2137cbdfd2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::FlaggedArrayVariable::operator&lt;=</definition>
+        <argsstring>(const FlaggedArrayVariable &amp;) const</argsstring>
+        <name>operator&lt;=</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::operator&lt;=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &amp;</type>
+          <defname>av</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="123" column="7" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="167" bodyend="175"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1a057bac67b1096fddff5c8ad0c3b807a3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::FlaggedArrayVariable::operator&gt;</definition>
+        <argsstring>(const FlaggedArrayVariable &amp;) const</argsstring>
+        <name>operator&gt;</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::operator&gt;</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &amp;</type>
+          <defname>av</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="124" column="22" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="177" bodyend="185"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1aab2dcf3e8236fbc008119617327a9391" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::FlaggedArrayVariable::operator&gt;=</definition>
+        <argsstring>(const FlaggedArrayVariable &amp;) const</argsstring>
+        <name>operator&gt;=</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::operator&gt;=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &amp;</type>
+          <defname>av</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="125" column="22" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="187" bodyend="195"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1ab0776a3a15398aed284087d0e4b4c317" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::FlaggedArrayVariable::operator[]</definition>
+        <argsstring>(size_t) const</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::operator[]</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <defname>i</defname>
+        </param>
+        <briefdescription>
+<para>accessors to the data </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="128" column="22" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="119" bodyend="123"/>
+        <referencedby refid="namespacecsmp_1a8e81de3a4cd4e92f56afe31f2f99ebd7" compoundref="write_variable_if_8h" startline="104" endline="118">csmp::writeVariableIf</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1aefae918a9993d4bbf212278279337bba" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double &amp;</type>
+        <definition>double &amp; csmp::FlaggedArrayVariable::operator()</definition>
+        <argsstring>(size_t)</argsstring>
+        <name>operator()</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::operator()</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <defname>i</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="129" column="21" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="125" bodyend="129"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1ac88b4b142339590b1f5558026caf9a4d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FlaggedArrayVariable::Component</definition>
+        <argsstring>(uint32_t, double)</argsstring>
+        <name>Component</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::Component</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="130" column="22" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="131" bodyend="135"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1a583cdbd798e1add7f2fc43bdd77cab30" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::FlaggedArrayVariable::Component</definition>
+        <argsstring>(uint32_t) const</argsstring>
+        <name>Component</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::Component</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <defname>i</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="131" column="22" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="137" bodyend="141"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1a999bd9489d55a72c31032e09182390c3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::FlaggedArrayVariable::Size</definition>
+        <argsstring>() const</argsstring>
+        <name>Size</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::Size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="133" column="22" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="92" bodyend="95"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1a3122c9acdd833eb1cb9332ff8362984a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FlaggedArrayVariable::Resize</definition>
+        <argsstring>(uint32_t newSize, double newValue=std::numeric_limits&lt; double &gt;::quiet_NaN())</argsstring>
+        <name>Resize</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::Resize</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>newSize</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>newValue</declname>
+          <defval>std::numeric_limits&lt; double &gt;::quiet_NaN()</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="134" column="22" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="97" bodyend="101"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1a096522c60387f965b46daf279a985400" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref></type>
+        <definition>VARIABLE_FLAG csmp::FlaggedArrayVariable::Flag</definition>
+        <argsstring>(const size_t &amp;) const</argsstring>
+        <name>Flag</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::Flag</qualifiedname>
+        <param>
+          <type>const size_t &amp;</type>
+          <defname>i</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="135" column="22" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="104" bodyend="107"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1a4586df6480114cbc06a8c198739e0751" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref> &amp;</type>
+        <definition>VARIABLE_FLAG &amp; csmp::FlaggedArrayVariable::Flag</definition>
+        <argsstring>(const size_t &amp;)</argsstring>
+        <name>Flag</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::Flag</qualifiedname>
+        <param>
+          <type>const size_t &amp;</type>
+          <defname>i</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="136" column="21" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="109" bodyend="112"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1a35e650e56cc6e9b4383c0c9d45fdba4f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FlaggedArrayVariable::Flag</definition>
+        <argsstring>(const size_t &amp;, VARIABLE_FLAG)</argsstring>
+        <name>Flag</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::Flag</qualifiedname>
+        <param>
+          <type>const size_t &amp;</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref></type>
+          <defname>flag</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="137" column="22" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="114" bodyend="117"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1a084e5253d45cff96b1fd546e7ecf5015" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::FlaggedArrayVariable::IsWithinRange</definition>
+        <argsstring>(double min, double max) const</argsstring>
+        <name>IsWithinRange</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::IsWithinRange</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>min</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>max</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="138" column="22" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="370" bodyend="378"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1aca90bc5082248bf78d7abc8370a0054f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::FlaggedArrayVariable::Has_NaN_Values</definition>
+        <argsstring>() const</argsstring>
+        <name>Has_NaN_Values</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::Has_NaN_Values</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="139" column="22" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="383" bodyend="388"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1a49b26572c9ab97b65dde7a7444e1a2bb" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FlaggedArrayVariable::MinMax</definition>
+        <argsstring>(double &amp;min, double &amp;max) const</argsstring>
+        <name>MinMax</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::MinMax</qualifiedname>
+        <param>
+          <type>double &amp;</type>
+          <declname>min</declname>
+        </param>
+        <param>
+          <type>double &amp;</type>
+          <declname>max</declname>
+        </param>
+        <briefdescription>
+<para>returns the minimum and maximum of the values stored in the array variable </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="140" column="22" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="394" bodyend="398"/>
+        <referencedby refid="classcsmp_1_1_model_1ae98b627c7aa1d3422044856e211fdf96" compoundref="_model_8cpp" startline="2787" endline="2899">csmp::Model&lt; dim &gt;::MinMaxOf</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1aa25ce4c4398a06378c1b1b18caed2da1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FlaggedArrayVariable::Sort</definition>
+        <argsstring>()</argsstring>
+        <name>Sort</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::Sort</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="141" column="22" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="579" bodyend="582"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1af1ff13929df0d3156c7000d069be58bb" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FlaggedArrayVariable::Out</definition>
+        <argsstring>(long digits=3) const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::Out</qualifiedname>
+        <param>
+          <type>long</type>
+          <declname>digits</declname>
+          <defval>3</defval>
+        </param>
+        <briefdescription>
+<para>printing array values to screen </para>
+        </briefdescription>
+        <detaileddescription>
+<para>outputs values to screen up to 10 values per row </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="144" column="22" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="406" bodyend="431"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1aa7bed49982d089e6fdfe009b061c686a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::FlaggedArrayVariable::Out</definition>
+        <argsstring>(const char *filename, size_t precision=9) const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::Out</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>filename</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>precision</declname>
+          <defval>9</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="145" column="22" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="435" bodyend="445"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1adde9be588a61b39335055d91592849ec" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::FlaggedArrayVariable::Out</definition>
+        <argsstring>(std::fstream &amp;fp) const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::Out</qualifiedname>
+        <param>
+          <type>std::fstream &amp;</type>
+          <declname>fp</declname>
+        </param>
+        <briefdescription>
+<para>SKM: DO NOT USE C-STYLE I/O - for internal csmp binary IO. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Outs the array to given file pointer (binary format)</para>
+<para>Order:<orderedlist>
+<listitem><para>Flag</para>
+</listitem><listitem><para>Size</para>
+</listitem><listitem><para>Data</para>
+</listitem></orderedlist>
+</para>
+<para>Roman, 2013: Changed order due to multiple flags:<orderedlist>
+<listitem><para>Size</para>
+</listitem><listitem><para>Flags</para>
+</listitem><listitem><para>Data</para>
+</listitem></orderedlist>
+</para>
+<para><simplesect kind="author"><para>P. Lang </para>
+</simplesect>
+<simplesect kind="date"><para>9/28/2012</para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">fp</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>If non-null, the fp.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>true if it succeeds, false if it fails. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="148" column="22" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="470" bodyend="495"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1a2c61e87e8127d1afe880297b1e3507c1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::FlaggedArrayVariable::In</definition>
+        <argsstring>(std::fstream &amp;fp)</argsstring>
+        <name>In</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::In</qualifiedname>
+        <param>
+          <type>std::fstream &amp;</type>
+          <declname>fp</declname>
+        </param>
+        <briefdescription>
+<para>Reads the array from given file pointer (binary format) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>See bool <ref refid="classcsmp_1_1_flagged_array_variable_1adde9be588a61b39335055d91592849ec" kindref="member">FlaggedArrayVariable::Out( std::fstream&amp; fp ) const</ref></para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">fp</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>If non-null, the fp.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>true if it succeeds, false if it fails. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="149" column="22" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="511" bodyend="549"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1a018d241a6674352eb1f5a94da30eb35b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>FlaggedArrayContainer::const_iterator</type>
+        <definition>FlaggedArrayVariable::FlaggedArrayContainer::const_iterator csmp::FlaggedArrayVariable::Begin</definition>
+        <argsstring>() const</argsstring>
+        <name>Begin</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::Begin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="151" column="45" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="585" bodyend="588"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1aa1d5d6f72f86638978adce038c6244cb" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>FlaggedArrayContainer::const_iterator</type>
+        <definition>FlaggedArrayVariable::FlaggedArrayContainer::const_iterator csmp::FlaggedArrayVariable::End</definition>
+        <argsstring>() const</argsstring>
+        <name>End</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::End</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="152" column="45" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="591" bodyend="594"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1af0b612f2459b66c1c585af59d77e55d2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::FlaggedArrayVariable::NextLargestEntry</definition>
+        <argsstring>(double) const</argsstring>
+        <name>NextLargestEntry</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::NextLargestEntry</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>fromValue</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="154" column="14" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="565" bodyend="569"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flagged_array_variable_1ab75c41734d4c12a769c351148f01078b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::FlaggedArrayVariable::HasLargerEntry</definition>
+        <argsstring>(double) const</argsstring>
+        <name>HasLargerEntry</name>
+        <qualifiedname>csmp::FlaggedArrayVariable::HasLargerEntry</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>fromValue</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FlaggedArrayVariable.h" line="155" column="14" bodyfile="source/modules/model/FlaggedArrayVariable.cpp" bodystart="572" bodyend="576"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Storage for an arbitrary number of variables and flags with a size that is not predefined but can be determined at runtime. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>Roman Manasipov, Philipp Lang </para>
+</simplesect>
+<simplesect kind="date"><para>2013</para>
+</simplesect>
+In order to support arbitrary sized variables to be discretized in CSMP. Based on implementation of <ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> by Philipp Lang but has additional container of flags for each data component</para>
+<sect1 id="classcsmp_1_1_upwind_control_visitor_1usage">
+<title>Usage</title><para>To instantiate an <ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> of arbitrary size:</para>
+<para><programlisting><codeline><highlight class="normal"><ref refid="classcsmp_1_1_flagged_array_variable_1a62b18957163af9789b5e9877fd97b709" kindref="member">FlaggedArrayVariable</ref><sp/>fav;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>0<sp/>entries,<sp/>flag<sp/>set<sp/>to<sp/>Any</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="classcsmp_1_1_flagged_array_variable_1a62b18957163af9789b5e9877fd97b709" kindref="member">FlaggedArrayVariable</ref><sp/>fav(4,<sp/>10.,<sp/><ref refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9a2d373b048f997a96c661862c40f2fcae" kindref="member">DIRICH</ref><sp/>);<sp/></highlight><highlight class="comment">//<sp/>4<sp/>entries<sp/>with<sp/>value<sp/>10.,<sp/>flag<sp/>set<sp/>to<sp/>Dirichlet</highlight></codeline>
+</programlisting></para>
+<para>When using <ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> in Store/Read operations, we need to first create an instance of appropriate size, i.e. the same size as provided in the <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>. A constructor which does exactly this:</para>
+<para><programlisting><codeline><highlight class="normal"><ref refid="classcsmp_1_1_flagged_array_variable_1a62b18957163af9789b5e9877fd97b709" kindref="member">FlaggedArrayVariable</ref><sp/>fav(<sp/></highlight><highlight class="stringliteral">&quot;element<sp/>array&quot;</highlight><highlight class="normal">,<sp/>model.Database()<sp/>);<sp/></highlight><highlight class="comment">//<sp/>size<sp/>as<sp/>specified<sp/>in<sp/>PropertyDatabase,<sp/>values<sp/>=<sp/>0.,<sp/>flag<sp/>=<sp/>any</highlight></codeline>
+</programlisting></para>
+<para>Again, the alternative would be to manually initiate the correct size. With an <ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> of appropriate size, you may use functions like</para>
+<para><programlisting><codeline><highlight class="normal">model.InputPropertyValue(<sp/></highlight><highlight class="stringliteral">&quot;element<sp/>flagged<sp/>array&quot;</highlight><highlight class="normal">,<sp/>fav<sp/>);</highlight></codeline>
+</programlisting></para>
+<para>Or something low level in the likes of</para>
+<para><programlisting><codeline><highlight class="normal">Index<sp/>efaKey(<sp/>model.Database().StorageKey(</highlight><highlight class="stringliteral">&quot;element<sp/>flagged<sp/>array&quot;</highlight><highlight class="normal">)<sp/>);</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordflow">for</highlight><highlight class="normal">(<sp/>vector&lt;Element&lt;3&gt;*&gt;::const_iterator<sp/>it(<sp/>model.Region(</highlight><highlight class="stringliteral">&quot;Model&quot;</highlight><highlight class="normal">).CellsBegin()<sp/>);<sp/>it<sp/>!=<sp/>model.Region(</highlight><highlight class="stringliteral">&quot;Model&quot;</highlight><highlight class="normal">).CellsEnd();<sp/>++it<sp/>)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>(*it)-&gt;Read(<sp/>efaKey,<sp/>fav<sp/>);</highlight></codeline>
+</programlisting></para>
+<para><ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> operations are possible as defined through the interface </para>
+</sect1>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::FlaggedArrayVariable</label>
+        <link refid="classcsmp_1_1_flagged_array_variable"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/model/FlaggedArrayVariable.h" line="59" column="1" bodyfile="source/includes/model/FlaggedArrayVariable.h" bodystart="60" bodyend="160"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_flagged_array_variable_1a018d241a6674352eb1f5a94da30eb35b" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>Begin</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1ac88b4b142339590b1f5558026caf9a4d" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>Component</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1a583cdbd798e1add7f2fc43bdd77cab30" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>Component</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1a162c40cc3bbc62a44738a6e01befcb45" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>CopyValuesOnly</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1a7f4efbdff49a2de75309417695b6e3cc" prot="private" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>data_</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1aa1d5d6f72f86638978adce038c6244cb" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>End</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1a096522c60387f965b46daf279a985400" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>Flag</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1a4586df6480114cbc06a8c198739e0751" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>Flag</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1a35e650e56cc6e9b4383c0c9d45fdba4f" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>Flag</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1ae6ad4446e88a452f70a23a2f024c225d" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>FlaggedArrayContainer</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1a62b18957163af9789b5e9877fd97b709" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>FlaggedArrayVariable</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1aea3a8adc03b882cda1ecaf452498db3b" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>FlaggedArrayVariable</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1a15894c7b3d905513d20a0340bd8f6fff" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>FlaggedArrayVariable</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1a14f5ffc11a0253f8b4f6333889327ef6" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>FlaggedArrayVariable</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1a9f58a1c098db8508d284b6fee2e67b43" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>FlaggedArrayVariable</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1a480acfdafd6d0dac93cfaca7db778b0c" prot="private" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>flags_</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1aca90bc5082248bf78d7abc8370a0054f" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>Has_NaN_Values</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1ab75c41734d4c12a769c351148f01078b" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>HasLargerEntry</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1a2c61e87e8127d1afe880297b1e3507c1" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>In</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1a084e5253d45cff96b1fd546e7ecf5015" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>IsWithinRange</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1a49b26572c9ab97b65dde7a7444e1a2bb" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>MinMax</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1af0b612f2459b66c1c585af59d77e55d2" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>NextLargestEntry</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1ac49766cdf4cddeabf1ef7f85d49b77dd" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>operator!=</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1aefae918a9993d4bbf212278279337bba" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>operator()</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1a641eac1072431767dcfb145bba34f1d9" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>operator*</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1a0c89ae84540d7a349d4c8f078abbbf35" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>operator*</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1aaebb4fe80a102c4387f2c5d60e80a71b" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>operator*=</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1afb6cba8ca5558d059a41162681a50d3b" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>operator*=</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1af6002d42c2b0e841b2b835da1fae074a" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>operator*=</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1a4641e9be026b303245d00b115273cb8d" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>operator+</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1a75ec9accef6b50f65bc7d9b8684c5a71" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>operator+</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1a047b71f042099cd07dffbee03beca176" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>operator+=</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1a340114754e8b45913120159e5b816d5f" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>operator+=</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1ac218afc751177c750c7982126278f3b8" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>operator+=</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1a7c9946db4087a6af5d947b2e4e4dc7bf" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>operator-</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1a7aea6122e0964b1cffab0fd8d96f6942" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>operator-</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1a63fe88c78bf4d1294ab2746472335007" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>operator-=</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1a54bfed2f90ee6d8adca311ec59c09f1d" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>operator-=</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1afdfd1dd415acf0405c21a74a67b87341" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>operator-=</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1a4d7d6f88d80ccf6474bba119d502c708" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>operator/</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1a04b554fb612f3f915076ad0258b6039c" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>operator/</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1ae276184b1ac7578216b10858ff155ecc" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>operator/=</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1a261c69ad74c51c2033d37fd5b2d51c9f" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>operator/=</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1af51ddbf5ec91dba563a69380e783640c" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>operator/=</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1aeb4d0c1ae3e95e7ed0814522ebe77250" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>operator&lt;</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1ade0dc102137689d4b4b68b2137cbdfd2" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>operator&lt;=</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1a79f1dfcfd058e327ecfe41283ad6a82a" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1ae958073b65d4c4f2c9e515e93ba14308" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1a5a99fb87e711b7f9620d27963e58a4a6" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1ab1c62f77bec9efd97ed939874cd9fff5" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>operator==</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1a057bac67b1096fddff5c8ad0c3b807a3" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>operator&gt;</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1aab2dcf3e8236fbc008119617327a9391" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>operator&gt;=</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1ab0776a3a15398aed284087d0e4b4c317" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>operator[]</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1a81d102275cc40dfc9c6c98f5c5f8e34f" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>operator^</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1af1ff13929df0d3156c7000d069be58bb" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1aa7bed49982d089e6fdfe009b061c686a" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1adde9be588a61b39335055d91592849ec" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1a3122c9acdd833eb1cb9332ff8362984a" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>Resize</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1a999bd9489d55a72c31032e09182390c3" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>Size</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1aa25ce4c4398a06378c1b1b18caed2da1" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>Sort</name></member>
+      <member refid="classcsmp_1_1_flagged_array_variable_1a12c135b24dc8224ceda9be0b6dab97f9" prot="public" virt="non-virtual"><scope>csmp::FlaggedArrayVariable</scope><name>VariableType</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,453 @@
+# ======================================================================
+#      OPEN_CSMP++ MS-VISUAL STUDIO PROJECT CREATION UNDER WINDOWS 
+# ======================================================================
+# Note: Intel C++ compiler for C++20 + HPC extensions required!
+# ======================================================================
+
+cmake_minimum_required(VERSION 3.29)
+
+project(open-csmp 
+        VERSION 23 
+        DESCRIPTION "OpenCSMP library from GitLab repository" 
+        LANGUAGES CXX)
+
+# Set C++20 as the standard
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS ON)
+
+# Force Visual Studio generator
+if(NOT CMAKE_GENERATOR MATCHES "Visual Studio")
+    message(FATAL_ERROR "This CMakeLists.txt is configured for Visual Studio generator only.")
+endif()
+
+# ======================================================================
+# Set Intel oneAPI DPC++/C++ Compiler
+# ======================================================================
+find_program(ICX_COMPILER icx 
+    HINTS 
+        "C:/Program Files (x86)/Intel/oneAPI/compiler/latest/bin"
+        "C:/Program Files/Intel/oneAPI/compiler/latest/bin"
+    NO_DEFAULT_PATH
+)
+if(NOT ICX_COMPILER)
+    message(FATAL_ERROR "Intel oneAPI DPC++/C++ Compiler (icx) not found. Ensure Intel oneAPI is installed and setvars.bat is run.")
+endif()
+message(STATUS "Found icx at: ${ICX_COMPILER}")
+set(CMAKE_CXX_COMPILER "${ICX_COMPILER}")
+execute_process(
+    COMMAND "${ICX_COMPILER}" --version
+    OUTPUT_VARIABLE ICX_VERSION_OUTPUT
+    RESULT_VARIABLE ICX_VERSION_RESULT
+)
+if(ICX_VERSION_RESULT EQUAL 0)
+    message(STATUS "icx version: ${ICX_VERSION_OUTPUT}")
+else()
+    message(FATAL_ERROR "Failed to run icx --version. Ensure icx is executable.")
+endif()
+# if(NOT CMAKE_CXX_COMPILER_ID MATCHES "Intel")
+#    message(FATAL_ERROR "Intel oneAPI DPC++/C++ Compiler (icx) is required. Current compiler: ${CMAKE_CXX_COMPILER_ID} (${CMAKE_CXX_COMPILER})")
+# endif()
+
+# Set Release mode with processor-specific optimizations
+set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /O3 /xHost /Qipo" CACHE STRING "Release flags for Intel compiler")
+
+
+# ======================================================================
+# Enable MPI support
+# ======================================================================
+find_package(MPI REQUIRED)
+if(NOT MPI_CXX_FOUND)
+    message(FATAL_ERROR "MPI is required but not found. Ensure Intel MPI or MS-MPI is installed.")
+endif()
+message(STATUS "MPI found: ${MPI_CXX_LIBRARIES}")
+
+
+# ======================================================================
+# Enable SAMG solver
+# ======================================================================
+set(samg ON CACHE BOOL "Enable SAMG Solver")
+if(NOT samg)
+    message(FATAL_ERROR "SAMG solver is required for this build configuration.")
+endif()
+
+
+# ======================================================================
+# Enable testing
+# ======================================================================
+include(CTest)
+enable_testing()
+
+
+# ======================================================================
+# Define library source and header files
+# ======================================================================
+file(GLOB_RECURSE LIBRARY_SOURCE_FILES CONFIGURE_DEPENDS
+    "${CMAKE_SOURCE_DIR}/source/modules/*.cpp"
+    "${CMAKE_SOURCE_DIR}/source/modules/*.h"
+    "${CMAKE_SOURCE_DIR}/source/includes/*.h"
+    "${CMAKE_SOURCE_DIR}/thirdparty/plf_colony/plf_colony.h"
+)
+list(FILTER LIBRARY_SOURCE_FILES EXCLUDE REGEX "${CMAKE_SOURCE_DIR}/source/modules/deprecated/.*")
+list(FILTER LIBRARY_SOURCE_FILES EXCLUDE REGEX "${CMAKE_SOURCE_DIR}/source/includes/deprecated/.*")
+# message(STATUS "LIBRARY_SOURCE_FILES: ${LIBRARY_SOURCE_FILES}")
+
+# Third-party libraries
+# ======================================================================
+
+# Include SAMG files
+# ======================================================================
+file(GLOB SAMG_FILES CONFIGURE_DEPENDS
+    "${CMAKE_SOURCE_DIR}/thirdparty/samg/samg.h"
+    "${CMAKE_SOURCE_DIR}/thirdparty/samg/samg[1-5].h"
+    "${CMAKE_SOURCE_DIR}/source/includes/integration/solver/SAMG_*.h"
+    "${CMAKE_SOURCE_DIR}/source/modules/integration/solver/SAMG_*.cpp"
+    "${CMAKE_SOURCE_DIR}/source/modules/integration/solver/SAMG_profiles/*.h"
+    "${CMAKE_SOURCE_DIR}/source/modules/integration/solver/SAMG_profiles/*.cpp"
+    RECURSE
+)
+list(FILTER SAMG_FILES EXCLUDE REGEX "SAMG_Configurator\\.cpp$")
+list(FILTER SAMG_FILES EXCLUDE REGEX "SAMG_Configurator\\.h$")
+
+# Function to extract unique directory names
+function(get_directories result)
+    set(dir_list "")
+    foreach(file_path ${ARGN})
+        get_filename_component(dir_path ${file_path} DIRECTORY)
+        list(APPEND dir_list ${dir_path})
+    endforeach()
+    list(REMOVE_DUPLICATES dir_list)
+    set(${result} ${dir_list} PARENT_SCOPE)
+endfunction()
+
+# Get header directories
+get_directories(HEADER_DIRECTORIES ${LIBRARY_SOURCE_FILES} ${SAMG_FILES})
+
+# Variable sets
+set(VARIABLE_INDEX_SETS
+    "${CMAKE_SOURCE_DIR}/../VariableSet_TracerTransfer.h"
+    "${CMAKE_SOURCE_DIR}/../VariableSet_TwoPhaseFlow.h"
+    "${CMAKE_SOURCE_DIR}/../VariableSet_CO2GeoSequestration.h"
+)
+
+
+# ======================================================================
+# IAPS H2O EOS
+# ======================================================================
+file(GLOB IAPS_H2O_EOS_SOURCE_FILES CONFIGURE_DEPENDS
+    "${CMAKE_SOURCE_DIR}/thirdparty/iaps_h2o_eos/*.cpp"
+    RECURSE
+)
+list(FILTER IAPS_H2O_EOS_SOURCE_FILES EXCLUDE REGEX "thirdparty/iaps_h2o_eos/deprecated/.*")
+add_library(iaps_h2o_eos STATIC ${IAPS_H2O_EOS_SOURCE_FILES})
+target_include_directories(iaps_h2o_eos PUBLIC "${CMAKE_SOURCE_DIR}/thirdparty/iaps_h2o_eos")
+
+
+# ======================================================================
+# JPEG
+# ======================================================================
+file(GLOB JPEG_SOURCE_FILES CONFIGURE_DEPENDS
+    "${CMAKE_SOURCE_DIR}/thirdparty/jpeg/*.cpp"
+    RECURSE
+)
+list(FILTER JPEG_SOURCE_FILES EXCLUDE REGEX "thirdparty/jpeg/deprecated/.*")
+add_library(jpeg STATIC ${JPEG_SOURCE_FILES})
+target_include_directories(jpeg PUBLIC "${CMAKE_SOURCE_DIR}/thirdparty/jpeg")
+
+
+# ======================================================================
+# Eigen
+# ======================================================================
+set(EIGEN_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/thirdparty/eigen")
+file(GLOB EIGEN_FILES CONFIGURE_DEPENDS
+    "${EIGEN_INCLUDE_DIR}/Eigen/*.h"
+    RECURSE
+)
+list(FILTER EIGEN_FILES EXCLUDE REGEX "${EIGEN_INCLUDE_DIR}/Eigen/deprecated/.*")
+
+
+# ======================================================================
+# CGNS
+# ======================================================================
+add_library(cgns INTERFACE)
+target_include_directories(cgns INTERFACE "${CMAKE_SOURCE_DIR}/thirdparty/cgns")
+
+
+# ======================================================================
+# RapidXML
+# ======================================================================
+add_library(rapidxml INTERFACE)
+target_include_directories(rapidxml INTERFACE "${CMAKE_SOURCE_DIR}/thirdparty/rapidxml")
+
+
+# ======================================================================
+# Catch2 (not included into distribution)
+# ======================================================================
+# Fetch via FetchContent (recommended for automation)
+# include(FetchContent)
+# FetchContent_Declare(
+#     Catch2
+#    GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+#    GIT_TAG v3.7.1  # Use latest stable tag
+#    GIT_SUBMODULES ""  # Disable submodules to avoid update errors
+# )
+# FetchContent_MakeAvailable(Catch2)
+
+# Verify Catch2 include path
+# set(CATCH2_INCLUDE_DIR "${CMAKE_BINARY_DIR}/_deps/catch2-src/extras")
+# if(EXISTS "${CATCH2_INCLUDE_DIR}/catch_amalgamated.hpp")
+#    message(STATUS "Found catch_amalgamated.hpp at: ${CATCH2_INCLUDE_DIR}")
+# else()
+#     message(FATAL_ERROR "catch_amalgamated.hpp not found in ${CATCH2_INCLUDE_DIR}")
+# endif()
+
+
+# ======================================================================
+# Tests
+# ======================================================================
+# Collect source files (only .cpp) recursively
+file(GLOB_RECURSE UNIT_TEST_SOURCES
+    "${CMAKE_SOURCE_DIR}/tests/Test.h"
+    "${CMAKE_SOURCE_DIR}/tests/TestSuite.h"
+    "${CMAKE_SOURCE_DIR}/tests/unit/*.h"
+    "${CMAKE_SOURCE_DIR}/tests/integration/*.h"
+    "${CMAKE_SOURCE_DIR}/tests/Test.cpp"
+    "${CMAKE_SOURCE_DIR}/tests/TestSuite.cpp"
+    "${CMAKE_SOURCE_DIR}/tests/unit/*.cpp"
+    "${CMAKE_SOURCE_DIR}/tests/integration/*.cpp"
+)
+# Exclude deprecated files
+list(FILTER UNIT_TEST_SOURCES EXCLUDE REGEX "tests/unit/deprecated/.*")
+list(FILTER UNIT_TEST_SOURCES EXCLUDE REGEX "tests/unit_tests_catch.*")
+list(FILTER UNIT_TEST_SOURCES EXCLUDE REGEX "tests/unit_tests_development.*")
+list(FILTER UNIT_TEST_SOURCES EXCLUDE REGEX "tests/unit_tests_main.*")
+
+# Define the executable with source files
+add_executable(open-csmp-tests
+    "${CMAKE_SOURCE_DIR}/tests/SKM_unit_tests_main.cpp"
+    ${UNIT_TEST_SOURCES}
+)
+
+# Set include directories for headers
+target_include_directories(open-csmp-tests
+    PRIVATE
+        "${CMAKE_SOURCE_DIR}/tests"
+        "${CMAKE_SOURCE_DIR}/tests/unit"
+        "${CMAKE_SOURCE_DIR}/tests/integration"
+        ${HEADER_DIRECTORIES}
+        ${EIGEN_INCLUDE_DIR}
+        ${MPI_CXX_INCLUDE_DIRS}
+)
+
+# Link libraries
+target_link_libraries(open-csmp-tests
+    PRIVATE
+        open-csmp-core
+        ${MPI_CXX_LIBRARIES}
+)
+
+
+# ======================================================================
+# SAMG libraries for Windows
+# ======================================================================
+set(SAMG_LIB_PATH "${CMAKE_SOURCE_DIR}/thirdparty/samg/windows")
+find_library(SAMG_LIB NAMES amg_mult_dyn HINTS "${SAMG_LIB_PATH}")
+find_library(OMP_LIB NAMES iomp5md HINTS "${SAMG_LIB_PATH}")
+if(NOT SAMG_LIB)
+    message(FATAL_ERROR "SAMG library not found at ${SAMG_LIB_PATH}/libamg_mult.lib")
+endif()
+if(NOT OMP_LIB)
+    message(FATAL_ERROR "OpenMP library not found at ${SAMG_LIB_PATH}/libiomp5.lib")
+endif()
+
+
+# ======================================================================
+# Main library
+# ======================================================================
+add_library(open-csmp-core STATIC
+    ${LIBRARY_SOURCE_FILES}
+    ${SAMG_FILES}
+    ${VARIABLE_INDEX_SETS}
+    ${EIGEN_FILES}
+)
+target_include_directories(open-csmp-core
+    PUBLIC
+        "${CMAKE_SOURCE_DIR}/.."
+        ${EIGEN_INCLUDE_DIR}
+        ${HEADER_DIRECTORIES}
+        ${MPI_CXX_INCLUDE_DIRS}
+)
+target_link_libraries(open-csmp-core
+    PUBLIC
+        iaps_h2o_eos
+        jpeg
+        cgns
+        rapidxml
+        ${SAMG_LIB}
+        ${OMP_LIB}
+        ${MPI_CXX_LIBRARIES}
+)
+target_compile_definitions(open-csmp-core
+    PUBLIC
+        CSMP_WITH_SAMG_SOLVER
+        SAMG_MULTIPLE_INSTANCES
+        PYRAMID_TRIANGULAR_FACETS
+        LEGACY_SAMG
+        _MPI
+)
+
+
+# ======================================================================
+#     CSMP++ Examples
+# ======================================================================
+file(GLOB EXAMPLES_SOURCE_FILES CONFIGURE_DEPENDS
+    "${CMAKE_SOURCE_DIR}/examples/source/*.h"
+    "${CMAKE_SOURCE_DIR}/examples/source/*.cpp"
+    "${CMAKE_SOURCE_DIR}/examples/source/interrelations/*.h"
+    "${CMAKE_SOURCE_DIR}/examples/source/interrelations/*.cpp"
+    "${CMAKE_SOURCE_DIR}/examples/source/visitors/*.h"
+    "${CMAKE_SOURCE_DIR}/examples/source/visitors/*.cpp"
+    "${CMAKE_SOURCE_DIR}/tests/Test.*"
+    "${CMAKE_SOURCE_DIR}/tests/TestSuite.*"
+    RECURSE
+)
+
+add_executable(open-csmp-examples ${EXAMPLES_SOURCE_FILES})
+target_include_directories(open-csmp-examples
+    PRIVATE
+        ${HEADER_DIRECTORIES}
+        ${EIGEN_INCLUDE_DIR}
+#        "${CMAKE_SOURCE_DIR}/thirdparty/Catch2/src"
+#        "${CMAKE_SOURCE_DIR}/thirdparty/Catch2/src/catch2"
+        "${CMAKE_SOURCE_DIR}/tests"        
+        "${CMAKE_SOURCE_DIR}/examples/source"
+        "${CMAKE_SOURCE_DIR}/examples/source/visitors"
+        "${CMAKE_SOURCE_DIR}/examples/source/interrelations"
+        ${MPI_CXX_INCLUDE_DIRS}
+)
+target_link_libraries(open-csmp-examples
+    PRIVATE
+        open-csmp-core
+        iaps_h2o_eos
+        ${MPI_CXX_LIBRARIES}
+)
+
+
+# ======================================================================
+#     DFM and (geologic) Fault modelling tools
+# ======================================================================
+file(GLOB DFM_MODELLING_SOURCE_FILES CONFIGURE_DEPENDS
+    "${CMAKE_SOURCE_DIR}/DFM_and_fault_modelling/main/*.cpp"
+    "${CMAKE_SOURCE_DIR}/DFM_and_fault_modelling/source/*.h"
+    "${CMAKE_SOURCE_DIR}/DFM_and_fault_modelling/source/*.cpp"
+    "${CMAKE_SOURCE_DIR}/tests/Test.*"
+    "${CMAKE_SOURCE_DIR}/tests/TestSuite.*"
+    RECURSE
+)
+# Exclude deprecated files
+list(FILTER DFM_MODELLING_SOURCE_FILES EXCLUDE REGEX "DFM_and_fault_modelling/source/DFM_Simulator_UnitTest_main.*")
+list(FILTER DFM_MODELLING_SOURCE_FILES EXCLUDE REGEX "tests/unit_tests_catch.*")
+list(FILTER DFM_MODELLING_SOURCE_FILES EXCLUDE REGEX "tests/unit_tests_development.*")
+list(FILTER DFM_MODELLING_SOURCE_FILES EXCLUDE REGEX "tests/unit_tests_main.*")
+
+add_executable(csmp-DFM-modelling ${DFM_MODELLING_SOURCE_FILES})
+target_include_directories(csmp-DFM-modelling
+    PRIVATE
+        ${HEADER_DIRECTORIES}
+        ${EIGEN_INCLUDE_DIR}
+        "${CMAKE_SOURCE_DIR}/tests"        
+        "${CMAKE_SOURCE_DIR}/DFM_and_fault_modelling/main"
+        "${CMAKE_SOURCE_DIR}/DFM_and_fault_modelling/source"
+        ${MPI_CXX_INCLUDE_DIRS}
+)
+target_link_libraries(csmp-DFM-modelling
+    PRIVATE
+        open-csmp-core
+        ${MPI_CXX_LIBRARIES}
+)
+
+
+# ======================================================================
+#     FECFVM Simulator (Shaho Bazr-Afkan)
+# ======================================================================
+file(GLOB FECFVM_SOURCE_FILES CONFIGURE_DEPENDS
+    "${CMAKE_SOURCE_DIR}/FECFVM_simulator/*main.cpp"
+    "${CMAKE_SOURCE_DIR}/FECFVM_simulator/includes/*.h"
+    "${CMAKE_SOURCE_DIR}/FECFVM_simulator/modules/*.cpp"
+    "${CMAKE_SOURCE_DIR}/tests/Test.*"
+    "${CMAKE_SOURCE_DIR}/tests/TestSuite.*"
+    RECURSE
+)
+# Exclude deprecated files
+list(FILTER FECFVM_SOURCE_FILES EXCLUDE REGEX "FECFVM_simulator/functionalityTesting_main.*")
+list(FILTER FECFVM_SOURCE_FILES EXCLUDE REGEX "tests/unit_tests_catch.*")
+list(FILTER FECFVM_SOURCE_FILES EXCLUDE REGEX "tests/unit_tests_development.*")
+list(FILTER FECFVM_SOURCE_FILES EXCLUDE REGEX "tests/unit_tests_main.*")
+
+add_executable(FECFVM-simulator ${FECFVM_SOURCE_FILES})
+target_include_directories(FECFVM-simulator
+    PRIVATE
+        ${HEADER_DIRECTORIES}
+        ${EIGEN_INCLUDE_DIR}
+        "${CMAKE_SOURCE_DIR}/tests"        
+        "${CMAKE_SOURCE_DIR}/FECFVM_simulator/includes"
+        "${CMAKE_SOURCE_DIR}/FECFVM_simulator/modules"
+        ${MPI_CXX_INCLUDE_DIRS}
+)
+target_link_libraries(FECFVM-simulator
+    PRIVATE
+        open-csmp-core
+        ${MPI_CXX_LIBRARIES}
+)
+
+
+
+# ======================================================================
+# Install targets (open-csmp-2024/build/Debug, build/Release)
+# ======================================================================
+
+install(TARGETS open-csmp-core
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+    RUNTIME DESTINATION bin
+)
+install(TARGETS open-csmp-examples
+    RUNTIME DESTINATION bin
+)
+install(TARGETS open-csmp-tests
+    RUNTIME DESTINATION bin
+)
+install(TARGETS csmp-DFM-modelling
+    RUNTIME DESTINATION bin
+)
+install(TARGETS FECFVM-simulator
+    RUNTIME DESTINATION bin
+)
+install(DIRECTORY "${CMAKE_SOURCE_DIR}/source/includes/"
+    DESTINATION include/open-csmp
+    FILES_MATCHING PATTERN "*.h"
+)
+install(DIRECTORY "${CMAKE_SOURCE_DIR}/examples/example_inputs/"
+    DESTINATION example_inputs
+    FILES_MATCHING PATTERN "*"
+)
+install(DIRECTORY "${CMAKE_SOURCE_DIR}/continuous_integration_testing/"
+    DESTINATION continuous_integration_testing
+    FILES_MATCHING PATTERN "*"
+)
+
+
+# ======================================================================
+# Enable IPO for all targets (Linker cross-file optimisations)
+# ======================================================================
+
+include(CheckIPOSupported)
+check_ipo_supported(RESULT ipo_result)
+if(ipo_result)
+    set_target_properties(open-csmp-core open-csmp-examples open-csmp-tests csmp-DFM-modelling FECFVM-simulator
+        PROPERTIES INTERPROCEDURAL_OPTIMIZATION TRUE)
+endif()
+
+# Add tests to CTest
+add_test(NAME UnitTests COMMAND open-csmp-tests)

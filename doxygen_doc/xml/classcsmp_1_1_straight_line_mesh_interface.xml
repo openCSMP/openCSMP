@@ -1,0 +1,195 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_straight_line_mesh_interface" kind="class" language="C++" prot="public">
+    <compoundname>csmp::StraightLineMeshInterface</compoundname>
+    <includes refid="_straight_line_mesh_interface_8h" local="no">StraightLineMeshInterface.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_straight_line_mesh_interface_1a5abb47c4daad170861e3c23a02224f59" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_v_set" kindref="compound">csmp::VSet</ref>&lt; dim &gt; *</type>
+        <definition>csmp::VSet&lt;dim&gt;* csmp::StraightLineMeshInterface&lt; dim &gt;::vset_</definition>
+        <argsstring></argsstring>
+        <name>vset_</name>
+        <qualifiedname>csmp::StraightLineMeshInterface::vset_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/StraightLineMeshInterface.h" line="39" column="17" bodyfile="source/includes/interfaces/StraightLineMeshInterface.h" bodystart="39" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_straight_line_mesh_interface_1ae732cc4f1d70cd278c1ee69282cf2dc7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::StraightLineMeshInterface&lt; dim &gt;::StraightLineMeshInterface</definition>
+        <argsstring>()</argsstring>
+        <name>StraightLineMeshInterface</name>
+        <qualifiedname>csmp::StraightLineMeshInterface::StraightLineMeshInterface</qualifiedname>
+        <briefdescription>
+<para>creates mesh based on the parameters provided in text file &quot;*-mesh.txt&quot; </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/StraightLineMeshInterface.h" line="20" column="5" bodyfile="source/modules/interfaces/StraightLineMeshInterface.cpp" bodystart="13" bodyend="15"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_straight_line_mesh_interface_1a15bc7202487063a62a82a7181daa0ec9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::StraightLineMeshInterface&lt; dim &gt;::StraightLineMeshInterface</definition>
+        <argsstring>(csmp::VSet&lt; dim &gt; &amp;vset, const std::string &amp;mesh_file)</argsstring>
+        <name>StraightLineMeshInterface</name>
+        <qualifiedname>csmp::StraightLineMeshInterface::StraightLineMeshInterface</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">csmp::VSet</ref>&lt; dim &gt; &amp;</type>
+          <declname>vset</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>mesh_file</declname>
+        </param>
+        <briefdescription>
+<para>creates mesh based on the parameters provided in text file </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/StraightLineMeshInterface.h" line="23" column="5" bodyfile="source/modules/interfaces/StraightLineMeshInterface.cpp" bodystart="19" bodyend="23"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_straight_line_mesh_interface_1ad32f66b00b69ecbc8c8f63fe310027be" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::StraightLineMeshInterface&lt; dim &gt;::WriteInfoFile</definition>
+        <argsstring>()</argsstring>
+        <name>WriteInfoFile</name>
+        <qualifiedname>csmp::StraightLineMeshInterface::WriteInfoFile</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/StraightLineMeshInterface.h" line="25" column="10" bodyfile="source/modules/interfaces/StraightLineMeshInterface.cpp" bodystart="29" bodyend="50"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_straight_line_mesh_interface_1a0f98daed679475361c2fa617df07bb54" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::StraightLineMeshInterface&lt; dim &gt;::WriteSampleFile</definition>
+        <argsstring>(std::ofstream &amp;ofs)</argsstring>
+        <name>WriteSampleFile</name>
+        <qualifiedname>csmp::StraightLineMeshInterface::WriteSampleFile</qualifiedname>
+        <param>
+          <type>std::ofstream &amp;</type>
+          <declname>ofs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/StraightLineMeshInterface.h" line="30" column="10" bodyfile="source/modules/interfaces/StraightLineMeshInterface.cpp" bodystart="54" bodyend="159"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_straight_line_mesh_interface_1a53fd6134562034ba6d99a813780b4855" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::StraightLineMeshInterface&lt; dim &gt;::Initialize</definition>
+        <argsstring>(csmp::VSet&lt; dim &gt; &amp;vset, const std::string &amp;mesh_file)</argsstring>
+        <name>Initialize</name>
+        <qualifiedname>csmp::StraightLineMeshInterface::Initialize</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">csmp::VSet</ref>&lt; dim &gt; &amp;</type>
+          <declname>vset</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>mesh_file</declname>
+          <defname>fname</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Builds <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> based on the information in text file <simplesect kind="author"><para>R. Manasipov </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/StraightLineMeshInterface.h" line="32" column="10" bodyfile="source/modules/interfaces/StraightLineMeshInterface.cpp" bodystart="168" bodyend="203"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_straight_line_mesh_interface_1a8e916b678dab4f901b6b31894e9b4c98" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::StraightLineMeshInterface&lt; dim &gt;::ReadMesh</definition>
+        <argsstring>(std::ifstream &amp;ifs, char *text_line, size_t line_length, std::set&lt; std::string &gt; &amp;keywords, std::string &amp;keyword, std::vector&lt; std::string &gt; &amp;keyword_params)</argsstring>
+        <name>ReadMesh</name>
+        <qualifiedname>csmp::StraightLineMeshInterface::ReadMesh</qualifiedname>
+        <param>
+          <type>std::ifstream &amp;</type>
+          <declname>ifs</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>text_line</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>line_length</declname>
+        </param>
+        <param>
+          <type>std::set&lt; std::string &gt; &amp;</type>
+          <declname>keywords</declname>
+        </param>
+        <param>
+          <type>std::string &amp;</type>
+          <declname>keyword</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; std::string &gt; &amp;</type>
+          <declname>keyword_params</declname>
+        </param>
+        <briefdescription>
+<para>Generic function which reads blocks of data marked by keyword. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/StraightLineMeshInterface.h" line="35" column="10" bodyfile="source/modules/interfaces/StraightLineMeshInterface.cpp" bodystart="209" bodyend="387"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Creates mesh based on the parameters provided in text file &quot;*-mesh.txt&quot;. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>R. Manasipov </para>
+</simplesect>
+<simplesect kind="date"><para>2014 </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::StraightLineMeshInterface&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_straight_line_mesh_interface"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/interfaces/StraightLineMeshInterface.h" line="16" column="1" bodyfile="source/includes/interfaces/StraightLineMeshInterface.h" bodystart="16" bodyend="40"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_straight_line_mesh_interface_1a53fd6134562034ba6d99a813780b4855" prot="private" virt="non-virtual"><scope>csmp::StraightLineMeshInterface</scope><name>Initialize</name></member>
+      <member refid="classcsmp_1_1_straight_line_mesh_interface_1a8e916b678dab4f901b6b31894e9b4c98" prot="private" virt="non-virtual"><scope>csmp::StraightLineMeshInterface</scope><name>ReadMesh</name></member>
+      <member refid="classcsmp_1_1_straight_line_mesh_interface_1ae732cc4f1d70cd278c1ee69282cf2dc7" prot="public" virt="non-virtual"><scope>csmp::StraightLineMeshInterface</scope><name>StraightLineMeshInterface</name></member>
+      <member refid="classcsmp_1_1_straight_line_mesh_interface_1a15bc7202487063a62a82a7181daa0ec9" prot="public" virt="non-virtual"><scope>csmp::StraightLineMeshInterface</scope><name>StraightLineMeshInterface</name></member>
+      <member refid="classcsmp_1_1_straight_line_mesh_interface_1a5abb47c4daad170861e3c23a02224f59" prot="private" virt="non-virtual"><scope>csmp::StraightLineMeshInterface</scope><name>vset_</name></member>
+      <member refid="classcsmp_1_1_straight_line_mesh_interface_1ad32f66b00b69ecbc8c8f63fe310027be" prot="public" virt="non-virtual"><scope>csmp::StraightLineMeshInterface</scope><name>WriteInfoFile</name></member>
+      <member refid="classcsmp_1_1_straight_line_mesh_interface_1a0f98daed679475361c2fa617df07bb54" prot="private" virt="non-virtual"><scope>csmp::StraightLineMeshInterface</scope><name>WriteSampleFile</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,166 @@
+\doxysection{csmp\+::Element\+To\+Node\+Property\+Visitor\texorpdfstring{$<$}{<} Var, dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_element_to_node_property_visitor}{}\label{classcsmp_1_1_element_to_node_property_visitor}\index{csmp::ElementToNodePropertyVisitor$<$ Var, dim $>$@{csmp::ElementToNodePropertyVisitor$<$ Var, dim $>$}}
+
+
+replaces value of property a with propery b  
+
+
+
+
+{\ttfamily \#include $<$Element\+To\+Node\+Property\+Visitor.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Element\+To\+Node\+Property\+Visitor\texorpdfstring{$<$}{<} Var, dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=244pt]{classcsmp_1_1_element_to_node_property_visitor__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Element\+To\+Node\+Property\+Visitor\texorpdfstring{$<$}{<} Var, dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=244pt]{classcsmp_1_1_element_to_node_property_visitor__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_element_to_node_property_visitor_a03a2ee308fc8d5ede80c2ab6ff242eae}{Element\+To\+Node\+Property\+Visitor}} (const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&p, const char \texorpdfstring{$\ast$}{*}elmt\+\_\+prop, const char \texorpdfstring{$\ast$}{*}node\+\_\+prop, size\+\_\+t nodes)
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_element_to_node_property_visitor_ab5866420246629ee7d269eb4c61806be}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\begin{DoxyCompactList}\small\item\em second application cycle (weighting) \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_element_to_node_property_visitor_a19fd6af6adf383da7d46876b965c9b1e}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\begin{DoxyCompactList}\small\item\em first application cycle (extrapolation) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_element_to_node_property_visitor_a63749e3d01a6cb44c6e58ca3674c3484}\label{classcsmp_1_1_element_to_node_property_visitor_a63749e3d01a6cb44c6e58ca3674c3484} 
+void {\bfseries Apply\+Weighting\+To\+Extrapolated\+Values} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_visitor_a1097abaa59d3a35d65c0cb6335e2719c}{Visitor}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} level=MODEL, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} target=ELEMENT)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_visitor_a04cef3d343b9721c4d636f5496ccfa42}{Application\+Level}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} p)
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Application\+Level} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_visitor_a05b9c8127e47ce0ca524e2804c14251a}{Application\+Target}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} p)
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Application\+Target} () const
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a005bb17978ed03376bc3f7c1c329c936}{Set\+Initial\+Properties}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}model)
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a07433f464353062d91f21684b9378dec}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_ac71cf14aab11139d8b03b39d4e4709bc}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_region}{Region}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_ac735e758870331b6639ea969504c47bf}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_boundary}{Boundary}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void {\bfseries Visit} (\mbox{\hyperlink{classcsmp_1_1_split_boundary}{Split\+Boundary}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_abdca6daa1802e3727868d2d614c65015}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_face}{Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a0f21f0cfcf5328584883eb38effb58d4}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void {\bfseries Visit} (\mbox{\hyperlink{classcsmp_1_1_edge}{Edge}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+bool {\bfseries Verbose} ()
+\item 
+void {\bfseries Verbose} (bool verbose)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries application\+\_\+level\+\_\+}
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries application\+\_\+target\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename Var, uint32\+\_\+t dim$>$\newline
+class csmp\+::\+Element\+To\+Node\+Property\+Visitor$<$ Var, dim $>$}
+replaces value of property a with propery b 
+
+\label{doc-constructors}
+\Hypertarget{classcsmp_1_1_element_to_node_property_visitor_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcsmp_1_1_element_to_node_property_visitor_a03a2ee308fc8d5ede80c2ab6ff242eae}\index{csmp::ElementToNodePropertyVisitor$<$ Var, dim $>$@{csmp::ElementToNodePropertyVisitor$<$ Var, dim $>$}!ElementToNodePropertyVisitor@{ElementToNodePropertyVisitor}}
+\index{ElementToNodePropertyVisitor@{ElementToNodePropertyVisitor}!csmp::ElementToNodePropertyVisitor$<$ Var, dim $>$@{csmp::ElementToNodePropertyVisitor$<$ Var, dim $>$}}
+\doxysubsubsection{\texorpdfstring{ElementToNodePropertyVisitor()}{ElementToNodePropertyVisitor()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_element_to_node_property_visitor_a03a2ee308fc8d5ede80c2ab6ff242eae} 
+template$<$typename Var, uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_element_to_node_property_visitor}{csmp\+::\+Element\+To\+Node\+Property\+Visitor}}$<$ Var, dim $>$\+::\+Element\+To\+Node\+Property\+Visitor (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&}]{p}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{elmt\+\_\+prop}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{node\+\_\+prop}{, }\item[{size\+\_\+t}]{nodes}{}\end{DoxyParamCaption})}
+
+Steps\+:
+
+
+\begin{DoxyItemize}
+\item \doxylink{classcsmp_1_1_visitor}{Visitor} requires all nodes in the mesh to be numbered consecutively
+\item the target node property has to be set to zero prior to the accumulation
+\item Values are interpolated to nodes where these are accumulated
+\item the nodal contributions are weighted by the distance of the element barycenter to each node (all weights are summed so that the absolute value can be rectified once the accumulation is complete). 
+\end{DoxyItemize}Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=264pt]{classcsmp_1_1_element_to_node_property_visitor_a03a2ee308fc8d5ede80c2ab6ff242eae_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=264pt]{classcsmp_1_1_element_to_node_property_visitor_a03a2ee308fc8d5ede80c2ab6ff242eae_icgraph}
+\end{center}
+\end{figure}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_element_to_node_property_visitor_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_element_to_node_property_visitor_a19fd6af6adf383da7d46876b965c9b1e}\index{csmp::ElementToNodePropertyVisitor$<$ Var, dim $>$@{csmp::ElementToNodePropertyVisitor$<$ Var, dim $>$}!Visit@{Visit}}
+\index{Visit@{Visit}!csmp::ElementToNodePropertyVisitor$<$ Var, dim $>$@{csmp::ElementToNodePropertyVisitor$<$ Var, dim $>$}}
+\doxysubsubsection{\texorpdfstring{Visit()}{Visit()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_element_to_node_property_visitor_a19fd6af6adf383da7d46876b965c9b1e} 
+template$<$typename Var, uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_element_to_node_property_visitor}{csmp\+::\+Element\+To\+Node\+Property\+Visitor}}$<$ Var, dim $>$\+::\+Visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}}]{eptr}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+first application cycle (extrapolation) 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}.
+
+\Hypertarget{classcsmp_1_1_element_to_node_property_visitor_ab5866420246629ee7d269eb4c61806be}\index{csmp::ElementToNodePropertyVisitor$<$ Var, dim $>$@{csmp::ElementToNodePropertyVisitor$<$ Var, dim $>$}!Visit@{Visit}}
+\index{Visit@{Visit}!csmp::ElementToNodePropertyVisitor$<$ Var, dim $>$@{csmp::ElementToNodePropertyVisitor$<$ Var, dim $>$}}
+\doxysubsubsection{\texorpdfstring{Visit()}{Visit()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_element_to_node_property_visitor_ab5866420246629ee7d269eb4c61806be} 
+template$<$typename Var, uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_element_to_node_property_visitor}{csmp\+::\+Element\+To\+Node\+Property\+Visitor}}$<$ Var, dim $>$\+::\+Visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}}]{nptr}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+second application cycle (weighting) 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/model/Element\+To\+Node\+Property\+Visitor.\+h\item 
+source/modules/model/Element\+To\+Node\+Property\+Visitor.\+cpp\end{DoxyCompactItemize}

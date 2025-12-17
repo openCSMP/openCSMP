@@ -1,0 +1,114 @@
+\doxysection{Pillar.\+h}
+\hypertarget{_pillar_8h_source}{}\label{_pillar_8h_source}\index{source/includes/interfaces/Eclipse/Pillar.h@{source/includes/interfaces/Eclipse/Pillar.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{PILLAR\_UOM\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{PILLAR\_UOM\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_point_8h}{"{}Point.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{map}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00010\ \textcolor{comment}{}}
+\DoxyCodeLine{00011\ \textcolor{comment}{@class\ Pillar\ \ Pillar\ "{}Pillar.h"{}}}
+\DoxyCodeLine{00012\ \textcolor{comment}{@author\ R.\ Manasipov}}
+\DoxyCodeLine{00013\ \textcolor{comment}{@author\ A.J.\ Bromage}}
+\DoxyCodeLine{00014\ \textcolor{comment}{@date\ 2015-\/2017}}
+\DoxyCodeLine{00015\ \textcolor{comment}{}}
+\DoxyCodeLine{00016\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00017\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_pillar}{Pillar}}\ \{}
+\DoxyCodeLine{00018\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \ \ Pillar();}
+\DoxyCodeLine{00021\ \ \ \ \ Pillar(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_point}{Point}}<3U>\&\ pStart,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_point}{Point}}<3U>\&\ pEnd\ );}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \ \ \string~Pillar();}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{comment}{///\ reserve\ capacity}}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_pillar_ab1f0d6dee24d5ed6dc49cde2c9d710a1}{Reserve}}(\ size\_t\ zpoints\ );}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{comment}{///\ beads\ on\ the\ pillar}}
+\DoxyCodeLine{00029\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_pillar_ac075a56f71148ab397537eae1bd72782}{size\_t}}\ \mbox{\hyperlink{classcsmp_1_1_pillar_ac075a56f71148ab397537eae1bd72782}{GetNumPoints}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{comment}{///\ returns\ the\ starting\ point\ of\ the\ pillar\ at\ the\ smallest\ Z}}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<3>\&\ \mbox{\hyperlink{classcsmp_1_1_pillar_a235e77da1111ea8b8f1d3716d9770dcd}{StartPoint}}()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ start\_;\ \}}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{comment}{///\ returns\ the\ starting\ point\ of\ the\ pillar\ at\ the\ largest\ Z}}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<3>\&\ \mbox{\hyperlink{classcsmp_1_1_pillar_a57b661392e0bd343e60728a589ff5c20}{EndPoint}}()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ end\_;\ \}}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keywordtype}{void}\ AddZCoord(\ \textcolor{keywordtype}{double}\ z\ );}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordtype}{void}\ SetZCoords(\ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ zcoords\ );}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{double}\ GetZCoord(\ size\_t\ zid\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_point}{Point}}<3U>\ GetPoint(\ size\_t\ zid\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ size\_t\ FindPoint(\ \textcolor{keywordtype}{double}\ z\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordtype}{void}\ SetFirstNodeNum(size\_t\ node\_num);}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ size\_t\ FirstNodeNum()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{comment}{///\ prints\ the\ data\ stored\ in\ the\ pillar\ to\ screen}}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_pillar_ab0be3d462c6a34ba1dad4a13c610c061}{Out}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00055\ \ \ \ \ size\_t\ firstNodeNum\_;}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{comment}{///\ line\ equations}}
+\DoxyCodeLine{00058\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_point}{Point}}<3U>\ start\_;\ \ \textcolor{comment}{///\ start\ of\ line}}
+\DoxyCodeLine{00059\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_point}{Point}}<3U>\ end\_;\ \ \textcolor{comment}{///\ end\ of\ line}}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{comment}{///\ cells\ data}}
+\DoxyCodeLine{00062\ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\ \ points\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ points,\ called\ beads}}
+\DoxyCodeLine{00063\ \};}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \textcolor{keyword}{enum}\ \textcolor{keyword}{class}\ ECLIPSE\_CELL\_CLASSIFICATION\ :\ uint8\_t\ \{}
+\DoxyCodeLine{00067\ \ \ ECLIPSE\_CELL\_HEXAHEDRON,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0000}}
+\DoxyCodeLine{00068\ \ \ ECLIPSE\_CELL\_PYRAMIDS\_310\_312,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0001}}
+\DoxyCodeLine{00069\ \ \ ECLIPSE\_CELL\_PYRAMIDS\_201\_203,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0010}}
+\DoxyCodeLine{00070\ \ \ ECLIPSE\_CELL\_PRISM\_23,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0011}}
+\DoxyCodeLine{00071\ \ \ ECLIPSE\_CELL\_PYRAMIDS\_130\_132,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0100}}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \ \ ECLIPSE\_CELL\_TETRAHEDRONS\_130\_132,\ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0101}}
+\DoxyCodeLine{00074\ \ \ ECLIPSE\_CELL\_PRISM\_12,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0110}}
+\DoxyCodeLine{00075\ \ \ ECLIPSE\_CELL\_PYRAMID\_0,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0111}}
+\DoxyCodeLine{00076\ \ \ ECLIPSE\_CELL\_PYRAMIDS\_021\_023,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 1000}}
+\DoxyCodeLine{00077\ \ \ ECLIPSE\_CELL\_PRISM\_03,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 1001}}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ ECLIPSE\_CELL\_TETRAHEDRONS\_021\_023,\ \ \ \ \ \ \ \ \textcolor{comment}{//\ 1010}}
+\DoxyCodeLine{00080\ \ \ ECLIPSE\_CELL\_PYRAMID\_1,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 1011}}
+\DoxyCodeLine{00081\ \ \ ECLIPSE\_CELL\_PRISM\_01,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 1100}}
+\DoxyCodeLine{00082\ \ \ ECLIPSE\_CELL\_PYRAMID\_2,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 1101}}
+\DoxyCodeLine{00083\ \ \ ECLIPSE\_CELL\_PYRAMID\_3,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 1110}}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \ \ ECLIPSE\_CELL\_DEGENERATE\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 1111}}
+\DoxyCodeLine{00086\ \};}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \textcolor{comment}{///\ A\ column\ cell,\ in\ Eclipse\ convention\ ordering}}
+\DoxyCodeLine{00089\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}\ \{}
+\DoxyCodeLine{00090\ \ \ size\_t\ k;}
+\DoxyCodeLine{00091\ \ \ \textcolor{keywordtype}{bool}\ skew\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00092\ \ \ ECLIPSE\_CELL\_CLASSIFICATION\ classification;}
+\DoxyCodeLine{00093\ \ \ size\_t\ z[4][2];}
+\DoxyCodeLine{00094\ \};}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \textcolor{comment}{///\ A\ column}}
+\DoxyCodeLine{00097\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcsmp_1_1_column}{Column}}\ \{}
+\DoxyCodeLine{00098\ \ \ std::vector<ColumnCell>\ cells\_;}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \ \ Column(\textcolor{keyword}{const}\ std::vector<ColumnCell>\&\ cells)}
+\DoxyCodeLine{00101\ \ \ \ \ :\ cells\_(cells.begin(),\ cells.end())}
+\DoxyCodeLine{00102\ \ \ \{}
+\DoxyCodeLine{00103\ \ \ \}}
+\DoxyCodeLine{00104\ \};}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ \}\textcolor{comment}{//\ end\ namespace\ csmp}}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

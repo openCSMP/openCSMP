@@ -1,0 +1,1245 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_property_handle" kind="class" language="C++" prot="public">
+    <compoundname>csmp::PropertyHandle</compoundname>
+    <includes refid="_property_handle_8h" local="no">PropertyHandle.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_property_handle_1a4875ea9e9690482d3d29134a1a3498eb" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+        <definition>Model&lt;dim&gt;&amp; csmp::PropertyHandle&lt; dim &gt;::model_domain</definition>
+        <argsstring></argsstring>
+        <name>model_domain</name>
+        <qualifiedname>csmp::PropertyHandle::model_domain</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="229" column="21" bodyfile="source/includes/property_manipulation/PropertyHandle.h" bodystart="229" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_handle_1ae08e32a49cc0d1b5121d5e855975a840" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::PropertyHandle&lt; dim &gt;::group_name</definition>
+        <argsstring></argsstring>
+        <name>group_name</name>
+        <qualifiedname>csmp::PropertyHandle::group_name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="230" column="27" bodyfile="source/includes/property_manipulation/PropertyHandle.h" bodystart="230" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_handle_1aa359469490b74e58c2721e791c5b59fc" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_region" kindref="compound">Region</ref>&lt; dim &gt; &amp;</type>
+        <definition>Region&lt;dim&gt;&amp; csmp::PropertyHandle&lt; dim &gt;::group</definition>
+        <argsstring></argsstring>
+        <name>group</name>
+        <qualifiedname>csmp::PropertyHandle::group</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="231" column="21" bodyfile="source/includes/property_manipulation/PropertyHandle.h" bodystart="231" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_handle_1ade36122473189102d957b9ee451b95a4" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::PropertyHandle&lt; dim &gt;::var_name</definition>
+        <argsstring></argsstring>
+        <name>var_name</name>
+        <qualifiedname>csmp::PropertyHandle::var_name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="232" column="27" bodyfile="source/includes/property_manipulation/PropertyHandle.h" bodystart="232" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_handle_1abd4c562956ed4eae610b64236c5dfa04" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::PropertyHandle&lt; dim &gt;::key_</definition>
+        <argsstring></argsstring>
+        <name>key_</name>
+        <qualifiedname>csmp::PropertyHandle::key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="233" column="27" bodyfile="source/includes/property_manipulation/PropertyHandle.h" bodystart="233" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_handle_1aa82313ba4a3404e7cdd508f5acd689ad" prot="private" static="no" mutable="no">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref></type>
+        <definition>VARIABLE_FLAG csmp::PropertyHandle&lt; dim &gt;::flag_output</definition>
+        <argsstring></argsstring>
+        <name>flag_output</name>
+        <qualifiedname>csmp::PropertyHandle::flag_output</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="234" column="27" bodyfile="source/includes/property_manipulation/PropertyHandle.h" bodystart="234" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_handle_1a4275282dc45e11ce1720049e562f39f3" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::PropertyHandle&lt; dim &gt;::new_variable_created</definition>
+        <argsstring></argsstring>
+        <name>new_variable_created</name>
+        <qualifiedname>csmp::PropertyHandle::new_variable_created</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="235" column="27" bodyfile="source/includes/property_manipulation/PropertyHandle.h" bodystart="235" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_property_handle_1a88ec60b31e8b46b2303ff3905892ce32" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::PropertyHandle&lt; dim &gt;::PropertyHandle</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;sg, const char *var_name, VARIABLE_TYPE type=SCALAR, PLACEMENT place=NODE, uint32_t vsize=1U)</argsstring>
+        <name>PropertyHandle</name>
+        <qualifiedname>csmp::PropertyHandle::PropertyHandle</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <declname>sg</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>var_name</declname>
+        </param>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1gacbf62c758c46dc45b3f024638bb89274" kindref="member">VARIABLE_TYPE</ref></type>
+          <declname>type</declname>
+          <defname>ptype</defname>
+          <defval>SCALAR</defval>
+        </param>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">PLACEMENT</ref></type>
+          <declname>place</declname>
+          <defval>NODE</defval>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>vsize</declname>
+          <defname>psize</defname>
+          <defval>1U</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Constructor associates a distributed physical variable with the constructed <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref>. If the variable already exists in the <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>, the new <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> will be a handle to it. If the variable name is not known to the <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>, it will be registered as a new variable and property storage will be allocated accordingly by the MemoryManager.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>There are four constructor arguments. The first is a reference to the current <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>, the second is the variable name, and the remaining two arguments specify the variable type and placement, respectively. These last two arguments have the default values SCALAR, and NODE. If the variable type or placement differs from these values, they must be specified. If a new variable shall be created the user must specify its type and placement.</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>The constructor initializes the output variable flag to PLAIN and requests the <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> for the associated variable from the <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>. It prompts the creation of a new variable if the property does not already exist. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="170" column="5" bodyfile="source/modules/property_manipulation/PropertyHandle.cpp" bodystart="44" bodyend="82"/>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9a6c4de567ce41f96e0e61175ca75945b3" compoundref="_c_s_m_p__global__enumerations_8h" startline="59">csmp::ANY</references>
+        <references refid="classcsmp_1_1_property_handle_1a88ec60b31e8b46b2303ff3905892ce32" compoundref="_property_handle_8cpp" startline="44" endline="82">csmp::PropertyHandle&lt; dim &gt;::PropertyHandle</references>
+        <referencedby refid="classcsmp_1_1_property_handle_1a88ec60b31e8b46b2303ff3905892ce32" compoundref="_property_handle_8cpp" startline="44" endline="82">csmp::PropertyHandle&lt; dim &gt;::PropertyHandle</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_handle_1ada2d2f1420884dd333af55b88de00b0c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::PropertyHandle&lt; dim &gt;::PropertyHandle</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;sg, const char *target_region, const char *var_name, VARIABLE_TYPE type=SCALAR, PLACEMENT place=NODE, uint32_t vsize=1U)</argsstring>
+        <name>PropertyHandle</name>
+        <qualifiedname>csmp::PropertyHandle::PropertyHandle</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <declname>sg</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>target_region</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>var_name</declname>
+        </param>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1gacbf62c758c46dc45b3f024638bb89274" kindref="member">VARIABLE_TYPE</ref></type>
+          <declname>type</declname>
+          <defval>SCALAR</defval>
+        </param>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">PLACEMENT</ref></type>
+          <declname>place</declname>
+          <defval>NODE</defval>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>vsize</declname>
+          <defval>1U</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="173" column="5" bodyfile="source/modules/property_manipulation/PropertyHandle.cpp" bodystart="91" bodyend="130"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_handle_1a9620c267a912260d48e250c0a9b288ea" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::PropertyHandle&lt; dim &gt;::PropertyHandle</definition>
+        <argsstring>(const PropertyHandle &amp;op)</argsstring>
+        <name>PropertyHandle</name>
+        <qualifiedname>csmp::PropertyHandle::PropertyHandle</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> &amp;</type>
+          <declname>op</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>A copy-constructed <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> is associated exactly with the same variable as its input argument. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="177" column="5" bodyfile="source/modules/property_manipulation/PropertyHandle.cpp" bodystart="138" bodyend="147"/>
+        <references refid="classcsmp_1_1_property_handle_1a9620c267a912260d48e250c0a9b288ea" compoundref="_property_handle_8cpp" startline="138" endline="147">csmp::PropertyHandle&lt; dim &gt;::PropertyHandle</references>
+        <referencedby refid="classcsmp_1_1_property_handle_1a9620c267a912260d48e250c0a9b288ea" compoundref="_property_handle_8cpp" startline="138" endline="147">csmp::PropertyHandle&lt; dim &gt;::PropertyHandle</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_handle_1a4011b4168bc76a2f37befabb526a5541" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::PropertyHandle&lt; dim &gt;::~PropertyHandle</definition>
+        <argsstring>()</argsstring>
+        <name>~PropertyHandle</name>
+        <qualifiedname>csmp::PropertyHandle::~PropertyHandle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The destructor of a <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> linked to dynamically created variable, will prompt the <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref> to delete the variable entry and call the MemoryManager to delete the storage which was allocated for that variable. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="179" column="5" bodyfile="source/modules/property_manipulation/PropertyHandle.cpp" bodystart="161" bodyend="166"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_handle_1a709264c35eb0526b0c2925df00b8d776" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> &amp;</type>
+        <definition>PropertyHandle&lt; dim &gt; &amp; csmp::PropertyHandle&lt; dim &gt;::operator=</definition>
+        <argsstring>(const PropertyHandle &amp;op)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::PropertyHandle::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> &amp;</type>
+          <declname>op</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="182" column="21" bodyfile="source/modules/property_manipulation/PropertyHandle.cpp" bodystart="237" bodyend="375"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_handle_1a1d41759b0c37af5b9ca55b7ce9dfa4e1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> &amp;</type>
+        <definition>PropertyHandle&lt; dim &gt; &amp; csmp::PropertyHandle&lt; dim &gt;::operator=</definition>
+        <argsstring>(double val)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::PropertyHandle::operator=</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Assigns the value of its argument to the physical variable associated with the <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> at where the variable has a flag which is equal to the output flag.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>Variables of the types double, <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref>, <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>, or <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> may be assigned.</para>
+<para><simplesect kind="return"><para>The assignment returns the value into the <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> to the left of the equal sign. The original values are overwritten irrespective of their original flag. <linebreak/>
+</para>
+</simplesect>
+</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>The assigment operator relies on the overloaded operators of the basic CSMP variables (scalar, vector, and tensor) to perform the assignments.</para>
+<para>In the special case, where an assignment of a vector to a scalar is attempted, the length of the vector will be assigned.</para>
+<para>The attempt to assign a tensor to a vector is undefined and will therefore provoke an error.</para>
+<para>If a tensor shall be assigned to a scalar, the determinant of the tensor will be assigned.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>To write <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> expressions like:</para>
+<para><programlisting><codeline><highlight class="normal">csp_specific_op<sp/>=<sp/>12.5;</highlight></codeline>
+</programlisting></para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>Undefined assigments, like that of a tensor to a vector will invoke error messages. Because these are special operations, if the length of a vector or the determinant of a tensor is assigned to a scalar, a warning will be issued which specifies the type of assignment made. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="183" column="21" bodyfile="source/modules/property_manipulation/PropertyHandle.cpp" bodystart="427" bodyend="508"/>
+        <references refid="classcsmp_1_1_property_handle_1a2eda2263970fa36bcfc1ad6a03949469" compoundref="_property_handle_8cpp" startline="4089" endline="4103">csmp::PropertyHandle&lt; dim &gt;::IsWithinRange</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_handle_1ad01023f67784a0021cf92cda256b8290" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> &amp;</type>
+        <definition>PropertyHandle&lt; dim &gt; &amp; csmp::PropertyHandle&lt; dim &gt;::operator=</definition>
+        <argsstring>(const ScalarVariable &amp;s)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::PropertyHandle::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &amp;</type>
+          <declname>s</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="184" column="21" bodyfile="source/modules/property_manipulation/PropertyHandle.cpp" bodystart="513" bodyend="595"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_handle_1a5c8f8d95d19b4f15e774e78e7bd61e3e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> &amp;</type>
+        <definition>PropertyHandle&lt; dim &gt; &amp; csmp::PropertyHandle&lt; dim &gt;::operator=</definition>
+        <argsstring>(const VectorVariable&lt; dim &gt; &amp;v)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::PropertyHandle::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; dim &gt; &amp;</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="185" column="21" bodyfile="source/modules/property_manipulation/PropertyHandle.cpp" bodystart="599" bodyend="675"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_handle_1abfa726dfa7a711c6562c97e3ca5775fc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> &amp;</type>
+        <definition>PropertyHandle&lt; dim &gt; &amp; csmp::PropertyHandle&lt; dim &gt;::operator=</definition>
+        <argsstring>(const TensorVariable&lt; dim &gt; &amp;t)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::PropertyHandle::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref>&lt; dim &gt; &amp;</type>
+          <declname>t</declname>
+          <defname>ts</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Assigns the values of the tensor variable to the distributed property. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="186" column="21" bodyfile="source/modules/property_manipulation/PropertyHandle.cpp" bodystart="682" bodyend="744"/>
+        <references refid="classcsmp_1_1_property_handle_1a2eda2263970fa36bcfc1ad6a03949469" compoundref="_property_handle_8cpp" startline="4089" endline="4103">csmp::PropertyHandle&lt; dim &gt;::IsWithinRange</references>
+        <references refid="classcsmp_1_1_scalar_variable_1a7f0ab5431406d975d6e1de988f369176" compoundref="_scalar_variable_8cpp" startline="6" endline="6">csmp::ScalarVariable::operator()</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_handle_1ab29746ac3d6dd9f78ff0c5df83d90302" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> &amp;</type>
+        <definition>PropertyHandle&lt; dim &gt; &amp; csmp::PropertyHandle&lt; dim &gt;::operator=</definition>
+        <argsstring>(const std::vector&lt; VectorVariable&lt; dim &gt; &gt; &amp;vc)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::PropertyHandle::operator=</qualifiedname>
+        <param>
+          <type>const std::vector&lt; <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; dim &gt; &gt; &amp;</type>
+          <declname>vc</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="187" column="21" bodyfile="source/modules/property_manipulation/PropertyHandle.cpp" bodystart="752" bodyend="787"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_handle_1adca0ff6143b01053482f3796d152e52f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> &amp;</type>
+        <definition>PropertyHandle&lt; dim &gt; &amp; csmp::PropertyHandle&lt; dim &gt;::operator=</definition>
+        <argsstring>(const std::vector&lt; TensorVariable&lt; dim &gt; &gt; &amp;ts)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::PropertyHandle::operator=</qualifiedname>
+        <param>
+          <type>const std::vector&lt; <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref>&lt; dim &gt; &gt; &amp;</type>
+          <declname>ts</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="188" column="21" bodyfile="source/modules/property_manipulation/PropertyHandle.cpp" bodystart="792" bodyend="827"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_handle_1a98836987275c992cb1a5e3c500560f16" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> &amp;</type>
+        <definition>PropertyHandle&lt; dim &gt; &amp; csmp::PropertyHandle&lt; dim &gt;::operator+=</definition>
+        <argsstring>(double val)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>csmp::PropertyHandle::operator+=</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The operators &apos;+=&apos;, &apos;-=&apos;, &apos;*=&apos;, and &apos;/=&apos; perform combined arithmetic and assignment operations but avoid the generation of temporary variables as would be generated, if the operatios were performed separately.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>val</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The argument to the right of the combined operators must be a floating point value.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The floating point value on the right modifies the <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> value on the left according to the arithmetic operator used.</para>
+</simplesect>
+</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>The operators are based on the overloaded operators of the CSP basic variables, the <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref>, <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>, and <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref>.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>To add a floating point value to, subtract from, multiply, or divide by the physical variable which is associated with the <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref>, write expressions like:</para>
+<para><programlisting><codeline><highlight class="normal">my_operand<sp/>+=<sp/>5.2;</highlight></codeline>
+</programlisting> </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="191" column="21" bodyfile="source/modules/property_manipulation/PropertyHandle.cpp" bodystart="863" bodyend="983"/>
+        <references refid="classcsmp_1_1_property_handle_1a2eda2263970fa36bcfc1ad6a03949469" compoundref="_property_handle_8cpp" startline="4089" endline="4103">csmp::PropertyHandle&lt; dim &gt;::IsWithinRange</references>
+        <references refid="classcsmp_1_1_scalar_variable_1a7f0ab5431406d975d6e1de988f369176" compoundref="_scalar_variable_8cpp" startline="6" endline="6">csmp::ScalarVariable::operator()</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_handle_1a51ab2673cf2640208adbcdea7ce37361" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> &amp;</type>
+        <definition>PropertyHandle&lt; dim &gt; &amp; csmp::PropertyHandle&lt; dim &gt;::operator-=</definition>
+        <argsstring>(double val)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>csmp::PropertyHandle::operator-=</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="192" column="21" bodyfile="source/modules/property_manipulation/PropertyHandle.cpp" bodystart="988" bodyend="1107"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_handle_1a750f4ec00439262023c978683cb06f75" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> &amp;</type>
+        <definition>PropertyHandle&lt; dim &gt; &amp; csmp::PropertyHandle&lt; dim &gt;::operator*=</definition>
+        <argsstring>(double val)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>csmp::PropertyHandle::operator*=</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Where the variable is flagged that the output flag, the default value of which is ANY, its value is multiplied by the argument value. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="193" column="21" bodyfile="source/modules/property_manipulation/PropertyHandle.cpp" bodystart="1116" bodyend="1235"/>
+        <references refid="classcsmp_1_1_property_handle_1a2eda2263970fa36bcfc1ad6a03949469" compoundref="_property_handle_8cpp" startline="4089" endline="4103">csmp::PropertyHandle&lt; dim &gt;::IsWithinRange</references>
+        <references refid="classcsmp_1_1_scalar_variable_1a7f0ab5431406d975d6e1de988f369176" compoundref="_scalar_variable_8cpp" startline="6" endline="6">csmp::ScalarVariable::operator()</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_handle_1a7157396ddc2b6f8fe96ced121372082c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> &amp;</type>
+        <definition>PropertyHandle&lt; dim &gt; &amp; csmp::PropertyHandle&lt; dim &gt;::operator/=</definition>
+        <argsstring>(double val)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>csmp::PropertyHandle::operator/=</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="194" column="21" bodyfile="source/modules/property_manipulation/PropertyHandle.cpp" bodystart="1240" bodyend="1360"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_handle_1a52956c8f9403dcddf16534cc58605a49" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> &amp;</type>
+        <definition>PropertyHandle&lt; dim &gt; &amp; csmp::PropertyHandle&lt; dim &gt;::operator+=</definition>
+        <argsstring>(const PropertyHandle &amp;op)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>csmp::PropertyHandle::operator+=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> &amp;</type>
+          <declname>op</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The operators &apos;+=&apos;, &apos;-=&apos;, &apos;*=&apos;, and &apos;/=&apos; perform combined arithmetic and assignment operations involving two PropertyHandles but avoid the generation of temporary variables as would be generated, if the operatios were performed separately.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>op</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The argument to the right of the combined operators must be a <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref>.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The value of the physical variable of the <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> on the right modifies the <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> value on the left according to the arithmetic operator used.</para>
+</simplesect>
+</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>The operators are based on the overloaded operators of the CSP basic variables, the <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref>, <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>, and <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref>.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>To add a floating point value to, subtract from, multiply, or divide by the physical variable which is associated with the <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref>, write expressions like:</para>
+<para><programlisting><codeline><highlight class="normal">my_operand<sp/>+=<sp/>5.2;</highlight></codeline>
+</programlisting></para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>Operations involving variables of different type or different placement cannot be performed. In this case an error will be reported. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="197" column="21" bodyfile="source/modules/property_manipulation/PropertyHandle.cpp" bodystart="1400" bodyend="1587"/>
+        <references refid="classcsmp_1_1_property_handle_1a2eda2263970fa36bcfc1ad6a03949469" compoundref="_property_handle_8cpp" startline="4089" endline="4103">csmp::PropertyHandle&lt; dim &gt;::IsWithinRange</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_handle_1a748f500d29c02823ed3a19c0e19e2496" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> &amp;</type>
+        <definition>PropertyHandle&lt; dim &gt; &amp; csmp::PropertyHandle&lt; dim &gt;::operator-=</definition>
+        <argsstring>(const PropertyHandle &amp;op)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>csmp::PropertyHandle::operator-=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> &amp;</type>
+          <declname>op</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="198" column="21" bodyfile="source/modules/property_manipulation/PropertyHandle.cpp" bodystart="1592" bodyend="1774"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_handle_1a9276977e5bddb6c879a0c0c5c4a4555e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> &amp;</type>
+        <definition>PropertyHandle&lt; dim &gt; &amp; csmp::PropertyHandle&lt; dim &gt;::operator*=</definition>
+        <argsstring>(const PropertyHandle &amp;op)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>csmp::PropertyHandle::operator*=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> &amp;</type>
+          <declname>op</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para><xrefsect id="todo_1_todo000194"><xreftitle>Todo</xreftitle><xrefdescription><para>(1-F) key.type, key.place should be opkey.type, key.place </para>
+</xrefdescription></xrefsect></para>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="199" column="21" bodyfile="source/modules/property_manipulation/PropertyHandle.cpp" bodystart="1779" bodyend="1972"/>
+        <references refid="classcsmp_1_1_property_handle_1a2eda2263970fa36bcfc1ad6a03949469" compoundref="_property_handle_8cpp" startline="4089" endline="4103">csmp::PropertyHandle&lt; dim &gt;::IsWithinRange</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_handle_1acb5ca29f14d551d6b3ffd63f5e8dae48" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> &amp;</type>
+        <definition>PropertyHandle&lt; dim &gt; &amp; csmp::PropertyHandle&lt; dim &gt;::operator/=</definition>
+        <argsstring>(const PropertyHandle &amp;op)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>csmp::PropertyHandle::operator/=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> &amp;</type>
+          <declname>op</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="200" column="21" bodyfile="source/modules/property_manipulation/PropertyHandle.cpp" bodystart="1977" bodyend="2160"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_handle_1a3ec98d66d13a356309d8ff8da4ec9937" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyHandle&lt; dim &gt;::Squared</definition>
+        <argsstring>()</argsstring>
+        <name>Squared</name>
+        <qualifiedname>csmp::PropertyHandle::Squared</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Multiplies the physical variable which is associated with the <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> by itself. If this variable is vector, or a tensor, the corresponding vector or matrix products will be assigned, respectively.</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>The method relies on the interface of the CSP basic variables <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref>, <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>, and <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref>.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Apart from offering an efficient way to raise variable values to the power of 2, <ref refid="classcsmp_1_1_property_handle_1a3ec98d66d13a356309d8ff8da4ec9937" kindref="member">Squared()</ref> implements vector and matrix multiplication for vector and tensor variables, respectively. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="203" column="19" bodyfile="source/modules/property_manipulation/PropertyHandle.cpp" bodystart="2182" bodyend="2299"/>
+        <references refid="classcsmp_1_1_property_handle_1a2eda2263970fa36bcfc1ad6a03949469" compoundref="_property_handle_8cpp" startline="4089" endline="4103">csmp::PropertyHandle&lt; dim &gt;::IsWithinRange</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_handle_1a32c64de5c8a180f1d1fad710c0846fa5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyHandle&lt; dim &gt;::Sqrt</definition>
+        <argsstring>()</argsstring>
+        <name>Sqrt</name>
+        <qualifiedname>csmp::PropertyHandle::Sqrt</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Takes the square root of the values of the physical variable which is associated with the <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref>. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="204" column="19" bodyfile="source/modules/property_manipulation/PropertyHandle.cpp" bodystart="2310" bodyend="2436"/>
+        <references refid="classcsmp_1_1_property_handle_1a2eda2263970fa36bcfc1ad6a03949469" compoundref="_property_handle_8cpp" startline="4089" endline="4103">csmp::PropertyHandle&lt; dim &gt;::IsWithinRange</references>
+        <references refid="classcsmp_1_1_scalar_variable_1a7f0ab5431406d975d6e1de988f369176" compoundref="_scalar_variable_8cpp" startline="6" endline="6">csmp::ScalarVariable::operator()</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_handle_1a38a6053488aad9313b7c98acee490adf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyHandle&lt; dim &gt;::Ln</definition>
+        <argsstring>()</argsstring>
+        <name>Ln</name>
+        <qualifiedname>csmp::PropertyHandle::Ln</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Calculates the natural logarithm (base 2) of each component of the CSP basic variable which is associated with the <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref>.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>Since the method cannot take the natural logarithm of 0 or a negative number, variables with such a value are not modified. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="205" column="19" bodyfile="source/modules/property_manipulation/PropertyHandle.cpp" bodystart="2452" bodyend="2579"/>
+        <references refid="classcsmp_1_1_property_handle_1a2eda2263970fa36bcfc1ad6a03949469" compoundref="_property_handle_8cpp" startline="4089" endline="4103">csmp::PropertyHandle&lt; dim &gt;::IsWithinRange</references>
+        <references refid="classcsmp_1_1_scalar_variable_1a7f0ab5431406d975d6e1de988f369176" compoundref="_scalar_variable_8cpp" startline="6" endline="6">csmp::ScalarVariable::operator()</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_handle_1a052b7ad27853f4eb928bc81377d287fe" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyHandle&lt; dim &gt;::Log10</definition>
+        <argsstring>()</argsstring>
+        <name>Log10</name>
+        <qualifiedname>csmp::PropertyHandle::Log10</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Calculates the decadic logarithm (base 10) of each component of the CSP basic variable which is associated with the <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref>.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>Since the method cannot take the logarithm of 0 or a negative number, variables with such a value are not modified. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="206" column="19" bodyfile="source/modules/property_manipulation/PropertyHandle.cpp" bodystart="2594" bodyend="2721"/>
+        <references refid="classcsmp_1_1_property_handle_1a2eda2263970fa36bcfc1ad6a03949469" compoundref="_property_handle_8cpp" startline="4089" endline="4103">csmp::PropertyHandle&lt; dim &gt;::IsWithinRange</references>
+        <references refid="classcsmp_1_1_scalar_variable_1a7f0ab5431406d975d6e1de988f369176" compoundref="_scalar_variable_8cpp" startline="6" endline="6">csmp::ScalarVariable::operator()</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_handle_1ae9f9081d7346eb4b755dae919c5b6013" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyHandle&lt; dim &gt;::Exp</definition>
+        <argsstring>()</argsstring>
+        <name>Exp</name>
+        <qualifiedname>csmp::PropertyHandle::Exp</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Calculates E raised to the power of each component of the physical variable associated with the <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref>. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="207" column="19" bodyfile="source/modules/property_manipulation/PropertyHandle.cpp" bodystart="2733" bodyend="2857"/>
+        <references refid="classcsmp_1_1_property_handle_1a2eda2263970fa36bcfc1ad6a03949469" compoundref="_property_handle_8cpp" startline="4089" endline="4103">csmp::PropertyHandle&lt; dim &gt;::IsWithinRange</references>
+        <references refid="classcsmp_1_1_scalar_variable_1a7f0ab5431406d975d6e1de988f369176" compoundref="_scalar_variable_8cpp" startline="6" endline="6">csmp::ScalarVariable::operator()</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_handle_1a61bd7e7d9a8ec2a72ee1ed598d7065d6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyHandle&lt; dim &gt;::Pow</definition>
+        <argsstring>(double raised_to)</argsstring>
+        <name>Pow</name>
+        <qualifiedname>csmp::PropertyHandle::Pow</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>raised_to</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Raises each component of the CSP basic variable associated with the <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> to the power of its first argument.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>raised_to</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The power to which the variable shall be raised. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="208" column="19" bodyfile="source/modules/property_manipulation/PropertyHandle.cpp" bodystart="2871" bodyend="2995"/>
+        <references refid="classcsmp_1_1_property_handle_1a2eda2263970fa36bcfc1ad6a03949469" compoundref="_property_handle_8cpp" startline="4089" endline="4103">csmp::PropertyHandle&lt; dim &gt;::IsWithinRange</references>
+        <references refid="classcsmp_1_1_scalar_variable_1a7f0ab5431406d975d6e1de988f369176" compoundref="_scalar_variable_8cpp" startline="6" endline="6">csmp::ScalarVariable::operator()</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_handle_1a678ba1e51e0663d58ffb83069d946f04" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyHandle&lt; dim &gt;::ZapNAN</definition>
+        <argsstring>(double with)</argsstring>
+        <name>ZapNAN</name>
+        <qualifiedname>csmp::PropertyHandle::ZapNAN</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>with</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Replaces each NAN (not a number) value of the physical variable which is associated with the <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> with the supplied floating point argument.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>with</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The floating point number with which NAN values shall be replaced. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="209" column="19" bodyfile="source/modules/property_manipulation/PropertyHandle.cpp" bodystart="3010" bodyend="3137"/>
+        <references refid="classcsmp_1_1_property_handle_1a2eda2263970fa36bcfc1ad6a03949469" compoundref="_property_handle_8cpp" startline="4089" endline="4103">csmp::PropertyHandle&lt; dim &gt;::IsWithinRange</references>
+        <references refid="classcsmp_1_1_scalar_variable_1a7f0ab5431406d975d6e1de988f369176" compoundref="_scalar_variable_8cpp" startline="6" endline="6">csmp::ScalarVariable::operator()</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_handle_1a3dfd0c830c886a5031f462750687d380" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyHandle&lt; dim &gt;::Sin</definition>
+        <argsstring>()</argsstring>
+        <name>Sin</name>
+        <qualifiedname>csmp::PropertyHandle::Sin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns the sin of the physical variable component value which must be in radians. A radian (rad) is defined as the ratio of the corresponding arc length to the radius of the circle. Thus, 1 radian = 57.2958o and the angle in rad is (grad * pi) / 180.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>It is tested whether the input variable is in the legitimate range of zero to 2 Pi. If not, an error message is returned and no calculation is performed. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="210" column="19" bodyfile="source/modules/property_manipulation/PropertyHandle.cpp" bodystart="3157" bodyend="3290"/>
+        <references refid="classcsmp_1_1_property_handle_1a2eda2263970fa36bcfc1ad6a03949469" compoundref="_property_handle_8cpp" startline="4089" endline="4103">csmp::PropertyHandle&lt; dim &gt;::IsWithinRange</references>
+        <references refid="classcsmp_1_1_scalar_variable_1a7f0ab5431406d975d6e1de988f369176" compoundref="_scalar_variable_8cpp" startline="6" endline="6">csmp::ScalarVariable::operator()</references>
+        <references refid="classcsmp_1_1_property_handle_1a01ea8480651da5462789dce112d34fb6" compoundref="_property_handle_8cpp" startline="4057" endline="4060">csmp::PropertyHandle&lt; dim &gt;::Range</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_handle_1ab39d3c22028fb93f77ffda61ddcb5026" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyHandle&lt; dim &gt;::Cos</definition>
+        <argsstring>()</argsstring>
+        <name>Cos</name>
+        <qualifiedname>csmp::PropertyHandle::Cos</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns the cos of the physical variable component value which must be in radians. A radian (rad) is defined as the ratio of the corresponding arc length to the radius of the circle. Thus, 1 radian = 57.2958o and the angle in rad is (grad * pi) / 180.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>It is tested whether the input variable is in the legitimate range of zero to 2 Pi. If not, an error message is returned and no calculation is performed. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="211" column="19" bodyfile="source/modules/property_manipulation/PropertyHandle.cpp" bodystart="3310" bodyend="3441"/>
+        <references refid="classcsmp_1_1_property_handle_1a2eda2263970fa36bcfc1ad6a03949469" compoundref="_property_handle_8cpp" startline="4089" endline="4103">csmp::PropertyHandle&lt; dim &gt;::IsWithinRange</references>
+        <references refid="classcsmp_1_1_scalar_variable_1a7f0ab5431406d975d6e1de988f369176" compoundref="_scalar_variable_8cpp" startline="6" endline="6">csmp::ScalarVariable::operator()</references>
+        <references refid="classcsmp_1_1_property_handle_1a01ea8480651da5462789dce112d34fb6" compoundref="_property_handle_8cpp" startline="4057" endline="4060">csmp::PropertyHandle&lt; dim &gt;::Range</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_handle_1a4ae5a13329a2f2cf6b1c08e4cde7f6de" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyHandle&lt; dim &gt;::Tan</definition>
+        <argsstring>()</argsstring>
+        <name>Tan</name>
+        <qualifiedname>csmp::PropertyHandle::Tan</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns the tan of the physical variable component value which must be in radians. A radian (rad) is defined as the ratio of the corresponding arc length to the radius of the circle. Thus, 1 radian = 57.2958o and the angle in rad is (grad * pi) / 180.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>It is tested whether the input variable is in the legitimate range of zero to 2 Pi. If not, an error message is returned and no calculation is performed. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="212" column="19" bodyfile="source/modules/property_manipulation/PropertyHandle.cpp" bodystart="3461" bodyend="3592"/>
+        <references refid="classcsmp_1_1_property_handle_1a2eda2263970fa36bcfc1ad6a03949469" compoundref="_property_handle_8cpp" startline="4089" endline="4103">csmp::PropertyHandle&lt; dim &gt;::IsWithinRange</references>
+        <references refid="classcsmp_1_1_scalar_variable_1a7f0ab5431406d975d6e1de988f369176" compoundref="_scalar_variable_8cpp" startline="6" endline="6">csmp::ScalarVariable::operator()</references>
+        <references refid="classcsmp_1_1_property_handle_1a01ea8480651da5462789dce112d34fb6" compoundref="_property_handle_8cpp" startline="4057" endline="4060">csmp::PropertyHandle&lt; dim &gt;::Range</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_handle_1a20ce3529dc7f43cc4d6a4ac1d9f3ba22" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyHandle&lt; dim &gt;::Acos</definition>
+        <argsstring>()</argsstring>
+        <name>Acos</name>
+        <qualifiedname>csmp::PropertyHandle::Acos</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns the arc cos of the physical variable component value. This value must be between -1 and 1.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>If the physical variable component value is not within a range between -1 and 1, an error will be reported. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="213" column="19" bodyfile="source/modules/property_manipulation/PropertyHandle.cpp" bodystart="3609" bodyend="3740"/>
+        <references refid="classcsmp_1_1_property_handle_1a2eda2263970fa36bcfc1ad6a03949469" compoundref="_property_handle_8cpp" startline="4089" endline="4103">csmp::PropertyHandle&lt; dim &gt;::IsWithinRange</references>
+        <references refid="classcsmp_1_1_scalar_variable_1a7f0ab5431406d975d6e1de988f369176" compoundref="_scalar_variable_8cpp" startline="6" endline="6">csmp::ScalarVariable::operator()</references>
+        <references refid="classcsmp_1_1_property_handle_1a01ea8480651da5462789dce112d34fb6" compoundref="_property_handle_8cpp" startline="4057" endline="4060">csmp::PropertyHandle&lt; dim &gt;::Range</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_handle_1a996904b678b66f3b48a6a3a8f39d6293" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyHandle&lt; dim &gt;::Asin</definition>
+        <argsstring>()</argsstring>
+        <name>Asin</name>
+        <qualifiedname>csmp::PropertyHandle::Asin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns the arc sin of the physical variable component value. This value must be between -1 and 1.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>If the physical variable component value is not within a range between -1 and 1, an error will be reported. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="214" column="19" bodyfile="source/modules/property_manipulation/PropertyHandle.cpp" bodystart="3757" bodyend="3888"/>
+        <references refid="classcsmp_1_1_property_handle_1a2eda2263970fa36bcfc1ad6a03949469" compoundref="_property_handle_8cpp" startline="4089" endline="4103">csmp::PropertyHandle&lt; dim &gt;::IsWithinRange</references>
+        <references refid="classcsmp_1_1_scalar_variable_1a7f0ab5431406d975d6e1de988f369176" compoundref="_scalar_variable_8cpp" startline="6" endline="6">csmp::ScalarVariable::operator()</references>
+        <references refid="classcsmp_1_1_property_handle_1a01ea8480651da5462789dce112d34fb6" compoundref="_property_handle_8cpp" startline="4057" endline="4060">csmp::PropertyHandle&lt; dim &gt;::Range</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_handle_1af5214a1b159ce7819f5ee1c431aecbe9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyHandle&lt; dim &gt;::Atan</definition>
+        <argsstring>()</argsstring>
+        <name>Atan</name>
+        <qualifiedname>csmp::PropertyHandle::Atan</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns the arc tan of the physical variable component value. This value must be between -1 and 1.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>If the physical variable component value is not within a range between -1 and 1, an error will be reported. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="215" column="19" bodyfile="source/modules/property_manipulation/PropertyHandle.cpp" bodystart="3906" bodyend="4037"/>
+        <references refid="classcsmp_1_1_property_handle_1a2eda2263970fa36bcfc1ad6a03949469" compoundref="_property_handle_8cpp" startline="4089" endline="4103">csmp::PropertyHandle&lt; dim &gt;::IsWithinRange</references>
+        <references refid="classcsmp_1_1_scalar_variable_1a7f0ab5431406d975d6e1de988f369176" compoundref="_scalar_variable_8cpp" startline="6" endline="6">csmp::ScalarVariable::operator()</references>
+        <references refid="classcsmp_1_1_property_handle_1a01ea8480651da5462789dce112d34fb6" compoundref="_property_handle_8cpp" startline="4057" endline="4060">csmp::PropertyHandle&lt; dim &gt;::Range</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_handle_1aa925f8547cef7786dbf691ddee459991" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>const char *</type>
+        <definition>const char * csmp::PropertyHandle&lt; dim &gt;::VariableName</definition>
+        <argsstring>() const</argsstring>
+        <name>VariableName</name>
+        <qualifiedname>csmp::PropertyHandle::VariableName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="218" column="18" bodyfile="source/modules/property_manipulation/PropertyHandle.cpp" bodystart="180" bodyend="181"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_handle_1a12c56e037bf4d1d9530766c90c207c60" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+        <definition>const csmp::Index &amp; csmp::PropertyHandle&lt; dim &gt;::Key</definition>
+        <argsstring>() const</argsstring>
+        <name>Key</name>
+        <qualifiedname>csmp::PropertyHandle::Key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns the storage specification of the variable which is associated with the <ref refid="classcsmp_1_1_operand" kindref="compound">csmp::Operand</ref> into a corresponding structure. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="219" column="24" bodyfile="source/modules/property_manipulation/PropertyHandle.cpp" bodystart="175" bodyend="177"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_handle_1a01ea8480651da5462789dce112d34fb6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyHandle&lt; dim &gt;::Range</definition>
+        <argsstring>(double &amp;omin, double &amp;omax) const</argsstring>
+        <name>Range</name>
+        <qualifiedname>csmp::PropertyHandle::Range</qualifiedname>
+        <param>
+          <type>double &amp;</type>
+          <declname>omin</declname>
+        </param>
+        <param>
+          <type>double &amp;</type>
+          <declname>omax</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Performs a range check for the physical variable which is associated with the <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref>.</para>
+<para><ref refid="classcsmp_1_1_property_handle_1a01ea8480651da5462789dce112d34fb6" kindref="member">Range()</ref> will return the minimum and the maximum value of the physical variable which is associated with the <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> into its first and its second argument.</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para><ref refid="classcsmp_1_1_property_handle_1a01ea8480651da5462789dce112d34fb6" kindref="member">Range()</ref> calls the MinMaxOf() interface of the <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="220" column="20" bodyfile="source/modules/property_manipulation/PropertyHandle.cpp" bodystart="4057" bodyend="4060"/>
+        <referencedby refid="classcsmp_1_1_property_handle_1a20ce3529dc7f43cc4d6a4ac1d9f3ba22" compoundref="_property_handle_8cpp" startline="3609" endline="3740">csmp::PropertyHandle&lt; dim &gt;::Acos</referencedby>
+        <referencedby refid="classcsmp_1_1_property_handle_1a996904b678b66f3b48a6a3a8f39d6293" compoundref="_property_handle_8cpp" startline="3757" endline="3888">csmp::PropertyHandle&lt; dim &gt;::Asin</referencedby>
+        <referencedby refid="classcsmp_1_1_property_handle_1af5214a1b159ce7819f5ee1c431aecbe9" compoundref="_property_handle_8cpp" startline="3906" endline="4037">csmp::PropertyHandle&lt; dim &gt;::Atan</referencedby>
+        <referencedby refid="classcsmp_1_1_property_handle_1ab39d3c22028fb93f77ffda61ddcb5026" compoundref="_property_handle_8cpp" startline="3310" endline="3441">csmp::PropertyHandle&lt; dim &gt;::Cos</referencedby>
+        <referencedby refid="classcsmp_1_1_property_handle_1a3dfd0c830c886a5031f462750687d380" compoundref="_property_handle_8cpp" startline="3157" endline="3290">csmp::PropertyHandle&lt; dim &gt;::Sin</referencedby>
+        <referencedby refid="classcsmp_1_1_property_handle_1a4ae5a13329a2f2cf6b1c08e4cde7f6de" compoundref="_property_handle_8cpp" startline="3461" endline="3592">csmp::PropertyHandle&lt; dim &gt;::Tan</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_handle_1a2eda2263970fa36bcfc1ad6a03949469" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::PropertyHandle&lt; dim &gt;::IsWithinRange</definition>
+        <argsstring>() const</argsstring>
+        <name>IsWithinRange</name>
+        <qualifiedname>csmp::PropertyHandle::IsWithinRange</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Tests whether the physical variable which is associated with the <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> has a value which complies with the legitimate range defined in the <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref> object.</para>
+<para>If the variable was defined at runtime, it is tested against a default range from -1.0e+30 to 1.0e+30.</para>
+<para><simplesect kind="return"><para><ref refid="classcsmp_1_1_property_handle_1a2eda2263970fa36bcfc1ad6a03949469" kindref="member">IsWithinRange()</ref> returns the boolean variable &apos;true&apos; if the variable values lie within the expected range.</para>
+</simplesect>
+</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>sWithinRange() compares the actual value range of the variable with that specified in the <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>If so desired by the user, <ref refid="classcsmp_1_1_property_handle_1a2eda2263970fa36bcfc1ad6a03949469" kindref="member">IsWithinRange()</ref> will be applied after each operation on a <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref>. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="221" column="20" bodyfile="source/modules/property_manipulation/PropertyHandle.cpp" bodystart="4089" bodyend="4103"/>
+        <referencedby refid="classcsmp_1_1_property_handle_1a20ce3529dc7f43cc4d6a4ac1d9f3ba22" compoundref="_property_handle_8cpp" startline="3609" endline="3740">csmp::PropertyHandle&lt; dim &gt;::Acos</referencedby>
+        <referencedby refid="classcsmp_1_1_property_handle_1a996904b678b66f3b48a6a3a8f39d6293" compoundref="_property_handle_8cpp" startline="3757" endline="3888">csmp::PropertyHandle&lt; dim &gt;::Asin</referencedby>
+        <referencedby refid="classcsmp_1_1_property_handle_1af5214a1b159ce7819f5ee1c431aecbe9" compoundref="_property_handle_8cpp" startline="3906" endline="4037">csmp::PropertyHandle&lt; dim &gt;::Atan</referencedby>
+        <referencedby refid="classcsmp_1_1_property_handle_1ab39d3c22028fb93f77ffda61ddcb5026" compoundref="_property_handle_8cpp" startline="3310" endline="3441">csmp::PropertyHandle&lt; dim &gt;::Cos</referencedby>
+        <referencedby refid="classcsmp_1_1_property_handle_1ae9f9081d7346eb4b755dae919c5b6013" compoundref="_property_handle_8cpp" startline="2733" endline="2857">csmp::PropertyHandle&lt; dim &gt;::Exp</referencedby>
+        <referencedby refid="classcsmp_1_1_property_handle_1a38a6053488aad9313b7c98acee490adf" compoundref="_property_handle_8cpp" startline="2452" endline="2579">csmp::PropertyHandle&lt; dim &gt;::Ln</referencedby>
+        <referencedby refid="classcsmp_1_1_property_handle_1a052b7ad27853f4eb928bc81377d287fe" compoundref="_property_handle_8cpp" startline="2594" endline="2721">csmp::PropertyHandle&lt; dim &gt;::Log10</referencedby>
+        <referencedby refid="classcsmp_1_1_property_handle_1a9276977e5bddb6c879a0c0c5c4a4555e" compoundref="_property_handle_8cpp" startline="1779" endline="1972">csmp::PropertyHandle&lt; dim &gt;::operator*=</referencedby>
+        <referencedby refid="classcsmp_1_1_property_handle_1a750f4ec00439262023c978683cb06f75" compoundref="_property_handle_8cpp" startline="1116" endline="1235">csmp::PropertyHandle&lt; dim &gt;::operator*=</referencedby>
+        <referencedby refid="classcsmp_1_1_property_handle_1a52956c8f9403dcddf16534cc58605a49" compoundref="_property_handle_8cpp" startline="1400" endline="1587">csmp::PropertyHandle&lt; dim &gt;::operator+=</referencedby>
+        <referencedby refid="classcsmp_1_1_property_handle_1a98836987275c992cb1a5e3c500560f16" compoundref="_property_handle_8cpp" startline="863" endline="983">csmp::PropertyHandle&lt; dim &gt;::operator+=</referencedby>
+        <referencedby refid="classcsmp_1_1_property_handle_1abfa726dfa7a711c6562c97e3ca5775fc" compoundref="_property_handle_8cpp" startline="682" endline="744">csmp::PropertyHandle&lt; dim &gt;::operator=</referencedby>
+        <referencedby refid="classcsmp_1_1_property_handle_1a1d41759b0c37af5b9ca55b7ce9dfa4e1" compoundref="_property_handle_8cpp" startline="427" endline="508">csmp::PropertyHandle&lt; dim &gt;::operator=</referencedby>
+        <referencedby refid="classcsmp_1_1_property_handle_1a61bd7e7d9a8ec2a72ee1ed598d7065d6" compoundref="_property_handle_8cpp" startline="2871" endline="2995">csmp::PropertyHandle&lt; dim &gt;::Pow</referencedby>
+        <referencedby refid="classcsmp_1_1_property_handle_1a3dfd0c830c886a5031f462750687d380" compoundref="_property_handle_8cpp" startline="3157" endline="3290">csmp::PropertyHandle&lt; dim &gt;::Sin</referencedby>
+        <referencedby refid="classcsmp_1_1_property_handle_1a32c64de5c8a180f1d1fad710c0846fa5" compoundref="_property_handle_8cpp" startline="2310" endline="2436">csmp::PropertyHandle&lt; dim &gt;::Sqrt</referencedby>
+        <referencedby refid="classcsmp_1_1_property_handle_1a3ec98d66d13a356309d8ff8da4ec9937" compoundref="_property_handle_8cpp" startline="2182" endline="2299">csmp::PropertyHandle&lt; dim &gt;::Squared</referencedby>
+        <referencedby refid="classcsmp_1_1_property_handle_1a4ae5a13329a2f2cf6b1c08e4cde7f6de" compoundref="_property_handle_8cpp" startline="3461" endline="3592">csmp::PropertyHandle&lt; dim &gt;::Tan</referencedby>
+        <referencedby refid="classcsmp_1_1_property_handle_1a678ba1e51e0663d58ffb83069d946f04" compoundref="_property_handle_8cpp" startline="3010" endline="3137">csmp::PropertyHandle&lt; dim &gt;::ZapNAN</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_handle_1a03ad5576ac87af17cb875efbea818dd6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref></type>
+        <definition>VARIABLE_FLAG csmp::PropertyHandle&lt; dim &gt;::OutputCondition</definition>
+        <argsstring>() const</argsstring>
+        <name>OutputCondition</name>
+        <qualifiedname>csmp::PropertyHandle::OutputCondition</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><ref refid="classcsmp_1_1_property_handle_1a03ad5576ac87af17cb875efbea818dd6" kindref="member">OutputCondition()</ref> returns the <ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref> flag which the distributed physical variable which is associated with the <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> must have in order to allow modification by the <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref>.</para>
+<para><simplesect kind="return"><para>The flag that the physical variables flag must correspond to if the variable shall be modified.</para>
+</simplesect>
+</para>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Since each CSMP scalar, vector, or tensor variable has a single or a set of flags which indicate to the solver whether it may modify or use this variable instance as a constraint, the same rule applies to PropertyHandles. Thus, only if the output flag matches the local flag of the distributed variable, it will modify the latter. Accordingly, the variable flag may be used to protect certain variable values from modification by PropertyHandles. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="222" column="20" bodyfile="source/modules/property_manipulation/PropertyHandle.cpp" bodystart="203" bodyend="203"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_handle_1aab5a4dbf66b9b312273ba68c33205e35" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyHandle&lt; dim &gt;::OutputCondition</definition>
+        <argsstring>(VARIABLE_FLAG c)</argsstring>
+        <name>OutputCondition</name>
+        <qualifiedname>csmp::PropertyHandle::OutputCondition</qualifiedname>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref></type>
+          <declname>c</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><ref refid="classcsmp_1_1_property_handle_1a03ad5576ac87af17cb875efbea818dd6" kindref="member">OutputCondition()</ref> assigns the <ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref> flag which the distributed physical variable which is associated with the <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> must have in order to allow modification by the <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref>.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>c</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The flag which the output flag shall be changed into.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="attention"><para>The flag of the physical variables flag must correspond, else the variable is not modified.</para>
+</simplesect>
+</para>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Since each CSMP scalar, vector, or tensor variable has a single or a set of flags which indicate to the solver whether it may modify or use this variable instance as a constraint, the same rule applies to PropertyHandles. Thus, only if the output flag matches the local flag of the distributed variable, it will modify the latter. Accordingly, the variable flag may be used to protect certain variable values from modification by PropertyHandles. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="223" column="20" bodyfile="source/modules/property_manipulation/PropertyHandle.cpp" bodystart="228" bodyend="228"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_handle_1aa75a1204703bb356d83c6361b549e235" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyHandle&lt; dim &gt;::Out</definition>
+        <argsstring>() const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::PropertyHandle::Out</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The standard CSP object interface <ref refid="classcsmp_1_1_property_handle_1aa75a1204703bb356d83c6361b549e235" kindref="member">Out()</ref> will print the state of the <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> to stdout. This output comprises the name of the physical variable which is associated with the <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref>, the output flag, and the values of the distributed physical variable.</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>The method <ref refid="classcsmp_1_1_property_handle_1aa75a1204703bb356d83c6361b549e235" kindref="member">Out()</ref> uses the <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> method OutputVariableToScreen() to print the variable values. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="225" column="10" bodyfile="source/modules/property_manipulation/PropertyHandle.cpp" bodystart="4120" bodyend="4127"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_handle_1a9b3bb027a58437a87dc7b566852f46bc" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyHandle&lt; dim &gt;::Out</definition>
+        <argsstring>(const char *text_file_name) const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::PropertyHandle::Out</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>text_file_name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The CSP object interface <ref refid="classcsmp_1_1_property_handle_1aa75a1204703bb356d83c6361b549e235" kindref="member">Out()</ref> will print the values of the <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> associated variable to a textfile.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>text_file_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The name of the textfile is supplied as first argument to <ref refid="classcsmp_1_1_property_handle_1aa75a1204703bb356d83c6361b549e235" kindref="member">Out()</ref>.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para><ref refid="classcsmp_1_1_property_handle_1aa75a1204703bb356d83c6361b549e235" kindref="member">Out()</ref> relies on the <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> method OutputDataAsTextColumns() in the creation of the output textfile. <linebreak/>
+</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>To save a <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> temporary variable to file.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>Refer to the documentation of the <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> to learn about the footprint of OutputDataAsTextColumns(). </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PropertyHandle.h" line="226" column="10" bodyfile="source/modules/property_manipulation/PropertyHandle.cpp" bodystart="4154" bodyend="4162"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para><ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> - a global accessor and mutator of distributed data. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>S.K. Matthaei </para>
+</simplesect>
+<simplesect kind="author"><para>Stephen G. Roberts </para>
+</simplesect>
+<simplesect kind="date"><para>1999</para>
+</simplesect>
+</para>
+<sect1 id="compare_floats_8h_1motivation">
+<title>Motivation</title><para>Especially for test computations, one would like write arithmetic expressions which apply to distributed physical variables. To make these expressions concise it is useful to replace lengthy variable names by a notation of choice, for instance, to define a variation of porosity with depth:</para>
+<para>phi = phi - 1 / z^2</para>
+<para>Finally, there is a need to create variables for such mathematical expressions at runtime.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_1design">
+<title>Design Intent</title><para>The <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> was designed following the motivation from above, but also by using the existing <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> classs as a model. Thus, an <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> shares many of the <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> interfaces, but as a difference, it will currently apply to the associated variable on all the elements, nodes, or constraint points of a mesh, depending on where the <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> variable is placed.</para>
+<para>The desired capability of writing arithmetic expressions is implemented via C++ operator overloading. Notably, there is no assignment operator for operands to operands, since the expected result of a C++ assignment would imply a complete overwriting of the lefthand physical variable with the one on the right of the assignment operator.</para>
+<para>Self-assignment is provided to write expressions which are efficient, since they do not require the creation of temporary variables. Thus, the expression</para>
+<para>phi = phi - 1 / z^2</para>
+<para>can be replaced by</para>
+<para>phi -= 1 / z^2</para>
+<para>which avoids the creation of a temporary variable for the righthand side which would subsequently be assigned to &apos;phi&apos; on the left.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_visitor_1applicability">
+<title>Applicability</title><para>PropertyHandles can be applied anywhere in a main program or a high-level class object or function which has access to the CSMP library. To create a <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> its constructor takes arguments which allow it to associate itself with an existing variable in the <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> or to request a new <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> variable which will be globally known until the <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> is destructed again. If a new variable is created, it will be destroyed when the destructor of the <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> is called.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_solver_1participants">
+<title>Participants</title><para>The <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> has references to the Mesh and Memory managers, and the <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref> and it stores the <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> of the associated physical variable for rapid variable access.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_time_step_evaluator_1collaborations">
+<title>Collaborations</title><para>The <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> collaborates with the <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> and its contained managers in order to carry out its arithmetic operations.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_1consequences">
+<title>Consequences</title><para>PropertyHandles allow the user to add, subtract, multiply, and divide distributed physical variables among eachother, to assign values to them, or to add, subtract, multiply, and divide CSP basic variables to the distributed physical variables.</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>For clarity, the placement and type of the physical variables which are associated with PropertyHandles are used to impose restrictions on whether PropertyHandles can be used together in arithmetic expressions. Only if the placement and variable type is the same this can be done.</para>
+<para>The user is requested to make recommendations of how PropertyHandles can be made more flexibility while avoiding ambiguities of assigning variables of different type to one another.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_visitor_1examples">
+<title>Application Examples</title><para>Below the full source code for the porosity example from above is listed:</para>
+<para><programlisting><codeline><highlight class="comment">//<sp/>existing<sp/>property<sp/>using<sp/>default<sp/>arguments<sp/></highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="classcsmp_1_1_property_handle_1a88ec60b31e8b46b2303ff3905892ce32" kindref="member">PropertyHandle</ref><sp/><sp/>phi(<sp/>current_supergroup,<sp/></highlight><highlight class="stringliteral">&quot;porosity&quot;</highlight><highlight class="normal">,<sp/>SCALAR,<sp/>ELEMENT<sp/>);</highlight></codeline>
+<codeline><highlight class="normal">phi<sp/>=<sp/>0.4;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>new<sp/>property<sp/></highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="classcsmp_1_1_property_handle_1a88ec60b31e8b46b2303ff3905892ce32" kindref="member">PropertyHandle</ref><sp/><sp/>z(<sp/>current_supergroup,<sp/></highlight><highlight class="stringliteral">&quot;depth&quot;</highlight><highlight class="normal">,<sp/>SCALAR,<sp/>ELEMENT<sp/>);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>initialize<sp/>the<sp/>new<sp/>property<sp/>using<sp/>an<sp/>Interrelation<sp/>subclass</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">AssignDepthToProperty<sp/><sp/>make_depth(<sp/>reference_to_property_database<sp/>);</highlight></codeline>
+<codeline><highlight class="normal">current_supergroup.Apply(<sp/>make_depth<sp/>);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>desired<sp/>arithmetic<sp/>expression</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">phi<sp/>-=<sp/>1<sp/>/<sp/>z^2;</highlight></codeline>
+<codeline><highlight class="normal">phi.OutMatlab();</highlight></codeline>
+</programlisting></para>
+<para>In this example, the existing scalar element variable &apos;porosity&apos; is assigned to the <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> &apos;phi&apos; and intialized to 40%. The construction of the <ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref> &apos;z&apos; prompts the generation of a new variable &quot;depth&quot; as a scalar placed on the element and initialized to NAN (not a number). The interrelation AssignDepthToProperty assigns the z-coordinate of the element centers to the new variable &apos;depth&apos;. Now the following arithmetic expression has the necessary input values and can be applied. The result is output to a text file in Matlab format.</para>
+<para>PropertyHandles also allow to create temporary variables, then apply standard mathematical operations on these, and subsequently output the results to a file for visualization. In the following example, the natural logarithm of the variable porosity is output to a textfile:</para>
+<para><programlisting><codeline><highlight class="normal"><ref refid="classcsmp_1_1_property_handle_1a88ec60b31e8b46b2303ff3905892ce32" kindref="member">PropertyHandle</ref><sp/><sp/>phi(<sp/>current_supergroup,<sp/></highlight><highlight class="stringliteral">&quot;porosity&quot;</highlight><highlight class="normal">,<sp/>SCALAR,<sp/>ELEMENT<sp/>);</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="classcsmp_1_1_property_handle_1a88ec60b31e8b46b2303ff3905892ce32" kindref="member">PropertyHandle</ref><sp/><sp/>log_phi(<sp/>current_supergroup,<sp/></highlight><highlight class="stringliteral">&quot;log<sp/>porosity&quot;</highlight><highlight class="normal">,<sp/>SCALAR,<sp/>ELEMENT<sp/>);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>assign<sp/>the<sp/>porosity<sp/>to<sp/>the<sp/>new<sp/>variable<sp/>without<sp/>direct<sp/>assignment</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">log_phi<sp/><sp/>=<sp/>0.0;</highlight></codeline>
+<codeline><highlight class="normal">log_phi<sp/>+=<sp/>phi;</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>logarithmitize<sp/>the<sp/>values</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">log_phi.Log();</highlight></codeline>
+<codeline><highlight class="normal">log_phi.Out(<sp/>logarithmitized_porosity<sp/>);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>delete<sp/>the<sp/>temporary<sp/>variable</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">log_phi.~PropertyHandle();</highlight></codeline>
+</programlisting></para>
+<para><xrefsect id="todo_1_todo000022"><xreftitle>Todo</xreftitle><xrefdescription><para>!!! SKM: fix math function calls and catch IEEE exceptions </para>
+<para>SKM: deal with new variable placements </para>
+<para>(1) Crashes when it wants to create a REGION property (A) </para>
+<para>(3) A range of switch statements must be extended for type REGION, FACE, INTER_FACE (A)</para>
+</xrefdescription></xrefsect></para>
+</sect1>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>csmp::PropertyHandle&lt; 3 &gt;</label>
+        <link refid="classcsmp_1_1_property_handle"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; 3 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::PropertyHandle&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_property_handle"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::PropertyHandle&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_property_handle"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/property_manipulation/PropertyHandle.h" line="168" column="1" bodyfile="source/includes/property_manipulation/PropertyHandle.h" bodystart="168" bodyend="236"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_property_handle_1a20ce3529dc7f43cc4d6a4ac1d9f3ba22" prot="public" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>Acos</name></member>
+      <member refid="classcsmp_1_1_property_handle_1a996904b678b66f3b48a6a3a8f39d6293" prot="public" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>Asin</name></member>
+      <member refid="classcsmp_1_1_property_handle_1af5214a1b159ce7819f5ee1c431aecbe9" prot="public" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>Atan</name></member>
+      <member refid="classcsmp_1_1_property_handle_1ab39d3c22028fb93f77ffda61ddcb5026" prot="public" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>Cos</name></member>
+      <member refid="classcsmp_1_1_property_handle_1ae9f9081d7346eb4b755dae919c5b6013" prot="public" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>Exp</name></member>
+      <member refid="classcsmp_1_1_property_handle_1aa82313ba4a3404e7cdd508f5acd689ad" prot="private" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>flag_output</name></member>
+      <member refid="classcsmp_1_1_property_handle_1aa359469490b74e58c2721e791c5b59fc" prot="private" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>group</name></member>
+      <member refid="classcsmp_1_1_property_handle_1ae08e32a49cc0d1b5121d5e855975a840" prot="private" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>group_name</name></member>
+      <member refid="classcsmp_1_1_property_handle_1a2eda2263970fa36bcfc1ad6a03949469" prot="public" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>IsWithinRange</name></member>
+      <member refid="classcsmp_1_1_property_handle_1a12c56e037bf4d1d9530766c90c207c60" prot="public" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>Key</name></member>
+      <member refid="classcsmp_1_1_property_handle_1abd4c562956ed4eae610b64236c5dfa04" prot="private" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>key_</name></member>
+      <member refid="classcsmp_1_1_property_handle_1a38a6053488aad9313b7c98acee490adf" prot="public" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>Ln</name></member>
+      <member refid="classcsmp_1_1_property_handle_1a052b7ad27853f4eb928bc81377d287fe" prot="public" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>Log10</name></member>
+      <member refid="classcsmp_1_1_property_handle_1a4875ea9e9690482d3d29134a1a3498eb" prot="private" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>model_domain</name></member>
+      <member refid="classcsmp_1_1_property_handle_1a4275282dc45e11ce1720049e562f39f3" prot="private" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>new_variable_created</name></member>
+      <member refid="classcsmp_1_1_property_handle_1a750f4ec00439262023c978683cb06f75" prot="public" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>operator*=</name></member>
+      <member refid="classcsmp_1_1_property_handle_1a9276977e5bddb6c879a0c0c5c4a4555e" prot="public" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>operator*=</name></member>
+      <member refid="classcsmp_1_1_property_handle_1a98836987275c992cb1a5e3c500560f16" prot="public" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>operator+=</name></member>
+      <member refid="classcsmp_1_1_property_handle_1a52956c8f9403dcddf16534cc58605a49" prot="public" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>operator+=</name></member>
+      <member refid="classcsmp_1_1_property_handle_1a51ab2673cf2640208adbcdea7ce37361" prot="public" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>operator-=</name></member>
+      <member refid="classcsmp_1_1_property_handle_1a748f500d29c02823ed3a19c0e19e2496" prot="public" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>operator-=</name></member>
+      <member refid="classcsmp_1_1_property_handle_1a7157396ddc2b6f8fe96ced121372082c" prot="public" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>operator/=</name></member>
+      <member refid="classcsmp_1_1_property_handle_1acb5ca29f14d551d6b3ffd63f5e8dae48" prot="public" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>operator/=</name></member>
+      <member refid="classcsmp_1_1_property_handle_1a709264c35eb0526b0c2925df00b8d776" prot="public" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_property_handle_1a1d41759b0c37af5b9ca55b7ce9dfa4e1" prot="public" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_property_handle_1ad01023f67784a0021cf92cda256b8290" prot="public" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_property_handle_1a5c8f8d95d19b4f15e774e78e7bd61e3e" prot="public" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_property_handle_1abfa726dfa7a711c6562c97e3ca5775fc" prot="public" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_property_handle_1ab29746ac3d6dd9f78ff0c5df83d90302" prot="public" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_property_handle_1adca0ff6143b01053482f3796d152e52f" prot="public" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_property_handle_1aa75a1204703bb356d83c6361b549e235" prot="public" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_property_handle_1a9b3bb027a58437a87dc7b566852f46bc" prot="public" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_property_handle_1a03ad5576ac87af17cb875efbea818dd6" prot="public" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>OutputCondition</name></member>
+      <member refid="classcsmp_1_1_property_handle_1aab5a4dbf66b9b312273ba68c33205e35" prot="public" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>OutputCondition</name></member>
+      <member refid="classcsmp_1_1_property_handle_1a61bd7e7d9a8ec2a72ee1ed598d7065d6" prot="public" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>Pow</name></member>
+      <member refid="classcsmp_1_1_property_handle_1a88ec60b31e8b46b2303ff3905892ce32" prot="public" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>PropertyHandle</name></member>
+      <member refid="classcsmp_1_1_property_handle_1ada2d2f1420884dd333af55b88de00b0c" prot="public" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>PropertyHandle</name></member>
+      <member refid="classcsmp_1_1_property_handle_1a9620c267a912260d48e250c0a9b288ea" prot="public" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>PropertyHandle</name></member>
+      <member refid="classcsmp_1_1_property_handle_1a01ea8480651da5462789dce112d34fb6" prot="public" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>Range</name></member>
+      <member refid="classcsmp_1_1_property_handle_1a3dfd0c830c886a5031f462750687d380" prot="public" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>Sin</name></member>
+      <member refid="classcsmp_1_1_property_handle_1a32c64de5c8a180f1d1fad710c0846fa5" prot="public" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>Sqrt</name></member>
+      <member refid="classcsmp_1_1_property_handle_1a3ec98d66d13a356309d8ff8da4ec9937" prot="public" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>Squared</name></member>
+      <member refid="classcsmp_1_1_property_handle_1a4ae5a13329a2f2cf6b1c08e4cde7f6de" prot="public" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>Tan</name></member>
+      <member refid="classcsmp_1_1_property_handle_1ade36122473189102d957b9ee451b95a4" prot="private" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>var_name</name></member>
+      <member refid="classcsmp_1_1_property_handle_1aa925f8547cef7786dbf691ddee459991" prot="public" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>VariableName</name></member>
+      <member refid="classcsmp_1_1_property_handle_1a678ba1e51e0663d58ffb83069d946f04" prot="public" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>ZapNAN</name></member>
+      <member refid="classcsmp_1_1_property_handle_1a4011b4168bc76a2f37befabb526a5541" prot="public" virt="non-virtual"><scope>csmp::PropertyHandle</scope><name>~PropertyHandle</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,144 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_finite_element_manager___test" kind="class" language="C++" prot="public">
+    <compoundname>csmp::FiniteElementManager_Test</compoundname>
+    <basecompoundref refid="classcsmp_1_1_test" prot="public" virt="non-virtual">csmp::Test</basecompoundref>
+    <includes refid="_finite_element_manager___test_8h" local="no">FiniteElementManager_Test.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_finite_element_manager___test_1a7837d2fb625217e8947d3ef3a2d88e6a" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::FiniteElementManager_Test::verbose_</definition>
+        <argsstring></argsstring>
+        <name>verbose_</name>
+        <qualifiedname>csmp::FiniteElementManager_Test::verbose_</qualifiedname>
+        <initializer>= true</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/FiniteElementManager_Test.h" line="31" column="10" bodyfile="tests/unit/FiniteElementManager_Test.h" bodystart="31" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_finite_element_manager___test_1a20bc6da8a12cf688e2b16e7cf8dfae1c" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::FiniteElementManager_Test::run</definition>
+        <argsstring>()</argsstring>
+        <name>run</name>
+        <qualifiedname>csmp::FiniteElementManager_Test::run</qualifiedname>
+        <reimplements refid="classcsmp_1_1_test_1af63cd2af47d8d03819b05cf8bfb27eac">run</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/FiniteElementManager_Test.h" line="21" column="18" bodyfile="tests/unit/FiniteElementManager_Test.cpp" bodystart="39" bodyend="45"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_element_manager___test_1a8579362075e9ae27714ba148aea3a749" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FiniteElementManager_Test::TestBasicFunctionality</definition>
+        <argsstring>()</argsstring>
+        <name>TestBasicFunctionality</name>
+        <qualifiedname>csmp::FiniteElementManager_Test::TestBasicFunctionality</qualifiedname>
+        <briefdescription>
+<para>builds different managers and demonstrates that they contain the correct element types </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Tests methods of public interface of <ref refid="classcsmp_1_1_finite_element_manager" kindref="compound">FiniteElementManager</ref>, demonstrating that it generates the correct element types and that they are accessible </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/FiniteElementManager_Test.h" line="24" column="10" bodyfile="tests/unit/FiniteElementManager_Test.cpp" bodystart="54" bodyend="137"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_element_manager___test_1a94f1a2bc2f000d6bab0f05f108d18fc2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FiniteElementManager_Test::TestBasicFunctionality_FiniteElementManager1</definition>
+        <argsstring>()</argsstring>
+        <name>TestBasicFunctionality_FiniteElementManager1</name>
+        <qualifiedname>csmp::FiniteElementManager_Test::TestBasicFunctionality_FiniteElementManager1</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Builds templatiised version of finite element manager (<ref refid="classcsmp_1_1_finite_element_manager1" kindref="compound">FiniteElementManager1</ref>) and demonstrates that it contains the correct element types </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/FiniteElementManager_Test.h" line="25" column="10" bodyfile="tests/unit/FiniteElementManager_Test.cpp" bodystart="144" bodyend="221"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_element_manager___test_1a1e1d038daf365d59e39e084f67b6a962" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FiniteElementManager_Test::TestAccumulationSpeed</definition>
+        <argsstring>()</argsstring>
+        <name>TestAccumulationSpeed</name>
+        <qualifiedname>csmp::FiniteElementManager_Test::TestAccumulationSpeed</qualifiedname>
+        <briefdescription>
+<para>uses a transient pressure diffusion calculation with tetra-triangle model to measure the speed of the accumulation </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/FiniteElementManager_Test.h" line="28" column="10" bodyfile="tests/unit/FiniteElementManager_Test.cpp" bodystart="229" bodyend="340"/>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9a2d373b048f997a96c661862c40f2fcae" compoundref="_c_s_m_p__global__enumerations_8h" startline="64">csmp::DIRICH</references>
+        <references refid="namespacecsmp_1a045796fbaba7d5053c66ae8e794e5f9b" compoundref="_scalar_variable_8cpp" startline="222" endline="225">csmp::makeScalar</references>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6" compoundref="_c_s_m_p__global__enumerations_8h" startline="58">csmp::PLAIN</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Verifies functionality of <ref refid="classcsmp_1_1_finite_element" kindref="compound">FiniteElement</ref> manager and then tests its performance with a pressure diffusion model based on prism_test </para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::FiniteElementManager_Test</label>
+        <link refid="classcsmp_1_1_finite_element_manager___test"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Test</label>
+        <link refid="classcsmp_1_1_test"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::FiniteElementManager_Test</label>
+        <link refid="classcsmp_1_1_finite_element_manager___test"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Test</label>
+        <link refid="classcsmp_1_1_test"/>
+      </node>
+    </collaborationgraph>
+    <location file="tests/unit/FiniteElementManager_Test.h" line="19" column="1" bodyfile="tests/unit/FiniteElementManager_Test.h" bodystart="19" bodyend="32"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_test_1ad3346b23b36fbe34ac5f306a2a5d0e28" prot="protected" virt="non-virtual"><scope>csmp::FiniteElementManager_Test</scope><name>do_equal</name></member>
+      <member refid="classcsmp_1_1_test_1aee0da28e82775ce7d1ebd3b9fae9bf7d" prot="protected" virt="non-virtual"><scope>csmp::FiniteElementManager_Test</scope><name>do_fail</name></member>
+      <member refid="classcsmp_1_1_test_1a9976e7601c20a057d2f0ed2f8318c862" prot="public" virt="non-virtual"><scope>csmp::FiniteElementManager_Test</scope><name>do_succeed</name></member>
+      <member refid="classcsmp_1_1_test_1a0bf5d355d1455b2bc113ba2572e95ad8" prot="protected" virt="non-virtual"><scope>csmp::FiniteElementManager_Test</scope><name>do_test</name></member>
+      <member refid="classcsmp_1_1_test_1ab8d7cbdfd0588aa57d7ce4d2574d665b" prot="public" virt="non-virtual"><scope>csmp::FiniteElementManager_Test</scope><name>getName</name></member>
+      <member refid="classcsmp_1_1_test_1a47920cfd13f92f0860ca62ade4f2e150" prot="public" virt="non-virtual"><scope>csmp::FiniteElementManager_Test</scope><name>getNumFailed</name></member>
+      <member refid="classcsmp_1_1_test_1af0f3b897ba4ff0cb7c94cde8be1fb32b" prot="public" virt="non-virtual"><scope>csmp::FiniteElementManager_Test</scope><name>getNumPassed</name></member>
+      <member refid="classcsmp_1_1_test_1ac340370a07ff5fd4bd85bae93f0a3dac" prot="public" virt="non-virtual"><scope>csmp::FiniteElementManager_Test</scope><name>getStream</name></member>
+      <member refid="classcsmp_1_1_test_1adfad3f1f85aa766958ffcc59070e2d2d" prot="public" virt="non-virtual"><scope>csmp::FiniteElementManager_Test</scope><name>hasName</name></member>
+      <member refid="classcsmp_1_1_test_1a73afdd22caa8aac000b0d07fb3ae42e5" prot="protected" virt="non-virtual"><scope>csmp::FiniteElementManager_Test</scope><name>prefix_</name></member>
+      <member refid="classcsmp_1_1_test_1aa241dcb3adf0ec6716ed08739bd3f79b" prot="public" virt="non-virtual"><scope>csmp::FiniteElementManager_Test</scope><name>report</name></member>
+      <member refid="classcsmp_1_1_test_1a5d334e867a3de4afd434dd9b0034234c" prot="public" virt="virtual"><scope>csmp::FiniteElementManager_Test</scope><name>reset</name></member>
+      <member refid="classcsmp_1_1_finite_element_manager___test_1a20bc6da8a12cf688e2b16e7cf8dfae1c" prot="public" virt="virtual"><scope>csmp::FiniteElementManager_Test</scope><name>run</name></member>
+      <member refid="classcsmp_1_1_test_1a3e006cad54b35d9e20561f4a64843b4e" prot="public" virt="non-virtual"><scope>csmp::FiniteElementManager_Test</scope><name>setName</name></member>
+      <member refid="classcsmp_1_1_test_1a20ba6ab18fcaaf806df6348a3b2e032b" prot="public" virt="non-virtual"><scope>csmp::FiniteElementManager_Test</scope><name>setStream</name></member>
+      <member refid="classcsmp_1_1_test_1aa4e274174d16215448eab6198bdb5979" prot="public" virt="non-virtual"><scope>csmp::FiniteElementManager_Test</scope><name>Test</name></member>
+      <member refid="classcsmp_1_1_finite_element_manager___test_1a1e1d038daf365d59e39e084f67b6a962" prot="public" virt="non-virtual"><scope>csmp::FiniteElementManager_Test</scope><name>TestAccumulationSpeed</name></member>
+      <member refid="classcsmp_1_1_finite_element_manager___test_1a8579362075e9ae27714ba148aea3a749" prot="public" virt="non-virtual"><scope>csmp::FiniteElementManager_Test</scope><name>TestBasicFunctionality</name></member>
+      <member refid="classcsmp_1_1_finite_element_manager___test_1a94f1a2bc2f000d6bab0f05f108d18fc2" prot="public" virt="non-virtual"><scope>csmp::FiniteElementManager_Test</scope><name>TestBasicFunctionality_FiniteElementManager1</name></member>
+      <member refid="classcsmp_1_1_finite_element_manager___test_1a7837d2fb625217e8947d3ef3a2d88e6a" prot="private" virt="non-virtual"><scope>csmp::FiniteElementManager_Test</scope><name>verbose_</name></member>
+      <member refid="classcsmp_1_1_test_1ac154a16a5e086fe52e032c30722f5060" prot="public" virt="virtual"><scope>csmp::FiniteElementManager_Test</scope><name>~Test</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

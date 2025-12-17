@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="structcsmp_1_1_finite_volume_placement_collection" kind="struct" language="C++" prot="public">
+    <compoundname>csmp::FiniteVolumePlacementCollection</compoundname>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+      <param>
+        <type><ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">PLACEMENT</ref></type>
+        <declname>pl</declname>
+        <defname>pl</defname>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::FiniteVolumePlacementCollection&lt; dim, pl &gt;</label>
+        <link refid="structcsmp_1_1_finite_volume_placement_collection"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/model/VariablePlacement.h" line="13" column="15" bodyfile="source/includes/model/VariablePlacement.h" bodystart="13" bodyend="-1"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

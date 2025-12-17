@@ -1,0 +1,229 @@
+\doxysection{Error\+Handler.\+h}
+\hypertarget{_error_handler_8h_source}{}\label{_error_handler_8h_source}\index{source/includes/run\_control/ErrorHandler.h@{source/includes/run\_control/ErrorHandler.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_ERROR\_HANDLER\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_ERROR\_HANDLER\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_generic_singleton_8h}{"{}GenericSingleton.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_exception_8h}{"{}Exception.h"{}}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_b_e___time_8h}{"{}BE\_Time.h"{}}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{map}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{comment}{///\ reporting\ level\ set\ for\ the\ error\ handler;\ default=verbose}}
+\DoxyCodeLine{00013\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{namespacecsmp_acb6b4545143bba63576db4256420387b}{CSMP\_OUTPUT\_LEVEL}}\ :\ \mbox{\hyperlink{namespacecsmp_acb6b4545143bba63576db4256420387b}{std}}::\mbox{\hyperlink{namespacecsmp_acb6b4545143bba63576db4256420387b}{int8\_t}}\ \{\ VERBOSE=100,\ SILENT=0,\ IMPORTANT\_OUTPUT=1,\ PROCESS\_OUTPUT=2,\ INFO\_OUTPUT=3\ \};}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00017\ \textcolor{comment}{@brief\ The\ singleton\ ErrorHandler\ implements\ an\ issue\ reporting\ scheme\ to\ support\ }}
+\DoxyCodeLine{00018\ \textcolor{comment}{platform-\/specific\ message\ capabilities\ like\ error}}
+\DoxyCodeLine{00019\ \textcolor{comment}{windows\ or\ specific\ options\ that\ can\ be\ specified\ for\ core-\/dumps\ etc.\ }}
+\DoxyCodeLine{00020\ \textcolor{comment}{The\ error\ handler\ further\ documents\ the\ progression\ of\ issues\ that\ occur\ during}}
+\DoxyCodeLine{00021\ \textcolor{comment}{a\ run\ so\ that\ warnings\ etc.\ leading\ up\ to\ an\ error\ can\ be\ examined\ in\ the\ }}
+\DoxyCodeLine{00022\ \textcolor{comment}{runtime.log\ file.\ Thus,\ the\ aim\ is}}
+\DoxyCodeLine{00023\ \textcolor{comment}{to\ provide\ diagnostics\ of\ when\ and\ under\ what\ conditions\ an}}
+\DoxyCodeLine{00024\ \textcolor{comment}{error\ arose.\ \ }}
+\DoxyCodeLine{00025\ \textcolor{comment}{}}
+\DoxyCodeLine{00026\ \textcolor{comment}{@author\ S.K.\ Matthai}}
+\DoxyCodeLine{00027\ \textcolor{comment}{@author\ Stephen\ G.\ Roberts}}
+\DoxyCodeLine{00028\ \textcolor{comment}{@date\ 1999}}
+\DoxyCodeLine{00029\ \textcolor{comment}{}}
+\DoxyCodeLine{00030\ \textcolor{comment}{@section\ messages\ Messages\ }}
+\DoxyCodeLine{00031\ \textcolor{comment}{}}
+\DoxyCodeLine{00032\ \textcolor{comment}{The\ ErrorHandler\ classifies\ (by\ enumeration),}}
+\DoxyCodeLine{00033\ \textcolor{comment}{the\ different\ messages\ that\ are\ sent\ to\ it\ as\ INFOs,\ WARNINGs,\ ERRORs,\ and}}
+\DoxyCodeLine{00034\ \textcolor{comment}{FATAL\_ERRORs:\ }}
+\DoxyCodeLine{00035\ \textcolor{comment}{}}
+\DoxyCodeLine{00036\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00037\ \textcolor{comment}{enum\ csmp\_error\{\ INFO,\ EXCEPTION,\ WARNING,\ ERROR,\ FATAL\_ERROR\ \};}}
+\DoxyCodeLine{00038\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00039\ \textcolor{comment}{}}
+\DoxyCodeLine{00040\ \textcolor{comment}{If\ a\ FATAL\_ERROR\ is\ reported,\ the\ ErrorHandler\ will\ terminate}}
+\DoxyCodeLine{00041\ \textcolor{comment}{the\ run.\ This\ role\ is\ given\ to\ the\ error\ handler\ with\ its\ future\ role\ as}}
+\DoxyCodeLine{00042\ \textcolor{comment}{exception\ handler\ in\ mind.\ Present\ FATAL\_ERRORs\ will\ become\ recoverable}}
+\DoxyCodeLine{00043\ \textcolor{comment}{once\ exception\ handling\ is\ consistently\ implemented\ throughout\ CSMP.}}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00045\ \textcolor{comment}{@section\ design\ Design\ Intent}}
+\DoxyCodeLine{00046\ \textcolor{comment}{}}
+\DoxyCodeLine{00047\ \textcolor{comment}{The\ ErrorHandler\ logs\ information\ strings\ to\ 'cout'\ /\ 'cerr'\ and\ to\ the\ log}}
+\DoxyCodeLine{00048\ \textcolor{comment}{file\ 'ErrorHandler.log'.\ To\ be\ able\ to\ trace\ a\ message\ to\ its\ source,\ a\ string}}
+\DoxyCodeLine{00049\ \textcolor{comment}{that\ consists\ of\ the\ class\ and\ method\ name\ from\ which\ the\ message\ originated}}
+\DoxyCodeLine{00050\ \textcolor{comment}{must\ be\ supplied\ as\ first\ message\ argument.\ In\ case\ of\ an\ overloaded\ method}}
+\DoxyCodeLine{00051\ \textcolor{comment}{additional\ information\ is\ included\ in\ braces\ which\ identifies\ the\ called}}
+\DoxyCodeLine{00052\ \textcolor{comment}{method\ uniquely,\ for\ example:}}
+\DoxyCodeLine{00053\ \textcolor{comment}{}}
+\DoxyCodeLine{00054\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00055\ \textcolor{comment}{ErrorHandler::Notice(char*,\ char*):}}
+\DoxyCodeLine{00056\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00057\ \textcolor{comment}{}}
+\DoxyCodeLine{00058\ \textcolor{comment}{Messages\ which\ are\ written\ to\ file,\ are\ automatically\ preceded\ by\ a\ time}}
+\DoxyCodeLine{00059\ \textcolor{comment}{string\ which\ tells\ the\ user\ when\ the\ message\ originated.\ Since\ messages}}
+\DoxyCodeLine{00060\ \textcolor{comment}{may\ also\ contain\ numerical\ data\ in\ the\ description\ of\ the\ error\ message}}
+\DoxyCodeLine{00061\ \textcolor{comment}{the\ ErrorHandler\ interface\ is\ overloaded\ to\ accept\ std::string\ arguments}}
+\DoxyCodeLine{00062\ \textcolor{comment}{(std::string\ has\ overloaded\ operators\ that\ allow\ the\ method\ writer\ to\ convert\ }}
+\DoxyCodeLine{00063\ \textcolor{comment}{numbers\ to\ strings).\ The\ functionality\ of\ the\ ErrorHandler\ is\ planned\ to\ be\ }}
+\DoxyCodeLine{00064\ \textcolor{comment}{extended\ to\ handle\ top\ level\ (C++)\ exceptions.\ For\ this\ purpose\ the\ standard}}
+\DoxyCodeLine{00065\ \textcolor{comment}{exception\ base\ classes\ exception,\ logic\_error,\ and\ runtime\_error\ will\ be}}
+\DoxyCodeLine{00066\ \textcolor{comment}{subclassed\ for\ CSMP-\/specific\ error\ types.}}
+\DoxyCodeLine{00067\ \textcolor{comment}{}}
+\DoxyCodeLine{00068\ \textcolor{comment}{A\ goal\ of\ the\ exception\ handling\ is\ to\ store\ the\ transient\ state}}
+\DoxyCodeLine{00069\ \textcolor{comment}{of\ a\ run\ before\ it\ gets\ aborted\ such\ that\ it\ can\ be\ carried\ on\ from\ this}}
+\DoxyCodeLine{00070\ \textcolor{comment}{state\ at\ a\ later\ time,\ when\ the\ error\ condition\ has\ been\ properly}}
+\DoxyCodeLine{00071\ \textcolor{comment}{diagnosed.}}
+\DoxyCodeLine{00072\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00073\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00074\ \textcolor{comment}{@section\ applicability\ Applicability}}
+\DoxyCodeLine{00075\ \textcolor{comment}{}}
+\DoxyCodeLine{00076\ \textcolor{comment}{The\ ErrorHandler\ is\ used\ inside\ high-\/level\ CSMP\ objects\ like\ the}}
+\DoxyCodeLine{00077\ \textcolor{comment}{Model\ etc..\ Only\ those\ which\ carry\ enough\ information\ so\ that\ it\ makes\ sense}}
+\DoxyCodeLine{00078\ \textcolor{comment}{to\ collect\ user-\/readable\ diagnostics\ from\ a\ CSMP\ run\ are\ logged.\ }}
+\DoxyCodeLine{00079\ \textcolor{comment}{Atomic\ generic\ classes\ report\ errors\ directly\ to\ the}}
+\DoxyCodeLine{00080\ \textcolor{comment}{'cerr'\ stream.}}
+\DoxyCodeLine{00081\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00082\ \textcolor{comment}{}}
+\DoxyCodeLine{00083\ \textcolor{comment}{@section\ structure\ Structure}}
+\DoxyCodeLine{00084\ \textcolor{comment}{}}
+\DoxyCodeLine{00085\ \textcolor{comment}{ErrorHandler\ is\ a\ base-\/level\ class\ using\ STL\ maps\ to\ store\ the}}
+\DoxyCodeLine{00086\ \textcolor{comment}{different\ types\ of\ error\ messages.}}
+\DoxyCodeLine{00087\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00088\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00089\ \textcolor{comment}{@section\ participants\ Participants}}
+\DoxyCodeLine{00090\ \textcolor{comment}{}}
+\DoxyCodeLine{00091\ \textcolor{comment}{A\ singleton\ instance(static)\ is\ created\ upon\ loading\ the\ csmp\ core\ library.}}
+\DoxyCodeLine{00092\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00093\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00094\ \textcolor{comment}{@section\ collaborations\ Collaborations}}
+\DoxyCodeLine{00095\ \textcolor{comment}{}}
+\DoxyCodeLine{00096\ \textcolor{comment}{ErrorHandler\ uses\ the\ functionality\ of\ STL\ maps\ and\ the\ std::string\ class.}}
+\DoxyCodeLine{00097\ \textcolor{comment}{The\ Standard\_IO\_Handler\ is\ used\ in\ dialogs\ with\ a\ console\ user.}}
+\DoxyCodeLine{00098\ \textcolor{comment}{The\ object\ BE\_Time\ is\ contained\ to\ log\ the\ time\ at\ which\ errors\ occur.}}
+\DoxyCodeLine{00099\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00100\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00101\ \textcolor{comment}{@section\ consequences\ Consequences}}
+\DoxyCodeLine{00102\ \textcolor{comment}{}}
+\DoxyCodeLine{00103\ \textcolor{comment}{The\ consequent\ usage\ of\ the\ ErrorHandler\ turns\ it\ into\ an\ 'Observer'}}
+\DoxyCodeLine{00104\ \textcolor{comment}{object\ the\ functionality\ of\ which\ may\ be\ widely\ extended\ in\ future}}
+\DoxyCodeLine{00105\ \textcolor{comment}{implementations.\ For\ the\ time\ being,\ the\ user\ can\ use\ the\ '*.log'\ file}}
+\DoxyCodeLine{00106\ \textcolor{comment}{and\ the\ screen\ output\ to\ obtain\ a\ detailed\ progress\ report\ for\ his/her}}
+\DoxyCodeLine{00107\ \textcolor{comment}{CSMP\ run.\ Interaction\ with\ the\ run,\ however,\ is\ still\ very\ limited.}}
+\DoxyCodeLine{00108\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00109\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00110\ \textcolor{comment}{@section\ implementation\ Implementation}}
+\DoxyCodeLine{00111\ \textcolor{comment}{}}
+\DoxyCodeLine{00112\ \textcolor{comment}{The\ ErrorHandler\ stores\ the\ message\ strings\ in\ 3\ maps\ corresponding}}
+\DoxyCodeLine{00113\ \textcolor{comment}{to\ the\ message\ types:\ INFO,\ WARNING,\ ERROR.\ Since\ only\ a\ single\ FATAL\_ERROR}}
+\DoxyCodeLine{00114\ \textcolor{comment}{can\ occur\ before\ the\ run\ is\ terminated,\ it\ is\ lumped\ into\ the\ ERROR}}
+\DoxyCodeLine{00115\ \textcolor{comment}{map.\ In\ the\ log\ file,\ all\ messages\ are\ logged\ sequentially.\ }}
+\DoxyCodeLine{00116\ \textcolor{comment}{}}
+\DoxyCodeLine{00117\ \textcolor{comment}{The\ error\ log\ file\ is\ written\ by\ the\ destructor\ of\ the\ error\ handler.\ Because}}
+\DoxyCodeLine{00118\ \textcolor{comment}{the\ destructor\ of\ a\ global\ object\ is\ called\ last,\ this\ assures\ that\ all}}
+\DoxyCodeLine{00119\ \textcolor{comment}{messages\ that\ arise\ in\ the\ destruction\ process\ are\ logged\ as\ well.\ }}
+\DoxyCodeLine{00120\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00121\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00122\ \textcolor{comment}{@section\ application\ Application\ Examples}}
+\DoxyCodeLine{00123\ \textcolor{comment}{}}
+\DoxyCodeLine{00124\ \textcolor{comment}{The\ ErrorHandler\ is\ implemented\ as\ a\ Singleton\ pattern\ (GoF).}}
+\DoxyCodeLine{00125\ \textcolor{comment}{}}
+\DoxyCodeLine{00126\ \textcolor{comment}{A\ reference\ to\ the\ ErrorHanlder\ instance\ is\ acquired\ as\ such}}
+\DoxyCodeLine{00127\ \textcolor{comment}{}}
+\DoxyCodeLine{00128\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00129\ \textcolor{comment}{\#include\ "{}ErrorHandler.h"{}}}
+\DoxyCodeLine{00130\ \textcolor{comment}{...}}
+\DoxyCodeLine{00131\ \textcolor{comment}{ErrorHandler\&\ csmp\_error(\ ErrorHandler::Instance()\ );}}
+\DoxyCodeLine{00132\ \textcolor{comment}{...}}
+\DoxyCodeLine{00133\ \textcolor{comment}{csmp\_error.Note(\ ERROR,\ "{}MyClass::ProblematicMethod()"{},\ "{}what\ actually\ went\ wrong"{}\ );}}
+\DoxyCodeLine{00134\ \textcolor{comment}{}}
+\DoxyCodeLine{00135\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00136\ \textcolor{comment}{}}
+\DoxyCodeLine{00137\ \textcolor{comment}{after\ which\ one\ can\ call\ the\ handler}}
+\DoxyCodeLine{00138\ \textcolor{comment}{}}
+\DoxyCodeLine{00139\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00140\ \textcolor{comment}{csmp\_error.Note(\ ERROR,\ "{}IterativeAlgorithm<dim>::Iterations"{},\ "{}Solution\ did\ not\ converge!\ "{}\ );}}
+\DoxyCodeLine{00141\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00142\ \textcolor{comment}{}}
+\DoxyCodeLine{00143\ \textcolor{comment}{alternatively,\ if\ i.e.\ just\ a\ single\ call\ is\ to\ be\ made}}
+\DoxyCodeLine{00144\ \textcolor{comment}{}}
+\DoxyCodeLine{00145\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00146\ \textcolor{comment}{ErrorHandler::Instance().Note(\ ERROR,\ "{}IterativeAlgorithm<dim>::Iterations"{},\ "{}Solution\ did\ not\ converge!\ "{}\ );}}
+\DoxyCodeLine{00147\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00148\ \textcolor{comment}{}}
+\DoxyCodeLine{00149\ \textcolor{comment}{@todo\ SKM\ -\/\ resolve\ how\ ErrorHandler\ should\ interact\ with\ exception\ handling}}
+\DoxyCodeLine{00150\ \textcolor{comment}{}}
+\DoxyCodeLine{00151\ \textcolor{comment}{@todo\ SKM\ -\/\ use\ typename\ capability\ to\ find\ out\ from\ which\ inherited\ object\ the\ message\ came}}
+\DoxyCodeLine{00152\ \textcolor{comment}{}}
+\DoxyCodeLine{00153\ \textcolor{comment}{@todo\ SKM\ -\/\ allow\ user\ to\ intervene\ and\ fix\ some\ problems}}
+\DoxyCodeLine{00154\ \textcolor{comment}{}}
+\DoxyCodeLine{00155\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00156\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_error_handler}{ErrorHandler}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_error_handler}{GenericSingleton}}<\mbox{\hyperlink{classcsmp_1_1_error_handler}{ErrorHandler}}>\ \{}
+\DoxyCodeLine{00157\ }
+\DoxyCodeLine{00158\ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_generic_singleton}{GenericSingleton}}<\mbox{\hyperlink{classcsmp_1_1_error_handler}{ErrorHandler}}>;}
+\DoxyCodeLine{00159\ }
+\DoxyCodeLine{00160\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00161\ \ \ \ \ \textcolor{comment}{///\ writes\ a\ file\ called\ 'Runtime.log'\ with\ all\ the\ current\ messages\ when\ the\ program\ terminates}}
+\DoxyCodeLine{00162\ \ \ \ \ \string~\mbox{\hyperlink{classcsmp_1_1_error_handler_accd9f36c7966b135d8b7be891b73dac5}{ErrorHandler}}();}
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00164\ \ \ \ \ \textcolor{comment}{///\ sets\ output\ reporting\ level\ to\ verbose\ (reporting\ of\ all\ events\ to\ cout\ and\ cerr)}}
+\DoxyCodeLine{00165\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_error_handler_aa7ff3cc9b5041c031569fc43c52dbc42}{Verbose}}(\ \textcolor{keywordtype}{bool}\ VERBOSE\ );}
+\DoxyCodeLine{00166\ }
+\DoxyCodeLine{00167\ \ \ \ \ \textcolor{comment}{///\ reports\ whether\ the\ reporting\ level\ is\ set\ to\ VERBOSE}}
+\DoxyCodeLine{00168\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_error_handler_ad908f61ff33632ba5ec1d8f4125ffe5a}{Verbose}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00169\ }
+\DoxyCodeLine{00170\ \ \ \ \ \textcolor{comment}{///\ sets\ output\ to\ corresponding\ CSMP\_OUTPUT\_LEVEL}}
+\DoxyCodeLine{00171\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_error_handler_a6f30b22ba47efb908a00476d3b45aa5f}{ReportingLevel}}(\ \mbox{\hyperlink{namespacecsmp_acb6b4545143bba63576db4256420387b}{CSMP\_OUTPUT\_LEVEL}}\ verb\ );}
+\DoxyCodeLine{00172\ }
+\DoxyCodeLine{00173\ \ \ \ \ \textcolor{comment}{///\ returns\ the\ current\ setting\ of\ the\ CSMP\_OUTPUT\_LEVEL}}
+\DoxyCodeLine{00174\ \ \ \ \ \mbox{\hyperlink{namespacecsmp_acb6b4545143bba63576db4256420387b}{CSMP\_OUTPUT\_LEVEL}}\ \mbox{\hyperlink{classcsmp_1_1_error_handler_ab304674c2d823a6ab5d5c657091a7e69}{ReportingLevel}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00175\ }
+\DoxyCodeLine{00176\ \ \ \ \ \textcolor{comment}{///\ use\ as\ @code\ ErrorHandler\&\ csmp\_error(\ ErrorHandler::Instance()\ );\ csmp\_error.Note(\ WARNING,\ "{}class::method\ where\ this\ comes\ from"{},\ messsage\ );\ @endcode}}
+\DoxyCodeLine{00177\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_error_handler_a52d34d4424e25ee15208cb9160f40252}{Note}}(\ \mbox{\hyperlink{namespacecsmp_a6a7cd0f08693c4632eea521f4ab13cb8}{CSMP\_MESSAGE}}\ err\_type,}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ source,}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ message\ );}
+\DoxyCodeLine{00180\ }
+\DoxyCodeLine{00181\ \ \ \ \ \textcolor{comment}{///\ 4\ argument\ version\ of\ notice}}
+\DoxyCodeLine{00182\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_error_handler_a79b4a5dacb8de3cb5a17344fa30b3d34}{Note}}(\ \mbox{\hyperlink{namespacecsmp_a6a7cd0f08693c4632eea521f4ab13cb8}{CSMP\_MESSAGE}}\ err\_type,}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ source,}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ message1,}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ message2\ );}
+\DoxyCodeLine{00186\ }
+\DoxyCodeLine{00187\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_error_handler_a77fbbab4a96fb6df4937ea998845336f}{PrintInfos}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00188\ \ \ \ \ \textcolor{keywordtype}{void}\ PrintWarnings()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00189\ \ \ \ \ \textcolor{keywordtype}{void}\ PrintErrors()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00190\ }
+\DoxyCodeLine{00191\ \ \ \ \ \textcolor{comment}{///\ returns\ how\ many\ errors\ are\ allowed\ before\ program\ termination\ is\ triggered}}
+\DoxyCodeLine{00192\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_error_handler_a3dd2b91ab441b2bb427149ffb12d950d}{size\_t}}\ \mbox{\hyperlink{classcsmp_1_1_error_handler_a3dd2b91ab441b2bb427149ffb12d950d}{MaximumNumberOfErrors}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00193\ }
+\DoxyCodeLine{00194\ \ \ \ \ \textcolor{comment}{///\ writes\ the\ content\ of\ message\ containers\ stored\ by\ the\ handler\ to\ file}}
+\DoxyCodeLine{00195\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_error_handler_a3524c28c22cce4f9440a877352a54e3d}{WriteErrorsToFile}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ err\_file=\textcolor{stringliteral}{"{}ErrorHandler.log"{}}\ );}
+\DoxyCodeLine{00196\ }
+\DoxyCodeLine{00197\ \ \ \ \ \textcolor{comment}{///\ writes\ contents\ of\ contained\ maps\ to\ file}}
+\DoxyCodeLine{00198\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_error_handler_a7f264c94bf1c554d3e8a7c15a2e95a95}{Out}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00199\ }
+\DoxyCodeLine{00200\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00201\ \ \ \ \ \textcolor{comment}{///\ sets\ default\ to\ VERBOSE,\ error\ limit\ to\ 10'000,\ and\ counters\ to\ zero;\ private\ because\ ErrorHandler\ is\ a\ singleton}}
+\DoxyCodeLine{00202\ \ \ \ \ ErrorHandler();}
+\DoxyCodeLine{00203\ }
+\DoxyCodeLine{00204\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00205\ }
+\DoxyCodeLine{00206\ \ \ \ \ \mbox{\hyperlink{class_b_e___time}{BE\_Time}}\ \ \ \ \ \ \ \ \ \ \ \ timer\_;\ \ \ \ \ \ \ \ \textcolor{comment}{///<\ for\ the\ reporting\ of\ errors\ using\ time\ formatted\ to\ ascii\ strings}}
+\DoxyCodeLine{00207\ \ \ \ \ \mbox{\hyperlink{namespacecsmp_acb6b4545143bba63576db4256420387b}{CSMP\_OUTPUT\_LEVEL}}\ \ verbose\_;\ \ \ \ \ \ \textcolor{comment}{///<\ CSMP\_OUTPUT\_LEVEL\ stored\ as\ a\ short\ enumeration\ (see\ csmp::Exception)}}
+\DoxyCodeLine{00208\ \ \ \ \ \textcolor{keywordtype}{long}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ errors\_;\ \ \ \ \ \ \ \textcolor{comment}{///<\ errors\ incurred\ where\ something\ actually\ went\ wrong\ as\ opposed\ to\ a\ problem\ with-\/\ or\ without\ consequences}}
+\DoxyCodeLine{00209\ \ \ \ \ \textcolor{keywordtype}{long}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ warnings\_;\ \ \ \ \ \textcolor{comment}{///<\ problems\ incurred}}
+\DoxyCodeLine{00210\ \ \ \ \ \textcolor{keywordtype}{long}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ total\_;\ \ \ \ \ \ \ \ \textcolor{comment}{///<\ total\ issues\ logged}}
+\DoxyCodeLine{00211\ \ \ \ \ \textcolor{keyword}{const}\ size\_t\ \ \ \ \ \ \ error\_limit\_;\ \ \textcolor{comment}{///<\ number\ of\ errors\ that\ are\ allowed\ to\ occur\ before\ program\ terminates}}
+\DoxyCodeLine{00212\ }
+\DoxyCodeLine{00213\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ originator\ \&\ message\ \ \ \ \ \ }}
+\DoxyCodeLine{00214\ \ \ \ \ std::multimap<std::string,std::string>\ \ minfos\_;\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ log\ of\ info\ messages}}
+\DoxyCodeLine{00215\ \ \ \ \ std::multimap<std::string,std::string>\ \ mwarnings\_;\ \ \ \ \ \ \ \textcolor{comment}{///<\ log\ of\ warnings}}
+\DoxyCodeLine{00216\ \ \ \ \ std::multimap<std::string,std::string>\ \ merrors\_;\ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ log\ of\ errors}}
+\DoxyCodeLine{00217\ \ \ \ \ \textcolor{comment}{//\ \ time\ \ \ \ \ \ \ message}}
+\DoxyCodeLine{00218\ \ \ \ \ std::map<std::string,std::string>\ \ \ \ \ \ \ error\_sequence\_;\ \ \textcolor{comment}{///<\ chronological\ sequence\ of\ messages}}
+\DoxyCodeLine{00219\ \ \};}
+\DoxyCodeLine{00220\ }
+\DoxyCodeLine{00221\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00222\ }
+\DoxyCodeLine{00223\ \ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

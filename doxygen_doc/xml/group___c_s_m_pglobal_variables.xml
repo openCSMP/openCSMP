@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="group___c_s_m_pglobal_variables" kind="group">
+    <compoundname>CSMPglobalVariables</compoundname>
+    <title>Global CSMP Variables</title>
+    <sectiondef kind="var">
+      <memberdef kind="variable" id="group___c_s_m_pglobal_variables_1ga33246abf249d0a92ff32695779645251" prot="public" static="no" constexpr="yes" mutable="no">
+        <type>double</type>
+        <definition>double csmp::PI</definition>
+        <argsstring></argsstring>
+        <name>PI</name>
+        <qualifiedname>csmp::PI</qualifiedname>
+        <initializer>= 3.14159265358979323846</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/CSMP_mathUtilities.h" line="18" column="18" bodyfile="source/includes/math/CSMP_mathUtilities.h" bodystart="18" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

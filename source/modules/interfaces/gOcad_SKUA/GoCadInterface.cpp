@@ -1755,10 +1755,10 @@ void GoCadInterface<dim>::FlagEdgeNodesOfBoxShapedModel( VSet<dim>& vset )
     size_t counter(0U);
     for ( auto bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); bit++, counter++ )
       // ignoring nodes which were already identified as model corners 
-      if ( (*bit) != CNR_MIN      && (*bit) != CNR_MAX &&
-           (*bit) != CNR_MIN_MAXX && (*bit) != CNR_MIN_MAXXZ &&
-           (*bit) != CNR_MIN_MAXZ && (*bit) != CNR_MAX_MINXZ &&
-           (*bit) != CNR_MAX_MAXX && (*bit) != CNR_MAX_MAXZ )
+      if ( (*bit) != CNR_MIN && (*bit) != CNR_MAX &&
+           (*bit) != CNR2 && (*bit) != CNR3 &&
+           (*bit) != CNR4 && (*bit) != CNR5 &&
+           (*bit) != CNR6 && (*bit) != CNR8 )
         {
            xco = vset.Px( counter );
            yco = vset.Py( counter );

@@ -1,0 +1,39 @@
+\doxysection{IAPWS\+\_\+\+H2\+O\+\_\+\+Density.\+h}
+\hypertarget{_i_a_p_w_s___h2_o___density_8h_source}{}\label{_i_a_p_w_s___h2_o___density_8h_source}\index{source/includes/eos/IAPWS\_H2O\_Density.h@{source/includes/eos/IAPWS\_H2O\_Density.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \ \textcolor{preprocessor}{IAPWS\_H20\_DENSITY\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \ \textcolor{preprocessor}{IAPWS\_H20\_DENSITY\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}steam4.h"{}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_i_a_p_w_s___h2_o___density}{IAPWS\_H2O\_Density}}\ \{}
+\DoxyCodeLine{00010\ \ \ \ \ Prop\ \ \ \ \ \ \ \ \ \ \ *props,\ *lprops,\ *sprops;\ \ \ \textcolor{comment}{//\ PROST\ output\ structures}}
+\DoxyCodeLine{00011\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ t,\ p,\ d,\ h;}
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ dp;}
+\DoxyCodeLine{00013\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00014\ \ \ \ \ IAPWS\_H2O\_Density();}
+\DoxyCodeLine{00015\ \ \ \ \ \string~IAPWS\_H2O\_Density();}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_i_a_p_w_s___h2_o___density_a43c3c7545a39edbcca3f5228f611451c}{Density}}(\ \textcolor{keywordtype}{double}\ T,\ \textcolor{keywordtype}{double}\ P\ );}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keywordtype}{double}\ Viscosity(\ \textcolor{keywordtype}{double}\ T,\ \textcolor{keywordtype}{double}\ P\ );}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_i_a_p_w_s___h2_o___density_a61b62d1b959be384d60f7303a388cd2a}{Density\_P\_MPa}}(\ \textcolor{keywordtype}{double}\ T,\ \textcolor{keywordtype}{double}\ P\ );}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{double}\ VapourDensity(\ \textcolor{keywordtype}{double}\ T,\ \textcolor{keywordtype}{double}\ P\ );}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{double}\ LiquidDensity(\ \textcolor{keywordtype}{double}\ T,\ \textcolor{keywordtype}{double}\ P\ );}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_i_a_p_w_s___h2_o___density_a2d2990123c63c460cc9bd7bbe3b8a4f5}{Pressure}}(\ \textcolor{keywordtype}{double}\ T,\ \textcolor{keywordtype}{double}\ rho\ );}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_i_a_p_w_s___h2_o___density_a32cb15e145e174d92577ece40137db8b}{HeatCapacity}}(\ \textcolor{keywordtype}{double}\ T,\ \textcolor{keywordtype}{double}\ P\ );}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_i_a_p_w_s___h2_o___density_a5132635f9d7ba968baffb68e19e86204}{HeatCapacityDensTemp}}(\ \textcolor{keywordtype}{double}\ rho,\ \textcolor{keywordtype}{double}\ T\ );}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_i_a_p_w_s___h2_o___density_a69068e2f6b693bc6ec9c96810e1b5e8a}{EnthalpyDensTemp}}(\ \textcolor{keywordtype}{double}\ rho,\ \textcolor{keywordtype}{double}\ T\ );}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{double}\ Enthalpy(\ \textcolor{keywordtype}{double}\ P,\ \textcolor{keywordtype}{double}\ T\ );}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_i_a_p_w_s___h2_o___density_aaf8189fbe25f87a9370351e824d87ba4}{LiquidSaturation}}(\ \textcolor{keywordtype}{double}\ T,\ \textcolor{keywordtype}{double}\ P\ );}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{double}\ SaturationTemperature(\ \textcolor{keywordtype}{double}\ P\ );}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{double}\ SaturationPressure(\ \textcolor{keywordtype}{double}\ T\ );}
+\DoxyCodeLine{00029\ \};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \}\ \textcolor{comment}{//\ end\ namespace\ csmp}}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

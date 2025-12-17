@@ -1,0 +1,141 @@
+.TH "csmp::TwoPhaseUndersaturatedFluidPropertyVisitor< dim >" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::TwoPhaseUndersaturatedFluidPropertyVisitor< dim >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+Inherits \fBcsmp::Visitor< dim >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBTwoPhaseUndersaturatedFluidPropertyVisitor\fP (\fBModel\fP< dim > &model, const \fBFluidPropertyVisitorConfiguration\fP &config)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBNode\fP< dim > *node)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBModel\fP< dim > *model)"
+.br
+.ti -1c
+.RI "void \fBCalculateConstantVariables\fP ()"
+.br
+.ti -1c
+.RI "void \fBSpiveyOilCompressibilityCorrelation\fP (double P, double T)"
+.br
+.ti -1c
+.RI "void \fBDensityOilGreaterPb\fP (double P)"
+.br
+.ti -1c
+.RI "void \fBPetroskyFarshadOilViscosityGreaterPb\fP (double P)"
+.br
+.ti -1c
+.RI "void \fBSpiveyBrineAFactors\fP (double T)"
+.br
+.ti -1c
+.RI "double \fBSpiveyA\fP (const double ai[], double T) const"
+.br
+.ti -1c
+.RI "void \fBSpiveyBrineCompressibilityPure\fP (double P)"
+.br
+.ti -1c
+.RI "void \fBSpiveyBrineDensityPure\fP (double P)"
+.br
+.ti -1c
+.RI "void \fBSpiveyBrindeDensityPRef\fP (double m)"
+.br
+.ti -1c
+.RI "void \fBSpiveyBrineCompressibility\fP (double P, double m)"
+.br
+.ti -1c
+.RI "void \fBSpiveyBrineDensity\fP (double P)"
+.br
+.ti -1c
+.RI "void \fBMaoDuanWaterViscosityPure\fP (double T)"
+.br
+.ti -1c
+.RI "void \fBMaoDuanBrineRelativeViscosity\fP (double T, double m)"
+.br
+.ti -1c
+.RI "double \fBSalinityToConcentration\fP (double S) const"
+.br
+.RI "Spivey et\&. al 1999 Compressibility of oil at pressures higher than Pb\&. "
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::Visitor< dim >\fP
+.in +1c
+.ti -1c
+.RI "\fBVisitor\fP (\fBPLACEMENT\fP level=MODEL, \fBPLACEMENT\fP target=ELEMENT)"
+.br
+.ti -1c
+.RI "void \fBApplicationLevel\fP (\fBPLACEMENT\fP p)"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBApplicationLevel\fP () const"
+.br
+.ti -1c
+.RI "void \fBApplicationTarget\fP (\fBPLACEMENT\fP p)"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBApplicationTarget\fP () const"
+.br
+.ti -1c
+.RI "virtual void \fBSetInitialProperties\fP (\fBModel\fP< dim > *model)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBRegion\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBBoundary\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBSplitBoundary\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBElement\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBFace\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBInterFace\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBEdge\fP< dim > *)"
+.br
+.ti -1c
+.RI "bool \fBVerbose\fP ()"
+.br
+.ti -1c
+.RI "void \fBVerbose\fP (bool verbose)"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Attributes inherited from \fBcsmp::Visitor< dim >\fP
+.in +1c
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBapplication_level_\fP"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBapplication_target_\fP"
+.br
+.in -1c
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim> void \fBcsmp::TwoPhaseUndersaturatedFluidPropertyVisitor\fP< dim >::Visit (\fBModel\fP< dim > * model)\fR [virtual]\fP"
+
+.PP
+Reimplemented from \fBcsmp::Visitor< dim >\fP\&.
+.SS "template<uint32_t dim> void \fBcsmp::TwoPhaseUndersaturatedFluidPropertyVisitor\fP< dim >::Visit (\fBNode\fP< dim > * node)\fR [virtual]\fP"
+
+.PP
+Reimplemented from \fBcsmp::Visitor< dim >\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

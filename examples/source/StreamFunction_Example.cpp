@@ -420,14 +420,14 @@ double StreamFunction_Example::integrateDomainBoundaryFlux( Model<dim>& sg )
          IPVF.resize( (*eit)->IntegrationPoints()*dim );
          fill( IPVF.begin(), IPVF.end(), 0. );
 
-         for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+         for ( uint32_t i{0u}; i<(*eit)->IntegrationPoints(); i++ )
            {
               // getting shape function derivative matrix at the integration point
               (*(*eit)).dN_AtIntegrationPoint( DERIV, i, 1 );
 
               // getting the material properties, K and phi into the equation
-              for ( auto n=0; n<(*eit)->Nodes(); n++ )
-                for ( auto j=0; j<dim; j++ )
+              for ( uint32_t n=0; n<(*eit)->Nodes(); n++ )
+                for ( uint32_t j=0; j<dim; j++ )
                   // -DERIV because fluid flows down pressure
                   IPVF[ i*dim + j ] += PF[n]() * -DERIV(j,n) * K();
            }
@@ -441,9 +441,9 @@ double StreamFunction_Example::integrateDomainBoundaryFlux( Model<dim>& sg )
        assert( mit.second );
        (*mit.first).second.resize((*eit)->Nodes());
 
-       for ( auto i{0}; i<(*eit)->Nodes(); i++ ) {
+       for ( uint32_t i{0u}; i<(*eit)->Nodes(); i++ ) {
             (*mit.first).second[i].resize(dim);
-            for ( size_t j=0; j<dim; j++ )
+            for ( uint32_t j=0; j<dim; j++ )
               (*mit.first).second[i][j] = NVF[ i*dim + j ];
          }
 

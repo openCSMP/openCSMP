@@ -1,0 +1,175 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_erf_density" kind="class" language="C++" prot="public">
+    <compoundname>csmp::ErfDensity</compoundname>
+    <basecompoundref refid="classcsmp_1_1_mesh_density" prot="public" virt="virtual">csmp::MeshDensity</basecompoundref>
+    <includes refid="_line_element_mesher_8h" local="no">LineElementMesher.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_erf_density_1aae171b814e9ae74460020905cb791a8e" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::ErfDensity::a_</definition>
+        <argsstring></argsstring>
+        <name>a_</name>
+        <qualifiedname>csmp::ErfDensity::a_</qualifiedname>
+        <briefdescription>
+<para>y = b_ * erf( a * x ) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/LineElementMesher.h" line="55" column="14" bodyfile="source/includes/discretisation/LineElementMesher.h" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_erf_density_1a7d642d317bcb8d86832c85f57df67ad2" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::ErfDensity::b_</definition>
+        <argsstring></argsstring>
+        <name>b_</name>
+        <qualifiedname>csmp::ErfDensity::b_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/LineElementMesher.h" line="56" column="14" bodyfile="source/includes/discretisation/LineElementMesher.h" bodystart="56" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_erf_density_1a33ebee7c1e29a4e6b8807fe2a8bbd480" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::ErfDensity::ErfDensity</definition>
+        <argsstring>(double a=3.0, double b=1.0)</argsstring>
+        <name>ErfDensity</name>
+        <qualifiedname>csmp::ErfDensity::ErfDensity</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>a</declname>
+          <defval>3.0</defval>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>b</declname>
+          <defval>1.0</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/LineElementMesher.h" line="48" column="7" bodyfile="source/modules/discretisation/LineElementMesher.cpp" bodystart="652" bodyend="652"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_erf_density_1ab0372bf2c20ed4208fe45943eefa63d7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::ErfDensity::~ErfDensity</definition>
+        <argsstring>()</argsstring>
+        <name>~ErfDensity</name>
+        <qualifiedname>csmp::ErfDensity::~ErfDensity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/LineElementMesher.h" line="49" column="7" bodyfile="source/modules/discretisation/LineElementMesher.cpp" bodystart="653" bodyend="653"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_erf_density_1a1c2671020448511a063254e599459de0" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::ErfDensity::operator()</definition>
+        <argsstring>(double x)</argsstring>
+        <name>operator()</name>
+        <qualifiedname>csmp::ErfDensity::operator()</qualifiedname>
+        <reimplements refid="classcsmp_1_1_mesh_density_1ae9c6a313c64d7cf50900f56cab5ed426">operator()</reimplements>
+        <param>
+          <type>double</type>
+          <declname>x</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/LineElementMesher.h" line="50" column="22" bodyfile="source/modules/discretisation/LineElementMesher.cpp" bodystart="654" bodyend="665"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_erf_density_1a8a1010d3d7525b6d37a0298f6f6b2658" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ErfDensity::SetA</definition>
+        <argsstring>(double)</argsstring>
+        <name>SetA</name>
+        <qualifiedname>csmp::ErfDensity::SetA</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>a</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/LineElementMesher.h" line="51" column="12" bodyfile="source/modules/discretisation/LineElementMesher.cpp" bodystart="666" bodyend="666"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_erf_density_1aff4713c9def7a18bc2d147f430079d45" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ErfDensity::SetB</definition>
+        <argsstring>(double)</argsstring>
+        <name>SetB</name>
+        <qualifiedname>csmp::ErfDensity::SetB</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>b</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/LineElementMesher.h" line="52" column="12" bodyfile="source/modules/discretisation/LineElementMesher.cpp" bodystart="667" bodyend="667"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>error function based mesh size variation </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::ErfDensity</label>
+        <link refid="classcsmp_1_1_erf_density"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::MeshDensity</label>
+        <link refid="classcsmp_1_1_mesh_density"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::ErfDensity</label>
+        <link refid="classcsmp_1_1_erf_density"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::MeshDensity</label>
+        <link refid="classcsmp_1_1_mesh_density"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/discretisation/LineElementMesher.h" line="46" column="1" bodyfile="source/includes/discretisation/LineElementMesher.h" bodystart="46" bodyend="57"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_erf_density_1aae171b814e9ae74460020905cb791a8e" prot="private" virt="non-virtual"><scope>csmp::ErfDensity</scope><name>a_</name></member>
+      <member refid="classcsmp_1_1_erf_density_1a7d642d317bcb8d86832c85f57df67ad2" prot="private" virt="non-virtual"><scope>csmp::ErfDensity</scope><name>b_</name></member>
+      <member refid="classcsmp_1_1_erf_density_1a33ebee7c1e29a4e6b8807fe2a8bbd480" prot="public" virt="non-virtual"><scope>csmp::ErfDensity</scope><name>ErfDensity</name></member>
+      <member refid="classcsmp_1_1_mesh_density_1a3204e211b8ab97b3c4c027138720f163" prot="public" virt="non-virtual"><scope>csmp::ErfDensity</scope><name>MeshDensity</name></member>
+      <member refid="classcsmp_1_1_erf_density_1a1c2671020448511a063254e599459de0" prot="public" virt="virtual"><scope>csmp::ErfDensity</scope><name>operator()</name></member>
+      <member refid="classcsmp_1_1_erf_density_1a8a1010d3d7525b6d37a0298f6f6b2658" prot="public" virt="non-virtual"><scope>csmp::ErfDensity</scope><name>SetA</name></member>
+      <member refid="classcsmp_1_1_erf_density_1aff4713c9def7a18bc2d147f430079d45" prot="public" virt="non-virtual"><scope>csmp::ErfDensity</scope><name>SetB</name></member>
+      <member refid="classcsmp_1_1_erf_density_1ab0372bf2c20ed4208fe45943eefa63d7" prot="public" virt="non-virtual"><scope>csmp::ErfDensity</scope><name>~ErfDensity</name></member>
+      <member refid="classcsmp_1_1_mesh_density_1a8b1911720f1e1ad8a403e2bd26c7a089" prot="public" virt="virtual"><scope>csmp::ErfDensity</scope><name>~MeshDensity</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

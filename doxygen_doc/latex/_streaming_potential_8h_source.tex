@@ -1,0 +1,49 @@
+\doxysection{Streaming\+Potential.\+h}
+\hypertarget{_streaming_potential_8h_source}{}\label{_streaming_potential_8h_source}\index{source/includes/thmc/single\_phase\_flow/StreamingPotential.h@{source/includes/thmc/single\_phase\_flow/StreamingPotential.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_INTERRELATION\_STREAMING\_POTENTIAL\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_INTERRELATION\_STREAMING\_POTENTIAL\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_interrelation_8h}{"{}Interrelation.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_property_handle_8h}{"{}PropertyHandle.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{comment}{///\ algorithm\ and\ interrelation\ required\ to\ compute\ streaming\ potential}}
+\DoxyCodeLine{00010\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00011\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_streaming_potential}{StreamingPotential}}\ \{}
+\DoxyCodeLine{00012\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00013\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_streaming_potential_adaa6823338e03ba6c8715c474abd6724}{StreamingPotential}}(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ );}
+\DoxyCodeLine{00014\ \ \ \ \ \string~StreamingPotential();}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_streaming_potential_a531a9df5066ab5d422d882a66a726ba7}{EvaluatePotential}}(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ potential=\textcolor{stringliteral}{"{}streaming\ potential"{}}\ );}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00020\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_handle}{PropertyHandle}}<dim>\ \ ones,\ \ \ \ \textcolor{comment}{///\ <\ \ potential\ source}}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ccoeff;\ \ \textcolor{comment}{///\ <\ coupling\ coefficient}}
+\DoxyCodeLine{00022\ \ \};}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{comment}{///\ to\ compute\ the\ input\ coefficients}}
+\DoxyCodeLine{00025\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00026\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_potential_source}{PotentialSource}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_interrelation}{Interrelation}}<dim>\ \{}
+\DoxyCodeLine{00027\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ mu;\ \ \ \ \ \textcolor{comment}{//\ dynamic\ viscosity\ [Pa\ s-\/1]}}
+\DoxyCodeLine{00028\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ k;\ \ \ \ \ \ \textcolor{comment}{//\ permeability\ \ \ \ [m2]}}
+\DoxyCodeLine{00029\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ rhof;\ \ \ \textcolor{comment}{//\ fluid\ density\ \ \ [kg\ m-\/3]}}
+\DoxyCodeLine{00030\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ R;\ \ \ \ \ \ \textcolor{comment}{//\ R\ factor}}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ temp1,\ temp2;}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00035\ \ \ \ \ PotentialSource(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&\ );}
+\DoxyCodeLine{00036\ \ \ \ \ \string~PotentialSource()\ \{\};}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_potential_source_afb8d2d8ce1d68c05b1412eb03dd2a8ae}{Calculate}}();}
+\DoxyCodeLine{00038\ \};}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \}\ \textcolor{comment}{//\ csmp\ }}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{//\ CSMP\_INTERRELATION\_STREAMING\_POTENTIAL\_H}}
+
+\end{DoxyCode}

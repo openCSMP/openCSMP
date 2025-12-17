@@ -429,7 +429,7 @@ namespace csmp
     //     | _/       V\     |
     //     |/           L\   |
     //   _/|              H\ |  
-    //  /  |       VH          \ 
+    //  /  |       VH          \
     //     |                 | \
     //   --A-----------------B-- ip_p_max // needs: -1
     //     |                 |
@@ -607,8 +607,8 @@ namespace csmp
             //      (4)                              (2)
             //                                                               
             //   P                                P
-            //   ^    vlhcurve                    ^
-            //   |   /                            |         |   vlhcurve
+            //   ^    vlhcurve                   ^
+            //   |   /                            |         |   meltcurve
             //  -D--/------C-                    -D---------C__/
             // --|x/-------|------ pcurrent       |     ___/| 
             //   |/        |                    --|-x__/----|------ pcurrent
@@ -624,6 +624,7 @@ namespace csmp
             value_vlh_before      = vlh_halite.ValueOf(property_index); // (between A and D)
             tdummy            = tvlh;
             value_vlh             = vlh_halite.ValueOf(property_index);
+	    
             value_before          =  value_iD + pnorm*( value_vlh_before - value_iD );
             tnorm             = (tcurrent-t_iD) / (tvlh-t_iD);
             value_interpolated    =  value_before + tnorm*(value_vlh-value_before);
@@ -645,14 +646,13 @@ namespace csmp
             //   P                        
             //   ^                        
             //   |                        
-            //  -D---------C ___  vlhcurve  
+            //  -D---------C ___  meltcurve  
             // --|-----x--_|/-----pcurrent           
             //   | _____/  |              
             // __|/        |              
             //   |         |     
             //  -A---------B--> T         
             //   |         |              
-            //
             //
             pnorm             = (pcurrent-p_iD) / (vlh_halite.Pressure()-p_iD);
             value_iC              = storage_vector[iC];
@@ -674,7 +674,7 @@ namespace csmp
             //  (6)
             //
             //   P
-            //   ^            vlhcurve
+            //   ^            meltcurve
             //   |           /
             //  -D--------C-/
             //  -|--x-----|/--- pcurrent
@@ -939,7 +939,6 @@ namespace csmp
             //   |         |     
             //  -A---------B--> T         
             //   |         |              
-            //
             //
             pnorm             = (pcurrent-p_iD) / (naclmelt_halite.PmeltFromT()-p_iD);
             value_iC              = storage_vector[iC];

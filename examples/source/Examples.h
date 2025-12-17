@@ -60,10 +60,15 @@
 #include "SlopeMechanics_Example.h" // developed for UoM SMD course, pore-pressure and gravitational loading
 #include "QuadrilateratorToCSMPbinary_Example.h" // demonstrating the Quadrilaterator 2D mesher
 #include "VariableManagement_Example.h" // reading and writing variables to CSMP binary files
-#include "CSMPInterfaces_Example.h"
+#include "Interfaces_Example.h"
 #include "ThermalConvectionETHZ_Example.h"
-// TODO: include Lukas Mosser's correlation based black-oil model property calculations
 #include "MechanicsAndMultiphaseFlow_Example.h"
 #include "UG4_ProMeshOutput_Example.h"
+#include "PoreRadiusAnd_Pc_Example.h"
+#include "StaggeredGridStokesSolver_Example.h"
+#include "PressureDependentBlackOilProperties_Example.h"
+#include "RegionMonitor_Example.h"
+#include "Tractions_Example.h"
+//#include "FieldVariable_Example.h"
 
 #endif

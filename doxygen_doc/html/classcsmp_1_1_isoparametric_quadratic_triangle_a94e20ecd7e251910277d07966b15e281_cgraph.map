@@ -1,0 +1,5 @@
+<map id="csmp::IsoparametricQuadraticTriangle::JacobianDeterminant" name="csmp::IsoparametricQuadraticTriangle::JacobianDeterminant">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,204,46"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_finite_element.html#ae758e82d3b214e9f9c5bda10cd20b515" title="returns the determinant of the member Jacobian matrix JAC that must have been initialised before" alt="" coords="252,5,404,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="204,23,236,23,236,28,204,28"/>
+</map>

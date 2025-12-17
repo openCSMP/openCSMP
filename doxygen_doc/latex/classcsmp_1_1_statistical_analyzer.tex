@@ -1,0 +1,192 @@
+\doxysection{csmp\+::Statistical\+Analyzer\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_statistical_analyzer}{}\label{classcsmp_1_1_statistical_analyzer}\index{csmp::StatisticalAnalyzer$<$ dim $>$@{csmp::StatisticalAnalyzer$<$ dim $>$}}
+
+
+Class for the generation of volume-\/weighted and other histograms from CSMP models and their unique regions.  
+
+
+
+
+{\ttfamily \#include $<$Statistical\+Analyzer.\+h$>$}
+
+
+
+Collaboration diagram for csmp\+::Statistical\+Analyzer\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=251pt]{classcsmp_1_1_statistical_analyzer__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_statistical_analyzer_a4348a06e38916b8253ede128b31b010d}\label{classcsmp_1_1_statistical_analyzer_a4348a06e38916b8253ede128b31b010d} 
+{\bfseries Statistical\+Analyzer} (const \mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_statistical_analyzer_ab2e44dbfee3b073ee83780f0f0245f4d}{Define\+Bins}} (const char \texorpdfstring{$\ast$}{*}bin\+\_\+ascii\+\_\+file, Histogram\+Bins \&) const
+\begin{DoxyCompactList}\small\item\em specify via ascii input file, the x-\/axis range of the histogram columns, i.\+e. the bin size \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_statistical_analyzer_aae8db381dad50be17ae2ddb6d22a3ee0}\label{classcsmp_1_1_statistical_analyzer_aae8db381dad50be17ae2ddb6d22a3ee0} 
+void {\bfseries Define\+Bins} (Histogram\+Bins \&bins, double first\+\_\+val,...) const
+\begin{DoxyCompactList}\small\item\em specify the binsize using bin ranges specified by a sequence of double values of user-\/defined length \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_statistical_analyzer_a18b993a0035174202d32b126a97afb0b}\label{classcsmp_1_1_statistical_analyzer_a18b993a0035174202d32b126a97afb0b} 
+void {\bfseries Define\+Bins} (const double minimum, const double maximum, const size\+\_\+t number\+\_\+of\+\_\+bins, Histogram\+Bins \&data) const
+\begin{DoxyCompactList}\small\item\em creats histogram bins by providing the data range and number of devisions \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_statistical_analyzer_a51b63c9e021f29ea73c62ac884442bb7}{Region\+Property\+Histograms}} (const char \texorpdfstring{$\ast$}{*}prop, const Histogram\+Bins \&bins, std\+::map$<$ std\+::string, std\+::pair$<$ Histogram\+Bins, size\+\_\+t $>$ $>$ \&results) const
+\begin{DoxyCompactList}\small\item\em normalizes number of counts by element volume \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_statistical_analyzer_ab3d0f3b485cf4f62bea5a6055fce78a0}{Region\+Property\+Histograms}} (const char \texorpdfstring{$\ast$}{*}prop, const Histogram\+Bins \&bins, std\+::map$<$ std\+::string, std\+::pair$<$ Histogram\+Bins, size\+\_\+t $>$ $>$ \&results, bool normalize) const
+\begin{DoxyCompactList}\small\item\em normalize by counts; \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_statistical_analyzer_ae4d01d3b13c978029168683652c69028}{Region\+Property\+Histograms\+Element}} (const char \texorpdfstring{$\ast$}{*}prop, const Histogram\+Bins \&bins, std\+::map$<$ std\+::string, std\+::pair$<$ Histogram\+Bins, size\+\_\+t $>$ $>$ \&results) const
+\begin{DoxyCompactList}\small\item\em analyzes properties element by element interpolating variables to barycenter if necessary \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_statistical_analyzer_a55a5fa7c318c71fc8d374b6410fcb1ba}{Region\+Property\+Histograms\+Integration\+Point}} (const char \texorpdfstring{$\ast$}{*}prop, const Histogram\+Bins \&bins, std\+::map$<$ std\+::string, std\+::pair$<$ Histogram\+Bins, size\+\_\+t $>$ $>$ \&results, const std\+::string \&flow\+\_\+domain) const
+\begin{DoxyCompactList}\small\item\em analyzes properties element by element, integral over interpolation points of each element; written for velocity \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_statistical_analyzer_a9e84507a4be8573cc25a495fedb9caef}{Region\+Property\+Histograms\+Element\+Property2\+Binning\+Based\+On\+Property1}} (const char \texorpdfstring{$\ast$}{*}prop1, const char \texorpdfstring{$\ast$}{*}prop2, const Histogram\+Bins \&bins, std\+::map$<$ std\+::string, std\+::pair$<$ Histogram\+Bins, size\+\_\+t $>$ $>$ \&results1, std\+::map$<$ std\+::string, std\+::pair$<$ Histogram\+Bins, size\+\_\+t $>$ $>$ \&results2, bool weighted\+\_\+by\+\_\+porosity=false) const
+\begin{DoxyCompactList}\small\item\em as previous method, but binning second property based on first property occurance \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_statistical_analyzer_a1af3afc3edafeb87415b24aa61527968}\label{classcsmp_1_1_statistical_analyzer_a1af3afc3edafeb87415b24aa61527968} 
+void {\bfseries Output\+Region\+Property\+Histograms} (const char \texorpdfstring{$\ast$}{*}prop, const std\+::map$<$ std\+::string, std\+::pair$<$ Histogram\+Bins, size\+\_\+t $>$ $>$ \&results) const
+\begin{DoxyCompactList}\small\item\em for each model region, a separate histogram is created using the user-\/specified bins \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_statistical_analyzer_a6e94f1fd1fc979de10aded5e754db352}{Output\+Region\+Property\+Histograms\+Maple}} (const char \texorpdfstring{$\ast$}{*}prop, const Histogram\+Bins \&bins, const std\+::map$<$ std\+::string, std\+::pair$<$ Histogram\+Bins, size\+\_\+t $>$ $>$ \&results, bool log10\+\_\+of\+\_\+bin\+\_\+values) const
+\begin{DoxyCompactList}\small\item\em writes Maple statlist format with weights; results must be copied and pasted into Maple workbook \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_statistical_analyzer_a038c6b2b9cf9a129532bb5787698bf18}\label{classcsmp_1_1_statistical_analyzer_a038c6b2b9cf9a129532bb5787698bf18} 
+void {\bfseries Output\+Region\+Property\+Abundance\+Polygons\+Maple} (const char \texorpdfstring{$\ast$}{*}prop, const Histogram\+Bins \&bins, const std\+::map$<$ std\+::string, std\+::pair$<$ Histogram\+Bins, size\+\_\+t $>$ $>$ \&results, bool log10\+\_\+of\+\_\+bin\+\_\+values) const
+\begin{DoxyCompactList}\small\item\em for copy/paste to Maple\+: list of \mbox{[}bin-\/center,histogram column-\/height\mbox{]} pairs to plot curves \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_statistical_analyzer_a4939379ad87de0e789bcf297486f72a3}\label{classcsmp_1_1_statistical_analyzer_a4939379ad87de0e789bcf297486f72a3} 
+void {\bfseries Output\+Region\+Property\+Abundance\+Polygons\+Maple} (const char \texorpdfstring{$\ast$}{*}prop, const char \texorpdfstring{$\ast$}{*}file\+\_\+name\+\_\+prefix, const std\+::vector$<$ std\+::pair$<$ double, double $>$ $>$ \&bins, const std\+::map$<$ std\+::string, std\+::pair$<$ Histogram\+Bins, size\+\_\+t $>$ $>$ \&results, bool log10\+\_\+of\+\_\+bin\+\_\+values) const
+\begin{DoxyCompactList}\small\item\em like previous method, but name can include filename etc. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim$>$\newline
+class csmp\+::\+Statistical\+Analyzer$<$ dim $>$}
+Class for the generation of volume-\/weighted and other histograms from CSMP models and their unique regions. 
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000043}{Todo}}]refactor such that Maple specific output is done by Maple\+Interface class.\end{DoxyRefDesc}
+
+
+@uthor Stephan Matthai \begin{DoxyDate}{Date}
+2001 
+\end{DoxyDate}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_statistical_analyzer_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_statistical_analyzer_ab2e44dbfee3b073ee83780f0f0245f4d}\index{csmp::StatisticalAnalyzer$<$ dim $>$@{csmp::StatisticalAnalyzer$<$ dim $>$}!DefineBins@{DefineBins}}
+\index{DefineBins@{DefineBins}!csmp::StatisticalAnalyzer$<$ dim $>$@{csmp::StatisticalAnalyzer$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{DefineBins()}{DefineBins()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_statistical_analyzer_ab2e44dbfee3b073ee83780f0f0245f4d} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_statistical_analyzer}{csmp\+::\+Statistical\+Analyzer}}$<$ dim $>$\+::\+Define\+Bins (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{bin\+\_\+file}{, }\item[{Histogram\+Bins \&}]{data}{}\end{DoxyParamCaption}) const}
+
+
+
+specify via ascii input file, the x-\/axis range of the histogram columns, i.\+e. the bin size 
+
+Function defines the bins for the histogram on the basis of the user input as specified in file which is read by this function. The file should contain the following information\+:
+
+title number of bin-\/dilimiter values (integer) bin bound values (floating point) EOF
+
+\doxylink{classcsmp_1_1_example}{Example} \textquotesingle{}myfile.\+bins\textquotesingle{} 8 1.\+0e-\/5 2.\+0e-\/5 4.\+0e-\/5 6.\+0e-\/5 8.\+0e-\/5 1.\+0e-\/4 2.\+0e-\/4 6.\+0e-\/4 EOF \Hypertarget{classcsmp_1_1_statistical_analyzer_a6e94f1fd1fc979de10aded5e754db352}\index{csmp::StatisticalAnalyzer$<$ dim $>$@{csmp::StatisticalAnalyzer$<$ dim $>$}!OutputRegionPropertyHistogramsMaple@{OutputRegionPropertyHistogramsMaple}}
+\index{OutputRegionPropertyHistogramsMaple@{OutputRegionPropertyHistogramsMaple}!csmp::StatisticalAnalyzer$<$ dim $>$@{csmp::StatisticalAnalyzer$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{OutputRegionPropertyHistogramsMaple()}{OutputRegionPropertyHistogramsMaple()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_statistical_analyzer_a6e94f1fd1fc979de10aded5e754db352} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_statistical_analyzer}{csmp\+::\+Statistical\+Analyzer}}$<$ dim $>$\+::\+Output\+Region\+Property\+Histograms\+Maple (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{prop}{, }\item[{const Histogram\+Bins \&}]{bins}{, }\item[{const std\+::map$<$ std\+::string, std\+::pair$<$ Histogram\+Bins, size\+\_\+t $>$ $>$ \&}]{results}{, }\item[{bool}]{log10\+\_\+of\+\_\+bin\+\_\+values}{}\end{DoxyParamCaption}) const}
+
+
+
+writes Maple statlist format with weights; results must be copied and pasted into Maple workbook 
+
+In Maple paste the data into the list as shown below\+:
+
+with(stats)\+: \begin{quote}
+with(stats\mbox{[}statplots\mbox{]})\+: data1\+:=\mbox{[} Weight(1..3, 5), Weight(3..5, 10), Weight(5..7, 8)\mbox{]}\+: histogram(data1, color=cyan); \end{quote}
+\Hypertarget{classcsmp_1_1_statistical_analyzer_a51b63c9e021f29ea73c62ac884442bb7}\index{csmp::StatisticalAnalyzer$<$ dim $>$@{csmp::StatisticalAnalyzer$<$ dim $>$}!RegionPropertyHistograms@{RegionPropertyHistograms}}
+\index{RegionPropertyHistograms@{RegionPropertyHistograms}!csmp::StatisticalAnalyzer$<$ dim $>$@{csmp::StatisticalAnalyzer$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{RegionPropertyHistograms()}{RegionPropertyHistograms()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_statistical_analyzer_a51b63c9e021f29ea73c62ac884442bb7} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_statistical_analyzer}{csmp\+::\+Statistical\+Analyzer}}$<$ dim $>$\+::\+Region\+Property\+Histograms (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{prop}{, }\item[{const Histogram\+Bins \&}]{bins}{, }\item[{std\+::map$<$ std\+::string, std\+::pair$<$ Histogram\+Bins, size\+\_\+t $>$ $>$ \&}]{results}{}\end{DoxyParamCaption}) const}
+
+
+
+normalizes number of counts by element volume 
+
+
+\begin{DoxyParams}{Parameters}
+{\em prop} & analysed element variable  \\
+\hline
+{\em bins} & bin ranges from \texorpdfstring{$<$}{<} to \texorpdfstring{$<$}{<}= \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classcsmp_1_1_statistical_analyzer_ab3d0f3b485cf4f62bea5a6055fce78a0}\index{csmp::StatisticalAnalyzer$<$ dim $>$@{csmp::StatisticalAnalyzer$<$ dim $>$}!RegionPropertyHistograms@{RegionPropertyHistograms}}
+\index{RegionPropertyHistograms@{RegionPropertyHistograms}!csmp::StatisticalAnalyzer$<$ dim $>$@{csmp::StatisticalAnalyzer$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{RegionPropertyHistograms()}{RegionPropertyHistograms()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_statistical_analyzer_ab3d0f3b485cf4f62bea5a6055fce78a0} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_statistical_analyzer}{csmp\+::\+Statistical\+Analyzer}}$<$ dim $>$\+::\+Region\+Property\+Histograms (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{prop}{, }\item[{const Histogram\+Bins \&}]{bins}{, }\item[{std\+::map$<$ std\+::string, std\+::pair$<$ Histogram\+Bins, size\+\_\+t $>$ $>$ \&}]{results}{, }\item[{bool}]{normalize}{}\end{DoxyParamCaption}) const}
+
+
+
+normalize by counts; 
+
+\begin{DoxyAttention}{Attention}
+this makes sense only for regular grids 
+\end{DoxyAttention}
+\Hypertarget{classcsmp_1_1_statistical_analyzer_ae4d01d3b13c978029168683652c69028}\index{csmp::StatisticalAnalyzer$<$ dim $>$@{csmp::StatisticalAnalyzer$<$ dim $>$}!RegionPropertyHistogramsElement@{RegionPropertyHistogramsElement}}
+\index{RegionPropertyHistogramsElement@{RegionPropertyHistogramsElement}!csmp::StatisticalAnalyzer$<$ dim $>$@{csmp::StatisticalAnalyzer$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{RegionPropertyHistogramsElement()}{RegionPropertyHistogramsElement()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_statistical_analyzer_ae4d01d3b13c978029168683652c69028} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_statistical_analyzer}{csmp\+::\+Statistical\+Analyzer}}$<$ dim $>$\+::\+Region\+Property\+Histograms\+Element (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{prop}{, }\item[{const Histogram\+Bins \&}]{bins}{, }\item[{std\+::map$<$ std\+::string, std\+::pair$<$ Histogram\+Bins, size\+\_\+t $>$ $>$ \&}]{results}{}\end{DoxyParamCaption}) const}
+
+
+
+analyzes properties element by element interpolating variables to barycenter if necessary 
+
+Goes through all Regions of current \doxylink{classcsmp_1_1_model}{Model} and calculates the area/volume of the region with property values within the ranges defined in \textquotesingle{}bins\textquotesingle{}. Normalizes the computed values by the total area/volume of the \doxylink{classcsmp_1_1_region}{Region}. Returns a map of bins and area/volume normalized values for each region using the region name as key / identifier. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_statistical_analyzer_ae4d01d3b13c978029168683652c69028_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_statistical_analyzer_a9e84507a4be8573cc25a495fedb9caef}\index{csmp::StatisticalAnalyzer$<$ dim $>$@{csmp::StatisticalAnalyzer$<$ dim $>$}!RegionPropertyHistogramsElementProperty2BinningBasedOnProperty1@{RegionPropertyHistogramsElementProperty2BinningBasedOnProperty1}}
+\index{RegionPropertyHistogramsElementProperty2BinningBasedOnProperty1@{RegionPropertyHistogramsElementProperty2BinningBasedOnProperty1}!csmp::StatisticalAnalyzer$<$ dim $>$@{csmp::StatisticalAnalyzer$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{RegionPropertyHistogramsElementProperty2BinningBasedOnProperty1()}{RegionPropertyHistogramsElementProperty2BinningBasedOnProperty1()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_statistical_analyzer_a9e84507a4be8573cc25a495fedb9caef} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_statistical_analyzer}{csmp\+::\+Statistical\+Analyzer}}$<$ dim $>$\+::\+Region\+Property\+Histograms\+Element\+Property2\+Binning\+Based\+On\+Property1 (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{prop1}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{prop2}{, }\item[{const Histogram\+Bins \&}]{bins}{, }\item[{std\+::map$<$ std\+::string, std\+::pair$<$ Histogram\+Bins, size\+\_\+t $>$ $>$ \&}]{results1}{, }\item[{std\+::map$<$ std\+::string, std\+::pair$<$ Histogram\+Bins, size\+\_\+t $>$ $>$ \&}]{results2}{, }\item[{bool}]{weighted\+\_\+by\+\_\+porosity}{ = {\ttfamily false}}\end{DoxyParamCaption}) const}
+
+
+
+as previous method, but binning second property based on first property occurance 
+
+Whoever wrote this, should explain what it does ! Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_statistical_analyzer_a9e84507a4be8573cc25a495fedb9caef_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_statistical_analyzer_a55a5fa7c318c71fc8d374b6410fcb1ba}\index{csmp::StatisticalAnalyzer$<$ dim $>$@{csmp::StatisticalAnalyzer$<$ dim $>$}!RegionPropertyHistogramsIntegrationPoint@{RegionPropertyHistogramsIntegrationPoint}}
+\index{RegionPropertyHistogramsIntegrationPoint@{RegionPropertyHistogramsIntegrationPoint}!csmp::StatisticalAnalyzer$<$ dim $>$@{csmp::StatisticalAnalyzer$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{RegionPropertyHistogramsIntegrationPoint()}{RegionPropertyHistogramsIntegrationPoint()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_statistical_analyzer_a55a5fa7c318c71fc8d374b6410fcb1ba} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_statistical_analyzer}{csmp\+::\+Statistical\+Analyzer}}$<$ dim $>$\+::\+Region\+Property\+Histograms\+Integration\+Point (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{prop}{, }\item[{const Histogram\+Bins \&}]{bins}{, }\item[{std\+::map$<$ std\+::string, std\+::pair$<$ Histogram\+Bins, size\+\_\+t $>$ $>$ \&}]{results}{, }\item[{const std\+::string \&}]{flow\+\_\+domain}{}\end{DoxyParamCaption}) const}
+
+
+
+analyzes properties element by element, integral over interpolation points of each element; written for velocity 
+
+Goes through all Regions of current \doxylink{classcsmp_1_1_model}{Model} and calculates the area/volume of the region with property values within the ranges defined in \textquotesingle{}bins\textquotesingle{}. Normalizes the computed values by the total area/volume of the \doxylink{classcsmp_1_1_region}{Region}. Returns a map of bins and area/volume normalized values for each region using the region name as key / identifier. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/analysis/Statistical\+Analyzer.\+h\item 
+source/modules/analysis/Statistical\+Analyzer.\+cpp\end{DoxyCompactItemize}

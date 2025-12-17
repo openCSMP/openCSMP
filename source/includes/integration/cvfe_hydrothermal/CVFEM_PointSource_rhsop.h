@@ -48,11 +48,11 @@ class CVFEM_PointSource_rhsop : public CVFEM_MathOperatorRHS<dim> {
 
     ~CVFEM_PointSource_rhsop();
     
-    virtual void GetOperands( const CELL<dim>& );
-    virtual void GetOperandsCVFEM( const CELL<dim>&, csmp::Index upwind_var_key );
-    virtual void ComputeContribution( const CELL<dim>& );
+    void GetOperands( const CELL<dim>& ) override final;
+    void GetOperandsCVFEM( const CELL<dim>&, csmp::Index upwind_var_key ) override final;
+    void ComputeContribution( const CELL<dim>& ) override final;
     
-    virtual CVFEM_PointSource_rhsop<dim,CELL>* clone() const { return new CVFEM_PointSource_rhsop<dim,CELL>(*this); }
+    CVFEM_PointSource_rhsop<dim,CELL>* clone() const override final { return new CVFEM_PointSource_rhsop<dim,CELL>(*this); }
     
   private:
   

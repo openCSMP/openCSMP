@@ -1,0 +1,45 @@
+\doxysection{Linear\+Rectangle.\+h}
+\hypertarget{_linear_rectangle_8h_source}{}\label{_linear_rectangle_8h_source}\index{source/includes/integration/finite\_elements/LinearRectangle.h@{source/includes/integration/finite\_elements/LinearRectangle.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{LINEAR\_RECTANGLE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{LINEAR\_RECTANGLE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_finite_element_8h}{"{}FiniteElement.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_linear_rectangle}{LinearRectangle}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_finite_element}{FiniteElement}}\ \{}
+\DoxyCodeLine{00009\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00010\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_linear_rectangle_a97efef1b9128d12d082ddb128e3df98a}{LinearRectangle}}(\ uint32\_t\ dim);}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_linear_rectangle_a7e3b697c937138ea5aa2755a608c63df}{IntegralNN}}(\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ M);}
+\DoxyCodeLine{00013\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_linear_rectangle_a37bb379b19c6372969674b0a2c63012e}{Volume}}();}
+\DoxyCodeLine{00014\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \mbox{\hyperlink{classcsmp_1_1_linear_rectangle_a6db9ff95a7cf5d78963d05880060f05b}{EdgeLengths}}(std::vector<\textcolor{keywordtype}{double}>\&\ );}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ uint32\_t\ CornerNodes()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ 4U;\ \}}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ uint32\_t\ MidSideNodes()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ 0;\ \}}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_linear_rectangle_ad9d037ee6731cda8b363d02ac102ad56}{CornerNodes}}(std::vector<uint32\_t>\&\ ids)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_linear_rectangle_a9fe098e081aa9ed6801f36a4319a8fd3}{NodesOfSegment}}(\ uint32\_t\ segm\_id,\ std::vector<uint32\_t>\&\ snids)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classcsmp_1_1_linear_rectangle_a5a91b469f3f387e88d7a34d22633b183}{std}}::\mbox{\hyperlink{classcsmp_1_1_linear_rectangle_a5a91b469f3f387e88d7a34d22633b183}{vector}}<\mbox{\hyperlink{classcsmp_1_1_linear_rectangle_a5a91b469f3f387e88d7a34d22633b183}{uint32\_t}}>\ \ \mbox{\hyperlink{classcsmp_1_1_linear_rectangle_a5a91b469f3f387e88d7a34d22633b183}{NodesOfFace}}(\ uint32\_t\ face\_id\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classcsmp_1_1_linear_rectangle_ae51e9ade99500ff13848a222ebfae216}{std}}::\mbox{\hyperlink{classcsmp_1_1_linear_rectangle_ae51e9ade99500ff13848a222ebfae216}{vector}}<\mbox{\hyperlink{classcsmp_1_1_linear_rectangle_ae51e9ade99500ff13848a222ebfae216}{uint32\_t}}>\ \ \mbox{\hyperlink{classcsmp_1_1_linear_rectangle_ae51e9ade99500ff13848a222ebfae216}{CornerNodesOfFace}}(\ uint32\_t\ face\_id\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classcsmp_1_1_linear_rectangle_a1b8ff6535771ebb13fd96525b996e16f}{std}}::\mbox{\hyperlink{classcsmp_1_1_linear_rectangle_a1b8ff6535771ebb13fd96525b996e16f}{vector}}<\mbox{\hyperlink{classcsmp_1_1_linear_rectangle_a1b8ff6535771ebb13fd96525b996e16f}{uint32\_t}}>\ \ \mbox{\hyperlink{classcsmp_1_1_linear_rectangle_a1b8ff6535771ebb13fd96525b996e16f}{NodesConnectedTo}}(\ uint32\_t\ node\_id\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ Integral\_dNT\_K\_dN(\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ M,\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ K);}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_linear_rectangle_ab7cd80b857e2a7e826869347f5e9aea7}{N}}(std::vector<\textcolor{keywordtype}{double}>\&\ N,\ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ xyz);}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_linear_rectangle_a23fbf48986900a68c751b8dbb5e53b43}{dN}}(\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ DN);}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_linear_rectangle_a3411bf9968e1e5a8ae776e2d5ac72420}{N\_AtBaryCenter}}(std::vector<\textcolor{keywordtype}{double}>\&\ N);}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ UnitNormal(std::vector<\textcolor{keywordtype}{double}>\&\ vc)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\_FEM\_TYPE}}\ \ \mbox{\hyperlink{classcsmp_1_1_linear_rectangle_a9e54e145e4e259ea9461c047c1d08ec9}{ElementTypeOfSegment}}(\ \mbox{\hyperlink{classcsmp_1_1_linear_rectangle_a9e54e145e4e259ea9461c047c1d08ec9}{uint32\_t}})\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ LINEAR\_BAR;\ \};}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\_FEM\_TYPE}}\ \ \mbox{\hyperlink{classcsmp_1_1_linear_rectangle_a53864877d76127fd42229d25ae5c7adc}{ElementTypeOfFace}}(\ \mbox{\hyperlink{classcsmp_1_1_linear_rectangle_a53864877d76127fd42229d25ae5c7adc}{uint32\_t}})\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ LINEAR\_BAR;\ \};}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ Nrs(\ std::vector<\textcolor{keywordtype}{double}>\&\ N,\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ RS,\ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ rs\ );}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\ \ \ M1\_;}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\ V\_;}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \};\ \textcolor{comment}{//\ end\ class\ linear\ rectangle}}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \}\ \textcolor{comment}{//\ end\ csmp}}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{//\ LINEAR\_RECTANGLE\_H}}
+
+\end{DoxyCode}

@@ -1,0 +1,113 @@
+\doxysection{csmp\+::Model\+Comparator\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_model_comparator}{}\label{classcsmp_1_1_model_comparator}\index{csmp::ModelComparator$<$ dim $>$@{csmp::ModelComparator$<$ dim $>$}}
+
+
+allows for comparison between two csmp models  
+
+
+
+
+{\ttfamily \#include $<$Model\+Comparator.\+h$>$}
+
+
+
+Collaboration diagram for csmp\+::Model\+Comparator\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=259pt]{classcsmp_1_1_model_comparator__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_model_comparator_aa3cdb018b4fbd99a84757abfec4f9c79}{Compare\+Models}} (const \mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&model1, const \mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&model2, const char \texorpdfstring{$\ast$}{*}property1, const char \texorpdfstring{$\ast$}{*}property2, const char \texorpdfstring{$\ast$}{*}region="{}Model"{}) const
+\begin{DoxyCompactList}\small\item\em Comparison is done for identically equal meshes with identical numberiings of nodes//. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_model_comparator_a8580dc48ac3e8eaaf34904592b420911}\label{classcsmp_1_1_model_comparator_a8580dc48ac3e8eaaf34904592b420911} 
+double {\bfseries Compare\+VSets} (\mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}$<$ dim $>$ \&vset1, \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}$<$ dim $>$ \&vset2, const char \texorpdfstring{$\ast$}{*}property1, const char \texorpdfstring{$\ast$}{*}property2, const char \texorpdfstring{$\ast$}{*}variables\+File1, const char \texorpdfstring{$\ast$}{*}variables\+File2, bool isoparametric=false, const char \texorpdfstring{$\ast$}{*}region="{}Model"{}) const
+\item 
+\Hypertarget{classcsmp_1_1_model_comparator_a3416cabfd9e0e44299e52037db90c392}\label{classcsmp_1_1_model_comparator_a3416cabfd9e0e44299e52037db90c392} 
+double {\bfseries Compare\+VSets} (const char \texorpdfstring{$\ast$}{*}vset1\+File, const char \texorpdfstring{$\ast$}{*}vset2\+File, const char \texorpdfstring{$\ast$}{*}property1, const char \texorpdfstring{$\ast$}{*}property2, const char \texorpdfstring{$\ast$}{*}variables\+File1, const char \texorpdfstring{$\ast$}{*}variables\+File2, bool isoparametric=false, const char \texorpdfstring{$\ast$}{*}region="{}Model"{}) const
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_model_comparator_a2547e1d3beefad9db3b697f6e6c1e9de}{Compare\+Models\+Renumbered\+Nodes}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&model1, \mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&model2, const char \texorpdfstring{$\ast$}{*}property1, const char \texorpdfstring{$\ast$}{*}property2, const char \texorpdfstring{$\ast$}{*}region="{}Model"{})
+\begin{DoxyCompactList}\small\item\em Comparison is done for identically equal meshes but might be different numbering of nodes //. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_model_comparator_a02e3cf7efd93d86b7c44d047ff0112e1}\label{classcsmp_1_1_model_comparator_a02e3cf7efd93d86b7c44d047ff0112e1} 
+double {\bfseries Compare\+VSets\+Renumbered\+Nodes} (\mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}$<$ dim $>$ \&vset1, \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}$<$ dim $>$ \&vset2, const char \texorpdfstring{$\ast$}{*}property1, const char \texorpdfstring{$\ast$}{*}property2, const char \texorpdfstring{$\ast$}{*}variables\+File1, const char \texorpdfstring{$\ast$}{*}variables\+File2, bool isoparametric=false, const char \texorpdfstring{$\ast$}{*}region="{}Model"{})
+\item 
+\Hypertarget{classcsmp_1_1_model_comparator_ad3b5b33efc98eaa4597d187bb8c44d6e}\label{classcsmp_1_1_model_comparator_ad3b5b33efc98eaa4597d187bb8c44d6e} 
+double {\bfseries Compare\+VSets\+Renumbered\+Nodes} (const char \texorpdfstring{$\ast$}{*}vset1\+File, const char \texorpdfstring{$\ast$}{*}vset2\+File, const char \texorpdfstring{$\ast$}{*}property1, const char \texorpdfstring{$\ast$}{*}property2, const char \texorpdfstring{$\ast$}{*}variables\+File1, const char \texorpdfstring{$\ast$}{*}variables\+File2, bool isoparametric=false, const char \texorpdfstring{$\ast$}{*}region="{}Model"{})
+\item 
+\Hypertarget{classcsmp_1_1_model_comparator_aa5464640646aa0dcbd399b026475e00e}\label{classcsmp_1_1_model_comparator_aa5464640646aa0dcbd399b026475e00e} 
+double {\bfseries Compare\+Models\+At\+Points} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&model1, \mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&model2, const char \texorpdfstring{$\ast$}{*}property1, const char \texorpdfstring{$\ast$}{*}property2, const char \texorpdfstring{$\ast$}{*}region="{}Model"{})
+\begin{DoxyCompactList}\small\item\em Comparison is done for meshes that can be in general different from each other //. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_model_comparator_ad82600b9b19f49ccca5f9b5848b84d55}\label{classcsmp_1_1_model_comparator_ad82600b9b19f49ccca5f9b5848b84d55} 
+double {\bfseries Compare\+VSets\+At\+Points} (\mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}$<$ dim $>$ \&vset1, \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}$<$ dim $>$ \&vset2, const char \texorpdfstring{$\ast$}{*}property1, const char \texorpdfstring{$\ast$}{*}property2, const char \texorpdfstring{$\ast$}{*}variables\+File1, const char \texorpdfstring{$\ast$}{*}variables\+File2, bool isoparametric=false, const char \texorpdfstring{$\ast$}{*}region="{}Model"{})
+\item 
+\Hypertarget{classcsmp_1_1_model_comparator_afd05c38acb8e25ee245b1f07ea6bbbe9}\label{classcsmp_1_1_model_comparator_afd05c38acb8e25ee245b1f07ea6bbbe9} 
+double {\bfseries Compare\+VSets\+At\+Points} (const char \texorpdfstring{$\ast$}{*}vset1\+File, const char \texorpdfstring{$\ast$}{*}vset2\+File, const char \texorpdfstring{$\ast$}{*}property1, const char \texorpdfstring{$\ast$}{*}property2, const char \texorpdfstring{$\ast$}{*}variables\+File1, const char \texorpdfstring{$\ast$}{*}variables\+File2, bool isoparametric=false, const char \texorpdfstring{$\ast$}{*}region="{}Model"{})
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim$>$\newline
+class csmp\+::\+Model\+Comparator$<$ dim $>$}
+allows for comparison between two csmp models 
+
+\begin{DoxyAuthor}{Author}
+P. Lang 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Aug 2011
+\end{DoxyDate}
+Compares Models, Vsets. For usage example, please refer to \doxylink{classcsmp_1_1_model_comparator___test}{Model\+Comparator\+\_\+\+Test} for the time being.
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000238}{Todo}}](1) seperate comparisons of meshes from properties discretised on them 
+
+(3) Different error norms 
+
+(3) Different properties of same model 
+
+(3) Cor diff var types 
+
+(3) Cefactor(outsource) functions once diff var types implemented 
+
+(3) Cefactor static, no sense anymore -\/ DONE(or not so much???) 
+
+(3) Cefaults for var file param 
+
+(3) Compare list of properties \end{DoxyRefDesc}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_model_comparator_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_model_comparator_aa3cdb018b4fbd99a84757abfec4f9c79}\index{csmp::ModelComparator$<$ dim $>$@{csmp::ModelComparator$<$ dim $>$}!CompareModels@{CompareModels}}
+\index{CompareModels@{CompareModels}!csmp::ModelComparator$<$ dim $>$@{csmp::ModelComparator$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{CompareModels()}{CompareModels()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_model_comparator_aa3cdb018b4fbd99a84757abfec4f9c79} 
+template$<$uint32\+\_\+t dim$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_model_comparator}{csmp\+::\+Model\+Comparator}}$<$ dim $>$\+::\+Compare\+Models (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&}]{model1}{, }\item[{const \mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&}]{model2}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{property1}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{property2}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{region}{ = {\ttfamily "{}Model"{}}}\end{DoxyParamCaption}) const}
+
+
+
+Comparison is done for identically equal meshes with identical numberiings of nodes//. 
+
+Comparison is done for identically equal meshes with identical numberings of nodes//. \Hypertarget{classcsmp_1_1_model_comparator_a2547e1d3beefad9db3b697f6e6c1e9de}\index{csmp::ModelComparator$<$ dim $>$@{csmp::ModelComparator$<$ dim $>$}!CompareModelsRenumberedNodes@{CompareModelsRenumberedNodes}}
+\index{CompareModelsRenumberedNodes@{CompareModelsRenumberedNodes}!csmp::ModelComparator$<$ dim $>$@{csmp::ModelComparator$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{CompareModelsRenumberedNodes()}{CompareModelsRenumberedNodes()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_model_comparator_a2547e1d3beefad9db3b697f6e6c1e9de} 
+template$<$uint32\+\_\+t dim$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_model_comparator}{csmp\+::\+Model\+Comparator}}$<$ dim $>$\+::\+Compare\+Models\+Renumbered\+Nodes (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&}]{model1}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&}]{model2}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{property1}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{property2}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{region}{ = {\ttfamily "{}Model"{}}}\end{DoxyParamCaption})}
+
+
+
+Comparison is done for identically equal meshes but might be different numbering of nodes //. 
+
+Comparison is done for identically equal meshes but might be different numbering of nodes//. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/utilities/Model\+Comparator.\+h\item 
+source/modules/utilities/Model\+Comparator.\+cpp\end{DoxyCompactItemize}

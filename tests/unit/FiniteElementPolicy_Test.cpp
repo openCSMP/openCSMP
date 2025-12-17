@@ -201,6 +201,7 @@ bool FiniteElementPolicy_Test::Test_PropertyValueAtBaryCenter()
     
     // barycentre
     const vector<double> bctr{ 1./3., 1./3., 0. }; // of linear prism element
+    const double tolerance = numeric_limits<double>::epsilon() * 10.;
     
     // scalars
     e_ptr_->PropertyValueAtBaryCenter( skey, sc_test );
@@ -228,9 +229,9 @@ bool FiniteElementPolicy_Test::Test_PropertyValueAtBaryCenter()
     const double at_value{ e_ptr_->PropertyValueAt( skey2, xyz ) },
                  bc_value{ e_ptr_->PropertyValueAtBaryCenter( skey2 ) };
 
-    _test( approximatelyEqual( bc_value, 1. ) );
+    _test( approximatelyEqual( bc_value, 1., tolerance ) );
     _test( approximatelyEqual( at_value, bc_value ) );
-    passed_all_tests = approximatelyEqual( bc_value, 1. );
+    passed_all_tests = approximatelyEqual( bc_value, 1., tolerance );
     passed_all_tests = approximatelyEqual( at_value, bc_value );
 
     return passed_all_tests;

@@ -1,0 +1,46 @@
+\doxysection{csmp\+::Binary\+File\+Handler\texorpdfstring{$<$}{<} S, T \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_binary_file_handler}{}\label{classcsmp_1_1_binary_file_handler}\index{csmp::BinaryFileHandler$<$ S, T $>$@{csmp::BinaryFileHandler$<$ S, T $>$}}
+
+
+writes objects and collections thereof to binary file  
+
+
+
+
+{\ttfamily \#include $<$Binary\+File\+Handler.\+h$>$}
+
+
+
+Collaboration diagram for csmp\+::Binary\+File\+Handler\texorpdfstring{$<$}{<} S, T \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=195pt]{classcsmp_1_1_binary_file_handler__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_binary_file_handler_a10bd3fb1c3b0cc6cdf2303d8a689a33d}\label{classcsmp_1_1_binary_file_handler_a10bd3fb1c3b0cc6cdf2303d8a689a33d} 
+void {\bfseries Save\+As} (const char \texorpdfstring{$\ast$}{*}s, const std\+::vector$<$ S $>$ \&obj\+\_\+list)
+\item 
+\Hypertarget{classcsmp_1_1_binary_file_handler_a19ebd0451a901c0330a997059449cca1}\label{classcsmp_1_1_binary_file_handler_a19ebd0451a901c0330a997059449cca1} 
+void {\bfseries Save\+As} (const char \texorpdfstring{$\ast$}{*}s, const std\+::map$<$ S, T $>$ \&obj\+\_\+list)
+\item 
+\Hypertarget{classcsmp_1_1_binary_file_handler_a27b493137f0aba5f03bec02e4ed347d9}\label{classcsmp_1_1_binary_file_handler_a27b493137f0aba5f03bec02e4ed347d9} 
+bool {\bfseries Read} (const char \texorpdfstring{$\ast$}{*}s, std\+::vector$<$ S $>$ \&obj\+\_\+list)
+\begin{DoxyCompactList}\small\item\em Objects of type S are added in the \doxylink{classvector}{vector$<$double$>$} \textquotesingle{}obj\+\_\+list\textquotesingle{}. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_binary_file_handler_a10b516c4f40c6ea7127f94529141be24}\label{classcsmp_1_1_binary_file_handler_a10b516c4f40c6ea7127f94529141be24} 
+bool {\bfseries Read} (const char \texorpdfstring{$\ast$}{*}s, std\+::map$<$ S, T $>$ \&obj\+\_\+list)
+\begin{DoxyCompactList}\small\item\em Objects of type T are read and added in the map \textquotesingle{}obj\+\_\+list\textquotesingle{} with keys S. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$class S, class T$>$\newline
+class csmp\+::\+Binary\+File\+Handler$<$ S, T $>$}
+writes objects and collections thereof to binary file 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/interfaces/Binary\+File\+Handler.\+h\end{DoxyCompactItemize}

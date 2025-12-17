@@ -1,0 +1,217 @@
+.TH "csmp::DES2PhaseTransport< dim, FLOW_FUNCTIONS >" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::DES2PhaseTransport< dim, FLOW_FUNCTIONS >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+Inherited by \fBcsmp::DES2PhaseSlightlyCompressibleTransport< dim, FLOW_FUNCTIONS >\fP\&.
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef \fBajb::detail::FibonacciHeap_Node\fP< double, size_t > \fBHeap_Node\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBDES2PhaseTransport\fP (\fBModel\fP< dim > &m, const char *target_region, bool with_gravity_forces, bool with_capillary_spreading, double cfl_multiplier, double PEP_multiplier, double relaxing_factor, bool tensor_k, FLOW_FUNCTIONS< dim > &ff)"
+.br
+.ti -1c
+.RI "virtual void \fBAdvectVariable_DES\fP (double time_increment, double model_time, size_t num_threads=1)=0"
+.br
+.ti -1c
+.RI "virtual void \fBAdvectVariable_TDS\fP (double time_interval, size_t num_threads=1)=0"
+.br
+.ti -1c
+.RI "void \fBSetNoFlowBoundaryCondition\fP (bool no_flow_boundary)"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBInitializeBasicVariablsAndKeys\fP ()"
+.br
+.ti -1c
+.RI "void \fBInitializeFiniteVolumeProperties\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBInitializeEvents\fP ()=0"
+.br
+.ti -1c
+.RI "void \fBResetCFLMultiplier\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBComputeRateofChange\fP (\fBEvent\fP< dim > *event)=0"
+.br
+.ti -1c
+.RI "virtual bool \fBSchedule\fP (\fBEvent\fP< dim > *event, double t_end)=0"
+.br
+.ti -1c
+.RI "virtual void \fBUpdate_DES\fP (\fBEvent\fP< dim > *event, double t_clock)=0"
+.br
+.ti -1c
+.RI "virtual void \fBUpdate_TDS\fP (\fBEvent\fP< dim > *event, double delta_t)=0"
+.br
+.ti -1c
+.RI "virtual void \fBSynchronize\fP (\fBEvent\fP< dim > *event, double t_clock, double &t_remove)=0"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBModel\fP< dim > & \fBsg_\fP"
+.br
+.ti -1c
+.RI "\fBRegion\fP< dim > & \fBgref_\fP"
+.br
+.ti -1c
+.RI "\fBPropertyDatabase\fP< dim > & \fBdb_\fP"
+.br
+.ti -1c
+.RI "double \fBupper_limit_\fP"
+.br
+.ti -1c
+.RI "double \fBlower_limit_\fP"
+.br
+.RI "range in which the result is allowed to vary "
+.ti -1c
+.RI "double \fBCFL_multiplier_\fP"
+.br
+.ti -1c
+.RI "double \fBPEP_multiplier_\fP"
+.br
+.ti -1c
+.RI "bool \fBtensor_k_\fP = false"
+.br
+.ti -1c
+.RI "std::vector< \fBEvent\fP< dim > > \fBFullList\fP"
+.br
+.ti -1c
+.RI "std::vector< \fBEvent\fP< dim > * > \fBPEPList\fP"
+.br
+.ti -1c
+.RI "\fBajb::FibonacciHeap\fP< double, size_t > \fBEventHeap\fP"
+.br
+.ti -1c
+.RI "size_t \fBrate_count_\fP"
+.br
+.ti -1c
+.RI "size_t \fBupdate_count_\fP"
+.br
+.ti -1c
+.RI "double \fBT_RateOfChange_\fP"
+.br
+.ti -1c
+.RI "double \fBT_Schedule_\fP"
+.br
+.ti -1c
+.RI "double \fBT_InsertToHeap_\fP"
+.br
+.ti -1c
+.RI "double \fBT_Update_\fP"
+.br
+.ti -1c
+.RI "double \fBT_Synchronize_\fP"
+.br
+.ti -1c
+.RI "double \fBT_RemoveFromHeap_\fP"
+.br
+.ti -1c
+.RI "double \fBT_AdvectVariable_\fP"
+.br
+.ti -1c
+.RI "FLOW_FUNCTIONS< dim > & \fBflowfunctions_\fP"
+.br
+.ti -1c
+.RI "bool \fBwith_capillary_spreading_\fP"
+.br
+.ti -1c
+.RI "bool \fBwith_gravity_forces_\fP"
+.br
+.ti -1c
+.RI "double \fBrelaxing_factor_\fP"
+.br
+.ti -1c
+.RI "bool \fBno_flow_boundary_\fP = true"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< SCALAR, NODE > \fBkey_EventIndex\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< SCALAR, NODE > \fBkey_update\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< SCALAR, NODE > \fBkey_rate\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< SCALAR, NODE > \fBkey_schedule\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< SCALAR, NODE > \fBkey_synchronize\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< SCALAR, NODE > \fBkey_fvPV\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< SCALAR, NODE > \fBkey_sCO2\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< SCALAR, NODE > \fBkey_sH2O\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< SCALAR, NODE > \fBkey_cut\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< SCALAR, NODE > \fBkey_CFL\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< SCALAR, NODE > \fBkey_pf\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< SCALAR, NODE > \fBkey_fv\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< SCALAR, ELEMENT > \fBkey_phi\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< SCALAR, ELEMENT > \fBkey_thi\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< SCALAR, ELEMENT > \fBkey_ssH2O\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< SCALAR, ELEMENT > \fBkey_k\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< SCALAR, FACET_INTEGRATION_POINT > \fBkey_fA\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< VECTOR, FACET_INTEGRATION_POINT > \fBkey_fn\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< VECTOR, ELEMENT > \fBkey_gradSn\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< VECTOR, ELEMENT > \fBkey_gradP\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< SCALAR, SECTOR_INTEGRATION_POINT > \fBkey_sPV\fP"
+.br
+.ti -1c
+.RI "std::set< \fBcsmp::Element\fP< dim > * > \fBhalo_stencils_\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< ARRAY, NODE > \fBkey_time\fP"
+.br
+.in -1c
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

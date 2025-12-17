@@ -1,0 +1,95 @@
+\doxysection{Iterative\+Integrator.\+h}
+\hypertarget{_iterative_integrator_8h_source}{}\label{_iterative_integrator_8h_source}\index{source/includes/integration/pde\_integrators/IterativeIntegrator.h@{source/includes/integration/pde\_integrators/IterativeIntegrator.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_ITERATIVE\_INTEGRATOR\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_ITERATIVE\_INTEGRATOR\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_p_d_e___integrator_8h}{"{}PDE\_Integrator.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_element}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}};}
+\DoxyCodeLine{00009\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_interrelation}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_interrelation}{Interrelation}};}
+\DoxyCodeLine{00010\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_visitor}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_visitor}{Visitor}};}
+\DoxyCodeLine{00011\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_model}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}};}
+\DoxyCodeLine{00012\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings}{SAMG\_Settings}};}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00016\ \textcolor{comment}{@brief\ Base\ class\ for\ the\ iterative\ itegration\ of\ PDEs\ using\ the\ FE\ method.}}
+\DoxyCodeLine{00017\ \textcolor{comment}{}}
+\DoxyCodeLine{00018\ \textcolor{comment}{@author\ Adrian\ Burri}}
+\DoxyCodeLine{00019\ \textcolor{comment}{@date\ 2004}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00021\ \textcolor{comment}{Provide\ a\ base\ class\ for\ transient\ algorithms\ which\ involve\ an\ iterative}}
+\DoxyCodeLine{00022\ \textcolor{comment}{solution\ algorithm\ on\ every\ time-\/step.\ }}
+\DoxyCodeLine{00023\ \textcolor{comment}{}}
+\DoxyCodeLine{00024\ \textcolor{comment}{@section\ design\ Design\ Intent}}
+\DoxyCodeLine{00025\ \textcolor{comment}{}}
+\DoxyCodeLine{00026\ \textcolor{comment}{Make\ it\ easier\ to\ derive\ special\ iterative\ schemes.\ Basically,\ only\ the}}
+\DoxyCodeLine{00027\ \textcolor{comment}{method\ Residual\ needs\ to\ be\ overwritten.}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00029\ \textcolor{comment}{@section\ participants\ Participants}}
+\DoxyCodeLine{00030\ \textcolor{comment}{}}
+\DoxyCodeLine{00031\ \textcolor{comment}{The\ PDE\_Integrator\ base\ class.}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00033\ \textcolor{comment}{@section\ collaboration\ Collaboration}}
+\DoxyCodeLine{00034\ \textcolor{comment}{}}
+\DoxyCodeLine{00035\ \textcolor{comment}{Models,\ Visitors\ and\ Interrelations.\ Calculations\ on\ single\ Region}}
+\DoxyCodeLine{00036\ \textcolor{comment}{objects\ is\ not\ supported.\ \ }}
+\DoxyCodeLine{00037\ \textcolor{comment}{}}
+\DoxyCodeLine{00038\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00039\ \textcolor{keyword}{template}<uint32\_t\ dim,\textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ CELLTYPE=\mbox{\hyperlink{classcsmp_1_1_element}{Element}}>}
+\DoxyCodeLine{00040\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_iterative_integrator}{IterativeIntegrator}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_iterative_integrator}{PDE\_Integrator}}<\mbox{\hyperlink{classcsmp_1_1_iterative_integrator}{dim}},\mbox{\hyperlink{classcsmp_1_1_iterative_integrator}{CELLTYPE}}>\ \{}
+\DoxyCodeLine{00041\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00042\ \ \ \ \ IterativeIntegrator();}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keywordtype}{void}\ MaximalIterationNumber(size\_t\ max\_iter);}
+\DoxyCodeLine{00045\ \ \ \ \ size\_t\ MaximalIterationNumber()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{void}\ TargetResidual(\textcolor{keywordtype}{double}\ target\_residual);}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordtype}{void}\ Verbose(\textcolor{keywordtype}{bool}\ yesno);}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keywordtype}{void}\ AddPostProcess(\ \mbox{\hyperlink{classcsmp_1_1_interrelation}{Interrelation}}<dim>*\ );}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keywordtype}{void}\ AddPostProcess(\ \mbox{\hyperlink{classcsmp_1_1_visitor}{Visitor}}<dim>*\ );}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ SetupEquations(\ ModelSubDomain<dim,CELLTYPE>\&\ );}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \ Residual();}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ SolveEquations(\ ModelSubDomain<dim,CELLTYPE>\&\ );}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordtype}{void}\ ApplyPostProcesses(\ ModelSubDomain<dim,CELLTYPE>\&\ );}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \textcolor{preprocessor}{CSMP\_WITH\_SAMG\_SOLVER}}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classcsmp_1_1_iterative_integrator}{size\_t}}\ \mbox{\hyperlink{classcsmp_1_1_iterative_integrator}{Iterations}}(\ \mbox{\hyperlink{classcsmp_1_1_iterative_integrator}{ModelSubDomain}}<\mbox{\hyperlink{classcsmp_1_1_iterative_integrator}{dim}},\mbox{\hyperlink{classcsmp_1_1_iterative_integrator}{CELLTYPE}}>\&\ );}
+\DoxyCodeLine{00059\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{else}}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{comment}{///\ add\ extra\ functionality\ for\ alternative\ solver\ if\ needed}}
+\DoxyCodeLine{00061\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{comment}{///\ Solution\ vector<double>\ of\ last\ iteration\ *\ not\ yet\ used}}
+\DoxyCodeLine{00065\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_iterative_integrator_a137c0c2a79dd2f4accabc6af8313eb21}{std}}::\mbox{\hyperlink{classcsmp_1_1_iterative_integrator_a137c0c2a79dd2f4accabc6af8313eb21}{vector}}<\textcolor{keywordtype}{double}>\ \mbox{\hyperlink{classcsmp_1_1_iterative_integrator_a137c0c2a79dd2f4accabc6af8313eb21}{x\_old\_}};}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keywordtype}{bool}\ verbose\_;}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \textcolor{preprocessor}{CSMP\_WITH\_SAMG\_SOLVER}}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_iterative_integrator}{SAMG\_KeepMemory}}();}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_iterative_integrator}{SAMG\_KeepSettings}}();}
+\DoxyCodeLine{00071\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{else}}
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{comment}{///\ add\ extra\ functionality\ for\ alternative\ solver\ if\ needed}}
+\DoxyCodeLine{00073\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00076\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_iterative_integrator}{std}}::\mbox{\hyperlink{classcsmp_1_1_iterative_integrator}{list}}<\mbox{\hyperlink{classcsmp_1_1_iterative_integrator}{std}}::\mbox{\hyperlink{classcsmp_1_1_iterative_integrator}{pair}}<\mbox{\hyperlink{classcsmp_1_1_iterative_integrator}{Interrelation}}<\mbox{\hyperlink{classcsmp_1_1_iterative_integrator}{dim}}>*,\ \mbox{\hyperlink{classcsmp_1_1_iterative_integrator}{Visitor}}<\mbox{\hyperlink{classcsmp_1_1_iterative_integrator}{dim}}>*>\ >\ \mbox{\hyperlink{classcsmp_1_1_iterative_integrator}{processes\_}};}
+\DoxyCodeLine{00077\ \ \ \ \ size\_t\ max\_iter\_;}
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keywordtype}{double}\ target\_residual\_;}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \textcolor{preprocessor}{CSMP\_WITH\_SAMG\_SOLVER}}
+\DoxyCodeLine{00081\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_iterative_integrator}{SAMG\_Settings}}*\ \mbox{\hyperlink{classcsmp_1_1_iterative_integrator}{GetSAMG\_Settings}}();}
+\DoxyCodeLine{00082\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{else}}
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{comment}{///\ add\ extra\ functionality\ for\ alternative\ solver\ if\ needed}}
+\DoxyCodeLine{00084\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00085\ \};}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \}\ \textcolor{comment}{//\ end\ namespace\ csmp}}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

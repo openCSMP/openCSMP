@@ -109,7 +109,7 @@ public:
   size_t Faces() const;
 
   /// returns number of InterFaces=lower-dimensional elements in current mesh
-  size_t InterFaces() const;
+  size_t Interfaces() const;
   
   /// number of Manifold objects existing in conjuction with the split boundaries
   size_t NodeManifolds() const;
@@ -126,8 +126,8 @@ public:
   typename plf::colony<Face<dim> >::iterator      FacesBegin();
   typename plf::colony<Face<dim> >::iterator      FacesEnd();
 
-  typename plf::colony<InterFace<dim> >::iterator InterFacesBegin();
-  typename plf::colony<InterFace<dim> >::iterator InterFacesEnd();
+  typename plf::colony<InterFace<dim> >::iterator InterfacesBegin();
+  typename plf::colony<InterFace<dim> >::iterator InterfacesEnd();
 
   typename plf::colony<NodeManifold<dim> >::iterator NodeManifoldsBegin();
   typename plf::colony<NodeManifold<dim> >::iterator NodeManifoldsEnd();
@@ -142,8 +142,8 @@ public:
   typename plf::colony<Face<dim> >::const_iterator      FacesBegin() const;
   typename plf::colony<Face<dim> >::const_iterator      FacesEnd() const;
 
-  typename plf::colony<InterFace<dim> >::const_iterator InterFacesBegin() const;
-  typename plf::colony<InterFace<dim> >::const_iterator InterFacesEnd() const;
+  typename plf::colony<InterFace<dim> >::const_iterator InterfacesBegin() const;
+  typename plf::colony<InterFace<dim> >::const_iterator InterfacesEnd() const;
   
   typename plf::colony<NodeManifold<dim> >::const_iterator NodeManifoldsBegin() const;
   typename plf::colony<NodeManifold<dim> >::const_iterator NodeManifoldsEnd() const;

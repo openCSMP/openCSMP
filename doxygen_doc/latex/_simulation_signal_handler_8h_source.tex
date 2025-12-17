@@ -1,0 +1,58 @@
+\doxysection{Simulation\+Signal\+Handler.\+h}
+\hypertarget{_simulation_signal_handler_8h_source}{}\label{_simulation_signal_handler_8h_source}\index{source/includes/run\_control/SimulationSignalHandler.h@{source/includes/run\_control/SimulationSignalHandler.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{SIMULATION\_SIGNAL\_HANDLER\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{SIMULATION\_SIGNAL\_HANDLER\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{csignal}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{iostream}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keywordtype}{void}\ HandleSignal(\textcolor{keywordtype}{int}\ sig\_code);}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00010\ \textcolor{comment}{\ \ \ \ Allows\ user\ to\ interrupt\ simulation\ by\ keystrokes.}}
+\DoxyCodeLine{00011\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ \ \ \ Used\ by\ FEMCFVM\ simulator.}}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ \ \ \ @author\ J.\ Mindel\ \&\ S.\ Bazrafkan}}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ \ \ \ @date\ 2012}}
+\DoxyCodeLine{00016\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00017\ \textcolor{keyword}{class}\ \mbox{\hyperlink{class_simulation_signal_handler}{SimulationSignalHandler}}}
+\DoxyCodeLine{00018\ \{}
+\DoxyCodeLine{00019\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00020\ \ \ \ \ SimulationSignalHandler();}
+\DoxyCodeLine{00021\ \ \ \ \ \string~SimulationSignalHandler();}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{void}\ OutputVTUSignal(\textcolor{keywordtype}{bool}\ signal)\{outputVTUSignal\_\ =\ signal;\}}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{bool}\ OutputVTUSignal()\{\textcolor{keywordflow}{return}\ outputVTUSignal\_;\}}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{comment}{//\ used\ for\ monitoring\ data\ output}}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{void}\ OutputMonitorDataSignal(\textcolor{keywordtype}{bool}\ signal)\{outputMonitorDataSignal\_=\ signal;\}}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordtype}{bool}\ OutputMonitorDataSignal()\{\textcolor{keywordflow}{return}\ outputMonitorDataSignal\_;\}}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{comment}{//\ output\ restart\ file.}}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordtype}{void}\ OutputRestartFileSignal(\textcolor{keywordtype}{bool}\ signal)\{outputRestartSignal\_\ =\ signal;\}}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{bool}\ OutputRestartFileSignal()\{\textcolor{keywordflow}{return}\ outputRestartSignal\_;\}}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{void}\ QuitSignal(\textcolor{keywordtype}{bool}\ signal)\{\textcolor{keyword}{this}-\/>quitSignal\_\ =\ signal;\}}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordtype}{bool}\ QuitSignal()\{\textcolor{keywordflow}{return}\ \textcolor{keyword}{this}-\/>quitSignal\_;\}}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{void}\ SignalRaised(\textcolor{keywordtype}{bool}\ signal)\{interactiveSignalRaised\_\ =\ signal;\}}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordtype}{bool}\ SignalRaised()\{\textcolor{keywordflow}{return}\ interactiveSignalRaised\_;\}}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{comment}{//void\ HandleSignal(int\ sig\_code);}}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ outputVTUSignal\_;}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ outputRestartSignal\_;}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ quitSignal\_;}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ interactiveSignalRaised\_;}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ outputMonitorDataSignal\_;}
+\DoxyCodeLine{00050\ \};}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{//\ SIMULATION\_SIGNAL\_HANDLER\_H}}
+
+\end{DoxyCode}

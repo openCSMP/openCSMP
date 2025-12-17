@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_25b5e3d362c3c556b4470441deffdc49" kind="dir">
+    <compoundname>source/modules/thmc/fractures</compoundname>
+    <innerfile refid="_exponential_fracture_matrix_transfer_8cpp">ExponentialFractureMatrixTransfer.cpp</innerfile>
+    <innerfile refid="_fourar_lenormand_8cpp">FourarLenormand.cpp</innerfile>
+    <innerfile refid="_fracture_8cpp">Fracture.cpp</innerfile>
+    <innerfile refid="_fracture_brooks_corey_parameter_visitor_8cpp">FractureBrooksCoreyParameterVisitor.cpp</innerfile>
+    <innerfile refid="_fracture_capillary_pressure_visitor_8cpp">FractureCapillaryPressureVisitor.cpp</innerfile>
+    <innerfile refid="_fracture_compute_capillary_gradient_visitor_8cpp">FractureComputeCapillaryGradientVisitor.cpp</innerfile>
+    <innerfile refid="_fracture_compute_velocity_visitor_8cpp">FractureComputeVelocityVisitor.cpp</innerfile>
+    <innerfile refid="_fracture_matrix_upscaled_8cpp">FractureMatrixUpscaled.cpp</innerfile>
+    <innerfile refid="_fracture_peclet_number_visitor_8cpp">FracturePecletNumberVisitor.cpp</innerfile>
+    <innerfile refid="_generic_transfer_function_8cpp">GenericTransferFunction.cpp</innerfile>
+    <innerfile refid="_hydro_fracture_visitor_8cpp">HydroFractureVisitor.cpp</innerfile>
+    <innerfile refid="_inter_face_fracture_visitor_8cpp">InterFaceFractureVisitor.cpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="source/modules/thmc/fractures/"/>
+  </compounddef>
+</doxygen>

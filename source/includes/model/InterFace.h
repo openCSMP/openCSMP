@@ -128,7 +128,7 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
                
 
     /// self-detection in the interface construction process
-    bool operator==( const InterFace<dim>& );
+    bool operator==( const InterFace<dim>& ) const;
 
     /// reference to provide efficiency hack in MeshManager
     typename  std::vector<csmp::InterFace<dim>*>& NeighborElementVector();
@@ -169,31 +169,31 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     void Accept( csmp::Visitor<dim>& vis );
 
     /// of variables that are discretised on interfaces; required by LocalVariableStorage
-    PLACEMENT Placement() const { return INTER_FACE; }
+    PLACEMENT Placement() const noexcept { return INTER_FACE; }
 
     /// node_connector_.size() = total nodes on both sides of InterFace
-    uint32_t  Nodes() const;
+    uint32_t  Nodes() const noexcept;
     
-    uint32_t  Faces() const;
+    uint32_t  Faces() const noexcept;
   
     /// the InterFace object neighbors of the InterFace (one per face of interface)
-    uint32_t  Neighbors() const;
+    uint32_t  Neighbors() const noexcept;
 
     /// the InterFace object neighbors which are connected with the InterFace and not null.
-    uint32_t  ConnectedNeighbors() const;
+    uint32_t  ConnectedNeighbors() const noexcept;
 
     /// only constant iterators are provided because the user is not supposed to change the node pr neighbor connectivity (done by MeshManager);
-    typename std::vector<csmp::Node<dim>*>::const_iterator        NodesBegin() const;
-    typename std::vector<csmp::Node<dim>*>::const_iterator        NodesEnd() const;
+    typename std::vector<csmp::Node<dim>*>::const_iterator        NodesBegin() const noexcept;
+    typename std::vector<csmp::Node<dim>*>::const_iterator        NodesEnd() const noexcept;
 
-    typename std::vector<csmp::Node<dim>*>::const_iterator        CornerNodesBegin() const;
-    typename std::vector<csmp::Node<dim>*>::const_iterator        CornerNodesEnd() const;
+    typename std::vector<csmp::Node<dim>*>::const_iterator        CornerNodesBegin() const noexcept;
+    typename std::vector<csmp::Node<dim>*>::const_iterator        CornerNodesEnd() const noexcept;
 
-    typename std::vector<csmp::InterFace<dim>*>::const_iterator   NeighborsBegin() const;
-    typename std::vector<csmp::InterFace<dim>*>::const_iterator   NeighborsEnd() const;
+    typename std::vector<csmp::InterFace<dim>*>::const_iterator   NeighborsBegin() const noexcept;
+    typename std::vector<csmp::InterFace<dim>*>::const_iterator   NeighborsEnd() const noexcept;
 
     /// access ONLY to the nodes on the Current_Side of the interface (determined by member current_side_)
-    csmp::Node<dim>* const N( uint32_t n_local ) const;
+    csmp::Node<dim>* const N( uint32_t n_local ) const noexcept;
     
     /// access the nodes that are connected to either, the inside or the outside of the Face
     csmp::Node<dim>* const N( uint32_t n_local, INTERFACE_SIDE side ) const;
@@ -201,47 +201,47 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     csmp::Node<dim>* const MatchingN( uint32_t n_local, INTERFACE_SIDE side ) const;
 
     /// switches internal state variable that sets interface side
-    void            CurrentSide( INTERFACE_SIDE side );
-    INTERFACE_SIDE  CurrentSide() const;
+    void            CurrentSide( INTERFACE_SIDE side ) noexcept;
+    INTERFACE_SIDE  CurrentSide() const noexcept;
     
     /// END_POINT is a  classifier that applies on the perimeter of SplitBoundary objects terminating within models where INSIDE and OUTSIDE nodes are identical
     // TODO: review this functionality / adapt to manifolds
     bool IsEndPointNode( uint32_t n_local ) const;
 
     /// returns neighbor InterFace of interface
-    csmp::InterFace<dim>* const Neighbor( uint32_t ) const;
+    csmp::InterFace<dim>* const Neighbor( uint32_t ) const noexcept;
     
     /// on-the-fly 0..n-1 numbering stored in mutable local variable and used for computations in interfaces (displacement gradients etc.)
-    void           Idx( size_t ) const;
-    size_t         Idx() const;
+    void           Idx( size_t ) const noexcept;
+    size_t         Idx() const noexcept;
 
     /// access the higher dimensional elements on either side of interface; @attention returns nullptr if outside is not present
-    Element<dim>* const Parent( INTERFACE_SIDE ) const;
+    Element<dim>* const Parent( INTERFACE_SIDE ) const noexcept;
   
     /// higher-dimensional element located on side opposite to where the unit normal points; will always be present
-    Element<dim>* const InnerParent() const;
+    Element<dim>* const InnerParent() const noexcept;
   
     /// higher-dimensional element located on the side of the interface to which the unit normal points; @attention does not exist on model boundary
-    Element<dim>* const OuterParent() const;
+    Element<dim>* const OuterParent() const noexcept;
 
     /// Local node numbers in higher-dimensional adjacent elements; costly to compute
     uint32_t       ParentNodeNumber( uint32_t n_local, INTERFACE_SIDE side ) const;
 
     /// access to the Element object from which the original face was created if it still is there (use HasBase()
-    Element<dim>*  InterveningElement();
-    const Element<dim>*  InterveningElement() const;
+    Element<dim>*  InterveningElement() noexcept;
+    const Element<dim>*  InterveningElement() const noexcept;
 
     /// is an equi-dimensional element connected to the MIDDLE element pointer of this InterFace
-    bool           HasInterveningElement() const { return middleElement_!=nullptr; }
+    bool           HasInterveningElement() const noexcept { return middleElement_!=nullptr; }
     
     /// tests whether the INSIDE nodes match the OUTSIDE nodes w.r.t. their position
     bool           AreNodesCollocated(double tolerance=std::numeric_limits<double>::epsilon()) const;
   
     /// local number of the face in the inner parent element, which borders against the interface
     void           ParentFaceID( INTERFACE_SIDE, uint32_t idx );
-    uint32_t       InnerParentFaceID() const;
-    uint32_t       OuterParentFaceID() const;
     uint32_t       ParentFaceID( INTERFACE_SIDE side ) const;
+    uint32_t       InnerParentFaceID() const noexcept;
+    uint32_t       OuterParentFaceID() const noexcept;
 
     // ------------------------------------------------------------------------
     //  InterFace geometric properties
@@ -275,7 +275,7 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     double  LengthInDirection( const VectorVariable<dim>& vecDirection ) const;
     
     /// as needed by FiniteElementPolicy (uses current_side_ to retrieve matrix)
-    void NodeCoordinateMatrix( DenseMatrix<DM_MIN>& ) const;
+    void NodeCoordinateMatrix( DenseMatrix<DM_MIN>& XY ) const;
 
     /// as needed in the accumulation process in pde operators for a specifc side
     void NodeCoordinateMatrix( DenseMatrix<DM_MIN>&, INTERFACE_SIDE side ) const;

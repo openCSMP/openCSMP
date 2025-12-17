@@ -1,0 +1,342 @@
+\doxysection{csmp\+::TDDUnit\+Test\+\_\+\+Example Class Reference}
+\hypertarget{classcsmp_1_1_t_d_d_unit_test___example}{}\label{classcsmp_1_1_t_d_d_unit_test___example}\index{csmp::TDDUnitTest\_Example@{csmp::TDDUnitTest\_Example}}
+
+
+Introduces to \doxylink{classcsmp_1_1_test}{Test} Driven Development in general and attempts to provide a CSMP++ specific approach.  
+
+
+
+
+{\ttfamily \#include $<$TDDUnit\+Test\+\_\+\+Example.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::TDDUnit\+Test\+\_\+\+Example\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=220pt]{classcsmp_1_1_t_d_d_unit_test___example__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::TDDUnit\+Test\+\_\+\+Example\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=220pt]{classcsmp_1_1_t_d_d_unit_test___example__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_t_d_d_unit_test___example_a0de455536c16c53bde60a2c9c30edabb}{Run}} () override final
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_t_d_d_unit_test___example_ac44335a75229c26f6418a5472f3e8b98}{Specifications}} () override final
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_example}{csmp\+::\+Example}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Example} (std\+::ostream \texorpdfstring{$\ast$}{*}osptr=0)
+\item 
+void {\bfseries Set\+Title} (const std\+::string \&text)
+\begin{DoxyCompactList}\small\item\em Reporting interface. \end{DoxyCompactList}\item 
+void {\bfseries Set\+Category} (const std\+::string \&text)
+\item 
+void {\bfseries Set\+Difficulty} (const int \&difficulty)
+\begin{DoxyCompactList}\small\item\em set function, takes care that 0 \texorpdfstring{$<$}{<} difficulty \texorpdfstring{$<$}{<} 4 \end{DoxyCompactList}\item 
+void {\bfseries Add\+Description} (const std\+::string \&text)
+\begin{DoxyCompactList}\small\item\em allows to add a descrtiption to an example \end{DoxyCompactList}\item 
+void {\bfseries Add\+Requirement} (const std\+::string \&text)
+\begin{DoxyCompactList}\small\item\em allows to add a requirement to an example (files etc..) \end{DoxyCompactList}\item 
+void {\bfseries Add\+Author} (const std\+::string \&text)
+\begin{DoxyCompactList}\small\item\em allows to add an author to an example \end{DoxyCompactList}\item 
+std\+::string {\bfseries Get\+Title} () const
+\begin{DoxyCompactList}\small\item\em example title return function \end{DoxyCompactList}\item 
+int {\bfseries Get\+Difficulty} () const
+\begin{DoxyCompactList}\small\item\em return function \end{DoxyCompactList}\item 
+std\+::string {\bfseries Get\+Category} () const
+\begin{DoxyCompactList}\small\item\em return function \end{DoxyCompactList}\item 
+std\+::list$<$ std\+::string $>$\+::const\+\_\+iterator {\bfseries Get\+Descriptions\+Begin} ()
+\begin{DoxyCompactList}\small\item\em return function \end{DoxyCompactList}\item 
+std\+::list$<$ std\+::string $>$\+::const\+\_\+iterator {\bfseries Get\+Descriptions\+End} () const
+\begin{DoxyCompactList}\small\item\em return function \end{DoxyCompactList}\item 
+std\+::list$<$ std\+::string $>$\+::const\+\_\+iterator {\bfseries Get\+Authors\+Begin} ()
+\begin{DoxyCompactList}\small\item\em return function \end{DoxyCompactList}\item 
+std\+::list$<$ std\+::string $>$\+::const\+\_\+iterator {\bfseries Get\+Authors\+End} () const
+\begin{DoxyCompactList}\small\item\em return function \end{DoxyCompactList}\item 
+std\+::list$<$ std\+::string $>$\+::const\+\_\+iterator {\bfseries Get\+Requirements\+Begin} ()
+\begin{DoxyCompactList}\small\item\em return function \end{DoxyCompactList}\item 
+std\+::list$<$ std\+::string $>$\+::const\+\_\+iterator {\bfseries Get\+Requirements\+End} () const
+\begin{DoxyCompactList}\small\item\em return function \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_example}{csmp\+::\+Example}}}
+\begin{DoxyCompactItemize}
+\item 
+void {\bfseries Initialize} ()
+\begin{DoxyCompactList}\small\item\em assures db to contain data \end{DoxyCompactList}\item 
+std\+::ostream \texorpdfstring{$\ast$}{*} {\bfseries Get\+Stream} ()
+\item 
+void {\bfseries Set\+Stream} (std\+::ostream \texorpdfstring{$\ast$}{*}ostream)
+\item 
+std\+::string {\bfseries Get\+Example\+File\+Name} (const char \texorpdfstring{$\ast$}{*}path)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_example_ac926ad8eb6de45710b9076c8f6304880}{Create\+Working\+Directory\+And\+Copy\+Input\+Model\+Files}} (std\+::string \&example\+\_\+name, std\+::string \&model\+\_\+name, std\+::string \&variable\+\_\+file, std\+::string config\+\_\+file="{}"{})
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Introduces to \doxylink{classcsmp_1_1_test}{Test} Driven Development in general and attempts to provide a CSMP++ specific approach. 
+
+Unit\+Tests and \doxylink{classcsmp_1_1_test}{Test} Driven Development increase confidence in the code you write and drastically reduce debugging needs. In an environment like CSMP that is not tested bottom up, a different approach to testing new classes may be chosen. Also for classes that act on a \doxylink{classcsmp_1_1_model}{csmp\+::\+Model}, the user might skip test driven development/unit testing due to the high effort required. This document tries to provide an approach to CSMP specific TDD.
+
+\begin{DoxyAuthor}{Author}
+P Lang 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+September 2010 
+\end{DoxyDate}
+\begin{DoxyNote}{Note}
+WORK IN PROGRESS
+\end{DoxyNote}
+\hypertarget{classcsmp_1_1_t_d_d_unit_test___example_outline}{}\doxysubsection{\texorpdfstring{Outline}{Outline}}\label{classcsmp_1_1_t_d_d_unit_test___example_outline}
+
+\begin{DoxyItemize}
+\item Unit Tests and Functional Tests
+\begin{DoxyItemize}
+\item in general XP
+\item interpreted for CSMP
+\end{DoxyItemize}
+\item Introduction to TDD
+\item Implementation
+\end{DoxyItemize}\hypertarget{classcsmp_1_1_t_d_d_unit_test___example_tests}{}\doxysubsection{\texorpdfstring{Unit Tests and Functional Tests}{Unit Tests and Functional Tests}}\label{classcsmp_1_1_t_d_d_unit_test___example_tests}
+\hypertarget{classcsmp_1_1_t_d_d_unit_test___example_general}{}\doxysubsubsection{\texorpdfstring{In general XP}{In general XP}}\label{classcsmp_1_1_t_d_d_unit_test___example_general}
+A Unit \doxylink{classcsmp_1_1_test}{Test} is designed to test the interface of a single class through proper pass/fail criteria. A Functional \doxylink{classcsmp_1_1_test}{Test} tests the result of class interactions within a bigger context. Hence, pass/fail criteria are more complex. This also includes performance test and the validation of applications in their whole.\hypertarget{classcsmp_1_1_t_d_d_unit_test___example_csmp}{}\doxysubsubsection{\texorpdfstring{Interpreted for CSMP}{Interpreted for CSMP}}\label{classcsmp_1_1_t_d_d_unit_test___example_csmp}
+To test classes that require a model to act on, multiple Unit Tests may be run within one test function and work with the same model. Classes are tested indepently from another, and the \doxylink{classcsmp_1_1_test_suite}{Test\+Suite} will spot failures individually. To sum it up, we put multiple tests inside a single test function that establishes a model for all of them. This is done to reduce the effort that goes into creating a test. Functional Tests, or \doxylink{classcsmp_1_1_test}{Test} Cases, measure performance and compare results of complex applications.\hypertarget{classcsmp_1_1_t_d_d_unit_test___example_tdd}{}\doxysubsection{\texorpdfstring{Introduction to TDD}{Introduction to TDD}}\label{classcsmp_1_1_t_d_d_unit_test___example_tdd}
+Write your Unit \doxylink{classcsmp_1_1_test}{Test} first, let it fail(because there is no class yet, afterall) then implement your class piecewise to make the tests pass. Once the tests pass, improve your code. Benefits\+:
+\begin{DoxyItemize}
+\item improves design
+\begin{DoxyItemize}
+\item think it through
+\item then implement
+\end{DoxyItemize}
+\item reduces amount of code
+\begin{DoxyItemize}
+\item by sticking to what you really planned to do
+\item by having code that does the job quickly
+\begin{DoxyItemize}
+\item and improve it when there\textquotesingle{}s time
+\end{DoxyItemize}
+\end{DoxyItemize}
+\item used together with SVN, often replaces debugger
+\begin{DoxyItemize}
+\item revert to revision that works, go form there
+\end{DoxyItemize}
+\item YOU CAN TRUST IN YOUR CODE AN SUBSEQUENT USE OF IT
+\item IT IS TESTED(what\textquotesingle{}s the alternative?)
+\end{DoxyItemize}
+
+How it\textquotesingle{}s done\+:
+\begin{DoxyEnumerate}
+\item Write your test
+\item See it fail
+\item Implement your code
+\item Make the test pass
+\end{DoxyEnumerate}\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+Basic Unit \doxylink{classcsmp_1_1_test}{Test} and TDD with CSMP\textquotesingle{}s \doxylink{classcsmp_1_1_test}{csmp\+::\+Test} and \doxylink{classcsmp_1_1_test_suite}{csmp\+::\+Test\+Suite} class. Available Macros\+: -\/\+\_\+test( cond ) tests for logical statement -\/\+\_\+fail( stri ) fails -\/\+\_\+equal( arg1, arg2, tolerance ) tests if arguments equal within tolerance
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \textcolor{comment}{//\ implementation\ follos}}
+\DoxyCodeLine{\ \ \textcolor{keyword}{class\ }Unit}
+\DoxyCodeLine{\ \ \{}
+\DoxyCodeLine{\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordtype}{int}\ foo1(\ \textcolor{keywordtype}{int}\ a\ )\ \{\ \textcolor{keywordflow}{return}\ a/a;\ \}}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordtype}{int}\ foo2(\ \textcolor{keywordtype}{int}\ a\ )\ \{\ \textcolor{keywordflow}{return}\ a*a;\ \}}
+\DoxyCodeLine{\ \ \};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \textcolor{comment}{//\ this\ comes\ first(failing)}}
+\DoxyCodeLine{\ \ \textcolor{keyword}{class\ \ }UnitTest\ :\ \textcolor{keyword}{public}\ Test}
+\DoxyCodeLine{\ \ \{}
+\DoxyCodeLine{\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ run()\ \{\ \_test(\ Unit().foo1(\ 5\ )\ ==\ 1\ );}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_test(\ Unit().foo2(\ 5\ )\ >\ 5\ );\ \}}
+\DoxyCodeLine{\ \ \};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keywordtype}{int}\ main(\ \textcolor{keywordtype}{int}\ argc,\ \textcolor{keywordtype}{char}**\ argv)}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ TestSuite\ s(\textcolor{stringliteral}{"{}TDD\ SUITE"{}},\ \&cout);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ s.addTest(\ \textcolor{keyword}{new}\ UnitTest()\ );}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ s.run();}
+\DoxyCodeLine{\ \ \textcolor{keywordtype}{int}\ failures\ =\ s.report();}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \textcolor{keywordflow}{return}\ failures;}
+\DoxyCodeLine{\ \}}
+
+\end{DoxyCode}
+
+
+Multiple Unit Tests within one test function for a group of classes to be tested, e.\+g. Interrelations.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{comment}{//\ global\ function\ to\ reload\ model\ from\ binary}}
+\DoxyCodeLine{\textcolor{keywordtype}{void}\ resetModel(\ Model<DIM>*\ model\ )}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ \textcolor{keywordflow}{if}(\ model\ !=\ 0\ )}
+\DoxyCodeLine{\ \ \ \ \textcolor{keyword}{delete}\ model;}
+\DoxyCodeLine{\ \ model\ =\ \textcolor{keyword}{new}\ ANSYS\_Model3D(\ \textcolor{stringliteral}{"{}small\_prism\_bin"{}},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}CSMP-\/2phase-\/variables.txt"{}}\ );}
+\DoxyCodeLine{\}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keyword}{class\ \ }MultipleUnitTest\ :\ \textcolor{keyword}{public}\ Test}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\textcolor{keyword}{public}:}
+\DoxyCodeLine{\ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ run()\ \{}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ establishing\ a\ test\ model}}
+\DoxyCodeLine{\ \ \ \ Model<DIM>*\ model;}
+\DoxyCodeLine{\ \ \ \ resetModel(\ model\ );}
+\DoxyCodeLine{}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ getting\ indices\ to\ evaluate\ test\ criterion}}
+\DoxyCodeLine{\ \ \ \ \textcolor{keyword}{const}\ Region<dim>\&\ rref\ =\ model-\/>Region(\ \textcolor{stringliteral}{"{}Model"{}}\ );}
+\DoxyCodeLine{\ \ \ \ Index\ porosityKey\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ model-\/>Database().StorageKey(\ \textcolor{stringliteral}{"{}porosity"{}}\ );}
+\DoxyCodeLine{\ \ \ \ Index\ frapKey\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ model-\/>Database().StorageKey(\ \textcolor{stringliteral}{"{}fracture\ aperture"{}}\ );}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ backing\ up\ property\ that\ will\ be\ manipulated}}
+\DoxyCodeLine{\ \ \ \ PropertyHandle<DIM>*\ cachePorosity\ =\ \textcolor{keyword}{new}\ PropertyHandle<DIM>(\ (*model),\ \textcolor{stringliteral}{"{}cache\ porosity"{}},\ SCALAR,\ ELEMENT\ );}
+\DoxyCodeLine{\ \ \ \ Index\ cachePorosityKey\ =\ model-\/>Database().StorageKey(\ \textcolor{stringliteral}{"{}cache\ porosity"{}}\ );}
+\DoxyCodeLine{\ \ \ \ (*model).CopyReplace(\ \textcolor{stringliteral}{"{}porosity"{}},\ \textcolor{stringliteral}{"{}cache\ porosity"{}}\ );}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ Applying\ an\ Interrelation\ to\ the\ model}}
+\DoxyCodeLine{\ \ \ \ FracturePorosityFromAperture<DIM>\ fracturePorosityInterrelation(\ (*model).Database()\ );}
+\DoxyCodeLine{\ \ \ \ (*model).Apply(\ fracturePorosityInterrelation\ );}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ Running\ a\ trivial\ test\ criterion}}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordtype}{bool}\ passed(\ \textcolor{keyword}{true}\ );}
+\DoxyCodeLine{\ \ \ \ \textcolor{keyword}{const}\ std::vector<Element<DIM>*>::const\_iterator\ elementsEnd\ =\ rref.CellsEnd();}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{for}(\ std::vector<Element<DIM>*>::const\_iterator\ it\ =\ rref.CellsBegin();}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ it\ !=\ elementsEnd;\ ++it\ )}
+\DoxyCodeLine{\ \ \ \ \ \ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\ (*it)-\/>Read(\ porosityKey\ )\ !=\ (*it)-\/>Read(\ cachePorosityKey\ )\ *}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (*it)-\/>Read(\ frapKey\ )\ )\ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ passed\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{comment}{//\ if\ we\ wish\ to\ test\ more\ than\ one\ interrelation\ within\ one\ loop,\ we\ do}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{comment}{//\ \_equal(\ (*it)-\/>Read(\ cacheValue1Key\ ),\ (*it)-\/>Read(\ value1Key\ )\ ),\ tolerance\_\ );}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{comment}{//\ \_equal(\ (*it)-\/>Read(\ cacheValue2Key\ ),\ (*it)-\/>Read(\ value2Key\ )\ ),\ tolerance\_\ );}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{comment}{//\ ....}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{comment}{//\ as\ long\ as\ the\ tests\ still\ qualify\ as\ independent}}
+\DoxyCodeLine{\ \ \ \ \ \ \}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \textcolor{comment}{//\ evaluating\ test\ criterion}}
+\DoxyCodeLine{\ \ \ \ \ \ \_test(\ passed\ );}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \textcolor{comment}{//\ restoring\ model}}
+\DoxyCodeLine{\ \ \ \ \ \ (*model).CopyReplace(\ \textcolor{stringliteral}{"{}cache\ porosity"{}},\ \textcolor{stringliteral}{"{}porosity"{}}\ );}
+\DoxyCodeLine{\ \ \ \ \ \ \textcolor{keyword}{delete}\ cachePorosity;}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \textcolor{comment}{//...tests}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \textcolor{comment}{//\ resetting\ model\ if\ required}}
+\DoxyCodeLine{\ \ \ \ \ \ resetModel(\ model\ );}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \textcolor{comment}{//...tests}}
+\DoxyCodeLine{}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \}\ \textcolor{comment}{//\ run}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keywordtype}{int}\ main(\ \textcolor{keywordtype}{int}\ argc,\ \textcolor{keywordtype}{char}**\ argv)}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ TestSuite\ s(\textcolor{stringliteral}{"{}TDD\ SUITE"{}},\ \&cout);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ s.addTest(\ \textcolor{keyword}{new}\ MultipleUnitTest()\ );}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ s.run();}
+\DoxyCodeLine{\ \ \textcolor{keywordtype}{int}\ failures\ =\ s.report();}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \textcolor{keywordflow}{return}\ failures;}
+\DoxyCodeLine{\ \}}
+
+\end{DoxyCode}
+
+
+Points to consider\+:
+\begin{DoxyItemize}
+\item load model from a CSMP binary
+\item use model.\+Copy\+Replace(...) if possible
+\end{DoxyItemize}
+
+For developers, IMHO there\textquotesingle{}s no alternativ to writing a single test per core class\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{int}\ main(\ \textcolor{keywordtype}{int}\ argc,\ \textcolor{keywordtype}{char}**\ argv)}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ TestSuite\ s(\textcolor{stringliteral}{"{}TDD\ SUITE"{}},\ \&cout);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \textcolor{comment}{//\ establishing\ model}}
+\DoxyCodeLine{\ \ \textcolor{keyword}{enum}\{\ DIM\ =\ 2\ \};}
+\DoxyCodeLine{\ \ Model<DIM>*\ model;}
+\DoxyCodeLine{\ \ resetModel(\ model\ )}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \textcolor{comment}{//\ the\ tests\ themselve\ have\ the\ responsability\ to\ restore\ the\ model}}
+\DoxyCodeLine{\ \ \textcolor{comment}{//\ to\ its\ default}}
+\DoxyCodeLine{\ \ s.addTest(\ \textcolor{keyword}{new}\ UnitTest1(\ model\ )\ );}
+\DoxyCodeLine{\ \ s.addTest(\ \textcolor{keyword}{new}\ UnitTest2(\ model\ )\ );}
+\DoxyCodeLine{\ \ s.addTest(\ \textcolor{keyword}{new}\ UnitTest3(\ model\ )\ );}
+\DoxyCodeLine{\ \ s.addTest(\ \textcolor{keyword}{new}\ UnitTest4(\ model\ )\ );}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ s.run();}
+\DoxyCodeLine{\ \ \textcolor{keywordtype}{int}\ failures\ =\ s.report();}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \textcolor{keywordflow}{return}\ failures;}
+\DoxyCodeLine{\ \}}
+
+\end{DoxyCode}
+
+
+\begin{DoxyNote}{Note}
+10 MIN BUILD 
+\end{DoxyNote}
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000052}{Todo}}](3) Implement Suite features for functioal tests(csmp binary comparison, speed, vtk comparison(\+DONE)...) \end{DoxyRefDesc}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_t_d_d_unit_test___example_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_t_d_d_unit_test___example_a0de455536c16c53bde60a2c9c30edabb}\index{csmp::TDDUnitTest\_Example@{csmp::TDDUnitTest\_Example}!Run@{Run}}
+\index{Run@{Run}!csmp::TDDUnitTest\_Example@{csmp::TDDUnitTest\_Example}}
+\doxysubsubsection{\texorpdfstring{Run()}{Run()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_t_d_d_unit_test___example_a0de455536c16c53bde60a2c9c30edabb} 
+void csmp\+::\+TDDUnit\+Test\+\_\+\+Example\+::\+Run (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [final]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classcsmp_1_1_example}{csmp\+::\+Example}}.
+
+\Hypertarget{classcsmp_1_1_t_d_d_unit_test___example_ac44335a75229c26f6418a5472f3e8b98}\index{csmp::TDDUnitTest\_Example@{csmp::TDDUnitTest\_Example}!Specifications@{Specifications}}
+\index{Specifications@{Specifications}!csmp::TDDUnitTest\_Example@{csmp::TDDUnitTest\_Example}}
+\doxysubsubsection{\texorpdfstring{Specifications()}{Specifications()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_t_d_d_unit_test___example_ac44335a75229c26f6418a5472f3e8b98} 
+void csmp\+::\+TDDUnit\+Test\+\_\+\+Example\+::\+Specifications (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [final]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classcsmp_1_1_example}{csmp\+::\+Example}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+examples/source/TDDUnit\+Test\+\_\+\+Example.\+h\item 
+examples/source/TDDUnit\+Test\+\_\+\+Example.\+cpp\end{DoxyCompactItemize}

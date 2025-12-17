@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_44a449024b30a3b325a6974bcf49bdd2" kind="dir">
+    <compoundname>source/includes/utilities</compoundname>
+    <innerfile refid="_a_p___bool_vector_8h">AP_BoolVector.h</innerfile>
+    <innerfile refid="_a_p__test_utilities_8h">AP_testUtilities.h</innerfile>
+    <innerfile refid="_a_p___timer_8h">AP_Timer.h</innerfile>
+    <innerfile refid="_attorney_8h">Attorney.h</innerfile>
+    <innerfile refid="_b_e__require_8h">BE_require.h</innerfile>
+    <innerfile refid="_b_e___time_8h">BE_Time.h</innerfile>
+    <innerfile refid="_b_e___token_iterator_8h">BE_TokenIterator.h</innerfile>
+    <innerfile refid="_color_palette_8h">ColorPalette.h</innerfile>
+    <innerfile refid="convert_color_to_permeability_8h">convertColorToPermeability.h</innerfile>
+    <innerfile refid="_coordinate_transformer_8h">CoordinateTransformer.h</innerfile>
+    <innerfile refid="_c_s_m_p__high_level_utilities_8h">CSMP_highLevelUtilities.h</innerfile>
+    <innerfile refid="_face_data_8h">FaceData.h</innerfile>
+    <innerfile refid="_fibonacci_heap_8h">FibonacciHeap.h</innerfile>
+    <innerfile refid="_hash_key_8h">HashKey.h</innerfile>
+    <innerfile refid="_loki__static__check_8h">Loki_static_check.h</innerfile>
+    <innerfile refid="_loop_unroller_8h">LoopUnroller.h</innerfile>
+    <innerfile refid="_model_comparator_8h">ModelComparator.h</innerfile>
+    <innerfile refid="_name_demangler_8h">NameDemangler.h</innerfile>
+    <innerfile refid="_o_s___utilities_8h">OS_Utilities.h</innerfile>
+    <innerfile refid="_p_l___utilities_8h">PL_Utilities.h</innerfile>
+    <innerfile refid="_small_set_8h">SmallSet.h</innerfile>
+    <innerfile refid="_s_t_l__utilities_8h">STL_utilities.h</innerfile>
+    <innerfile refid="_union_find_8h">UnionFind.h</innerfile>
+    <innerfile refid="vset_makers_8h">vsetMakers.h</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="source/includes/utilities/"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,1911 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_math_operator_r_h_s" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>csmp::MathOperatorRHS</compoundname>
+    <derivedcompoundref refid="classcsmp_1_1_r_h_s___fixed_value_matrix" prot="public" virt="non-virtual">csmp::RHS_FixedValueMatrix&lt; dim, CELL &gt;</derivedcompoundref>
+    <includes refid="_math_operator_r_h_s_8h" local="no">MathOperatorRHS.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+      <param>
+        <type>template&lt; uint32_t &gt; class</type>
+        <declname>CELL</declname>
+        <defname>CELL</defname>
+        <defval><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref></defval>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_math_operator_r_h_s_1a0bf5eca393d0470696ddc1f68c49c33a" prot="protected" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::MathOperatorRHS&lt; dim, CELL &gt;::name_</definition>
+        <argsstring></argsstring>
+        <name>name_</name>
+        <qualifiedname>csmp::MathOperatorRHS::name_</qualifiedname>
+        <briefdescription>
+<para>name of operator </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="153" column="41" bodyfile="source/includes/model/MathOperatorRHS.h" bodystart="153" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_math_operator_r_h_s_1aeebb771d18fad508b89bab6ba3fdc9e8" prot="protected" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_parameter" kindref="compound">Parameter</ref></type>
+        <definition>Parameter csmp::MathOperatorRHS&lt; dim, CELL &gt;::op</definition>
+        <argsstring></argsstring>
+        <name>op</name>
+        <qualifiedname>csmp::MathOperatorRHS::op</qualifiedname>
+        <briefdescription>
+<para>material property operand </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="155" column="41" bodyfile="source/includes/model/MathOperatorRHS.h" bodystart="155" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_math_operator_r_h_s_1aea6bcf22aa25daa01f53b49cd16bca24" prot="protected" static="no" mutable="no">
+        <type>std::pair&lt; <ref refid="structcsmp_1_1_parameter" kindref="compound">Parameter</ref>, size_t &gt;</type>
+        <definition>std::pair&lt;Parameter, size_t&gt; csmp::MathOperatorRHS&lt; dim, CELL &gt;::top</definition>
+        <argsstring></argsstring>
+        <name>top</name>
+        <qualifiedname>csmp::MathOperatorRHS::top</qualifiedname>
+        <briefdescription>
+<para>test function operand </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="156" column="22" bodyfile="source/includes/model/MathOperatorRHS.h" bodystart="156" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_math_operator_r_h_s_1a4075835995bb9932c4d7c257547e66de" prot="protected" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::MathOperatorRHS&lt; dim, CELL &gt;::RHS</definition>
+        <argsstring></argsstring>
+        <name>RHS</name>
+        <qualifiedname>csmp::MathOperatorRHS::RHS</qualifiedname>
+        <briefdescription>
+<para>solution <ref refid="classvector" kindref="compound">vector&lt;double&gt;</ref> to be accumulated </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="158" column="33" bodyfile="source/includes/model/MathOperatorRHS.h" bodystart="158" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_math_operator_r_h_s_1aad7e46e90d59322926ae92e98198a706" prot="protected" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &gt;</type>
+        <definition>std::vector&lt;DenseMatrix&lt;DM_MIN&gt; &gt; csmp::MathOperatorRHS&lt; dim, CELL &gt;::MTRL</definition>
+        <argsstring></argsstring>
+        <name>MTRL</name>
+        <qualifiedname>csmp::MathOperatorRHS::MTRL</qualifiedname>
+        <briefdescription>
+<para>material property matrix(es) needed for PDE operand </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="160" column="19" bodyfile="source/includes/model/MathOperatorRHS.h" bodystart="160" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_math_operator_r_h_s_1ab1b5fad18c56f4849f9ded0940711ad2" prot="protected" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt;</type>
+        <definition>DenseMatrix&lt;DM_MIN&gt; csmp::MathOperatorRHS&lt; dim, CELL &gt;::DERIV</definition>
+        <argsstring></argsstring>
+        <name>DERIV</name>
+        <qualifiedname>csmp::MathOperatorRHS::DERIV</qualifiedname>
+        <briefdescription>
+<para>shape function derivative matrix </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="163" column="33" bodyfile="source/includes/model/MathOperatorRHS.h" bodystart="163" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_math_operator_r_h_s_1ad789282bfcaf0300e8912174871f5e6f" prot="protected" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::MathOperatorRHS&lt; dim, CELL &gt;::IPOL</definition>
+        <argsstring></argsstring>
+        <name>IPOL</name>
+        <qualifiedname>csmp::MathOperatorRHS::IPOL</qualifiedname>
+        <briefdescription>
+<para>shape function vector </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="164" column="33" bodyfile="source/includes/model/MathOperatorRHS.h" bodystart="164" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_math_operator_r_h_s_1a7b85528afe467c2ef91668ff0dcab968" prot="protected" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::MathOperatorRHS&lt; dim, CELL &gt;::factor_</definition>
+        <argsstring></argsstring>
+        <name>factor_</name>
+        <qualifiedname>csmp::MathOperatorRHS::factor_</qualifiedname>
+        <briefdescription>
+<para>constant factor </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="166" column="41" bodyfile="source/includes/model/MathOperatorRHS.h" bodystart="166" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_math_operator_r_h_s_1abeae2ec15ba22135c4c5b3098b6b3537" prot="protected" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::MathOperatorRHS&lt; dim, CELL &gt;::add_accumulate_</definition>
+        <argsstring></argsstring>
+        <name>add_accumulate_</name>
+        <qualifiedname>csmp::MathOperatorRHS::add_accumulate_</qualifiedname>
+        <briefdescription>
+<para>specifies accumulation procedure </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="169" column="17" bodyfile="source/includes/model/MathOperatorRHS.h" bodystart="169" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_math_operator_r_h_s_1af76a808d235d684bcc507ea0a9bdac18" prot="protected" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::MathOperatorRHS&lt; dim, CELL &gt;::subtract_accumulate_</definition>
+        <argsstring></argsstring>
+        <name>subtract_accumulate_</name>
+        <qualifiedname>csmp::MathOperatorRHS::subtract_accumulate_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="170" column="17" bodyfile="source/includes/model/MathOperatorRHS.h" bodystart="170" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_math_operator_r_h_s_1a0ca505f93c401b561990e652ddeba037" prot="protected" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::MathOperatorRHS&lt; dim, CELL &gt;::add_accumulate_later_</definition>
+        <argsstring></argsstring>
+        <name>add_accumulate_later_</name>
+        <qualifiedname>csmp::MathOperatorRHS::add_accumulate_later_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="171" column="17" bodyfile="source/includes/model/MathOperatorRHS.h" bodystart="171" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_math_operator_r_h_s_1ae05aed4df946d473651b5ad4873e7786" prot="protected" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::MathOperatorRHS&lt; dim, CELL &gt;::subtract_accumulate_later_</definition>
+        <argsstring></argsstring>
+        <name>subtract_accumulate_later_</name>
+        <qualifiedname>csmp::MathOperatorRHS::subtract_accumulate_later_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="172" column="17" bodyfile="source/includes/model/MathOperatorRHS.h" bodystart="172" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_math_operator_r_h_s_1a2cf305524d12d1bf73302bc00cab0503" prot="protected" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::MathOperatorRHS&lt; dim, CELL &gt;::multiply_accumulate_</definition>
+        <argsstring></argsstring>
+        <name>multiply_accumulate_</name>
+        <qualifiedname>csmp::MathOperatorRHS::multiply_accumulate_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="173" column="17" bodyfile="source/includes/model/MathOperatorRHS.h" bodystart="173" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_math_operator_r_h_s_1a3d1907ed1b36a73c7591653b0965323e" prot="protected" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::MathOperatorRHS&lt; dim, CELL &gt;::lump_matrices_</definition>
+        <argsstring></argsstring>
+        <name>lump_matrices_</name>
+        <qualifiedname>csmp::MathOperatorRHS::lump_matrices_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="174" column="17" bodyfile="source/includes/model/MathOperatorRHS.h" bodystart="174" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_math_operator_r_h_s_1a8158abc37b41cdd02469b9d18fb83337" prot="protected" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::MathOperatorRHS&lt; dim, CELL &gt;::application_cycles_</definition>
+        <argsstring></argsstring>
+        <name>application_cycles_</name>
+        <qualifiedname>csmp::MathOperatorRHS::application_cycles_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="176" column="17" bodyfile="source/includes/model/MathOperatorRHS.h" bodystart="176" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_math_operator_r_h_s_1a5b96da9a81a4d11ac04946c44c89e72a" prot="protected" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::MathOperatorRHS&lt; dim, CELL &gt;::application_cycle_</definition>
+        <argsstring></argsstring>
+        <name>application_cycle_</name>
+        <qualifiedname>csmp::MathOperatorRHS::application_cycle_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="177" column="17" bodyfile="source/includes/model/MathOperatorRHS.h" bodystart="177" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_math_operator_r_h_s_1a4bc59dd56b98bb076deada3e1b222627" prot="protected" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::MathOperatorRHS&lt; dim, CELL &gt;::time_multiply_</definition>
+        <argsstring></argsstring>
+        <name>time_multiply_</name>
+        <qualifiedname>csmp::MathOperatorRHS::time_multiply_</qualifiedname>
+        <briefdescription>
+<para>time-dependent multipliers </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="180" column="17" bodyfile="source/includes/model/MathOperatorRHS.h" bodystart="180" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_math_operator_r_h_s_1a666bb360540f0ed1fad82c821109fc91" prot="protected" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::MathOperatorRHS&lt; dim, CELL &gt;::time_divide_</definition>
+        <argsstring></argsstring>
+        <name>time_divide_</name>
+        <qualifiedname>csmp::MathOperatorRHS::time_divide_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="181" column="17" bodyfile="source/includes/model/MathOperatorRHS.h" bodystart="181" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1a91814dd6b5e811723188e2fc69a6a0aa" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::MathOperatorRHS&lt; dim, CELL &gt;::MathOperatorRHS</definition>
+        <argsstring>()</argsstring>
+        <name>MathOperatorRHS</name>
+        <qualifiedname>csmp::MathOperatorRHS::MathOperatorRHS</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="47" column="5" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="13" bodyend="28"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1a2524c3fe7d10e3162916975c7f94bd58" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::MathOperatorRHS&lt; dim, CELL &gt;::MathOperatorRHS</definition>
+        <argsstring>(const MathOperatorRHS &amp;)</argsstring>
+        <name>MathOperatorRHS</name>
+        <qualifiedname>csmp::MathOperatorRHS::MathOperatorRHS</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_math_operator_r_h_s" kindref="compound">MathOperatorRHS</ref> &amp;</type>
+          <defname>mo</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="51" column="5" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="85" bodyend="105"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1a6fc668671f2620196f7cb8305c004958" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::MathOperatorRHS&lt; dim, CELL &gt;::MathOperatorRHS</definition>
+        <argsstring>(const PropertyDatabase&lt; dim &gt; &amp;, const char *test)</argsstring>
+        <name>MathOperatorRHS</name>
+        <qualifiedname>csmp::MathOperatorRHS::MathOperatorRHS</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>&lt; dim &gt; &amp;</type>
+          <defname>pref</defname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>test</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="53" column="5" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="34" bodyend="53"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1ad48adc062ee577ba556622e12dce7c50" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::MathOperatorRHS&lt; dim, CELL &gt;::MathOperatorRHS</definition>
+        <argsstring>(const PropertyDatabase&lt; dim &gt; &amp;, const char *oper, const char *test)</argsstring>
+        <name>MathOperatorRHS</name>
+        <qualifiedname>csmp::MathOperatorRHS::MathOperatorRHS</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>&lt; dim &gt; &amp;</type>
+          <defname>pref</defname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>oper</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>test</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="56" column="5" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="59" bodyend="80"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1a8daf2f4ba7583b116d5c496d81e4cbc0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_math_operator_r_h_s" kindref="compound">MathOperatorRHS</ref> &amp;</type>
+        <definition>MathOperatorRHS&lt; dim, CELL &gt; &amp; csmp::MathOperatorRHS&lt; dim, CELL &gt;::operator=</definition>
+        <argsstring>(const MathOperatorRHS &amp;)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::MathOperatorRHS::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_math_operator_r_h_s" kindref="compound">MathOperatorRHS</ref> &amp;</type>
+          <defname>mo</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="60" column="21" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="110" bodyend="133"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1ab0f58bc4d43c0f20e003467bfe536157" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>csmp::MathOperatorRHS&lt; dim, CELL &gt;::~MathOperatorRHS</definition>
+        <argsstring>()</argsstring>
+        <name>~MathOperatorRHS</name>
+        <qualifiedname>csmp::MathOperatorRHS::~MathOperatorRHS</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="62" column="13" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="138" bodyend="140"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1aa700d71b384204010a5514f046b30daf" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>string csmp::MathOperatorRHS&lt; dim, CELL &gt;::Name</definition>
+        <argsstring>() const</argsstring>
+        <name>Name</name>
+        <qualifiedname>csmp::MathOperatorRHS::Name</qualifiedname>
+        <briefdescription>
+<para><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> Functions. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="65" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="169" bodyend="172"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1aca9186dd58d5960a3bc5366f79e0e7ad" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::MathOperatorRHS&lt; dim, CELL &gt;::Name</definition>
+        <argsstring>(const char *, const char *topname)</argsstring>
+        <name>Name</name>
+        <qualifiedname>csmp::MathOperatorRHS::Name</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <defname>s</defname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>topname</declname>
+        </param>
+        <briefdescription>
+<para>=================================== <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> Functions ======================================================================== </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="66" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="146" bodyend="151"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1a63376acd0d0272f0b9148654325e5fb0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::MathOperatorRHS&lt; dim, CELL &gt;::Name</definition>
+        <argsstring>(const char *, const char *opname, const char *topname)</argsstring>
+        <name>Name</name>
+        <qualifiedname>csmp::MathOperatorRHS::Name</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <defname>s</defname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>opname</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>topname</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="67" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="156" bodyend="163"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1a7b331a8a17ea8dee88ebb05f50233649" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::MathOperatorRHS&lt; dim, CELL &gt;::Out</definition>
+        <argsstring>() const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::MathOperatorRHS::Out</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="69" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="180" bodyend="184"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1ac839f56b47b3732ae505b79843841401" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>const <ref refid="structcsmp_1_1_parameter" kindref="compound">Parameter</ref> &amp;</type>
+        <definition>const csmp::Parameter &amp; csmp::MathOperatorRHS&lt; dim, CELL &gt;::MaterialOperand</definition>
+        <argsstring>() const</argsstring>
+        <name>MaterialOperand</name>
+        <qualifiedname>csmp::MathOperatorRHS::MaterialOperand</qualifiedname>
+        <briefdescription>
+<para>op </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="72" column="21" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="192" bodyend="195"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1a52d354d9bbfc6fd037f70b401cfc2289" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>const <ref refid="structcsmp_1_1_index" kindref="compound">Index</ref> &amp;</type>
+        <definition>const csmp::Index &amp; csmp::MathOperatorRHS&lt; dim, CELL &gt;::MaterialOperandKey</definition>
+        <argsstring>() const</argsstring>
+        <name>MaterialOperandKey</name>
+        <qualifiedname>csmp::MathOperatorRHS::MaterialOperandKey</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="73" column="18" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="200" bodyend="203"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1ad9193c44bf7efa489009fce52afd3d0d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>string csmp::MathOperatorRHS&lt; dim, CELL &gt;::MaterialOperandName</definition>
+        <argsstring>() const</argsstring>
+        <name>MaterialOperandName</name>
+        <qualifiedname>csmp::MathOperatorRHS::MaterialOperandName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="74" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="208" bodyend="211"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1af230ea6195bab299ee9e77f217f0d0bc" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1gacbf62c758c46dc45b3f024638bb89274" kindref="member">VARIABLE_TYPE</ref></type>
+        <definition>csmp::VARIABLE_TYPE csmp::MathOperatorRHS&lt; dim, CELL &gt;::MaterialOperandType</definition>
+        <argsstring>() const</argsstring>
+        <name>MaterialOperandType</name>
+        <qualifiedname>csmp::MathOperatorRHS::MaterialOperandType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="75" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="217" bodyend="220"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1a706cf0840efb0d27a828c5d018335ba9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">PLACEMENT</ref></type>
+        <definition>csmp::PLACEMENT csmp::MathOperatorRHS&lt; dim, CELL &gt;::MaterialOperandPlacement</definition>
+        <argsstring>() const</argsstring>
+        <name>MaterialOperandPlacement</name>
+        <qualifiedname>csmp::MathOperatorRHS::MaterialOperandPlacement</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="76" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="226" bodyend="229"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1a00b31b95962f4495178242201c92cfcd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::MathOperatorRHS&lt; dim, CELL &gt;::MaterialOperandDataDepth</definition>
+        <argsstring>() const</argsstring>
+        <name>MaterialOperandDataDepth</name>
+        <qualifiedname>csmp::MathOperatorRHS::MaterialOperandDataDepth</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="77" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="235" bodyend="238"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1ac571c4c7d3f98ecd2c34d1cd6d75fa36" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>const <ref refid="structcsmp_1_1_parameter" kindref="compound">Parameter</ref> &amp;</type>
+        <definition>const csmp::Parameter &amp; csmp::MathOperatorRHS&lt; dim, CELL &gt;::BasicOperand</definition>
+        <argsstring>() const</argsstring>
+        <name>BasicOperand</name>
+        <qualifiedname>csmp::MathOperatorRHS::BasicOperand</qualifiedname>
+        <briefdescription>
+<para>bop </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="80" column="21" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="247" bodyend="250"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1aee095a41b5ac8a32ee6dc703a4314b50" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>const <ref refid="structcsmp_1_1_index" kindref="compound">Index</ref> &amp;</type>
+        <definition>const csmp::Index &amp; csmp::MathOperatorRHS&lt; dim, CELL &gt;::BasicOperandKey</definition>
+        <argsstring>() const</argsstring>
+        <name>BasicOperandKey</name>
+        <qualifiedname>csmp::MathOperatorRHS::BasicOperandKey</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="81" column="18" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="256" bodyend="259"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1a41c990f110ad162091910ee8bcbda6cf" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>string csmp::MathOperatorRHS&lt; dim, CELL &gt;::BasicOperandName</definition>
+        <argsstring>() const</argsstring>
+        <name>BasicOperandName</name>
+        <qualifiedname>csmp::MathOperatorRHS::BasicOperandName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="82" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="265" bodyend="268"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1a22231a19221e8cd8651167a4e2f0f483" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1gacbf62c758c46dc45b3f024638bb89274" kindref="member">VARIABLE_TYPE</ref></type>
+        <definition>csmp::VARIABLE_TYPE csmp::MathOperatorRHS&lt; dim, CELL &gt;::BasicOperandType</definition>
+        <argsstring>() const</argsstring>
+        <name>BasicOperandType</name>
+        <qualifiedname>csmp::MathOperatorRHS::BasicOperandType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="83" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="275" bodyend="278"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1ab7c8384f6e49d9d81fe4f7ff41a18e41" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">PLACEMENT</ref></type>
+        <definition>csmp::PLACEMENT csmp::MathOperatorRHS&lt; dim, CELL &gt;::BasicOperandPlacement</definition>
+        <argsstring>() const</argsstring>
+        <name>BasicOperandPlacement</name>
+        <qualifiedname>csmp::MathOperatorRHS::BasicOperandPlacement</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="84" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="284" bodyend="287"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1a4d75aa984bee30ef4b78b59f9892bb15" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::MathOperatorRHS&lt; dim, CELL &gt;::BasicOperandDataDepth</definition>
+        <argsstring>() const</argsstring>
+        <name>BasicOperandDataDepth</name>
+        <qualifiedname>csmp::MathOperatorRHS::BasicOperandDataDepth</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="85" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="294" bodyend="297"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1a6c0a7d5e5796aa4e028f4479a808cfb0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::MathOperatorRHS&lt; dim, CELL &gt;::BasicOperandOffset</definition>
+        <argsstring>() const</argsstring>
+        <name>BasicOperandOffset</name>
+        <qualifiedname>csmp::MathOperatorRHS::BasicOperandOffset</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="86" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="312" bodyend="315"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1ac7f075729b547f586546be54d1df5a04" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::MathOperatorRHS&lt; dim, CELL &gt;::BasicOperandOffset</definition>
+        <argsstring>(size_t)</argsstring>
+        <name>BasicOperandOffset</name>
+        <qualifiedname>csmp::MathOperatorRHS::BasicOperandOffset</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <defname>os</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="87" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="303" bodyend="306"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1a22dc4521ebc649242eacb41f1ab8e260" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>const <ref refid="structcsmp_1_1_parameter" kindref="compound">Parameter</ref> &amp;</type>
+        <definition>const csmp::Parameter &amp; csmp::MathOperatorRHS&lt; dim, CELL &gt;::TestOperand</definition>
+        <argsstring>() const</argsstring>
+        <name>TestOperand</name>
+        <qualifiedname>csmp::MathOperatorRHS::TestOperand</qualifiedname>
+        <briefdescription>
+<para>top </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="90" column="21" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="321" bodyend="324"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1a8e21ef3752c7956c83dd55a033d66353" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>const <ref refid="structcsmp_1_1_index" kindref="compound">Index</ref> &amp;</type>
+        <definition>const csmp::Index &amp; csmp::MathOperatorRHS&lt; dim, CELL &gt;::TestOperandKey</definition>
+        <argsstring>() const</argsstring>
+        <name>TestOperandKey</name>
+        <qualifiedname>csmp::MathOperatorRHS::TestOperandKey</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="91" column="18" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="330" bodyend="333"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1af7842dfe6f55c020253018e1371450f0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>string csmp::MathOperatorRHS&lt; dim, CELL &gt;::TestOperandName</definition>
+        <argsstring>() const</argsstring>
+        <name>TestOperandName</name>
+        <qualifiedname>csmp::MathOperatorRHS::TestOperandName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="92" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="338" bodyend="341"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1a9ab51c99368137c5cb79bcf6e7e01296" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1gacbf62c758c46dc45b3f024638bb89274" kindref="member">VARIABLE_TYPE</ref></type>
+        <definition>csmp::VARIABLE_TYPE csmp::MathOperatorRHS&lt; dim, CELL &gt;::TestOperandType</definition>
+        <argsstring>() const</argsstring>
+        <name>TestOperandType</name>
+        <qualifiedname>csmp::MathOperatorRHS::TestOperandType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="93" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="347" bodyend="350"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1a73fb944e6a4f1aeb6566867eb4894b7b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">PLACEMENT</ref></type>
+        <definition>csmp::PLACEMENT csmp::MathOperatorRHS&lt; dim, CELL &gt;::TestOperandPlacement</definition>
+        <argsstring>() const</argsstring>
+        <name>TestOperandPlacement</name>
+        <qualifiedname>csmp::MathOperatorRHS::TestOperandPlacement</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="94" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="356" bodyend="359"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1af4c6867b7a59a8dbd0db7bad48cd2c3d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::MathOperatorRHS&lt; dim, CELL &gt;::TestOperandDataDepth</definition>
+        <argsstring>() const</argsstring>
+        <name>TestOperandDataDepth</name>
+        <qualifiedname>csmp::MathOperatorRHS::TestOperandDataDepth</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="95" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="364" bodyend="367"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1ae6df026b0ecf14dd9a4cfa9a08e792b2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::MathOperatorRHS&lt; dim, CELL &gt;::TestOperandOffset</definition>
+        <argsstring>() const</argsstring>
+        <name>TestOperandOffset</name>
+        <qualifiedname>csmp::MathOperatorRHS::TestOperandOffset</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="96" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="380" bodyend="383"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1a58f5927e3903755bd5f520257bc79632" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::MathOperatorRHS&lt; dim, CELL &gt;::TestOperandOffset</definition>
+        <argsstring>(size_t)</argsstring>
+        <name>TestOperandOffset</name>
+        <qualifiedname>csmp::MathOperatorRHS::TestOperandOffset</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <defname>os</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="97" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="372" bodyend="375"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1af950a8b9a3d4ea2229f60d27ab6a69c2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::MathOperatorRHS&lt; dim, CELL &gt;::Add</definition>
+        <argsstring>() const</argsstring>
+        <name>Add</name>
+        <qualifiedname>csmp::MathOperatorRHS::Add</qualifiedname>
+        <briefdescription>
+<para>Accumulation Process Settings. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Get Flags and Properties </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="102" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="515" bodyend="518"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1a23b92f3ebeee4a6e1673706f740566b4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::MathOperatorRHS&lt; dim, CELL &gt;::Subtract</definition>
+        <argsstring>() const</argsstring>
+        <name>Subtract</name>
+        <qualifiedname>csmp::MathOperatorRHS::Subtract</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="103" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="523" bodyend="526"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1abdc618c15c875eef18858655fb345090" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::MathOperatorRHS&lt; dim, CELL &gt;::AddLater</definition>
+        <argsstring>() const</argsstring>
+        <name>AddLater</name>
+        <qualifiedname>csmp::MathOperatorRHS::AddLater</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="104" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="532" bodyend="535"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1a04a0443ea4ccd22e563baa9b49a2a813" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::MathOperatorRHS&lt; dim, CELL &gt;::SubtractLater</definition>
+        <argsstring>() const</argsstring>
+        <name>SubtractLater</name>
+        <qualifiedname>csmp::MathOperatorRHS::SubtractLater</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="105" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="541" bodyend="544"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1a4ce7b610b2ed3470e4d159846d03ddeb" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::MathOperatorRHS&lt; dim, CELL &gt;::Multiply</definition>
+        <argsstring>() const</argsstring>
+        <name>Multiply</name>
+        <qualifiedname>csmp::MathOperatorRHS::Multiply</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="106" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="550" bodyend="553"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1a91445273130ae00f5188a9991dbffaa6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::MathOperatorRHS&lt; dim, CELL &gt;::LumpedFormulation</definition>
+        <argsstring>() const</argsstring>
+        <name>LumpedFormulation</name>
+        <qualifiedname>csmp::MathOperatorRHS::LumpedFormulation</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="107" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="574" bodyend="577"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1a51d50bbbd4f27aca48243f24f7fb92e0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::MathOperatorRHS&lt; dim, CELL &gt;::ApplicationCycle</definition>
+        <argsstring>() const</argsstring>
+        <name>ApplicationCycle</name>
+        <qualifiedname>csmp::MathOperatorRHS::ApplicationCycle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="108" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="566" bodyend="569"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1a14fff508439c520f875dfd77d117489f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::MathOperatorRHS&lt; dim, CELL &gt;::ApplicationCycles</definition>
+        <argsstring>() const</argsstring>
+        <name>ApplicationCycles</name>
+        <qualifiedname>csmp::MathOperatorRHS::ApplicationCycles</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="109" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="558" bodyend="561"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1a5cb6c0bce5427dbb968492b49021b138" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::MathOperatorRHS&lt; dim, CELL &gt;::MultiplyBy</definition>
+        <argsstring>() const</argsstring>
+        <name>MultiplyBy</name>
+        <qualifiedname>csmp::MathOperatorRHS::MultiplyBy</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="110" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="582" bodyend="585"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1a2fae8dab461a98afdd5bb376ffab59d0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::MathOperatorRHS&lt; dim, CELL &gt;::MultiplyWithTimeIncrement</definition>
+        <argsstring>() const</argsstring>
+        <name>MultiplyWithTimeIncrement</name>
+        <qualifiedname>csmp::MathOperatorRHS::MultiplyWithTimeIncrement</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="111" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="590" bodyend="593"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1aa6bb4a6c6a96c3e3951433004d0de15b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::MathOperatorRHS&lt; dim, CELL &gt;::DivideByTimeIncrement</definition>
+        <argsstring>() const</argsstring>
+        <name>DivideByTimeIncrement</name>
+        <qualifiedname>csmp::MathOperatorRHS::DivideByTimeIncrement</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="112" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="598" bodyend="601"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1a95426d12ae7f3a6eb1bf10c036505e7b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::MathOperatorRHS&lt; dim, CELL &gt;::AddAccumulate</definition>
+        <argsstring>()</argsstring>
+        <name>AddAccumulate</name>
+        <qualifiedname>csmp::MathOperatorRHS::AddAccumulate</qualifiedname>
+        <briefdescription>
+<para>Set Flags and Properties. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>=================================== Accumulation Process Settings ======================================================================== </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="115" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="394" bodyend="402"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1a44292090da69cef35e58f612bf9a82e9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::MathOperatorRHS&lt; dim, CELL &gt;::SubtractAccumulate</definition>
+        <argsstring>()</argsstring>
+        <name>SubtractAccumulate</name>
+        <qualifiedname>csmp::MathOperatorRHS::SubtractAccumulate</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="116" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="408" bodyend="416"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1a7d3039e3ef140aabc09b14fd9c0f52a6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::MathOperatorRHS&lt; dim, CELL &gt;::AddAccumulateLater</definition>
+        <argsstring>()</argsstring>
+        <name>AddAccumulateLater</name>
+        <qualifiedname>csmp::MathOperatorRHS::AddAccumulateLater</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="117" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="422" bodyend="430"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1aab0a4b47807bdafb917c4683aac6d270" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::MathOperatorRHS&lt; dim, CELL &gt;::SubtractAccumulateLater</definition>
+        <argsstring>()</argsstring>
+        <name>SubtractAccumulateLater</name>
+        <qualifiedname>csmp::MathOperatorRHS::SubtractAccumulateLater</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="118" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="436" bodyend="444"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1aae6e621f2b1ad8b8189282007a87ad58" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::MathOperatorRHS&lt; dim, CELL &gt;::MultiplyAccumulate</definition>
+        <argsstring>()</argsstring>
+        <name>MultiplyAccumulate</name>
+        <qualifiedname>csmp::MathOperatorRHS::MultiplyAccumulate</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="119" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="450" bodyend="457"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1a9d60e14ce439c974150a57c3cfe13ce8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::MathOperatorRHS&lt; dim, CELL &gt;::LumpedFormulation</definition>
+        <argsstring>(bool)</argsstring>
+        <name>LumpedFormulation</name>
+        <qualifiedname>csmp::MathOperatorRHS::LumpedFormulation</qualifiedname>
+        <param>
+          <type>bool</type>
+          <defname>lumped</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="120" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="463" bodyend="466"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1adbfd8b054a999e664e5dff2fdb1e7670" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::MathOperatorRHS&lt; dim, CELL &gt;::ApplicationCycle</definition>
+        <argsstring>(uint32_t)</argsstring>
+        <name>ApplicationCycle</name>
+        <qualifiedname>csmp::MathOperatorRHS::ApplicationCycle</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <defname>c</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="121" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="481" bodyend="484"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1aba8162a585bc19b9ff4d83ebf250a4a2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::MathOperatorRHS&lt; dim, CELL &gt;::ApplicationCycles</definition>
+        <argsstring>(uint32_t)</argsstring>
+        <name>ApplicationCycles</name>
+        <qualifiedname>csmp::MathOperatorRHS::ApplicationCycles</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <defname>c</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="122" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="472" bodyend="475"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1ae92ff4dc9bc35dfffbff8eb202901e87" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::MathOperatorRHS&lt; dim, CELL &gt;::MultiplyBy</definition>
+        <argsstring>(double integral_mult_factor)</argsstring>
+        <name>MultiplyBy</name>
+        <qualifiedname>csmp::MathOperatorRHS::MultiplyBy</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>integral_mult_factor</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="123" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="490" bodyend="493"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1abb6e3bad228a21bd49c0c00b2a158d94" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::MathOperatorRHS&lt; dim, CELL &gt;::MultiplyWithTimeIncrement</definition>
+        <argsstring>(bool multiply)</argsstring>
+        <name>MultiplyWithTimeIncrement</name>
+        <qualifiedname>csmp::MathOperatorRHS::MultiplyWithTimeIncrement</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>multiply</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="124" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="498" bodyend="501"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1a27f61912ffda5dac4c386a3d3fc27b2e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::MathOperatorRHS&lt; dim, CELL &gt;::DivideByTimeIncrement</definition>
+        <argsstring>(bool divide)</argsstring>
+        <name>DivideByTimeIncrement</name>
+        <qualifiedname>csmp::MathOperatorRHS::DivideByTimeIncrement</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>divide</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="125" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="507" bodyend="510"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1a4ac9c3b2f60149cd6cc4a35681b29e0d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::MathOperatorRHS&lt; dim, CELL &gt;::PropertyAtIntegrationPoint</definition>
+        <argsstring>(const CELL&lt; dim &gt; &amp;, const csmp::Index &amp;, uint32_t ip, DenseMatrix&lt; DM_MIN &gt; &amp;)</argsstring>
+        <name>PropertyAtIntegrationPoint</name>
+        <qualifiedname>csmp::MathOperatorRHS::PropertyAtIntegrationPoint</qualifiedname>
+        <param>
+          <type>const CELL&lt; dim &gt; &amp;</type>
+          <defname>e_ref</defname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <defname>idx</defname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>ip</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <defname>M</defname>
+        </param>
+        <briefdescription>
+<para>interpolation of property if isoparametric elements are used </para>
+        </briefdescription>
+        <detaileddescription>
+<para>=================================== Main Computational Procedure Functions ======================================================================== </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="128" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="609" bodyend="722"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1ad5614fa4de569146a684d28635eb9ff7" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::MathOperatorRHS&lt; dim, CELL &gt;::GetOperands</definition>
+        <argsstring>(const CELL&lt; dim &gt; &amp;)</argsstring>
+        <name>GetOperands</name>
+        <qualifiedname>csmp::MathOperatorRHS::GetOperands</qualifiedname>
+        <reimplementedby refid="classcsmp_1_1_c_v_f_e_m___point_source__rhsop_1adca59b5304c9a5af08f424ea9f01a2ff">GetOperands</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1a05e952d7fe8191d00ef159e94f53b6c9">GetOperands</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_integral__d_n_t__rhsop__d_n__d_v_1a9c9a0e6b9da86d551006ed79f9748982">GetOperands</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_integral___n_t___m__d_v___triangle_1adc0ba977bfd4a585c23d12658f7b3bba">GetOperands</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_integral___n_t__op__d_ni__d_v_1ad50abdf5794811b3910ea6d6ed6c112e">GetOperands</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_integral___n_t__op__d_s_1af7e5084cee39958a8a9827343d4506f1">GetOperands</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_integral___n_t__op___n__d_v_1ad52e8605eb6a085b1e1720d9b1cac377">GetOperands</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_integral___n_t__rhsop___n__d_v_1ac672977f841ce715c0e7c752d8464dd6">GetOperands</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_integral__op___n_t__d_n__orthogonal__d_v_1a7c677371eec624c1ac45afa98dfa0ed5">GetOperands</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_integral__rhsop__d_n_t__d_n__d_v_1a0ab1b2d3431317fdaa6819ed6faeb526">GetOperands</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_integral__var___n_t__rhsop___n__d_v_1ae0468950841ea2f951a3705ad2ed37c5">GetOperands</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_n_t__op_1a0c7ea2ac820d5e3164dc641b2a6cbce9">GetOperands</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral___b_t___d__op__d_v_1a977be5172ccdbce122765a32e2f9fbf5">GetOperands</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral___d_ni__rhsop__d_v_1a5ac5720a0574b698ece507d11fec15f7">GetOperands</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral___d_n_t__rhsop___d_n__d_v_1a5ec9bf3177a62c9c9b02a8ec66c4afd0">GetOperands</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral___d_n_t__v__d_v_1a7ad2d8d0c90af3b2a27f9a6c4348dbf0">GetOperands</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral___n_t__mixed__op__d_ni__d_v_1acc4182be3a730bfd5a41a4f671c1d1c2">GetOperands</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral___n_t__op1__op2__d_ni__d_v_1a5d92f8cd74543cbccbe760c44d3e4a60">GetOperands</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral___n_t__op__d_ni__d_v_1a024f38d2445f90b586810ed15cc991a1">GetOperands</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral___n_t__rhs__nodal__op___n__d_v_1a5d4b55a944ae148631e26b1f861a12d1">GetOperands</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral__op___n_t__d_n__orthogonal__d_v_1aead735ddfccecca21e6c1481f3674dd0">GetOperands</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral___p_t__op__d_s_1a5135a64ddea9a05c229596496eb075eb">GetOperands</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral___p_t__op__d_v_1a00462479256630c7a2601f901149fba0">GetOperands</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_point_source__rhsop_1aad7111cd173fc75414b49e5b07353fc2">GetOperands</reimplementedby>
+        <param>
+          <type>const CELL&lt; dim &gt; &amp;</type>
+          <defname>e_ref</defname>
+        </param>
+        <briefdescription>
+<para>getting data from the <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>, <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>, <ref refid="classcsmp_1_1_inter_face" kindref="compound">InterFace</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+<para>GetOperands fills a vector of material property matrices with the required values for later computation. These matrices always have the dimensions spatial-dimension^2 and they will hold either scalar, vector or tensor properties, depending on what kind of property the <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> is.</para>
+<para>When the property is an element property, it will be put into the first vector entry MTRL[0]. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="133" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="738" bodyend="816"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1ab77b3c1f4f078290ec9330a916482ed7" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::MathOperatorRHS&lt; dim, CELL &gt;::ComputeContribution</definition>
+        <argsstring>(const CELL&lt; dim &gt; &amp;)</argsstring>
+        <name>ComputeContribution</name>
+        <qualifiedname>csmp::MathOperatorRHS::ComputeContribution</qualifiedname>
+        <reimplementedby refid="classcsmp_1_1_c_v_f_e_m___point_source__rhsop_1ae3cde35d6c0e009ed91d6c25dd00fac1">ComputeContribution</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1a2b39c82936c676cb4944dd98fe047263">ComputeContribution</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_integral__d_n_t__d_n__d_v_1a019b13c2e6d1c0749d28dfa57981cb67">ComputeContribution</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_integral__d_n_t__rhsop__d_n__d_v_1a95279718ef95db29ad1768d0b09b4861">ComputeContribution</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_integral___n_t___m__d_v___triangle_1a3b519d73d33a390cc0051efcdb1a803c">ComputeContribution</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_integral___n_t__op__d_ni__d_v_1ae2a59f1bd6a75988a23b42941b70ecee">ComputeContribution</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_integral___n_t__op__d_s_1ad9fab8181ccf0eb543b19b01fd61edad">ComputeContribution</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_integral___n_t__op___n__d_v_1a654d25ff1eebed860043299e422d8325">ComputeContribution</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_integral___n_t__rhsop___n__d_v_1aa36237d73a72957e5ba790ca93eb452f">ComputeContribution</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_integral__op___n_t__d_n__orthogonal__d_v_1a73743f0832bb230c9ce2d53746583f18">ComputeContribution</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_integral__rhsop__d_n_t__d_n__d_v_1a88fcf57c54ea4313714851b8ff3fca19">ComputeContribution</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_integral__var___n_t__rhsop___n__d_v_1a8e6cc69640cc73c939a5d9cb5373e245">ComputeContribution</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_n_t__op_1a00dd2359d7e8f608405dcfc66accd6a0">ComputeContribution</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral___b_t___d__op__d_v_1a84b1d603d45d6990cfad765e8b27382b">ComputeContribution</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral___b_t__op__d_v_1a6826f13230457cf6714a050dfc107dc2">ComputeContribution</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral___d_ni__rhsop__d_v_1a49646c96a9f9a4a65d86d4b1c7a35b52">ComputeContribution</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral__d_n_t__op__d_v_1ac59f1f93c380208ecdae5de60eefe308">ComputeContribution</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral__d_n_t__op__d_v_1ac59f1f93c380208ecdae5de60eefe308">ComputeContribution</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral__d_n_t__op__d_v_1ac59f1f93c380208ecdae5de60eefe308">ComputeContribution</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral___d_n_t__rhsop___d_n__d_v_1aa55a93fc84c6cd408746967904b18e8c">ComputeContribution</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral___d_n_t__v__d_v_1ae6c2dbfd939acc5c88246605ded45d6d">ComputeContribution</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral___n_t__mixed__op__d_ni__d_v_1ade00165e4c1f5c1e5f5797b5b0c7c07f">ComputeContribution</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral___n_t__op1__op2__d_ni__d_v_1a97d3307eebf44c0801ae48c42a053e52">ComputeContribution</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral___n_t__op__d_ni__d_v_1a0320b14bcdff5cf522db4bbf2b5614f8">ComputeContribution</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral___n_t__op___n__d_s_1a2a0bd71934b0072903e54b8d0ad84b05">ComputeContribution</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral___n_t__op___n__d_v_1a74ea426e0214732bf6fde34c2f10634e">ComputeContribution</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral___n_t__op___n__d_v_1a74ea426e0214732bf6fde34c2f10634e">ComputeContribution</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral___n_t__op___n__d_v_1a74ea426e0214732bf6fde34c2f10634e">ComputeContribution</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral___n_t__rhs__nodal__op___n__d_v_1a32daa4e6b86e6078a29470dce3ac7cc8">ComputeContribution</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral__op___n_t__d_n__orthogonal__d_v_1ad659fb20d2c5fcf3213ee17785372300">ComputeContribution</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral__op___n_t___n__d_v_1acdb4b1ddba237b01fcfa56edda70c664">ComputeContribution</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral__op___p_t___p__d_v_1a0eb7c1d1a451ac0587e92f8cac5ce537">ComputeContribution</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral___p_t__op__d_s_1a955e8a05bc01e8e478b36ac2f8b1b99d">ComputeContribution</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral___p_t__op__d_v_1a4c4addcf40291d02966a088279a6ff40">ComputeContribution</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral___p_t__op___p__d_v_1a2970674f3efa421e8a25c99574281ea5">ComputeContribution</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral___set_r_h_s__to___one_1a4b74bf601b1982d01c6cb75ee0a5022e">ComputeContribution</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral___set_r_h_s__to___zero_1aa5af4afd7b135068cd91b2f3c7fa4701">ComputeContribution</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_point_source__rhsop_1a18230b62ed854df5ed5a5b6f47c50e0c">ComputeContribution</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_point_source__rhsop_1a18230b62ed854df5ed5a5b6f47c50e0c">ComputeContribution</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_point_source__rhsop_1a18230b62ed854df5ed5a5b6f47c50e0c">ComputeContribution</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_p_t__op_1a93c41ad02b3c277098b04293677596b3">ComputeContribution</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_upwind___integral__d_n_t__rhsop__d_n__d_v_1aa18be996dc4a5370e4b89c144addde72">ComputeContribution</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_upwind___integral__d_n_t__rhsop__g__d_v_1a69b95679a8b3d0fedee8fe70f3f06a69">ComputeContribution</reimplementedby>
+        <param>
+          <type>const CELL&lt; dim &gt; &amp;</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+<para>integration performed on <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>, <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>, <ref refid="classcsmp_1_1_inter_face" kindref="compound">InterFace</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="136" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="832" bodyend="837"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1ad1c90df52dbb10f0c9eefd445758fc02" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::MathOperatorRHS&lt; dim, CELL &gt;::WriteOperands</definition>
+        <argsstring>(CELL&lt; dim &gt; &amp;)</argsstring>
+        <name>WriteOperands</name>
+        <qualifiedname>csmp::MathOperatorRHS::WriteOperands</qualifiedname>
+        <param>
+          <type>CELL&lt; dim &gt; &amp;</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+<para>writing data to the <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>, <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>, <ref refid="classcsmp_1_1_inter_face" kindref="compound">InterFace</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="139" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="820" bodyend="825"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1a5a6138f5b4e123f88a9115e1d9315871" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::MathOperatorRHS&lt; dim, CELL &gt;::MultiplyWithTimeFactor</definition>
+        <argsstring>(double dt)</argsstring>
+        <name>MultiplyWithTimeFactor</name>
+        <qualifiedname>csmp::MathOperatorRHS::MultiplyWithTimeFactor</qualifiedname>
+        <reimplementedby refid="classcsmp_1_1_num_integral___n_t__op1__op2__d_ni__d_v_1a921a45bedd942e0458a9d274fa54f6d2">MultiplyWithTimeFactor</reimplementedby>
+        <param>
+          <type>double</type>
+          <declname>dt</declname>
+        </param>
+        <briefdescription>
+<para>if so specified multiply with time increment </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="142" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="843" bodyend="847"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1ad9c03f1d3138a22e0bc40778d0032f6a" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::MathOperatorRHS&lt; dim, CELL &gt;::AssignToGlobal</definition>
+        <argsstring>(const CELL&lt; dim &gt; &amp;, std::vector&lt; double &gt; &amp;rhs)</argsstring>
+        <name>AssignToGlobal</name>
+        <qualifiedname>csmp::MathOperatorRHS::AssignToGlobal</qualifiedname>
+        <param>
+          <type>const CELL&lt; dim &gt; &amp;</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>assigment to the right hand side global vector (after everything was calculated ) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>AssignToGlobal matrix functions. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="145" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="853" bodyend="884"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1a9470acdb9a64217b4ae019cc7cd5b66f" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::MathOperatorRHS&lt; dim, CELL &gt;::AssignToGlobal</definition>
+        <argsstring>(const CELL&lt; dim &gt; &amp;, std::vector&lt; double &gt; &amp;rhs, const std::vector&lt; size_t &gt; &amp;)</argsstring>
+        <name>AssignToGlobal</name>
+        <qualifiedname>csmp::MathOperatorRHS::AssignToGlobal</qualifiedname>
+        <param>
+          <type>const CELL&lt; dim &gt; &amp;</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; size_t &gt; &amp;</type>
+          <defname>DOF_indexes</defname>
+        </param>
+        <briefdescription>
+<para>used by PDE_IntegratorUoM for assembly of a pre-eliminated solution matrix and RH vector (scalar versions, Luat Khoa Tran) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Transform <ref refid="classcsmp_1_1_node" kindref="compound">Node</ref> <ref refid="structcsmp_1_1_index" kindref="compound">Index</ref> Vector.</para>
+<para>Roman, 2013: Added Array Variable and Falgged Array Variable <ref refid="structcsmp_1_1_index" kindref="compound">Index</ref> Accessor </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="148" column="19" bodyfile="source/modules/model/MathOperatorRHS.cpp" bodystart="933" bodyend="978"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_r_h_s_1ae5355392c670d7c81d9822a0efbf767e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="classcsmp_1_1_math_operator_r_h_s" kindref="compound">MathOperatorRHS</ref>&lt; dim, CELL &gt; *</type>
+        <definition>virtual MathOperatorRHS&lt; dim, CELL &gt; * csmp::MathOperatorRHS&lt; dim, CELL &gt;::clone</definition>
+        <argsstring>() const =0</argsstring>
+        <name>clone</name>
+        <qualifiedname>csmp::MathOperatorRHS::clone</qualifiedname>
+        <reimplementedby refid="classcsmp_1_1_c_v_f_e_m___math_operator_r_h_s_1acd5b4a0599a0ca9ac5ec57cf87757fd2">clone</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_c_v_f_e_m___math_operator_r_h_s_1acd5b4a0599a0ca9ac5ec57cf87757fd2">clone</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_c_v_f_e_m___point_source__rhsop_1a63c5cc6979b57c9634408a8f636998a3">clone</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1ae4ca2177043ecbae26a29757792e7eab">clone</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_integral__d_n_t__d_n__d_v_1a91bd9b8f6cf6864ababc02ef87c4c9ed">clone</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_integral___n_t__op__d_ni__d_v_1ac3c991ebdf6a3403599e20f47ff6914b">clone</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_integral___n_t__op___n__d_v_1adb7d0c8894049d90f4ac6db625ef177f">clone</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_integral__var___n_t__rhsop___n__d_v_1ad07c2c2e7ad69cd7cc210e70098b96a4">clone</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral___b_t___d__op__d_v_1a2bf248fff812a3d2c5152085fc2d18d7">clone</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral___b_t__op__d_v_1a47255d5eb6d7b5ee629e5f2c1f2b8f13">clone</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral___d_ni__rhsop__d_v_1a182115f5a816072c98626477aebbbd6e">clone</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral__d_n_t__op__d_v_1afff07b2f94dcc7c137b9520e19406c78">clone</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral__d_n_t__op__d_v_1afff07b2f94dcc7c137b9520e19406c78">clone</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral__d_n_t__op__d_v_1afff07b2f94dcc7c137b9520e19406c78">clone</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral___d_n_t__rhsop___d_n__d_v_1a0d031a57d76cecd1202dc10b9f9c182c">clone</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral__dudn__rhsop__u__d_s_1a9a64635223f8fab69d68c872131d9897">clone</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral___n_t__op__d_ni__d_v_1a4950ab1873eee5adc82029c04cb99f70">clone</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral___n_t__op___n__d_s_1a2a39d26d8ff976db2373c613f65e627d">clone</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral___n_t__op___n__d_v_1a71c316b8e0d12f34ff072f7df5241782">clone</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral___n_t__op___n__d_v_1a71c316b8e0d12f34ff072f7df5241782">clone</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral___n_t__op___n__d_v_1a71c316b8e0d12f34ff072f7df5241782">clone</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral___n_t__rhs__nodal__op___n__d_v_1a4c10b574afda300ce627eec2ac81a60b">clone</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral__op___n_t__d_n__orthogonal__d_v_1a7ce95c07a7a4e26fb55aababa72470eb">clone</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral___p_t__op__d_s_1a52aecc2167df618217f5547c7932580e">clone</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral___p_t__op__d_v_1a88068faad70f4f855e5d9df2f8605364">clone</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral___set_r_h_s__to___one_1a65f79f1cf840a8c13b119fccbe84cfbb">clone</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_num_integral___set_r_h_s__to___zero_1adc8a2751809eafc6986a88af9a0fbb21">clone</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_point_source__rhsop_1ad7330a071f32e6401be546e2da54903b">clone</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_point_source__rhsop_1ad7330a071f32e6401be546e2da54903b">clone</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_point_source__rhsop_1ad7330a071f32e6401be546e2da54903b">clone</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_p_t__op_1a18034abf49847d0c9b4953c925ce61fd">clone</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_r_h_s___fixed_value_matrix_1afb9a8b7eebe7b4d9caa01342e254286c">clone</reimplementedby>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MathOperatorRHS.h" line="150" column="29"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para><ref refid="classcsmp_1_1_base" kindref="compound">Base</ref> class for FE or FV integrals accumulated into righthand vector. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>S.K. Matthai </para>
+</simplesect>
+<simplesect kind="author"><para>Stephen G. Roberts </para>
+</simplesect>
+<simplesect kind="date"><para>1999</para>
+</simplesect>
+</para>
+<sect1 id="compare_floats_8h_1motivation">
+<title>Motivation</title><para>To be able to write PDE equations in finite element form, using the CSMP Algorithm class.</para>
+<para>RULES for using righthand Mathoperators</para>
+<para><orderedlist>
+<listitem><para>supplied data:<itemizedlist>
+<listitem><para>Property vectors contain data from: nodes, integration points, or elements</para>
+</listitem><listitem><para>node and integration point data are supplied together in a numbering as specified for the particular element type.</para>
+</listitem><listitem><para>if a node or a integration point has multiple degrees of freedom, then the node property <ref refid="classvector" kindref="compound">vector&lt;double&gt;</ref> will be of dimension (nds+ips) * dof in this case, the entries will be &apos;dof&apos; per node or constraint point in the order as given above. </para>
+</listitem></itemizedlist>
+</para>
+</listitem></orderedlist>
+</para>
+</sect1>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="7">
+        <label>csmp::CVFEM_MathOperatorRHS&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_c_v_f_e_m___math_operator_r_h_s"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>csmp::CVFEM_MathOperatorRHS&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_c_v_f_e_m___math_operator_r_h_s"/>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; dim, CELL &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>csmp::CVFEM_PointSource_rhsop&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_c_v_f_e_m___point_source__rhsop"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>csmp::Integral_NT_M_dV_Triangle&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_integral___n_t___m__d_v___triangle"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>csmp::Integral_NT_op_N_dV&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_integral___n_t__op___n__d_v"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>csmp::Integral_NT_op_dNi_dV&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_integral___n_t__op__d_ni__d_v"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="46">
+        <label>csmp::Integral_NT_op_dS&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_integral___n_t__op__d_s"/>
+        <childnode refid="45" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>csmp::Integral_NT_rhsop_N_dV&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_integral___n_t__rhsop___n__d_v"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="15">
+        <label>csmp::Integral_dNT_dN_dV&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_integral__d_n_t__d_n__d_v"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="16">
+        <label>csmp::Integral_dNT_rhsop_dN_dV&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_integral__d_n_t__rhsop__d_n__d_v"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="17">
+        <label>csmp::Integral_op_NT_dN_orthogonal_dV&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_integral__op___n_t__d_n__orthogonal__d_v"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="18">
+        <label>csmp::Integral_rhsop_dNT_dN_dV&lt; dim, CELL, var &gt;</label>
+        <link refid="classcsmp_1_1_integral__rhsop__d_n_t__d_n__d_v"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="19">
+        <label>csmp::Integral_var_NT_rhsop_N_dV&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_integral__var___n_t__rhsop___n__d_v"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::MathOperatorRHS&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_math_operator_r_h_s"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; dim, CELL &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::MathOperatorRHS&lt; dim, Element &gt;</label>
+        <link refid="classcsmp_1_1_math_operator_r_h_s"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; dim, Element &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="45">
+        <label>csmp::MathOperatorRHS&lt; dim, Face &gt;</label>
+        <link refid="classcsmp_1_1_math_operator_r_h_s"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; dim, Face &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="49">
+        <label>csmp::MathOperatorRHS&lt; dim, InterFace &gt;</label>
+        <link refid="classcsmp_1_1_math_operator_r_h_s"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; dim, InterFace &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="51">
+        <label>csmp::MathOperatorRHS&lt; dim, csmp::Element &gt;</label>
+        <link refid="classcsmp_1_1_math_operator_r_h_s"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; dim, csmp::Element &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="20">
+        <label>csmp::NT_op&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_n_t__op"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="21">
+        <label>csmp::NumIntegral_BT_D_op_dV&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_num_integral___b_t___d__op__d_v"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="22">
+        <label>csmp::NumIntegral_BT_op_dV&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_num_integral___b_t__op__d_v"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="23">
+        <label>csmp::NumIntegral_DNT_rhsop_DN_dV&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_num_integral___d_n_t__rhsop___d_n__d_v"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="24">
+        <label>csmp::NumIntegral_DNi_rhsop_dV&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_num_integral___d_ni__rhsop__d_v"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="25">
+        <label>csmp::NumIntegral_NT_mixed_op_dNi_dV&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_num_integral___n_t__mixed__op__d_ni__d_v"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="26">
+        <label>csmp::NumIntegral_NT_op1_op2_dNi_dV&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_num_integral___n_t__op1__op2__d_ni__d_v"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="47">
+        <label>csmp::NumIntegral_NT_op_N_dS&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_num_integral___n_t__op___n__d_s"/>
+        <childnode refid="45" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="27">
+        <label>csmp::NumIntegral_NT_op_N_dV&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_num_integral___n_t__op___n__d_v"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>csmp::NumIntegral_NT_op_N_dV&lt; dim, Element &gt;</label>
+        <link refid="classcsmp_1_1_num_integral___n_t__op___n__d_v"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="27" relation="template-instance">
+          <edgelabel>&lt; dim, Element &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="28">
+        <label>csmp::NumIntegral_NT_op_N_dV&lt; dim, csmp::Element &gt;</label>
+        <link refid="classcsmp_1_1_num_integral___n_t__op___n__d_v"/>
+        <childnode refid="27" relation="template-instance">
+          <edgelabel>&lt; dim, csmp::Element &gt;</edgelabel>
+        </childnode>
+        <childnode refid="51" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="29">
+        <label>csmp::NumIntegral_NT_op_dNi_dV&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_num_integral___n_t__op__d_ni__d_v"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="30">
+        <label>csmp::NumIntegral_NT_rhs_nodal_op_N_dV&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_num_integral___n_t__rhs__nodal__op___n__d_v"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="31">
+        <label>csmp::NumIntegral_PT_op_P_dV&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_num_integral___p_t__op___p__d_v"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="48">
+        <label>csmp::NumIntegral_PT_op_dS&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_num_integral___p_t__op__d_s"/>
+        <childnode refid="45" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="32">
+        <label>csmp::NumIntegral_PT_op_dV&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_num_integral___p_t__op__d_v"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="33">
+        <label>csmp::NumIntegral_SetRHS_to_One&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_num_integral___set_r_h_s__to___one"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="34">
+        <label>csmp::NumIntegral_SetRHS_to_Zero&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_num_integral___set_r_h_s__to___zero"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="35">
+        <label>csmp::NumIntegral_dNT_op_dV&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_num_integral__d_n_t__op__d_v"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>csmp::NumIntegral_dNT_op_dV&lt; dim, Element &gt;</label>
+        <link refid="classcsmp_1_1_num_integral__d_n_t__op__d_v"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="35" relation="template-instance">
+          <edgelabel>&lt; dim, Element &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="36">
+        <label>csmp::NumIntegral_dNT_op_dV&lt; dim, csmp::Element &gt;</label>
+        <link refid="classcsmp_1_1_num_integral__d_n_t__op__d_v"/>
+        <childnode refid="35" relation="template-instance">
+          <edgelabel>&lt; dim, csmp::Element &gt;</edgelabel>
+        </childnode>
+        <childnode refid="51" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="50">
+        <label>csmp::NumIntegral_dudn_rhsop_u_dS&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_num_integral__dudn__rhsop__u__d_s"/>
+        <childnode refid="49" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="37">
+        <label>csmp::NumIntegral_op_NT_N_dV&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_num_integral__op___n_t___n__d_v"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="38">
+        <label>csmp::NumIntegral_op_NT_dN_orthogonal_dV&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_num_integral__op___n_t__d_n__orthogonal__d_v"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="39">
+        <label>csmp::NumIntegral_op_PT_P_dV&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_num_integral__op___p_t___p__d_v"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="40">
+        <label>csmp::PT_op&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_p_t__op"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="41">
+        <label>csmp::PointSource_rhsop&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_point_source__rhsop"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>csmp::PointSource_rhsop&lt; dim, Element &gt;</label>
+        <link refid="classcsmp_1_1_point_source__rhsop"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="41" relation="template-instance">
+          <edgelabel>&lt; dim, Element &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="42">
+        <label>csmp::PointSource_rhsop&lt; dim, csmp::Element &gt;</label>
+        <link refid="classcsmp_1_1_point_source__rhsop"/>
+        <childnode refid="41" relation="template-instance">
+          <edgelabel>&lt; dim, csmp::Element &gt;</edgelabel>
+        </childnode>
+        <childnode refid="51" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::RHS_FixedValueMatrix&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_r_h_s___fixed_value_matrix"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="43">
+        <label>csmp::Upwind_Integral_dNT_rhsop_dN_dV&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_upwind___integral__d_n_t__rhsop__d_n__d_v"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="44">
+        <label>csmp::Upwind_Integral_dNT_rhsop_g_dV&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_upwind___integral__d_n_t__rhsop__g__d_v"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="8">
+        <label>csmp::DenseMatrix&lt; mn_max &gt;</label>
+        <link refid="classcsmp_1_1_dense_matrix"/>
+      </node>
+      <node id="7">
+        <label>csmp::DenseMatrix&lt; DM_MIN &gt;</label>
+        <link refid="classcsmp_1_1_dense_matrix"/>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; DM_MIN &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::Index</label>
+        <link refid="structcsmp_1_1_index"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>+localVariables</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>+integrationPointVariables</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>+indexTracker</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>csmp::IndexTracker</label>
+        <link refid="classcsmp_1_1_index_tracker"/>
+      </node>
+      <node id="5">
+        <label>csmp::IntegrationPointVariables</label>
+        <link refid="structcsmp_1_1_integration_point_variables"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>+ipvCell</edgelabel>
+          <edgelabel>+ipvFacet</edgelabel>
+          <edgelabel>+ipvSector</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>csmp::LocalVariables</label>
+        <link refid="structcsmp_1_1_local_variables"/>
+      </node>
+      <node id="1">
+        <label>csmp::MathOperatorRHS&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_math_operator_r_h_s"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>#op</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>#DERIV</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Parameter</label>
+        <link refid="structcsmp_1_1_parameter"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>+key</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/model/MathOperatorRHS.h" line="46" column="1" bodyfile="source/includes/model/MathOperatorRHS.h" bodystart="46" bodyend="183"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1af950a8b9a3d4ea2229f60d27ab6a69c2" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>Add</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1abeae2ec15ba22135c4c5b3098b6b3537" prot="protected" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>add_accumulate_</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a0ca505f93c401b561990e652ddeba037" prot="protected" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>add_accumulate_later_</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a95426d12ae7f3a6eb1bf10c036505e7b" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>AddAccumulate</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a7d3039e3ef140aabc09b14fd9c0f52a6" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>AddAccumulateLater</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1abdc618c15c875eef18858655fb345090" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>AddLater</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a5b96da9a81a4d11ac04946c44c89e72a" prot="protected" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>application_cycle_</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a8158abc37b41cdd02469b9d18fb83337" prot="protected" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>application_cycles_</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a51d50bbbd4f27aca48243f24f7fb92e0" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>ApplicationCycle</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1adbfd8b054a999e664e5dff2fdb1e7670" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>ApplicationCycle</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a14fff508439c520f875dfd77d117489f" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>ApplicationCycles</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1aba8162a585bc19b9ff4d83ebf250a4a2" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>ApplicationCycles</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1ad9c03f1d3138a22e0bc40778d0032f6a" prot="public" virt="virtual"><scope>csmp::MathOperatorRHS</scope><name>AssignToGlobal</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a9470acdb9a64217b4ae019cc7cd5b66f" prot="public" virt="virtual"><scope>csmp::MathOperatorRHS</scope><name>AssignToGlobal</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1ac571c4c7d3f98ecd2c34d1cd6d75fa36" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>BasicOperand</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a4d75aa984bee30ef4b78b59f9892bb15" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>BasicOperandDataDepth</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1aee095a41b5ac8a32ee6dc703a4314b50" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>BasicOperandKey</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a41c990f110ad162091910ee8bcbda6cf" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>BasicOperandName</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a6c0a7d5e5796aa4e028f4479a808cfb0" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>BasicOperandOffset</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1ac7f075729b547f586546be54d1df5a04" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>BasicOperandOffset</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1ab7c8384f6e49d9d81fe4f7ff41a18e41" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>BasicOperandPlacement</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a22231a19221e8cd8651167a4e2f0f483" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>BasicOperandType</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1ae5355392c670d7c81d9822a0efbf767e" prot="public" virt="pure-virtual"><scope>csmp::MathOperatorRHS</scope><name>clone</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1ab77b3c1f4f078290ec9330a916482ed7" prot="public" virt="virtual"><scope>csmp::MathOperatorRHS</scope><name>ComputeContribution</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1ab1b5fad18c56f4849f9ded0940711ad2" prot="protected" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>DERIV</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1aa6bb4a6c6a96c3e3951433004d0de15b" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>DivideByTimeIncrement</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a27f61912ffda5dac4c386a3d3fc27b2e" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>DivideByTimeIncrement</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a7b85528afe467c2ef91668ff0dcab968" prot="protected" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>factor_</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1ad5614fa4de569146a684d28635eb9ff7" prot="public" virt="virtual"><scope>csmp::MathOperatorRHS</scope><name>GetOperands</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1ad789282bfcaf0300e8912174871f5e6f" prot="protected" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>IPOL</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a3d1907ed1b36a73c7591653b0965323e" prot="protected" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>lump_matrices_</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a91445273130ae00f5188a9991dbffaa6" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>LumpedFormulation</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a9d60e14ce439c974150a57c3cfe13ce8" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>LumpedFormulation</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1ac839f56b47b3732ae505b79843841401" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>MaterialOperand</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a00b31b95962f4495178242201c92cfcd" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>MaterialOperandDataDepth</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a52d354d9bbfc6fd037f70b401cfc2289" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>MaterialOperandKey</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1ad9193c44bf7efa489009fce52afd3d0d" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>MaterialOperandName</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a706cf0840efb0d27a828c5d018335ba9" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>MaterialOperandPlacement</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1af230ea6195bab299ee9e77f217f0d0bc" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>MaterialOperandType</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a91814dd6b5e811723188e2fc69a6a0aa" prot="private" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>MathOperatorRHS</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a2524c3fe7d10e3162916975c7f94bd58" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>MathOperatorRHS</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a6fc668671f2620196f7cb8305c004958" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>MathOperatorRHS</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1ad48adc062ee577ba556622e12dce7c50" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>MathOperatorRHS</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1aad7e46e90d59322926ae92e98198a706" prot="protected" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>MTRL</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a4ce7b610b2ed3470e4d159846d03ddeb" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>Multiply</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a2cf305524d12d1bf73302bc00cab0503" prot="protected" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>multiply_accumulate_</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1aae6e621f2b1ad8b8189282007a87ad58" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>MultiplyAccumulate</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a5cb6c0bce5427dbb968492b49021b138" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>MultiplyBy</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1ae92ff4dc9bc35dfffbff8eb202901e87" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>MultiplyBy</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a5a6138f5b4e123f88a9115e1d9315871" prot="public" virt="virtual"><scope>csmp::MathOperatorRHS</scope><name>MultiplyWithTimeFactor</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a2fae8dab461a98afdd5bb376ffab59d0" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>MultiplyWithTimeIncrement</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1abb6e3bad228a21bd49c0c00b2a158d94" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>MultiplyWithTimeIncrement</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1aa700d71b384204010a5514f046b30daf" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>Name</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1aca9186dd58d5960a3bc5366f79e0e7ad" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>Name</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a63376acd0d0272f0b9148654325e5fb0" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>Name</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a0bf5eca393d0470696ddc1f68c49c33a" prot="protected" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>name_</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1aeebb771d18fad508b89bab6ba3fdc9e8" prot="protected" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>op</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a8daf2f4ba7583b116d5c496d81e4cbc0" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a7b331a8a17ea8dee88ebb05f50233649" prot="public" virt="virtual"><scope>csmp::MathOperatorRHS</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a4ac9c3b2f60149cd6cc4a35681b29e0d" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>PropertyAtIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a4075835995bb9932c4d7c257547e66de" prot="protected" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>RHS</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a23b92f3ebeee4a6e1673706f740566b4" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>Subtract</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1af76a808d235d684bcc507ea0a9bdac18" prot="protected" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>subtract_accumulate_</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1ae05aed4df946d473651b5ad4873e7786" prot="protected" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>subtract_accumulate_later_</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a44292090da69cef35e58f612bf9a82e9" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>SubtractAccumulate</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1aab0a4b47807bdafb917c4683aac6d270" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>SubtractAccumulateLater</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a04a0443ea4ccd22e563baa9b49a2a813" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>SubtractLater</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a22dc4521ebc649242eacb41f1ab8e260" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>TestOperand</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1af4c6867b7a59a8dbd0db7bad48cd2c3d" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>TestOperandDataDepth</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a8e21ef3752c7956c83dd55a033d66353" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>TestOperandKey</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1af7842dfe6f55c020253018e1371450f0" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>TestOperandName</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1ae6df026b0ecf14dd9a4cfa9a08e792b2" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>TestOperandOffset</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a58f5927e3903755bd5f520257bc79632" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>TestOperandOffset</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a73fb944e6a4f1aeb6566867eb4894b7b" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>TestOperandPlacement</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a9ab51c99368137c5cb79bcf6e7e01296" prot="public" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>TestOperandType</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a666bb360540f0ed1fad82c821109fc91" prot="protected" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>time_divide_</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a4bc59dd56b98bb076deada3e1b222627" prot="protected" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>time_multiply_</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1aea6bcf22aa25daa01f53b49cd16bca24" prot="protected" virt="non-virtual"><scope>csmp::MathOperatorRHS</scope><name>top</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1ad1c90df52dbb10f0c9eefd445758fc02" prot="public" virt="virtual"><scope>csmp::MathOperatorRHS</scope><name>WriteOperands</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1ab0f58bc4d43c0f20e003467bfe536157" prot="public" virt="virtual"><scope>csmp::MathOperatorRHS</scope><name>~MathOperatorRHS</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

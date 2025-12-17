@@ -1,0 +1,5 @@
+<map id="csmp::ModelTopology::EliminateSurfaceCells" name="csmp::ModelTopology::EliminateSurfaceCells">
+<area shape="rect" id="Node000001" title="remove all surfaces" alt="" coords="5,5,164,46"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_model_topology.html#a0f740f541898d12a312e2a8451b7a52b" title=" " alt="" coords="212,5,360,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="164,23,196,23,196,28,164,28"/>
+</map>

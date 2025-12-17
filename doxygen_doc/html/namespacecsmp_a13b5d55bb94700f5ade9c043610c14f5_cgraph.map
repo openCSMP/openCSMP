@@ -1,0 +1,5 @@
+<map id="csmp::frictionAngle" name="csmp::frictionAngle">
+<area shape="rect" id="Node000001" title="returns arctan(mu) in degrees," alt="" coords="5,5,139,31"/>
+<area shape="rect" id="Node000002" href="$namespacecsmp.html#a7eb608f94da6c10db811e730fb014d89" title="pi (m) perimeter of circle with a diameter of 1" alt="" coords="187,5,307,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="139,16,171,16,171,21,139,21"/>
+</map>

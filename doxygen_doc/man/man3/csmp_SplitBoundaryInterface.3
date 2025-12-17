@@ -1,0 +1,453 @@
+.TH "csmp::SplitBoundaryInterface< dim, SPLITBOUNDARY_COMPLEX >" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::SplitBoundaryInterface< dim, SPLITBOUNDARY_COMPLEX >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <SplitBoundaryInterface\&.h>\fP
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef std::map< std::string, \fBcsmp::SplitBoundary\fP< dim > >::iterator \fBsplitBoundaryIterator\fP"
+.br
+.ti -1c
+.RI "typedef std::map< std::string, \fBcsmp::SplitBoundary\fP< dim > >::const_iterator \fBsplitBoundaryConstIterator\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBSplitBoundaryInterface\fP (const \fBSplitBoundaryInterface\fP &bd)=delete"
+.br
+.ti -1c
+.RI "\fBcsmp::SplitBoundary\fP< dim > & \fBSplitBoundary\fP (const std::string &)"
+.br
+.ti -1c
+.RI "const \fBcsmp::SplitBoundary\fP< dim > & \fBSplitBoundary\fP (const std::string &) const"
+.br
+.ti -1c
+.RI "bool \fBContainsSplitBoundary\fP (const std::string &) const"
+.br
+.ti -1c
+.RI "splitBoundaryIterator \fBSplitBoundariesBegin\fP ()"
+.br
+.ti -1c
+.RI "splitBoundaryIterator \fBSplitBoundariesEnd\fP ()"
+.br
+.ti -1c
+.RI "splitBoundaryConstIterator \fBSplitBoundariesBegin\fP () const"
+.br
+.ti -1c
+.RI "splitBoundaryConstIterator \fBSplitBoundariesEnd\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBSplitBoundaries\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBFormSplitBoundariesFrom\fP (const \fBModelTopology\fP &)"
+.br
+.RI "uses the \fBInterFace\fP ids stored in the model topology object (if any) to form split boundaries with corresponding names; returns number of split boundaries formed "
+.ti -1c
+.RI "std::pair< std::set< std::string >, bool > \fBDetectAndCreateSplitBoundaries\fP ()"
+.br
+.RI "Creates SplitBoundaries detecting disconnected but node-matched perimeter element faces in mesh (already created in meshing tool); these are grouped and named for regions\&. "
+.ti -1c
+.RI "size_t \fBSeparateUniqueRegionsBySplitBoundaries\fP ()"
+.br
+.RI "creates consistently named split boundaries between all unique regions in the model "
+.ti -1c
+.RI "std::pair< std::set< std::string >, bool > \fBCreateSplitBoundaryFrom\fP (const char *dim_1_region, bool retain_elmts_as_intervening_elements)"
+.br
+.RI "creation of one or multiple SplitBoundaries from a lower dimensional region "
+.ti -1c
+.RI "std::pair< std::string, bool > \fBCreateSplitBoundaryBetween\fP (const char *region1, const char *region2)"
+.br
+.RI "creates \fBSplitBoundary\fP between non-overlapping regions that share nodes at their perimeter; all shared nodes are multiplicated including perimeter nodes "
+.ti -1c
+.RI "std::pair< std::string, bool > \fBInsertRegionIntoSplitBoundary\fP (const char *split_boundary, int32_t material_id_for_new_elements)"
+.br
+.RI "inserts a lower-dimensional \fBRegion\fP inside of the \fBSplitBoundary\fP, assigning its elements to the InterveningElement() pointers of its interfaces; the name will be that of the \fBSplitBoundary\fP followed by _REGION "
+.ti -1c
+.RI "std::set< std::string > \fBInsertLowerDimensionalRegionsIntoSplitBoundaries\fP (int32_t material_id_for_new_elements)"
+.br
+.RI "Creates isolated lower-dimensional mesh regions between split boundaries with unique names matching those of the \fBSplitBoundary\fP objects; set will be empty if none created\&. "
+.ti -1c
+.RI "void \fBRemoveSplitBoundary\fP (const char *split_boundary, bool erase_interfaces)"
+.br
+.RI "Creates a single lower-dimensional mesh region taking into account all split boundaries objects; returning its name and whether this operation was successful\&. "
+.ti -1c
+.RI "void \fBRemoveSplitBoundary\fP (\fBcsmp::SplitBoundary\fP< dim > &, bool erase_interfaces)"
+.br
+.RI "Removes splitboundary including interfaces, but does not fuse the mesh back together again\&. "
+.ti -1c
+.RI "std::string \fBMergeSplitBoundaries\fP (const char *new_sb_name, std::set< std::string > splitboundaries)"
+.br
+.ti -1c
+.RI "size_t \fBSplitBoundariesOut\fP () const"
+.br
+.RI "prints current split boundaries to screen and returns how many there are "
+.ti -1c
+.RI "bool \fBOutputSplitBoundariesToBinary\fP (const char *fileName) const"
+.br
+.ti -1c
+.RI "bool \fBInputSplitBoundariesFromBinary\fP (const char *fileName, const std::set< std::string > &subset_variables)"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "std::string \fBCreateSplitBoundaryName\fP (const std::pair< std::string, std::string > &juxtaposed_regions) const"
+.br
+.RI "creating name for the case when the \fBSplitBoundary\fP was already present in the input mesh "
+.ti -1c
+.RI "std::string \fBCreateSplitBoundaryNameFrom\fP (const \fBFaceConstructionData\fP< dim > &, const std::vector< std::string > &region_names) const"
+.br
+.RI "creates name for one specific patch of the new split boundary "
+.ti -1c
+.RI "size_t \fBFindSplitBoundaryByNames\fP (const std::set< std::string > &intersected_regions, std::set< std::string > &region_patches_found) const"
+.br
+.RI "searches the split boundary map for split-boundary names that contain the names of the regions stored in the first set "
+.ti -1c
+.RI "bool \fBAddSplitBoundary\fP (const char *name, typename std::vector< \fBInterFace\fP< dim > * >::iterator first, typename std::vector< \fBInterFace\fP< dim > * >::iterator last, \fBBOX_BOUNDARY\fP)"
+.br
+.RI "creates split boundary from already interconnected faces that also know their parent elements "
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::map< std::string, \fBcsmp::SplitBoundary\fP< dim > > \fBsplitBoundaryMap_\fP"
+.br
+.RI "boundary name & boundary container of key-value pairs "
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim, template< uint32_t > class SPLITBOUNDARY_COMPLEX>
+.br
+class csmp::SplitBoundaryInterface< dim, SPLITBOUNDARY_COMPLEX >"Creation, management and deletion of \fBSplitBoundary\fP objects\&.
+
+.PP
+Split boundaries can be created for:
+.IP "1." 4
+internal model boundaries
+.IP "2." 4
+node-matched disconnected boundaries of the mesh 
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim, template< uint32_t > class SPLITBOUNDARY_COMPLEX> bool \fBcsmp::SplitBoundaryInterface\fP< dim, SPLITBOUNDARY_COMPLEX >::ContainsSplitBoundary (const std::string & ) const"
+Reports whether a \fBSplitBoundary\fP with the corresponding name exists inside the model\&. 
+.SS "template<uint32_t dim, template< uint32_t > class SPLITBOUNDARY_COMPLEX> pair< string, bool > \fBcsmp::SplitBoundaryInterface\fP< dim, SPLITBOUNDARY_COMPLEX >::CreateSplitBoundaryBetween (const char * region1_name, const char * region2_name)"
+
+.PP
+creates \fBSplitBoundary\fP between non-overlapping regions that share nodes at their perimeter; all shared nodes are multiplicated including perimeter nodes Creates \fBSplitBoundary\fP between two unique regions that share nodes along their perimeter\&. The first region will be placed on the inside of the new split boundary\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIregion1_name\fP name of the unique region that shall be on the inside of the new split boundary 
+.br
+\fIregion2_name\fP of the unique region that touches (shares nodes with) region1 and shall become the outside region of the new split boundary
+.RE
+.PP
+\fBNote\fP
+.RS 4
+Method will add new \fBNode\fP and \fBInterFace\fP objects to the model
+
+.PP
+method does not create a temporary \fBBoundary\fP on the way to the \fBSplitBoundary\fP construction
+
+.PP
+method ignores Elements that are lines
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+SKM 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+25/1/20 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class SPLITBOUNDARY_COMPLEX> pair< set< string >, bool > \fBcsmp::SplitBoundaryInterface\fP< dim, SPLITBOUNDARY_COMPLEX >::CreateSplitBoundaryFrom (const char * dim_1_region, bool retain_elmts_as_intervening_elements)"
+
+.PP
+creation of one or multiple SplitBoundaries from a lower dimensional region 1) Checks dim-1 region exists 2) Checks no Nodes on the dim-1 region have the label INTERNAL before proceeding 3) Counts Unique Regions and creates property "region identifyier" for all elements within each region with a region-specific integer (to be identified after node duplication for region updating) 4) For each \fBElement\fP in the dim-1 \fBRegion\fP, it constructs \fBFaceConstructionData\fP, which stores: i) Inner/Outer Parents of dim-1 element, ii) Faces of inner/outer parent elements that are sharing the dim-1 element\&. iii) Region_identifier (\fBElement\fP property) of the Inside and Outside Parent \fBElement\fP -> (materials_) (THIS HOWEVER IS NOT ALL THE ELEMENTS THAT SHARE THE NODE) iii) Region_Identifier of the dim-1 element (material_) iv) PatchNumber which is the unique identifier of the subregions determined by the n_juxtoposition (Patch is the same if you have the same inside/outside materials_ (region identifier))
+
+.PP
+Creates SplitBoundar(ies) from lower dimensional region without the need for a user to create \fBBoundary\fP objects first\&. The underlying region is removed in the process\&.
+
+.PP
+4\&.2) Breaks dim-1 region into smaller subregions based on t 5) Breaks dim-1 \fBRegion\fP into smaller subregions, and gives each one a unique name 
+.SS "template<uint32_t dim, template< uint32_t > class SPLITBOUNDARY_COMPLEX> string \fBcsmp::SplitBoundaryInterface\fP< dim, SPLITBOUNDARY_COMPLEX >::CreateSplitBoundaryName (const std::pair< std::string, std::string > & juxtaposed_regions) const\fR [protected]\fP"
+
+.PP
+creating name for the case when the \fBSplitBoundary\fP was already present in the input mesh Creates a name like SPLITBOUNDARY_region1_region2 adding a number if this is necessary to make the name unique\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+the facing relationships of the boundary are preserved so that region1 is the first in the argument pair\&.
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+SKM 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+January 2018 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class SPLITBOUNDARY_COMPLEX> string \fBcsmp::SplitBoundaryInterface\fP< dim, SPLITBOUNDARY_COMPLEX >::CreateSplitBoundaryNameFrom (const \fBFaceConstructionData\fP< dim > & , const std::vector< std::string > & region_names) const\fR [protected]\fP"
+
+.PP
+creates name for one specific patch of the new split boundary protected METHOD (not known beyond this compilation unit)
+
+.PP
+creates underscore-separated unique names for the region patches based on the juxtapositions relationships across the lower-dimensional regions, the names are composed of:
+
+.PP
+.IP "1." 4
+the name of the master region
+.IP "2." 4
+"SPLITBOUNDARY"
+.IP "3." 4
+the patch identifier number attached to boundary
+.IP "4." 4
+the name of the inner region, i\&.e\&. the region that the lower-dimensional element normals point away from
+.IP "5." 4
+the name of the outer region, i\&.e\&. that into which the normals point
+.PP
+
+.PP
+\fBAttention\fP
+.RS 4
+where the boundary just intersects a single layer (same material on either side), the layer name appears only once\&. The second instance is replaced by INTERSECTION\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class SPLITBOUNDARY_COMPLEX> pair< set< string >, bool > \fBcsmp::SplitBoundaryInterface\fP< dim, SPLITBOUNDARY_COMPLEX >::DetectAndCreateSplitBoundaries ()"
+
+.PP
+Creates SplitBoundaries detecting disconnected but node-matched perimeter element faces in mesh (already created in meshing tool); these are grouped and named for regions\&. Creates SplitBoundaries detecting, them in the (ANSYS) input model as node-matched interfaces, connecting such disconnected perimeter element faces in mesh; these are detected and grouped by bordering regions and turned into \fBSplitBoundary\fP objects with names following the same conventions as for \fBBoundary\fP objects\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+this method does not prompt the generation of any nodes because they are expected to be already there in ANSYS\&.
+
+.PP
+this method relies on the existing numbering of nodes, elements, faces and interfaces\&.
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+SKM 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+20/03/2018 updated 5/9/2021 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class SPLITBOUNDARY_COMPLEX> size_t \fBcsmp::SplitBoundaryInterface\fP< dim, SPLITBOUNDARY_COMPLEX >::FindSplitBoundaryByNames (const std::set< std::string > & intersected_regions, std::set< std::string > & region_patches_found) const\fR [protected]\fP"
+
+.PP
+searches the split boundary map for split-boundary names that contain the names of the regions stored in the first set Searches the model for splitboundaries the name of which contains the search strings provided via the first set\&. The results are returnd into the second set\&.
+
+.PP
+\fBNote\fP
+.RS 4
+Use this method, for example, to retrieve multiple splitboundary patches that were generated from a single lower-dimensional regon, like a fault surface\&.
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+SKM 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+March 2016 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class SPLITBOUNDARY_COMPLEX> bool \fBcsmp::SplitBoundaryInterface\fP< dim, SPLITBOUNDARY_COMPLEX >::InputSplitBoundariesFromBinary (const char * fileName, const std::set< std::string > & subset_variables)"
+Reads all split boundary objects in a model from binary file, expecting that interfaces and their connectivity are already present in \fBMeshManager\fP\&. 
+.PP
+\fBAuthor\fP
+.RS 4
+SKM 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+6/9/2021 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class SPLITBOUNDARY_COMPLEX> set< string > \fBcsmp::SplitBoundaryInterface\fP< dim, SPLITBOUNDARY_COMPLEX >::InsertLowerDimensionalRegionsIntoSplitBoundaries (int32_t material_id)"
+
+.PP
+Creates isolated lower-dimensional mesh regions between split boundaries with unique names matching those of the \fBSplitBoundary\fP objects; set will be empty if none created\&. Insert a lower-dimensional element mesh into the model, which is fully disconnected from the model, to represent a fracture that coincides with a \fBSplitBoundary\fP according to the desire to use \fBSplitBoundary\fP objects for lower-dimensional fractures for the modelling of both, fluid flow and geomechanics\&. It only shares the locations of the nodes (if the \fBSplitBoundary\fP has not been modified) or lies in the symmetry plane of the 2 sides if the nodes have been separated by deformation\&.
+
+.PP
+\fBAuthor\fP
+.RS 4
+JCK updated 26/08/2019
+.RE
+.PP
+TODO: like \fBBoundary\fP patches, the split boundary patches should have unique names that reflect juxtaposition relationships of regions In all SplitBoundaries of the model, lower dimensional \fBElement\fP regions are inserted\&.
+
+.PP
+As many lower-dimensional element regions are created as there SplitBoundaries in the model 
+.PP
+\fBAuthor\fP
+.RS 4
+SKM 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+26/1/2020 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class SPLITBOUNDARY_COMPLEX> pair< string, bool > \fBcsmp::SplitBoundaryInterface\fP< dim, SPLITBOUNDARY_COMPLEX >::InsertRegionIntoSplitBoundary (const char * split_boundary, int32_t material_id)"
+
+.PP
+inserts a lower-dimensional \fBRegion\fP inside of the \fBSplitBoundary\fP, assigning its elements to the InterveningElement() pointers of its interfaces; the name will be that of the \fBSplitBoundary\fP followed by _REGION 
+.PP
+.nf
+@author E\&.P
+@date 07/2/2020
+
+@brief
+Creates lower dimensional elements and adds them to
+1) interface object as middle element
+2) Region of all the middle elements in the split boundary
+3) Model Region
+
+@note This method can be used either
+1) Create an entirely new lower dimensional Region within the SplitBoundary with its name followed by the string "_REGION"\&.
+or
+2) Extends an already existing lower dimensional middle region of the split boundary to include any new interface objects which have the Middle_Element = nullptr\&.
+
+.fi
+.PP
+
+.PP
+E\&.P TODO: Setting boundary flags to Elements which have faces on a boundary must be done for 3D case! 
+.PP
+.nf
+TODO: May be do this mainly in the MeshManager using one of the methds that takes the adjacent higher-dim elements as an input
+TODO: In this case, the input information is similar to entries of a VSet: new 'nodes', 'pelmt' and 'plist' vectors
+
+.fi
+.PP
+ 
+.SS "template<uint32_t dim, template< uint32_t > class SPLITBOUNDARY_COMPLEX> string \fBcsmp::SplitBoundaryInterface\fP< dim, SPLITBOUNDARY_COMPLEX >::MergeSplitBoundaries (const char * new_sb_name, std::set< std::string > splitboundaries)"
+Merges splitboundary objects and gives resultant Splitboundary a new name, original Splitboundaries no longer exist\&. Original interfaces are not deleted\&. 
+.SS "template<uint32_t dim, template< uint32_t > class SPLITBOUNDARY_COMPLEX> bool \fBcsmp::SplitBoundaryInterface\fP< dim, SPLITBOUNDARY_COMPLEX >::OutputSplitBoundariesToBinary (const char * file_name) const"
+Writes \fBSplitBoundary\fP objects to file using the section tags: 
+.PP
+.nf
+ SBDFHEDR
+ SPLITBDRY
+ ONE_BDRY
+ SBDRYVAR
+ SBDFFOTR
+
+.fi
+.PP
+ 
+.SS "template<uint32_t dim, template< uint32_t > class SPLITBOUNDARY_COMPLEX> void \fBcsmp::SplitBoundaryInterface\fP< dim, SPLITBOUNDARY_COMPLEX >::RemoveSplitBoundary (const char * splitboundary, bool erase_interfaces)"
+
+.PP
+Creates a single lower-dimensional mesh region taking into account all split boundaries objects; returning its name and whether this operation was successful\&. Removes splitboundary including interfaces, but does not fuse the mesh back together again
+
+.PP
+Removes the \fBSplitBoundary\fP object with the given name if it exists inside the model; else returns with a warning\&.
+
+.PP
+Removing a \fBSplitBoundary\fP will also prompt the \fBMeshManager\fP to delete the corresponding \fBInterFace\fP elements from the model, potentially turning it into a disconnected group of mesh patches\&.
+
+.PP
+\fBNote\fP
+.RS 4
+he mesh is not fused together again\&.
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+Provide the option to fuse the mesh back together again\&. 
+.RE
+.PP
+.PP
+.nf
+   @author SKM (refactored - since design was flawed)
+   @date 15/8/2020
+.fi
+.PP
+ 
+.SS "template<uint32_t dim, template< uint32_t > class SPLITBOUNDARY_COMPLEX> void \fBcsmp::SplitBoundaryInterface\fP< dim, SPLITBOUNDARY_COMPLEX >::RemoveSplitBoundary (\fBcsmp::SplitBoundary\fP< dim > & split_boundary, bool erase_interfaces)"
+
+.PP
+Removes splitboundary including interfaces, but does not fuse the mesh back together again\&. Removes the \fBSplitBoundary\fP object with the given name if it exists inside the model; else returns with a warning\&.
+
+.PP
+Removing a \fBSplitBoundary\fP will also prompt the \fBMeshManager\fP to delete the corresponding \fBInterFace\fP elements from the model, potentially turning it into a disconnected group of mesh patches\&.
+
+.PP
+\fBNote\fP
+.RS 4
+he mesh is not fused together again\&.
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+Provide the option to fuse the mesh back together again\&. 
+.RE
+.PP
+.PP
+.nf
+   @author SKM (refactored - since design was flawed)
+   @date 15/8/2020
+.fi
+.PP
+ 
+.SS "template<uint32_t dim, template< uint32_t > class SPLITBOUNDARY_COMPLEX> size_t \fBcsmp::SplitBoundaryInterface\fP< dim, SPLITBOUNDARY_COMPLEX >::SeparateUniqueRegionsBySplitBoundaries ()"
+
+.PP
+creates consistently named split boundaries between all unique regions in the model Form consistently named split boundaries between all the unique regions in the current model, while detecting and honouring already existing \fBBoundary\fP and \fBSplitBoundary\fP objects identified by INTERNAL boundary flags\&. These lower-dimensional model subdomains will not be touched\&. Only those unique regions are considered which have the same spatial dimension as the model\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+all perimeter nodes / contact points between split boundaries in 2D will become NodeManifolds connecting as many \fBNode\fP objects as regions are in contact with one another at that split boundary\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class SPLITBOUNDARY_COMPLEX> size_t \fBcsmp::SplitBoundaryInterface\fP< dim, SPLITBOUNDARY_COMPLEX >::SplitBoundariesOut () const"
+
+.PP
+prints current split boundaries to screen and returns how many there are Prints current SplitBoundaries to screen 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

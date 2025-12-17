@@ -1,0 +1,668 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classmjl_1_1_point" kind="class" language="C++" prot="public">
+    <compoundname>mjl::Point</compoundname>
+    <derivedcompoundref refid="classmjl_1_1_vertex" prot="public" virt="non-virtual">mjl::Vertex</derivedcompoundref>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classmjl_1_1_point_1a1993709d2a09084c71af4a119dedb488" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double mjl::Point::x_</definition>
+        <argsstring></argsstring>
+        <name>x_</name>
+        <qualifiedname>mjl::Point::x_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Point.h" line="46" column="12" bodyfile="source/includes/discretisation/MJL_Point.h" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classmjl_1_1_point_1a29b31374dcb48014cde8d7ad317fd661" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double mjl::Point::y_</definition>
+        <argsstring></argsstring>
+        <name>y_</name>
+        <qualifiedname>mjl::Point::y_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Point.h" line="46" column="15" bodyfile="source/includes/discretisation/MJL_Point.h" bodystart="46" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classmjl_1_1_point_1a87b3b7c451c7ae8af8024eb6c61d7eb3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>mjl::Point::Point</definition>
+        <argsstring>()</argsstring>
+        <name>Point</name>
+        <qualifiedname>mjl::Point::Point</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Point.h" line="13" column="5" bodyfile="source/includes/discretisation/MJL_Point.h" bodystart="57" bodyend="58"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_point_1a8c82e6d3dc17ee141814d1c17d616b16" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>mjl::Point::Point</definition>
+        <argsstring>(double, double)</argsstring>
+        <name>Point</name>
+        <qualifiedname>mjl::Point::Point</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>px</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <defname>py</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Point.h" line="14" column="5" bodyfile="source/includes/discretisation/MJL_Point.h" bodystart="61" bodyend="62"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_point_1a65b300ae47c79c3ab19ff8b3c6449aa0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>mjl::Point::Point</definition>
+        <argsstring>(const Point &amp;)</argsstring>
+        <name>Point</name>
+        <qualifiedname>mjl::Point::Point</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point" kindref="compound">Point</ref> &amp;</type>
+          <defname>p</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Point.h" line="15" column="5" bodyfile="source/includes/discretisation/MJL_Point.h" bodystart="115" bodyend="118"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_point_1aafba868fb2dfaaf95e2cd8f7c4536cb0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>mjl::Point::~Point</definition>
+        <argsstring>()</argsstring>
+        <name>~Point</name>
+        <qualifiedname>mjl::Point::~Point</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Point.h" line="16" column="5" bodyfile="source/includes/discretisation/MJL_Point.h" bodystart="16" bodyend="16"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_point_1a07c9a5d6c5b920ae624ef01c3a19f181" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classmjl_1_1_point" kindref="compound">Point</ref> &amp;</type>
+        <definition>Point &amp; mjl::Point::operator=</definition>
+        <argsstring>(const Point &amp;)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>mjl::Point::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point" kindref="compound">Point</ref> &amp;</type>
+          <defname>p</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Point.h" line="17" column="11" bodyfile="source/includes/discretisation/MJL_Point.h" bodystart="65" bodyend="71"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_point_1aa0161cb16591f02e3eefcca64eb4be06" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classmjl_1_1_point" kindref="compound">Point</ref></type>
+        <definition>Point mjl::Point::operator+</definition>
+        <argsstring>(const Point &amp;) const</argsstring>
+        <name>operator+</name>
+        <qualifiedname>mjl::Point::operator+</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point" kindref="compound">Point</ref> &amp;</type>
+          <defname>p</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Point.h" line="18" column="12" bodyfile="source/includes/discretisation/MJL_Point.h" bodystart="121" bodyend="124"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_point_1ad096fb8f47ba23112684ed38c8ae4f6e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classmjl_1_1_point" kindref="compound">Point</ref></type>
+        <definition>Point mjl::Point::operator-</definition>
+        <argsstring>(const Point &amp;) const</argsstring>
+        <name>operator-</name>
+        <qualifiedname>mjl::Point::operator-</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point" kindref="compound">Point</ref> &amp;</type>
+          <defname>p</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Point.h" line="19" column="12" bodyfile="source/includes/discretisation/MJL_Point.h" bodystart="127" bodyend="130"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_point_1afdabc3135000bfef611b73da23a116bd" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classmjl_1_1_point" kindref="compound">Point</ref> &amp;</type>
+        <definition>Point &amp; mjl::Point::operator+=</definition>
+        <argsstring>(const Point &amp;)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>mjl::Point::operator+=</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point" kindref="compound">Point</ref> &amp;</type>
+          <defname>p</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Point.h" line="20" column="11" bodyfile="source/includes/discretisation/MJL_Point.h" bodystart="73" bodyend="78"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_point_1a9e3c8ab7ae05ca86539cf816c4ec9146" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classmjl_1_1_point" kindref="compound">Point</ref> &amp;</type>
+        <definition>Point &amp; mjl::Point::operator-=</definition>
+        <argsstring>(const Point &amp;)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>mjl::Point::operator-=</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point" kindref="compound">Point</ref> &amp;</type>
+          <defname>p</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Point.h" line="21" column="11" bodyfile="source/includes/discretisation/MJL_Point.h" bodystart="80" bodyend="85"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_point_1af4a27cc35b9972d2edb3d40c244796fc" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classmjl_1_1_point" kindref="compound">Point</ref> &amp;</type>
+        <definition>Point &amp; mjl::Point::operator*=</definition>
+        <argsstring>(const Point &amp;)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>mjl::Point::operator*=</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point" kindref="compound">Point</ref> &amp;</type>
+          <defname>p</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Point.h" line="22" column="11" bodyfile="source/includes/discretisation/MJL_Point.h" bodystart="101" bodyend="106"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_point_1aa15c0f7cec8454014b99aa7a1f648455" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classmjl_1_1_point" kindref="compound">Point</ref> &amp;</type>
+        <definition>Point &amp; mjl::Point::operator/=</definition>
+        <argsstring>(const Point &amp;)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>mjl::Point::operator/=</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point" kindref="compound">Point</ref> &amp;</type>
+          <defname>p</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Point.h" line="23" column="11" bodyfile="source/includes/discretisation/MJL_Point.h" bodystart="108" bodyend="113"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_point_1a8aadab6d3db34f45ac679d0a4f2f2892" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classmjl_1_1_point" kindref="compound">Point</ref> &amp;</type>
+        <definition>Point &amp; mjl::Point::operator*=</definition>
+        <argsstring>(double)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>mjl::Point::operator*=</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>p</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Point.h" line="24" column="11" bodyfile="source/includes/discretisation/MJL_Point.h" bodystart="94" bodyend="99"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_point_1addd22c50d6700e0d2c131650a7c38657" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classmjl_1_1_point" kindref="compound">Point</ref> &amp;</type>
+        <definition>Point &amp; mjl::Point::operator/=</definition>
+        <argsstring>(double)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>mjl::Point::operator/=</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>p</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Point.h" line="25" column="11" bodyfile="source/includes/discretisation/MJL_Point.h" bodystart="87" bodyend="92"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_point_1a336e6f419981a6a5d7a113a162fcae17" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>double &amp;</type>
+        <definition>double &amp; mjl::Point::operator()</definition>
+        <argsstring>(int)</argsstring>
+        <name>operator()</name>
+        <qualifiedname>mjl::Point::operator()</qualifiedname>
+        <param>
+          <type>int</type>
+          <defname>i</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Point.h" line="27" column="12" bodyfile="source/includes/discretisation/MJL_Point.h" bodystart="140" bodyend="143"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_point_1ac10309bca80e42cd986fc8fa84c38eaf" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double mjl::Point::operator[]</definition>
+        <argsstring>(int) const</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>mjl::Point::operator[]</qualifiedname>
+        <param>
+          <type>int</type>
+          <defname>i</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Point.h" line="28" column="13" bodyfile="source/includes/discretisation/MJL_Point.h" bodystart="146" bodyend="149"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_point_1a347d82af0ccaad37b6d4119a047e38d8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double mjl::Point::X</definition>
+        <argsstring>() const</argsstring>
+        <name>X</name>
+        <qualifiedname>mjl::Point::X</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Point.h" line="29" column="13" bodyfile="source/includes/discretisation/MJL_Point.h" bodystart="176" bodyend="176"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_point_1a8c8a886ab82fcac90d031549e371ba7a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double mjl::Point::Y</definition>
+        <argsstring>() const</argsstring>
+        <name>Y</name>
+        <qualifiedname>mjl::Point::Y</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Point.h" line="30" column="13" bodyfile="source/includes/discretisation/MJL_Point.h" bodystart="177" bodyend="177"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_point_1a88a7ee697a2deae2c467b44a06c7bdd4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool mjl::Point::operator==</definition>
+        <argsstring>(const Point &amp;) const</argsstring>
+        <name>operator==</name>
+        <qualifiedname>mjl::Point::operator==</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point" kindref="compound">Point</ref> &amp;</type>
+          <defname>p</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Point.h" line="31" column="16" bodyfile="source/includes/discretisation/MJL_Point.h" bodystart="152" bodyend="155"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_point_1a5063f0ae86f6d3c64fe3fa01411e61d3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool mjl::Point::operator!=</definition>
+        <argsstring>(const Point &amp;) const</argsstring>
+        <name>operator!=</name>
+        <qualifiedname>mjl::Point::operator!=</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point" kindref="compound">Point</ref> &amp;</type>
+          <defname>p</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Point.h" line="32" column="16" bodyfile="source/includes/discretisation/MJL_Point.h" bodystart="158" bodyend="161"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_point_1a59bc291d953d33aad75621ce831a5390" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool mjl::Point::operator&lt;</definition>
+        <argsstring>(const Point &amp;) const</argsstring>
+        <name>operator&lt;</name>
+        <qualifiedname>mjl::Point::operator&lt;</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point" kindref="compound">Point</ref> &amp;</type>
+          <defname>p</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Point.h" line="33" column="5" bodyfile="source/includes/discretisation/MJL_Point.h" bodystart="164" bodyend="167"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_point_1a92f0ca7bf80f636bf7021aae1be742c3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool mjl::Point::operator&gt;</definition>
+        <argsstring>(const Point &amp;) const</argsstring>
+        <name>operator&gt;</name>
+        <qualifiedname>mjl::Point::operator&gt;</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point" kindref="compound">Point</ref> &amp;</type>
+          <defname>p</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Point.h" line="34" column="16" bodyfile="source/includes/discretisation/MJL_Point.h" bodystart="170" bodyend="173"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_point_1ae6e0b67152988a2f20f653202ddceaba" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int mjl::Point::Orientation</definition>
+        <argsstring>(Point &amp;, Point &amp;, Point &amp;)</argsstring>
+        <name>Orientation</name>
+        <qualifiedname>mjl::Point::Orientation</qualifiedname>
+        <param>
+          <type><ref refid="classmjl_1_1_point" kindref="compound">Point</ref> &amp;</type>
+          <defname>p0</defname>
+        </param>
+        <param>
+          <type><ref refid="classmjl_1_1_point" kindref="compound">Point</ref> &amp;</type>
+          <defname>p1</defname>
+        </param>
+        <param>
+          <type><ref refid="classmjl_1_1_point" kindref="compound">Point</ref> &amp;</type>
+          <defname>p2</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>1 if positive oriented (counterclockwise) </para>
+</simplesect>
+<simplesect kind="return"><para>-1 if clockwise </para>
+</simplesect>
+<simplesect kind="return"><para>0 if collinear </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Point.h" line="35" column="16" bodyfile="source/modules/discretisation/MJL_Point.cpp" bodystart="55" bodyend="64"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_point_1ad21865b595628544d25ca320741c5175" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double mjl::Point::PolarAngle</definition>
+        <argsstring>() const</argsstring>
+        <name>PolarAngle</name>
+        <qualifiedname>mjl::Point::PolarAngle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Point.h" line="36" column="13" bodyfile="source/modules/discretisation/MJL_Point.cpp" bodystart="35" bodyend="45"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_point_1a1742d36d0b8de397f65f360230bd990c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double mjl::Point::Length</definition>
+        <argsstring>() const</argsstring>
+        <name>Length</name>
+        <qualifiedname>mjl::Point::Length</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Point.h" line="37" column="13" bodyfile="source/includes/discretisation/MJL_Point.h" bodystart="179" bodyend="182"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_point_1a06582859cc6f5bd2f0731a516b0d2bea" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>LOCATION</type>
+        <definition>LOCATION mjl::Point::Classify</definition>
+        <argsstring>(const Point &amp;, const Point &amp;) const</argsstring>
+        <name>Classify</name>
+        <qualifiedname>mjl::Point::Classify</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point" kindref="compound">Point</ref> &amp;</type>
+          <defname>p0</defname>
+        </param>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point" kindref="compound">Point</ref> &amp;</type>
+          <defname>p1</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Point.h" line="38" column="16" bodyfile="source/modules/discretisation/MJL_Point.cpp" bodystart="16" bodyend="30"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_point_1a920b40f562bae39663582b1308678ff1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>LOCATION</type>
+        <definition>LOCATION mjl::Point::Classify</definition>
+        <argsstring>(const Edge &amp;) const</argsstring>
+        <name>Classify</name>
+        <qualifiedname>mjl::Point::Classify</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_edge" kindref="compound">Edge</ref> &amp;</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Point.h" line="39" column="16" bodyfile="source/modules/discretisation/MJL_Point.cpp" bodystart="9" bodyend="12"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_point_1a3437860aade9f7cbd981523394c7c86d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void mjl::Point::Set</definition>
+        <argsstring>(double, double)</argsstring>
+        <name>Set</name>
+        <qualifiedname>mjl::Point::Set</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>cx</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <defname>cy</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Point.h" line="40" column="16" bodyfile="source/includes/discretisation/MJL_Point.h" bodystart="185" bodyend="189"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_point_1a1ea373273f0532a5d1ff84ca52006fe6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void mjl::Point::Move</definition>
+        <argsstring>(double dx, double dy)</argsstring>
+        <name>Move</name>
+        <qualifiedname>mjl::Point::Move</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>dx</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>dy</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Point.h" line="41" column="16" bodyfile="source/includes/discretisation/MJL_Point.h" bodystart="193" bodyend="197"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_point_1a74ac5e83e8bcc75ae07960278e4f76e2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void mjl::Point::Scale</definition>
+        <argsstring>(double xfac, double yfac)</argsstring>
+        <name>Scale</name>
+        <qualifiedname>mjl::Point::Scale</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>xfac</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>yfac</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Point.h" line="42" column="16" bodyfile="source/includes/discretisation/MJL_Point.h" bodystart="199" bodyend="203"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_point_1a9930ffb5e4f119b5be644a0c4639d723" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void mjl::Point::Out</definition>
+        <argsstring>() const</argsstring>
+        <name>Out</name>
+        <qualifiedname>mjl::Point::Out</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Point.h" line="43" column="16" bodyfile="source/modules/discretisation/MJL_Point.cpp" bodystart="68" bodyend="71"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="friend">
+      <memberdef kind="friend" id="classmjl_1_1_point_1a5efca9a8d275175a74aa3337a5c28a3c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classmjl_1_1_point" kindref="compound">Point</ref></type>
+        <definition>Point operator*</definition>
+        <argsstring>(double s, const Point &amp;p)</argsstring>
+        <name>operator*</name>
+        <qualifiedname>mjl::Point::operator*</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>s</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point" kindref="compound">Point</ref> &amp;</type>
+          <declname>p</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Point.h" line="26" column="18" bodyfile="source/includes/discretisation/MJL_Point.h" bodystart="133" bodyend="136"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>mjl::Point</label>
+        <link refid="classmjl_1_1_point"/>
+      </node>
+      <node id="2">
+        <label>mjl::Vertex</label>
+        <link refid="classmjl_1_1_vertex"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>mjl::Point</label>
+        <link refid="classmjl_1_1_point"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/discretisation/MJL_Point.h" line="11" column="1" bodyfile="source/includes/discretisation/MJL_Point.h" bodystart="11" bodyend="47"/>
+    <listofallmembers>
+      <member refid="classmjl_1_1_point_1a06582859cc6f5bd2f0731a516b0d2bea" prot="public" virt="non-virtual"><scope>mjl::Point</scope><name>Classify</name></member>
+      <member refid="classmjl_1_1_point_1a920b40f562bae39663582b1308678ff1" prot="public" virt="non-virtual"><scope>mjl::Point</scope><name>Classify</name></member>
+      <member refid="classmjl_1_1_point_1a1742d36d0b8de397f65f360230bd990c" prot="public" virt="non-virtual"><scope>mjl::Point</scope><name>Length</name></member>
+      <member refid="classmjl_1_1_point_1a1ea373273f0532a5d1ff84ca52006fe6" prot="public" virt="non-virtual"><scope>mjl::Point</scope><name>Move</name></member>
+      <member refid="classmjl_1_1_point_1a5063f0ae86f6d3c64fe3fa01411e61d3" prot="public" virt="non-virtual"><scope>mjl::Point</scope><name>operator!=</name></member>
+      <member refid="classmjl_1_1_point_1a336e6f419981a6a5d7a113a162fcae17" prot="public" virt="non-virtual"><scope>mjl::Point</scope><name>operator()</name></member>
+      <member refid="classmjl_1_1_point_1a5efca9a8d275175a74aa3337a5c28a3c" prot="public" virt="non-virtual"><scope>mjl::Point</scope><name>operator*</name></member>
+      <member refid="classmjl_1_1_point_1af4a27cc35b9972d2edb3d40c244796fc" prot="public" virt="non-virtual"><scope>mjl::Point</scope><name>operator*=</name></member>
+      <member refid="classmjl_1_1_point_1a8aadab6d3db34f45ac679d0a4f2f2892" prot="public" virt="non-virtual"><scope>mjl::Point</scope><name>operator*=</name></member>
+      <member refid="classmjl_1_1_point_1aa0161cb16591f02e3eefcca64eb4be06" prot="public" virt="non-virtual"><scope>mjl::Point</scope><name>operator+</name></member>
+      <member refid="classmjl_1_1_point_1afdabc3135000bfef611b73da23a116bd" prot="public" virt="non-virtual"><scope>mjl::Point</scope><name>operator+=</name></member>
+      <member refid="classmjl_1_1_point_1ad096fb8f47ba23112684ed38c8ae4f6e" prot="public" virt="non-virtual"><scope>mjl::Point</scope><name>operator-</name></member>
+      <member refid="classmjl_1_1_point_1a9e3c8ab7ae05ca86539cf816c4ec9146" prot="public" virt="non-virtual"><scope>mjl::Point</scope><name>operator-=</name></member>
+      <member refid="classmjl_1_1_point_1aa15c0f7cec8454014b99aa7a1f648455" prot="public" virt="non-virtual"><scope>mjl::Point</scope><name>operator/=</name></member>
+      <member refid="classmjl_1_1_point_1addd22c50d6700e0d2c131650a7c38657" prot="public" virt="non-virtual"><scope>mjl::Point</scope><name>operator/=</name></member>
+      <member refid="classmjl_1_1_point_1a59bc291d953d33aad75621ce831a5390" prot="public" virt="non-virtual"><scope>mjl::Point</scope><name>operator&lt;</name></member>
+      <member refid="classmjl_1_1_point_1a07c9a5d6c5b920ae624ef01c3a19f181" prot="public" virt="non-virtual"><scope>mjl::Point</scope><name>operator=</name></member>
+      <member refid="classmjl_1_1_point_1a88a7ee697a2deae2c467b44a06c7bdd4" prot="public" virt="non-virtual"><scope>mjl::Point</scope><name>operator==</name></member>
+      <member refid="classmjl_1_1_point_1a92f0ca7bf80f636bf7021aae1be742c3" prot="public" virt="non-virtual"><scope>mjl::Point</scope><name>operator&gt;</name></member>
+      <member refid="classmjl_1_1_point_1ac10309bca80e42cd986fc8fa84c38eaf" prot="public" virt="non-virtual"><scope>mjl::Point</scope><name>operator[]</name></member>
+      <member refid="classmjl_1_1_point_1ae6e0b67152988a2f20f653202ddceaba" prot="public" virt="non-virtual"><scope>mjl::Point</scope><name>Orientation</name></member>
+      <member refid="classmjl_1_1_point_1a9930ffb5e4f119b5be644a0c4639d723" prot="public" virt="non-virtual"><scope>mjl::Point</scope><name>Out</name></member>
+      <member refid="classmjl_1_1_point_1a87b3b7c451c7ae8af8024eb6c61d7eb3" prot="public" virt="non-virtual"><scope>mjl::Point</scope><name>Point</name></member>
+      <member refid="classmjl_1_1_point_1a8c82e6d3dc17ee141814d1c17d616b16" prot="public" virt="non-virtual"><scope>mjl::Point</scope><name>Point</name></member>
+      <member refid="classmjl_1_1_point_1a65b300ae47c79c3ab19ff8b3c6449aa0" prot="public" virt="non-virtual"><scope>mjl::Point</scope><name>Point</name></member>
+      <member refid="classmjl_1_1_point_1ad21865b595628544d25ca320741c5175" prot="public" virt="non-virtual"><scope>mjl::Point</scope><name>PolarAngle</name></member>
+      <member refid="classmjl_1_1_point_1a74ac5e83e8bcc75ae07960278e4f76e2" prot="public" virt="non-virtual"><scope>mjl::Point</scope><name>Scale</name></member>
+      <member refid="classmjl_1_1_point_1a3437860aade9f7cbd981523394c7c86d" prot="public" virt="non-virtual"><scope>mjl::Point</scope><name>Set</name></member>
+      <member refid="classmjl_1_1_point_1a347d82af0ccaad37b6d4119a047e38d8" prot="public" virt="non-virtual"><scope>mjl::Point</scope><name>X</name></member>
+      <member refid="classmjl_1_1_point_1a1993709d2a09084c71af4a119dedb488" prot="private" virt="non-virtual"><scope>mjl::Point</scope><name>x_</name></member>
+      <member refid="classmjl_1_1_point_1a8c8a886ab82fcac90d031549e371ba7a" prot="public" virt="non-virtual"><scope>mjl::Point</scope><name>Y</name></member>
+      <member refid="classmjl_1_1_point_1a29b31374dcb48014cde8d7ad317fd661" prot="private" virt="non-virtual"><scope>mjl::Point</scope><name>y_</name></member>
+      <member refid="classmjl_1_1_point_1aafba868fb2dfaaf95e2cd8f7c4536cb0" prot="public" virt="non-virtual"><scope>mjl::Point</scope><name>~Point</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

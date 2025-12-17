@@ -1,0 +1,6 @@
+<map id="csmp::UG4_UGX_FileExport_Test::Run" name="csmp::UG4_UGX_FileExport_Test::Run">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,29,196,70"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_a_n_s_y_s___model3_d.html#aecaf09058c223b75508c1b87d22aaca3" title="input from ANSYS *.asc, *.dat and *&#45;variable.txt files" alt="" coords="244,29,410,70"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="196,47,228,47,228,52,196,52"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="284,29,282,19,289,10,304,5,327,3,351,5,366,11,364,16,350,10,327,8,305,10,292,15,287,21,289,28"/>
+</map>

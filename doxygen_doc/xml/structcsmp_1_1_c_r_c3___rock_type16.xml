@@ -1,0 +1,356 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="structcsmp_1_1_c_r_c3___rock_type16" kind="struct" language="C++" prot="public">
+    <compoundname>csmp::CRC3_RockType16</compoundname>
+    <includes refid="_otway_c_r_c3___rock_types___version__2_8h" local="no">OtwayCRC3_RockTypes_Version_2.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcsmp_1_1_c_r_c3___rock_type16_1a20ab54d77761bb504cdc008003a0eefc" prot="public" static="no" mutable="no">
+        <type>const std::string</type>
+        <definition>const std::string csmp::CRC3_RockType16::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <qualifiedname>csmp::CRC3_RockType16::name</qualifiedname>
+        <initializer>= &quot;baffle&quot;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/OtwayCRC3_RockTypes_Version_2.h" line="483" column="22" bodyfile="source/includes/thmc/two_phase_flow/OtwayCRC3_RockTypes_Version_2.h" bodystart="483" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_c_r_c3___rock_type16_1a6703dcf0e6613855e2599f5de07d545f" prot="public" static="no" mutable="no">
+        <type>const int</type>
+        <definition>const int csmp::CRC3_RockType16::rocktype_</definition>
+        <argsstring></argsstring>
+        <name>rocktype_</name>
+        <qualifiedname>csmp::CRC3_RockType16::rocktype_</qualifiedname>
+        <initializer>= 16</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/OtwayCRC3_RockTypes_Version_2.h" line="484" column="19" bodyfile="source/includes/thmc/two_phase_flow/OtwayCRC3_RockTypes_Version_2.h" bodystart="484" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_c_r_c3___rock_type16_1ac7c37e2eb2379282e3f04ed6f53e4790" prot="public" static="no" mutable="no">
+        <type>const int</type>
+        <definition>const int csmp::CRC3_RockType16::subtypes_</definition>
+        <argsstring></argsstring>
+        <name>subtypes_</name>
+        <qualifiedname>csmp::CRC3_RockType16::subtypes_</qualifiedname>
+        <initializer>= 1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/OtwayCRC3_RockTypes_Version_2.h" line="485" column="19" bodyfile="source/includes/thmc/two_phase_flow/OtwayCRC3_RockTypes_Version_2.h" bodystart="485" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_c_r_c3___rock_type16_1aa18079d1ffaf63d5d3032b04c4dcc0a6" prot="public" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::CRC3_RockType16::k_</definition>
+        <argsstring></argsstring>
+        <name>k_</name>
+        <qualifiedname>csmp::CRC3_RockType16::k_</qualifiedname>
+        <initializer>= 1.0e-16</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/OtwayCRC3_RockTypes_Version_2.h" line="486" column="17" bodyfile="source/includes/thmc/two_phase_flow/OtwayCRC3_RockTypes_Version_2.h" bodystart="486" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_c_r_c3___rock_type16_1a6e9510b85b9e31917e4ed6c1e6fef79c" prot="public" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::CRC3_RockType16::phi_</definition>
+        <argsstring></argsstring>
+        <name>phi_</name>
+        <qualifiedname>csmp::CRC3_RockType16::phi_</qualifiedname>
+        <initializer>= 0.09</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/OtwayCRC3_RockTypes_Version_2.h" line="487" column="19" bodyfile="source/includes/thmc/two_phase_flow/OtwayCRC3_RockTypes_Version_2.h" bodystart="487" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_c_r_c3___rock_type16_1a298c3fef16772bb7fad09754b816b875" prot="public" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::CRC3_RockType16::Swi_</definition>
+        <argsstring></argsstring>
+        <name>Swi_</name>
+        <qualifiedname>csmp::CRC3_RockType16::Swi_</qualifiedname>
+        <initializer>= 0.3</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/OtwayCRC3_RockTypes_Version_2.h" line="488" column="19" bodyfile="source/includes/thmc/two_phase_flow/OtwayCRC3_RockTypes_Version_2.h" bodystart="488" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_c_r_c3___rock_type16_1a79ed6482f40c67ba5080c60b0e5edbc0" prot="public" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::CRC3_RockType16::Swi_pc_</definition>
+        <argsstring></argsstring>
+        <name>Swi_pc_</name>
+        <qualifiedname>csmp::CRC3_RockType16::Swi_pc_</qualifiedname>
+        <initializer>= 0.3</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/OtwayCRC3_RockTypes_Version_2.h" line="489" column="19" bodyfile="source/includes/thmc/two_phase_flow/OtwayCRC3_RockTypes_Version_2.h" bodystart="489" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_c_r_c3___rock_type16_1acecc3ab9569c67a5ca69d4a38c95782f" prot="public" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::CRC3_RockType16::Sgr_</definition>
+        <argsstring></argsstring>
+        <name>Sgr_</name>
+        <qualifiedname>csmp::CRC3_RockType16::Sgr_</qualifiedname>
+        <initializer>= 0.1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/OtwayCRC3_RockTypes_Version_2.h" line="490" column="19" bodyfile="source/includes/thmc/two_phase_flow/OtwayCRC3_RockTypes_Version_2.h" bodystart="490" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_c_r_c3___rock_type16_1a907cbf430b5f4d2aa8984c503d64f3ef" prot="public" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::CRC3_RockType16::m_</definition>
+        <argsstring></argsstring>
+        <name>m_</name>
+        <qualifiedname>csmp::CRC3_RockType16::m_</qualifiedname>
+        <initializer>= 0.7</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/OtwayCRC3_RockTypes_Version_2.h" line="491" column="19" bodyfile="source/includes/thmc/two_phase_flow/OtwayCRC3_RockTypes_Version_2.h" bodystart="491" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_c_r_c3___rock_type16_1a9182e9f8ed8de8b27d735e70b53f7655" prot="public" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::CRC3_RockType16::pd_</definition>
+        <argsstring></argsstring>
+        <name>pd_</name>
+        <qualifiedname>csmp::CRC3_RockType16::pd_</qualifiedname>
+        <initializer>= 1.0e+6</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/OtwayCRC3_RockTypes_Version_2.h" line="492" column="19" bodyfile="source/includes/thmc/two_phase_flow/OtwayCRC3_RockTypes_Version_2.h" bodystart="492" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structcsmp_1_1_c_r_c3___rock_type16_1ad8c944478e6ff5b61b228bb5db47467c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::CRC3_RockType16::IsComposite</definition>
+        <argsstring>() const</argsstring>
+        <name>IsComposite</name>
+        <qualifiedname>csmp::CRC3_RockType16::IsComposite</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/OtwayCRC3_RockTypes_Version_2.h" line="470" column="9" bodyfile="source/includes/thmc/two_phase_flow/OtwayCRC3_RockTypes_Version_2.h" bodystart="470" bodyend="470"/>
+      </memberdef>
+      <memberdef kind="function" id="structcsmp_1_1_c_r_c3___rock_type16_1aa3f8b6a8f8fdba66d97acc0ab6dc60fb" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::CRC3_RockType16::Krw</definition>
+        <argsstring>(double Sw) const</argsstring>
+        <name>Krw</name>
+        <qualifiedname>csmp::CRC3_RockType16::Krw</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>Sw</declname>
+        </param>
+        <briefdescription>
+<para>Linear water relative permeability for drainage. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/OtwayCRC3_RockTypes_Version_2.h" line="472" column="11" bodyfile="source/includes/thmc/two_phase_flow/OtwayCRC3_RockTypes_Version_2.h" bodystart="472" bodyend="475"/>
+        <references refid="namespacecsmp_1a7347d94ec898ee4f764f3755a297e749" compoundref="_otway_c_r_c3___rock_types___version__2_8h" startline="153" endline="155">csmp::seffL</references>
+      </memberdef>
+      <memberdef kind="function" id="structcsmp_1_1_c_r_c3___rock_type16_1ae5a89d014c785c592cf3424ebef06e14" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::CRC3_RockType16::Krn</definition>
+        <argsstring>(double Sw) const</argsstring>
+        <name>Krn</name>
+        <qualifiedname>csmp::CRC3_RockType16::Krn</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>Sw</declname>
+        </param>
+        <briefdescription>
+<para>Linear CO2 relative permeability for drainage. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/OtwayCRC3_RockTypes_Version_2.h" line="477" column="11" bodyfile="source/includes/thmc/two_phase_flow/OtwayCRC3_RockTypes_Version_2.h" bodystart="477" bodyend="481"/>
+        <references refid="namespacecsmp_1aceb7605581b3653dc9d44e5af1386695" compoundref="_otway_c_r_c3___rock_types___version__2_8h" startline="158" endline="160">csmp::seffL</references>
+      </memberdef>
+      <memberdef kind="function" id="structcsmp_1_1_c_r_c3___rock_type16_1ad8c944478e6ff5b61b228bb5db47467c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::CRC3_RockType16::IsComposite</definition>
+        <argsstring>() const</argsstring>
+        <name>IsComposite</name>
+        <qualifiedname>csmp::CRC3_RockType16::IsComposite</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/OtwayCRC3_RockTypes_Version_3.h" line="470" column="9" bodyfile="source/includes/thmc/two_phase_flow/OtwayCRC3_RockTypes_Version_3.h" bodystart="470" bodyend="470"/>
+      </memberdef>
+      <memberdef kind="function" id="structcsmp_1_1_c_r_c3___rock_type16_1aa3f8b6a8f8fdba66d97acc0ab6dc60fb" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::CRC3_RockType16::Krw</definition>
+        <argsstring>(double Sw) const</argsstring>
+        <name>Krw</name>
+        <qualifiedname>csmp::CRC3_RockType16::Krw</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>Sw</declname>
+        </param>
+        <briefdescription>
+<para>Linear water relative permeability for drainage. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/OtwayCRC3_RockTypes_Version_3.h" line="472" column="11" bodyfile="source/includes/thmc/two_phase_flow/OtwayCRC3_RockTypes_Version_3.h" bodystart="472" bodyend="475"/>
+        <references refid="namespacecsmp_1a7347d94ec898ee4f764f3755a297e749" compoundref="_otway_c_r_c3___rock_types___version__2_8h" startline="153" endline="155">csmp::seffL</references>
+      </memberdef>
+      <memberdef kind="function" id="structcsmp_1_1_c_r_c3___rock_type16_1ae5a89d014c785c592cf3424ebef06e14" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::CRC3_RockType16::Krn</definition>
+        <argsstring>(double Sw) const</argsstring>
+        <name>Krn</name>
+        <qualifiedname>csmp::CRC3_RockType16::Krn</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>Sw</declname>
+        </param>
+        <briefdescription>
+<para>Linear CO2 relative permeability for drainage. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/OtwayCRC3_RockTypes_Version_3.h" line="477" column="11" bodyfile="source/includes/thmc/two_phase_flow/OtwayCRC3_RockTypes_Version_3.h" bodystart="477" bodyend="481"/>
+        <references refid="namespacecsmp_1aceb7605581b3653dc9d44e5af1386695" compoundref="_otway_c_r_c3___rock_types___version__2_8h" startline="158" endline="160">csmp::seffL</references>
+      </memberdef>
+      <memberdef kind="function" id="structcsmp_1_1_c_r_c3___rock_type16_1ad8c944478e6ff5b61b228bb5db47467c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::CRC3_RockType16::IsComposite</definition>
+        <argsstring>() const</argsstring>
+        <name>IsComposite</name>
+        <qualifiedname>csmp::CRC3_RockType16::IsComposite</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/OtwayCRC3_RockTypes.h" line="441" column="9" bodyfile="source/includes/thmc/two_phase_flow/OtwayCRC3_RockTypes.h" bodystart="441" bodyend="441"/>
+      </memberdef>
+      <memberdef kind="function" id="structcsmp_1_1_c_r_c3___rock_type16_1aa3f8b6a8f8fdba66d97acc0ab6dc60fb" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::CRC3_RockType16::Krw</definition>
+        <argsstring>(double Sw) const</argsstring>
+        <name>Krw</name>
+        <qualifiedname>csmp::CRC3_RockType16::Krw</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>Sw</declname>
+        </param>
+        <briefdescription>
+<para>Linear water relative permeability for drainage. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/OtwayCRC3_RockTypes.h" line="443" column="11" bodyfile="source/includes/thmc/two_phase_flow/OtwayCRC3_RockTypes.h" bodystart="443" bodyend="446"/>
+        <references refid="namespacecsmp_1a7347d94ec898ee4f764f3755a297e749" compoundref="_otway_c_r_c3___rock_types___version__2_8h" startline="153" endline="155">csmp::seffL</references>
+      </memberdef>
+      <memberdef kind="function" id="structcsmp_1_1_c_r_c3___rock_type16_1ae5a89d014c785c592cf3424ebef06e14" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::CRC3_RockType16::Krn</definition>
+        <argsstring>(double Sw) const</argsstring>
+        <name>Krn</name>
+        <qualifiedname>csmp::CRC3_RockType16::Krn</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>Sw</declname>
+        </param>
+        <briefdescription>
+<para>Linear CO2 relative permeability for drainage. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/OtwayCRC3_RockTypes.h" line="448" column="11" bodyfile="source/includes/thmc/two_phase_flow/OtwayCRC3_RockTypes.h" bodystart="448" bodyend="451"/>
+        <references refid="namespacecsmp_1aceb7605581b3653dc9d44e5af1386695" compoundref="_otway_c_r_c3___rock_types___version__2_8h" startline="158" endline="160">csmp::seffL</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Essentially impermeable rock with an entry pressure that is so high that it will not be exceeded by a plume with 100-m column height. </para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::CRC3_RockType16</label>
+        <link refid="structcsmp_1_1_c_r_c3___rock_type16"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/thmc/two_phase_flow/OtwayCRC3_RockTypes_Version_2.h" line="469" column="1" bodyfile="source/includes/thmc/two_phase_flow/OtwayCRC3_RockTypes_Version_2.h" bodystart="469" bodyend="493"/>
+    <listofallmembers>
+      <member refid="structcsmp_1_1_c_r_c3___rock_type16_1ad8c944478e6ff5b61b228bb5db47467c" prot="public" virt="non-virtual"><scope>csmp::CRC3_RockType16</scope><name>IsComposite</name></member>
+      <member refid="structcsmp_1_1_c_r_c3___rock_type16_1ad8c944478e6ff5b61b228bb5db47467c" prot="public" virt="non-virtual"><scope>csmp::CRC3_RockType16</scope><name>IsComposite</name></member>
+      <member refid="structcsmp_1_1_c_r_c3___rock_type16_1ad8c944478e6ff5b61b228bb5db47467c" prot="public" virt="non-virtual"><scope>csmp::CRC3_RockType16</scope><name>IsComposite</name></member>
+      <member refid="structcsmp_1_1_c_r_c3___rock_type16_1aa18079d1ffaf63d5d3032b04c4dcc0a6" prot="public" virt="non-virtual"><scope>csmp::CRC3_RockType16</scope><name>k_</name></member>
+      <member refid="structcsmp_1_1_c_r_c3___rock_type16_1ae5a89d014c785c592cf3424ebef06e14" prot="public" virt="non-virtual"><scope>csmp::CRC3_RockType16</scope><name>Krn</name></member>
+      <member refid="structcsmp_1_1_c_r_c3___rock_type16_1ae5a89d014c785c592cf3424ebef06e14" prot="public" virt="non-virtual"><scope>csmp::CRC3_RockType16</scope><name>Krn</name></member>
+      <member refid="structcsmp_1_1_c_r_c3___rock_type16_1ae5a89d014c785c592cf3424ebef06e14" prot="public" virt="non-virtual"><scope>csmp::CRC3_RockType16</scope><name>Krn</name></member>
+      <member refid="structcsmp_1_1_c_r_c3___rock_type16_1aa3f8b6a8f8fdba66d97acc0ab6dc60fb" prot="public" virt="non-virtual"><scope>csmp::CRC3_RockType16</scope><name>Krw</name></member>
+      <member refid="structcsmp_1_1_c_r_c3___rock_type16_1aa3f8b6a8f8fdba66d97acc0ab6dc60fb" prot="public" virt="non-virtual"><scope>csmp::CRC3_RockType16</scope><name>Krw</name></member>
+      <member refid="structcsmp_1_1_c_r_c3___rock_type16_1aa3f8b6a8f8fdba66d97acc0ab6dc60fb" prot="public" virt="non-virtual"><scope>csmp::CRC3_RockType16</scope><name>Krw</name></member>
+      <member refid="structcsmp_1_1_c_r_c3___rock_type16_1a907cbf430b5f4d2aa8984c503d64f3ef" prot="public" virt="non-virtual"><scope>csmp::CRC3_RockType16</scope><name>m_</name></member>
+      <member refid="structcsmp_1_1_c_r_c3___rock_type16_1a20ab54d77761bb504cdc008003a0eefc" prot="public" virt="non-virtual"><scope>csmp::CRC3_RockType16</scope><name>name</name></member>
+      <member refid="structcsmp_1_1_c_r_c3___rock_type16_1a9182e9f8ed8de8b27d735e70b53f7655" prot="public" virt="non-virtual"><scope>csmp::CRC3_RockType16</scope><name>pd_</name></member>
+      <member refid="structcsmp_1_1_c_r_c3___rock_type16_1a6e9510b85b9e31917e4ed6c1e6fef79c" prot="public" virt="non-virtual"><scope>csmp::CRC3_RockType16</scope><name>phi_</name></member>
+      <member refid="structcsmp_1_1_c_r_c3___rock_type16_1a6703dcf0e6613855e2599f5de07d545f" prot="public" virt="non-virtual"><scope>csmp::CRC3_RockType16</scope><name>rocktype_</name></member>
+      <member refid="structcsmp_1_1_c_r_c3___rock_type16_1acecc3ab9569c67a5ca69d4a38c95782f" prot="public" virt="non-virtual"><scope>csmp::CRC3_RockType16</scope><name>Sgr_</name></member>
+      <member refid="structcsmp_1_1_c_r_c3___rock_type16_1ac7c37e2eb2379282e3f04ed6f53e4790" prot="public" virt="non-virtual"><scope>csmp::CRC3_RockType16</scope><name>subtypes_</name></member>
+      <member refid="structcsmp_1_1_c_r_c3___rock_type16_1a298c3fef16772bb7fad09754b816b875" prot="public" virt="non-virtual"><scope>csmp::CRC3_RockType16</scope><name>Swi_</name></member>
+      <member refid="structcsmp_1_1_c_r_c3___rock_type16_1a79ed6482f40c67ba5080c60b0e5edbc0" prot="public" virt="non-virtual"><scope>csmp::CRC3_RockType16</scope><name>Swi_pc_</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,281 @@
+\doxysection{Finite\+Element\+\_\+\+Test\+Data.\+h}
+\hypertarget{_finite_element___test_data_8h_source}{}\label{_finite_element___test_data_8h_source}\index{tests/unit/FiniteElement\_TestData.h@{tests/unit/FiniteElement\_TestData.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{FINITE\_ELEMENT\_TESTDATA\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{FINITE\_ELEMENT\_TESTDATA\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_finite_element_8h}{"{}FiniteElement.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_node_8h}{"{}Node.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{comment}{///\ Container\ class\ for\ FEM\ Test/Validation\ Data}}
+\DoxyCodeLine{00010\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{FiniteElement\_TestData}}\ \{}
+\DoxyCodeLine{00011\ \ \ \ \textcolor{keyword}{friend}\ \mbox{\hyperlink{classcsmp_1_1_node_ae378a11cba45cb58e2f94f35f6e137de}{std}}::\mbox{\hyperlink{classcsmp_1_1_node_ae378a11cba45cb58e2f94f35f6e137de}{istream}}\&\ \mbox{\hyperlink{classcsmp_1_1_node_ae378a11cba45cb58e2f94f35f6e137de}{operator}}\ >>\ (\ std::istream\&,\ \mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{FiniteElement\_TestData}}\&\ );}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00014\ \ \ FiniteElement\_TestData(\ \textcolor{keywordtype}{bool}\ verbose\ )\ :\ verbose\_(verbose)\ \{\}}
+\DoxyCodeLine{00015\ \ \ \string~FiniteElement\_TestData()}
+\DoxyCodeLine{00016\ \ \ \ \ \{}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\ std::vector<Node<3U>*>::iterator\ it\ =\ nodes\_.begin();\ it\ !=\ nodes\_.end();\ ++it\ )}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}\ (*it);}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ nodes\_.clear();}
+\DoxyCodeLine{00020\ \ \ \ \ \}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ std::string\ FemName()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ femName\_;\ \}}
+\DoxyCodeLine{00023\ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ FemName(\ std::string\ femName\ )\ \{\ femName\_\ =\ femName;\ \}}
+\DoxyCodeLine{00024\ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \ Dim()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ dim\_;\ \}}
+\DoxyCodeLine{00025\ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ Dim(\ \textcolor{keywordtype}{int}\ dim\ )\ \{}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dim\_\ =\ dim;\ shapeFunctionXYZ\_.assign(\ dim,\ 999.\ );}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ jacobianAtRST\_.assign(\ dim,\ std::vector<\textcolor{keywordtype}{double}>(\ Dim(),\ 999.\ )\ );}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ RST\_.assign(\ dim,\ 999.\ );}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00030\ \ \ size\_t\ NodeCount()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ nodes\_.size();\ \}}
+\DoxyCodeLine{00031\ \ \ \textcolor{keywordtype}{void}\ \ \ NodeCount(\ \textcolor{keywordtype}{int}\ nodeCount\ )\ \{}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DeleteNodes();}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ nodes\_.assign(\ nodeCount,\ \textcolor{keywordtype}{nullptr}\ );}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ counterNodes\_.assign(\ nodeCount,\ 999.\ );}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ shapeFunctionN\_.assign(\ nodeCount,\ 999.\ );}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ shapeFunctionNatBarycenter\_.assign(\ nodeCount,\ 999.\ );}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ shapeFunctionDN\_.assign(\ nodeCount,\ std::vector<\textcolor{keywordtype}{double}>(\ Dim(),\ 999.\ )\ );}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ shapeFunctionDNatXZY\_.assign(\ nodeCount,\ std::vector<\textcolor{keywordtype}{double}>(\ Dim(),\ 999.\ )\ );}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ shapeFunctionDNatNode\_.assign(\ nodeCount,\ std::vector<std::vector<\textcolor{keywordtype}{double}>\ >(\ nodeCount,\ std::vector<\textcolor{keywordtype}{double}>(\ Dim(),\ 999.\ )\ )\ );}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ shapeFunctionDNatBaryCenter\_.assign(\ nodeCount,\ std::vector<\textcolor{keywordtype}{double}>(\ Dim(),\ 999.\ )\ );}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00042\ \ \ \textcolor{keywordtype}{int}\ SegmentCount()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ segmentCount\_;\ \}}
+\DoxyCodeLine{00043\ \ \ \textcolor{keywordtype}{void}\ \ \ SegmentCount(\ \textcolor{keywordtype}{int}\ segmentCount\ )\ \{\ segmentCount\_\ =\ segmentCount;\ \}}
+\DoxyCodeLine{00044\ \ \ size\_t\ FaceCount()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ nodesPerFace\_.size();\ \}}
+\DoxyCodeLine{00045\ \ \ \textcolor{keywordtype}{void}\ \ \ FaceCount(\ \textcolor{keywordtype}{int}\ faceCount\ )\ \{}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ nodesPerFace\_.assign(\ faceCount,\ 0\ );}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ nodesOfFace\_.assign(\ faceCount,\ std::vector<\textcolor{keywordtype}{int}>()\ );}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ faceElementTypes\_.assign(\ faceCount,\ UNKNOWN\ );}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00050\ \ \ \textcolor{keywordtype}{int}\ NeighborCount()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ neighborCount\_;\ \}}
+\DoxyCodeLine{00051\ \ \ \textcolor{keywordtype}{void}\ \ \ NeighborCount(\ \textcolor{keywordtype}{int}\ neighborCount\ )\ \{\ neighborCount\_\ =\ neighborCount;\ \}}
+\DoxyCodeLine{00052\ \ \ \textcolor{keywordtype}{int}\ NodesPerFace(\ \textcolor{keywordtype}{int}\ i\ )\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ nodesPerFace\_.at(\ i\ );\ \}}
+\DoxyCodeLine{00053\ \ \ \textcolor{keywordtype}{void}\ \ \ NodesPerFace(\ \textcolor{keywordtype}{int}\ i,\ \textcolor{keywordtype}{int}\ nodesPerFace\ )\ \{\ nodesPerFace\_.at(\ i\ )\ =\ nodesPerFace;\ \}}
+\DoxyCodeLine{00054\ \ \ \textcolor{keywordtype}{int}\ NodeOfFace(\ \textcolor{keywordtype}{int}\ face,\ \textcolor{keywordtype}{int}\ faceNode\ )\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ nodesOfFace\_.at(\ face\ ).at(\ faceNode\ );\ \}}
+\DoxyCodeLine{00055\ \ \ \textcolor{keywordtype}{void}\ \ \ NodeOfFace(\ \textcolor{keywordtype}{int}\ face,\ \textcolor{keywordtype}{int}\ faceNode\ ,\ \textcolor{keywordtype}{int}\ femNode\ )\ \{\ nodesOfFace\_.at(\ face\ ).push\_back(\ femNode\ );\ \}}
+\DoxyCodeLine{00056\ \ \ \textcolor{keywordtype}{int}\ IntegrationPointNeighborCount()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ constraintPointNeighborCount\_;\ \}}
+\DoxyCodeLine{00057\ \ \ \textcolor{keywordtype}{void}\ \ \ IntegrationPointNeighborCount(\ \textcolor{keywordtype}{int}\ constraintPointNeighborCount\ )\ \{\ constraintPointNeighborCount\_\ =\ constraintPointNeighborCount;\ \}}
+\DoxyCodeLine{00058\ \ \ \textcolor{keywordtype}{int}\ IntegrationPointCount()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ integrationPointCount\_;\ \}}
+\DoxyCodeLine{00059\ \ \ \textcolor{keywordtype}{void}\ \ \ IntegrationPointCount(\ \textcolor{keywordtype}{int}\ count\ )\ \{}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ integrationPointCount\_\ =\ count;}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ipGlobal\_.assign(\ count,\ std::vector<\textcolor{keywordtype}{double}>(\ Dim()\ )\ );}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ integrationPointWeights\_.assign(\ count,\ 999.\ );}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ shapeFunctionNatIP\_.assign(\ count,\ std::vector<\textcolor{keywordtype}{double}>(\ NodeCount(),\ 999.\ )\ );}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ shapeFunctionDNatIP\_.assign(\ count,\ std::vector<std::vector<\textcolor{keywordtype}{double}>\ >(\ NodeCount(),\ std::vector<\textcolor{keywordtype}{double}>(\ Dim(),\ 999.\ )\ )\ );}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ jacobianAtIP\_.assign(\ count,\ std::vector<std::vector<\textcolor{keywordtype}{double}>\ >(\ Dim(),\ std::vector<\textcolor{keywordtype}{double}>(\ Dim(),\ 999.\ )\ )\ );}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00067\ \ \ \textcolor{keywordtype}{int}\ InterpolationNumber()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ interpolationNumber\_;\ \}}
+\DoxyCodeLine{00068\ \ \ \textcolor{keywordtype}{void}\ \ \ InterpolationNumber(\ \textcolor{keywordtype}{int}\ interpolationNumber\ )\ \{\ interpolationNumber\_\ =\ interpolationNumber;\ \}}
+\DoxyCodeLine{00069\ \ \ \textcolor{keywordtype}{bool}\ \ \ Isoparametric()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ isoparametric\_;\ \}}
+\DoxyCodeLine{00070\ \ \ \textcolor{keywordtype}{void}\ \ \ Isoparametric(\ \textcolor{keywordtype}{bool}\ isoparametric\ )\ \{\ isoparametric\_\ =\ isoparametric;\ \}}
+\DoxyCodeLine{00071\ \ \ \textcolor{keywordtype}{bool}\ \ \ UsesLocalCoordinates()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ localCoordinates\_;\ \}}
+\DoxyCodeLine{00072\ \ \ \textcolor{keywordtype}{void}\ \ \ UsesLocalCoordinates(\ \textcolor{keywordtype}{bool}\ localCoordinates\ )\ \{\ localCoordinates\_\ =\ localCoordinates;\ \}}
+\DoxyCodeLine{00073\ \ \ \textcolor{keywordtype}{int}\ OrderOfShapeFunctions()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ orderOfShapeFunctions\_;\ \}}
+\DoxyCodeLine{00074\ \ \ \textcolor{keywordtype}{void}\ \ \ OrderOfShapeFunctions(\ \textcolor{keywordtype}{int}\ orderOfShapeFunctions\ )\ \{\ orderOfShapeFunctions\_\ =\ orderOfShapeFunctions;\ \}}
+\DoxyCodeLine{00075\ \ \ \textcolor{keywordtype}{bool}\ \ \ LineElement()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ lineElement\_;\ \}}
+\DoxyCodeLine{00076\ \ \ \textcolor{keywordtype}{void}\ \ \ LineElement(\ \textcolor{keywordtype}{bool}\ lineElement\ )\ \{\ lineElement\_\ =\ lineElement;\ \}}
+\DoxyCodeLine{00077\ \ \ \textcolor{keywordtype}{bool}\ \ \ SurfaceElement()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ surfaceElement\_;\ \}}
+\DoxyCodeLine{00078\ \ \ \textcolor{keywordtype}{void}\ \ \ SurfaceElement(\ \textcolor{keywordtype}{bool}\ surfaceElement\ )\ \{\ surfaceElement\_\ =\ surfaceElement;\ \}}
+\DoxyCodeLine{00079\ \ \ \textcolor{keywordtype}{bool}\ \ \ VolumeElement()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ volumeElement\_;\ \}}
+\DoxyCodeLine{00080\ \ \ \textcolor{keywordtype}{void}\ \ \ VolumeElement(\ \textcolor{keywordtype}{bool}\ volumeElement\ )\ \{\ volumeElement\_\ =\ volumeElement;\ \}}
+\DoxyCodeLine{00081\ \ \ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\_FEM\_TYPE}}\ \ \ ElementType()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ elementType\_;\ \}}
+\DoxyCodeLine{00082\ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ ElementType(\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\_FEM\_TYPE}}\ elementType\ )\ \{\ elementType\_\ =\ elementType;\ \}}
+\DoxyCodeLine{00083\ \ \ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\_FEM\_TYPE}}\ \ \ FaceElementType(\ \textcolor{keywordtype}{int}\ face\ )\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ faceElementTypes\_.at(\ face\ );\ \}}
+\DoxyCodeLine{00084\ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ FaceElementType(\ \textcolor{keywordtype}{int}\ face,\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\_FEM\_TYPE}}\ faceElementType\ )\ \{\ faceElementTypes\_.at(\ face\ )\ =\ faceElementType;\ \}}
+\DoxyCodeLine{00085\ \ \ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<3U>*\ \ \ \ \ \ \ NodePtr(\ \textcolor{keywordtype}{int}\ i\ )\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ nodes\_.at(\ i\ );\ \}}
+\DoxyCodeLine{00086\ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ NodePtr(\ \textcolor{keywordtype}{int}\ i,\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<3U>*\ node\ )\ \{\ nodes\_.at(\ i\ )\ =\ node;\ \}}
+\DoxyCodeLine{00087\ \ \ \textcolor{keywordtype}{double}\ Volume()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ volume\_;\ \}}
+\DoxyCodeLine{00088\ \ \ \textcolor{keywordtype}{void}\ \ \ Volume(\ \textcolor{keywordtype}{double}\ volume\ )\ \{\ volume\_\ =\ volume;\ \}}
+\DoxyCodeLine{00089\ \ \ \textcolor{keywordtype}{double}\ Tolerance()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ tolerance\_;\ \}}
+\DoxyCodeLine{00090\ \ \ \textcolor{keywordtype}{void}\ \ \ Tolerance(\ \textcolor{keywordtype}{double}\ tolerance\ )\ \{\ tolerance\_\ =\ tolerance;\ \}}
+\DoxyCodeLine{00091\ \ \ \textcolor{keywordtype}{double}\ AspectRatio()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ aspectRatio\_;\ \}}
+\DoxyCodeLine{00092\ \ \ \textcolor{keywordtype}{void}\ \ \ AspectRatio(\ \textcolor{keywordtype}{double}\ aspectRatio\ )\ \{\ aspectRatio\_\ =\ aspectRatio;\ \}}
+\DoxyCodeLine{00093\ \ \ \textcolor{keywordtype}{double}\ InnerRadius()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ innerRadius\_;\ \}}
+\DoxyCodeLine{00094\ \ \ \textcolor{keywordtype}{void}\ \ \ InnerRadius(\ \textcolor{keywordtype}{double}\ innerRadius\ )\ \{\ innerRadius\_\ =\ innerRadius;\ \}}
+\DoxyCodeLine{00095\ \ \ size\_t\ EdgeCount()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ edgeLengths\_.size();\ \}}
+\DoxyCodeLine{00096\ \ \ \textcolor{keywordtype}{void}\ \ \ EdgeCount(\ \textcolor{keywordtype}{int}\ edgeCount\ )\ \{\ edgeLengths\_.clear();\ edgeLengths\_.assign(\ edgeCount,\ 0\ );\ \}}
+\DoxyCodeLine{00097\ \ \ \textcolor{keywordtype}{double}\ EdgeLength(\ \textcolor{keywordtype}{int}\ i\ )\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ edgeLengths\_.at(\ i\ );\ \}}
+\DoxyCodeLine{00098\ \ \ \textcolor{keywordtype}{void}\ \ \ EdgeLength(\ \textcolor{keywordtype}{int}\ i,\ \textcolor{keywordtype}{double}\ length\ )\ \{\ edgeLengths\_.at(\ i\ )\ =\ length;\ \}}
+\DoxyCodeLine{00099\ \ \ size\_t\ NodesPerSegment()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ nodesOfSegment\_.at(\ 0\ ).size();\ \}}
+\DoxyCodeLine{00100\ \ \ \textcolor{keywordtype}{void}\ \ \ NodesPerSegment(\ \textcolor{keywordtype}{int}\ nodesPerSegment\ )\ \{\ nodesOfSegment\_.assign(\ SegmentCount(),\ std::vector<\textcolor{keywordtype}{int}>(\ nodesPerSegment,\ 999\ )\ );\ \}}
+\DoxyCodeLine{00101\ \ \ \textcolor{keywordtype}{int}\ NodeOfSegment(\ \textcolor{keywordtype}{int}\ segment,\ \textcolor{keywordtype}{int}\ segmentNode\ )\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ nodesOfSegment\_.at(\ segment\ ).at(\ segmentNode\ );\ \}}
+\DoxyCodeLine{00102\ \ \ \textcolor{keywordtype}{void}\ \ \ NodeOfSegment(\ \textcolor{keywordtype}{int}\ segment,\ \textcolor{keywordtype}{int}\ segmentNode\ ,\ \textcolor{keywordtype}{int}\ femNode\ )\ \{\ nodesOfSegment\_.at(\ segment\ ).at(\ segmentNode\ )\ =\ femNode;\ \}}
+\DoxyCodeLine{00103\ \ \ size\_t\ CornerNodeCount()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ cornerNodes\_.size();\ \}}
+\DoxyCodeLine{00104\ \ \ \textcolor{keywordtype}{void}\ \ \ CornerNodeCount(\ \textcolor{keywordtype}{int}\ count\ )\ \{\ cornerNodes\_.assign(\ count,\ 999\ );\ \}}
+\DoxyCodeLine{00105\ \ \ \textcolor{keywordtype}{int}\ NodeAtCorner(\ \textcolor{keywordtype}{int}\ corner\ )\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ cornerNodes\_.at(\ corner\ );\ \}}
+\DoxyCodeLine{00106\ \ \ \textcolor{keywordtype}{void}\ \ \ NodeAtCorner(\ \textcolor{keywordtype}{int}\ corner,\ \textcolor{keywordtype}{int}\ femNode\ )\ \{\ cornerNodes\_.at(\ corner\ )\ =\ femNode;\ \}}
+\DoxyCodeLine{00107\ \ \ size\_t\ MidsideNodeCount()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ midsideNodes\_.size();\ \}}
+\DoxyCodeLine{00108\ \ \ \textcolor{keywordtype}{void}\ \ \ MidsideNodeCount(\ \textcolor{keywordtype}{int}\ count\ )\ \{\ midsideNodes\_.assign(\ count,\ 999\ );\ \}}
+\DoxyCodeLine{00109\ \ \ \textcolor{keywordtype}{int}\ NodeAtMidside(\ \textcolor{keywordtype}{int}\ midside\ )\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ midsideNodes\_.at(\ midside\ );\ \}}
+\DoxyCodeLine{00110\ \ \ \textcolor{keywordtype}{void}\ \ \ NodeAtMidside(\ \textcolor{keywordtype}{int}\ midside,\ \textcolor{keywordtype}{int}\ femNode\ )\ \{\ midsideNodes\_.at(\ midside\ )\ =\ femNode;\ \}}
+\DoxyCodeLine{00111\ \ \ size\_t\ InteriorNodeCount()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ interiorNodes\_.size();\ \}}
+\DoxyCodeLine{00112\ \ \ \textcolor{keywordtype}{void}\ \ \ InteriorNodeCount(\ \textcolor{keywordtype}{int}\ count\ )\ \{\ interiorNodes\_.assign(\ count,\ 999\ );\ \}}
+\DoxyCodeLine{00113\ \ \ \textcolor{keywordtype}{int}\ NodeAtInterior(\ \textcolor{keywordtype}{int}\ interior\ )\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ interiorNodes\_.at(\ interior\ );\ \}}
+\DoxyCodeLine{00114\ \ \ \textcolor{keywordtype}{void}\ \ \ NodeAtInterior(\ \textcolor{keywordtype}{int}\ interior,\ \textcolor{keywordtype}{int}\ femNode\ )\ \{\ interiorNodes\_.at(\ interior\ )\ =\ femNode;\ \}}
+\DoxyCodeLine{00115\ \ \ \textcolor{keywordtype}{void}\ \ \ UnitNormal(\ std::vector<\textcolor{keywordtype}{double}>\ unitNormal\ )\ \{\ unitNormal\_\ =\ unitNormal;\ \}}
+\DoxyCodeLine{00116\ \ \ std::vector<\textcolor{keywordtype}{double}>\ UnitNormal()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ unitNormal\_;\ \}}
+\DoxyCodeLine{00117\ \ \ \textcolor{keywordtype}{void}\ \ \ ExtrapolationVariableCount(\ \textcolor{keywordtype}{int}\ count\ )\ \{\ ivars\_.assign(\ IntegrationPointCount(),\ std::vector<\textcolor{keywordtype}{double}>(\ count\ )\ \ );\ nvars\_.assign(\ NodeCount(),\ std::vector<\textcolor{keywordtype}{double}>(\ count\ )\ );\ \}}
+\DoxyCodeLine{00118\ \ \ size\_t\ ExtrapolationVariableCount()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ ivars\_.at(\ 0\ ).size();\ \}}
+\DoxyCodeLine{00119\ \ \ \textcolor{keywordtype}{double}\ IntegrationPointVariable(\ \textcolor{keywordtype}{int}\ ip,\ \textcolor{keywordtype}{int}\ var\ )\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ ivars\_.at(\ ip\ ).at(\ var\ );\ \}}
+\DoxyCodeLine{00120\ \ \ \textcolor{keywordtype}{void}\ \ \ IntegrationPointVariable(\ \textcolor{keywordtype}{int}\ ip,\ \textcolor{keywordtype}{int}\ var,\ \textcolor{keywordtype}{double}\ value\ )\ \ \{\ \ ivars\_.at(\ ip\ ).at(\ var\ )\ =\ value;\ \}}
+\DoxyCodeLine{00121\ \ \ \textcolor{keywordtype}{double}\ NodePointVariable(\ \textcolor{keywordtype}{int}\ np,\ \textcolor{keywordtype}{int}\ var\ )\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ nvars\_.at(\ np\ ).at(\ var\ );\ \}}
+\DoxyCodeLine{00122\ \ \ \textcolor{keywordtype}{void}\ \ \ NodePointVariable(\ \textcolor{keywordtype}{int}\ np,\ \textcolor{keywordtype}{int}\ var,\ \textcolor{keywordtype}{double}\ value\ )\ \ \{\ \ nvars\_.at(\ np\ ).at(\ var\ )\ =\ value;\ \}}
+\DoxyCodeLine{00123\ \ \ \textcolor{keywordtype}{double}\ IpGlobal(\ \textcolor{keywordtype}{int}\ ip,\ \textcolor{keywordtype}{int}\ xyz\ )\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ ipGlobal\_.at(\ ip\ ).at(\ xyz\ );\ \}}
+\DoxyCodeLine{00124\ \ \ \textcolor{keywordtype}{void}\ \ \ IpGlobal(\ \textcolor{keywordtype}{int}\ ip,\ \textcolor{keywordtype}{int}\ xyz,\ \textcolor{keywordtype}{double}\ value\ )\ \ \{\ \ ipGlobal\_.at(\ ip\ ).at(\ xyz\ )\ =\ value;\ \}}
+\DoxyCodeLine{00125\ \ \ \textcolor{keywordtype}{double}\ IntegrationPointWeight(\ \textcolor{keywordtype}{int}\ ip\ )\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ integrationPointWeights\_.at(\ ip\ );\ \}}
+\DoxyCodeLine{00126\ \ \ \textcolor{keywordtype}{void}\ \ \ IntegrationPointWeight(\ \textcolor{keywordtype}{int}\ ip,\ \textcolor{keywordtype}{double}\ value\ )\ \{\ integrationPointWeights\_.at(\ ip\ )\ =\ value;\ \}}
+\DoxyCodeLine{00127\ \ \ \textcolor{keywordtype}{int}\ CounterClockWiseNode(\ \textcolor{keywordtype}{int}\ n\ )\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ counterNodes\_.at(\ n\ );\ \}}
+\DoxyCodeLine{00128\ \ \ \textcolor{keywordtype}{void}\ \ \ CounterClockWiseNode(\ \textcolor{keywordtype}{int}\ n,\ \textcolor{keywordtype}{int}\ node\ )\ \{\ counterNodes\_.at(\ n\ )\ =\ node;\ \}}
+\DoxyCodeLine{00129\ \ \ \textcolor{keywordtype}{double}\ ShapeFunctionXYZ(\ \textcolor{keywordtype}{int}\ xyz\ )\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ shapeFunctionXYZ\_.at(\ xyz\ );\ \}}
+\DoxyCodeLine{00130\ \ \ \textcolor{keywordtype}{void}\ \ \ ShapeFunctionXYZ(\ \textcolor{keywordtype}{int}\ xyz,\ \textcolor{keywordtype}{double}\ value\ )\ \{\ shapeFunctionXYZ\_.at(\ xyz\ )\ =\ value;\ \}}
+\DoxyCodeLine{00131\ \ \ \textcolor{keywordtype}{double}\ ShapeFunctionN(\ \textcolor{keywordtype}{int}\ n\ )\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ shapeFunctionN\_.at(\ n\ );\ \}}
+\DoxyCodeLine{00132\ \ \ \textcolor{keywordtype}{void}\ \ \ ShapeFunctionN(\ \textcolor{keywordtype}{int}\ n,\ \textcolor{keywordtype}{double}\ value\ )\ \{\ shapeFunctionN\_.at(\ n\ )\ =\ value;\ \}}
+\DoxyCodeLine{00133\ \ \ \textcolor{keywordtype}{double}\ ShapeFunctionNatIP(\ \textcolor{keywordtype}{int}\ ip,\ \textcolor{keywordtype}{int}\ n\ )\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ shapeFunctionNatIP\_.at(\ ip\ ).at(\ n\ );\ \}}
+\DoxyCodeLine{00134\ \ \ \textcolor{keywordtype}{void}\ \ \ ShapeFunctionNatIP(\ \textcolor{keywordtype}{int}\ ip,\ \ \textcolor{keywordtype}{int}\ n,\ \textcolor{keywordtype}{double}\ value\ )\ \{\ shapeFunctionNatIP\_.at(\ ip\ ).at(\ n\ )\ =\ value;\ \}}
+\DoxyCodeLine{00135\ \ \ \textcolor{keywordtype}{double}\ ShapeFunctionNatBarycenter(\ \textcolor{keywordtype}{int}\ n\ )\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ shapeFunctionNatBarycenter\_.at(\ n\ );\ \}}
+\DoxyCodeLine{00136\ \ \ \textcolor{keywordtype}{void}\ \ \ ShapeFunctionNatBarycenter(\ \textcolor{keywordtype}{int}\ n,\ \textcolor{keywordtype}{double}\ value\ )\ \{\ shapeFunctionNatBarycenter\_.at(\ n\ )\ =\ value;\ \}}
+\DoxyCodeLine{00137\ \ \ \textcolor{keywordtype}{double}\ ShapeFunctionDN(\ \textcolor{keywordtype}{int}\ n,\ \textcolor{keywordtype}{int}\ xyz\ )\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ shapeFunctionDN\_.at(\ n\ ).at(\ xyz\ );\ \}}
+\DoxyCodeLine{00138\ \ \ \textcolor{keywordtype}{void}\ \ \ ShapeFunctionDN(\ \textcolor{keywordtype}{int}\ n,\ \ \textcolor{keywordtype}{int}\ xyz,\ \textcolor{keywordtype}{double}\ value\ )\ \{\ shapeFunctionDN\_.at(\ n\ ).at(\ xyz\ )\ =\ value;\ \}}
+\DoxyCodeLine{00139\ \ \ \textcolor{keywordtype}{double}\ ShapeFunctionDNatXYZ(\ \textcolor{keywordtype}{int}\ n,\ \textcolor{keywordtype}{int}\ xyz\ )\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ shapeFunctionDNatXZY\_.at(\ n\ ).at(\ xyz\ );\ \}}
+\DoxyCodeLine{00140\ \ \ \textcolor{keywordtype}{void}\ \ \ ShapeFunctionDNatXYZ(\ \textcolor{keywordtype}{int}\ n,\ \textcolor{keywordtype}{int}\ xyz,\ \textcolor{keywordtype}{double}\ value\ )\ \{\ shapeFunctionDNatXZY\_.at(\ n\ ).at(\ xyz\ )\ =\ value;\ \}}
+\DoxyCodeLine{00141\ \ \ \textcolor{keywordtype}{void}\ \ \ ShapeFunctionDNatXYZ(\ \textcolor{keywordtype}{bool}\ val\ )\ \{\ shapeFunctionDNatXZYbool\_\ =\ val;\ \}}
+\DoxyCodeLine{00142\ \ \ \textcolor{keywordtype}{bool}\ \ \ ShapeFunctionDNatXYZ()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ shapeFunctionDNatXZYbool\_;\ \}}
+\DoxyCodeLine{00143\ \ \ \textcolor{keywordtype}{double}\ ShapeFunctionDNatIP(\ \textcolor{keywordtype}{int}\ ip,\ \textcolor{keywordtype}{int}\ n,\ \textcolor{keywordtype}{int}\ xyz\ )\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ shapeFunctionDNatIP\_.at(\ ip\ ).at(\ n\ ).at(\ xyz\ );\ \}}
+\DoxyCodeLine{00144\ \ \ \textcolor{keywordtype}{void}\ \ \ ShapeFunctionDNatIP(\ \textcolor{keywordtype}{int}\ ip,\ \textcolor{keywordtype}{int}\ n,\ \ \textcolor{keywordtype}{int}\ xyz,\ \textcolor{keywordtype}{double}\ value\ )\ \{\ shapeFunctionDNatIP\_.at(\ ip\ ).at(\ n\ ).at(\ xyz\ )\ =\ value;\ \}}
+\DoxyCodeLine{00145\ \ \ \textcolor{keywordtype}{void}\ \ \ ShapeFunctionDNatIP(\ \textcolor{keywordtype}{bool}\ val\ )\ \{\ shapeFunctionDNatIPbool\_\ =\ val;\ \}}
+\DoxyCodeLine{00146\ \ \ \textcolor{keywordtype}{bool}\ \ \ ShapeFunctionDNatIP()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ shapeFunctionDNatIPbool\_;\ \}}
+\DoxyCodeLine{00147\ \ \ \textcolor{keywordtype}{double}\ ShapeFunctionDNatNode(\ \textcolor{keywordtype}{int}\ node,\ \textcolor{keywordtype}{int}\ n,\ \textcolor{keywordtype}{int}\ xyz\ )\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ shapeFunctionDNatNode\_.at(\ node\ ).at(\ n\ ).at(\ xyz\ );\ \}}
+\DoxyCodeLine{00148\ \ \ \textcolor{keywordtype}{void}\ \ \ ShapeFunctionDNatNode(\ \textcolor{keywordtype}{int}\ node,\ \textcolor{keywordtype}{int}\ n,\ \ \textcolor{keywordtype}{int}\ xyz,\ \textcolor{keywordtype}{double}\ value\ )\ \{\ shapeFunctionDNatNode\_.at(\ node\ ).at(\ n\ ).at(\ xyz\ )\ =\ value;\ \}}
+\DoxyCodeLine{00149\ \ \ \textcolor{keywordtype}{void}\ \ \ ShapeFunctionDNatNode(\ \textcolor{keywordtype}{bool}\ val\ )\ \{\ shapeFunctionDNatNodeBool\_\ =\ val;\ \}}
+\DoxyCodeLine{00150\ \ \ \textcolor{keywordtype}{bool}\ \ \ ShapeFunctionDNatNode()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ shapeFunctionDNatNodeBool\_;\ \}}
+\DoxyCodeLine{00151\ \ \ \textcolor{keywordtype}{double}\ ShapeFunctionDNatBaryCenter(\ \textcolor{keywordtype}{int}\ n,\ \textcolor{keywordtype}{int}\ xyz\ )\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ shapeFunctionDNatBaryCenter\_.at(\ n\ ).at(\ xyz\ );\ \}}
+\DoxyCodeLine{00152\ \ \ \textcolor{keywordtype}{void}\ \ \ ShapeFunctionDNatBaryCenter(\ \textcolor{keywordtype}{int}\ n,\ \ \textcolor{keywordtype}{int}\ xyz,\ \textcolor{keywordtype}{double}\ value\ )\ \{\ shapeFunctionDNatBaryCenter\_.at(\ n\ ).at(\ xyz\ )\ =\ value;\ \}}
+\DoxyCodeLine{00153\ \ \ \textcolor{keywordtype}{void}\ \ \ ShapeFunctionDNatBaryCenter(\ \textcolor{keywordtype}{bool}\ val\ )\ \{\ shapeFunctionDNatBaryCenterBool\_\ =\ val;\ \}}
+\DoxyCodeLine{00154\ \ \ \textcolor{keywordtype}{bool}\ \ \ ShapeFunctionDNatBaryCenter()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ shapeFunctionDNatBaryCenterBool\_;\ \}}
+\DoxyCodeLine{00155\ \ \ \textcolor{keywordtype}{double}\ JACOBIANatIP(\ \textcolor{keywordtype}{int}\ ip,\ \textcolor{keywordtype}{int}\ row,\ \textcolor{keywordtype}{int}\ column\ )\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ jacobianAtIP\_.at(\ ip\ ).at(\ row\ ).at(\ column\ );\ \}}
+\DoxyCodeLine{00156\ \ \ \textcolor{keywordtype}{void}\ \ \ JACOBIANatIP(\ \textcolor{keywordtype}{int}\ ip,\ \textcolor{keywordtype}{int}\ row,\ \textcolor{keywordtype}{int}\ column,\ \textcolor{keywordtype}{double}\ value\ )\ \{\ jacobianAtIP\_.at(\ ip\ ).at(\ row\ ).at(\ column\ )\ =\ value;\ \}}
+\DoxyCodeLine{00157\ \ \ \textcolor{keywordtype}{void}\ \ \ JACOBIANatIP(\ \textcolor{keywordtype}{bool}\ val\ )\ \{\ JACOBIANatIPbool\_\ =\ val;\ \}}
+\DoxyCodeLine{00158\ \ \ \textcolor{keywordtype}{bool}\ \ \ JACOBIANatIP()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ JACOBIANatIPbool\_;\ \}}
+\DoxyCodeLine{00159\ \ \ \textcolor{keywordtype}{void}\ \ \ JACOBIANatRST(\ \textcolor{keywordtype}{bool}\ val\ )\ \{\ JACOBIANatRSTbool\_\ =\ val;\ \}}
+\DoxyCodeLine{00160\ \ \ \textcolor{keywordtype}{bool}\ \ \ JACOBIANatRST()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ JACOBIANatRSTbool\_;\ \}}
+\DoxyCodeLine{00161\ \ \ \textcolor{keywordtype}{void}\ \ \ JACOBIANatRST(\ \textcolor{keywordtype}{int}\ row,\ \textcolor{keywordtype}{int}\ column,\ \textcolor{keywordtype}{double}\ value\ )\ \{\ jacobianAtRST\_.at(\ row\ ).at(\ column\ )\ =\ value;\ \}}
+\DoxyCodeLine{00162\ \ \ \textcolor{keywordtype}{double}\ JACOBIANatRST(\ \textcolor{keywordtype}{int}\ row,\ \textcolor{keywordtype}{int}\ column\ )\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ jacobianAtRST\_.at(\ row\ ).at(\ column\ );\ \}}
+\DoxyCodeLine{00163\ \ \ \textcolor{keywordtype}{void}\ \ \ RST(\ \textcolor{keywordtype}{int}\ rst,\ \textcolor{keywordtype}{double}\ value\ )\ \{\ RST\_.at(\ rst\ )\ =\ value;\ \}}
+\DoxyCodeLine{00164\ \ \ \textcolor{keywordtype}{double}\ RST(\ \textcolor{keywordtype}{int}\ rst\ )\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ RST\_.at(\ rst\ );\ \}}
+\DoxyCodeLine{00165\ }
+\DoxyCodeLine{00166\ }
+\DoxyCodeLine{00167\ }
+\DoxyCodeLine{00168\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00169\ \ \ std::string\ femName\_;}
+\DoxyCodeLine{00170\ \ \ \textcolor{keywordtype}{int}\ dim\_;}
+\DoxyCodeLine{00171\ \ \ \textcolor{keywordtype}{int}\ segmentCount\_;}
+\DoxyCodeLine{00172\ \ \ \textcolor{keywordtype}{int}\ neighborCount\_;}
+\DoxyCodeLine{00173\ \ \ \textcolor{keywordtype}{int}\ constraintPointNeighborCount\_;}
+\DoxyCodeLine{00174\ \ \ \textcolor{keywordtype}{int}\ integrationPointCount\_;}
+\DoxyCodeLine{00175\ \ \ \textcolor{keywordtype}{int}\ interpolationNumber\_;}
+\DoxyCodeLine{00176\ \ \ \textcolor{keywordtype}{int}\ orderOfShapeFunctions\_;}
+\DoxyCodeLine{00177\ \ \ \textcolor{keywordtype}{bool}\ isoparametric\_;}
+\DoxyCodeLine{00178\ \ \ \textcolor{keywordtype}{bool}\ localCoordinates\_;}
+\DoxyCodeLine{00179\ \ \ \textcolor{keywordtype}{bool}\ lineElement\_;}
+\DoxyCodeLine{00180\ \ \ \textcolor{keywordtype}{bool}\ surfaceElement\_;}
+\DoxyCodeLine{00181\ \ \ \textcolor{keywordtype}{bool}\ volumeElement\_;}
+\DoxyCodeLine{00182\ \ \ \textcolor{keywordtype}{bool}\ shapeFunctionDNatXZYbool\_;}
+\DoxyCodeLine{00183\ \ \ \textcolor{keywordtype}{bool}\ shapeFunctionDNatIPbool\_;}
+\DoxyCodeLine{00184\ \ \ \textcolor{keywordtype}{bool}\ shapeFunctionDNatNodeBool\_;}
+\DoxyCodeLine{00185\ \ \ \textcolor{keywordtype}{bool}\ shapeFunctionDNatBaryCenterBool\_;}
+\DoxyCodeLine{00186\ \ \ \textcolor{keywordtype}{bool}\ JACOBIANatIPbool\_;}
+\DoxyCodeLine{00187\ \ \ \textcolor{keywordtype}{bool}\ JACOBIANatRSTbool\_;}
+\DoxyCodeLine{00188\ \ \ \textcolor{keywordtype}{double}\ tolerance\_;}
+\DoxyCodeLine{00189\ \ \ \textcolor{keywordtype}{double}\ volume\_;}
+\DoxyCodeLine{00190\ \ \ \textcolor{keywordtype}{double}\ aspectRatio\_;}
+\DoxyCodeLine{00191\ \ \ \textcolor{keywordtype}{double}\ innerRadius\_;}
+\DoxyCodeLine{00192\ \ \ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\_FEM\_TYPE}}\ elementType\_;}
+\DoxyCodeLine{00193\ \ \ std::vector<\textcolor{keywordtype}{int}>\ nodesPerFace\_;}
+\DoxyCodeLine{00194\ \ \ std::vector<\textcolor{keywordtype}{int}>\ cornerNodes\_;}
+\DoxyCodeLine{00195\ \ \ std::vector<\textcolor{keywordtype}{int}>\ midsideNodes\_;}
+\DoxyCodeLine{00196\ \ \ std::vector<\textcolor{keywordtype}{int}>\ interiorNodes\_;}
+\DoxyCodeLine{00197\ \ \ std::vector<\textcolor{keywordtype}{int}>\ counterNodes\_;}
+\DoxyCodeLine{00198\ \ \ std::vector<Node<3U>*>\ nodes\_;}
+\DoxyCodeLine{00199\ \ \ std::vector<\textcolor{keywordtype}{double}>\ edgeLengths\_;}
+\DoxyCodeLine{00200\ \ \ std::vector<\textcolor{keywordtype}{double}>\ unitNormal\_;}
+\DoxyCodeLine{00201\ \ \ std::vector<\textcolor{keywordtype}{double}>\ integrationPointWeights\_;}
+\DoxyCodeLine{00202\ \ \ std::vector<\textcolor{keywordtype}{double}>\ shapeFunctionXYZ\_;}
+\DoxyCodeLine{00203\ \ \ std::vector<\textcolor{keywordtype}{double}>\ shapeFunctionN\_;}
+\DoxyCodeLine{00204\ \ \ std::vector<\textcolor{keywordtype}{double}>\ shapeFunctionNatBarycenter\_;}
+\DoxyCodeLine{00205\ \ \ std::vector<\textcolor{keywordtype}{double}>\ RST\_;}
+\DoxyCodeLine{00206\ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{vector}}<\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{vector}}<\textcolor{keywordtype}{double}>\ >\ \mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{ivars\_}};}
+\DoxyCodeLine{00207\ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{vector}}<\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{vector}}<\textcolor{keywordtype}{double}>\ >\ \mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{nvars\_}};}
+\DoxyCodeLine{00208\ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{vector}}<\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{vector}}<\textcolor{keywordtype}{double}>\ >\ \mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{ipGlobal\_}};}
+\DoxyCodeLine{00209\ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{vector}}<\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{vector}}<\textcolor{keywordtype}{double}>\ >\ \mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{shapeFunctionNatIP\_}};}
+\DoxyCodeLine{00210\ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{vector}}<\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{vector}}<\textcolor{keywordtype}{double}>\ >\ \mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{shapeFunctionDN\_}};}
+\DoxyCodeLine{00211\ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{vector}}<\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{vector}}<\textcolor{keywordtype}{double}>\ >\ \mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{shapeFunctionDNatXZY\_}};}
+\DoxyCodeLine{00212\ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{vector}}<\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{vector}}<\textcolor{keywordtype}{double}>\ >\ \mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{shapeFunctionDNatBaryCenter\_}};}
+\DoxyCodeLine{00213\ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{vector}}<\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{vector}}<\textcolor{keywordtype}{double}>\ >\ \mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{jacobianAtRST\_}};}
+\DoxyCodeLine{00214\ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{vector}}<\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{vector}}<\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{vector}}<\textcolor{keywordtype}{double}>\ >\ >\ \mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{shapeFunctionDNatIP\_}};}
+\DoxyCodeLine{00215\ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{vector}}<\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{vector}}<\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{vector}}<\textcolor{keywordtype}{double}>\ >\ >\ \mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{shapeFunctionDNatNode\_}};}
+\DoxyCodeLine{00216\ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{vector}}<\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{vector}}<\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{vector}}<\textcolor{keywordtype}{double}>\ >\ >\ \mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{jacobianAtIP\_}};}
+\DoxyCodeLine{00217\ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{vector}}<\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{vector}}<\textcolor{keywordtype}{int}>\ >\ \mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{nodesOfSegment\_}};}
+\DoxyCodeLine{00218\ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{vector}}<\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{vector}}<\textcolor{keywordtype}{int}>\ >\ \mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{nodesOfFace\_}};}
+\DoxyCodeLine{00219\ \ \ std::vector<CSMP\_FEM\_TYPE>\ faceElementTypes\_;}
+\DoxyCodeLine{00220\ }
+\DoxyCodeLine{00221\ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ verbose\_;}
+\DoxyCodeLine{00222\ }
+\DoxyCodeLine{00223\ \ \ \textcolor{keywordtype}{void}\ \ \ DeleteNodes()\ \{}
+\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\ \textcolor{keyword}{auto}\ it\ =\ nodes\_.begin();\ it\ !=\ nodes\_.end();\ ++it\ )}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}\ (*it);}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \ \ \ \ \ nodes\_.clear();}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{comment}{//\ DeleteNodes}}
+\DoxyCodeLine{00228\ \};}
+\DoxyCodeLine{00229\ }
+\DoxyCodeLine{00230\ }
+\DoxyCodeLine{00231\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00232\ \textcolor{comment}{@class\ FiniteElement\_TestData}}
+\DoxyCodeLine{00233\ \textcolor{comment}{@author\ Philipp\ Lang}}
+\DoxyCodeLine{00234\ \textcolor{comment}{@date\ Dec\ 2010}}
+\DoxyCodeLine{00235\ \textcolor{comment}{}}
+\DoxyCodeLine{00236\ \textcolor{comment}{@todo\ (3)\ Verbose\ for\ read\ in\ feedback}}
+\DoxyCodeLine{00237\ \textcolor{comment}{}}
+\DoxyCodeLine{00238\ \textcolor{comment}{Designed\ to\ hold\ test\ data\ of\ a\ given\ Finite\ Element\ type\ for\ later\ use\ in\ the\ generic\ FiniteElement\_Test.}}
+\DoxyCodeLine{00239\ \textcolor{comment}{Overloaded\ istream\ operator\ to\ facilitate\ input\ from\ text\ file.}}
+\DoxyCodeLine{00240\ \textcolor{comment}{}}
+\DoxyCodeLine{00241\ \textcolor{comment}{@section\ dataFile\ Data\ File\ Structure}}
+\DoxyCodeLine{00242\ \textcolor{comment}{}}
+\DoxyCodeLine{00243\ \textcolor{comment}{Delimeters\ between\ variable\ names\ and\ corresponding\ values\ are\ tabs,}}
+\DoxyCodeLine{00244\ \textcolor{comment}{names\ may\ cointain\ white\ spaces.\ The\ given\ sequence\ is\ crucial.\ The}}
+\DoxyCodeLine{00245\ \textcolor{comment}{following\ sample\ test\ file\ should\ be\ selx\ explanatory,\ please\ scroll}}
+\DoxyCodeLine{00246\ \textcolor{comment}{further\ down\ for\ detailed\ information\ on\ the\ individual\ blocks.}}
+\DoxyCodeLine{00247\ \textcolor{comment}{}}
+\DoxyCodeLine{00248\ \textcolor{comment}{@subsection\ Sample\ Test\ File\ Content\ and\ Structure}}
+\DoxyCodeLine{00249\ \textcolor{comment}{}}
+\DoxyCodeLine{00250\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00251\ \textcolor{comment}{}}
+\DoxyCodeLine{00252\ \textcolor{comment}{entire\ test\ file\ here}}
+\DoxyCodeLine{00253\ \textcolor{comment}{}}
+\DoxyCodeLine{00254\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00255\ \textcolor{comment}{}}
+\DoxyCodeLine{00256\ \textcolor{comment}{@subsection\ Extrapolation\ from\ Integration\ Point\ to\ Node}}
+\DoxyCodeLine{00257\ \textcolor{comment}{}}
+\DoxyCodeLine{00258\ \textcolor{comment}{Testing\ extrapolation\ from\ integration(gauss)\ points\ to\ nodes.\ We\ choose}}
+\DoxyCodeLine{00259\ \textcolor{comment}{to\ test\ a\ fix\ number\ of\ two\ variables\ per\ IP.\ The\ first\ data\ line\ porvides}}
+\DoxyCodeLine{00260\ \textcolor{comment}{the\ input\ values\ in\ a\ form\ such\ that\ [\ variable1\ @\ IP1,\ variable\ 2\ @\ IP1,}}
+\DoxyCodeLine{00261\ \textcolor{comment}{variable1\ @\ IP2,\ variable2\ @\ IP2\ ...\ etc.\ for\ each\ IP\ ]}}
+\DoxyCodeLine{00262\ \textcolor{comment}{Similarly,\ the\ resulting\ extrapolated\ node\ values\ are\ given\ such\ that}}
+\DoxyCodeLine{00263\ \textcolor{comment}{[\ variable1\ @\ N1,\ variable\ 2\ @\ N1,\ variable1\ @\ N2,\ variable2\ @\ N2\ ...\ etc.\ for\ each\ Node\ ]}}
+\DoxyCodeLine{00264\ \textcolor{comment}{}}
+\DoxyCodeLine{00265\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00266\ \textcolor{comment}{Integration\ Points\ To\ Node\ Extrapolation(2\ variables)}}
+\DoxyCodeLine{00267\ \textcolor{comment}{Integration\ Point\ Values(2x\ integration\ points)\ \ \ \ \ \ \ \ \ 1.\ 2.\ 1.\ 2.\ 1.\ 2.\ 1.\ 2.}}
+\DoxyCodeLine{00268\ \textcolor{comment}{Extrapolated\ Node\ Values(2x\ nodes)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 1.\ 2.\ 1.\ 2.\ 1.\ 2.\ 1.\ 2.}}
+\DoxyCodeLine{00269\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00270\ \textcolor{comment}{}}
+\DoxyCodeLine{00271\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00272\ }
+\DoxyCodeLine{00273\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00274\ }
+\DoxyCodeLine{00275\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{//\ FINITEELEMENT\_TESTDATA\_H}}
+
+\end{DoxyCode}

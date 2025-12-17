@@ -1,0 +1,863 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_layered_composite_processor1" kind="class" language="C++" prot="public">
+    <compoundname>csmp::LayeredCompositeProcessor1</compoundname>
+    <includes refid="_layered_composite_processor1_8h" local="no">LayeredCompositeProcessor1.h</includes>
+    <sectiondef kind="private-type">
+      <memberdef kind="enum" id="classcsmp_1_1_layered_composite_processor1_1a389f4cdc161aa09c46a226a0dea41a11" prot="private" static="no" strong="no">
+        <type></type>
+        <name></name>
+        <qualifiedname>csmp::LayeredCompositeProcessor1</qualifiedname>
+        <enumvalue id="classcsmp_1_1_layered_composite_processor1_1a389f4cdc161aa09c46a226a0dea41a11ab29c8d447377ce0fa52e4c8a11187c08" prot="private">
+          <name>f</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="classcsmp_1_1_layered_composite_processor1_1a389f4cdc161aa09c46a226a0dea41a11aeb1447ba0b3af624905aee40a99d1971" prot="private">
+          <name>Sw_VL</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="classcsmp_1_1_layered_composite_processor1_1a389f4cdc161aa09c46a226a0dea41a11aee5d9a181d3b5ea4d3d95193fd440746" prot="private">
+          <name>Sw_CL</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="classcsmp_1_1_layered_composite_processor1_1a389f4cdc161aa09c46a226a0dea41a11af4cc4bb3f962f974c98a89f41c084f23" prot="private">
+          <name>Sw_CL_low_k</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="classcsmp_1_1_layered_composite_processor1_1a389f4cdc161aa09c46a226a0dea41a11a74c6a3729fbb6a34c21b4caa622258e8" prot="private">
+          <name>Sw_CL_high_k</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="classcsmp_1_1_layered_composite_processor1_1a389f4cdc161aa09c46a226a0dea41a11ac5aedab14ca094af89611dfffd914ecb" prot="private">
+          <name>Sfactor</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" line="105" column="5" bodyfile="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" bodystart="105" bodyend="105"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_layered_composite_processor1_1aae8c03fe795f3ac8d0f10e1c12793963" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::LayeredCompositeProcessor1::k_low_</definition>
+        <argsstring></argsstring>
+        <name>k_low_</name>
+        <qualifiedname>csmp::LayeredCompositeProcessor1::k_low_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" line="108" column="12" bodyfile="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" bodystart="108" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_layered_composite_processor1_1a078e2a1e9a1dca8b04a0015fc96f46e9" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::LayeredCompositeProcessor1::k_high_</definition>
+        <argsstring></argsstring>
+        <name>k_high_</name>
+        <qualifiedname>csmp::LayeredCompositeProcessor1::k_high_</qualifiedname>
+        <briefdescription>
+<para>layer permeabilities </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" line="108" column="19" bodyfile="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" bodystart="108" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_layered_composite_processor1_1a53353ef29d4a0e1aed97b466fb7950c0" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::LayeredCompositeProcessor1::phi_low_</definition>
+        <argsstring></argsstring>
+        <name>phi_low_</name>
+        <qualifiedname>csmp::LayeredCompositeProcessor1::phi_low_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" line="109" column="12" bodyfile="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" bodystart="109" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_layered_composite_processor1_1a14433b3cbb55b554dce182f4d65a5e7c" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::LayeredCompositeProcessor1::phi_high_</definition>
+        <argsstring></argsstring>
+        <name>phi_high_</name>
+        <qualifiedname>csmp::LayeredCompositeProcessor1::phi_high_</qualifiedname>
+        <briefdescription>
+<para>porosities of low and high k layers </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" line="109" column="21" bodyfile="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" bodystart="109" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_layered_composite_processor1_1ac352d33830085a0b394fc48f3355ea76" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::LayeredCompositeProcessor1::LY_low_</definition>
+        <argsstring></argsstring>
+        <name>LY_low_</name>
+        <qualifiedname>csmp::LayeredCompositeProcessor1::LY_low_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" line="110" column="12" bodyfile="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" bodystart="110" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_layered_composite_processor1_1aa465b7d276e31fb66bde72bbc9db813a" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::LayeredCompositeProcessor1::LY_high_</definition>
+        <argsstring></argsstring>
+        <name>LY_high_</name>
+        <qualifiedname>csmp::LayeredCompositeProcessor1::LY_high_</qualifiedname>
+        <briefdescription>
+<para>cumulative layer thickness in the vertical direction (Y), normalized summing to 1 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" line="110" column="20" bodyfile="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" bodystart="110" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_layered_composite_processor1_1abca969273fab7a8da9489691fc0b0e18" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::LayeredCompositeProcessor1::Swi_low_</definition>
+        <argsstring></argsstring>
+        <name>Swi_low_</name>
+        <qualifiedname>csmp::LayeredCompositeProcessor1::Swi_low_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" line="111" column="12" bodyfile="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_layered_composite_processor1_1ac54f512a2880def913a90c46287f2d90" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::LayeredCompositeProcessor1::Swi_high_</definition>
+        <argsstring></argsstring>
+        <name>Swi_high_</name>
+        <qualifiedname>csmp::LayeredCompositeProcessor1::Swi_high_</qualifiedname>
+        <briefdescription>
+<para>irreducible saturations of the 2 different layers </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" line="111" column="21" bodyfile="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_layered_composite_processor1_1a1e1445e3fc1b7826be27d30230814e07" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::LayeredCompositeProcessor1::m_low_</definition>
+        <argsstring></argsstring>
+        <name>m_low_</name>
+        <qualifiedname>csmp::LayeredCompositeProcessor1::m_low_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" line="112" column="12" bodyfile="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_layered_composite_processor1_1aba5185878e51173b78be715978498a59" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::LayeredCompositeProcessor1::m_high_</definition>
+        <argsstring></argsstring>
+        <name>m_high_</name>
+        <qualifiedname>csmp::LayeredCompositeProcessor1::m_high_</qualifiedname>
+        <briefdescription>
+<para>van Genuchten exponents for the 2 different layers </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" line="112" column="19" bodyfile="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_layered_composite_processor1_1ad5b7e2167fc8d77a964fdd966e1e06f3" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::LayeredCompositeProcessor1::pd_low_</definition>
+        <argsstring></argsstring>
+        <name>pd_low_</name>
+        <qualifiedname>csmp::LayeredCompositeProcessor1::pd_low_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" line="113" column="12" bodyfile="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" bodystart="113" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_layered_composite_processor1_1abfe38df339850111f67bfc6f7936fca8" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::LayeredCompositeProcessor1::pd_high_</definition>
+        <argsstring></argsstring>
+        <name>pd_high_</name>
+        <qualifiedname>csmp::LayeredCompositeProcessor1::pd_high_</qualifiedname>
+        <briefdescription>
+<para>capillary (drainage) entry pressure of low and high k layers </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" line="113" column="20" bodyfile="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" bodystart="113" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_layered_composite_processor1_1a90205cf0ac7c5c2bf62e1e39501aa213" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::LayeredCompositeProcessor1::bcp_low_</definition>
+        <argsstring></argsstring>
+        <name>bcp_low_</name>
+        <qualifiedname>csmp::LayeredCompositeProcessor1::bcp_low_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" line="114" column="12" bodyfile="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" bodystart="114" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_layered_composite_processor1_1a0ee5ad4daf651b4ed90f4700ee5328c1" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::LayeredCompositeProcessor1::bcp_high_</definition>
+        <argsstring></argsstring>
+        <name>bcp_high_</name>
+        <qualifiedname>csmp::LayeredCompositeProcessor1::bcp_high_</qualifiedname>
+        <briefdescription>
+<para>Brooks-Corey 64&apos; exponents for low and high k layers. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" line="114" column="21" bodyfile="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" bodystart="114" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_layered_composite_processor1_1a22927fd6ab280da38ac4b918ab476669" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::vector&lt; std::vector&lt; double &gt; &gt; &gt;</type>
+        <definition>std::vector&lt;std::vector&lt;std::vector&lt;double&gt; &gt; &gt; csmp::LayeredCompositeProcessor1::RRT_</definition>
+        <argsstring></argsstring>
+        <name>RRT_</name>
+        <qualifiedname>csmp::LayeredCompositeProcessor1::RRT_</qualifiedname>
+        <briefdescription>
+<para>data table for n-rocktypes with extra 3 columns for sw, krw, krn </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" line="116" column="17" bodyfile="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" bodystart="116" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_layered_composite_processor1_1acbcd00d75d65169a004b462cf71bf5e9" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::LayeredCompositeProcessor1::LayeredCompositeProcessor1</definition>
+        <argsstring>(const char *RRT_data)</argsstring>
+        <name>LayeredCompositeProcessor1</name>
+        <qualifiedname>csmp::LayeredCompositeProcessor1::LayeredCompositeProcessor1</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>RRT_data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>TODO: cleanup - remove variables that need to come from input file use rocktype properly. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" line="52" column="14" bodyfile="source/modules/thmc/two_phase_flow/LayeredCompositeProcessor1.cpp" bodystart="22" bodyend="32"/>
+        <references refid="classcsmp_1_1_layered_composite_processor1_1aad29df6350147e36d610ee3f22eb8424" compoundref="_layered_composite_processor1_8cpp" startline="51" endline="127">ReadRockTypeData</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_layered_composite_processor1_1aad29df6350147e36d610ee3f22eb8424" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::LayeredCompositeProcessor1::ReadRockTypeData</definition>
+        <argsstring>(const char *datafile)</argsstring>
+        <name>ReadRockTypeData</name>
+        <qualifiedname>csmp::LayeredCompositeProcessor1::ReadRockTypeData</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>datafile</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Reading the datafile:</para>
+<para><programlisting><codeline><highlight class="normal">ARP_FSst_Slt_new_names.txt<sp/>-<sp/>Input<sp/>data<sp/>table<sp/>to<sp/>define<sp/>Heterogeneity<sp/>Aware<sp/>Relative<sp/>Permeability<sp/>as<sp/>a<sp/>function<sp/>of<sp/>sw<sp/>and<sp/>Nc<sp/>=<sp/>k<sp/>grad<sp/>P<sp/>/<sp/>sigma,<sp/>sigma<sp/>=<sp/>interfacial<sp/>tension<sp/>H2O-CO2</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/>comment<sp/>line</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">1<sp/>#<sp/>total<sp/>number<sp/>of<sp/>rocktypes<sp/>in<sp/>file</highlight></codeline>
+<codeline><highlight class="normal">1<sp/>#<sp/>rocktype<sp/>identifier<sp/>1:<sp/>FSst-Slt<sp/>(Fine<sp/>Sandstone<sp/>-<sp/>Silt)<sp/>Planar<sp/>Bedding</highlight></codeline>
+<codeline><highlight class="normal">30<sp/>6<sp/>#<sp/>table<sp/>size(rows<sp/>vs.<sp/>columns)</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/>F-flow<sp/><sp/><sp/><sp/>Sw_VL<sp/>(cell<sp/>average)<sp/><sp/>Sw_CL(cell<sp/>average)<sp/><sp/>Sw_low_CL<sp/><sp/>Sw_high_CL<sp/><sp/><sp/><sp/>Sfactor</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">0.990000000000000<sp/><sp/>0.958327612404074<sp/><sp/>0.978851642918739<sp/><sp/>1<sp/><sp/>0.957703285837478<sp/><sp/>137051613.363363</highlight></codeline>
+<codeline><highlight class="normal">0.956206896551724<sp/><sp/>0.935003844772692<sp/><sp/>0.964807268982292<sp/><sp/>1<sp/><sp/>0.929614537964584<sp/><sp/>28739845.1229135</highlight></codeline>
+</programlisting> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" line="53" column="10" bodyfile="source/modules/thmc/two_phase_flow/LayeredCompositeProcessor1.cpp" bodystart="51" bodyend="127"/>
+        <references refid="namespacecsmp_1a6c42e9e0529dda9c61a77681f2735608" compoundref="_text_file_i_o_8cpp" startline="424" endline="452">csmp::isCommentLine</references>
+        <referencedby refid="classcsmp_1_1_layered_composite_processor1_1acbcd00d75d65169a004b462cf71bf5e9" compoundref="_layered_composite_processor1_8cpp" startline="22" endline="32">LayeredCompositeProcessor1</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_layered_composite_processor1_1a83dca058fcc73a2c5a3263a8db52c6a5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::LayeredCompositeProcessor1::krw</definition>
+        <argsstring>(double sw, double Nc, int rocktype)</argsstring>
+        <name>krw</name>
+        <qualifiedname>csmp::LayeredCompositeProcessor1::krw</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>sw</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>Nc</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>rocktype</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Costly prototype which computes values for each row in the rocktype specific rocktype table</para>
+<para>The following table entries are expected: f(sw), Sw_VL, Sw_CL, Sw_CL_low_k, Sw_CL_high_k, Sfactor </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" line="57" column="12" bodyfile="source/modules/thmc/two_phase_flow/LayeredCompositeProcessor1.cpp" bodystart="141" bodyend="180"/>
+        <referencedby refid="classcsmp_1_1_layered_composite_processor1_1a1e842c388edf0031cb841a58773b43b3" compoundref="_layered_composite_processor1_8cpp" startline="283" endline="297">WriteRelativePermeabilityTable</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_layered_composite_processor1_1a7abe21d407fbcdbbc698af1bacc4bdb6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::LayeredCompositeProcessor1::krn</definition>
+        <argsstring>(double sw, double Nc, int rocktype)</argsstring>
+        <name>krn</name>
+        <qualifiedname>csmp::LayeredCompositeProcessor1::krn</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>sw</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>Nc</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>rocktype</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" line="58" column="12" bodyfile="source/modules/thmc/two_phase_flow/LayeredCompositeProcessor1.cpp" bodystart="184" bodyend="222"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_layered_composite_processor1_1ae187616de6f7d984f43c1b69fc4ccc9a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::pair&lt; double, double &gt;</type>
+        <definition>pair&lt; double, double &gt; csmp::LayeredCompositeProcessor1::RelativePermeability</definition>
+        <argsstring>(double sw, double Nc, int rocktype)</argsstring>
+        <name>RelativePermeability</name>
+        <qualifiedname>csmp::LayeredCompositeProcessor1::RelativePermeability</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>sw</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>Nc</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>rocktype</declname>
+        </param>
+        <briefdescription>
+<para>computes wetting- and non-wetting phase relative permeabilities in one operation </para>
+        </briefdescription>
+        <detaileddescription>
+<para>More efficient version that computes and returns both relperms in one go.</para>
+<para><simplesect kind="return"><para>pair of krw,krn </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" line="61" column="15" bodyfile="source/modules/thmc/two_phase_flow/LayeredCompositeProcessor1.cpp" bodystart="232" bodyend="276"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_layered_composite_processor1_1a99303e1684582a978888df66e46e70a6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::LayeredCompositeProcessor1::pc</definition>
+        <argsstring>(double sw, int rocktype) const</argsstring>
+        <name>pc</name>
+        <qualifiedname>csmp::LayeredCompositeProcessor1::pc</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>sw</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>rocktype</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Best approach still subject of discussion. Capillary limit!</para>
+<para>Horizontal case.<itemizedlist>
+<listitem><para>entry pressure is that of the high-k layer</para>
+</listitem><listitem><para>capillary pressure curve is stepped<itemizedlist>
+<listitem><para>first the high-k layer gets saturated</para>
+</listitem><listitem><para>now the low key layer gets saturated once its entry pressure is overcome </para>
+</listitem></itemizedlist>
+</para>
+</listitem></itemizedlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" line="63" column="12" bodyfile="source/modules/thmc/two_phase_flow/LayeredCompositeProcessor1.cpp" bodystart="336" bodyend="348"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_layered_composite_processor1_1a1e842c388edf0031cb841a58773b43b3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::LayeredCompositeProcessor1::WriteRelativePermeabilityTable</definition>
+        <argsstring>(const char *filename, int rocktype, double Nc)</argsstring>
+        <name>WriteRelativePermeabilityTable</name>
+        <qualifiedname>csmp::LayeredCompositeProcessor1::WriteRelativePermeabilityTable</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>filename</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>rocktype</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>Nc</declname>
+        </param>
+        <briefdescription>
+<para>writes textfile with sw, krw(sw,Nc), krn(sw,Nc) values computed for rocktype in 0.05 saturation increments </para>
+        </briefdescription>
+        <detaileddescription>
+<para>writes textfile with sw, krw(sw,Nc), krn(sw,Nc), and pc(sw) values computed for (composite) rocktype in 0.05 saturation increments </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" line="66" column="10" bodyfile="source/modules/thmc/two_phase_flow/LayeredCompositeProcessor1.cpp" bodystart="283" bodyend="297"/>
+        <references refid="classcsmp_1_1_layered_composite_processor1_1a83dca058fcc73a2c5a3263a8db52c6a5" compoundref="_layered_composite_processor1_8cpp" startline="141" endline="180">krw</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_layered_composite_processor1_1a49201419b69f894cd82ca563d457fe9b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::LayeredCompositeProcessor1::Out</definition>
+        <argsstring>() const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::LayeredCompositeProcessor1::Out</qualifiedname>
+        <briefdescription>
+<para>reports the stored rocktype table(s) etc. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" line="69" column="10" bodyfile="source/modules/thmc/two_phase_flow/LayeredCompositeProcessor1.cpp" bodystart="304" bodyend="323"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_layered_composite_processor1_1a6490a0d91addd398b542a09450758c90" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::LayeredCompositeProcessor1::k_AverageY</definition>
+        <argsstring>() const</argsstring>
+        <name>k_AverageY</name>
+        <qualifiedname>csmp::LayeredCompositeProcessor1::k_AverageY</qualifiedname>
+        <briefdescription>
+<para>vertical thickness weighted (harmonic) mean of the vertical layer permeabilities </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" line="75" column="12" bodyfile="source/modules/thmc/two_phase_flow/LayeredCompositeProcessor1.cpp" bodystart="355" bodyend="358"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_layered_composite_processor1_1a3f4466d812b3430ee40be17f22c5ad3c" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::LayeredCompositeProcessor1::k_AverageX</definition>
+        <argsstring>() const</argsstring>
+        <name>k_AverageX</name>
+        <qualifiedname>csmp::LayeredCompositeProcessor1::k_AverageX</qualifiedname>
+        <briefdescription>
+<para>horizontal thickness weighted average of the horizontal layer permeabilities </para>
+        </briefdescription>
+        <detaileddescription>
+<para>horizontal thickness-weighted average of the horizontal layer permeabilities </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" line="77" column="12" bodyfile="source/modules/thmc/two_phase_flow/LayeredCompositeProcessor1.cpp" bodystart="363" bodyend="366"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_layered_composite_processor1_1a2060ef754fef7921167771014f910419" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::LayeredCompositeProcessor1::SwAtNc</definition>
+        <argsstring>(double Nc, double Sw_VL, double Sw_CL, double Sfactor) const</argsstring>
+        <name>SwAtNc</name>
+        <qualifiedname>csmp::LayeredCompositeProcessor1::SwAtNc</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>Nc</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>Sw_VL</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>Sw_CL</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>Sfactor</declname>
+        </param>
+        <briefdescription>
+<para>water saturation in cell at given capillary number; calculated from entries in table </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" line="79" column="12" bodyfile="source/modules/thmc/two_phase_flow/LayeredCompositeProcessor1.cpp" bodystart="371" bodyend="374"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_layered_composite_processor1_1a62126d94c2816fe2855b40f94281f5b8" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::LayeredCompositeProcessor1::SwAtNc_Low_k_Layer</definition>
+        <argsstring>(double Nc, double Sw_VL, double Sw_low_CL, double Sfactor) const</argsstring>
+        <name>SwAtNc_Low_k_Layer</name>
+        <qualifiedname>csmp::LayeredCompositeProcessor1::SwAtNc_Low_k_Layer</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>Nc</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>Sw_VL</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>Sw_low_CL</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>Sfactor</declname>
+        </param>
+        <briefdescription>
+<para>corresponding sw in low-k laminations </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" line="81" column="12" bodyfile="source/modules/thmc/two_phase_flow/LayeredCompositeProcessor1.cpp" bodystart="379" bodyend="382"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_layered_composite_processor1_1a1569a91e822fdc40145e95e1ec26538a" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::LayeredCompositeProcessor1::SwAtNc_High_k_Layer</definition>
+        <argsstring>(double Nc, double Sw_VL, double Sw_high_CL, double Sfactor) const</argsstring>
+        <name>SwAtNc_High_k_Layer</name>
+        <qualifiedname>csmp::LayeredCompositeProcessor1::SwAtNc_High_k_Layer</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>Nc</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>Sw_VL</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>Sw_high_CL</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>Sfactor</declname>
+        </param>
+        <briefdescription>
+<para>corresponding sw in high-k laminations </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" line="83" column="12" bodyfile="source/modules/thmc/two_phase_flow/LayeredCompositeProcessor1.cpp" bodystart="387" bodyend="390"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_layered_composite_processor1_1a2fd41a0d47641782587396ef695cd45f" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::LayeredCompositeProcessor1::SwStarLow</definition>
+        <argsstring>(double Sw_low_at_Nc) const</argsstring>
+        <name>SwStarLow</name>
+        <qualifiedname>csmp::LayeredCompositeProcessor1::SwStarLow</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>Sw_low_at_Nc</declname>
+        </param>
+        <briefdescription>
+<para>effective sw in low-k laminations </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" line="85" column="12" bodyfile="source/modules/thmc/two_phase_flow/LayeredCompositeProcessor1.cpp" bodystart="395" bodyend="398"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_layered_composite_processor1_1a229607275a00f6c6fe114bdca07fb147" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::LayeredCompositeProcessor1::SwStarHigh</definition>
+        <argsstring>(double Sw_high_at_Nc) const</argsstring>
+        <name>SwStarHigh</name>
+        <qualifiedname>csmp::LayeredCompositeProcessor1::SwStarHigh</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>Sw_high_at_Nc</declname>
+        </param>
+        <briefdescription>
+<para>effective sw in low-k laminations </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" line="87" column="12" bodyfile="source/modules/thmc/two_phase_flow/LayeredCompositeProcessor1.cpp" bodystart="403" bodyend="406"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_layered_composite_processor1_1a4c3e3c855453d615b85e8e2ad547f21a" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::LayeredCompositeProcessor1::KrwLow</definition>
+        <argsstring>(double SwStar_low) const</argsstring>
+        <name>KrwLow</name>
+        <qualifiedname>csmp::LayeredCompositeProcessor1::KrwLow</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>SwStar_low</declname>
+        </param>
+        <briefdescription>
+<para>krw relperm of low-k layer at given saturation and capillary number </para>
+        </briefdescription>
+        <detaileddescription>
+<para>krw relperm of low-k layer at given saturation and capillary number (uses van Genuchten model - with m parameter) </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" line="90" column="12" bodyfile="source/modules/thmc/two_phase_flow/LayeredCompositeProcessor1.cpp" bodystart="414" bodyend="421"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_layered_composite_processor1_1af22a9612e191dcbe2571ab89536c9e16" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::LayeredCompositeProcessor1::KrwHigh</definition>
+        <argsstring>(double SwStar_high) const</argsstring>
+        <name>KrwHigh</name>
+        <qualifiedname>csmp::LayeredCompositeProcessor1::KrwHigh</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>SwStar_high</declname>
+        </param>
+        <briefdescription>
+<para>krw relperm of high-k layer at given saturation and capillary number </para>
+        </briefdescription>
+        <detaileddescription>
+<para>krw relperm of high-k layer at given saturation and capillary number (uses van Genuchten model - with m parameter) </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" line="92" column="12" bodyfile="source/modules/thmc/two_phase_flow/LayeredCompositeProcessor1.cpp" bodystart="430" bodyend="437"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_layered_composite_processor1_1ac316b249333864be2d3ebea839efbaa4" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::LayeredCompositeProcessor1::KrnLow</definition>
+        <argsstring>(double SwStar_low) const</argsstring>
+        <name>KrnLow</name>
+        <qualifiedname>csmp::LayeredCompositeProcessor1::KrnLow</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>SwStar_low</declname>
+        </param>
+        <briefdescription>
+<para>krn relperm of low-k layer at given saturation and capillary number </para>
+        </briefdescription>
+        <detaileddescription>
+<para>krn relperm of low-k layer at given saturation and capillary number (uses Brooks-Corey model - with bcp parameter) </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" line="95" column="12" bodyfile="source/modules/thmc/two_phase_flow/LayeredCompositeProcessor1.cpp" bodystart="446" bodyend="451"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_layered_composite_processor1_1a75adbe500d25731f8945acaeeeb23e54" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::LayeredCompositeProcessor1::KrnHigh</definition>
+        <argsstring>(double SwStar_high) const</argsstring>
+        <name>KrnHigh</name>
+        <qualifiedname>csmp::LayeredCompositeProcessor1::KrnHigh</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>SwStar_high</declname>
+        </param>
+        <briefdescription>
+<para>krn relperm of high-k layer at given saturation and capillary number </para>
+        </briefdescription>
+        <detaileddescription>
+<para>krn relperm of high-k layer at given saturation and capillary number (uses Brooks-Corey model - with bcp parameter) </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" line="97" column="12" bodyfile="source/modules/thmc/two_phase_flow/LayeredCompositeProcessor1.cpp" bodystart="459" bodyend="464"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_layered_composite_processor1_1a4867db5989e7cb586962f9fe19bbf2ba" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::LayeredCompositeProcessor1::KrwComposite</definition>
+        <argsstring>(double swAtNc_Low_k_Layer, double swAtNc_High_k_Layer) const</argsstring>
+        <name>KrwComposite</name>
+        <qualifiedname>csmp::LayeredCompositeProcessor1::KrwComposite</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>swAtNc_Low_k_Layer</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>swAtNc_High_k_Layer</declname>
+        </param>
+        <briefdescription>
+<para>relative permeability at the given water saturation and capillary number </para>
+        </briefdescription>
+        <detaileddescription>
+<para>relative permeability at the given water saturation and capillary number (uses van Genuchten model - with m parameter) </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" line="100" column="12" bodyfile="source/modules/thmc/two_phase_flow/LayeredCompositeProcessor1.cpp" bodystart="472" bodyend="480"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_layered_composite_processor1_1aca7b4aa0405fec233fd02692781eeb99" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::LayeredCompositeProcessor1::KrnComposite</definition>
+        <argsstring>(double swAtNc_Low_k_Layer, double swAtNc_High_k_Layer) const</argsstring>
+        <name>KrnComposite</name>
+        <qualifiedname>csmp::LayeredCompositeProcessor1::KrnComposite</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>swAtNc_Low_k_Layer</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>swAtNc_High_k_Layer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" line="101" column="12" bodyfile="source/modules/thmc/two_phase_flow/LayeredCompositeProcessor1.cpp" bodystart="484" bodyend="491"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Implementation of relative permeability model of Maartje Boon for layered rocktypes = composities. The values are supplied by parameter table that initialises model for rocktype. Documentation in Maple worksheet &apos;Maartje_relperms&apos;.</para>
+<para>Calculation procedure</para>
+<para><orderedlist>
+<listitem><para>for given rocktype, table is initialised from file</para>
+</listitem><listitem><para>Average saturation values, sw are calculated for each row for the given capillary number</para>
+</listitem><listitem><para>The relative permeability is calculated by linear interpolation between the rocks of interest, for the wetting and the nonwetting phase</para>
+</listitem></orderedlist>
+</para>
+<para>This model is meant to be extended to the case where horizontal relperms differ from vertical ones.</para>
+<para>The input table is supposed to have the following format (# comment lines to be ignored).</para>
+<para><programlisting><codeline><highlight class="normal">HARP_FSst_Slt_new_names.txt<sp/>-<sp/>Input<sp/>data<sp/>table<sp/>to<sp/>find<sp/>Heterogeneity<sp/>Aware<sp/>Relative<sp/>Permeability<sp/>(HARP<sp/>?)<sp/>as<sp/>a<sp/>function<sp/>of<sp/>sw<sp/>and<sp/>Nc<sp/>=<sp/>k<sp/>grad<sp/>P<sp/>/<sp/>sigma,<sp/>sigma<sp/>=<sp/>interfacial<sp/>tension<sp/>H2O-CO2</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor"><sp/>#<sp/>comment<sp/>line</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/>2<sp/>#<sp/>total<sp/>number<sp/>of<sp/>rocktypes<sp/>in<sp/>file</highlight></codeline>
+<codeline><highlight class="normal"><sp/>1<sp/>#<sp/>rocktype<sp/>identifier<sp/>1:<sp/>FSst-Slt<sp/>(Fine<sp/>Sandstone<sp/>-<sp/>Silt)<sp/>Planar<sp/>Bedding</highlight></codeline>
+<codeline><highlight class="normal"><sp/>30<sp/>6<sp/>#<sp/>table<sp/>size(rows<sp/>vs.<sp/>columns)</highlight></codeline>
+<codeline><highlight class="normal"><sp/></highlight><highlight class="preprocessor">#<sp/>F-flow<sp/><sp/><sp/><sp/>Sw_VL<sp/>(cell<sp/>average)<sp/><sp/>Sw_CL(cell<sp/>average)<sp/><sp/>Sw_low_CL<sp/><sp/>Sw_high_CL<sp/><sp/><sp/><sp/>Sfactor</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/>0.990000000000000<sp/><sp/>0.958327612404074<sp/><sp/>0.978851642918739<sp/><sp/>1<sp/><sp/>0.957703285837478<sp/><sp/>137051613.363363</highlight></codeline>
+<codeline><highlight class="normal"><sp/>0.956206896551724<sp/><sp/>0.935003844772692<sp/><sp/>0.964807268982292<sp/><sp/>1<sp/><sp/>0.929614537964584<sp/><sp/>28739845.1229135</highlight></codeline>
+<codeline><highlight class="normal"><sp/>0.922413793103448<sp/><sp/>0.922536293954733<sp/><sp/>0.959418405274487<sp/><sp/>1<sp/><sp/>0.918836810548975<sp/><sp/>43986865.1983833</highlight></codeline>
+</programlisting></para>
+<para>saturations double Sw_VL_, Sw_CL_; ///&lt; cell saturations at viscous and capillary limit double Sw_low_CL_, Sw_high_CL_; ///&lt; average saturations at CL in the different layers a double Sw_at_Nc_; ///&lt; saturation at the capillary number of interest double Sfactor_; ///&lt; scaling factor </para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::LayeredCompositeProcessor1</label>
+        <link refid="classcsmp_1_1_layered_composite_processor1"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" line="50" column="1" bodyfile="source/includes/thmc/two_phase_flow/LayeredCompositeProcessor1.h" bodystart="50" bodyend="117"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_layered_composite_processor1_1a0ee5ad4daf651b4ed90f4700ee5328c1" prot="private" virt="non-virtual"><scope>csmp::LayeredCompositeProcessor1</scope><name>bcp_high_</name></member>
+      <member refid="classcsmp_1_1_layered_composite_processor1_1a90205cf0ac7c5c2bf62e1e39501aa213" prot="private" virt="non-virtual"><scope>csmp::LayeredCompositeProcessor1</scope><name>bcp_low_</name></member>
+      <member refid="classcsmp_1_1_layered_composite_processor1_1a389f4cdc161aa09c46a226a0dea41a11ab29c8d447377ce0fa52e4c8a11187c08" prot="private" virt="non-virtual"><scope>csmp::LayeredCompositeProcessor1</scope><name>f</name></member>
+      <member refid="classcsmp_1_1_layered_composite_processor1_1a3f4466d812b3430ee40be17f22c5ad3c" prot="private" virt="non-virtual"><scope>csmp::LayeredCompositeProcessor1</scope><name>k_AverageX</name></member>
+      <member refid="classcsmp_1_1_layered_composite_processor1_1a6490a0d91addd398b542a09450758c90" prot="private" virt="non-virtual"><scope>csmp::LayeredCompositeProcessor1</scope><name>k_AverageY</name></member>
+      <member refid="classcsmp_1_1_layered_composite_processor1_1a078e2a1e9a1dca8b04a0015fc96f46e9" prot="private" virt="non-virtual"><scope>csmp::LayeredCompositeProcessor1</scope><name>k_high_</name></member>
+      <member refid="classcsmp_1_1_layered_composite_processor1_1aae8c03fe795f3ac8d0f10e1c12793963" prot="private" virt="non-virtual"><scope>csmp::LayeredCompositeProcessor1</scope><name>k_low_</name></member>
+      <member refid="classcsmp_1_1_layered_composite_processor1_1a7abe21d407fbcdbbc698af1bacc4bdb6" prot="public" virt="non-virtual"><scope>csmp::LayeredCompositeProcessor1</scope><name>krn</name></member>
+      <member refid="classcsmp_1_1_layered_composite_processor1_1aca7b4aa0405fec233fd02692781eeb99" prot="private" virt="non-virtual"><scope>csmp::LayeredCompositeProcessor1</scope><name>KrnComposite</name></member>
+      <member refid="classcsmp_1_1_layered_composite_processor1_1a75adbe500d25731f8945acaeeeb23e54" prot="private" virt="non-virtual"><scope>csmp::LayeredCompositeProcessor1</scope><name>KrnHigh</name></member>
+      <member refid="classcsmp_1_1_layered_composite_processor1_1ac316b249333864be2d3ebea839efbaa4" prot="private" virt="non-virtual"><scope>csmp::LayeredCompositeProcessor1</scope><name>KrnLow</name></member>
+      <member refid="classcsmp_1_1_layered_composite_processor1_1a83dca058fcc73a2c5a3263a8db52c6a5" prot="public" virt="non-virtual"><scope>csmp::LayeredCompositeProcessor1</scope><name>krw</name></member>
+      <member refid="classcsmp_1_1_layered_composite_processor1_1a4867db5989e7cb586962f9fe19bbf2ba" prot="private" virt="non-virtual"><scope>csmp::LayeredCompositeProcessor1</scope><name>KrwComposite</name></member>
+      <member refid="classcsmp_1_1_layered_composite_processor1_1af22a9612e191dcbe2571ab89536c9e16" prot="private" virt="non-virtual"><scope>csmp::LayeredCompositeProcessor1</scope><name>KrwHigh</name></member>
+      <member refid="classcsmp_1_1_layered_composite_processor1_1a4c3e3c855453d615b85e8e2ad547f21a" prot="private" virt="non-virtual"><scope>csmp::LayeredCompositeProcessor1</scope><name>KrwLow</name></member>
+      <member refid="classcsmp_1_1_layered_composite_processor1_1acbcd00d75d65169a004b462cf71bf5e9" prot="public" virt="non-virtual"><scope>csmp::LayeredCompositeProcessor1</scope><name>LayeredCompositeProcessor1</name></member>
+      <member refid="classcsmp_1_1_layered_composite_processor1_1aa465b7d276e31fb66bde72bbc9db813a" prot="private" virt="non-virtual"><scope>csmp::LayeredCompositeProcessor1</scope><name>LY_high_</name></member>
+      <member refid="classcsmp_1_1_layered_composite_processor1_1ac352d33830085a0b394fc48f3355ea76" prot="private" virt="non-virtual"><scope>csmp::LayeredCompositeProcessor1</scope><name>LY_low_</name></member>
+      <member refid="classcsmp_1_1_layered_composite_processor1_1aba5185878e51173b78be715978498a59" prot="private" virt="non-virtual"><scope>csmp::LayeredCompositeProcessor1</scope><name>m_high_</name></member>
+      <member refid="classcsmp_1_1_layered_composite_processor1_1a1e1445e3fc1b7826be27d30230814e07" prot="private" virt="non-virtual"><scope>csmp::LayeredCompositeProcessor1</scope><name>m_low_</name></member>
+      <member refid="classcsmp_1_1_layered_composite_processor1_1a49201419b69f894cd82ca563d457fe9b" prot="public" virt="non-virtual"><scope>csmp::LayeredCompositeProcessor1</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_layered_composite_processor1_1a99303e1684582a978888df66e46e70a6" prot="public" virt="non-virtual"><scope>csmp::LayeredCompositeProcessor1</scope><name>pc</name></member>
+      <member refid="classcsmp_1_1_layered_composite_processor1_1abfe38df339850111f67bfc6f7936fca8" prot="private" virt="non-virtual"><scope>csmp::LayeredCompositeProcessor1</scope><name>pd_high_</name></member>
+      <member refid="classcsmp_1_1_layered_composite_processor1_1ad5b7e2167fc8d77a964fdd966e1e06f3" prot="private" virt="non-virtual"><scope>csmp::LayeredCompositeProcessor1</scope><name>pd_low_</name></member>
+      <member refid="classcsmp_1_1_layered_composite_processor1_1a14433b3cbb55b554dce182f4d65a5e7c" prot="private" virt="non-virtual"><scope>csmp::LayeredCompositeProcessor1</scope><name>phi_high_</name></member>
+      <member refid="classcsmp_1_1_layered_composite_processor1_1a53353ef29d4a0e1aed97b466fb7950c0" prot="private" virt="non-virtual"><scope>csmp::LayeredCompositeProcessor1</scope><name>phi_low_</name></member>
+      <member refid="classcsmp_1_1_layered_composite_processor1_1aad29df6350147e36d610ee3f22eb8424" prot="public" virt="non-virtual"><scope>csmp::LayeredCompositeProcessor1</scope><name>ReadRockTypeData</name></member>
+      <member refid="classcsmp_1_1_layered_composite_processor1_1ae187616de6f7d984f43c1b69fc4ccc9a" prot="public" virt="non-virtual"><scope>csmp::LayeredCompositeProcessor1</scope><name>RelativePermeability</name></member>
+      <member refid="classcsmp_1_1_layered_composite_processor1_1a22927fd6ab280da38ac4b918ab476669" prot="private" virt="non-virtual"><scope>csmp::LayeredCompositeProcessor1</scope><name>RRT_</name></member>
+      <member refid="classcsmp_1_1_layered_composite_processor1_1a389f4cdc161aa09c46a226a0dea41a11ac5aedab14ca094af89611dfffd914ecb" prot="private" virt="non-virtual"><scope>csmp::LayeredCompositeProcessor1</scope><name>Sfactor</name></member>
+      <member refid="classcsmp_1_1_layered_composite_processor1_1a389f4cdc161aa09c46a226a0dea41a11aee5d9a181d3b5ea4d3d95193fd440746" prot="private" virt="non-virtual"><scope>csmp::LayeredCompositeProcessor1</scope><name>Sw_CL</name></member>
+      <member refid="classcsmp_1_1_layered_composite_processor1_1a389f4cdc161aa09c46a226a0dea41a11a74c6a3729fbb6a34c21b4caa622258e8" prot="private" virt="non-virtual"><scope>csmp::LayeredCompositeProcessor1</scope><name>Sw_CL_high_k</name></member>
+      <member refid="classcsmp_1_1_layered_composite_processor1_1a389f4cdc161aa09c46a226a0dea41a11af4cc4bb3f962f974c98a89f41c084f23" prot="private" virt="non-virtual"><scope>csmp::LayeredCompositeProcessor1</scope><name>Sw_CL_low_k</name></member>
+      <member refid="classcsmp_1_1_layered_composite_processor1_1a389f4cdc161aa09c46a226a0dea41a11aeb1447ba0b3af624905aee40a99d1971" prot="private" virt="non-virtual"><scope>csmp::LayeredCompositeProcessor1</scope><name>Sw_VL</name></member>
+      <member refid="classcsmp_1_1_layered_composite_processor1_1a2060ef754fef7921167771014f910419" prot="private" virt="non-virtual"><scope>csmp::LayeredCompositeProcessor1</scope><name>SwAtNc</name></member>
+      <member refid="classcsmp_1_1_layered_composite_processor1_1a1569a91e822fdc40145e95e1ec26538a" prot="private" virt="non-virtual"><scope>csmp::LayeredCompositeProcessor1</scope><name>SwAtNc_High_k_Layer</name></member>
+      <member refid="classcsmp_1_1_layered_composite_processor1_1a62126d94c2816fe2855b40f94281f5b8" prot="private" virt="non-virtual"><scope>csmp::LayeredCompositeProcessor1</scope><name>SwAtNc_Low_k_Layer</name></member>
+      <member refid="classcsmp_1_1_layered_composite_processor1_1ac54f512a2880def913a90c46287f2d90" prot="private" virt="non-virtual"><scope>csmp::LayeredCompositeProcessor1</scope><name>Swi_high_</name></member>
+      <member refid="classcsmp_1_1_layered_composite_processor1_1abca969273fab7a8da9489691fc0b0e18" prot="private" virt="non-virtual"><scope>csmp::LayeredCompositeProcessor1</scope><name>Swi_low_</name></member>
+      <member refid="classcsmp_1_1_layered_composite_processor1_1a229607275a00f6c6fe114bdca07fb147" prot="private" virt="non-virtual"><scope>csmp::LayeredCompositeProcessor1</scope><name>SwStarHigh</name></member>
+      <member refid="classcsmp_1_1_layered_composite_processor1_1a2fd41a0d47641782587396ef695cd45f" prot="private" virt="non-virtual"><scope>csmp::LayeredCompositeProcessor1</scope><name>SwStarLow</name></member>
+      <member refid="classcsmp_1_1_layered_composite_processor1_1a1e842c388edf0031cb841a58773b43b3" prot="public" virt="non-virtual"><scope>csmp::LayeredCompositeProcessor1</scope><name>WriteRelativePermeabilityTable</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

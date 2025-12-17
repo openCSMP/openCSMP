@@ -1,0 +1,40 @@
+\doxysection{Maximum\+Difference.\+h}
+\hypertarget{_maximum_difference_8h_source}{}\label{_maximum_difference_8h_source}\index{source/includes/property\_manipulation/MaximumDifference.h@{source/includes/property\_manipulation/MaximumDifference.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{MAXIMUM\_DIFFERENCE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{MAXIMUM\_DIFFERENCE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_interrelation_8h}{"{}Interrelation.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00009\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_maximum_difference}{MaximumDifference}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_interrelation}{Interrelation}}<dim>\ \{}
+\DoxyCodeLine{00010\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ \ Var1;\ \textcolor{comment}{///\ <\ total\ fluid\ pressure}}
+\DoxyCodeLine{00011\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ \ Var2;\ \textcolor{comment}{///\ <\ conductivity\ multiplier}}
+\DoxyCodeLine{00012\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ var1,\ var2;}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ max\_difference;}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keyword}{explicit}\ MaximumDifference(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&\ p,}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ variable1,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ variable2\ );}
+\DoxyCodeLine{00018\ \ \ \ \ \string~MaximumDifference()\ \{\};}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_maximum_difference_ac033f8aa33eacf48ce83eab0b2193d78}{Calculate}}();}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{void}\ Reset();}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ Value()\ \textcolor{keyword}{const};\ \textcolor{comment}{///\ <\ outputs\ the\ computed\ value}}
+\DoxyCodeLine{00022\ \};}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{comment}{///\ compare\ distributed\ variable\ values:\ calculates\ maximum\ difference\ between\ distributed\ variable\ values\ of\ the\ same\ type\ and\ placement;\ difference\ can\ be\ normalised}}
+\DoxyCodeLine{00025\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00026\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{namespacecsmp_a740030d2092bdc8005af44514d3f047a}{maximumDifference}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ new\_property,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ old\_property,}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ normalise\ );}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

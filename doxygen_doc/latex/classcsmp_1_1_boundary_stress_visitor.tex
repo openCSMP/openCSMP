@@ -1,0 +1,271 @@
+\doxysection{csmp\+::Boundary\+Stress\+Visitor\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_boundary_stress_visitor}{}\label{classcsmp_1_1_boundary_stress_visitor}\index{csmp::BoundaryStressVisitor$<$ dim $>$@{csmp::BoundaryStressVisitor$<$ dim $>$}}
+
+
+\doxylink{classcsmp_1_1_boundary_stress_visitor}{Boundary\+Stress\+Visitor} accesses a \doxylink{classcsmp_1_1_boundary}{Boundary} object that must be a surface, computing nodal forces based on the normal and shear stresses applied to that \doxylink{classcsmp_1_1_boundary}{Boundary} element. If the boundary is inclined or vertical and body forces are enabled, the visitor takes the vertical variation in the boundary normal stress into account.  
+
+
+
+
+{\ttfamily \#include $<$Boundary\+Stress\+Visitor.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Boundary\+Stress\+Visitor\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=216pt]{classcsmp_1_1_boundary_stress_visitor__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Boundary\+Stress\+Visitor\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=216pt]{classcsmp_1_1_boundary_stress_visitor__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_boundary_stress_visitor_ae2dab2f1731e26e436878c4640ac292e}{Boundary\+Stress\+Visitor}} (const \mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&, const char \texorpdfstring{$\ast$}{*}SV\+\_\+variable, bool overwrite\+\_\+force\+\_\+vector=true)
+\begin{DoxyCompactList}\small\item\em by default, any entries into the RHS force vectors will get overwritten \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_boundary_stress_visitor_a726cfbf7d6ab33bca80a016486926820}\label{classcsmp_1_1_boundary_stress_visitor_a726cfbf7d6ab33bca80a016486926820} 
+{\bfseries Boundary\+Stress\+Visitor} (const \mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&, BOUNDARY\+\_\+\+STRESS=BOUNDARY\+\_\+\+STRESS\+::\+SINGLE\+\_\+\+VALUED, bool overwrite\+\_\+force\+\_\+vector=true)
+\begin{DoxyCompactList}\small\item\em computations using absolute stress values on the boundary \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_boundary_stress_visitor_a4ac8dc8426ad7ef7fd1bc52adef02c9d}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_boundary}{Boundary}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\begin{DoxyCompactList}\small\item\em to zero out force vector, prior to accumulation of forces. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_boundary_stress_visitor_aacb2895678c4b568b478fdc619272e42}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_face}{Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\begin{DoxyCompactList}\small\item\em computes nodal forces weighted by node \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_boundary_stress_visitor_ae2dab2f1731e26e436878c4640ac292e}{Boundary\+Stress\+Visitor}} (const \mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&, const char \texorpdfstring{$\ast$}{*}SV\+\_\+variable, bool overwrite\+\_\+force\+\_\+vector=true)
+\begin{DoxyCompactList}\small\item\em by default, any entries into the RHS force vectors will get overwritten \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_boundary_stress_visitor_a726cfbf7d6ab33bca80a016486926820}\label{classcsmp_1_1_boundary_stress_visitor_a726cfbf7d6ab33bca80a016486926820} 
+{\bfseries Boundary\+Stress\+Visitor} (const \mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&, BOUNDARY\+\_\+\+STRESS=BOUNDARY\+\_\+\+STRESS\+::\+SINGLE\+\_\+\+VALUED, bool overwrite\+\_\+force\+\_\+vector=true)
+\begin{DoxyCompactList}\small\item\em computations using absolute stress values on the boundary \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_boundary_stress_visitor_abdad4e41ba17176143c7a3b36b04756e}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_boundary}{Boundary}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\begin{DoxyCompactList}\small\item\em to zero out force vector, prior to accumulation of forces. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_boundary_stress_visitor_a11abcc3f6b424d955ab388b6727c30dd}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_face}{Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\begin{DoxyCompactList}\small\item\em computes nodal forces weighted by node \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_visitor_a1097abaa59d3a35d65c0cb6335e2719c}{Visitor}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} level=MODEL, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} target=ELEMENT)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_visitor_a04cef3d343b9721c4d636f5496ccfa42}{Application\+Level}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} p)
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Application\+Level} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_visitor_a05b9c8127e47ce0ca524e2804c14251a}{Application\+Target}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} p)
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Application\+Target} () const
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a005bb17978ed03376bc3f7c1c329c936}{Set\+Initial\+Properties}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}model)
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a07433f464353062d91f21684b9378dec}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_ac71cf14aab11139d8b03b39d4e4709bc}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_region}{Region}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void {\bfseries Visit} (\mbox{\hyperlink{classcsmp_1_1_split_boundary}{Split\+Boundary}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a1a3ed57d253eef9a0097232c7359627c}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a0f21f0cfcf5328584883eb38effb58d4}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void {\bfseries Visit} (\mbox{\hyperlink{classcsmp_1_1_edge}{Edge}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a46449d8a657dbe4a2db5f1126e08323d}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+bool {\bfseries Verbose} ()
+\item 
+void {\bfseries Verbose} (bool verbose)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries application\+\_\+level\+\_\+}
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries application\+\_\+target\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim$>$\newline
+class csmp\+::\+Boundary\+Stress\+Visitor$<$ dim $>$}
+\doxylink{classcsmp_1_1_boundary_stress_visitor}{Boundary\+Stress\+Visitor} accesses a \doxylink{classcsmp_1_1_boundary}{Boundary} object that must be a surface, computing nodal forces based on the normal and shear stresses applied to that \doxylink{classcsmp_1_1_boundary}{Boundary} element. If the boundary is inclined or vertical and body forces are enabled, the visitor takes the vertical variation in the boundary normal stress into account. 
+
+\begin{DoxyAttention}{Attention}
+this visitor assumes that the driving stresses are Andersonian, i.\+e. that one of the principal stress axes is aligned with the vertical (Y)-\/axis of the model.
+\end{DoxyAttention}
+\begin{DoxyNote}{Note}
+This visitor allows for a workaround for applying stress boundary conditions if one does not want to use the Neumann condition functionality of the \doxylink{classcsmp_1_1_p_d_e___integrator}{PDE\+\_\+\+Integrator}.
+\end{DoxyNote}
+Input are the \doxylink{classcsmp_1_1_face}{Face} variables \textquotesingle{}normal stress\textquotesingle{} and \textquotesingle{}shear stress.\textquotesingle{} The nodal forces are computed from these.
+
+Use this, for instance to compute and apply overburden stresses.
+
+\begin{DoxyAttention}{Attention}
+by default all forces that were previously assigned are zeroed first.
+
+compressive (inward pointing) stresses are positive.
+
+this visitor assumes that the far-\/field stress regime is Andersonian, i.\+e. one of the principal stresses is oriented perpendicular to the earth surface.
+\end{DoxyAttention}
+\begin{DoxyAuthor}{Author}
+SKM 29/9/2014 
+\end{DoxyAuthor}
+
+
+\label{doc-constructors}
+\Hypertarget{classcsmp_1_1_boundary_stress_visitor_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcsmp_1_1_boundary_stress_visitor_ae2dab2f1731e26e436878c4640ac292e}\index{csmp::BoundaryStressVisitor$<$ dim $>$@{csmp::BoundaryStressVisitor$<$ dim $>$}!BoundaryStressVisitor@{BoundaryStressVisitor}}
+\index{BoundaryStressVisitor@{BoundaryStressVisitor}!csmp::BoundaryStressVisitor$<$ dim $>$@{csmp::BoundaryStressVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{BoundaryStressVisitor()}{BoundaryStressVisitor()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_boundary_stress_visitor_ae2dab2f1731e26e436878c4640ac292e} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_boundary_stress_visitor}{csmp\+::\+Boundary\+Stress\+Visitor}}$<$ dim $>$\+::\+Boundary\+Stress\+Visitor (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&}]{model}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{SV\+\_\+variable}{, }\item[{bool}]{overwrite\+\_\+force\+\_\+vector}{ = {\ttfamily true}}\end{DoxyParamCaption})}
+
+
+
+by default, any entries into the RHS force vectors will get overwritten 
+
+For the computation of the nodal \textquotesingle{}gravity force\textquotesingle{}
+
+Application level is model so that all boundaries are visited followed by a visitation of their faces.
+
+
+\begin{DoxyParams}{Parameters}
+{\em model} & computation domain.\\
+\hline
+{\em SV\+\_\+variable} & denotes overburden = vertical stress calculated by integration of the sediment column dry density up to the earth\textquotesingle{} surface. \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyParams}{Parameters}
+{\em SV\+\_\+variable} & should vary with depth \\
+\hline
+\end{DoxyParams}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=224pt]{classcsmp_1_1_boundary_stress_visitor_ae2dab2f1731e26e436878c4640ac292e_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=224pt]{classcsmp_1_1_boundary_stress_visitor_ae2dab2f1731e26e436878c4640ac292e_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_boundary_stress_visitor_ae2dab2f1731e26e436878c4640ac292e}\index{csmp::BoundaryStressVisitor$<$ dim $>$@{csmp::BoundaryStressVisitor$<$ dim $>$}!BoundaryStressVisitor@{BoundaryStressVisitor}}
+\index{BoundaryStressVisitor@{BoundaryStressVisitor}!csmp::BoundaryStressVisitor$<$ dim $>$@{csmp::BoundaryStressVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{BoundaryStressVisitor()}{BoundaryStressVisitor()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_boundary_stress_visitor_ae2dab2f1731e26e436878c4640ac292e} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_boundary_stress_visitor}{csmp\+::\+Boundary\+Stress\+Visitor}}$<$ dim $>$\+::\+Boundary\+Stress\+Visitor (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&}]{}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{SV\+\_\+variable}{, }\item[{bool}]{overwrite\+\_\+force\+\_\+vector}{ = {\ttfamily true}}\end{DoxyParamCaption})}
+
+
+
+by default, any entries into the RHS force vectors will get overwritten 
+
+
+\begin{DoxyParams}{Parameters}
+{\em SV\+\_\+variable} & should vary with depth \\
+\hline
+\end{DoxyParams}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_boundary_stress_visitor_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_boundary_stress_visitor_abdad4e41ba17176143c7a3b36b04756e}\index{csmp::BoundaryStressVisitor$<$ dim $>$@{csmp::BoundaryStressVisitor$<$ dim $>$}!Visit@{Visit}}
+\index{Visit@{Visit}!csmp::BoundaryStressVisitor$<$ dim $>$@{csmp::BoundaryStressVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Visit()}{Visit()}\hspace{0.1cm}{\footnotesize\ttfamily [1/4]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_boundary_stress_visitor_abdad4e41ba17176143c7a3b36b04756e} 
+template$<$uint32\+\_\+t dim$>$ \\
+virtual void \mbox{\hyperlink{classcsmp_1_1_boundary_stress_visitor}{csmp\+::\+Boundary\+Stress\+Visitor}}$<$ dim $>$\+::\+Visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_boundary}{Boundary}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}}]{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+to zero out force vector, prior to accumulation of forces. 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}.
+
+\Hypertarget{classcsmp_1_1_boundary_stress_visitor_a4ac8dc8426ad7ef7fd1bc52adef02c9d}\index{csmp::BoundaryStressVisitor$<$ dim $>$@{csmp::BoundaryStressVisitor$<$ dim $>$}!Visit@{Visit}}
+\index{Visit@{Visit}!csmp::BoundaryStressVisitor$<$ dim $>$@{csmp::BoundaryStressVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Visit()}{Visit()}\hspace{0.1cm}{\footnotesize\ttfamily [2/4]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_boundary_stress_visitor_a4ac8dc8426ad7ef7fd1bc52adef02c9d} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_boundary_stress_visitor}{csmp\+::\+Boundary\+Stress\+Visitor}}$<$ dim $>$\+::\+Visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_boundary}{Boundary}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}}]{b}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+to zero out force vector, prior to accumulation of forces. 
+
+Collects the stress value placed on the boudary and (optionally) zeros out the initial force values assigned to this boundary. 
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}.
+
+\Hypertarget{classcsmp_1_1_boundary_stress_visitor_a11abcc3f6b424d955ab388b6727c30dd}\index{csmp::BoundaryStressVisitor$<$ dim $>$@{csmp::BoundaryStressVisitor$<$ dim $>$}!Visit@{Visit}}
+\index{Visit@{Visit}!csmp::BoundaryStressVisitor$<$ dim $>$@{csmp::BoundaryStressVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Visit()}{Visit()}\hspace{0.1cm}{\footnotesize\ttfamily [3/4]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_boundary_stress_visitor_a11abcc3f6b424d955ab388b6727c30dd} 
+template$<$uint32\+\_\+t dim$>$ \\
+virtual void \mbox{\hyperlink{classcsmp_1_1_boundary_stress_visitor}{csmp\+::\+Boundary\+Stress\+Visitor}}$<$ dim $>$\+::\+Visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_face}{Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}}]{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+computes nodal forces weighted by node 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_visitor_abdca6daa1802e3727868d2d614c65015}{csmp\+::\+Visitor$<$ dim $>$}}.
+
+\Hypertarget{classcsmp_1_1_boundary_stress_visitor_aacb2895678c4b568b478fdc619272e42}\index{csmp::BoundaryStressVisitor$<$ dim $>$@{csmp::BoundaryStressVisitor$<$ dim $>$}!Visit@{Visit}}
+\index{Visit@{Visit}!csmp::BoundaryStressVisitor$<$ dim $>$@{csmp::BoundaryStressVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Visit()}{Visit()}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_boundary_stress_visitor_aacb2895678c4b568b478fdc619272e42} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_boundary_stress_visitor}{csmp\+::\+Boundary\+Stress\+Visitor}}$<$ dim $>$\+::\+Visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_face}{Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}}]{f}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+computes nodal forces weighted by node 
+
+Interpolates the applied element-\/centric forces to the nodes.
+
+An approach is used where the nodal contribution is weighted on the basis of the distance of the barycenter to the node.
+
+\begin{DoxyAttention}{Attention}
+this is an integration (for uniform nodal forces, see option, we get non-\/uniform stresses) 
+\end{DoxyAttention}
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_visitor_abdca6daa1802e3727868d2d614c65015}{csmp\+::\+Visitor$<$ dim $>$}}.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_boundary_stress_visitor_aacb2895678c4b568b478fdc619272e42_cgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/modules/thmc/mechanics/Boundary\+Stress\+Visitor.\+h\item 
+source/includes/thmc/mechanics/Boundary\+Stress\+Visitor.\+h\item 
+source/modules/thmc/mechanics/Boundary\+Stress\+Visitor.\+cpp\end{DoxyCompactItemize}

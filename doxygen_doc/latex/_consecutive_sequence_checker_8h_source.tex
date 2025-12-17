@@ -1,0 +1,71 @@
+\doxysection{Consecutive\+Sequence\+Checker.\+h}
+\hypertarget{_consecutive_sequence_checker_8h_source}{}\label{_consecutive_sequence_checker_8h_source}\index{source/includes/math/ConsecutiveSequenceChecker.h@{source/includes/math/ConsecutiveSequenceChecker.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ \ ConsecutiveSequenceChecker.hpp}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ \ CSMP\_GitHub}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ \ Created\ by\ Stephan\ Matthai\ on\ 10/12/2016.}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//\ \ Copyright\ ©\ 2016\ Stephan\ Matthai.\ All\ rights\ reserved.}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CONSECUTIVE\_INTEGER\_CHECKER\_H}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CONSECUTIVE\_INTEGER\_CHECKER\_H}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{iostream}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{map}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{set}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{vector}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00019\ \textcolor{comment}{}}
+\DoxyCodeLine{00020\ \textcolor{comment}{@class\ ConsecutiveSequenceChecker\ -\/\ checks\ integer\ sequences\ for\ whether\ they\ are\ consecutive.}}
+\DoxyCodeLine{00021\ \textcolor{comment}{}}
+\DoxyCodeLine{00022\ \textcolor{comment}{@author\ SKM\ }}
+\DoxyCodeLine{00023\ \textcolor{comment}{@date\ 10/12/2016}}
+\DoxyCodeLine{00024\ \textcolor{comment}{}}
+\DoxyCodeLine{00025\ \textcolor{comment}{1.\ Finds\ the\ max­i­mum\ and\ min­i­mum\ ele­ments\ in\ sequences}}
+\DoxyCodeLine{00026\ \textcolor{comment}{2.\ Checks\ if\ the\ sequence\ length\ =\ max-\/min+1}}
+\DoxyCodeLine{00027\ \textcolor{comment}{3.\ Checks\ if\ the\ sequence\ contains\ duplicates}}
+\DoxyCodeLine{00028\ \textcolor{comment}{4.\ checks\ whether\ the\ elements\ of\ the\ sequence\ are\ consecutuve}}
+\DoxyCodeLine{00029\ \textcolor{comment}{}}
+\DoxyCodeLine{00030\ \textcolor{comment}{@note\ current\ implementation\ is\ restricted\ to\ size\_t\ \ unsigned\ integers.}}
+\DoxyCodeLine{00031\ \textcolor{comment}{}}
+\DoxyCodeLine{00032\ \textcolor{comment}{@note\ use\ Test\_ConsecutiveSequenceChecker()\ to\ see\ verification\ of\ methods.}}
+\DoxyCodeLine{00033\ \textcolor{comment}{}}
+\DoxyCodeLine{00034\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00035\ \textcolor{keyword}{class}\ \mbox{\hyperlink{class_consecutive_sequence_checker}{ConsecutiveSequenceChecker}}\ \{}
+\DoxyCodeLine{00036\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{comment}{///\ checks\ elements\ of\ an\ integer\ set}}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_consecutive_sequence_checker_add78e9316f6dadf08e0bf7c2312ffc69}{IsRangeOfUnsignedIntConsecutive}}(\ \textcolor{keyword}{const}\ std::set<T>\&,\ \textcolor{keywordtype}{bool}\ check\_whether\_max\_value\_is\_size\_minus1\ );}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{comment}{///\ checks\ elements\ of\ an\ integer\ vector}}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_consecutive_sequence_checker_add78e9316f6dadf08e0bf7c2312ffc69}{IsRangeOfUnsignedIntConsecutive}}(\ \textcolor{keyword}{const}\ std::vector<T>\&,\ \textcolor{keywordtype}{bool}\ check\_whether\_max\_value\_is\_size\_minus1\ );}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{comment}{///\ checks\ whether\ the\ keys\ of\ a\ map\ are\ in\ consecutive\ order}}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ K,\ \textcolor{keyword}{typename}\ V>}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_consecutive_sequence_checker_aa021fe7bd036c5e0508588ef5fb162a5}{IsKeyRangeOfUnsignedIntConsecutive}}(\ \textcolor{keyword}{const}\ std::map<K,V>\&,\ \textcolor{keywordtype}{bool}\ check\_whether\_max\_value\_is\_size\_minus1\ );}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{comment}{///\ checks\ whether\ the\ values\ of\ a\ map\ are\ in\ consecutive\ order}}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ K,\ \textcolor{keyword}{typename}\ V>}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_consecutive_sequence_checker_aba7559a456b334624b3b48cd3b50bb76}{IsValueRangeOfUnsignedIntConsecutive}}(\ \textcolor{keyword}{const}\ std::map<K,V>\&,\ \textcolor{keywordtype}{bool}\ check\_whether\_max\_value\_is\_size\_minus1\ );}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{comment}{///\ checks\ whether\ the\ values\ in\ the\ map\ are\ unique,\ form\ a\ continuous\ sequence\ and\ (optionally)\ are\ bounded\ by\ max-\/val\ ==\ n-\/values-\/1}}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ K,\ \textcolor{keyword}{typename}\ V>}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_consecutive_sequence_checker_a57dd32e4236b21e88488ea6ef0f3daab}{IsValueRangeUniqueAndBounded}}(\ \textcolor{keyword}{const}\ std::map<K,V>\&,\ \textcolor{keywordtype}{bool}\ check\_whether\_max\_value\_is\_size\_minus1\ );}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{comment}{///\ checks\ whether\ the\ values\ of\ a\ map\ are\ in\ consecutive\ order}}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ K,\ \textcolor{keyword}{typename}\ V>}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_consecutive_sequence_checker_a38bf69cdb2e3ce4bfa807cd9e12c145e}{IsValueRangeOfUnsignedIntConsecutive}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_consecutive_sequence_checker_a38bf69cdb2e3ce4bfa807cd9e12c145e}{std}}::\mbox{\hyperlink{class_consecutive_sequence_checker_a38bf69cdb2e3ce4bfa807cd9e12c145e}{multimap}}<\mbox{\hyperlink{class_consecutive_sequence_checker_a38bf69cdb2e3ce4bfa807cd9e12c145e}{K}},\mbox{\hyperlink{class_consecutive_sequence_checker_a38bf69cdb2e3ce4bfa807cd9e12c145e}{std}}::\mbox{\hyperlink{class_consecutive_sequence_checker_a38bf69cdb2e3ce4bfa807cd9e12c145e}{vector}}<\mbox{\hyperlink{class_consecutive_sequence_checker_a38bf69cdb2e3ce4bfa807cd9e12c145e}{V}}>\ >\&,\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_consecutive_sequence_checker_a38bf69cdb2e3ce4bfa807cd9e12c145e}{check\_whether\_max\_value\_is\_size\_minus1}}\ );}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{comment}{///\ verifies\ the\ interfaces\ of\ this\ class}}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_consecutive_sequence_checker_ae279a6852c64c467cdef67fb26e945ef}{Test\_ConsecutiveSequenceChecker}}();}
+\DoxyCodeLine{00063\ \};}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{/*\ CONSECUTIVE\_SEQUENCE\_CHECKER\_H\ */}}
+
+\end{DoxyCode}

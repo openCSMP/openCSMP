@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_a4bc1ee4440994d600e22115268c3c2b" kind="dir">
+    <compoundname>source/modules/integration/finite_elements</compoundname>
+    <innerfile refid="_c_s_m_p___element_specifications_8cpp">CSMP_ElementSpecifications.cpp</innerfile>
+    <innerfile refid="_finite_element_8cpp">FiniteElement.cpp</innerfile>
+    <innerfile refid="_finite_element_policy_8cpp">FiniteElementPolicy.cpp</innerfile>
+    <innerfile refid="_isoparametric_linear_hexahedron_8cpp">IsoparametricLinearHexahedron.cpp</innerfile>
+    <innerfile refid="_isoparametric_linear_line_element_8cpp">IsoparametricLinearLineElement.cpp</innerfile>
+    <innerfile refid="_isoparametric_linear_prism_8cpp">IsoparametricLinearPrism.cpp</innerfile>
+    <innerfile refid="_isoparametric_linear_pyramid_8cpp">IsoparametricLinearPyramid.cpp</innerfile>
+    <innerfile refid="_isoparametric_linear_quadrilateral_8cpp">IsoparametricLinearQuadrilateral.cpp</innerfile>
+    <innerfile refid="_isoparametric_linear_tetrahedron_8cpp">IsoparametricLinearTetrahedron.cpp</innerfile>
+    <innerfile refid="_isoparametric_linear_triangle_8cpp">IsoparametricLinearTriangle.cpp</innerfile>
+    <innerfile refid="_isoparametric_quadratic_hexahedron_8cpp">IsoparametricQuadraticHexahedron.cpp</innerfile>
+    <innerfile refid="_isoparametric_quadratic_line_element_8cpp">IsoparametricQuadraticLineElement.cpp</innerfile>
+    <innerfile refid="_isoparametric_quadratic_prism_8cpp">IsoparametricQuadraticPrism.cpp</innerfile>
+    <innerfile refid="_isoparametric_quadratic_pyramid_8cpp">IsoparametricQuadraticPyramid.cpp</innerfile>
+    <innerfile refid="_isoparametric_quadratic_quadrilateral_8cpp">IsoparametricQuadraticQuadrilateral.cpp</innerfile>
+    <innerfile refid="_isoparametric_quadratic_tetrahedron_8cpp">IsoparametricQuadraticTetrahedron.cpp</innerfile>
+    <innerfile refid="_isoparametric_quadratic_triangle_8cpp">IsoparametricQuadraticTriangle.cpp</innerfile>
+    <innerfile refid="_linear_cuboid_8cpp">LinearCuboid.cpp</innerfile>
+    <innerfile refid="_linear_line_element_8cpp">LinearLineElement.cpp</innerfile>
+    <innerfile refid="_linear_rectangle_8cpp">LinearRectangle.cpp</innerfile>
+    <innerfile refid="_linear_tetrahedron_8cpp">LinearTetrahedron.cpp</innerfile>
+    <innerfile refid="_linear_triangle_8cpp">LinearTriangle.cpp</innerfile>
+    <innerfile refid="_linear_triangle3_d_8cpp">LinearTriangle3D.cpp</innerfile>
+    <innerfile refid="_stabilization_parameter_visitor_8cpp">StabilizationParameterVisitor.cpp</innerfile>
+    <innerfile refid="_v_data_8cpp">VData.cpp</innerfile>
+    <innerfile refid="_v_set_8cpp">VSet.cpp</innerfile>
+    <innerfile refid="_v_set_converter_8cpp">VSetConverter.cpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="source/modules/integration/finite_elements/"/>
+  </compounddef>
+</doxygen>

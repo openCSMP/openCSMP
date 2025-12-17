@@ -1,0 +1,1361 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_na_cl_saturated_vapor_lookup" kind="class" language="C++" prot="public">
+    <compoundname>csmp::NaClSaturatedVaporLookup</compoundname>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1af589ea5741bf35ed4c66d2834d9b6a92" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::NaClSaturatedVaporLookup::temperature</definition>
+        <argsstring></argsstring>
+        <name>temperature</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::temperature</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="42" column="26" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a213cec59408a2cbee45327805acf1c5d" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::NaClSaturatedVaporLookup::pressure</definition>
+        <argsstring></argsstring>
+        <name>pressure</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::pressure</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="43" column="26" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1aa080d316f75661fad1ac922c04f118f0" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::tcurrent</definition>
+        <argsstring></argsstring>
+        <name>tcurrent</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::tcurrent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="45" column="27" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a292f0ca75c252a2a5342fc1bf7c58930" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::pcurrent</definition>
+        <argsstring></argsstring>
+        <name>pcurrent</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::pcurrent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="46" column="27" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1ad2c457a3d7c7783099e70c110d856b5d" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::xcurrent</definition>
+        <argsstring></argsstring>
+        <name>xcurrent</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::xcurrent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="47" column="27" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1afc8fff8f1ccc298f40e65fd54972ae36" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::tdummy</definition>
+        <argsstring></argsstring>
+        <name>tdummy</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::tdummy</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="48" column="27" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1aa8e85cc65b2285425e3a704212c32fb1" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::t_res</definition>
+        <argsstring></argsstring>
+        <name>t_res</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::t_res</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="49" column="27" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a76cf385d76034b04de05b27233f52929" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::p_res</definition>
+        <argsstring></argsstring>
+        <name>p_res</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::p_res</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="50" column="27" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a771d305d7830bf6f6cf709c0f355e3b9" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::tnorm</definition>
+        <argsstring></argsstring>
+        <name>tnorm</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::tnorm</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="51" column="27" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1abceb65ddd478dfb088413118ccd2f6dd" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::pnorm</definition>
+        <argsstring></argsstring>
+        <name>pnorm</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::pnorm</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="52" column="27" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1ad6aa80b6985c3be0f83a5a4e63558993" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::t_iA</definition>
+        <argsstring></argsstring>
+        <name>t_iA</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::t_iA</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="53" column="27" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1abe9f7016395ff149a7a94418c5a415d8" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::t_iB</definition>
+        <argsstring></argsstring>
+        <name>t_iB</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::t_iB</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="54" column="27" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1aa9b2644f4041b49ecaff4b9e2eaaf48e" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::t_iC</definition>
+        <argsstring></argsstring>
+        <name>t_iC</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::t_iC</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="55" column="27" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a3ecd275de85847aae10ad05b0290c61d" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::t_iD</definition>
+        <argsstring></argsstring>
+        <name>t_iD</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::t_iD</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="56" column="27" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a0867cb8902b2affe51aa87db6439f612" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::p_iA</definition>
+        <argsstring></argsstring>
+        <name>p_iA</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::p_iA</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="57" column="27" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a9a1e53c545b3e1d8f0a02db4b135cd83" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::p_iB</definition>
+        <argsstring></argsstring>
+        <name>p_iB</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::p_iB</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="58" column="27" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1afe75c95593aa4a85d9b4bb04987f0ad7" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::p_iC</definition>
+        <argsstring></argsstring>
+        <name>p_iC</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::p_iC</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="59" column="27" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1adbec590e6dbe2bfb9f448c620f786096" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::p_iD</definition>
+        <argsstring></argsstring>
+        <name>p_iD</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::p_iD</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="60" column="27" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1aff95e8cf0657e786382c0de1f598a823" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::pvlh_iB</definition>
+        <argsstring></argsstring>
+        <name>pvlh_iB</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::pvlh_iB</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="61" column="27" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1acd0e05b35c28a903c88fc78173266b8f" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::pvlh_iA</definition>
+        <argsstring></argsstring>
+        <name>pvlh_iA</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::pvlh_iA</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="62" column="27" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1aa75469ff46ce56b76102fb2cb2ff0112" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::value_bottom</definition>
+        <argsstring></argsstring>
+        <name>value_bottom</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::value_bottom</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="63" column="27" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1abaa29c7fa879aecdb4db2e9f7f959dc0" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::value_top</definition>
+        <argsstring></argsstring>
+        <name>value_top</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::value_top</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="64" column="27" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1ab3b89da7648fd2fb0b7b3531d540a1a1" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::value_interpolated</definition>
+        <argsstring></argsstring>
+        <name>value_interpolated</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::value_interpolated</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="65" column="27" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="65" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1aadf4374a8d41632045c5a8c0a362bd88" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::value_iA</definition>
+        <argsstring></argsstring>
+        <name>value_iA</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::value_iA</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="66" column="27" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a3b9f8970a4299ca6271ca57cf8988db4" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::value_iB</definition>
+        <argsstring></argsstring>
+        <name>value_iB</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::value_iB</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="67" column="27" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a11aed6c5f486e4b6bb886f3480b3a7dd" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::value_iC</definition>
+        <argsstring></argsstring>
+        <name>value_iC</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::value_iC</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="68" column="27" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1af3202dcaa169858a457f96718a1f964f" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::value_iD</definition>
+        <argsstring></argsstring>
+        <name>value_iD</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::value_iD</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="69" column="27" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="69" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a79ec1b3c378d20bb02134e0c98d7722c" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::value_before</definition>
+        <argsstring></argsstring>
+        <name>value_before</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::value_before</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="70" column="27" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a6a9ddc572b8144661499fd101cbe737f" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::value_behind</definition>
+        <argsstring></argsstring>
+        <name>value_behind</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::value_behind</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="71" column="27" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a956dacee41d95744557234ad0f3fe40e" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::value_vlh</definition>
+        <argsstring></argsstring>
+        <name>value_vlh</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::value_vlh</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="72" column="27" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1aadd5e92297aab8fcace659aa7397d4d9" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::value_vlh_behind</definition>
+        <argsstring></argsstring>
+        <name>value_vlh_behind</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::value_vlh_behind</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="73" column="27" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a40d86b7cb9e1578faa69ca690e50e9fc" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::value_vlh_before</definition>
+        <argsstring></argsstring>
+        <name>value_vlh_before</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::value_vlh_before</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="74" column="27" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1ad27fc41b45f716d5172ce75da66427e0" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::tvlh</definition>
+        <argsstring></argsstring>
+        <name>tvlh</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::tvlh</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="75" column="27" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="75" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a98ddb1de2161241eea7ac37b902c890d" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::x_low</definition>
+        <argsstring></argsstring>
+        <name>x_low</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::x_low</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="76" column="27" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="76" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1aab0bc904dfd2930cd78c51dc847c252a" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::x_high</definition>
+        <argsstring></argsstring>
+        <name>x_high</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::x_high</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="77" column="27" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a63b4b296b987c7f0a4095096771d924c" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::pmax_low</definition>
+        <argsstring></argsstring>
+        <name>pmax_low</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::pmax_low</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="78" column="27" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a1f20cab91632aa93c1045f9effa1af2d" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::pmax_high</definition>
+        <argsstring></argsstring>
+        <name>pmax_high</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::pmax_high</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="79" column="27" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a396e66bab3a14af036722d51fd200e93" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::NaClSaturatedVaporLookup::it</definition>
+        <argsstring></argsstring>
+        <name>it</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::it</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="81" column="29" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a1ff68301f8e43259059fda94f70a9eda" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::NaClSaturatedVaporLookup::ip</definition>
+        <argsstring></argsstring>
+        <name>ip</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::ip</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="82" column="29" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a212e23d16c4751385abc14968fe0e940" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::NaClSaturatedVaporLookup::t_dim</definition>
+        <argsstring></argsstring>
+        <name>t_dim</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::t_dim</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="83" column="29" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="83" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a0f97dbfb649fe304f816fc03b8e4b84a" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::NaClSaturatedVaporLookup::p_dim</definition>
+        <argsstring></argsstring>
+        <name>p_dim</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::p_dim</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="84" column="29" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1af08a514cf849b81e5bf9172d462ae743" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::NaClSaturatedVaporLookup::iA</definition>
+        <argsstring></argsstring>
+        <name>iA</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::iA</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="85" column="29" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1aaece5a064c13803d10ab31a998a12e8f" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::NaClSaturatedVaporLookup::iB</definition>
+        <argsstring></argsstring>
+        <name>iB</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::iB</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="86" column="29" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1ab27e1e43e7097de48f8b220da03c4acd" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::NaClSaturatedVaporLookup::iC</definition>
+        <argsstring></argsstring>
+        <name>iC</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::iC</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="87" column="29" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="87" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a5f621550a6c87fc4f0676d92f919678d" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::NaClSaturatedVaporLookup::iD</definition>
+        <argsstring></argsstring>
+        <name>iD</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::iD</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="88" column="29" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a2628e18f54a434e94cfa3fda1fcccb6c" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::NaClSaturatedVaporLookup::i_dummy</definition>
+        <argsstring></argsstring>
+        <name>i_dummy</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::i_dummy</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="89" column="29" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="89" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1ad171536f42efff00f6473b9b8fb52c09" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::NaClSaturatedVaporLookup::it_p_max</definition>
+        <argsstring></argsstring>
+        <name>it_p_max</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::it_p_max</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="90" column="29" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="90" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1aea55905d2efe6ee017cc92ec769dd429" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::NaClSaturatedVaporLookup::ip_p_max_low</definition>
+        <argsstring></argsstring>
+        <name>ip_p_max_low</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::ip_p_max_low</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="91" column="29" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a48fc78db04324e8b7a02be8369c49b12" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::NaClSaturatedVaporLookup::ip_p_max_high</definition>
+        <argsstring></argsstring>
+        <name>ip_p_max_high</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::ip_p_max_high</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="92" column="29" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a7b3876ea19554a09545ac9aa7e51350a" prot="private" static="no" mutable="no">
+        <type>States</type>
+        <definition>States csmp::NaClSaturatedVaporLookup::state</definition>
+        <argsstring></argsstring>
+        <name>state</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::state</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="93" column="29" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="93" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a362c0299c5d73db850c69ad86e661b13" prot="private" static="no" mutable="no">
+        <type>States</type>
+        <definition>States csmp::NaClSaturatedVaporLookup::state_iA</definition>
+        <argsstring></argsstring>
+        <name>state_iA</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::state_iA</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="94" column="29" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="94" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1ae71f19fd6e7fad6312851d902c6d57c4" prot="private" static="no" mutable="no">
+        <type>States</type>
+        <definition>States csmp::NaClSaturatedVaporLookup::state_iB</definition>
+        <argsstring></argsstring>
+        <name>state_iB</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::state_iB</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="95" column="29" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="95" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1ac8cb0ca17805cc098f76bfebdb00ac9a" prot="private" static="no" mutable="no">
+        <type>States</type>
+        <definition>States csmp::NaClSaturatedVaporLookup::state_iC</definition>
+        <argsstring></argsstring>
+        <name>state_iC</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::state_iC</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="96" column="29" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="96" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a5ab07a8eee814f2c8c4aa7a3244fbc11" prot="private" static="no" mutable="no">
+        <type>States</type>
+        <definition>States csmp::NaClSaturatedVaporLookup::state_iD</definition>
+        <argsstring></argsstring>
+        <name>state_iD</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::state_iD</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="97" column="29" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="97" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a511cc65c0f2b2f82933e7e0bb9ee33eb" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::NaClSaturatedVaporLookup::storage_vector</definition>
+        <argsstring></argsstring>
+        <name>storage_vector</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::storage_vector</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="99" column="19" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="99" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a647dab56e7e0550f6e5a61eb505394eb" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; States &gt;</type>
+        <definition>std::vector&lt;States&gt; csmp::NaClSaturatedVaporLookup::state_vector</definition>
+        <argsstring></argsstring>
+        <name>state_vector</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::state_vector</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="100" column="21" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="100" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1ae0cc02807cad53fc8717b85289824119" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_critical_point_h2_o" kindref="compound">CriticalPointH2O</ref></type>
+        <definition>CriticalPointH2O csmp::NaClSaturatedVaporLookup::cp_h2o</definition>
+        <argsstring></argsstring>
+        <name>cp_h2o</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::cp_h2o</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="112" column="36" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a0a00dbfda4bcab48a2b1d02abf332eec" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_v_l_h___vapor_lookup" kindref="compound">VLH_VaporLookup</ref></type>
+        <definition>VLH_VaporLookup csmp::NaClSaturatedVaporLookup::vlh_vapor</definition>
+        <argsstring></argsstring>
+        <name>vlh_vapor</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::vlh_vapor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="113" column="36" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="113" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1aa88a04ee507e52f5abbb3fd12303ad9e" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_h2_o_lookup" kindref="compound">H2OLookup</ref></type>
+        <definition>H2OLookup csmp::NaClSaturatedVaporLookup::water</definition>
+        <argsstring></argsstring>
+        <name>water</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::water</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="114" column="36" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="114" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a2fb8535a4a4f72ffa887ec6d1cc1c9ab" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_error_handler" kindref="compound">ErrorHandler</ref> &amp;</type>
+        <definition>ErrorHandler&amp; csmp::NaClSaturatedVaporLookup::csmp_error</definition>
+        <argsstring></argsstring>
+        <name>csmp_error</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::csmp_error</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="116" column="35" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="116" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a29527eaa894c7e4aff9d4c0986aec90c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::NaClSaturatedVaporLookup::NaClSaturatedVaporLookup</definition>
+        <argsstring>(const double &amp;externaltemperature, const double &amp;externalpressure)</argsstring>
+        <name>NaClSaturatedVaporLookup</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::NaClSaturatedVaporLookup</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>externaltemperature</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>externalpressure</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="20" column="5" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClSaturatedVaporLookup.cpp" bodystart="21" bodyend="238"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a8b222a4d77d3caaed2be3ccff68fd901" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::NaClSaturatedVaporLookup::~NaClSaturatedVaporLookup</definition>
+        <argsstring>()</argsstring>
+        <name>~NaClSaturatedVaporLookup</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::~NaClSaturatedVaporLookup</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="21" column="5" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClSaturatedVaporLookup.cpp" bodystart="241" bodyend="243"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a878953c8cb9abbc59b5bd17b0224c93a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::NaClSaturatedVaporLookup::NaClSaturatedVaporLookup</definition>
+        <argsstring>(const NaClSaturatedVaporLookup &amp;)</argsstring>
+        <name>NaClSaturatedVaporLookup</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::NaClSaturatedVaporLookup</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_na_cl_saturated_vapor_lookup" kindref="compound">NaClSaturatedVaporLookup</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="22" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1ae6b34e44f55c4a2da6c74b96f0fbb9e3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_na_cl_saturated_vapor_lookup" kindref="compound">NaClSaturatedVaporLookup</ref> &amp;</type>
+        <definition>NaClSaturatedVaporLookup &amp; csmp::NaClSaturatedVaporLookup::operator=</definition>
+        <argsstring>(const NaClSaturatedVaporLookup &amp;)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_na_cl_saturated_vapor_lookup" kindref="compound">NaClSaturatedVaporLookup</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="23" column="30"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1ad7e2c28fdc3f535834dc0e0beaa1bf7e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::Temperature</definition>
+        <argsstring>()</argsstring>
+        <name>Temperature</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::Temperature</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="25" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClSaturatedVaporLookup.cpp" bodystart="248" bodyend="248"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1af0860d9efa8059112a0fbd4d828f2748" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::Pressure</definition>
+        <argsstring>()</argsstring>
+        <name>Pressure</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::Pressure</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="26" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClSaturatedVaporLookup.cpp" bodystart="249" bodyend="249"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1aa676f1174a515be0309517cb80a28285" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::MassFractionNaCl</definition>
+        <argsstring>()</argsstring>
+        <name>MassFractionNaCl</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::MassFractionNaCl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="27" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClSaturatedVaporLookup.cpp" bodystart="250" bodyend="250"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a4d72eba19923ee4568ca9eb4545e36dc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::Density</definition>
+        <argsstring>()</argsstring>
+        <name>Density</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::Density</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="28" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClSaturatedVaporLookup.cpp" bodystart="251" bodyend="251"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a27a76774a5c6452c4d68277fdc0c0909" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::Enthalpy</definition>
+        <argsstring>()</argsstring>
+        <name>Enthalpy</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::Enthalpy</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="29" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClSaturatedVaporLookup.cpp" bodystart="252" bodyend="252"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a8b4b2283a923e9471003fae7cdcd04a7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::HeatCapacity</definition>
+        <argsstring>()</argsstring>
+        <name>HeatCapacity</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::HeatCapacity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="30" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClSaturatedVaporLookup.cpp" bodystart="253" bodyend="253"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1afd4e5ad61baba6e0abe54389620816e1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::Compressibility</definition>
+        <argsstring>()</argsstring>
+        <name>Compressibility</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::Compressibility</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="31" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClSaturatedVaporLookup.cpp" bodystart="254" bodyend="254"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1ad8252550a9756da2e6f2c1ebdd17a31b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::Viscosity</definition>
+        <argsstring>()</argsstring>
+        <name>Viscosity</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::Viscosity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="32" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClSaturatedVaporLookup.cpp" bodystart="255" bodyend="255"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a01b2463ee22ad562a1220794b2aff807" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::DCompositionDT</definition>
+        <argsstring>()</argsstring>
+        <name>DCompositionDT</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::DCompositionDT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="33" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClSaturatedVaporLookup.cpp" bodystart="303" bodyend="333"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a967de71e30dcd6149e8f90abcffeb964" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::DMassFractionNaClDT</definition>
+        <argsstring>()</argsstring>
+        <name>DMassFractionNaClDT</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::DMassFractionNaClDT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="34" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClSaturatedVaporLookup.cpp" bodystart="336" bodyend="366"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a86f5858d65be07085aa4e4b3c7c7f249" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::ReportMassFractionNaCl</definition>
+        <argsstring>()</argsstring>
+        <name>ReportMassFractionNaCl</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::ReportMassFractionNaCl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="35" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClSaturatedVaporLookup.cpp" bodystart="257" bodyend="257"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1ae09673136891292f6fc98fbaa7b09a0f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::ReportEnthalpy</definition>
+        <argsstring>()</argsstring>
+        <name>ReportEnthalpy</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::ReportEnthalpy</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="36" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClSaturatedVaporLookup.cpp" bodystart="258" bodyend="258"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a1c3a8bcd6eda9f7846b4f96cbb55f071" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::DEnthalpyDT</definition>
+        <argsstring>()</argsstring>
+        <name>DEnthalpyDT</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::DEnthalpyDT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="37" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClSaturatedVaporLookup.cpp" bodystart="270" bodyend="300"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1ab7ee9c5ee06eb5d58ef9fed9dd7f8c28" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::ValueOf</definition>
+        <argsstring>(const int &amp;property_index)</argsstring>
+        <name>ValueOf</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::ValueOf</qualifiedname>
+        <param>
+          <type>const int &amp;</type>
+          <declname>property_index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="38" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClSaturatedVaporLookup.cpp" bodystart="382" bodyend="468"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a433df267b1d902000d4493adc305c530" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::NormalInterpolation</definition>
+        <argsstring>(const int &amp;property_index)</argsstring>
+        <name>NormalInterpolation</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::NormalInterpolation</qualifiedname>
+        <param>
+          <type>const int &amp;</type>
+          <declname>property_index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="102" column="12" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClSaturatedVaporLookup.cpp" bodystart="470" bodyend="491"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a0e05a2a0f3a15c555b476ff2d0a689d1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::NearVLHInterpolationLowT</definition>
+        <argsstring>(const int &amp;property_index)</argsstring>
+        <name>NearVLHInterpolationLowT</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::NearVLHInterpolationLowT</qualifiedname>
+        <param>
+          <type>const int &amp;</type>
+          <declname>property_index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="103" column="12" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClSaturatedVaporLookup.cpp" bodystart="545" bodyend="713"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a9be7c9a8cbb291767a530040c8b4d0ce" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::NearVLHInterpolationHighT</definition>
+        <argsstring>(const int &amp;property_index)</argsstring>
+        <name>NearVLHInterpolationHighT</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::NearVLHInterpolationHighT</qualifiedname>
+        <param>
+          <type>const int &amp;</type>
+          <declname>property_index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="104" column="12" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClSaturatedVaporLookup.cpp" bodystart="718" bodyend="868"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a3c7a0d5032447fc4023569c79122261c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVaporLookup::NearVLHMaxInterpolation</definition>
+        <argsstring>(const int &amp;property_index)</argsstring>
+        <name>NearVLHMaxInterpolation</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::NearVLHMaxInterpolation</qualifiedname>
+        <param>
+          <type>const int &amp;</type>
+          <declname>property_index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="105" column="12" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClSaturatedVaporLookup.cpp" bodystart="493" bodyend="543"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a0271369aed13a2328f9c6294f203fde0" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::NaClSaturatedVaporLookup::SetTemperatureAndPressure</definition>
+        <argsstring>()</argsstring>
+        <name>SetTemperatureAndPressure</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::SetTemperatureAndPressure</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="107" column="10" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClSaturatedVaporLookup.cpp" bodystart="261" bodyend="267"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a461c3786715fca53cdcf6313e1115073" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::NaClSaturatedVaporLookup::GetIndex_iA</definition>
+        <argsstring>(const int &amp;property_index)</argsstring>
+        <name>GetIndex_iA</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::GetIndex_iA</qualifiedname>
+        <param>
+          <type>const int &amp;</type>
+          <declname>property_index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="108" column="10" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClSaturatedVaporLookup.cpp" bodystart="368" bodyend="379"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a07d068508c8f7e19b4e68a0f3bfd05ba" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::NaClSaturatedVaporLookup::GetTemperatureIndex</definition>
+        <argsstring>(const double &amp;t)</argsstring>
+        <name>GetTemperatureIndex</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::GetTemperatureIndex</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>t</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="109" column="10" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClSaturatedVaporLookup.cpp" bodystart="870" bodyend="888"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a26928c2d070184e8bd331f7783e601a9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::NaClSaturatedVaporLookup::GetPressureIndex</definition>
+        <argsstring>(const double &amp;p)</argsstring>
+        <name>GetPressureIndex</name>
+        <qualifiedname>csmp::NaClSaturatedVaporLookup::GetPressureIndex</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>p</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="110" column="10" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClSaturatedVaporLookup.cpp" bodystart="890" bodyend="907"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::NaClSaturatedVaporLookup</label>
+        <link refid="classcsmp_1_1_na_cl_saturated_vapor_lookup"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/eos/NaClSaturatedVaporLookup.h" line="16" column="3" bodyfile="source/includes/eos/NaClSaturatedVaporLookup.h" bodystart="17" bodyend="117"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1afd4e5ad61baba6e0abe54389620816e1" prot="public" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>Compressibility</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1ae0cc02807cad53fc8717b85289824119" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>cp_h2o</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a2fb8535a4a4f72ffa887ec6d1cc1c9ab" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>csmp_error</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a01b2463ee22ad562a1220794b2aff807" prot="public" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>DCompositionDT</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a4d72eba19923ee4568ca9eb4545e36dc" prot="public" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>Density</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a1c3a8bcd6eda9f7846b4f96cbb55f071" prot="public" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>DEnthalpyDT</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a967de71e30dcd6149e8f90abcffeb964" prot="public" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>DMassFractionNaClDT</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a27a76774a5c6452c4d68277fdc0c0909" prot="public" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>Enthalpy</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a461c3786715fca53cdcf6313e1115073" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>GetIndex_iA</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a26928c2d070184e8bd331f7783e601a9" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>GetPressureIndex</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a07d068508c8f7e19b4e68a0f3bfd05ba" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>GetTemperatureIndex</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a8b4b2283a923e9471003fae7cdcd04a7" prot="public" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>HeatCapacity</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a2628e18f54a434e94cfa3fda1fcccb6c" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>i_dummy</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1af08a514cf849b81e5bf9172d462ae743" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>iA</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1aaece5a064c13803d10ab31a998a12e8f" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>iB</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1ab27e1e43e7097de48f8b220da03c4acd" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>iC</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a5f621550a6c87fc4f0676d92f919678d" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>iD</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a1ff68301f8e43259059fda94f70a9eda" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>ip</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a48fc78db04324e8b7a02be8369c49b12" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>ip_p_max_high</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1aea55905d2efe6ee017cc92ec769dd429" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>ip_p_max_low</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a396e66bab3a14af036722d51fd200e93" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>it</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1ad171536f42efff00f6473b9b8fb52c09" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>it_p_max</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1aa676f1174a515be0309517cb80a28285" prot="public" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>MassFractionNaCl</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a29527eaa894c7e4aff9d4c0986aec90c" prot="public" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>NaClSaturatedVaporLookup</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a878953c8cb9abbc59b5bd17b0224c93a" prot="public" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>NaClSaturatedVaporLookup</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a9be7c9a8cbb291767a530040c8b4d0ce" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>NearVLHInterpolationHighT</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a0e05a2a0f3a15c555b476ff2d0a689d1" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>NearVLHInterpolationLowT</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a3c7a0d5032447fc4023569c79122261c" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>NearVLHMaxInterpolation</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a433df267b1d902000d4493adc305c530" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>NormalInterpolation</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1ae6b34e44f55c4a2da6c74b96f0fbb9e3" prot="public" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a0f97dbfb649fe304f816fc03b8e4b84a" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>p_dim</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a0867cb8902b2affe51aa87db6439f612" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>p_iA</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a9a1e53c545b3e1d8f0a02db4b135cd83" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>p_iB</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1afe75c95593aa4a85d9b4bb04987f0ad7" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>p_iC</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1adbec590e6dbe2bfb9f448c620f786096" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>p_iD</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a76cf385d76034b04de05b27233f52929" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>p_res</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a292f0ca75c252a2a5342fc1bf7c58930" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>pcurrent</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a1f20cab91632aa93c1045f9effa1af2d" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>pmax_high</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a63b4b296b987c7f0a4095096771d924c" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>pmax_low</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1abceb65ddd478dfb088413118ccd2f6dd" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>pnorm</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1af0860d9efa8059112a0fbd4d828f2748" prot="public" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>Pressure</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a213cec59408a2cbee45327805acf1c5d" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>pressure</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1acd0e05b35c28a903c88fc78173266b8f" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>pvlh_iA</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1aff95e8cf0657e786382c0de1f598a823" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>pvlh_iB</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1ae09673136891292f6fc98fbaa7b09a0f" prot="public" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>ReportEnthalpy</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a86f5858d65be07085aa4e4b3c7c7f249" prot="public" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>ReportMassFractionNaCl</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a0271369aed13a2328f9c6294f203fde0" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>SetTemperatureAndPressure</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a7b3876ea19554a09545ac9aa7e51350a" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>state</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a362c0299c5d73db850c69ad86e661b13" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>state_iA</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1ae71f19fd6e7fad6312851d902c6d57c4" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>state_iB</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1ac8cb0ca17805cc098f76bfebdb00ac9a" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>state_iC</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a5ab07a8eee814f2c8c4aa7a3244fbc11" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>state_iD</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a647dab56e7e0550f6e5a61eb505394eb" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>state_vector</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a511cc65c0f2b2f82933e7e0bb9ee33eb" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>storage_vector</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a212e23d16c4751385abc14968fe0e940" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>t_dim</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1ad6aa80b6985c3be0f83a5a4e63558993" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>t_iA</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1abe9f7016395ff149a7a94418c5a415d8" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>t_iB</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1aa9b2644f4041b49ecaff4b9e2eaaf48e" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>t_iC</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a3ecd275de85847aae10ad05b0290c61d" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>t_iD</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1aa8e85cc65b2285425e3a704212c32fb1" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>t_res</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1aa080d316f75661fad1ac922c04f118f0" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>tcurrent</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1afc8fff8f1ccc298f40e65fd54972ae36" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>tdummy</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1ad7e2c28fdc3f535834dc0e0beaa1bf7e" prot="public" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>Temperature</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1af589ea5741bf35ed4c66d2834d9b6a92" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>temperature</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a771d305d7830bf6f6cf709c0f355e3b9" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>tnorm</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1ad27fc41b45f716d5172ce75da66427e0" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>tvlh</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a79ec1b3c378d20bb02134e0c98d7722c" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>value_before</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a6a9ddc572b8144661499fd101cbe737f" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>value_behind</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1aa75469ff46ce56b76102fb2cb2ff0112" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>value_bottom</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1aadf4374a8d41632045c5a8c0a362bd88" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>value_iA</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a3b9f8970a4299ca6271ca57cf8988db4" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>value_iB</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a11aed6c5f486e4b6bb886f3480b3a7dd" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>value_iC</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1af3202dcaa169858a457f96718a1f964f" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>value_iD</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1ab3b89da7648fd2fb0b7b3531d540a1a1" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>value_interpolated</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1abaa29c7fa879aecdb4db2e9f7f959dc0" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>value_top</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a956dacee41d95744557234ad0f3fe40e" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>value_vlh</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a40d86b7cb9e1578faa69ca690e50e9fc" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>value_vlh_before</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1aadd5e92297aab8fcace659aa7397d4d9" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>value_vlh_behind</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1ab7ee9c5ee06eb5d58ef9fed9dd7f8c28" prot="public" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>ValueOf</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1ad8252550a9756da2e6f2c1ebdd17a31b" prot="public" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>Viscosity</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a0a00dbfda4bcab48a2b1d02abf332eec" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>vlh_vapor</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1aa88a04ee507e52f5abbb3fd12303ad9e" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>water</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1aab0bc904dfd2930cd78c51dc847c252a" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>x_high</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a98ddb1de2161241eea7ac37b902c890d" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>x_low</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1ad2c457a3d7c7783099e70c110d856b5d" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>xcurrent</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_lookup_1a8b222a4d77d3caaed2be3ccff68fd901" prot="public" virt="non-virtual"><scope>csmp::NaClSaturatedVaporLookup</scope><name>~NaClSaturatedVaporLookup</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

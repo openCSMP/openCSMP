@@ -1,0 +1,90 @@
+\doxysection{Node\+Functions\+\_\+\+Test.\+h}
+\hypertarget{_node_functions___test_8h_source}{}\label{_node_functions___test_8h_source}\index{tests/unit/NodeFunctions\_Test.h@{tests/unit/NodeFunctions\_Test.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ \ NodeFunctions\_Test.h}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ \ CSMP\_GitHub\_UnitTests}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ \ Created\ by\ Stephan\ Matthai\ on\ 7/07/2024.}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//\ \ Copyright\ ©\ 2024\ Stephan\ Matthai.\ All\ rights\ reserved.}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_NODE\_FUNCTIONS\_TEST\_H}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_NODE\_FUNCTIONS\_TEST\_H}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_test_8h}{"{}Test.h"{}}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_node_8h}{"{}Node.h"{}}}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_model}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}};}
+\DoxyCodeLine{00018\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_region}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_region}{Region}};}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00021\ \textcolor{comment}{}}
+\DoxyCodeLine{00022\ \textcolor{comment}{TODO:\ these\ functions\ still\ need\ to\ be\ testsed}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00024\ \textcolor{comment}{///\ if\ there\ is\ only\ one\ parent\ element\ expected,\ then\ use\ this\ method\ instead\ of\ 'parentElementsSharedByFace'}}
+\DoxyCodeLine{00025\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00026\ \textcolor{comment}{template<uint32\_t\ dim>}}
+\DoxyCodeLine{00027\ \textcolor{comment}{std::pair<Element<dim>*,size\_t>\ \ parentElement(\ std::vector<Node<dim>*>::const\_iterator\ first,}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<Node<dim>*>::const\_iterator\ last\ );}}
+\DoxyCodeLine{00029\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00030\ \textcolor{comment}{}}
+\DoxyCodeLine{00031\ \textcolor{comment}{///\ for\ a\ node\ that\ lies\ on\ an\ internal\ surface,\ method\ reports\ which\ of\ volumetric\ parent\ elements\ lie\ on\ the\ inside\ and\ which\ on\ the\ outside\ of\ this\ surface;\ throws\ if\ assumptions\ are\ not\ met}}
+\DoxyCodeLine{00032\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00033\ \textcolor{comment}{template<uint32\_t\ dim>}}
+\DoxyCodeLine{00034\ \textcolor{comment}{std::pair<std::vector<Element<dim>*>,std::vector<Element<dim>*>>\ \ parentElementsAdjacentTo(\ const\ Node<dim>*\ const\ low\_dim\_node\ );}}
+\DoxyCodeLine{00035\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00036\ \textcolor{comment}{}}
+\DoxyCodeLine{00037\ \textcolor{comment}{///\ determines\ role\ of\ Node\ (simple\ mesh\ node\ vs.\ geometric\ constraint),\ using\ BOX\ flagging\ and\ parent\ element\ connectivity,}}
+\DoxyCodeLine{00038\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00039\ \textcolor{comment}{template<uint32\_t\ dim>}}
+\DoxyCodeLine{00040\ \textcolor{comment}{TOPOTYPE\ checkModelPartThatNodeBelongsTo(\ const\ Node<dim>*\ const\ );}}
+\DoxyCodeLine{00041\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00042\ \textcolor{comment}{}}
+\DoxyCodeLine{00043\ \textcolor{comment}{///\ prints\ Idx\ and\ boundary\ flag\ values\ of\ the\ nodes\ that\ this\ node\ is\ connected\ with}}
+\DoxyCodeLine{00044\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00045\ \textcolor{comment}{template<uint32\_t\ dim>}}
+\DoxyCodeLine{00046\ \textcolor{comment}{void\ printNeighbors(\ const\ Node<dim>*\ const\ );}}
+\DoxyCodeLine{00047\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00048\ \textcolor{comment}{}}
+\DoxyCodeLine{00049\ \textcolor{comment}{///\ prints\ current\ parent\ information\ and\ checks\ for\ duplicate\ parents}}
+\DoxyCodeLine{00050\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00051\ \textcolor{comment}{template<uint32\_t\ dim>}}
+\DoxyCodeLine{00052\ \textcolor{comment}{void\ printParents(\ const\ Node<dim>*\ const\ );}}
+\DoxyCodeLine{00053\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00054\ \textcolor{comment}{}}
+\DoxyCodeLine{00055\ \textcolor{comment}{///\ calculates\ the\ size\ of\ the\ Node\ excluding\ the\ dynamic\ contribution\ to\ the\ stored\ variables}}
+\DoxyCodeLine{00056\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00057\ \textcolor{comment}{template<uint32\_t\ dim>}}
+\DoxyCodeLine{00058\ \textcolor{comment}{size\_t\ sizeOf(\ const\ Node<dim>*\ const\ );}}
+\DoxyCodeLine{00059\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00060\ \textcolor{comment}{}}
+\DoxyCodeLine{00061\ \textcolor{comment}{\ \ \ \ @author\ SKM}}
+\DoxyCodeLine{00062\ \textcolor{comment}{\ \ \ \ @date\ 7/7/24}}
+\DoxyCodeLine{00063\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00064\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_node_functions___test}{NodeFunctions\_Test}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_test}{Test}}\ \{}
+\DoxyCodeLine{00065\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00066\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_node_functions___test_aebe7eacf004c207a5ba18903f5fa10bb}{NodeFunctions\_Test}}();}
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~NodeFunctions\_Test()\ \{\}}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_node_functions___test_a5eb41f3597cc2db6a769677ac604cd07}{run}}();}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{comment}{//\ testing\ whether\ functionality\ is\ suitable\ for\ creating\ a\ sparsity\ pattern}}
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keywordtype}{bool}\ Test\_nodeNeighbors(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ model\ );}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keywordtype}{bool}\ Test\_parentElementsSharedByFace();}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ verbose\_\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00080\ \};}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \}\ \textcolor{comment}{//\ end\ csmp}}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{/*\ CSMP\_NODE\_FUNCTIONS\_TEST\_H\ */}}
+
+\end{DoxyCode}

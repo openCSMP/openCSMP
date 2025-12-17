@@ -1,0 +1,113 @@
+.TH "csmp::XML_Document" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::XML_Document \- trivial class to provide an interface for creating and parsing XML documents\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <XML_Document\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBXML_Document\fP ()"
+.br
+.RI "default constructor "
+.ti -1c
+.RI "\fBXML_Document\fP & \fBoperator=\fP (const \fBXML_Document\fP &src)"
+.br
+.ti -1c
+.RI "void \fBOpenNode\fP (const char *nodeLabel)"
+.br
+.RI "opens a new xml node with name and label/settings "
+.ti -1c
+.RI "void \fBCloseNode\fP (const char *nodeName)"
+.br
+.RI "closes given node "
+.ti -1c
+.RI "void \fBAddComment\fP (const char *comment)"
+.br
+.RI "inserts a xml comment "
+.ti -1c
+.RI "void \fBAddInfo\fP (const char *comment)"
+.br
+.RI "inserts a xml system information "
+.ti -1c
+.RI "void \fBInsertData\fP (const char *data)"
+.br
+.RI "inserts data at current position(not responsible for line breaks/levels!!) "
+.ti -1c
+.RI "void \fBLineBreak\fP (size_t n=1)"
+.br
+.ti -1c
+.RI "void \fBTab\fP (size_t n=1)"
+.br
+.ti -1c
+.RI "void \fBBringToLevel\fP ()"
+.br
+.ti -1c
+.RI "size_t \fBCurrentLineCharacterCount\fP () const"
+.br
+.RI "returns the number of characters in current line "
+.ti -1c
+.RI "bool \fBWriteToFile\fP (const char *fileName) const"
+.br
+.RI "writes data to file(no exception handling) "
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBXML_Document\fP (const \fBXML_Document\fP &src)"
+.br
+.ti -1c
+.RI "size_t \fBUp\fP (size_t n=1)"
+.br
+.ti -1c
+.RI "size_t \fBDown\fP (size_t n=1)"
+.br
+.ti -1c
+.RI "void \fBLevel\fP (size_t level)"
+.br
+.ti -1c
+.RI "size_t \fBLevel\fP () const"
+.br
+.ti -1c
+.RI "void \fBWriteToData\fP (const char *content)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+trivial class to provide an interface for creating and parsing XML documents\&. 
+
+
+.PP
+\fBAuthor\fP
+.RS 4
+P\&. Lang 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+Jan 2011
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+(3) Range check current level up/down 
+
+.PP
+(3) Integrate reading/parsing features 
+
+.PP
+(3) Implement vector to hold node names per level to allow for auto closing etc\&.\&.\&.
+.RE
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

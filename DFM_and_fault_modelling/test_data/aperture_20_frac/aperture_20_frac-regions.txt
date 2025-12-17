@@ -1,0 +1,11 @@
+aperture_20_frac-regions.txt
+no properties
+MATRIX
+BACK
+BOTTOM
+FRONT
+LEFT
+RIGHT
+TOP
+SET1_EW
+SET2_NNW_SSE

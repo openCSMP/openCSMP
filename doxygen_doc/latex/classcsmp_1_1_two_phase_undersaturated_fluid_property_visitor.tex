@@ -1,0 +1,148 @@
+\doxysection{csmp\+::Two\+Phase\+Undersaturated\+Fluid\+Property\+Visitor\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor}{}\label{classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor}\index{csmp::TwoPhaseUndersaturatedFluidPropertyVisitor$<$ dim $>$@{csmp::TwoPhaseUndersaturatedFluidPropertyVisitor$<$ dim $>$}}
+
+
+Inheritance diagram for csmp\+::Two\+Phase\+Undersaturated\+Fluid\+Property\+Visitor\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Two\+Phase\+Undersaturated\+Fluid\+Property\+Visitor\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_a720f5fc10a5932153267a722d95b6950}\label{classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_a720f5fc10a5932153267a722d95b6950} 
+{\bfseries Two\+Phase\+Undersaturated\+Fluid\+Property\+Visitor} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&model, const \mbox{\hyperlink{structcsmp_1_1_fluid_property_visitor_configuration}{Fluid\+Property\+Visitor\+Configuration}} \&config)
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_aab6d3747ed48268304fb052094876235}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}node)
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_a1f0b3bb75f9f6f1f0f099748a88e50cf}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}model)
+\item 
+\Hypertarget{classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_ab361ace9ed82e856b0ecd4a15d49686f}\label{classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_ab361ace9ed82e856b0ecd4a15d49686f} 
+void {\bfseries Calculate\+Constant\+Variables} ()
+\item 
+\Hypertarget{classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_a91315239d4cf66ca8522f4baeac86915}\label{classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_a91315239d4cf66ca8522f4baeac86915} 
+void {\bfseries Spivey\+Oil\+Compressibility\+Correlation} (double P, double T)
+\item 
+\Hypertarget{classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_a8c740edd1c21823697af740c984714e5}\label{classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_a8c740edd1c21823697af740c984714e5} 
+void {\bfseries Density\+Oil\+Greater\+Pb} (double P)
+\item 
+\Hypertarget{classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_aa815a8d28eb28bc889cd6df80ca8b0a4}\label{classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_aa815a8d28eb28bc889cd6df80ca8b0a4} 
+void {\bfseries Petrosky\+Farshad\+Oil\+Viscosity\+Greater\+Pb} (double P)
+\item 
+\Hypertarget{classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_a1111bd34e085c233648d4d7e8bc544e0}\label{classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_a1111bd34e085c233648d4d7e8bc544e0} 
+void {\bfseries Spivey\+Brine\+AFactors} (double T)
+\item 
+\Hypertarget{classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_a1ab75dfd97bd6ea31303b80d3c9bc1bd}\label{classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_a1ab75dfd97bd6ea31303b80d3c9bc1bd} 
+double {\bfseries SpiveyA} (const double ai\mbox{[}$\,$\mbox{]}, double T) const
+\item 
+\Hypertarget{classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_ac075bcd9f733ddc16af94d7c330c7a83}\label{classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_ac075bcd9f733ddc16af94d7c330c7a83} 
+void {\bfseries Spivey\+Brine\+Compressibility\+Pure} (double P)
+\item 
+\Hypertarget{classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_a7cc4e934cc33d70b814e5541b1673b37}\label{classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_a7cc4e934cc33d70b814e5541b1673b37} 
+void {\bfseries Spivey\+Brine\+Density\+Pure} (double P)
+\item 
+\Hypertarget{classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_a2b8051aeccbd5de7faa342aa78db5add}\label{classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_a2b8051aeccbd5de7faa342aa78db5add} 
+void {\bfseries Spivey\+Brinde\+Density\+PRef} (double m)
+\item 
+\Hypertarget{classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_ac553c131dec8d0163ea7c48ecb96f30c}\label{classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_ac553c131dec8d0163ea7c48ecb96f30c} 
+void {\bfseries Spivey\+Brine\+Compressibility} (double P, double m)
+\item 
+\Hypertarget{classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_a5cb2bed4af7bc979bd4a817ac66dd95f}\label{classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_a5cb2bed4af7bc979bd4a817ac66dd95f} 
+void {\bfseries Spivey\+Brine\+Density} (double P)
+\item 
+\Hypertarget{classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_a92d35877dada151c99499dcf40200170}\label{classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_a92d35877dada151c99499dcf40200170} 
+void {\bfseries Mao\+Duan\+Water\+Viscosity\+Pure} (double T)
+\item 
+\Hypertarget{classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_ae43e39b99800ec2c5518782eb4066634}\label{classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_ae43e39b99800ec2c5518782eb4066634} 
+void {\bfseries Mao\+Duan\+Brine\+Relative\+Viscosity} (double T, double m)
+\item 
+\Hypertarget{classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_ae230a81c05606ebf7bbf01638586a31d}\label{classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_ae230a81c05606ebf7bbf01638586a31d} 
+double {\bfseries Salinity\+To\+Concentration} (double S) const
+\begin{DoxyCompactList}\small\item\em Spivey et. al 1999 Compressibility of oil at pressures higher than Pb. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_visitor_a1097abaa59d3a35d65c0cb6335e2719c}{Visitor}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} level=MODEL, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} target=ELEMENT)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_visitor_a04cef3d343b9721c4d636f5496ccfa42}{Application\+Level}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} p)
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Application\+Level} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_visitor_a05b9c8127e47ce0ca524e2804c14251a}{Application\+Target}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} p)
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Application\+Target} () const
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a005bb17978ed03376bc3f7c1c329c936}{Set\+Initial\+Properties}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}model)
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_ac71cf14aab11139d8b03b39d4e4709bc}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_region}{Region}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_ac735e758870331b6639ea969504c47bf}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_boundary}{Boundary}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void {\bfseries Visit} (\mbox{\hyperlink{classcsmp_1_1_split_boundary}{Split\+Boundary}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a1a3ed57d253eef9a0097232c7359627c}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_abdca6daa1802e3727868d2d614c65015}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_face}{Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a0f21f0cfcf5328584883eb38effb58d4}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void {\bfseries Visit} (\mbox{\hyperlink{classcsmp_1_1_edge}{Edge}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+bool {\bfseries Verbose} ()
+\item 
+void {\bfseries Verbose} (bool verbose)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries application\+\_\+level\+\_\+}
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries application\+\_\+target\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_a1f0b3bb75f9f6f1f0f099748a88e50cf}\index{csmp::TwoPhaseUndersaturatedFluidPropertyVisitor$<$ dim $>$@{csmp::TwoPhaseUndersaturatedFluidPropertyVisitor$<$ dim $>$}!Visit@{Visit}}
+\index{Visit@{Visit}!csmp::TwoPhaseUndersaturatedFluidPropertyVisitor$<$ dim $>$@{csmp::TwoPhaseUndersaturatedFluidPropertyVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Visit()}{Visit()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_a1f0b3bb75f9f6f1f0f099748a88e50cf} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor}{csmp\+::\+Two\+Phase\+Undersaturated\+Fluid\+Property\+Visitor}}$<$ dim $>$\+::\+Visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}}]{model}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}.
+
+\Hypertarget{classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_aab6d3747ed48268304fb052094876235}\index{csmp::TwoPhaseUndersaturatedFluidPropertyVisitor$<$ dim $>$@{csmp::TwoPhaseUndersaturatedFluidPropertyVisitor$<$ dim $>$}!Visit@{Visit}}
+\index{Visit@{Visit}!csmp::TwoPhaseUndersaturatedFluidPropertyVisitor$<$ dim $>$@{csmp::TwoPhaseUndersaturatedFluidPropertyVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Visit()}{Visit()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_aab6d3747ed48268304fb052094876235} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor}{csmp\+::\+Two\+Phase\+Undersaturated\+Fluid\+Property\+Visitor}}$<$ dim $>$\+::\+Visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}}]{node}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/thmc/two\+\_\+phase\+\_\+flow/Two\+Phase\+Undersaturated\+Fluid\+Property\+Visitor.\+h\item 
+source/modules/thmc/two\+\_\+phase\+\_\+flow/Two\+Phase\+Undersaturated\+Fluid\+Property\+Visitor.\+cpp\end{DoxyCompactItemize}

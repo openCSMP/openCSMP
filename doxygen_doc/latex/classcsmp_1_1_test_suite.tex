@@ -1,0 +1,78 @@
+\doxysection{csmp\+::Test\+Suite Class Reference}
+\hypertarget{classcsmp_1_1_test_suite}{}\label{classcsmp_1_1_test_suite}\index{csmp::TestSuite@{csmp::TestSuite}}
+
+
+Collaboration diagram for csmp\+::Test\+Suite\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=204pt]{classcsmp_1_1_test_suite__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_test_suite_a4a1c75c1640f9e808b25f3264f86e306}\label{classcsmp_1_1_test_suite_a4a1c75c1640f9e808b25f3264f86e306} 
+{\bfseries Test\+Suite} (const string \&name, ostream \texorpdfstring{$\ast$}{*}osptr=0)
+\item 
+\Hypertarget{classcsmp_1_1_test_suite_a640b9a2847d9b2f6493058df537e6fe0}\label{classcsmp_1_1_test_suite_a640b9a2847d9b2f6493058df537e6fe0} 
+string {\bfseries get\+Name} () const
+\item 
+\Hypertarget{classcsmp_1_1_test_suite_af39f6e2ed88f1009e0ec6dea2d728575}\label{classcsmp_1_1_test_suite_af39f6e2ed88f1009e0ec6dea2d728575} 
+long {\bfseries get\+Num\+Passed} () const
+\item 
+\Hypertarget{classcsmp_1_1_test_suite_a13b5f3211ee41f8a440a9373e969e0a6}\label{classcsmp_1_1_test_suite_a13b5f3211ee41f8a440a9373e969e0a6} 
+long {\bfseries get\+Num\+Failed} () const
+\item 
+\Hypertarget{classcsmp_1_1_test_suite_a72ff284eefd7e3a9c41cd1218ea2b794}\label{classcsmp_1_1_test_suite_a72ff284eefd7e3a9c41cd1218ea2b794} 
+const ostream \texorpdfstring{$\ast$}{*} {\bfseries get\+Stream} () const
+\item 
+\Hypertarget{classcsmp_1_1_test_suite_a3055f49a3b5bfdeca880459cedc382b5}\label{classcsmp_1_1_test_suite_a3055f49a3b5bfdeca880459cedc382b5} 
+void {\bfseries set\+Stream} (ostream \texorpdfstring{$\ast$}{*}osptr)
+\item 
+\Hypertarget{classcsmp_1_1_test_suite_acfba2de76c3d6c7e12d19de4b6467a16}\label{classcsmp_1_1_test_suite_acfba2de76c3d6c7e12d19de4b6467a16} 
+void {\bfseries add\+Test} (\mbox{\hyperlink{classcsmp_1_1_test}{Test}} \texorpdfstring{$\ast$}{*}t)
+\item 
+\Hypertarget{classcsmp_1_1_test_suite_ac5238c5154684bc8104097cf9bba06cb}\label{classcsmp_1_1_test_suite_ac5238c5154684bc8104097cf9bba06cb} 
+void {\bfseries add\+Test} (const char \texorpdfstring{$\ast$}{*}test\+\_\+name, \mbox{\hyperlink{classcsmp_1_1_test}{Test}} \texorpdfstring{$\ast$}{*}t)
+\item 
+\Hypertarget{classcsmp_1_1_test_suite_a54ebeb146796f0a9e91b2b59638ad3fe}\label{classcsmp_1_1_test_suite_a54ebeb146796f0a9e91b2b59638ad3fe} 
+void {\bfseries add\+Test\+Suite} (const \mbox{\hyperlink{classcsmp_1_1_test_suite}{Test\+Suite}} \&)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_test_suite_a843bc2d137a1885706f093f36bac8ed9}{run}} ()
+\item 
+\Hypertarget{classcsmp_1_1_test_suite_a3657fcdfa13191c540825775b4ffdc3b}\label{classcsmp_1_1_test_suite_a3657fcdfa13191c540825775b4ffdc3b} 
+void {\bfseries Run\+Specific\+Test} (const char \texorpdfstring{$\ast$}{*})
+\item 
+\Hypertarget{classcsmp_1_1_test_suite_a51b8fdacefa9e73a3187120c5834827d}\label{classcsmp_1_1_test_suite_a51b8fdacefa9e73a3187120c5834827d} 
+void {\bfseries Free\+All\+But\+Specific\+Test} (const char \texorpdfstring{$\ast$}{*}test\+\_\+name)
+\item 
+\Hypertarget{classcsmp_1_1_test_suite_a6e9e0694df3ac615c5992dada7466a51}\label{classcsmp_1_1_test_suite_a6e9e0694df3ac615c5992dada7466a51} 
+bool {\bfseries Is\+In\+Suite} (const char \texorpdfstring{$\ast$}{*}test\+\_\+name)
+\item 
+\Hypertarget{classcsmp_1_1_test_suite_ab73c6f3db368eede9e397342860daf7a}\label{classcsmp_1_1_test_suite_ab73c6f3db368eede9e397342860daf7a} 
+long {\bfseries report} () const
+\item 
+\Hypertarget{classcsmp_1_1_test_suite_ac5ba9c8967da9f944201454ff0508db9}\label{classcsmp_1_1_test_suite_ac5ba9c8967da9f944201454ff0508db9} 
+void {\bfseries free} ()
+\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_test_suite_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_test_suite_a843bc2d137a1885706f093f36bac8ed9}\index{csmp::TestSuite@{csmp::TestSuite}!run@{run}}
+\index{run@{run}!csmp::TestSuite@{csmp::TestSuite}}
+\doxysubsubsection{\texorpdfstring{run()}{run()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_test_suite_a843bc2d137a1885706f093f36bac8ed9} 
+void csmp\+::\+Test\+Suite\+::run (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000254}{Todo}}](1-\/D) Put exception catch around each test and report as failed if throw, instead of throwing all the way out of this member, halting test routine \end{DoxyRefDesc}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+tests/Test\+Suite.\+h\item 
+tests/Test\+Suite.\+cpp\end{DoxyCompactItemize}

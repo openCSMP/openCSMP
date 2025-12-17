@@ -24,13 +24,13 @@ class NumIntegral_BT_D_op_dV : public MathOperatorRHS<dim,CELL> {
                             const char* poissons, // Poisson's ratio
                             const char* test, bool plane_strain=true ); // displacement
 
-    virtual void GetOperands( const CELL<dim>& );
+    void GetOperands( const CELL<dim>& ) override final;
 
-    virtual void ComputeContribution( const CELL<dim>& );
+    void ComputeContribution( const CELL<dim>& ) override final;
     
     void PlaneStress();
     
-    virtual NumIntegral_BT_D_op_dV<dim,CELL>* clone() const { return new NumIntegral_BT_D_op_dV<dim,CELL> (*this); }
+    NumIntegral_BT_D_op_dV<dim,CELL>* clone() const override final { return new NumIntegral_BT_D_op_dV<dim,CELL> (*this); }
     
   private:  
     csmp::Index                       nu_key_;    ///< Poisson's ratio

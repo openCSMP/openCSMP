@@ -1,0 +1,5 @@
+<map id="csmp::Face::Parent" name="csmp::Face::Parent">
+<area shape="rect" id="Node000001" title="access the higher dimensional elements on either side of face;" alt="" coords="233,13,369,38"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_face.html#aacb7102f0e766287c0886d33ab2c4855" title="not a face&#45;normal vector, but the shortest path between the barycenters of face and element" alt="" coords="5,5,185,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="217,28,185,28,185,23,217,23"/>
+</map>

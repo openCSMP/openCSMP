@@ -1,0 +1,151 @@
+.TH "csmp::Tutorial1_Example" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::Tutorial1_Example \- transient pressure diffusion through a porous medium  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <Tutorial1_Example\&.h>\fP
+.PP
+Inherits \fBcsmp::Example\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual void \fBRun\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBSpecifications\fP ()"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::Example\fP
+.in +1c
+.ti -1c
+.RI "\fBExample\fP (std::ostream *osptr=0)"
+.br
+.ti -1c
+.RI "void \fBSetTitle\fP (const std::string &text)"
+.br
+.RI "Reporting interface\&. "
+.ti -1c
+.RI "void \fBSetCategory\fP (const std::string &text)"
+.br
+.ti -1c
+.RI "void \fBSetDifficulty\fP (const int &difficulty)"
+.br
+.RI "set function, takes care that 0 < difficulty < 4 "
+.ti -1c
+.RI "void \fBAddDescription\fP (const std::string &text)"
+.br
+.RI "allows to add a descrtiption to an example "
+.ti -1c
+.RI "void \fBAddRequirement\fP (const std::string &text)"
+.br
+.RI "allows to add a requirement to an example (files etc\&.\&.) "
+.ti -1c
+.RI "void \fBAddAuthor\fP (const std::string &text)"
+.br
+.RI "allows to add an author to an example "
+.ti -1c
+.RI "std::string \fBGetTitle\fP () const"
+.br
+.RI "example title return function "
+.ti -1c
+.RI "int \fBGetDifficulty\fP () const"
+.br
+.RI "return function "
+.ti -1c
+.RI "std::string \fBGetCategory\fP () const"
+.br
+.RI "return function "
+.ti -1c
+.RI "std::list< std::string >::const_iterator \fBGetDescriptionsBegin\fP ()"
+.br
+.RI "return function "
+.ti -1c
+.RI "std::list< std::string >::const_iterator \fBGetDescriptionsEnd\fP () const"
+.br
+.RI "return function "
+.ti -1c
+.RI "std::list< std::string >::const_iterator \fBGetAuthorsBegin\fP ()"
+.br
+.RI "return function "
+.ti -1c
+.RI "std::list< std::string >::const_iterator \fBGetAuthorsEnd\fP () const"
+.br
+.RI "return function "
+.ti -1c
+.RI "std::list< std::string >::const_iterator \fBGetRequirementsBegin\fP ()"
+.br
+.RI "return function "
+.ti -1c
+.RI "std::list< std::string >::const_iterator \fBGetRequirementsEnd\fP () const"
+.br
+.RI "return function "
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Member Functions inherited from \fBcsmp::Example\fP
+.in +1c
+.ti -1c
+.RI "void \fBInitialize\fP ()"
+.br
+.RI "assures db to contain data "
+.ti -1c
+.RI "std::ostream * \fBGetStream\fP ()"
+.br
+.ti -1c
+.RI "void \fBSetStream\fP (std::ostream *ostream)"
+.br
+.ti -1c
+.RI "std::string \fBGetExampleFileName\fP (const char *path)"
+.br
+.ti -1c
+.RI "void \fBCreateWorkingDirectoryAndCopyInputModelFiles\fP (std::string &example_name, std::string &model_name, std::string &variable_file, std::string config_file='')"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+transient pressure diffusion through a porous medium 
+.SH "Member Function Documentation"
+.PP 
+.SS "void csmp::Tutorial1_Example::Run ()\fR [virtual]\fP"
+
+.PP
+
+.PP
+Simple program that shows how to solve the transient pressure diffusion equation using a fully implicit FE discretisation\&. A simple triangular FE mesh is generated automatically in CSMP from which the \fBModel\fP is built\&. \fBBoundary\fP and initial conditions are applied and the hydraulic conductivity is computed as a function of the permeability and viscosity\&. Output is written to VTK and Matlab files\&.
+
+.PP
+Tasks and exercises:
+
+.PP
+.IP "1." 4
+Generate different text-input files with varying permeabilities (see User's Guide Page 45 "Regular Meshes from Pixel Data") NB: Uncomment the line where a fixed, uniform permeability is set!
+.IP "2." 4
+Visualise results and observe how pressure diffusion varies for models with and without permeability contrast
+.IP "3." 4
+Vary boundary and initial conditions (e\&.g\&., fixed pressure on two sides vs\&. one side, change compressibility, etc\&.)
+.IP "4." 4
+Visualise results and observe what happens
+.IP "5." 4
+Generate a simple mesh that is only 1 FE high, use a uniform permeability and apply boundary conditions such that you can compare numerical results with your analytical solution for the diffusion equation
+.IP "6." 4
+Write a new function that reads in porosity and computes the compressibility as a function of the user-specified fluid- and rock-compressibilities, i\&.e\&. solves c = phi * c_f + (1-phi) * c_r for each FE with phi = porosity, c_f = fluid compressibility and c_r = rock compressibility\&. Look at other classes in /source_code/interrelations for inspiration\&. 
+.PP
+
+.PP
+Implements \fBcsmp::Example\fP\&.
+.SS "void csmp::Tutorial1_Example::Specifications ()\fR [virtual]\fP"
+
+.PP
+Implements \fBcsmp::Example\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

@@ -1,0 +1,687 @@
+\doxysection{csmp\+::Boundary\+Interface\texorpdfstring{$<$}{<} dim, BOUNDARY\+\_\+\+COMPLEX \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_boundary_interface}{}\label{classcsmp_1_1_boundary_interface}\index{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$@{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$}}
+
+
+Policy of \doxylink{classcsmp_1_1_model}{Model} class for the management of internal and external boundaries which are of a lower spatial dimensional than the model and consist of \doxylink{classcsmp_1_1_face}{Face} objects.  
+
+
+
+
+{\ttfamily \#include $<$Boundary\+Interface.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Boundary\+Interface\texorpdfstring{$<$}{<} dim, BOUNDARY\+\_\+\+COMPLEX \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_boundary_interface__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Boundary\+Interface\texorpdfstring{$<$}{<} dim, BOUNDARY\+\_\+\+COMPLEX \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=240pt]{classcsmp_1_1_boundary_interface__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_boundary_interface_ad9e5b080197df15de0fc223a7793de2d}\label{classcsmp_1_1_boundary_interface_ad9e5b080197df15de0fc223a7793de2d} 
+typedef std\+::map$<$ std\+::string, \mbox{\hyperlink{classcsmp_1_1_boundary}{csmp\+::\+Boundary}}$<$ dim $>$ $>$\+::iterator {\bfseries boundary\+Iterator}
+\item 
+\Hypertarget{classcsmp_1_1_boundary_interface_a093f6e8261b159874d8537dd3abc0927}\label{classcsmp_1_1_boundary_interface_a093f6e8261b159874d8537dd3abc0927} 
+typedef std\+::map$<$ std\+::string, \mbox{\hyperlink{classcsmp_1_1_boundary}{csmp\+::\+Boundary}}$<$ dim $>$ $>$\+::const\+\_\+iterator {\bfseries boundary\+Const\+Iterator}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_boundary_interface_aedd5c464a8121a28627aab369b8f2403}\label{classcsmp_1_1_boundary_interface_aedd5c464a8121a28627aab369b8f2403} 
+{\bfseries Boundary\+Interface} (const \mbox{\hyperlink{classcsmp_1_1_boundary_interface}{Boundary\+Interface}} \&)=delete
+\item 
+\Hypertarget{classcsmp_1_1_boundary_interface_ab40b76a0d54da3105648ed8e454cdd98}\label{classcsmp_1_1_boundary_interface_ab40b76a0d54da3105648ed8e454cdd98} 
+\mbox{\hyperlink{classcsmp_1_1_boundary}{csmp\+::\+Boundary}}$<$ dim $>$ \& {\bfseries Boundary} (const std\+::string \&b\+Name)
+\item 
+\Hypertarget{classcsmp_1_1_boundary_interface_ab6d9b0f7dcdd1a2b77dc1c5b568ddd1b}\label{classcsmp_1_1_boundary_interface_ab6d9b0f7dcdd1a2b77dc1c5b568ddd1b} 
+const \mbox{\hyperlink{classcsmp_1_1_boundary}{csmp\+::\+Boundary}}$<$ dim $>$ \& {\bfseries Boundary} (const std\+::string \&b\+Name) const
+\item 
+\Hypertarget{classcsmp_1_1_boundary_interface_ad82b6e1229b2eaa3311dc068aa3f0ba6}\label{classcsmp_1_1_boundary_interface_ad82b6e1229b2eaa3311dc068aa3f0ba6} 
+bool {\bfseries Contains\+Boundary} (const std\+::string \&b\+Name) const
+\item 
+\Hypertarget{classcsmp_1_1_boundary_interface_a2771e6533d70e579027431c1ee070926}\label{classcsmp_1_1_boundary_interface_a2771e6533d70e579027431c1ee070926} 
+boundary\+Iterator {\bfseries Boundaries\+Begin} ()
+\item 
+\Hypertarget{classcsmp_1_1_boundary_interface_a1c2e56d21a8535986a71d7a2e37f03ee}\label{classcsmp_1_1_boundary_interface_a1c2e56d21a8535986a71d7a2e37f03ee} 
+boundary\+Iterator {\bfseries Boundaries\+End} ()
+\item 
+\Hypertarget{classcsmp_1_1_boundary_interface_a89bbae050e1bbcee04f262dba1de3adc}\label{classcsmp_1_1_boundary_interface_a89bbae050e1bbcee04f262dba1de3adc} 
+boundary\+Const\+Iterator {\bfseries Boundaries\+Begin} () const
+\item 
+\Hypertarget{classcsmp_1_1_boundary_interface_aa8a2e8bf0c1f33a4407738fd29a64cc5}\label{classcsmp_1_1_boundary_interface_aa8a2e8bf0c1f33a4407738fd29a64cc5} 
+boundary\+Const\+Iterator {\bfseries Boundaries\+End} () const
+\item 
+\Hypertarget{classcsmp_1_1_boundary_interface_ab5bc3897b365ba69484288cecb498d3c}\label{classcsmp_1_1_boundary_interface_ab5bc3897b365ba69484288cecb498d3c} 
+boundary\+Iterator {\bfseries Boundary} (const \mbox{\hyperlink{classcsmp_1_1_boundary}{csmp\+::\+Boundary}}$<$ dim $>$ \&)
+\item 
+\Hypertarget{classcsmp_1_1_boundary_interface_afc9322d44807e26716d48f2c616d3b78}\label{classcsmp_1_1_boundary_interface_afc9322d44807e26716d48f2c616d3b78} 
+size\+\_\+t {\bfseries Boundaries} () const
+\item 
+std\+::string \mbox{\hyperlink{classcsmp_1_1_boundary_interface_a7f343a42577037dff47093f62a90b84b}{Create\+Boundary\+Name}} (const std\+::string \&inside\+\_\+region, const std\+::string \&outside\+\_\+region)
+\begin{DoxyCompactList}\small\item\em creates a name for a new boundary that shall be created between two touching unique (non-\/overlapping) regions \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{classcsmp_1_1_boundary_interface_ad66b7d53568c18e4241ad24ef51f51d7}{Find\+Boundary\+By\+Name}} (const std\+::set$<$ std\+::string $>$ \&intersected\+\_\+regions) const
+\begin{DoxyCompactList}\small\item\em searches for a boundary that intersects the supplied higher-\/dimensional region(s); returns null string (\textquotesingle{}\textbackslash{}0\textquotesingle{}) if not found \end{DoxyCompactList}\item 
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_boundary_interface_a8c12cd3934001fdeea4d927a94bd4e9d}{Find\+Boundary\+By\+Names}} (const std\+::set$<$ std\+::string $>$ \&intersected\+\_\+regions, std\+::set$<$ std\+::string $>$ \&region\+\_\+patches\+\_\+found) const
+\begin{DoxyCompactList}\small\item\em searches for the boundaries whose name contains the supplied strings (region names etc.) \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_boundary_interface_af8d883b322003e0e831b114a53120eef}{Is\+Boundary\+Name}} (const std\+::string \&region\+Name) const
+\begin{DoxyCompactList}\small\item\em checks whether name contains the strings BOUNDARY or any of the predefined boundary names \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_boundary_interface_a170a0b5502f6e14e6ea475714b6764db}{Box\+Shaped}} () const
+\begin{DoxyCompactList}\small\item\em checks whether the model contains the \doxylink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\+\_\+\+BOUNDARY}=equivalent boundaries TOP, BOTTOM etc. \end{DoxyCompactList}\item 
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_boundary_interface_abc0392784790ae33fdc9759a7bf19615}{Form\+Boundaries\+From}} (const \mbox{\hyperlink{classcsmp_1_1_model_topology}{Model\+Topology}} \&)
+\begin{DoxyCompactList}\small\item\em uses the \doxylink{classcsmp_1_1_face}{Face} ids stored in the model topology object to form boundaries using \doxylink{classcsmp_1_1_face}{Face} objects which already exist; returns number of boundaries formed \end{DoxyCompactList}\item 
+std\+::pair$<$ std\+::set$<$ std\+::string $>$, bool $>$ \mbox{\hyperlink{classcsmp_1_1_boundary_interface_a41271a0826a7dfae74abdb5cf4856b4f}{Create\+Internal\+Boundary\+From}} (const char \texorpdfstring{$\ast$}{*}dimension\+\_\+minus1\+\_\+region)
+\begin{DoxyCompactList}\small\item\em converts lower-\/dimensional \doxylink{classcsmp_1_1_region}{Region} into uniquely named \doxylink{classcsmp_1_1_boundary}{Boundary} patches, assigning more specific names to these; the input \doxylink{classcsmp_1_1_region}{Region} and its elements are removed \end{DoxyCompactList}\item 
+std\+::pair$<$ std\+::string, bool $>$ \mbox{\hyperlink{classcsmp_1_1_boundary_interface_a46772c373bade27cc1bfd5de6a7f2cb1}{Create\+External\+Boundary\+From}} (const char \texorpdfstring{$\ast$}{*}dimension\+\_\+minus1\+\_\+region, bool check\+\_\+topo\+\_\+attributes\+\_\+of\+\_\+nodes)
+\begin{DoxyCompactList}\small\item\em converts lower-\/dimensional \doxylink{classcsmp_1_1_region}{Region} on the outside of the model into a \doxylink{classcsmp_1_1_boundary}{Boundary}; returns whether this conversion was successful as well as the boundary name \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_boundary_interface_ad24b7f5db1277b6a7837a700d103d153}{Create\+Boundary\+Around}} (const char \texorpdfstring{$\ast$}{*}region)
+\begin{DoxyCompactList}\small\item\em creates INTERNAL boundary, ignoring already existing boundaries or split-\/boundaries as well as lower-\/dimensional regions, region will be on inside \end{DoxyCompactList}\item 
+std\+::pair$<$ std\+::string, bool $>$ \mbox{\hyperlink{classcsmp_1_1_boundary_interface_a4e8a32b74b875851b1805944812b3a70}{Create\+Boundary\+Between}} (const char \texorpdfstring{$\ast$}{*}region1, const char \texorpdfstring{$\ast$}{*}region2)
+\begin{DoxyCompactList}\small\item\em insert lower-\/dimensional \doxylink{classcsmp_1_1_region}{Region} between two equidimensional unique regions, and then converts it into \doxylink{classcsmp_1_1_boundary}{Boundary}; returns boundary name \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_boundary_interface_ad1c6156ff7aa50d5a1c26d12d32006f7}{Establish\+Edge\+Boundaries\+Of\+Box\+Shaped\+Model}} ()
+\begin{DoxyCompactList}\small\item\em creates EDGE\# \doxylink{classcsmp_1_1_boundary}{Boundary} line objects for box-\/shaped model by intersecting side boundaries objects \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_boundary_interface_aa3b79631cd879e55338d14803caae786}{Establish\+Box\+Boundaries}} ()
+\begin{DoxyCompactList}\small\item\em creates \doxylink{classcsmp_1_1_boundary}{csmp\+::\+Boundary} objects replacing lower-\/dimensional \doxylink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\+\_\+\+BOUNDARY} named regions with boundaries with the same names \end{DoxyCompactList}\item 
+std\+::set$<$ std\+::string $>$ \mbox{\hyperlink{classcsmp_1_1_boundary_interface_ad0eed3c326997f854db44d5a7320a1e2}{Establish\+Boundaries\+From\+Regions}} ()
+\begin{DoxyCompactList}\small\item\em inserts box boundary or irregular \doxylink{classcsmp_1_1_boundary}{csmp\+::\+Boundary} objects for all eligible regions in the model; returns the names of the created boudaries \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_boundary_interface_a432e8ca3268d6ef31eaf6b9fd23a3e7c}{Establish\+Box\+Boundaries\+From\+Orientation}} ()
+\begin{DoxyCompactList}\small\item\em tries to create \doxylink{classcsmp_1_1_box}{Box} \doxylink{classcsmp_1_1_boundary}{Boundary} objects surrounding \textquotesingle{}\doxylink{classcsmp_1_1_model}{Model}\textquotesingle{} into TOP, BOTTOM, IRREGULAR if possible; updates \doxylink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\+\_\+\+BOUNDARY} flags \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_boundary_interface_a806f539a7761ee70feaa892a22d040ff}{Establish\+Box\+Boundaries\+From\+Node\+Flags}} (bool recreate\+\_\+box\+\_\+boundary\+\_\+flags\+\_\+before)
+\begin{DoxyCompactList}\small\item\em creates 3D BOX boundaries using the node flags to identify sides, edges, and corners; use for simple models where corresponding lines or surfaces are missing \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_boundary_interface_ae8976912d2d26ce92222880798dba583}{Remove\+Boundary}} (const char \texorpdfstring{$\ast$}{*}boundary, bool erase\+\_\+faces)
+\begin{DoxyCompactList}\small\item\em Removes boundary with deletion of its faces in the \doxylink{classcsmp_1_1_mesh_manager}{Mesh\+Manager}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_boundary_interface_a363ed5b8e8cbb1e5a6ae26051753e01d}{Remove\+Boundary}} (\mbox{\hyperlink{classcsmp_1_1_boundary}{csmp\+::\+Boundary}}$<$ dim $>$ \&, bool erase\+\_\+faces)
+\begin{DoxyCompactList}\small\item\em Remove boundary, also deleting associated face objects if so requested. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_boundary_interface_ae4bfaeada6c1968a38b739272df2e8a5}\label{classcsmp_1_1_boundary_interface_ae4bfaeada6c1968a38b739272df2e8a5} 
+size\+\_\+t {\bfseries Boundaries\+Out} () const
+\begin{DoxyCompactList}\small\item\em prints boundary names and other stats to screen; returns number of boundaries \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_boundary_interface_a4e58d1c493b2e439a430621ea11df640}{Output\+Boundaries\+To\+Binary}} (const char \texorpdfstring{$\ast$}{*}file\+\_\+name) const
+\begin{DoxyCompactList}\small\item\em method used in the storage of a model to binary file \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_boundary_interface_a573cc9956b043b7010b5c70eebc47a40}{Input\+Boundaries\+From\+Binary}} (const char \texorpdfstring{$\ast$}{*}file\+\_\+name, const std\+::set$<$ std\+::string $>$ \&subset\+\_\+variables)
+\begin{DoxyCompactList}\small\item\em reads boundaries stored in CSMP native binary file written by Output\+Boundaries\+To\+Binary; if set non-\/empty will only read subset of variables \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string \mbox{\hyperlink{classcsmp_1_1_boundary_interface_a7aef8cb4f10754a119e7df1309b9d98a}{Create\+Boundary\+Name\+From}} (const \mbox{\hyperlink{classcsmp_1_1_face_construction_data}{Face\+Construction\+Data}}$<$ dim $>$ \&, const std\+::vector$<$ std\+::string $>$ \&region\+\_\+names) const
+\begin{DoxyCompactList}\small\item\em combines strings (including \textquotesingle{}BOUNDARY\textquotesingle{}) into a unique name of the boundary \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_boundary_interface_a9bdc4e94ff3dbf306bdcccfefd721969}{Add\+Boundary}} (const char \texorpdfstring{$\ast$}{*}name, typename std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_face}{Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::iterator faces\+Begin, typename std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_face}{Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::iterator faces\+End, \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\+\_\+\+BOUNDARY}})
+\begin{DoxyCompactList}\small\item\em creates boundary from already interconnected faces that also know their parent elements \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_boundary_interface_a9ec05234ca81cb71c04c9b5e57064a8c}\label{classcsmp_1_1_boundary_interface_a9ec05234ca81cb71c04c9b5e57064a8c} 
+std\+::map$<$ std\+::string, \mbox{\hyperlink{classcsmp_1_1_boundary}{csmp\+::\+Boundary}}$<$ dim $>$ $>$ {\bfseries boundary\+Map\+\_\+}
+\begin{DoxyCompactList}\small\item\em storage of the boundaries \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_boundary_interface_a09b67aeb3907dc5aa8625fa1514bf694}\label{classcsmp_1_1_boundary_interface_a09b67aeb3907dc5aa8625fa1514bf694} 
+class {\bfseries Boundary\+\_\+\+Test}
+\item 
+\Hypertarget{classcsmp_1_1_boundary_interface_a136b1488cdcd5c98e0ea3a2c34dd6480}\label{classcsmp_1_1_boundary_interface_a136b1488cdcd5c98e0ea3a2c34dd6480} 
+class {\bfseries Boundary\+Interface\+\_\+\+Test}
+\begin{DoxyCompactList}\small\item\em to gain access to protected member functions for testing \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_boundary_interface_aa5d36d2b6156a65c7e8f3c13bbfe474d}\label{classcsmp_1_1_boundary_interface_aa5d36d2b6156a65c7e8f3c13bbfe474d} 
+class {\bfseries Box\+\_\+\+Test}
+\item 
+\Hypertarget{classcsmp_1_1_boundary_interface_ac5a102c3fa820bfdae75912a557c16fb}\label{classcsmp_1_1_boundary_interface_ac5a102c3fa820bfdae75912a557c16fb} 
+class {\bfseries Boundary\+Inter\+Face\+\_\+\+Test}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class BOUNDARY\+\_\+\+COMPLEX$>$\newline
+class csmp\+::\+Boundary\+Interface$<$ dim, BOUNDARY\+\_\+\+COMPLEX $>$}
+Policy of \doxylink{classcsmp_1_1_model}{Model} class for the management of internal and external boundaries which are of a lower spatial dimensional than the model and consist of \doxylink{classcsmp_1_1_face}{Face} objects. 
+
+The \doxylink{classcsmp_1_1_boundary_interface}{Boundary\+Interface} manages the boundaries of the model, including their construction and removal.\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+By contrast with the \doxylink{classcsmp_1_1_region_interface}{Region\+Interface} whose interfaces for \doxylink{classcsmp_1_1_region}{Region} creation rely on the existance of a master region that contains all elements of the model, no such region exists for the boundaries, but boundaries are typically constructed from lower-\/dimensional regions tagged via the name string \textquotesingle{}BOUNDARY\textquotesingle{} as future boundaries in the geomodelling process.
+
+\begin{DoxyNote}{Note}
+the \doxylink{classcsmp_1_1_boundary_interface}{Boundary\+Interface} is not responsible for the management of \doxylink{classcsmp_1_1_face}{Face} objects. These are handled by the \doxylink{classcsmp_1_1_mesh_manager}{Mesh\+Manager}. The only thing that the \doxylink{classcsmp_1_1_boundary_interface}{Boundary\+Interface} does is to allow the creation / modification of Boundaries and to give access to them.
+\end{DoxyNote}
+\begin{DoxyAuthor}{Author}
+S.\+K. Matthai 
+
+P. Lang 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2010, 2017 
+\end{DoxyDate}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_boundary_interface_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_boundary_interface_a9bdc4e94ff3dbf306bdcccfefd721969}\index{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$@{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$}!AddBoundary@{AddBoundary}}
+\index{AddBoundary@{AddBoundary}!csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$@{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$}}
+\doxysubsubsection{\texorpdfstring{AddBoundary()}{AddBoundary()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_boundary_interface_a9bdc4e94ff3dbf306bdcccfefd721969} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class BOUNDARY\+\_\+\+COMPLEX$>$ \\
+bool \mbox{\hyperlink{classcsmp_1_1_boundary_interface}{csmp\+::\+Boundary\+Interface}}$<$ dim, BOUNDARY\+\_\+\+COMPLEX $>$\+::\+Add\+Boundary (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{boundary\+\_\+name}{, }\item[{typename std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_face}{Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::iterator}]{faces\+Begin}{, }\item[{typename std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_face}{Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::iterator}]{faces\+End}{, }\item[{\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\+\_\+\+BOUNDARY}}}]{bflag}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+creates boundary from already interconnected faces that also know their parent elements 
+
+Creates boundary from Faces that already know their parent elements and are interconnected to one another!
+
+The connectivity between the Faces is (re)established.
+
+\begin{DoxyNote}{Note}
+the supplied \doxylink{classcsmp_1_1_face}{Face} pointer vector is moved into boundary and will therefore not be accessible anymore after this method has been called.
+\end{DoxyNote}
+\begin{DoxyAuthor}{Author}
+SKM 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+1/4/2016 
+\end{DoxyDate}
+\Hypertarget{classcsmp_1_1_boundary_interface_a170a0b5502f6e14e6ea475714b6764db}\index{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$@{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$}!BoxShaped@{BoxShaped}}
+\index{BoxShaped@{BoxShaped}!csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$@{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$}}
+\doxysubsubsection{\texorpdfstring{BoxShaped()}{BoxShaped()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_boundary_interface_a170a0b5502f6e14e6ea475714b6764db} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class BOUNDARY\+\_\+\+COMPLEX$>$ \\
+bool \mbox{\hyperlink{classcsmp_1_1_boundary_interface}{csmp\+::\+Boundary\+Interface}}$<$ dim, BOUNDARY\+\_\+\+COMPLEX $>$\+::\+Box\+Shaped (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+checks whether the model contains the \doxylink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\+\_\+\+BOUNDARY}=equivalent boundaries TOP, BOTTOM etc. 
+
+Checks whether a model is box-\/shaped while we can\textquotesingle{}t ask Rectangular\+Shaped\+Model anymore since boundary regions were replaced by boundaries. \Hypertarget{classcsmp_1_1_boundary_interface_ad24b7f5db1277b6a7837a700d103d153}\index{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$@{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$}!CreateBoundaryAround@{CreateBoundaryAround}}
+\index{CreateBoundaryAround@{CreateBoundaryAround}!csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$@{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$}}
+\doxysubsubsection{\texorpdfstring{CreateBoundaryAround()}{CreateBoundaryAround()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_boundary_interface_ad24b7f5db1277b6a7837a700d103d153} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class BOUNDARY\+\_\+\+COMPLEX$>$ \\
+bool \mbox{\hyperlink{classcsmp_1_1_boundary_interface}{csmp\+::\+Boundary\+Interface}}$<$ dim, BOUNDARY\+\_\+\+COMPLEX $>$\+::\+Create\+Boundary\+Around (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{region\+\_\+name}{}\end{DoxyParamCaption})}
+
+
+
+creates INTERNAL boundary, ignoring already existing boundaries or split-\/boundaries as well as lower-\/dimensional regions, region will be on inside 
+
+Creates \doxylink{classcsmp_1_1_boundary}{Boundary} around the supplied region ignoring pre-\/exisiting Boundaries of Split\+Boundaries identified by nodes flagged as INTERNAL or the presence of Node\+Manifolds. Also ignores external model boundaries.
+
+The resulting \doxylink{classcsmp_1_1_boundary}{Boundary} is flagged as INTERNAL.
+
+\begin{DoxyAttention}{Attention}
+By default, there is no partitioning of the boundary into patches based in the juxtaposition of different layers and the region. Instead, the boundary is named BOUNDARY\+\_\+"{}region"{}\+\_\+\+HULL.
+
+the detection of existing boundaries relies on their nodes being flagged as !\+NOT, if these are not present the method might duplicate existing boundaries.
+\end{DoxyAttention}
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000139}{Todo}}]should HULL be partitioned for consistency with boundary naming conventions? -\/ this would require the identification of the names of the adjacent regions. It could be made optional / dependent on the presence of an initialised region identifier.\end{DoxyRefDesc}
+
+
+\begin{DoxyAuthor}{Author}
+SKM 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+27/10/21 refactored 
+\end{DoxyDate}
+\Hypertarget{classcsmp_1_1_boundary_interface_a4e8a32b74b875851b1805944812b3a70}\index{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$@{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$}!CreateBoundaryBetween@{CreateBoundaryBetween}}
+\index{CreateBoundaryBetween@{CreateBoundaryBetween}!csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$@{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$}}
+\doxysubsubsection{\texorpdfstring{CreateBoundaryBetween()}{CreateBoundaryBetween()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_boundary_interface_a4e8a32b74b875851b1805944812b3a70} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class BOUNDARY\+\_\+\+COMPLEX$>$ \\
+pair$<$ string, bool $>$ \mbox{\hyperlink{classcsmp_1_1_boundary_interface}{csmp\+::\+Boundary\+Interface}}$<$ dim, BOUNDARY\+\_\+\+COMPLEX $>$\+::\+Create\+Boundary\+Between (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{group1}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{group2}{}\end{DoxyParamCaption})}
+
+
+
+insert lower-\/dimensional \doxylink{classcsmp_1_1_region}{Region} between two equidimensional unique regions, and then converts it into \doxylink{classcsmp_1_1_boundary}{Boundary}; returns boundary name 
+
+Method forms a \doxylink{classcsmp_1_1_boundary}{Boundary} between the two supplied regions. This will involve the creation and connection of Faces.
+
+This method will only work for unique Regions which are not overlapping.
+
+This method makes no sense for the region \textquotesingle{}\doxylink{classcsmp_1_1_model}{Model}\textquotesingle{} as it encompasses all unique regions.
+
+\begin{DoxyReturn}{Returns}
+returns pair singnalling the success of the operation and giving the name of the boundary.
+\end{DoxyReturn}
+\begin{DoxyAttention}{Attention}
+\+: Boundaries\+Interface cannot be created in 1D models or between regions which contain one-\/dimensional elements.
+\end{DoxyAttention}
+\begin{DoxyNote}{Note}
+the BOX boundary flag will always be internal for this type of boundary because it lies between higher dimensional regions.
+\end{DoxyNote}
+NAMING THE NEW BOUNDARY
+
+(1. name of the master region from which the boundary was created if any)
+
+
+\begin{DoxyEnumerate}
+\item "{}\+BOUNDARY"{}
+\item the patch identifier number attached to boundary (making the boundary patch unique, avoiding duplications)
+\item the name of the inner region, i.\+e. the region that the lower-\/dimensional element normals point away from
+\item the name of the outer region, i.\+e. that into which the normals point
+\end{DoxyEnumerate}
+
+\begin{DoxyNote}{Note}
+Where the boundary just intersects a layer (same material on either side), the layer name appears only once. The second instance is replaced by INTERSECTION.
+\end{DoxyNote}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+Attempts to create a lower-\/dimensional region between higher dimensional ones. This is done in the following steps\+:
+
+
+\begin{DoxyEnumerate}
+\item Checks\+:
+\end{DoxyEnumerate}
+\begin{DoxyItemize}
+\item do the input regions exist
+\item are they higher dimensional
+\item is there not already a region that has the name that the new region will get?
+\end{DoxyItemize}
+\begin{DoxyEnumerate}
+\item Using the Perimeter faces of the candiate regions, matching faces are found and the inside and outside elements are determined as well as recording their face numbers.
+\item The \doxylink{classcsmp_1_1_mesh_manager}{Mesh\+Manager} is instructed to create the required \doxylink{classcsmp_1_1_face}{Face} objects AND connect them with one another. (no objects need to be deleted because it is assumed that there is no line element region at this boundary) \begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000138}{Todo}}]check\end{DoxyRefDesc}
+
+\item The \doxylink{classcsmp_1_1_boundary}{Boundary} is constructed from the \doxylink{classcsmp_1_1_face}{Face} objects.
+\end{DoxyEnumerate}
+
+\begin{DoxyNote}{Note}
+the \doxylink{classcsmp_1_1_region}{Region} will be oriented such that the elements of the first region will be on the inside (normals pointing outward from this region).
+
+this region is not necessarily contiguous
+\end{DoxyNote}
+\begin{DoxyAuthor}{Author}
+SKM 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+refactored 2/4/2022 
+\end{DoxyDate}
+\Hypertarget{classcsmp_1_1_boundary_interface_a7f343a42577037dff47093f62a90b84b}\index{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$@{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$}!CreateBoundaryName@{CreateBoundaryName}}
+\index{CreateBoundaryName@{CreateBoundaryName}!csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$@{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$}}
+\doxysubsubsection{\texorpdfstring{CreateBoundaryName()}{CreateBoundaryName()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_boundary_interface_a7f343a42577037dff47093f62a90b84b} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class BOUNDARY\+\_\+\+COMPLEX$>$ \\
+string \mbox{\hyperlink{classcsmp_1_1_boundary_interface}{csmp\+::\+Boundary\+Interface}}$<$ dim, BOUNDARY\+\_\+\+COMPLEX $>$\+::\+Create\+Boundary\+Name (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{inside\+\_\+region}{, }\item[{const std\+::string \&}]{outside\+\_\+region}{}\end{DoxyParamCaption})}
+
+
+
+creates a name for a new boundary that shall be created between two touching unique (non-\/overlapping) regions 
+
+Creates a name for a new boundary that shall be created between two touching unique (non-\/overlapping) regions
+
+Name will be \textquotesingle{}BOUNDARY\textquotesingle{} + inner + "{}\+\_\+"{} + outer contacting regions. If the name already exists, a number will be appended to boundary to make it unique.
+
+\begin{DoxyAuthor}{Author}
+SKM 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+17/4/22 
+\end{DoxyDate}
+\Hypertarget{classcsmp_1_1_boundary_interface_a7aef8cb4f10754a119e7df1309b9d98a}\index{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$@{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$}!CreateBoundaryNameFrom@{CreateBoundaryNameFrom}}
+\index{CreateBoundaryNameFrom@{CreateBoundaryNameFrom}!csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$@{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$}}
+\doxysubsubsection{\texorpdfstring{CreateBoundaryNameFrom()}{CreateBoundaryNameFrom()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_boundary_interface_a7aef8cb4f10754a119e7df1309b9d98a} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class BOUNDARY\+\_\+\+COMPLEX$>$ \\
+string \mbox{\hyperlink{classcsmp_1_1_boundary_interface}{csmp\+::\+Boundary\+Interface}}$<$ dim, BOUNDARY\+\_\+\+COMPLEX $>$\+::\+Create\+Boundary\+Name\+From (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_face_construction_data}{Face\+Construction\+Data}}$<$ dim $>$ \&}]{}{, }\item[{const std\+::vector$<$ std\+::string $>$ \&}]{region\+\_\+names}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+combines strings (including \textquotesingle{}BOUNDARY\textquotesingle{}) into a unique name of the boundary 
+
+LOCAL METHOD (not known beyond this compilation unit)
+
+creates underscore-\/separated unique names for the region patches based on the juxtapositions relationships across the lower-\/dimensional regions, the names are composed of\+:
+
+
+\begin{DoxyEnumerate}
+\item the name of the master region
+\item "{}\+BOUNDARY"{}
+\item the patch identifier number attached to boundary
+\item the name of the inner region, i.\+e. the region that the lower-\/dimensional element normals point away from
+\item the name of the outer region, i.\+e. that into which the normals point
+\end{DoxyEnumerate}
+
+\begin{DoxyAttention}{Attention}
+where the boundary just intersects a single layer (same material on either side), the layer name appears only once. The second instance is replaced by INTERSECTION. 
+\end{DoxyAttention}
+\Hypertarget{classcsmp_1_1_boundary_interface_a46772c373bade27cc1bfd5de6a7f2cb1}\index{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$@{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$}!CreateExternalBoundaryFrom@{CreateExternalBoundaryFrom}}
+\index{CreateExternalBoundaryFrom@{CreateExternalBoundaryFrom}!csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$@{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$}}
+\doxysubsubsection{\texorpdfstring{CreateExternalBoundaryFrom()}{CreateExternalBoundaryFrom()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_boundary_interface_a46772c373bade27cc1bfd5de6a7f2cb1} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class BOUNDARY\+\_\+\+COMPLEX$>$ \\
+pair$<$ string, bool $>$ \mbox{\hyperlink{classcsmp_1_1_boundary_interface}{csmp\+::\+Boundary\+Interface}}$<$ dim, BOUNDARY\+\_\+\+COMPLEX $>$\+::\+Create\+External\+Boundary\+From (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{dimension\+\_\+minus1\+\_\+region}{, }\item[{bool}]{check\+\_\+topo\+\_\+attributes\+\_\+of\+\_\+nodes}{}\end{DoxyParamCaption})}
+
+
+
+converts lower-\/dimensional \doxylink{classcsmp_1_1_region}{Region} on the outside of the model into a \doxylink{classcsmp_1_1_boundary}{Boundary}; returns whether this conversion was successful as well as the boundary name 
+
+converts lower-\/dimensional \doxylink{classcsmp_1_1_region}{Region} on the outside of the model into a \doxylink{classcsmp_1_1_boundary}{Boundary}; returns whether this conversion was successful as well as the boundary name \Hypertarget{classcsmp_1_1_boundary_interface_a41271a0826a7dfae74abdb5cf4856b4f}\index{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$@{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$}!CreateInternalBoundaryFrom@{CreateInternalBoundaryFrom}}
+\index{CreateInternalBoundaryFrom@{CreateInternalBoundaryFrom}!csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$@{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$}}
+\doxysubsubsection{\texorpdfstring{CreateInternalBoundaryFrom()}{CreateInternalBoundaryFrom()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_boundary_interface_a41271a0826a7dfae74abdb5cf4856b4f} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class BOUNDARY\+\_\+\+COMPLEX$>$ \\
+pair$<$ set$<$ string $>$, bool $>$ \mbox{\hyperlink{classcsmp_1_1_boundary_interface}{csmp\+::\+Boundary\+Interface}}$<$ dim, BOUNDARY\+\_\+\+COMPLEX $>$\+::\+Create\+Internal\+Boundary\+From (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{dim\+\_\+1\+\_\+region}{}\end{DoxyParamCaption})}
+
+
+
+converts lower-\/dimensional \doxylink{classcsmp_1_1_region}{Region} into uniquely named \doxylink{classcsmp_1_1_boundary}{Boundary} patches, assigning more specific names to these; the input \doxylink{classcsmp_1_1_region}{Region} and its elements are removed 
+
+Converts lower-\/dimensional region into Boundarie(s) of faces, decomposed into patches. The \doxylink{classcsmp_1_1_mesh_manager}{Mesh\+Manager} updates the connectivity. The original region is removed (including removal from "{}\+Model"{}) to non-\/unique regions.
+
+Uses node-\/to-\/parent relationship to find the higher dimensional elements that will share a face with the \doxylink{classcsmp_1_1_face}{Face}\+: usng \doxylink{namespacecsmp_ad5202c6b521360ae1a186a5452878a3c}{higher\+Dimensional\+Neighbors()}
+
+\begin{DoxyReturn}{Returns}
+pair of the set oof boundary patches that were created from the region and boolean that tells whether the operation was completely successful.
+\end{DoxyReturn}
+Algorithmic steps\+:
+
+
+\begin{DoxyEnumerate}
+\item Verify input lower-\/dimensional region object from which the boundary shall be created\+: must be lower dimensional and must lie inside of model
+\item Determine the number of boundary segments (sub-\/boundaries) that the new boundary will consist of. The output of this step will be a map of \doxylink{classcsmp_1_1_face_construction_data}{Face\+Construction\+Data} in which the names of the new boundary segments are the keys.
+\item In the \doxylink{classcsmp_1_1_mesh_manager}{Mesh\+Manager} object,
+
+3.\+1 create all required face objects
+
+3.\+2 connect them with one another (neighbors); Boundary\+::\+Establish\+Neighbor\+Connectivity( vector$<$\+Face$<$dim$>$\texorpdfstring{$\ast$}{*}$>$\& ); this is important because any \doxylink{classcsmp_1_1_model_sub_domain}{Model\+Sub\+Domain} creation relies on this connectivity during identification of interior and perimeter.
+\item Create the \doxylink{classcsmp_1_1_boundary}{Boundary} segments, one-\/by-\/one from the map$<$bname, Face\+Construction\+Data$>$; this involves connecting the faces to their higher dimensional neighbours.
+\item For the nodes located on the new boundaries, update / recreate the parent element vectors so that these no longer include neither the elements from which the \doxylink{classcsmp_1_1_boundary}{Boundary} was created nor the new faces.
+\item Remove the parent region of the new boundary(ies) from the region “\+Model.\+” The region is also put into the non-\/unique region map.
+\item Assign \doxylink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\+\_\+\+BOUNDARY} flags to new nodes if any.
+\item By default, but optional removes parent region (including its elements). 
+\end{DoxyEnumerate}\Hypertarget{classcsmp_1_1_boundary_interface_ad0eed3c326997f854db44d5a7320a1e2}\index{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$@{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$}!EstablishBoundariesFromRegions@{EstablishBoundariesFromRegions}}
+\index{EstablishBoundariesFromRegions@{EstablishBoundariesFromRegions}!csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$@{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$}}
+\doxysubsubsection{\texorpdfstring{EstablishBoundariesFromRegions()}{EstablishBoundariesFromRegions()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_boundary_interface_ad0eed3c326997f854db44d5a7320a1e2} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class BOUNDARY\+\_\+\+COMPLEX$>$ \\
+set$<$ string $>$ \mbox{\hyperlink{classcsmp_1_1_boundary_interface}{csmp\+::\+Boundary\+Interface}}$<$ dim, BOUNDARY\+\_\+\+COMPLEX $>$\+::\+Establish\+Boundaries\+From\+Regions (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+inserts box boundary or irregular \doxylink{classcsmp_1_1_boundary}{csmp\+::\+Boundary} objects for all eligible regions in the model; returns the names of the created boudaries 
+
+Creates boundary around "{}\+Model"{} region determining whether lower-\/dimensional regions shall become a boundary segments on the basis of whether their name contains the string "{}\+BOUNDARY"{} or is one of the reserved boundary names.
+
+When a boundary (of \doxylink{classcsmp_1_1_face}{Face} objects) is created, the underpinning lower-\/dimensional (parent) region is removed from the region "{}\+Model"{}. It is also moved from the unique to the non-\/unique region map if it was stored there originally.
+
+\begin{DoxyRemark}{Remarks}
+builds boundaries only considering unique, lower-\/dimensional regions (line-\/element boundaries will not be created).
+\end{DoxyRemark}
+\begin{DoxyReturn}{Returns}
+if all the created \doxylink{classcsmp_1_1_face}{Face} objects can be assigned to boundaries (as identified by the string BOUNDARY) the method returns true. If not, the remaining \doxylink{classcsmp_1_1_face}{Face} objects will be retained as a \doxylink{classcsmp_1_1_boundary}{Boundary} object named "{}Model\+\_\+\+BOUNDARY and the method returns false.
+\end{DoxyReturn}
+\begin{DoxyAttention}{Attention}
+by contrast to \doxylink{classcsmp_1_1_boundary_interface_aa3b79631cd879e55338d14803caae786}{Establish\+Box\+Boundaries()}, Establish\+Boundaries() does not require to be applied to box-\/shaped models, but is more general.
+\end{DoxyAttention}
+\begin{DoxyRefDesc}{Test}
+\item[\mbox{\hyperlink{test__test000035}{Test}}]updated by SKM 2016 \end{DoxyRefDesc}
+\Hypertarget{classcsmp_1_1_boundary_interface_aa3b79631cd879e55338d14803caae786}\index{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$@{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$}!EstablishBoxBoundaries@{EstablishBoxBoundaries}}
+\index{EstablishBoxBoundaries@{EstablishBoxBoundaries}!csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$@{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$}}
+\doxysubsubsection{\texorpdfstring{EstablishBoxBoundaries()}{EstablishBoxBoundaries()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_boundary_interface_aa3b79631cd879e55338d14803caae786} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class BOUNDARY\+\_\+\+COMPLEX$>$ \\
+bool \mbox{\hyperlink{classcsmp_1_1_boundary_interface}{csmp\+::\+Boundary\+Interface}}$<$ dim, BOUNDARY\+\_\+\+COMPLEX $>$\+::\+Establish\+Box\+Boundaries (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+creates \doxylink{classcsmp_1_1_boundary}{csmp\+::\+Boundary} objects replacing lower-\/dimensional \doxylink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\+\_\+\+BOUNDARY} named regions with boundaries with the same names 
+
+Forms boundaries considering names of \doxylink{_box_8h}{Box.\+h}-\/defined strings only, e.\+g., BACK, BOTTOM, RIGHT, TOP, FRONT, IRREGULAR and INTERNAL. Regions with these names are converted to boundaries removing them and their Elements that are replaced by \doxylink{classcsmp_1_1_face}{Face} objects. The new boundaries are given the standard names and are flagged correspondingly.
+
+\begin{DoxyRemark}{Remarks}
+input regions must be lower-\/dimensional (surfaces in 3D and lines in 1D) 
+
+input regions must be unique (space exclusive) 
+
+connectivity of \doxylink{classcsmp_1_1_face}{Face} objects must match / preserve that of previous \doxylink{classcsmp_1_1_element}{Element} objects 
+
+when elements become faces they need to be tagged so that one can detect which region they were created from (idx?)
+\end{DoxyRemark}
+\begin{DoxyNote}{Note}
+if the TOP region is missing, but a IRREGULAR region is there in stead, this is converted into the corresponding boundary. In this case, the model is still regarded as BOX\+\_\+\+SHAPED.
+
+\doxylink{classcsmp_1_1_boundary}{Boundary} creation itself does not deal with the generation of \doxylink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\+\_\+\+BOUNDARY} flags for the model edges and corners. This is accomplished subsequently (in this method) by calling \doxylink{group___c_s_m_pglobal_functions_ga20ee477d00c1041c66b394b9acb5d15b}{recreate\+Box\+Boundary\+Flags()}.
+\end{DoxyNote}
+\begin{DoxyAttention}{Attention}
+this method does not take care of the updating of the non-\/unique regions that are affected by the conversion of Regions into boundaries. This is done afterwards by methods of the \doxylink{classcsmp_1_1_model}{Model} class.
+\end{DoxyAttention}
+\begin{DoxyAuthor}{Author}
+refactored by SKM 2016 
+
+refactored by SKM 2018 
+
+SKM 2021 
+\end{DoxyAuthor}
+\Hypertarget{classcsmp_1_1_boundary_interface_a806f539a7761ee70feaa892a22d040ff}\index{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$@{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$}!EstablishBoxBoundariesFromNodeFlags@{EstablishBoxBoundariesFromNodeFlags}}
+\index{EstablishBoxBoundariesFromNodeFlags@{EstablishBoxBoundariesFromNodeFlags}!csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$@{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$}}
+\doxysubsubsection{\texorpdfstring{EstablishBoxBoundariesFromNodeFlags()}{EstablishBoxBoundariesFromNodeFlags()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_boundary_interface_a806f539a7761ee70feaa892a22d040ff} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class BOUNDARY\+\_\+\+COMPLEX$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_boundary_interface}{csmp\+::\+Boundary\+Interface}}$<$ dim, BOUNDARY\+\_\+\+COMPLEX $>$\+::\+Establish\+Box\+Boundaries\+From\+Node\+Flags (\begin{DoxyParamCaption}\item[{bool}]{recreate\+\_\+box\+\_\+boundary\+\_\+flags\+\_\+before}{}\end{DoxyParamCaption})}
+
+
+
+creates 3D BOX boundaries using the node flags to identify sides, edges, and corners; use for simple models where corresponding lines or surfaces are missing 
+
+Creates BOX boundaries using the node flags to identify sides, edges, and corners; use for simple models where corresponding lines or surfaces are missing.
+
+The result are \doxylink{classcsmp_1_1_boundary}{Boundary} objects with standard names such as TOP, BOTTOM, INTERNAL, IRREGULAR, EDGE1, CNR2 etc.
+
+\begin{DoxyAttention}{Attention}
+method assumes that boundary flags were assigned correctly to the nodes, else a method which does this is called.
+\end{DoxyAttention}
+Procedure
+\begin{DoxyItemize}
+\item using the node flags of the perimeter elements faces, boundary by boundary \doxylink{classcsmp_1_1_v_data}{VData} are created that are subsequently employed to create the \doxylink{classcsmp_1_1_face}{Face} objects of the new boundaries. Then these are created. 
+\end{DoxyItemize}\Hypertarget{classcsmp_1_1_boundary_interface_a432e8ca3268d6ef31eaf6b9fd23a3e7c}\index{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$@{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$}!EstablishBoxBoundariesFromOrientation@{EstablishBoxBoundariesFromOrientation}}
+\index{EstablishBoxBoundariesFromOrientation@{EstablishBoxBoundariesFromOrientation}!csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$@{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$}}
+\doxysubsubsection{\texorpdfstring{EstablishBoxBoundariesFromOrientation()}{EstablishBoxBoundariesFromOrientation()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_boundary_interface_a432e8ca3268d6ef31eaf6b9fd23a3e7c} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class BOUNDARY\+\_\+\+COMPLEX$>$ \\
+bool \mbox{\hyperlink{classcsmp_1_1_boundary_interface}{csmp\+::\+Boundary\+Interface}}$<$ dim, BOUNDARY\+\_\+\+COMPLEX $>$\+::\+Establish\+Box\+Boundaries\+From\+Orientation (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+tries to create \doxylink{classcsmp_1_1_box}{Box} \doxylink{classcsmp_1_1_boundary}{Boundary} objects surrounding \textquotesingle{}\doxylink{classcsmp_1_1_model}{Model}\textquotesingle{} into TOP, BOTTOM, IRREGULAR if possible; updates \doxylink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\+\_\+\+BOUNDARY} flags 
+
+Method caps elements that share one of their faces with the model boundary with \doxylink{classcsmp_1_1_face}{Face} objects. In a second step it assigns these to the \doxylink{classcsmp_1_1_box}{Box} boundaries\+: TOP, BOTTOM,LEFT, RIGHT, etc. INTERNAL, IRREGULAR, or \doxylink{classcsmp_1_1_edge}{Edge} boundaries are not created.
+
+\begin{DoxyAttention}{Attention}
+method assumes that the perimeter of region "{}\+Model"{} correctly identifies the outside faces of the elements of the model. 
+
+this method was designed primarily for three-\/dimensional models.
+\end{DoxyAttention}
+\begin{DoxyAuthor}{Author}
+SKM 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+21/8/2018 
+\end{DoxyDate}
+\Hypertarget{classcsmp_1_1_boundary_interface_ad1c6156ff7aa50d5a1c26d12d32006f7}\index{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$@{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$}!EstablishEdgeBoundariesOfBoxShapedModel@{EstablishEdgeBoundariesOfBoxShapedModel}}
+\index{EstablishEdgeBoundariesOfBoxShapedModel@{EstablishEdgeBoundariesOfBoxShapedModel}!csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$@{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$}}
+\doxysubsubsection{\texorpdfstring{EstablishEdgeBoundariesOfBoxShapedModel()}{EstablishEdgeBoundariesOfBoxShapedModel()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_boundary_interface_ad1c6156ff7aa50d5a1c26d12d32006f7} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class BOUNDARY\+\_\+\+COMPLEX$>$ \\
+bool \mbox{\hyperlink{classcsmp_1_1_boundary_interface}{csmp\+::\+Boundary\+Interface}}$<$ dim, BOUNDARY\+\_\+\+COMPLEX $>$\+::\+Establish\+Edge\+Boundaries\+Of\+Box\+Shaped\+Model (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+creates EDGE\# \doxylink{classcsmp_1_1_boundary}{Boundary} line objects for box-\/shaped model by intersecting side boundaries objects 
+
+Creates \doxylink{classcsmp_1_1_edge}{Edge} boundary objects (of dim-\/2 \doxylink{classcsmp_1_1_face}{Face} objects) for box-\/shaped model from side boundaries
+
+
+\begin{DoxyEnumerate}
+\item verifies that that the side boundaries of the box-\/shaped model are there
+\end{DoxyEnumerate}
+
+\begin{DoxyAttention}{Attention}
+EXCEPTION\+: the edge curves are represented by \doxylink{classcsmp_1_1_face}{Face} objects, however these are dim-\/2 entities. Following CSMP\textquotesingle{}s rules, these edges will be connected to their face neighbors AND their higher-\/dimensional parent elements with which they share edges.
+\end{DoxyAttention}
+\begin{DoxyRefDesc}{Test}
+\item[\mbox{\hyperlink{test__test000034}{Test}}]OK -\/ for Box\+Halfs3D\end{DoxyRefDesc}
+\Hypertarget{classcsmp_1_1_boundary_interface_ad66b7d53568c18e4241ad24ef51f51d7}\index{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$@{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$}!FindBoundaryByName@{FindBoundaryByName}}
+\index{FindBoundaryByName@{FindBoundaryByName}!csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$@{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$}}
+\doxysubsubsection{\texorpdfstring{FindBoundaryByName()}{FindBoundaryByName()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_boundary_interface_ad66b7d53568c18e4241ad24ef51f51d7} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class BOUNDARY\+\_\+\+COMPLEX$>$ \\
+string \mbox{\hyperlink{classcsmp_1_1_boundary_interface}{csmp\+::\+Boundary\+Interface}}$<$ dim, BOUNDARY\+\_\+\+COMPLEX $>$\+::\+Find\+Boundary\+By\+Name (\begin{DoxyParamCaption}\item[{const std\+::set$<$ std\+::string $>$ \&}]{intersected\+\_\+regions}{}\end{DoxyParamCaption}) const}
+
+
+
+searches for a boundary that intersects the supplied higher-\/dimensional region(s); returns null string (\textquotesingle{}\textbackslash{}0\textquotesingle{}) if not found 
+
+Returns name of the first \doxylink{classcsmp_1_1_boundary}{Boundary} (patch) that contains the supplied region name strings or any other other strings in an arbitrary order.
+
+if the boundary does not exist, method returns \textbackslash{}O string.
+
+\begin{DoxyAuthor}{Author}
+SKM 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+March 2016 
+\end{DoxyDate}
+\Hypertarget{classcsmp_1_1_boundary_interface_a8c12cd3934001fdeea4d927a94bd4e9d}\index{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$@{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$}!FindBoundaryByNames@{FindBoundaryByNames}}
+\index{FindBoundaryByNames@{FindBoundaryByNames}!csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$@{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$}}
+\doxysubsubsection{\texorpdfstring{FindBoundaryByNames()}{FindBoundaryByNames()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_boundary_interface_a8c12cd3934001fdeea4d927a94bd4e9d} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class BOUNDARY\+\_\+\+COMPLEX$>$ \\
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_boundary_interface}{csmp\+::\+Boundary\+Interface}}$<$ dim, BOUNDARY\+\_\+\+COMPLEX $>$\+::\+Find\+Boundary\+By\+Names (\begin{DoxyParamCaption}\item[{const std\+::set$<$ std\+::string $>$ \&}]{intersected\+\_\+regions}{, }\item[{std\+::set$<$ std\+::string $>$ \&}]{region\+\_\+patches\+\_\+found}{}\end{DoxyParamCaption}) const}
+
+
+
+searches for the boundaries whose name contains the supplied strings (region names etc.) 
+
+Searches the model for boundaries the name of which contains the search strings provided via the first set. The results are returnd into the second set.
+
+\begin{DoxyNote}{Note}
+Use this method, for example, to retrieve multiple boundary patches that were generated from a single lower-\/dimensional regon, like a fault surface.
+\end{DoxyNote}
+\begin{DoxyAuthor}{Author}
+SKM 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+March 2016 
+\end{DoxyDate}
+\Hypertarget{classcsmp_1_1_boundary_interface_abc0392784790ae33fdc9759a7bf19615}\index{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$@{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$}!FormBoundariesFrom@{FormBoundariesFrom}}
+\index{FormBoundariesFrom@{FormBoundariesFrom}!csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$@{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$}}
+\doxysubsubsection{\texorpdfstring{FormBoundariesFrom()}{FormBoundariesFrom()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_boundary_interface_abc0392784790ae33fdc9759a7bf19615} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class BOUNDARY\+\_\+\+COMPLEX$>$ \\
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_boundary_interface}{csmp\+::\+Boundary\+Interface}}$<$ dim, BOUNDARY\+\_\+\+COMPLEX $>$\+::\+Form\+Boundaries\+From (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_model_topology}{Model\+Topology}} \&}]{topo}{}\end{DoxyParamCaption})}
+
+
+
+uses the \doxylink{classcsmp_1_1_face}{Face} ids stored in the model topology object to form boundaries using \doxylink{classcsmp_1_1_face}{Face} objects which already exist; returns number of boundaries formed 
+
+Assuming that the necessary \doxylink{classcsmp_1_1_face}{Face} objects already exist, this method creates Boundaries interpreting the \doxylink{structcsmp_1_1_cell}{Cell} \textquotesingle{}idx\textquotesingle{} stored in the model topology object as \doxylink{classcsmp_1_1_face}{Face} \textquotesingle{}idx\textquotesingle{} ranging between n\+\_\+elements..interfaces-\/1 \Hypertarget{classcsmp_1_1_boundary_interface_a573cc9956b043b7010b5c70eebc47a40}\index{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$@{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$}!InputBoundariesFromBinary@{InputBoundariesFromBinary}}
+\index{InputBoundariesFromBinary@{InputBoundariesFromBinary}!csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$@{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$}}
+\doxysubsubsection{\texorpdfstring{InputBoundariesFromBinary()}{InputBoundariesFromBinary()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_boundary_interface_a573cc9956b043b7010b5c70eebc47a40} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class BOUNDARY\+\_\+\+COMPLEX$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_boundary_interface}{csmp\+::\+Boundary\+Interface}}$<$ dim, BOUNDARY\+\_\+\+COMPLEX $>$\+::\+Input\+Boundaries\+From\+Binary (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{file\+\_\+name}{, }\item[{const std\+::set$<$ std\+::string $>$ \&}]{subset\+\_\+variables}{}\end{DoxyParamCaption})}
+
+
+
+reads boundaries stored in CSMP native binary file written by Output\+Boundaries\+To\+Binary; if set non-\/empty will only read subset of variables 
+
+reads and initialises boundaries from file written by \doxylink{classcsmp_1_1_boundary_interface_a4e58d1c493b2e439a430621ea11df640}{Output\+Boundaries\+To\+Binary()} \Hypertarget{classcsmp_1_1_boundary_interface_af8d883b322003e0e831b114a53120eef}\index{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$@{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$}!IsBoundaryName@{IsBoundaryName}}
+\index{IsBoundaryName@{IsBoundaryName}!csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$@{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$}}
+\doxysubsubsection{\texorpdfstring{IsBoundaryName()}{IsBoundaryName()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_boundary_interface_af8d883b322003e0e831b114a53120eef} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class BOUNDARY\+\_\+\+COMPLEX$>$ \\
+bool \mbox{\hyperlink{classcsmp_1_1_boundary_interface}{csmp\+::\+Boundary\+Interface}}$<$ dim, BOUNDARY\+\_\+\+COMPLEX $>$\+::\+Is\+Boundary\+Name (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{region\+Name}{}\end{DoxyParamCaption}) const}
+
+
+
+checks whether name contains the strings BOUNDARY or any of the predefined boundary names 
+
+Checks whether the name contains any substring that is indicative of a model boundary, this includes LEFT, RIGHT, TOP, BOTTOM, FRONT, BACK, IRREGULAR and any name that is preceded by the string BOUNDARY.
+
+\begin{DoxyNote}{Note}
+\doxylink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\+\_\+\+BOUNDARY} edge and corner names are not checked for 
+\end{DoxyNote}
+\Hypertarget{classcsmp_1_1_boundary_interface_a4e58d1c493b2e439a430621ea11df640}\index{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$@{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$}!OutputBoundariesToBinary@{OutputBoundariesToBinary}}
+\index{OutputBoundariesToBinary@{OutputBoundariesToBinary}!csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$@{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$}}
+\doxysubsubsection{\texorpdfstring{OutputBoundariesToBinary()}{OutputBoundariesToBinary()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_boundary_interface_a4e58d1c493b2e439a430621ea11df640} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class BOUNDARY\+\_\+\+COMPLEX$>$ \\
+bool \mbox{\hyperlink{classcsmp_1_1_boundary_interface}{csmp\+::\+Boundary\+Interface}}$<$ dim, BOUNDARY\+\_\+\+COMPLEX $>$\+::\+Output\+Boundaries\+To\+Binary (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{file\+\_\+name}{}\end{DoxyParamCaption}) const}
+
+
+
+method used in the storage of a model to binary file 
+
+Writes all the boundaries to binary file, remembering all details of their implementation.
+
+\begin{DoxyAttention}{Attention}
+method expects that a unique global nnumbering of \doxylink{classcsmp_1_1_face}{Face} and \doxylink{classcsmp_1_1_node}{Node} objects was established prior to its application.
+
+ONLY METHOD that provides complete information about each boundary\+: interior vs. perimeter nodes and element; boudary faces etc.
+\end{DoxyAttention}
+\begin{DoxyAuthor}{Author}
+SKM 3/4/2016 
+\end{DoxyAuthor}
+\Hypertarget{classcsmp_1_1_boundary_interface_ae8976912d2d26ce92222880798dba583}\index{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$@{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$}!RemoveBoundary@{RemoveBoundary}}
+\index{RemoveBoundary@{RemoveBoundary}!csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$@{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$}}
+\doxysubsubsection{\texorpdfstring{RemoveBoundary()}{RemoveBoundary()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_boundary_interface_ae8976912d2d26ce92222880798dba583} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class BOUNDARY\+\_\+\+COMPLEX$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_boundary_interface}{csmp\+::\+Boundary\+Interface}}$<$ dim, BOUNDARY\+\_\+\+COMPLEX $>$\+::\+Remove\+Boundary (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{boundary\+\_\+name}{, }\item[{bool}]{erase\+\_\+faces}{}\end{DoxyParamCaption})}
+
+
+
+Removes boundary with deletion of its faces in the \doxylink{classcsmp_1_1_mesh_manager}{Mesh\+Manager}. 
+
+Removes the boundary from the map, prompting the \doxylink{classcsmp_1_1_mesh_manager}{Mesh\+Manager} to delete the corresponding \doxylink{classcsmp_1_1_face}{Face} objects if so required. Interior nodes that had a boundary specific \doxylink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\+\_\+\+BOUNDARY} flag are set back to NOT.
+
+
+\begin{DoxyParams}{Parameters}
+{\em boundary\+\_\+name} & either one of the box boundaries or a name that contains the string BOUNDARY (case insentivite) \\
+\hline
+{\em erase\+\_\+faces} & deletes the \doxylink{classcsmp_1_1_face}{Face} objects that were defining the boundary\\
+\hline
+\end{DoxyParams}
+\begin{DoxyAttention}{Attention}
+this does not remove the \doxylink{classcsmp_1_1_face}{Face} objects associated with the boundary; call \doxylink{classcsmp_1_1_mesh_manager}{Mesh\+Manager} to do this. \begin{DoxyVerb}@author SKM (refactored - since design was flawed)
+@date 15/8/2020
+\end{DoxyVerb}
+ 
+\end{DoxyAttention}
+\Hypertarget{classcsmp_1_1_boundary_interface_a363ed5b8e8cbb1e5a6ae26051753e01d}\index{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$@{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$}!RemoveBoundary@{RemoveBoundary}}
+\index{RemoveBoundary@{RemoveBoundary}!csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$@{csmp::BoundaryInterface$<$ dim, BOUNDARY\_COMPLEX $>$}}
+\doxysubsubsection{\texorpdfstring{RemoveBoundary()}{RemoveBoundary()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_boundary_interface_a363ed5b8e8cbb1e5a6ae26051753e01d} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class BOUNDARY\+\_\+\+COMPLEX$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_boundary_interface}{csmp\+::\+Boundary\+Interface}}$<$ dim, BOUNDARY\+\_\+\+COMPLEX $>$\+::\+Remove\+Boundary (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_boundary}{csmp\+::\+Boundary}}$<$ dim $>$ \&}]{boundary}{, }\item[{bool}]{erase\+\_\+faces}{}\end{DoxyParamCaption})}
+
+
+
+Remove boundary, also deleting associated face objects if so requested. 
+
+Removes the boundary from the map, prompting the \doxylink{classcsmp_1_1_mesh_manager}{Mesh\+Manager} to delete the corresponding \doxylink{classcsmp_1_1_face}{Face} objects if so required. Interior nodes that had a boundary specific \doxylink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\+\_\+\+BOUNDARY} flag are set back to NOT.
+
+
+\begin{DoxyParams}{Parameters}
+{\em boundary} & reference to valid boundary in the model\\
+\hline
+\end{DoxyParams}
+\begin{DoxyAttention}{Attention}
+this does not remove the \doxylink{classcsmp_1_1_face}{Face} objects associated with the boundary; call \doxylink{classcsmp_1_1_mesh_manager}{Mesh\+Manager} to do this. \begin{DoxyVerb}@author SKM (refactored - since design was flawed)
+@date 15/8/2020
+\end{DoxyVerb}
+ 
+\end{DoxyAttention}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/model/Boundary\+Interface.\+h\item 
+source/modules/model/Boundary\+Interface.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,120 @@
+\doxysection{csmp\+::Property\+Constraints Class Reference}
+\hypertarget{classcsmp_1_1_property_constraints}{}\label{classcsmp_1_1_property_constraints}\index{csmp::PropertyConstraints@{csmp::PropertyConstraints}}
+
+
+\doxylink{classcsmp_1_1_property_constraints}{Property\+Constraints} permits to combine multiple criteria on the basis of which non-\/unique regions can be formed.  
+
+
+
+
+{\ttfamily \#include $<$Property\+Constraints.\+h$>$}
+
+
+
+Collaboration diagram for csmp\+::Property\+Constraints\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=241pt]{classcsmp_1_1_property_constraints__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_property_constraints_a0a9b761efe6c8071c6a9d6b3431bd46e}\label{classcsmp_1_1_property_constraints_a0a9b761efe6c8071c6a9d6b3431bd46e} 
+{\bfseries Property\+Constraints} (const \mbox{\hyperlink{classcsmp_1_1_property_constraints}{Property\+Constraints}} \&cr)
+\item 
+\Hypertarget{classcsmp_1_1_property_constraints_a295110f03dba2e3905e2269048d29b6c}\label{classcsmp_1_1_property_constraints_a295110f03dba2e3905e2269048d29b6c} 
+{\bfseries Property\+Constraints} (const char \texorpdfstring{$\ast$}{*}prop\+\_\+name, double pmin, double pmax)
+\item 
+\Hypertarget{classcsmp_1_1_property_constraints_af0533ec1db44c9beadd344f08b1cfb72}\label{classcsmp_1_1_property_constraints_af0533ec1db44c9beadd344f08b1cfb72} 
+\mbox{\hyperlink{classcsmp_1_1_property_constraints}{Property\+Constraints}} \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_property_constraints}{Property\+Constraints}} \&cr)
+\item 
+\Hypertarget{classcsmp_1_1_property_constraints_ae31b0b43dbc95e4184d7885ceb130ef8}\label{classcsmp_1_1_property_constraints_ae31b0b43dbc95e4184d7885ceb130ef8} 
+bool {\bfseries With\+Indexes} () const
+\item 
+\Hypertarget{classcsmp_1_1_property_constraints_a144c5cdc9a2ba2ccbac42c59551ba450}\label{classcsmp_1_1_property_constraints_a144c5cdc9a2ba2ccbac42c59551ba450} 
+uint32\+\_\+t {\bfseries Constraints} () const
+\item 
+\Hypertarget{classcsmp_1_1_property_constraints_aed130d684f7be6243061542b152ae457}\label{classcsmp_1_1_property_constraints_aed130d684f7be6243061542b152ae457} 
+void {\bfseries Check\+Length\+Of\+Vector\+Variables} (bool check)
+\item 
+\Hypertarget{classcsmp_1_1_property_constraints_a16e67e38f81543155102f82e701a68e1}\label{classcsmp_1_1_property_constraints_a16e67e38f81543155102f82e701a68e1} 
+bool {\bfseries Add\+Constraint} (const char \texorpdfstring{$\ast$}{*}prop\+\_\+name, double pmin, double pmax)
+\item 
+\Hypertarget{classcsmp_1_1_property_constraints_afefea043f8b5add99aefa2987dfe0f45}\label{classcsmp_1_1_property_constraints_afefea043f8b5add99aefa2987dfe0f45} 
+void {\bfseries Change\+Constraint} (const char \texorpdfstring{$\ast$}{*}prop\+\_\+name, double pmin, double pmax)
+\item 
+\Hypertarget{classcsmp_1_1_property_constraints_a5360f2653db35717d34104473ed0ff31}\label{classcsmp_1_1_property_constraints_a5360f2653db35717d34104473ed0ff31} 
+{\footnotesize template$<$uint32\+\_\+t dim$>$ }\\bool {\bfseries Initialize\+Property\+Indices} (const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&)
+\item 
+\Hypertarget{classcsmp_1_1_property_constraints_a461ce107234de1740c818ddb7ef633e8}\label{classcsmp_1_1_property_constraints_a461ce107234de1740c818ddb7ef633e8} 
+{\footnotesize template$<$uint32\+\_\+t dim$>$ }\\void {\bfseries Delete\+Constraint} (const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&, const char \texorpdfstring{$\ast$}{*}prop\+\_\+name)
+\item 
+\Hypertarget{classcsmp_1_1_property_constraints_a7d9b86f8c1f01bc128ff95c25d50b329}\label{classcsmp_1_1_property_constraints_a7d9b86f8c1f01bc128ff95c25d50b329} 
+{\footnotesize template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ }\\bool {\bfseries Check\+Constraints} (const CELL$<$ dim $>$ \texorpdfstring{$\ast$}{*}) const
+\item 
+{\footnotesize template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ }\\bool \mbox{\hyperlink{classcsmp_1_1_property_constraints_a1d30ff2462d74d8a7738369ed5528fa3}{Check\+Constraints}} (const CELL$<$ dim $>$ \texorpdfstring{$\ast$}{*}, \mbox{\hyperlink{structcsmp_1_1_index}{Index}} \&idx) const
+\item 
+\Hypertarget{classcsmp_1_1_property_constraints_a1f8b2a3c14c79c1f6fd4e389139855b8}\label{classcsmp_1_1_property_constraints_a1f8b2a3c14c79c1f6fd4e389139855b8} 
+void {\bfseries Satisfy\+Constraints\+For\+At\+Least\+One\+Node} (bool satisfy)
+\item 
+\Hypertarget{classcsmp_1_1_property_constraints_afba6414595c35c74a12c672efec90af0}\label{classcsmp_1_1_property_constraints_afba6414595c35c74a12c672efec90af0} 
+void {\bfseries Satisfy\+Constraints\+For\+Nodal\+Average} (bool satisfy)
+\item 
+\Hypertarget{classcsmp_1_1_property_constraints_a5413f3260232e449fe30b88ba5f7fbf6}\label{classcsmp_1_1_property_constraints_a5413f3260232e449fe30b88ba5f7fbf6} 
+void {\bfseries Erase} ()
+\item 
+\Hypertarget{classcsmp_1_1_property_constraints_ab196b0f201ad4b304fe3e02b3a1c710c}\label{classcsmp_1_1_property_constraints_ab196b0f201ad4b304fe3e02b3a1c710c} 
+void {\bfseries Out} () const
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\doxylink{classcsmp_1_1_property_constraints}{Property\+Constraints} permits to combine multiple criteria on the basis of which non-\/unique regions can be formed. 
+
+In the terminology of this class, a criterion is called a constraint. This class stores user-\/defined constraints that may include, for instance, the magnitude of a vector.
+
+\begin{DoxyNote}{Note}
+look in the region interface to see how to build regions using \doxylink{classcsmp_1_1_property_constraints}{Property\+Constraints}.
+\end{DoxyNote}
+\begin{DoxyAuthor}{Author}
+SKM 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+15/6/1999 
+\end{DoxyDate}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_property_constraints_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_property_constraints_a1d30ff2462d74d8a7738369ed5528fa3}\index{csmp::PropertyConstraints@{csmp::PropertyConstraints}!CheckConstraints@{CheckConstraints}}
+\index{CheckConstraints@{CheckConstraints}!csmp::PropertyConstraints@{csmp::PropertyConstraints}}
+\doxysubsubsection{\texorpdfstring{CheckConstraints()}{CheckConstraints()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_constraints_a1d30ff2462d74d8a7738369ed5528fa3} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+bool csmp\+::\+Property\+Constraints\+::\+Check\+Constraints (\begin{DoxyParamCaption}\item[{const CELL$<$ dim $>$ \texorpdfstring{$\ast$}{*}}]{e}{, }\item[{\mbox{\hyperlink{structcsmp_1_1_index}{Index}} \&}]{failed\+\_\+upon}{}\end{DoxyParamCaption}) const}
+
+For all constraints the checks are performed until a check fails. Since the constraints scalar ranges, vector and tensor variables are checked for their individual components unless specific check instructions were specified. If so, for instance, vectors can be checked for ~\newline
+ their length and tensors for their Eigenvalues. ~\newline
+
+
+\begin{DoxyReturn}{Returns}
+whether the element satisfies the user-\/supplied constraints. 
+\end{DoxyReturn}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_property_constraints_a1d30ff2462d74d8a7738369ed5528fa3_cgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/model/Property\+Constraints.\+h\item 
+source/modules/model/Property\+Constraints.\+cpp\end{DoxyCompactItemize}

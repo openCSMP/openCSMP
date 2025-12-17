@@ -36,15 +36,16 @@ void FiniteVolumeStencilSpeed_Test::run()
       const string model_name{"prism_test"}; //  53821 elements, 10831 nodes, 3040 faces
       
       // checking whether there already is a native csmp file set in place
-      if ( !isThereFileCalled( model_name + "_variables.dat") )
-        {
-          // creating the model from ANSYS .asc and .dat files and converting it to CSMP native binary fileset
-          ANSYS_Model3D ansys_model( model_name.c_str(), model_name.c_str(), "VariableSet_TracerTransfer-variables.txt", true );
-          cout << "\n"<<"FiniteVolumeStencilSpeed_Test::run: time taking to build model from ANSYS: " << (ansys_build_time=timer.StopClock()) << "\n\n\n";
-          printModelDimensions( ansys_model );
-          // saving model to disk
-          ansys_model.OutputToBinaryFile(model_name.c_str());
-        }
+      //if ( !isThereFileCalled( model_name + "_variables.dat") )
+      {
+        timer.Start();
+        // creating the model from ANSYS .asc and .dat files and converting it to CSMP native binary fileset
+        ANSYS_Model3D ansys_model( model_name.c_str(), model_name.c_str(), "VariableSet_TracerTransfer-variables.txt", true );
+        cout << "\n"<<"FiniteVolumeStencilSpeed_Test::run: time taking to build model from ANSYS: " << (ansys_build_time=timer.StopClock()) << "\n\n\n";
+        printModelDimensions( ansys_model );
+        // saving model to disk
+        ansys_model.OutputToBinaryFile(model_name.c_str());
+      }
       // reading from binary file
       timer.Start();
       Model<3U> model( model_name );
@@ -61,7 +62,9 @@ void FiniteVolumeStencilSpeed_Test::run()
       // -----------------------------------------------------------
       Region<3U>&  model_domain = model.Region("Model");
       const bool initialize_flux( true ); // prescibed 'total velocity'
+      timer.Start();
       initializeFiniteVolumeProperties( model, model_domain, initialize_flux );
+      cout << "\n"<<"FiniteVolumeStencilSpeed_Test::run: time taken to initialise transport variables: "<< timer.StopClock() << endl;
       AssignFlowProperties( model );
 
       // computing flux balance for computed divergence free 'total velocity' field
@@ -79,7 +82,7 @@ void FiniteVolumeStencilSpeed_Test::run()
       const bool prescribed_velocity(false);
       timer.Start();
       TestFlowThroughModel( model, prescribed_velocity );
-      cout << "\n"<<"FiniteVolumeStencilSpeed_Test::run: "<< timer.StopClock() << endl;
+      cout << "\n"<<"FiniteVolumeStencilSpeed_Test::run: time takend to conduct a transport simulation: "<< timer.StopClock() << endl;
       
     } // end run
 
@@ -182,7 +185,7 @@ void  FiniteVolumeStencilSpeed_Test::DivergenceFreeTotalVelocityField( Model<3U>
 
     // 5.  Output the initial conditions to VTK
     // -----------------------------------------
-#ifdef DEBUG
+#ifndef NDEBUG
     VTK_Interface<3U>  vtk_output;
     vtk_output.OutputDataToVTK( model, "fluid-pressure", "fluid pressure", 0, true );
     vtk_output.OutputDataToVTK( model, "velocity",       "velocity",       0, true );
@@ -219,7 +222,7 @@ void  FiniteVolumeStencilSpeed_Test::TestFlowThroughModel( Model<3U>& model, boo
     const double inlet_concentration(3.);
     model.InputBoundaryValue( LEFT, "concentration", makeScalar(DIRICH,inlet_concentration) );
     
-#ifdef DEBUG
+#ifndef NDEBUG
     VTK_Interface<3U>  vtk_output;
     vtk_output.OutputDataToVTK( model, "concentration", "concentration", 0, true );
 #endif
@@ -254,7 +257,7 @@ void  FiniteVolumeStencilSpeed_Test::TestFlowThroughModel( Model<3U>& model, boo
     // 1.1 getting some tracer into model
     transport.AdvectVariable( time_interval );
     duration += time_interval;
-#ifdef DEBUG
+#ifndef NDEBUG
     vtk_output.OutputDataToVTK( model, "concentration", "concentration", 1, true );
 #endif
 
@@ -262,14 +265,14 @@ void  FiniteVolumeStencilSpeed_Test::TestFlowThroughModel( Model<3U>& model, boo
     model.InputBoundaryValue( LEFT, "concentration", makeScalar(DIRICH,0.) );
     transport.AdvectVariable( time_interval );
     duration += time_interval;
-#ifdef DEBUG
+#ifndef NDEBUG
     vtk_output.OutputDataToVTK( model, "concentration", "concentration", 2, true );
 #endif
 
     // 1.3 transporting for trice the time
     transport.AdvectVariable( time_interval );
     duration += time_interval;
- #ifdef DEBUG
+ #ifndef NDEBUG
    vtk_output.OutputDataToVTK( model, "concentration", "concentration", 3, true );
  #endif
     const bool print_maximum{true};
@@ -280,7 +283,7 @@ void  FiniteVolumeStencilSpeed_Test::TestFlowThroughModel( Model<3U>& model, boo
     transport.AdvectVariable( time_interval * 2. );
     duration += time_interval * 2.;
     _test( printRangeOfVariable( model, "concentration", print_maximum ) <= inlet_concentration );
-#ifdef DEBUG
+#ifndef NDEBUG
     vtk_output.OutputDataToVTK( model, "concentration", "concentration", 4, true );
 #endif
 

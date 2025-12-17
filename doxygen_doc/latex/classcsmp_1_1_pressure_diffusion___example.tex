@@ -1,0 +1,127 @@
+\doxysection{csmp\+::Pressure\+Diffusion\+\_\+\+Example Class Reference}
+\hypertarget{classcsmp_1_1_pressure_diffusion___example}{}\label{classcsmp_1_1_pressure_diffusion___example}\index{csmp::PressureDiffusion\_Example@{csmp::PressureDiffusion\_Example}}
+
+
+Inheritance diagram for csmp\+::Pressure\+Diffusion\+\_\+\+Example\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=220pt]{classcsmp_1_1_pressure_diffusion___example__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Pressure\+Diffusion\+\_\+\+Example\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=220pt]{classcsmp_1_1_pressure_diffusion___example__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_pressure_diffusion___example_acedc50849e6a2394aa136182e8deb1e0}{Run}} ()
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_pressure_diffusion___example_ac9e4ffef2ae50925d07ee0969c3105c6}{Specifications}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_example}{csmp\+::\+Example}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Example} (std\+::ostream \texorpdfstring{$\ast$}{*}osptr=0)
+\item 
+void {\bfseries Set\+Title} (const std\+::string \&text)
+\begin{DoxyCompactList}\small\item\em Reporting interface. \end{DoxyCompactList}\item 
+void {\bfseries Set\+Category} (const std\+::string \&text)
+\item 
+void {\bfseries Set\+Difficulty} (const int \&difficulty)
+\begin{DoxyCompactList}\small\item\em set function, takes care that 0 \texorpdfstring{$<$}{<} difficulty \texorpdfstring{$<$}{<} 4 \end{DoxyCompactList}\item 
+void {\bfseries Add\+Description} (const std\+::string \&text)
+\begin{DoxyCompactList}\small\item\em allows to add a descrtiption to an example \end{DoxyCompactList}\item 
+void {\bfseries Add\+Requirement} (const std\+::string \&text)
+\begin{DoxyCompactList}\small\item\em allows to add a requirement to an example (files etc..) \end{DoxyCompactList}\item 
+void {\bfseries Add\+Author} (const std\+::string \&text)
+\begin{DoxyCompactList}\small\item\em allows to add an author to an example \end{DoxyCompactList}\item 
+std\+::string {\bfseries Get\+Title} () const
+\begin{DoxyCompactList}\small\item\em example title return function \end{DoxyCompactList}\item 
+int {\bfseries Get\+Difficulty} () const
+\begin{DoxyCompactList}\small\item\em return function \end{DoxyCompactList}\item 
+std\+::string {\bfseries Get\+Category} () const
+\begin{DoxyCompactList}\small\item\em return function \end{DoxyCompactList}\item 
+std\+::list$<$ std\+::string $>$\+::const\+\_\+iterator {\bfseries Get\+Descriptions\+Begin} ()
+\begin{DoxyCompactList}\small\item\em return function \end{DoxyCompactList}\item 
+std\+::list$<$ std\+::string $>$\+::const\+\_\+iterator {\bfseries Get\+Descriptions\+End} () const
+\begin{DoxyCompactList}\small\item\em return function \end{DoxyCompactList}\item 
+std\+::list$<$ std\+::string $>$\+::const\+\_\+iterator {\bfseries Get\+Authors\+Begin} ()
+\begin{DoxyCompactList}\small\item\em return function \end{DoxyCompactList}\item 
+std\+::list$<$ std\+::string $>$\+::const\+\_\+iterator {\bfseries Get\+Authors\+End} () const
+\begin{DoxyCompactList}\small\item\em return function \end{DoxyCompactList}\item 
+std\+::list$<$ std\+::string $>$\+::const\+\_\+iterator {\bfseries Get\+Requirements\+Begin} ()
+\begin{DoxyCompactList}\small\item\em return function \end{DoxyCompactList}\item 
+std\+::list$<$ std\+::string $>$\+::const\+\_\+iterator {\bfseries Get\+Requirements\+End} () const
+\begin{DoxyCompactList}\small\item\em return function \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_example}{csmp\+::\+Example}}}
+\begin{DoxyCompactItemize}
+\item 
+void {\bfseries Initialize} ()
+\begin{DoxyCompactList}\small\item\em assures db to contain data \end{DoxyCompactList}\item 
+std\+::ostream \texorpdfstring{$\ast$}{*} {\bfseries Get\+Stream} ()
+\item 
+void {\bfseries Set\+Stream} (std\+::ostream \texorpdfstring{$\ast$}{*}ostream)
+\item 
+std\+::string {\bfseries Get\+Example\+File\+Name} (const char \texorpdfstring{$\ast$}{*}path)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_example_ac926ad8eb6de45710b9076c8f6304880}{Create\+Working\+Directory\+And\+Copy\+Input\+Model\+Files}} (std\+::string \&example\+\_\+name, std\+::string \&model\+\_\+name, std\+::string \&variable\+\_\+file, std\+::string config\+\_\+file="{}"{})
+\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_pressure_diffusion___example_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_pressure_diffusion___example_acedc50849e6a2394aa136182e8deb1e0}\index{csmp::PressureDiffusion\_Example@{csmp::PressureDiffusion\_Example}!Run@{Run}}
+\index{Run@{Run}!csmp::PressureDiffusion\_Example@{csmp::PressureDiffusion\_Example}}
+\doxysubsubsection{\texorpdfstring{Run()}{Run()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_pressure_diffusion___example_acedc50849e6a2394aa136182e8deb1e0} 
+void csmp\+::\+Pressure\+Diffusion\+\_\+\+Example\+::\+Run (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+2D transient calculation of fluid pressure distribution using a triangular element mesh generated by the program Triangle (file set\+: frac30.\+1). Quadratic finite element interpolation is used and Dirichlet essential conditions are applied. After computing an initial left-\/right fluid pressure gradient, the pressure on the left is dropped to a low value and the response of the model is computed in a time stepping loop.
+
+Use VTK example\+\_\+viewer.\+tcl or Paraview to visualize vtk output.
+
+Exercise\+: Vary the fluid pressure and input different hydraulic diffusivity / storativity values to observe how these influence fluid pressure requilibratation. \begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000047}{Todo}}]SKM\+: to fix\+: method cannot handle element input variables \end{DoxyRefDesc}
+
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000048}{Todo}}]influx surface integral\+: \doxylink{classcsmp_1_1_num_integral___n_t__op___n__d_s}{Num\+Integral\+\_\+\+NT\+\_\+op\+\_\+\+N\+\_\+d\+S$<$2\+U$>$} influx( model.\+Database(), "{}influx"{}, "{}fluid pressure"{} ); \end{DoxyRefDesc}
+
+
+Implements \mbox{\hyperlink{classcsmp_1_1_example}{csmp\+::\+Example}}.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=338pt]{classcsmp_1_1_pressure_diffusion___example_acedc50849e6a2394aa136182e8deb1e0_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_pressure_diffusion___example_ac9e4ffef2ae50925d07ee0969c3105c6}\index{csmp::PressureDiffusion\_Example@{csmp::PressureDiffusion\_Example}!Specifications@{Specifications}}
+\index{Specifications@{Specifications}!csmp::PressureDiffusion\_Example@{csmp::PressureDiffusion\_Example}}
+\doxysubsubsection{\texorpdfstring{Specifications()}{Specifications()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_pressure_diffusion___example_ac9e4ffef2ae50925d07ee0969c3105c6} 
+void csmp\+::\+Pressure\+Diffusion\+\_\+\+Example\+::\+Specifications (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classcsmp_1_1_example}{csmp\+::\+Example}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+examples/source/Pressure\+Diffusion\+\_\+\+Example.\+h\item 
+examples/source/Pressure\+Diffusion\+\_\+\+Example.\+cpp\end{DoxyCompactItemize}

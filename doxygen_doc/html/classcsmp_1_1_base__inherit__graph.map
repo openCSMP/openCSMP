@@ -1,0 +1,9 @@
+<map id="csmp::Base&lt; T &gt;" name="csmp::Base&lt; T &gt;">
+<area shape="rect" id="Node000001" title="base class" alt="" coords="10,121,129,187"/>
+<area shape="rect" id="Node000003" href="$classcsmp_1_1_base.html" title=" " alt="" coords="5,258,133,325"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="72,202,72,259,66,259,66,202"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="46,5,92,72"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="72,87,72,121,66,121,66,87"/>
+<area shape="rect" id="Node000004" href="$classcsmp_1_1_sub.html" title="sub class (demonstrating compile time polymorphism)" alt="" coords="7,374,132,440"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="72,340,72,374,66,374,66,340"/>
+</map>

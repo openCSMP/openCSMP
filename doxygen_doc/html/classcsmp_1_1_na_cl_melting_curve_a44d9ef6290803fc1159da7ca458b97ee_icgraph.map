@@ -1,0 +1,13 @@
+<map id="csmp::NaClMeltingCurve::NaClMeltingCurve" name="csmp::NaClMeltingCurve::NaClMeltingCurve">
+<area shape="rect" id="Node000001" title=" " alt="" coords="626,63,795,103"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_halite_liquidus.html#aeaca336da1757689f6665244539fb82d" title=" " alt="" coords="435,63,578,103"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="611,86,579,86,579,80,611,80"/>
+<area shape="rect" id="Node000003" href="$classcsmp_1_1_na_cl_saturated_vapor.html#abd993e8f13b163d4832a507285effdfa" title=" " alt="" coords="207,5,387,46"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="419,62,373,49,375,44,421,57"/>
+<area shape="rect" id="Node000004" href="$classcsmp_1_1_twophase_vapor.html#a106ce9bbb086b6e21f6bb8056b718fd8" title=" " alt="" coords="5,63,159,103"/>
+<area shape="poly" id="edge6_Node000002_Node000004" title=" " alt="" coords="419,86,159,86,159,80,419,80"/>
+<area shape="rect" id="Node000005" href="$classcsmp_1_1_twophase_liquid.html#acbc78de0d42d3c379186195beb7672a2" title=" " alt="" coords="220,120,374,161"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="421,109,375,122,373,117,419,104"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="204,53,160,65,158,60,203,48"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="204,118,158,106,160,101,206,113"/>
+</map>

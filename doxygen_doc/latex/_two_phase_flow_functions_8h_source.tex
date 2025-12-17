@@ -1,0 +1,139 @@
+\doxysection{Two\+Phase\+Flow\+Functions.\+h}
+\hypertarget{_two_phase_flow_functions_8h_source}{}\label{_two_phase_flow_functions_8h_source}\index{source/includes/thmc/two\_phase\_flow/TwoPhaseFlowFunctions.h@{source/includes/thmc/two\_phase\_flow/TwoPhaseFlowFunctions.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ \ TwoPhaseFlowFunctions.h}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ \ CSMP\_GitHub}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ \ Created\ by\ Mahyar\ Madadi\ \ on\ 16/July/2018.}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//\ \ Copyright\ ©\ 2017\ Stephan\ Matthai.\ All\ rights\ reserved.}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_TWO\_PHASE\_FLOW\_FUNCTIONS\_H}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_TWO\_PHASE\_FLOW\_FUNCTIONS\_H}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ \ \ \ @brief\ 2-\/phase\ multiphase\ flow\ functions\ for\ immiscible\ displacement\ of\ slightly\ compressible\ fluids.}}
+\DoxyCodeLine{00018\ \textcolor{comment}{}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ \ \ \ Generates\ all\ relevant\ input\ values\ for\ 2-\/phase\ immiscible\ (saturation-\/based\ volume)\ transport\ scheme.}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ \ \ \ Uses\ the\ SaturationFunctions\ and\ Fluid\ module\ and\ the}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ \ \ \ constitutive\ relationships\ specified\ therein.}}
+\DoxyCodeLine{00022\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00023\ \textcolor{keyword}{template}<uint32\_t\ dim,\ \textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ USER>}
+\DoxyCodeLine{00024\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions}{TwoPhaseFlowFunctions}}\ \{}
+\DoxyCodeLine{00025\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{comment}{///\ current\ water\ saturation\ initialised\ inside\ of\ the\ model}}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_aa4c35723be480893a04b7d9bbd714d5d}{Sw}}(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const}\ e\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{comment}{///\ lambda\ parameter:\ 0\ for\ water,\ 1\ for\ the\ non-\/wetting\ phase}}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_a8e815f1d0e3d35290fd8012738f9e104}{Mobility}}(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const},\ uint32\_t\ phase\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{comment}{///\ lambda\ parameter:\ 0\ for\ water,\ 1\ for\ the\ non-\/wetting\ phase\ (using\ prescribed\ sw)}}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_ae13f971b41fa6659d59deb823ce2d53f}{Mobility\_at}}(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const},\ uint32\_t\ phase,\ \textcolor{keywordtype}{double}\ sw\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{comment}{///\ d\ lambda\_i\ /\ dsw}}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_adfd3f10a6452ceec887ac6ee94bd8d11}{MobilityDerivative}}(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const},\ uint32\_t\ phase,\ \textcolor{keywordtype}{bool}\ evaluate\_numerically=\textcolor{keyword}{false}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_a3583273f56e339059560bae1603257fa}{MobilityDerivative\_at}}(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const},\ uint32\_t\ phase,\ \textcolor{keywordtype}{double}\ sw\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{comment}{///\ lambda\_t:\ sum\ of\ phase\ mobilities}}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_aff163b77e8e057a168b63bc49ad02f70}{TotalMobility}}(\ \ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{comment}{///\ lambda\_t:\ sum\ of\ phase\ mobilities\ (using\ prescribed\ sw)}}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_a02064e66435763d9f45572881696ee9b}{TotalMobility\_at}}(\ \ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const},\ \textcolor{keywordtype}{double}\ sw\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{comment}{///\ lambda\ overbar:\ l1\ *\ l2\ /\ l1\ +\ l2\ =\ mobility\ product\ /\ total\ mobility\ also\ known\ as\ G}}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_ab23f9375ae7f476e0eaecef7baa6e4dc}{MobilityProduct}}(\ \ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{comment}{///\ d\ lambda\ overbar\ /\ dsw\ also\ known\ as\ dGds}}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_a0c9df8a94676491e468a0c1d42795d05}{MobilityProductDerivative}}(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const},\ \textcolor{keywordtype}{bool}\ \ evaluate\_numerically=\textcolor{keyword}{false}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_ad204036ce2dec252065021b10678cefd}{MobilityProductDerivative\_at}}(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const},\ \textcolor{keywordtype}{double}\ sw\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \ \textcolor{comment}{///\ fractional\ flow;\ 0=water,\ 1=non-\/wetting\ phase}}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_a7a0f8565a17ea1a85363c7327f97fee4}{f}}(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const},\ uint32\_t\ phase\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \ \ \ \textcolor{comment}{///\ fractional\ flow;\ 0=water,\ 1=non-\/wetting\ phase\ \ (using\ prescribed\ sw)}}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_a5e1ace14d22cf90a5e137805f099b336}{f\_at}}(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const},\ uint32\_t\ phase,\ \textcolor{keywordtype}{double}\ sw\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{comment}{///\ Permeability}}
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_a4cbb7f650140e0f5c31fbe38a7338bd4}{Permeability}}(\ \ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{comment}{///\ derivative\ of\ fractional\ flow\ (used\ in\ advection\ multiplier);\ note\ that\ fw+fn=1,\ dfw\_dsw=dfn\_dsn}}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_a41d0e0204c5ea1eecd96e04f41376dd8}{dfds}}(\ \ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const},\ uint32\_t\ phase\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_a27eab09c3d0ae37c4e37ec13dd8df655}{dfds\_at}}(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const},\ \textcolor{keywordtype}{double}\ sw\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{comment}{///\ maximum\ value\ of\ previous\ derivative}}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_a842bd5a14959aa69fa952455640bc36a}{MaxFractionalFlowDerivative}}(\ \ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{comment}{///\ multiplier\ for\ advection\ viscosity\ coefficient\ in\ the\ case\ of\ non-\/linear\ advection}}
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_a5d4bbc14660932b74f00f8499784e71a}{AdvectionMultiplier}}(\ \ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{comment}{///\ outputs\ the\ shock\ wave\ celerity}}
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_a4a1087561974cfd736c2be0e9d81c3f4}{ShockSpeed}}(\ \ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{comment}{///\ outputs\ the\ water\ saturation\ at\ the\ non-\/wetting\ phase\ shock\ front}}
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_a41a0273052d41f0ba081d2ed0bb0544b}{ShockHeight}}(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{comment}{///\ calculated\ shock\ height\ and\ speed}}
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_adf3785cd6e0f56a4f56b16698cf1a5cb}{ShockSpeedAndHeight}}(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const},\ \textcolor{keywordtype}{double}\&\ speed,\ \textcolor{keywordtype}{double}\&\ height\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{comment}{///\ multipliers\ for\ gravity-\/driven\ flow\ (advection\ multiplier\ and\ source\ term)}}
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_ab171e4e81f6e13024d434dd2c2704a53}{GravityMultiplier}}(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const},\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\&\ dip\_vec\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_aba1760c4175e399fe5eed6939ab1d4fc}{GravityMultiplier\_G}}(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const},\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\&\ dip\_vec\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_a61764ee0bc11afb6bdc45c68fea29402}{GravityMultiplier\_dGds}}(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const},\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\&\ dip\_vec\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{comment}{///\ multiplier\ for\ diffusion\ coefficient\ in\ the\ case\ of\ non-\/linear\ diffusion\ uses\ viscosity(phase)}}
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_a3d5af31b69a0cba26bbbe8017792702d}{DiffusionMultiplier}}(\ \ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const},\ size\_t\ phase\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{comment}{///\ driven\ by\ capillary\ pressure\ gradient}}
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_a7e4d7221b06b72bb90cb2aa6b2f0f10a}{CapillaryDiffusionMultiplier}}(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keywordtype}{double}\ CapillaryDiffusionMultiplier\_Phase(\ \ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const},\ size\_t\ phase\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{comment}{///\ calculating\ the\ Shock\ velocity}}
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_a1ebdf0d643ec5f0fb5a85779bf8a3e12}{ShockFrontVelocity}}(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const}\ )\ \textcolor{keyword}{const}\ ;}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{keywordtype}{double}\ dfds\_Numerical(\ \ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const},\ uint32\_t\ phase,\ \textcolor{keywordtype}{double}\ delta\_s\ =\ 0.001\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_a22a444b0c017e83b3f9230a1a54c0176}{dfds\_at\_Numerical}}(\ \ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const},\ \textcolor{keywordtype}{double}\ sw,\ \textcolor{keywordtype}{double}\ delta\_s\ =\ 0.001\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ \ \ \ \ \textcolor{keywordtype}{double}\ dGds\_Numerical(\ \ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const},\ \textcolor{keywordtype}{double}\ delta\_s\ =\ 0.000001\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_a40d52d74e94507cdaff5648fe840f963}{dlwds\_Numerical}}(\ \ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const},\ \textcolor{keywordtype}{double}\ delta\_s\ =\ 0.001\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_aa615b626de0a2393419b4b567b423cd1}{dlnds\_Numerical}}(\ \ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const},\ \textcolor{keywordtype}{double}\ delta\_s\ =\ 0.001\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00113\ \ \ \ \ USER<dim>*\ User()\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<USER<dim>*>(\textcolor{keyword}{this});\ \}}
+\DoxyCodeLine{00114\ \ \ \ \ USER<dim>\ \textcolor{keyword}{const}*\ User()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<\textcolor{keyword}{const}\ USER<dim>*>(\textcolor{keyword}{this});\ \}}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{comment}{//\ NON-\/STANDARD\ INTERFACES}}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ \ \ \ \ \textcolor{comment}{///\ calculating\ the\ \ Inflection\ point}}
+\DoxyCodeLine{00119\ \ \ \ \ \textcolor{keywordtype}{double}\ InflectionPointSaturation(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const}\ )\ \textcolor{keyword}{const}\ ;}
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ \ \ \ \ \textcolor{comment}{///\ calculating\ the\ Tangent\ Point}}
+\DoxyCodeLine{00122\ \ \ \ \ \textcolor{keywordtype}{double}\ TangentPointSaturation(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const}\ )\ \textcolor{keyword}{const}\ ;}
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ \ \ \ \ \textcolor{comment}{///\ calculating\ \ Buckley\ Leverett\ function...\ this\ has\ to\ be\ zero\ at\ shock\ point}}
+\DoxyCodeLine{00125\ \ \ \ \ \textcolor{keywordtype}{double}\ TangentOfFractionalFlowFunction(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const},\ \textcolor{keywordtype}{double}\ S)\ \textcolor{keyword}{const}\ ;}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ \ \ \ \ \textcolor{comment}{///\ finding\ root\ of\ \ Buckley\ Leverett\ function...\ which\ results\ is\ shock\ point\ saturation.}}
+\DoxyCodeLine{00128\ \ \ \ \ \textcolor{keywordtype}{double}\ FindRootSecantMethod(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const},\ \textcolor{keywordtype}{double}\ S1,\ \textcolor{keywordtype}{double}\ S2)\ \textcolor{keyword}{const}\ ;}
+\DoxyCodeLine{00129\ \};}
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ \}\ \textcolor{comment}{//\ end\ csmp}}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{/*\ CSMP\_TWO\_PHASE\_FLOW\_FUNCTIONS\_H\ */}}
+
+\end{DoxyCode}

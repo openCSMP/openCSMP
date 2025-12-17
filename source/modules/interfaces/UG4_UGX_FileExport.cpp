@@ -65,7 +65,7 @@ UG4_UGX_FileExport<dim>::UG4_UGX_FileExport( const Model<dim>& model )
     size_t counter{ model_domain.Cells() };
     // number faces and interfaces consecutively in the order in which they are stored in the MeshManager
     for ( auto it=model.Mesh().FacesBegin(); it!=model.Mesh().FacesEnd(); ++it ) { (*it).Idx( counter++ ); }
-    for ( auto it=model.Mesh().InterFacesBegin(); it!=model.Mesh().InterFacesEnd(); ++it ) { (*it).Idx( counter++ ); }
+    for ( auto it=model.Mesh().InterfacesBegin(); it!=model.Mesh().InterfacesEnd(); ++it ) { (*it).Idx( counter++ ); }
  
  } // end constructor
   
@@ -75,7 +75,7 @@ UG4_UGX_FileExport<dim>::UG4_UGX_FileExport( const Model<dim>& model )
       Finds corresponding CSMP line element or returns UNSPECIFIED
 */
 template<uint32_t dim>
-long UG4_UGX_FileExport<dim>::EquivalentEdgeInCSMP( size_t ug_idx ) const {
+unsigned long UG4_UGX_FileExport<dim>::EquivalentEdgeInCSMP( size_t ug_idx ) const {
      const auto map_it = csmp_edges_inverted_.find( ug_idx );
      if ( map_it == csmp_edges_inverted_.end() ) return UNSPECIFIED;
      return (*map_it).second;
@@ -85,7 +85,7 @@ long UG4_UGX_FileExport<dim>::EquivalentEdgeInCSMP( size_t ug_idx ) const {
       Finds corresponding CSMP line element or returns UNSPECIFIED
 */
 template<uint32_t dim>
-long UG4_UGX_FileExport<dim>::EquivalentFaceInCSMP( size_t ug_idx ) const {
+unsigned long UG4_UGX_FileExport<dim>::EquivalentFaceInCSMP( size_t ug_idx ) const {
      const auto map_it = csmp_faces_inverted_.find( ug_idx );
      if ( map_it == csmp_faces_inverted_.end() ) return UNSPECIFIED;
      return (*map_it).second;
@@ -353,8 +353,8 @@ void UG4_UGX_FileExport<dim>::WriteFaceVariableValue( ofstream& ofs, const csmp:
                              sc = (*next(mesh.FacesBegin(),cell_idx-mesh.Elements())).Read(var_key);
                           break;
                         case INTER_FACE:
-                             assert( cell_idx < mesh.Elements()+mesh.Faces()+mesh.InterFaces() );
-                             sc = (*next(mesh.InterFacesBegin(),cell_idx-mesh.Elements()-mesh.Faces())).Read(var_key);
+                             assert( cell_idx < mesh.Elements()+mesh.Faces()+mesh.Interfaces() );
+                             sc = (*next(mesh.InterfacesBegin(),cell_idx-mesh.Elements()-mesh.Faces())).Read(var_key);
                           break;
                         default:
                              sc = -numeric_limits<float>::max(); // no-data value
@@ -376,8 +376,8 @@ void UG4_UGX_FileExport<dim>::WriteFaceVariableValue( ofstream& ofs, const csmp:
                              (*next(mesh.FacesBegin(),cell_idx-mesh.Elements())).Read(var_key,vc);
                           break;
                         case INTER_FACE:
-                             assert( cell_idx < mesh.Elements()+mesh.Faces()+mesh.InterFaces() );
-                             (*next(mesh.InterFacesBegin(),cell_idx-mesh.Elements()-mesh.Faces())).Read(var_key,vc);
+                             assert( cell_idx < mesh.Elements()+mesh.Faces()+mesh.Interfaces() );
+                             (*next(mesh.InterfacesBegin(),cell_idx-mesh.Elements()-mesh.Faces())).Read(var_key,vc);
                           break;
                         default:
                              vc = -numeric_limits<float>::max(); // no-data value
@@ -401,8 +401,8 @@ void UG4_UGX_FileExport<dim>::WriteFaceVariableValue( ofstream& ofs, const csmp:
                              (*next(mesh.FacesBegin(),cell_idx-mesh.Elements())).Read(var_key,ts);
                           break;
                         case INTER_FACE:
-                             assert( cell_idx < mesh.Elements()+mesh.Faces()+mesh.InterFaces() );
-                             (*next(mesh.InterFacesBegin(),cell_idx-mesh.Elements()-mesh.Faces())).Read(var_key,ts);
+                             assert( cell_idx < mesh.Elements()+mesh.Faces()+mesh.Interfaces() );
+                             (*next(mesh.InterfacesBegin(),cell_idx-mesh.Elements()-mesh.Faces())).Read(var_key,ts);
                           break;
                         default:
                              ts = -numeric_limits<float>::max(); // no-data value
@@ -1984,11 +1984,11 @@ string UG4_UGX_FileExport<dim>::UG_VariableType( const csmp::Index& index ) cons
            else print_whitespace = true;
            ofs << (*next(mesh.FacesBegin(),cell_idx-mesh.Elements())).N(i)->Idx();
         }
-     else if ( cell_idx < mesh.Elements()+mesh.Faces()+mesh.InterFaces() )
-       for ( uint32_t i{0U}; i<(*next(mesh.InterFacesBegin(),cell_idx-mesh.Elements()-mesh.Faces())).Nodes(); ++i ) {
+     else if ( cell_idx < mesh.Elements()+mesh.Faces()+mesh.Interfaces() )
+       for ( uint32_t i{0U}; i<(*next(mesh.InterfacesBegin(),cell_idx-mesh.Elements()-mesh.Faces())).Nodes(); ++i ) {
            if ( print_whitespace ) ofs <<" ";
            else print_whitespace = true;
-           ofs << (*next(mesh.InterFacesBegin(),cell_idx-mesh.Elements()-mesh.Faces())).N(i)->Idx();
+           ofs << (*next(mesh.InterfacesBegin(),cell_idx-mesh.Elements()-mesh.Faces())).N(i)->Idx();
         }
      else {
        if ( !equivalentEntityInCSMP(cell_idx) )
@@ -2033,8 +2033,8 @@ static void writeCellVariableValue( ofstream& ofs, const csmp::Index& var_key,
                              sc = (*next(mesh.FacesBegin(),cell_idx-mesh.Elements())).Read(var_key);
                           break;
                         case INTER_FACE:
-                             assert( cell_idx < mesh.Elements()+mesh.Faces()+mesh.InterFaces() );
-                             sc = (*next(mesh.InterFacesBegin(),cell_idx-mesh.Elements()-mesh.Faces())).Read(var_key);
+                             assert( cell_idx < mesh.Elements()+mesh.Faces()+mesh.Interfaces() );
+                             sc = (*next(mesh.InterfacesBegin(),cell_idx-mesh.Elements()-mesh.Faces())).Read(var_key);
                           break;
                         default:
                              sc = -numeric_limits<float>::max(); // no-data value
@@ -2056,8 +2056,8 @@ static void writeCellVariableValue( ofstream& ofs, const csmp::Index& var_key,
                              (*next(mesh.FacesBegin(),cell_idx-mesh.Elements())).Read(var_key,vc);
                           break;
                         case INTER_FACE:
-                             assert( cell_idx < mesh.Elements()+mesh.Faces()+mesh.InterFaces() );
-                             (*next(mesh.InterFacesBegin(),cell_idx-mesh.Elements()-mesh.Faces())).Read(var_key,vc);
+                             assert( cell_idx < mesh.Elements()+mesh.Faces()+mesh.Interfaces() );
+                             (*next(mesh.InterfacesBegin(),cell_idx-mesh.Elements()-mesh.Faces())).Read(var_key,vc);
                           break;
                         default:
                              vc = -numeric_limits<float>::max(); // no-data value
@@ -2081,8 +2081,8 @@ static void writeCellVariableValue( ofstream& ofs, const csmp::Index& var_key,
                              (*next(mesh.FacesBegin(),cell_idx-mesh.Elements())).Read(var_key,ts);
                           break;
                         case INTER_FACE:
-                             assert( cell_idx < mesh.Elements()+mesh.Faces()+mesh.InterFaces() );
-                             (*next(mesh.InterFacesBegin(),cell_idx-mesh.Elements()-mesh.Faces())).Read(var_key,ts);
+                             assert( cell_idx < mesh.Elements()+mesh.Faces()+mesh.Interfaces() );
+                             (*next(mesh.InterfacesBegin(),cell_idx-mesh.Elements()-mesh.Faces())).Read(var_key,ts);
                           break;
                         default:
                              ts = -numeric_limits<float>::max(); // no-data value

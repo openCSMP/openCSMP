@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_s_a_m_g___configurator" kind="class" language="C++" prot="public">
+    <compoundname>csmp::SAMG_Configurator</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___configurator_1a79f6a3d1d2ca804878c168f3fe3acace" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type></type>
+        <definition>virtual csmp::SAMG_Configurator::~SAMG_Configurator</definition>
+        <argsstring>()</argsstring>
+        <name>~SAMG_Configurator</name>
+        <qualifiedname>csmp::SAMG_Configurator::~SAMG_Configurator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Configurator.h" line="11" column="15" bodyfile="source/includes/integration/solver/SAMG_Configurator.h" bodystart="11" bodyend="11"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___configurator_1a012bf4f404225a22df7b145cda69754b" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="classcsmp_1_1_s_a_m_g___settings" kindref="compound">SAMG_Settings</ref> *</type>
+        <definition>SAMG_Settings * csmp::SAMG_Configurator::GetSettingsByName</definition>
+        <argsstring>(const std::string &amp;name)</argsstring>
+        <name>GetSettingsByName</name>
+        <qualifiedname>csmp::SAMG_Configurator::GetSettingsByName</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Configurator.h" line="12" column="29" bodyfile="source/modules/integration/solver/SAMG_Configurator.cpp" bodystart="5" bodyend="19"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::SAMG_Configurator</label>
+        <link refid="classcsmp_1_1_s_a_m_g___configurator"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/integration/solver/SAMG_Configurator.h" line="9" column="3" bodyfile="source/includes/integration/solver/SAMG_Configurator.h" bodystart="9" bodyend="14"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_s_a_m_g___configurator_1a012bf4f404225a22df7b145cda69754b" prot="public" virt="virtual"><scope>csmp::SAMG_Configurator</scope><name>GetSettingsByName</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___configurator_1a79f6a3d1d2ca804878c168f3fe3acace" prot="public" virt="virtual"><scope>csmp::SAMG_Configurator</scope><name>~SAMG_Configurator</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

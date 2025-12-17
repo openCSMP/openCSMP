@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_solver_settings" kind="class" language="C++" prot="public">
+    <compoundname>csmp::SolverSettings</compoundname>
+    <derivedcompoundref refid="structcsmp_1_1_p_a_r_d_i_s_o___solver_settings" prot="public" virt="non-virtual">csmp::PARDISO_SolverSettings</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_s_a_m_g___settings" prot="public" virt="non-virtual">csmp::SAMG_Settings</derivedcompoundref>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_solver_settings_1aabb21ca1d0ed257fdf333bf0dd5f8eb9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::SolverSettings::SolverSettings</definition>
+        <argsstring>()</argsstring>
+        <name>SolverSettings</name>
+        <qualifiedname>csmp::SolverSettings::SolverSettings</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SolverSettings.h" line="12" column="5" bodyfile="source/modules/integration/solver/SolverSettings.cpp" bodystart="8" bodyend="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_solver_settings_1a8ba8a5640e78244178947ecfd9c1fec8" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>csmp::SolverSettings::~SolverSettings</definition>
+        <argsstring>()</argsstring>
+        <name>~SolverSettings</name>
+        <qualifiedname>csmp::SolverSettings::~SolverSettings</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SolverSettings.h" line="13" column="13" bodyfile="source/modules/integration/solver/SolverSettings.cpp" bodystart="12" bodyend="14"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>csmp::PARDISO_SolverSettings</label>
+        <link refid="structcsmp_1_1_p_a_r_d_i_s_o___solver_settings"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::SAMG_Settings</label>
+        <link refid="classcsmp_1_1_s_a_m_g___settings"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::SolverSettings</label>
+        <link refid="classcsmp_1_1_solver_settings"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::SolverSettings</label>
+        <link refid="classcsmp_1_1_solver_settings"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/integration/solver/SolverSettings.h" line="10" column="1" bodyfile="source/includes/integration/solver/SolverSettings.h" bodystart="10" bodyend="14"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_solver_settings_1aabb21ca1d0ed257fdf333bf0dd5f8eb9" prot="public" virt="non-virtual"><scope>csmp::SolverSettings</scope><name>SolverSettings</name></member>
+      <member refid="classcsmp_1_1_solver_settings_1a8ba8a5640e78244178947ecfd9c1fec8" prot="public" virt="virtual"><scope>csmp::SolverSettings</scope><name>~SolverSettings</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

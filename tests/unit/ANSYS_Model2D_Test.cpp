@@ -192,9 +192,9 @@ void ANSYS_Model2D_Test::run()
     cout << "\nFaces: " << model2d_->Mesh().Faces() << "\n";
     std::map<std::string,std::vector<Face<2U>*> >  face_map;
     cout << "\nFace Groups: " << findContiguousMeshPatches( model2d_->Mesh().FacesBegin(), model2d_->Mesh().FacesEnd(), face_map ) << "\n";
-    cout << "\nInterfaces: " << model2d_->Mesh().InterFaces() << "\n";
+    cout << "\nInterfaces: " << model2d_->Mesh().Interfaces() << "\n";
     std::map<std::string,std::vector<InterFace<2U>*> >  iface_map;
-    cout << "\nInterface Groups: " << findContiguousMeshPatches( model2d_->Mesh().InterFacesBegin(), model2d_->Mesh().InterFacesEnd(), iface_map ) << "\n";
+    cout << "\nInterface Groups: " << findContiguousMeshPatches( model2d_->Mesh().InterfacesBegin(), model2d_->Mesh().InterfacesEnd(), iface_map ) << "\n";
     
     if (reconstruct_from_file) {
         model2d_->OutputToBinaryFile(model2d_name_.c_str());
@@ -207,8 +207,8 @@ void ANSYS_Model2D_Test::run()
         cout << "\nElement Groups: " << findContiguousMeshPatches( mesh.ElementsBegin(), mesh.ElementsEnd(), patch_map ) << "\n";
         cout << "\nFaces: " << model2d_->Mesh().Faces() << "\n";
         cout << "\nFace Groups: " << findContiguousMeshPatches( mesh.FacesBegin(), mesh.FacesEnd(), face_map ) << "\n";
-        cout << "\nInterfaces: " << model2d_->Mesh().InterFaces() << "\n";
-        cout << "\nInterface Groups: " << findContiguousMeshPatches( mesh.InterFacesBegin(), mesh.InterFacesEnd(), iface_map ) << "\n";
+        cout << "\nInterfaces: " << model2d_->Mesh().Interfaces() << "\n";
+        cout << "\nInterface Groups: " << findContiguousMeshPatches( mesh.InterfacesBegin(), mesh.InterfacesEnd(), iface_map ) << "\n";
       }
       
  } // end create_ANSYS2D_Model
@@ -344,7 +344,7 @@ void ANSYS_Model2D_Test::Test_printLineElementRegion()
 
 void  ANSYS_Model2D_Test::Test_CreateConsistentLineElementOrientations2D()
  {
-    string model2d_name_ = "three_layers"; // TODO: use model that is already in the testing fixtures
+    string model2d_name_ = "three_layers";
     if ( verbose_ ) {
          cout <<"\n\n"<<"ANSYS_Model2D_Test::Test_CreateConsistentLineElementOrientations2D: running test on model '"<< endl;
          cout << model2d_name_ <<"'"<< endl;
@@ -362,9 +362,11 @@ void  ANSYS_Model2D_Test::Test_CreateConsistentLineElementOrientations2D()
     if ( verbose_ ) {
          interface1.Out();
          const bool renumber_elmts{true};
-         _test( printLineElementRegion( model, interface1.Name().c_str(), renumber_elmts ) == interface1.Cells() );
+         auto traversed_elmts = printLineElementRegion( model, interface1.Name().c_str(), renumber_elmts );
+         _test( traversed_elmts == interface1.Cells() );
          interface2.Out();
-         _test( printLineElementRegion( model, interface2.Name().c_str(), renumber_elmts ) == interface2.Cells() );
+         traversed_elmts = printLineElementRegion( model, interface2.Name().c_str(), renumber_elmts );
+         _test( traversed_elmts == interface2.Cells() );
       }
     
     // 3. The endpoints of these regions must be at the vertical model boundaries
@@ -377,14 +379,14 @@ void  ANSYS_Model2D_Test::Test_CreateConsistentLineElementOrientations2D()
     int contiguous{2}, n_missing_nbors{0};
     // interface 1
     for ( auto it=interface1.CellsBegin(); it!=interface1.CellsEnd(); ++it )
-      for ( int i{0}; i<(*it)->Neighbors(); ++i )
+      for ( uint32_t i{0u}; i<(*it)->Neighbors(); ++i )
         if ( (*it)->Neighbor(i) == nullptr )
           n_missing_nbors++;
     _test( n_missing_nbors <= contiguous );
     // interface 2
     n_missing_nbors = 0;
     for ( auto it=interface2.CellsBegin(); it!=interface2.CellsEnd(); ++it )
-      for ( int i{0}; i<(*it)->Neighbors(); ++i )
+      for ( uint32_t i{0u}; i<(*it)->Neighbors(); ++i )
         if ( (*it)->Neighbor(i) == nullptr )
           n_missing_nbors++;
     _test( n_missing_nbors <= contiguous );

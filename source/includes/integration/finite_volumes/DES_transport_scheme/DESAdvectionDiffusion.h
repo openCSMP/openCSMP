@@ -23,10 +23,12 @@ class DESAdvectionDiffusion {
     void AdvectVariable_TDS( double time_interval, size_t num_threads=1 );
     
     void AdvectVariable_DES_serial( double model_time );
-    void AdvectVariable_DES_parallel ( double model_time, size_t num_threads ); 
     void AdvectVariable_TDS_serial( double time_interval );
+#if defined(_OPENMP)
     void AdvectVariable_TDS_parallel ( double time_interval, size_t num_threads );
-    
+    void AdvectVariable_DES_parallel ( double model_time, size_t num_threads ); 
+#endif
+
     ~DESAdvectionDiffusion();
     
     typedef ajb::detail::FibonacciHeap_Node<double,size_t> Heap_Node;

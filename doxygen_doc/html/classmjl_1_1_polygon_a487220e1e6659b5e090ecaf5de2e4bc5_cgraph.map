@@ -1,0 +1,9 @@
+<map id="mjl::Polygon::CheckAngles" name="mjl::Polygon::CheckAngles">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,55,185,80"/>
+<area shape="rect" id="Node000002" href="$classmjl_1_1_polygon.html#abda65416ceabdf25bdef0ac5193c714b" title=" " alt="" coords="233,5,361,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="150,51,226,33,227,38,151,57"/>
+<area shape="rect" id="Node000003" href="$classmjl_1_1_polygon.html#a60d02a09517d791ccc0252730ddc1ac5" title=" " alt="" coords="236,55,358,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="185,65,221,65,221,70,185,70"/>
+<area shape="rect" id="Node000004" href="$namespacemjl.html#a24fe914e67952eeec27fab5d5265a692" title=" " alt="" coords="238,104,356,130"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="151,78,227,97,226,102,150,84"/>
+</map>

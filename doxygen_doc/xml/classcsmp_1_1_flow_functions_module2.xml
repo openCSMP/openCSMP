@@ -1,0 +1,256 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_flow_functions_module2" kind="class" language="C++" prot="public">
+    <compoundname>csmp::FlowFunctionsModule2</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">variables::VariableSet_CO2GeoSequestration</basecompoundref>
+    <basecompoundref refid="classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis" prot="public" virt="non-virtual">csmp::BrooksCoreySaturationFunctionsWithHysteresis&lt; dim, FlowFunctionsModule2 &gt;</basecompoundref>
+    <basecompoundref refid="classcsmp_1_1_two_phase_flow_functions" prot="public" virt="non-virtual">csmp::TwoPhaseFlowFunctions&lt; dim, FlowFunctionsModule2 &gt;</basecompoundref>
+    <basecompoundref refid="classcsmp_1_1_fluid" prot="public" virt="non-virtual">csmp::Fluid&lt; dim, FlowFunctionsModule2 &gt;</basecompoundref>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_flow_functions_module2_1a4dadd507b65620824cba097f63e2dd61" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::FlowFunctionsModule2&lt; dim &gt;::acceleration_of_gravity_</definition>
+        <argsstring></argsstring>
+        <name>acceleration_of_gravity_</name>
+        <qualifiedname>csmp::FlowFunctionsModule2::acceleration_of_gravity_</qualifiedname>
+        <briefdescription>
+<para>this must be read and input from the model (key_g) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/FlowFunctionsModule.h" line="73" column="13" bodyfile="source/includes/thmc/two_phase_flow/FlowFunctionsModule.h" bodystart="73" bodyend="-1"/>
+        <referencedby refid="classcsmp_1_1_flow_functions_module2_1a2b94cb82ed85beced7bff46c3746962c" compoundref="_flow_functions_module_8cpp" startline="16" endline="21">csmp::FlowFunctionsModule2&lt; dim &gt;::FlowFunctionsModule2</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_flow_functions_module2_1a2b94cb82ed85beced7bff46c3746962c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::FlowFunctionsModule2&lt; dim &gt;::FlowFunctionsModule2</definition>
+        <argsstring>(PropertyDatabase&lt; dim &gt; &amp;, double acc_gravity)</argsstring>
+        <name>FlowFunctionsModule2</name>
+        <qualifiedname>csmp::FlowFunctionsModule2::FlowFunctionsModule2</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>&lt; dim &gt; &amp;</type>
+          <defname>db</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>acc_gravity</declname>
+        </param>
+        <briefdescription>
+<para>&lt; fluids module / EOS interface </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/FlowFunctionsModule.h" line="72" column="6" bodyfile="source/modules/thmc/two_phase_flow/FlowFunctionsModule.cpp" bodystart="16" bodyend="21"/>
+        <references refid="classcsmp_1_1_flow_functions_module2_1a4dadd507b65620824cba097f63e2dd61" compoundref="_flow_functions_module_8h" startline="73">csmp::FlowFunctionsModule2&lt; dim &gt;::acceleration_of_gravity_</references>
+        <references refid="classcsmp_1_1_flow_functions_module2_1a2b94cb82ed85beced7bff46c3746962c" compoundref="_flow_functions_module_8cpp" startline="16" endline="21">csmp::FlowFunctionsModule2&lt; dim &gt;::FlowFunctionsModule2</references>
+        <referencedby refid="classcsmp_1_1_flow_functions_module2_1a2b94cb82ed85beced7bff46c3746962c" compoundref="_flow_functions_module_8cpp" startline="16" endline="21">csmp::FlowFunctionsModule2&lt; dim &gt;::FlowFunctionsModule2</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="4">
+        <label>csmp::BrooksCoreySaturationFunctionsWithHysteresis&lt; dim, USER &gt;</label>
+        <link refid="classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis"/>
+      </node>
+      <node id="3">
+        <label>csmp::BrooksCoreySaturationFunctionsWithHysteresis&lt; dim, FlowFunctionsModule2 &gt;</label>
+        <link refid="classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; dim, FlowFunctionsModule2 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>csmp::FlowFunctionsModule2&lt; 3U &gt;</label>
+        <link refid="classcsmp_1_1_flow_functions_module2"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; 3U &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::FlowFunctionsModule2&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_flow_functions_module2"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>csmp::Fluid&lt; dim, USER &gt;</label>
+        <link refid="classcsmp_1_1_fluid"/>
+      </node>
+      <node id="7">
+        <label>csmp::Fluid&lt; dim, FlowFunctionsModule2 &gt;</label>
+        <link refid="classcsmp_1_1_fluid"/>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; dim, FlowFunctionsModule2 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>csmp::TwoPhaseFlowFunctions&lt; dim, USER &gt;</label>
+        <link refid="classcsmp_1_1_two_phase_flow_functions"/>
+      </node>
+      <node id="5">
+        <label>csmp::TwoPhaseFlowFunctions&lt; dim, FlowFunctionsModule2 &gt;</label>
+        <link refid="classcsmp_1_1_two_phase_flow_functions"/>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; dim, FlowFunctionsModule2 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>variables::VariableSet_CO2GeoSequestration</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="4">
+        <label>csmp::BrooksCoreySaturationFunctionsWithHysteresis&lt; dim, USER &gt;</label>
+        <link refid="classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis"/>
+      </node>
+      <node id="3">
+        <label>csmp::BrooksCoreySaturationFunctionsWithHysteresis&lt; dim, FlowFunctionsModule2 &gt;</label>
+        <link refid="classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; dim, FlowFunctionsModule2 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::FlowFunctionsModule2&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_flow_functions_module2"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>csmp::Fluid&lt; dim, USER &gt;</label>
+        <link refid="classcsmp_1_1_fluid"/>
+      </node>
+      <node id="7">
+        <label>csmp::Fluid&lt; dim, FlowFunctionsModule2 &gt;</label>
+        <link refid="classcsmp_1_1_fluid"/>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; dim, FlowFunctionsModule2 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>csmp::TwoPhaseFlowFunctions&lt; dim, USER &gt;</label>
+        <link refid="classcsmp_1_1_two_phase_flow_functions"/>
+      </node>
+      <node id="5">
+        <label>csmp::TwoPhaseFlowFunctions&lt; dim, FlowFunctionsModule2 &gt;</label>
+        <link refid="classcsmp_1_1_two_phase_flow_functions"/>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; dim, FlowFunctionsModule2 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>variables::VariableSet_CO2GeoSequestration</label>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/thmc/two_phase_flow/FlowFunctionsModule.h" line="66" column="1" bodyfile="source/includes/thmc/two_phase_flow/FlowFunctionsModule.h" bodystart="69" bodyend="74"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_flow_functions_module2_1a4dadd507b65620824cba097f63e2dd61" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>acceleration_of_gravity_</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1a5d4bbc14660932b74f00f8499784e71a" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>AdvectionMultiplier</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_1a5c895e11fd5de544162e4e80c90e2905ab16959ff045f835bdc27b9088811324f" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>AOD</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_1a5c895e11fd5de544162e4e80c90e2905ac9a8eae2b41a043fab73e08d99f58436" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>AOI</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_1a5c895e11fd5de544162e4e80c90e2905af3aad7f0733cc4e46118b10e7cf9fe1d" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>AWD</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_1a5c895e11fd5de544162e4e80c90e2905af13c45326079aebb3c25c4b0b457111d" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>AWI</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_1a2d0fabde5074ff8ebe224e003f3c773b" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>BrooksCoreySaturationFunctionsWithHysteresis</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1a7e4d7221b06b72bb90cb2aa6b2f0f10a" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>CapillaryDiffusionMultiplier</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1a4ed58f82aed71734001c46fafe37a3b0" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>CapillaryDiffusionMultiplier_Phase</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_1a234593ee529e2c7bc2235d7fd29239ada49b3d62f63a6fd4ede7ff5da9ddfa602" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>CO2</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_1a43fa762c336c131fd484077850a0f541ae0527ffd3615b44cb07de9ff8103b671" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>CO_CURRENT_FLOW</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_1a5c895e11fd5de544162e4e80c90e2905a7098f9995541eb2433f1c4e2c43be7a6" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>COD</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_1a5c895e11fd5de544162e4e80c90e2905ae1a5cf6917f76a6e1145d43e4dbb375b" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>COI</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_1a43fa762c336c131fd484077850a0f541a032da7451741910cd2b2be417cb0cd68" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>COUNTER_CURRENT_FLOW</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_1a5c895e11fd5de544162e4e80c90e2905ab21eda0ab27f002288f64ae8f0924441" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>CWD</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_1a5c895e11fd5de544162e4e80c90e2905ac6d97f7866a8a7fa4d5e4e1d30762f42" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>CWI</name></member>
+      <member refid="classcsmp_1_1_fluid_1a71cf4da9f4528fe980cf17fde0489dd8" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>Density</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1a41d0e0204c5ea1eecd96e04f41376dd8" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>dfds</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1a27eab09c3d0ae37c4e37ec13dd8df655" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>dfds_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1a22a444b0c017e83b3f9230a1a54c0176" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>dfds_at_Numerical</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1aeb164bd5471009c921c455b65a4fd67d" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>dfds_Numerical</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1ac96665fcb718f0ab8509e6f83c3c1a2c" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>dGds_Numerical</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1a3d5af31b69a0cba26bbbe8017792702d" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>DiffusionMultiplier</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_1a875a55eb9e181de81590cb781139e052" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>dkrnds</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_1aa409c03ab16ad8cf8020a3972378b7ae" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>dkrnds_at</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_1a840a44219023142221730eb65d53a9df" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>dkrnds_at_Numerical</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_1a5ead3e2a1fb0ed42e5ebb98971fd7467" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>dkrnds_Numerical</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_1a299921caa154813daf10549c510b28c0" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>dkrwds</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_1a7c965a647ed0a29a3d03cdf43d5e3154" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>dkrwds_at</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_1a3c0f1793300b779c4494cda791ca85c3" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>dkrwds_at_Numerical</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_1a909f4831d1f036cbbd37d1c524108f68" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>dkrwds_Numerical</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1aa615b626de0a2393419b4b567b423cd1" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>dlnds_Numerical</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1a40d52d74e94507cdaff5648fe840f963" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>dlwds_Numerical</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_1ab81eb8f2bf4a7ad9054222813b854f12" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>dpcds</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_1a9b256fbeeb998f958879b0e79edb5d31" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>dpcds_at</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_1a43fa762c336c131fd484077850a0f541af46a984ca524f0a33ba2a6a517565562" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>DRAINAGE</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_1af5bcc3b9e061c7a989ab9b21186b3793" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>EffectiveSaturation</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_1a93369ed3b8820a5437add806950b9242" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>EffectiveSaturation_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1a7a0f8565a17ea1a85363c7327f97fee4" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>f</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1a5e1ace14d22cf90a5e137805f099b336" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>f_at</name></member>
+      <member refid="classcsmp_1_1_flow_functions_module2_1a2b94cb82ed85beced7bff46c3746962c" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>FlowFunctionsModule2</name></member>
+      <member refid="classcsmp_1_1_fluid_1aa40e2f444b57d5b9cab64096e81532f8" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>Fluid</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_1a234593ee529e2c7bc2235d7fd29239ad" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>FLUID_PHASE</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1ab171e4e81f6e13024d434dd2c2704a53" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>GravityMultiplier</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1a61764ee0bc11afb6bdc45c68fea29402" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>GravityMultiplier_dGds</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1aba1760c4175e399fe5eed6939ab1d4fc" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>GravityMultiplier_G</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_1a234593ee529e2c7bc2235d7fd29239adaf7a7f630a65b65f89b9c18c2af3b2f9e" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>H2O</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_1a5c895e11fd5de544162e4e80c90e2905" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>HYSTERIC_MODEL_PARAMETERS</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_1a43fa762c336c131fd484077850a0f541a76f38c1b5ca9ba84941e3a9bea72636e" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>IMBIBITION</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_1a6cc88b1e6b2c950897c233adcd1aa235" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>krn</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_1a1222b3b1510eb77617f17d63367ba429" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>krn_at</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_1aaf4a851f527de153ce191cff3967abab" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>krw</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_1a6a25c494d34c8c497b5a35494fc83080" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>krw_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1a842bd5a14959aa69fa952455640bc36a" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>MaxFractionalFlowDerivative</name></member>
+      <member refid="classcsmp_1_1_fluid_1ac79983865ce50ef995e71b8d9ce1227f" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>MixtureDensity</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1a8e815f1d0e3d35290fd8012738f9e104" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>Mobility</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1ae13f971b41fa6659d59deb823ce2d53f" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>Mobility_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1adfd3f10a6452ceec887ac6ee94bd8d11" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>MobilityDerivative</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1a3583273f56e339059560bae1603257fa" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>MobilityDerivative_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1ab23f9375ae7f476e0eaecef7baa6e4dc" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>MobilityProduct</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1a0c9df8a94676491e468a0c1d42795d05" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>MobilityProductDerivative</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1ad204036ce2dec252065021b10678cefd" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>MobilityProductDerivative_at</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_1a372e33207818c1975b5e5d9e0dc2fb3c" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>OilResidualSaturation</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_1adf43707907281e88d786ce36dbddeeef" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>pc</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_1a2d02bc38c6ff43b6eed355a2bcc8e438" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>pc_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1a4cbb7f650140e0f5c31fbe38a7338bd4" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>Permeability</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1a1ebdf0d643ec5f0fb5a85779bf8a3e12" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>ShockFrontVelocity</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1a41a0273052d41f0ba081d2ed0bb0544b" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>ShockHeight</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1a4a1087561974cfd736c2be0e9d81c3f4" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>ShockSpeed</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1adf3785cd6e0f56a4f56b16698cf1a5cb" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>ShockSpeedAndHeight</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1aa4c35723be480893a04b7d9bbd714d5d" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>Sw</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1aff163b77e8e057a168b63bc49ad02f70" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>TotalMobility</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1a02064e66435763d9f45572881696ee9b" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>TotalMobility_at</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_1a43fa762c336c131fd484077850a0f541" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>TWO_PHASE_FLOW_PROCESS</name></member>
+      <member refid="classcsmp_1_1_fluid_1ae6d7eda07d8d4e2ab19593f4045e3056" prot="protected" virt="non-virtual" ambiguityscope="csmp::"><scope>csmp::FlowFunctionsModule2</scope><name>User</name></member>
+      <member refid="classcsmp_1_1_fluid_1a5d35a075b444911a7e9040682ec52b84" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>Viscosity</name></member>
+      <member refid="classcsmp_1_1_fluid_1ae18bd5309962a5d0a15e766c159f8ae0" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>ViscosityRatio</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_1a450182a9b75bc36312e73c73e9aa07ca" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>WaterAndOilResidualSaturationImbibitionToDrainage</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_1a676678e9e9c12542bf7e7f1a8a30515f" prot="public" virt="non-virtual"><scope>csmp::FlowFunctionsModule2</scope><name>WaterResidualSaturation</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

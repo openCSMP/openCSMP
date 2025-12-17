@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="structcsmp_1_1_type_matches_f_e_m___i_p___placement" kind="struct" language="C++" prot="public">
+    <compoundname>csmp::TypeMatchesFEM_IP_Placement</compoundname>
+    <includes refid="enum_type_compatibility_checks_8h" local="no">enumTypeCompatibilityChecks.h</includes>
+    <templateparamlist>
+      <param>
+        <type>template&lt; uint32_t &gt; class</type>
+        <declname>T</declname>
+        <defname>T</defname>
+      </param>
+      <param>
+        <type><ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">PLACEMENT</ref></type>
+        <declname>IT</declname>
+        <defname>IT</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="enum" id="structcsmp_1_1_type_matches_f_e_m___i_p___placement_1af830707f17eaefebf58817be00f03e15" prot="public" static="no" strong="no">
+        <type></type>
+        <name></name>
+        <qualifiedname>csmp::TypeMatchesFEM_IP_Placement</qualifiedname>
+        <enumvalue id="structcsmp_1_1_type_matches_f_e_m___i_p___placement_1af830707f17eaefebf58817be00f03e15a6f0586e729c607a396c050dd04c8a5a5" prot="public">
+          <name>value</name>
+          <initializer>= false</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/enumTypeCompatibilityChecks.h" line="72" column="5" bodyfile="source/includes/model/enumTypeCompatibilityChecks.h" bodystart="72" bodyend="72"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>For variables placed on the integration points (Gauss quadrature points) of <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>, <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> or <ref refid="classcsmp_1_1_inter_face" kindref="compound">InterFace</ref> objects. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>csmp::TypeMatchesFEM_IP_Placement&lt; Element, ELEMENT_INTEGRATION_POINT &gt;</label>
+        <link refid="structcsmp_1_1_type_matches_f_e_m___i_p___placement_3_01_element_00_01_e_l_e_m_e_n_t___i_n_t_e_g_r_a_t_i_o_n___p_o_i_n_t_01_4"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Element, ELEMENT_INTEGRATION_POINT &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::TypeMatchesFEM_IP_Placement&lt; Face, FACE_INTEGRATION_POINT &gt;</label>
+        <link refid="structcsmp_1_1_type_matches_f_e_m___i_p___placement_3_01_face_00_01_f_a_c_e___i_n_t_e_g_r_a_t_i_o_n___p_o_i_n_t_01_4"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Face, FACE_INTEGRATION_POINT &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>csmp::TypeMatchesFEM_IP_Placement&lt; InterFace, INTER_FACE_INTEGRATION_POINT &gt;</label>
+        <link refid="structcsmp_1_1_type_matches_f_e_m___i_p___placement_3_01_inter_face_00_01_i_n_t_e_r___f_a_c_e___301e1573dab16be350f6377996460985"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; InterFace, INTER_FACE_INTEGRATION_POINT &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::TypeMatchesFEM_IP_Placement&lt; T, IT &gt;</label>
+        <link refid="structcsmp_1_1_type_matches_f_e_m___i_p___placement"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::TypeMatchesFEM_IP_Placement&lt; T, IT &gt;</label>
+        <link refid="structcsmp_1_1_type_matches_f_e_m___i_p___placement"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/model/enumTypeCompatibilityChecks.h" line="71" column="15" bodyfile="source/includes/model/enumTypeCompatibilityChecks.h" bodystart="71" bodyend="73"/>
+    <listofallmembers>
+      <member refid="structcsmp_1_1_type_matches_f_e_m___i_p___placement_1af830707f17eaefebf58817be00f03e15a6f0586e729c607a396c050dd04c8a5a5" prot="public" virt="non-virtual"><scope>csmp::TypeMatchesFEM_IP_Placement</scope><name>value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,84 @@
+\doxysection{Fem\+To\+Grid\+Visitor.\+h}
+\hypertarget{_fem_to_grid_visitor_8h_source}{}\label{_fem_to_grid_visitor_8h_source}\index{source/includes/regular\_grids/FemToGridVisitor.h@{source/includes/regular\_grids/FemToGridVisitor.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{FEM\_TO\_GRID\_VISITOR\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{FEM\_TO\_GRID\_VISITOR\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_visitor_8h}{"{}Visitor.h"{}}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_element_grid_8h}{"{}ElementGrid.h"{}}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_finite_element_8h}{"{}FiniteElement.h"{}}}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_property_database}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}};}
+\DoxyCodeLine{00012\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_finite_difference_grid}{FiniteDifferenceGrid}};}
+\DoxyCodeLine{00013\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}};}
+\DoxyCodeLine{00014\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_element}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}};}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{comment}{//\ works\ only\ in\ 2D,\ requires\ contiguous,\ unique\ element\ numbering}}
+\DoxyCodeLine{00017\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00018\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_fem_to_grid_visitor}{FemToGridVisitor}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_visitor}{Visitor}}<dim>\ \{}
+\DoxyCodeLine{00019\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00020\ \ \ \ \ FemToGridVisitor(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&,}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_difference_grid}{FiniteDifferenceGrid}}\&,}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ var,}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ size\_t\ elements\ );}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~FemToGridVisitor();}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_fem_to_grid_visitor_addc1ce4f8db391e7aa05aff234f0c9f9}{Visit}}(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ );}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_fem_to_grid_visitor_aa48740ee809dc588c84be57b3d1cd55b}{Visit}}(\ \mbox{\hyperlink{classcsmp_1_1_region}{Region}}<dim>*\ );}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ OutputProperty(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ prop\ );}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ OutputProperty()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{bool}\ OverWrite()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordtype}{void}\ OverWrite(\ \textcolor{keywordtype}{bool}\ yes\_or\_no\ );}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{void}\ ChangeOutputProperty(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ var\ );}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_fem_to_grid_visitor}{FemToGridVisitor}}\&\ operator=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_fem_to_grid_visitor}{FemToGridVisitor}}\&\ );}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&\ \ pref;}
+\DoxyCodeLine{00041\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_difference_grid}{FiniteDifferenceGrid}}\&\ \ \ \ \ \ \ \ \ grid;}
+\DoxyCodeLine{00042\ \ \ \ \ std::vector<\textcolor{keywordtype}{bool}>\ \ \ \ \ \ \ \ \ \ \ \ \ visited;}
+\DoxyCodeLine{00043\ \ \ \ \ std::vector<ElementGrid>\ \ \ \ \ \ egrids;}
+\DoxyCodeLine{00044\ \ \ \ \ cEGridIterator\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ eit,\ it\_end;}
+\DoxyCodeLine{00045\ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\ \ \ \ \ \ \ \ \ NF;}
+\DoxyCodeLine{00046\ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\ \ \ \ \ \ \ \ \ xy;}
+\DoxyCodeLine{00047\ \ \ \ \ std::vector<ScalarVariable\ >\ \ P;}
+\DoxyCodeLine{00048\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sc;}
+\DoxyCodeLine{00049\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\ \ \ \ \ \ \ \ \ \ \ XY,\ NN;}
+\DoxyCodeLine{00050\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ prop\_key;}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ time\_increment;}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ overwrite;}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordtype}{bool}\ IsInsideTriangle(\ \textcolor{keywordtype}{double}\ x,\ \textcolor{keywordtype}{double}\ y,\ \textcolor{keywordtype}{bool}\ update=\textcolor{keyword}{true}\ );}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordtype}{bool}\ IsInsideQuadrilateral(\ \textcolor{keywordtype}{double}\ x,\ \textcolor{keywordtype}{double}\ y\ );}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keywordtype}{void}\ MinMaxCoordinates(\ \textcolor{keywordtype}{double}\&\ min\_x,\ \textcolor{keywordtype}{double}\&\ max\_x,}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\&\ min\_y,\ \textcolor{keywordtype}{double}\&\ max\_y\ );}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keywordtype}{void}\ InitializeElementGrid(\ size\_t\ id,\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\_FEM\_TYPE}}\ );}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \};}
+\DoxyCodeLine{00063\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00064\ \textcolor{comment}{@class\ FemToGridVisitor\ FemToGridVisitor\ "{}main\_library/FemToGridVisitor.h"{}}}
+\DoxyCodeLine{00065\ \textcolor{comment}{}}
+\DoxyCodeLine{00066\ \textcolor{comment}{@author\ S.K.\ Matthaei}}
+\DoxyCodeLine{00067\ \textcolor{comment}{@date\ 1997}}
+\DoxyCodeLine{00068\ \textcolor{comment}{}}
+\DoxyCodeLine{00069\ \textcolor{comment}{class\ 'FemToGridVisitor'\ uses\ linear\ interpolation\ on\ a\ triangle}}
+\DoxyCodeLine{00070\ \textcolor{comment}{to\ calculate\ values\ of\ the\ input\ "{}var"{}\ on\ the\ supplied}}
+\DoxyCodeLine{00071\ \textcolor{comment}{regular\ grid.}}
+\DoxyCodeLine{00072\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \}\ \textcolor{comment}{//\ csmp\ \ \ \ }}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

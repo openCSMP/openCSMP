@@ -17,10 +17,10 @@ class NumIntegral_op_NT_dN_orthogonal_dV : public MathOperatorRHS<dim,CELL> {
                                         const char* basic,            // e.g., fluid pressure
                                         const char* test );           // streamfunction
     
-    virtual void GetOperands( const CELL<dim>& );
-    virtual void ComputeContribution( const CELL<dim>& );
+    void GetOperands( const CELL<dim>& ) override final;
+    void ComputeContribution( const CELL<dim>& ) override final;
     
-    virtual NumIntegral_op_NT_dN_orthogonal_dV<dim,CELL>* clone() const { return new NumIntegral_op_NT_dN_orthogonal_dV<dim,CELL> (*this); }
+    NumIntegral_op_NT_dN_orthogonal_dV<dim,CELL>* clone() const override final { return new NumIntegral_op_NT_dN_orthogonal_dV<dim,CELL> (*this); }
 
   private:
     DenseMatrix<DM_MIN>  M, DNORTHO, NT; 

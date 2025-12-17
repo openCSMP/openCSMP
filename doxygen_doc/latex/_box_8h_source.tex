@@ -1,0 +1,276 @@
+\doxysection{Box.\+h}
+\hypertarget{_box_8h_source}{}\label{_box_8h_source}\index{source/includes/model/Box.h@{source/includes/model/Box.h}}
+\mbox{\hyperlink{_box_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_BOX\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_BOX\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{set}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_point_8h}{"{}Point.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_v_set}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}};}
+\DoxyCodeLine{00010\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_node}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}};}
+\DoxyCodeLine{00011\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_model}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}};}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00014\ \textcolor{comment}{@file\ Box.h}}
+\DoxyCodeLine{00015\ \textcolor{comment}{}}
+\DoxyCodeLine{00016\ \textcolor{comment}{@brief\ Anything\ to\ do\ with\ definitions\ and\ operations\ on\ rectangular\ and\ box-\/shaped\ models(2D\ and\ 3D\ that\ is).}}
+\DoxyCodeLine{00017\ \textcolor{comment}{This\ also\ includes\ stand-\/alone\ functions\ for\ the\ processing\ of\ Boundary\ flags\ and\ values.}}
+\DoxyCodeLine{00018\ \textcolor{comment}{}}
+\DoxyCodeLine{00019\ \textcolor{comment}{@author\ S.K.\ Matthai}}
+\DoxyCodeLine{00020\ \textcolor{comment}{@date\ 1997}}
+\DoxyCodeLine{00021\ \textcolor{comment}{}}
+\DoxyCodeLine{00022\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00025\ \textcolor{comment}{@addtogroup\ CSMPglobalEnums}}
+\DoxyCodeLine{00026\ \textcolor{comment}{@\{}}
+\DoxyCodeLine{00027\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{comment}{///\ fixed\ boundary\ identifiers;\ @attention\ do\ not\ alter\ numbering\ or\ sequence\ because\ it\ is\ used\ in\ iterations}}
+\DoxyCodeLine{00030\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::int8\_t}
+\DoxyCodeLine{00031\ \ \ \ \ IRREGULAR\_OUTSIDE\{-\/1\},}
+\DoxyCodeLine{00032\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{LEFT\_OUTSIDE}}\{-\/2\},\ \ \textcolor{comment}{///<\ model\ boundary\ flags}}
+\DoxyCodeLine{00033\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{RIGHT\_OUTSIDE}}\{-\/3\},\ \ \textcolor{comment}{///<\ ...}}
+\DoxyCodeLine{00034\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{BOTTOM\_OUTSIDE}}\{-\/4\},}
+\DoxyCodeLine{00035\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{TOP\_OUTSIDE}}\{-\/5\},}
+\DoxyCodeLine{00036\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{FRONT\_OUTSIDE}}\{-\/6\},}
+\DoxyCodeLine{00037\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{BACK\_OUTSIDE}}\{-\/7\},}
+\DoxyCodeLine{00038\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{CNR\_MIN}}\{-\/8\},\ \ \ \ \ \ \ \textcolor{comment}{///<\ min-\/x,\ min-\/y,\ min-\/z}}
+\DoxyCodeLine{00039\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{CNR\_MAX}}\{-\/9\},\ \ \ \ \ \ \ \textcolor{comment}{///<\ max-\/x,\ max-\/y,\ max-\/z}}
+\DoxyCodeLine{00040\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{CNR\_MIN\_MAXX}}\{-\/10\},\ \textcolor{comment}{///<\ see\ users\ guide}}
+\DoxyCodeLine{00041\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{CNR\_MIN\_MAXXZ}}\{-\/11\},}
+\DoxyCodeLine{00042\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{CNR\_MIN\_MAXZ}}\{-\/12\},}
+\DoxyCodeLine{00043\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{CNR\_MAX\_MINXZ}}\{-\/13\},}
+\DoxyCodeLine{00044\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{CNR\_MAX\_MAXX}}\{-\/14\},}
+\DoxyCodeLine{00045\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{CNR\_MAX\_MAXZ}}\{-\/15\},}
+\DoxyCodeLine{00046\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{BACK\_BOTTOM}}\{-\/16\},\ \textcolor{comment}{///<\ model\ edges:\ BACK\ and\ BOTTOM}}
+\DoxyCodeLine{00047\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{BACK\_RIGHT}}\{-\/17\},\ \ \textcolor{comment}{///<\ BACK\ and\ RIGHT}}
+\DoxyCodeLine{00048\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{BACK\_TOP}}\{-\/18\},\ \ \ \ \textcolor{comment}{///<\ BACK\ and\ TOP}}
+\DoxyCodeLine{00049\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{BACK\_LEFT}}\{-\/19\},\ \ \ \textcolor{comment}{///<\ BACK\ and\ LEFT}}
+\DoxyCodeLine{00050\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{BOTTOM\_RIGHT}}\{-\/20\},\textcolor{comment}{///<\ BOTTOM\ and\ RIGHT}}
+\DoxyCodeLine{00051\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{TOP\_RIGHT}}\{-\/21\},\ \ \ \textcolor{comment}{///<\ TOP\ and\ RIGHT}}
+\DoxyCodeLine{00052\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{TOP\_LEFT}}\{-\/22\},\ \ \ \ \textcolor{comment}{///<\ TOP\ and\ LEFT}}
+\DoxyCodeLine{00053\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{BOTTOM\_LEFT}}\{-\/23\},\ \textcolor{comment}{///<\ BOTTOM\ and\ LEFT}}
+\DoxyCodeLine{00054\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{FRONT\_BOTTOM}}\{-\/24\},\textcolor{comment}{///<\ FRONT\ and\ BOTTOM}}
+\DoxyCodeLine{00055\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{FRONT\_RIGHT}}\{-\/25\},\ \textcolor{comment}{///<\ FRONT\ and\ RIGHT}}
+\DoxyCodeLine{00056\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{FRONT\_TOP}}\{-\/26\},\ \ \ \textcolor{comment}{///<\ FRONT\ and\ TOP}}
+\DoxyCodeLine{00057\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{FRONT\_LEFT}}\{-\/27\},\ \ \textcolor{comment}{///<\ FRONT\ and\ LEFT}}
+\DoxyCodeLine{00058\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{REGION\_BOUNDARY}}\{-\/28\},}
+\DoxyCodeLine{00059\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{MULTIPLE\_BOUNDARIES}}\{-\/29\};}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \textcolor{comment}{///\ @enum\ BOX\_BOUNDARY\ uniquely\ identifies\ placement\ of\ nodes\ on\ the\ boundary\ of\ a\ box-\/shaped\ model}}
+\DoxyCodeLine{00062\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}}\ :\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{std}}::\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{int8\_t}}\ \{}
+\DoxyCodeLine{00063\ \ \ \mbox{\hyperlink{group___c_s_m_pglobal_enums_gga8e4421c3cd02f67e535bceb2dc74bfb6aa75032f56e77653ffaa7e2eb85566858}{NOT}}\ \ \ \ \ \ \ =\ 0,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ not\ located\ on\ a\ model\ boundary}}
+\DoxyCodeLine{00064\ \ \ \mbox{\hyperlink{group___c_s_m_pglobal_enums_gga8e4421c3cd02f67e535bceb2dc74bfb6a06df978a517113d47cf3375e7d0a978a}{IRREGULAR}}\ =\ IRREGULAR\_OUTSIDE,\ \ \textcolor{comment}{///<\ located\ on\ a\ not-\/specified\ outside\ boundary\ of\ model\ (usually\ in\ the\ bounding\ box)}}
+\DoxyCodeLine{00065\ \ \ TOP\ \ \ \ \ \ \ =\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{TOP\_OUTSIDE}},}
+\DoxyCodeLine{00066\ \ \ BOTTOM\ \ \ \ =\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOTTOM\_OUTSIDE}},}
+\DoxyCodeLine{00067\ \ \ LEFT\ \ \ =\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{LEFT\_OUTSIDE}},}
+\DoxyCodeLine{00068\ \ \ RIGHT\ =\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{RIGHT\_OUTSIDE}},}
+\DoxyCodeLine{00069\ \ \ FRONT\ =\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{FRONT\_OUTSIDE}},}
+\DoxyCodeLine{00070\ \ \ BACK\ \ =\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BACK\_OUTSIDE}},}
+\DoxyCodeLine{00071\ \ \ CNR1\ \ =\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{CNR\_MIN}},}
+\DoxyCodeLine{00072\ \ \ CNR2\ \ =\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{CNR\_MIN\_MAXX}},}
+\DoxyCodeLine{00073\ \ \ CNR3\ \ =\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{CNR\_MAX\_MAXX}},}
+\DoxyCodeLine{00074\ \ \ CNR4\ \ =\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{CNR\_MAX\_MINXZ}},}
+\DoxyCodeLine{00075\ \ \ CNR5\ \ =\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{CNR\_MIN\_MAXZ}},}
+\DoxyCodeLine{00076\ \ \ CNR6\ \ =\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{CNR\_MIN\_MAXXZ}},}
+\DoxyCodeLine{00077\ \ \ CNR7\ \ =\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{CNR\_MAX}},}
+\DoxyCodeLine{00078\ \ \ CNR8\ \ =\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{CNR\_MAX\_MAXZ}},}
+\DoxyCodeLine{00079\ \ \ EDGE1\ =\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BACK\_BOTTOM}},}
+\DoxyCodeLine{00080\ \ \ EDGE2\ =\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BACK\_RIGHT}},}
+\DoxyCodeLine{00081\ \ \ EDGE3\ =\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BACK\_TOP}},}
+\DoxyCodeLine{00082\ \ \ EDGE4\ =\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BACK\_LEFT}},}
+\DoxyCodeLine{00083\ \ \ EDGE5\ =\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOTTOM\_LEFT}},}
+\DoxyCodeLine{00084\ \ \ EDGE6\ =\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOTTOM\_RIGHT}},}
+\DoxyCodeLine{00085\ \ \ EDGE7\ =\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{TOP\_RIGHT}},}
+\DoxyCodeLine{00086\ \ \ EDGE8\ =\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{TOP\_LEFT}},}
+\DoxyCodeLine{00087\ \ \ EDGE9\ =\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{FRONT\_BOTTOM}},}
+\DoxyCodeLine{00088\ \ \ EDGE10\ =\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{FRONT\_RIGHT}},}
+\DoxyCodeLine{00089\ \ \ EDGE11\ =\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{FRONT\_TOP}},}
+\DoxyCodeLine{00090\ \ \ EDGE12\ =\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{FRONT\_LEFT}},}
+\DoxyCodeLine{00091\ \ \ \mbox{\hyperlink{group___c_s_m_pglobal_enums_gga8e4421c3cd02f67e535bceb2dc74bfb6a760090e41d76ddb523e132c0ed2a634b}{INTERNAL}}\ =\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{REGION\_BOUNDARY}},\ \ \ \ \textcolor{comment}{///<\ \ internal\ model\ boundary\ (usually\ inside\ bounding\ box,\ with\ neighbors\ on\ either\ side)}}
+\DoxyCodeLine{00092\ \ \ \mbox{\hyperlink{group___c_s_m_pglobal_enums_gga8e4421c3cd02f67e535bceb2dc74bfb6a71dba2a91c54c4427623ab1b2aa5d473}{MULTIPLE}}\ =\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{MULTIPLE\_BOUNDARIES}}\ \textcolor{comment}{///<\ \ can\ result\ when\ an\ element\ is\ at\ the\ front\ and\ back\ at\ the\ same\ time\ because\ model\ is\ only\ a\ single\ element\ thick\ or\ similar}}
+\DoxyCodeLine{00093\ \};}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00096\ \textcolor{comment}{@\}}}
+\DoxyCodeLine{00097\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00100\ \textcolor{comment}{@brief\ brings\ together\ all\ functionality\ needed\ to\ deal\ with\ Box\ shaped\ models\ whose\ boundaries}}
+\DoxyCodeLine{00101\ \textcolor{comment}{are\ identified\ by\ BOX\_BOUNDARY\ flags.}}
+\DoxyCodeLine{00102\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00103\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_box}{Box}}\ \{}
+\DoxyCodeLine{00104\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00105\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_ga64fa56c35e598036583aa92ebdb14fc8}{UnitNormalTo}}(\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}}\ bdry,\ uint32\_t\ dim,}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\&\ nrml\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \};}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}}\ \ \mbox{\hyperlink{group___c_s_m_pglobal_functions_ga716e9d29e59b3eaf92f5d37c9f253253}{intToBOX\_BOUNDARY}}(\ int8\_t\ i\ );}
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ \textcolor{comment}{///\ turn\ enumeration\ into\ string}}
+\DoxyCodeLine{00113\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_gace4345cb4dde7fac354305651c61f464}{std}}::\mbox{\hyperlink{group___c_s_m_pglobal_functions_gace4345cb4dde7fac354305651c61f464}{string}}\ \ \mbox{\hyperlink{group___c_s_m_pglobal_functions_gace4345cb4dde7fac354305651c61f464}{parseBoundary}}(\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}}\ );}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \textcolor{comment}{///\ interprets\ enumeration\ from\ string}}
+\DoxyCodeLine{00116\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}}\ \ \mbox{\hyperlink{namespacecsmp_ad3147b30d4727bd135c86ea0dcceea07}{parseBoundary}}(\ \textcolor{keyword}{const}\ std::string\&\ box\_boundary\_name\ );}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ \textcolor{comment}{///\ returns\ whether\ supplied\ boundary\ flag\ refers\ to\ a\ model\ edge}}
+\DoxyCodeLine{00119\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_ga86d9cf3c88a730a881254cbd98f8c9eb}{isEdge}}(\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}}\ );}
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ \textcolor{comment}{///\ returns\ whether\ flag\ is\ a\ corner}}
+\DoxyCodeLine{00122\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_ga6b970c9a34abf2a9150140f4fd91e833}{isCorner}}(\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}}\ );}
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ \textcolor{comment}{///\ returns\ whether\ flag\ is\ a\ side\ of\ the\ model}}
+\DoxyCodeLine{00125\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_ga1ac914be25ff02b5b8c1d629c7cb191b}{isSide}}(\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}}\ );}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ \textcolor{comment}{///\ returns\ whether\ supplied\ boundary\ flag\ is\ located\ at\ a\ model\ boundary\ edge}}
+\DoxyCodeLine{00128\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_gad14db27ca76ca3bd64073e8e0fd22dd4}{belongsToEdge}}(\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}}\ edge,\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}}\ );}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ \textcolor{comment}{///\ returns\ whether\ supplied\ boundary\ flag\ is\ located\ at\ a\ model\ boundary\ side}}
+\DoxyCodeLine{00131\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_ga260768ce8b1a81330b85fe5fce74f477}{belongsToSide}}(\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}}\ side,\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}}\ );}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ \textcolor{comment}{///\ returns\ whether\ boundary\ flag\ belongs\ to\ boundary\ LEFT}}
+\DoxyCodeLine{00134\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_gaa0f8bf7b0ab86f3ed497a6e892bb18a3}{isLEFT}}(\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}}\ );}
+\DoxyCodeLine{00135\ \textcolor{comment}{///\ returns\ whether\ boundary\ flag\ belongs\ to\ boundary\ RIGHT}}
+\DoxyCodeLine{00136\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_ga286f881708e778bda4cbc6fc28c5ac48}{isRIGHT}}(\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}}\ );}
+\DoxyCodeLine{00137\ \textcolor{comment}{///\ returns\ whether\ boundary\ flag\ belongs\ to\ boundary\ TOP}}
+\DoxyCodeLine{00138\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_ga975e897c190d19be26a02aca05e47082}{isTOP}}(\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}}\ );}
+\DoxyCodeLine{00139\ \textcolor{comment}{///\ returns\ whether\ boundary\ flag\ belongs\ to\ boundary\ BOTTOM}}
+\DoxyCodeLine{00140\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_ga6673719c184b399a54af3f63c537fee8}{isBOTTOM}}(\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}}\ );}
+\DoxyCodeLine{00141\ \textcolor{comment}{///\ returns\ whether\ boundary\ flag\ belongs\ to\ boundary\ FRONT\ (3D\ only)}}
+\DoxyCodeLine{00142\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_ga650b1c06ae06d49e3a59113e4c9c8f60}{isFRONT}}(\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}}\ );}
+\DoxyCodeLine{00143\ \textcolor{comment}{///\ returns\ whether\ boundary\ flag\ belongs\ to\ boundary\ BACK\ (3D\ only)}}
+\DoxyCodeLine{00144\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_gafab769328f91ebe6032499c43faa8110}{isBACK}}(\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}}\ );}
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00146\ \textcolor{comment}{///\ returns\ true\ also\ for\ edges\ and\ corners}}
+\DoxyCodeLine{00147\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_ga67c628137703b7561fe920a1eb20b12f}{canBeIRREGULAR}}(\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}}\ );}
+\DoxyCodeLine{00148\ }
+\DoxyCodeLine{00149\ \textcolor{comment}{///\ returns\ nodes\ that\ are\ either\ flagged\ \ CNR1\ or\ CNR2\ from\ one-\/dimensional\ model}}
+\DoxyCodeLine{00150\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<1U>*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_gae9b9930fea4a5c4368dd33d74a67089e}{cornerFlaggedNode}}(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<1U>\&,\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}}\ );}
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00152\ \textcolor{comment}{///\ infers\ from\ node\ flags\ and\ cell\ type,\ which\ boundary\ the\ element\ face\ lies\ on\ including\ INTERNAL\ boundaries}}
+\DoxyCodeLine{00153\ \textcolor{keyword}{template}<uint32\_t\ dim,\ \textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ CELL>}
+\DoxyCodeLine{00154\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_ga5c6baa4d81d5694647d6bbd0e6aab5c0}{atBoundary}}(\ \textcolor{keyword}{const}\ CELL<dim>*\ \textcolor{keyword}{const},\ uint32\_t\ boundary\_face\ );}
+\DoxyCodeLine{00155\ }
+\DoxyCodeLine{00156\ \textcolor{comment}{///\ is\ the\ cell\ located\ at\ a\ model\ boundary?\ -\/\ for\ line\ or\ surface\ element\ in\ 3D\ models\ \ this\ is\ inferred\ when\ all\ their\ nodes\ are\ on\ boundary;\ for\ volume\ elements\ all\ nodes\ of\ one\ face\ must\ be}}
+\DoxyCodeLine{00157\ \textcolor{keyword}{template}<uint32\_t\ dim,\ \textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ CELL>}
+\DoxyCodeLine{00158\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_gaf777836f67ff3cfa3f783120b477fd11}{atBoundary}}(\ \textcolor{keyword}{const}\ CELL<dim>*\ \textcolor{keyword}{const}\ );}
+\DoxyCodeLine{00159\ }
+\DoxyCodeLine{00160\ \textcolor{comment}{///\ identifies\ which\ boundary\ a\ lower\ dimensional\ element\ is\ located\ on\ using\ the\ node\ \ flags\ of\ this\ element}}
+\DoxyCodeLine{00161\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00162\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}}\ \mbox{\hyperlink{namespacecsmp_a2e4b8406b02902b3846a46789c819722}{atBoundary}}(\ \textcolor{keyword}{const}\ std::set<BOX\_BOUNDARY>\&\ node\_flags,\ uint32\_t\ boundary\_face\_corner\_nodes\ );}
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00164\ \textcolor{comment}{///\ prints\ a\ summary\ of\ the\ current\ flags\ of\ the\ nodes\ and\ elements\ to\ screen.}}
+\DoxyCodeLine{00165\ \textcolor{keyword}{template}<uint32\_t\ dim>\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_gaf488645ab1faa231464e099bc6dc4fa4}{printBoxBoundaryFlags}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ );}
+\DoxyCodeLine{00166\ }
+\DoxyCodeLine{00167\ \textcolor{comment}{///\ gives\ the\ extreme\ coordinates\ of\ the\ bounding\ box\ of\ the\ BOUNDARY\ (not\ the\ model!)\ -\/\ 1D\ model}}
+\DoxyCodeLine{00168\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_ga26e98b89a5db442313780dbe6c0e4151}{boundaryMinMaxCoordinates}}(\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}},}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_point}{Point}}<1U>\&\ model\_coord\_min,}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_point}{Point}}<1U>\&\ model\_coord\_max\ );}
+\DoxyCodeLine{00171\ }
+\DoxyCodeLine{00172\ \textcolor{comment}{///\ gives\ the\ extreme\ coordinates\ of\ the\ bounding\ box\ of\ the\ BOUNDARY\ (not\ the\ model!)\ -\/\ 2D\ model}}
+\DoxyCodeLine{00173\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_gac3aec5b250ec2f980aa760b852186cb4}{boundaryMinMaxCoordinates}}(\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}},\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_point}{Point}}<2U>\&,\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_point}{Point}}<2U>\&\ );}
+\DoxyCodeLine{00174\ }
+\DoxyCodeLine{00175\ \textcolor{comment}{///\ gives\ the\ extreme\ coordinates\ of\ the\ bounding\ box\ of\ the\ BOUNDARY\ (not\ the\ model!)\ -\/\ 3D\ model}}
+\DoxyCodeLine{00176\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_gae3754abd6405bdb431d5af36906d3b1a}{boundaryMinMaxCoordinates}}(\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}},\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_point}{Point}}<3U>\&,\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_point}{Point}}<3U>\&\ );}
+\DoxyCodeLine{00177\ }
+\DoxyCodeLine{00178\ \textcolor{comment}{///\ compares\ the\ supplied\ string\ with\ valid\ BOX\_BOUNDARY\ classifications;\ returns\ true\ if\ it\ is\ among\ them}}
+\DoxyCodeLine{00179\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp_aceeba7f664227183bc48f33d17a0d055}{isDiagnosticBoxBoundaryClassifier}}(\ \textcolor{keyword}{const}\ std::string\&\ );}
+\DoxyCodeLine{00180\ }
+\DoxyCodeLine{00181\ \textcolor{comment}{///\ Applies\ box\ boundary\ flags\ assuming\ that\ the\ model\ stored\ in\ the\ VSet\ is\ box-\/shaped\ with\ the\ sides\ aligned\ with\ the\ coordinate\ axes.}}
+\DoxyCodeLine{00182\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00183\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_gaf01ece2dd60ef644efd6a5f39d1818d1}{establishBoundaryFlagsForBoxModel}}(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ vset,\ \textcolor{keywordtype}{double}\ tolerance\ );}
+\DoxyCodeLine{00184\ }
+\DoxyCodeLine{00185\ \textcolor{comment}{///\ using\ existing\ Boundary\ objects,\ establish\ node\ and\ element\ BOX\_BOUNDARY\ flagging}}
+\DoxyCodeLine{00186\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_ga20ee477d00c1041c66b394b9acb5d15b}{recreateBoxBoundaryFlags}}(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<1U>\&\ );}
+\DoxyCodeLine{00187\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_ga69b3ba7b2734c431c1ab8c60a1b6bb15}{recreateBoxBoundaryFlags}}(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<2U>\&\ );}
+\DoxyCodeLine{00188\ \textcolor{keywordtype}{void}\ recreateBoxBoundaryFlags(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<3U>\&\ );}
+\DoxyCodeLine{00189\ }
+\DoxyCodeLine{00190\ \textcolor{comment}{///\ boundary\ flags\ for\ 2D\ models\ consisting\ of\ quadrilaterals\ only;\ since\ these\ models\ are\ regular\ method\ is\ rather\ fast}}
+\DoxyCodeLine{00191\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_gabe9f5ed063f7a9fbf63c863d2ffc2193}{recreateBoxBoundaryFlagsForQuadrilateralModel}}(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<2U>\&\ );}
+\DoxyCodeLine{00192\ }
+\DoxyCodeLine{00193\ \textcolor{comment}{///\ boundary\ flags\ for\ 3D\ models\ consisting\ of\ hexahedra\ only;\ since\ these\ models\ are\ regular\ method\ is\ rather\ fast}}
+\DoxyCodeLine{00194\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_gaaa98130aa92c763cba74a532c73a2db1}{recreateBoxBoundaryFlagsForHexahedralModel}}(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<3U>\&\ );}
+\DoxyCodeLine{00195\ }
+\DoxyCodeLine{00196\ \textcolor{comment}{///\ permits\ to\ create\ variables\ values\ from\ BOX\_BOUNDARY\ flag\ enumeration\ values}}
+\DoxyCodeLine{00197\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00198\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_ga3a18a868088cabdf5c433d2daa3796fe}{boxFlagsToVariable}}(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ node\_variable,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ elmt\_variable\ );}
+\DoxyCodeLine{00199\ }
+\DoxyCodeLine{00200\ \textcolor{comment}{///\ using\ the\ coordinate\ locations\ of\ the\ vertices\ defining\ the\ bounding\ rectangle;\ node\ flagging\ is\ performed;\ error\ prone\ method!}}
+\DoxyCodeLine{00201\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00202\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_ga660afbbd83ad8330b7cfe53f338406cc}{flagCornerNodes}}(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&,\ \textcolor{keywordtype}{double}\ tol,\ \textcolor{keywordtype}{double}\ xmin,\ \textcolor{keywordtype}{double}\ xmax,\ \textcolor{keywordtype}{double}\ ymin,\ \textcolor{keywordtype}{double}\ ymax,\ \textcolor{keywordtype}{double}\ zmin,\ \textcolor{keywordtype}{double}\ zmax\ );}
+\DoxyCodeLine{00203\ }
+\DoxyCodeLine{00204\ \textcolor{comment}{///\ Finds\ edges\ in\ boxed\ shaped\ model\ and\ gibes\ them\ a\ BOX\_BOUDARY\_FLAG}}
+\DoxyCodeLine{00205\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00206\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_ga172c4c1c36ed2faadb9b0c792bd538e6}{flagEdges}}(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&,\ \textcolor{keywordtype}{double}\ tol,\ \textcolor{keywordtype}{double}\ xmin,\ \textcolor{keywordtype}{double}\ xmax,\ \textcolor{keywordtype}{double}\ ymin,\ \textcolor{keywordtype}{double}\ ymax,\ \textcolor{keywordtype}{double}\ zmin,\ \textcolor{keywordtype}{double}\ zmax\ );}
+\DoxyCodeLine{00207\ }
+\DoxyCodeLine{00208\ \textcolor{comment}{///\ returns\ true\ if\ the\ model\ contains\ some\ box\ boundary\ identifiers,\ but\ also\ irregular\ boundaries}}
+\DoxyCodeLine{00209\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_gac6a2a42d205e461bd54a544648c4f6c0}{hasAllSideBoundaries}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<2U>\&\ );}
+\DoxyCodeLine{00210\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_gae5fbc1ffd9639dd2bc3b6bfef1006153}{hasAllSideBoundaries}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<3U>\&\ );}
+\DoxyCodeLine{00211\ }
+\DoxyCodeLine{00212\ \textcolor{comment}{///\ returns\ true\ if\ the\ model\ contains\ the\ complete\ set\ of\ box\ boundary\ identifiers}}
+\DoxyCodeLine{00213\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_gac878421aeb80354dd6c708426580b557}{isStrictlyBoxShaped}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<2U>\&\ );}
+\DoxyCodeLine{00214\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_ga4a5434ada5ef33d28d14613cea6cb593}{isStrictlyBoxShaped}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<3U>\&\ );}
+\DoxyCodeLine{00215\ }
+\DoxyCodeLine{00216\ \textcolor{comment}{///\ returns\ the\ dim-\/2\ edge\ \ (if\ any)\ that\ lies\ between\ the\ sides\ of\ the\ box\ that\ are\ given\ as\ arguments}}
+\DoxyCodeLine{00217\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}}\ \ \mbox{\hyperlink{group___c_s_m_pglobal_functions_ga4c9a22ddd432ece3ce5f50e1d84ab887}{whichEdge}}(\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}}\ side1,\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}}\ side2\ );}
+\DoxyCodeLine{00218\ }
+\DoxyCodeLine{00219\ \textcolor{comment}{///\ returns\ the\ corner\ of\ the\ BOX\ (1-\/6)\ that\ is\ shared\ by\ the\ side\ boundaries}}
+\DoxyCodeLine{00220\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}}\ \ \mbox{\hyperlink{group___c_s_m_pglobal_functions_gaff15bf160aa1a4e0ed2337c79d399f87}{whichCorner}}(\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}}\ side1,\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}}\ side2,\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}}\ side3\ );}
+\DoxyCodeLine{00221\ }
+\DoxyCodeLine{00222\ \textcolor{comment}{///\ return\ which\ boundary\ the\ edge\ or\ lower-\/dim\ face\ with\ the\ two\ end-\/node\ flags\ is\ on}}
+\DoxyCodeLine{00223\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}}\ \ \mbox{\hyperlink{group___c_s_m_pglobal_functions_ga4a734d4253f389f5710d8789d077b60d}{whichBoundary}}(\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}}\ node\_flag1,\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}}\ node\_flag2\ );}
+\DoxyCodeLine{00224\ }
+\DoxyCodeLine{00225\ }
+\DoxyCodeLine{00226\ \textcolor{comment}{///\ reports\ the\ range\ of\ property\ values\ on\ the\ nodes\ flagged\ with\ the\ BOX\_BOUNDARY\ identifier}}
+\DoxyCodeLine{00227\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00228\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_ga99c685c2fcc2ec4ea7fbda9eb4b659e2}{boxBoundaryPropertyRange}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ sg,\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}}\ boundary,}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ node\_property,\ \textcolor{keywordtype}{double}\&\ bmin,\ \textcolor{keywordtype}{double}\&\ bmax\ );}
+\DoxyCodeLine{00230\ }
+\DoxyCodeLine{00231\ \textcolor{comment}{///\ linear\ interpolation\ of\ values\ to\ point\ between\ 2\ points\ in\ 1D\ (use\ for\ assigning\ property\ gradients\ along\ straight\ boundaries)}}
+\DoxyCodeLine{00232\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{namespacecsmp_a3bc774e6d5d16c5a1cc41263d12cff9c}{linearInterpolate}}(\ \textcolor{keyword}{const}\ std::pair<Point<1U>,\ \textcolor{keywordtype}{double}>\&,}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::pair<Point<1U>,\ \textcolor{keywordtype}{double}>\&,}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<1U>\&\ );}
+\DoxyCodeLine{00235\ }
+\DoxyCodeLine{00236\ \textcolor{comment}{///\ bilinear\ interpolation\ to\ point\ between\ 2\ points\ in\ 2D}}
+\DoxyCodeLine{00237\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{namespacecsmp_a547046838bcf20ae7d1f23cb3f9c4395}{linearInterpolate}}(\ \textcolor{keyword}{const}\ std::pair<Point<2U>,\ \textcolor{keywordtype}{double}>\&,}
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::pair<Point<2U>,\ \textcolor{keywordtype}{double}>\&,}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<2U>\&\ );}
+\DoxyCodeLine{00240\ }
+\DoxyCodeLine{00241\ \textcolor{comment}{///\ 3D\ trilinear\ interpolation}}
+\DoxyCodeLine{00242\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{namespacecsmp_a20cbbd4367c7f886179da57f8c93d0e8}{linearInterpolate}}(\ \textcolor{keyword}{const}\ std::pair<Point<3U>,\ \textcolor{keywordtype}{double}>\&,}
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::pair<Point<3U>,\ \textcolor{keywordtype}{double}>\&,}
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<3U>\&\ );}
+\DoxyCodeLine{00245\ }
+\DoxyCodeLine{00246\ \textcolor{comment}{///\ just\ a\ stub\ (ignores\ the\ bilinear)}}
+\DoxyCodeLine{00247\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_ga82ee7c7c55e047d07035e45bf6933786}{bilinearInterpolate}}(\ uint32\_t\ idx\_x,\ uint32\_t\ idx\_y,}
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<1U>\&\ xy1,}
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<1U>\&\ xy2,}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<1U>\&\ coord,}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ p1,\ \textcolor{keywordtype}{double}\ p2,\ \textcolor{keywordtype}{double},\ \textcolor{keywordtype}{double}\ );}
+\DoxyCodeLine{00252\ }
+\DoxyCodeLine{00253\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_gafd67855b92eb81ddf7ecaec18e7a154c}{bilinearInterpolate}}(\ uint32\_t\ idx\_x,\ uint32\_t\ idx\_y,}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<2U>\&\ xy1,}
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<2U>\&\ xy2,}
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<2U>\&\ coord,}
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ val@x0,y0\ \ val@x1,y0\ \ val@x1,y1\ \ val@x0,y1}}
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ p1,\ \textcolor{keywordtype}{double}\ p2,\ \textcolor{keywordtype}{double}\ p3,\ \textcolor{keywordtype}{double}\ p4\ );}
+\DoxyCodeLine{00259\ }
+\DoxyCodeLine{00260\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_ga2718a7fd9693923da5d48bc3916e44b7}{bilinearInterpolate}}(\ uint32\_t\ idx\_x,\ uint32\_t\ idx\_y,}
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<3U>\&\ xy1,}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<3U>\&\ xy2,}
+\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<3U>\&\ coord,}
+\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ val@x0,y0\ \ val@x1,y0\ \ val@x1,y1\ \ val@x0,y1}}
+\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ p1,\ \textcolor{keywordtype}{double}\ p2,\ \textcolor{keywordtype}{double}\ p3,\ \textcolor{keywordtype}{double}\ p4\ );}
+\DoxyCodeLine{00266\ }
+\DoxyCodeLine{00267\ }
+\DoxyCodeLine{00268\ \}\ \textcolor{comment}{//\ end\ namespace\ csmp}}
+\DoxyCodeLine{00269\ }
+\DoxyCodeLine{00270\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

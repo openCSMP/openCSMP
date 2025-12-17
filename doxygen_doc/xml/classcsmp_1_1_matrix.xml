@@ -1,0 +1,959 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_matrix" kind="class" language="C++" prot="public">
+    <compoundname>csmp::Matrix</compoundname>
+    <includes refid="_matrix_8h" local="no">Matrix.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_matrix_1a59b654afc2ce5c082d07b8cd2c5f1fc5" prot="private" static="no" mutable="no">
+        <type><ref refid="class_dynamic_array2_d" kindref="compound">DynamicArray2D</ref>&lt; double &gt;</type>
+        <definition>DynamicArray2D&lt;double&gt; csmp::Matrix::data</definition>
+        <argsstring></argsstring>
+        <name>data</name>
+        <qualifiedname>csmp::Matrix::data</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="96" column="20" bodyfile="source/includes/model/Matrix.h" bodystart="96" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_matrix_1a063d600ef7af37df393d79956aac7b40" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Matrix::Matrix</definition>
+        <argsstring>()</argsstring>
+        <name>Matrix</name>
+        <qualifiedname>csmp::Matrix::Matrix</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="26" column="5" bodyfile="source/includes/model/Matrix.h" bodystart="26" bodyend="26"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matrix_1a7f289c214bec0b71c94fe54099ca5c63" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Matrix::Matrix</definition>
+        <argsstring>(size_t m, size_t n)</argsstring>
+        <name>Matrix</name>
+        <qualifiedname>csmp::Matrix::Matrix</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>m</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>n</declname>
+        </param>
+        <briefdescription>
+<para>constructor (i,j) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="27" column="5" bodyfile="source/modules/model/Matrix.cpp" bodystart="615" bodyend="618"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matrix_1a0dd470869401cc4a4e6a32b62b4355ed" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Matrix::Matrix</definition>
+        <argsstring>(size_t m, size_t n, double val)</argsstring>
+        <name>Matrix</name>
+        <qualifiedname>csmp::Matrix::Matrix</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>m</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>n</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="28" column="5" bodyfile="source/modules/model/Matrix.cpp" bodystart="25" bodyend="28"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matrix_1a402662d6fcfe9c3f57282718e127dcc1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::Matrix::Rows</definition>
+        <argsstring>() const</argsstring>
+        <name>Rows</name>
+        <qualifiedname>csmp::Matrix::Rows</qualifiedname>
+        <briefdescription>
+<para>returns number of rows </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="30" column="12" bodyfile="source/modules/model/Matrix.cpp" bodystart="649" bodyend="649"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matrix_1a6e6e53dd0e01107619820ba8b28da0a7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::Matrix::Cols</definition>
+        <argsstring>() const</argsstring>
+        <name>Cols</name>
+        <qualifiedname>csmp::Matrix::Cols</qualifiedname>
+        <briefdescription>
+<para>returns number of columns </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="31" column="12" bodyfile="source/modules/model/Matrix.cpp" bodystart="653" bodyend="653"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matrix_1a85d653db0f20ef9c28aab16c70ba6768" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Matrix::Resize</definition>
+        <argsstring>(size_t m, size_t n)</argsstring>
+        <name>Resize</name>
+        <qualifiedname>csmp::Matrix::Resize</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>m</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>n</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="32" column="10" bodyfile="source/modules/model/Matrix.cpp" bodystart="405" bodyend="408"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matrix_1a57a5eddf5bbb292526cb926c60efa2e9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double &amp;</type>
+        <definition>double &amp; csmp::Matrix::operator()</definition>
+        <argsstring>(size_t m, size_t n)</argsstring>
+        <name>operator()</name>
+        <qualifiedname>csmp::Matrix::operator()</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>m</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>n</declname>
+        </param>
+        <briefdescription>
+<para>accessors M(i,j) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>operator (i,j) </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="35" column="18" bodyfile="source/modules/model/Matrix.cpp" bodystart="625" bodyend="631"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matrix_1a5aa48279ac6fd5a801ad5d5400f40665" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>const double &amp;</type>
+        <definition>const double &amp; csmp::Matrix::operator()</definition>
+        <argsstring>(size_t m, size_t n) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>csmp::Matrix::operator()</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>m</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>n</declname>
+        </param>
+        <briefdescription>
+<para>operator (i,j) const </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="36" column="18" bodyfile="source/modules/model/Matrix.cpp" bodystart="636" bodyend="642"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matrix_1a415d3271adb382777f2941c1a9a53ec1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_matrix" kindref="compound">Matrix</ref> &amp;</type>
+        <definition>Matrix &amp; csmp::Matrix::operator=</definition>
+        <argsstring>(double val)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::Matrix::operator=</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+<para>assignment </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="38" column="12" bodyfile="source/modules/model/Matrix.cpp" bodystart="9" bodyend="15"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matrix_1aaafe78e191d64a213cd8f0067a32c3f3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_matrix" kindref="compound">Matrix</ref> &amp;</type>
+        <definition>Matrix &amp; csmp::Matrix::operator+=</definition>
+        <argsstring>(const Matrix &amp;M)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>csmp::Matrix::operator+=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_matrix" kindref="compound">Matrix</ref> &amp;</type>
+          <declname>M</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="40" column="12" bodyfile="source/modules/model/Matrix.cpp" bodystart="101" bodyend="108"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matrix_1aa6f90dc66f06f4728c6216c1c7704e2d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_matrix" kindref="compound">Matrix</ref> &amp;</type>
+        <definition>Matrix &amp; csmp::Matrix::operator-=</definition>
+        <argsstring>(const Matrix &amp;M)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>csmp::Matrix::operator-=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_matrix" kindref="compound">Matrix</ref> &amp;</type>
+          <declname>M</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="41" column="12" bodyfile="source/modules/model/Matrix.cpp" bodystart="116" bodyend="123"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matrix_1ada91936624c494d010255ac296658dd0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_matrix" kindref="compound">Matrix</ref> &amp;</type>
+        <definition>Matrix &amp; csmp::Matrix::operator*=</definition>
+        <argsstring>(const Matrix &amp;M)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>csmp::Matrix::operator*=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_matrix" kindref="compound">Matrix</ref> &amp;</type>
+          <declname>M</declname>
+          <defname>mat</defname>
+        </param>
+        <briefdescription>
+<para>matrix - matrix multiplication -&gt; M(A.rows,B.cols) (operator creates temporary M) </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="warning"><para>creates a temporary </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="43" column="12" bodyfile="source/modules/model/Matrix.cpp" bodystart="51" bodyend="80"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matrix_1a2f76e34b387d5e127aa5ec80d0b69849" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_matrix" kindref="compound">Matrix</ref> &amp;</type>
+        <definition>Matrix &amp; csmp::Matrix::operator*=</definition>
+        <argsstring>(double val)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>csmp::Matrix::operator*=</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="44" column="12" bodyfile="source/modules/model/Matrix.cpp" bodystart="33" bodyend="39"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matrix_1a14fbde9914480b34e90a1bab490c342c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_matrix" kindref="compound">Matrix</ref> &amp;</type>
+        <definition>Matrix &amp; csmp::Matrix::operator*=</definition>
+        <argsstring>(const std::vector&lt; double &gt; &amp;v)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>csmp::Matrix::operator*=</qualifiedname>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+<para>matrix vector multiplication </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="46" column="12" bodyfile="source/modules/model/Matrix.cpp" bodystart="203" bodyend="223"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matrix_1ac58f4367dd296d850d06597fc0ec046f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_matrix" kindref="compound">Matrix</ref></type>
+        <definition>Matrix csmp::Matrix::operator+</definition>
+        <argsstring>(const Matrix &amp;M) const</argsstring>
+        <name>operator+</name>
+        <qualifiedname>csmp::Matrix::operator+</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_matrix" kindref="compound">Matrix</ref> &amp;</type>
+          <declname>M</declname>
+        </param>
+        <briefdescription>
+<para>adding of same-size matrices </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="48" column="13" bodyfile="source/modules/model/Matrix.cpp" bodystart="132" bodyend="142"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matrix_1a9aae30c26fab46e705205a3f1494962f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_matrix" kindref="compound">Matrix</ref></type>
+        <definition>Matrix csmp::Matrix::operator-</definition>
+        <argsstring>(const Matrix &amp;M) const</argsstring>
+        <name>operator-</name>
+        <qualifiedname>csmp::Matrix::operator-</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_matrix" kindref="compound">Matrix</ref> &amp;</type>
+          <declname>M</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="49" column="13" bodyfile="source/modules/model/Matrix.cpp" bodystart="148" bodyend="158"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matrix_1adf341aae1ef982dab46be5a6ce753d38" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_matrix" kindref="compound">Matrix</ref></type>
+        <definition>Matrix csmp::Matrix::operator*</definition>
+        <argsstring>(const Matrix &amp;M) const</argsstring>
+        <name>operator*</name>
+        <qualifiedname>csmp::Matrix::operator*</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_matrix" kindref="compound">Matrix</ref> &amp;</type>
+          <declname>M</declname>
+        </param>
+        <briefdescription>
+<para>C = A B, matrix - matrix multiplication -&gt; M(A.rows,B.cols) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="51" column="13" bodyfile="source/modules/model/Matrix.cpp" bodystart="174" bodyend="195"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matrix_1a79920ddc698840bb95be768bfdec856c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Matrix::Identity</definition>
+        <argsstring>()</argsstring>
+        <name>Identity</name>
+        <qualifiedname>csmp::Matrix::Identity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="53" column="10" bodyfile="source/modules/model/Matrix.cpp" bodystart="414" bodyend="420"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matrix_1a404f594a5c59ce84ef02810490041e5f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Matrix::RowCondenseTo</definition>
+        <argsstring>(std::vector&lt; double &gt; &amp;vec) const</argsstring>
+        <name>RowCondenseTo</name>
+        <qualifiedname>csmp::Matrix::RowCondenseTo</qualifiedname>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>vec</declname>
+        </param>
+        <briefdescription>
+<para>returns vec = Mat * unity vector </para>
+        </briefdescription>
+        <detaileddescription>
+<para>vec = Mat * unity vector </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="56" column="10" bodyfile="source/modules/model/Matrix.cpp" bodystart="89" bodyend="94"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matrix_1a6edeb2bfe9222440a52f10f83532b996" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Matrix::Zero</definition>
+        <argsstring>()</argsstring>
+        <name>Zero</name>
+        <qualifiedname>csmp::Matrix::Zero</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="58" column="10" bodyfile="source/modules/model/Matrix.cpp" bodystart="426" bodyend="431"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matrix_1a63fb8f269867006aba1a82c6b0fc5e24" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Matrix::ZeroRow</definition>
+        <argsstring>(size_t row)</argsstring>
+        <name>ZeroRow</name>
+        <qualifiedname>csmp::Matrix::ZeroRow</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>row</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="59" column="10" bodyfile="source/modules/model/Matrix.cpp" bodystart="437" bodyend="447"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matrix_1a0f2f0c93b1ea26d7c956024693e02214" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Matrix::ZeroCol</definition>
+        <argsstring>(size_t col)</argsstring>
+        <name>ZeroCol</name>
+        <qualifiedname>csmp::Matrix::ZeroCol</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>col</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="60" column="10" bodyfile="source/modules/model/Matrix.cpp" bodystart="453" bodyend="458"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matrix_1a9b3735109dae1e86e4c210268354b7cc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Matrix::Fill</definition>
+        <argsstring>(double val)</argsstring>
+        <name>Fill</name>
+        <qualifiedname>csmp::Matrix::Fill</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="61" column="10" bodyfile="source/modules/model/Matrix.cpp" bodystart="465" bodyend="468"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matrix_1ada434025491464560c208942979401f5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Matrix::FillRow</definition>
+        <argsstring>(size_t row, double val)</argsstring>
+        <name>FillRow</name>
+        <qualifiedname>csmp::Matrix::FillRow</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>row</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="62" column="10" bodyfile="source/modules/model/Matrix.cpp" bodystart="474" bodyend="481"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matrix_1a4ea996aa14ef92d9b73cb225332aea19" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Matrix::FillCol</definition>
+        <argsstring>(size_t col, double val)</argsstring>
+        <name>FillCol</name>
+        <qualifiedname>csmp::Matrix::FillCol</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>col</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="63" column="10" bodyfile="source/modules/model/Matrix.cpp" bodystart="487" bodyend="494"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matrix_1a81c4b7b15dc0b26da1fa4722a69eaeb2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt; double &gt; csmp::Matrix::ReturnRow</definition>
+        <argsstring>(size_t row) const</argsstring>
+        <name>ReturnRow</name>
+        <qualifiedname>csmp::Matrix::ReturnRow</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>row</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="64" column="17" bodyfile="source/modules/model/Matrix.cpp" bodystart="788" bodyend="799"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matrix_1ab1ca0f12d5db869445bb082c3b793843" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt; double &gt; csmp::Matrix::ReturnCol</definition>
+        <argsstring>(size_t col) const</argsstring>
+        <name>ReturnCol</name>
+        <qualifiedname>csmp::Matrix::ReturnCol</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>col</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="65" column="17" bodyfile="source/modules/model/Matrix.cpp" bodystart="803" bodyend="814"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matrix_1aa1dfb533939872b6c257014cd920014b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Matrix::AssignToRow</definition>
+        <argsstring>(size_t row, std::vector&lt; double &gt; &amp;vec)</argsstring>
+        <name>AssignToRow</name>
+        <qualifiedname>csmp::Matrix::AssignToRow</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>row</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>vec</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="66" column="10" bodyfile="source/modules/model/Matrix.cpp" bodystart="818" bodyend="830"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matrix_1a6f603e5ebb5c39bde9bbb6fd90fa3592" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Matrix::AssignToCol</definition>
+        <argsstring>(size_t row, std::vector&lt; double &gt; &amp;vec)</argsstring>
+        <name>AssignToCol</name>
+        <qualifiedname>csmp::Matrix::AssignToCol</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>row</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>vec</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="67" column="10" bodyfile="source/modules/model/Matrix.cpp" bodystart="834" bodyend="846"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matrix_1a9ef1da71fe2dc2d8b41062cb5ae2fb33" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Matrix::Transposed</definition>
+        <argsstring>(Matrix &amp;RES) const</argsstring>
+        <name>Transposed</name>
+        <qualifiedname>csmp::Matrix::Transposed</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_matrix" kindref="compound">Matrix</ref> &amp;</type>
+          <declname>RES</declname>
+        </param>
+        <briefdescription>
+<para>RES = M^T into its argument. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="70" column="10" bodyfile="source/modules/model/Matrix.cpp" bodystart="500" bodyend="506"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matrix_1a3b0ffc6795e7e19d127645af54da2491" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Matrix::TransposedProduct</definition>
+        <argsstring>(Matrix &amp;RES) const</argsstring>
+        <name>TransposedProduct</name>
+        <qualifiedname>csmp::Matrix::TransposedProduct</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_matrix" kindref="compound">Matrix</ref> &amp;</type>
+          <declname>RES</declname>
+        </param>
+        <briefdescription>
+<para>RES = M^T M. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>RES = A^T A. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="73" column="10" bodyfile="source/modules/model/Matrix.cpp" bodystart="293" bodyend="305"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matrix_1af7f96de422740e5074d457c3e05df6a7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Matrix::MultiplyWithTransposedOf</definition>
+        <argsstring>(const Matrix &amp;B, Matrix &amp;RES) const</argsstring>
+        <name>MultiplyWithTransposedOf</name>
+        <qualifiedname>csmp::Matrix::MultiplyWithTransposedOf</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_matrix" kindref="compound">Matrix</ref> &amp;</type>
+          <declname>B</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_matrix" kindref="compound">Matrix</ref> &amp;</type>
+          <declname>RES</declname>
+        </param>
+        <briefdescription>
+<para>RES = A B^T. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="76" column="10" bodyfile="source/modules/model/Matrix.cpp" bodystart="233" bodyend="254"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matrix_1a06ff85bb325f7c07f8ce7af9354cf790" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Matrix::MultiplyTransposedOfWith</definition>
+        <argsstring>(const Matrix &amp;B, Matrix &amp;RES) const</argsstring>
+        <name>MultiplyTransposedOfWith</name>
+        <qualifiedname>csmp::Matrix::MultiplyTransposedOfWith</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_matrix" kindref="compound">Matrix</ref> &amp;</type>
+          <declname>B</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_matrix" kindref="compound">Matrix</ref> &amp;</type>
+          <declname>RES</declname>
+        </param>
+        <briefdescription>
+<para>RES = A^T B. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="79" column="10" bodyfile="source/modules/model/Matrix.cpp" bodystart="263" bodyend="284"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matrix_1af87963920747d8ea6afb9029e157ecb5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Matrix::RowSum</definition>
+        <argsstring>(size_t row) const</argsstring>
+        <name>RowSum</name>
+        <qualifiedname>csmp::Matrix::RowSum</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>row</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="80" column="14" bodyfile="source/modules/model/Matrix.cpp" bodystart="514" bodyend="528"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matrix_1a4c7b064fe052f81119d61f36977afff5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Matrix::ColSum</definition>
+        <argsstring>(size_t col) const</argsstring>
+        <name>ColSum</name>
+        <qualifiedname>csmp::Matrix::ColSum</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>col</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="81" column="14" bodyfile="source/modules/model/Matrix.cpp" bodystart="534" bodyend="548"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matrix_1a01e2e650d691137e6577a5a9c7a70bbe" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Matrix::NormL1</definition>
+        <argsstring>() const</argsstring>
+        <name>NormL1</name>
+        <qualifiedname>csmp::Matrix::NormL1</qualifiedname>
+        <briefdescription>
+<para>unscaled matrix norms </para>
+        </briefdescription>
+        <detaileddescription>
+<para>unscaled L1 matrix norm ||A1|| = max_j * sum_i |aij| </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="83" column="14" bodyfile="source/modules/model/Matrix.cpp" bodystart="334" bodyend="351"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matrix_1af34b6abb397621b826061502b2064fcc" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Matrix::NormL_Infinity</definition>
+        <argsstring>() const</argsstring>
+        <name>NormL_Infinity</name>
+        <qualifiedname>csmp::Matrix::NormL_Infinity</qualifiedname>
+        <briefdescription>
+<para>unscaled L_infinity matrix norm ||A||inf = max_i * sum_j |aij| </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="84" column="14" bodyfile="source/modules/model/Matrix.cpp" bodystart="312" bodyend="329"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matrix_1aa6d3b9c6e6ea7874ff4b21e183f36f44" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_matrix" kindref="compound">Matrix</ref></type>
+        <definition>Matrix csmp::Matrix::Minor</definition>
+        <argsstring>(const size_t row, const size_t col)</argsstring>
+        <name>Minor</name>
+        <qualifiedname>csmp::Matrix::Minor</qualifiedname>
+        <param>
+          <type>const size_t</type>
+          <declname>row</declname>
+        </param>
+        <param>
+          <type>const size_t</type>
+          <declname>col</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns a submatrix of the matrix with the dimensions row x col </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="86" column="13" bodyfile="source/modules/model/Matrix.cpp" bodystart="851" bodyend="868"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matrix_1a99ce28015558eea9e4f2ed66f8d8ec6f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Matrix::In</definition>
+        <argsstring>()</argsstring>
+        <name>In</name>
+        <qualifiedname>csmp::Matrix::In</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="88" column="10" bodyfile="source/modules/model/Matrix.cpp" bodystart="555" bodyend="571"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matrix_1a9752c31ff6d0ace913a0016c31974c16" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Matrix::Out</definition>
+        <argsstring>(long digits=5L) const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::Matrix::Out</qualifiedname>
+        <param>
+          <type>long</type>
+          <declname>digits</declname>
+          <defval>5L</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="89" column="10" bodyfile="source/modules/model/Matrix.cpp" bodystart="578" bodyend="608"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matrix_1ad54c112959c0096592b37b7d6b7c018b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Matrix::LUDecomposition</definition>
+        <argsstring>(std::vector&lt; uint32_t &gt; &amp;index, double &amp;d)</argsstring>
+        <name>LUDecomposition</name>
+        <qualifiedname>csmp::Matrix::LUDecomposition</qualifiedname>
+        <param>
+          <type>std::vector&lt; uint32_t &gt; &amp;</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>double &amp;</type>
+          <declname>d</declname>
+        </param>
+        <briefdescription>
+<para>LU decomposition and back-substitution. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="92" column="10" bodyfile="source/modules/model/Matrix.cpp" bodystart="702" bodyend="756"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matrix_1a14a0a2f0553e2de709d306e1d305a281" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Matrix::LUBackSubstitution</definition>
+        <argsstring>(std::vector&lt; uint32_t &gt; &amp;index, std::vector&lt; double &gt; &amp;b)</argsstring>
+        <name>LUBackSubstitution</name>
+        <qualifiedname>csmp::Matrix::LUBackSubstitution</qualifiedname>
+        <param>
+          <type>std::vector&lt; uint32_t &gt; &amp;</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>b</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="93" column="10" bodyfile="source/modules/model/Matrix.cpp" bodystart="758" bodyend="783"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_matrix_1a509a41121b45f7cd802746c8e84da567" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Matrix::CheckRange</definition>
+        <argsstring>(size_t m, size_t n, const char *originator) const</argsstring>
+        <name>CheckRange</name>
+        <qualifiedname>csmp::Matrix::CheckRange</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>m</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>n</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>originator</declname>
+        </param>
+        <briefdescription>
+<para>checks whether row and column numbers are compatible with the size of the matrix </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="98" column="10" bodyfile="source/modules/model/Matrix.cpp" bodystart="660" bodyend="676"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matrix_1a3fa4570d62f1b34e27a21c9608278e48" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Matrix::CheckSizes</definition>
+        <argsstring>(const Matrix &amp;mat, const char *originator) const</argsstring>
+        <name>CheckSizes</name>
+        <qualifiedname>csmp::Matrix::CheckSizes</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_matrix" kindref="compound">Matrix</ref> &amp;</type>
+          <declname>mat</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>originator</declname>
+        </param>
+        <briefdescription>
+<para>checks whether the righthand matrix has the same size as the lefthand one in the calculation </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Matrix.h" line="99" column="10" bodyfile="source/modules/model/Matrix.cpp" bodystart="682" bodyend="698"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Experimental implementation of class for a dense matrix greater than 50x50 matrix that can change its size. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Supported operations (M = dense matrix, v = vector, _T = transposed, T = tensor matrix(dim,dim), default vector is a column vector (v = { c0,c2..cn-1 }, vc = <ref refid="classvector" kindref="compound">vector(dim)</ref> )</para>
+<para><simplesect kind="author"><para>S. K. Matthai </para>
+</simplesect>
+<simplesect kind="author"><para>S. Geiger </para>
+</simplesect>
+<simplesect kind="author"><para>S. G. Roberts </para>
+</simplesect>
+<simplesect kind="date"><para>2001</para>
+</simplesect>
+<xrefsect id="todo_1_todo000041"><xreftitle>Todo</xreftitle><xrefdescription><para>SKM - implement non-member global methods for multiplication etc. </para>
+</xrefdescription></xrefsect></para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::Matrix</label>
+        <link refid="classcsmp_1_1_matrix"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/model/Matrix.h" line="24" column="1" bodyfile="source/includes/model/Matrix.h" bodystart="24" bodyend="100"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_matrix_1a6f603e5ebb5c39bde9bbb6fd90fa3592" prot="public" virt="non-virtual"><scope>csmp::Matrix</scope><name>AssignToCol</name></member>
+      <member refid="classcsmp_1_1_matrix_1aa1dfb533939872b6c257014cd920014b" prot="public" virt="non-virtual"><scope>csmp::Matrix</scope><name>AssignToRow</name></member>
+      <member refid="classcsmp_1_1_matrix_1a509a41121b45f7cd802746c8e84da567" prot="private" virt="non-virtual"><scope>csmp::Matrix</scope><name>CheckRange</name></member>
+      <member refid="classcsmp_1_1_matrix_1a3fa4570d62f1b34e27a21c9608278e48" prot="private" virt="non-virtual"><scope>csmp::Matrix</scope><name>CheckSizes</name></member>
+      <member refid="classcsmp_1_1_matrix_1a6e6e53dd0e01107619820ba8b28da0a7" prot="public" virt="non-virtual"><scope>csmp::Matrix</scope><name>Cols</name></member>
+      <member refid="classcsmp_1_1_matrix_1a4c7b064fe052f81119d61f36977afff5" prot="public" virt="non-virtual"><scope>csmp::Matrix</scope><name>ColSum</name></member>
+      <member refid="classcsmp_1_1_matrix_1a59b654afc2ce5c082d07b8cd2c5f1fc5" prot="private" virt="non-virtual"><scope>csmp::Matrix</scope><name>data</name></member>
+      <member refid="classcsmp_1_1_matrix_1a9b3735109dae1e86e4c210268354b7cc" prot="public" virt="non-virtual"><scope>csmp::Matrix</scope><name>Fill</name></member>
+      <member refid="classcsmp_1_1_matrix_1a4ea996aa14ef92d9b73cb225332aea19" prot="public" virt="non-virtual"><scope>csmp::Matrix</scope><name>FillCol</name></member>
+      <member refid="classcsmp_1_1_matrix_1ada434025491464560c208942979401f5" prot="public" virt="non-virtual"><scope>csmp::Matrix</scope><name>FillRow</name></member>
+      <member refid="classcsmp_1_1_matrix_1a79920ddc698840bb95be768bfdec856c" prot="public" virt="non-virtual"><scope>csmp::Matrix</scope><name>Identity</name></member>
+      <member refid="classcsmp_1_1_matrix_1a99ce28015558eea9e4f2ed66f8d8ec6f" prot="public" virt="non-virtual"><scope>csmp::Matrix</scope><name>In</name></member>
+      <member refid="classcsmp_1_1_matrix_1a14a0a2f0553e2de709d306e1d305a281" prot="public" virt="non-virtual"><scope>csmp::Matrix</scope><name>LUBackSubstitution</name></member>
+      <member refid="classcsmp_1_1_matrix_1ad54c112959c0096592b37b7d6b7c018b" prot="public" virt="non-virtual"><scope>csmp::Matrix</scope><name>LUDecomposition</name></member>
+      <member refid="classcsmp_1_1_matrix_1a063d600ef7af37df393d79956aac7b40" prot="public" virt="non-virtual"><scope>csmp::Matrix</scope><name>Matrix</name></member>
+      <member refid="classcsmp_1_1_matrix_1a7f289c214bec0b71c94fe54099ca5c63" prot="public" virt="non-virtual"><scope>csmp::Matrix</scope><name>Matrix</name></member>
+      <member refid="classcsmp_1_1_matrix_1a0dd470869401cc4a4e6a32b62b4355ed" prot="public" virt="non-virtual"><scope>csmp::Matrix</scope><name>Matrix</name></member>
+      <member refid="classcsmp_1_1_matrix_1aa6d3b9c6e6ea7874ff4b21e183f36f44" prot="public" virt="non-virtual"><scope>csmp::Matrix</scope><name>Minor</name></member>
+      <member refid="classcsmp_1_1_matrix_1a06ff85bb325f7c07f8ce7af9354cf790" prot="public" virt="non-virtual"><scope>csmp::Matrix</scope><name>MultiplyTransposedOfWith</name></member>
+      <member refid="classcsmp_1_1_matrix_1af7f96de422740e5074d457c3e05df6a7" prot="public" virt="non-virtual"><scope>csmp::Matrix</scope><name>MultiplyWithTransposedOf</name></member>
+      <member refid="classcsmp_1_1_matrix_1a01e2e650d691137e6577a5a9c7a70bbe" prot="public" virt="non-virtual"><scope>csmp::Matrix</scope><name>NormL1</name></member>
+      <member refid="classcsmp_1_1_matrix_1af34b6abb397621b826061502b2064fcc" prot="public" virt="non-virtual"><scope>csmp::Matrix</scope><name>NormL_Infinity</name></member>
+      <member refid="classcsmp_1_1_matrix_1a57a5eddf5bbb292526cb926c60efa2e9" prot="public" virt="non-virtual"><scope>csmp::Matrix</scope><name>operator()</name></member>
+      <member refid="classcsmp_1_1_matrix_1a5aa48279ac6fd5a801ad5d5400f40665" prot="public" virt="non-virtual"><scope>csmp::Matrix</scope><name>operator()</name></member>
+      <member refid="classcsmp_1_1_matrix_1adf341aae1ef982dab46be5a6ce753d38" prot="public" virt="non-virtual"><scope>csmp::Matrix</scope><name>operator*</name></member>
+      <member refid="classcsmp_1_1_matrix_1ada91936624c494d010255ac296658dd0" prot="public" virt="non-virtual"><scope>csmp::Matrix</scope><name>operator*=</name></member>
+      <member refid="classcsmp_1_1_matrix_1a2f76e34b387d5e127aa5ec80d0b69849" prot="public" virt="non-virtual"><scope>csmp::Matrix</scope><name>operator*=</name></member>
+      <member refid="classcsmp_1_1_matrix_1a14fbde9914480b34e90a1bab490c342c" prot="public" virt="non-virtual"><scope>csmp::Matrix</scope><name>operator*=</name></member>
+      <member refid="classcsmp_1_1_matrix_1ac58f4367dd296d850d06597fc0ec046f" prot="public" virt="non-virtual"><scope>csmp::Matrix</scope><name>operator+</name></member>
+      <member refid="classcsmp_1_1_matrix_1aaafe78e191d64a213cd8f0067a32c3f3" prot="public" virt="non-virtual"><scope>csmp::Matrix</scope><name>operator+=</name></member>
+      <member refid="classcsmp_1_1_matrix_1a9aae30c26fab46e705205a3f1494962f" prot="public" virt="non-virtual"><scope>csmp::Matrix</scope><name>operator-</name></member>
+      <member refid="classcsmp_1_1_matrix_1aa6f90dc66f06f4728c6216c1c7704e2d" prot="public" virt="non-virtual"><scope>csmp::Matrix</scope><name>operator-=</name></member>
+      <member refid="classcsmp_1_1_matrix_1a415d3271adb382777f2941c1a9a53ec1" prot="public" virt="non-virtual"><scope>csmp::Matrix</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_matrix_1a9752c31ff6d0ace913a0016c31974c16" prot="public" virt="non-virtual"><scope>csmp::Matrix</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_matrix_1a85d653db0f20ef9c28aab16c70ba6768" prot="public" virt="non-virtual"><scope>csmp::Matrix</scope><name>Resize</name></member>
+      <member refid="classcsmp_1_1_matrix_1ab1ca0f12d5db869445bb082c3b793843" prot="public" virt="non-virtual"><scope>csmp::Matrix</scope><name>ReturnCol</name></member>
+      <member refid="classcsmp_1_1_matrix_1a81c4b7b15dc0b26da1fa4722a69eaeb2" prot="public" virt="non-virtual"><scope>csmp::Matrix</scope><name>ReturnRow</name></member>
+      <member refid="classcsmp_1_1_matrix_1a404f594a5c59ce84ef02810490041e5f" prot="public" virt="non-virtual"><scope>csmp::Matrix</scope><name>RowCondenseTo</name></member>
+      <member refid="classcsmp_1_1_matrix_1a402662d6fcfe9c3f57282718e127dcc1" prot="public" virt="non-virtual"><scope>csmp::Matrix</scope><name>Rows</name></member>
+      <member refid="classcsmp_1_1_matrix_1af87963920747d8ea6afb9029e157ecb5" prot="public" virt="non-virtual"><scope>csmp::Matrix</scope><name>RowSum</name></member>
+      <member refid="classcsmp_1_1_matrix_1a9ef1da71fe2dc2d8b41062cb5ae2fb33" prot="public" virt="non-virtual"><scope>csmp::Matrix</scope><name>Transposed</name></member>
+      <member refid="classcsmp_1_1_matrix_1a3b0ffc6795e7e19d127645af54da2491" prot="public" virt="non-virtual"><scope>csmp::Matrix</scope><name>TransposedProduct</name></member>
+      <member refid="classcsmp_1_1_matrix_1a6edeb2bfe9222440a52f10f83532b996" prot="public" virt="non-virtual"><scope>csmp::Matrix</scope><name>Zero</name></member>
+      <member refid="classcsmp_1_1_matrix_1a0f2f0c93b1ea26d7c956024693e02214" prot="public" virt="non-virtual"><scope>csmp::Matrix</scope><name>ZeroCol</name></member>
+      <member refid="classcsmp_1_1_matrix_1a63fb8f269867006aba1a82c6b0fc5e24" prot="public" virt="non-virtual"><scope>csmp::Matrix</scope><name>ZeroRow</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

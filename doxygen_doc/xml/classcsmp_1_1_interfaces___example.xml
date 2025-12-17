@@ -1,0 +1,381 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_interfaces___example" kind="class" language="C++" prot="public">
+    <compoundname>csmp::Interfaces_Example</compoundname>
+    <basecompoundref refid="classcsmp_1_1_example" prot="public" virt="non-virtual">csmp::Example</basecompoundref>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_interfaces___example_1a1ee77b2b05b95e79d13ca8eafbc55f71" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::Interfaces_Example::output_vtu_</definition>
+        <argsstring></argsstring>
+        <name>output_vtu_</name>
+        <qualifiedname>csmp::Interfaces_Example::output_vtu_</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Interfaces_Example.h" line="29" column="10" bodyfile="examples/source/Interfaces_Example.h" bodystart="29" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_interfaces___example_1a6f17ae8b9480fe22a44758504b948e95" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::Interfaces_Example::Run</definition>
+        <argsstring>()</argsstring>
+        <name>Run</name>
+        <qualifiedname>csmp::Interfaces_Example::Run</qualifiedname>
+        <reimplements refid="classcsmp_1_1_example_1a6e65f9276ebaa3ea88587cc742a81f8f">Run</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Builds CSMP native format models (binary files) using various interfaces, including ANSYS, SKUA, ECLIPSE, RHINO, TRIANGLE, etc. User can select which model to build or build all the models that shall be used in other examples. For this purpose, existing &quot;default&quot; files from the directory example_inputs/ will be used.</para>
+<para><simplesect kind="attention"><para>To run the OpenCSMP examples, please copy the &apos;example_inputs/&apos; directory to a location outside of the open-csmp repository as you do not want the repository to track your experimentation with the examples.. Set this new directory as the working directory of your IDE (CLion, XCode, QT_Creator, MS Vis Studio etc.). Look at the 3 sub directories of example_inputs/ after running the example. They should contain:</para>
+</simplesect>
+<itemizedlist>
+<listitem><para>&quot;input_meshes/&quot; contains mesh files that can be read by OpenCSMP interfaces;</para>
+</listitem><listitem><para>&apos;csmp_native_format_models/&apos; that contains OpenCSMP native format binary files (*.vset and *.dat files);</para>
+</listitem><listitem><para>&apos;variables_and_configuration_files/&apos; (*.txt files) containing variable lists and model configuration files.</para>
+</listitem></itemizedlist>
+</para>
+<para>&apos;bitmaps_and_other/&apos; contains misc files that can serve the creation of CSMP native models</para>
+<para><simplesect kind="note"><para>Typically the name of these files represents the name of the model with an argument like &apos;-variables.txt&apos; of &apos;-configuration.txt&apos; see CSMP users guide.</para>
+</simplesect>
+Creating new subdirectories in your new working directory, this <ref refid="classcsmp_1_1_interfaces___example_1a6f17ae8b9480fe22a44758504b948e95" kindref="member">Run()</ref> functions will:</para>
+<para>1) create an example directory from its name (i.e., &apos;example_outputs/example_name/&apos;);</para>
+<para>2) recover default input files from the &apos;example_inputs/&apos; directory, copy them into the example directory</para>
+<para>3) produce all outputs in the created example directory (note: if an example directory already exists, it will be overwritten).</para>
+<para><simplesect kind="note"><para>to use your own inputs, please copy the input files into corresponding sub directories of &apos;example_inputs/&apos;</para>
+</simplesect>
+<simplesect kind="attention"><para>Again: do not create your working directory anywhere inside the cloned open-csmp repository! </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Interfaces_Example.h" line="14" column="18" bodyfile="examples/source/Interfaces_Example.cpp" bodystart="76" bodyend="467"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_interfaces___example_1a2e84fa0481fdf69fcfefca005ec26cfa" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::Interfaces_Example::Specifications</definition>
+        <argsstring>()</argsstring>
+        <name>Specifications</name>
+        <qualifiedname>csmp::Interfaces_Example::Specifications</qualifiedname>
+        <reimplements refid="classcsmp_1_1_example_1a8cee542c22a71c15bba5c6ddf959455b">Specifications</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Interfaces_Example.h" line="15" column="18" bodyfile="examples/source/Interfaces_Example.cpp" bodystart="29" bodyend="39"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_interfaces___example_1acb96fb2b9f2a9be2e1f1385459c7bad7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::Interfaces_Example::BuildFromSKUAModel</definition>
+        <argsstring>(const string &amp;model_name)</argsstring>
+        <name>BuildFromSKUAModel</name>
+        <qualifiedname>csmp::Interfaces_Example::BuildFromSKUAModel</qualifiedname>
+        <param>
+          <type>const string &amp;</type>
+          <declname>model_name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Interfaces_Example.cpp" line="629" column="6" bodyfile="examples/source/Interfaces_Example.cpp" bodystart="629" bodyend="661"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_interfaces___example_1a70c220e511a6865863592d9a64888061" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Interfaces_Example::BuildFromANSYS2DModel</definition>
+        <argsstring>(const std::string &amp;model_name)</argsstring>
+        <name>BuildFromANSYS2DModel</name>
+        <qualifiedname>csmp::Interfaces_Example::BuildFromANSYS2DModel</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>model_name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Interfaces_Example.h" line="18" column="10" bodyfile="examples/source/Interfaces_Example.cpp" bodystart="510" bodyend="522"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_interfaces___example_1a26ab93679c47919b17e19787333d50b5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Interfaces_Example::BuildFromANSYS3DModel</definition>
+        <argsstring>(const std::string &amp;model_name)</argsstring>
+        <name>BuildFromANSYS3DModel</name>
+        <qualifiedname>csmp::Interfaces_Example::BuildFromANSYS3DModel</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>model_name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Interfaces_Example.h" line="19" column="10" bodyfile="examples/source/Interfaces_Example.cpp" bodystart="525" bodyend="537"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_interfaces___example_1a75981b591a7fb500665c562df6dd0d5c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Interfaces_Example::BuildFromTRIANGLEModel</definition>
+        <argsstring>(const std::string &amp;model_name)</argsstring>
+        <name>BuildFromTRIANGLEModel</name>
+        <qualifiedname>csmp::Interfaces_Example::BuildFromTRIANGLEModel</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>model_name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Interfaces_Example.h" line="20" column="10" bodyfile="examples/source/Interfaces_Example.cpp" bodystart="540" bodyend="559"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_interfaces___example_1a0fe7a6b39162be8cc7f754079dc24cc1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Interfaces_Example::BuildFromTriangulatorModel</definition>
+        <argsstring>(const std::string &amp;model_name, double extent1, double extent2)</argsstring>
+        <name>BuildFromTriangulatorModel</name>
+        <qualifiedname>csmp::Interfaces_Example::BuildFromTriangulatorModel</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>model_name</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>extent1</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>extent2</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Interfaces_Example.h" line="21" column="10" bodyfile="examples/source/Interfaces_Example.cpp" bodystart="562" bodyend="603"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_interfaces___example_1ad05f58036f42e53c83f7fa2e9eee50c4" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Interfaces_Example::BuildFromQuadrilateratorModel</definition>
+        <argsstring>(const std::string &amp;model_name, double x, double y)</argsstring>
+        <name>BuildFromQuadrilateratorModel</name>
+        <qualifiedname>csmp::Interfaces_Example::BuildFromQuadrilateratorModel</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>model_name</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>y</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Interfaces_Example.h" line="22" column="10" bodyfile="examples/source/Interfaces_Example.cpp" bodystart="606" bodyend="625"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_interfaces___example_1afecef7634a5606555117beeaf971a76f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::Interfaces_Example::BuildFromSKUAModel</definition>
+        <argsstring>(const std::string &amp;model_name)</argsstring>
+        <name>BuildFromSKUAModel</name>
+        <qualifiedname>csmp::Interfaces_Example::BuildFromSKUAModel</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>model_name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Interfaces_Example.h" line="23" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_interfaces___example_1a891753c8f4febf618bf6a9843ce4a512" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Interfaces_Example::BuildFromEclipseModel</definition>
+        <argsstring>(const std::string &amp;model_name)</argsstring>
+        <name>BuildFromEclipseModel</name>
+        <qualifiedname>csmp::Interfaces_Example::BuildFromEclipseModel</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>model_name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Interfaces_Example.h" line="24" column="10" bodyfile="examples/source/Interfaces_Example.cpp" bodystart="667" bodyend="761"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_interfaces___example_1a98ca4600cb7f586eaaa635f721cc851f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Interfaces_Example::BuildFromGeoModellerModel</definition>
+        <argsstring>(const std::string &amp;model_name)</argsstring>
+        <name>BuildFromGeoModellerModel</name>
+        <qualifiedname>csmp::Interfaces_Example::BuildFromGeoModellerModel</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>model_name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Interfaces_Example.h" line="25" column="10" bodyfile="examples/source/Interfaces_Example.cpp" bodystart="765" bodyend="784"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_interfaces___example_1add43ac88e7e59d8fc4bbe1e7341fb66a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Interfaces_Example::BuildFromRhinoModel</definition>
+        <argsstring>(const std::string &amp;model_name)</argsstring>
+        <name>BuildFromRhinoModel</name>
+        <qualifiedname>csmp::Interfaces_Example::BuildFromRhinoModel</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>model_name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Interfaces_Example.h" line="26" column="10" bodyfile="examples/source/Interfaces_Example.cpp" bodystart="786" bodyend="813"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_interfaces___example_1a7d2a79290453eb4010ee4c8fb21b587c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>template void csmp::Interfaces_Example::OutputRegionIDToVTU</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;model)</argsstring>
+        <name>OutputRegionIDToVTU</name>
+        <qualifiedname>csmp::Interfaces_Example::OutputRegionIDToVTU</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <declname>model</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Interfaces_Example.h" line="27" column="21" bodyfile="examples/source/Interfaces_Example.cpp" bodystart="817" bodyend="834"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>csmp::Example</label>
+        <link refid="classcsmp_1_1_example"/>
+      </node>
+      <node id="1">
+        <label>csmp::Interfaces_Example</label>
+        <link refid="classcsmp_1_1_interfaces___example"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>csmp::Example</label>
+        <link refid="classcsmp_1_1_example"/>
+      </node>
+      <node id="1">
+        <label>csmp::Interfaces_Example</label>
+        <link refid="classcsmp_1_1_interfaces___example"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="examples/source/Interfaces_Example.h" line="10" column="1" bodyfile="examples/source/Interfaces_Example.h" bodystart="11" bodyend="30"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_example_1a7a2776d1a529fdc5185d24804e249fa4" prot="public" virt="non-virtual"><scope>csmp::Interfaces_Example</scope><name>AddAuthor</name></member>
+      <member refid="classcsmp_1_1_example_1a460febdef7c98c40ba774ba6670ff786" prot="public" virt="non-virtual"><scope>csmp::Interfaces_Example</scope><name>AddDescription</name></member>
+      <member refid="classcsmp_1_1_example_1a246f075bb8bf802ca5b9e49096f6a1ca" prot="public" virt="non-virtual"><scope>csmp::Interfaces_Example</scope><name>AddRequirement</name></member>
+      <member refid="classcsmp_1_1_interfaces___example_1a70c220e511a6865863592d9a64888061" prot="private" virt="non-virtual"><scope>csmp::Interfaces_Example</scope><name>BuildFromANSYS2DModel</name></member>
+      <member refid="classcsmp_1_1_interfaces___example_1a26ab93679c47919b17e19787333d50b5" prot="private" virt="non-virtual"><scope>csmp::Interfaces_Example</scope><name>BuildFromANSYS3DModel</name></member>
+      <member refid="classcsmp_1_1_interfaces___example_1a891753c8f4febf618bf6a9843ce4a512" prot="private" virt="non-virtual"><scope>csmp::Interfaces_Example</scope><name>BuildFromEclipseModel</name></member>
+      <member refid="classcsmp_1_1_interfaces___example_1a98ca4600cb7f586eaaa635f721cc851f" prot="private" virt="non-virtual"><scope>csmp::Interfaces_Example</scope><name>BuildFromGeoModellerModel</name></member>
+      <member refid="classcsmp_1_1_interfaces___example_1ad05f58036f42e53c83f7fa2e9eee50c4" prot="private" virt="non-virtual"><scope>csmp::Interfaces_Example</scope><name>BuildFromQuadrilateratorModel</name></member>
+      <member refid="classcsmp_1_1_interfaces___example_1add43ac88e7e59d8fc4bbe1e7341fb66a" prot="private" virt="non-virtual"><scope>csmp::Interfaces_Example</scope><name>BuildFromRhinoModel</name></member>
+      <member refid="classcsmp_1_1_interfaces___example_1afecef7634a5606555117beeaf971a76f" prot="private" virt="non-virtual"><scope>csmp::Interfaces_Example</scope><name>BuildFromSKUAModel</name></member>
+      <member refid="classcsmp_1_1_interfaces___example_1acb96fb2b9f2a9be2e1f1385459c7bad7" prot="public" virt="non-virtual"><scope>csmp::Interfaces_Example</scope><name>BuildFromSKUAModel</name></member>
+      <member refid="classcsmp_1_1_interfaces___example_1a75981b591a7fb500665c562df6dd0d5c" prot="private" virt="non-virtual"><scope>csmp::Interfaces_Example</scope><name>BuildFromTRIANGLEModel</name></member>
+      <member refid="classcsmp_1_1_interfaces___example_1a0fe7a6b39162be8cc7f754079dc24cc1" prot="private" virt="non-virtual"><scope>csmp::Interfaces_Example</scope><name>BuildFromTriangulatorModel</name></member>
+      <member refid="classcsmp_1_1_example_1ac926ad8eb6de45710b9076c8f6304880" prot="protected" virt="non-virtual"><scope>csmp::Interfaces_Example</scope><name>CreateWorkingDirectoryAndCopyInputModelFiles</name></member>
+      <member refid="classcsmp_1_1_example_1a55b5098a7e25da12f36037b0347f63c1" prot="public" virt="non-virtual"><scope>csmp::Interfaces_Example</scope><name>Example</name></member>
+      <member refid="classcsmp_1_1_example_1a6ea7892372f1ed54bd66fbc93ed4c1e1" prot="public" virt="non-virtual"><scope>csmp::Interfaces_Example</scope><name>GetAuthorsBegin</name></member>
+      <member refid="classcsmp_1_1_example_1a1381ce20fa12dc1168f422ab348bb7d4" prot="public" virt="non-virtual"><scope>csmp::Interfaces_Example</scope><name>GetAuthorsEnd</name></member>
+      <member refid="classcsmp_1_1_example_1afbbe7869b870b19bcd16dc6a98ee2b2f" prot="public" virt="non-virtual"><scope>csmp::Interfaces_Example</scope><name>GetCategory</name></member>
+      <member refid="classcsmp_1_1_example_1a3fd636e079c1b09631a480c3cc5861fc" prot="public" virt="non-virtual"><scope>csmp::Interfaces_Example</scope><name>GetDescriptionsBegin</name></member>
+      <member refid="classcsmp_1_1_example_1a23eee344b701096cfe20784858b490b8" prot="public" virt="non-virtual"><scope>csmp::Interfaces_Example</scope><name>GetDescriptionsEnd</name></member>
+      <member refid="classcsmp_1_1_example_1af575e4786aca651596ed454ed6d262f6" prot="public" virt="non-virtual"><scope>csmp::Interfaces_Example</scope><name>GetDifficulty</name></member>
+      <member refid="classcsmp_1_1_example_1ac867309e60852ae127a00585205f9ac9" prot="protected" virt="non-virtual"><scope>csmp::Interfaces_Example</scope><name>GetExampleFileName</name></member>
+      <member refid="classcsmp_1_1_example_1afb4453025180082963850cd7b86ab7e5" prot="public" virt="non-virtual"><scope>csmp::Interfaces_Example</scope><name>GetRequirementsBegin</name></member>
+      <member refid="classcsmp_1_1_example_1a63d42dff58fdfd642d842a74bb609e1d" prot="public" virt="non-virtual"><scope>csmp::Interfaces_Example</scope><name>GetRequirementsEnd</name></member>
+      <member refid="classcsmp_1_1_example_1a7104cbfd7020f9e681204f0fb09953b7" prot="protected" virt="non-virtual"><scope>csmp::Interfaces_Example</scope><name>GetStream</name></member>
+      <member refid="classcsmp_1_1_example_1ab6d059e048b82444c3fcbc36880d70b6" prot="public" virt="non-virtual"><scope>csmp::Interfaces_Example</scope><name>GetTitle</name></member>
+      <member refid="classcsmp_1_1_example_1a69f06458486c7a3a3669739a2039c4ed" prot="protected" virt="non-virtual"><scope>csmp::Interfaces_Example</scope><name>Initialize</name></member>
+      <member refid="classcsmp_1_1_interfaces___example_1a1ee77b2b05b95e79d13ca8eafbc55f71" prot="private" virt="non-virtual"><scope>csmp::Interfaces_Example</scope><name>output_vtu_</name></member>
+      <member refid="classcsmp_1_1_interfaces___example_1a7d2a79290453eb4010ee4c8fb21b587c" prot="private" virt="non-virtual"><scope>csmp::Interfaces_Example</scope><name>OutputRegionIDToVTU</name></member>
+      <member refid="classcsmp_1_1_interfaces___example_1a6f17ae8b9480fe22a44758504b948e95" prot="public" virt="virtual"><scope>csmp::Interfaces_Example</scope><name>Run</name></member>
+      <member refid="classcsmp_1_1_example_1abe2b0fd87714fc83a379d825adb5771b" prot="public" virt="non-virtual"><scope>csmp::Interfaces_Example</scope><name>SetCategory</name></member>
+      <member refid="classcsmp_1_1_example_1a4909bbd859ca62d273c259d1b8b6657a" prot="public" virt="non-virtual"><scope>csmp::Interfaces_Example</scope><name>SetDifficulty</name></member>
+      <member refid="classcsmp_1_1_example_1a9814fee9852cbbcb4504f24f205b5e67" prot="protected" virt="non-virtual"><scope>csmp::Interfaces_Example</scope><name>SetStream</name></member>
+      <member refid="classcsmp_1_1_example_1adce5953feb4828ee24fb935d416a045b" prot="public" virt="non-virtual"><scope>csmp::Interfaces_Example</scope><name>SetTitle</name></member>
+      <member refid="classcsmp_1_1_interfaces___example_1a2e84fa0481fdf69fcfefca005ec26cfa" prot="public" virt="virtual"><scope>csmp::Interfaces_Example</scope><name>Specifications</name></member>
+      <member refid="classcsmp_1_1_example_1ab414b9f392a222139d56428ad915e620" prot="public" virt="virtual"><scope>csmp::Interfaces_Example</scope><name>~Example</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

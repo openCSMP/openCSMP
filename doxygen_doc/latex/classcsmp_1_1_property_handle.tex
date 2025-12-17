@@ -1,0 +1,769 @@
+\doxysection{csmp\+::Property\+Handle\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_property_handle}{}\label{classcsmp_1_1_property_handle}\index{csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}}
+
+
+\doxylink{classcsmp_1_1_property_handle}{Property\+Handle} -\/ a global accessor and mutator of distributed data.  
+
+
+
+
+{\ttfamily \#include $<$Property\+Handle.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Property\+Handle\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=209pt]{classcsmp_1_1_property_handle__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Property\+Handle\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=186pt]{classcsmp_1_1_property_handle__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_property_handle_a88ec60b31e8b46b2303ff3905892ce32}{Property\+Handle}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&sg, const char \texorpdfstring{$\ast$}{*}var\+\_\+name, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}} type=SCALAR, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place=NODE, uint32\+\_\+t vsize=1U)
+\item 
+\Hypertarget{classcsmp_1_1_property_handle_ada2d2f1420884dd333af55b88de00b0c}\label{classcsmp_1_1_property_handle_ada2d2f1420884dd333af55b88de00b0c} 
+{\bfseries Property\+Handle} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&sg, const char \texorpdfstring{$\ast$}{*}target\+\_\+region, const char \texorpdfstring{$\ast$}{*}var\+\_\+name, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}} type=SCALAR, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place=NODE, uint32\+\_\+t vsize=1U)
+\item 
+\mbox{\hyperlink{classcsmp_1_1_property_handle_a9620c267a912260d48e250c0a9b288ea}{Property\+Handle}} (const \mbox{\hyperlink{classcsmp_1_1_property_handle}{Property\+Handle}} \&op)
+\item 
+\mbox{\hyperlink{classcsmp_1_1_property_handle_a4011b4168bc76a2f37befabb526a5541}{\texorpdfstring{$\sim$}{\string~}\+Property\+Handle}} ()
+\item 
+\Hypertarget{classcsmp_1_1_property_handle_a709264c35eb0526b0c2925df00b8d776}\label{classcsmp_1_1_property_handle_a709264c35eb0526b0c2925df00b8d776} 
+\mbox{\hyperlink{classcsmp_1_1_property_handle}{Property\+Handle}} \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_property_handle}{Property\+Handle}} \&op)
+\item 
+\mbox{\hyperlink{classcsmp_1_1_property_handle}{Property\+Handle}} \& \mbox{\hyperlink{classcsmp_1_1_property_handle_a1d41759b0c37af5b9ca55b7ce9dfa4e1}{operator=}} (double val)
+\item 
+\Hypertarget{classcsmp_1_1_property_handle_ad01023f67784a0021cf92cda256b8290}\label{classcsmp_1_1_property_handle_ad01023f67784a0021cf92cda256b8290} 
+\mbox{\hyperlink{classcsmp_1_1_property_handle}{Property\+Handle}} \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&s)
+\item 
+\Hypertarget{classcsmp_1_1_property_handle_a5c8f8d95d19b4f15e774e78e7bd61e3e}\label{classcsmp_1_1_property_handle_a5c8f8d95d19b4f15e774e78e7bd61e3e} 
+\mbox{\hyperlink{classcsmp_1_1_property_handle}{Property\+Handle}} \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&v)
+\item 
+\mbox{\hyperlink{classcsmp_1_1_property_handle}{Property\+Handle}} \& \mbox{\hyperlink{classcsmp_1_1_property_handle_abfa726dfa7a711c6562c97e3ca5775fc}{operator=}} (const \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ dim $>$ \&t)
+\item 
+\Hypertarget{classcsmp_1_1_property_handle_ab29746ac3d6dd9f78ff0c5df83d90302}\label{classcsmp_1_1_property_handle_ab29746ac3d6dd9f78ff0c5df83d90302} 
+\mbox{\hyperlink{classcsmp_1_1_property_handle}{Property\+Handle}} \& {\bfseries operator=} (const std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ $>$ \&vc)
+\item 
+\Hypertarget{classcsmp_1_1_property_handle_adca0ff6143b01053482f3796d152e52f}\label{classcsmp_1_1_property_handle_adca0ff6143b01053482f3796d152e52f} 
+\mbox{\hyperlink{classcsmp_1_1_property_handle}{Property\+Handle}} \& {\bfseries operator=} (const std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ dim $>$ $>$ \&ts)
+\item 
+\mbox{\hyperlink{classcsmp_1_1_property_handle}{Property\+Handle}} \& \mbox{\hyperlink{classcsmp_1_1_property_handle_a98836987275c992cb1a5e3c500560f16}{operator+=}} (double val)
+\item 
+\Hypertarget{classcsmp_1_1_property_handle_a51ab2673cf2640208adbcdea7ce37361}\label{classcsmp_1_1_property_handle_a51ab2673cf2640208adbcdea7ce37361} 
+\mbox{\hyperlink{classcsmp_1_1_property_handle}{Property\+Handle}} \& {\bfseries operator-\/=} (double val)
+\item 
+\mbox{\hyperlink{classcsmp_1_1_property_handle}{Property\+Handle}} \& \mbox{\hyperlink{classcsmp_1_1_property_handle_a750f4ec00439262023c978683cb06f75}{operator\texorpdfstring{$\ast$}{*}=}} (double val)
+\item 
+\Hypertarget{classcsmp_1_1_property_handle_a7157396ddc2b6f8fe96ced121372082c}\label{classcsmp_1_1_property_handle_a7157396ddc2b6f8fe96ced121372082c} 
+\mbox{\hyperlink{classcsmp_1_1_property_handle}{Property\+Handle}} \& {\bfseries operator/=} (double val)
+\item 
+\mbox{\hyperlink{classcsmp_1_1_property_handle}{Property\+Handle}} \& \mbox{\hyperlink{classcsmp_1_1_property_handle_a52956c8f9403dcddf16534cc58605a49}{operator+=}} (const \mbox{\hyperlink{classcsmp_1_1_property_handle}{Property\+Handle}} \&op)
+\item 
+\Hypertarget{classcsmp_1_1_property_handle_a748f500d29c02823ed3a19c0e19e2496}\label{classcsmp_1_1_property_handle_a748f500d29c02823ed3a19c0e19e2496} 
+\mbox{\hyperlink{classcsmp_1_1_property_handle}{Property\+Handle}} \& {\bfseries operator-\/=} (const \mbox{\hyperlink{classcsmp_1_1_property_handle}{Property\+Handle}} \&op)
+\item 
+\mbox{\hyperlink{classcsmp_1_1_property_handle}{Property\+Handle}} \& \mbox{\hyperlink{classcsmp_1_1_property_handle_a9276977e5bddb6c879a0c0c5c4a4555e}{operator\texorpdfstring{$\ast$}{*}=}} (const \mbox{\hyperlink{classcsmp_1_1_property_handle}{Property\+Handle}} \&op)
+\item 
+\Hypertarget{classcsmp_1_1_property_handle_acb5ca29f14d551d6b3ffd63f5e8dae48}\label{classcsmp_1_1_property_handle_acb5ca29f14d551d6b3ffd63f5e8dae48} 
+\mbox{\hyperlink{classcsmp_1_1_property_handle}{Property\+Handle}} \& {\bfseries operator/=} (const \mbox{\hyperlink{classcsmp_1_1_property_handle}{Property\+Handle}} \&op)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_property_handle_a3ec98d66d13a356309d8ff8da4ec9937}{Squared}} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_property_handle_a32c64de5c8a180f1d1fad710c0846fa5}{Sqrt}} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_property_handle_a38a6053488aad9313b7c98acee490adf}{Ln}} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_property_handle_a052b7ad27853f4eb928bc81377d287fe}{Log10}} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_property_handle_ae9f9081d7346eb4b755dae919c5b6013}{Exp}} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_property_handle_a61bd7e7d9a8ec2a72ee1ed598d7065d6}{Pow}} (double raised\+\_\+to)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_property_handle_a678ba1e51e0663d58ffb83069d946f04}{Zap\+NAN}} (double with)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_property_handle_a3dfd0c830c886a5031f462750687d380}{Sin}} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_property_handle_ab39d3c22028fb93f77ffda61ddcb5026}{Cos}} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_property_handle_a4ae5a13329a2f2cf6b1c08e4cde7f6de}{Tan}} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_property_handle_a20ce3529dc7f43cc4d6a4ac1d9f3ba22}{Acos}} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_property_handle_a996904b678b66f3b48a6a3a8f39d6293}{Asin}} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_property_handle_af5214a1b159ce7819f5ee1c431aecbe9}{Atan}} ()
+\item 
+\Hypertarget{classcsmp_1_1_property_handle_aa925f8547cef7786dbf691ddee459991}\label{classcsmp_1_1_property_handle_aa925f8547cef7786dbf691ddee459991} 
+const char \texorpdfstring{$\ast$}{*} {\bfseries Variable\+Name} () const
+\item 
+const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \& \mbox{\hyperlink{classcsmp_1_1_property_handle_a12c56e037bf4d1d9530766c90c207c60}{Key}} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_property_handle_a01ea8480651da5462789dce112d34fb6}{Range}} (double \&omin, double \&omax) const
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_property_handle_a2eda2263970fa36bcfc1ad6a03949469}{Is\+Within\+Range}} () const
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} \mbox{\hyperlink{classcsmp_1_1_property_handle_a03ad5576ac87af17cb875efbea818dd6}{Output\+Condition}} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_property_handle_aab5a4dbf66b9b312273ba68c33205e35}{Output\+Condition}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} c)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_property_handle_aa75a1204703bb356d83c6361b549e235}{Out}} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_property_handle_a9b3bb027a58437a87dc7b566852f46bc}{Out}} (const char \texorpdfstring{$\ast$}{*}text\+\_\+file\+\_\+name) const
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim$>$\newline
+class csmp\+::\+Property\+Handle$<$ dim $>$}
+\doxylink{classcsmp_1_1_property_handle}{Property\+Handle} -\/ a global accessor and mutator of distributed data. 
+
+\begin{DoxyAuthor}{Author}
+S.\+K. Matthaei 
+
+Stephen G. Roberts 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+1999
+\end{DoxyDate}
+\hypertarget{compare_floats_8h_motivation}{}\doxysubsection{\texorpdfstring{Motivation}{Motivation}}\label{compare_floats_8h_motivation}
+Especially for test computations, one would like write arithmetic expressions which apply to distributed physical variables. To make these expressions concise it is useful to replace lengthy variable names by a notation of choice, for instance, to define a variation of porosity with depth\+:
+
+phi = phi -\/ 1 / z\texorpdfstring{$^\wedge$}{\string^}2
+
+Finally, there is a need to create variables for such mathematical expressions at runtime.\hypertarget{classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_design}{}\doxysubsection{\texorpdfstring{Design Intent}{Design Intent}}\label{classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_design}
+The \doxylink{classcsmp_1_1_property_handle}{Property\+Handle} was designed following the motivation from above, but also by using the existing \doxylink{classcsmp_1_1_operand}{Operand} classs as a model. Thus, an \doxylink{classcsmp_1_1_property_handle}{Property\+Handle} shares many of the \doxylink{classcsmp_1_1_operand}{Operand} interfaces, but as a difference, it will currently apply to the associated variable on all the elements, nodes, or constraint points of a mesh, depending on where the \doxylink{classcsmp_1_1_property_handle}{Property\+Handle} variable is placed.
+
+The desired capability of writing arithmetic expressions is implemented via C++ operator overloading. Notably, there is no assignment operator for operands to operands, since the expected result of a C++ assignment would imply a complete overwriting of the lefthand physical variable with the one on the right of the assignment operator.
+
+Self-\/assignment is provided to write expressions which are efficient, since they do not require the creation of temporary variables. Thus, the expression
+
+phi = phi -\/ 1 / z\texorpdfstring{$^\wedge$}{\string^}2
+
+can be replaced by
+
+phi -\/= 1 / z\texorpdfstring{$^\wedge$}{\string^}2
+
+which avoids the creation of a temporary variable for the righthand side which would subsequently be assigned to \textquotesingle{}phi\textquotesingle{} on the left.\hypertarget{classcsmp_1_1_visitor_applicability}{}\doxysubsection{\texorpdfstring{Applicability}{Applicability}}\label{classcsmp_1_1_visitor_applicability}
+Property\+Handles can be applied anywhere in a main program or a high-\/level class object or function which has access to the CSMP library. To create a \doxylink{classcsmp_1_1_property_handle}{Property\+Handle} its constructor takes arguments which allow it to associate itself with an existing variable in the \doxylink{classcsmp_1_1_model}{Model} or to request a new \doxylink{classcsmp_1_1_model}{Model} variable which will be globally known until the \doxylink{classcsmp_1_1_property_handle}{Property\+Handle} is destructed again. If a new variable is created, it will be destroyed when the destructor of the \doxylink{classcsmp_1_1_property_handle}{Property\+Handle} is called.\hypertarget{classcsmp_1_1_solver_participants}{}\doxysubsection{\texorpdfstring{Participants}{Participants}}\label{classcsmp_1_1_solver_participants}
+The \doxylink{classcsmp_1_1_property_handle}{Property\+Handle} has references to the Mesh and Memory managers, and the \doxylink{classcsmp_1_1_property_database}{Property\+Database} and it stores the \doxylink{structcsmp_1_1_index}{csmp\+::\+Index} of the associated physical variable for rapid variable access.\hypertarget{classcsmp_1_1_time_step_evaluator_collaborations}{}\doxysubsection{\texorpdfstring{Collaborations}{Collaborations}}\label{classcsmp_1_1_time_step_evaluator_collaborations}
+The \doxylink{classcsmp_1_1_property_handle}{Property\+Handle} collaborates with the \doxylink{classcsmp_1_1_model}{Model} and its contained managers in order to carry out its arithmetic operations.\hypertarget{classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_consequences}{}\doxysubsection{\texorpdfstring{Consequences}{Consequences}}\label{classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_consequences}
+Property\+Handles allow the user to add, subtract, multiply, and divide distributed physical variables among eachother, to assign values to them, or to add, subtract, multiply, and divide CSP basic variables to the distributed physical variables.\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+For clarity, the placement and type of the physical variables which are associated with Property\+Handles are used to impose restrictions on whether Property\+Handles can be used together in arithmetic expressions. Only if the placement and variable type is the same this can be done.
+
+The user is requested to make recommendations of how Property\+Handles can be made more flexibility while avoiding ambiguities of assigning variables of different type to one another.\hypertarget{classcsmp_1_1_visitor_examples}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{classcsmp_1_1_visitor_examples}
+Below the full source code for the porosity example from above is listed\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{comment}{//\ existing\ property\ using\ default\ arguments\ }}
+\DoxyCodeLine{\mbox{\hyperlink{classcsmp_1_1_property_handle_a88ec60b31e8b46b2303ff3905892ce32}{PropertyHandle}}\ \ phi(\ current\_supergroup,\ \textcolor{stringliteral}{"{}porosity"{}},\ SCALAR,\ ELEMENT\ );}
+\DoxyCodeLine{phi\ =\ 0.4;}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{comment}{//\ new\ property\ }}
+\DoxyCodeLine{\mbox{\hyperlink{classcsmp_1_1_property_handle_a88ec60b31e8b46b2303ff3905892ce32}{PropertyHandle}}\ \ z(\ current\_supergroup,\ \textcolor{stringliteral}{"{}depth"{}},\ SCALAR,\ ELEMENT\ );}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{comment}{//\ initialize\ the\ new\ property\ using\ an\ Interrelation\ subclass}}
+\DoxyCodeLine{AssignDepthToProperty\ \ make\_depth(\ reference\_to\_property\_database\ );}
+\DoxyCodeLine{current\_supergroup.Apply(\ make\_depth\ );}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{comment}{//\ desired\ arithmetic\ expression}}
+\DoxyCodeLine{phi\ -\/=\ 1\ /\ z\string^2;}
+\DoxyCodeLine{phi.OutMatlab();}
+
+\end{DoxyCode}
+
+
+In this example, the existing scalar element variable \textquotesingle{}porosity\textquotesingle{} is assigned to the \doxylink{classcsmp_1_1_property_handle}{Property\+Handle} \textquotesingle{}phi\textquotesingle{} and intialized to 40\%. The construction of the \doxylink{classcsmp_1_1_property_handle}{Property\+Handle} \textquotesingle{}z\textquotesingle{} prompts the generation of a new variable "{}depth"{} as a scalar placed on the element and initialized to NAN (not a number). The interrelation Assign\+Depth\+To\+Property assigns the z-\/coordinate of the element centers to the new variable \textquotesingle{}depth\textquotesingle{}. Now the following arithmetic expression has the necessary input values and can be applied. The result is output to a text file in Matlab format.
+
+Property\+Handles also allow to create temporary variables, then apply standard mathematical operations on these, and subsequently output the results to a file for visualization. In the following example, the natural logarithm of the variable porosity is output to a textfile\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{classcsmp_1_1_property_handle_a88ec60b31e8b46b2303ff3905892ce32}{PropertyHandle}}\ \ phi(\ current\_supergroup,\ \textcolor{stringliteral}{"{}porosity"{}},\ SCALAR,\ ELEMENT\ );}
+\DoxyCodeLine{\mbox{\hyperlink{classcsmp_1_1_property_handle_a88ec60b31e8b46b2303ff3905892ce32}{PropertyHandle}}\ \ log\_phi(\ current\_supergroup,\ \textcolor{stringliteral}{"{}log\ porosity"{}},\ SCALAR,\ ELEMENT\ );}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{comment}{//\ assign\ the\ porosity\ to\ the\ new\ variable\ without\ direct\ assignment}}
+\DoxyCodeLine{log\_phi\ \ =\ 0.0;}
+\DoxyCodeLine{log\_phi\ +=\ phi;}
+\DoxyCodeLine{\textcolor{comment}{//\ logarithmitize\ the\ values}}
+\DoxyCodeLine{}
+\DoxyCodeLine{log\_phi.Log();}
+\DoxyCodeLine{log\_phi.Out(\ logarithmitized\_porosity\ );}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{comment}{//\ delete\ the\ temporary\ variable}}
+\DoxyCodeLine{log\_phi.\string~PropertyHandle();}
+
+\end{DoxyCode}
+
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000022}{Todo}}]!!! SKM\+: fix math function calls and catch IEEE exceptions 
+
+SKM\+: deal with new variable placements 
+
+(1) Crashes when it wants to create a REGION property (A) 
+
+(3) A range of switch statements must be extended for type REGION, FACE, INTER\+\_\+\+FACE (A)\end{DoxyRefDesc}
+
+
+\label{doc-constructors}
+\Hypertarget{classcsmp_1_1_property_handle_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcsmp_1_1_property_handle_a88ec60b31e8b46b2303ff3905892ce32}\index{csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}!PropertyHandle@{PropertyHandle}}
+\index{PropertyHandle@{PropertyHandle}!csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{PropertyHandle()}{PropertyHandle()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_handle_a88ec60b31e8b46b2303ff3905892ce32} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_property_handle}{csmp\+::\+Property\+Handle}}$<$ dim $>$\+::\+Property\+Handle (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&}]{sg}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{var\+\_\+name}{, }\item[{\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}}}]{ptype}{ = {\ttfamily SCALAR}, }\item[{\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}}]{place}{ = {\ttfamily NODE}, }\item[{uint32\+\_\+t}]{psize}{ = {\ttfamily 1U}}\end{DoxyParamCaption})}
+
+Constructor associates a distributed physical variable with the constructed \doxylink{classcsmp_1_1_property_handle}{Property\+Handle}. If the variable already exists in the \doxylink{classcsmp_1_1_property_database}{Property\+Database}, the new \doxylink{classcsmp_1_1_property_handle}{Property\+Handle} will be a handle to it. If the variable name is not known to the \doxylink{classcsmp_1_1_property_database}{Property\+Database}, it will be registered as a new variable and property storage will be allocated accordingly by the Memory\+Manager.\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+There are four constructor arguments. The first is a reference to the current \doxylink{classcsmp_1_1_model}{Model}, the second is the variable name, and the remaining two arguments specify the variable type and placement, respectively. These last two arguments have the default values SCALAR, and NODE. If the variable type or placement differs from these values, they must be specified. If a new variable shall be created the user must specify its type and placement.\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+The constructor initializes the output variable flag to PLAIN and requests the \doxylink{structcsmp_1_1_index}{csmp\+::\+Index} for the associated variable from the \doxylink{classcsmp_1_1_property_database}{Property\+Database}. It prompts the creation of a new variable if the property does not already exist. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=194pt]{classcsmp_1_1_property_handle_a88ec60b31e8b46b2303ff3905892ce32_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=194pt]{classcsmp_1_1_property_handle_a88ec60b31e8b46b2303ff3905892ce32_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_property_handle_a9620c267a912260d48e250c0a9b288ea}\index{csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}!PropertyHandle@{PropertyHandle}}
+\index{PropertyHandle@{PropertyHandle}!csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{PropertyHandle()}{PropertyHandle()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_handle_a9620c267a912260d48e250c0a9b288ea} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_property_handle}{csmp\+::\+Property\+Handle}}$<$ dim $>$\+::\+Property\+Handle (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_property_handle}{Property\+Handle}}$<$ dim $>$ \&}]{op}{}\end{DoxyParamCaption})}
+
+A copy-\/constructed \doxylink{classcsmp_1_1_property_handle}{Property\+Handle} is associated exactly with the same variable as its input argument. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=194pt]{classcsmp_1_1_property_handle_a9620c267a912260d48e250c0a9b288ea_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=194pt]{classcsmp_1_1_property_handle_a9620c267a912260d48e250c0a9b288ea_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_property_handle_a4011b4168bc76a2f37befabb526a5541}\index{csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}!````~PropertyHandle@{\texorpdfstring{$\sim$}{\string~}PropertyHandle}}
+\index{````~PropertyHandle@{\texorpdfstring{$\sim$}{\string~}PropertyHandle}!csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}PropertyHandle()}{\string~PropertyHandle()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_handle_a4011b4168bc76a2f37befabb526a5541} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_property_handle}{csmp\+::\+Property\+Handle}}$<$ dim $>$\+::\texorpdfstring{$\sim$}{\string~}\mbox{\hyperlink{classcsmp_1_1_property_handle}{Property\+Handle}} (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+The destructor of a \doxylink{classcsmp_1_1_property_handle}{Property\+Handle} linked to dynamically created variable, will prompt the \doxylink{classcsmp_1_1_property_database}{Property\+Database} to delete the variable entry and call the Memory\+Manager to delete the storage which was allocated for that variable. 
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_property_handle_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_property_handle_a20ce3529dc7f43cc4d6a4ac1d9f3ba22}\index{csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}!Acos@{Acos}}
+\index{Acos@{Acos}!csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Acos()}{Acos()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_handle_a20ce3529dc7f43cc4d6a4ac1d9f3ba22} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_property_handle}{csmp\+::\+Property\+Handle}}$<$ dim $>$\+::\+Acos (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+Returns the arc cos of the physical variable component value. This value must be between -\/1 and 1.\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+If the physical variable component value is not within a range between -\/1 and 1, an error will be reported. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=343pt]{classcsmp_1_1_property_handle_a20ce3529dc7f43cc4d6a4ac1d9f3ba22_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_property_handle_a996904b678b66f3b48a6a3a8f39d6293}\index{csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}!Asin@{Asin}}
+\index{Asin@{Asin}!csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Asin()}{Asin()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_handle_a996904b678b66f3b48a6a3a8f39d6293} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_property_handle}{csmp\+::\+Property\+Handle}}$<$ dim $>$\+::\+Asin (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+Returns the arc sin of the physical variable component value. This value must be between -\/1 and 1.\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+If the physical variable component value is not within a range between -\/1 and 1, an error will be reported. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=343pt]{classcsmp_1_1_property_handle_a996904b678b66f3b48a6a3a8f39d6293_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_property_handle_af5214a1b159ce7819f5ee1c431aecbe9}\index{csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}!Atan@{Atan}}
+\index{Atan@{Atan}!csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Atan()}{Atan()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_handle_af5214a1b159ce7819f5ee1c431aecbe9} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_property_handle}{csmp\+::\+Property\+Handle}}$<$ dim $>$\+::\+Atan (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+Returns the arc tan of the physical variable component value. This value must be between -\/1 and 1.\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+If the physical variable component value is not within a range between -\/1 and 1, an error will be reported. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=343pt]{classcsmp_1_1_property_handle_af5214a1b159ce7819f5ee1c431aecbe9_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_property_handle_ab39d3c22028fb93f77ffda61ddcb5026}\index{csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}!Cos@{Cos}}
+\index{Cos@{Cos}!csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Cos()}{Cos()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_handle_ab39d3c22028fb93f77ffda61ddcb5026} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_property_handle}{csmp\+::\+Property\+Handle}}$<$ dim $>$\+::\+Cos (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+Returns the cos of the physical variable component value which must be in radians. A radian (rad) is defined as the ratio of the corresponding arc length to the radius of the circle. Thus, 1 radian = 57.\+2958o and the angle in rad is (grad \texorpdfstring{$\ast$}{*} pi) / 180.\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+It is tested whether the input variable is in the legitimate range of zero to 2 Pi. If not, an error message is returned and no calculation is performed. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_property_handle_ab39d3c22028fb93f77ffda61ddcb5026_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_property_handle_ae9f9081d7346eb4b755dae919c5b6013}\index{csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}!Exp@{Exp}}
+\index{Exp@{Exp}!csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Exp()}{Exp()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_handle_ae9f9081d7346eb4b755dae919c5b6013} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_property_handle}{csmp\+::\+Property\+Handle}}$<$ dim $>$\+::\+Exp (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+Calculates E raised to the power of each component of the physical variable associated with the \doxylink{classcsmp_1_1_property_handle}{Property\+Handle}. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_property_handle_ae9f9081d7346eb4b755dae919c5b6013_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_property_handle_a2eda2263970fa36bcfc1ad6a03949469}\index{csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}!IsWithinRange@{IsWithinRange}}
+\index{IsWithinRange@{IsWithinRange}!csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{IsWithinRange()}{IsWithinRange()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_handle_a2eda2263970fa36bcfc1ad6a03949469} 
+template$<$uint32\+\_\+t dim$>$ \\
+bool \mbox{\hyperlink{classcsmp_1_1_property_handle}{csmp\+::\+Property\+Handle}}$<$ dim $>$\+::\+Is\+Within\+Range (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+Tests whether the physical variable which is associated with the \doxylink{classcsmp_1_1_property_handle}{Property\+Handle} has a value which complies with the legitimate range defined in the \doxylink{classcsmp_1_1_property_database}{Property\+Database} object.
+
+If the variable was defined at runtime, it is tested against a default range from -\/1.\+0e+30 to 1.\+0e+30.
+
+\begin{DoxyReturn}{Returns}
+\doxylink{classcsmp_1_1_property_handle_a2eda2263970fa36bcfc1ad6a03949469}{Is\+Within\+Range()} returns the boolean variable \textquotesingle{}true\textquotesingle{} if the variable values lie within the expected range.
+\end{DoxyReturn}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+s\+Within\+Range() compares the actual value range of the variable with that specified in the \doxylink{classcsmp_1_1_property_database}{Property\+Database}.\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+If so desired by the user, \doxylink{classcsmp_1_1_property_handle_a2eda2263970fa36bcfc1ad6a03949469}{Is\+Within\+Range()} will be applied after each operation on a \doxylink{classcsmp_1_1_property_handle}{Property\+Handle}. Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_property_handle_a2eda2263970fa36bcfc1ad6a03949469_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_property_handle_a12c56e037bf4d1d9530766c90c207c60}\index{csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}!Key@{Key}}
+\index{Key@{Key}!csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Key()}{Key()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_handle_a12c56e037bf4d1d9530766c90c207c60} 
+template$<$uint32\+\_\+t dim$>$ \\
+const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \& \mbox{\hyperlink{classcsmp_1_1_property_handle}{csmp\+::\+Property\+Handle}}$<$ dim $>$\+::\+Key (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+Returns the storage specification of the variable which is associated with the \doxylink{classcsmp_1_1_operand}{csmp\+::\+Operand} into a corresponding structure. \Hypertarget{classcsmp_1_1_property_handle_a38a6053488aad9313b7c98acee490adf}\index{csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}!Ln@{Ln}}
+\index{Ln@{Ln}!csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Ln()}{Ln()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_handle_a38a6053488aad9313b7c98acee490adf} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_property_handle}{csmp\+::\+Property\+Handle}}$<$ dim $>$\+::\+Ln (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+Calculates the natural logarithm (base 2) of each component of the CSP basic variable which is associated with the \doxylink{classcsmp_1_1_property_handle}{Property\+Handle}.\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+Since the method cannot take the natural logarithm of 0 or a negative number, variables with such a value are not modified. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_property_handle_a38a6053488aad9313b7c98acee490adf_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_property_handle_a052b7ad27853f4eb928bc81377d287fe}\index{csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}!Log10@{Log10}}
+\index{Log10@{Log10}!csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Log10()}{Log10()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_handle_a052b7ad27853f4eb928bc81377d287fe} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_property_handle}{csmp\+::\+Property\+Handle}}$<$ dim $>$\+::\+Log10 (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+Calculates the decadic logarithm (base 10) of each component of the CSP basic variable which is associated with the \doxylink{classcsmp_1_1_property_handle}{Property\+Handle}.\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+Since the method cannot take the logarithm of 0 or a negative number, variables with such a value are not modified. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=343pt]{classcsmp_1_1_property_handle_a052b7ad27853f4eb928bc81377d287fe_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_property_handle_a9276977e5bddb6c879a0c0c5c4a4555e}\index{csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}!operator\texorpdfstring{$\ast$}{*}=@{operator\texorpdfstring{$\ast$}{*}=}}
+\index{operator\texorpdfstring{$\ast$}{*}=@{operator\texorpdfstring{$\ast$}{*}=}!csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{operator\texorpdfstring{$\ast$}{*}=()}{operator*=()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_handle_a9276977e5bddb6c879a0c0c5c4a4555e} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_property_handle}{Property\+Handle}}$<$ dim $>$ \& \mbox{\hyperlink{classcsmp_1_1_property_handle}{csmp\+::\+Property\+Handle}}$<$ dim $>$\+::operator\texorpdfstring{$\ast$}{*}= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_property_handle}{Property\+Handle}}$<$ dim $>$ \&}]{op}{}\end{DoxyParamCaption})}
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000194}{Todo}}](1-\/F) key.\+type, key.\+place should be opkey.\+type, key.\+place \end{DoxyRefDesc}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=343pt]{classcsmp_1_1_property_handle_a9276977e5bddb6c879a0c0c5c4a4555e_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_property_handle_a750f4ec00439262023c978683cb06f75}\index{csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}!operator\texorpdfstring{$\ast$}{*}=@{operator\texorpdfstring{$\ast$}{*}=}}
+\index{operator\texorpdfstring{$\ast$}{*}=@{operator\texorpdfstring{$\ast$}{*}=}!csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{operator\texorpdfstring{$\ast$}{*}=()}{operator*=()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_handle_a750f4ec00439262023c978683cb06f75} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_property_handle}{Property\+Handle}}$<$ dim $>$ \& \mbox{\hyperlink{classcsmp_1_1_property_handle}{csmp\+::\+Property\+Handle}}$<$ dim $>$\+::operator\texorpdfstring{$\ast$}{*}= (\begin{DoxyParamCaption}\item[{double}]{val}{}\end{DoxyParamCaption})}
+
+Where the variable is flagged that the output flag, the default value of which is ANY, its value is multiplied by the argument value. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=343pt]{classcsmp_1_1_property_handle_a750f4ec00439262023c978683cb06f75_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_property_handle_a52956c8f9403dcddf16534cc58605a49}\index{csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}!operator+=@{operator+=}}
+\index{operator+=@{operator+=}!csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{operator+=()}{operator+=()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_handle_a52956c8f9403dcddf16534cc58605a49} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_property_handle}{Property\+Handle}}$<$ dim $>$ \& \mbox{\hyperlink{classcsmp_1_1_property_handle}{csmp\+::\+Property\+Handle}}$<$ dim $>$\+::operator+= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_property_handle}{Property\+Handle}}$<$ dim $>$ \&}]{op}{}\end{DoxyParamCaption})}
+
+The operators \textquotesingle{}+=\textquotesingle{}, \textquotesingle{}-\/=\textquotesingle{}, \textquotesingle{}\texorpdfstring{$\ast$}{*}=\textquotesingle{}, and \textquotesingle{}/=\textquotesingle{} perform combined arithmetic and assignment operations involving two Property\+Handles but avoid the generation of temporary variables as would be generated, if the operatios were performed separately.
+
+
+\begin{DoxyParams}{Parameters}
+{\em op} & The argument to the right of the combined operators must be a \doxylink{classcsmp_1_1_property_handle}{Property\+Handle}.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The value of the physical variable of the \doxylink{classcsmp_1_1_property_handle}{Property\+Handle} on the right modifies the \doxylink{classcsmp_1_1_property_handle}{Property\+Handle} value on the left according to the arithmetic operator used.
+\end{DoxyReturn}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+The operators are based on the overloaded operators of the CSP basic variables, the \doxylink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}, \doxylink{classcsmp_1_1_vector_variable}{Vector\+Variable}, and \doxylink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}.\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+To add a floating point value to, subtract from, multiply, or divide by the physical variable which is associated with the \doxylink{classcsmp_1_1_property_handle}{Property\+Handle}, write expressions like\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{my\_operand\ +=\ 5.2;}
+
+\end{DoxyCode}
+\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+Operations involving variables of different type or different placement cannot be performed. In this case an error will be reported. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=343pt]{classcsmp_1_1_property_handle_a52956c8f9403dcddf16534cc58605a49_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_property_handle_a98836987275c992cb1a5e3c500560f16}\index{csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}!operator+=@{operator+=}}
+\index{operator+=@{operator+=}!csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{operator+=()}{operator+=()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_handle_a98836987275c992cb1a5e3c500560f16} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_property_handle}{Property\+Handle}}$<$ dim $>$ \& \mbox{\hyperlink{classcsmp_1_1_property_handle}{csmp\+::\+Property\+Handle}}$<$ dim $>$\+::operator+= (\begin{DoxyParamCaption}\item[{double}]{val}{}\end{DoxyParamCaption})}
+
+The operators \textquotesingle{}+=\textquotesingle{}, \textquotesingle{}-\/=\textquotesingle{}, \textquotesingle{}\texorpdfstring{$\ast$}{*}=\textquotesingle{}, and \textquotesingle{}/=\textquotesingle{} perform combined arithmetic and assignment operations but avoid the generation of temporary variables as would be generated, if the operatios were performed separately.
+
+
+\begin{DoxyParams}{Parameters}
+{\em val} & The argument to the right of the combined operators must be a floating point value.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The floating point value on the right modifies the \doxylink{classcsmp_1_1_property_handle}{Property\+Handle} value on the left according to the arithmetic operator used.
+\end{DoxyReturn}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+The operators are based on the overloaded operators of the CSP basic variables, the \doxylink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}, \doxylink{classcsmp_1_1_vector_variable}{Vector\+Variable}, and \doxylink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}.\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+To add a floating point value to, subtract from, multiply, or divide by the physical variable which is associated with the \doxylink{classcsmp_1_1_property_handle}{Property\+Handle}, write expressions like\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{my\_operand\ +=\ 5.2;}
+
+\end{DoxyCode}
+ Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=343pt]{classcsmp_1_1_property_handle_a98836987275c992cb1a5e3c500560f16_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_property_handle_abfa726dfa7a711c6562c97e3ca5775fc}\index{csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}!operator=@{operator=}}
+\index{operator=@{operator=}!csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_handle_abfa726dfa7a711c6562c97e3ca5775fc} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_property_handle}{Property\+Handle}}$<$ dim $>$ \& \mbox{\hyperlink{classcsmp_1_1_property_handle}{csmp\+::\+Property\+Handle}}$<$ dim $>$\+::operator= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ dim $>$ \&}]{ts}{}\end{DoxyParamCaption})}
+
+Assigns the values of the tensor variable to the distributed property. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=343pt]{classcsmp_1_1_property_handle_abfa726dfa7a711c6562c97e3ca5775fc_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_property_handle_a1d41759b0c37af5b9ca55b7ce9dfa4e1}\index{csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}!operator=@{operator=}}
+\index{operator=@{operator=}!csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_handle_a1d41759b0c37af5b9ca55b7ce9dfa4e1} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_property_handle}{Property\+Handle}}$<$ dim $>$ \& \mbox{\hyperlink{classcsmp_1_1_property_handle}{csmp\+::\+Property\+Handle}}$<$ dim $>$\+::operator= (\begin{DoxyParamCaption}\item[{double}]{val}{}\end{DoxyParamCaption})}
+
+Assigns the value of its argument to the physical variable associated with the \doxylink{classcsmp_1_1_property_handle}{Property\+Handle} at where the variable has a flag which is equal to the output flag.\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+Variables of the types double, \doxylink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}, \doxylink{classcsmp_1_1_vector_variable}{Vector\+Variable}, or \doxylink{classcsmp_1_1_tensor_variable}{Tensor\+Variable} may be assigned.
+
+\begin{DoxyReturn}{Returns}
+The assignment returns the value into the \doxylink{classcsmp_1_1_property_handle}{Property\+Handle} to the left of the equal sign. The original values are overwritten irrespective of their original flag. ~\newline
+
+\end{DoxyReturn}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+The assigment operator relies on the overloaded operators of the basic CSMP variables (scalar, vector, and tensor) to perform the assignments.
+
+In the special case, where an assignment of a vector to a scalar is attempted, the length of the vector will be assigned.
+
+The attempt to assign a tensor to a vector is undefined and will therefore provoke an error.
+
+If a tensor shall be assigned to a scalar, the determinant of the tensor will be assigned.\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+To write \doxylink{classcsmp_1_1_property_handle}{Property\+Handle} expressions like\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{csp\_specific\_op\ =\ 12.5;}
+
+\end{DoxyCode}
+\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+Undefined assigments, like that of a tensor to a vector will invoke error messages. Because these are special operations, if the length of a vector or the determinant of a tensor is assigned to a scalar, a warning will be issued which specifies the type of assignment made. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=343pt]{classcsmp_1_1_property_handle_a1d41759b0c37af5b9ca55b7ce9dfa4e1_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_property_handle_aa75a1204703bb356d83c6361b549e235}\index{csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}!Out@{Out}}
+\index{Out@{Out}!csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Out()}{Out()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_handle_aa75a1204703bb356d83c6361b549e235} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_property_handle}{csmp\+::\+Property\+Handle}}$<$ dim $>$\+::\+Out (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+The standard CSP object interface \doxylink{classcsmp_1_1_property_handle_aa75a1204703bb356d83c6361b549e235}{Out()} will print the state of the \doxylink{classcsmp_1_1_property_handle}{Property\+Handle} to stdout. This output comprises the name of the physical variable which is associated with the \doxylink{classcsmp_1_1_property_handle}{Property\+Handle}, the output flag, and the values of the distributed physical variable.\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+The method \doxylink{classcsmp_1_1_property_handle_aa75a1204703bb356d83c6361b549e235}{Out()} uses the \doxylink{classcsmp_1_1_model}{Model} method Output\+Variable\+To\+Screen() to print the variable values. \Hypertarget{classcsmp_1_1_property_handle_a9b3bb027a58437a87dc7b566852f46bc}\index{csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}!Out@{Out}}
+\index{Out@{Out}!csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Out()}{Out()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_handle_a9b3bb027a58437a87dc7b566852f46bc} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_property_handle}{csmp\+::\+Property\+Handle}}$<$ dim $>$\+::\+Out (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{text\+\_\+file\+\_\+name}{}\end{DoxyParamCaption}) const}
+
+The CSP object interface \doxylink{classcsmp_1_1_property_handle_aa75a1204703bb356d83c6361b549e235}{Out()} will print the values of the \doxylink{classcsmp_1_1_property_handle}{Property\+Handle} associated variable to a textfile.
+
+
+\begin{DoxyParams}{Parameters}
+{\em text\+\_\+file\+\_\+name} & The name of the textfile is supplied as first argument to \doxylink{classcsmp_1_1_property_handle_aa75a1204703bb356d83c6361b549e235}{Out()}.\\
+\hline
+\end{DoxyParams}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+\doxylink{classcsmp_1_1_property_handle_aa75a1204703bb356d83c6361b549e235}{Out()} relies on the \doxylink{classcsmp_1_1_model}{Model} method Output\+Data\+As\+Text\+Columns() in the creation of the output textfile. ~\newline
+\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+To save a \doxylink{classcsmp_1_1_property_handle}{Property\+Handle} temporary variable to file.\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+Refer to the documentation of the \doxylink{classcsmp_1_1_model}{Model} to learn about the footprint of Output\+Data\+As\+Text\+Columns(). \Hypertarget{classcsmp_1_1_property_handle_a03ad5576ac87af17cb875efbea818dd6}\index{csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}!OutputCondition@{OutputCondition}}
+\index{OutputCondition@{OutputCondition}!csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{OutputCondition()}{OutputCondition()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_handle_a03ad5576ac87af17cb875efbea818dd6} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} \mbox{\hyperlink{classcsmp_1_1_property_handle}{csmp\+::\+Property\+Handle}}$<$ dim $>$\+::\+Output\+Condition (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+\doxylink{classcsmp_1_1_property_handle_a03ad5576ac87af17cb875efbea818dd6}{Output\+Condition()} returns the \doxylink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG} flag which the distributed physical variable which is associated with the \doxylink{classcsmp_1_1_property_handle}{Property\+Handle} must have in order to allow modification by the \doxylink{classcsmp_1_1_property_handle}{Property\+Handle}.
+
+\begin{DoxyReturn}{Returns}
+The flag that the physical variables flag must correspond to if the variable shall be modified.
+\end{DoxyReturn}
+\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+Since each CSMP scalar, vector, or tensor variable has a single or a set of flags which indicate to the solver whether it may modify or use this variable instance as a constraint, the same rule applies to Property\+Handles. Thus, only if the output flag matches the local flag of the distributed variable, it will modify the latter. Accordingly, the variable flag may be used to protect certain variable values from modification by Property\+Handles. \Hypertarget{classcsmp_1_1_property_handle_aab5a4dbf66b9b312273ba68c33205e35}\index{csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}!OutputCondition@{OutputCondition}}
+\index{OutputCondition@{OutputCondition}!csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{OutputCondition()}{OutputCondition()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_handle_aab5a4dbf66b9b312273ba68c33205e35} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_property_handle}{csmp\+::\+Property\+Handle}}$<$ dim $>$\+::\+Output\+Condition (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}}}]{c}{}\end{DoxyParamCaption})}
+
+\doxylink{classcsmp_1_1_property_handle_a03ad5576ac87af17cb875efbea818dd6}{Output\+Condition()} assigns the \doxylink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG} flag which the distributed physical variable which is associated with the \doxylink{classcsmp_1_1_property_handle}{Property\+Handle} must have in order to allow modification by the \doxylink{classcsmp_1_1_property_handle}{Property\+Handle}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em c} & The flag which the output flag shall be changed into.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyAttention}{Attention}
+The flag of the physical variables flag must correspond, else the variable is not modified.
+\end{DoxyAttention}
+\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+Since each CSMP scalar, vector, or tensor variable has a single or a set of flags which indicate to the solver whether it may modify or use this variable instance as a constraint, the same rule applies to Property\+Handles. Thus, only if the output flag matches the local flag of the distributed variable, it will modify the latter. Accordingly, the variable flag may be used to protect certain variable values from modification by Property\+Handles. \Hypertarget{classcsmp_1_1_property_handle_a61bd7e7d9a8ec2a72ee1ed598d7065d6}\index{csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}!Pow@{Pow}}
+\index{Pow@{Pow}!csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Pow()}{Pow()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_handle_a61bd7e7d9a8ec2a72ee1ed598d7065d6} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_property_handle}{csmp\+::\+Property\+Handle}}$<$ dim $>$\+::\+Pow (\begin{DoxyParamCaption}\item[{double}]{raised\+\_\+to}{}\end{DoxyParamCaption})}
+
+Raises each component of the CSP basic variable associated with the \doxylink{classcsmp_1_1_property_handle}{Property\+Handle} to the power of its first argument.
+
+
+\begin{DoxyParams}{Parameters}
+{\em raised\+\_\+to} & The power to which the variable shall be raised. \\
+\hline
+\end{DoxyParams}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_property_handle_a61bd7e7d9a8ec2a72ee1ed598d7065d6_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_property_handle_a01ea8480651da5462789dce112d34fb6}\index{csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}!Range@{Range}}
+\index{Range@{Range}!csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Range()}{Range()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_handle_a01ea8480651da5462789dce112d34fb6} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_property_handle}{csmp\+::\+Property\+Handle}}$<$ dim $>$\+::\+Range (\begin{DoxyParamCaption}\item[{double \&}]{omin}{, }\item[{double \&}]{omax}{}\end{DoxyParamCaption}) const}
+
+Performs a range check for the physical variable which is associated with the \doxylink{classcsmp_1_1_property_handle}{Property\+Handle}.
+
+\doxylink{classcsmp_1_1_property_handle_a01ea8480651da5462789dce112d34fb6}{Range()} will return the minimum and the maximum value of the physical variable which is associated with the \doxylink{classcsmp_1_1_property_handle}{Property\+Handle} into its first and its second argument.\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+\doxylink{classcsmp_1_1_property_handle_a01ea8480651da5462789dce112d34fb6}{Range()} calls the Min\+Max\+Of() interface of the \doxylink{classcsmp_1_1_model}{Model}. Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_property_handle_a01ea8480651da5462789dce112d34fb6_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_property_handle_a3dfd0c830c886a5031f462750687d380}\index{csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}!Sin@{Sin}}
+\index{Sin@{Sin}!csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Sin()}{Sin()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_handle_a3dfd0c830c886a5031f462750687d380} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_property_handle}{csmp\+::\+Property\+Handle}}$<$ dim $>$\+::\+Sin (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+Returns the sin of the physical variable component value which must be in radians. A radian (rad) is defined as the ratio of the corresponding arc length to the radius of the circle. Thus, 1 radian = 57.\+2958o and the angle in rad is (grad \texorpdfstring{$\ast$}{*} pi) / 180.\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+It is tested whether the input variable is in the legitimate range of zero to 2 Pi. If not, an error message is returned and no calculation is performed. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_property_handle_a3dfd0c830c886a5031f462750687d380_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_property_handle_a32c64de5c8a180f1d1fad710c0846fa5}\index{csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}!Sqrt@{Sqrt}}
+\index{Sqrt@{Sqrt}!csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Sqrt()}{Sqrt()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_handle_a32c64de5c8a180f1d1fad710c0846fa5} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_property_handle}{csmp\+::\+Property\+Handle}}$<$ dim $>$\+::\+Sqrt (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+Takes the square root of the values of the physical variable which is associated with the \doxylink{classcsmp_1_1_property_handle}{Property\+Handle}. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=343pt]{classcsmp_1_1_property_handle_a32c64de5c8a180f1d1fad710c0846fa5_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_property_handle_a3ec98d66d13a356309d8ff8da4ec9937}\index{csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}!Squared@{Squared}}
+\index{Squared@{Squared}!csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Squared()}{Squared()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_handle_a3ec98d66d13a356309d8ff8da4ec9937} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_property_handle}{csmp\+::\+Property\+Handle}}$<$ dim $>$\+::\+Squared (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+Multiplies the physical variable which is associated with the \doxylink{classcsmp_1_1_property_handle}{Property\+Handle} by itself. If this variable is vector, or a tensor, the corresponding vector or matrix products will be assigned, respectively.\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+The method relies on the interface of the CSP basic variables \doxylink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}, \doxylink{classcsmp_1_1_vector_variable}{Vector\+Variable}, and \doxylink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}.\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+Apart from offering an efficient way to raise variable values to the power of 2, \doxylink{classcsmp_1_1_property_handle_a3ec98d66d13a356309d8ff8da4ec9937}{Squared()} implements vector and matrix multiplication for vector and tensor variables, respectively. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=343pt]{classcsmp_1_1_property_handle_a3ec98d66d13a356309d8ff8da4ec9937_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_property_handle_a4ae5a13329a2f2cf6b1c08e4cde7f6de}\index{csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}!Tan@{Tan}}
+\index{Tan@{Tan}!csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Tan()}{Tan()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_handle_a4ae5a13329a2f2cf6b1c08e4cde7f6de} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_property_handle}{csmp\+::\+Property\+Handle}}$<$ dim $>$\+::\+Tan (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+Returns the tan of the physical variable component value which must be in radians. A radian (rad) is defined as the ratio of the corresponding arc length to the radius of the circle. Thus, 1 radian = 57.\+2958o and the angle in rad is (grad \texorpdfstring{$\ast$}{*} pi) / 180.\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+It is tested whether the input variable is in the legitimate range of zero to 2 Pi. If not, an error message is returned and no calculation is performed. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_property_handle_a4ae5a13329a2f2cf6b1c08e4cde7f6de_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_property_handle_a678ba1e51e0663d58ffb83069d946f04}\index{csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}!ZapNAN@{ZapNAN}}
+\index{ZapNAN@{ZapNAN}!csmp::PropertyHandle$<$ dim $>$@{csmp::PropertyHandle$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{ZapNAN()}{ZapNAN()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_handle_a678ba1e51e0663d58ffb83069d946f04} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_property_handle}{csmp\+::\+Property\+Handle}}$<$ dim $>$\+::\+Zap\+NAN (\begin{DoxyParamCaption}\item[{double}]{with}{}\end{DoxyParamCaption})}
+
+Replaces each NAN (not a number) value of the physical variable which is associated with the \doxylink{classcsmp_1_1_property_handle}{Property\+Handle} with the supplied floating point argument.
+
+
+\begin{DoxyParams}{Parameters}
+{\em with} & The floating point number with which NAN values shall be replaced. \\
+\hline
+\end{DoxyParams}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=343pt]{classcsmp_1_1_property_handle_a678ba1e51e0663d58ffb83069d946f04_cgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/property\+\_\+manipulation/Property\+Handle.\+h\item 
+source/modules/property\+\_\+manipulation/Property\+Handle.\+cpp\end{DoxyCompactItemize}

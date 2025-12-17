@@ -1,0 +1,50 @@
+\doxysection{Model\+Time.\+h}
+\hypertarget{_model_time_8h_source}{}\label{_model_time_8h_source}\index{source/includes/model/ModelTime.h@{source/includes/model/ModelTime.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{MODELTIME\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{MODELTIME\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_generic_singleton_8h}{"{}GenericSingleton.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00009\ \textcolor{comment}{}}
+\DoxyCodeLine{00010\ \textcolor{comment}{\ @brief\ The\ only\ "{}global"{}\ variable\ in\ CSMP\ computations\ that\ is\ used\ to\ store\ simulated}}
+\DoxyCodeLine{00011\ \textcolor{comment}{\ (as\ opposed\ to\ computation)\ time\ so\ that\ it\ can\ be\ accessed\ across\ classes\ and\ processors.}}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ @author\ P.\ Lang}}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ @date\ Aug\ 2011}}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ To\ improve\ global\ status\ of\ the\ verbose\ variable.\ No\ explicit\ instantiation\ required\ any\ more.}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ Usage:}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ @code}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ \#include\ "{}ModelTime.h"{}}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ ...}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ bool\&\ model\_time(\ ModelTime::Instance().modelTime\ );}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ @endcode}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00027\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model_time}{ModelTime}}\ \ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_model_time}{GenericSingleton}}<\mbox{\hyperlink{classcsmp_1_1_model_time}{ModelTime}}>\{}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_generic_singleton}{GenericSingleton}}<\mbox{\hyperlink{classcsmp_1_1_model_time}{ModelTime}}>;}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00032\ \ \ \ \ \string~ModelTime();}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{double}\ modelTime;}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00038\ \ \ \ \ ModelTime()\ :\ modelTime(\ 0.\ )\ \{\}}
+\DoxyCodeLine{00039\ \ \};}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{//\ MODELTIME\_H}}
+
+\end{DoxyCode}

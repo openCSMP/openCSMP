@@ -1,0 +1,38 @@
+\doxysection{Pore\+Volume\+LHS.\+h}
+\hypertarget{_pore_volume_l_h_s_8h_source}{}\label{_pore_volume_l_h_s_8h_source}\index{source/includes/integration/finite\_volumes/generic\_transport\_scheme/PoreVolumeLHS.h@{source/includes/integration/finite\_volumes/generic\_transport\_scheme/PoreVolumeLHS.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_PORE\_VOLUME\_LHS\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_PORE\_VOLUME\_LHS\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_matrix_operator_8h}{"{}MatrixOperator.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00009\ \textcolor{comment}{\ \ \ \ The\ pore\ volume\ is\ accumulated\ into\ the\ diagonal\ of\ the\ sparse\ (solution)\ matrix}}
+\DoxyCodeLine{00010\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00011\ \textcolor{keyword}{template}\ <uint32\_t\ dim>}
+\DoxyCodeLine{00012\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_pore_volume_l_h_s}{PoreVolumeLHS}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_matrix_operator}{MatrixOperator}}<dim>\ \{}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00014\ \ \ \ \ \ \ PoreVolumeLHS(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{INDEX}}<SCALAR,SECTOR\_INTEGRATION\_POINT>\&\ spv\_key,}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{INDEX}}<SCALAR,NODE>\&\ fpv\_key\ );}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~PoreVolumeLHS()\ \{\}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ AccumulateFiniteVolume(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>\&\ nptr,\ SparseMatrix\&\ A\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ AccumulateStencil(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&\ eptr,\ SparseMatrix\&\ A\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00022\ \textcolor{comment}{//\ \ \ \ virtual\ void\ AccumulateStencil(\ const\ Face<dim>\&\ eptr,\ SparseMatrix\&\ A\ )\ const;}}
+\DoxyCodeLine{00023\ \textcolor{comment}{//\ \ \ \ virtual\ void\ AccumulateStencil(\ const\ InterFace<dim>\&\ eptr,\ SparseMatrix\&\ A\ )\ const;}}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{INDEX}}<SCALAR,SECTOR\_INTEGRATION\_POINT>\&\ spv\_key\_;}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{INDEX}}<SCALAR,NODE>\&\ fpv\_key\_;\ \textcolor{comment}{///<\ \ integrated\ pore\ volume\ of\ the\ entire\ finite\ volume}}
+\DoxyCodeLine{00028\ \};}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{//\ PORE\_VOLUME\_LHS\_H}}
+
+\end{DoxyCode}

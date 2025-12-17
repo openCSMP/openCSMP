@@ -1,0 +1,114 @@
+.TH "csmp::QuartzPrecipitation< dim >" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::QuartzPrecipitation< dim >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+Inherits \fBcsmp::Interrelation< dim >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBQuartzPrecipitation\fP (const \fBPropertyDatabase\fP< dim > &p, double time_increment)"
+.br
+.ti -1c
+.RI "void \fBCalculate\fP ()"
+.br
+.ti -1c
+.RI "void \fBSetTimeIncrement\fP (double time_increment)"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::Interrelation< dim >\fP
+.in +1c
+.ti -1c
+.RI "\fBInterrelation\fP (const \fBPropertyDatabase\fP< dim > &p)"
+.br
+.ti -1c
+.RI "void \fBName\fP (const char *s)"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBApplicationLevel\fP () const"
+.br
+.ti -1c
+.RI "void \fBApply\fP (\fBModel\fP< dim > &)"
+.br
+.ti -1c
+.RI "template<template< uint32_t > class CELL> void \fBApply\fP (\fBModelSubDomain\fP< dim, CELL > &)"
+.br
+.RI "a simplex is any geometrical association of points "
+.ti -1c
+.RI "bool \fBResultWithinRange\fP ()"
+.br
+.ti -1c
+.RI "std::map< std::string, \fBOperand\fP< dim > >::const_iterator \fBOperandsBegin\fP () const"
+.br
+.ti -1c
+.RI "std::map< std::string, \fBOperand\fP< dim > >::const_iterator \fBOperandsEnd\fP () const"
+.br
+.ti -1c
+.RI "std::map< std::string, \fBOperand\fP< dim > >::iterator \fBResult\fP ()"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Member Functions inherited from \fBcsmp::Interrelation< dim >\fP
+.in +1c
+.ti -1c
+.RI "\fBOperand\fP< dim > & \fBGlobalProperty\fP (const char *var)"
+.br
+.ti -1c
+.RI "void \fBResultProperty\fP (const char *var)"
+.br
+.ti -1c
+.RI "void \fBOutputCondition\fP (\fBOperand\fP< dim > &var, \fBVARIABLE_FLAG\fP output)"
+.br
+.in -1c
+
+Protected Attributes inherited from \fBcsmp::Interrelation< dim >\fP
+.in +1c
+.ti -1c
+.RI "const \fBPropertyDatabase\fP< dim > & \fBp_ref\fP"
+.br
+.ti -1c
+.RI "std::string \fBname_\fP"
+.br
+.ti -1c
+.RI "std::string \fBresult_property_\fP"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBapplication_level_\fP"
+.br
+.ti -1c
+.RI "std::map< std::string, \fBOperand\fP< dim > > \fBoperand_list_\fP"
+.br
+.ti -1c
+.RI "std::map< std::string, \fBOperand\fP< dim > >::iterator \fBresult_\fP"
+.br
+.in -1c
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim> void \fBcsmp::QuartzPrecipitation\fP< dim >::Calculate ()\fR [virtual]\fP"
+Calculating how much quartz gets precipitated
+
+.PP
+.IP "1." 4
+calculate quartz solubility at the nodes (done in \fBQuartzSolubility\&.h\fP)
+.IP "2." 4
+get vector properties flux and solubility gradient in the element
+.IP "3." 4
+project solubility gradient on fluid flux
+.IP "4." 4
+compute product of mass flux, projected solubility gradient, and time\&. This product gives the amount of quartz that is dissolved or precipitated 
+.PP
+
+.PP
+Reimplemented from \fBcsmp::Interrelation< dim >\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

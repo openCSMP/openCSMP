@@ -1,0 +1,736 @@
+.TH "csmp::SAMG_Settings" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::SAMG_Settings
+.SH SYNOPSIS
+.br
+.PP
+.PP
+Inherits \fBcsmp::SolverSettings\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBSAMG_Settings\fP ()"
+.br
+.ti -1c
+.RI "int32_t \fBGet_matrix\fP () const"
+.br
+.ti -1c
+.RI "int32_t \fBGet_ifirst\fP () const"
+.br
+.ti -1c
+.RI "double \fBGet_eps\fP () const"
+.br
+.ti -1c
+.RI "double \fBGet_rel_eps\fP () const"
+.br
+.ti -1c
+.RI "int32_t \fBGet_nsolve\fP () const"
+.br
+.ti -1c
+.RI "int32_t \fBGet_ncyc\fP () const"
+.br
+.ti -1c
+.RI "int32_t \fBGet_iswit\fP () const"
+.br
+.ti -1c
+.RI "int32_t \fBGet_iswtch\fP () const"
+.br
+.ti -1c
+.RI "double \fBGet_chktol\fP () const"
+.br
+.ti -1c
+.RI "int32_t \fBGet_idump\fP () const"
+.br
+.ti -1c
+.RI "int32_t \fBGet_idmp\fP () const"
+.br
+.ti -1c
+.RI "int32_t \fBGet_iout\fP () const"
+.br
+.ti -1c
+.RI "double \fBGet_a_cmplx\fP () const"
+.br
+.ti -1c
+.RI "double \fBGet_g_cmplx\fP () const"
+.br
+.ti -1c
+.RI "double \fBGet_p_cmplx\fP () const"
+.br
+.ti -1c
+.RI "double \fBGet_w_avrge\fP () const"
+.br
+.ti -1c
+.RI "int32_t \fBGet_ncg\fP () const"
+.br
+.ti -1c
+.RI "int32_t \fBGet_ncyc_done\fP () const"
+.br
+.ti -1c
+.RI "int32_t \fBGet_ncyc_best\fP () const"
+.br
+.ti -1c
+.RI "int32_t \fBGet_levelx\fP () const"
+.br
+.ti -1c
+.RI "int32_t \fBGet_ioform\fP () const"
+.br
+.ti -1c
+.RI "int32_t \fBGet_ioform_length\fP () const"
+.br
+.ti -1c
+.RI "int32_t \fBGet_iter_pre\fP () const"
+.br
+.ti -1c
+.RI "int * \fBGet_filnam_dump\fP ()"
+.br
+.ti -1c
+.RI "int32_t \fBGet_filnam_dump_length\fP () const"
+.br
+.ti -1c
+.RI "bool \fBExplicitSecondary\fP () const"
+.br
+.ti -1c
+.RI "bool \fBUsePointBasedApproach\fP () const"
+.br
+.ti -1c
+.RI "int32_t \fBGetSolverInstance\fP () const"
+.br
+.ti -1c
+.RI "int32_t \fBGet_mode_mess\fP () const"
+.br
+.ti -1c
+.RI "int32_t \fBGet_nxtyp\fP () const"
+.br
+.ti -1c
+.RI "int32_t \fBGet_nrd\fP () const"
+.br
+.ti -1c
+.RI "int32_t \fBGet_nru\fP () const"
+.br
+.ti -1c
+.RI "void \fBSet_isym\fP (int32_t isym)"
+.br
+.ti -1c
+.RI "void \fBSet_irow\fP (int32_t irow)"
+.br
+.ti -1c
+.RI "void \fBSet_itypu\fP (int32_t itypu)"
+.br
+.ti -1c
+.RI "void \fBSet_eps\fP (double eps)"
+.br
+.ti -1c
+.RI "void \fBSet_rel_eps\fP (double rel_eps)"
+.br
+.ti -1c
+.RI "void \fBSet_napproach\fP (int32_t napproach)"
+.br
+.ti -1c
+.RI "void \fBSet_nxtyp\fP (int32_t nxtyp)"
+.br
+.ti -1c
+.RI "void \fBSet_nrd\fP (int32_t nrd)"
+.br
+.ti -1c
+.RI "void \fBSet_nru\fP (int32_t nrd)"
+.br
+.ti -1c
+.RI "void \fBSet_internal\fP (int32_t internal)"
+.br
+.ti -1c
+.RI "void \fBSet_nprim\fP (int32_t nprim)"
+.br
+.ti -1c
+.RI "void \fBSet_npr_is_dummy\fP (int32_t npr_is_dummy)"
+.br
+.ti -1c
+.RI "void \fBSet_nint_weights\fP (int32_t nint_weights)"
+.br
+.ti -1c
+.RI "void \fBSet_nint_pat\fP (int32_t nint_pat)"
+.br
+.ti -1c
+.RI "void \fBSet_igam\fP (int32_t igam)"
+.br
+.ti -1c
+.RI "void \fBSet_ncgrad\fP (int32_t ncgrad)"
+.br
+.ti -1c
+.RI "void \fBSet_nkdim\fP (int32_t nkdim)"
+.br
+.ti -1c
+.RI "void \fBSet_ncycle\fP (int32_t ncycle)"
+.br
+.ti -1c
+.RI "void \fBSet_ncyc_done\fP (int32_t ncyc_done)"
+.br
+.ti -1c
+.RI "void \fBSet_ncyc_best\fP (int32_t ncyc_best)"
+.br
+.ti -1c
+.RI "void \fBSet_iswit\fP (int32_t iswit)"
+.br
+.ti -1c
+.RI "void \fBSet_iextent\fP (int32_t iextent)"
+.br
+.ti -1c
+.RI "void \fBSet_ndefault\fP (int32_t ndefault)"
+.br
+.ti -1c
+.RI "void \fBSet_norm_typ\fP (int32_t norm_typ)"
+.br
+.ti -1c
+.RI "void \fBSet_ioscratch\fP (int32_t ioscratch)"
+.br
+.ti -1c
+.RI "void \fBSet_chktol\fP (double chktol)"
+.br
+.ti -1c
+.RI "void \fBSet_idmp\fP (int32_t idmp)"
+.br
+.ti -1c
+.RI "void \fBSet_igdp\fP (int32_t igdp)"
+.br
+.ti -1c
+.RI "void \fBSet_iadp\fP (int32_t iadp)"
+.br
+.ti -1c
+.RI "void \fBSet_iwdp\fP (int32_t iwdp)"
+.br
+.ti -1c
+.RI "void \fBSet_iout1\fP (int32_t iout1)"
+.br
+.ti -1c
+.RI "void \fBSet_iout2\fP (int32_t iout2)"
+.br
+.ti -1c
+.RI "void \fBSet_a_cmplx\fP (double a_cmplx)"
+.br
+.ti -1c
+.RI "void \fBSet_g_cmplx\fP (double g_cmplx)"
+.br
+.ti -1c
+.RI "void \fBSet_p_cmplx\fP (double p_cmplx)"
+.br
+.ti -1c
+.RI "void \fBSet_w_avrge\fP (double w_avrge)"
+.br
+.ti -1c
+.RI "void \fBSet_ncgtyp\fP (int32_t ncgtyp)"
+.br
+.ti -1c
+.RI "void \fBSet_nred\fP (int32_t nred)"
+.br
+.ti -1c
+.RI "void \fBSet_nredlev\fP (int32_t nredlev)"
+.br
+.ti -1c
+.RI "void \fBSet_nxf_clean\fP (int32_t nxf_clean)"
+.br
+.ti -1c
+.RI "void \fBSet_neg_diag\fP (int neg_diag)"
+.br
+.ti -1c
+.RI "void \fBSet_npcol\fP (int32_t npcol)"
+.br
+.ti -1c
+.RI "void \fBSet_levelx\fP (int32_t levelx)"
+.br
+.ti -1c
+.RI "void \fBSet_ioform\fP (std::string ioform)"
+.br
+.ti -1c
+.RI "void \fBSet_filnam_dump\fP (const std::string &filnam_dump)"
+.br
+.ti -1c
+.RI "void \fBSet_iter_pre\fP (int32_t iter_pre)"
+.br
+.ti -1c
+.RI "void \fBSet_mode_mess\fP (int32_t)"
+.br
+.ti -1c
+.RI "void \fBSetNegative_nsolve\fP (bool negative_nsolve)"
+.br
+.ti -1c
+.RI "void \fBSetNegative_ncyc\fP (bool negative_ncyc)"
+.br
+.ti -1c
+.RI "void \fBSetNegative_idump\fP (bool negative_idump)"
+.br
+.ti -1c
+.RI "void \fBSetNegative_iout\fP (bool negative_iout)"
+.br
+.ti -1c
+.RI "void \fBExplicitSecondary\fP (bool explicit_secondary)"
+.br
+.RI "if this is not set 'true' all attempts to set secondary parameters will fail (default=false) "
+.ti -1c
+.RI "void \fBSetSolverInstance\fP (int32_t instance)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.PP
+\fBAuthor\fP
+.RS 4
+S\&.K\&. Matthaei 
+
+.PP
+S\&. Geiger 
+
+.PP
+G\&. Roberts 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2001
+.RE
+.PP
+.SH "Motivation"
+.PP
+Factoring out SAMG tuning parameter in a separate class so that they can be changed indepently of the solver object\&.
+.SH "Design Intent"
+.PP
+\fBSAMG_Settings\fP objects store SAMG tuning parameter\&. These tuning parameter are divided into switches and their subswitches\&.
+
+.PP
+Each switch can be accessed by its respective Get-method and its subswitches can be set using the respective Set-methods\&.
+
+.PP
+Every Set-method checks if the input data conforms to the restrictions imposed by the SAMG solver\&. If the input value is invald, a domain_error exception is thrown\&.
+
+.PP
+\fBWarning\fP
+.RS 4
+Only the rules for the subswitch itself are checked! Interdependencies between subswitches are NOT checked! The user is responsible to guarantee that all subswitches together form a meaniful parametrization for the SAMG solver\&. 
+.RE
+.PP
+
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "csmp::SAMG_Settings::SAMG_Settings ()"
+Default constructor\&. The standard settings are according to the SAMG user manual for version 21b1, if available\&. These standard settings apply well to scalar problems\&. 
+.SH "Member Function Documentation"
+.PP 
+.SS "bool csmp::SAMG_Settings::ExplicitSecondary () const"
+Query to determine whether user defined ncg values should be used\&. This function is called in the \fBSAMG_Solver\fP\&. 
+.SS "double csmp::SAMG_Settings::Get_a_cmplx () const"
+Returns value of a_cmplx switch 
+.SS "double csmp::SAMG_Settings::Get_chktol () const"
+Returns value of chktol switch
+
+.PP
+Involved subswitches: chktol 
+.SS "double csmp::SAMG_Settings::Get_eps () const"
+Returns value of eps switch
+
+.PP
+Involved subswitches: eps 
+.SS "int * csmp::SAMG_Settings::Get_filnam_dump ()"
+Returns value of optional filnam_dump switch 
+.SS "int32_t csmp::SAMG_Settings::Get_filnam_dump_length () const"
+Returns value of filnam_dump ASCII character length 
+.SS "double csmp::SAMG_Settings::Get_g_cmplx () const"
+Returns value of g_cmplx switch 
+.SS "int32_t csmp::SAMG_Settings::Get_idump () const"
+Returns value of idump switch
+
+.PP
+Involved subswitches: idmp, igdp, iadp, iwdp
+
+.PP
+For negative values of idump, call SetNegative_idump( true ) first 
+.SS "int32_t csmp::SAMG_Settings::Get_ifirst () const"
+Returns value of ifirst switch
+
+.PP
+Involved subswitches: itypu
+
+.PP
+If ifirst == 1, (end residual) <= eps, if ifirst == 0, (end residual) / (start residual) <= eps
+
+.PP
+rel_eps can be accessed with the function Get_rel_eps 
+.SS "int32_t csmp::SAMG_Settings::Get_ioform () const"
+Returns value of optional ioform switch 
+.SS "int32_t csmp::SAMG_Settings::Get_ioform_length () const"
+Returns value of ioform ASCII character length 
+.SS "int32_t csmp::SAMG_Settings::Get_iout () const"
+Returns value of iout switch
+
+.PP
+Involved subswitches: iout1, iout2
+
+.PP
+For negative values of iout, call SetNegative_iout( true ) first 
+.SS "int32_t csmp::SAMG_Settings::Get_iswit () const"
+Returns value of iswit
+
+.PP
+Involved subswitches: iswit, iextent, ndefault, norm_typ, ioscratch 
+.SS "int32_t csmp::SAMG_Settings::Get_iswtch () const"
+Returns value of iswtch switch
+
+.PP
+Involved subswitches: iswit, iextent, ndefault, norm_typ, ioscratch 
+.SS "int32_t csmp::SAMG_Settings::Get_iter_pre () const"
+Gets iter_pre which allows using SAMG as pre-conditioner for Bi-CGStab 
+.SS "int32_t csmp::SAMG_Settings::Get_levelx () const"
+Returns value of optional levelx switch 
+.SS "int32_t csmp::SAMG_Settings::Get_matrix () const"
+Returns value of matrix switch\&.
+
+.PP
+Involved subswitches: isym, irow 
+.SS "int32_t csmp::SAMG_Settings::Get_mode_mess () const"
+Query to determine which SAMG multiple instance is used\&. The returned number indicates the SAMG library instance used\&. 
+.SS "int32_t csmp::SAMG_Settings::Get_ncg () const"
+Returns value of optional ncg switch
+
+.PP
+Involved subswitches: ncgtyp, nred, nredlev, nxf_clean, npcol
+
+.PP
+Whether the optional switch should be set can be determined with the function \fBExplicitSecondary()\fP\&. \fBSAMG_Solver\fP uses this method to decide whether to stick to the defaults or to use the settings stored in the \fBSAMG_Settings\fP object\&. A modification of a subswitch of ncg triggers the use of the ncg switch automatically\&. 
+.SS "int32_t csmp::SAMG_Settings::Get_ncyc () const"
+Returns value of ncyc switch
+
+.PP
+Involved subswitches: igam, ncgrad, nkdim, ncycle
+
+.PP
+For negative values of ncyc, call SetNegative_ncyc( true ) first 
+.SS "int32_t csmp::SAMG_Settings::Get_ncyc_best () const"
+Query to determine the minimum number of iteration cycles performed\&. 
+.SS "int32_t csmp::SAMG_Settings::Get_ncyc_done () const"
+Query to determine how many iteration cycles have been performed\&. 
+.SS "int32_t csmp::SAMG_Settings::Get_nsolve () const"
+Returns value of nsolve switch
+
+.PP
+Involved subswitches: napproach, nxtyp, internal, nprim, npr_is_dummy, nint_weights, nint_pat
+
+.PP
+For negative values of nsolve, call SetNegative_nsolve(true) first 
+.SS "double csmp::SAMG_Settings::Get_p_cmplx () const"
+Returns value of p_cmplx switch 
+.SS "double csmp::SAMG_Settings::Get_rel_eps () const"
+Returns value of eps switch in the case of an explicit first guess vector (itypu == 0)\&.
+
+.PP
+Involved subswitches: eps 
+.SS "double csmp::SAMG_Settings::Get_w_avrge () const"
+Returns value of w_avrge switch 
+.SS "int32_t csmp::SAMG_Settings::GetSolverInstance () const"
+Query to determine which SAMG multiple instance is used\&. The returned number indicates the SAMG library instance used\&. 
+.SS "void csmp::SAMG_Settings::Set_a_cmplx (double a_cmplx)"
+Subswitch of a_cmplx\&.
+.SH "Input Arguments"
+.PP
+a_cmplx - Should be an upper limit for the operator complexity which is defined as the ratio between the total number of matrix entries (summed over all AMG levels) and the number of entries in the given matrix (= nna)\&. Depending on the problem and the strategy chosen, this may be a value as low as 1\&.2, but it may also be as high as 4\&.0, say\&. Typical values are 1\&.5-3\&.0\&. 
+.SS "void csmp::SAMG_Settings::Set_chktol (double chktol)"
+Checking of input matrix
+.SH "Input Arguments"
+.PP
+Used to control the amount of checking of the input matrix\&.
+
+.PP
+<0\&.0d0 No checking\&. This is the standard for production runs\&. =0\&.0d0 Standard checking for logical correctness\&. >0\&.0d0 Enhanced checking\&. The concrete value of chktol serves as a tolerance\&. Standard value: 1\&.0d-7\&. 
+.SS "void csmp::SAMG_Settings::Set_eps (double eps)"
+Stopping criterion\&.
+.SH "Input Arguments"
+.PP
+= 0\&.0 Stopping criteria based in eps is deactivated (only round-off error) 
+.PP
+.RS 4
+0\&.0 Iteration stops if res <= eps\&.res0 (res0 = starting residual) < 0\&.0 Iteration stops if res <= |eps| 
+.RE
+.PP
+
+.SS "void csmp::SAMG_Settings::Set_filnam_dump (const std::string & filnam_dump)"
+Switch filnam_dump
+.SH "Input Arguments"
+.PP
+Character\&. File root name which SAMG tries to find for reading\&. If idmp>1, the matrices as described above are dumped to files using the root name filnam_dump, the default name being ‘level’\&. 
+.SS "void csmp::SAMG_Settings::Set_g_cmplx (double g_cmplx)"
+Subswitch of g_cmplx\&.
+.SH "Input Arguments"
+.PP
+g_cmplx - Should be an upper limit for the grid complexity which is defined as the ratio between the total number of variables (summed over all AMG levels) and the number of variables in the given problem (= nnu)\&. Depending on the problem and the strategy chosen, this may be a value as low as 1\&.2\&. Usually, an upper limit is 2\&.0\&. 
+.SS "void csmp::SAMG_Settings::Set_iadp (int32_t iadp)"
+Subswitch of idump\&.
+.SH "Input Arguments"
+.PP
+Selects print output regarding the coarse-level matrices\&.
+
+.PP
+[3:3], iadp >1 is only relevant for coupled systems\&. 0 No particular output\&. 1 Display table on coarse-level matrices (full problem)\&. 2 In addition: same info for all submatrices\&. 3 In addition: connectivity info between unknowns\&. 
+.SS "void csmp::SAMG_Settings::Set_idmp (int32_t idmp)"
+Subswitch of idump\&.
+.SH "Input Arguments"
+.PP
+[1:1], idmp 0 Coarsening history 1 Standard print output (coarsening history)\&. 
+.SS "void csmp::SAMG_Settings::Set_iextent (int32_t iextent)"
+Subswitch of iswitch\&.
+.SH "Input Arguments"
+.PP
+[2:2],iextent Memory extension switch\&. Selects beahaviour when limits of initial dimensioning have been reached
+
+.PP
+0 SAMG returns with error code 1 SAMG allocates extra memory and continues (if no core space, writes prev\&. allocated data to disk 2 SAMG allocates ext\&. memory and continues (if no core space, SAMG terminates) 3 SAMG allocates ext\&. memory and continues (prev\&. allocated data is written to disk) 
+.SS "void csmp::SAMG_Settings::Set_igam (int32_t igam)"
+Subswitch of ncyc\&.
+.SH "Input Arguments"
+.PP
+[1:1],igam 1 V-cycle (standard) 2 F-cycle 3 W-cycle 4 WW-cycle (very expensive) 
+.SS "void csmp::SAMG_Settings::Set_igdp (int32_t igdp)"
+Subswitch of idump\&.
+.SH "Input Arguments"
+.PP
+Selects print output regarding the coarse levels\&.
+
+.PP
+[2:2], igdp >1 is only relevant for coupled systems\&. Otherwise: ignored\&. 0 No particular output\&. 1 Display table on grids (full problem)\&. 2 Same for all submatrices (only if nsys>1)\&. 
+.SS "void csmp::SAMG_Settings::Set_internal (int32_t internal)"
+Subswitch of nsolve\&.
+.SH "Input Arguments"
+.PP
+[3:3],internal = 0 primary matrix P is user-defined (nprim has to be !0) > 0 P is defined internally 
+.SS "void csmp::SAMG_Settings::Set_ioform (std::string ioform)"
+Switch ioform
+.SH "Input Arguments"
+.PP
+Reading or writing can be formatted, unformatted or binary\&. In case of reading, SAMG knows the format by looking into a special “format” file (suffix “\&.frm”, → Section 7\&.8\&.2)\&. In case of writing (→Sections 7\&.8\&.3‐7\&.8\&.5), the hidden char*1 variable ioform defines the format SAMG is supposed to use\&. That is, with the char*1 variable ch being ‘f’, ‘u’, or ‘b’, issue "call samg_set_ioform(ch,1)" to specify the requested format, the default being formatted\&. 
+.SS "void csmp::SAMG_Settings::Set_ioscratch (int32_t ioscratch)"
+Subswitch of iswitch\&.
+.SH "Input Arguments"
+.PP
+[6:7],ioscratch Unit number for scratch files used by SAMG for memory management 
+.SS "void csmp::SAMG_Settings::Set_iout1 (int32_t iout1)"
+Subswitch of iout\&.
+.SH "Input Arguments"
+.PP
+[1:1], iout1, 1 Table of input data and work statistics\&. 2 Standard history of cycling process\&. 3 Extended history: including all levels, full smoothing steps\&. 4 Extended history: including all levels and even partial smoothing steps\&. 
+.SS "void csmp::SAMG_Settings::Set_iout2 (int32_t iout2)"
+Subswitch of iout\&.
+.SH "Input Arguments"
+.PP
+[2:2], iout2 0 No action\&. 1 Display most relevant SAMG hidden parameters\&. 2 Display all SAMG hidden parameters\&. 3 Display all SAMG hidden parameters in a single list\&. 
+.SS "void csmp::SAMG_Settings::Set_irow (int32_t irow)"
+Subswitch of matrix\&.
+.SH "Input Arguments"
+.PP
+[2:2], irow0 1 A is a zero rowsum matrix\&. (For such matrices, the solution will be normalized) 2 A is not a zero rowsum matrix 
+.SS "void csmp::SAMG_Settings::Set_iswit (int32_t iswit)"
+Subswitch of iswitch\&.
+.SH "Input Arguments"
+.PP
+[1:1], iswit Controls re-use of SAMG decompositions during repeated calls\&. 
+.PP
+.nf
+      5   Complete SAMG run\&. Upon return, memory is released
+      4   Same as 5 except memory not released
+      3   partial setup: Re-use coarser grids and interpolation but update
+          Galerkin operators\&. Memory not released
+      2   No setup: Re-use coarser grids, interp\&. and Galerkin from prev\&. run
+      1   Same as 2 except SAMG assumes matrix A to be the same as prev\&. run
+
+.fi
+.PP
+
+.PP
+With settings iswit(4 ,\&.\&.\&., 1), it is the user’s responsibility to employ some kind of “outer” convergence control\&. Such a control is done automatically if the primary solver control is activated\&. This is done by just using the settings iswit( 6,\&.\&.\&., 9) instead of iswit(4 ,\&.\&.\&., 1)\&. More precisely, in solving a series of linear systems, the primary control process starts automatically whenever some iswit(>5) is used, and it will terminate as soon as some iswit(≤ 5) is used\&. 
+.SS "void csmp::SAMG_Settings::Set_isym (int32_t isym)"
+Subswitch of matrix\&.
+.SH "Input Arguments"
+.PP
+[1:1], isym 1 A is symmetric 2 A is not symmetric 
+.SS "void csmp::SAMG_Settings::Set_iter_pre (int32_t iter_pre)"
+Subswich of ncg\&. Sets the hidden parameter iter_pre\&. If iter_pre > 0, SAMG will be used as a pre-conditioner for the BI-CGStab solution\&. A maximum of 2 SAMG pre- condition calls is possible, i\&.e\&. 0 <= iter_pre <= 2; 
+.SS "void csmp::SAMG_Settings::Set_itypu (int32_t itypu)"
+Subswitch of ifirst\&.
+.SH "Input Arguments"
+.PP
+[1:1], itypu 0 Actual content of u is chosen as first approximation 1 First approximation u==0 2 First approximation u==1 3 First approximation is a random function
+
+.PP
+If itypu == 0, a different convergence criterion should be set based on the norm of the right-hand side vector:
+
+.PP
+eps = ||b|| * rel_eps
+
+.PP
+rel_eps can be accessed with the function Get_rel_eps 
+.SS "void csmp::SAMG_Settings::Set_iwdp (int32_t iwdp)"
+Subswitch of idump\&.
+.SH "Input Arguments"
+.PP
+Selects print output regarding the interpolation matrices\&.
+
+.PP
+[4:4], iwdp >1 is only relevant for coupled systems\&. 0 No particular output\&. 1 Display table on interpolation matrices (full problem)\&. 2 In addition: same info for all submatrices\&. 3 In addition: connectivity info between unknowns\&. 
+.SS "void csmp::SAMG_Settings::Set_levelx (int32_t levelx)"
+Switch levelx
+.SH "Input Arguments"
+.PP
+SAMG Safety limit: maximim number of levels to be created\&. Special debug option: Giving levelx a negative sign causes SAMG to display its convergence history also on coarser levels\&. Default = 25 
+.SS "void csmp::SAMG_Settings::Set_napproach (int32_t napproach)"
+Subswitch of nsolve\&.
+.SH "Input Arguments"
+.PP
+[1:1],napproach 1 Scalar approach (regardless of nsys) 2 Unknown-based (if used in scalar system napproach will be reset to 1) 3-5 Point32_t based approaches - selects type of interpolation to use 3: interp\&. is separate for each unknown 4: interp\&. is same " " " 5: interp\&. is point- (block-) wise 
+.SS "void csmp::SAMG_Settings::Set_ncgrad (int32_t ncgrad)"
+Subswitch of ncyc\&.
+.SH "Input Arguments"
+.PP
+[2:2],ncgrad 0 default accelerator (accelerator) 1 Preconditioner for CG (standard) 2 Precon\&. for BI-CGSTAB 3 Precon\&. for GMRES 
+.SS "void csmp::SAMG_Settings::Set_ncgtyp (int32_t ncgtyp)"
+Subswitch of ncg\&.
+.SH "Input Arguments"
+.PP
+Selects the process of defining strong connectivity\&. Standard choices: ncgtyp=1 or ncgtyp=4\&.
+
+.PP
+[1:1], ncgtyp 1 Standard process\&. This is supposed to be used if A has mostly negative off-diagonals\&. Positive off-diagonal elements (if any) should be small\&. Variables with only positive couplings will become C-variables\&.
+
+.PP
+2 Standard process except that variables which have only positive couplings are treated by absolute value\&.
+
+.PP
+3 Standard process except that, for mixed-sign rows, all "large" positive entries (threshold parameter ewt2) are eliminated before a decision on strong connectivity is made\&. If, for some variable i, this does not lead to a clear decision, i will become a C-variable\&.
+
+.PP
+4 Same as 3 except that, if the elimination of positive couplings of variable i fails to give a clear picture, this option temporarily switches to the standard process 1\&.
+
+.PP
+5 Same as 4 except that variables which have only positive couplings are treated by absolute value\&. 
+.SS "void csmp::SAMG_Settings::Set_ncyc_best (int32_t ncyc_best)"
+Storage for best cycle iterations performed
+.SH "Input Arguments"
+.PP
+[4: ] Benchmark variable for best number of cycles performed 
+.SS "void csmp::SAMG_Settings::Set_ncyc_done (int32_t ncyc_done)"
+Storage for cycle iterations performed
+.SH "Input Arguments"
+.PP
+[4: ] Number of cycles performed 
+.SS "void csmp::SAMG_Settings::Set_ncycle (int32_t ncycle)"
+Subswitch of ncyc\&.
+.SH "Input Arguments"
+.PP
+[4: ] Max\&. number of cycles to be performed 
+.SS "void csmp::SAMG_Settings::Set_ndefault (int32_t ndefault)"
+Subswitch of iswitch\&.
+.SH "Input Arguments"
+.PP
+[3:4],n_default Selects default secondary parameters (if n_default = 0, no defaults are set and must be expicitly defined) 10-13 Used if no 'critical'positive off-diagonal entries 15-18 Same as prev but more effort in construction of interpolation 20-23 alternative to 10-13 for 'critical' positive off-diagonal entries 25-28 Same as prev with more effort in construction of interpolation
+
+.PP
+tested: 
+.SS "void csmp::SAMG_Settings::Set_neg_diag (int neg_diag)"
+Deals with the handling of negative values in the diagonal of the solution matrix (SAMG manual on Galerkin coarse-;eve; matrices\&.
+
+.PP
+Integer\&. Defines the maximum number of non‐positive diagonal entries allowed in computing the Galerkin operators before SAMG gives up its attempts to modify interpolation and continues without further checks\&. If neg_diag<0, checking of the diagonal is completely de‐activated\&. Warning: In the latter case you should know what you are doing! 
+.SS "void csmp::SAMG_Settings::Set_nint_pat (int32_t nint_pat)"
+Subswitch of nsolve\&.
+.SH "Input Arguments"
+.PP
+[8:8], nint_pat 
+.SS "void csmp::SAMG_Settings::Set_nint_weights (int32_t nint_weights)"
+Subswitch of nsolve\&.
+.SH "Input Arguments"
+.PP
+[7:7], nint_weights 
+.SS "void csmp::SAMG_Settings::Set_nkdim (int32_t nkdim)"
+Subswitch for ncyc\&.
+.SH "Input Arguments"
+.PP
+[3:3],nkdim 0 Select default dimension (Krylov space 1-8 Dimension = nkdim+1 dimension) 9 Dimension = 20 
+.SS "void csmp::SAMG_Settings::Set_norm_typ (int32_t norm_typ)"
+Subswitch of iswitch\&.
+.SH "Input Arguments"
+.PP
+[5:5],norm_typ Selects type of norm to be used in computing residuals 
+.PP
+.nf
+      0 L2-norm
+      1 L1-norm
+      2 Maximum norm
+
+.fi
+.PP
+ 
+.SS "void csmp::SAMG_Settings::Set_npcol (int32_t npcol)"
+Subswitch of ncg\&.
+.SH "Input Arguments"
+.PP
+Enforce particular conditions\&. This is done a posteriori by adding extra C-variables\&. Thus, npcol>0 should not be used in combination with aggressive or cluster coarsening\&. Standard choice: npcol=0\&.
+
+.PP
+[5:5], npcol 0 No action\&. 1 Enforce weak F-to-F diagonal dominance (1\&.0)\&. 2 Enforce strong F-to-F diagonal dominance (0\&.75)\&. 
+.SS "void csmp::SAMG_Settings::Set_npr_is_dummy (int32_t npr_is_dummy)"
+Subswitch of nsolve\&.
+.SH "Input Arguments"
+.PP
+[6:6],npr_is_dummy 0 Primary unknown is a physical unknown 1 Primary unknown is a dummy 
+.SS "void csmp::SAMG_Settings::Set_nprim (int32_t nprim)"
+Subswitch of nsolve\&.
+.SH "Input Arguments"
+.PP
+[4:5],nprim 
+.SS "void csmp::SAMG_Settings::Set_nred (int32_t nred)"
+Subswitch of ncg\&.
+.SH "Input Arguments"
+.PP
+Specifies speed of coarsening, ie, how fast the number of variables is reduced from one level to the next\&. Standard choice: nred=0\&.
+
+.PP
+[2:2], nred 0 Standard coarsening\&. 1-4 Aggressive coarsening\&. 1 is most, 4 is least aggressive; 2-3 are in between\&. Recommendation: use 1 for anisotropic and 2 for isotropic problems\&. 5 Cluster coarsening & piecewise constant interpolation\&. 6 Cluster coarsening & multi-pass interpolation\&. 
+.SS "void csmp::SAMG_Settings::Set_nredlev (int32_t nredlev)"
+Subswitch of ncg\&.
+.SH "Input Arguments"
+.PP
+Specifies the levels where aggressive or cluster coarsening is to be used\&. On the remaining levels, standard coarsening will be applied\&. Only relevant if nred>0\&. Standard choice: nredlev=0\&.
+
+.PP
+[3:3], nredlev 0-8 From level 1 up to level nredlev+1\&. 9 On all levels (not recommended)\&. 
+.SS "void csmp::SAMG_Settings::Set_nxf_clean (int32_t nxf_clean)"
+Subswitch of ncg\&.
+.SH "Input Arguments"
+.PP
+Defines how to treat exceptional F-variables (XF) left over at the end of standard or cluster coarsening\&. Standard choice: nxf_clean=0\&.
+
+.PP
+[4:4], nxf_clean 0 Standard procedure (currently equivalent to 1)\&. 1 Ensure that all XF-variables have a strong coupling to (at least) one regular F-variable\&. 2 Re-set all XF-variables to C-variables\&. 
+.SS "void csmp::SAMG_Settings::Set_nxtyp (int32_t nxtyp)"
+Subswitch of nsolve\&.
+.SH "Input Arguments"
+.PP
+[2:2],nxtyp 0 Gauss-Seidel relaxation 1 ILU(0) (substantial increase in required memory) 2 ILUT 3 Special box relaxation 5 Gauss-Seidel blockwise 
+.SS "void csmp::SAMG_Settings::Set_p_cmplx (double p_cmplx)"
+Subswitch of p_cmplx\&.
+.SH "Input Arguments"
+.PP
+p_cmplx - This parameter is relevant only if any of the point-based approaches is selected\&. p_cmplx should then be an upper limit for the point complexity which is defined as the ratio between the total number of points (summed over all AMG levels) and the number of points in the given problem\&. Depending on the problem and the strategy chosen, this may be a value as low as 1\&.2\&. Usually, an upper limit is 2\&.0\&. 
+.SS "void csmp::SAMG_Settings::Set_rel_eps (double rel_eps)"
+Stopping criterion when first guess is set ( itypu == 0 )\&.
+.SH "Input Arguments"
+.PP
+Relative convergence is used as stopping criterion "res <= eps\&.res0" (res0 = starting residual)\&. 
+.SS "void csmp::SAMG_Settings::Set_w_avrge (double w_avrge)"
+Subswitch of w_avrge\&.
+.SH "Input Arguments"
+.PP
+w_avrge - Should be an upper limit for the average row length of interpolation, that is, the total number of interpolation weights used by SAMG, summed over all levels, divided by the total number of variables (summed over all levels)\&. Depending on the problem and the strategy chosen, this may be a value as low as 1\&.5, but it may also be as high as 6\&.0, say\&. A typical average value is 3\&.0\&. 
+.SS "bool csmp::SAMG_Settings::UsePointBasedApproach () const"
+Query to determine if point-based approach is used\&. When the function returns false, an unknown-based approach is selected by the \fBSAMG_Settings\fP object\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

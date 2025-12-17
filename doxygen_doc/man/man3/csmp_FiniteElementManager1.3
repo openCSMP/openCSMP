@@ -1,0 +1,121 @@
+.TH "csmp::FiniteElementManager1< dim, INTPOL_ORDER, USING_LOCAL_COORDS >" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::FiniteElementManager1< dim, INTPOL_ORDER, USING_LOCAL_COORDS > \- Alternative version of \fBFiniteElementManager\fP where all elements are stored on the stack (initialised at compile time in the body of the class)  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <FiniteElementManager_stack_version\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBInitializeElements\fP (uint32_t, uint32_t, bool)"
+.br
+.ti -1c
+.RI "bool \fBContainsElementType\fP (\fBCSMP_FEM_TYPE\fP etype) const"
+.br
+.ti -1c
+.RI "void \fBCurrentElementTypes\fP (std::list< \fBCSMP_FEM_TYPE\fP > &etypes) const"
+.br
+.ti -1c
+.RI "int \fBInterpolationOrder\fP () const"
+.br
+.ti -1c
+.RI "bool \fBUsesElementsWithLocalCoordinateSystem\fP () const"
+.br
+.ti -1c
+.RI "\fBFiniteElement\fP *const \fBE\fP (int8_t csmp_etype)"
+.br
+.RI "get finite element pointer from enumeration type (TODO: maybe a reference should be returned here?) "
+.ti -1c
+.RI "\fBFiniteElement\fP *const \fBE\fP (\fBCSMP_FEM_TYPE\fP csmp_etype)"
+.br
+.ti -1c
+.RI "const \fBFiniteElement\fP *const \fBE\fP (\fBCSMP_FEM_TYPE\fP csmp_etype) const"
+.br
+.RI "const version needed "
+.ti -1c
+.RI "uint32_t \fBNodesOfElementType\fP (\fBCSMP_FEM_TYPE\fP etype)"
+.br
+.ti -1c
+.RI "\fBFiniteElement\fP *const \fBLinearBarElement\fP ()"
+.br
+.ti -1c
+.RI "\fBFiniteElement\fP *const \fBLinearTriangleElement\fP ()"
+.br
+.ti -1c
+.RI "\fBFiniteElement\fP *const \fBLinearTetrahedronElement\fP ()"
+.br
+.ti -1c
+.RI "void \fBOut\fP () const"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim, int INTPOL_ORDER, bool USING_LOCAL_COORDS>
+.br
+class csmp::FiniteElementManager1< dim, INTPOL_ORDER, USING_LOCAL_COORDS >"Alternative version of \fBFiniteElementManager\fP where all elements are stored on the stack (initialised at compile time in the body of the class) 
+
+
+.PP
+\fBAttention\fP
+.RS 4
+IS SLOWER THAN MANAGER WHERE ELEMENTS ARE CREATED ON THE HEAP!!!! - and less flexible! (SKM30/6/2024)
+.RE
+.PP
+@atttention needs specialisations for
+.IP "\(bu" 2
+1, 2, and 3D
+.IP "\(bu" 2
+with and without local coordinate system
+.IP "\(bu" 2
+with linear and with quadratic interpolation function
+.PP
+
+.PP
+\fBNote\fP
+.RS 4
+USING_LOCAL_COORDS refers to whether the element is defined in parametric space coordinates (r,s,t) like all the isoparametric elements in CSMP
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+S\&.K\&. Matthai 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2024 
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim, int INTPOL_ORDER, bool USING_LOCAL_COORDS> \fBFiniteElement\fP *const \fBcsmp::FiniteElementManager1\fP< dim, INTPOL_ORDER, USING_LOCAL_COORDS >::E (int8_t etype)"
+
+.PP
+get finite element pointer from enumeration type (TODO: maybe a reference should be returned here?) supported types
+
+.PP
+linear isoparametric elements ISOPARAMETRIC_LINEAR_TETRAHEDRON ISOPARAMETRIC_LINEAR_HEXAHEDRON ISOPARAMETRIC_LINEAR_PRISM ISOPARAMETRIC_LINEAR_PYRAMID ISOPARAMETRIC_LINEAR_TRIANGLE ISOPARAMETRIC_LINEAR_QUADRILATERAL ISOPARAMETRIC_LINEAR_BAR
+
+.PP
+quadratic isoparam elements ISOPARAMETRIC_QUADRATIC_TETRAHEDRON ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20 ISOPARAMETRIC_QUADRATIC_PYRAMID13 ISOPARAMETRIC_QUADRATIC_PRISM15 ISOPARAMETRIC_QUADRATIC_TRIANGLE ISOPARAMETRIC_QUADRATIC_QUADRILATERAL ISOPARAMETRIC_QUADRATIC_BAR
+
+.PP
+cubics (not implemented yet ISOPARAMETRIC_CUBIC_TETRAHEDRON ISOPARAMETRIC_CUBIC_HEXAHEDRON ISOPARAMETRIC_CUBIC_PRISM ISOPARAMETRIC_CUBIC_PYRAMID ISOPARAMETRIC_CUBIC_TRIANGLE ISOPARAMETRIC_CUBIC_QUADRILATERAL ISOPARAMETRIC_CUBIC_BAR
+
+.PP
+barycentric quadratic forms ISOPARAMETRIC_BARYCENTRIC_LINEAR_TRIANGLE ISOPARAMETRIC_BARYCENTRIC_LINEAR_QUADRILATERAL BARYCENTRIC_QUADRATIC_TETRAHEDRON BARYCENTRIC_QUADRATIC_TRIANGLE ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_QUADRILATERAL
+
+.PP
+linear analytically integrated elements LINEAR_TETRAHEDRON LINEAR_CUBOID LINEAR_TRIANGLE, LINEAR_TRIANGLE3D LINEAR_RECTANGLE LINEAR_BAR 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

@@ -89,9 +89,11 @@ bool binaryFileWrite( fstream& fp, const char* str )
 	// writing the size of the object
 	const size_t  characters = strlen(str);
 	fp.write( reinterpret_cast<const char*>(&characters), sizeof(size_t) );
+  
+  if ( characters > LONG_MAX ) throw out_of_range("binaryFileWrite( fstream&, const char* ): number of characters in string exceeds LONG_MAX");
 
 	// writing the character string
-	fp.write( reinterpret_cast<const char*>(str), characters );
+	fp.write( str, static_cast<long>(characters) );
 
 	return true;
 }
@@ -105,7 +107,7 @@ bool binaryFileRead( fstream& fp, char str[] )
 		return false;
 	}
 	// read size of the record and assert this 
-	size_t  characters(0);
+  size_t  characters{0u};
 	char    buf[INFO_STRING];
 
 	if ( !fp.read( reinterpret_cast<char*>(&characters), sizeof(size_t) ) )
@@ -118,8 +120,8 @@ bool binaryFileRead( fstream& fp, char str[] )
 		throw csmp::Exception( ERROR, "binaryFileRead", "too many characters in input string" );
 
 	// reading the character string
-	fp.read( reinterpret_cast<char*>(buf), characters );	
-	if (characters != fp.gcount())
+	fp.read( reinterpret_cast<char*>(buf), static_cast<long>(characters) );
+	if ( static_cast<long>(characters) != fp.gcount() )
     {
       cerr << "\nbinaryFileRead(char[]) ERROR: incorrect number of characters were read: ";
       cerr << "\nIndicated number: " << characters << ", actual number read: " << strlen(buf) << endl;
@@ -127,11 +129,9 @@ bool binaryFileRead( fstream& fp, char str[] )
     }
 	// null terminate string and copy to 'str' argument
 	buf[characters] = '\0';
-	strcpy(str, buf);
+  strcpy(str, buf);
 
-  if (!fp) {
-      throw std::runtime_error("binaryFileRead: Error occurred while reading from file");
-    }
+  if (!fp) throw std::runtime_error("binaryFileRead: Error occurred while reading from file");
 
 	return true;
 }
@@ -150,13 +150,13 @@ bool binaryFileWrite( fstream& fp, const std::string& str )
 	// writing the size of the object
 	const size_t  characters = str.size();
 	fp.write( reinterpret_cast<const char*>(&characters), sizeof(size_t) );
+  
+  if ( characters > LONG_MAX ) throw out_of_range("binaryFileWrite( fstream&, const std::string& ): number of characters in string exceeds LONG_MAX");
 
 	// writing the character string (since C++1.7 string is guaranteed to be contiguous in memory)
-	fp.write( str.data(), characters );
+	fp.write( str.data(), static_cast<long>(characters) );
 
-  if (!fp) {
-      throw std::runtime_error("binaryFileWrite: Error occurred while writing string to file");
-  }
+  if (!fp) throw std::runtime_error("binaryFileWrite: Error occurred while writing string to file");
 
 	return true;
 }
@@ -170,7 +170,7 @@ bool binaryFileRead( fstream& fp, string& str )
 		return false;
 	}
 	// read size of the string
-	size_t  characters = 0;
+  size_t  characters{0u};
 	if ( !fp.read( reinterpret_cast<char*>(&characters), sizeof(size_t) ) )
     {
       cerr << "\nbinaryFileRead(string): ERROR: could not read string length." << endl;
@@ -178,10 +178,12 @@ bool binaryFileRead( fstream& fp, string& str )
     }
   str.clear();
   str.resize( characters, '\0' );
+  
+  if ( characters > LONG_MAX ) throw out_of_range("binaryFileRead( fstream& fp, string& str ): string has more characters than LONG_MAX");
 
 	// reading the character string
-	fp.read( reinterpret_cast<char*>(str.data()), characters );
-	if (characters != fp.gcount())
+	fp.read( reinterpret_cast<char*>(str.data()), static_cast<long>(characters) );
+	if ( static_cast<long>(characters) != fp.gcount() )
     {
       cerr << "\nbinaryFileRead(string) ERROR: incorrect number of characters were read: ";
       cerr << "\nIndicated number: " << characters << ", actual number read: " << str.size() << endl;

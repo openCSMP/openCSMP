@@ -1,0 +1,5 @@
+<map id="csmp::Boundary::CreateFrom" name="csmp::Boundary::CreateFrom">
+<area shape="rect" id="Node000001" title="creating from supplied vector of faces" alt="" coords="5,13,199,38"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_boundary.html#ae15c93c5e4ce935f481648789afc23a1" title="assigns box boundary flags to nodes unless they do not have a NOT value" alt="" coords="247,5,419,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="199,23,231,23,231,28,199,28"/>
+</map>

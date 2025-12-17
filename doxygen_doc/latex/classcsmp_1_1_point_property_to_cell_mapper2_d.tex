@@ -1,0 +1,105 @@
+\doxysection{csmp\+::Point\+Property\+To\+Cell\+Mapper2D Class Reference}
+\hypertarget{classcsmp_1_1_point_property_to_cell_mapper2_d}{}\label{classcsmp_1_1_point_property_to_cell_mapper2_d}\index{csmp::PointPropertyToCellMapper2D@{csmp::PointPropertyToCellMapper2D}}
+
+
+{\ttfamily \#include $<$Point\+Property\+To\+Cell\+Mapper2\+D.\+h$>$}
+
+
+
+Collaboration diagram for csmp\+::Point\+Property\+To\+Cell\+Mapper2D\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=236pt]{classcsmp_1_1_point_property_to_cell_mapper2_d__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_point_property_to_cell_mapper2_d_a46ab7190aff48e42eb1344354b3bb137}\label{classcsmp_1_1_point_property_to_cell_mapper2_d_a46ab7190aff48e42eb1344354b3bb137} 
+{\bfseries Point\+Property\+To\+Cell\+Mapper2D} (std\+::string point\+\_\+property\+\_\+csv\+\_\+file)
+\begin{DoxyCompactList}\small\item\em reads property data from CSV text file \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_point_property_to_cell_mapper2_d_a4deac4c0e592b13f8c891ea7f21e5057}{Map\+Points\+To\+Cells}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ 2 $>$ \&, std\+::string target\+\_\+region, std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ 2 $>$ \texorpdfstring{$\ast$}{*} $>$ \&)
+\begin{DoxyCompactList}\small\item\em initialises vector determining point containment for cells of the target region; points not found become null cells; returns whether all region cells have points \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_point_property_to_cell_mapper2_d_a706985b94772b5ff8daaa7eca9037555}{Map\+Point\+Data\+To\+Elements}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ 2 $>$ \&, std\+::string target\+\_\+region, std\+::string target\+\_\+variable)
+\begin{DoxyCompactList}\small\item\em Assigns property data to the elements of the target region, and interpolates them across it if some points do not have corresponding cells. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_point_property_to_cell_mapper2_d_ad39c7acd25d93107ce284455082b837a}{Map\+Node\+To\+Point\+Data}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ 2 $>$ \&, std\+::string target\+\_\+variable)
+\begin{DoxyCompactList}\small\item\em Interpolates the values of the target variable, to the points stored in the \doxylink{classcsmp_1_1_data_table}{Data\+Table}, storing them in there provided that the target variable is defined in the table. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_point_property_to_cell_mapper2_d_a72628095511938f8f4c62db9ae0e50df}\label{classcsmp_1_1_point_property_to_cell_mapper2_d_a72628095511938f8f4c62db9ae0e50df} 
+void {\bfseries Output\+Point\+Data\+To\+CSV\+\_\+\+File} (std\+::string file\+\_\+name, std\+::string target\+\_\+variable) const
+\begin{DoxyCompactList}\small\item\em writes point dataset to a CSV file \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_point_property_to_cell_mapper2_d_ac2284e835f51c708c4558232804f19f9}\label{classcsmp_1_1_point_property_to_cell_mapper2_d_ac2284e835f51c708c4558232804f19f9} 
+size\+\_\+t {\bfseries Total\+Points} () const
+\begin{DoxyCompactList}\small\item\em all points stored in the Mapper irrespective of their association with regions \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_point_property_to_cell_mapper2_d_aa85edd984e39c22657843d306ceb093c}\label{classcsmp_1_1_point_property_to_cell_mapper2_d_aa85edd984e39c22657843d306ceb093c} 
+size\+\_\+t {\bfseries Cells\+With\+Points} () const
+\begin{DoxyCompactList}\small\item\em current count of cells which contain one or more of the points stored by the Mapper \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_point_property_to_cell_mapper2_d_a7f84951d5c1114806a911e9318f8122c}\label{classcsmp_1_1_point_property_to_cell_mapper2_d_a7f84951d5c1114806a911e9318f8122c} 
+void {\bfseries Out} () const
+\begin{DoxyCompactList}\small\item\em prints datatable indicating for which points mesh cells were identfied \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Using the point data in the supplied spreadsheet, \doxylink{classcsmp_1_1_point_property_to_cell_mapper2_d}{Point\+Property\+To\+Cell\+Mapper2D} creates a vector of cell pointers that are non-\/null if they contain points are are part of the target region. This set is then used for the mapping of values to the mesh or back to the point set.
+
+\begin{DoxyAuthor}{Author}
+SKM 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+5/1/2022 
+\end{DoxyDate}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_point_property_to_cell_mapper2_d_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_point_property_to_cell_mapper2_d_ad39c7acd25d93107ce284455082b837a}\index{csmp::PointPropertyToCellMapper2D@{csmp::PointPropertyToCellMapper2D}!MapNodeToPointData@{MapNodeToPointData}}
+\index{MapNodeToPointData@{MapNodeToPointData}!csmp::PointPropertyToCellMapper2D@{csmp::PointPropertyToCellMapper2D}}
+\doxysubsubsection{\texorpdfstring{MapNodeToPointData()}{MapNodeToPointData()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_point_property_to_cell_mapper2_d_ad39c7acd25d93107ce284455082b837a} 
+void csmp\+::\+Point\+Property\+To\+Cell\+Mapper2\+D\+::\+Map\+Node\+To\+Point\+Data (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ 2 $>$ \&}]{}{, }\item[{std\+::string}]{target\+\_\+variable}{}\end{DoxyParamCaption})}
+
+
+
+Interpolates the values of the target variable, to the points stored in the \doxylink{classcsmp_1_1_data_table}{Data\+Table}, storing them in there provided that the target variable is defined in the table. 
+
+Interpolates the values of the target node variable, to the points specified in the CSV file, writing another CSV file with these values \Hypertarget{classcsmp_1_1_point_property_to_cell_mapper2_d_a706985b94772b5ff8daaa7eca9037555}\index{csmp::PointPropertyToCellMapper2D@{csmp::PointPropertyToCellMapper2D}!MapPointDataToElements@{MapPointDataToElements}}
+\index{MapPointDataToElements@{MapPointDataToElements}!csmp::PointPropertyToCellMapper2D@{csmp::PointPropertyToCellMapper2D}}
+\doxysubsubsection{\texorpdfstring{MapPointDataToElements()}{MapPointDataToElements()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_point_property_to_cell_mapper2_d_a706985b94772b5ff8daaa7eca9037555} 
+void csmp\+::\+Point\+Property\+To\+Cell\+Mapper2\+D\+::\+Map\+Point\+Data\+To\+Elements (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ 2 $>$ \&}]{}{, }\item[{std\+::string}]{target\+\_\+region}{, }\item[{std\+::string}]{target\+\_\+variable}{}\end{DoxyParamCaption})}
+
+
+
+Assigns property data to the elements of the target region, and interpolates them across it if some points do not have corresponding cells. 
+
+Attempts to assign the property data as element properties of the target region, in the process \textquotesingle{}cells\+\_\+with\+\_\+points\+\_\+\textquotesingle{} gets initialised Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_point_property_to_cell_mapper2_d_a706985b94772b5ff8daaa7eca9037555_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_point_property_to_cell_mapper2_d_a4deac4c0e592b13f8c891ea7f21e5057}\index{csmp::PointPropertyToCellMapper2D@{csmp::PointPropertyToCellMapper2D}!MapPointsToCells@{MapPointsToCells}}
+\index{MapPointsToCells@{MapPointsToCells}!csmp::PointPropertyToCellMapper2D@{csmp::PointPropertyToCellMapper2D}}
+\doxysubsubsection{\texorpdfstring{MapPointsToCells()}{MapPointsToCells()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_point_property_to_cell_mapper2_d_a4deac4c0e592b13f8c891ea7f21e5057} 
+bool csmp\+::\+Point\+Property\+To\+Cell\+Mapper2\+D\+::\+Map\+Points\+To\+Cells (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ 2 $>$ \&}]{}{, }\item[{std\+::string}]{target\+\_\+region}{, }\item[{std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ 2 $>$ \texorpdfstring{$\ast$}{*} $>$ \&}]{}{}\end{DoxyParamCaption})}
+
+
+
+initialises vector determining point containment for cells of the target region; points not found become null cells; returns whether all region cells have points 
+
+Initialises cell-\/pointer vector determining point containment for cells of the target region; points not found become null cells;
+
+\begin{DoxyReturn}{Returns}
+returns true when all cells of the target region contain points. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/property\+\_\+manipulation/Point\+Property\+To\+Cell\+Mapper2\+D.\+h\item 
+source/modules/property\+\_\+manipulation/Point\+Property\+To\+Cell\+Mapper2\+D.\+cpp\end{DoxyCompactItemize}

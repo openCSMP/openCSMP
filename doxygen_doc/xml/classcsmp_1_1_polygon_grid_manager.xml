@@ -1,0 +1,254 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_polygon_grid_manager" kind="class" language="C++" prot="public">
+    <compoundname>csmp::PolygonGridManager</compoundname>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_polygon_grid_manager_1ad66ba7752f8a20b77308b1a88f8b3c39" prot="private" static="no" mutable="no">
+        <type>std::map&lt; <ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt;, size_t &gt;</type>
+        <definition>std::map&lt;csmp::Point&lt;3U&gt;,size_t&gt; csmp::PolygonGridManager::points_</definition>
+        <argsstring></argsstring>
+        <name>points_</name>
+        <qualifiedname>csmp::PolygonGridManager::points_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/PolygonGrid.h" line="157" column="15" bodyfile="source/includes/interfaces/Eclipse/PolygonGrid.h" bodystart="157" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_polygon_grid_manager_1aba07c3da8b3c7fe01e8e04e5ea31ef8b" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref> * &gt;</type>
+        <definition>std::vector&lt;GridNode*&gt; csmp::PolygonGridManager::grid_nodes_</definition>
+        <argsstring></argsstring>
+        <name>grid_nodes_</name>
+        <qualifiedname>csmp::PolygonGridManager::grid_nodes_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/PolygonGrid.h" line="158" column="28" bodyfile="source/includes/interfaces/Eclipse/PolygonGrid.h" bodystart="158" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_polygon_grid_manager_1a8a4d0a82778542374527d2296e71498a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::PolygonGridManager::PolygonGridManager</definition>
+        <argsstring>()</argsstring>
+        <name>PolygonGridManager</name>
+        <qualifiedname>csmp::PolygonGridManager::PolygonGridManager</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/PolygonGrid.h" line="138" column="5" bodyfile="source/modules/interfaces/Eclipse/PolygonGrid.cpp" bodystart="408" bodyend="410"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_polygon_grid_manager_1ab06266c03c0d54a386e816473e996bdd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::PolygonGridManager::PolygonGridManager</definition>
+        <argsstring>(const PolygonGridManager &amp;)</argsstring>
+        <name>PolygonGridManager</name>
+        <qualifiedname>csmp::PolygonGridManager::PolygonGridManager</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_polygon_grid_manager" kindref="compound">PolygonGridManager</ref> &amp;</type>
+          <defname>pgm</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/PolygonGrid.h" line="139" column="5" bodyfile="source/modules/interfaces/Eclipse/PolygonGrid.cpp" bodystart="414" bodyend="418"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_polygon_grid_manager_1a9a7e3b663da37674166310ab6f2581ad" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_polygon_grid_manager" kindref="compound">PolygonGridManager</ref> &amp;</type>
+        <definition>PolygonGridManager &amp; csmp::PolygonGridManager::operator=</definition>
+        <argsstring>(const PolygonGridManager &amp;)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::PolygonGridManager::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_polygon_grid_manager" kindref="compound">PolygonGridManager</ref> &amp;</type>
+          <defname>pgm</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/PolygonGrid.h" line="140" column="24" bodyfile="source/modules/interfaces/Eclipse/PolygonGrid.cpp" bodystart="422" bodyend="430"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_polygon_grid_manager_1a5821beb320fe83fcdbc177599c91b72e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::PolygonGridManager::~PolygonGridManager</definition>
+        <argsstring>()</argsstring>
+        <name>~PolygonGridManager</name>
+        <qualifiedname>csmp::PolygonGridManager::~PolygonGridManager</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/PolygonGrid.h" line="141" column="5" bodyfile="source/modules/interfaces/Eclipse/PolygonGrid.cpp" bodystart="434" bodyend="437"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_polygon_grid_manager_1ab7ac87a7f5171f04c7a7327a0b673c86" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PolygonGridManager::Clear</definition>
+        <argsstring>()</argsstring>
+        <name>Clear</name>
+        <qualifiedname>csmp::PolygonGridManager::Clear</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>deleting the grid nodes that the pointers in the grid_nodes vector point to. </para>
+        </detaileddescription>
+        <inbodydescription>
+<para>delete nodes</para>
+<para>clear points</para>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/PolygonGrid.h" line="143" column="10" bodyfile="source/modules/interfaces/Eclipse/PolygonGrid.cpp" bodystart="443" bodyend="458"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_polygon_grid_manager_1af877a9c660c4f7737ce86ae3e82c7308" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::PolygonGridManager::GetNumNodes</definition>
+        <argsstring>() const</argsstring>
+        <name>GetNumNodes</name>
+        <qualifiedname>csmp::PolygonGridManager::GetNumNodes</qualifiedname>
+        <briefdescription>
+<para>nodes </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/PolygonGrid.h" line="146" column="12" bodyfile="source/modules/interfaces/Eclipse/PolygonGrid.cpp" bodystart="461" bodyend="464"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_polygon_grid_manager_1a7dbbd73a65f05625d773d6de7c874fd3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>const <ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt; &amp;</type>
+        <definition>const csmp::Point&lt; 3U &gt; &amp; csmp::PolygonGridManager::GetPoint</definition>
+        <argsstring>(size_t nid) const</argsstring>
+        <name>GetPoint</name>
+        <qualifiedname>csmp::PolygonGridManager::GetPoint</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>nid</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/PolygonGrid.h" line="148" column="23" bodyfile="source/modules/interfaces/Eclipse/PolygonGrid.cpp" bodystart="467" bodyend="470"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_polygon_grid_manager_1aea7797b4f9923812f3b92821d0e7d88d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref> *</type>
+        <definition>GridNode * csmp::PolygonGridManager::GetNode</definition>
+        <argsstring>(size_t nid)</argsstring>
+        <name>GetNode</name>
+        <qualifiedname>csmp::PolygonGridManager::GetNode</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>nid</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/PolygonGrid.h" line="149" column="14" bodyfile="source/modules/interfaces/Eclipse/PolygonGrid.cpp" bodystart="473" bodyend="476"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_polygon_grid_manager_1ae7ac5079efb8b4c808735bfdc2aadf35" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref> *</type>
+        <definition>GridNode * csmp::PolygonGridManager::GetNode</definition>
+        <argsstring>(const csmp::Point&lt; 3U &gt; &amp;)</argsstring>
+        <name>GetNode</name>
+        <qualifiedname>csmp::PolygonGridManager::GetNode</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt; &amp;</type>
+          <defname>pt</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/PolygonGrid.h" line="150" column="14" bodyfile="source/modules/interfaces/Eclipse/PolygonGrid.cpp" bodystart="479" bodyend="482"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_polygon_grid_manager_1aad481de6e7f41323761afd0b7e53d98a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref> *</type>
+        <definition>GridNode * csmp::PolygonGridManager::AddNode</definition>
+        <argsstring>(const csmp::Point&lt; 3U &gt; &amp;)</argsstring>
+        <name>AddNode</name>
+        <qualifiedname>csmp::PolygonGridManager::AddNode</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt; &amp;</type>
+          <defname>pt</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Methods dynamically allocates nodes on the heap, storing the pointers to them in the grid_nodes_ array, but also returning them to its caller.</para>
+<para><xrefsect id="todo_1_todo000124"><xreftitle>Todo</xreftitle><xrefdescription><para>SKM: when vector is resized all the stored pointers will be invalidated during rereconstruction; avoid! </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/PolygonGrid.h" line="151" column="14" bodyfile="source/modules/interfaces/Eclipse/PolygonGrid.cpp" bodystart="494" bodyend="506"/>
+        <referencedby refid="namespacecsmp_1a19ecc57bb9af10e0f707f09a6c603c23" compoundref="_meshing_tools_8cpp" startline="1608" endline="1793">csmp::addCellCentroid</referencedby>
+        <referencedby refid="namespacecsmp_1ac1cd94f62068355e1c3327fecc5dc82b" compoundref="_meshing_tools_8cpp" startline="1249" endline="1277">csmp::addFaceCentroid</referencedby>
+        <referencedby refid="namespacecsmp_1a49ddef3a60773134a6d2f199e228c28e" compoundref="_meshing_tools_8cpp" startline="1210" endline="1240">csmp::addFaceCentroid</referencedby>
+        <referencedby refid="namespacecsmp_1ab8129f70f96ff06440bff401c6ba36ea" compoundref="_meshing_tools_8cpp" startline="1169" endline="1201">csmp::addFaceCentroid</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_polygon_grid_manager_1a9a91ca08bae65c6372a188c4883e053d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PolygonGridManager::Out</definition>
+        <argsstring>() const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::PolygonGridManager::Out</qualifiedname>
+        <briefdescription>
+<para>prints object state to screen </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/PolygonGrid.h" line="154" column="10" bodyfile="source/modules/interfaces/Eclipse/PolygonGrid.cpp" bodystart="534" bodyend="548"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::PolygonGridManager</label>
+        <link refid="classcsmp_1_1_polygon_grid_manager"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/interfaces/Eclipse/PolygonGrid.h" line="136" column="1" bodyfile="source/includes/interfaces/Eclipse/PolygonGrid.h" bodystart="136" bodyend="159"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_polygon_grid_manager_1aad481de6e7f41323761afd0b7e53d98a" prot="public" virt="non-virtual"><scope>csmp::PolygonGridManager</scope><name>AddNode</name></member>
+      <member refid="classcsmp_1_1_polygon_grid_manager_1ab7ac87a7f5171f04c7a7327a0b673c86" prot="public" virt="non-virtual"><scope>csmp::PolygonGridManager</scope><name>Clear</name></member>
+      <member refid="classcsmp_1_1_polygon_grid_manager_1aea7797b4f9923812f3b92821d0e7d88d" prot="public" virt="non-virtual"><scope>csmp::PolygonGridManager</scope><name>GetNode</name></member>
+      <member refid="classcsmp_1_1_polygon_grid_manager_1ae7ac5079efb8b4c808735bfdc2aadf35" prot="public" virt="non-virtual"><scope>csmp::PolygonGridManager</scope><name>GetNode</name></member>
+      <member refid="classcsmp_1_1_polygon_grid_manager_1af877a9c660c4f7737ce86ae3e82c7308" prot="public" virt="non-virtual"><scope>csmp::PolygonGridManager</scope><name>GetNumNodes</name></member>
+      <member refid="classcsmp_1_1_polygon_grid_manager_1a7dbbd73a65f05625d773d6de7c874fd3" prot="public" virt="non-virtual"><scope>csmp::PolygonGridManager</scope><name>GetPoint</name></member>
+      <member refid="classcsmp_1_1_polygon_grid_manager_1aba07c3da8b3c7fe01e8e04e5ea31ef8b" prot="private" virt="non-virtual"><scope>csmp::PolygonGridManager</scope><name>grid_nodes_</name></member>
+      <member refid="classcsmp_1_1_polygon_grid_manager_1a9a7e3b663da37674166310ab6f2581ad" prot="public" virt="non-virtual"><scope>csmp::PolygonGridManager</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_polygon_grid_manager_1a9a91ca08bae65c6372a188c4883e053d" prot="public" virt="non-virtual"><scope>csmp::PolygonGridManager</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_polygon_grid_manager_1ad66ba7752f8a20b77308b1a88f8b3c39" prot="private" virt="non-virtual"><scope>csmp::PolygonGridManager</scope><name>points_</name></member>
+      <member refid="classcsmp_1_1_polygon_grid_manager_1a8a4d0a82778542374527d2296e71498a" prot="public" virt="non-virtual"><scope>csmp::PolygonGridManager</scope><name>PolygonGridManager</name></member>
+      <member refid="classcsmp_1_1_polygon_grid_manager_1ab06266c03c0d54a386e816473e996bdd" prot="public" virt="non-virtual"><scope>csmp::PolygonGridManager</scope><name>PolygonGridManager</name></member>
+      <member refid="classcsmp_1_1_polygon_grid_manager_1a5821beb320fe83fcdbc177599c91b72e" prot="public" virt="non-virtual"><scope>csmp::PolygonGridManager</scope><name>~PolygonGridManager</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

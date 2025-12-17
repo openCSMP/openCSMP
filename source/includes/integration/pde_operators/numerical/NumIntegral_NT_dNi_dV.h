@@ -23,14 +23,12 @@ class NumIntegral_NT_dNi_dV : public MathOperatorLHS<dim,CELL> {
                            /* no operand 'oper' in this pde operator */
                            const char* basic,
                            const char* test );
-    
-    virtual ~NumIntegral_NT_dNi_dV();
   
     /// does nothing since there are no operands to read
-    virtual void GetOperands( const CELL<dim>& ) { /* no operand to read */ }
+    void GetOperands( const CELL<dim>& ) override final { /* no operand to read */ }
   
     /// Computes N_transposed * DN_i product that is weighted by the determinant of Jacobian matrix.
-    virtual void ComputeContribution( const CELL<dim>& );
+    void ComputeContribution( const CELL<dim>& ) override final;
   
     /// chose the desired spatial derivate; default is Y
     void SpatialDerivative( SPATIAL_DERIVATIVE );
@@ -38,7 +36,7 @@ class NumIntegral_NT_dNi_dV : public MathOperatorLHS<dim,CELL> {
     /// transposes LHS element matrix before it gets accumulated; default is false
     void Transposed();
   
-    virtual NumIntegral_NT_dNi_dV<dim,CELL>* clone() const { return new NumIntegral_NT_dNi_dV<dim,CELL> (*this); }
+    NumIntegral_NT_dNi_dV<dim,CELL>* clone() const override final { return new NumIntegral_NT_dNi_dV<dim,CELL> (*this); }
   
   private:
     NumIntegral_NT_dNi_dV();

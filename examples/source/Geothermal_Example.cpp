@@ -413,10 +413,10 @@ Comparison between CSMP and TOUGH results.
 */
 bool Geothermal_Example::Compare( Model<DIM>& model, const string& file ) const
 {
-  FILE* fin;
+  FILE*  fin{nullptr};
   double x, y, val, res, tol;
-  size_t ind( 0 );
-  size_t flag( 0 );
+  size_t ind{0};
+  
   size_t nPoints;
   ScalarVariable result( PLAIN, 0.0 );
   map<size_t, std::vector<double> > points;
@@ -429,6 +429,7 @@ bool Geothermal_Example::Compare( Model<DIM>& model, const string& file ) const
   }
 
   // TOUGH simulation results
+  int flag{0};
   // reads (x_coord, y_coord, temperature) data from a text file
   while ( flag != EOF ) {
     flag = fscanf( fin, "%lf\t%lf\t%lf\n", &x, &y, &val );

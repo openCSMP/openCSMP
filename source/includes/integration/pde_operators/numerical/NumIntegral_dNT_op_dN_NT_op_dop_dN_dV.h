@@ -28,8 +28,8 @@ class NumIntegral_dNT_op_dN_NT_op_dop_dN_dV : public MathOperatorLHS<dim,CELL> {
                                            const char* basic,           // e.g., temperature
                                            const char* test );          // e.g., temperature
     
-    virtual void GetOperands( const CELL<dim>& );
-    virtual void ComputeContribution( const CELL<dim>& );
+    void GetOperands( const CELL<dim>& ) override final;
+    void ComputeContribution( const CELL<dim>& ) override final;
     
     void SpatialDerivative( uint32_t num_xyz ); // set gradZ direction to X=1, Y=2, Z=3
 

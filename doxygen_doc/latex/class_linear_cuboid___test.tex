@@ -1,0 +1,33 @@
+\doxysection{Linear\+Cuboid\+\_\+\+Test Class Reference}
+\hypertarget{class_linear_cuboid___test}{}\label{class_linear_cuboid___test}\index{LinearCuboid\_Test@{LinearCuboid\_Test}}
+
+
+{\ttfamily \#include $<$Linear\+Cuboid\+\_\+\+Test.\+h$>$}
+
+
+
+Collaboration diagram for Linear\+Cuboid\+\_\+\+Test\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=169pt]{class_linear_cuboid___test__coll__graph}
+\end{center}
+\end{figure}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyAuthor}{Author}
+Hani Akbari (Jan. 2017) This class tests implementation of Linear\+Cuboid element.
+\end{DoxyAuthor}
+1-\/ In constructor, \doxylink{class_linear_cuboid___test}{Linear\+Cuboid\+\_\+\+Test(bool)} we define 8 nodes of a cuboid element in standard oredering and each node has 3 coordinates.
+
+2-\/ Run() tests integral of NN and d\+NdN i.\+e. integrates multilplication of shape functions and gradient of shape functions over element and prints the result.
+
+3-\/ Run() tests values of shape functions at nodes \+: Test\+Sum\+Shapes\+At\+Bary\+Center(const Element$<$3\+U$>$\&). It also tests sum of values of shape functions at barycenter that must be one \+: Test\+Sum\+Shapes\+At\+Bary\+Center(const Element$<$3\+U$>$\& )
+
+4-\/ \+\_\+equal\+Test(a,b,tol) returns false if \texorpdfstring{$\vert$}{|}a-\/b\texorpdfstring{$\vert$}{|} \texorpdfstring{$>$}{>} tol. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+tests/unit/Linear\+Cuboid\+\_\+\+Test.\+h\end{DoxyCompactItemize}

@@ -1,0 +1,144 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_s_a_m_g___profile" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>csmp::SAMG_Profile</compoundname>
+    <derivedcompoundref refid="classcsmp_1_1_steady_state_diffusion_profile" prot="public" virt="non-virtual">csmp::SteadyStateDiffusionProfile&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_two_phase_implicit_node_centered_f_v_trans_profile" prot="public" virt="non-virtual">csmp::TwoPhaseImplicitNodeCenteredFVTransProfile&lt; dim &gt;</derivedcompoundref>
+    <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___profile_1aa578f93df0e849445194537fac249bfb" prot="protected" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::SAMG_Profile::dumpFileName_</definition>
+        <argsstring></argsstring>
+        <name>dumpFileName_</name>
+        <qualifiedname>csmp::SAMG_Profile::dumpFileName_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/integration/solver/SAMG_profiles/SAMG_Profile.h" line="22" column="19" bodyfile="source/modules/integration/solver/SAMG_profiles/SAMG_Profile.h" bodystart="22" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___profile_1a471424984b9d7b3abe8fdea968a8b86d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::SAMG_Profile::SAMG_Profile</definition>
+        <argsstring>()</argsstring>
+        <name>SAMG_Profile</name>
+        <qualifiedname>csmp::SAMG_Profile::SAMG_Profile</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/integration/solver/SAMG_profiles/SAMG_Profile.h" line="12" column="5" bodyfile="source/modules/integration/solver/SAMG_profiles/SAMG_Profile.cpp" bodystart="6" bodyend="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___profile_1afc52c7740b53785c91775ab377233699" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>csmp::SAMG_Profile::~SAMG_Profile</definition>
+        <argsstring>()</argsstring>
+        <name>~SAMG_Profile</name>
+        <qualifiedname>csmp::SAMG_Profile::~SAMG_Profile</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/integration/solver/SAMG_profiles/SAMG_Profile.h" line="13" column="13" bodyfile="source/modules/integration/solver/SAMG_profiles/SAMG_Profile.cpp" bodystart="11" bodyend="14"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___profile_1a5031ac63d62abfe968f5002d4cf9c4b0" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>bool</type>
+        <definition>virtual bool csmp::SAMG_Profile::Solve</definition>
+        <argsstring>(double modelTime)=0</argsstring>
+        <name>Solve</name>
+        <qualifiedname>csmp::SAMG_Profile::Solve</qualifiedname>
+        <reimplementedby refid="classcsmp_1_1_steady_state_diffusion_profile_1ad64b384fc5380f1670002d4adab93024">Solve</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_two_phase_implicit_node_centered_f_v_trans_profile_1acf61ebdb3cf9b3b829a9453f2b0065ee">Solve</reimplementedby>
+        <param>
+          <type>double</type>
+          <declname>modelTime</declname>
+        </param>
+        <briefdescription>
+<para>Solve for matrix equation. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/integration/solver/SAMG_profiles/SAMG_Profile.h" line="16" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___profile_1add889b454cd92924bc18cf8cdee0ca25" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::string</type>
+        <definition>std::string csmp::SAMG_Profile::FileDumpName</definition>
+        <argsstring>() const</argsstring>
+        <name>FileDumpName</name>
+        <qualifiedname>csmp::SAMG_Profile::FileDumpName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/integration/solver/SAMG_profiles/SAMG_Profile.h" line="18" column="19" bodyfile="source/modules/integration/solver/SAMG_profiles/SAMG_Profile.h" bodystart="18" bodyend="18"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___profile_1a39f74f5bf9be21deb8278884d2f256fc" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Profile::FileDumpName</definition>
+        <argsstring>(const std::string &amp;dumpFileName)</argsstring>
+        <name>FileDumpName</name>
+        <qualifiedname>csmp::SAMG_Profile::FileDumpName</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>dumpFileName</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/integration/solver/SAMG_profiles/SAMG_Profile.h" line="19" column="19" bodyfile="source/modules/integration/solver/SAMG_profiles/SAMG_Profile.h" bodystart="19" bodyend="19"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::SAMG_Profile</label>
+        <link refid="classcsmp_1_1_s_a_m_g___profile"/>
+      </node>
+      <node id="2">
+        <label>csmp::SteadyStateDiffusionProfile&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_steady_state_diffusion_profile"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::TwoPhaseImplicitNodeCenteredFVTransProfile&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_two_phase_implicit_node_centered_f_v_trans_profile"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::SAMG_Profile</label>
+        <link refid="classcsmp_1_1_s_a_m_g___profile"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/modules/integration/solver/SAMG_profiles/SAMG_Profile.h" line="10" column="1" bodyfile="source/modules/integration/solver/SAMG_profiles/SAMG_Profile.h" bodystart="10" bodyend="24"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_s_a_m_g___profile_1aa578f93df0e849445194537fac249bfb" prot="protected" virt="non-virtual"><scope>csmp::SAMG_Profile</scope><name>dumpFileName_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___profile_1add889b454cd92924bc18cf8cdee0ca25" prot="public" virt="non-virtual"><scope>csmp::SAMG_Profile</scope><name>FileDumpName</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___profile_1a39f74f5bf9be21deb8278884d2f256fc" prot="public" virt="non-virtual"><scope>csmp::SAMG_Profile</scope><name>FileDumpName</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___profile_1a471424984b9d7b3abe8fdea968a8b86d" prot="public" virt="non-virtual"><scope>csmp::SAMG_Profile</scope><name>SAMG_Profile</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___profile_1a5031ac63d62abfe968f5002d4cf9c4b0" prot="public" virt="pure-virtual"><scope>csmp::SAMG_Profile</scope><name>Solve</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___profile_1afc52c7740b53785c91775ab377233699" prot="public" virt="virtual"><scope>csmp::SAMG_Profile</scope><name>~SAMG_Profile</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

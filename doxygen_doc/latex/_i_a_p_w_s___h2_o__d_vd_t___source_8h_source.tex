@@ -1,0 +1,37 @@
+\doxysection{IAPWS\+\_\+\+H2\+O\+\_\+d\+Vd\+T\+\_\+\+Source.\+h}
+\hypertarget{_i_a_p_w_s___h2_o__d_vd_t___source_8h_source}{}\label{_i_a_p_w_s___h2_o__d_vd_t___source_8h_source}\index{source/includes/eos/IAPWS\_H2O\_dVdT\_Source.h@{source/includes/eos/IAPWS\_H2O\_dVdT\_Source.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{IAPWS\_H2O\_DVDT\_SOURCE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{IAPWS\_H2O\_DVDT\_SOURCE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_interrelation_8h}{"{}Interrelation.h"{}}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}steam4.h"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00011\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_i_a_p_w_s___h2_o__d_vd_t___source}{IAPWS\_H2O\_dVdT\_Source}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_interrelation}{Interrelation}}<dim>\ \{}
+\DoxyCodeLine{00012\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ T;\ \ \ \ \ \textcolor{comment}{//\ temperature\ (oC)}}
+\DoxyCodeLine{00013\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ preT;\ \ \textcolor{comment}{//\ previous\ temperature\ (oC)}}
+\DoxyCodeLine{00014\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ X;\ \ \ \ \ \textcolor{comment}{//\ porosity}}
+\DoxyCodeLine{00015\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ Q;\ \ \ \ \ \textcolor{comment}{//\ thermal\ expansion}}
+\DoxyCodeLine{00016\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ A;\ \ \ \ \ \textcolor{comment}{//\ fluid\ expansivity}}
+\DoxyCodeLine{00017\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ alpha,\ temperature,\ T\_prev,\ phi;}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ eT,\ eT\_rock,\ \textcolor{comment}{//\ thermal\ expansivity\ (m3\ K-\/1)}}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ deltaT,\ \ \ \ \ \ \textcolor{comment}{//\ temperature\ change}}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ delta\_t;\ \ \ \ \ \textcolor{comment}{//\ change\ in\ time}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \textcolor{keyword}{public}:\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ length-\/expansion\ coeff.\ for\ rock\ (concrete)}}
+\DoxyCodeLine{00023\ \ \ \ \ IAPWS\_H2O\_dVdT\_Source(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&\ p,\ \textcolor{keywordtype}{double}\ dt,\ \textcolor{keywordtype}{double}\ eL\_rock=1.2e-\/5\ );}
+\DoxyCodeLine{00024\ \ \ \ \ \string~IAPWS\_H2O\_dVdT\_Source()\ \{\};}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_i_a_p_w_s___h2_o__d_vd_t___source_ae0a801ba952ddd31902349cf6b11aba9}{Calculate}}();}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{void}\ SetTimeIncrement(\ \textcolor{keywordtype}{double}\ dt\ );}
+\DoxyCodeLine{00027\ \};}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \}}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

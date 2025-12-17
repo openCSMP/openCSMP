@@ -221,7 +221,7 @@ void RegionMonitor<dim>::InsertExternallyCalculatedProperty(string property,
 {
 
     string property_column_header_entry=property+"_"+regionname;
-    for(int i = 0; i < property_column_header_entry.length(); i++)
+    for(size_t i = 0; i < property_column_header_entry.length(); i++)
     {
            if( isspace(property_column_header_entry[i]) )
                property_column_header_entry[i] = '_';
@@ -235,7 +235,7 @@ void RegionMonitor<dim>::InsertExternallyCalculatedProperty(string property_regi
 {
 
     string property_column_header_entry=property_regionname;
-    for(int i = 0; i < property_column_header_entry.length(); i++)
+    for(size_t i = 0; i < property_column_header_entry.length(); i++)
     {
            if( isspace(property_column_header_entry[i]) )
                property_column_header_entry[i] = '_';
@@ -250,7 +250,7 @@ void RegionMonitor<dim>::InsertPreCalculatedPropertyValue( double time,
                                                            double value )
 {
     string property_column_entry=property+"_"+regionname;
-    for(int i = 0; i < property_column_entry.length(); i++)
+    for(size_t i = 0; i < property_column_entry.length(); i++)
     {
            if( isspace(property_column_entry[i]) )
                property_column_entry[i] = '_';
@@ -275,7 +275,7 @@ void RegionMonitor<dim>::InsertPreCalculatedPropertyValue( double time,
                                                            double value )
 {
     string property_column_entry=property_regionname;
-    for(int i = 0; i < property_column_entry.length(); i++)
+    for(size_t i = 0; i < property_column_entry.length(); i++)
     {
            if( isspace(property_column_entry[i]) )
                property_column_entry[i] = '_';

@@ -80,8 +80,11 @@ void PointPropertyToCellMapper2D_Test::run()
          else if ( (*it)->AtBoundary() == CNR4 ) counter++;
       }
     _test( counter == 4U );
-
+    
+    // set 'face variable' to a non-NaN value so that it gets preserved when output to binary
+    model.InputPropertyValue( "face variable", makeScalar( PLAIN, 0. ) );
     right.InputPropertyValue( "face variable", makeScalar( PLAIN, 2. ) );
+    
     ArrayVariable av( "nodal array", model.Database() );
     // SKM FIX: if av is not initialized its values are NAN and a comparison with another array variable will always evaluate as false
     av = 5.;
@@ -103,12 +106,17 @@ void PointPropertyToCellMapper2D_Test::run()
     model.OutputToBinaryFile(bin1name.c_str());
     // model.Out();
 
+    // Tests on the model recreated from disk
     Model<2U> modelBinIn0(bin1name);
-    Index nodalArrayKey0( modelBinIn0.Database().StorageKey("nodal array") );
-    Index faceVariableKey0( modelBinIn0.Database().StorageKey("face variable") );
+    
+    Index nodalArrayKey0 = modelBinIn0.Database().StorageKey("nodal array");
+    Index faceVariableKey0 = modelBinIn0.Database().StorageKey("face variable");
+
     _test( (*modelBinIn0.Boundary("RIGHT").CellsBegin())->Read(faceVariableKey0) == 2. );
+
     ArrayVariable avBin0( "nodal array", modelBinIn0.Database() );
     (*modelBinIn0.Region("Model").NodesBegin())->Read( nodalArrayKey0, avBin0 );
+
     _test( avBin0 == av );
     
     Model<2U> modelBinIn1(bin1name);

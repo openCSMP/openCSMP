@@ -264,22 +264,18 @@ double LinearTriangle3D::Volume()
 
 
 
-
-void LinearTriangle3D::UnitNormal( std::vector<double>& vc ) const
+vector<double> LinearTriangle3D::UnitNormal() const
  {
     // triangle is defined by two vectors a and b
     double a1 = XY(1,0) - XY(0,0), 
-			  a2 = XY(1,1) - XY(0,1),
-			  a3 = XY(1,2) - XY(0,2),
-			  b1 = XY(2,0) - XY(0,0), 
-			  b2 = XY(2,1) - XY(0,1),
-			  b3 = XY(2,2) - XY(0,2);
+           a2 = XY(1,1) - XY(0,1),
+           a3 = XY(1,2) - XY(0,2),
+           b1 = XY(2,0) - XY(0,0),
+           b2 = XY(2,1) - XY(0,1),
+           b3 = XY(2,2) - XY(0,2);
 
-  // normal to triangle (but not unit normal!)
-    vc.resize(dim);
-    vc[0]  = a2*b3 - a3*b2;
-    vc[1]  = a3*b1 - a1*b3;
-    vc[2]  = a1*b2 - a2*b1;
+    // normal to triangle (but not unit normal!)
+    vector<double> vc{ a2*b3 - a3*b2, a3*b1 - a1*b3, a1*b2 - a2*b1 };
     // normalization to unit length and orienting normal CCW
     double length = -sqrt( vc[0]*vc[0] + vc[1]*vc[1] + vc[2]*vc[2] );
     vc[0] /= length;
@@ -288,8 +284,8 @@ void LinearTriangle3D::UnitNormal( std::vector<double>& vc ) const
 
 //    cout <<"\nLinearTriangle3D::UnitNormal: is: "<< endl;
 //    out( vc );
+    return vc;
  }
-
 
 
 
@@ -654,7 +650,7 @@ void LinearTriangle3D::OutputNodeDataToVTK( const char* file_name,
   {
      char  outfile[NAME_STRING], elmt[30];
      strcpy( outfile, file_name );
-     snprintf( elmt, sizeof(elmt), "%lu", CurrentID() );
+     snprintf( elmt, sizeof(elmt), "%zu", CurrentID() );
      strcat( outfile, elmt );
      strcat( outfile, ".vtk" );
        
@@ -756,7 +752,7 @@ void LinearTriangle3D::OutputToVTK( const char* file_name )
   {
      char  outfile[NAME_STRING], elmt[30];
      strcpy( outfile, file_name );
-     snprintf( elmt, sizeof(elmt), "%lu", CurrentID() );
+     snprintf( elmt, sizeof(elmt), "%zu", CurrentID() );
      strcat( outfile, elmt );
      strcat( outfile, ".vtk" );
        

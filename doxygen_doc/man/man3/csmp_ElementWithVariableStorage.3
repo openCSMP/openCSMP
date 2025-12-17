@@ -1,0 +1,90 @@
+.TH "csmp::ElementWithVariableStorage< dim >" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::ElementWithVariableStorage< dim >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+Inherits \fBcsmp::LocalVariableStorage< dim, Element >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "template<class Var> void \fBNodePropertyVector\fP (const \fBcsmp::Index\fP &, std::vector< Var > &) const"
+.br
+.RI "returns property values at the nodes "
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::LocalVariableStorage< dim, Element >\fP
+.in +1c
+.ti -1c
+.RI "bool \fBoperator==\fP (const \fBLocalVariableStorage\fP< dim, \fBElement\fP > &) const"
+.br
+.RI "Goto overload for storees without \fBIntegrationPointVariables\fP\&. "
+.ti -1c
+.RI "void \fBResizePropertyStorage\fP (const \fBLocalVariables\fP &)"
+.br
+.RI "Goto overload for storees without \fBIntegrationPointVariables\fP\&. "
+.ti -1c
+.RI "void \fBAddProperty\fP (const \fBcsmp::Index\fP &)"
+.br
+.RI "Creates an empty space in the storage preserving the original variable values\&. \fBLocalVariables\fP in \fBIndex\fP have to reflect NEW state (incl added) "
+.ti -1c
+.RI "void \fBDeleteProperty\fP (const \fBcsmp::Index\fP &)"
+.br
+.RI "Deletes data and flags of property \fBLocalVariables\fP in \fBIndex\fP have to reflect CURRENT state (incl property to be removed) "
+.ti -1c
+.RI "bool \fBIsWithinRange\fP (const \fBcsmp::Index\fP &, double, double) const"
+.br
+.ti -1c
+.RI "double \fBRead\fP (const \fBcsmp::Index\fP &) const"
+.br
+.RI "Scalar variable value\&. "
+.ti -1c
+.RI "void \fBStore\fP (const \fBcsmp::Index\fP &, const \fBScalarVariable\fP &)"
+.br
+.RI "Scalar variable\&. "
+.ti -1c
+.RI "\fBVARIABLE_FLAG\fP \fBStatus\fP (const \fBcsmp::Index\fP &) const"
+.br
+.RI "Scalar & Array variable flag\&. "
+.ti -1c
+.RI "void \fBStoreArrayEntry\fP (const \fBcsmp::Index\fP &, double array_elmt_value, int_type)"
+.br
+.ti -1c
+.RI "double \fBReadArrayEntry\fP (const \fBcsmp::Index\fP &, int_type array_elmt) const"
+.br
+.RI "reads single double element inside of the target array "
+.ti -1c
+.RI "bool \fBEmptyLVS\fP () const"
+.br
+.ti -1c
+.RI "void \fBOutLVS\fP () const"
+.br
+.ti -1c
+.RI "void \fBAssertPlacement\fP (const \fBcsmp::Index\fP &) const"
+.br
+.RI "We check in debug only\&. "
+.ti -1c
+.RI "void \fBAssertIntegrationPointPlacement\fP (const \fBcsmp::Index\fP &) const"
+.br
+.RI "We check in debug only\&. "
+.ti -1c
+.RI "void \fBAssertFiniteVolumeIntegrationPointPlacement\fP (const \fBcsmp::Index\fP &) const"
+.br
+.RI "We check in debug only\&. "
+.ti -1c
+.RI "void \fBStoreLocalState\fP (const \fBLocalVariables\fP &lv)"
+.br
+.RI "We store in debug only\&. "
+.ti -1c
+.RI "void \fBLVS\fP (const Data &data)"
+.br
+.RI "copy or move supplied data into storage "
+.in -1c
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

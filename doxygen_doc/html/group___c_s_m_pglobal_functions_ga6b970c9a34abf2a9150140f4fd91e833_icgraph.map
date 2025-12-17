@@ -1,0 +1,23 @@
+<map id="csmp::isCorner" name="csmp::isCorner">
+<area shape="rect" id="Node000001" title="returns whether flag is a corner" alt="" coords="284,228,394,254"/>
+<area shape="rect" id="Node000002" href="$group___c_s_m_pglobal_functions.html#ga5c6baa4d81d5694647d6bbd0e6aab5c0" title="infers from node flags and cell type, which boundary the element face lies on including INTERNAL boun..." alt="" coords="57,5,184,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="329,214,317,175,298,129,271,83,254,62,234,44,210,31,184,24,185,19,212,26,237,40,258,58,275,80,303,126,322,173,334,212"/>
+<area shape="rect" id="Node000003" href="$group___c_s_m_pglobal_functions.html#gad44ad05657a80067f542508bd41ea85e" title="identifying the boundary that a lower dimensional element is located on from the BOX_BOUNDARY flags a..." alt="" coords="57,55,184,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="324,215,290,153,265,120,234,94,210,82,184,75,185,69,212,77,237,89,269,117,295,150,329,212"/>
+<area shape="rect" id="Node000004" href="$group___c_s_m_pglobal_functions.html#ga26e98b89a5db442313780dbe6c0e4151" title="gives the extreme coordinates of the bounding box of the BOUNDARY (not the model!) &#45; 1D model" alt="" coords="5,104,236,130"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="317,218,281,178,259,159,234,143,210,133,212,128,237,138,262,155,285,175,321,214"/>
+<area shape="rect" id="Node000005" href="$group___c_s_m_pglobal_functions.html#gac3aec5b250ec2f980aa760b852186cb4" title="gives the extreme coordinates of the bounding box of the BOUNDARY (not the model!) &#45; 2D model" alt="" coords="5,153,236,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="301,223,235,193,198,182,199,177,237,188,303,218"/>
+<area shape="rect" id="Node000006" href="$group___c_s_m_pglobal_functions.html#gae3754abd6405bdb431d5af36906d3b1a" title="gives the extreme coordinates of the bounding box of the BOUNDARY (not the model!) &#45; 3D model" alt="" coords="5,203,236,228"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="268,235,236,232,236,226,268,230"/>
+<area shape="rect" id="Node000007" href="$group___c_s_m_pglobal_functions.html#ga67c628137703b7561fe920a1eb20b12f" title="returns true also for edges and corners" alt="" coords="32,252,209,278"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="268,251,210,258,210,252,268,246"/>
+<area shape="rect" id="Node000008" href="$classcsmp_1_1_model.html#a0420507bc518fc8f233ecdccfaaf531e" title="uses the vector of variable flags (ANY, DIRICH etc.) to change the status of the target variable at t..." alt="" coords="26,302,215,342"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="301,264,237,293,204,304,202,299,235,288,298,259"/>
+<area shape="rect" id="Node000009" href="$classcsmp_1_1_model.html#af02c3aae20950e871acfafd520dd532f" title="sets the value of the property on those sites (nodes, elements) whose AtBoundary() function matches t..." alt="" coords="26,367,215,408"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="323,268,287,313,263,337,237,356,212,369,210,364,234,352,260,333,283,310,319,265"/>
+<area shape="rect" id="Node000010" href="$classcsmp_1_1_model.html#a69f9911b3ea97c2db09cd990442126f9" title="the supplied 4 scalar node variable values (2 in 2D) are linearly interpolated across the square (lin..." alt="" coords="38,432,203,473"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="332,269,319,304,299,345,272,386,237,422,205,440,202,435,234,417,268,383,294,342,314,302,327,267"/>
+<area shape="rect" id="Node000011" href="$classcsmp_1_1_model.html#a67bae937ff0d191ecf5c85d3ede0b3d6" title="the supplied 4 vector node variable values (2 in 2D) are linearly interpolated across the square (lin..." alt="" coords="38,498,203,538"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="336,270,327,317,308,375,280,435,260,463,237,487,205,506,202,502,234,483,256,459,275,432,304,373,321,315,331,269"/>
+</map>

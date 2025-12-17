@@ -1,0 +1,11 @@
+<map id="csmp::readDefaultPropertyValues" name="csmp::readDefaultPropertyValues">
+<area shape="rect" id="Node000001" title="read default property values ( a.k.a block2 )" alt="" coords="5,76,183,117"/>
+<area shape="rect" id="Node000002" href="$namespacecsmp.html#a34701d1c9fda79fddb23382772ee2859" title=" " alt="" coords="250,5,378,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="143,73,230,40,248,34,250,39,232,45,145,78"/>
+<area shape="rect" id="Node000003" href="$namespacecsmp.html#a6c42e9e0529dda9c61a77681f2735608" title="detects lines beginning with #, %, –; char* not constant because first comment char gets replaced by ..." alt="" coords="238,55,390,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="183,82,222,77,223,82,184,88"/>
+<area shape="rect" id="Node000004" href="$classcsmp_1_1_scalar_variable.html#a7f0ab5431406d975d6e1de988f369176" title="assignment as an lvalue" alt="" coords="242,104,386,145"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="184,105,227,111,226,116,183,111"/>
+<area shape="rect" id="Node000005" href="$namespacecsmp.html#a1df2d0c67628adc29fbe873b72ddd970" title=" " alt="" coords="231,169,398,195"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="140,115,232,154,253,162,251,167,230,159,138,120"/>
+</map>

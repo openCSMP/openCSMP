@@ -1,0 +1,1514 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="_box_8h" kind="file" language="C++">
+    <compoundname>Box.h</compoundname>
+    <includes local="no">set</includes>
+    <includes refid="_point_8h" local="yes">Point.h</includes>
+    <includedby refid="_stream_function___example_8h" local="yes">examples/source/StreamFunction_Example.h</includedby>
+    <includedby refid="_u_g4___pro_mesh_output___example_8cpp" local="yes">examples/source/UG4_ProMeshOutput_Example.cpp</includedby>
+    <includedby refid="_node_centered_finite_volume_transport_8h" local="yes">source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeTransport.h</includedby>
+    <includedby refid="_a_n_s_y_s___element_specifications_8h" local="yes">source/includes/interfaces/ANSYS/ANSYS_ElementSpecifications.h</includedby>
+    <includedby refid="_c_g_n_s___element_specifications_8h" local="yes">source/includes/interfaces/CGNS/CGNS_ElementSpecifications.h</includedby>
+    <includedby refid="_go_cad_interface_8h" local="yes">source/includes/interfaces/gOcad_SKUA/GoCadInterface.h</includedby>
+    <includedby refid="_boundary_interface_8h" local="yes">source/includes/model/BoundaryInterface.h</includedby>
+    <includedby refid="_element_8h" local="yes">source/includes/model/Element.h</includedby>
+    <includedby refid="_model_8h" local="yes">source/includes/model/Model.h</includedby>
+    <includedby refid="_node_8h" local="yes">source/includes/model/Node.h</includedby>
+    <includedby refid="_split_boundary_interface_8h" local="yes">source/includes/model/SplitBoundaryInterface.h</includedby>
+    <includedby refid="_line_element_mesher_8cpp" local="yes">source/modules/discretisation/LineElementMesher.cpp</includedby>
+    <includedby refid="_quadrilaterator_8cpp" local="yes">source/modules/discretisation/Quadrilaterator.cpp</includedby>
+    <includedby refid="_triangulator_8cpp" local="yes">source/modules/discretisation/Triangulator.cpp</includedby>
+    <includedby refid="_c_s_m_p___element_specifications_8cpp" local="yes">source/modules/integration/finite_elements/CSMP_ElementSpecifications.cpp</includedby>
+    <includedby refid="_v_data_8cpp" local="yes">source/modules/integration/finite_elements/VData.cpp</includedby>
+    <includedby refid="_v_set_converter_8cpp" local="yes">source/modules/integration/finite_elements/VSetConverter.cpp</includedby>
+    <includedby refid="_node_centered_finite_volume_transport_8cpp" local="yes">source/modules/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeTransport.cpp</includedby>
+    <includedby refid="_a_n_s_y_s___model3_d_8cpp" local="yes">source/modules/interfaces/ANSYS/ANSYS_Model3D.cpp</includedby>
+    <includedby refid="_rhino_surface_reader_8cpp" local="yes">source/modules/interfaces/Rhinoceros/RhinoSurfaceReader.cpp</includedby>
+    <includedby refid="_t_r_i_a_n_g_l_e___interface_8cpp" local="yes">source/modules/interfaces/TRIANGLE_Interface.cpp</includedby>
+    <includedby refid="_s_k_u_a___model_8cpp" local="yes">source/modules/interfaces/gOcad_SKUA/SKUA_Model.cpp</includedby>
+    <includedby refid="_boundary_8cpp" local="yes">source/modules/model/Boundary.cpp</includedby>
+    <includedby refid="_boundary_interface_8cpp" local="yes">source/modules/model/BoundaryInterface.cpp</includedby>
+    <includedby refid="_box_8cpp" local="yes">source/modules/model/Box.cpp</includedby>
+    <includedby refid="_mesh_management_utilities_8cpp" local="yes">source/modules/model/MeshManagementUtilities.cpp</includedby>
+    <includedby refid="_mesh_manager_8cpp" local="yes">source/modules/model/MeshManager.cpp</includedby>
+    <includedby refid="_model_8cpp" local="yes">source/modules/model/Model.cpp</includedby>
+    <includedby refid="_model_sub_domain_8cpp" local="yes">source/modules/model/ModelSubDomain.cpp</includedby>
+    <includedby refid="_model_topology_8cpp" local="yes">source/modules/model/ModelTopology.cpp</includedby>
+    <includedby refid="_corner_point_grid_8cpp" local="yes">source/modules/regular_grids/CornerPointGrid.cpp</includedby>
+    <includedby refid="_c_s_m_p__high_level_utilities_8cpp" local="yes">source/modules/utilities/CSMP_highLevelUtilities.cpp</includedby>
+    <includedby refid="_face_data_8cpp" local="yes">source/modules/utilities/FaceData.cpp</includedby>
+    <includedby refid="vset_makers_8cpp" local="yes">source/modules/utilities/vsetMakers.cpp</includedby>
+    <includedby refid="_box___test_8h" local="yes">tests/unit/Box_Test.h</includedby>
+    <includedby refid="_element_policy_integrity___test_8h" local="yes">tests/unit/ElementPolicyIntegrity_Test.h</includedby>
+    <includedby refid="_model_sub_domain___test_8cpp" local="yes">tests/unit/ModelSubDomain_Test.cpp</includedby>
+    <includedby refid="_model_sub_domain___test_8h" local="yes">tests/unit/ModelSubDomain_Test.h</includedby>
+    <includedby refid="_p_d_e___integrator___test_8h" local="yes">tests/unit/PDE_Integrator_Test.h</includedby>
+    <includedby refid="_v_data___test_8cpp" local="yes">tests/unit/VData_Test.cpp</includedby>
+    <incdepgraph>
+      <node id="1">
+        <label>source/includes/model/Box.h</label>
+        <link refid="_box_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>CSMP_definitions.h</label>
+        <link refid="_c_s_m_p__definitions_8h"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="43" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+      </node>
+      <node id="45">
+        <label>CSMP_global_enumerations.h</label>
+        <link refid="_c_s_m_p__global__enumerations_8h_source"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+      </node>
+      <node id="44">
+        <label>Index.h</label>
+        <link refid="_index_8h_source"/>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+      </node>
+      <node id="48">
+        <label>IntegrationPointVariables.h</label>
+        <link refid="_integration_point_variables_8h_source"/>
+        <childnode refid="47" relation="include">
+        </childnode>
+      </node>
+      <node id="47">
+        <label>LocalVariables.h</label>
+        <link refid="_local_variables_8h_source"/>
+      </node>
+      <node id="3">
+        <label>Point.h</label>
+        <link refid="_point_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="16">
+        <label>algorithm</label>
+      </node>
+      <node id="17">
+        <label>array</label>
+      </node>
+      <node id="15">
+        <label>cassert</label>
+      </node>
+      <node id="10">
+        <label>cctype</label>
+      </node>
+      <node id="13">
+        <label>cfloat</label>
+      </node>
+      <node id="18">
+        <label>chrono</label>
+      </node>
+      <node id="14">
+        <label>climits</label>
+      </node>
+      <node id="5">
+        <label>cmath</label>
+      </node>
+      <node id="9">
+        <label>cstdarg</label>
+      </node>
+      <node id="8">
+        <label>cstddef</label>
+      </node>
+      <node id="46">
+        <label>cstdint</label>
+      </node>
+      <node id="6">
+        <label>cstdio</label>
+      </node>
+      <node id="7">
+        <label>cstdlib</label>
+      </node>
+      <node id="11">
+        <label>cstring</label>
+      </node>
+      <node id="12">
+        <label>ctime</label>
+      </node>
+      <node id="19">
+        <label>deque</label>
+      </node>
+      <node id="20">
+        <label>exception</label>
+      </node>
+      <node id="21">
+        <label>filesystem</label>
+      </node>
+      <node id="22">
+        <label>fstream</label>
+      </node>
+      <node id="23">
+        <label>functional</label>
+      </node>
+      <node id="24">
+        <label>iomanip</label>
+      </node>
+      <node id="25">
+        <label>iostream</label>
+      </node>
+      <node id="26">
+        <label>istream</label>
+      </node>
+      <node id="27">
+        <label>iterator</label>
+      </node>
+      <node id="28">
+        <label>limits</label>
+      </node>
+      <node id="29">
+        <label>list</label>
+      </node>
+      <node id="30">
+        <label>map</label>
+      </node>
+      <node id="31">
+        <label>memory</label>
+      </node>
+      <node id="32">
+        <label>numeric</label>
+      </node>
+      <node id="33">
+        <label>ostream</label>
+      </node>
+      <node id="34">
+        <label>random</label>
+      </node>
+      <node id="2">
+        <label>set</label>
+      </node>
+      <node id="35">
+        <label>sstream</label>
+      </node>
+      <node id="36">
+        <label>stdexcept</label>
+      </node>
+      <node id="37">
+        <label>string</label>
+      </node>
+      <node id="39">
+        <label>type_traits</label>
+      </node>
+      <node id="38">
+        <label>typeinfo</label>
+      </node>
+      <node id="43">
+        <label>unordered_map</label>
+      </node>
+      <node id="42">
+        <label>unordered_set</label>
+      </node>
+      <node id="40">
+        <label>utility</label>
+      </node>
+      <node id="41">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="31">
+        <label>examples/source/DES2PhaseFlowWithSplitBoundary_Example.h</label>
+        <link refid="_d_e_s2_phase_flow_with_split_boundary___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="32">
+        <label>examples/source/DES2PhaseSlightlyCompressibleFlow_Example.h</label>
+        <link refid="_d_e_s2_phase_slightly_compressible_flow___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>examples/source/Examples.h</label>
+        <link refid="_examples_8h_source"/>
+      </node>
+      <node id="33">
+        <label>examples/source/Interfaces_Example.h</label>
+        <link refid="_interfaces___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>examples/source/StreamFunction_Example.h</label>
+        <link refid="_stream_function___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="34">
+        <label>examples/source/ThermalConvectionETHZ_Example.h</label>
+        <link refid="_thermal_convection_e_t_h_z___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="35">
+        <label>examples/source/Tutorial3_Example.h</label>
+        <link refid="_tutorial3___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="36">
+        <label>examples/source/deprecated/Tutorial4_Example_original.h</label>
+        <link refid="_tutorial4___example__original_8h_source"/>
+      </node>
+      <node id="37">
+        <label>source/includes/analysis/NodeCenteredFiniteVolumeMonitor.h</label>
+        <link refid="_node_centered_finite_volume_monitor_8h_source"/>
+      </node>
+      <node id="38">
+        <label>source/includes/analysis/RegionMonitor.h</label>
+        <link refid="_region_monitor_8h_source"/>
+        <childnode refid="39" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>source/includes/integration/cvfe_hydrothermal/CVFEM_PHX_Scheme.h</label>
+        <link refid="_c_v_f_e_m___p_h_x___scheme_8h_source"/>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="40">
+        <label>source/includes/integration/cvfe_hydrothermal/CVFEM_PressureGradientVisitor.h</label>
+        <link refid="_c_v_f_e_m___pressure_gradient_visitor_8h_source"/>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>source/includes/integration/cvfe_hydrothermal/ExplicitFiniteVolumeTransportPHX.h</label>
+        <link refid="_explicit_finite_volume_transport_p_h_x_8h_source"/>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>source/includes/integration/cvfe_hydrothermal/UpwindControlVisitor.h</label>
+        <link refid="_upwind_control_visitor_8h_source"/>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="109">
+        <label>source/includes/integration/finite_volumes/DES_transport_scheme/DES2PhaseSlightlyCompressibleTransport.h</label>
+        <link refid="_d_e_s2_phase_slightly_compressible_transport_8h_source"/>
+      </node>
+      <node id="108">
+        <label>source/includes/integration/finite_volumes/DES_transport_scheme/DES2PhaseTransport.h</label>
+        <link refid="_d_e_s2_phase_transport_8h_source"/>
+        <childnode refid="109" relation="include">
+        </childnode>
+      </node>
+      <node id="110">
+        <label>source/includes/integration/finite_volumes/DES_transport_scheme/DESAdvectionDiffusion.h</label>
+        <link refid="_d_e_s_advection_diffusion_8h_source"/>
+      </node>
+      <node id="111">
+        <label>source/includes/integration/finite_volumes/DES_transport_scheme/Event.h</label>
+        <link refid="_event_8h_source"/>
+        <childnode refid="108" relation="include">
+        </childnode>
+        <childnode refid="110" relation="include">
+        </childnode>
+      </node>
+      <node id="112">
+        <label>source/includes/integration/finite_volumes/FiniteVolumePolicy.h</label>
+        <link refid="_finite_volume_policy_8h_source"/>
+        <childnode refid="113" relation="include">
+        </childnode>
+        <childnode refid="74" relation="include">
+        </childnode>
+        <childnode refid="114" relation="include">
+        </childnode>
+        <childnode refid="116" relation="include">
+        </childnode>
+        <childnode refid="104" relation="include">
+        </childnode>
+      </node>
+      <node id="41">
+        <label>source/includes/integration/finite_volumes/GenericNodePropertyGradient.h</label>
+        <link refid="_generic_node_property_gradient_8h_source"/>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="42">
+        <label>source/includes/integration/finite_volumes/GenericNodePropertyGradientLimiter.h</label>
+        <link refid="_generic_node_property_gradient_limiter_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>source/includes/integration/finite_volumes/legacy_transport_scheme/ExplicitMassBasedTransport.h</label>
+        <link refid="_explicit_mass_based_transport_8h_source"/>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>source/includes/integration/finite_volumes/legacy_transport_scheme/ExplicitNodeCenteredFiniteVolumeTransport.h</label>
+        <link refid="_explicit_node_centered_finite_volume_transport_8h_source"/>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeTransport.h</label>
+        <link refid="_node_centered_finite_volume_transport_8h_source"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+      </node>
+      <node id="15">
+        <label>source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.h</label>
+        <link refid="_two_phase_explicit_node_centered_f_v_transport_8h_source"/>
+      </node>
+      <node id="16">
+        <label>source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseImplicitNodeCenteredFVTransport.h</label>
+        <link refid="_two_phase_implicit_node_centered_f_v_transport_8h_source"/>
+        <childnode refid="17" relation="include">
+        </childnode>
+      </node>
+      <node id="77">
+        <label>source/includes/integration/pde_integrators/PDE_Integrator_CRM.h</label>
+        <link refid="_p_d_e___integrator___c_r_m_8h_source"/>
+      </node>
+      <node id="117">
+        <label>source/includes/integration/pde_operators/numerical/NumIntegral_dNT_op_dN_dV_InterFace.h</label>
+        <link refid="_num_integral__d_n_t__op__d_n__d_v___inter_face_8h_source"/>
+      </node>
+      <node id="118">
+        <label>source/includes/integration/pde_operators/numerical/NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region.h</label>
+        <link refid="_num_integral__dudn__op__u__d_s___inter_face__w__dim_m1___region_8h_source"/>
+      </node>
+      <node id="119">
+        <label>source/includes/integration/pde_operators/numerical/NumIntegral_dudn_rhsop_u_dS.h</label>
+        <link refid="_num_integral__dudn__rhsop__u__d_s_8h_source"/>
+      </node>
+      <node id="18">
+        <label>source/includes/interfaces/ANSYS/ANSYS_ElementSpecifications.h</label>
+        <link refid="_a_n_s_y_s___element_specifications_8h_source"/>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+      </node>
+      <node id="19">
+        <label>source/includes/interfaces/ANSYS/ANSYS_Interface.h</label>
+        <link refid="_a_n_s_y_s___interface_8h_source"/>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+      </node>
+      <node id="43">
+        <label>source/includes/interfaces/ANSYS/ANSYS_Model2D.h</label>
+        <link refid="_a_n_s_y_s___model2_d_8h_source"/>
+      </node>
+      <node id="44">
+        <label>source/includes/interfaces/ANSYS/ANSYS_Model3D.h</label>
+        <link refid="_a_n_s_y_s___model3_d_8h_source"/>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="27">
+        <label>source/includes/interfaces/CGNS/CGNS_ElementSpecifications.h</label>
+        <link refid="_c_g_n_s___element_specifications_8h_source"/>
+        <childnode refid="23" relation="include">
+        </childnode>
+      </node>
+      <node id="23">
+        <label>source/includes/interfaces/CGNS/CGNS_Interface.h</label>
+        <link refid="_c_g_n_s___interface_8h_source"/>
+      </node>
+      <node id="45">
+        <label>source/includes/interfaces/CGNS/CGNS_Model.h</label>
+        <link refid="_c_g_n_s___model_8h_source"/>
+      </node>
+      <node id="46">
+        <label>source/includes/interfaces/Eclipse/EclipseModel.h</label>
+        <link refid="_eclipse_model_8h_source"/>
+      </node>
+      <node id="47">
+        <label>source/includes/interfaces/Matlab/MatlabInterface.h</label>
+        <link refid="_matlab_interface_8h_source"/>
+      </node>
+      <node id="81">
+        <label>source/includes/interfaces/StochasticPermeabilityFieldInterface.h</label>
+        <link refid="_stochastic_permeability_field_interface_8h_source"/>
+      </node>
+      <node id="48">
+        <label>source/includes/interfaces/VTK/VTU_Interface.h</label>
+        <link refid="_v_t_u___interface_8h_source"/>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="49" relation="include">
+        </childnode>
+      </node>
+      <node id="28">
+        <label>source/includes/interfaces/gOcad_SKUA/GoCadInterface.h</label>
+        <link refid="_go_cad_interface_8h_source"/>
+      </node>
+      <node id="50">
+        <label>source/includes/interfaces/gOcad_SKUA/SKUA_Model.h</label>
+        <link refid="_s_k_u_a___model_8h_source"/>
+      </node>
+      <node id="51">
+        <label>source/includes/math/RandomFieldGenerator.h</label>
+        <link refid="_random_field_generator_8h_source"/>
+      </node>
+      <node id="115">
+        <label>source/includes/model/Boundary.h</label>
+        <link refid="_boundary_8h_source"/>
+        <childnode refid="77" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="83" relation="include">
+        </childnode>
+      </node>
+      <node id="29">
+        <label>source/includes/model/BoundaryInterface.h</label>
+        <link refid="_boundary_interface_8h_source"/>
+        <childnode refid="30" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>source/includes/model/Box.h</label>
+        <link refid="_box_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="74" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="107" relation="include">
+        </childnode>
+        <childnode refid="127" relation="include">
+        </childnode>
+        <childnode refid="129" relation="include">
+        </childnode>
+        <childnode refid="102" relation="include">
+        </childnode>
+        <childnode refid="130" relation="include">
+        </childnode>
+        <childnode refid="131" relation="include">
+        </childnode>
+      </node>
+      <node id="113">
+        <label>source/includes/model/Edge.h</label>
+        <link refid="_edge_8h_source"/>
+      </node>
+      <node id="74">
+        <label>source/includes/model/Element.h</label>
+        <link refid="_element_8h_source"/>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+        <childnode refid="75" relation="include">
+        </childnode>
+        <childnode refid="76" relation="include">
+        </childnode>
+        <childnode refid="80" relation="include">
+        </childnode>
+        <childnode refid="83" relation="include">
+        </childnode>
+        <childnode refid="84" relation="include">
+        </childnode>
+        <childnode refid="86" relation="include">
+        </childnode>
+        <childnode refid="101" relation="include">
+        </childnode>
+        <childnode refid="102" relation="include">
+        </childnode>
+        <childnode refid="103" relation="include">
+        </childnode>
+        <childnode refid="104" relation="include">
+        </childnode>
+        <childnode refid="105" relation="include">
+        </childnode>
+        <childnode refid="106" relation="include">
+        </childnode>
+      </node>
+      <node id="114">
+        <label>source/includes/model/Face.h</label>
+        <link refid="_face_8h_source"/>
+        <childnode refid="48" relation="include">
+        </childnode>
+        <childnode refid="115" relation="include">
+        </childnode>
+        <childnode refid="75" relation="include">
+        </childnode>
+      </node>
+      <node id="52">
+        <label>source/includes/model/FieldVariable.h</label>
+        <link refid="model_2_field_variable_8h_source"/>
+      </node>
+      <node id="116">
+        <label>source/includes/model/InterFace.h</label>
+        <link refid="_inter_face_8h_source"/>
+        <childnode refid="117" relation="include">
+        </childnode>
+        <childnode refid="118" relation="include">
+        </childnode>
+        <childnode refid="119" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+        <childnode refid="75" relation="include">
+        </childnode>
+        <childnode refid="60" relation="include">
+        </childnode>
+        <childnode refid="120" relation="include">
+        </childnode>
+        <childnode refid="122" relation="include">
+        </childnode>
+      </node>
+      <node id="75">
+        <label>source/includes/model/MeshManager.h</label>
+        <link refid="_mesh_manager_8h_source"/>
+        <childnode refid="30" relation="include">
+        </childnode>
+      </node>
+      <node id="30">
+        <label>source/includes/model/Model.h</label>
+        <link refid="_model_8h_source"/>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="43" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+        <childnode refid="50" relation="include">
+        </childnode>
+        <childnode refid="51" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="60" relation="include">
+        </childnode>
+        <childnode refid="63" relation="include">
+        </childnode>
+        <childnode refid="64" relation="include">
+        </childnode>
+        <childnode refid="65" relation="include">
+        </childnode>
+        <childnode refid="66" relation="include">
+        </childnode>
+        <childnode refid="67" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="68" relation="include">
+        </childnode>
+        <childnode refid="49" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="69" relation="include">
+        </childnode>
+        <childnode refid="70" relation="include">
+        </childnode>
+        <childnode refid="71" relation="include">
+        </childnode>
+        <childnode refid="72" relation="include">
+        </childnode>
+        <childnode refid="73" relation="include">
+        </childnode>
+      </node>
+      <node id="53">
+        <label>source/includes/model/Model1D.h</label>
+        <link refid="_model1_d_8h_source"/>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="54" relation="include">
+        </childnode>
+        <childnode refid="55" relation="include">
+        </childnode>
+        <childnode refid="56" relation="include">
+        </childnode>
+        <childnode refid="57" relation="include">
+        </childnode>
+        <childnode refid="58" relation="include">
+        </childnode>
+        <childnode refid="59" relation="include">
+        </childnode>
+      </node>
+      <node id="22">
+        <label>source/includes/model/ModelTopology.h</label>
+        <link refid="_model_topology_8h_source"/>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+      </node>
+      <node id="107">
+        <label>source/includes/model/Node.h</label>
+        <link refid="_node_8h_source"/>
+        <childnode refid="108" relation="include">
+        </childnode>
+        <childnode refid="110" relation="include">
+        </childnode>
+        <childnode refid="111" relation="include">
+        </childnode>
+        <childnode refid="112" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+        <childnode refid="75" relation="include">
+        </childnode>
+        <childnode refid="123" relation="include">
+        </childnode>
+        <childnode refid="86" relation="include">
+        </childnode>
+        <childnode refid="124" relation="include">
+        </childnode>
+        <childnode refid="126" relation="include">
+        </childnode>
+      </node>
+      <node id="60">
+        <label>source/includes/model/PropertyAtPointVisitor.h</label>
+        <link refid="_property_at_point_visitor_8h_source"/>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="61" relation="include">
+        </childnode>
+        <childnode refid="62" relation="include">
+        </childnode>
+      </node>
+      <node id="76">
+        <label>source/includes/model/Region.h</label>
+        <link refid="_region_8h_source"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="77" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="75" relation="include">
+        </childnode>
+        <childnode refid="60" relation="include">
+        </childnode>
+        <childnode refid="61" relation="include">
+        </childnode>
+        <childnode refid="78" relation="include">
+        </childnode>
+        <childnode refid="79" relation="include">
+        </childnode>
+      </node>
+      <node id="120">
+        <label>source/includes/model/SplitBoundary.h</label>
+        <link refid="_split_boundary_8h_source"/>
+        <childnode refid="77" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="83" relation="include">
+        </childnode>
+        <childnode refid="121" relation="include">
+        </childnode>
+      </node>
+      <node id="127">
+        <label>source/includes/model/SplitBoundaryInterface.h</label>
+        <link refid="_split_boundary_interface_8h_source"/>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="128" relation="include">
+        </childnode>
+      </node>
+      <node id="80">
+        <label>source/includes/property_manipulation/PropertyHandle.h</label>
+        <link refid="_property_handle_8h_source"/>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="81" relation="include">
+        </childnode>
+        <childnode refid="82" relation="include">
+        </childnode>
+        <childnode refid="67" relation="include">
+        </childnode>
+        <childnode refid="71" relation="include">
+        </childnode>
+        <childnode refid="57" relation="include">
+        </childnode>
+        <childnode refid="58" relation="include">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>source/includes/run_control/SimulatorControl.h</label>
+        <link refid="_simulator_control_8h_source"/>
+      </node>
+      <node id="63">
+        <label>source/includes/run_control/SimulatorMonitor.h</label>
+        <link refid="_simulator_monitor_8h_source"/>
+        <childnode refid="11" relation="include">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>source/includes/run_control/SimulatorSetup.h</label>
+        <link refid="_simulator_setup_8h_source"/>
+        <childnode refid="12" relation="include">
+        </childnode>
+      </node>
+      <node id="87">
+        <label>source/includes/thmc/fractures/FourarLenormand.h</label>
+        <link refid="_fourar_lenormand_8h_source"/>
+        <childnode refid="57" relation="include">
+        </childnode>
+        <childnode refid="58" relation="include">
+        </childnode>
+      </node>
+      <node id="83">
+        <label>source/includes/thmc/fractures/Fracture.h</label>
+        <link refid="_fracture_8h_source"/>
+      </node>
+      <node id="88">
+        <label>source/includes/thmc/fractures/FractureComputeCapillaryGradientVisitor.h</label>
+        <link refid="_fracture_compute_capillary_gradient_visitor_8h_source"/>
+      </node>
+      <node id="89">
+        <label>source/includes/thmc/fractures/FractureComputeVelocityVisitor.h</label>
+        <link refid="_fracture_compute_velocity_visitor_8h_source"/>
+      </node>
+      <node id="90">
+        <label>source/includes/thmc/fractures/FractureMatrixUpscaled.h</label>
+        <link refid="_fracture_matrix_upscaled_8h_source"/>
+        <childnode refid="57" relation="include">
+        </childnode>
+        <childnode refid="58" relation="include">
+        </childnode>
+      </node>
+      <node id="64">
+        <label>source/includes/thmc/fractures/HydroFractureVisitor.h</label>
+        <link refid="_hydro_fracture_visitor_8h_source"/>
+      </node>
+      <node id="65">
+        <label>source/includes/thmc/single_phase_flow/DispersivityVisitor.h</label>
+        <link refid="_dispersivity_visitor_8h_source"/>
+      </node>
+      <node id="82">
+        <label>source/includes/thmc/single_phase_flow/StreamingPotential.h</label>
+        <link refid="_streaming_potential_8h_source"/>
+      </node>
+      <node id="91">
+        <label>source/includes/thmc/two_phase_flow/BrooksCorey.h</label>
+        <link refid="_brooks_corey_8h_source"/>
+        <childnode refid="57" relation="include">
+        </childnode>
+        <childnode refid="58" relation="include">
+        </childnode>
+      </node>
+      <node id="92">
+        <label>source/includes/thmc/two_phase_flow/BrooksCoreyCO2.h</label>
+        <link refid="_brooks_corey_c_o2_8h_source"/>
+      </node>
+      <node id="93">
+        <label>source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h</label>
+        <link refid="_brooks_corey_with_hysteresis_8h_source"/>
+        <childnode refid="57" relation="include">
+        </childnode>
+        <childnode refid="58" relation="include">
+        </childnode>
+      </node>
+      <node id="94">
+        <label>source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresisCO2.h</label>
+        <link refid="_brooks_corey_with_hysteresis_c_o2_8h_source"/>
+      </node>
+      <node id="95">
+        <label>source/includes/thmc/two_phase_flow/Corey.h</label>
+        <link refid="_corey_8h_source"/>
+        <childnode refid="57" relation="include">
+        </childnode>
+        <childnode refid="58" relation="include">
+        </childnode>
+      </node>
+      <node id="96">
+        <label>source/includes/thmc/two_phase_flow/ExperimentalRT.h</label>
+        <link refid="_experimental_r_t_8h_source"/>
+        <childnode refid="57" relation="include">
+        </childnode>
+        <childnode refid="58" relation="include">
+        </childnode>
+      </node>
+      <node id="84">
+        <label>source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h</label>
+        <link refid="_experimental_saturation_functions_8h_source"/>
+        <childnode refid="85" relation="include">
+        </childnode>
+      </node>
+      <node id="85">
+        <label>source/includes/thmc/two_phase_flow/FlowFunctionsModule.h</label>
+        <link refid="_flow_functions_module_8h_source"/>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+      </node>
+      <node id="123">
+        <label>source/includes/thmc/two_phase_flow/Fluid.h</label>
+        <link refid="_fluid_8h_source"/>
+        <childnode refid="85" relation="include">
+        </childnode>
+      </node>
+      <node id="97">
+        <label>source/includes/thmc/two_phase_flow/HeterogeneityAndRateAwareModel.h</label>
+        <link refid="_heterogeneity_and_rate_aware_model_8h_source"/>
+      </node>
+      <node id="98">
+        <label>source/includes/thmc/two_phase_flow/LinearTwoPhaseModel.h</label>
+        <link refid="_linear_two_phase_model_8h_source"/>
+        <childnode refid="94" relation="include">
+        </childnode>
+        <childnode refid="57" relation="include">
+        </childnode>
+        <childnode refid="58" relation="include">
+        </childnode>
+      </node>
+      <node id="99">
+        <label>source/includes/thmc/two_phase_flow/TwoPhaseFileBased.h</label>
+        <link refid="_two_phase_file_based_8h_source"/>
+        <childnode refid="57" relation="include">
+        </childnode>
+        <childnode refid="58" relation="include">
+        </childnode>
+      </node>
+      <node id="86">
+        <label>source/includes/thmc/two_phase_flow/TwoPhaseModel.h</label>
+        <link refid="_two_phase_model_8h_source"/>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="87" relation="include">
+        </childnode>
+        <childnode refid="88" relation="include">
+        </childnode>
+        <childnode refid="89" relation="include">
+        </childnode>
+        <childnode refid="90" relation="include">
+        </childnode>
+        <childnode refid="91" relation="include">
+        </childnode>
+        <childnode refid="92" relation="include">
+        </childnode>
+        <childnode refid="93" relation="include">
+        </childnode>
+        <childnode refid="94" relation="include">
+        </childnode>
+        <childnode refid="95" relation="include">
+        </childnode>
+        <childnode refid="96" relation="include">
+        </childnode>
+        <childnode refid="97" relation="include">
+        </childnode>
+        <childnode refid="98" relation="include">
+        </childnode>
+        <childnode refid="99" relation="include">
+        </childnode>
+        <childnode refid="100" relation="include">
+        </childnode>
+        <childnode refid="73" relation="include">
+        </childnode>
+      </node>
+      <node id="66">
+        <label>source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h</label>
+        <link refid="_two_phase_undersaturated_fluid_property_visitor_8h_source"/>
+      </node>
+      <node id="100">
+        <label>source/includes/thmc/two_phase_flow/VanGenuchten.h</label>
+        <link refid="_van_genuchten_8h_source"/>
+        <childnode refid="57" relation="include">
+        </childnode>
+        <childnode refid="58" relation="include">
+        </childnode>
+      </node>
+      <node id="61">
+        <label>source/includes/utilities/ModelComparator.h</label>
+        <link refid="_model_comparator_8h_source"/>
+      </node>
+      <node id="67">
+        <label>source/includes/utilities/PL_Utilities.h</label>
+        <link refid="_p_l___utilities_8h"/>
+        <childnode refid="48" relation="include">
+        </childnode>
+      </node>
+      <node id="24">
+        <label>source/includes/utilities/vsetMakers.h</label>
+        <link refid="vset_makers_8h_source"/>
+        <childnode refid="25" relation="include">
+        </childnode>
+      </node>
+      <node id="78">
+        <label>source/modules/integration/solver/SAMG_profiles/SteadyStateDiffusionProfile.h</label>
+        <link refid="_steady_state_diffusion_profile_8h_source"/>
+      </node>
+      <node id="17">
+        <label>source/modules/integration/solver/SAMG_profiles/TwoPhaseImplicitNodeCenteredFVTransProfile.h</label>
+        <link refid="_two_phase_implicit_node_centered_f_v_trans_profile_8h_source"/>
+      </node>
+      <node id="7">
+        <label>tests/integration/CVFEM_1D_VVCase.h</label>
+        <link refid="_c_v_f_e_m__1_d___v_v_case_8h_source"/>
+      </node>
+      <node id="13">
+        <label>tests/integration/Geothermal_2D_VVCase.h</label>
+        <link refid="_geothermal__2_d___v_v_case_8h_source"/>
+      </node>
+      <node id="14">
+        <label>tests/integration/Geothermal_3D_VVCase.h</label>
+        <link refid="_geothermal__3_d___v_v_case_8h_source"/>
+      </node>
+      <node id="68">
+        <label>tests/unit/BoundaryInterface_Test.h</label>
+        <link refid="_boundary_interface___test_8h_source"/>
+      </node>
+      <node id="49">
+        <label>tests/unit/Boundary_Test.h</label>
+        <link refid="_boundary___test_8h_source"/>
+      </node>
+      <node id="129">
+        <label>tests/unit/Box_Test.h</label>
+        <link refid="_box___test_8h_source"/>
+      </node>
+      <node id="101">
+        <label>tests/unit/Colony_Test.h</label>
+        <link refid="_colony___test_8h_source"/>
+      </node>
+      <node id="102">
+        <label>tests/unit/ElementPolicyIntegrity_Test.h</label>
+        <link refid="_element_policy_integrity___test_8h_source"/>
+      </node>
+      <node id="103">
+        <label>tests/unit/Element_Test.h</label>
+        <link refid="_element___test_8h_source"/>
+      </node>
+      <node id="125">
+        <label>tests/unit/FiniteElement_Test.h</label>
+        <link refid="_finite_element___test_8h_source"/>
+      </node>
+      <node id="124">
+        <label>tests/unit/FiniteElement_TestData.h</label>
+        <link refid="_finite_element___test_data_8h_source"/>
+        <childnode refid="125" relation="include">
+        </childnode>
+      </node>
+      <node id="104">
+        <label>tests/unit/FiniteVolumePolicy_Test.h</label>
+        <link refid="_finite_volume_policy___test_8h_source"/>
+      </node>
+      <node id="20">
+        <label>tests/unit/Integral_var_NT_lhsop_N_dV_Test.h</label>
+        <link refid="_integral__var___n_t__lhsop___n__d_v___test_8h_source"/>
+      </node>
+      <node id="21">
+        <label>tests/unit/Integral_var_NT_rhsop_N_dV_Test.h</label>
+        <link refid="_integral__var___n_t__rhsop___n__d_v___test_8h_source"/>
+      </node>
+      <node id="122">
+        <label>tests/unit/InterFace_Test.h</label>
+        <link refid="_inter_face___test_8h_source"/>
+      </node>
+      <node id="105">
+        <label>tests/unit/IsoparametricQuadraticTetrahedron_Test.h</label>
+        <link refid="_isoparametric_quadratic_tetrahedron___test_8h_source"/>
+      </node>
+      <node id="106">
+        <label>tests/unit/LinearCuboid_Test.h</label>
+        <link refid="_linear_cuboid___test_8h_source"/>
+      </node>
+      <node id="54">
+        <label>tests/unit/MathOperatorLHS_Test.h</label>
+        <link refid="_math_operator_l_h_s___test_8h_source"/>
+      </node>
+      <node id="55">
+        <label>tests/unit/MathOperatorRHS_Test.h</label>
+        <link refid="_math_operator_r_h_s___test_8h_source"/>
+      </node>
+      <node id="69">
+        <label>tests/unit/MeshManager_Test.h</label>
+        <link refid="_mesh_manager___test_8h_source"/>
+      </node>
+      <node id="130">
+        <label>tests/unit/ModelSubDomain_Test.h</label>
+        <link refid="_model_sub_domain___test_8h_source"/>
+      </node>
+      <node id="26">
+        <label>tests/unit/ModelTopology_Test.h</label>
+        <link refid="_model_topology___test_8h_source"/>
+      </node>
+      <node id="126">
+        <label>tests/unit/NodeFunctions_Test.h</label>
+        <link refid="_node_functions___test_8h_source"/>
+      </node>
+      <node id="70">
+        <label>tests/unit/NodeManifoldManager_Test.h</label>
+        <link refid="_node_manifold_manager___test_8h_source"/>
+      </node>
+      <node id="131">
+        <label>tests/unit/PDE_Integrator_Test.h</label>
+        <link refid="_p_d_e___integrator___test_8h_source"/>
+      </node>
+      <node id="79">
+        <label>tests/unit/Parallel_TestCase.h</label>
+        <link refid="_parallel___test_case_8h_source"/>
+      </node>
+      <node id="62">
+        <label>tests/unit/PropertyAtPointVisitor_Test.h</label>
+        <link refid="_property_at_point_visitor___test_8h_source"/>
+      </node>
+      <node id="71">
+        <label>tests/unit/PropertyHandle_Test.h</label>
+        <link refid="_property_handle___test_8h_source"/>
+      </node>
+      <node id="39">
+        <label>tests/unit/RegionMonitor_Test.h</label>
+        <link refid="_region_monitor___test_8h_source"/>
+      </node>
+      <node id="72">
+        <label>tests/unit/Region_Test.h</label>
+        <link refid="_region___test_8h_source"/>
+      </node>
+      <node id="73">
+        <label>tests/unit/RelativePermeabilityModel_Test.h</label>
+        <link refid="_relative_permeability_model___test_8h_source"/>
+      </node>
+      <node id="128">
+        <label>tests/unit/SplitBoundaryInterface_Test.h</label>
+        <link refid="_split_boundary_interface___test_8h_source"/>
+        <childnode refid="121" relation="include">
+        </childnode>
+      </node>
+      <node id="121">
+        <label>tests/unit/SplitBoundary_Test.h</label>
+        <link refid="_split_boundary___test_8h_source"/>
+      </node>
+      <node id="56">
+        <label>tests/unit/StatisticalAnalyzer_Test.h</label>
+        <link refid="_statistical_analyzer___test_8h_source"/>
+      </node>
+      <node id="57">
+        <label>tests/unit/TwoPhaseModelCapillaryPressure_TestSuite.h</label>
+        <link refid="_two_phase_model_capillary_pressure___test_suite_8h_source"/>
+      </node>
+      <node id="58">
+        <label>tests/unit/TwoPhaseModelWithCapillaryPressure_TestSuite.h</label>
+        <link refid="_two_phase_model_with_capillary_pressure___test_suite_8h_source"/>
+      </node>
+      <node id="59">
+        <label>tests/unit/TwoPhaseModel_TestSuite.h</label>
+        <link refid="_two_phase_model___test_suite_8h_source"/>
+      </node>
+      <node id="25">
+        <label>tests/unit/VSet_Test1.h</label>
+        <link refid="_v_set___test1_8h_source"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="classcsmp_1_1_box" prot="public">csmp::Box</innerclass>
+    <innernamespace refid="namespacecsmp">csmp</innernamespace>
+    <briefdescription>
+<para>Anything to do with definitions and operations on rectangular and box-shaped models(2D and 3D that is). This also includes stand-alone functions for the processing of Boundary flags and values. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>S.K. Matthai </para>
+</simplesect>
+<simplesect kind="date"><para>1997 </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#ifndef<sp/>CSMP_BOX_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>CSMP_BOX_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;set&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;Point.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacecsmp" kindref="compound">csmp</ref><sp/>{</highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;u</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">32_t&gt;<sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>;</highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;u</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">32_t&gt;<sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>;</highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;u</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">32_t&gt;<sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>;</highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/>std::int8_t</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/>IRREGULAR_OUTSIDE{-1},</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/>LEFT_OUTSIDE{-2},<sp/><sp/></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/>RIGHT_OUTSIDE{-3},<sp/><sp/></highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/>BOTTOM_OUTSIDE{-4},</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/>TOP_OUTSIDE{-5},</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/>FRONT_OUTSIDE{-6},</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/>BACK_OUTSIDE{-7},</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/>CNR_MIN{-8},<sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/>CNR_MAX{-9},<sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/>CNR_MIN_MAXX{-10},<sp/></highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/>CNR_MIN_MAXXZ{-11},</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/>CNR_MIN_MAXZ{-12},</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/>CNR_MAX_MINXZ{-13},</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/>CNR_MAX_MAXX{-14},</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/>CNR_MAX_MAXZ{-15},</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/>BACK_BOTTOM{-16},<sp/></highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/>BACK_RIGHT{-17},<sp/><sp/></highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/>BACK_TOP{-18},<sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/>BACK_LEFT{-19},<sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/>BOTTOM_RIGHT{-20},</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/>TOP_RIGHT{-21},<sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/>TOP_LEFT{-22},<sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/>BOTTOM_LEFT{-23},<sp/></highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/>FRONT_BOTTOM{-24},</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/>FRONT_RIGHT{-25},<sp/></highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/>FRONT_TOP{-26},<sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/>FRONT_LEFT{-27},<sp/><sp/></highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/>REGION_BOUNDARY{-28},<sp/></highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/>MULTIPLE_BOUNDARIES{-29};</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"></highlight></codeline>
+<codeline lineno="62" refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">enum</highlight><highlight class="normal"><sp/><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref><sp/>:<sp/>std::int8_t<sp/>{</highlight></codeline>
+<codeline lineno="63" refid="group___c_s_m_pglobal_enums_1gga8e4421c3cd02f67e535bceb2dc74bfb6aa75032f56e77653ffaa7e2eb85566858" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="group___c_s_m_pglobal_enums_1gga8e4421c3cd02f67e535bceb2dc74bfb6aa75032f56e77653ffaa7e2eb85566858" kindref="member">NOT</ref><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>0,<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="64" refid="group___c_s_m_pglobal_enums_1gga8e4421c3cd02f67e535bceb2dc74bfb6a06df978a517113d47cf3375e7d0a978a" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="group___c_s_m_pglobal_enums_1gga8e4421c3cd02f67e535bceb2dc74bfb6a06df978a517113d47cf3375e7d0a978a" kindref="member">IRREGULAR</ref><sp/>=<sp/>IRREGULAR_OUTSIDE,<sp/><sp/></highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/>TOP<sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>TOP_OUTSIDE,</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/>BOTTOM<sp/><sp/><sp/><sp/>=<sp/>BOTTOM_OUTSIDE,</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/>LEFT<sp/><sp/><sp/>=<sp/>LEFT_OUTSIDE,</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/>RIGHT<sp/>=<sp/>RIGHT_OUTSIDE,</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/>FRONT<sp/>=<sp/>FRONT_OUTSIDE,</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/>BACK<sp/><sp/>=<sp/>BACK_OUTSIDE,</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/>CNR1<sp/><sp/>=<sp/>CNR_MIN,</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/>CNR2<sp/><sp/>=<sp/>CNR_MIN_MAXX,</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/>CNR3<sp/><sp/>=<sp/>CNR_MAX_MAXX,</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/>CNR4<sp/><sp/>=<sp/>CNR_MAX_MINXZ,</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/>CNR5<sp/><sp/>=<sp/>CNR_MIN_MAXZ,</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/>CNR6<sp/><sp/>=<sp/>CNR_MIN_MAXXZ,</highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/>CNR7<sp/><sp/>=<sp/>CNR_MAX,</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/>CNR8<sp/><sp/>=<sp/>CNR_MAX_MAXZ,</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/>EDGE1<sp/>=<sp/>BACK_BOTTOM,</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/>EDGE2<sp/>=<sp/>BACK_RIGHT,</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/>EDGE3<sp/>=<sp/>BACK_TOP,</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/>EDGE4<sp/>=<sp/>BACK_LEFT,</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/>EDGE5<sp/>=<sp/>BOTTOM_LEFT,</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/>EDGE6<sp/>=<sp/>BOTTOM_RIGHT,</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/>EDGE7<sp/>=<sp/>TOP_RIGHT,</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/>EDGE8<sp/>=<sp/>TOP_LEFT,</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/>EDGE9<sp/>=<sp/>FRONT_BOTTOM,</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/>EDGE10<sp/>=<sp/>FRONT_RIGHT,</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/>EDGE11<sp/>=<sp/>FRONT_TOP,</highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/>EDGE12<sp/>=<sp/>FRONT_LEFT,</highlight></codeline>
+<codeline lineno="91" refid="group___c_s_m_pglobal_enums_1gga8e4421c3cd02f67e535bceb2dc74bfb6a760090e41d76ddb523e132c0ed2a634b" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="group___c_s_m_pglobal_enums_1gga8e4421c3cd02f67e535bceb2dc74bfb6a760090e41d76ddb523e132c0ed2a634b" kindref="member">INTERNAL</ref><sp/>=<sp/>REGION_BOUNDARY,<sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="92" refid="group___c_s_m_pglobal_enums_1gga8e4421c3cd02f67e535bceb2dc74bfb6a71dba2a91c54c4427623ab1b2aa5d473" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="group___c_s_m_pglobal_enums_1gga8e4421c3cd02f67e535bceb2dc74bfb6a71dba2a91c54c4427623ab1b2aa5d473" kindref="member">MULTIPLE</ref><sp/>=<sp/>MULTIPLE_BOUNDARIES<sp/></highlight></codeline>
+<codeline lineno="93"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"></highlight></codeline>
+<codeline lineno="98"><highlight class="normal"></highlight></codeline>
+<codeline lineno="103" refid="classcsmp_1_1_box" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classcsmp_1_1_box" kindref="compound">Box</ref><sp/>{</highlight></codeline>
+<codeline lineno="104"><highlight class="normal"></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="105"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="group___c_s_m_pglobal_functions_1ga64fa56c35e598036583aa92ebdb14fc8" kindref="member">UnitNormalTo</ref>(<sp/><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref><sp/>bdry,<sp/>uint32_t<sp/>dim,</highlight></codeline>
+<codeline lineno="106"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::vector&lt;double&gt;&amp;<sp/>nrml<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="107"><highlight class="normal"></highlight></codeline>
+<codeline lineno="108"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="109"><highlight class="normal"></highlight></codeline>
+<codeline lineno="110"><highlight class="normal"><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref><sp/><sp/><ref refid="group___c_s_m_pglobal_functions_1ga716e9d29e59b3eaf92f5d37c9f253253" kindref="member">intToBOX_BOUNDARY</ref>(<sp/>int8_t<sp/>i<sp/>);</highlight></codeline>
+<codeline lineno="111"><highlight class="normal"></highlight></codeline>
+<codeline lineno="113"><highlight class="normal">std::string<sp/><sp/><ref refid="group___c_s_m_pglobal_functions_1gace4345cb4dde7fac354305651c61f464" kindref="member">parseBoundary</ref>(<sp/><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref><sp/>);</highlight></codeline>
+<codeline lineno="114"><highlight class="normal"></highlight></codeline>
+<codeline lineno="116" refid="namespacecsmp_1ad3147b30d4727bd135c86ea0dcceea07" refkind="member"><highlight class="normal"><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref><sp/><sp/><ref refid="group___c_s_m_pglobal_functions_1gace4345cb4dde7fac354305651c61f464" kindref="member">parseBoundary</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string&amp;<sp/>box_boundary_name<sp/>);</highlight></codeline>
+<codeline lineno="117"><highlight class="normal"></highlight></codeline>
+<codeline lineno="119"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="group___c_s_m_pglobal_functions_1ga86d9cf3c88a730a881254cbd98f8c9eb" kindref="member">isEdge</ref>(<sp/><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref><sp/>);</highlight></codeline>
+<codeline lineno="120"><highlight class="normal"></highlight></codeline>
+<codeline lineno="122"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="group___c_s_m_pglobal_functions_1ga6b970c9a34abf2a9150140f4fd91e833" kindref="member">isCorner</ref>(<sp/><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref><sp/>);</highlight></codeline>
+<codeline lineno="123"><highlight class="normal"></highlight></codeline>
+<codeline lineno="125"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="group___c_s_m_pglobal_functions_1ga1ac914be25ff02b5b8c1d629c7cb191b" kindref="member">isSide</ref>(<sp/><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref><sp/>);</highlight></codeline>
+<codeline lineno="126"><highlight class="normal"></highlight></codeline>
+<codeline lineno="128"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="group___c_s_m_pglobal_functions_1gad14db27ca76ca3bd64073e8e0fd22dd4" kindref="member">belongsToEdge</ref>(<sp/><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref><sp/>edge,<sp/><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref><sp/>);</highlight></codeline>
+<codeline lineno="129"><highlight class="normal"></highlight></codeline>
+<codeline lineno="131"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="group___c_s_m_pglobal_functions_1ga260768ce8b1a81330b85fe5fce74f477" kindref="member">belongsToSide</ref>(<sp/><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref><sp/>side,<sp/><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref><sp/>);</highlight></codeline>
+<codeline lineno="132"><highlight class="normal"></highlight></codeline>
+<codeline lineno="134"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="group___c_s_m_pglobal_functions_1gaa0f8bf7b0ab86f3ed497a6e892bb18a3" kindref="member">isLEFT</ref>(<sp/><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref><sp/>);</highlight></codeline>
+<codeline lineno="136"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="group___c_s_m_pglobal_functions_1ga286f881708e778bda4cbc6fc28c5ac48" kindref="member">isRIGHT</ref>(<sp/><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref><sp/>);</highlight></codeline>
+<codeline lineno="138"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="group___c_s_m_pglobal_functions_1ga975e897c190d19be26a02aca05e47082" kindref="member">isTOP</ref>(<sp/><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref><sp/>);</highlight></codeline>
+<codeline lineno="140"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="group___c_s_m_pglobal_functions_1ga6673719c184b399a54af3f63c537fee8" kindref="member">isBOTTOM</ref>(<sp/><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref><sp/>);</highlight></codeline>
+<codeline lineno="142"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="group___c_s_m_pglobal_functions_1ga650b1c06ae06d49e3a59113e4c9c8f60" kindref="member">isFRONT</ref>(<sp/><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref><sp/>);</highlight></codeline>
+<codeline lineno="144"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="group___c_s_m_pglobal_functions_1gafab769328f91ebe6032499c43faa8110" kindref="member">isBACK</ref>(<sp/><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref><sp/>);</highlight></codeline>
+<codeline lineno="145"><highlight class="normal"></highlight></codeline>
+<codeline lineno="147"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="group___c_s_m_pglobal_functions_1ga67c628137703b7561fe920a1eb20b12f" kindref="member">canBeIRREGULAR</ref>(<sp/><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref><sp/>);</highlight></codeline>
+<codeline lineno="148"><highlight class="normal"></highlight></codeline>
+<codeline lineno="150"><highlight class="normal"><ref refid="classcsmp_1_1_node" kindref="compound">Node&lt;1U&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="group___c_s_m_pglobal_functions_1gae9b9930fea4a5c4368dd33d74a67089e" kindref="member">cornerFlaggedNode</ref>(<sp/><ref refid="classcsmp_1_1_model" kindref="compound">Model&lt;1U&gt;</ref>&amp;,<sp/><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref><sp/>);</highlight></codeline>
+<codeline lineno="151"><highlight class="normal"></highlight></codeline>
+<codeline lineno="153"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;u</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">32_t<sp/>dim,<sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;u</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">32_t&gt;<sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal">CELL&gt;</highlight></codeline>
+<codeline lineno="154"><highlight class="normal"><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref><sp/><ref refid="group___c_s_m_pglobal_functions_1ga5c6baa4d81d5694647d6bbd0e6aab5c0" kindref="member">atBoundary</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>CELL&lt;dim&gt;*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">,<sp/>uint32_t<sp/>boundary_face<sp/>);</highlight></codeline>
+<codeline lineno="155"><highlight class="normal"></highlight></codeline>
+<codeline lineno="157"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;u</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">32_t<sp/>dim,<sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;u</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">32_t&gt;<sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal">CELL&gt;</highlight></codeline>
+<codeline lineno="158"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="group___c_s_m_pglobal_functions_1ga5c6baa4d81d5694647d6bbd0e6aab5c0" kindref="member">atBoundary</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>CELL&lt;dim&gt;*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="159"><highlight class="normal"></highlight></codeline>
+<codeline lineno="161"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;u</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">32_t<sp/>dim&gt;</highlight></codeline>
+<codeline lineno="162" refid="namespacecsmp_1a2e4b8406b02902b3846a46789c819722" refkind="member"><highlight class="normal"><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref><sp/><ref refid="group___c_s_m_pglobal_functions_1ga5c6baa4d81d5694647d6bbd0e6aab5c0" kindref="member">atBoundary</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::set&lt;BOX_BOUNDARY&gt;&amp;<sp/>node_flags,<sp/>uint32_t<sp/>boundary_face_corner_nodes<sp/>);</highlight></codeline>
+<codeline lineno="163"><highlight class="normal"></highlight></codeline>
+<codeline lineno="165"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;u</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">32_t<sp/>dim&gt;<sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="group___c_s_m_pglobal_functions_1gaf488645ab1faa231464e099bc6dc4fa4" kindref="member">printBoxBoundaryFlags</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_model" kindref="compound">Model&lt;dim&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="166"><highlight class="normal"></highlight></codeline>
+<codeline lineno="168"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="group___c_s_m_pglobal_functions_1ga26e98b89a5db442313780dbe6c0e4151" kindref="member">boundaryMinMaxCoordinates</ref>(<sp/><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref>,</highlight></codeline>
+<codeline lineno="169"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point&lt;1U&gt;</ref>&amp;<sp/>model_coord_min,</highlight></codeline>
+<codeline lineno="170"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point&lt;1U&gt;</ref>&amp;<sp/>model_coord_max<sp/>);</highlight></codeline>
+<codeline lineno="171"><highlight class="normal"></highlight></codeline>
+<codeline lineno="173"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="group___c_s_m_pglobal_functions_1ga26e98b89a5db442313780dbe6c0e4151" kindref="member">boundaryMinMaxCoordinates</ref>(<sp/><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref>,<sp/><ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point&lt;2U&gt;</ref>&amp;,<sp/><ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point&lt;2U&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="174"><highlight class="normal"></highlight></codeline>
+<codeline lineno="176"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="group___c_s_m_pglobal_functions_1ga26e98b89a5db442313780dbe6c0e4151" kindref="member">boundaryMinMaxCoordinates</ref>(<sp/><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref>,<sp/><ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point&lt;3U&gt;</ref>&amp;,<sp/><ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point&lt;3U&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="177"><highlight class="normal"></highlight></codeline>
+<codeline lineno="179" refid="namespacecsmp_1aceeba7f664227183bc48f33d17a0d055" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="namespacecsmp_1aceeba7f664227183bc48f33d17a0d055" kindref="member">isDiagnosticBoxBoundaryClassifier</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string&amp;<sp/>);</highlight></codeline>
+<codeline lineno="180"><highlight class="normal"></highlight></codeline>
+<codeline lineno="182"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;u</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">32_t<sp/>dim&gt;</highlight></codeline>
+<codeline lineno="183"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="group___c_s_m_pglobal_functions_1gaf01ece2dd60ef644efd6a5f39d1818d1" kindref="member">establishBoundaryFlagsForBoxModel</ref>(<sp/><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet&lt;dim&gt;</ref>&amp;<sp/>vset,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>tolerance<sp/>);</highlight></codeline>
+<codeline lineno="184"><highlight class="normal"></highlight></codeline>
+<codeline lineno="186"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="group___c_s_m_pglobal_functions_1ga20ee477d00c1041c66b394b9acb5d15b" kindref="member">recreateBoxBoundaryFlags</ref>(<sp/><ref refid="classcsmp_1_1_model" kindref="compound">Model&lt;1U&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="187"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="group___c_s_m_pglobal_functions_1ga20ee477d00c1041c66b394b9acb5d15b" kindref="member">recreateBoxBoundaryFlags</ref>(<sp/><ref refid="classcsmp_1_1_model" kindref="compound">Model&lt;2U&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="188"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="group___c_s_m_pglobal_functions_1ga20ee477d00c1041c66b394b9acb5d15b" kindref="member">recreateBoxBoundaryFlags</ref>(<sp/><ref refid="classcsmp_1_1_model" kindref="compound">Model&lt;3U&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="189"><highlight class="normal"></highlight></codeline>
+<codeline lineno="191"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="group___c_s_m_pglobal_functions_1gabe9f5ed063f7a9fbf63c863d2ffc2193" kindref="member">recreateBoxBoundaryFlagsForQuadrilateralModel</ref>(<sp/><ref refid="classcsmp_1_1_model" kindref="compound">Model&lt;2U&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="192"><highlight class="normal"></highlight></codeline>
+<codeline lineno="194"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="group___c_s_m_pglobal_functions_1gaaa98130aa92c763cba74a532c73a2db1" kindref="member">recreateBoxBoundaryFlagsForHexahedralModel</ref>(<sp/><ref refid="classcsmp_1_1_model" kindref="compound">Model&lt;3U&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="195"><highlight class="normal"></highlight></codeline>
+<codeline lineno="197"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;u</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">32_t<sp/>dim&gt;</highlight></codeline>
+<codeline lineno="198"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="group___c_s_m_pglobal_functions_1ga3a18a868088cabdf5c433d2daa3796fe" kindref="member">boxFlagsToVariable</ref>(<sp/><ref refid="classcsmp_1_1_model" kindref="compound">Model&lt;dim&gt;</ref>&amp;,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>node_variable,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>elmt_variable<sp/>);</highlight></codeline>
+<codeline lineno="199"><highlight class="normal"></highlight></codeline>
+<codeline lineno="201"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;u</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">32_t<sp/>dim&gt;</highlight></codeline>
+<codeline lineno="202"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="group___c_s_m_pglobal_functions_1ga660afbbd83ad8330b7cfe53f338406cc" kindref="member">flagCornerNodes</ref>(<sp/><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet&lt;dim&gt;</ref>&amp;,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>tol,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>xmin,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>xmax,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>ymin,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>ymax,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>zmin,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>zmax<sp/>);</highlight></codeline>
+<codeline lineno="203"><highlight class="normal"></highlight></codeline>
+<codeline lineno="205"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;u</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">32_t<sp/>dim&gt;</highlight></codeline>
+<codeline lineno="206"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="group___c_s_m_pglobal_functions_1ga172c4c1c36ed2faadb9b0c792bd538e6" kindref="member">flagEdges</ref>(<sp/><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet&lt;dim&gt;</ref>&amp;,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>tol,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>xmin,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>xmax,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>ymin,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>ymax,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>zmin,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>zmax<sp/>);</highlight></codeline>
+<codeline lineno="207"><highlight class="normal"></highlight></codeline>
+<codeline lineno="209"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="group___c_s_m_pglobal_functions_1gac6a2a42d205e461bd54a544648c4f6c0" kindref="member">hasAllSideBoundaries</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_model" kindref="compound">Model&lt;2U&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="210"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="group___c_s_m_pglobal_functions_1gac6a2a42d205e461bd54a544648c4f6c0" kindref="member">hasAllSideBoundaries</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_model" kindref="compound">Model&lt;3U&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="211"><highlight class="normal"></highlight></codeline>
+<codeline lineno="213"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="group___c_s_m_pglobal_functions_1gac878421aeb80354dd6c708426580b557" kindref="member">isStrictlyBoxShaped</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_model" kindref="compound">Model&lt;2U&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="214"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="group___c_s_m_pglobal_functions_1gac878421aeb80354dd6c708426580b557" kindref="member">isStrictlyBoxShaped</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_model" kindref="compound">Model&lt;3U&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="215"><highlight class="normal"></highlight></codeline>
+<codeline lineno="217"><highlight class="normal"><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref><sp/><sp/><ref refid="group___c_s_m_pglobal_functions_1ga4c9a22ddd432ece3ce5f50e1d84ab887" kindref="member">whichEdge</ref>(<sp/><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref><sp/>side1,<sp/><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref><sp/>side2<sp/>);</highlight></codeline>
+<codeline lineno="218"><highlight class="normal"></highlight></codeline>
+<codeline lineno="220"><highlight class="normal"><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref><sp/><sp/><ref refid="group___c_s_m_pglobal_functions_1gaff15bf160aa1a4e0ed2337c79d399f87" kindref="member">whichCorner</ref>(<sp/><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref><sp/>side1,<sp/><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref><sp/>side2,<sp/><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref><sp/>side3<sp/>);</highlight></codeline>
+<codeline lineno="221"><highlight class="normal"></highlight></codeline>
+<codeline lineno="223"><highlight class="normal"><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref><sp/><sp/><ref refid="group___c_s_m_pglobal_functions_1ga4a734d4253f389f5710d8789d077b60d" kindref="member">whichBoundary</ref>(<sp/><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref><sp/>node_flag1,<sp/><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref><sp/>node_flag2<sp/>);</highlight></codeline>
+<codeline lineno="224"><highlight class="normal"></highlight></codeline>
+<codeline lineno="225"><highlight class="normal"></highlight></codeline>
+<codeline lineno="227"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;u</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">32_t<sp/>dim&gt;</highlight></codeline>
+<codeline lineno="228"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="group___c_s_m_pglobal_functions_1ga99c685c2fcc2ec4ea7fbda9eb4b659e2" kindref="member">boxBoundaryPropertyRange</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_model" kindref="compound">Model&lt;dim&gt;</ref>&amp;<sp/>sg,<sp/><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref><sp/>boundary,</highlight></codeline>
+<codeline lineno="229"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>node_property,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&amp;<sp/>bmin,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&amp;<sp/>bmax<sp/>);</highlight></codeline>
+<codeline lineno="230"><highlight class="normal"></highlight></codeline>
+<codeline lineno="232" refid="namespacecsmp_1a3bc774e6d5d16c5a1cc41263d12cff9c" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="namespacecsmp_1a3bc774e6d5d16c5a1cc41263d12cff9c" kindref="member">linearInterpolate</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::pair&lt;<ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;1U&gt;</ref>,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&gt;&amp;,</highlight></codeline>
+<codeline lineno="233"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::pair&lt;<ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;1U&gt;</ref>,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&gt;&amp;,</highlight></codeline>
+<codeline lineno="234"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;1U&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="235"><highlight class="normal"></highlight></codeline>
+<codeline lineno="237" refid="namespacecsmp_1a547046838bcf20ae7d1f23cb3f9c4395" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="namespacecsmp_1a3bc774e6d5d16c5a1cc41263d12cff9c" kindref="member">linearInterpolate</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::pair&lt;<ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;2U&gt;</ref>,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&gt;&amp;,</highlight></codeline>
+<codeline lineno="238"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::pair&lt;<ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;2U&gt;</ref>,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&gt;&amp;,</highlight></codeline>
+<codeline lineno="239"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;2U&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="240"><highlight class="normal"></highlight></codeline>
+<codeline lineno="242" refid="namespacecsmp_1a20cbbd4367c7f886179da57f8c93d0e8" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="namespacecsmp_1a3bc774e6d5d16c5a1cc41263d12cff9c" kindref="member">linearInterpolate</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::pair&lt;<ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;3U&gt;</ref>,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&gt;&amp;,</highlight></codeline>
+<codeline lineno="243"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::pair&lt;<ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;3U&gt;</ref>,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&gt;&amp;,</highlight></codeline>
+<codeline lineno="244"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;3U&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="245"><highlight class="normal"></highlight></codeline>
+<codeline lineno="247"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="group___c_s_m_pglobal_functions_1ga82ee7c7c55e047d07035e45bf6933786" kindref="member">bilinearInterpolate</ref>(<sp/>uint32_t<sp/>idx_x,<sp/>uint32_t<sp/>idx_y,</highlight></codeline>
+<codeline lineno="248"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;1U&gt;</ref>&amp;<sp/>xy1,</highlight></codeline>
+<codeline lineno="249"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;1U&gt;</ref>&amp;<sp/>xy2,</highlight></codeline>
+<codeline lineno="250"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;1U&gt;</ref>&amp;<sp/>coord,</highlight></codeline>
+<codeline lineno="251"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>p1,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>p2,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="252"><highlight class="normal"></highlight></codeline>
+<codeline lineno="253"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="group___c_s_m_pglobal_functions_1ga82ee7c7c55e047d07035e45bf6933786" kindref="member">bilinearInterpolate</ref>(<sp/>uint32_t<sp/>idx_x,<sp/>uint32_t<sp/>idx_y,</highlight></codeline>
+<codeline lineno="254"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;2U&gt;</ref>&amp;<sp/>xy1,</highlight></codeline>
+<codeline lineno="255"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;2U&gt;</ref>&amp;<sp/>xy2,</highlight></codeline>
+<codeline lineno="256"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;2U&gt;</ref>&amp;<sp/>coord,</highlight></codeline>
+<codeline lineno="257"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>val@x0,y0<sp/><sp/>val@x1,y0<sp/><sp/>val@x1,y1<sp/><sp/>val@x0,y1</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="258"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>p1,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>p2,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>p3,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>p4<sp/>);</highlight></codeline>
+<codeline lineno="259"><highlight class="normal"></highlight></codeline>
+<codeline lineno="260"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="group___c_s_m_pglobal_functions_1ga82ee7c7c55e047d07035e45bf6933786" kindref="member">bilinearInterpolate</ref>(<sp/>uint32_t<sp/>idx_x,<sp/>uint32_t<sp/>idx_y,</highlight></codeline>
+<codeline lineno="261"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;3U&gt;</ref>&amp;<sp/>xy1,</highlight></codeline>
+<codeline lineno="262"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;3U&gt;</ref>&amp;<sp/>xy2,</highlight></codeline>
+<codeline lineno="263"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;3U&gt;</ref>&amp;<sp/>coord,</highlight></codeline>
+<codeline lineno="264"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>val@x0,y0<sp/><sp/>val@x1,y0<sp/><sp/>val@x1,y1<sp/><sp/>val@x0,y1</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="265"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>p1,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>p2,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>p3,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>p4<sp/>);</highlight></codeline>
+<codeline lineno="266"><highlight class="normal"></highlight></codeline>
+<codeline lineno="267"><highlight class="normal"></highlight></codeline>
+<codeline lineno="268"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>end<sp/>namespace<sp/>csmp</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="269"><highlight class="normal"></highlight></codeline>
+<codeline lineno="270"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="271"><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="source/includes/model/Box.h"/>
+  </compounddef>
+</doxygen>

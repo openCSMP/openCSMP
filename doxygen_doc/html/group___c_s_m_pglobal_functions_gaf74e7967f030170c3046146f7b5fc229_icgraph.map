@@ -1,0 +1,7 @@
+<map id="csmp::g" name="csmp::g">
+<area shape="rect" id="Node000001" title="finding the x value, in the range [xmin,xmax], where function the &quot;df(x)/dx=(f(x)&#45;f(x1))/(x&#45;x1)&quot;...." alt="" coords="242,35,310,60"/>
+<area shape="rect" id="Node000002" href="$group___c_s_m_pglobal_functions.html#ga2f12b9d86bc1483572e38db6c7f93d7e" title="in the range [xmin,xmax], finds the intersection of the nonlinear function (flinear) with a linear fu..." alt="" coords="36,5,163,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="226,42,163,31,164,26,227,37"/>
+<area shape="rect" id="Node000003" href="$classcsmp_1_1_stencil_processor_p_h_x.html#a25201ee08639dbfa335391a0f410ce1c" title=" " alt="" coords="5,55,194,96"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="227,58,195,63,194,58,226,53"/>
+</map>

@@ -230,7 +230,7 @@ void VData::AddNodeManifolds( VData::manifoldContainer::const_iterator first,
     /// reports whether the model contains only isoparametric element types
 bool  VData::IsoparametricElementMesh() const
  {
-     for ( auto it : pelmt )
+     for ( const auto& it : pelmt )
        if ( !CSMP_ElementSpecifications::IsIsoparametric(it) )
          return false;
      return true;
@@ -246,7 +246,7 @@ uint32_t VData::SpatialDimension() const
      return CSMP_ElementSpecifications::MinimumSpatialDimension( pelmt[0] );
      
    uint32_t spatial_dim{1u};
-   for ( auto i : pelmt ) {
+   for ( const auto& i : pelmt ) {
         spatial_dim = max( spatial_dim, CSMP_ElementSpecifications::MinimumSpatialDimension(i) );
         if (  spatial_dim == 3 ) break;
      }
@@ -2332,10 +2332,10 @@ void VData::ReduceTo( const map<size_t,size_t>& o_n_elmt_ids, ///< the element  
                    if ( eit == o_n_elmt_ids.end() ) {
                          if ( first_incidence ) {
                                if ( csmp_error.Verbose() ) {
-                                   cerr <<"\nVData::ReduceTo 'pfvert' neighbor element ID could not be updated for element ";
+                                   cerr <<"\nVData::ReduceTo: 'pfvert' neighbor element ID could not be updated for element ";
                                    cerr << *pit <<" and possible others.\n Treating them as 'REGION_BOUNDARY'"<< endl;
-#ifndef NDEBUG
-cerr <<"\n"<<"current mapping from old neighbor-element idx to new idx:"<< endl;
+#if !defined(NDEBUG) && defined(VDATA_TESTING)
+cerr <<"\n"<<"\nVData::ReduceTo: current mapping from old neighbor-element idx to new idx:"<< endl;
 for ( const auto& pfit : o_n_elmt_ids )
   cerr <<" "<< pfit.first <<":"<< pfit.second;
 cerr << endl;
@@ -2632,7 +2632,7 @@ size_t VData::RenumberElementsCounterClockwise2D()
                           }
                      }
                    // in all cases, the neighbor numbering has to be reversed as well
-                   if ( !(*pfv).empty() ) reverse( (*pfv).begin(), (*pfv).end() );
+                   if ( !pfverts.empty() and !(*pfv).empty() ) reverse( (*pfv).begin(), (*pfv).end() );
                    orientation_changes++;  
                 }
            }
@@ -2894,10 +2894,10 @@ size_t VData::RenumberElementsCounterClockwise2D()
       
       // 3. Reordering chains that are located on the model boundary to make them consistent with the counter-clockwise element numbering
       // --------------------------------------------------------------------------------------------------------------------------------
-      // using: //  face-nd-ids,      elmt, face   to verify that elements are indeed oriented correctly
-      //        map<set<uint32_t>,pair<size_t,size_t> > surf_elmt_face_nd_ids;
+      // using: //  face-nd-ids, elmt, face   to verify that elements are indeed oriented correctly
       //
       // getting the surface element deque ready for binary_search
+      //    deque<pair<size_t,size_t> >
       sort( surf_elmt_face_nd_ids.begin(), surf_elmt_face_nd_ids.end() );
       
       // looping over the line elements that are missing one neighbor, i.e., are at the beginning of a chain
@@ -2906,20 +2906,20 @@ size_t VData::RenumberElementsCounterClockwise2D()
            // searching for the corresponding face of a higher dimensional element
            // --------------------------------------------------------------------
            // if a surface element face with same node numbering is found the line element is already correctly oriented
-           if ( binary_search( surf_elmt_face_nd_ids.begin(), surf_elmt_face_nd_ids.end(), make_pair( plist[*it][0], plist[*it][1]) ) )
-             continue;
-           // if the face has the opposite orientation, the line elements in the polyline have to be flipped
+           if ( binary_search( surf_elmt_face_nd_ids.begin(), surf_elmt_face_nd_ids.end(), make_pair( plist[*it][0], plist[*it][1]) ) ) {
+                continue;
+             }
+           // if the face has the opposite orientation, the line elements in the polyline must be flipped
            if ( binary_search( surf_elmt_face_nd_ids.begin(), surf_elmt_face_nd_ids.end(), make_pair( plist[*it][1], plist[*it][0]) ) ) {
                 swap( plist[*it][0], plist[*it][1] );     // swapping nodes
                 swap( pfverts[*it][0], pfverts[*it][1] ); // swapping neighbors
+                continue;
              }
            // this is a line element with no surface element next to it?
-           else {
-                cerr <<"\nVData::CreateConsistentLineElementOrientations: detected detached line element "<< *it <<" at border with the nodes:\n\t\t";
-                cerr << plist[*it][0] <<"("<< parseBoundary(static_cast<BOX_BOUNDARY>(bflags[ static_cast<size_t>(plist[*it][0])])) <<"), ";
-                cerr << plist[*it][1] <<"("<< parseBoundary(static_cast<BOX_BOUNDARY>(bflags[ static_cast<size_t>(plist[*it][1])])) <<"), ";
-                cerr <<" element has no higher-dimensional neighbor; its orientation was left untouched.\n";
-             }
+           cerr <<"\nVData::CreateConsistentLineElementOrientations: detected detached line element "<< *it <<" at border with the nodes:\n\t\t";
+           cerr << plist[*it][0] <<"("<< parseBoundary(static_cast<BOX_BOUNDARY>(bflags[ static_cast<size_t>(plist[*it][0])])) <<"), ";
+           cerr << plist[*it][1] <<"("<< parseBoundary(static_cast<BOX_BOUNDARY>(bflags[ static_cast<size_t>(plist[*it][1])])) <<"), ";
+           cerr <<" element has no higher-dimensional neighbor; its orientation was left untouched.\n";
            
         } // end boundary_line_elmts
               
@@ -3217,7 +3217,7 @@ void  VData::EstablishElementConnectivity2D()
                   // normals are (-dy, dx)=clockwise and (dy, -dx)=counter-clockwise (USED HERE)
                   const double unrml[2U] = { dy/length, -dx/length };
                   // determining BOX_BOUNDARY
-                  // TODO: does not work yet
+// TODO: does not work yet
                   BOX_BOUNDARY boundary(IRREGULAR);
                   bool boundary_found{false};
                   // bottom (within +/-20o of side-boundary normal (dot-product >=0.94)
@@ -3268,9 +3268,9 @@ void  VData::EstablishElementConnectivity2D()
                 {
                    size_t boundaries_per_element(0U);
                    for ( vector<int64_t>::const_iterator pt=(*pft).begin(); pt!=(*pft).end(); ++pt )
-                     // the face is on the boundary
+                     // the face is on the boundary of model bigger than just 4 corner nodes
                      if ( (*pt) < 0 ) boundaries_per_element++;
-                   if ( boundaries_per_element > 1U &&
+                   if ( boundaries_per_element > 1U && plist.size() > 4 &&
                        isTriangularElement( parseFiniteElementTypeEnum( etype ) ) )
                      {
                        cerr <<"\n\n\telement "<< elmt_idx <<" ("<< parseFiniteElementType( pelmt[static_cast<size_t>(elmt_idx)] ) <<") ";
@@ -3401,6 +3401,8 @@ void  VData::EstablishElementConnectivity2D()
 
    // 5. reorienting line-element chains (done in other method)
    if ( HybridElementTypeMesh() ) CreateConsistentLineElementOrientations2D();
+   
+   cout << "\n"<<"EstablishElementConnectivity2D: Established neighbor connectivity of "<< pfverts.size() <<" cells successfully.\n"<< endl;
 
  } // end EstablishElementConnectivity2D
 
@@ -3523,7 +3525,7 @@ size_t VData::SwitchCornerTriangles2D()
     
     @attention method relies on correct boundary flags
     
-    @todo only use face corner nodes to identify matching faces
+    @todo Only use face corner nodes to identify matching faces
     @todo needs to take into account potentials Faces and Interfaces.
 */
 void VData::EstablishElementConnectivity3D()
@@ -3555,7 +3557,7 @@ void VData::EstablishElementConnectivity3D()
     const size_t n_elements(plist.size());
     pfverts.resize( plist.size() );
 
-    for ( size_t elmt_idx{0}; elmt_idx < n_elements; ++elmt_idx )
+    for ( size_t elmt_idx{0ul}; elmt_idx < n_elements; ++elmt_idx )
       {
          // getting the element type (unfortunately this is known only at runtime)
          const CSMP_FEM_TYPE etype = (HybridElementTypeMesh()==true) ? static_cast<CSMP_FEM_TYPE>(pelmt[elmt_idx]) : static_cast<CSMP_FEM_TYPE>(pelmt[0]);
@@ -3867,7 +3869,11 @@ void VData::EstablishElementConnectivity3D()
                        cerr <<", all node boundary flags have value: NOT; setting neighbor to IRREGULAR"<< endl;
                        pfverts[elmt][boundary_face] = IRREGULAR;
                     }
-                  else pfverts[elmt][boundary_face] = atBoundary<3>( bflag_set, n_face_nodes );
+                  else {
+                       if ( n_face_nodes > 4 )
+                         csmp_error.Note( ERROR, "VData::EstablishElementConnectivity3D", "Neighbor flags not necessarily handled correctly for higher-order meshes");
+                       pfverts[elmt][boundary_face] = atBoundary<3>( bflag_set, n_face_nodes );
+                    }
                 }
           }
 
@@ -4487,8 +4493,7 @@ As a consequence, degenerate tetrahedra would be produced by the splitting opera
 @todo does not repair any surface elements that are covering the faces of the tetrahedra and would need to be adjusted
 
 */
-/* TODO: not all corner cases are handled yet
-
+// TODO: does not work correctly yet
 void splitCornerTetrahedron( VData& vdata, size_t cnr, size_t nbr )
  {
     assert( cnr < vdata.Elements() );
@@ -4651,7 +4656,6 @@ elementToVTK( vdata, nbr, "b_interior_tetrahedron" );
     cout <<" and its neighbor "<< nbr <<", adding the new tetrahedron "<< new1;
 
  } // end splitCornerTetrahedron
-*/
 
 
 

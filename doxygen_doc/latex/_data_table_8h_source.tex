@@ -1,0 +1,79 @@
+\doxysection{Data\+Table.\+h}
+\hypertarget{_data_table_8h_source}{}\label{_data_table_8h_source}\index{source/includes/interfaces/DataTable.h@{source/includes/interfaces/DataTable.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ \ DataTable.h}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ \ CSMP\_unit\_tests}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ \ Created\ by\ Stephan\ Matthai\ on\ 20/12/21.}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//\ \ Copyright\ ©\ 2021\ Stephan\ Matthai.\ All\ rights\ reserved.}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_DATA\_TABLE\_H}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_DATA\_TABLE\_H}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{vector}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{set}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{iostream}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_data_table}{DataTable}}\ \{}
+\DoxyCodeLine{00020\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{comment}{///\ creates\ a\ table\ from\ values\ and\ column\ headers\ supplied}}
+\DoxyCodeLine{00022\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_data_table_ab30ea0548e34e38e2a85b5a9286f982d}{DataTable}}(\ std::string\ name,\ \textcolor{keyword}{const}\ std::vector<std::string>\&\ col\_headers,}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_data_table_ab30ea0548e34e38e2a85b5a9286f982d}{std}}::\mbox{\hyperlink{classcsmp_1_1_data_table_ab30ea0548e34e38e2a85b5a9286f982d}{vector}}<\mbox{\hyperlink{classcsmp_1_1_data_table_ab30ea0548e34e38e2a85b5a9286f982d}{std}}::\mbox{\hyperlink{classcsmp_1_1_data_table_ab30ea0548e34e38e2a85b5a9286f982d}{vector}}<\textcolor{keywordtype}{double}>>\&\ \mbox{\hyperlink{classcsmp_1_1_data_table_ab30ea0548e34e38e2a85b5a9286f982d}{rows\_of\_columns}}\ );}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ DataTable(\ std::string\ name,}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<std::string>\&\ col\_headers,}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<std::string>\&\ row\_lables,}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<std::vector<\textcolor{keywordtype}{double}>>\&\ rows\_of\_columns\ );}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \string~DataTable()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{comment}{///\ if\ table\ does\ not\ already\ contain\ a\ data\ column\ with\ the\ indicated\ header\ it\ is\ appended\ on\ the\ right}}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_data_table_a6d84c348c3f9a59eb0db59d6ffe7cebf}{AppendColumn}}(\ std::string\ col\_header\ );}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ size\_t\ Rows()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ table\_.size();\ \}}
+\DoxyCodeLine{00036\ \ \ \ \ size\_t\ Columns()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ (table\_.empty())\ ?\ 0\ :\ table\_[0].size();\ \}}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{comment}{///\ checks\ whether\ there\ is\ a\ column\ header\ that\ matches\ the\ supplied\ variable}}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_data_table_a57a2b5fa0aa4a8a15d711a15a03d2606}{ContainsColumn}}(\ std::string\ column\_header\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{comment}{///\ finds\ in\ which\ column\ the\ values\ of\ the\ target\ variable\ are\ stored;\ returns\ UINT\_MAX\ if\ the\ variable\ is\ not\ contained}}
+\DoxyCodeLine{00042\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_data_table_a4940b62df5a0d190c7d2c050a8bd584f}{size\_t}}\ \mbox{\hyperlink{classcsmp_1_1_data_table_a4940b62df5a0d190c7d2c050a8bd584f}{ColumnIndex}}(\ std::string\ variable\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{comment}{///\ read\ access\ of\ elements\ in\ the\ table\ by\ row\ and\ column\ indices}}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_data_table_ac4e5912de9d97d9efe58e67b9d8a1c64}{operator}}()(\ size\_t\ row,\ size\_t\ col\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{comment}{///\ write\ access}}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordtype}{double}\&\ \mbox{\hyperlink{classcsmp_1_1_data_table_adec68ba84bcaf52b762474c24fdcfb35}{operator}}()(\ size\_t\ row,\ size\_t\ col\ );}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{comment}{///\ whre\ empty\ sets\ are\ supplied\ as\ arguments,\ all\ column\ or\ rows\ will\ be\ extracted}}
+\DoxyCodeLine{00050\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_data_table}{DataTable}}\ \ \mbox{\hyperlink{classcsmp_1_1_data_table_a7214d3276024ecffb46ef98ee0456e35}{ExtractSubTable}}(\ \textcolor{keyword}{const}\ std::set<std::string>\&\ rows,\ \textcolor{keyword}{const}\ std::set<std::string>\&\ columns\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00051\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_data_table}{DataTable}}\ \ \mbox{\hyperlink{classcsmp_1_1_data_table_a7214d3276024ecffb46ef98ee0456e35}{ExtractSubTable}}(\ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{int}>\&\ rows,\ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{int}>\&\ columns\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{comment}{///\ writes\ the\ data\ from\ the\ currently\ stored\ table\ into\ a\ comma\ delimited\ text\ file}}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_data_table_ae548e81b57e73a9b815860d2875b5f76}{Write\_CSV\_File}}(\ std::string\ filename\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keywordtype}{void}\ Out()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00059\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_data_table}{std}}::\mbox{\hyperlink{classcsmp_1_1_data_table}{vector}}<\mbox{\hyperlink{classcsmp_1_1_data_table}{std}}::\mbox{\hyperlink{classcsmp_1_1_data_table}{vector}}<\textcolor{keywordtype}{double}>\ >\ \ \mbox{\hyperlink{classcsmp_1_1_data_table}{table\_}};\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ body\ of\ the\ table}}
+\DoxyCodeLine{00060\ \ \ \ \ \ std::vector<std::string>\ \ \ \ \ \ \ \ \ \ \ col\_titles\_;\ \ \ \ \ \ \textcolor{comment}{///<\ headings\ indicating\ the\ variable\ names}}
+\DoxyCodeLine{00061\ \ \ \ \ \ std::vector<std::string>\ \ \ \ \ \ \ \ \ \ \ row\_identifiers\_;\ \textcolor{comment}{///<\ optional,\ could\ be\ region\ names}}
+\DoxyCodeLine{00062\ \ \ \ \ \ std::string\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ title\_;\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ \ the\ name\ of\ the\ table}}
+\DoxyCodeLine{00063\ \};}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \ \ \textcolor{comment}{///\ reads\ CSV\ file\ collecting\ all\ the\ data\ needed\ to\ initialise\ the\ DataTable}}
+\DoxyCodeLine{00066\ \ \ \mbox{\hyperlink{namespacecsmp_af674fa41f20b8027fb608e5cd4746d2d}{size\_t}}\ \mbox{\hyperlink{namespacecsmp_af674fa41f20b8027fb608e5cd4746d2d}{read\_CSV\_File}}(\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{string}}\ \mbox{\hyperlink{namespacecsmp}{filename}},}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{string}}>\&\ \mbox{\hyperlink{namespacecsmp}{row\_labels}},\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{string}}>\&\ \mbox{\hyperlink{namespacecsmp}{col\_headers}},}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\textcolor{keywordtype}{double}>>\&\ \mbox{\hyperlink{namespacecsmp}{rows\_of\_columns}}\ );}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \}\ \textcolor{comment}{//\ end\ csmp}}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{/*\ CSMP\_DATA\_TABLE\_H\ */}}
+
+\end{DoxyCode}

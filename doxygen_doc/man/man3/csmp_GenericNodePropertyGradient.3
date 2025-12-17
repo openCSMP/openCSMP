@@ -1,0 +1,223 @@
+.TH "csmp::GenericNodePropertyGradient< dim >" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::GenericNodePropertyGradient< dim > \- Computes the gradient of a node variable at the node using a least-squares approach\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <GenericNodePropertyGradient\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBGenericNodePropertyGradient\fP (\fBModel\fP< dim > &, const char *region, const char *prop='node property gradient')"
+.br
+.ti -1c
+.RI "\fBGenericNodePropertyGradient\fP (\fBModel\fP< dim > &, const char *region, std::vector< char * > advected_props)"
+.br
+.ti -1c
+.RI "void \fBGenericCenterOfMass\fP (size_t global_node_id, \fBVectorVariable\fP< dim > &mass_center) const"
+.br
+.RI "provide public access to center of mass of fv: "
+.ti -1c
+.RI "void \fBGenericDistanceFacetFVBarycenter\fP (size_t global_el_id, uint32_t local_facet_id, uint32_t local_node_id, \fBVectorVariable\fP< dim > &\fBdistance\fP) const"
+.br
+.RI "provide public access to distance between facet and mass centre: "
+.ti -1c
+.RI "void \fBCalculateGenericLeastSquareSums\fP ()"
+.br
+.RI "computation of property gradient "
+.ti -1c
+.RI "void \fBCalculateGenericNodalGradient\fP ()"
+.br
+.RI "computation of property gradient "
+.ti -1c
+.RI "void \fBSetPropertyKey\fP (\fBcsmp::Index\fP &key)"
+.br
+.RI "initializing the property key "
+.ti -1c
+.RI "double \fBSizeOf\fP () const"
+.br
+.ti -1c
+.RI "void \fBCalculateGenericLeastSquareSums\fP ()"
+.br
+.ti -1c
+.RI "void \fBCalculateGenericNodalGradient\fP ()"
+.br
+.ti -1c
+.RI "void \fBCalculateGenericLeastSquareSums\fP ()"
+.br
+.ti -1c
+.RI "void \fBCalculateGenericNodalGradient\fP ()"
+.br
+.ti -1c
+.RI "void \fBCalculateGenericLeastSquareSums\fP ()"
+.br
+.ti -1c
+.RI "void \fBCalculateGenericNodalGradient\fP ()"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBRegion\fP< dim > & \fBgref_\fP"
+.br
+.ti -1c
+.RI "double \fBtolerance\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBu_key\fP"
+.br
+.ti -1c
+.RI "const \fBcsmp::Index\fP \fBgrad_key\fP"
+.br
+.ti -1c
+.RI "const \fBcsmp::Index\fP \fBmctr_key\fP"
+.br
+.ti -1c
+.RI "std::vector< \fBPropertyHandle\fP< dim > * > \fBgradient\fP"
+.br
+.ti -1c
+.RI "\fBPropertyHandle\fP< dim > \fBmass_center\fP"
+.br
+.ti -1c
+.RI "std::vector< double > \fBdet\fP"
+.br
+.ti -1c
+.RI "std::vector< double > \fBsum_x2\fP"
+.br
+.ti -1c
+.RI "std::vector< double > \fBsum_y2\fP"
+.br
+.ti -1c
+.RI "std::vector< double > \fBsum_z2\fP"
+.br
+.ti -1c
+.RI "std::vector< double > \fBsum_xy\fP"
+.br
+.ti -1c
+.RI "std::vector< double > \fBsum_xz\fP"
+.br
+.ti -1c
+.RI "std::vector< double > \fBsum_yz\fP"
+.br
+.ti -1c
+.RI "std::vector< uint32_t > \fBzero_grad_index_\fP"
+.br
+.ti -1c
+.RI "std::vector< std::vector< size_t > > \fBneighbors_\fP"
+.br
+.RI "global indices of parent nodes; [node_id] -> vector with id's "
+.ti -1c
+.RI "std::vector< std::vector< std::vector< \fBVectorVariable\fP< dim > > > > \fBdistance_facet_FVBarycenter_\fP"
+.br
+.RI "[EL_Id] [local_facet_id] [local_node_id], distance between facet with ID local_facet_id and node with ID local_node_id "
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim>
+.br
+class csmp::GenericNodePropertyGradient< dim >"Computes the gradient of a node variable at the node using a least-squares approach\&. 
+
+The NodePropertyGradient object can be used to compute the nodal gradient of a property (solute concentration, fluid phase volume fraction, etc\&.\&.\&.) such that the property can be advected with second order accuarcy\&. It is used by the NodePropertyGradientLimiter as well in second order accurate advection schemes to avoid spurious oscillations\&.
+
+.PP
+The resulting gradient is stored at the node\&. 
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<uint32_t dim> \fBcsmp::GenericNodePropertyGradient\fP< dim >::GenericNodePropertyGradient (\fBModel\fP< dim > & sg, const char * region, const char * prop = \fR'node property gradient'\fP)"
+Sets the calculator up for computation on the entire model (a throughgoing node numbering is assumed\&. 
+.SS "template<uint32_t dim> \fBcsmp::GenericNodePropertyGradient\fP< dim >::GenericNodePropertyGradient (\fBModel\fP< dim > & sg, const char * region, std::vector< char * > advected_props)"
+Constructor for several variables\&. This is needed if, e\&.g\&. several components and fluid phases need to be limited\&. The name of the properties to be limited needs to be passed on in the vector of characters \fBvector<char* >\fP properties\&. 
+.SH "Member Function Documentation"
+.PP 
+.SS "void \fBcsmp::GenericNodePropertyGradient\fP< 1U >::CalculateGenericLeastSquareSums ()"
+A private method that computes the least squares sums, i\&.e\&., the sum of the distances between the center of mass of a finite volume to the centers of mass of all neighboring finite volumes\&. The sums are needed for the subseqent finite volume computations and are stored in STL vectors\&.
+
+.PP
+If the mesh doesn't change, this only needs to be calculated once for this class\&.
+
+.PP
+This computation is done automatically during the construction of the object\&.
+
+.PP
+A message states the successful computation of the least squares sums\&. 
+.SS "void \fBcsmp::GenericNodePropertyGradient\fP< 2U >::CalculateGenericLeastSquareSums ()"
+A private method that computes the least squares sums, i\&.e\&., the sum of the distances between the center of mass of a finite volume to the centers of mass of all neighboring finite volumes\&. The sums are needed for the subseqent finite volume computations and are stored in STL vectors\&.
+
+.PP
+If the mesh doesn't change, this only needs to be calculated once for this class\&.
+
+.PP
+This computation is done automatically during the construction of the object\&.
+
+.PP
+A message states the successful computation of the least squares sums 
+.SS "void \fBcsmp::GenericNodePropertyGradient\fP< 3U >::CalculateGenericLeastSquareSums ()"
+void GenericNodePropertyGradient<dim>::CalculateLeastSquareSums()
+.SH "Description"
+.PP
+A private method that computes the least squares sums, i\&.e\&., the sum of the distances between the center of mass of a finite volume to the centers of mass of all neighboring finite volumes\&. The sums are needed for the subseqent finite volume computations and are stored in STL vectors\&.
+
+.PP
+If the mesh doesn't change, this only needs to be calculated once for this class\&.
+.SS "void \fBcsmp::GenericNodePropertyGradient\fP< 1U >::CalculateGenericNodalGradient ()"
+GenericNodePropertyGradient<dim>::CalculateNodalGradient()
+.SH "Description"
+.PP
+Computes the gradient of a property (concentration, saturation, etc\&.), by summing up the difference in the property value in a single finite volume and all its neighbors times the according least square sum\&. Those gradients are needed for the higher order finite volume methods and are stored in STL vectors\&.
+
+.PP
+Note: For both the case where just one gradient is needed as for the one where several ones are needed: The user has to set the Property Key to the respective value!
+.SH "Implementation"
+.PP
+The method is implemented from the various FiniteVolume<fT, dim>Visitors and the STL vectors that store the x and y components of the gradients can be accessed through the interfaces GradientComponentX() and GradientComponentY()
+
+.PP
+\fBTest\fP
+.RS 4
+tested OK 
+.RE
+.PP
+
+.SS "void \fBcsmp::GenericNodePropertyGradient\fP< 2U >::CalculateGenericNodalGradient ()"
+Computes the gradient of a property (concentration, saturation, etc\&.), by summing up the difference in the property value in a single finite volume and all its neighbors times the according least square sum\&. Those gradients are needed for the higher order finite volume methods and are stored in STL vectors\&.
+
+.PP
+Note: For both the case where just one gradient is needed as for the one where several ones are needed: The user has to set the Property Key to the respective value!
+
+.PP
+The method is implemented from the various FiniteVolume<fT, dim>Visitors and the STL vectors that store the x and y components of the gradients can be accessed through the interfaces GradientComponentX() and GradientComponentY() 
+.SS "void \fBcsmp::GenericNodePropertyGradient\fP< 3U >::CalculateGenericNodalGradient ()"
+Computes the gradient of a property (concentration, saturation, etc\&.), by summing up the difference in the property value in a single finite volume and all its neighbors times the according least square sum\&. Those gradients are needed for the higher order finite volume methods and are stored in STL vectors\&.
+
+.PP
+Note: For both the case where just one gradient is needed as for the one where several ones are needed: The user has to set the Property Key to the respective value!
+
+.PP
+The method is implemented from the various FiniteVolume<fT, dim>Visitors and the STL vectors that store the x and y components of the gradients can be accessed through the interfaces GradientComponentX() and GradientComponentY() 
+.SS "template<uint32_t dim> void \fBcsmp::GenericNodePropertyGradient\fP< dim >::GenericCenterOfMass (size_t global_node_id, \fBVectorVariable\fP< dim > & mass_center_out) const"
+
+.PP
+provide public access to center of mass of fv: Returns the calculated centers of mass of generic finite volumes in 2d\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIglobal_node_id\fP the node id of the corresponding FV
+.br
+\fImass_center_out\fP the Vector onto which the xyz-coordinates of the mass center of the FV that belongs to the the node are written 
+.RE
+.PP
+
+.SS "template<uint32_t dim> double \fBcsmp::GenericNodePropertyGradient\fP< dim >::SizeOf () const"
+Returns the storage required by the \fBGenericNodePropertyGradient\fP object 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

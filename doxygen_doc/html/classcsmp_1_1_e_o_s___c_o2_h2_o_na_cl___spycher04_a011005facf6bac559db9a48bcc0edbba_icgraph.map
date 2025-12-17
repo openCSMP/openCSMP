@@ -1,0 +1,78 @@
+<map id="csmp::EOS_CO2H2ONaCl_Spycher04::a_Co2" name="csmp::EOS_CO2H2ONaCl_Spycher04::a_Co2">
+<area shape="rect" id="Node000001" title=" " alt="" coords="2522,501,2702,542"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a809be0c93aa4d76e041d6a51fd76d7e0" title="activity of mixture" alt="" coords="2293,529,2474,570"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="2507,537,2474,541,2474,536,2506,532"/>
+<area shape="rect" id="Node000030" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#aaa041ed091d036d932bde93f3b382b06" title=" " alt="" coords="1777,516,1957,557"/>
+<area shape="poly" id="edge45_Node000001_Node000030" title=" " alt="" coords="2506,521,2474,520,2239,518,2005,527,1958,530,1957,525,2005,522,2239,513,2474,515,2506,516"/>
+<area shape="rect" id="Node000003" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a62501eb7250b9755f378f5803a302d28" title="returns the compressed volume of CO2." alt="" coords="2005,408,2245,449"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="2323,525,2170,452,2172,447,2326,520"/>
+<area shape="rect" id="Node000029" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a95c442db128cb4169dbbc5bea34627d5" title="Compressibility of carbonic phase." alt="" coords="2032,631,2218,687"/>
+<area shape="poly" id="edge39_Node000002_Node000029" title=" " alt="" coords="2325,579,2246,615,2202,633,2200,628,2244,610,2323,575"/>
+<area shape="poly" id="edge40_Node000002_Node000030" title=" " alt="" coords="2278,550,1957,541,1957,536,2278,544"/>
+<area shape="rect" id="Node000031" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a1f91407fe0dbbfaa7a983fa23ca1537e" title=" " alt="" coords="1777,581,1957,622"/>
+<area shape="poly" id="edge43_Node000002_Node000031" title=" " alt="" coords="2279,563,1958,595,1957,590,2278,558"/>
+<area shape="rect" id="Node000004" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#aba193f357734c78d5ac6fe60e589dc0f" title="compressed volume molar CO2" alt="" coords="1777,401,1957,442"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="1989,427,1957,427,1957,421,1989,422"/>
+<area shape="rect" id="Node000005" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a4d984744c1e2ba7d387ba62f31069fef" title="vCo2 @RC / vCo2 @SC unit =&gt; Rm^3/Sm^3" alt="" coords="1504,91,1729,147"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="1837,391,1639,149,1643,146,1841,388"/>
+<area shape="rect" id="Node000008" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#afb9279c1db706ef595c229c3f8dba84d" title="viscosity of the carbonic phase" alt="" coords="1510,293,1723,334"/>
+<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="1813,396,1728,355,1681,337,1683,332,1730,350,1816,391"/>
+<area shape="rect" id="Node000009" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a711301d767105454ad35ccd343e04db7" title="density of the carbonic phase" alt="" coords="1238,127,1456,167"/>
+<area shape="poly" id="edge8_Node000004_Node000009" title=" " alt="" coords="1761,421,1699,414,1633,400,1565,379,1503,348,1476,329,1452,306,1410,257,1378,208,1356,169,1361,166,1382,205,1414,254,1456,303,1480,325,1506,343,1567,374,1634,395,1700,409,1762,416"/>
+<area shape="rect" id="Node000012" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a8cb658ac65a556eb54f1248bbc8b68c8" title="mole fraction (0..1) of CO2 in aqueous phase" alt="" coords="1257,432,1437,473"/>
+<area shape="poly" id="edge11_Node000004_Node000012" title=" " alt="" coords="1761,431,1438,450,1438,444,1761,425"/>
+<area shape="rect" id="Node000024" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a74efbc1440ff4d9a809a471c2f6c0d71" title="mole fraction (0..1) of H20 in carbonic phase" alt="" coords="1526,581,1707,622"/>
+<area shape="poly" id="edge31_Node000004_Node000024" title=" " alt="" coords="1827,453,1648,583,1645,579,1824,449"/>
+<area shape="rect" id="Node000028" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a20183b92e9c12edbd8a267b656601c4d" title="Z compressibility factor for carbonic phase." alt="" coords="1515,459,1718,499"/>
+<area shape="poly" id="edge38_Node000004_Node000028" title=" " alt="" coords="1762,448,1709,461,1708,455,1761,443"/>
+<area shape="rect" id="Node000006" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a54eda7d181afa7b385aa2be3dd1ad025" title="gas (CO2) formation volume factor, Bg" alt="" coords="1257,37,1437,78"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="1489,93,1437,81,1439,76,1490,87"/>
+<area shape="rect" id="Node000007" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#abf483cbdd6129985d9d344cbbbbd67f7" title="compressibility of the carbonic phase" alt="" coords="979,5,1184,46"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="1241,48,1184,41,1184,35,1242,42"/>
+<area shape="rect" id="Node000010" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#ad27d7f23cc337badee730400a574677b" title=" " alt="" coords="984,70,1178,126"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="1222,127,1179,118,1180,113,1223,121"/>
+<area shape="rect" id="Node000011" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a5589546dfe45b9651f6997362d279c81" title="reservoir solution water&#45;CO2 ratio" alt="" coords="744,77,925,118"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="969,100,925,100,925,95,969,95"/>
+<area shape="poly" id="edge16_Node000012_Node000010" title=" " alt="" coords="1335,417,1317,358,1287,283,1245,207,1218,171,1188,140,1173,128,1176,124,1192,136,1222,168,1249,204,1292,281,1322,356,1340,416"/>
+<area shape="rect" id="Node000013" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#aa601fcece485db437e63dba3b1c55de0" title=" " alt="" coords="980,150,1183,206"/>
+<area shape="poly" id="edge12_Node000012_Node000013" title=" " alt="" coords="1329,419,1307,374,1276,321,1236,267,1188,220,1171,208,1174,204,1192,216,1240,263,1280,318,1312,372,1334,417"/>
+<area shape="rect" id="Node000014" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a838009bec9749cb53e4e3d2cfa9343f1" title="needs conversion (iterative approach) Equation A8 Spychler 2004" alt="" coords="980,230,1183,286"/>
+<area shape="poly" id="edge13_Node000012_Node000014" title=" " alt="" coords="1318,422,1262,360,1227,328,1189,300,1168,288,1170,284,1191,295,1230,324,1266,357,1322,418"/>
+<area shape="rect" id="Node000015" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a805503dc13e596bc190c0a3d8fe19ad1" title="molality of CO2 in aqueous phase" alt="" coords="991,309,1172,350"/>
+<area shape="poly" id="edge14_Node000012_Node000015" title=" " alt="" coords="1300,426,1248,395,1189,365,1156,353,1158,348,1191,361,1250,390,1303,421"/>
+<area shape="rect" id="Node000016" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a6dbf0f5cc7ad412cbc7879218d198baa" title="density of aqueous phase with contained dissolved CO2" alt="" coords="973,375,1190,415"/>
+<area shape="poly" id="edge15_Node000012_Node000016" title=" " alt="" coords="1241,432,1178,419,1179,413,1242,427"/>
+<area shape="rect" id="Node000017" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#af89ad2329b147952b788d3f5ed8948aa" title="mass fraction of CO2 in aqueous phase (weight percent)" alt="" coords="516,432,696,473"/>
+<area shape="poly" id="edge17_Node000012_Node000017" title=" " alt="" coords="1241,452,1013,447,744,448,697,450,697,445,744,443,1013,442,1241,446"/>
+<area shape="rect" id="Node000020" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#af21616a2c3e9edfcb3a1311e8fd19a0d" title="mass fraction H2O in aqueous phase (weight percent)" alt="" coords="516,547,696,587"/>
+<area shape="poly" id="edge20_Node000012_Node000020" title=" " alt="" coords="1324,487,1300,515,1268,545,1232,574,1191,595,1123,615,1053,626,982,630,912,629,782,613,679,591,680,585,783,608,912,623,982,625,1053,621,1122,610,1189,590,1229,569,1265,541,1296,511,1320,483"/>
+<area shape="rect" id="Node000021" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a58113b7bebf766b3743f2aeb5c42faa3" title="mole fraction (0..1) of H20 in aqueous phase (the rest is CO2)" alt="" coords="744,489,925,530"/>
+<area shape="poly" id="edge21_Node000012_Node000021" title=" " alt="" coords="1242,468,1190,474,925,503,925,498,1190,468,1241,462"/>
+<area shape="rect" id="Node000022" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a07262e56a0f3346bcc9cb639df5b7ff1" title="mass fraction (0..1) of salt in aqueous phase (weight percent)" alt="" coords="516,648,696,689"/>
+<area shape="poly" id="edge30_Node000012_Node000022" title=" " alt="" coords="1330,488,1308,524,1276,566,1237,605,1191,636,1129,662,1063,680,996,691,928,697,802,696,697,686,697,681,802,691,928,692,995,686,1062,674,1127,657,1189,631,1234,601,1272,562,1303,521,1326,485"/>
+<area shape="rect" id="Node000023" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a8b008d3031c9062728a21a13b07f97c8" title="mass fraction total dissolved salts in aqueous phase (weight percent)" alt="" coords="991,540,1172,581"/>
+<area shape="poly" id="edge25_Node000012_Node000023" title=" " alt="" coords="1289,482,1191,524,1144,542,1142,537,1189,519,1286,477"/>
+<area shape="rect" id="Node000018" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#aa179fe804c5befddba70f6a789ce205f" title=" " alt="" coords="234,424,468,480"/>
+<area shape="poly" id="edge18_Node000017_Node000018" title=" " alt="" coords="500,455,468,455,468,450,500,450"/>
+<area shape="rect" id="Node000019" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a26252ff434ea32a5d5dfa66e4031dd04" title="water formation volume factor, Bw" alt="" coords="5,432,186,473"/>
+<area shape="poly" id="edge19_Node000018_Node000019" title=" " alt="" coords="218,455,186,455,186,450,218,450"/>
+<area shape="poly" id="edge22_Node000021_Node000017" title=" " alt="" coords="736,488,689,476,691,471,737,482"/>
+<area shape="poly" id="edge23_Node000021_Node000020" title=" " alt="" coords="737,537,691,549,689,543,736,532"/>
+<area shape="poly" id="edge24_Node000021_Node000022" title=" " alt="" coords="793,541,639,650,635,645,790,537"/>
+<area shape="poly" id="edge26_Node000023_Node000017" title=" " alt="" coords="1036,534,984,504,924,480,866,467,807,458,697,453,697,447,807,453,867,462,925,475,986,500,1039,529"/>
+<area shape="poly" id="edge27_Node000023_Node000020" title=" " alt="" coords="975,564,697,568,697,563,975,559"/>
+<area shape="poly" id="edge28_Node000023_Node000021" title=" " alt="" coords="976,541,925,531,926,526,977,536"/>
+<area shape="poly" id="edge29_Node000023_Node000022" title=" " alt="" coords="976,587,698,650,696,645,975,582"/>
+<area shape="poly" id="edge32_Node000024_Node000012" title=" " alt="" coords="1545,577,1503,557,1433,515,1375,475,1378,471,1436,511,1506,553,1547,573"/>
+<area shape="rect" id="Node000025" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a4d69520deb96194b6b144f1eb0536447" title="mass fraction of CO2 in carbonic phase (weight percent)" alt="" coords="991,731,1172,771"/>
+<area shape="poly" id="edge33_Node000024_Node000025" title=" " alt="" coords="1527,629,1158,733,1156,728,1525,624"/>
+<area shape="rect" id="Node000026" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a4f2d3cafc60b55de099ee7a1d94e129f" title="mole fraction (0..1) of CO2 in carbonic phase (the rest is H2O)" alt="" coords="1257,731,1437,771"/>
+<area shape="poly" id="edge34_Node000024_Node000026" title=" " alt="" coords="1566,632,1387,732,1384,728,1564,628"/>
+<area shape="rect" id="Node000027" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a25ddf8746c9bbb5c2a236417d8009589" title="mass fraction of H2O in carbonic phase (weight percent)" alt="" coords="991,796,1172,837"/>
+<area shape="poly" id="edge37_Node000024_Node000027" title=" " alt="" coords="1599,637,1575,673,1543,715,1504,754,1458,785,1423,801,1386,812,1311,826,1237,831,1172,829,1172,824,1237,825,1310,821,1385,807,1421,796,1455,781,1500,750,1539,711,1571,670,1595,634"/>
+<area shape="poly" id="edge35_Node000026_Node000025" title=" " alt="" coords="1241,754,1172,754,1172,748,1241,748"/>
+<area shape="poly" id="edge36_Node000026_Node000027" title=" " alt="" coords="1247,778,1168,798,1166,793,1246,773"/>
+<area shape="poly" id="edge41_Node000030_Node000012" title=" " alt="" coords="1761,540,1637,533,1570,525,1504,514,1445,496,1392,476,1394,471,1447,491,1505,508,1571,520,1638,528,1761,534"/>
+<area shape="poly" id="edge42_Node000030_Node000024" title=" " alt="" coords="1772,564,1698,583,1697,578,1771,559"/>
+<area shape="poly" id="edge44_Node000031_Node000024" title=" " alt="" coords="1761,604,1707,604,1707,599,1761,599"/>
+</map>

@@ -3,6 +3,7 @@
 
 #include <set>
 #include "FiniteElement.h"
+#include <Eigen/Dense>
 
 namespace csmp {
 
@@ -35,17 +36,17 @@ class FiniteElementPolicy {
     FiniteElement* FE() const noexcept;
     
     /// true for volumes in 3D, surfaces in 2D, and line elements in 1D, else this is a lower dimensional element
-    bool       IsEquidimensional() const;
+    bool       IsEquidimensional() const noexcept;
     
-    bool       IsLine() const;
-    bool       IsSurface() const;
-    bool       IsVolume() const;
+    bool       IsLine() const noexcept;
+    bool       IsSurface() const noexcept;
+    bool       IsVolume() const noexcept;
 
-    uint32_t   Interpolation() const;
-    bool       UsesLocalCoordinates() const;
+    uint32_t   Interpolation() const noexcept;
+    bool       UsesLocalCoordinates() const noexcept;
 
     /// number of element integration points for current quadrature scheme
-    uint32_t   IntegrationPoints() const;
+    uint32_t   IntegrationPoints() const noexcept;
   
     /// returns the location of the integration point in global coordinates
     Point<dim> IntegrationPoint( uint32_t ip ) const;
@@ -109,6 +110,12 @@ class FiniteElementPolicy {
 
     /// returns the value of a scalar property interpolated to the integration point of interest
     double  PropertyValueAtIntegrationPoint( const csmp::Index& node_prop, uint32_t integration_point ) const;
+    
+    /// computes the gradient of a property at the barycenter of the element, face or interface (for scalar this is a vector for vector this is a matrix); returns determinant of DN
+    Eigen::Matrix<double,dim,Eigen::Dynamic> PropertyGradientAtBaryCenter( const Index& prop_key, double& detJ ) const;
+    
+    /// computes the gradient of a property at the integration point of the element, face or interface (for scalar this is a vector for vector this is a matrix); returns determinant of DN
+    Eigen::Matrix<double,dim,Eigen::Dynamic> PropertyGradientAtIntegrationPoint( const Index& prop_key, uint32_t ip, double& detJ ) const;
 
     /// returns property values at the integration points
     template<class Var>
@@ -129,7 +136,7 @@ class FiniteElementPolicy {
     double  InnerRadius() const;
   
     /// number of edges = segments in the finite element of interest
-    uint32_t Segments() const;
+    uint32_t Segments() const noexcept;
 
     /// retrieve position of the segment (element edge) mid-points
     Point<dim> SegmentMidPoint( uint32_t segm ) const;
@@ -175,8 +182,17 @@ class FiniteElementPolicy {
     friend class InterFace<dim>;
 
   private:
+    void AccumulateGradient( Eigen::Matrix<double,dim,Eigen::Dynamic>& gradVar,
+                             const DenseMatrix<DM_MIN>& DERIV, const csmp::Index& prop_key, uint32_t ip ) const;
+  
     csmp::FiniteElement*  fptr_ = nullptr;
 };
+
+/**
+     Computing the area of the finite element Face #
+ */
+template<uint32_t dim>
+double faceArea( const Element<dim>& elmt, uint32_t element_face );
 
 } // end csmp
 

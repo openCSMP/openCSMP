@@ -19,8 +19,8 @@ class Integral_NT_op_dNi_dV : public MathOperatorRHS<dim,CELL> {
     Integral_NT_op_dNi_dV( const PropertyDatabase<dim>&, 
                            const char* oper, const char* mtrl, const char* test );
     
-    virtual void GetOperands( const CELL<dim>& ) override;
-    virtual void ComputeContribution( const CELL<dim>& ) override;
+    void GetOperands( const CELL<dim>& ) override final;
+    void ComputeContribution( const CELL<dim>& ) override final;
     
     /// the space dimension of the partial derivative which shall be considered
     void SpatialDerivative( uint32_t xyz=2 );
@@ -28,7 +28,7 @@ class Integral_NT_op_dNi_dV : public MathOperatorRHS<dim,CELL> {
     /// in stead of MultiplyWithTimeIncrement() since that would multiply whole contribution
     void MaterialPropertyTimeMultiplier( double time_increment );
 
-    virtual Integral_NT_op_dNi_dV<dim,CELL>* clone() const { return new Integral_NT_op_dNi_dV<dim,CELL> (*this); }
+    Integral_NT_op_dNi_dV<dim,CELL>* clone() const override final { return new Integral_NT_op_dNi_dV<dim,CELL> (*this); }
   
   private:
     std::vector<double>         IPOL;

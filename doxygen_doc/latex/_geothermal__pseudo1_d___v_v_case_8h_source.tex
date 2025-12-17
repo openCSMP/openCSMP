@@ -1,0 +1,39 @@
+\doxysection{Geothermal\+\_\+pseudo1\+D\+\_\+\+VVCase.\+h}
+\hypertarget{_geothermal__pseudo1_d___v_v_case_8h_source}{}\label{_geothermal__pseudo1_d___v_v_case_8h_source}\index{tests/integration/Geothermal\_pseudo1D\_VVCase.h@{tests/integration/Geothermal\_pseudo1D\_VVCase.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{GEOTHERMAL\_PSEUDO1D\_VVCASE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{GEOTHERMAL\_PSEUDO1D\_VVCASE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_test_8h}{"{}Test.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_model}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}};}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \ \ \textcolor{comment}{/**\ Geothermal\ pseudo\ 1D\ Test\ Case}}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ \ =================================}}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ \ Mesh:\ \ \ \ \ \ \ Linear\ Triangles}}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ \ Model:\ \ \ \ \ \ 2000x1000\ m\ 2D}}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ \ Test:\ \ \ \ \ \ \ Temperature}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ \ BC:\ \ \ \ \ \ \ \ \ constant\ pressure,\ constant\ temperature}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ \ Criterion:}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ \ =================================}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ \ */}}
+\DoxyCodeLine{00020\ \ \ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_geothermal__pseudo1_d___v_v_case}{Geothermal\_pseudo1D\_VVCase}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_test}{Test}}}
+\DoxyCodeLine{00021\ \ \ \ \ \{}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ Geothermal\_pseudo1D\_VVCase(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ prefix);}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_geothermal__pseudo1_d___v_v_case_af185ae96c7cf696edd93aa5052cf1730}{run}}();}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ outputToVTU(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<2U>\&\ model,std::string\ model\_name,\ \textcolor{keyword}{const}\ std::list<std::string>\&\ props,\ size\_t\ timestep\ );}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ ComputeMassConductivity\ (\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<2U>\&\ model\ );}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{bool}\ Compare\ (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}<2U>\&\ model,\ std::string\ file\ );}
+\DoxyCodeLine{00029\ \ \ \ \ \};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{//\ GEOTHERMAL\_PSEUDO1D\_VVCASE\_H}}
+
+\end{DoxyCode}

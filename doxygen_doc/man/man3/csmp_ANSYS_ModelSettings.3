@@ -1,0 +1,50 @@
+.TH "csmp::ANSYS_ModelSettings" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::ANSYS_ModelSettings
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBANSYS_ModelSettings\fP (const std::string &mesh_file_prefix)"
+.br
+.ti -1c
+.RI "\fBANSYS_ModelSettings\fP (const \fBANSYS_ModelSettings\fP &)"
+.br
+.ti -1c
+.RI "\fBANSYS_ModelSettings\fP & \fBoperator=\fP (const \fBANSYS_ModelSettings\fP &)"
+.br
+.ti -1c
+.RI "void \fBMeshSetup\fP (const std::string &regions_file_prefix, bool irregular_mesh=true, bool binary_file=true, bool create_boundaries=true)"
+.br
+.ti -1c
+.RI "void \fBMeshSetup\fP (const std::set< std::string > &regions, bool irregular_mesh=true, bool binary_file=true, bool create_boundaries=true)"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::string \fBmesh_file_prefix_\fP"
+.br
+.ti -1c
+.RI "std::set< std::string > \fBregions_\fP"
+.br
+.ti -1c
+.RI "bool \fBirregular_mesh_\fP"
+.br
+.ti -1c
+.RI "bool \fBbinary_file_\fP"
+.br
+.ti -1c
+.RI "bool \fBcreate_boundaries_\fP"
+.br
+.in -1c
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

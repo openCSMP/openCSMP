@@ -1,0 +1,378 @@
+\doxysection{Fibonacci\+Heap.\+h}
+\hypertarget{_fibonacci_heap_8h_source}{}\label{_fibonacci_heap_8h_source}\index{source/includes/utilities/FibonacciHeap.h@{source/includes/utilities/FibonacciHeap.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2015-\/2017,\ Andrew\ J.\ Bromage}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ All\ rights\ reserved.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//\ Permission\ is\ hereby\ granted,\ free\ of\ charge,\ to\ any\ person}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ obtaining\ a\ copy\ of\ this\ software\ and\ associated\ documentation\ files}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//\ (the\ "{}Software"{}),\ to\ deal\ in\ the\ Software\ without\ restriction,}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//\ including\ without\ limitation\ the\ rights\ to\ use,\ copy,\ modify,\ merge,}}
+\DoxyCodeLine{00008\ \textcolor{comment}{//\ publish,\ distribute,\ sublicense,\ and/or\ sell\ copies\ of\ the\ Software,}}
+\DoxyCodeLine{00009\ \textcolor{comment}{//\ and\ to\ permit\ persons\ to\ whom\ the\ Software\ is\ furnished\ to\ do\ so,}}
+\DoxyCodeLine{00010\ \textcolor{comment}{//\ subject\ to\ the\ following\ conditions:}}
+\DoxyCodeLine{00011\ \textcolor{comment}{//}}
+\DoxyCodeLine{00012\ \textcolor{comment}{//\ \ \ The\ above\ copyright\ notice\ and\ this\ permission\ notice\ shall\ be}}
+\DoxyCodeLine{00013\ \textcolor{comment}{//\ \ \ included\ in\ all\ copies\ or\ substantial\ portions\ of\ the\ Software.}}
+\DoxyCodeLine{00014\ \textcolor{comment}{//}}
+\DoxyCodeLine{00015\ \textcolor{comment}{//\ THE\ SOFTWARE\ IS\ PROVIDED\ "{}AS\ IS"{},\ WITHOUT\ WARRANTY\ OF\ ANY\ KIND,}}
+\DoxyCodeLine{00016\ \textcolor{comment}{//\ EXPRESS\ OR\ IMPLIED,\ INCLUDING\ BUT\ NOT\ LIMITED\ TO\ THE\ WARRANTIES\ OF}}
+\DoxyCodeLine{00017\ \textcolor{comment}{//\ MERCHANTABILITY,\ FITNESS\ FOR\ A\ PARTICULAR\ PURPOSE\ AND\ NONINFRINGEMENT.}}
+\DoxyCodeLine{00018\ \textcolor{comment}{//\ IN\ NO\ EVENT\ SHALL\ THE\ AUTHORS\ OR\ COPYRIGHT\ HOLDERS\ BE\ LIABLE\ FOR}}
+\DoxyCodeLine{00019\ \textcolor{comment}{//\ ANY\ CLAIM,\ DAMAGES\ OR\ OTHER\ LIABILITY,\ WHETHER\ IN\ AN\ ACTION\ OF}}
+\DoxyCodeLine{00020\ \textcolor{comment}{//\ CONTRACT,\ TORT\ OR\ OTHERWISE,\ ARISING\ FROM,\ OUT\ OF\ OR\ IN\ CONNECTION}}
+\DoxyCodeLine{00021\ \textcolor{comment}{//\ WITH\ THE\ SOFTWARE\ OR\ THE\ USE\ OR\ OTHER\ DEALINGS\ IN\ THE\ SOFTWARE.}}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{FIBHEAP\_HH}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{FIBHEAP\_HH}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{vector}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{limits}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{deque}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{iostream}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{keyword}{namespace}\ ajb\ \{}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \textcolor{keyword}{namespace}\ detail\ \{}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ K,\ \textcolor{keyword}{typename}\ V>}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structajb_1_1detail_1_1_fibonacci_heap___node}{FibonacciHeap\_Node}}}
+\DoxyCodeLine{00037\ \ \ \ \ \{}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ FibonacciHeap\_Node(\textcolor{keyword}{const}\ \mbox{\hyperlink{structajb_1_1detail_1_1_fibonacci_heap___node}{FibonacciHeap\_Node}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ FibonacciHeap\_Node(\mbox{\hyperlink{structajb_1_1detail_1_1_fibonacci_heap___node}{FibonacciHeap\_Node}}\&\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structajb_1_1detail_1_1_fibonacci_heap___node}{FibonacciHeap\_Node}}\&\ operator=(\textcolor{keyword}{const}\ \mbox{\hyperlink{structajb_1_1detail_1_1_fibonacci_heap___node}{FibonacciHeap\_Node}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ K\ key\_;}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ V\ value\_;}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ uint64\_t\ degree\_;}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ mark\_;}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structajb_1_1detail_1_1_fibonacci_heap___node}{FibonacciHeap\_Node}}*\ prev\_;}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structajb_1_1detail_1_1_fibonacci_heap___node}{FibonacciHeap\_Node}}*\ next\_;}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structajb_1_1detail_1_1_fibonacci_heap___node}{FibonacciHeap\_Node}}*\ child\_;}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structajb_1_1detail_1_1_fibonacci_heap___node}{FibonacciHeap\_Node}}*\ parent\_;}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ FibonacciHeap\_Node(K\ key,\ V\ value)}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ :\ key\_(std::move(key)),}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ value\_(std::move(value)),}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ degree\_(0),}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mark\_(\textcolor{keyword}{false}),}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ prev\_(\textcolor{keyword}{this}),}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ next\_(\textcolor{keyword}{this}),}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ child\_(0),}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ parent\_(0)}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ singleton()\ \textcolor{keyword}{const}\ \{}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ next\_\ ==\ \textcolor{keyword}{this};}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ link(\mbox{\hyperlink{structajb_1_1detail_1_1_fibonacci_heap___node}{FibonacciHeap\_Node}}*\ n)\ \{}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ next\_-\/>prev\_\ =\ n-\/>prev\_;}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ n-\/>prev\_-\/>next\_\ =\ next\_;}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \ \ next\_\ =\ n;}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ n-\/>prev\_\ =\ \textcolor{keyword}{this};}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ unlink()\ \{}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ prev\_-\/>next\_\ =\ next\_;}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \ \ next\_-\/>prev\_\ =\ prev\_;}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \ \ \ \ next\_\ =\ prev\_\ =\ \textcolor{keyword}{this};}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ add\_child(\mbox{\hyperlink{structajb_1_1detail_1_1_fibonacci_heap___node}{FibonacciHeap\_Node}}*\ n)\ \{}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!child\_)\ \{}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ child\_\ =\ n;}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ child\_-\/>link(n);}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ n-\/>parent\_\ =\ \textcolor{keyword}{this};}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ n-\/>mark\_\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ ++degree\_;}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ remove\_child(\mbox{\hyperlink{structajb_1_1detail_1_1_fibonacci_heap___node}{FibonacciHeap\_Node}}*\ n)}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (n-\/>singleton())\ \{}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ child\_\ =\ 0;}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (child\_\ ==\ n)\ \{}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ child\_\ =\ n-\/>next\_;}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ n-\/>unlink();}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \ \ \ \ n-\/>parent\_\ =\ 0;}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \ \ \ \ n-\/>mark\_\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \ \ \ \ -\/-\/degree\_;}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ V\ getV()\ \{\textcolor{keywordflow}{return}\ value\_;\}}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ K\ getK()\ \{\textcolor{keywordflow}{return}\ key\_;\}}
+\DoxyCodeLine{00111\ \ \ \ \ \};}
+\DoxyCodeLine{00112\ \}}
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00114\ \textcolor{comment}{///\ A\ Fibonacci\ min-\/heap}}
+\DoxyCodeLine{00115\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00116\ \textcolor{comment}{\ *\ See:}}
+\DoxyCodeLine{00117\ \textcolor{comment}{\ *\ \ \ Fredman\ \&\ Tarjan,\ "{}Fibonacci\ heaps\ and\ their\ uses\ in\ improved\ network}}
+\DoxyCodeLine{00118\ \textcolor{comment}{\ *\ \ \ optimization\ algorithms"{},\ JACM\ 34\ (3):\ 596–615,\ Jul\ 1987.}}
+\DoxyCodeLine{00119\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00120\ \textcolor{comment}{\ *\ \ \ doi:10.1145/28869.28874}}
+\DoxyCodeLine{00121\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00122\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ K,\ \textcolor{keyword}{typename}\ V>}
+\DoxyCodeLine{00123\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classajb_1_1_fibonacci_heap}{FibonacciHeap}}}
+\DoxyCodeLine{00124\ \{}
+\DoxyCodeLine{00125\ \ \ \ \ FibonacciHeap(\textcolor{keyword}{const}\ \mbox{\hyperlink{classajb_1_1_fibonacci_heap}{FibonacciHeap}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00126\ \ \ \ \ FibonacciHeap(\mbox{\hyperlink{classajb_1_1_fibonacci_heap}{FibonacciHeap}}\&\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00127\ \ \ \ \ \mbox{\hyperlink{classajb_1_1_fibonacci_heap}{FibonacciHeap}}\&\ operator=(\textcolor{keyword}{const}\ \mbox{\hyperlink{classajb_1_1_fibonacci_heap}{FibonacciHeap}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00129\ \ \ \ \ \textcolor{keyword}{typedef}\ K\ key\_type;}
+\DoxyCodeLine{00130\ \ \ \ \ \textcolor{keyword}{typedef}\ V\ value\_type;}
+\DoxyCodeLine{00131\ \ \ \ \ \textcolor{keyword}{typedef}\ detail::\mbox{\hyperlink{structajb_1_1detail_1_1_fibonacci_heap___node}{FibonacciHeap\_Node}}<K,V>*\ node\_ptr;}
+\DoxyCodeLine{00132\ \ \ \ \ \textcolor{keyword}{typedef}\ \textcolor{keyword}{const}\ detail::\mbox{\hyperlink{structajb_1_1detail_1_1_fibonacci_heap___node}{FibonacciHeap\_Node}}<K,V>*\ const\_node\_ptr;}
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00134\ \ \ \ \ node\_ptr\ root\_;}
+\DoxyCodeLine{00135\ \ \ \ \ size\_t\ count\_;}
+\DoxyCodeLine{00136\ \ \ \ \ size\_t\ max\_degree\_;}
+\DoxyCodeLine{00137\ \ \ \ \ node\_ptr\ consolidation\_[\mbox{\hyperlink{classajb_1_1_fibonacci_heap}{std}}::\mbox{\hyperlink{classajb_1_1_fibonacci_heap}{numeric\_limits}}<\mbox{\hyperlink{classajb_1_1_fibonacci_heap}{uint32\_t}}>::\mbox{\hyperlink{classajb_1_1_fibonacci_heap}{digits}}+1];}
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00140\ \ \ \ \ \textcolor{keywordtype}{void}\ promote\_children\_of\_root()}
+\DoxyCodeLine{00141\ \ \ \ \ \{}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!root\_-\/>child\_)\ \{}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ node\_ptr\ child\ =\ root\_-\/>child\_;}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{do}\ \{}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \ \ \ \ child-\/>parent\_\ =\ 0;}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (child-\/>degree\_\ >\ max\_degree\_)\ \{}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ max\_degree\_\ =\ child-\/>degree\_;}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \ \ \ \ child\ =\ child-\/>next\_;}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{while}\ (child\ !=\ root\_-\/>child\_);}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ root\_-\/>child\_\ =\ 0;}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ root\_-\/>link(child);}
+\DoxyCodeLine{00156\ \ \ \ \ \}}
+\DoxyCodeLine{00157\ }
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00159\ \ \ \ \ \textcolor{keywordtype}{void}\ cascading\_cut(node\_ptr\ node)}
+\DoxyCodeLine{00160\ \ \ \ \ \{}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ node\_ptr\ parent\ =\ node-\/>parent\_;}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;;)\ \{}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \ \ \ \ parent-\/>remove\_child(node);}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \ \ \ \ insert\_node(node);}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!parent-\/>parent\_)\ \{}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (!parent-\/>mark\_)\ \{}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ parent-\/>mark\_\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ node\ =\ parent;}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ parent\ =\ parent-\/>parent\_;}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00177\ \ \ \ \ \}}
+\DoxyCodeLine{00178\ }
+\DoxyCodeLine{00179\ }
+\DoxyCodeLine{00180\ \ \ \ \ \textcolor{keywordtype}{void}\ remove\_current\_root()}
+\DoxyCodeLine{00181\ \ \ \ \ \{}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!root\_)\ \{}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00185\ }
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ -\/-\/count\_;}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ promote\_children\_of\_root();}
+\DoxyCodeLine{00188\ }
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (root\_-\/>next\_\ ==\ root\_)\ \{}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \ \ \ \ node\_ptr\ root\ =\ root\_;}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \ \ \ \ root\_\ =\ 0;}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}\ root;}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00195\ }
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ size\_t\ consolidation\_size\ =\ \textcolor{keyword}{sizeof}(consolidation\_)\ /\ \textcolor{keyword}{sizeof}(consolidation\_[0]);}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ i\ =\ 0;\ i\ <\ consolidation\_size;\ ++i)\ \{}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \ \ \ \ consolidation\_[i]\ =\ 0;}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ node\_ptr\ curr\ =\ root\_-\/>next\_;}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ max\_degree\_\ =\ 0;}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{do}\ \{}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ d\ =\ curr-\/>degree\_;}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \ \ \ \ node\_ptr\ current\ =\ curr;}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \ \ \ \ curr\ =\ curr-\/>next\_;}
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (consolidation\_[d])\ \{}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ node\_ptr\ other\ =\ consolidation\_[d];}
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (current-\/>key\_\ >\ other-\/>key\_)\ \{}
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::swap(other,\ current);}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ other-\/>unlink();}
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ current-\/>add\_child(other);}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ consolidation\_[d]\ =\ 0;}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ++d;}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \ \ \ \ consolidation\_[d]\ =\ current;}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{while}\ (curr\ !=\ root\_);}
+\DoxyCodeLine{00218\ }
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \ \ \ \ node\_ptr\ root\ =\ root\_;}
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \ \ \ \ root\_\ =\ 0;}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}\ root;}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00224\ }
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ size\_t\ newMaxDegree\ =\ 0;}
+\DoxyCodeLine{00226\ }
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ i\ =\ 0;\ i\ <\ consolidation\_size;\ ++i)\ \{}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \ \ \ \ node\_ptr\ newRoot\ =\ consolidation\_[i];}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (newRoot)\ \{}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ newRoot-\/>next\_\ =\ newRoot-\/>prev\_\ =\ newRoot;}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ insert\_node(newRoot);}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (i\ >\ newMaxDegree)\ \{}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ newMaxDegree\ =\ i;}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00237\ }
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ max\_degree\_\ =\ newMaxDegree;}
+\DoxyCodeLine{00239\ \ \ \ \ \}}
+\DoxyCodeLine{00240\ }
+\DoxyCodeLine{00241\ \ \ \ \ node\_ptr\ insert\_node(node\_ptr\ new\_node)}
+\DoxyCodeLine{00242\ \ \ \ \ \{}
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!root\_)\ \{}
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \ \ \ \ root\_\ =\ new\_node;}
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \ \ \ \ root\_-\/>link(new\_node);}
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (new\_node-\/>key\_\ <\ root\_-\/>key\_)}
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ root\_\ =\ new\_node;}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ new\_node;}
+\DoxyCodeLine{00254\ \ \ \ \ \}}
+\DoxyCodeLine{00255\ }
+\DoxyCodeLine{00256\ }
+\DoxyCodeLine{00257\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00258\ \ \ \ \ \textcolor{keyword}{typedef}\ node\_ptr\ finger;}
+\DoxyCodeLine{00259\ \ \ \ \ \textcolor{keyword}{typedef}\ const\_node\_ptr\ const\_finger;}
+\DoxyCodeLine{00260\ }
+\DoxyCodeLine{00261\ \ \ \ \ \textcolor{comment}{///\ Constructor}}
+\DoxyCodeLine{00262\ \ \ \ \ \mbox{\hyperlink{classajb_1_1_fibonacci_heap_a723b86974a77cd8465e6b1bdc92c6264}{FibonacciHeap}}()}
+\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ :\ root\_(0),\ \mbox{\hyperlink{classajb_1_1_fibonacci_heap_a723b86974a77cd8465e6b1bdc92c6264}{count\_}}(0),\ \mbox{\hyperlink{classajb_1_1_fibonacci_heap_a723b86974a77cd8465e6b1bdc92c6264}{max\_degree\_}}(0)}
+\DoxyCodeLine{00264\ \ \ \ \ \{}
+\DoxyCodeLine{00265\ \ \ \ \ \}}
+\DoxyCodeLine{00266\ }
+\DoxyCodeLine{00267\ \ \ \ \ \textcolor{comment}{///\ Remove\ all\ elements\ from\ the\ heap}}
+\DoxyCodeLine{00268\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classajb_1_1_fibonacci_heap_aee871d2f5dc14522c9c9fe6445f79d3f}{clear}}()}
+\DoxyCodeLine{00269\ \ \ \ \ \{}
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (root\_)\ \{}
+\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (root\_-\/>next\_\ !=\ root\_\ \&\&\ !root\_-\/>singleton())\ \{}
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ promote\_children\_of\_root();}
+\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ node\_ptr\ root\ =\ root\_;}
+\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ root\_\ =\ root-\/>next\_;}
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ root-\/>unlink();}
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}\ root;}
+\DoxyCodeLine{00277\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \ \ \ node\_ptr\ root\ =\ root\_;}
+\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ \ \ \ root\_\ =\ 0;}
+\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}\ root;}
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ count\_\ =\ 0;}
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ max\_degree\_\ =\ 0;}
+\DoxyCodeLine{00284\ \ \ \ \ \}}
+\DoxyCodeLine{00285\ }
+\DoxyCodeLine{00286\ \ \ \ \ \textcolor{comment}{///\ Destructor}}
+\DoxyCodeLine{00287\ \ \ \ \ \string~\mbox{\hyperlink{classajb_1_1_fibonacci_heap_adcd0bdaa76476a8f90436972899e4ca3}{FibonacciHeap}}()}
+\DoxyCodeLine{00288\ \ \ \ \ \{}
+\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classajb_1_1_fibonacci_heap_aee871d2f5dc14522c9c9fe6445f79d3f}{clear}}\mbox{\hyperlink{classajb_1_1_fibonacci_heap_aee871d2f5dc14522c9c9fe6445f79d3f}{(}}\mbox{\hyperlink{classajb_1_1_fibonacci_heap_aee871d2f5dc14522c9c9fe6445f79d3f}{)}};}
+\DoxyCodeLine{00290\ \ \ \ \ \}}
+\DoxyCodeLine{00291\ }
+\DoxyCodeLine{00292\ \ \ \ \ \textcolor{comment}{///\ Number\ of\ elements\ in\ the\ heap}}
+\DoxyCodeLine{00293\ \ \ \ \ \mbox{\hyperlink{classajb_1_1_fibonacci_heap_af34745d53a6820f8230fdba5fa464c9c}{uint64\_t}}\ \mbox{\hyperlink{classajb_1_1_fibonacci_heap_af34745d53a6820f8230fdba5fa464c9c}{size}}()\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00294\ \ \ \ \ \{}
+\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ count\_;}
+\DoxyCodeLine{00296\ \ \ \ \ \}}
+\DoxyCodeLine{00297\ }
+\DoxyCodeLine{00298\ \ \ \ \ \textcolor{comment}{///\ Is\ the\ heap\ empty}}
+\DoxyCodeLine{00299\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classajb_1_1_fibonacci_heap_ad48fb2bee1cc0630b0f8d0a1017d15cd}{empty}}()\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00300\ \ \ \ \ \{}
+\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ count\_\ ==\ 0;}
+\DoxyCodeLine{00302\ \ \ \ \ \}}
+\DoxyCodeLine{00303\ }
+\DoxyCodeLine{00304\ }
+\DoxyCodeLine{00305\ \ \ \ \ \textcolor{comment}{///\ Insert\ an\ element\ in\ the\ heap\ (move\ semantics)}}
+\DoxyCodeLine{00306\ \ \ \ \ finger\ \mbox{\hyperlink{classajb_1_1_fibonacci_heap_a2c544a843ee9afe6d648289c017dbab6}{insert}}(K\ key,\ V\ value)}
+\DoxyCodeLine{00307\ \ \ \ \ \{}
+\DoxyCodeLine{00308\ \ \ \ \ \ \ \ \ ++count\_;}
+\DoxyCodeLine{00309\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ insert\_node(\textcolor{keyword}{new}\ detail::\mbox{\hyperlink{structajb_1_1detail_1_1_fibonacci_heap___node}{FibonacciHeap\_Node}}<K,V>(key,\ value));}
+\DoxyCodeLine{00310\ \ \ \ \ \}}
+\DoxyCodeLine{00311\ }
+\DoxyCodeLine{00312\ \ \ \ \ finger\ insert(node\_ptr\ new\_node)}
+\DoxyCodeLine{00313\ \ \ \ \ \{}
+\DoxyCodeLine{00314\ \ \ \ \ \ \ \ \ ++count\_;}
+\DoxyCodeLine{00315\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ insert\_node(new\_node);}
+\DoxyCodeLine{00316\ \ \ \ \ \}}
+\DoxyCodeLine{00317\ }
+\DoxyCodeLine{00318\ \ \ \ \ \textcolor{comment}{///\ Get\ the\ minimum\ element\ in\ the\ heap}}
+\DoxyCodeLine{00319\ \ \ \ \ finger\ \mbox{\hyperlink{classajb_1_1_fibonacci_heap_a1a7aa7fd7de30f0d1873b9df407bb887}{minimum}}()}
+\DoxyCodeLine{00320\ \ \ \ \ \{}
+\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ root\_;}
+\DoxyCodeLine{00322\ \ \ \ \ \}}
+\DoxyCodeLine{00323\ }
+\DoxyCodeLine{00324\ \ \ \ \ \textcolor{comment}{///\ Get\ the\ minimum\ element\ in\ the\ heap}}
+\DoxyCodeLine{00325\ \ \ \ \ const\_finger\ \mbox{\hyperlink{classajb_1_1_fibonacci_heap_a2aa3165f51d2d96444fbee5d9d9c9f42}{minimum}}()\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00326\ \ \ \ \ \{}
+\DoxyCodeLine{00327\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ root\_;}
+\DoxyCodeLine{00328\ \ \ \ \ \}}
+\DoxyCodeLine{00329\ }
+\DoxyCodeLine{00330\ \ \ \ \ \textcolor{comment}{///\ Remove\ the\ minimum\ element\ in\ the\ heap}}
+\DoxyCodeLine{00331\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classajb_1_1_fibonacci_heap_a77acaacabe9e7a9d7c4863a3c21e33d5}{remove\_minimum}}()}
+\DoxyCodeLine{00332\ \ \ \ \ \{}
+\DoxyCodeLine{00333\ \ \ \ \ \ \ \ \ remove\_current\_root();}
+\DoxyCodeLine{00334\ \ \ \ \ \}}
+\DoxyCodeLine{00335\ }
+\DoxyCodeLine{00336\ \ \ \ \ \textcolor{comment}{///\ Decrease\ the\ key\ of\ an\ element\ in\ the\ heap}}
+\DoxyCodeLine{00337\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classajb_1_1_fibonacci_heap_ac552b0d580138c6107b206375a345dc1}{decrease\_key}}(finger\ node,\ K\ new\_key)}
+\DoxyCodeLine{00338\ \ \ \ \ \{}
+\DoxyCodeLine{00339\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (new\_key\ >\ node-\/>key\_)\ \{}
+\DoxyCodeLine{00340\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ \textcolor{stringliteral}{"{}Trying\ to\ decrease\ key\ to\ a\ greater\ key."{}};}
+\DoxyCodeLine{00341\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00342\ \ \ \ \ \ \ \ \ node-\/>key\_\ =\ std::move(new\_key);}
+\DoxyCodeLine{00343\ \ \ \ \ \ \ \ \ node\_ptr\ parent\ =\ node-\/>parent\_;}
+\DoxyCodeLine{00344\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!parent)\ \{}
+\DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (node-\/>key\_\ <\ root\_-\/>key\_)\ \{}
+\DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ root\_\ =\ node;}
+\DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00348\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00349\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00350\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (parent-\/>key\_\ <=\ new\_key)\ \{}
+\DoxyCodeLine{00351\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00352\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00353\ }
+\DoxyCodeLine{00354\ \ \ \ \ \ \ \ \ cascading\_cut(node);}
+\DoxyCodeLine{00355\ \ \ \ \ \}}
+\DoxyCodeLine{00356\ }
+\DoxyCodeLine{00357\ \ \ \ \ \textcolor{comment}{///\ Remove\ an\ element\ from\ the\ heap}}
+\DoxyCodeLine{00358\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classajb_1_1_fibonacci_heap_a9048e8e17d225328a7c0126deabf34a3}{remove}}(node\_ptr\ node)}
+\DoxyCodeLine{00359\ \ \ \ \ \{}
+\DoxyCodeLine{00360\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (node-\/>parent\_)\ \{}
+\DoxyCodeLine{00361\ \ \ \ \ \ \ \ \ \ \ \ \ cascading\_cut(node);}
+\DoxyCodeLine{00362\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00363\ \ \ \ \ \ \ \ \ root\_\ =\ node;}
+\DoxyCodeLine{00364\ \ \ \ \ \ \ \ \ remove\_current\_root();}
+\DoxyCodeLine{00365\ \ \ \ \ \}}
+\DoxyCodeLine{00366\ }
+\DoxyCodeLine{00367\ \};}
+\DoxyCodeLine{00368\ }
+\DoxyCodeLine{00369\ \}}
+\DoxyCodeLine{00370\ }
+\DoxyCodeLine{00371\ }
+\DoxyCodeLine{00372\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

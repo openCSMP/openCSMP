@@ -1,0 +1,238 @@
+\doxysection{csmp\+::Num\+Integral\+\_\+d\+NT\+\_\+op\+\_\+d\+N\+\_\+dV\texorpdfstring{$<$}{<} dim, CELL \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_num_integral__d_n_t__op__d_n__d_v}{}\label{classcsmp_1_1_num_integral__d_n_t__op__d_n__d_v}\index{csmp::NumIntegral\_dNT\_op\_dN\_dV$<$ dim, CELL $>$@{csmp::NumIntegral\_dNT\_op\_dN\_dV$<$ dim, CELL $>$}}
+
+
+PDE operator\+: oper div\texorpdfstring{$^\wedge$}{\string^}2 N -\/ interpolation functions squared.  
+
+
+
+
+{\ttfamily \#include $<$Num\+Integral\+\_\+d\+NT\+\_\+op\+\_\+d\+N\+\_\+d\+V.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Num\+Integral\+\_\+d\+NT\+\_\+op\+\_\+d\+N\+\_\+dV\texorpdfstring{$<$}{<} dim, CELL \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_num_integral__d_n_t__op__d_n__d_v__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Num\+Integral\+\_\+d\+NT\+\_\+op\+\_\+d\+N\+\_\+dV\texorpdfstring{$<$}{<} dim, CELL \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_num_integral__d_n_t__op__d_n__d_v__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_num_integral__d_n_t__op__d_n__d_v_a29693a7c4efe5853f0f52d8ae36f0a66}{Num\+Integral\+\_\+d\+NT\+\_\+op\+\_\+d\+N\+\_\+dV}} (const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&, const char \texorpdfstring{$\ast$}{*}oper, const char \texorpdfstring{$\ast$}{*}basic, const char \texorpdfstring{$\ast$}{*}test)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_num_integral__d_n_t__op__d_n__d_v_a7a30a607229360e5937f103a962e43db}{Compute\+Contribution}} (const CELL$<$ dim $>$ \&) override final
+\item 
+\mbox{\hyperlink{classcsmp_1_1_num_integral__d_n_t__op__d_n__d_v}{Num\+Integral\+\_\+d\+NT\+\_\+op\+\_\+d\+N\+\_\+dV}}$<$ dim, CELL $>$ \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classcsmp_1_1_num_integral__d_n_t__op__d_n__d_v_a42d8d6ee0563e57669ea371b1c70b873}{clone}} () const override final
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_math_operator_l_h_s}{csmp\+::\+Math\+Operator\+LHS$<$ dim, Element $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Math\+Operator\+LHS} (const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&, const char \texorpdfstring{$\ast$}{*}basic, const char \texorpdfstring{$\ast$}{*}test)
+\item 
+\mbox{\hyperlink{classcsmp_1_1_math_operator_l_h_s}{Math\+Operator\+LHS}} \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_math_operator_l_h_s}{Math\+Operator\+LHS}} \&)
+\item 
+std\+::string {\bfseries Name} () const
+\begin{DoxyCompactList}\small\item\em \doxylink{classcsmp_1_1_operand}{Operand} Functions. \end{DoxyCompactList}\item 
+virtual void {\bfseries Out} () const
+\item 
+const \mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}} \& {\bfseries Material\+Operand} () const
+\item 
+const \mbox{\hyperlink{structcsmp_1_1_index}{Index}} \& {\bfseries Material\+Operand\+Key} () const
+\item 
+std\+::string {\bfseries Material\+Operand\+Name} () const
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}} {\bfseries Material\+Operand\+Type} () const
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Material\+Operand\+Placement} () const
+\item 
+uint32\+\_\+t {\bfseries Material\+Operand\+Data\+Depth} () const
+\item 
+const \mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}} \& {\bfseries Basic\+Operand} () const
+\item 
+const \mbox{\hyperlink{structcsmp_1_1_index}{Index}} \& {\bfseries Basic\+Operand\+Key} () const
+\item 
+std\+::string {\bfseries Basic\+Operand\+Name} () const
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}} {\bfseries Basic\+Operand\+Type} () const
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Basic\+Operand\+Placement} () const
+\item 
+uint32\+\_\+t {\bfseries Basic\+Operand\+Data\+Depth} () const
+\item 
+size\+\_\+t {\bfseries Basic\+Operand\+Offset} () const
+\item 
+const \mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}} \& {\bfseries Test\+Operand} () const
+\item 
+const \mbox{\hyperlink{structcsmp_1_1_index}{Index}} \& {\bfseries Test\+Operand\+Key} () const
+\item 
+std\+::string {\bfseries Test\+Operand\+Name} () const
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}} {\bfseries Test\+Operand\+Type} () const
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Test\+Operand\+Placement} () const
+\item 
+uint32\+\_\+t {\bfseries Test\+Operand\+Data\+Depth} () const
+\item 
+size\+\_\+t {\bfseries Test\+Operand\+Offset} () const
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_math_operator_l_h_s_a071174805944988e79eb90d220825fc6}{Add}} () const
+\begin{DoxyCompactList}\small\item\em Accumulation Process Settings. \end{DoxyCompactList}\item 
+bool {\bfseries Subtract} () const
+\item 
+bool {\bfseries Add\+Later} () const
+\item 
+bool {\bfseries Subtract\+Later} () const
+\item 
+bool {\bfseries Multiply} () const
+\item 
+bool {\bfseries Lumped\+Formulation} () const
+\item 
+uint32\+\_\+t {\bfseries Application\+Cycle} () const
+\item 
+uint32\+\_\+t {\bfseries Application\+Cycles} () const
+\item 
+double {\bfseries Multiply\+By} () const
+\item 
+bool {\bfseries Multiply\+With\+Time\+Increment} () const
+\item 
+bool {\bfseries Divide\+By\+Time\+Increment} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_math_operator_l_h_s_a656e2058fe8befd10867c14daf913fb4}{Add\+Accumulate}} ()
+\begin{DoxyCompactList}\small\item\em Set flags and properties. \end{DoxyCompactList}\item 
+void {\bfseries Subtract\+Accumulate} ()
+\item 
+void {\bfseries Add\+Accumulate\+Later} ()
+\item 
+void {\bfseries Subtract\+Accumulate\+Later} ()
+\item 
+void {\bfseries Multiply\+Accumulate} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_math_operator_l_h_s_a3e0f634988ada2fc5655833a1d0b8ded}{Property\+At\+Integration\+Point}} (const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, uint32\+\_\+t ip, \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&)
+\begin{DoxyCompactList}\small\item\em interpolation of property if isoparametric elements are used \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_math_operator_l_h_s_acaaa0a607351dfb0c857249573a26e47}{Get\+Operands}} (const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em getting data from the \doxylink{classcsmp_1_1_element}{Element}, \doxylink{classcsmp_1_1_face}{Face}, \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_math_operator_l_h_s_a0972c226f26ae57084c7d22343560e3e}{Write\+Operands}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em writing data to the \doxylink{classcsmp_1_1_element}{Element}, \doxylink{classcsmp_1_1_face}{Face}, \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} \end{DoxyCompactList}\item 
+virtual void {\bfseries Multiply\+With\+Time\+Factor} (double dt)
+\begin{DoxyCompactList}\small\item\em multiply with time increment if this is desired \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_math_operator_l_h_s_ab63fa0d4cdd2e842a7bd9e72cad20760}{Assign\+To\+Global}} (const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&, \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{Sparse\+Matrix}} \&)
+\begin{DoxyCompactList}\small\item\em assigment to the left hand side global matrix (after everything was calculated ) \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_num_integral__d_n_t__op__d_n__d_v_a60ec991106ee48babc45d08ff807696e}\label{classcsmp_1_1_num_integral__d_n_t__op__d_n__d_v_a60ec991106ee48babc45d08ff807696e} 
+\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ {\bfseries B\+\_\+}
+\item 
+\Hypertarget{classcsmp_1_1_num_integral__d_n_t__op__d_n__d_v_ad05068d3e7cc3e3255325e3192b5905a}\label{classcsmp_1_1_num_integral__d_n_t__op__d_n__d_v_ad05068d3e7cc3e3255325e3192b5905a} 
+\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ {\bfseries BT\+\_\+}
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_math_operator_l_h_s}{csmp\+::\+Math\+Operator\+LHS$<$ dim, Element $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string {\bfseries name\+\_\+}
+\begin{DoxyCompactList}\small\item\em name of operator \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}} {\bfseries op}
+\begin{DoxyCompactList}\small\item\em material property operand \end{DoxyCompactList}\item 
+std\+::pair$<$ \mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}}, size\+\_\+t $>$ {\bfseries bop}
+\begin{DoxyCompactList}\small\item\em basic function operand and calculation offset \end{DoxyCompactList}\item 
+std\+::pair$<$ \mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}}, size\+\_\+t $>$ {\bfseries top}
+\begin{DoxyCompactList}\small\item\em test function operand and calculation offset \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ {\bfseries LHS}
+\begin{DoxyCompactList}\small\item\em solution matrix to be accumulated \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ $>$ {\bfseries MTRL}
+\begin{DoxyCompactList}\small\item\em material property matrix(es) needed for PDE operand \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ {\bfseries DERIV}
+\begin{DoxyCompactList}\small\item\em shape function derivative matrix \end{DoxyCompactList}\item 
+std\+::vector$<$ double $>$ {\bfseries IPOL}
+\begin{DoxyCompactList}\small\item\em shape function vector \end{DoxyCompactList}\item 
+double {\bfseries factor\+\_\+}
+\begin{DoxyCompactList}\small\item\em constant scaling factor \end{DoxyCompactList}\item 
+bool {\bfseries add\+\_\+accumulate\+\_\+}
+\item 
+bool {\bfseries subtract\+\_\+accumulate\+\_\+}
+\item 
+bool {\bfseries add\+\_\+accumulate\+\_\+later\+\_\+}
+\item 
+bool {\bfseries subtract\+\_\+accumulate\+\_\+later\+\_\+}
+\item 
+bool {\bfseries multiply\+\_\+accumulate\+\_\+}
+\item 
+bool {\bfseries lump\+\_\+matrices\+\_\+}
+\item 
+uint32\+\_\+t {\bfseries application\+\_\+cycles\+\_\+}
+\item 
+uint32\+\_\+t {\bfseries application\+\_\+cycle\+\_\+}
+\item 
+bool {\bfseries time\+\_\+multiply\+\_\+}
+\item 
+bool {\bfseries time\+\_\+divide\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL = Element$>$\newline
+class csmp\+::\+Num\+Integral\+\_\+d\+NT\+\_\+op\+\_\+d\+N\+\_\+d\+V$<$ dim, CELL $>$}
+PDE operator\+: oper div\texorpdfstring{$^\wedge$}{\string^}2 N -\/ interpolation functions squared. 
+
+\label{doc-constructors}
+\Hypertarget{classcsmp_1_1_num_integral__d_n_t__op__d_n__d_v_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcsmp_1_1_num_integral__d_n_t__op__d_n__d_v_a29693a7c4efe5853f0f52d8ae36f0a66}\index{csmp::NumIntegral\_dNT\_op\_dN\_dV$<$ dim, CELL $>$@{csmp::NumIntegral\_dNT\_op\_dN\_dV$<$ dim, CELL $>$}!NumIntegral\_dNT\_op\_dN\_dV@{NumIntegral\_dNT\_op\_dN\_dV}}
+\index{NumIntegral\_dNT\_op\_dN\_dV@{NumIntegral\_dNT\_op\_dN\_dV}!csmp::NumIntegral\_dNT\_op\_dN\_dV$<$ dim, CELL $>$@{csmp::NumIntegral\_dNT\_op\_dN\_dV$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{NumIntegral\_dNT\_op\_dN\_dV()}{NumIntegral\_dNT\_op\_dN\_dV()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_num_integral__d_n_t__op__d_n__d_v_a29693a7c4efe5853f0f52d8ae36f0a66} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_num_integral__d_n_t__op__d_n__d_v}{csmp\+::\+Num\+Integral\+\_\+d\+NT\+\_\+op\+\_\+d\+N\+\_\+dV}}$<$ dim, CELL $>$\+::\+Num\+Integral\+\_\+d\+NT\+\_\+op\+\_\+d\+N\+\_\+dV (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&}]{pref}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{oper}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{basic}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{test}{}\end{DoxyParamCaption})}
+
+The \doxylink{classcsmp_1_1_operand}{Operand} which is used here can be both, an element or a nodal variable which is then interpolated to the integration points to obtain the integral properties. 
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_num_integral__d_n_t__op__d_n__d_v_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_num_integral__d_n_t__op__d_n__d_v_a42d8d6ee0563e57669ea371b1c70b873}\index{csmp::NumIntegral\_dNT\_op\_dN\_dV$<$ dim, CELL $>$@{csmp::NumIntegral\_dNT\_op\_dN\_dV$<$ dim, CELL $>$}!clone@{clone}}
+\index{clone@{clone}!csmp::NumIntegral\_dNT\_op\_dN\_dV$<$ dim, CELL $>$@{csmp::NumIntegral\_dNT\_op\_dN\_dV$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{clone()}{clone()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_num_integral__d_n_t__op__d_n__d_v_a42d8d6ee0563e57669ea371b1c70b873} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL = Element$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_num_integral__d_n_t__op__d_n__d_v}{Num\+Integral\+\_\+d\+NT\+\_\+op\+\_\+d\+N\+\_\+dV}}$<$ dim, CELL $>$ \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classcsmp_1_1_num_integral__d_n_t__op__d_n__d_v}{csmp\+::\+Num\+Integral\+\_\+d\+NT\+\_\+op\+\_\+d\+N\+\_\+dV}}$<$ dim, CELL $>$\+::clone (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [final]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classcsmp_1_1_math_operator_l_h_s}{csmp\+::\+Math\+Operator\+LHS$<$ dim, Element $>$}}.
+
+\Hypertarget{classcsmp_1_1_num_integral__d_n_t__op__d_n__d_v_a7a30a607229360e5937f103a962e43db}\index{csmp::NumIntegral\_dNT\_op\_dN\_dV$<$ dim, CELL $>$@{csmp::NumIntegral\_dNT\_op\_dN\_dV$<$ dim, CELL $>$}!ComputeContribution@{ComputeContribution}}
+\index{ComputeContribution@{ComputeContribution}!csmp::NumIntegral\_dNT\_op\_dN\_dV$<$ dim, CELL $>$@{csmp::NumIntegral\_dNT\_op\_dN\_dV$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{ComputeContribution()}{ComputeContribution()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_num_integral__d_n_t__op__d_n__d_v_a7a30a607229360e5937f103a962e43db} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_num_integral__d_n_t__op__d_n__d_v}{csmp\+::\+Num\+Integral\+\_\+d\+NT\+\_\+op\+\_\+d\+N\+\_\+dV}}$<$ dim, CELL $>$\+::\+Compute\+Contribution (\begin{DoxyParamCaption}\item[{const CELL$<$ dim $>$ \&}]{e}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [final]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Laplacian operator of shape function derivatives squared.
+
+\begin{DoxyAttention}{Attention}
+since the interpolation functions derivatives are constant across simplices (linear line, triangle and tetrahedral elements), the computation of DN for these elements simplifies greatly. 
+\end{DoxyAttention}
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_math_operator_l_h_s_ad218c9a90bfa910a988f540a8fe802ea}{csmp\+::\+Math\+Operator\+LHS$<$ dim, Element $>$}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/integration/pde\+\_\+operators/numerical/Num\+Integral\+\_\+d\+NT\+\_\+op\+\_\+d\+N\+\_\+d\+V.\+h\item 
+source/modules/integration/pde\+\_\+operators/numerical\+\_\+integration/Num\+Integral\+\_\+d\+NT\+\_\+op\+\_\+d\+N\+\_\+d\+V.\+cpp\end{DoxyCompactItemize}

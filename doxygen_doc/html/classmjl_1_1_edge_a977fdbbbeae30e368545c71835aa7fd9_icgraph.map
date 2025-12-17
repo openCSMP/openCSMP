@@ -1,0 +1,15 @@
+<map id="mjl::Edge::Intersect" name="mjl::Edge::Intersect">
+<area shape="rect" id="Node000001" title=" " alt="" coords="490,104,625,130"/>
+<area shape="rect" id="Node000002" href="$group___c_s_m_pglobal_functions.html#ga85e8aa8dcc3d8d4c0dd5040561c42762" title="variation of clipPolygonToEdge(), MJL, p. 127" alt="" coords="262,5,420,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="527,97,487,69,441,45,411,34,412,29,443,40,490,65,530,92"/>
+<area shape="rect" id="Node000003" href="$classmjl_1_1_edge.html#a95c95b8e922e8f7c2605df1906342dca" title=" " alt="" coords="281,55,400,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="483,103,400,84,401,78,484,97"/>
+<area shape="rect" id="Node000004" href="$classmjl_1_1_edge.html#ac8bf9ec6d584ddc112f3c8b9ecff4cc4" title=" " alt="" coords="258,104,424,130"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="474,120,425,120,425,114,474,114"/>
+<area shape="rect" id="Node000005" href="$namespacemjl.html#a32b3a8d58f823cb167c3f3c499f56224" title=" " alt="" coords="278,153,404,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="484,136,401,155,400,150,483,131"/>
+<area shape="rect" id="Node000007" href="$classmjl_1_1_edge.html#a2eb063c4229dbbcb316e776ba7cc5b4e" title=" " alt="" coords="240,203,442,228"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="530,141,490,169,443,194,412,205,411,200,441,189,487,164,527,137"/>
+<area shape="rect" id="Node000006" href="$group___c_s_m_pglobal_functions.html#ga9855cfe021c08cc1f9bde489be203e1c" title="Laszlo, p. 158." alt="" coords="5,153,192,179"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="263,169,192,169,192,164,263,164"/>
+</map>

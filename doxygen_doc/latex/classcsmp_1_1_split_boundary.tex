@@ -1,0 +1,772 @@
+\doxysection{csmp\+::Split\+Boundary\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_split_boundary}{}\label{classcsmp_1_1_split_boundary}\index{csmp::SplitBoundary$<$ dim $>$@{csmp::SplitBoundary$<$ dim $>$}}
+
+
+Representation of a model boundary across which the elements are node-\/matching, but have unique nodes on either side; as many nodes as come together.  
+
+
+
+
+{\ttfamily \#include $<$Split\+Boundary.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Split\+Boundary\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_split_boundary__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Split\+Boundary\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_split_boundary__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_split_boundary_abc5aa10b5f10d32e7fe5fef2b06e4fdc}{Split\+Boundary}} (std\+::string splitboundaryname, const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&, const \mbox{\hyperlink{classcsmp_1_1_finite_element_manager}{Finite\+Element\+Manager}} \&, \mbox{\hyperlink{classcsmp_1_1_mesh_manager}{Mesh\+Manager}}$<$ dim $>$ \&, const \mbox{\hyperlink{structcsmp_1_1_inter_face_parent_elements}{Inter\+Face\+Parent\+Elements}}$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em constructor of split boundary with given name from set of juxtaposed elements; prompts \doxylink{classcsmp_1_1_mesh_manager}{Mesh\+Manager} to create elements \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_split_boundary_a77131cf40ebc2b3700a79422217aa60c}\label{classcsmp_1_1_split_boundary_a77131cf40ebc2b3700a79422217aa60c} 
+{\bfseries Split\+Boundary} (std\+::string splitboundaryname, const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&)
+\item 
+\Hypertarget{classcsmp_1_1_split_boundary_a2d082017a8b57be1714aeb972d045e77}\label{classcsmp_1_1_split_boundary_a2d082017a8b57be1714aeb972d045e77} 
+{\bfseries Split\+Boundary} (const \mbox{\hyperlink{classcsmp_1_1_split_boundary}{Split\+Boundary}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_split_boundary_abc5835e274933cfc7d7a35b6eb365799}\label{classcsmp_1_1_split_boundary_abc5835e274933cfc7d7a35b6eb365799} 
+{\bfseries Split\+Boundary} (\mbox{\hyperlink{classcsmp_1_1_split_boundary}{Split\+Boundary}} \&\&)
+\item 
+\mbox{\hyperlink{classcsmp_1_1_split_boundary_a7e7d694d9d6deb4c2f310f9493d433f7}{Split\+Boundary}} (const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&, \mbox{\hyperlink{classcsmp_1_1_mesh_manager}{Mesh\+Manager}}$<$ dim $>$ \&, const \mbox{\hyperlink{structcsmp_1_1_sub_domain_info}{Sub\+Domain\+Info}} \&)
+\begin{DoxyCompactList}\small\item\em RECONSTRUCTOR of split boundaries from csmp native file format (call only prior to deleting anythin from colonies) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_split_boundary_a132d461372796e5877d7e8235e779df5}\label{classcsmp_1_1_split_boundary_a132d461372796e5877d7e8235e779df5} 
+virtual {\bfseries \texorpdfstring{$\sim$}{\string~}\+Split\+Boundary} ()
+\begin{DoxyCompactList}\small\item\em Does not delet interfaces, Delete() has to be called for this. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_split_boundary_af27b8d0737ffd71328a9622f43cc818c}\label{classcsmp_1_1_split_boundary_af27b8d0737ffd71328a9622f43cc818c} 
+\mbox{\hyperlink{classcsmp_1_1_split_boundary}{Split\+Boundary}}$<$ dim $>$ \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_split_boundary}{Split\+Boundary}} \&)
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_split_boundary_afcfc0e11fabd4608334b4fcf2ffb7749}{Accept}} (\mbox{\hyperlink{classcsmp_1_1_visitor}{Visitor}}$<$ dim $>$ \&) override
+\begin{DoxyCompactList}\small\item\em applies visitor to split boundary \end{DoxyCompactList}\item 
+virtual \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} \mbox{\hyperlink{classcsmp_1_1_split_boundary_aff4060b8894b89927930ee33e271c164}{Placement}} () const override
+\begin{DoxyCompactList}\small\item\em methods required for the \doxylink{classcsmp_1_1_local_variable_storage}{Local\+Variable\+Storage} \end{DoxyCompactList}\item 
+virtual bool \mbox{\hyperlink{classcsmp_1_1_split_boundary_af312a758ab5eb0e6ab39a5815faf7736}{Valid\+Variable}} (const char \texorpdfstring{$\ast$}{*}variable\+Name) const override
+\item 
+\Hypertarget{classcsmp_1_1_split_boundary_aca466837457273b9731d5cff6df4b084}\label{classcsmp_1_1_split_boundary_aca466837457273b9731d5cff6df4b084} 
+size\+\_\+t {\bfseries Accumulate\+By\+Number} (\mbox{\hyperlink{classcsmp_1_1_mesh_manager}{Mesh\+Manager}}$<$ dim $>$ \&, std\+::vector$<$ size\+\_\+t $>$ \&cell\+\_\+ids)
+\begin{DoxyCompactList}\small\item\em forms a split boundary from existing interfaces assuming that these are numbered n=elmts+faces .. interfaces-\/1 \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_split_boundary_a2731741f854b3c9eeef31db155ce59c8}{Create\+From}} (const typename std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator ifaces\+Begin, const typename std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator ifaces\+End)
+\begin{DoxyCompactList}\small\item\em creating from supplied vector of interfaces \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_node_manifold}{Node\+Manifold}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$ \mbox{\hyperlink{classcsmp_1_1_split_boundary_ae9473aa84e014d2c67a6ea07f2294590}{Node\+Manifolds}} () const
+\begin{DoxyCompactList}\small\item\em generates a vector of \doxylink{classcsmp_1_1_node_manifold}{Node\+Manifold} pointers that can be iterated over \end{DoxyCompactList}\item 
+std\+::pair$<$ std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$, size\+\_\+t $>$ \mbox{\hyperlink{classcsmp_1_1_split_boundary_ac7a3455696472b4c9ff069c7130cc12e}{Inside\+Nodes}} () const
+\begin{DoxyCompactList}\small\item\em returns sorted node pointer vector partitioned into an interior and perimeter range; perimeter starts at size\+\_\+t number of nodes in returned pair \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_split_boundary_a234586d6a363bd7562906515a1128233}\label{classcsmp_1_1_split_boundary_a234586d6a363bd7562906515a1128233} 
+std\+::pair$<$ std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$, size\+\_\+t $>$ {\bfseries Outside\+Nodes} () const
+\begin{DoxyCompactList}\small\item\em returns sorted node pointer vector partitioned into an interior and perimeter range; perimeter starts at size\+\_\+t number of nodes in returned pair \end{DoxyCompactList}\item 
+{\footnotesize template$<$class Var$>$ }\\void \mbox{\hyperlink{classcsmp_1_1_split_boundary_abebe13c32f2f5afffbf2bec2626698b2}{Input\+Node\+Property\+Value}} (const char \texorpdfstring{$\ast$}{*}input\+\_\+node\+\_\+prop, const Var \&, \mbox{\hyperlink{namespacecsmp_a4b8f1ad9f1a09a957714679ce72aee3f}{SUBDOMAIN\+\_\+\+PART}}, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}})
+\begin{DoxyCompactList}\small\item\em NEW\+: input constat node variable value on a specific side of the split boundary (options INSIDE or OUTSIDE) \end{DoxyCompactList}\item 
+{\footnotesize template$<$class Var$>$ }\\void \mbox{\hyperlink{classcsmp_1_1_split_boundary_a47849333d38671eefea4da2590b33029}{Input\+Property\+Value}} (const char \texorpdfstring{$\ast$}{*}input\+\_\+node\+\_\+prop, const Var \&, \mbox{\hyperlink{namespacecsmp_a4b8f1ad9f1a09a957714679ce72aee3f}{SUBDOMAIN\+\_\+\+PART}}, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}})
+\begin{DoxyCompactList}\small\item\em input node variable values on a specific side of the split boundary (options INSIDE or OUTSIDE) \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Var$>$ }\\void \mbox{\hyperlink{classcsmp_1_1_split_boundary_a12ee784071c102a4ae199d540de5bc25}{Input\+Property\+Value}} (const char \texorpdfstring{$\ast$}{*}input\+\_\+prop, const Var \&new\+\_\+value, \mbox{\hyperlink{namespacecsmp_a4b8f1ad9f1a09a957714679ce72aee3f}{SUBDOMAIN\+\_\+\+PART}} sd=COMPLETE)
+\begin{DoxyCompactList}\small\item\em for the assignment of properties that are unique to the instance of this subclass \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_split_boundary_a5ddb0e61eff49c44c103b2bd91cfa525}\label{classcsmp_1_1_split_boundary_a5ddb0e61eff49c44c103b2bd91cfa525} 
+{\footnotesize template$<$typename Var$>$ }\\void {\bfseries Input\+Property\+Value} (const char \texorpdfstring{$\ast$}{*}input\+\_\+prop, const Var \&new\+\_\+value, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} do\+\_\+not\+\_\+overwrite, \mbox{\hyperlink{namespacecsmp_a4b8f1ad9f1a09a957714679ce72aee3f}{SUBDOMAIN\+\_\+\+PART}} sd=COMPLETE)
+\begin{DoxyCompactList}\small\item\em as Input\+Property\+Value, but with more selective overwrite protection for variable components that have the flag \textquotesingle{}do\+\_\+not\+\_\+overwrite\textquotesingle{} \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_split_boundary_a75f1a53c6552e0da1f6fd760e0c0e807}\label{classcsmp_1_1_split_boundary_a75f1a53c6552e0da1f6fd760e0c0e807} 
+void {\bfseries Change\+Node\+Property\+Status} (const char \texorpdfstring{$\ast$}{*}property, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} new\+\_\+status\+\_\+of\+\_\+scalar, \mbox{\hyperlink{namespacecsmp_a4b8f1ad9f1a09a957714679ce72aee3f}{SUBDOMAIN\+\_\+\+PART}}, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}})
+\begin{DoxyCompactList}\small\item\em changes the flag of the scalar node variable \textquotesingle{}property\textquotesingle{} to the new value; applied either to the INSIDE or OUTSIDE of the entire splitboundary or its interior or perimeter \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_split_boundary_a24d55befbaaedaa5b1902b7645a1f99c}{Change\+Node\+Property\+Status\+Where}} (const char \texorpdfstring{$\ast$}{*}, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}}, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}}, double, double)
+\begin{DoxyCompactList}\small\item\em changes the flag of the scalar node variable \textquotesingle{}property\textquotesingle{} to the new value; applied either to the INSIDE or OUTSIDE of the entire splitboundary but only where the variable value is in the target range \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_split_boundary_a08bf30a3fde5d76e31414ed772fb7a08}\label{classcsmp_1_1_split_boundary_a08bf30a3fde5d76e31414ed772fb7a08} 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}} {\bfseries Region\+Location} (const \mbox{\hyperlink{classcsmp_1_1_region}{Region}}$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em Returns the position of and adjacent region relative to the boundary. Relies on element Idx. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_split_boundary_a764360969ee1e4649a87cd246bd5751a}{Area}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}}=INSIDE) const
+\begin{DoxyCompactList}\small\item\em output length(2\+D) or area(3d) of the split boundary=lower dimensional region; middle refers to bisector if nodes are displaced \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_split_boundary_ae8285cbb98a08b8a8668c843bba335f6}{Length}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}}=INSIDE) const
+\begin{DoxyCompactList}\small\item\em output length(of a split boundary that consists of line elements; middle refers to bisector if nodes are displaced \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_split_boundary_aba0387a57910810645c1e48740ab4c8b}{Perimeter}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}}=INSIDE) const
+\begin{DoxyCompactList}\small\item\em outputs length of perimeter curve of a 3D split boundary; no meaning in 1 or 2D models \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_split_boundary_aa557ba090e826707c511de813cd07bc1}{Surface\+Integral}} (const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&, const char \texorpdfstring{$\ast$}{*}property, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}}=INSIDE) const
+\begin{DoxyCompactList}\small\item\em integrates the property over the boundary line or surface \end{DoxyCompactList}\item 
+std\+::pair$<$ int32\+\_\+t, int32\+\_\+t $>$ \mbox{\hyperlink{classcsmp_1_1_split_boundary_ae6cb311802efeeaf022c4f4d13905961}{Inter\+Face\+Spatial\+Dimensions}} () const
+\begin{DoxyCompactList}\small\item\em returns 1) interfaces of how many different spatial dimensions are contained, and 2) the highest interface spatial dimension in subdomain \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_split_boundary_aecf83ad78ea0056edfb3490935376098}\label{classcsmp_1_1_split_boundary_aecf83ad78ea0056edfb3490935376098} 
+\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\+\_\+\+BOUNDARY}} {\bfseries At\+Boundary} () const
+\begin{DoxyCompactList}\small\item\em reports box-\/boundary flag equivalent which is always INTERNAL because \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} objects can only exist on the interior of a model \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_split_boundary_ac74122eca9f68620cfa5bfb33862a1d5}{Pull\+Apart\+Split\+Boundary}} (double dist)
+\begin{DoxyCompactList}\small\item\em Method that applies half of displacement to both sides of interface (dotted by unit\+Normal) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_split_boundary_a4fbb0551ea8dbfb93a5c55a752263e84}\label{classcsmp_1_1_split_boundary_a4fbb0551ea8dbfb93a5c55a752263e84} 
+void {\bfseries Out} () const
+\begin{DoxyCompactList}\small\item\em writes all contained data on the screen \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_split_boundary_ad6dc8335ae8703f6a60f427b9c4ac2da}{Write\+Split\+Boundary\+Indexes\+To\+Binary\+File}} (std\+::fstream \&) const
+\begin{DoxyCompactList}\small\item\em different version than in the base class that does not attempt to write nodes \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_split_boundary_a2354deaa72317e9f011077add85d57b3}\label{classcsmp_1_1_split_boundary_a2354deaa72317e9f011077add85d57b3} 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator {\bfseries Nodes\+Begin} () const =delete
+\item 
+\Hypertarget{classcsmp_1_1_split_boundary_ad80c22821972d180c5e2053c06ed7692}\label{classcsmp_1_1_split_boundary_ad80c22821972d180c5e2053c06ed7692} 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator {\bfseries Perimeter\+Nodes\+Begin} () const =delete
+\item 
+\Hypertarget{classcsmp_1_1_split_boundary_ab4566fe80036549436343bb415e2775d}\label{classcsmp_1_1_split_boundary_ab4566fe80036549436343bb415e2775d} 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator {\bfseries Nodes\+End} () const =delete
+\item 
+\Hypertarget{classcsmp_1_1_split_boundary_a5a08af6b133f97c5837099d9b3103204}\label{classcsmp_1_1_split_boundary_a5a08af6b133f97c5837099d9b3103204} 
+size\+\_\+t {\bfseries Nodes} () const =delete
+\item 
+\Hypertarget{classcsmp_1_1_split_boundary_aefa15b7793b6b55c414dabb7aad82d4b}\label{classcsmp_1_1_split_boundary_aefa15b7793b6b55c414dabb7aad82d4b} 
+size\+\_\+t {\bfseries Interior\+Nodes} () const =delete
+\item 
+\Hypertarget{classcsmp_1_1_split_boundary_ac08a5e95aa6ae7337f0a6009e85cc577}\label{classcsmp_1_1_split_boundary_ac08a5e95aa6ae7337f0a6009e85cc577} 
+size\+\_\+t {\bfseries Perimeter\+Nodes} () const =delete
+\item 
+\Hypertarget{classcsmp_1_1_split_boundary_a5bf307c3b46890081df2e81fd827cd80}\label{classcsmp_1_1_split_boundary_a5bf307c3b46890081df2e81fd827cd80} 
+bool {\bfseries Is\+Perimeter\+Node} (const \mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const =delete
+\item 
+\Hypertarget{classcsmp_1_1_split_boundary_a79327903f341eb140a6b38089626ebcd}\label{classcsmp_1_1_split_boundary_a79327903f341eb140a6b38089626ebcd} 
+\mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} {\bfseries N} (size\+\_\+t n) const =delete
+\item 
+\Hypertarget{classcsmp_1_1_split_boundary_ae98686744623780fea1ad5aab8ae98c2}\label{classcsmp_1_1_split_boundary_ae98686744623780fea1ad5aab8ae98c2} 
+bool {\bfseries Is\+Perimeter\+Node} (const size\+\_\+t nidx) const =delete
+\item 
+\Hypertarget{classcsmp_1_1_split_boundary_a088bbfc460ebc887930954d1e2f25379}\label{classcsmp_1_1_split_boundary_a088bbfc460ebc887930954d1e2f25379} 
+void {\bfseries Assign\+Node\+Coordinates\+To} (const char \texorpdfstring{$\ast$}{*}vector\+\_\+prop)=delete
+\item 
+\Hypertarget{classcsmp_1_1_split_boundary_a2ecb40ec7d413cdbba86983e737cc299}\label{classcsmp_1_1_split_boundary_a2ecb40ec7d413cdbba86983e737cc299} 
+void {\bfseries Assign\+Node\+Coordinates\+To} (const char \texorpdfstring{$\ast$}{*}scalar\+\_\+prop, char coord)=delete
+\item 
+\Hypertarget{classcsmp_1_1_split_boundary_ae8f8db83f51c3b9932cef7e18f3a5792}\label{classcsmp_1_1_split_boundary_ae8f8db83f51c3b9932cef7e18f3a5792} 
+void {\bfseries Node\+Attributes\+To\+CSV} ()=delete
+\item 
+\Hypertarget{classcsmp_1_1_split_boundary_a14558f6b8d67d9bded593f05f2025c10}\label{classcsmp_1_1_split_boundary_a14558f6b8d67d9bded593f05f2025c10} 
+void {\bfseries Change\+Property\+Status} (const char \texorpdfstring{$\ast$}{*}, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}}, \mbox{\hyperlink{namespacecsmp_a4b8f1ad9f1a09a957714679ce72aee3f}{SUBDOMAIN\+\_\+\+PART}})=delete
+\item 
+\Hypertarget{classcsmp_1_1_split_boundary_a3c30b1aed8b23b9fab79ff67436d961d}\label{classcsmp_1_1_split_boundary_a3c30b1aed8b23b9fab79ff67436d961d} 
+void {\bfseries Change\+Property\+Status\+Where} (const char \texorpdfstring{$\ast$}{*}, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}}, double, double)=delete
+\item 
+\Hypertarget{classcsmp_1_1_split_boundary_aafdf292c2a3c881e951d062c3c5a0ac8}\label{classcsmp_1_1_split_boundary_aafdf292c2a3c881e951d062c3c5a0ac8} 
+void {\bfseries Change\+Property\+Status} (const char \texorpdfstring{$\ast$}{*}, const std\+::vector$<$ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} $>$ \&, \mbox{\hyperlink{namespacecsmp_a4b8f1ad9f1a09a957714679ce72aee3f}{SUBDOMAIN\+\_\+\+PART}})=delete
+\item 
+\Hypertarget{classcsmp_1_1_split_boundary_a23789b53677345d15819e3a0a4fc659a}\label{classcsmp_1_1_split_boundary_a23789b53677345d15819e3a0a4fc659a} 
+void {\bfseries Change\+Property\+Status\+Where} (const char \texorpdfstring{$\ast$}{*}, const std\+::vector$<$ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} $>$ \&, double, double)=delete
+\item 
+\Hypertarget{classcsmp_1_1_split_boundary_a94c5de6592785af9377baaef7c9c516b}\label{classcsmp_1_1_split_boundary_a94c5de6592785af9377baaef7c9c516b} 
+void {\bfseries Change\+Property\+Status} (const char \texorpdfstring{$\ast$}{*}, uint32\+\_\+t, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}}, \mbox{\hyperlink{namespacecsmp_a4b8f1ad9f1a09a957714679ce72aee3f}{SUBDOMAIN\+\_\+\+PART}})=delete
+\item 
+\Hypertarget{classcsmp_1_1_split_boundary_a2e07775afac973ca203614d5c6062423}\label{classcsmp_1_1_split_boundary_a2e07775afac973ca203614d5c6062423} 
+void {\bfseries Change\+Property\+Status\+Where} (const char \texorpdfstring{$\ast$}{*}, uint32\+\_\+t, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}}, double, double)=delete
+\item 
+\Hypertarget{classcsmp_1_1_split_boundary_a54668a6de66c779ac2fd7da7056681e1}\label{classcsmp_1_1_split_boundary_a54668a6de66c779ac2fd7da7056681e1} 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} {\bfseries Property\+Status} (const char \texorpdfstring{$\ast$}{*}, \mbox{\hyperlink{namespacecsmp_a4b8f1ad9f1a09a957714679ce72aee3f}{SUBDOMAIN\+\_\+\+PART}}, uint32\+\_\+t) const =delete
+\item 
+\Hypertarget{classcsmp_1_1_split_boundary_a58e0027e32e63fb33fda5d3cf551ad98}\label{classcsmp_1_1_split_boundary_a58e0027e32e63fb33fda5d3cf551ad98} 
+void {\bfseries Interpolate\+Node\+To\+Cell\+Property} (const char \texorpdfstring{$\ast$}{*}, const char \texorpdfstring{$\ast$}{*})=delete
+\item 
+\Hypertarget{classcsmp_1_1_split_boundary_a7f5aa8d761b222125597681500c31497}\label{classcsmp_1_1_split_boundary_a7f5aa8d761b222125597681500c31497} 
+void {\bfseries Interpolate\+Node\+To\+Integration\+Point\+Property} (const char \texorpdfstring{$\ast$}{*}, const char \texorpdfstring{$\ast$}{*})=delete
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_model_sub_domain}{csmp\+::\+Model\+Sub\+Domain$<$ dim, Inter\+Face $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Model\+Sub\+Domain} (const std\+::string \&subdomain\+\_\+name, const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em constructs incomplete subdomain for later initialisation with suitable methods in subclasses \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_model_sub_domain}{Model\+Sub\+Domain}}$<$ dim, \mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}} $>$ \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_model_sub_domain}{Model\+Sub\+Domain}} \&)
+\item 
+std\+::string {\bfseries Name} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ac2e34ce178d5896bdff2826e02e022d5}{Apply}} (\mbox{\hyperlink{classcsmp_1_1_interrelation}{Interrelation}}$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em modification via Operand-\/based relations between discretised properties that only modify a single result variable \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_aedad5f8e462b7e645c1745f5c674e39c}{Rebuild\+Sub\+Domain\+After\+Change\+Of\+Cell\+Vector}} ()
+\begin{DoxyCompactList}\small\item\em deletes nullptr cells, rebuilds node vector, sorts everything and re-\/establishes the perimeter face vectors after modifications of cells \end{DoxyCompactList}\item 
+void {\bfseries Rebuild\+Sub\+Domain\+After\+Change\+Of\+Node\+Vector} ()
+\begin{DoxyCompactList}\small\item\em rebuilds node vector, sorts everything and re-\/establishes interior and perimeter \end{DoxyCompactList}\item 
+void {\bfseries Update\+Cell\+Membership\+Applying\+Constraints} (typename std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator master\+\_\+domain\+\_\+start, typename std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator master\+\_\+domain\+\_\+end, const \mbox{\hyperlink{classcsmp_1_1_property_constraints}{Property\+Constraints}} \&)
+\begin{DoxyCompactList}\small\item\em rebuilds subdomain on the basis of the cells that will be selected according to the supplied property constraints \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a558d771a7d76ff360397d9c2383d89fc}{Identify\+Perimeter}} ()
+\begin{DoxyCompactList}\small\item\em distinguishes PERIMETER simplices that have at least one face on domain boundary from INTERIOR ones; calls Partition\+Element\+Vector() \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_aaf3ef248874090a67fe87e50d8bd5873}{Create\+Node\+Pointer\+Vector}} ()
+\begin{DoxyCompactList}\small\item\em creates node pointer vector from cell vector, using a vector to achieve uniqueness via sort, unique, erase algorithms \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a3757b2383895058cff32c8e3ea1a7b3c}{Sort\+Vectors}} (size\+\_\+t interior\+\_\+cells, size\+\_\+t interior\+\_\+nodes)
+\begin{DoxyCompactList}\small\item\em sorts the node and CELL vectors split into the interior and perimeter ranges (4 sorting operations) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a03118649c3f6254773d9e9ed34f33aea}{Build\+Perimeter\+Face\+Vector}} (int64\+\_\+t interior\+\_\+cells)
+\begin{DoxyCompactList}\small\item\em assuming that a partitioned (and sorted) cell vector is in place, constructs the bd\+\_\+face\+\_\+vec\+\_\+ by checking whether neighbor cells belong to the domain or not \end{DoxyCompactList}\item 
+void {\bfseries Schedule\+For\+Rebuild} ()
+\begin{DoxyCompactList}\small\item\em for rebuilding subdomains when nodes or cells changed\+: flag up for a rebuild using Rebuild\+Sub\+Domain\+After\+Change\+Of\+Cell\+Vector \end{DoxyCompactList}\item 
+bool {\bfseries Needs\+Rebuild} () const
+\item 
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a23464a6c34ba9416419f87036a813d68}{Rebuild\+Cell\+And\+Perimeter\+Face\+Vector}} ()
+\begin{DoxyCompactList}\small\item\em deletes \textquotesingle{}nullptr\textquotesingle{} cells from cell vector, retaining the sorting into interior and perimeter elements, and rebuilding perimeter faces as necessary \end{DoxyCompactList}\item 
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a028f4a5b3dc58fb6b59ac9237b7f519c}{Rebuild\+Node\+Vector}} ()
+\begin{DoxyCompactList}\small\item\em deletes \textquotesingle{}nullptr\textquotesingle{} nodes from \doxylink{classcsmp_1_1_node}{Node} vector, retaining the sorting into interior and perimeter nodes \end{DoxyCompactList}\item 
+int32\+\_\+t {\bfseries Domain\+Index} () const
+\begin{DoxyCompactList}\small\item\em reference counting-\/based unique domain identifier (0..n-\/1) \end{DoxyCompactList}\item 
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ad79aeada5222861dabe5c81323c59507}{Renumber\+Nodes}} () const
+\begin{DoxyCompactList}\small\item\em renumbers nodes in domain 0..n-\/1 \end{DoxyCompactList}\item 
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a17520db92d9751e03853275afc84fa09}{Renumber\+Cells}} () const
+\begin{DoxyCompactList}\small\item\em renumbers cells in domain 0..n-\/1 \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af44335d9a2ce08027b18924e2a10927c}{Update\+Member\+Indexes}} () const
+\begin{DoxyCompactList}\small\item\em renumber cells and nodes consecutively from 0..n-\/1 \end{DoxyCompactList}\item 
+std\+::vector$<$ size\+\_\+t $>$ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a67e17a74c2386395bb019a4c9e440be0}{Member\+Cell\+Indexes}} () const
+\begin{DoxyCompactList}\small\item\em output current indices to vector \end{DoxyCompactList}\item 
+const std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$ \& \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a82cbf631efd523e2d7ba277294950c85}{Cell\+Vector}} () const
+\begin{DoxyCompactList}\small\item\em reference to container of finite cell pointers to either \doxylink{classcsmp_1_1_element}{Element}, \doxylink{classcsmp_1_1_face}{Face} or \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} objects; \end{DoxyCompactList}\item 
+const std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$ \& {\bfseries Node\+Vector} () const
+\begin{DoxyCompactList}\small\item\em reference to const \doxylink{classcsmp_1_1_node}{Node} pointer vector \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator {\bfseries Nodes\+Begin} () const
+\begin{DoxyCompactList}\small\item\em const iterators (cell and node pointers cannot be modified but the nodes and cells can!) \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator {\bfseries Perimeter\+Nodes\+Begin} () const
+\item 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator {\bfseries Nodes\+End} () const
+\item 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator {\bfseries Cells\+Begin} () const
+\item 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator {\bfseries Perimeter\+Cells\+Begin} () const
+\item 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator {\bfseries Cells\+End} () const
+\item 
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ad09876ac74479c2fce0230ca4eb623fd}{Shared\+Perimeter\+Nodes}} (typename std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator start, typename std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator end) const
+\begin{DoxyCompactList}\small\item\em returns how many of the nodes in the supplied iterator range also form part of the current subdomain\textquotesingle{}s perimeter \end{DoxyCompactList}\item 
+bool {\bfseries Empty} () const
+\begin{DoxyCompactList}\small\item\em check whether subdomain conatains any cells \end{DoxyCompactList}\item 
+size\+\_\+t {\bfseries Nodes} () const
+\item 
+size\+\_\+t {\bfseries Interior\+Nodes} () const
+\item 
+size\+\_\+t {\bfseries Perimeter\+Nodes} () const
+\item 
+size\+\_\+t {\bfseries Integration\+Points} () const
+\item 
+size\+\_\+t {\bfseries Sector\+Integration\+Points} () const
+\item 
+size\+\_\+t {\bfseries Facet\+Integration\+Points} () const
+\item 
+size\+\_\+t {\bfseries Cells} () const
+\item 
+size\+\_\+t {\bfseries Interior\+Cells} () const
+\item 
+size\+\_\+t {\bfseries Perimeter\+Cells} () const
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a347ab9b03b1dfa44c93f1b99956bc47b}{Contains}} (const \mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\item 
+bool {\bfseries Is\+Perimeter\+Node} (const \mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\item 
+bool {\bfseries Is\+Perimeter\+Cell} (const \mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a57da45c091a50ea8cbbb337fdc6a64c6}{Perimeter\+Faces}} (size\+\_\+t eid) const
+\begin{DoxyCompactList}\small\item\em for looping over the perimeter faces of perimeter cell with \#eid, method is used to travel across subdomain surface / outline \end{DoxyCompactList}\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a1a759eb5ea8a606b18524cb1fbd133f6}{Perimeter\+Face}} (size\+\_\+t eid, uint32\+\_\+t face) const
+\begin{DoxyCompactList}\small\item\em returns local face id of face \#face that lies on perimeter of model subdomain \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a010f14b108721967ca9978df1499d52f}{N}} (size\+\_\+t n) const
+\begin{DoxyCompactList}\small\item\em pointer to node \#n in subdomain; \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} {\bfseries E} (size\+\_\+t n) const
+\begin{DoxyCompactList}\small\item\em pointer to cell \#n of model subdomain \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a2f8fe3782a143a775c253d3c6191fc62}{Is\+Contiguous}} () const
+\begin{DoxyCompactList}\small\item\em checks whether all cells within the subdomain are interconnected (if the domain has multi-\/dimensional cells this is never the case) \end{DoxyCompactList}\item 
+std\+::pair$<$ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gae70f4082919c7730a8934bfcac658ea2}{CELL\+\_\+\+SHAPE}}, bool $>$ {\bfseries Single\+Cell\+Shape\+Domain} () const
+\begin{DoxyCompactList}\small\item\em if the model subdomain consists of a single cell shape (line, surface, volume) this method returns true revealing the type \end{DoxyCompactList}\item 
+std\+::pair$<$ int32\+\_\+t, int32\+\_\+t $>$ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ab4c56e525a0880281af8173c8538565e}{Spatial\+Dimensions}} () const
+\begin{DoxyCompactList}\small\item\em returns 1) cells of how many different spatial dimensions are contained, and 2) the highest cell spatial dimension in subdomain \end{DoxyCompactList}\item 
+void {\bfseries Min\+Max\+Coordinates} (\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \&xyz\+\_\+min, \mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \&xyz\+\_\+max) const
+\begin{DoxyCompactList}\small\item\em returns diagonally opposite points of bounding box \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ae5f0861ac366755bbc9a7bedd3c7eb79}{Assign\+Node\+Coordinates\+To}} (const char \texorpdfstring{$\ast$}{*}vector\+\_\+prop)
+\begin{DoxyCompactList}\small\item\em output coordinates to user-\/defined vector variable \mbox{[}x1,y1,z1,...xn,yn,zn\mbox{]} \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_affe9c994091a81214bffdec3b1eb379d}{Assign\+Cell\+Characteristics\+To}} (const char \texorpdfstring{$\ast$}{*}characteristic, const char \texorpdfstring{$\ast$}{*}var)
+\begin{DoxyCompactList}\small\item\em characteristics like \textquotesingle{}length\textquotesingle{}, \textquotesingle{}area\textquotesingle{}, \textquotesingle{}volume\textquotesingle{} , \textquotesingle{}aspect ratio\textquotesingle{}, \textquotesingle{}inner radius\textquotesingle{} are assigned to user-\/defined variable \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a67ef0c828a71395fd0fe06c01c0ada6e}{Node\+Attributes\+To\+CSV}} ()
+\begin{DoxyCompactList}\small\item\em writes a CSV (comma delimited ascii text) file with point coordinates, node-\/idx, \doxylink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\+\_\+\+BOUNDARY} flags, and interior vs perimeter information \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a75a4cf21feddd36d999043a1451dabce}{Input\+Property\+Value}} (const char \texorpdfstring{$\ast$}{*}input\+\_\+prop, const Var \&new\+\_\+value, \mbox{\hyperlink{namespacecsmp_a4b8f1ad9f1a09a957714679ce72aee3f}{SUBDOMAIN\+\_\+\+PART}} sd=COMPLETE)
+\begin{DoxyCompactList}\small\item\em assigns uniform (single) variable value to either the entire subdomain or its interior or perimeter \end{DoxyCompactList}\item 
+void {\bfseries Change\+Property\+Status} (const char \texorpdfstring{$\ast$}{*}property, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} new\+\_\+status\+\_\+of\+\_\+scalar, \mbox{\hyperlink{namespacecsmp_a4b8f1ad9f1a09a957714679ce72aee3f}{SUBDOMAIN\+\_\+\+PART}}=COMPLETE)
+\begin{DoxyCompactList}\small\item\em changes the flag of the scalar variable \textquotesingle{}property\textquotesingle{} to new value; applied either in the entire subdomain or its interior or perimeter \end{DoxyCompactList}\item 
+void {\bfseries Change\+Property\+Status\+Where} (const char \texorpdfstring{$\ast$}{*}property, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} new\+\_\+status\+\_\+of\+\_\+scalar, double min\+\_\+value\+\_\+to\+\_\+change, double max\+\_\+value\+\_\+to\+\_\+change)
+\begin{DoxyCompactList}\small\item\em changes the flag of the scalar variable \textquotesingle{}property\textquotesingle{} to new value if the scalar variable is withing the specified range \end{DoxyCompactList}\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ababfefdacbec60ddd809e37ec764997b}{Property\+Status}} (const char \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{structvariable}{variable}}, \mbox{\hyperlink{namespacecsmp_a4b8f1ad9f1a09a957714679ce72aee3f}{SUBDOMAIN\+\_\+\+PART}} flag=COMPLETE, uint32\+\_\+t i=0) const
+\begin{DoxyCompactList}\small\item\em by default (i=0) returns status of scalar variable or first component of a vector or tensor variable; if i\texorpdfstring{$>$}{>}0 flag of corresponding component is returned \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a427056542aa764b22ca3284fc77e170f}{Min\+Max\+Of}} (const char \texorpdfstring{$\ast$}{*}property, double \&gmin, double \&gmax) const
+\begin{DoxyCompactList}\small\item\em min/max property values (length of vectors and eigenvalues of tensors) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a4e074800bd8dbe5099bc9a3b71089f44}{Interpolate\+Node\+To\+Cell\+Property}} (const char \texorpdfstring{$\ast$}{*}nprop, const char \texorpdfstring{$\ast$}{*}eprop)
+\item 
+void {\bfseries Interpolate\+Node\+To\+Integration\+Point\+Property} (const char \texorpdfstring{$\ast$}{*}nprop, const char \texorpdfstring{$\ast$}{*}eprop)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a1a884652fb9c34a64d55665a19939b22}{Interpolate\+Integration\+Point\+To\+Cell\+Property}} (const char \texorpdfstring{$\ast$}{*}cprop, const char \texorpdfstring{$\ast$}{*}eprop)
+\item 
+void {\bfseries Extrapolate\+Cell\+To\+Integration\+Point\+Property} (const char \texorpdfstring{$\ast$}{*}eprop, const char \texorpdfstring{$\ast$}{*}cprop)
+\item 
+void {\bfseries Extrapolate\+Cell\+To\+Facet\+Integration\+Point\+Property} (const char \texorpdfstring{$\ast$}{*}eprop, const char \texorpdfstring{$\ast$}{*}fipprop)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a0646dd865affebcbae44e00f4d00aa21}{Extrapolate\+Cell\+To\+Node\+Property}} (const char \texorpdfstring{$\ast$}{*}eprop, const char \texorpdfstring{$\ast$}{*}nprop, bool by\+\_\+distance=true)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_aecc9505535c81b0151704fc5b9fac09e}{Extrapolate\+Integration\+Point\+To\+Node\+Property}} (const char \texorpdfstring{$\ast$}{*}cprop, const char \texorpdfstring{$\ast$}{*}nprop)
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ad56987658b3732e443a349b49445792b}{Average}} (const char \texorpdfstring{$\ast$}{*}property) const
+\begin{DoxyCompactList}\small\item\em arithmetic (number as opposed to volume weighted) average \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af7671cce5f309418f3b52d5a1d3ab02e}{Copy\+Gradient\+Of\+Property\+\_\+\+A\+\_\+\+To\+\_\+B}} (const char \texorpdfstring{$\ast$}{*}node\+\_\+prop, const char \texorpdfstring{$\ast$}{*}cell\+\_\+prop)
+\item 
+void {\bfseries Copy\+Replace} (const char \texorpdfstring{$\ast$}{*}from, const char \texorpdfstring{$\ast$}{*}to)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a472e8d79822b50bf470b3faf71266cb0}{Write\+Domain\+Indexes\+To\+Binary\+File}} (std\+::fstream \&) const
+\begin{DoxyCompactList}\small\item\em writes complete \doxylink{classcsmp_1_1_model_sub_domain}{Model\+Sub\+Domain} specifications in terms of unique indices as block to binary file \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a3e4530100fdef7bf13ba9fd963f83fd0}{Output\+Variable\+To\+Screen}} (const char \texorpdfstring{$\ast$}{*}prop) const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ae83133e61ae2e75a6da7cce17a4afe5d}{Out}} () const
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_local_variable_storage}{csmp\+::\+Local\+Variable\+Storage$<$ dim, Split\+Boundary $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+bool {\bfseries operator==} (const \mbox{\hyperlink{classcsmp_1_1_local_variable_storage}{Local\+Variable\+Storage}}$<$ dim, \mbox{\hyperlink{classcsmp_1_1_split_boundary}{Split\+Boundary}} $>$ \&) const
+\begin{DoxyCompactList}\small\item\em Goto overload for storees without \doxylink{structcsmp_1_1_integration_point_variables}{Integration\+Point\+Variables}. \end{DoxyCompactList}\item 
+void {\bfseries Resize\+Property\+Storage} (const \mbox{\hyperlink{structcsmp_1_1_local_variables}{Local\+Variables}} \&)
+\begin{DoxyCompactList}\small\item\em Goto overload for storees without \doxylink{structcsmp_1_1_integration_point_variables}{Integration\+Point\+Variables}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_local_variable_storage_ae81c2b297f4166821bc3de2856e055ae}{Add\+Property}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&)
+\begin{DoxyCompactList}\small\item\em Creates an empty space in the storage preserving the original variable values. \doxylink{structcsmp_1_1_local_variables}{Local\+Variables} in \doxylink{structcsmp_1_1_index}{Index} have to reflect NEW state (incl added) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_local_variable_storage_a3b56bab7bc4a1db37bfc4d4176457349}{Delete\+Property}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&)
+\begin{DoxyCompactList}\small\item\em Deletes data and flags of property \doxylink{structcsmp_1_1_local_variables}{Local\+Variables} in \doxylink{structcsmp_1_1_index}{Index} have to reflect CURRENT state (incl property to be removed) \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_local_variable_storage_aa8f995011429356bfd7e7744794c9b9b}{Is\+Within\+Range}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, double, double) const
+\item 
+double {\bfseries Read} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\begin{DoxyCompactList}\small\item\em Scalar variable value. \end{DoxyCompactList}\item 
+void {\bfseries Store} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, const \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&)
+\begin{DoxyCompactList}\small\item\em Scalar variable. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} {\bfseries Status} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\begin{DoxyCompactList}\small\item\em Scalar \& Array variable flag. \end{DoxyCompactList}\item 
+void {\bfseries Store\+Array\+Entry} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, double array\+\_\+elmt\+\_\+value, int\+\_\+type)
+\item 
+double {\bfseries Read\+Array\+Entry} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, int\+\_\+type array\+\_\+elmt) const
+\begin{DoxyCompactList}\small\item\em reads single double element inside of the target array \end{DoxyCompactList}\item 
+bool {\bfseries Empty\+LVS} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_local_variable_storage_ade5ec5a8e9afb482c1619924cf8259b2}{Out\+LVS}} () const
+\item 
+void {\bfseries Assert\+Placement} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\begin{DoxyCompactList}\small\item\em We check in debug only. \end{DoxyCompactList}\item 
+void {\bfseries Assert\+Integration\+Point\+Placement} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\begin{DoxyCompactList}\small\item\em We check in debug only. \end{DoxyCompactList}\item 
+void {\bfseries Assert\+Finite\+Volume\+Integration\+Point\+Placement} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\begin{DoxyCompactList}\small\item\em We check in debug only. \end{DoxyCompactList}\item 
+void {\bfseries Store\+Local\+State} (const \mbox{\hyperlink{structcsmp_1_1_local_variables}{Local\+Variables}} \&lv)
+\begin{DoxyCompactList}\small\item\em We store in debug only. \end{DoxyCompactList}\item 
+void {\bfseries LVS} (const Data \&data)
+\begin{DoxyCompactList}\small\item\em copy or move supplied data into storage \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_split_boundary_a39df9cfea4612a091cf948be73fe1f70}\label{classcsmp_1_1_split_boundary_a39df9cfea4612a091cf948be73fe1f70} 
+\mbox{\hyperlink{structcsmp_1_1_integration_point_variables}{Integration\+Point\+Variables}} {\bfseries Inter\+Face\+Integration\+Point\+Variables} () const
+\begin{DoxyCompactList}\small\item\em return physical variable count at given integration points \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_split_boundary_acc2d370e0bc8784d3536e13660150da5}\label{classcsmp_1_1_split_boundary_acc2d370e0bc8784d3536e13660150da5} 
+\mbox{\hyperlink{structcsmp_1_1_local_variables}{Local\+Variables}} {\bfseries Inter\+Face\+Variables} () const
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_model_sub_domain}{csmp\+::\+Model\+Sub\+Domain$<$ dim, Inter\+Face $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a9d850f869aa6838cecb95fb492a02568}{Partition\+Cell\+Vector}} ()
+\begin{DoxyCompactList}\small\item\em establishes interior vs. exterior simplices and nodes; returns index of first boundary cell \end{DoxyCompactList}\item 
+size\+\_\+t {\bfseries Partition\+Cell\+Vector\+For\+Boundary} ()
+\item 
+size\+\_\+t {\bfseries Partition\+Cell\+Vector\+For\+Split\+Boundary} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_model_sub_domain}{csmp\+::\+Model\+Sub\+Domain$<$ dim, Inter\+Face $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \& {\bfseries pref\+\_\+}
+\item 
+std\+::string {\bfseries subdomain\+\_\+name\+\_\+}
+\begin{DoxyCompactList}\small\item\em passed down when domain is created so that it can be referred to \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$ {\bfseries cell\+\_\+vec\+\_\+}
+\begin{DoxyCompactList}\small\item\em doubly sorted, interior cells first \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::vector$<$ uint32\+\_\+t $>$ $>$ {\bfseries bd\+\_\+face\+\_\+vec\+\_\+}
+\begin{DoxyCompactList}\small\item\em matching second sorted range of cell\+\_\+vec\+\_\+ \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$ {\bfseries node\+\_\+vec\+\_\+}
+\begin{DoxyCompactList}\small\item\em doubly sorted, interior nodes first \end{DoxyCompactList}\item 
+size\+\_\+t {\bfseries first\+\_\+bd\+\_\+node\+\_\+}
+\begin{DoxyCompactList}\small\item\em begin of the perimeter nodes \end{DoxyCompactList}\item 
+int32\+\_\+t {\bfseries domain\+\_\+idx\+\_\+}
+\begin{DoxyCompactList}\small\item\em created during construction from domain\+\_\+count\+\_\+ \end{DoxyCompactList}\item 
+bool {\bfseries rebuilt\+\_\+needed\+\_\+}
+\begin{DoxyCompactList}\small\item\em parameter set when mesh gets modified by \doxylink{classcsmp_1_1_mesh_manager}{Mesh\+Manager} so that update can be prompted \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Static Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_model_sub_domain}{csmp\+::\+Model\+Sub\+Domain$<$ dim, Inter\+Face $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+static int32\+\_\+t {\bfseries domain\+\_\+count\+\_\+}
+\begin{DoxyCompactList}\small\item\em reference-\/counting to get unique identifier for subdomains \end{DoxyCompactList}\item 
+static constexpr bool {\bfseries verbose\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim$>$\newline
+class csmp\+::\+Split\+Boundary$<$ dim $>$}
+Representation of a model boundary across which the elements are node-\/matching, but have unique nodes on either side; as many nodes as come together. 
+
+\begin{DoxyAuthor}{Author}
+P. Lang 
+
+S.\+K. Matthai 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2011
+\end{DoxyDate}
+Split\+Boundaries are collections of Inter\+Faces (interior material boundaries) singled out for specific computations.\hypertarget{classcsmp_1_1_split_boundary_conventions}{}\doxysubsection{\texorpdfstring{Conventions}{Conventions}}\label{classcsmp_1_1_split_boundary_conventions}
+The base class node pointer vector contains nodes of the inner side of the split boundary. If one wants to access neighboring nodes, this would be done via looping over the boundaries interfaces and use Inter\+Face\+::\+N(i,j).\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+Split boundaries split the nodes of the provided \doxylink{classcsmp_1_1_boundary}{Boundary} plus those that belong to another \doxylink{classcsmp_1_1_boundary}{Boundary} as well. Hence, use of Boundaries is required where all external and internal boundaries of the domain are represented as such (exist as a \doxylink{classcsmp_1_1_boundary}{csmp\+::\+Boundary}).
+
+Opposing parent elements on either side of the \doxylink{classcsmp_1_1_boundary}{csmp\+::\+Boundary} are removed from each others neighbor list, so they are from the now duplicated nodes parent list on the opposing side.
+
+\begin{DoxyAttention}{Attention}
+Before andy Split\+Boundaries may be built all Boundaries have to be set up. 
+
+2D models in 3D space will not allow for proper split boundary creation (unit normal of line element issue)
+\end{DoxyAttention}
+\hypertarget{compare_floats_8h_motivation}{}\doxysubsection{\texorpdfstring{Motivation}{Motivation}}\label{compare_floats_8h_motivation}
+To address and carry out computations at material interfaces or model boundaries.
+
+To avoid conditional processing (if at boundary statements etc.) for all elements of a model, by treating boundary specific calculations separately.\hypertarget{classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_consequences}{}\doxysubsection{\texorpdfstring{Consequences}{Consequences}}\label{classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_consequences}
+\doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} objects permit the implementation of jump discontinuities in continuum models, see Tran et al. (2020, AWR)
+
+\begin{DoxyNote}{Note}
+\doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} has no \doxylink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\+\_\+\+BOUNDARY} flag because it can only have the value INTERNAL anyway. 
+\end{DoxyNote}
+
+
+\label{doc-constructors}
+\Hypertarget{classcsmp_1_1_split_boundary_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcsmp_1_1_split_boundary_abc5aa10b5f10d32e7fe5fef2b06e4fdc}\index{csmp::SplitBoundary$<$ dim $>$@{csmp::SplitBoundary$<$ dim $>$}!SplitBoundary@{SplitBoundary}}
+\index{SplitBoundary@{SplitBoundary}!csmp::SplitBoundary$<$ dim $>$@{csmp::SplitBoundary$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{SplitBoundary()}{SplitBoundary()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_split_boundary_abc5aa10b5f10d32e7fe5fef2b06e4fdc} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_split_boundary}{csmp\+::\+Split\+Boundary}}$<$ dim $>$\+::\+Split\+Boundary (\begin{DoxyParamCaption}\item[{std\+::string}]{splitboundaryname}{, }\item[{const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&}]{pref}{, }\item[{const \mbox{\hyperlink{classcsmp_1_1_finite_element_manager}{Finite\+Element\+Manager}} \&}]{femgr}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_mesh_manager}{Mesh\+Manager}}$<$ dim $>$ \&}]{mesh}{, }\item[{const \mbox{\hyperlink{structcsmp_1_1_inter_face_parent_elements}{Inter\+Face\+Parent\+Elements}}$<$ dim $>$ \&}]{ifset}{}\end{DoxyParamCaption})}
+
+
+
+constructor of split boundary with given name from set of juxtaposed elements; prompts \doxylink{classcsmp_1_1_mesh_manager}{Mesh\+Manager} to create elements 
+
+Constructor of a split boundary from the set of juxtaposed elements Asks mesh manager to construct corresponding faces.
+
+Can be used to create Splitboundaries from node-\/matched interface meshes which already contain multiplicated yet collocated nodes (can be done in ANSYS).
+
+\begin{DoxyAuthor}{Author}
+SKM 15/08/2018 
+\end{DoxyAuthor}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=187pt]{classcsmp_1_1_split_boundary_abc5aa10b5f10d32e7fe5fef2b06e4fdc_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=187pt]{classcsmp_1_1_split_boundary_abc5aa10b5f10d32e7fe5fef2b06e4fdc_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_split_boundary_a7e7d694d9d6deb4c2f310f9493d433f7}\index{csmp::SplitBoundary$<$ dim $>$@{csmp::SplitBoundary$<$ dim $>$}!SplitBoundary@{SplitBoundary}}
+\index{SplitBoundary@{SplitBoundary}!csmp::SplitBoundary$<$ dim $>$@{csmp::SplitBoundary$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{SplitBoundary()}{SplitBoundary()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_split_boundary_a7e7d694d9d6deb4c2f310f9493d433f7} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_split_boundary}{csmp\+::\+Split\+Boundary}}$<$ dim $>$\+::\+Split\+Boundary (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&}]{pref}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_mesh_manager}{Mesh\+Manager}}$<$ dim $>$ \&}]{mesh}{, }\item[{const \mbox{\hyperlink{structcsmp_1_1_sub_domain_info}{Sub\+Domain\+Info}} \&}]{info}{}\end{DoxyParamCaption})}
+
+
+
+RECONSTRUCTOR of split boundaries from csmp native file format (call only prior to deleting anythin from colonies) 
+
+contains correctly partitioned vectors and boundary faces
+
+RECONSTRUCTOR of split boundary
+
+\begin{DoxyAttention}{Attention}
+the \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} objects referred to by \doxylink{structcsmp_1_1_sub_domain_info}{Sub\+Domain\+Info} are expected to be allready part of the model 
+
+this also means, that these were already interconnected with one-\/another when the mesh was build from \doxylink{classcsmp_1_1_v_set}{VSet} \begin{DoxyVerb}@author SKM
+@date 21/9/21
+\end{DoxyVerb}
+ 
+\end{DoxyAttention}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=187pt]{classcsmp_1_1_split_boundary_a7e7d694d9d6deb4c2f310f9493d433f7_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=187pt]{classcsmp_1_1_split_boundary_a7e7d694d9d6deb4c2f310f9493d433f7_icgraph}
+\end{center}
+\end{figure}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_split_boundary_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_split_boundary_afcfc0e11fabd4608334b4fcf2ffb7749}\index{csmp::SplitBoundary$<$ dim $>$@{csmp::SplitBoundary$<$ dim $>$}!Accept@{Accept}}
+\index{Accept@{Accept}!csmp::SplitBoundary$<$ dim $>$@{csmp::SplitBoundary$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Accept()}{Accept()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_split_boundary_afcfc0e11fabd4608334b4fcf2ffb7749} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_split_boundary}{csmp\+::\+Split\+Boundary}}$<$ dim $>$\+::\+Accept (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_visitor}{Visitor}}$<$ dim $>$ \&}]{v}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+applies visitor to split boundary 
+
+visitation of a split boundary 
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ad584415f46a55043ff7f3ca6aedede95}{csmp\+::\+Model\+Sub\+Domain$<$ dim, Inter\+Face $>$}}.
+
+\Hypertarget{classcsmp_1_1_split_boundary_a764360969ee1e4649a87cd246bd5751a}\index{csmp::SplitBoundary$<$ dim $>$@{csmp::SplitBoundary$<$ dim $>$}!Area@{Area}}
+\index{Area@{Area}!csmp::SplitBoundary$<$ dim $>$@{csmp::SplitBoundary$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Area()}{Area()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_split_boundary_a764360969ee1e4649a87cd246bd5751a} 
+template$<$uint32\+\_\+t dim$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_split_boundary}{csmp\+::\+Split\+Boundary}}$<$ dim $>$\+::\+Area (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}}}]{side}{ = {\ttfamily INSIDE}}\end{DoxyParamCaption}) const}
+
+
+
+output length(2\+D) or area(3d) of the split boundary=lower dimensional region; middle refers to bisector if nodes are displaced 
+
+Is calculated on the basis of the Splitboundary bisector if the split nodes were moved apart in the simulation process; else a particular side is used. Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=330pt]{classcsmp_1_1_split_boundary_a764360969ee1e4649a87cd246bd5751a_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_split_boundary_a24d55befbaaedaa5b1902b7645a1f99c}\index{csmp::SplitBoundary$<$ dim $>$@{csmp::SplitBoundary$<$ dim $>$}!ChangeNodePropertyStatusWhere@{ChangeNodePropertyStatusWhere}}
+\index{ChangeNodePropertyStatusWhere@{ChangeNodePropertyStatusWhere}!csmp::SplitBoundary$<$ dim $>$@{csmp::SplitBoundary$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{ChangeNodePropertyStatusWhere()}{ChangeNodePropertyStatusWhere()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_split_boundary_a24d55befbaaedaa5b1902b7645a1f99c} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_split_boundary}{csmp\+::\+Split\+Boundary}}$<$ dim $>$\+::\+Change\+Node\+Property\+Status\+Where (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{property}{, }\item[{\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}}}]{status}{, }\item[{\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}}}]{side}{, }\item[{double}]{min\+\_\+val}{, }\item[{double}]{max\+\_\+val}{}\end{DoxyParamCaption})}
+
+
+
+changes the flag of the scalar node variable \textquotesingle{}property\textquotesingle{} to the new value; applied either to the INSIDE or OUTSIDE of the entire splitboundary but only where the variable value is in the target range 
+
+Where the value of the node property (length in case of a vector) is within the specified range its flag is getting changed to the new value but only for the INSIDE or OUTSIDE nodes of the \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary}. \Hypertarget{classcsmp_1_1_split_boundary_a2731741f854b3c9eeef31db155ce59c8}\index{csmp::SplitBoundary$<$ dim $>$@{csmp::SplitBoundary$<$ dim $>$}!CreateFrom@{CreateFrom}}
+\index{CreateFrom@{CreateFrom}!csmp::SplitBoundary$<$ dim $>$@{csmp::SplitBoundary$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{CreateFrom()}{CreateFrom()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_split_boundary_a2731741f854b3c9eeef31db155ce59c8} 
+template$<$uint32\+\_\+t dim$>$ \\
+bool \mbox{\hyperlink{classcsmp_1_1_split_boundary}{csmp\+::\+Split\+Boundary}}$<$ dim $>$\+::\+Create\+From (\begin{DoxyParamCaption}\item[{const typename std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator}]{ifaces\+Begin}{, }\item[{const typename std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator}]{ifaces\+End}{}\end{DoxyParamCaption})}
+
+
+
+creating from supplied vector of interfaces 
+
+For post-\/processing the results of Divide. Here the assumption is made that the faces are already interconnected. \Hypertarget{classcsmp_1_1_split_boundary_abebe13c32f2f5afffbf2bec2626698b2}\index{csmp::SplitBoundary$<$ dim $>$@{csmp::SplitBoundary$<$ dim $>$}!InputNodePropertyValue@{InputNodePropertyValue}}
+\index{InputNodePropertyValue@{InputNodePropertyValue}!csmp::SplitBoundary$<$ dim $>$@{csmp::SplitBoundary$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{InputNodePropertyValue()}{InputNodePropertyValue()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_split_boundary_abebe13c32f2f5afffbf2bec2626698b2} 
+template$<$uint32\+\_\+t dim$>$ \\
+template$<$class Var$>$ \\
+template void \mbox{\hyperlink{classcsmp_1_1_split_boundary}{csmp\+::\+Split\+Boundary}}$<$ dim $>$\+::\+Input\+Node\+Property\+Value (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{input\+\_\+node\+\_\+prop}{, }\item[{const Var \&}]{}{, }\item[{\mbox{\hyperlink{namespacecsmp_a4b8f1ad9f1a09a957714679ce72aee3f}{SUBDOMAIN\+\_\+\+PART}}}]{}{, }\item[{\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}}}]{}{}\end{DoxyParamCaption})}
+
+
+
+NEW\+: input constat node variable value on a specific side of the split boundary (options INSIDE or OUTSIDE) 
+
+\begin{DoxyAttention}{Attention}
+method overrides each node several times but circumvents the need to store vectors to inside and outside nodes. 
+\end{DoxyAttention}
+\Hypertarget{classcsmp_1_1_split_boundary_a47849333d38671eefea4da2590b33029}\index{csmp::SplitBoundary$<$ dim $>$@{csmp::SplitBoundary$<$ dim $>$}!InputPropertyValue@{InputPropertyValue}}
+\index{InputPropertyValue@{InputPropertyValue}!csmp::SplitBoundary$<$ dim $>$@{csmp::SplitBoundary$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{InputPropertyValue()}{InputPropertyValue()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_split_boundary_a47849333d38671eefea4da2590b33029} 
+template$<$uint32\+\_\+t dim$>$ \\
+template$<$class Var$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_split_boundary}{csmp\+::\+Split\+Boundary}}$<$ dim $>$\+::\+Input\+Property\+Value (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{input\+\_\+prop}{, }\item[{const Var \&}]{new\+\_\+value}{, }\item[{\mbox{\hyperlink{namespacecsmp_a4b8f1ad9f1a09a957714679ce72aee3f}{SUBDOMAIN\+\_\+\+PART}}}]{part}{, }\item[{\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}}}]{side}{}\end{DoxyParamCaption})}
+
+
+
+input node variable values on a specific side of the split boundary (options INSIDE or OUTSIDE) 
+
+Property assignment to nodes on either side of the interface. Relies on the design that the node vector contains the inside nodes. \Hypertarget{classcsmp_1_1_split_boundary_a12ee784071c102a4ae199d540de5bc25}\index{csmp::SplitBoundary$<$ dim $>$@{csmp::SplitBoundary$<$ dim $>$}!InputPropertyValue@{InputPropertyValue}}
+\index{InputPropertyValue@{InputPropertyValue}!csmp::SplitBoundary$<$ dim $>$@{csmp::SplitBoundary$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{InputPropertyValue()}{InputPropertyValue()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_split_boundary_a12ee784071c102a4ae199d540de5bc25} 
+template$<$uint32\+\_\+t dim$>$ \\
+template$<$typename Var$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_split_boundary}{csmp\+::\+Split\+Boundary}}$<$ dim $>$\+::\+Input\+Property\+Value (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{input\+\_\+prop}{, }\item[{const Var \&}]{new\+\_\+value}{, }\item[{\mbox{\hyperlink{namespacecsmp_a4b8f1ad9f1a09a957714679ce72aee3f}{SUBDOMAIN\+\_\+\+PART}}}]{sd}{ = {\ttfamily COMPLETE}}\end{DoxyParamCaption})}
+
+
+
+for the assignment of properties that are unique to the instance of this subclass 
+
+for the assignment of properties that are unique to the instance of this subclass
+
+\begin{DoxyAuthor}{Author}
+SKM 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+7/6/2020 
+\end{DoxyDate}
+\Hypertarget{classcsmp_1_1_split_boundary_ac7a3455696472b4c9ff069c7130cc12e}\index{csmp::SplitBoundary$<$ dim $>$@{csmp::SplitBoundary$<$ dim $>$}!InsideNodes@{InsideNodes}}
+\index{InsideNodes@{InsideNodes}!csmp::SplitBoundary$<$ dim $>$@{csmp::SplitBoundary$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{InsideNodes()}{InsideNodes()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_split_boundary_ac7a3455696472b4c9ff069c7130cc12e} 
+template$<$uint32\+\_\+t dim$>$ \\
+pair$<$ \mbox{\hyperlink{classvector}{vector}}$<$ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$, size\+\_\+t $>$ \mbox{\hyperlink{classcsmp_1_1_split_boundary}{csmp\+::\+Split\+Boundary}}$<$ dim $>$\+::\+Inside\+Nodes (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+returns sorted node pointer vector partitioned into an interior and perimeter range; perimeter starts at size\+\_\+t number of nodes in returned pair 
+
+Generates sorted \doxylink{classcsmp_1_1_node}{Node} Vector with perimeter nodes identified by \doxylink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\+\_\+\+BOUNDARY} flags and non-\/manifold status. \Hypertarget{classcsmp_1_1_split_boundary_ae6cb311802efeeaf022c4f4d13905961}\index{csmp::SplitBoundary$<$ dim $>$@{csmp::SplitBoundary$<$ dim $>$}!InterFaceSpatialDimensions@{InterFaceSpatialDimensions}}
+\index{InterFaceSpatialDimensions@{InterFaceSpatialDimensions}!csmp::SplitBoundary$<$ dim $>$@{csmp::SplitBoundary$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{InterFaceSpatialDimensions()}{InterFaceSpatialDimensions()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_split_boundary_ae6cb311802efeeaf022c4f4d13905961} 
+template$<$uint32\+\_\+t dim$>$ \\
+pair$<$ int32\+\_\+t, int32\+\_\+t $>$ \mbox{\hyperlink{classcsmp_1_1_split_boundary}{csmp\+::\+Split\+Boundary}}$<$ dim $>$\+::\+Inter\+Face\+Spatial\+Dimensions (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+returns 1) interfaces of how many different spatial dimensions are contained, and 2) the highest interface spatial dimension in subdomain 
+
+Detects of how many spatial dimensions interface types are contained in model. It returns a pair\+: first value gives number of different spatial dimensions contained, second value returns the highest spatial dimension contained.
+
+\begin{DoxyAuthor}{Author}
+SKM 1/11/2013 
+\end{DoxyAuthor}
+\Hypertarget{classcsmp_1_1_split_boundary_ae8285cbb98a08b8a8668c843bba335f6}\index{csmp::SplitBoundary$<$ dim $>$@{csmp::SplitBoundary$<$ dim $>$}!Length@{Length}}
+\index{Length@{Length}!csmp::SplitBoundary$<$ dim $>$@{csmp::SplitBoundary$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Length()}{Length()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_split_boundary_ae8285cbb98a08b8a8668c843bba335f6} 
+template$<$uint32\+\_\+t dim$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_split_boundary}{csmp\+::\+Split\+Boundary}}$<$ dim $>$\+::\+Length (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}}}]{side}{ = {\ttfamily INSIDE}}\end{DoxyParamCaption}) const}
+
+
+
+output length(of a split boundary that consists of line elements; middle refers to bisector if nodes are displaced 
+
+Is calculated on the basis of the Splitboundary bisector if the split nodes were moved apart in the simulation process; else a particular side is used. \Hypertarget{classcsmp_1_1_split_boundary_ae9473aa84e014d2c67a6ea07f2294590}\index{csmp::SplitBoundary$<$ dim $>$@{csmp::SplitBoundary$<$ dim $>$}!NodeManifolds@{NodeManifolds}}
+\index{NodeManifolds@{NodeManifolds}!csmp::SplitBoundary$<$ dim $>$@{csmp::SplitBoundary$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{NodeManifolds()}{NodeManifolds()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_split_boundary_ae9473aa84e014d2c67a6ea07f2294590} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classvector}{vector}}$<$ \mbox{\hyperlink{classcsmp_1_1_node_manifold}{Node\+Manifold}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$ \mbox{\hyperlink{classcsmp_1_1_split_boundary}{csmp\+::\+Split\+Boundary}}$<$ dim $>$\+::\+Node\+Manifolds (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+generates a vector of \doxylink{classcsmp_1_1_node_manifold}{Node\+Manifold} pointers that can be iterated over 
+
+returns a pointer to the node manifold associated with node of the split boundary; on the perimeter, a null pointer might be returned if the node is not a manifold
+
+Only accumulates the inside nodes as these will later be sorted by \doxylink{classcsmp_1_1_model_sub_domain_a9d850f869aa6838cecb95fb492a02568}{Model\+Sub\+Domain\+::\+Partition\+Cell\+Vector}, i.\+e. Identify\+Perimeter Only those nodes that are manifolds. \Hypertarget{classcsmp_1_1_split_boundary_aba0387a57910810645c1e48740ab4c8b}\index{csmp::SplitBoundary$<$ dim $>$@{csmp::SplitBoundary$<$ dim $>$}!Perimeter@{Perimeter}}
+\index{Perimeter@{Perimeter}!csmp::SplitBoundary$<$ dim $>$@{csmp::SplitBoundary$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Perimeter()}{Perimeter()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_split_boundary_aba0387a57910810645c1e48740ab4c8b} 
+template$<$uint32\+\_\+t dim$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_split_boundary}{csmp\+::\+Split\+Boundary}}$<$ dim $>$\+::\+Perimeter (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}}}]{side}{ = {\ttfamily INSIDE}}\end{DoxyParamCaption}) const}
+
+
+
+outputs length of perimeter curve of a 3D split boundary; no meaning in 1 or 2D models 
+
+Computes length (m) of the \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} object\textquotesingle{}s perimeter curve. \doxylink{classcsmp_1_1_operation}{Operation} makes sense only in 33 because the perimeter of a line are just its end points. \Hypertarget{classcsmp_1_1_split_boundary_aff4060b8894b89927930ee33e271c164}\index{csmp::SplitBoundary$<$ dim $>$@{csmp::SplitBoundary$<$ dim $>$}!Placement@{Placement}}
+\index{Placement@{Placement}!csmp::SplitBoundary$<$ dim $>$@{csmp::SplitBoundary$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Placement()}{Placement()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_split_boundary_aff4060b8894b89927930ee33e271c164} 
+template$<$uint32\+\_\+t dim$>$ \\
+virtual \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} \mbox{\hyperlink{classcsmp_1_1_split_boundary}{csmp\+::\+Split\+Boundary}}$<$ dim $>$\+::\+Placement (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+methods required for the \doxylink{classcsmp_1_1_local_variable_storage}{Local\+Variable\+Storage} 
+
+
+
+Implements \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a74ddc3c010264bef70bd0604ec19ff11}{csmp\+::\+Model\+Sub\+Domain$<$ dim, Inter\+Face $>$}}.
+
+\Hypertarget{classcsmp_1_1_split_boundary_ac74122eca9f68620cfa5bfb33862a1d5}\index{csmp::SplitBoundary$<$ dim $>$@{csmp::SplitBoundary$<$ dim $>$}!PullApartSplitBoundary@{PullApartSplitBoundary}}
+\index{PullApartSplitBoundary@{PullApartSplitBoundary}!csmp::SplitBoundary$<$ dim $>$@{csmp::SplitBoundary$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{PullApartSplitBoundary()}{PullApartSplitBoundary()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_split_boundary_ac74122eca9f68620cfa5bfb33862a1d5} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_split_boundary}{csmp\+::\+Split\+Boundary}}$<$ dim $>$\+::\+Pull\+Apart\+Split\+Boundary (\begin{DoxyParamCaption}\item[{double}]{dist}{}\end{DoxyParamCaption})}
+
+
+
+Method that applies half of displacement to both sides of interface (dotted by unit\+Normal) 
+
+Iterates of \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} objects and displaces nodes by param dist/2 on both sides, opening up the interface. Leaves middle nodes untouched. Uses Inter\+Face-\/\texorpdfstring{$>$}{>}Unit\+Normal() from bisector plane or middle element
+
+
+\begin{DoxyParams}{Parameters}
+{\em dist} & is the final aperture the nodes will have. Each side is displaced by dist/2. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classcsmp_1_1_split_boundary_aa557ba090e826707c511de813cd07bc1}\index{csmp::SplitBoundary$<$ dim $>$@{csmp::SplitBoundary$<$ dim $>$}!SurfaceIntegral@{SurfaceIntegral}}
+\index{SurfaceIntegral@{SurfaceIntegral}!csmp::SplitBoundary$<$ dim $>$@{csmp::SplitBoundary$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{SurfaceIntegral()}{SurfaceIntegral()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_split_boundary_aa557ba090e826707c511de813cd07bc1} 
+template$<$uint32\+\_\+t dim$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_split_boundary}{csmp\+::\+Split\+Boundary}}$<$ dim $>$\+::\+Surface\+Integral (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&}]{p}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{property}{, }\item[{\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}}}]{side}{ = {\ttfamily INSIDE}}\end{DoxyParamCaption}) const}
+
+
+
+integrates the property over the boundary line or surface 
+
+Integrates a scalar variable of interest over the target side of the \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} using the current finite element basis functions. Dependent on the placement of the variable it is either read from the \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} or the target sidfe of the boundary. Potential incompatibilities are checked.
+
+\begin{DoxyAttention}{Attention}
+for simplex element node and integration point properties are integrated using their value projected to the element barycentre.
+\end{DoxyAttention}
+If the variable is vector quantity, it is projected onto the outward pointing normals of the boundary \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} objects, multiplying the boundary normal componet with their area.
+
+\begin{DoxyAuthor}{Author}
+SKM 21/8/2018 
+\end{DoxyAuthor}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=330pt]{classcsmp_1_1_split_boundary_aa557ba090e826707c511de813cd07bc1_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_split_boundary_af312a758ab5eb0e6ab39a5815faf7736}\index{csmp::SplitBoundary$<$ dim $>$@{csmp::SplitBoundary$<$ dim $>$}!ValidVariable@{ValidVariable}}
+\index{ValidVariable@{ValidVariable}!csmp::SplitBoundary$<$ dim $>$@{csmp::SplitBoundary$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{ValidVariable()}{ValidVariable()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_split_boundary_af312a758ab5eb0e6ab39a5815faf7736} 
+template$<$uint32\+\_\+t dim$>$ \\
+bool \mbox{\hyperlink{classcsmp_1_1_split_boundary}{csmp\+::\+Split\+Boundary}}$<$ dim $>$\+::\+Valid\+Variable (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{variable\+Name}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_model_sub_domain}{csmp\+::\+Model\+Sub\+Domain$<$ dim, Inter\+Face $>$}}.
+
+\Hypertarget{classcsmp_1_1_split_boundary_ad6dc8335ae8703f6a60f427b9c4ac2da}\index{csmp::SplitBoundary$<$ dim $>$@{csmp::SplitBoundary$<$ dim $>$}!WriteSplitBoundaryIndexesToBinaryFile@{WriteSplitBoundaryIndexesToBinaryFile}}
+\index{WriteSplitBoundaryIndexesToBinaryFile@{WriteSplitBoundaryIndexesToBinaryFile}!csmp::SplitBoundary$<$ dim $>$@{csmp::SplitBoundary$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{WriteSplitBoundaryIndexesToBinaryFile()}{WriteSplitBoundaryIndexesToBinaryFile()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_split_boundary_ad6dc8335ae8703f6a60f427b9c4ac2da} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_split_boundary}{csmp\+::\+Split\+Boundary}}$<$ dim $>$\+::\+Write\+Split\+Boundary\+Indexes\+To\+Binary\+File (\begin{DoxyParamCaption}\item[{std\+::fstream \&}]{}{}\end{DoxyParamCaption}) const}
+
+
+
+different version than in the base class that does not attempt to write nodes 
+
+Special version without nodes. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/model/Split\+Boundary\+Interface.\+h\item 
+source/includes/model/Split\+Boundary.\+h\item 
+source/modules/model/Split\+Boundary.\+cpp\end{DoxyCompactItemize}

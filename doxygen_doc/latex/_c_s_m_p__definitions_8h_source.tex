@@ -1,0 +1,140 @@
+\doxysection{CSMP\+\_\+definitions.\+h}
+\hypertarget{_c_s_m_p__definitions_8h_source}{}\label{_c_s_m_p__definitions_8h_source}\index{source/includes/model/CSMP\_definitions.h@{source/includes/model/CSMP\_definitions.h}}
+\mbox{\hyperlink{_c_s_m_p__definitions_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_DEFINITIONS\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_DEFINITIONS\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00005\ \textcolor{comment}{@file\ CSMP\_definitions.h}}
+\DoxyCodeLine{00006\ \textcolor{comment}{@brief\ Global\ declarations\ and\ definitions}}
+\DoxyCodeLine{00007\ \textcolor{comment}{@author\ S.K.\ Matthai\ (1995)}}
+\DoxyCodeLine{00008\ \textcolor{comment}{}}
+\DoxyCodeLine{00009\ \textcolor{comment}{Global\ declarations\ and\ definitions\ for\ the\ CSMP++\ code\ for\ the\ simulation}}
+\DoxyCodeLine{00010\ \textcolor{comment}{of\ complex\ natural\ systems.}}
+\DoxyCodeLine{00011\ \textcolor{comment}{This\ file\ includes\ the\ most\ important\ C++\ header\ files\ to\ make\ the\ use}}
+\DoxyCodeLine{00012\ \textcolor{comment}{of\ the\ library\ easier\ for\ the\ less\ experienced\ cross\ platform-\/,\ cross-\/compiler\ user\ and}}
+\DoxyCodeLine{00013\ \textcolor{comment}{It\ is\ included\ by\ most\ headers\ in\ the\ CSMP\ C++\ library,}}
+\DoxyCodeLine{00014\ \textcolor{comment}{Last\ updated\ for\ use\ with\ C++17\ in\ November\ 2021.}}
+\DoxyCodeLine{00015\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00018\ \textcolor{comment}{==============================================================}}
+\DoxyCodeLine{00019\ \textcolor{comment}{Backward\ compatibility\ with\ C}}
+\DoxyCodeLine{00020\ \textcolor{comment}{==============================================================}}
+\DoxyCodeLine{00021\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cmath}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdio}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdlib}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstddef}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdarg}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cctype}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstring}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{ctime}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cfloat}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{climits}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cassert}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00037\ \textcolor{comment}{==============================================================}}
+\DoxyCodeLine{00038\ \textcolor{comment}{C++\ ANSI\ Standard\ Compliance\ /\ Standard\ Template\ Library\ (STL)}}
+\DoxyCodeLine{00039\ \textcolor{comment}{==============================================================}}
+\DoxyCodeLine{00040\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{algorithm}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{array}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{chrono}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00044\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{deque}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00045\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{exception}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{filesystem}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00047\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{fstream}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00048\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{functional}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00049\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{iomanip}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00050\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{iostream}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00051\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{istream}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00052\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{iterator}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00053\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{limits}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00054\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{list}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00055\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{map}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00056\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00057\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{numeric}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00058\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{ostream}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00059\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{random}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00060\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{set}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00061\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{sstream}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00062\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{stdexcept}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00063\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00064\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{typeinfo}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00065\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{type\_traits}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00066\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{utility}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00067\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{vector}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00068\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{unordered\_set}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00069\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{unordered\_map}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00072\ \textcolor{comment}{=====================================================}}
+\DoxyCodeLine{00073\ \textcolor{comment}{\ \ \ \ Matthew\ Bentham's\ flexible\ storage\ container\ used}}
+\DoxyCodeLine{00074\ \textcolor{comment}{\ \ \ \ to\ manage\ the\ storage\ of\ Elements,\ Faces,\ InterFaces\ and\ Nodes\ in\ MeshManager}}
+\DoxyCodeLine{00075\ \textcolor{comment}{\ \ \ \ https://plflib.org/colony.htm}}
+\DoxyCodeLine{00076\ \textcolor{comment}{=====================================================}}
+\DoxyCodeLine{00077\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00078\ \textcolor{comment}{//\#include\ "{}plf\_colony.h"{}}}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00082\ \textcolor{comment}{=======================}}
+\DoxyCodeLine{00083\ \textcolor{comment}{JPEG\ Interface}}
+\DoxyCodeLine{00084\ \textcolor{comment}{to\ create\ images\ etc.}}
+\DoxyCodeLine{00085\ \textcolor{comment}{=======================}}
+\DoxyCodeLine{00086\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00087\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_WITH\_IMAGE\_OUTPUT}}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{if}\ \textcolor{preprocessor}{defined}\textcolor{preprocessor}{(}\textcolor{preprocessor}{DEBUG}\textcolor{preprocessor}{)}\ \textcolor{preprocessor}{\&\&}\ \textcolor{preprocessor}{defined}\textcolor{preprocessor}{(}\textcolor{preprocessor}{NDEBUG}\textcolor{preprocessor}{)}}
+\DoxyCodeLine{00091\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{error}\ \textcolor{preprocessor}{\&\&}\ \textcolor{stringliteral}{"{}DEBUG\ and\ NDEBUG\ cannot\ be\ defined\ simultaneously"{}}}
+\DoxyCodeLine{00092\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00095\ \textcolor{comment}{@mainpage\ About}}
+\DoxyCodeLine{00096\ \textcolor{comment}{}}
+\DoxyCodeLine{00097\ \textcolor{comment}{The\ Complex\ Systems\ Modeling\ Platform\ (Open\ CSMP++)\ is\ an\ application\ programmer\ interface\ (API)}}
+\DoxyCodeLine{00098\ \textcolor{comment}{for\ the\ simulation\ of\ THMC\ processes\ and\ their\ interactions\ in\ complex\ space\ and\ time\ domains.}}
+\DoxyCodeLine{00099\ \textcolor{comment}{It\ primarily\ relies\ on\ combinations\ of\ finite\ element\ (FEM)\ and\ finite\ volue\ (FVM)\ methods\ for\ this\ purpose.}}
+\DoxyCodeLine{00100\ \textcolor{comment}{Open\ CSMP++\ \ was\ created\ as\ CSP\ in\ 1995\ by\ Stephan\ K.\ Matthai\ and\ Stephen\ G.\ Roberts\ at\ Stanford\ University.}}
+\DoxyCodeLine{00101\ \textcolor{comment}{}}
+\DoxyCodeLine{00102\ \textcolor{comment}{Open\ CSMP++\ has\ been\ designed\ for\ the\ simulation\ of\ complex\ physics\ in\ geometrically\ complex\ and\ scale-\/variant\ domains.}}
+\DoxyCodeLine{00103\ \textcolor{comment}{Its\ modular\ structure\ aims\ to\ support\ analysis\ of\ the\ emergent\ properties\ of\ the\ studied\ system\ via\ mathematical\ simulations.}}
+\DoxyCodeLine{00104\ \textcolor{comment}{Governing\ PDEs\ are\ integrated\ using\ FEM\ and\ FVM\ methods\ and\ combinations\ thereof.\ }}
+\DoxyCodeLine{00105\ \textcolor{comment}{}}
+\DoxyCodeLine{00106\ \textcolor{comment}{This\ core\ library\ of\ Open\ CSMP++\ is\ \ distributed\ under\ the\ L-\/GPL\ license\ for\ general\ and\ including\ commercial\ use.}}
+\DoxyCodeLine{00107\ \textcolor{comment}{Until\ Dezember\ 2021,\ \ CSMP++\ had\ to\ be\ licensed\ and\ the\ official\ contact\ point\ was\ the\ Technology\ Transfer\ of\ the\ ETHZ,\ Switzerland}}
+\DoxyCodeLine{00108\ \textcolor{comment}{("{}Meyns\ Silke\ (F\&W)"{}\ <silke.meyns@sl.ethz.ch>).}}
+\DoxyCodeLine{00109\ \textcolor{comment}{}}
+\DoxyCodeLine{00110\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00114\ \textcolor{comment}{\ \ \ \ \ Tests\ wheter\ a\ \ size\_t\ \ \ or\ any\ other\ unsigned\ integer\ has\ been\ assigned\ a\ maximum\ value\ to\ signify\ that\ it\ has\ not\ been\ initialised.}}
+\DoxyCodeLine{00115\ \textcolor{comment}{\ \ \ \ \ (example:\ raw\ size\_t's\ in\ CSMP\ are\ initialised\ to\ UINT\_MAX,\ just\ as\ floating\ point\ values\ are\ initialised\ to\ a\ quiet\ NaN).}}
+\DoxyCodeLine{00116\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00117\ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00118\ \ \textcolor{keywordtype}{bool}\ \textcolor{keyword}{constexpr}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h_a98b173fa19810d85dc37741935bb1500}{isUninitialisedInteger}}(\ T\ i\ )\ \{}
+\DoxyCodeLine{00119\ \ \ \ \ \ \textcolor{keyword}{static\_assert}(\ std::is\_integral<T>::value,\ \textcolor{stringliteral}{"{}hasIntegerUnitialisedDefaultValue:\ inappropriate\ argument\ type\ for\ this\ function."{}}\ );}
+\DoxyCodeLine{00120\ \ \ \ \ \ \textcolor{keyword}{static\_assert}(\ std::is\_arithmetic<T>::value,\ \textcolor{stringliteral}{"{}hasIntegerUnitialisedDefaultValue:\ inappropriate\ argument\ type\ for\ this\ function."{}}\ );}
+\DoxyCodeLine{00121\ \ \ \ \ \ \textcolor{keyword}{static\_assert}(\ std::is\_unsigned<T>::value,\ \textcolor{stringliteral}{"{}hasIntegerUnitialisedDefaultValue:\ inappropriate\ argument\ type\ for\ this\ function."{}}\ );}
+\DoxyCodeLine{00122\ \ \ \ \ \ \textcolor{keywordflow}{return}\ (\ i\ ==\ std::numeric\_limits<T>::max()\ );}
+\DoxyCodeLine{00123\ \ \ \}}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00126\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00127\ \textcolor{comment}{@defgroup\ CSMPglobalTypedefs\ CSMP\ number\ types\ for\ current\ computing\ platform}}
+\DoxyCodeLine{00128\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_index_8h}{"{}Index.h"{}}}}
+\DoxyCodeLine{00131\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__global__enumerations_8h}{"{}CSMP\_global\_enumerations.h"{}}}}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00134\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{/*\ CSMP\_DEFINITIONS\_H\ */}}
+
+\end{DoxyCode}

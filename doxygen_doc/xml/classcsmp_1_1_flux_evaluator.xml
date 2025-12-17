@@ -1,0 +1,508 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_flux_evaluator" kind="class" language="C++" prot="public">
+    <compoundname>csmp::FluxEvaluator</compoundname>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+      <param>
+        <type>template&lt; uint32_t &gt; class</type>
+        <declname>USER</declname>
+        <defname>USER</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_flux_evaluator_1a21fdb65c7cf6d89b179fdba980d35a28" prot="private" static="no" mutable="yes">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::FluxEvaluator&lt; dim, USER &gt;::sc_</definition>
+        <argsstring></argsstring>
+        <name>sc_</name>
+        <qualifiedname>csmp::FluxEvaluator::sc_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/FluxEvaluator.h" line="85" column="34" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/FluxEvaluator.h" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_flux_evaluator_1a5111f3b3fab3a87467c4d3347b381c48" prot="private" static="no" mutable="yes">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; dim &gt;</type>
+        <definition>VectorVariable&lt;dim&gt; csmp::FluxEvaluator&lt; dim, USER &gt;::vD_</definition>
+        <argsstring></argsstring>
+        <name>vD_</name>
+        <qualifiedname>csmp::FluxEvaluator::vD_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/FluxEvaluator.h" line="86" column="29" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/FluxEvaluator.h" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_flux_evaluator_1aa00ccc111c19eff01ea19d5f437f594f" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; dim &gt;</type>
+        <definition>VectorVariable&lt;dim&gt; csmp::FluxEvaluator&lt; dim, USER &gt;::nrml_</definition>
+        <argsstring></argsstring>
+        <name>nrml_</name>
+        <qualifiedname>csmp::FluxEvaluator::nrml_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/FluxEvaluator.h" line="86" column="33" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/FluxEvaluator.h" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_flux_evaluator_1a02302028a826a1d748bcfa1fad619785" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; dim &gt;</type>
+        <definition>VectorVariable&lt;dim&gt; csmp::FluxEvaluator&lt; dim, USER &gt;::gradC_</definition>
+        <argsstring></argsstring>
+        <name>gradC_</name>
+        <qualifiedname>csmp::FluxEvaluator::gradC_</qualifiedname>
+        <briefdescription>
+<para>for efficient re-use </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/FluxEvaluator.h" line="86" column="39" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/FluxEvaluator.h" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_flux_evaluator_1a987f7b33614b1b92100df98eab80ef09" prot="private" static="no" mutable="yes">
+        <type><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt;</type>
+        <definition>Point&lt;dim&gt; csmp::FluxEvaluator&lt; dim, USER &gt;::pt_</definition>
+        <argsstring></argsstring>
+        <name>pt_</name>
+        <qualifiedname>csmp::FluxEvaluator::pt_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/FluxEvaluator.h" line="87" column="29" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/FluxEvaluator.h" bodystart="87" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_flux_evaluator_1ad2fd61997a553deba1c6f00b7d860b09" prot="private" static="no" mutable="yes">
+        <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt;</type>
+        <definition>DenseMatrix&lt;DM_MIN&gt; csmp::FluxEvaluator&lt; dim, USER &gt;::DN_</definition>
+        <argsstring></argsstring>
+        <name>DN_</name>
+        <qualifiedname>csmp::FluxEvaluator::DN_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/FluxEvaluator.h" line="88" column="26" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/FluxEvaluator.h" bodystart="88" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_flux_evaluator_1a03e3a90c87e41a85f191d0c8ada74678" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::FluxEvaluator&lt; dim, USER &gt;::FluxEvaluator</definition>
+        <argsstring>()</argsstring>
+        <name>FluxEvaluator</name>
+        <qualifiedname>csmp::FluxEvaluator::FluxEvaluator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/FluxEvaluator.h" line="36" column="5" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/FluxEvaluator.h" bodystart="36" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flux_evaluator_1a535457807f0d8bfa829126094e67cdf5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FluxEvaluator&lt; dim, USER &gt;::Advective_O1_FluxesAndBalances</definition>
+        <argsstring>(Element&lt; dim &gt; *const) const</argsstring>
+        <name>Advective_O1_FluxesAndBalances</name>
+        <qualifiedname>csmp::FluxEvaluator::Advective_O1_FluxesAndBalances</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>eptr</defname>
+        </param>
+        <briefdescription>
+<para>computes F = (A_i vD . n_i) and its products with the upstream C0 on all facets, also computes FV flux balances </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Computes A_i vD . n_i for all facets and its product with the upstream concentrations. Stores &apos;facet flux&apos; and &apos;facet flux concentration&apos; product variables. Accumulates the flux balance and flux concentration balances in the corresponding node variables.</para>
+<para><simplesect kind="attention"><para>vD can be used directly as interstitial velocity since the FV is scaled by porosity</para>
+</simplesect>
+<simplesect kind="attention"><para>the thickness of lower-dimensional elements is taken into account</para>
+</simplesect>
+<simplesect kind="attention"><para>, assumes that the FV variables &apos;flux balance&apos; and &apos;new concentration&apos; were zeroed out before.</para>
+</simplesect>
+@tested OK SKM 17/8/19 </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/FluxEvaluator.h" line="41" column="12" bodyfile="source/modules/integration/finite_volumes/generic_transport_scheme/source/FluxEvaluator.cpp" bodystart="38" bodyend="103"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flux_evaluator_1a4d50599968f3cbb3acb4f0c2a0723f2f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FluxEvaluator&lt; dim, USER &gt;::Advective_O1_FluxesAndBalances</definition>
+        <argsstring>(Node&lt; dim &gt; *const) const</argsstring>
+        <name>Advective_O1_FluxesAndBalances</name>
+        <qualifiedname>csmp::FluxEvaluator::Advective_O1_FluxesAndBalances</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; dim &gt; * const</type>
+          <defname>nd_ptr</defname>
+        </param>
+        <briefdescription>
+<para>computes F = (A_i vD . n_i) and its products with transported variables, also computes FV flux balances </para>
+        </briefdescription>
+        <detaileddescription>
+<para>COMPUTING FLUX BALANCE FROM VELOCITY AND NORMAL AND FACET AREA.</para>
+<para>The divergence of the transport velocity on the current FV = node, and its product with the transport variable is stored. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/FluxEvaluator.h" line="44" column="11" bodyfile="source/modules/integration/finite_volumes/generic_transport_scheme/source/FluxEvaluator.cpp" bodystart="140" bodyend="183"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flux_evaluator_1a3a34a95941d6b6277ff691e5ef393f04" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>template&lt; uint32_t &gt; class</type>
+            <declname>CELL</declname>
+            <defname>CELL</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>template void csmp::FluxEvaluator&lt; dim, USER &gt;::VolumetricFlowAndTransportVariableFluxBalances</definition>
+        <argsstring>(ModelSubDomain&lt; dim, CELL &gt; &amp;, std::vector&lt; CELL&lt; dim &gt; * &gt; &amp;halo_stencils)</argsstring>
+        <name>VolumetricFlowAndTransportVariableFluxBalances</name>
+        <qualifiedname>csmp::FluxEvaluator::VolumetricFlowAndTransportVariableFluxBalances</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model_sub_domain" kindref="compound">ModelSubDomain</ref>&lt; dim, CELL &gt; &amp;</type>
+          <defname>subdomain</defname>
+        </param>
+        <param>
+          <type>std::vector&lt; CELL&lt; dim &gt; * &gt; &amp;</type>
+          <declname>halo_stencils</declname>
+        </param>
+        <briefdescription>
+<para>computes volumetric flows and (chemical) fluxes across facets using FacetFlux (facet flux) and stores them in target region </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Computes volumetric flows and (chemical) fluxes across facets using FacetFlux (facet flux) and stores them in target region</para>
+<para>Volumetric facet flow and (chemical) flux calculation (element by element), for all elements in the domain</para>
+<para>Facet fluxes in the FV sectors outside the domain are considered. by Advective_O1_FluxesBoundary(). This method also writes the correct volumetric flow balances onto the nodes on the perimeter. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/FluxEvaluator.h" line="50" column="10" bodyfile="source/modules/integration/finite_volumes/generic_transport_scheme/source/FluxEvaluator.cpp" bodystart="586" bodyend="642"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flux_evaluator_1a7557a8a4f116ea3993179d376724380b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FluxEvaluator&lt; dim, USER &gt;::FluxBalancesAtBoundary</definition>
+        <argsstring>(Node&lt; dim &gt; *const) const</argsstring>
+        <name>FluxBalancesAtBoundary</name>
+        <qualifiedname>csmp::FluxEvaluator::FluxBalancesAtBoundary</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; dim &gt; * const</type>
+          <defname>nd_ptr</defname>
+        </param>
+        <briefdescription>
+<para>computes flux balances on boundary FVs, using precomputed facet fluxes; volumetric balances are set to zero </para>
+        </briefdescription>
+        <detaileddescription>
+<para>From precomputed facet fluxes, <ref refid="classcsmp_1_1_flux_evaluator_1a7557a8a4f116ea3993179d376724380b" kindref="member">FluxBalancesAtBoundary()</ref> computes:</para>
+<para><orderedlist>
+<listitem><para>Nothing for FVs on the model boundary with Dirichlet concentration constraints.</para>
+</listitem><listitem><para>facet fluxes and flux balances of intact perimeter finite volumes that are not on the model boundary</para>
+</listitem><listitem><para>accumulation of facet flux-concentration products</para>
+</listitem><listitem><para>inflow if the the perimeter finite volume is truncated by the model boundary. This is determined from the AtBoundary() flag (flag!=NOT).</para>
+</listitem></orderedlist>
+</para>
+<para>In summary, this method computes flux balances and concentration-facet flux products where possible, at sliced boundaries inflow (+) concentration products are stored to C1. At such boundaries the influx is found from the flux balance and the FV cell&apos;s concentration.</para>
+<para><simplesect kind="attention"><para>This method is only for perimeter nodes </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/FluxEvaluator.h" line="56" column="11" bodyfile="source/modules/integration/finite_volumes/generic_transport_scheme/source/FluxEvaluator.cpp" bodystart="209" bodyend="265"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flux_evaluator_1ae1a1b4be20b06e0aea7a444ee61a5d0f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FluxEvaluator&lt; dim, USER &gt;::TransportVariableFluxes</definition>
+        <argsstring>(Element&lt; dim &gt; *const) const</argsstring>
+        <name>TransportVariableFluxes</name>
+        <qualifiedname>csmp::FluxEvaluator::TransportVariableFluxes</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>eptr</defname>
+        </param>
+        <briefdescription>
+<para>computes first-order facet fluxes, F = ff * C0; ff=(pre-computed) volumetric flow, C0=transport variable </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Computes first-order facet fluxes, F = ff * C0 = (pre-computed) volumetric flow upstream C0 products on all facets</para>
+<para>@apply this method to the interior and halo stencils. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/FluxEvaluator.h" line="59" column="11" bodyfile="source/modules/integration/finite_volumes/generic_transport_scheme/source/FluxEvaluator.cpp" bodystart="280" bodyend="315"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flux_evaluator_1af844f876b3498555c576d405b3186f0c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FluxEvaluator&lt; dim, USER &gt;::TransportVariableFluxesAndBalances</definition>
+        <argsstring>(Element&lt; dim &gt; *const) const</argsstring>
+        <name>TransportVariableFluxesAndBalances</name>
+        <qualifiedname>csmp::FluxEvaluator::TransportVariableFluxesAndBalances</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>eptr</defname>
+        </param>
+        <briefdescription>
+<para>like <ref refid="classcsmp_1_1_flux_evaluator_1ae1a1b4be20b06e0aea7a444ee61a5d0f" kindref="member">TransportVariableFluxes()</ref>, but computes FV balances of F as well, storing them in &apos;accumulation&apos;. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Also computes the outflow from each FV cell. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/FluxEvaluator.h" line="62" column="11" bodyfile="source/modules/integration/finite_volumes/generic_transport_scheme/source/FluxEvaluator.cpp" bodystart="322" bodyend="361"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flux_evaluator_1a4e5f8297f7be37d653438d4fd0fbd66b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FluxEvaluator&lt; dim, USER &gt;::FluxBalancesFromFacetFluxes</definition>
+        <argsstring>(Node&lt; dim &gt; *const) const</argsstring>
+        <name>FluxBalancesFromFacetFluxes</name>
+        <qualifiedname>csmp::FluxEvaluator::FluxBalancesFromFacetFluxes</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; dim &gt; * const</type>
+          <defname>nptr</defname>
+        </param>
+        <briefdescription>
+<para>computes balance of transport variable fluxes from precomputed facet fluxes and transport variable </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Computes and returns FV flux balance computed from pre-calculated thickness-weighted facet fluxes. The divergence of the volumetric flow is stored into the variable &apos;flux balance&apos;. The volumetric flow * upstream concentration product is stored into &apos;new concentration&apos;. Both, the flux balance and its product with concentration are stored on the node.</para>
+<para><simplesect kind="attention"><para>this method relies on precomputed facet fluxes. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/FluxEvaluator.h" line="65" column="11" bodyfile="source/modules/integration/finite_volumes/generic_transport_scheme/source/FluxEvaluator.cpp" bodystart="375" bodyend="397"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flux_evaluator_1a4c78926a0dd52165c1ec537343eeeb39" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::FluxEvaluator&lt; dim, USER &gt;::FluxBalanceAndOutFlow</definition>
+        <argsstring>(Node&lt; dim &gt; *const) const</argsstring>
+        <name>FluxBalanceAndOutFlow</name>
+        <qualifiedname>csmp::FluxEvaluator::FluxBalanceAndOutFlow</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; dim &gt; * const</type>
+          <defname>nptr</defname>
+        </param>
+        <briefdescription>
+<para>stores FV flux balances computed from current facet fluxes and C0 concentrations; returns outflow from cell </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Like <ref refid="classcsmp_1_1_flux_evaluator_1a4e5f8297f7be37d653438d4fd0fbd66b" kindref="member">FluxBalancesFromFacetFluxes()</ref>, but returns the current outflow from the cell.</para>
+<para>The latter is valid only for intact finite volumes (not at model boundary). Else, a ficticious outflow is detected at inflow boundaries.</para>
+<para><simplesect kind="attention"><para>this method relies on precomputed facet fluxes. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/FluxEvaluator.h" line="68" column="13" bodyfile="source/modules/integration/finite_volumes/generic_transport_scheme/source/FluxEvaluator.cpp" bodystart="450" bodyend="478"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flux_evaluator_1af8caa7567170e4eae992207c21ee555a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::FluxEvaluator&lt; dim, USER &gt;::InFlow</definition>
+        <argsstring>(const Node&lt; dim &gt; *const) const</argsstring>
+        <name>InFlow</name>
+        <qualifiedname>csmp::FluxEvaluator::InFlow</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; dim &gt; * const</type>
+          <defname>nptr</defname>
+        </param>
+        <briefdescription>
+<para>computes the volumetric flow into the current cell; </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>inflow which is always positive</para>
+</simplesect>
+Like <ref refid="classcsmp_1_1_flux_evaluator_1a4c78926a0dd52165c1ec537343eeeb39" kindref="member">FluxBalanceAndOutFlow()</ref>, but computes only the volumetric inflow into the cell.</para>
+<para>The latter is valid only for intact finite volumes (not at model boundary). Else, a ficticious inflow is detected at inflow boundaries.</para>
+<para><simplesect kind="attention"><para>this method relies on precomputed facet fluxes. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/FluxEvaluator.h" line="71" column="13" bodyfile="source/modules/integration/finite_volumes/generic_transport_scheme/source/FluxEvaluator.cpp" bodystart="491" bodyend="511"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flux_evaluator_1a6042e91a6788818ed767555cad2d963e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::FluxEvaluator&lt; dim, USER &gt;::OutFlow</definition>
+        <argsstring>(const Node&lt; dim &gt; *const) const</argsstring>
+        <name>OutFlow</name>
+        <qualifiedname>csmp::FluxEvaluator::OutFlow</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; dim &gt; * const</type>
+          <defname>nptr</defname>
+        </param>
+        <briefdescription>
+<para>computes the volumetric flow outside of the current cell; </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>outflow which is always positive</para>
+</simplesect>
+Like <ref refid="classcsmp_1_1_flux_evaluator_1a4c78926a0dd52165c1ec537343eeeb39" kindref="member">FluxBalanceAndOutFlow()</ref>, but computes only the volumetric outflow from the cell.</para>
+<para>The latter is valid only for intact finite volumes (not at model boundary). Else, not the complete outflow may be detected at out-flow boundaries.</para>
+<para><simplesect kind="attention"><para>this method relies on precomputed facet fluxes. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/FluxEvaluator.h" line="74" column="13" bodyfile="source/modules/integration/finite_volumes/generic_transport_scheme/source/FluxEvaluator.cpp" bodystart="523" bodyend="543"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flux_evaluator_1a57fbf6ae0c0b3d82e3646b75b02426e4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::FluxEvaluator&lt; dim, USER &gt;::VolumetricFlowBalance</definition>
+        <argsstring>(const Node&lt; dim &gt; *const) const</argsstring>
+        <name>VolumetricFlowBalance</name>
+        <qualifiedname>csmp::FluxEvaluator::VolumetricFlowBalance</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; dim &gt; * const</type>
+          <defname>nptr</defname>
+        </param>
+        <briefdescription>
+<para>computes the volumetric flow outside of the current cell; </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>outflow which is always positive</para>
+</simplesect>
+Meters cubed, going in versus out. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/FluxEvaluator.h" line="77" column="13" bodyfile="source/modules/integration/finite_volumes/generic_transport_scheme/source/FluxEvaluator.cpp" bodystart="551" bodyend="571"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_flux_evaluator_1af419aabd68ff087305968bccb1eae0fb" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>USER&lt; dim &gt; *</type>
+        <definition>USER&lt; dim &gt; * csmp::FluxEvaluator&lt; dim, USER &gt;::User</definition>
+        <argsstring>()</argsstring>
+        <name>User</name>
+        <qualifiedname>csmp::FluxEvaluator::User</qualifiedname>
+        <briefdescription>
+<para>shorthand for accessing the class that <ref refid="classcsmp_1_1_flux_evaluator" kindref="compound">FluxEvaluator</ref> is a policy of </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/FluxEvaluator.h" line="81" column="10" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/FluxEvaluator.h" bodystart="81" bodyend="81"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_flux_evaluator_1a71a41432e4a64623724fa4e0bd0fcfdf" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>USER&lt; dim &gt; const *</type>
+        <definition>USER&lt; dim &gt; const  * csmp::FluxEvaluator&lt; dim, USER &gt;::User</definition>
+        <argsstring>() const</argsstring>
+        <name>User</name>
+        <qualifiedname>csmp::FluxEvaluator::User</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/FluxEvaluator.h" line="82" column="16" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/FluxEvaluator.h" bodystart="82" bodyend="82"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Policy class that computes fluxes across finite-volume facets. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Part of trial implementation of Colleoli transport scheme. <simplesect kind="author"><para>Stephan K. Matthai </para>
+</simplesect>
+<simplesect kind="version"><para>1a </para>
+</simplesect>
+<simplesect kind="date"><para>21/2/2013 </para>
+</simplesect>
+<simplesect kind="pre"><para>high-level class depending on CSMP++ API </para>
+</simplesect>
+<simplesect kind="copyright"><para>Stephan K. Matthai</para>
+</simplesect>
+The transported variable on current and future time level is denoted as C0 and C1, respectively.</para>
+<para>All interim results are stored on the model.</para>
+<para><xrefsect id="todo_1_todo000092"><xreftitle>Todo</xreftitle><xrefdescription><para>double FluxBalanceFromGradP_K_mu_C0( Node&lt;dim&gt;* const ) const; </para>
+<para>double FluxBalanceFromGradP_KK_mu_C0( Node&lt;dim&gt;* const ) const; </para>
+<para>include dispersion and options for diffusive fluxes</para>
+</xrefdescription></xrefsect></para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>csmp::ExplicitTransport&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_explicit_transport"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::FluxEvaluator&lt; dim, ExplicitTransport &gt;</label>
+        <link refid="classcsmp_1_1_flux_evaluator"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; dim, ExplicitTransport &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>csmp::FluxEvaluator&lt; dim, ImplicitTransport &gt;</label>
+        <link refid="classcsmp_1_1_flux_evaluator"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; dim, ImplicitTransport &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::FluxEvaluator&lt; dim, USER &gt;</label>
+        <link refid="classcsmp_1_1_flux_evaluator"/>
+      </node>
+      <node id="5">
+        <label>csmp::ImplicitTransport&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_implicit_transport"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::FluxEvaluator&lt; dim, USER &gt;</label>
+        <link refid="classcsmp_1_1_flux_evaluator"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/integration/finite_volumes/generic_transport_scheme/FluxEvaluator.h" line="34" column="1" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/FluxEvaluator.h" bodystart="34" bodyend="89"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_flux_evaluator_1a535457807f0d8bfa829126094e67cdf5" prot="public" virt="non-virtual"><scope>csmp::FluxEvaluator</scope><name>Advective_O1_FluxesAndBalances</name></member>
+      <member refid="classcsmp_1_1_flux_evaluator_1a4d50599968f3cbb3acb4f0c2a0723f2f" prot="public" virt="non-virtual"><scope>csmp::FluxEvaluator</scope><name>Advective_O1_FluxesAndBalances</name></member>
+      <member refid="classcsmp_1_1_flux_evaluator_1ad2fd61997a553deba1c6f00b7d860b09" prot="private" virt="non-virtual"><scope>csmp::FluxEvaluator</scope><name>DN_</name></member>
+      <member refid="classcsmp_1_1_flux_evaluator_1a4c78926a0dd52165c1ec537343eeeb39" prot="public" virt="non-virtual"><scope>csmp::FluxEvaluator</scope><name>FluxBalanceAndOutFlow</name></member>
+      <member refid="classcsmp_1_1_flux_evaluator_1a7557a8a4f116ea3993179d376724380b" prot="public" virt="non-virtual"><scope>csmp::FluxEvaluator</scope><name>FluxBalancesAtBoundary</name></member>
+      <member refid="classcsmp_1_1_flux_evaluator_1a4e5f8297f7be37d653438d4fd0fbd66b" prot="public" virt="non-virtual"><scope>csmp::FluxEvaluator</scope><name>FluxBalancesFromFacetFluxes</name></member>
+      <member refid="classcsmp_1_1_flux_evaluator_1a03e3a90c87e41a85f191d0c8ada74678" prot="public" virt="non-virtual"><scope>csmp::FluxEvaluator</scope><name>FluxEvaluator</name></member>
+      <member refid="classcsmp_1_1_flux_evaluator_1a02302028a826a1d748bcfa1fad619785" prot="private" virt="non-virtual"><scope>csmp::FluxEvaluator</scope><name>gradC_</name></member>
+      <member refid="classcsmp_1_1_flux_evaluator_1af8caa7567170e4eae992207c21ee555a" prot="public" virt="non-virtual"><scope>csmp::FluxEvaluator</scope><name>InFlow</name></member>
+      <member refid="classcsmp_1_1_flux_evaluator_1aa00ccc111c19eff01ea19d5f437f594f" prot="private" virt="non-virtual"><scope>csmp::FluxEvaluator</scope><name>nrml_</name></member>
+      <member refid="classcsmp_1_1_flux_evaluator_1a6042e91a6788818ed767555cad2d963e" prot="public" virt="non-virtual"><scope>csmp::FluxEvaluator</scope><name>OutFlow</name></member>
+      <member refid="classcsmp_1_1_flux_evaluator_1a987f7b33614b1b92100df98eab80ef09" prot="private" virt="non-virtual"><scope>csmp::FluxEvaluator</scope><name>pt_</name></member>
+      <member refid="classcsmp_1_1_flux_evaluator_1a21fdb65c7cf6d89b179fdba980d35a28" prot="private" virt="non-virtual"><scope>csmp::FluxEvaluator</scope><name>sc_</name></member>
+      <member refid="classcsmp_1_1_flux_evaluator_1ae1a1b4be20b06e0aea7a444ee61a5d0f" prot="public" virt="non-virtual"><scope>csmp::FluxEvaluator</scope><name>TransportVariableFluxes</name></member>
+      <member refid="classcsmp_1_1_flux_evaluator_1af844f876b3498555c576d405b3186f0c" prot="public" virt="non-virtual"><scope>csmp::FluxEvaluator</scope><name>TransportVariableFluxesAndBalances</name></member>
+      <member refid="classcsmp_1_1_flux_evaluator_1af419aabd68ff087305968bccb1eae0fb" prot="private" virt="non-virtual"><scope>csmp::FluxEvaluator</scope><name>User</name></member>
+      <member refid="classcsmp_1_1_flux_evaluator_1a71a41432e4a64623724fa4e0bd0fcfdf" prot="private" virt="non-virtual"><scope>csmp::FluxEvaluator</scope><name>User</name></member>
+      <member refid="classcsmp_1_1_flux_evaluator_1a5111f3b3fab3a87467c4d3347b381c48" prot="private" virt="non-virtual"><scope>csmp::FluxEvaluator</scope><name>vD_</name></member>
+      <member refid="classcsmp_1_1_flux_evaluator_1a3a34a95941d6b6277ff691e5ef393f04" prot="public" virt="non-virtual"><scope>csmp::FluxEvaluator</scope><name>VolumetricFlowAndTransportVariableFluxBalances</name></member>
+      <member refid="classcsmp_1_1_flux_evaluator_1a57fbf6ae0c0b3d82e3646b75b02426e4" prot="public" virt="non-virtual"><scope>csmp::FluxEvaluator</scope><name>VolumetricFlowBalance</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

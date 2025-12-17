@@ -12,24 +12,16 @@ using namespace std;
 namespace csmp {
 
 /// base class constructor, sets ostream for example output
-Example::Example( ostream *ostream )
-  : ostream_( ostream )
-{
+Example::Example( ostream *osptr )
+  : ostream_(osptr), difficulty_(0) {
 }
 
-/// assures db to contain data
-void Example::Initialize()
+/// set function, takes care that 0 < difficulty < 4
+void Example::SetDifficulty( const int& difficulty )
 {
-  Specifications();
-  difficulty_ = (difficulty_ < 1 || difficulty_ > 5) ? 1 : difficulty_;
-  if( category_.empty() )
-    category_ = "General";
-  if( descriptions_.empty() )
-    descriptions_.push_back( "none" );
-  if( requirements_.empty() )
-    requirements_.push_back( "none" );
-  if( authors_.empty() )
-    authors_.push_back( "unknown" );
+  difficulty_ = difficulty;
+  difficulty_ = difficulty_ < 1 ? 1 : difficulty_;
+  difficulty_ = difficulty_ > 5 ? 5 : difficulty_;
 }
 
 /// allows to add a descrtiption to an example
@@ -59,10 +51,10 @@ string Example::GetTitle() const
   
 #ifdef __GNUC__
   //This is a fix for gcc name demangling.
-   int   status;
-   const std::type_info& ti = typeid(*this);
-   char* realname = abi::__cxa_demangle(ti.name(), 0, 0, &status);
-   text += realname;
+  int   status;
+  const auto &ti = typeid(*this);
+  const char* realname = abi::__cxa_demangle(ti.name(), nullptr, nullptr, &status);
+  text += realname;
 #else
   text += typeid(*this).name();
 #endif
@@ -83,61 +75,30 @@ string Example::GetCategory() const
   return category_;
 }
 
-/// set function, takes care that 0 < difficulty < 4
-void Example::SetDifficulty( const int& difficulty )
+/// assures db to contain data
+void Example::Initialize()
 {
-  difficulty_ = difficulty;
-  difficulty_ = difficulty_ < 1 ? 1 : difficulty_;
-  difficulty_ = difficulty_ > 5 ? 5 : difficulty_;
+  Specifications();
+  difficulty_ = difficulty_ < 1 || difficulty_ > 5 ? 1 : difficulty_;
+  if( category_.empty() )
+    category_ = "General";
+  if( descriptions_.empty() )
+    descriptions_.emplace_back("none" );
+  if( requirements_.empty() )
+    requirements_.emplace_back("none" );
+  if( authors_.empty() )
+    authors_.emplace_back("unknown" );
 }
-
-/// return function
-list<string>::const_iterator Example::GetDescriptionsBegin()
-{
-  return descriptions_.begin();
-}
-
-/// return function
-list<string>::const_iterator Example::GetDescriptionsEnd() const
-{
-  return descriptions_.end();
-}
-
-/// return function
-list<string>::const_iterator Example::GetRequirementsBegin()
-{
-  return requirements_.begin();
-}
-
-/// return function
-list<string>::const_iterator Example::GetRequirementsEnd() const
-{
-  return requirements_.end();
-}
-
-/// return function
-list<string>::const_iterator Example::GetAuthorsBegin()
-{
-  return authors_.begin();
-}
-
-/// return function
-list<string>::const_iterator Example::GetAuthorsEnd() const
-{
-  return authors_.end();
-}
-
 
 string Example::GetExampleFileName(const char* path)
 {
-  filesystem::path p(path);
+  const filesystem::path p(path);
   return p.stem().string();
 }
 
-
 /**
    Creates new directory "example_outputs/" side by side with the working directory "example_inputs", moving any file writing by the current example into there.
-   
+
    @attention This function expects that the directory that contains the executable is    open-csmp/examples/example_inputs/
 
    Context: to run the examples, you need to create a new directory somewhere outside of your repository and copy the example_inputs/  directory from the repository in there,
@@ -162,7 +123,7 @@ void Example::CreateWorkingDirectoryAndCopyInputModelFiles(std::string& example_
 
   //copy input files into working directory
   if(!model_name.empty()) {
-    string input_directory = (filesystem::current_path().parent_path().parent_path()).string();
+    string input_directory = filesystem::current_path().parent_path().parent_path().string();
     input_directory += "/example_inputs/csmp_native_format_models/";
     //.vset
     string path = "../../example_inputs/csmp_native_format_models/";
@@ -171,8 +132,8 @@ void Example::CreateWorkingDirectoryAndCopyInputModelFiles(std::string& example_
     if (filesystem::exists(filesystem::path(file_name))) filesystem::copy(filesystem::path(file_name), filesystem::path("./"));
     else {
       string error_message = "\n\nError: file '";
-      error_message += (name + "' does not exist in directory "  + input_directory);
-      error_message += (", example cannot run, please check.\n");
+      error_message += name + "' does not exist in directory "  + input_directory;
+      error_message += ", example cannot run, please check.\n";
       throw std::runtime_error(error_message);
     }
     //boundaries.dat
@@ -181,8 +142,8 @@ void Example::CreateWorkingDirectoryAndCopyInputModelFiles(std::string& example_
     if (filesystem::exists(filesystem::path(file_name))) filesystem::copy(filesystem::path(file_name), filesystem::path("./"));
     else {
       string error_message = "\n\nError: file '";
-      error_message += (name + "' does not exist in directory "  + input_directory);
-      error_message += (", example cannot run, please check.\n");
+      error_message += name + "' does not exist in directory "  + input_directory;
+      error_message += ", example cannot run, please check.\n";
       throw std::runtime_error(error_message);
     }
     //regions.dat
@@ -191,8 +152,8 @@ void Example::CreateWorkingDirectoryAndCopyInputModelFiles(std::string& example_
     if (filesystem::exists(filesystem::path(file_name))) filesystem::copy(filesystem::path(file_name), filesystem::path("./"));
     else {
       string error_message = "\n\nError: file '";
-      error_message += (name + "' does not exist in directory "  + input_directory);
-      error_message += (", example cannot run, please check.\n");
+      error_message += name + "' does not exist in directory "  + input_directory;
+      error_message += ", example cannot run, please check.\n";
       throw std::runtime_error(error_message);
     }
     //variables.dat
@@ -201,8 +162,8 @@ void Example::CreateWorkingDirectoryAndCopyInputModelFiles(std::string& example_
     if (filesystem::exists(filesystem::path(file_name))) filesystem::copy(filesystem::path(file_name), filesystem::path("./"));
     else {
       string error_message = "\n\nError: file '";
-      error_message += (name + "' does not exist in directory "  + input_directory);
-      error_message += (", example cannot run, please check.\n");
+      error_message += name + "' does not exist in directory "  + input_directory;
+      error_message += ", example cannot run, please check.\n";
       throw std::runtime_error(error_message);
     }
     //splitboundaries.dat - optional
@@ -213,36 +174,72 @@ void Example::CreateWorkingDirectoryAndCopyInputModelFiles(std::string& example_
 
   //copy variable file
   if(!variable_file.empty()) {
-    string input_directory = (filesystem::current_path().parent_path().parent_path()).string();
+    string input_directory = filesystem::current_path().parent_path().parent_path().string();
     input_directory += "/example_inputs/variables_and_configuration_files/";
 
     string path = "../../example_inputs/variables_and_configuration_files/";
-    string file_name = path + variable_file;
-    if (filesystem::exists(filesystem::path(file_name))) filesystem::copy(filesystem::path(file_name), filesystem::path("./"));
+    if (string file_name = path + variable_file; filesystem::exists(filesystem::path(file_name))) filesystem::copy(filesystem::path(file_name), filesystem::path("./"));
     else {
       string error_message = "\n\nError: file '";
-      error_message += (variable_file + "' does not exist in directory "  + input_directory);
-      error_message += (", example cannot run, please check.\n");
+      error_message += variable_file + "' does not exist in directory "  + input_directory;
+      error_message += ", example cannot run, please check.\n";
       throw std::runtime_error(error_message);
     }
   }
 
   //copy configuration file if required
   if(!config_file.empty()) {
-    string input_directory = (filesystem::current_path().parent_path().parent_path()).string();
+    string input_directory = filesystem::current_path().parent_path().parent_path().string();
     input_directory += "/example_inputs/variables_and_configuration_files/";
 
     string path = "../../example_inputs/variables_and_configuration_files/";
     config_file += "-configuration.txt";
-    string file_name = path + config_file;
-    if(filesystem::exists(filesystem::path(file_name))) filesystem::copy(filesystem::path(file_name), filesystem::path("./"));
+    if(string file_name = path + config_file; filesystem::exists(filesystem::path(file_name))) filesystem::copy(filesystem::path(file_name), filesystem::path("./"));
     else {
       string error_message = "\n\nError: file '";
-      error_message += (config_file + "' does not exist in directory "  + input_directory);
-      error_message += (", example cannot run, please check.\n");
+      error_message += config_file + "' does not exist in directory "  + input_directory;
+      error_message +=", example cannot run, please check.\n";
       throw std::runtime_error(error_message);
     }
   }
+}
+
+/// return function
+list<string>::const_iterator Example::GetDescriptionsBegin()
+{
+  return descriptions_.begin();
+}
+
+/// return function
+list<string>::const_iterator Example::GetDescriptionsEnd() const
+{
+  return descriptions_.end();
+}
+
+/// return function
+list<string>::const_iterator Example::GetAuthorsBegin()
+{
+  return authors_.begin();
+}
+
+/// return function
+list<string>::const_iterator Example::GetAuthorsEnd() const
+{
+  return authors_.end();
+}
+
+
+/// return function
+list<string>::const_iterator Example::GetRequirementsBegin()
+{
+  return requirements_.begin();
+}
+
+
+/// return function
+list<string>::const_iterator Example::GetRequirementsEnd() const
+{
+  return requirements_.end();
 }
 
 

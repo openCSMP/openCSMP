@@ -1,0 +1,384 @@
+\doxysection{Field\+Variable.\+h}
+\hypertarget{property__manipulation_2_field_variable_8h_source}{}\label{property__manipulation_2_field_variable_8h_source}\index{source/includes/property\_manipulation/FieldVariable.h@{source/includes/property\_manipulation/FieldVariable.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_FIELD\_VARIABLE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_FIELD\_VARIABLE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_model_sub_domain_8h}{"{}ModelSubDomain.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_exception_8h}{"{}Exception.h"{}}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_index_8h}{"{}Index.h"{}}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{comment}{//\ Forward\ declaration}}
+\DoxyCodeLine{00011\ \textcolor{keyword}{template}<uint32\_t,\ \textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ CELL>\ \textcolor{keyword}{class}\ FieldVariable;}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{comment}{//\ ===========================================================================================}}
+\DoxyCodeLine{00014\ \textcolor{comment}{//}}
+\DoxyCodeLine{00015\ \textcolor{comment}{//\ \ \ \ \ \ \ \ METAFUNCTIONS\ FOR\ COMPILE-\/TIME\ DISPATCHING\ ON\ csmp::INDEX}}
+\DoxyCodeLine{00016\ \textcolor{comment}{//}}
+\DoxyCodeLine{00017\ \textcolor{comment}{//\ ===========================================================================================}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{comment}{//\ Trait\ to\ determine\ the\ underlying\ data\ type\ of\ a\ VARIABLE\_TYPE}}
+\DoxyCodeLine{00020\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00021\ \textcolor{keyword}{template}<\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\_TYPE}}\ Ty,\ uint32\_t\ dim>}
+\DoxyCodeLine{00022\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcsmp_1_1_variable_data_type}{VariableDataType}};}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{comment}{///\ Scalar\ type}}
+\DoxyCodeLine{00025\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00026\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcsmp_1_1_variable_data_type_3_01_s_c_a_l_a_r_00_01dim_01_4}{VariableDataType}}<SCALAR,\ dim>\ \{}
+\DoxyCodeLine{00027\ \ \ \textcolor{keyword}{using}\ type\ =\ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}};}
+\DoxyCodeLine{00028\ \};}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \textcolor{comment}{///\ Vector\ type}}
+\DoxyCodeLine{00031\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00032\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcsmp_1_1_variable_data_type_3_01_v_e_c_t_o_r_00_01dim_01_4}{VariableDataType}}<VECTOR,\ dim>\ \{}
+\DoxyCodeLine{00033\ \ \ \textcolor{keyword}{using}\ type\ =\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>;}
+\DoxyCodeLine{00034\ \};}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \textcolor{comment}{///\ Tensor\ type}}
+\DoxyCodeLine{00037\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00038\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcsmp_1_1_variable_data_type_3_01_t_e_n_s_o_r_00_01dim_01_4}{VariableDataType}}<TENSOR,\ dim>\ \{}
+\DoxyCodeLine{00039\ \ \ \textcolor{keyword}{using}\ type\ =\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<dim>;}
+\DoxyCodeLine{00040\ \};}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \textcolor{comment}{//\ Trait\ to\ determine\ valid\ subdomain\ access\ for\ each\ PLACEMENT}}
+\DoxyCodeLine{00043\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00044\ \textcolor{keyword}{template}<\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}\ Pl>}
+\DoxyCodeLine{00045\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcsmp_1_1_placement_access_traits}{PlacementAccessTraits}};}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \textcolor{comment}{///\ NODE\ placement\ uses\ NodeVector()}}
+\DoxyCodeLine{00048\ \textcolor{keyword}{template}<>}
+\DoxyCodeLine{00049\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcsmp_1_1_placement_access_traits_3_01_n_o_d_e_01_4}{PlacementAccessTraits}}<NODE>\ \{}
+\DoxyCodeLine{00050\ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_node\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00051\ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_cellent\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00052\ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_integration\_point\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00053\ \};}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \textcolor{comment}{///\ ELEMENT\ placement\ uses\ CellVector()}}
+\DoxyCodeLine{00056\ \textcolor{keyword}{template}<>}
+\DoxyCodeLine{00057\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcsmp_1_1_placement_access_traits_3_01_e_l_e_m_e_n_t_01_4}{PlacementAccessTraits}}<ELEMENT>\ \{}
+\DoxyCodeLine{00058\ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_node\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00059\ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_element\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00060\ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_integration\_point\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00061\ \};}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \textcolor{comment}{///\ ELEMENT\_INTEGRATION\_POINT\ uses\ CellVector()\ with\ ip\ access}}
+\DoxyCodeLine{00064\ \textcolor{keyword}{template}<>}
+\DoxyCodeLine{00065\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcsmp_1_1_placement_access_traits_3_01_e_l_e_m_e_n_t___i_n_t_e_g_r_a_t_i_o_n___p_o_i_n_t_01_4}{PlacementAccessTraits}}<ELEMENT\_INTEGRATION\_POINT>\ \{}
+\DoxyCodeLine{00066\ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_node\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00067\ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_element\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00068\ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_integration\_point\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00069\ \};}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \textcolor{comment}{//\ Utility\ for\ checking\ placement\ compatibility\ between\ variables}}
+\DoxyCodeLine{00072\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00073\ \textcolor{keyword}{template}<\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}\ A,\ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}\ B>}
+\DoxyCodeLine{00074\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcsmp_1_1_is_same_placement}{IsSamePlacement}}\ \{}
+\DoxyCodeLine{00075\ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ value\ =\ A\ ==\ B;}
+\DoxyCodeLine{00076\ \};}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \textcolor{comment}{//\ Helper\ alias}}
+\DoxyCodeLine{00079\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00080\ \textcolor{keyword}{template}<\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\_TYPE}}\ Ty,\ uint32\_t\ dim>}
+\DoxyCodeLine{00081\ \textcolor{keyword}{using}\ VariableDataType\_t\ =\ \textcolor{keyword}{typename}\ \mbox{\hyperlink{structcsmp_1_1_variable_data_type}{VariableDataType}}<Ty,\ dim>::type;}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \textcolor{comment}{//\ ===========================================================================================}}
+\DoxyCodeLine{00086\ \textcolor{comment}{//}}
+\DoxyCodeLine{00087\ \textcolor{comment}{//\ \ \ \ \ \ \ \ FIELD\ VARIABLE\ -\/\ replacement\ of\ PropertyHandle}}
+\DoxyCodeLine{00088\ \textcolor{comment}{//}}
+\DoxyCodeLine{00089\ \textcolor{comment}{//\ ===========================================================================================}}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00092\ \textcolor{comment}{\ *\ @brief\ FieldVariable\ represents\ a\ handle\ to\ a\ distributed\ variable\ (scalar,\ vector,\ tensor)\ in\ the\ model.}}
+\DoxyCodeLine{00093\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00094\ \textcolor{comment}{\ *\ The\ FieldVariable\ provides\ access\ to\ variable\ values\ across\ a\ subdomain\ (e.g.,\ Region,\ Boundary)\ and}}
+\DoxyCodeLine{00095\ \textcolor{comment}{\ *\ supports\ arithmetic\ operations\ and\ expression\ templates.}}
+\DoxyCodeLine{00096\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00097\ \textcolor{comment}{\ *\ @tparam\ dim\ Spatial\ dimension}}
+\DoxyCodeLine{00098\ \textcolor{comment}{\ *\ @tparam\ CELL\ \ cell\ type\ used\ in\ the\ subdomain,\ i.e.\ Element\ for\ Region,\ Face\ for\ Boundary\ and\ InterFace\ for\ SplitBoundary}}
+\DoxyCodeLine{00099\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00100\ \textcolor{keyword}{template}\ <\mbox{\hyperlink{namespacecsmp}{uint32\_t}}\ \mbox{\hyperlink{namespacecsmp}{dim}},\ \textcolor{keyword}{template}\ <\mbox{\hyperlink{namespacecsmp}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{namespacecsmp}{CELL}}>}
+\DoxyCodeLine{00101\ \textcolor{keyword}{class}\ \mbox{\hyperlink{namespacecsmp}{FieldVariable}}\ \{}
+\DoxyCodeLine{00102\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keyword}{using}\ \mbox{\hyperlink{namespacecsmp}{SubdomainType}}\ =\ \mbox{\hyperlink{namespacecsmp}{ModelSubDomain}}<\mbox{\hyperlink{namespacecsmp}{dim}},\ \mbox{\hyperlink{namespacecsmp}{CELL}}>;}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ \ \ \ \ \textcolor{comment}{///\ Constructor:\ binds\ to\ an\ existing\ variable\ in\ the\ model's\ property\ database}}
+\DoxyCodeLine{00106\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{FieldVariable}}(\ \mbox{\hyperlink{namespacecsmp}{Model}}<\mbox{\hyperlink{namespacecsmp}{dim}}>\&\ \mbox{\hyperlink{namespacecsmp}{model}},\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{string}}\&\ \mbox{\hyperlink{namespacecsmp}{subdomain\_name}},\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{string}}\&\ \mbox{\hyperlink{namespacecsmp}{var\_name}});}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \ \ \ \ \textcolor{comment}{///\ Defaulted\ copy\ constructor\ and\ assignment}}
+\DoxyCodeLine{00109\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{FieldVariable}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{FieldVariable}}\&)\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00110\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{FieldVariable}}\&\ \mbox{\hyperlink{namespacecsmp}{operator}}=(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{FieldVariable}}\&)\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{comment}{///\ Assignment\ from\ scalar,\ vector,\ or\ tensor\ constants}}
+\DoxyCodeLine{00113\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{FieldVariable}}\&\ \mbox{\hyperlink{namespacecsmp}{operator}}=(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{ScalarVariable}}\&\ \mbox{\hyperlink{namespacecsmp}{s}});}
+\DoxyCodeLine{00114\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{FieldVariable}}\&\ \mbox{\hyperlink{namespacecsmp}{operator}}=(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{VectorVariable}}<\mbox{\hyperlink{namespacecsmp}{dim}}>\&\ \mbox{\hyperlink{namespacecsmp}{v}});}
+\DoxyCodeLine{00115\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{FieldVariable}}\&\ \mbox{\hyperlink{namespacecsmp}{operator}}=(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{TensorVariable}}<\mbox{\hyperlink{namespacecsmp}{dim}}>\&\ \mbox{\hyperlink{namespacecsmp}{t}});}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00117\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp}{Add}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{FieldVariable}}\&\ \mbox{\hyperlink{namespacecsmp}{other}});}
+\DoxyCodeLine{00118\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp}{Subtract}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{FieldVariable}}\&\ \mbox{\hyperlink{namespacecsmp}{other}});}
+\DoxyCodeLine{00119\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp}{Multiply}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{FieldVariable}}\&\ \mbox{\hyperlink{namespacecsmp}{other}});}
+\DoxyCodeLine{00120\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp}{Divide}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{FieldVariable}}\&\ \mbox{\hyperlink{namespacecsmp}{other}});}
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00122\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ \mbox{\hyperlink{namespacecsmp}{Var}}>}
+\DoxyCodeLine{00123\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp}{Add}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{Var}}\&\ \mbox{\hyperlink{namespacecsmp}{value}});}
+\DoxyCodeLine{00124\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ \mbox{\hyperlink{namespacecsmp}{Var}}>}
+\DoxyCodeLine{00125\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp}{Subtract}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{Var}}\&\ \mbox{\hyperlink{namespacecsmp}{value}});}
+\DoxyCodeLine{00126\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ \mbox{\hyperlink{namespacecsmp}{Var}}>}
+\DoxyCodeLine{00127\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp}{Multiply}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{Var}}\&\ \mbox{\hyperlink{namespacecsmp}{value}});}
+\DoxyCodeLine{00128\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ \mbox{\hyperlink{namespacecsmp}{Var}}>}
+\DoxyCodeLine{00129\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp}{Divide}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{Var}}\&\ \mbox{\hyperlink{namespacecsmp}{value}});}
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ \ \ \ \ \textcolor{comment}{///\ Access\ the\ associated\ subdomain}}
+\DoxyCodeLine{00132\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{SubdomainType}}\&\ \mbox{\hyperlink{namespacecsmp}{Subdomain}}()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ *\mbox{\hyperlink{namespacecsmp}{subdomain\_}};\ \}}
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00134\ \ \ \ \ \textcolor{comment}{///\ Access\ the\ variable\ key\ (index)}}
+\DoxyCodeLine{00135\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{Index}}\&\ \mbox{\hyperlink{namespacecsmp}{VarKey}}()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{namespacecsmp}{var\_id\_}};\ \}}
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00137\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00138\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{Index}}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{var\_id\_}};}
+\DoxyCodeLine{00139\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{string}}\ \ \ \ \mbox{\hyperlink{namespacecsmp}{variable\_name\_}};}
+\DoxyCodeLine{00140\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{SubdomainType}}*\ \mbox{\hyperlink{namespacecsmp}{subdomain\_}}\ =\ \textcolor{keywordtype}{nullptr};}
+\DoxyCodeLine{00141\ \};}
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00143\ \textcolor{comment}{//\ ===================\ IMPLEMENTATION\ ===================}}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ \textcolor{keyword}{template}\ <\mbox{\hyperlink{namespacecsmp}{uint32\_t}}\ \mbox{\hyperlink{namespacecsmp}{dim}},\ \textcolor{keyword}{template}\ <\mbox{\hyperlink{namespacecsmp}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{namespacecsmp}{CELL}}>}
+\DoxyCodeLine{00146\ \mbox{\hyperlink{namespacecsmp}{FieldVariable}}<\mbox{\hyperlink{namespacecsmp}{dim}},\mbox{\hyperlink{namespacecsmp}{CELL}}>::\mbox{\hyperlink{namespacecsmp}{FieldVariable}}(\ \mbox{\hyperlink{namespacecsmp}{Model}}<\mbox{\hyperlink{namespacecsmp}{dim}}>\&\ \mbox{\hyperlink{namespacecsmp}{model}},\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{string}}\&\ \mbox{\hyperlink{namespacecsmp}{region}},\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{string}}\&\ \mbox{\hyperlink{namespacecsmp}{variable\_name}})}
+\DoxyCodeLine{00147\ \ \ \ \ :\ \mbox{\hyperlink{namespacecsmp}{variable\_name\_}}(\mbox{\hyperlink{namespacecsmp}{variable\_name}}),\ \mbox{\hyperlink{namespacecsmp}{subdomain\_}}(\textcolor{keywordtype}{nullptr})}
+\DoxyCodeLine{00148\ \{}
+\DoxyCodeLine{00149\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{namespacecsmp}{model}}.\mbox{\hyperlink{namespacecsmp}{Database}}().\mbox{\hyperlink{namespacecsmp}{IsDefined}}(\mbox{\hyperlink{namespacecsmp}{variable\_name}}.\mbox{\hyperlink{namespacecsmp}{c\_str}}()))\ \{}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{string}}\ \mbox{\hyperlink{namespacecsmp}{error}}\ =\ \textcolor{stringliteral}{"{}Variable\ '"{}}\ +\ \mbox{\hyperlink{namespacecsmp}{variable\_name}}\ +\ \textcolor{stringliteral}{"{}'\ not\ found\ in\ database"{}};}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{namespacecsmp}{Exception}}(\mbox{\hyperlink{namespacecsmp}{ERROR}},\ \textcolor{stringliteral}{"{}FieldVariable\ (ctor):"{}},\ \mbox{\hyperlink{namespacecsmp}{error}}.\mbox{\hyperlink{namespacecsmp}{c\_str}}());}
+\DoxyCodeLine{00152\ \ \ \ \ \}}
+\DoxyCodeLine{00153\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{var\_id\_}}\ =\ \mbox{\hyperlink{namespacecsmp}{model}}.\mbox{\hyperlink{namespacecsmp}{Database}}().\mbox{\hyperlink{namespacecsmp}{StorageKey}}(\mbox{\hyperlink{namespacecsmp}{variable\_name}}.\mbox{\hyperlink{namespacecsmp}{c\_str}}());}
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00155\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{namespacecsmp}{model}}.\mbox{\hyperlink{namespacecsmp}{ContainsRegion}}(\mbox{\hyperlink{namespacecsmp}{region}}.\mbox{\hyperlink{namespacecsmp}{c\_str}}()))\ \{}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{string}}\ \mbox{\hyperlink{namespacecsmp}{error}}\ =\ \textcolor{stringliteral}{"{}Target\ region\ '"{}}\ +\ \mbox{\hyperlink{namespacecsmp}{region}}\ +\ \textcolor{stringliteral}{"{}'\ is\ not\ contained\ in\ model"{}};}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{namespacecsmp}{Exception}}(\mbox{\hyperlink{namespacecsmp}{ERROR}},\ \textcolor{stringliteral}{"{}FieldVariable\ (ctor):"{}},\ \mbox{\hyperlink{namespacecsmp}{error}}.\mbox{\hyperlink{namespacecsmp}{c\_str}}());}
+\DoxyCodeLine{00158\ \ \ \ \ \}}
+\DoxyCodeLine{00159\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{subdomain\_}}\ =\ \&\mbox{\hyperlink{namespacecsmp}{model}}.\mbox{\hyperlink{namespacecsmp}{Region}}(\mbox{\hyperlink{namespacecsmp}{region}}.\mbox{\hyperlink{namespacecsmp}{c\_str}}());}
+\DoxyCodeLine{00160\ \}}
+\DoxyCodeLine{00161\ }
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00163\ \textcolor{keyword}{template}\ <\mbox{\hyperlink{namespacecsmp}{uint32\_t}}\ \mbox{\hyperlink{namespacecsmp}{dim}},\ \textcolor{keyword}{template}\ <\mbox{\hyperlink{namespacecsmp}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{namespacecsmp}{CELL}}>}
+\DoxyCodeLine{00164\ \mbox{\hyperlink{namespacecsmp}{FieldVariable}}<\mbox{\hyperlink{namespacecsmp}{dim}},\ \mbox{\hyperlink{namespacecsmp}{CELL}}>\&}
+\DoxyCodeLine{00165\ \mbox{\hyperlink{namespacecsmp}{FieldVariable}}<\mbox{\hyperlink{namespacecsmp}{dim}},\ \mbox{\hyperlink{namespacecsmp}{CELL}}>::\mbox{\hyperlink{namespacecsmp}{operator}}=(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{ScalarVariable}}\&\ \mbox{\hyperlink{namespacecsmp}{s}})\ \{}
+\DoxyCodeLine{00166\ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\&\ \mbox{\hyperlink{namespacecsmp}{cell}}\ :\ \mbox{\hyperlink{namespacecsmp}{subdomain\_}}-\/>\mbox{\hyperlink{namespacecsmp}{CellVector}}())\ \{}
+\DoxyCodeLine{00167\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{cell}}-\/>\mbox{\hyperlink{namespacecsmp}{Store}}(\mbox{\hyperlink{namespacecsmp}{var\_id\_}},\ \mbox{\hyperlink{namespacecsmp}{s}});}
+\DoxyCodeLine{00168\ \ \ \}}
+\DoxyCodeLine{00169\ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00170\ \}}
+\DoxyCodeLine{00171\ }
+\DoxyCodeLine{00172\ \textcolor{keyword}{template}\ <\mbox{\hyperlink{namespacecsmp}{uint32\_t}}\ \mbox{\hyperlink{namespacecsmp}{dim}},\ \textcolor{keyword}{template}\ <\mbox{\hyperlink{namespacecsmp}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{namespacecsmp}{CELL}}>}
+\DoxyCodeLine{00173\ \mbox{\hyperlink{namespacecsmp}{FieldVariable}}<\mbox{\hyperlink{namespacecsmp}{dim}},\ \mbox{\hyperlink{namespacecsmp}{CELL}}>\&}
+\DoxyCodeLine{00174\ \mbox{\hyperlink{namespacecsmp}{FieldVariable}}<\mbox{\hyperlink{namespacecsmp}{dim}},\ \mbox{\hyperlink{namespacecsmp}{CELL}}>::\mbox{\hyperlink{namespacecsmp}{operator}}=(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{VectorVariable}}<\mbox{\hyperlink{namespacecsmp}{dim}}>\&\ \mbox{\hyperlink{namespacecsmp}{v}})\ \{}
+\DoxyCodeLine{00175\ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\&\ \mbox{\hyperlink{namespacecsmp}{cell}}\ :\ \mbox{\hyperlink{namespacecsmp}{subdomain\_}}-\/>\mbox{\hyperlink{namespacecsmp}{CellVector}}())\ \{}
+\DoxyCodeLine{00176\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{cell}}-\/>\mbox{\hyperlink{namespacecsmp}{Store}}(\mbox{\hyperlink{namespacecsmp}{var\_id\_}},\ \mbox{\hyperlink{namespacecsmp}{v}});}
+\DoxyCodeLine{00177\ \ \ \}}
+\DoxyCodeLine{00178\ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00179\ \}}
+\DoxyCodeLine{00180\ }
+\DoxyCodeLine{00181\ \textcolor{keyword}{template}\ <\mbox{\hyperlink{namespacecsmp}{uint32\_t}}\ \mbox{\hyperlink{namespacecsmp}{dim}},\ \textcolor{keyword}{template}\ <\mbox{\hyperlink{namespacecsmp}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{namespacecsmp}{CELL}}>}
+\DoxyCodeLine{00182\ \mbox{\hyperlink{namespacecsmp}{FieldVariable}}<\mbox{\hyperlink{namespacecsmp}{dim}},\ \mbox{\hyperlink{namespacecsmp}{CELL}}>\&}
+\DoxyCodeLine{00183\ \mbox{\hyperlink{namespacecsmp}{FieldVariable}}<\mbox{\hyperlink{namespacecsmp}{dim}},\ \mbox{\hyperlink{namespacecsmp}{CELL}}>::\mbox{\hyperlink{namespacecsmp}{operator}}=(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{TensorVariable}}<\mbox{\hyperlink{namespacecsmp}{dim}}>\&\ \mbox{\hyperlink{namespacecsmp}{t}})\ \{}
+\DoxyCodeLine{00184\ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\&\ \mbox{\hyperlink{namespacecsmp}{cell}}\ :\ \mbox{\hyperlink{namespacecsmp}{subdomain\_}}-\/>\mbox{\hyperlink{namespacecsmp}{CellVector}}())\ \{}
+\DoxyCodeLine{00185\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{cell}}-\/>\mbox{\hyperlink{namespacecsmp}{Store}}(\mbox{\hyperlink{namespacecsmp}{var\_id\_}},\ \mbox{\hyperlink{namespacecsmp}{t}});}
+\DoxyCodeLine{00186\ \ \ \}}
+\DoxyCodeLine{00187\ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00188\ \}}
+\DoxyCodeLine{00189\ }
+\DoxyCodeLine{00190\ \textcolor{keyword}{template}\ <\mbox{\hyperlink{namespacecsmp}{uint32\_t}}\ \mbox{\hyperlink{namespacecsmp}{dim}},\ \textcolor{keyword}{template}<\mbox{\hyperlink{namespacecsmp}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{namespacecsmp}{CELL}}>}
+\DoxyCodeLine{00191\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp}{FieldVariable}}<\mbox{\hyperlink{namespacecsmp}{dim}},\ \mbox{\hyperlink{namespacecsmp}{CELL}}>::\mbox{\hyperlink{namespacecsmp}{Add}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{FieldVariable}}\&\ \mbox{\hyperlink{namespacecsmp}{other}})\ \{}
+\DoxyCodeLine{00192\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\&\ \mbox{\hyperlink{namespacecsmp}{cell}}\ :\ \mbox{\hyperlink{namespacecsmp}{subdomain\_}}-\/>\mbox{\hyperlink{namespacecsmp}{CellVector}}())\ \{}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\&\ \mbox{\hyperlink{namespacecsmp}{value}}\ =\ \mbox{\hyperlink{namespacecsmp}{cell}}-\/>\mbox{\hyperlink{namespacecsmp}{Access}}(\mbox{\hyperlink{namespacecsmp}{var\_id\_}});}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ \mbox{\hyperlink{namespacecsmp}{other\_value}}\ =\ \mbox{\hyperlink{namespacecsmp}{cell}}-\/>\mbox{\hyperlink{namespacecsmp}{Read}}(\mbox{\hyperlink{namespacecsmp}{other}}.\mbox{\hyperlink{namespacecsmp}{var\_id\_}});}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{value}}\ +=\ \mbox{\hyperlink{namespacecsmp}{other\_value}};}
+\DoxyCodeLine{00196\ \ \ \ \ \}}
+\DoxyCodeLine{00197\ \}}
+\DoxyCodeLine{00198\ }
+\DoxyCodeLine{00199\ \textcolor{keyword}{template}\ <\mbox{\hyperlink{namespacecsmp}{uint32\_t}}\ \mbox{\hyperlink{namespacecsmp}{dim}},\ \textcolor{keyword}{template}<\mbox{\hyperlink{namespacecsmp}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{namespacecsmp}{CELL}}>}
+\DoxyCodeLine{00200\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp}{FieldVariable}}<\mbox{\hyperlink{namespacecsmp}{dim}},\ \mbox{\hyperlink{namespacecsmp}{CELL}}>::\mbox{\hyperlink{namespacecsmp}{Subtract}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{FieldVariable}}\&\ \mbox{\hyperlink{namespacecsmp}{other}})\ \{}
+\DoxyCodeLine{00201\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\&\ \mbox{\hyperlink{namespacecsmp}{cell}}\ :\ \mbox{\hyperlink{namespacecsmp}{subdomain\_}}-\/>\mbox{\hyperlink{namespacecsmp}{CellVector}}())\ \{}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \textcolor{keyword}{auto}\&\ \mbox{\hyperlink{namespacecsmp}{value}}\ =\ \mbox{\hyperlink{namespacecsmp}{cell}}-\/>\mbox{\hyperlink{namespacecsmp}{Access}}(\mbox{\hyperlink{namespacecsmp}{var\_id\_}});}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ \mbox{\hyperlink{namespacecsmp}{other\_value}}\ =\ \mbox{\hyperlink{namespacecsmp}{cell}}.\mbox{\hyperlink{namespacecsmp}{Read}}(\mbox{\hyperlink{namespacecsmp}{other}}.\mbox{\hyperlink{namespacecsmp}{var\_id\_}});}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{value}}\ -\/=\ \mbox{\hyperlink{namespacecsmp}{other\_value}};}
+\DoxyCodeLine{00205\ \ \ \ \ \}}
+\DoxyCodeLine{00206\ \}}
+\DoxyCodeLine{00207\ }
+\DoxyCodeLine{00208\ \textcolor{keyword}{template}\ <\mbox{\hyperlink{namespacecsmp}{uint32\_t}}\ \mbox{\hyperlink{namespacecsmp}{dim}},\ \textcolor{keyword}{template}<\mbox{\hyperlink{namespacecsmp}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{namespacecsmp}{CELL}}>}
+\DoxyCodeLine{00209\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp}{FieldVariable}}<\mbox{\hyperlink{namespacecsmp}{dim}},\ \mbox{\hyperlink{namespacecsmp}{CELL}}>::\mbox{\hyperlink{namespacecsmp}{Multiply}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{FieldVariable}}\&\ \mbox{\hyperlink{namespacecsmp}{other}})\ \{}
+\DoxyCodeLine{00210\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\&\ \mbox{\hyperlink{namespacecsmp}{cell}}\ :\ \mbox{\hyperlink{namespacecsmp}{subdomain\_}}-\/>\mbox{\hyperlink{namespacecsmp}{CellVector}}())\ \{}
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \textcolor{keyword}{auto}\&\ \mbox{\hyperlink{namespacecsmp}{value}}\ =\ \mbox{\hyperlink{namespacecsmp}{cell}}-\/>\mbox{\hyperlink{namespacecsmp}{Access}}(\mbox{\hyperlink{namespacecsmp}{var\_id\_}});}
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ \mbox{\hyperlink{namespacecsmp}{other\_value}}\ =\ \mbox{\hyperlink{namespacecsmp}{cell}}.\mbox{\hyperlink{namespacecsmp}{Read}}(\mbox{\hyperlink{namespacecsmp}{other}}.\mbox{\hyperlink{namespacecsmp}{var\_id\_}});}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{value}}\ *=\ \mbox{\hyperlink{namespacecsmp}{other\_value}};}
+\DoxyCodeLine{00214\ \ \ \ \ \}}
+\DoxyCodeLine{00215\ \}}
+\DoxyCodeLine{00216\ }
+\DoxyCodeLine{00217\ \textcolor{keyword}{template}\ <\mbox{\hyperlink{namespacecsmp}{uint32\_t}}\ \mbox{\hyperlink{namespacecsmp}{dim}},\ \textcolor{keyword}{template}<\mbox{\hyperlink{namespacecsmp}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{namespacecsmp}{CELL}}>}
+\DoxyCodeLine{00218\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp}{FieldVariable}}<\mbox{\hyperlink{namespacecsmp}{dim}},\ \mbox{\hyperlink{namespacecsmp}{CELL}}>::\mbox{\hyperlink{namespacecsmp}{Divide}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{FieldVariable}}\&\ \mbox{\hyperlink{namespacecsmp}{other}})\ \{}
+\DoxyCodeLine{00219\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\&\ \mbox{\hyperlink{namespacecsmp}{cell}}\ :\ \mbox{\hyperlink{namespacecsmp}{subdomain\_}}-\/>\mbox{\hyperlink{namespacecsmp}{CellVector}}())\ \{}
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \textcolor{keyword}{auto}\&\ \mbox{\hyperlink{namespacecsmp}{value}}\ =\ \mbox{\hyperlink{namespacecsmp}{cell}}-\/>\mbox{\hyperlink{namespacecsmp}{Access}}(\mbox{\hyperlink{namespacecsmp}{var\_id\_}});}
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ \mbox{\hyperlink{namespacecsmp}{other\_value}}\ =\ \mbox{\hyperlink{namespacecsmp}{cell}}-\/>\mbox{\hyperlink{namespacecsmp}{Read}}(\mbox{\hyperlink{namespacecsmp}{other}}.\mbox{\hyperlink{namespacecsmp}{var\_id\_}});}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{value}}\ /=\ \mbox{\hyperlink{namespacecsmp}{other\_value}};}
+\DoxyCodeLine{00223\ \ \ \ \ \}}
+\DoxyCodeLine{00224\ \}}
+\DoxyCodeLine{00225\ }
+\DoxyCodeLine{00226\ \textcolor{keyword}{template}\ <\mbox{\hyperlink{namespacecsmp}{uint32\_t}}\ \mbox{\hyperlink{namespacecsmp}{dim}},\ \textcolor{keyword}{template}<\mbox{\hyperlink{namespacecsmp}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{namespacecsmp}{CELL}}>}
+\DoxyCodeLine{00227\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ \mbox{\hyperlink{namespacecsmp}{Var}}>}
+\DoxyCodeLine{00228\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp}{FieldVariable}}<\mbox{\hyperlink{namespacecsmp}{dim}},\ \mbox{\hyperlink{namespacecsmp}{CELL}}>::\mbox{\hyperlink{namespacecsmp}{Add}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{Var}}\&\ \mbox{\hyperlink{namespacecsmp}{value}})\ \{}
+\DoxyCodeLine{00229\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\&\ \mbox{\hyperlink{namespacecsmp}{cell}}\ :\ \mbox{\hyperlink{namespacecsmp}{subdomain\_}}-\/>\mbox{\hyperlink{namespacecsmp}{CellVector}}())\ \{}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{cell}}.\mbox{\hyperlink{namespacecsmp}{Access}}(\mbox{\hyperlink{namespacecsmp}{var\_id\_}})\ +=\ \mbox{\hyperlink{namespacecsmp}{value}};}
+\DoxyCodeLine{00231\ \ \ \ \ \}}
+\DoxyCodeLine{00232\ \}}
+\DoxyCodeLine{00233\ }
+\DoxyCodeLine{00234\ \textcolor{keyword}{template}\ <\mbox{\hyperlink{namespacecsmp}{uint32\_t}}\ \mbox{\hyperlink{namespacecsmp}{dim}},\ \textcolor{keyword}{template}<\mbox{\hyperlink{namespacecsmp}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{namespacecsmp}{CELL}}>}
+\DoxyCodeLine{00235\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ \mbox{\hyperlink{namespacecsmp}{Var}}>}
+\DoxyCodeLine{00236\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp}{FieldVariable}}<\mbox{\hyperlink{namespacecsmp}{dim}},\ \mbox{\hyperlink{namespacecsmp}{CELL}}>::\mbox{\hyperlink{namespacecsmp}{Subtract}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{Var}}\&\ \mbox{\hyperlink{namespacecsmp}{value}})\ \{}
+\DoxyCodeLine{00237\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\&\ \mbox{\hyperlink{namespacecsmp}{cell}}\ :\ \mbox{\hyperlink{namespacecsmp}{subdomain\_}}-\/>\mbox{\hyperlink{namespacecsmp}{CellVector}}())\ \{}
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{cell}}.\mbox{\hyperlink{namespacecsmp}{Access}}(\mbox{\hyperlink{namespacecsmp}{var\_id\_}})\ -\/=\ \mbox{\hyperlink{namespacecsmp}{value}};}
+\DoxyCodeLine{00239\ \ \ \ \ \}}
+\DoxyCodeLine{00240\ \}}
+\DoxyCodeLine{00241\ }
+\DoxyCodeLine{00242\ \textcolor{keyword}{template}\ <\mbox{\hyperlink{namespacecsmp}{uint32\_t}}\ \mbox{\hyperlink{namespacecsmp}{dim}},\ \textcolor{keyword}{template}<\mbox{\hyperlink{namespacecsmp}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{namespacecsmp}{CELL}}>}
+\DoxyCodeLine{00243\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ \mbox{\hyperlink{namespacecsmp}{Var}}>}
+\DoxyCodeLine{00244\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp}{FieldVariable}}<\mbox{\hyperlink{namespacecsmp}{dim}},\ \mbox{\hyperlink{namespacecsmp}{CELL}}>::\mbox{\hyperlink{namespacecsmp}{Multiply}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{Var}}\&\ \mbox{\hyperlink{namespacecsmp}{value}})\ \{}
+\DoxyCodeLine{00245\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\&\ \mbox{\hyperlink{namespacecsmp}{cell}}\ :\ \mbox{\hyperlink{namespacecsmp}{subdomain\_}}-\/>\mbox{\hyperlink{namespacecsmp}{CellVector}}())\ \{}
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{cell}}.\mbox{\hyperlink{namespacecsmp}{Access}}(\mbox{\hyperlink{namespacecsmp}{var\_id\_}})\ *=\ \mbox{\hyperlink{namespacecsmp}{value}};}
+\DoxyCodeLine{00247\ \ \ \ \ \}}
+\DoxyCodeLine{00248\ \}}
+\DoxyCodeLine{00249\ }
+\DoxyCodeLine{00250\ \textcolor{keyword}{template}\ <\mbox{\hyperlink{namespacecsmp}{uint32\_t}}\ \mbox{\hyperlink{namespacecsmp}{dim}},\ \textcolor{keyword}{template}<\mbox{\hyperlink{namespacecsmp}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{namespacecsmp}{CELL}}>}
+\DoxyCodeLine{00251\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ \mbox{\hyperlink{namespacecsmp}{Var}}>}
+\DoxyCodeLine{00252\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp}{FieldVariable}}<\mbox{\hyperlink{namespacecsmp}{dim}},\ \mbox{\hyperlink{namespacecsmp}{CELL}}>::\mbox{\hyperlink{namespacecsmp}{Divide}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{Var}}\&\ \mbox{\hyperlink{namespacecsmp}{value}})\ \{}
+\DoxyCodeLine{00253\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\&\ \mbox{\hyperlink{namespacecsmp}{cell}}\ :\ \mbox{\hyperlink{namespacecsmp}{subdomain\_}}-\/>\mbox{\hyperlink{namespacecsmp}{CellVector}}())\ \{}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{cell}}.\mbox{\hyperlink{namespacecsmp}{Access}}(\mbox{\hyperlink{namespacecsmp}{var\_id\_}})\ /=\ \mbox{\hyperlink{namespacecsmp}{value}};}
+\DoxyCodeLine{00255\ \ \ \ \ \}}
+\DoxyCodeLine{00256\ \}}
+\DoxyCodeLine{00257\ }
+\DoxyCodeLine{00258\ }
+\DoxyCodeLine{00259\ \textcolor{comment}{//\ ===================================================================================}}
+\DoxyCodeLine{00260\ \textcolor{comment}{//}}
+\DoxyCodeLine{00261\ \textcolor{comment}{//\ \ \ \ \ \ \ VARIABLE\ ARITHMETIC}}
+\DoxyCodeLine{00262\ \textcolor{comment}{//}}
+\DoxyCodeLine{00263\ \textcolor{comment}{//\ ===================================================================================}}
+\DoxyCodeLine{00264\ }
+\DoxyCodeLine{00265\ \textcolor{comment}{///\ Add\ two\ FieldVariables}}
+\DoxyCodeLine{00266\ \textcolor{comment}{///}}
+\DoxyCodeLine{00267\ \textcolor{comment}{///\ Addition\ of\ two\ FieldVariable\ objects}}
+\DoxyCodeLine{00268\ \textcolor{keyword}{template}\ <uint32\_t\ dim,\ \textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ CELL>}
+\DoxyCodeLine{00269\ \mbox{\hyperlink{namespacecsmp_a0fb71ad978089122b0bba48be4cc9b40}{FieldVariable}}<\mbox{\hyperlink{namespacecsmp_a0fb71ad978089122b0bba48be4cc9b40}{dim}},\ \mbox{\hyperlink{namespacecsmp_a0fb71ad978089122b0bba48be4cc9b40}{CELL}}>\ \mbox{\hyperlink{namespacecsmp_a0fb71ad978089122b0bba48be4cc9b40}{operator}}+(}
+\DoxyCodeLine{00270\ \ \ \ \ \textcolor{keyword}{const}\ FieldVariable<dim,\ CELL>\&\ lhs,}
+\DoxyCodeLine{00271\ \ \ \ \ \textcolor{keyword}{const}\ FieldVariable<dim,\ CELL>\&\ rhs)}
+\DoxyCodeLine{00272\ \{}
+\DoxyCodeLine{00273\ \ \ \ \ FieldVariable<dim,\ CELL>\ result(lhs);}
+\DoxyCodeLine{00274\ \ \ \ \ result.Add(rhs);}
+\DoxyCodeLine{00275\ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{00276\ \}}
+\DoxyCodeLine{00277\ }
+\DoxyCodeLine{00278\ \textcolor{comment}{///\ Subtraction\ of\ two\ FieldVariable\ objects}}
+\DoxyCodeLine{00279\ \textcolor{keyword}{template}\ <uint32\_t\ dim,\ \textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ CELL>}
+\DoxyCodeLine{00280\ \mbox{\hyperlink{namespacecsmp_a9449bc7bf41d05874b68e1b624b1f753}{FieldVariable}}<\mbox{\hyperlink{namespacecsmp_a9449bc7bf41d05874b68e1b624b1f753}{dim}},\ \mbox{\hyperlink{namespacecsmp_a9449bc7bf41d05874b68e1b624b1f753}{CELL}}>\ \mbox{\hyperlink{namespacecsmp_a9449bc7bf41d05874b68e1b624b1f753}{operator}}-\/(}
+\DoxyCodeLine{00281\ \ \ \ \ \textcolor{keyword}{const}\ FieldVariable<dim,\ CELL>\&\ lhs,}
+\DoxyCodeLine{00282\ \ \ \ \ \textcolor{keyword}{const}\ FieldVariable<dim,\ CELL>\&\ rhs)}
+\DoxyCodeLine{00283\ \{}
+\DoxyCodeLine{00284\ \ \ \ \ FieldVariable<dim,\ CELL>\ result(lhs);}
+\DoxyCodeLine{00285\ \ \ \ \ result.Subtract(rhs);}
+\DoxyCodeLine{00286\ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{00287\ \}}
+\DoxyCodeLine{00288\ }
+\DoxyCodeLine{00289\ \textcolor{comment}{///\ Multiplication\ of\ two\ FieldVariable\ objects\ (component-\/wise)}}
+\DoxyCodeLine{00290\ \textcolor{keyword}{template}\ <uint32\_t\ dim,\ \textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ CELL>}
+\DoxyCodeLine{00291\ \mbox{\hyperlink{namespacecsmp_ac58b470b06456e4b744da778076d916f}{FieldVariable}}<\mbox{\hyperlink{namespacecsmp_ac58b470b06456e4b744da778076d916f}{dim}},\ \mbox{\hyperlink{namespacecsmp_ac58b470b06456e4b744da778076d916f}{CELL}}>\ \mbox{\hyperlink{namespacecsmp_ac58b470b06456e4b744da778076d916f}{operator}}*(}
+\DoxyCodeLine{00292\ \ \ \ \ \textcolor{keyword}{const}\ FieldVariable<dim,\ CELL>\&\ lhs,}
+\DoxyCodeLine{00293\ \ \ \ \ \textcolor{keyword}{const}\ FieldVariable<dim,\ CELL>\&\ rhs)}
+\DoxyCodeLine{00294\ \{}
+\DoxyCodeLine{00295\ \ \ \ \ FieldVariable<dim,\ CELL>\ result(lhs);}
+\DoxyCodeLine{00296\ \ \ \ \ result.Multiply(rhs);}
+\DoxyCodeLine{00297\ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{00298\ \}}
+\DoxyCodeLine{00299\ }
+\DoxyCodeLine{00300\ \textcolor{comment}{///\ Division\ of\ two\ FieldVariable\ objects\ (component-\/wise)}}
+\DoxyCodeLine{00301\ \textcolor{keyword}{template}\ <uint32\_t\ dim,\ \textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ CELL>}
+\DoxyCodeLine{00302\ \mbox{\hyperlink{namespacecsmp_a484b2834ae76ad3adb579727918fccea}{FieldVariable}}<\mbox{\hyperlink{namespacecsmp_a484b2834ae76ad3adb579727918fccea}{dim}},\ \mbox{\hyperlink{namespacecsmp_a484b2834ae76ad3adb579727918fccea}{CELL}}>\ \mbox{\hyperlink{namespacecsmp_a484b2834ae76ad3adb579727918fccea}{operator}}/(}
+\DoxyCodeLine{00303\ \ \ \ \ \textcolor{keyword}{const}\ FieldVariable<dim,\ CELL>\&\ lhs,}
+\DoxyCodeLine{00304\ \ \ \ \ \textcolor{keyword}{const}\ FieldVariable<dim,\ CELL>\&\ rhs)}
+\DoxyCodeLine{00305\ \{}
+\DoxyCodeLine{00306\ \ \ \ \ FieldVariable<dim,\ CELL>\ result(lhs);}
+\DoxyCodeLine{00307\ \ \ \ \ result.Divide(rhs);}
+\DoxyCodeLine{00308\ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{00309\ \}}
+\DoxyCodeLine{00310\ }
+\DoxyCodeLine{00311\ \textcolor{comment}{///\ Multiplication\ of\ a\ FieldVariable\ by\ a\ scalar}}
+\DoxyCodeLine{00312\ \textcolor{keyword}{template}\ <uint32\_t\ dim,\ \textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ CELL,\ \textcolor{keyword}{typename}\ Scalar>}
+\DoxyCodeLine{00313\ \mbox{\hyperlink{namespacecsmp_aad33b62fb61e31571ce5ab74e51feaff}{FieldVariable}}<\mbox{\hyperlink{namespacecsmp_aad33b62fb61e31571ce5ab74e51feaff}{dim}},\ \mbox{\hyperlink{namespacecsmp_aad33b62fb61e31571ce5ab74e51feaff}{CELL}}>\ \mbox{\hyperlink{namespacecsmp_aad33b62fb61e31571ce5ab74e51feaff}{operator}}*(}
+\DoxyCodeLine{00314\ \ \ \ \ \textcolor{keyword}{const}\ FieldVariable<dim,\ CELL>\&\ lhs,}
+\DoxyCodeLine{00315\ \ \ \ \ \textcolor{keyword}{const}\ Scalar\&\ rhs)}
+\DoxyCodeLine{00316\ \{}
+\DoxyCodeLine{00317\ \ \ \ \ FieldVariable<dim,\ CELL>\ result(lhs);}
+\DoxyCodeLine{00318\ \ \ \ \ result.Multiply(rhs);}
+\DoxyCodeLine{00319\ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{00320\ \}}
+\DoxyCodeLine{00321\ }
+\DoxyCodeLine{00322\ \textcolor{comment}{///\ Multiplication\ of\ a\ scalar\ by\ a\ FieldVariable}}
+\DoxyCodeLine{00323\ \textcolor{keyword}{template}\ <uint32\_t\ dim,\ \textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ CELL,\ \textcolor{keyword}{typename}\ Scalar>}
+\DoxyCodeLine{00324\ \mbox{\hyperlink{namespacecsmp_a5f2e64fd696a20f838c9be4862669b79}{FieldVariable}}<\mbox{\hyperlink{namespacecsmp_a5f2e64fd696a20f838c9be4862669b79}{dim}},\ \mbox{\hyperlink{namespacecsmp_a5f2e64fd696a20f838c9be4862669b79}{CELL}}>\ \mbox{\hyperlink{namespacecsmp_a5f2e64fd696a20f838c9be4862669b79}{operator}}*(}
+\DoxyCodeLine{00325\ \ \ \ \ \textcolor{keyword}{const}\ Scalar\&\ lhs,}
+\DoxyCodeLine{00326\ \ \ \ \ \textcolor{keyword}{const}\ FieldVariable<dim,\ CELL>\&\ rhs)}
+\DoxyCodeLine{00327\ \{}
+\DoxyCodeLine{00328\ \ \ \ \ FieldVariable<dim,\ CELL>\ result(rhs);}
+\DoxyCodeLine{00329\ \ \ \ \ result.Multiply(lhs);}
+\DoxyCodeLine{00330\ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{00331\ \}}
+\DoxyCodeLine{00332\ }
+\DoxyCodeLine{00333\ \textcolor{comment}{///\ Division\ of\ a\ FieldVariable\ by\ a\ scalar}}
+\DoxyCodeLine{00334\ \textcolor{keyword}{template}\ <uint32\_t\ dim,\ \textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ CELL,\ \textcolor{keyword}{typename}\ Scalar>}
+\DoxyCodeLine{00335\ \mbox{\hyperlink{namespacecsmp_a0df9ef61f08438f2425ba6c5f0cab471}{FieldVariable}}<\mbox{\hyperlink{namespacecsmp_a0df9ef61f08438f2425ba6c5f0cab471}{dim}},\ \mbox{\hyperlink{namespacecsmp_a0df9ef61f08438f2425ba6c5f0cab471}{CELL}}>\ \mbox{\hyperlink{namespacecsmp_a0df9ef61f08438f2425ba6c5f0cab471}{operator}}/(}
+\DoxyCodeLine{00336\ \ \ \ \ \textcolor{keyword}{const}\ FieldVariable<dim,\ CELL>\&\ lhs,}
+\DoxyCodeLine{00337\ \ \ \ \ \textcolor{keyword}{const}\ Scalar\&\ rhs)}
+\DoxyCodeLine{00338\ \{}
+\DoxyCodeLine{00339\ \ \ \ \ FieldVariable<dim,\ CELL>\ result(lhs);}
+\DoxyCodeLine{00340\ \ \ \ \ result.Divide(rhs);}
+\DoxyCodeLine{00341\ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{00342\ \}}
+\DoxyCodeLine{00343\ }
+\DoxyCodeLine{00344\ \textcolor{comment}{///\ Addition\ of\ a\ FieldVariable\ and\ a\ scalar}}
+\DoxyCodeLine{00345\ \textcolor{keyword}{template}\ <uint32\_t\ dim,\ \textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ CELL,\ \textcolor{keyword}{typename}\ Scalar>}
+\DoxyCodeLine{00346\ \mbox{\hyperlink{namespacecsmp_aa69bf11d8f7956273de37b15d2bb70cf}{FieldVariable}}<\mbox{\hyperlink{namespacecsmp_aa69bf11d8f7956273de37b15d2bb70cf}{dim}},\ \mbox{\hyperlink{namespacecsmp_aa69bf11d8f7956273de37b15d2bb70cf}{CELL}}>\ \mbox{\hyperlink{namespacecsmp_aa69bf11d8f7956273de37b15d2bb70cf}{operator}}+(}
+\DoxyCodeLine{00347\ \ \ \ \ \textcolor{keyword}{const}\ FieldVariable<dim,\ CELL>\&\ lhs,}
+\DoxyCodeLine{00348\ \ \ \ \ \textcolor{keyword}{const}\ Scalar\&\ rhs)}
+\DoxyCodeLine{00349\ \{}
+\DoxyCodeLine{00350\ \ \ \ \ FieldVariable<dim,\ CELL>\ result(lhs);}
+\DoxyCodeLine{00351\ \ \ \ \ result.Add(rhs);}
+\DoxyCodeLine{00352\ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{00353\ \}}
+\DoxyCodeLine{00354\ }
+\DoxyCodeLine{00355\ \textcolor{comment}{///\ Subtraction\ of\ a\ scalar\ from\ a\ FieldVariable}}
+\DoxyCodeLine{00356\ \textcolor{keyword}{template}\ <uint32\_t\ dim,\ \textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ CELL,\ \textcolor{keyword}{typename}\ Scalar>}
+\DoxyCodeLine{00357\ \mbox{\hyperlink{namespacecsmp_ae27f782295047992c3ef49bad811f662}{FieldVariable}}<\mbox{\hyperlink{namespacecsmp_ae27f782295047992c3ef49bad811f662}{dim}},\ \mbox{\hyperlink{namespacecsmp_ae27f782295047992c3ef49bad811f662}{CELL}}>\ \mbox{\hyperlink{namespacecsmp_ae27f782295047992c3ef49bad811f662}{operator}}-\/(}
+\DoxyCodeLine{00358\ \ \ \ \ \textcolor{keyword}{const}\ FieldVariable<dim,\ CELL>\&\ lhs,}
+\DoxyCodeLine{00359\ \ \ \ \ \textcolor{keyword}{const}\ Scalar\&\ rhs)}
+\DoxyCodeLine{00360\ \{}
+\DoxyCodeLine{00361\ \ \ \ \ FieldVariable<dim,\ CELL>\ result(lhs);}
+\DoxyCodeLine{00362\ \ \ \ \ result.Subtract(rhs);}
+\DoxyCodeLine{00363\ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{00364\ \}}
+\DoxyCodeLine{00365\ }
+\DoxyCodeLine{00366\ }
+\DoxyCodeLine{00367\ \}\ \textcolor{comment}{//\ namespace\ csmp}}
+\DoxyCodeLine{00368\ }
+\DoxyCodeLine{00369\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{//\ CSMP\_FIELD\_VARIABLE\_H}}
+\DoxyCodeLine{00370\ }
+\DoxyCodeLine{00371\ \textcolor{comment}{/*\ TODO:}}
+\DoxyCodeLine{00372\ \textcolor{comment}{\ \ \ \ void\ Sqrt();}}
+\DoxyCodeLine{00373\ \textcolor{comment}{\ \ \ \ void\ Log();}}
+\DoxyCodeLine{00374\ \textcolor{comment}{\ \ \ \ void\ Log10();}}
+\DoxyCodeLine{00375\ \textcolor{comment}{\ \ \ \ void\ Pow(\ double\ exponent\ );}}
+\DoxyCodeLine{00376\ \textcolor{comment}{}}
+\DoxyCodeLine{00377\ \textcolor{comment}{\ \ \ \ void\ Gradient();}}
+\DoxyCodeLine{00378\ \textcolor{comment}{*/}}
+
+\end{DoxyCode}

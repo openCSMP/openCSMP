@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_policy_two" kind="class" language="C++" prot="public">
+    <compoundname>csmp::PolicyTwo</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_policy_two_1a2c16d3386de9ad648083105c33c1175a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PolicyTwo::doSomething1</definition>
+        <argsstring>()</argsstring>
+        <name>doSomething1</name>
+        <qualifiedname>csmp::PolicyTwo::doSomething1</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/PolicyBased_Example.cpp" line="18" column="10" bodyfile="examples/source/PolicyBased_Example.cpp" bodystart="18" bodyend="18"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_policy_two_1a1c8e7993579ec7dc4362c51aec838860" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PolicyTwo::doSomething2</definition>
+        <argsstring>()</argsstring>
+        <name>doSomething2</name>
+        <qualifiedname>csmp::PolicyTwo::doSomething2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/PolicyBased_Example.cpp" line="19" column="10" bodyfile="examples/source/PolicyBased_Example.cpp" bodystart="19" bodyend="19"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::PolicyTwo</label>
+        <link refid="classcsmp_1_1_policy_two"/>
+      </node>
+    </collaborationgraph>
+    <location file="examples/source/PolicyBased_Example.cpp" line="15" column="1" bodyfile="examples/source/PolicyBased_Example.cpp" bodystart="16" bodyend="20"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_policy_two_1a2c16d3386de9ad648083105c33c1175a" prot="public" virt="non-virtual"><scope>csmp::PolicyTwo</scope><name>doSomething1</name></member>
+      <member refid="classcsmp_1_1_policy_two_1a1c8e7993579ec7dc4362c51aec838860" prot="public" virt="non-virtual"><scope>csmp::PolicyTwo</scope><name>doSomething2</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

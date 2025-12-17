@@ -1,0 +1,1125 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_halite_lookup" kind="class" language="C++" prot="public">
+    <compoundname>csmp::HaliteLookup</compoundname>
+    <includes refid="_halite_lookup_8h" local="yes">eos/h2o_nacl/HaliteLookup.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1aa3d0d5fadd302aaa57dda982a0b8432f" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::HaliteLookup::temperature_</definition>
+        <argsstring></argsstring>
+        <name>temperature_</name>
+        <qualifiedname>csmp::HaliteLookup::temperature_</qualifiedname>
+        <briefdescription>
+<para>reference to temperature [C] in flow code </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="30" column="18" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1a105d9f27edccc4183712f1fe0f98f073" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::HaliteLookup::pressure_</definition>
+        <argsstring></argsstring>
+        <name>pressure_</name>
+        <qualifiedname>csmp::HaliteLookup::pressure_</qualifiedname>
+        <briefdescription>
+<para>reference to pressure [Pa] in flow code </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="31" column="18" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1a8ace5dcfcf464a919ec49c379fa2cbac" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLookup::tcurrent_</definition>
+        <argsstring></argsstring>
+        <name>tcurrent_</name>
+        <qualifiedname>csmp::HaliteLookup::tcurrent_</qualifiedname>
+        <briefdescription>
+<para>temperature [C] for internal use </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="33" column="19" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1ae5da3e10192b1598ebb51e7c1c5b7b39" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLookup::pcurrent_</definition>
+        <argsstring></argsstring>
+        <name>pcurrent_</name>
+        <qualifiedname>csmp::HaliteLookup::pcurrent_</qualifiedname>
+        <briefdescription>
+<para>pressure [Pa], internal use </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="34" column="19" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1a0f37ccace3f68edfdb2a6d553daf306b" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLookup::tdummy_</definition>
+        <argsstring></argsstring>
+        <name>tdummy_</name>
+        <qualifiedname>csmp::HaliteLookup::tdummy_</qualifiedname>
+        <briefdescription>
+<para>another temperature variable [C] for internal use </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="35" column="19" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1a189fd79e80ff4e47ccfbf9872b998ff9" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLookup::pdummy_</definition>
+        <argsstring></argsstring>
+        <name>pdummy_</name>
+        <qualifiedname>csmp::HaliteLookup::pdummy_</qualifiedname>
+        <briefdescription>
+<para>another pressure variable [Pa] for internal use </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="36" column="19" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1ad8c135a7d78854677bc2cb22dd2fa7d2" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLookup::t_res_</definition>
+        <argsstring></argsstring>
+        <name>t_res_</name>
+        <qualifiedname>csmp::HaliteLookup::t_res_</qualifiedname>
+        <briefdescription>
+<para>temperature interval [C] in lookup table </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="37" column="19" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1a5fc7ee8bafc0a6ad6764c53c2b3e188b" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLookup::p_res_</definition>
+        <argsstring></argsstring>
+        <name>p_res_</name>
+        <qualifiedname>csmp::HaliteLookup::p_res_</qualifiedname>
+        <briefdescription>
+<para>pressure interval [bar] in lookup table </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="38" column="19" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1ab66844f63e3a09910d6b031192ce5842" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLookup::tnorm_</definition>
+        <argsstring></argsstring>
+        <name>tnorm_</name>
+        <qualifiedname>csmp::HaliteLookup::tnorm_</qualifiedname>
+        <briefdescription>
+<para>normalized temperature inside lookup cell </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="39" column="19" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1a3cd852ffe282c92e70b339d930cdc07b" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLookup::pnorm_</definition>
+        <argsstring></argsstring>
+        <name>pnorm_</name>
+        <qualifiedname>csmp::HaliteLookup::pnorm_</qualifiedname>
+        <briefdescription>
+<para>normalized pressure inside lookup cell </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="40" column="19" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1a445fcc92875828a194c660de5c70ff5c" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLookup::t_iA_</definition>
+        <argsstring></argsstring>
+        <name>t_iA_</name>
+        <qualifiedname>csmp::HaliteLookup::t_iA_</qualifiedname>
+        <briefdescription>
+<para>temperature at low-T, low-P corner of lookup cell </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="41" column="19" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1af6c96c6bea92ed70360eb5d4487af5bc" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLookup::t_iB_</definition>
+        <argsstring></argsstring>
+        <name>t_iB_</name>
+        <qualifiedname>csmp::HaliteLookup::t_iB_</qualifiedname>
+        <briefdescription>
+<para>temperature at high-T, low-P corner of lookup cell </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="42" column="19" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1a5ebba407920657e58a36b609583d2f57" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLookup::t_iC_</definition>
+        <argsstring></argsstring>
+        <name>t_iC_</name>
+        <qualifiedname>csmp::HaliteLookup::t_iC_</qualifiedname>
+        <briefdescription>
+<para>temperature at high-T, high-P corner of lookup cell </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="43" column="19" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1a9c798c93621c9bba0757f1b6b6340067" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLookup::t_iD_</definition>
+        <argsstring></argsstring>
+        <name>t_iD_</name>
+        <qualifiedname>csmp::HaliteLookup::t_iD_</qualifiedname>
+        <briefdescription>
+<para>temperature at low-T, high-P left corner of lookup cell </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="44" column="19" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1a0afc10ae7db3c8c595761dab0631fdb0" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLookup::p_iA_</definition>
+        <argsstring></argsstring>
+        <name>p_iA_</name>
+        <qualifiedname>csmp::HaliteLookup::p_iA_</qualifiedname>
+        <briefdescription>
+<para>pressure at low-T, low-P corner of lookup cell </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="45" column="19" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1a59892b2447e41664ac962c3e48a621a4" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLookup::p_iB_</definition>
+        <argsstring></argsstring>
+        <name>p_iB_</name>
+        <qualifiedname>csmp::HaliteLookup::p_iB_</qualifiedname>
+        <briefdescription>
+<para>pressure at high-T, low-P corner of lookup cell </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="46" column="19" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1a7e4c4bc2b59b982c60e1ff764919ebd5" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLookup::p_iC_</definition>
+        <argsstring></argsstring>
+        <name>p_iC_</name>
+        <qualifiedname>csmp::HaliteLookup::p_iC_</qualifiedname>
+        <briefdescription>
+<para>pressure at high-T, high-P corner of lookup cell </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="47" column="19" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1ab0801d9567cfa47b80cbbf4a9eb7415f" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLookup::p_iD_</definition>
+        <argsstring></argsstring>
+        <name>p_iD_</name>
+        <qualifiedname>csmp::HaliteLookup::p_iD_</qualifiedname>
+        <briefdescription>
+<para>pressure at low-T, high-P left corner of lookup cell </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="48" column="19" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1a5bd4f823eaa01dce2bb580cfad2e7a06" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLookup::v_bottom_</definition>
+        <argsstring></argsstring>
+        <name>v_bottom_</name>
+        <qualifiedname>csmp::HaliteLookup::v_bottom_</qualifiedname>
+        <briefdescription>
+<para>value of interest at low-P endpoint of isothermal interpolation </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="49" column="19" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1ab10de4b6dda66c19bfa543cb0df3bb14" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLookup::v_top_</definition>
+        <argsstring></argsstring>
+        <name>v_top_</name>
+        <qualifiedname>csmp::HaliteLookup::v_top_</qualifiedname>
+        <briefdescription>
+<para>value of interest at high-P endpoint of isothermal interpolation </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="50" column="19" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1a96864ce1567a70f5af7cdec0e7316104" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLookup::v_interpolated_</definition>
+        <argsstring></argsstring>
+        <name>v_interpolated_</name>
+        <qualifiedname>csmp::HaliteLookup::v_interpolated_</qualifiedname>
+        <briefdescription>
+<para>interpolated value of interest in lookup cell </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="51" column="19" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1a29c609e0407e36d6b089ef51e41212a2" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLookup::v_iA_</definition>
+        <argsstring></argsstring>
+        <name>v_iA_</name>
+        <qualifiedname>csmp::HaliteLookup::v_iA_</qualifiedname>
+        <briefdescription>
+<para>pressure at low-T, low-P corner of lookup cell </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="52" column="19" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1a4127904ba1f7746c8bbd450d379bc42c" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLookup::v_iB_</definition>
+        <argsstring></argsstring>
+        <name>v_iB_</name>
+        <qualifiedname>csmp::HaliteLookup::v_iB_</qualifiedname>
+        <briefdescription>
+<para>pressure at high-T, low-P corner of lookup cell </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="53" column="19" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1abc9490250a35b9beb1730ca51e56b97d" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLookup::v_iC_</definition>
+        <argsstring></argsstring>
+        <name>v_iC_</name>
+        <qualifiedname>csmp::HaliteLookup::v_iC_</qualifiedname>
+        <briefdescription>
+<para>pressure at high-T, high-P corner of lookup cell </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="54" column="19" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1af431cac89c9be19c015ec23143ab5477" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLookup::v_iD_</definition>
+        <argsstring></argsstring>
+        <name>v_iD_</name>
+        <qualifiedname>csmp::HaliteLookup::v_iD_</qualifiedname>
+        <briefdescription>
+<para>pressure at low-T, high-P left corner of lookup cell </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="55" column="19" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1ab91bf5a5ddd5bef53fab74ae1a8ae1a1" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLookup::v_before_</definition>
+        <argsstring></argsstring>
+        <name>v_before_</name>
+        <qualifiedname>csmp::HaliteLookup::v_before_</qualifiedname>
+        <briefdescription>
+<para>value of interest at low-T endpoint of isobaric interpolation </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="56" column="19" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1ac95368dbd8cf0689d249a3f3848f9ed4" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLookup::v_behind_</definition>
+        <argsstring></argsstring>
+        <name>v_behind_</name>
+        <qualifiedname>csmp::HaliteLookup::v_behind_</qualifiedname>
+        <briefdescription>
+<para>value of interest at high-T endpoint of isobaric interpolation </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="57" column="19" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1aed463acc0e429dee9fcb27605548a5cd" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLookup::v_vlh_</definition>
+        <argsstring></argsstring>
+        <name>v_vlh_</name>
+        <qualifiedname>csmp::HaliteLookup::v_vlh_</qualifiedname>
+        <briefdescription>
+<para>value of interest on intersection with Vapor-Halite-Liquid coexistence surface </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="58" column="19" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1a699895543a30f01c2ac4ba3ffda23f06" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLookup::v_vlh_behind_</definition>
+        <argsstring></argsstring>
+        <name>v_vlh_behind_</name>
+        <qualifiedname>csmp::HaliteLookup::v_vlh_behind_</qualifiedname>
+        <briefdescription>
+<para>value of interest on intersection with Vapor-Halite-Liquid coexistence surface if higher T </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="59" column="19" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1ab9af382a773e33080f571256bdd25056" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLookup::v_vlh_before_</definition>
+        <argsstring></argsstring>
+        <name>v_vlh_before_</name>
+        <qualifiedname>csmp::HaliteLookup::v_vlh_before_</qualifiedname>
+        <briefdescription>
+<para>value of interest on intersection with Vapor-Halite-Liquid coexistence surface if lower T </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="60" column="19" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1a0e1acb3a7df33dcf7cc1709938cc46dd" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLookup::tvlh_</definition>
+        <argsstring></argsstring>
+        <name>tvlh_</name>
+        <qualifiedname>csmp::HaliteLookup::tvlh_</qualifiedname>
+        <briefdescription>
+<para>temperature at intersection with Vapor-Halite-Liquid coexistence surface </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="61" column="19" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1aed7989eea3f7a7ae4e236d758352b023" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::HaliteLookup::it_</definition>
+        <argsstring></argsstring>
+        <name>it_</name>
+        <qualifiedname>csmp::HaliteLookup::it_</qualifiedname>
+        <briefdescription>
+<para>lookup grid line index along temperature axis </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="63" column="21" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1ae4af99141d24bf7f793fb68d1623017f" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::HaliteLookup::ip_</definition>
+        <argsstring></argsstring>
+        <name>ip_</name>
+        <qualifiedname>csmp::HaliteLookup::ip_</qualifiedname>
+        <briefdescription>
+<para>lookup grid line index along pressure axis </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="64" column="21" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1a8077babe728157b457640538ccf2abd0" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::HaliteLookup::t_dim_</definition>
+        <argsstring></argsstring>
+        <name>t_dim_</name>
+        <qualifiedname>csmp::HaliteLookup::t_dim_</qualifiedname>
+        <briefdescription>
+<para>number of T-gridlines = maximum value of it_ + 1 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="65" column="21" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="65" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1aa45247f3920c5669cba7f4c012d47bf7" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::HaliteLookup::p_dim_</definition>
+        <argsstring></argsstring>
+        <name>p_dim_</name>
+        <qualifiedname>csmp::HaliteLookup::p_dim_</qualifiedname>
+        <briefdescription>
+<para>number of P-gridlines = maximum value of ip_ + 1 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="66" column="21" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1a277d1225050bcc4279e2f92a5aa86729" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::HaliteLookup::iA_</definition>
+        <argsstring></argsstring>
+        <name>iA_</name>
+        <qualifiedname>csmp::HaliteLookup::iA_</qualifiedname>
+        <briefdescription>
+<para>lookup index of low-T, low-P corner of lookup cell </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="67" column="21" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1a8df6a8aee0dcaed364a8dab544c6ed7b" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::HaliteLookup::iB_</definition>
+        <argsstring></argsstring>
+        <name>iB_</name>
+        <qualifiedname>csmp::HaliteLookup::iB_</qualifiedname>
+        <briefdescription>
+<para>lookup index of high-T, low-P corner of lookup cell </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="68" column="21" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1af09720791225263a7157393352d1d2ed" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::HaliteLookup::iC_</definition>
+        <argsstring></argsstring>
+        <name>iC_</name>
+        <qualifiedname>csmp::HaliteLookup::iC_</qualifiedname>
+        <briefdescription>
+<para>lookup index of high-T, high-P corner of lookup cell </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="69" column="21" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="69" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1a71db3509bacf31e9bc6dfe9819b99a8c" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::HaliteLookup::iD_</definition>
+        <argsstring></argsstring>
+        <name>iD_</name>
+        <qualifiedname>csmp::HaliteLookup::iD_</qualifiedname>
+        <briefdescription>
+<para>lookup index of low-T, high-P left corner of lookup cell </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="70" column="21" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1ae6c39fd665d0b16cac97f6c8f48b50f0" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::HaliteLookup::i_dummy_</definition>
+        <argsstring></argsstring>
+        <name>i_dummy_</name>
+        <qualifiedname>csmp::HaliteLookup::i_dummy_</qualifiedname>
+        <briefdescription>
+<para>dummy index variable </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="71" column="21" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1ae5fb7c40dd4ebacdf00fb848cbee8e35" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int csmp::HaliteLookup::state_</definition>
+        <argsstring></argsstring>
+        <name>state_</name>
+        <qualifiedname>csmp::HaliteLookup::state_</qualifiedname>
+        <briefdescription>
+<para>phase state of system (always H for halite) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="72" column="21" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1a5f39e5dcfb7e43d010bacdba35e6df26" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int csmp::HaliteLookup::state_iA_</definition>
+        <argsstring></argsstring>
+        <name>state_iA_</name>
+        <qualifiedname>csmp::HaliteLookup::state_iA_</qualifiedname>
+        <briefdescription>
+<para>phase state of system at low-T, low-P corner of lookup cell (always H for halite) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="73" column="21" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1adec0c86903ae984d9a7f919108dffa40" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int csmp::HaliteLookup::state_iB_</definition>
+        <argsstring></argsstring>
+        <name>state_iB_</name>
+        <qualifiedname>csmp::HaliteLookup::state_iB_</qualifiedname>
+        <briefdescription>
+<para>phase state of system at high-T, low-P corner of lookup cell (always H for halite) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="74" column="21" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1a86c1b66c4a91f3df8bda37ed2716450d" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int csmp::HaliteLookup::state_iC_</definition>
+        <argsstring></argsstring>
+        <name>state_iC_</name>
+        <qualifiedname>csmp::HaliteLookup::state_iC_</qualifiedname>
+        <briefdescription>
+<para>phase state of system at high-T, high-P corner of lookup cell (always H for halite) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="75" column="21" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="75" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1a306ddef8a66368f4e092c2f25babb22d" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int csmp::HaliteLookup::state_iD_</definition>
+        <argsstring></argsstring>
+        <name>state_iD_</name>
+        <qualifiedname>csmp::HaliteLookup::state_iD_</qualifiedname>
+        <briefdescription>
+<para>phase state of system at low-T, high-P left corner of lookup cell (always H for halite) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="76" column="21" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="76" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1a03d06c5770038a59935198711fdeca27" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::HaliteLookup::storage_vector</definition>
+        <argsstring></argsstring>
+        <name>storage_vector</name>
+        <qualifiedname>csmp::HaliteLookup::storage_vector</qualifiedname>
+        <briefdescription>
+<para>stores lookup data in sequence t-p-x-rho-h at each Lookup point </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="78" column="17" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1a6e4dde5e0bf66f33b7fbc99815dc2652" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; int &gt;</type>
+        <definition>std::vector&lt;int&gt; csmp::HaliteLookup::state_vector</definition>
+        <argsstring></argsstring>
+        <name>state_vector</name>
+        <qualifiedname>csmp::HaliteLookup::state_vector</qualifiedname>
+        <briefdescription>
+<para>stores phase state at each Lookup point </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="80" column="22" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_lookup_1a265928a8fa5fb7ee25182f72c65d84da" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_na_cl_melting_curve_halite_lookup" kindref="compound">NaClMeltingCurveHaliteLookup</ref></type>
+        <definition>NaClMeltingCurveHaliteLookup csmp::HaliteLookup::naclmelt_h_lookup</definition>
+        <argsstring></argsstring>
+        <name>naclmelt_h_lookup</name>
+        <qualifiedname>csmp::HaliteLookup::naclmelt_h_lookup</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="92" column="37" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="92" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_halite_lookup_1a5c5fd3ddd636902abd71ec8de5ea4b25" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::HaliteLookup::HaliteLookup</definition>
+        <argsstring>(const double &amp;externaltemperature, const double &amp;externalpressure)</argsstring>
+        <name>HaliteLookup</name>
+        <qualifiedname>csmp::HaliteLookup::HaliteLookup</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>externaltemperature</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>externalpressure</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="16" column="5" bodyfile="source/modules/eos/h2o_nacl_lookup/HaliteLookup.cpp" bodystart="12" bodyend="186"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_halite_lookup_1a4e053818088ac99f8f74ca1ac12feb4e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::HaliteLookup::~HaliteLookup</definition>
+        <argsstring>()</argsstring>
+        <name>~HaliteLookup</name>
+        <qualifiedname>csmp::HaliteLookup::~HaliteLookup</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="18" column="5" bodyfile="source/modules/eos/h2o_nacl_lookup/HaliteLookup.cpp" bodystart="189" bodyend="191"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_halite_lookup_1a7203568a03e65ac0a249a83c415aa6ce" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::HaliteLookup::MassFractionNaCl</definition>
+        <argsstring>()</argsstring>
+        <name>MassFractionNaCl</name>
+        <qualifiedname>csmp::HaliteLookup::MassFractionNaCl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="20" column="19" bodyfile="source/modules/eos/h2o_nacl_lookup/HaliteLookup.cpp" bodystart="194" bodyend="194"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_halite_lookup_1a974c046cc6409315017e4e20413e1d2e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::HaliteLookup::Density</definition>
+        <argsstring>()</argsstring>
+        <name>Density</name>
+        <qualifiedname>csmp::HaliteLookup::Density</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="21" column="19" bodyfile="source/modules/eos/h2o_nacl_lookup/HaliteLookup.cpp" bodystart="195" bodyend="195"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_halite_lookup_1a8378d75c07b77404cf9be1912607fe55" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::HaliteLookup::Enthalpy</definition>
+        <argsstring>()</argsstring>
+        <name>Enthalpy</name>
+        <qualifiedname>csmp::HaliteLookup::Enthalpy</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="22" column="19" bodyfile="source/modules/eos/h2o_nacl_lookup/HaliteLookup.cpp" bodystart="196" bodyend="196"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_halite_lookup_1ab932539ea58789628ff0718ebdb18dd2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::HaliteLookup::HeatCapacity</definition>
+        <argsstring>()</argsstring>
+        <name>HeatCapacity</name>
+        <qualifiedname>csmp::HaliteLookup::HeatCapacity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="23" column="19" bodyfile="source/modules/eos/h2o_nacl_lookup/HaliteLookup.cpp" bodystart="197" bodyend="197"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_halite_lookup_1a682b9f13437809d533e062c9bbad3f3a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::HaliteLookup::Compressibility</definition>
+        <argsstring>()</argsstring>
+        <name>Compressibility</name>
+        <qualifiedname>csmp::HaliteLookup::Compressibility</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="24" column="19" bodyfile="source/modules/eos/h2o_nacl_lookup/HaliteLookup.cpp" bodystart="198" bodyend="198"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_halite_lookup_1a877685eed7ed09b2c8402d52552d8525" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::HaliteLookup::Viscosity</definition>
+        <argsstring>()</argsstring>
+        <name>Viscosity</name>
+        <qualifiedname>csmp::HaliteLookup::Viscosity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="25" column="19" bodyfile="source/modules/eos/h2o_nacl_lookup/HaliteLookup.cpp" bodystart="199" bodyend="199"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_halite_lookup_1a1e663ac22529ce05f7715952d1551c02" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::HaliteLookup::ValueOf</definition>
+        <argsstring>(const int &amp;property_index)</argsstring>
+        <name>ValueOf</name>
+        <qualifiedname>csmp::HaliteLookup::ValueOf</qualifiedname>
+        <param>
+          <type>const int &amp;</type>
+          <declname>property_index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="26" column="19" bodyfile="source/modules/eos/h2o_nacl_lookup/HaliteLookup.cpp" bodystart="225" bodyend="281"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_halite_lookup_1ae4e98c72c8be249197c6e4e289f258c2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::HaliteLookup::NormalInterpolation</definition>
+        <argsstring>(const int &amp;property_index)</argsstring>
+        <name>NormalInterpolation</name>
+        <qualifiedname>csmp::HaliteLookup::NormalInterpolation</qualifiedname>
+        <param>
+          <type>const int &amp;</type>
+          <declname>property_index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="82" column="12" bodyfile="source/modules/eos/h2o_nacl_lookup/HaliteLookup.cpp" bodystart="284" bodyend="305"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_halite_lookup_1a0f7efc7c34c34c66e0c4b50f70064424" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::HaliteLookup::NearVLHInterpolationLowT</definition>
+        <argsstring>(const int &amp;property_index)</argsstring>
+        <name>NearVLHInterpolationLowT</name>
+        <qualifiedname>csmp::HaliteLookup::NearVLHInterpolationLowT</qualifiedname>
+        <param>
+          <type>const int &amp;</type>
+          <declname>property_index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="83" column="12"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_halite_lookup_1acff2c20fb36edcf4051d8656a0e896be" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::HaliteLookup::NearVLHInterpolationHighT</definition>
+        <argsstring>(const int &amp;property_index)</argsstring>
+        <name>NearVLHInterpolationHighT</name>
+        <qualifiedname>csmp::HaliteLookup::NearVLHInterpolationHighT</qualifiedname>
+        <param>
+          <type>const int &amp;</type>
+          <declname>property_index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="84" column="12"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_halite_lookup_1ae96e3e0fe11190a436c49a3a50683e41" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::HaliteLookup::NearNaClMeltInterpolation</definition>
+        <argsstring>(const int &amp;property_index)</argsstring>
+        <name>NearNaClMeltInterpolation</name>
+        <qualifiedname>csmp::HaliteLookup::NearNaClMeltInterpolation</qualifiedname>
+        <param>
+          <type>const int &amp;</type>
+          <declname>property_index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="85" column="12" bodyfile="source/modules/eos/h2o_nacl_lookup/HaliteLookup.cpp" bodystart="311" bodyend="452"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_halite_lookup_1aa18615d7fb9a5b9d5b7fb108c89f91f8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::HaliteLookup::SetTemperatureAndPressure</definition>
+        <argsstring>()</argsstring>
+        <name>SetTemperatureAndPressure</name>
+        <qualifiedname>csmp::HaliteLookup::SetTemperatureAndPressure</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="87" column="14" bodyfile="source/modules/eos/h2o_nacl_lookup/HaliteLookup.cpp" bodystart="216" bodyend="223"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_halite_lookup_1ad99b2c6e62c452c1245838f1a51b34e3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::HaliteLookup::GetIndex_iA</definition>
+        <argsstring>(const int &amp;property_index)</argsstring>
+        <name>GetIndex_iA</name>
+        <qualifiedname>csmp::HaliteLookup::GetIndex_iA</qualifiedname>
+        <param>
+          <type>const int &amp;</type>
+          <declname>property_index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="88" column="14" bodyfile="source/modules/eos/h2o_nacl_lookup/HaliteLookup.cpp" bodystart="203" bodyend="214"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_halite_lookup_1a23f68241fad34de8a68f512ab8b82d75" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::HaliteLookup::GetTemperatureIndex</definition>
+        <argsstring>(const double &amp;t)</argsstring>
+        <name>GetTemperatureIndex</name>
+        <qualifiedname>csmp::HaliteLookup::GetTemperatureIndex</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>t</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="89" column="14" bodyfile="source/modules/eos/h2o_nacl_lookup/HaliteLookup.cpp" bodystart="454" bodyend="472"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_halite_lookup_1abfdee75064f82ec5841ed6ed5149e89b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::HaliteLookup::GetPressureIndex</definition>
+        <argsstring>(const double &amp;p)</argsstring>
+        <name>GetPressureIndex</name>
+        <qualifiedname>csmp::HaliteLookup::GetPressureIndex</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>p</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLookup.h" line="90" column="14" bodyfile="source/modules/eos/h2o_nacl_lookup/HaliteLookup.cpp" bodystart="474" bodyend="491"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Build and/or query lookup tables for thermodynamic properties of halite (crystalline NaCl) </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>Thomas Driesner, ETH Zuerich </para>
+</simplesect>
+</para>
+<sect1 id="compare_floats_8h_1contact">
+<title>Contact</title><para><ulink url="mailto:thomas.driesner@erdw.ethz.ch">thomas.driesner@erdw.ethz.ch</ulink></para>
+<para>@changes changes Latest Changes Jan 28, 2013: ported to CSMP++, changed all pressure units to Pa. Sep 10, 2014: adapted to CSMP++ coding style, updated doxygen comments</para>
+</sect1>
+<sect1 id="compare_floats_8h_1motivation">
+<title>Motivation</title><para>&quot;HaliteLookup&quot; stores various properties of the mineral halite (solid crystalline salt, NaCl) in lookup tables, as a function of temperature-pressure-composition [Celsius, Pa, mole fraction NaCl] according to the papers</para>
+<para>Driesner T. and Heinrich C.A. (2007): The system H2O-NaCl. Part I: Correlation formulae for phase relations in temperature-pressure-composition space from 0 to 1000oC, 0 to 5000 bar, and 0 to 1 XNaCl. Geochimica et Cosmochimica Acta 71, 4880-4901.</para>
+<para>Driesner T. (2007): The system H2O-NaCl. Part II: Correlations for molar volume, enthalpy, and isobaric heat capacity from 0 to 1000oC, 1 to 5000 bar, and 0 to 1 XNaCl. Geochimica et Cosmochimica Acta 71, 4902-4919.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_upwind_control_visitor_1usage">
+<title>Usage</title><para><linebreak/>
+ Construct an instance of &quot;HaliteLookup&quot; with temperature (in C) and pressure (in Pa) as they exist in the code that is supposed to use &quot;HaliteLookup&quot; as constructor variables. &quot;HaliteLookup&quot; has an internal mechanism to make sure that it always uses the current values of temperature and pressure . Public member names should be self-explanatory, I hope.</para>
+<para>Upon construction, <ref refid="classcsmp_1_1_halite_lookup" kindref="compound">HaliteLookup</ref> will check if the lookup tables do already exist. If not, they will be re-computed and written. The respective files are &quot;HalitePropertiesLookupTable.bin&quot; and &quot;HaliteStateLookupTable.bin&quot;.</para>
+<para><programlisting><codeline><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>t;<sp/></highlight><highlight class="comment">//<sp/>temperature<sp/>[C]<sp/>in<sp/>user&apos;s<sp/>application</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>p;<sp/></highlight><highlight class="comment">//<sp/>pressure<sp/>[Pa]<sp/>in<sp/>user&apos;s<sp/>application<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">HaliteLookup<sp/>haliteLookup(t,p);</highlight></codeline>
+<codeline><highlight class="normal">...</highlight></codeline>
+<codeline><highlight class="normal">t<sp/>=<sp/>some_value;</highlight></codeline>
+<codeline><highlight class="normal">p<sp/>=<sp/>some_other_value;</highlight></codeline>
+<codeline><highlight class="normal">cout<sp/>&lt;&lt;<sp/>haliteLookup.Density()<sp/>&lt;&lt;<sp/>endl;<sp/></highlight><highlight class="comment">//<sp/>will<sp/>return<sp/>density<sp/>at<sp/>the<sp/>new<sp/>t<sp/>and<sp/>p<sp/>conditions</highlight></codeline>
+</programlisting></para>
+</sect1>
+<sect1 id="classcsmp_1_1_upwind_control_visitor_1dependencies">
+<title>Dependencies</title><para><linebreak/>
+ requires &quot;ConvertConcentrationUnitsNaCl.h&quot; to ensure consistent unit conversions <linebreak/>
+</para>
+</sect1>
+<sect1 id="classcsmp_1_1_upwind_control_visitor_1issues">
+<title>Known issues</title><para>Composition() is in mole fraction NaCl, to convert to other units, the functions in &quot;ConvertConcentrationUnitsNaCl.h&quot; may be useful.</para>
+<para>To do: interpolation near the halite melting curve has not been coded optimally. Hence at extreme conditions (t &gt; 800.7 C and salinities very close to 100%) tiny mismatches in fluid properties may appear and cause problems.</para>
+</sect1>
+<sect1 id="compare_floats_8h_1testing">
+<title>Testing</title></sect1>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::HaliteLookup</label>
+        <link refid="classcsmp_1_1_halite_lookup"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/eos/HaliteLookup.h" line="12" column="3" bodyfile="source/includes/eos/HaliteLookup.h" bodystart="13" bodyend="93"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_halite_lookup_1a682b9f13437809d533e062c9bbad3f3a" prot="public" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>Compressibility</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1a974c046cc6409315017e4e20413e1d2e" prot="public" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>Density</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1a8378d75c07b77404cf9be1912607fe55" prot="public" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>Enthalpy</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1ad99b2c6e62c452c1245838f1a51b34e3" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>GetIndex_iA</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1abfdee75064f82ec5841ed6ed5149e89b" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>GetPressureIndex</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1a23f68241fad34de8a68f512ab8b82d75" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>GetTemperatureIndex</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1a5c5fd3ddd636902abd71ec8de5ea4b25" prot="public" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>HaliteLookup</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1ab932539ea58789628ff0718ebdb18dd2" prot="public" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>HeatCapacity</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1ae6c39fd665d0b16cac97f6c8f48b50f0" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>i_dummy_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1a277d1225050bcc4279e2f92a5aa86729" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>iA_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1a8df6a8aee0dcaed364a8dab544c6ed7b" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>iB_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1af09720791225263a7157393352d1d2ed" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>iC_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1a71db3509bacf31e9bc6dfe9819b99a8c" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>iD_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1ae4af99141d24bf7f793fb68d1623017f" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>ip_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1aed7989eea3f7a7ae4e236d758352b023" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>it_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1a7203568a03e65ac0a249a83c415aa6ce" prot="public" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>MassFractionNaCl</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1a265928a8fa5fb7ee25182f72c65d84da" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>naclmelt_h_lookup</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1ae96e3e0fe11190a436c49a3a50683e41" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>NearNaClMeltInterpolation</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1acff2c20fb36edcf4051d8656a0e896be" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>NearVLHInterpolationHighT</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1a0f7efc7c34c34c66e0c4b50f70064424" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>NearVLHInterpolationLowT</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1ae4e98c72c8be249197c6e4e289f258c2" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>NormalInterpolation</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1aa45247f3920c5669cba7f4c012d47bf7" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>p_dim_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1a0afc10ae7db3c8c595761dab0631fdb0" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>p_iA_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1a59892b2447e41664ac962c3e48a621a4" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>p_iB_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1a7e4c4bc2b59b982c60e1ff764919ebd5" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>p_iC_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1ab0801d9567cfa47b80cbbf4a9eb7415f" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>p_iD_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1a5fc7ee8bafc0a6ad6764c53c2b3e188b" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>p_res_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1ae5da3e10192b1598ebb51e7c1c5b7b39" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>pcurrent_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1a189fd79e80ff4e47ccfbf9872b998ff9" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>pdummy_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1a3cd852ffe282c92e70b339d930cdc07b" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>pnorm_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1a105d9f27edccc4183712f1fe0f98f073" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>pressure_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1aa18615d7fb9a5b9d5b7fb108c89f91f8" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>SetTemperatureAndPressure</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1ae5fb7c40dd4ebacdf00fb848cbee8e35" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>state_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1a5f39e5dcfb7e43d010bacdba35e6df26" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>state_iA_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1adec0c86903ae984d9a7f919108dffa40" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>state_iB_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1a86c1b66c4a91f3df8bda37ed2716450d" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>state_iC_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1a306ddef8a66368f4e092c2f25babb22d" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>state_iD_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1a6e4dde5e0bf66f33b7fbc99815dc2652" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>state_vector</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1a03d06c5770038a59935198711fdeca27" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>storage_vector</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1a8077babe728157b457640538ccf2abd0" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>t_dim_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1a445fcc92875828a194c660de5c70ff5c" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>t_iA_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1af6c96c6bea92ed70360eb5d4487af5bc" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>t_iB_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1a5ebba407920657e58a36b609583d2f57" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>t_iC_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1a9c798c93621c9bba0757f1b6b6340067" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>t_iD_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1ad8c135a7d78854677bc2cb22dd2fa7d2" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>t_res_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1a8ace5dcfcf464a919ec49c379fa2cbac" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>tcurrent_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1a0f37ccace3f68edfdb2a6d553daf306b" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>tdummy_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1aa3d0d5fadd302aaa57dda982a0b8432f" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>temperature_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1ab66844f63e3a09910d6b031192ce5842" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>tnorm_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1a0e1acb3a7df33dcf7cc1709938cc46dd" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>tvlh_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1ab91bf5a5ddd5bef53fab74ae1a8ae1a1" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>v_before_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1ac95368dbd8cf0689d249a3f3848f9ed4" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>v_behind_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1a5bd4f823eaa01dce2bb580cfad2e7a06" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>v_bottom_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1a29c609e0407e36d6b089ef51e41212a2" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>v_iA_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1a4127904ba1f7746c8bbd450d379bc42c" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>v_iB_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1abc9490250a35b9beb1730ca51e56b97d" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>v_iC_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1af431cac89c9be19c015ec23143ab5477" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>v_iD_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1a96864ce1567a70f5af7cdec0e7316104" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>v_interpolated_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1ab10de4b6dda66c19bfa543cb0df3bb14" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>v_top_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1aed463acc0e429dee9fcb27605548a5cd" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>v_vlh_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1ab9af382a773e33080f571256bdd25056" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>v_vlh_before_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1a699895543a30f01c2ac4ba3ffda23f06" prot="private" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>v_vlh_behind_</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1a1e663ac22529ce05f7715952d1551c02" prot="public" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>ValueOf</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1a877685eed7ed09b2c8402d52552d8525" prot="public" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>Viscosity</name></member>
+      <member refid="classcsmp_1_1_halite_lookup_1a4e053818088ac99f8f74ca1ac12feb4e" prot="public" virt="non-virtual"><scope>csmp::HaliteLookup</scope><name>~HaliteLookup</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

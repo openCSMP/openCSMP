@@ -1,0 +1,42 @@
+.TH "ThreephaeHLV" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+ThreephaeHLV
+.SH SYNOPSIS
+.br
+.PP
+.SH "Detailed Description"
+.PP 
+
+.PP
+\fBAuthor\fP
+.RS 4
+: Thomas Driesner, ETH Zuerich, thomas.driesner@erdw.ethz.ch
+.RE
+.PP
+.SH "Motivation"
+.PP
+"ThreephaseHLV" computes the temperature-pressure-composition [Celsius, bar] coordinates of the vapor-liquid-halite threephase-coexistence surface of the system H2O-NaCl, according to the paper
+
+.PP
+Driesner T\&. and Heinrich C\&.A\&. (2007): The system H2O-NaCl\&. Part I: Correlation formulae for phase relations in temperature-pressure-composition space from 0 to 1000oC, 0 to 5000 bar, and 0 to 1 XNaCl\&. Geochimica et Cosmochimica Acta 71, 4880-4901\&.
+
+.PP
+Other porperties such as density etc\&. are NOT provided\&.
+
+.PP
+"ThreephaseHLV" is legacy code coming from Thomas Driesner's developments for the H2O-NaCl system\&. It is REQUIRED to build accurate lookup tables for the H2O-NaCl system\&.
+.SH "Usage"
+.PP
+Construct an instance of "ThreephaseHLV" with the temperature (in C) as constructor variable\&. "ThreephaseHLV" has an internal mechanism to make sure that it always uses the current value of that temperature\&. Public member names should be self-explanatory, I hope\&.
+.SH "Requirements:"
+.PP
+"ThreephaseHLV" needs "TriplePointNaCl"
+.SH "Testing"
+.PP
+Manually tested against CSMP version 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

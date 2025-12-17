@@ -1,0 +1,871 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_f_v___integration_points_and_weights" kind="class" language="C++" prot="public">
+    <compoundname>csmp::FV_IntegrationPointsAndWeights</compoundname>
+    <includes refid="_f_v___integration_points_and_weights_8h" local="no">FV_IntegrationPointsAndWeights.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_f_v___integration_points_and_weights_1a4f66bc3d361a47bf3ddc94984532883d" prot="private" static="no" mutable="no">
+        <type><ref refid="group___c_s_m_pglobal_enums_1ga182d1fe97a0151d464d8170c0fafa872" kindref="member">CSMP_FEM_TYPE</ref></type>
+        <definition>CSMP_FEM_TYPE csmp::FV_IntegrationPointsAndWeights&lt; dim &gt;::m_typeOfSubdividedElement</definition>
+        <argsstring></argsstring>
+        <name>m_typeOfSubdividedElement</name>
+        <qualifiedname>csmp::FV_IntegrationPointsAndWeights::m_typeOfSubdividedElement</qualifiedname>
+        <briefdescription>
+<para>finite-element type to which the stencil belongs </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" line="88" column="20" bodyfile="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_f_v___integration_points_and_weights_1a53af040f53881387a1d5cdb89a27658d" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::pair&lt; uint32_t, uint32_t &gt; &gt;</type>
+        <definition>std::vector&lt;std::pair&lt;uint32_t,uint32_t&gt; &gt; csmp::FV_IntegrationPointsAndWeights&lt; dim &gt;::m_edges_of_element</definition>
+        <argsstring></argsstring>
+        <name>m_edges_of_element</name>
+        <qualifiedname>csmp::FV_IntegrationPointsAndWeights::m_edges_of_element</qualifiedname>
+        <briefdescription>
+<para>for each edge, local node numbers on inside and outside of facet </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" line="90" column="17" bodyfile="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" bodystart="90" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_f_v___integration_points_and_weights_1a275df3bbcfa15274157db3398edb1e83" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::vector&lt; uint32_t &gt; &gt;</type>
+        <definition>std::vector&lt;std::vector&lt;uint32_t&gt; &gt; csmp::FV_IntegrationPointsAndWeights&lt; dim &gt;::m_facets_surrounding_node</definition>
+        <argsstring></argsstring>
+        <name>m_facets_surrounding_node</name>
+        <qualifiedname>csmp::FV_IntegrationPointsAndWeights::m_facets_surrounding_node</qualifiedname>
+        <briefdescription>
+<para>[node][facet] = sector-delimiting facets </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" line="91" column="24" bodyfile="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_f_v___integration_points_and_weights_1ab819b680a00765be0c41fc0ed718df3a" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &gt; &gt;</type>
+        <definition>std::vector&lt;std::vector&lt;Point&lt;dim&gt; &gt; &gt; csmp::FV_IntegrationPointsAndWeights&lt; dim &gt;::m_facet_integration_points</definition>
+        <argsstring></argsstring>
+        <name>m_facet_integration_points</name>
+        <qualifiedname>csmp::FV_IntegrationPointsAndWeights::m_facet_integration_points</qualifiedname>
+        <briefdescription>
+<para>[isrf][spts][dim] = 1 for lowest-order integration </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" line="92" column="21" bodyfile="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_f_v___integration_points_and_weights_1a00b7b70cc84b8714d2c106587495d213" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::vector&lt; double &gt; &gt;</type>
+        <definition>std::vector&lt;std::vector&lt;double&gt; &gt; csmp::FV_IntegrationPointsAndWeights&lt; dim &gt;::m_facet_integration_weights</definition>
+        <argsstring></argsstring>
+        <name>m_facet_integration_weights</name>
+        <qualifiedname>csmp::FV_IntegrationPointsAndWeights::m_facet_integration_weights</qualifiedname>
+        <briefdescription>
+<para>[isrf][spts] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" line="93" column="26" bodyfile="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" bodystart="93" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_f_v___integration_points_and_weights_1ad59abb45720d8293237bfaf4c726e95e" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &gt;</type>
+        <definition>std::vector&lt; Point&lt;dim&gt; &gt; csmp::FV_IntegrationPointsAndWeights&lt; dim &gt;::m_facet_normals</definition>
+        <argsstring></argsstring>
+        <name>m_facet_normals</name>
+        <qualifiedname>csmp::FV_IntegrationPointsAndWeights::m_facet_normals</qualifiedname>
+        <briefdescription>
+<para>[isrf][dim] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" line="94" column="34" bodyfile="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" bodystart="94" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_f_v___integration_points_and_weights_1aba78703b5f0c062edc4484907da9932f" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::vector&lt; std::pair&lt; double, double &gt; &gt; &gt;</type>
+        <definition>std::vector&lt;std::vector&lt;std::pair&lt;double,double&gt; &gt; &gt; csmp::FV_IntegrationPointsAndWeights&lt; dim &gt;::m_facet_normal_xforms</definition>
+        <argsstring></argsstring>
+        <name>m_facet_normal_xforms</name>
+        <qualifiedname>csmp::FV_IntegrationPointsAndWeights::m_facet_normal_xforms</qualifiedname>
+        <briefdescription>
+<para>[isrf][node] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" line="95" column="17" bodyfile="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" bodystart="95" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_f_v___integration_points_and_weights_1a420f530af7c17189bbf6a3d4953b6927" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &gt; &gt;</type>
+        <definition>std::vector&lt;std::vector&lt;Point&lt;dim&gt; &gt; &gt; csmp::FV_IntegrationPointsAndWeights&lt; dim &gt;::m_volume_integration_points1</definition>
+        <argsstring></argsstring>
+        <name>m_volume_integration_points1</name>
+        <qualifiedname>csmp::FV_IntegrationPointsAndWeights::m_volume_integration_points1</qualifiedname>
+        <briefdescription>
+<para>[ivol][vpts][dim] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" line="96" column="21" bodyfile="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" bodystart="96" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_f_v___integration_points_and_weights_1a567dfdf2f40068e2cbc74027aedd4834" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::vector&lt; double &gt; &gt;</type>
+        <definition>std::vector&lt;std::vector&lt;double&gt; &gt; csmp::FV_IntegrationPointsAndWeights&lt; dim &gt;::m_volume_integration_weights</definition>
+        <argsstring></argsstring>
+        <name>m_volume_integration_weights</name>
+        <qualifiedname>csmp::FV_IntegrationPointsAndWeights::m_volume_integration_weights</qualifiedname>
+        <briefdescription>
+<para>[ivol][vpts] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" line="97" column="26" bodyfile="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" bodystart="97" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_f_v___integration_points_and_weights_1a04b2be1a0e8d85462a2de064e35de0cb" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::vector&lt; double &gt; &gt;</type>
+        <definition>std::vector&lt;std::vector&lt;double&gt; &gt; csmp::FV_IntegrationPointsAndWeights&lt; dim &gt;::m_projection_weights</definition>
+        <argsstring></argsstring>
+        <name>m_projection_weights</name>
+        <qualifiedname>csmp::FV_IntegrationPointsAndWeights::m_projection_weights</qualifiedname>
+        <briefdescription>
+<para>[isrf][spts] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" line="98" column="26" bodyfile="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" bodystart="98" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_f_v___integration_points_and_weights_1ad73c4029d1c08a3d51df0e922d72596a" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &gt; &gt;</type>
+        <definition>std::vector&lt;std::vector&lt;Point&lt;dim&gt; &gt; &gt; csmp::FV_IntegrationPointsAndWeights&lt; dim &gt;::m_par_volume_integration_points</definition>
+        <argsstring></argsstring>
+        <name>m_par_volume_integration_points</name>
+        <qualifiedname>csmp::FV_IntegrationPointsAndWeights::m_par_volume_integration_points</qualifiedname>
+        <briefdescription>
+<para>[ivol][vpts][dim] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" line="99" column="21" bodyfile="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" bodystart="99" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_f_v___integration_points_and_weights_1ab7a68fe75152d95913613daaae9e50b1" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &gt;</type>
+        <definition>std::vector&lt;Point&lt;dim&gt; &gt; csmp::FV_IntegrationPointsAndWeights&lt; dim &gt;::m_facet_edge_midpoints</definition>
+        <argsstring></argsstring>
+        <name>m_facet_edge_midpoints</name>
+        <qualifiedname>csmp::FV_IntegrationPointsAndWeights::m_facet_edge_midpoints</qualifiedname>
+        <briefdescription>
+<para>[isrf] points where the facet touches the finite element edges </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" line="100" column="35" bodyfile="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" bodystart="100" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_f_v___integration_points_and_weights_1aba8860611cd70fcb6abc707b0865ca20" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt;</type>
+        <definition>Point&lt;dim&gt; csmp::FV_IntegrationPointsAndWeights&lt; dim &gt;::m_barycenter</definition>
+        <argsstring></argsstring>
+        <name>m_barycenter</name>
+        <qualifiedname>csmp::FV_IntegrationPointsAndWeights::m_barycenter</qualifiedname>
+        <briefdescription>
+<para>center of gravity of finite element in parametric space </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" line="101" column="33" bodyfile="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" bodystart="101" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_f_v___integration_points_and_weights_1a53bc90a187f39063528f29253a57d079" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &gt; &gt;</type>
+        <definition>std::vector&lt; std::vector&lt;Point&lt;dim&gt; &gt; &gt; csmp::FV_IntegrationPointsAndWeights&lt; dim &gt;::m_facet_points</definition>
+        <argsstring></argsstring>
+        <name>m_facet_points</name>
+        <qualifiedname>csmp::FV_IntegrationPointsAndWeights::m_facet_points</qualifiedname>
+        <briefdescription>
+<para>corner points of facet (counter-clockwise looking in), starting with B.C. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" line="102" column="20" bodyfile="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_f_v___integration_points_and_weights_1a260b299986ac1f1f21051cbe9b908960" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; FV_FACET_TYPE &gt;</type>
+        <definition>std::vector&lt; FV_FACET_TYPE &gt; csmp::FV_IntegrationPointsAndWeights&lt; dim &gt;::m_facet_types</definition>
+        <argsstring></argsstring>
+        <name>m_facet_types</name>
+        <qualifiedname>csmp::FV_IntegrationPointsAndWeights::m_facet_types</qualifiedname>
+        <briefdescription>
+<para>types of facet </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" line="103" column="31" bodyfile="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_f_v___integration_points_and_weights_1a1557f7ac211e724016e36481fe30c8b3" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &gt; &gt;</type>
+        <definition>std::vector&lt; std::vector&lt;Point&lt;dim&gt; &gt; &gt; csmp::FV_IntegrationPointsAndWeights&lt; dim &gt;::m_sector_points</definition>
+        <argsstring></argsstring>
+        <name>m_sector_points</name>
+        <qualifiedname>csmp::FV_IntegrationPointsAndWeights::m_sector_points</qualifiedname>
+        <briefdescription>
+<para>corner points of finite volume sector corresponding to node </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" line="104" column="20" bodyfile="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" bodystart="104" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_f_v___integration_points_and_weights_1a3085aef6e055c88cbc7b1b62b4ae3c65" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::vector&lt; std::pair&lt; uint32_t, uint32_t &gt; &gt; &gt;</type>
+        <definition>std::vector&lt;std::vector&lt;std::pair&lt;uint32_t,uint32_t&gt; &gt; &gt; csmp::FV_IntegrationPointsAndWeights&lt; dim &gt;::m_edge_of_sectors</definition>
+        <argsstring></argsstring>
+        <name>m_edge_of_sectors</name>
+        <qualifiedname>csmp::FV_IntegrationPointsAndWeights::m_edge_of_sectors</qualifiedname>
+        <briefdescription>
+<para>edges of FV sector on outside of the finite element </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" line="105" column="17" bodyfile="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" bodystart="105" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_f_v___integration_points_and_weights_1a643745859b93ea3452e7dd9c9d4b7414" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::FV_IntegrationPointsAndWeights&lt; dim &gt;::FV_IntegrationPointsAndWeights</definition>
+        <argsstring>(CSMP_FEM_TYPE type=ISOPARAMETRIC_LINEAR_TRIANGLE)</argsstring>
+        <name>FV_IntegrationPointsAndWeights</name>
+        <qualifiedname>csmp::FV_IntegrationPointsAndWeights::FV_IntegrationPointsAndWeights</qualifiedname>
+        <param>
+          <type><ref refid="group___c_s_m_pglobal_enums_1ga182d1fe97a0151d464d8170c0fafa872" kindref="member">CSMP_FEM_TYPE</ref></type>
+          <declname>type</declname>
+          <defname>typeOfElement</defname>
+          <defval>ISOPARAMETRIC_LINEAR_TRIANGLE</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Public constructor of the <ref refid="classcsmp_1_1_f_v___integration_points_and_weights" kindref="compound">FV_IntegrationPointsAndWeights</ref> class. As default constructor of the class is declares private, this constructor should be used in all cases.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>typeOfElement</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>type of Finite <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> in CSMP </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" line="50" column="14" bodyfile="source/modules/integration/finite_volumes/FV_IntegrationPointsAndWeights.cpp" bodystart="24" bodyend="67"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_v___integration_points_and_weights_1a3bfcbea939f3f1bd7ff90b9042216501" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::FV_IntegrationPointsAndWeights&lt; dim &gt;::~FV_IntegrationPointsAndWeights</definition>
+        <argsstring>()</argsstring>
+        <name>~FV_IntegrationPointsAndWeights</name>
+        <qualifiedname>csmp::FV_IntegrationPointsAndWeights::~FV_IntegrationPointsAndWeights</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" line="51" column="5" bodyfile="source/modules/integration/finite_volumes/FV_IntegrationPointsAndWeights.cpp" bodystart="73" bodyend="75"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_v___integration_points_and_weights_1afb95fc67551f7d8a884b9429452d6858" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FV_IntegrationPointsAndWeights&lt; dim &gt;::FacetIntegrationPoints</definition>
+        <argsstring>(std::vector&lt; std::vector&lt; Point&lt; dim &gt; &gt; &gt; &amp;facet_integration_points) const</argsstring>
+        <name>FacetIntegrationPoints</name>
+        <qualifiedname>csmp::FV_IntegrationPointsAndWeights::FacetIntegrationPoints</qualifiedname>
+        <param>
+          <type>std::vector&lt; std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &gt; &gt; &amp;</type>
+          <declname>facet_integration_points</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" line="56" column="10" bodyfile="source/modules/integration/finite_volumes/FV_IntegrationPointsAndWeights.cpp" bodystart="175" bodyend="179"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_v___integration_points_and_weights_1a0d94bff1c04e5e4edfa1e2b6b8ec5ab3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FV_IntegrationPointsAndWeights&lt; dim &gt;::FacetIntegrationWeights</definition>
+        <argsstring>(std::vector&lt; std::vector&lt; double &gt; &gt; &amp;facet_integration_weights) const</argsstring>
+        <name>FacetIntegrationWeights</name>
+        <qualifiedname>csmp::FV_IntegrationPointsAndWeights::FacetIntegrationWeights</qualifiedname>
+        <param>
+          <type>std::vector&lt; std::vector&lt; double &gt; &gt; &amp;</type>
+          <declname>facet_integration_weights</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" line="57" column="10" bodyfile="source/modules/integration/finite_volumes/FV_IntegrationPointsAndWeights.cpp" bodystart="183" bodyend="187"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_v___integration_points_and_weights_1a2c023112335d36a6624de3e8934810d2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FV_IntegrationPointsAndWeights&lt; dim &gt;::SectorIntegrationPoints</definition>
+        <argsstring>(std::vector&lt; std::vector&lt; Point&lt; dim &gt; &gt; &gt; &amp;volume_integration_points) const</argsstring>
+        <name>SectorIntegrationPoints</name>
+        <qualifiedname>csmp::FV_IntegrationPointsAndWeights::SectorIntegrationPoints</qualifiedname>
+        <param>
+          <type>std::vector&lt; std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &gt; &gt; &amp;</type>
+          <declname>volume_integration_points</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" line="59" column="10" bodyfile="source/modules/integration/finite_volumes/FV_IntegrationPointsAndWeights.cpp" bodystart="159" bodyend="163"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_v___integration_points_and_weights_1a907bdd6c6b97557c84209e8c1182f477" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FV_IntegrationPointsAndWeights&lt; dim &gt;::SectorIntegrationWeights</definition>
+        <argsstring>(std::vector&lt; std::vector&lt; double &gt; &gt; &amp;volume_integration_weights) const</argsstring>
+        <name>SectorIntegrationWeights</name>
+        <qualifiedname>csmp::FV_IntegrationPointsAndWeights::SectorIntegrationWeights</qualifiedname>
+        <param>
+          <type>std::vector&lt; std::vector&lt; double &gt; &gt; &amp;</type>
+          <declname>volume_integration_weights</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" line="60" column="10" bodyfile="source/modules/integration/finite_volumes/FV_IntegrationPointsAndWeights.cpp" bodystart="167" bodyend="171"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_v___integration_points_and_weights_1ade38aa412cbd1f3c8cb9e875cce5d2b8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FV_IntegrationPointsAndWeights&lt; dim &gt;::ProjectionWeights</definition>
+        <argsstring>(std::vector&lt; std::vector&lt; double &gt; &gt; &amp;projection_weights) const</argsstring>
+        <name>ProjectionWeights</name>
+        <qualifiedname>csmp::FV_IntegrationPointsAndWeights::ProjectionWeights</qualifiedname>
+        <param>
+          <type>std::vector&lt; std::vector&lt; double &gt; &gt; &amp;</type>
+          <declname>projection_weights</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" line="62" column="10" bodyfile="source/modules/integration/finite_volumes/FV_IntegrationPointsAndWeights.cpp" bodystart="191" bodyend="195"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_v___integration_points_and_weights_1a398b5aa4334668f65901934c05af56dd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FV_IntegrationPointsAndWeights&lt; dim &gt;::FacetNormals</definition>
+        <argsstring>(std::vector&lt; Point&lt; dim &gt; &gt; &amp;facet_normals) const</argsstring>
+        <name>FacetNormals</name>
+        <qualifiedname>csmp::FV_IntegrationPointsAndWeights::FacetNormals</qualifiedname>
+        <param>
+          <type>std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &gt; &amp;</type>
+          <declname>facet_normals</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" line="64" column="10" bodyfile="source/modules/integration/finite_volumes/FV_IntegrationPointsAndWeights.cpp" bodystart="205" bodyend="208"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_v___integration_points_and_weights_1a349acf91436b4f731e1c0d34bcc30762" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FV_IntegrationPointsAndWeights&lt; dim &gt;::FacetNormalTransformations</definition>
+        <argsstring>(std::vector&lt; std::vector&lt; std::pair&lt; double, double &gt; &gt; &gt; &amp;facet_normal_xforms) const</argsstring>
+        <name>FacetNormalTransformations</name>
+        <qualifiedname>csmp::FV_IntegrationPointsAndWeights::FacetNormalTransformations</qualifiedname>
+        <param>
+          <type>std::vector&lt; std::vector&lt; std::pair&lt; double, double &gt; &gt; &gt; &amp;</type>
+          <declname>facet_normal_xforms</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" line="66" column="10" bodyfile="source/modules/integration/finite_volumes/FV_IntegrationPointsAndWeights.cpp" bodystart="198" bodyend="202"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_v___integration_points_and_weights_1a93eb0f47791149e0cb66da32c74309d3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FV_IntegrationPointsAndWeights&lt; dim &gt;::FacetsSurroundingNode</definition>
+        <argsstring>(std::vector&lt; std::vector&lt; uint32_t &gt; &gt; &amp;facets_surrounding_node) const</argsstring>
+        <name>FacetsSurroundingNode</name>
+        <qualifiedname>csmp::FV_IntegrationPointsAndWeights::FacetsSurroundingNode</qualifiedname>
+        <param>
+          <type>std::vector&lt; std::vector&lt; uint32_t &gt; &gt; &amp;</type>
+          <declname>facets_surrounding_node</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" line="68" column="10" bodyfile="source/modules/integration/finite_volumes/FV_IntegrationPointsAndWeights.cpp" bodystart="212" bodyend="215"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_v___integration_points_and_weights_1af54593a1eea1c3b76c01e8c11470718d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FV_IntegrationPointsAndWeights&lt; dim &gt;::EdgePairs</definition>
+        <argsstring>(std::vector&lt; std::pair&lt; uint32_t, uint32_t &gt; &gt; &amp;edges_of_element) const</argsstring>
+        <name>EdgePairs</name>
+        <qualifiedname>csmp::FV_IntegrationPointsAndWeights::EdgePairs</qualifiedname>
+        <param>
+          <type>std::vector&lt; std::pair&lt; uint32_t, uint32_t &gt; &gt; &amp;</type>
+          <declname>edges_of_element</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" line="70" column="10" bodyfile="source/modules/integration/finite_volumes/FV_IntegrationPointsAndWeights.cpp" bodystart="219" bodyend="222"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_v___integration_points_and_weights_1a48f8fa200eae25be6b9257659d86d2ed" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FV_IntegrationPointsAndWeights&lt; dim &gt;::EdgeMidpoints</definition>
+        <argsstring>(std::vector&lt; Point&lt; dim &gt; &gt; &amp;rst_facet_edge_midpoints) const</argsstring>
+        <name>EdgeMidpoints</name>
+        <qualifiedname>csmp::FV_IntegrationPointsAndWeights::EdgeMidpoints</qualifiedname>
+        <param>
+          <type>std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &gt; &amp;</type>
+          <declname>rst_facet_edge_midpoints</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" line="72" column="10" bodyfile="source/modules/integration/finite_volumes/FV_IntegrationPointsAndWeights.cpp" bodystart="225" bodyend="228"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_v___integration_points_and_weights_1a1266c408fa346dc061dcf5ff7b2b5fd6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FV_IntegrationPointsAndWeights&lt; dim &gt;::Barycenter</definition>
+        <argsstring>(Point&lt; dim &gt; &amp;rst_barycenter) const</argsstring>
+        <name>Barycenter</name>
+        <qualifiedname>csmp::FV_IntegrationPointsAndWeights::Barycenter</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &amp;</type>
+          <declname>rst_barycenter</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" line="74" column="8" bodyfile="source/modules/integration/finite_volumes/FV_IntegrationPointsAndWeights.cpp" bodystart="231" bodyend="234"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_v___integration_points_and_weights_1af1d54a75d728d0cdc281e5d6487a558a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FV_IntegrationPointsAndWeights&lt; dim &gt;::FacetPoints</definition>
+        <argsstring>(std::vector&lt; std::vector&lt; Point&lt; dim &gt; &gt; &gt; &amp;rst_facet_points) const</argsstring>
+        <name>FacetPoints</name>
+        <qualifiedname>csmp::FV_IntegrationPointsAndWeights::FacetPoints</qualifiedname>
+        <param>
+          <type>std::vector&lt; std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &gt; &gt; &amp;</type>
+          <declname>rst_facet_points</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" line="76" column="10" bodyfile="source/modules/integration/finite_volumes/FV_IntegrationPointsAndWeights.cpp" bodystart="237" bodyend="240"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_v___integration_points_and_weights_1a9422dcd338244558de6cecd7d8125f8d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FV_IntegrationPointsAndWeights&lt; dim &gt;::FacetTypes</definition>
+        <argsstring>(std::vector&lt; FV_FACET_TYPE &gt; &amp;facet_types) const</argsstring>
+        <name>FacetTypes</name>
+        <qualifiedname>csmp::FV_IntegrationPointsAndWeights::FacetTypes</qualifiedname>
+        <param>
+          <type>std::vector&lt; FV_FACET_TYPE &gt; &amp;</type>
+          <declname>facet_types</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" line="78" column="10" bodyfile="source/modules/integration/finite_volumes/FV_IntegrationPointsAndWeights.cpp" bodystart="243" bodyend="246"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_v___integration_points_and_weights_1ae02a5124c4a2531ddf1eecc3988867e1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FV_IntegrationPointsAndWeights&lt; dim &gt;::SectorPoints</definition>
+        <argsstring>(std::vector&lt; std::vector&lt; Point&lt; dim &gt; &gt; &gt; &amp;rst_sector_points) const</argsstring>
+        <name>SectorPoints</name>
+        <qualifiedname>csmp::FV_IntegrationPointsAndWeights::SectorPoints</qualifiedname>
+        <param>
+          <type>std::vector&lt; std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &gt; &gt; &amp;</type>
+          <declname>rst_sector_points</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" line="80" column="10" bodyfile="source/modules/integration/finite_volumes/FV_IntegrationPointsAndWeights.cpp" bodystart="249" bodyend="252"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_v___integration_points_and_weights_1a34544f7e19ff343ed6c38b3d6417b4e6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FV_IntegrationPointsAndWeights&lt; dim &gt;::SectorEdgePairs</definition>
+        <argsstring>(std::vector&lt; std::vector&lt; std::pair&lt; uint32_t, uint32_t &gt; &gt; &gt; &amp;edges_of_sector) const</argsstring>
+        <name>SectorEdgePairs</name>
+        <qualifiedname>csmp::FV_IntegrationPointsAndWeights::SectorEdgePairs</qualifiedname>
+        <param>
+          <type>std::vector&lt; std::vector&lt; std::pair&lt; uint32_t, uint32_t &gt; &gt; &gt; &amp;</type>
+          <declname>edges_of_sector</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" line="82" column="10" bodyfile="source/modules/integration/finite_volumes/FV_IntegrationPointsAndWeights.cpp" bodystart="256" bodyend="260"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_f_v___integration_points_and_weights_1a428344c166ba4ae59eccdd4a2d86979a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::FV_IntegrationPointsAndWeights&lt; dim &gt;::FV_IntegrationPointsAndWeights</definition>
+        <argsstring>()</argsstring>
+        <name>FV_IntegrationPointsAndWeights</name>
+        <qualifiedname>csmp::FV_IntegrationPointsAndWeights::FV_IntegrationPointsAndWeights</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" line="85" column="5" bodyfile="source/modules/integration/finite_volumes/FV_IntegrationPointsAndWeights.cpp" bodystart="9" bodyend="11"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_v___integration_points_and_weights_1a484612333aa35424c6d1c07f54e3f2c5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FV_IntegrationPointsAndWeights&lt; dim &gt;::Resize</definition>
+        <argsstring>(uint32_t n_isrf, uint32_t srfs_per_node, uint32_t n_ivol, uint32_t n_spts, uint32_t n_vpts)</argsstring>
+        <name>Resize</name>
+        <qualifiedname>csmp::FV_IntegrationPointsAndWeights::Resize</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>n_isrf</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>srfs_per_node</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>n_ivol</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>n_spts</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>n_vpts</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Method resizes private data arrays of the tabulated data of the <linebreak/>
+ class <linebreak/>
+</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>n_isrf</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>number of internal facets </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>srfs_per_node</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>number of facets, confronting the node </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>n_ivol</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>number of internal sectors </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>n_spts</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>number of facet integration points </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>n_vpts</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>number of volume integration points</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>The method is used in <ref refid="classcsmp_1_1_finite_volume_stencil" kindref="compound">FiniteVolumeStencil</ref> class to resize the internal arrays of the <ref refid="classcsmp_1_1_f_v___integration_points_and_weights" kindref="compound">FV_IntegrationPointsAndWeights</ref> class. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" line="86" column="10" bodyfile="source/modules/integration/finite_volumes/FV_IntegrationPointsAndWeights.cpp" bodystart="98" bodyend="152"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_v___integration_points_and_weights_1a3dab1b76ec904fa5229c9b1ffcc64155" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FV_IntegrationPointsAndWeights&lt; dim &gt;::CreateDataFor_ISOPARAMETRIC_LINEAR_TRI</definition>
+        <argsstring>()</argsstring>
+        <name>CreateDataFor_ISOPARAMETRIC_LINEAR_TRI</name>
+        <qualifiedname>csmp::FV_IntegrationPointsAndWeights::CreateDataFor_ISOPARAMETRIC_LINEAR_TRI</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Generates data for subdivision of isoparametric linear triangle to CV sectors. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" line="107" column="10" bodyfile="source/modules/integration/finite_volumes/FV_IntegrationPointsAndWeights.cpp" bodystart="350" bodyend="478"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_v___integration_points_and_weights_1a8cf8cfa5c9db9721ab1f31d4d37b999a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FV_IntegrationPointsAndWeights&lt; dim &gt;::CreateDataFor_ISOPARAMETRIC_LINEAR_QUAD</definition>
+        <argsstring>()</argsstring>
+        <name>CreateDataFor_ISOPARAMETRIC_LINEAR_QUAD</name>
+        <qualifiedname>csmp::FV_IntegrationPointsAndWeights::CreateDataFor_ISOPARAMETRIC_LINEAR_QUAD</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Generates data for subdivision of isoparametric linear quadrilateral to the CV sectors. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" line="108" column="10" bodyfile="source/modules/integration/finite_volumes/FV_IntegrationPointsAndWeights.cpp" bodystart="490" bodyend="620"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_v___integration_points_and_weights_1a30cb94743f1aedc03a7b426e3442ba2f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FV_IntegrationPointsAndWeights&lt; dim &gt;::CreateDataFor_ISOPARAMETRIC_LINEAR_TET</definition>
+        <argsstring>()</argsstring>
+        <name>CreateDataFor_ISOPARAMETRIC_LINEAR_TET</name>
+        <qualifiedname>csmp::FV_IntegrationPointsAndWeights::CreateDataFor_ISOPARAMETRIC_LINEAR_TET</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Generates stencil data for subdivision of unit isoparametric linear tetrahedron to the CV sectors. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" line="109" column="10" bodyfile="source/modules/integration/finite_volumes/FV_IntegrationPointsAndWeights.cpp" bodystart="631" bodyend="883"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_v___integration_points_and_weights_1af7e069388e47aca0dec4e5fe89106e43" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FV_IntegrationPointsAndWeights&lt; dim &gt;::CreateDataFor_ISOPARAMETRIC_LINEAR_HEX</definition>
+        <argsstring>()</argsstring>
+        <name>CreateDataFor_ISOPARAMETRIC_LINEAR_HEX</name>
+        <qualifiedname>csmp::FV_IntegrationPointsAndWeights::CreateDataFor_ISOPARAMETRIC_LINEAR_HEX</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Generates data for subdivision of unit isoparametric linear hexahedron to the CV sectors. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" line="110" column="10" bodyfile="source/modules/integration/finite_volumes/FV_IntegrationPointsAndWeights.cpp" bodystart="895" bodyend="1324"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_v___integration_points_and_weights_1aa265b9b71e17f1c5e8a68539cb0bdaa7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FV_IntegrationPointsAndWeights&lt; dim &gt;::CreateDataFor_ISOPARAMETRIC_LINEAR_PRISM</definition>
+        <argsstring>()</argsstring>
+        <name>CreateDataFor_ISOPARAMETRIC_LINEAR_PRISM</name>
+        <qualifiedname>csmp::FV_IntegrationPointsAndWeights::CreateDataFor_ISOPARAMETRIC_LINEAR_PRISM</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Generates data for subdivision of unit isoparametric linear prism to the CV sectors. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" line="111" column="10" bodyfile="source/modules/integration/finite_volumes/FV_IntegrationPointsAndWeights.cpp" bodystart="1338" bodyend="1693"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_v___integration_points_and_weights_1a851a7c530c1e62c8242c43f949bd9ff3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FV_IntegrationPointsAndWeights&lt; dim &gt;::CreateDataFor_ISOPARAMETRIC_LINEAR_PYR</definition>
+        <argsstring>()</argsstring>
+        <name>CreateDataFor_ISOPARAMETRIC_LINEAR_PYR</name>
+        <qualifiedname>csmp::FV_IntegrationPointsAndWeights::CreateDataFor_ISOPARAMETRIC_LINEAR_PYR</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Generates data for subdivision of unit isoparametric linear pyramid to the CV sectors.</para>
+<para>NB: The pyramid is a special element type since it has two sector integration points in the apex, but only a single one in each of the other 4 sectors. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" line="112" column="10" bodyfile="source/modules/integration/finite_volumes/FV_IntegrationPointsAndWeights.cpp" bodystart="2009" bodyend="2390"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_v___integration_points_and_weights_1a6166ca9ebe05cc65f93a9db35ce900f9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FV_IntegrationPointsAndWeights&lt; dim &gt;::CreateDataFor_ISOPARAMETRIC_LINEAR_BAR</definition>
+        <argsstring>()</argsstring>
+        <name>CreateDataFor_ISOPARAMETRIC_LINEAR_BAR</name>
+        <qualifiedname>csmp::FV_IntegrationPointsAndWeights::CreateDataFor_ISOPARAMETRIC_LINEAR_BAR</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Generates data needed in the subdivision of the isoparametric linear bar element into CV sectors. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" line="113" column="10" bodyfile="source/modules/integration/finite_volumes/FV_IntegrationPointsAndWeights.cpp" bodystart="270" bodyend="337"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Data class that contains all information required to initialize the FiniteElementStencil objects containing the node-centered FV parametric space representations matching the different isoparametric finite element types in CSMP. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>S.K. Matthaei </para>
+</simplesect>
+<simplesect kind="author"><para>S. Geiger </para>
+</simplesect>
+<simplesect kind="author"><para>A.A.Mezentsev </para>
+</simplesect>
+<simplesect kind="date"><para>2003</para>
+</simplesect>
+Class fills in the C-type arrays of tabulated integration points and weights for further use in inplementation of the CVPEM method in CSMP. Characteristic feature of the class is consistent support of the mixed (poly-element) mesh.</para>
+<sect1 id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1functionality">
+<title>Functionality</title><para>Generates positions of integration points and corresponding weights for numerical integration routines <linebreak/>
+</para>
+</sect1>
+<sect1 id="compare_floats_8h_1motivation">
+<title>Motivation</title><para>Part of a consistent framework for generation of the Finite Element/Finite Volume method in CSP. Uses the concept of</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>Using the template specialization mechanism of C++, the class is implemented for different floating point types. Currently the class is supporting linear iso-parametric family of Finite Elements with reduced polynomial interpolation basis .</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>No specific application examples are required, as the method is basically called once in the <ref refid="classcsmp_1_1_finite_volume_stencil" kindref="compound">FiniteVolumeStencil</ref> class of the great code CSMP. </para>
+</sect1>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::FV_IntegrationPointsAndWeights&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_f_v___integration_points_and_weights"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" line="48" column="1" bodyfile="source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h" bodystart="48" bodyend="114"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_f_v___integration_points_and_weights_1a1266c408fa346dc061dcf5ff7b2b5fd6" prot="public" virt="non-virtual"><scope>csmp::FV_IntegrationPointsAndWeights</scope><name>Barycenter</name></member>
+      <member refid="classcsmp_1_1_f_v___integration_points_and_weights_1a6166ca9ebe05cc65f93a9db35ce900f9" prot="private" virt="non-virtual"><scope>csmp::FV_IntegrationPointsAndWeights</scope><name>CreateDataFor_ISOPARAMETRIC_LINEAR_BAR</name></member>
+      <member refid="classcsmp_1_1_f_v___integration_points_and_weights_1af7e069388e47aca0dec4e5fe89106e43" prot="private" virt="non-virtual"><scope>csmp::FV_IntegrationPointsAndWeights</scope><name>CreateDataFor_ISOPARAMETRIC_LINEAR_HEX</name></member>
+      <member refid="classcsmp_1_1_f_v___integration_points_and_weights_1aa265b9b71e17f1c5e8a68539cb0bdaa7" prot="private" virt="non-virtual"><scope>csmp::FV_IntegrationPointsAndWeights</scope><name>CreateDataFor_ISOPARAMETRIC_LINEAR_PRISM</name></member>
+      <member refid="classcsmp_1_1_f_v___integration_points_and_weights_1a851a7c530c1e62c8242c43f949bd9ff3" prot="private" virt="non-virtual"><scope>csmp::FV_IntegrationPointsAndWeights</scope><name>CreateDataFor_ISOPARAMETRIC_LINEAR_PYR</name></member>
+      <member refid="classcsmp_1_1_f_v___integration_points_and_weights_1a8cf8cfa5c9db9721ab1f31d4d37b999a" prot="private" virt="non-virtual"><scope>csmp::FV_IntegrationPointsAndWeights</scope><name>CreateDataFor_ISOPARAMETRIC_LINEAR_QUAD</name></member>
+      <member refid="classcsmp_1_1_f_v___integration_points_and_weights_1a30cb94743f1aedc03a7b426e3442ba2f" prot="private" virt="non-virtual"><scope>csmp::FV_IntegrationPointsAndWeights</scope><name>CreateDataFor_ISOPARAMETRIC_LINEAR_TET</name></member>
+      <member refid="classcsmp_1_1_f_v___integration_points_and_weights_1a3dab1b76ec904fa5229c9b1ffcc64155" prot="private" virt="non-virtual"><scope>csmp::FV_IntegrationPointsAndWeights</scope><name>CreateDataFor_ISOPARAMETRIC_LINEAR_TRI</name></member>
+      <member refid="classcsmp_1_1_f_v___integration_points_and_weights_1a48f8fa200eae25be6b9257659d86d2ed" prot="public" virt="non-virtual"><scope>csmp::FV_IntegrationPointsAndWeights</scope><name>EdgeMidpoints</name></member>
+      <member refid="classcsmp_1_1_f_v___integration_points_and_weights_1af54593a1eea1c3b76c01e8c11470718d" prot="public" virt="non-virtual"><scope>csmp::FV_IntegrationPointsAndWeights</scope><name>EdgePairs</name></member>
+      <member refid="classcsmp_1_1_f_v___integration_points_and_weights_1afb95fc67551f7d8a884b9429452d6858" prot="public" virt="non-virtual"><scope>csmp::FV_IntegrationPointsAndWeights</scope><name>FacetIntegrationPoints</name></member>
+      <member refid="classcsmp_1_1_f_v___integration_points_and_weights_1a0d94bff1c04e5e4edfa1e2b6b8ec5ab3" prot="public" virt="non-virtual"><scope>csmp::FV_IntegrationPointsAndWeights</scope><name>FacetIntegrationWeights</name></member>
+      <member refid="classcsmp_1_1_f_v___integration_points_and_weights_1a398b5aa4334668f65901934c05af56dd" prot="public" virt="non-virtual"><scope>csmp::FV_IntegrationPointsAndWeights</scope><name>FacetNormals</name></member>
+      <member refid="classcsmp_1_1_f_v___integration_points_and_weights_1a349acf91436b4f731e1c0d34bcc30762" prot="public" virt="non-virtual"><scope>csmp::FV_IntegrationPointsAndWeights</scope><name>FacetNormalTransformations</name></member>
+      <member refid="classcsmp_1_1_f_v___integration_points_and_weights_1af1d54a75d728d0cdc281e5d6487a558a" prot="public" virt="non-virtual"><scope>csmp::FV_IntegrationPointsAndWeights</scope><name>FacetPoints</name></member>
+      <member refid="classcsmp_1_1_f_v___integration_points_and_weights_1a93eb0f47791149e0cb66da32c74309d3" prot="public" virt="non-virtual"><scope>csmp::FV_IntegrationPointsAndWeights</scope><name>FacetsSurroundingNode</name></member>
+      <member refid="classcsmp_1_1_f_v___integration_points_and_weights_1a9422dcd338244558de6cecd7d8125f8d" prot="public" virt="non-virtual"><scope>csmp::FV_IntegrationPointsAndWeights</scope><name>FacetTypes</name></member>
+      <member refid="classcsmp_1_1_f_v___integration_points_and_weights_1a643745859b93ea3452e7dd9c9d4b7414" prot="public" virt="non-virtual"><scope>csmp::FV_IntegrationPointsAndWeights</scope><name>FV_IntegrationPointsAndWeights</name></member>
+      <member refid="classcsmp_1_1_f_v___integration_points_and_weights_1a428344c166ba4ae59eccdd4a2d86979a" prot="private" virt="non-virtual"><scope>csmp::FV_IntegrationPointsAndWeights</scope><name>FV_IntegrationPointsAndWeights</name></member>
+      <member refid="classcsmp_1_1_f_v___integration_points_and_weights_1aba8860611cd70fcb6abc707b0865ca20" prot="private" virt="non-virtual"><scope>csmp::FV_IntegrationPointsAndWeights</scope><name>m_barycenter</name></member>
+      <member refid="classcsmp_1_1_f_v___integration_points_and_weights_1a3085aef6e055c88cbc7b1b62b4ae3c65" prot="private" virt="non-virtual"><scope>csmp::FV_IntegrationPointsAndWeights</scope><name>m_edge_of_sectors</name></member>
+      <member refid="classcsmp_1_1_f_v___integration_points_and_weights_1a53af040f53881387a1d5cdb89a27658d" prot="private" virt="non-virtual"><scope>csmp::FV_IntegrationPointsAndWeights</scope><name>m_edges_of_element</name></member>
+      <member refid="classcsmp_1_1_f_v___integration_points_and_weights_1ab7a68fe75152d95913613daaae9e50b1" prot="private" virt="non-virtual"><scope>csmp::FV_IntegrationPointsAndWeights</scope><name>m_facet_edge_midpoints</name></member>
+      <member refid="classcsmp_1_1_f_v___integration_points_and_weights_1ab819b680a00765be0c41fc0ed718df3a" prot="private" virt="non-virtual"><scope>csmp::FV_IntegrationPointsAndWeights</scope><name>m_facet_integration_points</name></member>
+      <member refid="classcsmp_1_1_f_v___integration_points_and_weights_1a00b7b70cc84b8714d2c106587495d213" prot="private" virt="non-virtual"><scope>csmp::FV_IntegrationPointsAndWeights</scope><name>m_facet_integration_weights</name></member>
+      <member refid="classcsmp_1_1_f_v___integration_points_and_weights_1aba78703b5f0c062edc4484907da9932f" prot="private" virt="non-virtual"><scope>csmp::FV_IntegrationPointsAndWeights</scope><name>m_facet_normal_xforms</name></member>
+      <member refid="classcsmp_1_1_f_v___integration_points_and_weights_1ad59abb45720d8293237bfaf4c726e95e" prot="private" virt="non-virtual"><scope>csmp::FV_IntegrationPointsAndWeights</scope><name>m_facet_normals</name></member>
+      <member refid="classcsmp_1_1_f_v___integration_points_and_weights_1a53bc90a187f39063528f29253a57d079" prot="private" virt="non-virtual"><scope>csmp::FV_IntegrationPointsAndWeights</scope><name>m_facet_points</name></member>
+      <member refid="classcsmp_1_1_f_v___integration_points_and_weights_1a260b299986ac1f1f21051cbe9b908960" prot="private" virt="non-virtual"><scope>csmp::FV_IntegrationPointsAndWeights</scope><name>m_facet_types</name></member>
+      <member refid="classcsmp_1_1_f_v___integration_points_and_weights_1a275df3bbcfa15274157db3398edb1e83" prot="private" virt="non-virtual"><scope>csmp::FV_IntegrationPointsAndWeights</scope><name>m_facets_surrounding_node</name></member>
+      <member refid="classcsmp_1_1_f_v___integration_points_and_weights_1ad73c4029d1c08a3d51df0e922d72596a" prot="private" virt="non-virtual"><scope>csmp::FV_IntegrationPointsAndWeights</scope><name>m_par_volume_integration_points</name></member>
+      <member refid="classcsmp_1_1_f_v___integration_points_and_weights_1a04b2be1a0e8d85462a2de064e35de0cb" prot="private" virt="non-virtual"><scope>csmp::FV_IntegrationPointsAndWeights</scope><name>m_projection_weights</name></member>
+      <member refid="classcsmp_1_1_f_v___integration_points_and_weights_1a1557f7ac211e724016e36481fe30c8b3" prot="private" virt="non-virtual"><scope>csmp::FV_IntegrationPointsAndWeights</scope><name>m_sector_points</name></member>
+      <member refid="classcsmp_1_1_f_v___integration_points_and_weights_1a4f66bc3d361a47bf3ddc94984532883d" prot="private" virt="non-virtual"><scope>csmp::FV_IntegrationPointsAndWeights</scope><name>m_typeOfSubdividedElement</name></member>
+      <member refid="classcsmp_1_1_f_v___integration_points_and_weights_1a420f530af7c17189bbf6a3d4953b6927" prot="private" virt="non-virtual"><scope>csmp::FV_IntegrationPointsAndWeights</scope><name>m_volume_integration_points1</name></member>
+      <member refid="classcsmp_1_1_f_v___integration_points_and_weights_1a567dfdf2f40068e2cbc74027aedd4834" prot="private" virt="non-virtual"><scope>csmp::FV_IntegrationPointsAndWeights</scope><name>m_volume_integration_weights</name></member>
+      <member refid="classcsmp_1_1_f_v___integration_points_and_weights_1ade38aa412cbd1f3c8cb9e875cce5d2b8" prot="public" virt="non-virtual"><scope>csmp::FV_IntegrationPointsAndWeights</scope><name>ProjectionWeights</name></member>
+      <member refid="classcsmp_1_1_f_v___integration_points_and_weights_1a484612333aa35424c6d1c07f54e3f2c5" prot="private" virt="non-virtual"><scope>csmp::FV_IntegrationPointsAndWeights</scope><name>Resize</name></member>
+      <member refid="classcsmp_1_1_f_v___integration_points_and_weights_1a34544f7e19ff343ed6c38b3d6417b4e6" prot="public" virt="non-virtual"><scope>csmp::FV_IntegrationPointsAndWeights</scope><name>SectorEdgePairs</name></member>
+      <member refid="classcsmp_1_1_f_v___integration_points_and_weights_1a2c023112335d36a6624de3e8934810d2" prot="public" virt="non-virtual"><scope>csmp::FV_IntegrationPointsAndWeights</scope><name>SectorIntegrationPoints</name></member>
+      <member refid="classcsmp_1_1_f_v___integration_points_and_weights_1a907bdd6c6b97557c84209e8c1182f477" prot="public" virt="non-virtual"><scope>csmp::FV_IntegrationPointsAndWeights</scope><name>SectorIntegrationWeights</name></member>
+      <member refid="classcsmp_1_1_f_v___integration_points_and_weights_1ae02a5124c4a2531ddf1eecc3988867e1" prot="public" virt="non-virtual"><scope>csmp::FV_IntegrationPointsAndWeights</scope><name>SectorPoints</name></member>
+      <member refid="classcsmp_1_1_f_v___integration_points_and_weights_1a3bfcbea939f3f1bd7ff90b9042216501" prot="public" virt="non-virtual"><scope>csmp::FV_IntegrationPointsAndWeights</scope><name>~FV_IntegrationPointsAndWeights</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,68 @@
+\doxysection{Single\+Phase\+Velocity\+Visitor.\+h}
+\hypertarget{_single_phase_velocity_visitor_8h_source}{}\label{_single_phase_velocity_visitor_8h_source}\index{source/includes/thmc/single\_phase\_flow/SinglePhaseVelocityVisitor.h@{source/includes/thmc/single\_phase\_flow/SinglePhaseVelocityVisitor.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_VELOCITY\_AND\_VOLUME\_FLUX\_VISITOR\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_VELOCITY\_AND\_VOLUME\_FLUX\_VISITOR\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_visitor_8h}{"{}Visitor.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_vector_variable}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}};}
+\DoxyCodeLine{00009\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_model}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}};}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{comment}{///\ IMPORTANT:\ for\ legacy\ purposes,\ the\ transport\ class\ assumes\ that\ the\ supplied\ velocity\ has\ already\ been\ scaled}}
+\DoxyCodeLine{00012\ \textcolor{comment}{///\ to\ adjust\ for\ facet\ areas\ coming\ from\ the\ thickness\ attribute\ (LDE's).\ \ This\ is\ perhaps\ a\ little\ unintuitive,}}
+\DoxyCodeLine{00013\ \textcolor{comment}{///\ since\ any\ new\ user\ needs\ to\ know\ beforehand\ that\ this\ has\ to\ happen.\ \ The\ user\ should\ always\ provide\ the}}
+\DoxyCodeLine{00014\ \textcolor{comment}{///\ "{}real"{}\ velocity\ (not\ scaled)\ and\ the\ transport\ class\ should\ deal\ with\ thickness\ through\ internal\ scaling\ of\ its}}
+\DoxyCodeLine{00015\ \textcolor{comment}{///\ facet\ areas.}}
+\DoxyCodeLine{00016\ \textcolor{comment}{///\ This\ class\ calculates\ single\ phase\ velocity\ in\ its\ "{}de-\/scaled"{}\ form.\ \ No\ thickness\ factor\ is\ used.\ \ Thus,\ using\ this}}
+\DoxyCodeLine{00017\ \textcolor{comment}{///\ calculation\ with\ a\ problem\ containing\ LDE's\ and\ using\ legacy\ transport\ classes\ (e.g.\ NCFVT)\ requires}}
+\DoxyCodeLine{00018\ \textcolor{comment}{///\ an\ extra\ step\ of\ multiplication\ by\ a\ "{}thickness"{}\ attribute.}}
+\DoxyCodeLine{00019\ \textcolor{comment}{///}}
+\DoxyCodeLine{00020\ \textcolor{comment}{///\ The\ class\ supports\ and\ will\ take\ advantage\ of\ Open\ MP\ by\ dividing\ the\ evaluation\ of\ the\ contributions\ equally\ among\ available}}
+\DoxyCodeLine{00021\ \textcolor{comment}{///\ threads.}}
+\DoxyCodeLine{00022\ \textcolor{comment}{///}}
+\DoxyCodeLine{00023\ \textcolor{comment}{///\ -\/-\/\ Julian\ M.\ 26-\/09-\/2015}}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{keyword}{template}<uint32\_t\ dim,\ \textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ CELL>}
+\DoxyCodeLine{00026\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_single_phase_velocity_visitor}{SinglePhaseVelocityVisitor}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_visitor}{Visitor}}<dim>\ \{}
+\DoxyCodeLine{00027\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ SinglePhaseVelocityVisitor(\mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ porosity,}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ conductivity,}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fluid\_density,}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fluid\_pressure,}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ velocity,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ results:\ Darcy\ Velocity}}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ model\_gravity\_vector\ =\ NULL,}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ pore\_velocity\ =\ NULL,\ \ \ \textcolor{comment}{//\ results:\ True\ velocity\ (v/phi)}}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ volume\_flux\ =\ NULL,\ \ \ \ \ \textcolor{comment}{//\ results:}}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ nodal\_velocity\ =\ NULL,}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ nodal\_pore\_velocity\ =\ NULL,}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ nodal\_volume\_flux\ =\ NULL);}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ \string~SinglePhaseVelocityVisitor()\ \{\}}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ Visit(\ CELL<dim>*\ );}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{const}\ size\_t\ components\_;}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ phi\_key\_,\ \ rho\_key\_,\ \ \ conductivity\_key\_,\ fpres\_key\_,}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ velo\_key\_,\ ivelo\_key\_,\ nvelo\_key\_,\ nivelo\_key\_,}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ flux\_key\_,\ nflux\_key\_;}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\ \ \ \ \ \ \ gravity\_unit\_vector\_;}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ with\_gravity\_;}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ gravitational\_acceleration\_;}
+\DoxyCodeLine{00056\ \ \ \ \ uint32\_t\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ application\_cycle\_;}
+\DoxyCodeLine{00057\ \ \ \ \ std::pair<\textcolor{keywordtype}{double},\textcolor{keywordtype}{double}>\ \ minmaxV\_,\ minmaxF\_;}
+\DoxyCodeLine{00058\ \};}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{//\ CSMP\_VELOCITY\_AND\_VOLUME\_FLUX\_VISITOR\_H}}
+
+\end{DoxyCode}

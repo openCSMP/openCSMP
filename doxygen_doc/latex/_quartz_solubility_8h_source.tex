@@ -1,0 +1,30 @@
+\doxysection{Quartz\+Solubility.\+h}
+\hypertarget{_quartz_solubility_8h_source}{}\label{_quartz_solubility_8h_source}\index{source/includes/thmc/geochemistry/QuartzSolubility.h@{source/includes/thmc/geochemistry/QuartzSolubility.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{QUARTZ\_SOLUBILITY\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{QUARTZ\_SOLUBILITY\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_interrelation_8h}{"{}Interrelation.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00009\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_quartz_solubility}{QuartzSolubility}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_interrelation}{Interrelation}}<dim>\ \{}
+\DoxyCodeLine{00010\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ \ \ \ \ \ \ T;\ \textcolor{comment}{///\ <\ temperature\ (oC)}}
+\DoxyCodeLine{00011\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ \ \ \ \ \ \ R;\ \textcolor{comment}{///\ <\ nodal\ fluid\ density\ (kg\ m-\/3)}}
+\DoxyCodeLine{00012\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ \ \ \ \ \ \ S;\ \textcolor{comment}{///\ <\ quartz\ solubility\ (kg\ silica\ /\ kg\ fluid)}}
+\DoxyCodeLine{00013\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ sc\_tC,\ rho;}
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keywordtype}{double}\ tC,\ v,\ d1,\ d2,\ d3,\ d4,\ sol;}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00017\ \ \ \ \ QuartzSolubility(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&\ p\ );}
+\DoxyCodeLine{00018\ \ \ \ \ \string~QuartzSolubility()\ \{\};}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_quartz_solubility_a14381470b9c1998685dced7ecb48a75c}{Calculate}}();}
+\DoxyCodeLine{00020\ \};}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

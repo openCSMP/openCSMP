@@ -201,13 +201,13 @@ public:
   explicit Model( const std::string& binaryFiles );
 
   /// Reconstructor:  reads model from CSMP's native binary files, but creating (additional) storage based on supplied variable file
-  Model( const std::string& binaryFiles, const std::string& variable_txt_file );
+  Model( const std::string& binaryFileName, const std::string& variable_txt_file );
 
   /// Reconstructor: reads model from set of CSMP's native binary file, but only reading the specified subset of variables
   Model( const std::string& binaryFileName, const std::set<std::string>& subset_variables );
 
   /// using the supplied polygonal data constructs unnamed single-domain model without regions or boundaries
-  Model( VSet<dim>&, const char* var_file );
+  Model( VSet<dim>& polygonal_dataset, const char* var_file );
 
   /// constructs purely topological unnamed single-domain model without regions, boundaries nor variable storage
   explicit Model( VSet<dim>& );

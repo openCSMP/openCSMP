@@ -1,0 +1,66 @@
+.TH "csmp::PolygonGrid" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::PolygonGrid
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <PolygonGrid\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPolygonGrid\fP (const \fBPolygonGrid\fP &)"
+.br
+.ti -1c
+.RI "\fBPolygonGrid\fP & \fBoperator=\fP (const \fBPolygonGrid\fP &)"
+.br
+.ti -1c
+.RI "\fB~PolygonGrid\fP ()"
+.br
+.ti -1c
+.RI "\fBGridNode\fP * \fBAddNode\fP (\fBGridNode\fP &)"
+.br
+.ti -1c
+.RI "\fBGridFace\fP * \fBAddFace\fP (\fBGridFace\fP &)"
+.br
+.ti -1c
+.RI "\fBGridElement\fP * \fBAddElement\fP (\fBGridElement\fP &)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.PP
+\fBAttention\fP
+.RS 4
+does not seem to be used anywhere! - remove?
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. Manasipov 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2015
+.RE
+.PP
+The \fBPolygonGrid\fP contains Points and GridNodes\&. 
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "csmp::PolygonGrid::~PolygonGrid ()"
+delete nodes
+
+.PP
+delete faces
+
+.PP
+delete elements
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

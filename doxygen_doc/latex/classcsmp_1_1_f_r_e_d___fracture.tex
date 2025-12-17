@@ -1,0 +1,126 @@
+\doxysection{csmp\+::FRED\+\_\+\+Fracture Class Reference}
+\hypertarget{classcsmp_1_1_f_r_e_d___fracture}{}\label{classcsmp_1_1_f_r_e_d___fracture}\index{csmp::FRED\_Fracture@{csmp::FRED\_Fracture}}
+
+
+\doxylink{classcsmp_1_1_fracture}{Fracture} specifications; FRED was a DFN-\/modelling consortium run by Golder Associates \texorpdfstring{$<$}{<}2004.  
+
+
+
+
+{\ttfamily \#include $<$FRED\+\_\+\+Fracture.\+h$>$}
+
+
+
+Collaboration diagram for csmp\+::FRED\+\_\+\+Fracture\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=187pt]{classcsmp_1_1_f_r_e_d___fracture__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_f_r_e_d___fracture_a249372b5edb8fd8dc1b042bc5c32537b}\label{classcsmp_1_1_f_r_e_d___fracture_a249372b5edb8fd8dc1b042bc5c32537b} 
+{\bfseries FRED\+\_\+\+Fracture} (const \mbox{\hyperlink{classcsmp_1_1_f_r_e_d___fracture}{FRED\+\_\+\+Fracture}} \&ffr)
+\item 
+\Hypertarget{classcsmp_1_1_f_r_e_d___fracture_a3f333a919da8c002464376c3fb736567}\label{classcsmp_1_1_f_r_e_d___fracture_a3f333a919da8c002464376c3fb736567} 
+{\bfseries FRED\+\_\+\+Fracture} (double ap, double compr, double perm, const std\+::list$<$ double $>$ \&properties, const std\+::list$<$ \mbox{\hyperlink{classmjl_1_1_point3_d}{mjl\+::\+Point3D}} $>$ \&boundary)
+\item 
+\Hypertarget{classcsmp_1_1_f_r_e_d___fracture_a7493bc682d8a01c0f152a2eb03dd0ec6}\label{classcsmp_1_1_f_r_e_d___fracture_a7493bc682d8a01c0f152a2eb03dd0ec6} 
+\mbox{\hyperlink{classcsmp_1_1_f_r_e_d___fracture}{FRED\+\_\+\+Fracture}} \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_f_r_e_d___fracture}{FRED\+\_\+\+Fracture}} \&ffr)
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_f_r_e_d___fracture_a64099039579eefec6272f6547e003926}{Initialize\+From}} (int nprops, std\+::ifstream \&ifs)
+\item 
+\Hypertarget{classcsmp_1_1_f_r_e_d___fracture_a5990e86494cf42487bc15c395de297cd}\label{classcsmp_1_1_f_r_e_d___fracture_a5990e86494cf42487bc15c395de297cd} 
+bool {\bfseries operator$<$} (const \mbox{\hyperlink{classcsmp_1_1_f_r_e_d___fracture}{FRED\+\_\+\+Fracture}} \&ffr) const
+\begin{DoxyCompactList}\small\item\em compare perimeter length \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_f_r_e_d___fracture_ad97cb9e8e83a348df4bbd6de488a4909}\label{classcsmp_1_1_f_r_e_d___fracture_ad97cb9e8e83a348df4bbd6de488a4909} 
+uint32\+\_\+t {\bfseries ID} () const
+\item 
+\Hypertarget{classcsmp_1_1_f_r_e_d___fracture_ad14d44e7e3f4174fcba2f95c4c05ac9a}\label{classcsmp_1_1_f_r_e_d___fracture_ad14d44e7e3f4174fcba2f95c4c05ac9a} 
+std\+::string {\bfseries Text\+ID} () const
+\item 
+\Hypertarget{classcsmp_1_1_f_r_e_d___fracture_a390cf20fa67214f0fbbbe4fe3465bf05}\label{classcsmp_1_1_f_r_e_d___fracture_a390cf20fa67214f0fbbbe4fe3465bf05} 
+int {\bfseries Set\+ID} () const
+\item 
+\Hypertarget{classcsmp_1_1_f_r_e_d___fracture_a0ee532cfa104be7409d749e15f5e97c0}\label{classcsmp_1_1_f_r_e_d___fracture_a0ee532cfa104be7409d749e15f5e97c0} 
+std\+::string {\bfseries Text\+Set\+ID} () const
+\item 
+\Hypertarget{classcsmp_1_1_f_r_e_d___fracture_a42fb900e7d72a4ccde9527c9a486ab14}\label{classcsmp_1_1_f_r_e_d___fracture_a42fb900e7d72a4ccde9527c9a486ab14} 
+void {\bfseries Bary\+Center} (\mbox{\hyperlink{classmjl_1_1_point3_d}{mjl\+::\+Point3D}} \&ctr) const
+\item 
+\Hypertarget{classcsmp_1_1_f_r_e_d___fracture_abaabe2158261dd386bd09609ba15b140}\label{classcsmp_1_1_f_r_e_d___fracture_abaabe2158261dd386bd09609ba15b140} 
+void {\bfseries Bary\+Center} (double \&x, double \&y, double \&z) const
+\item 
+\Hypertarget{classcsmp_1_1_f_r_e_d___fracture_a2b8deb7ec0984efea18620a306df3f5c}\label{classcsmp_1_1_f_r_e_d___fracture_a2b8deb7ec0984efea18620a306df3f5c} 
+double {\bfseries Perimeter} () const
+\item 
+\Hypertarget{classcsmp_1_1_f_r_e_d___fracture_a55f7ace792f5191152e285b30ebb153e}\label{classcsmp_1_1_f_r_e_d___fracture_a55f7ace792f5191152e285b30ebb153e} 
+double {\bfseries Diameter} () const
+\item 
+\Hypertarget{classcsmp_1_1_f_r_e_d___fracture_a13a95358a40a27c932209b448224d9f8}\label{classcsmp_1_1_f_r_e_d___fracture_a13a95358a40a27c932209b448224d9f8} 
+void {\bfseries Bounding\+Box} (\mbox{\hyperlink{classmjl_1_1_point3_d}{mjl\+::\+Point3D}} \&cnr1, \mbox{\hyperlink{classmjl_1_1_point3_d}{mjl\+::\+Point3D}} \&cnr8) const
+\item 
+\Hypertarget{classcsmp_1_1_f_r_e_d___fracture_ac32b08aef5fa2bdf2e237d52c91ede51}\label{classcsmp_1_1_f_r_e_d___fracture_ac32b08aef5fa2bdf2e237d52c91ede51} 
+void {\bfseries Move} (double dx, double dy, double dz)
+\item 
+\Hypertarget{classcsmp_1_1_f_r_e_d___fracture_a4a19889498ff0dfa27f08983304fabbd}\label{classcsmp_1_1_f_r_e_d___fracture_a4a19889498ff0dfa27f08983304fabbd} 
+void {\bfseries Scale} (double xfac, double dfac, double zfac)
+\item 
+\Hypertarget{classcsmp_1_1_f_r_e_d___fracture_a38e9d8f94953337356ca0fc73a9be556}\label{classcsmp_1_1_f_r_e_d___fracture_a38e9d8f94953337356ca0fc73a9be556} 
+std\+::list$<$ \mbox{\hyperlink{classmjl_1_1_point3_d}{mjl\+::\+Point3D}} $>$\+::const\+\_\+iterator {\bfseries Begin} () const
+\item 
+\Hypertarget{classcsmp_1_1_f_r_e_d___fracture_ac8cb7864bf4862be5232faa6d1802711}\label{classcsmp_1_1_f_r_e_d___fracture_ac8cb7864bf4862be5232faa6d1802711} 
+std\+::list$<$ \mbox{\hyperlink{classmjl_1_1_point3_d}{mjl\+::\+Point3D}} $>$\+::const\+\_\+iterator {\bfseries End} () const
+\item 
+\Hypertarget{classcsmp_1_1_f_r_e_d___fracture_a0e5f47c969b38f7d6baac056631da5bf}\label{classcsmp_1_1_f_r_e_d___fracture_a0e5f47c969b38f7d6baac056631da5bf} 
+size\+\_\+t {\bfseries Polygon\+Points} () const
+\item 
+\Hypertarget{classcsmp_1_1_f_r_e_d___fracture_aca3bc67089089c54e670a2e8e3edd674}\label{classcsmp_1_1_f_r_e_d___fracture_aca3bc67089089c54e670a2e8e3edd674} 
+std\+::list$<$ double $>$\+::const\+\_\+iterator {\bfseries Properties\+Begin} () const
+\item 
+\Hypertarget{classcsmp_1_1_f_r_e_d___fracture_a7157ea0310e376f19e63f026626c0580}\label{classcsmp_1_1_f_r_e_d___fracture_a7157ea0310e376f19e63f026626c0580} 
+std\+::list$<$ double $>$\+::const\+\_\+iterator {\bfseries Properties\+End} () const
+\item 
+\Hypertarget{classcsmp_1_1_f_r_e_d___fracture_a8e90e61599aba23a74f8a7fc2c349dec}\label{classcsmp_1_1_f_r_e_d___fracture_a8e90e61599aba23a74f8a7fc2c349dec} 
+void {\bfseries Erase} ()
+\item 
+\Hypertarget{classcsmp_1_1_f_r_e_d___fracture_a1f04def93ef0d4279de651b25b2b4fec}\label{classcsmp_1_1_f_r_e_d___fracture_a1f04def93ef0d4279de651b25b2b4fec} 
+void {\bfseries Out} () const
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\doxylink{classcsmp_1_1_fracture}{Fracture} specifications; FRED was a DFN-\/modelling consortium run by Golder Associates \texorpdfstring{$<$}{<}2004. 
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_f_r_e_d___fracture_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_f_r_e_d___fracture_a64099039579eefec6272f6547e003926}\index{csmp::FRED\_Fracture@{csmp::FRED\_Fracture}!InitializeFrom@{InitializeFrom}}
+\index{InitializeFrom@{InitializeFrom}!csmp::FRED\_Fracture@{csmp::FRED\_Fracture}}
+\doxysubsubsection{\texorpdfstring{InitializeFrom()}{InitializeFrom()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_f_r_e_d___fracture_a64099039579eefec6272f6547e003926} 
+bool csmp\+::\+FRED\+\_\+\+Fracture\+::\+Initialize\+From (\begin{DoxyParamCaption}\item[{int}]{nprops}{, }\item[{std\+::ifstream \&}]{ifs}{}\end{DoxyParamCaption})}
+
+Explanation and file entries\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{ID\#\ \ \#points\ \#fset\ permeability\ \ \ \ \ \ compressibility\ \ \ aperture}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ 1\ \ \ \ 4\ \ \ \ 1\ \ \ \ \ 1.000000e+000\ \ \ \ \ 3.000000e-\/006\ \ \ \ \ 1.000000e-\/001}
+\DoxyCodeLine{\ \ \ 1\ \ \ \ \ 3.333330e+001\ \ \ \ -\/1.000000e+002\ \ \ \ \ 1.000000e+002}
+\DoxyCodeLine{\ \ \ 2\ \ \ \ \ 3.333330e+001\ \ \ \ -\/1.000000e+002\ \ \ \ -\/1.000000e+002}
+\DoxyCodeLine{\ \ \ 3\ \ \ \ \ 3.333330e+001\ \ \ \ \ 1.000000e+002\ \ \ \ -\/1.000000e+002}
+\DoxyCodeLine{\ \ \ 4\ \ \ \ \ 3.333330e+001\ \ \ \ \ 1.000000e+002\ \ \ \ \ 1.000000e+002}
+\DoxyCodeLine{\ \ \ 0\ \ \ \ \ 1.000000e+000\ \ \ \ \ 0.000000e+000\ \ \ \ \ 0.000000e+000}
+
+\end{DoxyCode}
+ 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/interfaces/\+Fracman/FRED\+\_\+\+Fracture.\+h\item 
+source/modules/interfaces/\+Fracman/FRED\+\_\+\+Fracture.\+cpp\end{DoxyCompactItemize}

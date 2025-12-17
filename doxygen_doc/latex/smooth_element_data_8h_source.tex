@@ -1,0 +1,59 @@
+\doxysection{smooth\+Element\+Data.\+h}
+\hypertarget{smooth_element_data_8h_source}{}\label{smooth_element_data_8h_source}\index{source/includes/property\_manipulation/smoothElementData.h@{source/includes/property\_manipulation/smoothElementData.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ \ smoothElementData.h}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ \ CSMP\_FECFVM\_Simulator}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ \ Created\ by\ Stephan\ Matthai\ on\ 4/2/20.}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//\ \ Copyright\ ©\ 2020\ Stephan\ Matthai.\ All\ rights\ reserved.}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_SMOOTH\_ELEMENT\_DATA\_H}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_SMOOTH\_ELEMENT\_DATA\_H}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_model}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}};}
+\DoxyCodeLine{00017\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_element}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}};}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{keyword}{enum}\ SMOOTHING\_TYPE\ \{\ MEAN,\ HARMONIC\_MEAN,\ LOG10\_MEAN,\ HORIZONTAL\_MEAN\ \};}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ \ \ \ smoothElementData\ -\/\ reads\ CSMP\ binary\ file\ \ and\ performs\ various\ kinds\ of\ smoothing\ on\ the\ target\ element\ variable.}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ \ \ \ @parameter\ smoothing\_passes\ tells\ functions\ how\ often\ the\ same\ operation\ is\ to\ be\ performed}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ \ \ \ @parameter\ log10smoothing\ \ takes\ the\ decadic\ log\ value\ of\ the\ properties\ before\ the\ smoothing\ is\ performed.}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ \ \ \ @parameter\ horizontal\_direction\_only\ restricts\ operation\ to\ the\ horizontal}}
+\DoxyCodeLine{00029\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00030\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00031\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp_aae3141ff59920b4f43a7b2aaaa17fa31}{smoothElementData}}(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ region\_to\_be\_smoothed,}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ variable\_name,}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ smoothing\_passes\ =\ 1,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ usually\ sufficient}}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ log10\_smoothing\ =\ \textcolor{keyword}{false},\ \ \ \ \ \ \ \textcolor{comment}{///<\ creates\ a\ more\ patchy\ pattern\ with\ emphasis\ on\ the\ high\ values}}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ in\_plane\_smoothing\ =\ \textcolor{keyword}{false},\ \ \ \ \textcolor{comment}{///<\ only\ in\ the\ horizontal\ plane\ in\ as\ much\ as\ algorithm\ can\ resolve\ }}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ output\_model\_to\_binary\ =\ \textcolor{keyword}{false}\ \textcolor{comment}{///<\ write\ the\ model\ to\ binary}}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \textcolor{comment}{///\ smoothes\ porosity\ and\ permeability\ distributions\ in\ current\ model}}
+\DoxyCodeLine{00041\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00042\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp_a209271a476c029335e29a2a53459b118}{smoothPorosityAndPermeabilityDistribution}}(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ );}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \textcolor{comment}{///\ Edoardo\ Pezulli's\ neighbor\ extrapolation\ based\ method,\ that\ avoids\ Element\ and\ Node\ objects\ located\ at\ BOX\ boundary}}
+\DoxyCodeLine{00046\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00047\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp_acd8e358c654ee230129bca34bc2b7287}{spreadPropertiesOfInitialisedCellsAcross}}(\ \textcolor{keyword}{typename}\ \mbox{\hyperlink{namespacecsmp_acd8e358c654ee230129bca34bc2b7287}{std}}::\mbox{\hyperlink{namespacecsmp_acd8e358c654ee230129bca34bc2b7287}{vector}}<\mbox{\hyperlink{namespacecsmp_acd8e358c654ee230129bca34bc2b7287}{csmp}}::\mbox{\hyperlink{namespacecsmp_acd8e358c654ee230129bca34bc2b7287}{Element}}<\mbox{\hyperlink{namespacecsmp_acd8e358c654ee230129bca34bc2b7287}{dim}}>*>::\mbox{\hyperlink{namespacecsmp_acd8e358c654ee230129bca34bc2b7287}{iterator}}\ \mbox{\hyperlink{namespacecsmp_acd8e358c654ee230129bca34bc2b7287}{first}},}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{namespacecsmp_acd8e358c654ee230129bca34bc2b7287}{std}}::\mbox{\hyperlink{namespacecsmp_acd8e358c654ee230129bca34bc2b7287}{vector}}<\mbox{\hyperlink{namespacecsmp_acd8e358c654ee230129bca34bc2b7287}{csmp}}::\mbox{\hyperlink{namespacecsmp_acd8e358c654ee230129bca34bc2b7287}{Element}}<\mbox{\hyperlink{namespacecsmp_acd8e358c654ee230129bca34bc2b7287}{dim}}>*>::\mbox{\hyperlink{namespacecsmp_acd8e358c654ee230129bca34bc2b7287}{iterator}}\ \mbox{\hyperlink{namespacecsmp_acd8e358c654ee230129bca34bc2b7287}{last}}\ );}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \}\ \textcolor{comment}{//\ end\ csmp}}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{/*\ CSMP\_SMOOTH\_ELEMENT\_DATA\_H\ */}}
+
+\end{DoxyCode}

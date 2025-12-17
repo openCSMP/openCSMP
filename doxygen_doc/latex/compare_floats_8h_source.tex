@@ -1,0 +1,76 @@
+\doxysection{compare\+Floats.\+h}
+\hypertarget{compare_floats_8h_source}{}\label{compare_floats_8h_source}\index{source/includes/math/compareFloats.h@{source/includes/math/compareFloats.h}}
+\mbox{\hyperlink{compare_floats_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_COMPARE\_FLOATS\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_COMPARE\_FLOATS\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{limits}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cmath}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}}
+\DoxyCodeLine{00008\ \{}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \ \ \textcolor{comment}{//\ Functions\ that\ directly\ test\ within\ the\ numerical\ precision\ for\ double\ }}
+\DoxyCodeLine{00011\ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ approximatelyEqual(\textcolor{keywordtype}{double}\ a,\ \textcolor{keywordtype}{double}\ b)}
+\DoxyCodeLine{00012\ \ \ \{}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keywordflow}{return}\ fabs(a\ -\/\ b)\ <=\ (\ (fabs(a)\ <\ fabs(b)\ ?\ fabs(b)\ :\ fabs(a))\ *\ std::numeric\_limits<\textcolor{keywordtype}{double}>::epsilon());}
+\DoxyCodeLine{00014\ \ \ \}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ essentiallyEqual(\textcolor{keywordtype}{double}\ a,\ \textcolor{keywordtype}{double}\ b)}
+\DoxyCodeLine{00017\ \ \ \{}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keywordflow}{return}\ fabs(a\ -\/\ b)\ <=\ (\ (fabs(a)\ >\ fabs(b)\ ?\ fabs(b)\ :\ fabs(a))\ *\ std::numeric\_limits<\textcolor{keywordtype}{double}>::epsilon());}
+\DoxyCodeLine{00019\ \ \ \}}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ definitelyGreaterThan(\textcolor{keywordtype}{double}\ a,\ \textcolor{keywordtype}{double}\ b)}
+\DoxyCodeLine{00022\ \ \ \{}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordflow}{return}\ (a\ -\/\ b)\ >\ (\ (fabs(a)\ <\ fabs(b)\ ?\ fabs(b)\ :\ fabs(a))\ *\ std::numeric\_limits<\textcolor{keywordtype}{double}>::epsilon());}
+\DoxyCodeLine{00024\ \ \ \}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ definitelyLessThan(\textcolor{keywordtype}{double}\ a,\ \textcolor{keywordtype}{double}\ b)}
+\DoxyCodeLine{00027\ \ \ \{}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordflow}{return}\ (b\ -\/\ a)\ >\ (\ (fabs(a)\ <\ fabs(b)\ ?\ fabs(b)\ :\ fabs(a))\ *\ std::numeric\_limits<\textcolor{keywordtype}{double}>::epsilon());}
+\DoxyCodeLine{00029\ \ \ \}}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \textcolor{comment}{//\ For\ user-\/defined\ tolerance}}
+\DoxyCodeLine{00033\ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ approximatelyEqual(\textcolor{keywordtype}{double}\ a,\ \textcolor{keywordtype}{double}\ b,\ \textcolor{keywordtype}{double}\ epsilon)}
+\DoxyCodeLine{00034\ \ \ \{}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordflow}{return}\ fabs(a\ -\/\ b)\ <=\ (\ (fabs(a)\ <\ fabs(b)\ ?\ fabs(b)\ :\ fabs(a))\ *\ epsilon\ );}
+\DoxyCodeLine{00036\ \ \ \}}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ essentiallyEqual(\textcolor{keywordtype}{double}\ a,\ \textcolor{keywordtype}{double}\ b,\ \textcolor{keywordtype}{double}\ epsilon\ )}
+\DoxyCodeLine{00039\ \ \ \{}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordflow}{return}\ fabs(a\ -\/\ b)\ <=\ (\ (fabs(a)\ >\ fabs(b)\ ?\ fabs(b)\ :\ fabs(a))\ *\ epsilon\ );}
+\DoxyCodeLine{00041\ \ \ \}}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ definitelyGreaterThan(\textcolor{keywordtype}{double}\ a,\ \textcolor{keywordtype}{double}\ b,\ \textcolor{keywordtype}{double}\ epsilon\ )}
+\DoxyCodeLine{00044\ \ \ \{}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordflow}{return}\ (a\ -\/\ b)\ >\ (\ (fabs(a)\ <\ fabs(b)\ ?\ fabs(b)\ :\ fabs(a))\ *\ epsilon\ );}
+\DoxyCodeLine{00046\ \ \ \}}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ definitelyLessThan(\textcolor{keywordtype}{double}\ a,\ \textcolor{keywordtype}{double}\ b,\ \textcolor{keywordtype}{double}\ epsilon\ )}
+\DoxyCodeLine{00049\ \ \ \{}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keywordflow}{return}\ (b\ -\/\ a)\ >\ (\ (fabs(a)\ <\ fabs(b)\ ?\ fabs(b)\ :\ fabs(a))\ *\ epsilon\ );}
+\DoxyCodeLine{00051\ \ \ \}}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ \ \ \ \ @file\ compareFloats.h\ "{}math/compareFloats.h"{}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00055\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00056\ \textcolor{comment}{\ \ \ \ \ @author\ Thomas\ Driesner,\ ETH\ Zuerich\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00057\ \textcolor{comment}{\ \ \ \ \ @section\ contact\ Contact\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00058\ \textcolor{comment}{\ \ \ \ \ thomas.driesner@erdw.ethz.ch\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00059\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00060\ \textcolor{comment}{\ \ \ \ \ @changes\ changes\ Latest\ Changes\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00061\ \textcolor{comment}{\ \ \ \ \ Oct.\ 6,\ 2012:\ ported\ to\ CSMP++}}
+\DoxyCodeLine{00062\ \textcolor{comment}{}}
+\DoxyCodeLine{00063\ \textcolor{comment}{\ \ \ \ \ @section\ motivation\ Motivation\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00064\ \textcolor{comment}{\ \ \ \ \ A\ selection\ of\ inline\ functions\ for\ float\ comparisons\ that\ account\ for\ numerical\ precision.\ Function\ names\ should\ be\ self-\/explanatory.\ Functions\ can\ be\ traced\ back\ to\ Knuth's\ book\ and\ were\ found\ on:\ http://stackoverflow.com/questions/17333/most-\/effective-\/way-\/for-\/float-\/and-\/double-\/comparison}}
+\DoxyCodeLine{00065\ \textcolor{comment}{}}
+\DoxyCodeLine{00066\ \textcolor{comment}{\ \ \ \ \ @section\ testing\ Testing\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00067\ \textcolor{comment}{\ \ \ \ \ code\ was\ taken\ as\ is\ without\ further\ testing}}
+\DoxyCodeLine{00068\ \textcolor{comment}{\ \ */}}
+\DoxyCodeLine{00069\ \}}
+\DoxyCodeLine{00070\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

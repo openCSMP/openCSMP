@@ -1,0 +1,25 @@
+<map id="csmp::NumIntegral_dNT_op_dN_dV&lt; dim, CELL &gt;" name="csmp::NumIntegral_dNT_op_dN_dV&lt; dim, CELL &gt;">
+<area shape="rect" id="Node000001" title="PDE operator: oper div^2 N &#45; interpolation functions squared." alt="" coords="5,3084,169,3221"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_math_operator_l_h_s.html" title=" " alt="" coords="131,2532,320,3035"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="129,3049,115,3085,110,3083,124,3047"/>
+<area shape="rect" id="Node000003" href="$structcsmp_1_1_parameter.html" title="Record that describes the physical variables that are stored on a model:" alt="" coords="322,1332,452,1826"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="425,1825,436,1981,435,2155,429,2245,417,2334,400,2423,376,2509,356,2563,331,2616,326,2614,351,2561,371,2507,395,2422,412,2334,423,2244,430,2155,430,1981,420,1826"/>
+<area shape="rect" id="Node000010" href="$classcsmp_1_1_math_operator_l_h_s.html" title="Base class for FE or FVM integrals for the lefthandside (matrix)." alt="" coords="214,1917,372,2440"/>
+<area shape="poly" id="edge11_Node000010_Node000003" title=" " alt="" coords="351,1826,339,1900,334,1899,346,1825"/>
+<area shape="rect" id="Node000004" href="$structcsmp_1_1_index.html" title="Accessor for discretized physical variables." alt="" coords="321,768,453,1261"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="390,1261,390,1315,384,1315,384,1261"/>
+<area shape="rect" id="Node000005" href="$structcsmp_1_1_local_variables.html" title="Data class to store physical variable count at given placement." alt="" coords="126,5,262,316"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="170,316,162,404,160,500,167,600,187,696,211,759,242,819,277,874,313,923,309,926,273,877,237,821,206,761,182,698,162,600,155,500,157,403,165,315"/>
+<area shape="rect" id="Node000006" href="$structcsmp_1_1_integration_point_variables.html" title=" " alt="" coords="292,488,487,636"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="264,299,349,472,344,474,259,301"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="392,636,391,721,391,751,385,751,386,721,386,636"/>
+<area shape="rect" id="Node000007" href="$classcsmp_1_1_index_tracker.html" title="Keeps track of all Index objects once they have been registered." alt="" coords="513,427,640,697"/>
+<area shape="poly" id="edge7_Node000004_Node000007" title=" " alt="" coords="563,697,550,745,511,831,465,909,460,906,506,828,545,743,558,696"/>
+<area shape="rect" id="Node000008" href="$classcsmp_1_1_dense_matrix.html" title=" " alt="" coords="66,1437,199,1721"/>
+<area shape="poly" id="edge13_Node000001_Node000008" title=" " alt="" coords="125,1721,118,1850,105,2204,97,2553,90,3067,85,3067,92,2553,100,2204,113,1850,120,1721"/>
+<area shape="poly" id="edge8_Node000002_Node000008" title=" " alt="" coords="128,1721,124,1870,123,2050,130,2246,147,2440,159,2515,154,2516,142,2441,125,2246,118,2050,118,1870,122,1721"/>
+<area shape="poly" id="edge12_Node000010_Node000008" title=" " alt="" coords="173,1720,221,1900,216,1901,168,1722"/>
+<area shape="rect" id="Node000009" href="$classcsmp_1_1_dense_matrix.html" title=" " alt="" coords="66,872,199,1157"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="135,1172,135,1437,130,1437,130,1172"/>
+<area shape="poly" id="edge10_Node000002_Node000010" title=" " alt="" coords="265,2455,256,2532,251,2532,259,2455"/>
+</map>

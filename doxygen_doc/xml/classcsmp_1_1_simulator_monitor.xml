@@ -1,0 +1,807 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_simulator_monitor" kind="class" language="C++" prot="public">
+    <compoundname>csmp::SimulatorMonitor</compoundname>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_monitor_1a5d20fde3749dbb8187aa588b9774fafa" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+        <definition>Model&lt;dim&gt;&amp; csmp::SimulatorMonitor&lt; dim &gt;::mref_</definition>
+        <argsstring></argsstring>
+        <name>mref_</name>
+        <qualifiedname>csmp::SimulatorMonitor::mref_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorMonitor.h" line="69" column="11" bodyfile="source/includes/run_control/SimulatorMonitor.h" bodystart="69" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_monitor_1a9876d658044210c0f5c0a90ed06b5e88" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::SimulatorMonitor&lt; dim &gt;::file_prefix_</definition>
+        <argsstring></argsstring>
+        <name>file_prefix_</name>
+        <qualifiedname>csmp::SimulatorMonitor::file_prefix_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorMonitor.h" line="70" column="17" bodyfile="source/includes/run_control/SimulatorMonitor.h" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_monitor_1aee98d04d3288324a2f673a3c7b40abc5" prot="private" static="no" mutable="no">
+        <type>std::list&lt; std::string &gt;</type>
+        <definition>std::list&lt;std::string&gt; csmp::SimulatorMonitor&lt; dim &gt;::integrated_property_names_</definition>
+        <argsstring></argsstring>
+        <name>integrated_property_names_</name>
+        <qualifiedname>csmp::SimulatorMonitor::integrated_property_names_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorMonitor.h" line="72" column="16" bodyfile="source/includes/run_control/SimulatorMonitor.h" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_monitor_1a147d745e93dad4275db89d71460bb3c2" prot="private" static="no" mutable="no">
+        <type>std::list&lt; std::string &gt;</type>
+        <definition>std::list&lt;std::string&gt; csmp::SimulatorMonitor&lt; dim &gt;::ranged_property_names_</definition>
+        <argsstring></argsstring>
+        <name>ranged_property_names_</name>
+        <qualifiedname>csmp::SimulatorMonitor::ranged_property_names_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorMonitor.h" line="73" column="16" bodyfile="source/includes/run_control/SimulatorMonitor.h" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_monitor_1a0d6d2495da00de68d81b6b69914db512" prot="private" static="no" mutable="no">
+        <type>std::list&lt; std::string &gt;</type>
+        <definition>std::list&lt;std::string&gt; csmp::SimulatorMonitor&lt; dim &gt;::single_value_property_names_</definition>
+        <argsstring></argsstring>
+        <name>single_value_property_names_</name>
+        <qualifiedname>csmp::SimulatorMonitor::single_value_property_names_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorMonitor.h" line="74" column="16" bodyfile="source/includes/run_control/SimulatorMonitor.h" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_monitor_1a4328f328c737c81cd03cd5eee220d9cb" prot="private" static="no" mutable="no">
+        <type>std::list&lt; std::string &gt;</type>
+        <definition>std::list&lt;std::string&gt; csmp::SimulatorMonitor&lt; dim &gt;::dimensional_property_names_</definition>
+        <argsstring></argsstring>
+        <name>dimensional_property_names_</name>
+        <qualifiedname>csmp::SimulatorMonitor::dimensional_property_names_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorMonitor.h" line="75" column="16" bodyfile="source/includes/run_control/SimulatorMonitor.h" bodystart="75" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_monitor_1aa0a736d30b61e95298a619f60d8ea31f" prot="private" static="no" mutable="no">
+        <type>std::list&lt; std::string &gt;</type>
+        <definition>std::list&lt;std::string&gt; csmp::SimulatorMonitor&lt; dim &gt;::subdomains_to_calculate_perimeter_</definition>
+        <argsstring></argsstring>
+        <name>subdomains_to_calculate_perimeter_</name>
+        <qualifiedname>csmp::SimulatorMonitor::subdomains_to_calculate_perimeter_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorMonitor.h" line="77" column="15" bodyfile="source/includes/run_control/SimulatorMonitor.h" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_monitor_1acf1336b9fefdc3eac07db52afa679ce0" prot="private" static="no" mutable="no">
+        <type>std::list&lt; std::string &gt;</type>
+        <definition>std::list&lt;std::string&gt; csmp::SimulatorMonitor&lt; dim &gt;::subdomains_to_calculate_dimension_</definition>
+        <argsstring></argsstring>
+        <name>subdomains_to_calculate_dimension_</name>
+        <qualifiedname>csmp::SimulatorMonitor::subdomains_to_calculate_dimension_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorMonitor.h" line="77" column="49" bodyfile="source/includes/run_control/SimulatorMonitor.h" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_monitor_1a5b3c060c8fc978bdfa5937ef16f5527b" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; size_t &gt;</type>
+        <definition>std::vector&lt;size_t&gt; csmp::SimulatorMonitor&lt; dim &gt;::int_header_indexes_</definition>
+        <argsstring></argsstring>
+        <name>int_header_indexes_</name>
+        <qualifiedname>csmp::SimulatorMonitor::int_header_indexes_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorMonitor.h" line="79" column="17" bodyfile="source/includes/run_control/SimulatorMonitor.h" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_monitor_1a2722dfe4e8fd138a078828e23f9dd20e" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; size_t &gt;</type>
+        <definition>std::vector&lt;size_t&gt; csmp::SimulatorMonitor&lt; dim &gt;::range_header_indexes_</definition>
+        <argsstring></argsstring>
+        <name>range_header_indexes_</name>
+        <qualifiedname>csmp::SimulatorMonitor::range_header_indexes_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorMonitor.h" line="80" column="17" bodyfile="source/includes/run_control/SimulatorMonitor.h" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_monitor_1a9c30716a2e3645642b1744469008bf65" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; size_t &gt;</type>
+        <definition>std::vector&lt;size_t&gt; csmp::SimulatorMonitor&lt; dim &gt;::single_value_header_indexes_</definition>
+        <argsstring></argsstring>
+        <name>single_value_header_indexes_</name>
+        <qualifiedname>csmp::SimulatorMonitor::single_value_header_indexes_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorMonitor.h" line="81" column="17" bodyfile="source/includes/run_control/SimulatorMonitor.h" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_monitor_1a1caa3f2b23e4a78c90abca28d3a42722" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; size_t &gt;</type>
+        <definition>std::vector&lt;size_t&gt; csmp::SimulatorMonitor&lt; dim &gt;::dimensional_header_indexes_</definition>
+        <argsstring></argsstring>
+        <name>dimensional_header_indexes_</name>
+        <qualifiedname>csmp::SimulatorMonitor::dimensional_header_indexes_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorMonitor.h" line="82" column="17" bodyfile="source/includes/run_control/SimulatorMonitor.h" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_monitor_1a1d321293121e7de5588dff9ab16e8b08" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; size_t &gt;</type>
+        <definition>std::vector&lt;size_t&gt; csmp::SimulatorMonitor&lt; dim &gt;::model_time_indexes_</definition>
+        <argsstring></argsstring>
+        <name>model_time_indexes_</name>
+        <qualifiedname>csmp::SimulatorMonitor::model_time_indexes_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorMonitor.h" line="83" column="17" bodyfile="source/includes/run_control/SimulatorMonitor.h" bodystart="83" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_monitor_1a2349ab81792edb56548f718a109be4f0" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::string &gt;</type>
+        <definition>std::vector&lt;std::string&gt; csmp::SimulatorMonitor&lt; dim &gt;::values_column_headers_</definition>
+        <argsstring></argsstring>
+        <name>values_column_headers_</name>
+        <qualifiedname>csmp::SimulatorMonitor::values_column_headers_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorMonitor.h" line="85" column="18" bodyfile="source/includes/run_control/SimulatorMonitor.h" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_monitor_1ae1c0bc905872a3e6c26890e02c602043" prot="private" static="no" mutable="no">
+        <type>std::set&lt; std::string &gt;</type>
+        <definition>std::set&lt;std::string&gt; csmp::SimulatorMonitor&lt; dim &gt;::divide_by_region_volume_</definition>
+        <argsstring></argsstring>
+        <name>divide_by_region_volume_</name>
+        <qualifiedname>csmp::SimulatorMonitor::divide_by_region_volume_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorMonitor.h" line="86" column="14" bodyfile="source/includes/run_control/SimulatorMonitor.h" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_monitor_1a93290365314a2bf5acc63002c2fc7526" prot="private" static="no" mutable="no">
+        <type>std::set&lt; std::string &gt;</type>
+        <definition>std::set&lt;std::string&gt; csmp::SimulatorMonitor&lt; dim &gt;::multiply_integrand_with_porosity_</definition>
+        <argsstring></argsstring>
+        <name>multiply_integrand_with_porosity_</name>
+        <qualifiedname>csmp::SimulatorMonitor::multiply_integrand_with_porosity_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorMonitor.h" line="86" column="38" bodyfile="source/includes/run_control/SimulatorMonitor.h" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_monitor_1a945909bc8e944cf142c2e639c05bb9a4" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::SimulatorMonitor&lt; dim &gt;::include_thickness_attribute_</definition>
+        <argsstring></argsstring>
+        <name>include_thickness_attribute_</name>
+        <qualifiedname>csmp::SimulatorMonitor::include_thickness_attribute_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorMonitor.h" line="88" column="10" bodyfile="source/includes/run_control/SimulatorMonitor.h" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_monitor_1acae1104fa635fbb761eadb06f06b5ebb" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::SimulatorMonitor&lt; dim &gt;::verbose_</definition>
+        <argsstring></argsstring>
+        <name>verbose_</name>
+        <qualifiedname>csmp::SimulatorMonitor::verbose_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorMonitor.h" line="89" column="10" bodyfile="source/includes/run_control/SimulatorMonitor.h" bodystart="89" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_monitor_1abe539fafd8a4ed072f81102ce058c51a" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::SimulatorMonitor&lt; dim &gt;::first_monitor_call_</definition>
+        <argsstring></argsstring>
+        <name>first_monitor_call_</name>
+        <qualifiedname>csmp::SimulatorMonitor::first_monitor_call_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorMonitor.h" line="89" column="19" bodyfile="source/includes/run_control/SimulatorMonitor.h" bodystart="89" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_monitor_1ac2e700a72f5e7752bf4718a0f5a785e6" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::SimulatorMonitor&lt; dim &gt;::rowdata_</definition>
+        <argsstring></argsstring>
+        <name>rowdata_</name>
+        <qualifiedname>csmp::SimulatorMonitor::rowdata_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorMonitor.h" line="91" column="17" bodyfile="source/includes/run_control/SimulatorMonitor.h" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_monitor_1a3f1dfe432acc37b5081b900482424a94" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::SimulatorMonitor&lt; dim &gt;::last_requested_monitor_time_</definition>
+        <argsstring></argsstring>
+        <name>last_requested_monitor_time_</name>
+        <qualifiedname>csmp::SimulatorMonitor::last_requested_monitor_time_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorMonitor.h" line="92" column="12" bodyfile="source/includes/run_control/SimulatorMonitor.h" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_monitor_1ab6d62f35f0980417609a02160abc2673" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::SimulatorMonitor&lt; dim &gt;::current_requested_monitor_time_</definition>
+        <argsstring></argsstring>
+        <name>current_requested_monitor_time_</name>
+        <qualifiedname>csmp::SimulatorMonitor::current_requested_monitor_time_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorMonitor.h" line="92" column="41" bodyfile="source/includes/run_control/SimulatorMonitor.h" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_monitor_1ab7253f65114c128e9611958a6d252a39" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::vector&lt; double &gt; &gt;</type>
+        <definition>std::vector&lt; std::vector&lt;double &gt; &gt; csmp::SimulatorMonitor&lt; dim &gt;::values_</definition>
+        <argsstring></argsstring>
+        <name>values_</name>
+        <qualifiedname>csmp::SimulatorMonitor::values_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorMonitor.h" line="96" column="19" bodyfile="source/includes/run_control/SimulatorMonitor.h" bodystart="96" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_simulator_monitor_1a74c0b95c386ebc59d1605c30762be26d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::SimulatorMonitor&lt; dim &gt;::SimulatorMonitor</definition>
+        <argsstring>(std::string text_file, Model&lt; dim &gt; &amp;model, bool restart, const std::list&lt; std::string &gt; &amp;variables_to_monitor_integrals, const std::list&lt; std::string &gt; &amp;variables_to_monitor_ranges, const std::list&lt; std::string &gt; &amp;variables_to_monitor_single_values, const std::list&lt; std::string &gt; &amp;subdomains_to_integrate, const std::list&lt; std::string &gt; &amp;subdomains_to_measure_ranges, const std::list&lt; std::string &gt; &amp;subdomains_to_calculate_dimension, const std::list&lt; std::string &gt; &amp;subdomains_to_calculate_perimeter, const std::list&lt; std::string &gt; &amp;to_divide_by_region_porevolume, const std::list&lt; std::string &gt; &amp;to_multiply_integrand_by_porosity, bool verbose=true)</argsstring>
+        <name>SimulatorMonitor</name>
+        <qualifiedname>csmp::SimulatorMonitor::SimulatorMonitor</qualifiedname>
+        <param>
+          <type>std::string</type>
+          <declname>text_file</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <declname>model</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>restart</declname>
+        </param>
+        <param>
+          <type>const std::list&lt; std::string &gt; &amp;</type>
+          <declname>variables_to_monitor_integrals</declname>
+        </param>
+        <param>
+          <type>const std::list&lt; std::string &gt; &amp;</type>
+          <declname>variables_to_monitor_ranges</declname>
+        </param>
+        <param>
+          <type>const std::list&lt; std::string &gt; &amp;</type>
+          <declname>variables_to_monitor_single_values</declname>
+        </param>
+        <param>
+          <type>const std::list&lt; std::string &gt; &amp;</type>
+          <declname>subdomains_to_integrate</declname>
+        </param>
+        <param>
+          <type>const std::list&lt; std::string &gt; &amp;</type>
+          <declname>subdomains_to_measure_ranges</declname>
+        </param>
+        <param>
+          <type>const std::list&lt; std::string &gt; &amp;</type>
+          <declname>subdomains_to_calculate_dimension</declname>
+        </param>
+        <param>
+          <type>const std::list&lt; std::string &gt; &amp;</type>
+          <declname>subdomains_to_calculate_perimeter</declname>
+        </param>
+        <param>
+          <type>const std::list&lt; std::string &gt; &amp;</type>
+          <declname>to_divide_by_region_porevolume</declname>
+        </param>
+        <param>
+          <type>const std::list&lt; std::string &gt; &amp;</type>
+          <declname>to_multiply_integrand_by_porosity</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>verbose</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorMonitor.h" line="13" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_monitor_1a2784365a674b0f395e4de3109aea61fe" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::SimulatorMonitor&lt; dim &gt;::~SimulatorMonitor</definition>
+        <argsstring>()</argsstring>
+        <name>~SimulatorMonitor</name>
+        <qualifiedname>csmp::SimulatorMonitor::~SimulatorMonitor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorMonitor.h" line="27" column="5" bodyfile="source/modules/run_control/SimulatorMonitor.cpp" bodystart="771" bodyend="771"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_monitor_1ae54e78b986505b0260f3f17ac47f9f96" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SimulatorMonitor&lt; dim &gt;::ScalarPropertyIntegrals</definition>
+        <argsstring>(std::vector&lt; double &gt; &amp;rowdata)</argsstring>
+        <name>ScalarPropertyIntegrals</name>
+        <qualifiedname>csmp::SimulatorMonitor::ScalarPropertyIntegrals</qualifiedname>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>rowdata</declname>
+        </param>
+        <briefdescription>
+<para>calculates property integrals and stores these for the current time-step and property name </para>
+        </briefdescription>
+        <detaileddescription>
+<para>calculates property integrals and stores these for the current time-step and property name if the variable &apos;thickness&apos; is defined in the <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>, it is used to scale the element by element integrals. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorMonitor.h" line="30" column="10" bodyfile="source/modules/run_control/SimulatorMonitor.cpp" bodystart="354" bodyend="442"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_monitor_1a938e22dd2bc90e0ce485e0fd6e979b19" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SimulatorMonitor&lt; dim &gt;::ScalarPropertyRanges</definition>
+        <argsstring>(std::vector&lt; double &gt; &amp;rowdata)</argsstring>
+        <name>ScalarPropertyRanges</name>
+        <qualifiedname>csmp::SimulatorMonitor::ScalarPropertyRanges</qualifiedname>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>rowdata</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorMonitor.h" line="31" column="10" bodyfile="source/modules/run_control/SimulatorMonitor.cpp" bodystart="445" bodyend="492"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_monitor_1aff23c7e5d0c4b11328511c0ad5a8c018" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SimulatorMonitor&lt; dim &gt;::ScalarPropertyValues</definition>
+        <argsstring>(std::vector&lt; double &gt; &amp;rowdata)</argsstring>
+        <name>ScalarPropertyValues</name>
+        <qualifiedname>csmp::SimulatorMonitor::ScalarPropertyValues</qualifiedname>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>rowdata</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>this method reads values directly from the model </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorMonitor.h" line="32" column="10" bodyfile="source/modules/run_control/SimulatorMonitor.cpp" bodystart="497" bodyend="511"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_monitor_1ab3a685d2d6ec5994ef8be5fb1677d849" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SimulatorMonitor&lt; dim &gt;::CalculateDimensionsAndPerimeters</definition>
+        <argsstring>(std::vector&lt; double &gt; &amp;rowdata)</argsstring>
+        <name>CalculateDimensionsAndPerimeters</name>
+        <qualifiedname>csmp::SimulatorMonitor::CalculateDimensionsAndPerimeters</qualifiedname>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>rowdata</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para><xrefsect id="todo_1_todo000206"><xreftitle>Todo</xreftitle><xrefdescription><para>multiplication with porosity is not supported as with regions. To be resolved later on. </para>
+</xrefdescription></xrefsect></para>
+<para><xrefsect id="todo_1_todo000207"><xreftitle>Todo</xreftitle><xrefdescription><para>multiplication with porosity is not supported as with regions. To be resolved later on. </para>
+</xrefdescription></xrefsect></para>
+<para><xrefsect id="todo_1_todo000208"><xreftitle>Todo</xreftitle><xrefdescription><para>multiplication with porosity is not supported as with regions. To be resolved later on. </para>
+</xrefdescription></xrefsect></para>
+<para><xrefsect id="todo_1_todo000209"><xreftitle>Todo</xreftitle><xrefdescription><para>multiplication with porosity is not supported as with regions. To be resolved later on. </para>
+</xrefdescription></xrefsect></para>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorMonitor.h" line="33" column="10" bodyfile="source/modules/run_control/SimulatorMonitor.cpp" bodystart="514" bodyend="578"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_monitor_1a9f0b870262a891123978021acb27bb7d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SimulatorMonitor&lt; dim &gt;::Monitor</definition>
+        <argsstring>()</argsstring>
+        <name>Monitor</name>
+        <qualifiedname>csmp::SimulatorMonitor::Monitor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorMonitor.h" line="34" column="10" bodyfile="source/modules/run_control/SimulatorMonitor.cpp" bodystart="582" bodyend="600"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_monitor_1a6a97d1e312b485dab469c1945983e61e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SimulatorMonitor&lt; dim &gt;::InsertValueHeader</definition>
+        <argsstring>(std::string property_regionname, std::vector&lt; size_t &gt; &amp;indexes)</argsstring>
+        <name>InsertValueHeader</name>
+        <qualifiedname>csmp::SimulatorMonitor::InsertValueHeader</qualifiedname>
+        <param>
+          <type>std::string</type>
+          <declname>property_regionname</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; size_t &gt; &amp;</type>
+          <declname>indexes</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>adds in values in a separate container, to be output to a separate file with the same prefix name as the other monitoring file, except with the &quot;_ext&quot; added to its name. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorMonitor.h" line="39" column="10" bodyfile="source/modules/run_control/SimulatorMonitor.cpp" bodystart="331" bodyend="346"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_monitor_1afac9d8c779f742cadcfe2c0cefed21eb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SimulatorMonitor&lt; dim &gt;::ClearAllHeadersAndValues</definition>
+        <argsstring>()</argsstring>
+        <name>ClearAllHeadersAndValues</name>
+        <qualifiedname>csmp::SimulatorMonitor::ClearAllHeadersAndValues</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorMonitor.h" line="41" column="10" bodyfile="source/modules/run_control/SimulatorMonitor.cpp" bodystart="615" bodyend="623"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_monitor_1a5e3132be163feb64d7c419e5f667c702" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SimulatorMonitor&lt; dim &gt;::EraseDataValuesOnly</definition>
+        <argsstring>()</argsstring>
+        <name>EraseDataValuesOnly</name>
+        <qualifiedname>csmp::SimulatorMonitor::EraseDataValuesOnly</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorMonitor.h" line="42" column="10" bodyfile="source/modules/run_control/SimulatorMonitor.cpp" bodystart="626" bodyend="629"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_monitor_1a1f22fd0d4f3c95d064d17d057b92b2fa" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::SimulatorMonitor&lt; dim &gt;::DataExists</definition>
+        <argsstring>()</argsstring>
+        <name>DataExists</name>
+        <qualifiedname>csmp::SimulatorMonitor::DataExists</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorMonitor.h" line="46" column="10" bodyfile="source/includes/run_control/SimulatorMonitor.h" bodystart="46" bodyend="46"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_monitor_1a8edf77295efb0213160adfe5a5267a90" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::SimulatorMonitor&lt; dim &gt;::Verbose</definition>
+        <argsstring>()</argsstring>
+        <name>Verbose</name>
+        <qualifiedname>csmp::SimulatorMonitor::Verbose</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorMonitor.h" line="53" column="10" bodyfile="source/includes/run_control/SimulatorMonitor.h" bodystart="53" bodyend="53"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_monitor_1a6854a0a8268629ecf3dfd2f6021899a0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SimulatorMonitor&lt; dim &gt;::Verbose</definition>
+        <argsstring>(bool verbose)</argsstring>
+        <name>Verbose</name>
+        <qualifiedname>csmp::SimulatorMonitor::Verbose</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>verbose</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorMonitor.h" line="54" column="10" bodyfile="source/includes/run_control/SimulatorMonitor.h" bodystart="54" bodyend="54"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_monitor_1a672e06df34b11a1fbc8967e079da392d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SimulatorMonitor&lt; dim &gt;::ReadOldMonitoringData</definition>
+        <argsstring>(std::string file_name)</argsstring>
+        <name>ReadOldMonitoringData</name>
+        <qualifiedname>csmp::SimulatorMonitor::ReadOldMonitoringData</qualifiedname>
+        <param>
+          <type>std::string</type>
+          <declname>file_name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para>if the size of the data read on one line does not match the number of headers, skip to the next data line.</para>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorMonitor.h" line="56" column="10" bodyfile="source/modules/run_control/SimulatorMonitor.cpp" bodystart="216" bodyend="316"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_monitor_1a423d38fa1262909025a7af79c9747930" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SimulatorMonitor&lt; dim &gt;::ReadModelTime</definition>
+        <argsstring>(std::vector&lt; double &gt; &amp;rowdata)</argsstring>
+        <name>ReadModelTime</name>
+        <qualifiedname>csmp::SimulatorMonitor::ReadModelTime</qualifiedname>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>rowdata</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorMonitor.h" line="58" column="10" bodyfile="source/modules/run_control/SimulatorMonitor.cpp" bodystart="603" bodyend="612"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_simulator_monitor_1a84311ff7b0d23377fbedc23909b7cf95" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::SimulatorMonitor&lt; dim &gt;::HasVolumeElements</definition>
+        <argsstring>(const Model&lt; dim &gt; &amp;) const</argsstring>
+        <name>HasVolumeElements</name>
+        <qualifiedname>csmp::SimulatorMonitor::HasVolumeElements</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <defname>mref</defname>
+        </param>
+        <briefdescription>
+<para>P. Lang: loops over all elements of all regions of model and returns true if IsVolume() </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorMonitor.h" line="62" column="11" bodyfile="source/modules/run_control/SimulatorMonitor.cpp" bodystart="754" bodyend="767"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_monitor_1a438a6fc990a7f378aad45de4d6d4c5f6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SimulatorMonitor&lt; dim &gt;::CheckForDuplicateHeaders</definition>
+        <argsstring>()</argsstring>
+        <name>CheckForDuplicateHeaders</name>
+        <qualifiedname>csmp::SimulatorMonitor::CheckForDuplicateHeaders</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorMonitor.h" line="63" column="10" bodyfile="source/modules/run_control/SimulatorMonitor.cpp" bodystart="196" bodyend="213"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_monitor_1a1548599e913fc9c7ca7cccd05722376f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SimulatorMonitor&lt; dim &gt;::Out</definition>
+        <argsstring>()</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::SimulatorMonitor::Out</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorMonitor.h" line="64" column="11" bodyfile="source/modules/run_control/SimulatorMonitor.cpp" bodystart="632" bodyend="748"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_monitor_1aa5845ab3d291d0c4e60983da4cbfbd8f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>string csmp::SimulatorMonitor&lt; dim &gt;::UScoreForSpace</definition>
+        <argsstring>(std::string text)</argsstring>
+        <name>UScoreForSpace</name>
+        <qualifiedname>csmp::SimulatorMonitor::UScoreForSpace</qualifiedname>
+        <param>
+          <type>std::string</type>
+          <declname>text</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorMonitor.h" line="65" column="17" bodyfile="source/modules/run_control/SimulatorMonitor.cpp" bodystart="319" bodyend="328"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_monitor_1a74a6ea9950af6f3d4a52057a5a0a3fea" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::SimulatorMonitor&lt; dim &gt;::is_number</definition>
+        <argsstring>(const std::string &amp;s)</argsstring>
+        <name>is_number</name>
+        <qualifiedname>csmp::SimulatorMonitor::is_number</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>s</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorMonitor.h" line="66" column="10" bodyfile="source/modules/run_control/SimulatorMonitor.cpp" bodystart="776" bodyend="781"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_monitor_1a2125fdaf09cd07c25cfeea3b0870b2ed" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::SimulatorMonitor&lt; dim &gt;::SimulatorMonitor</definition>
+        <argsstring>()</argsstring>
+        <name>SimulatorMonitor</name>
+        <qualifiedname>csmp::SimulatorMonitor::SimulatorMonitor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorMonitor.h" line="67" column="5"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::SimulatorMonitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_simulator_monitor"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/run_control/SimulatorMonitor.h" line="10" column="1" bodyfile="source/includes/run_control/SimulatorMonitor.h" bodystart="10" bodyend="105"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_simulator_monitor_1ab3a685d2d6ec5994ef8be5fb1677d849" prot="public" virt="non-virtual"><scope>csmp::SimulatorMonitor</scope><name>CalculateDimensionsAndPerimeters</name></member>
+      <member refid="classcsmp_1_1_simulator_monitor_1a438a6fc990a7f378aad45de4d6d4c5f6" prot="private" virt="non-virtual"><scope>csmp::SimulatorMonitor</scope><name>CheckForDuplicateHeaders</name></member>
+      <member refid="classcsmp_1_1_simulator_monitor_1afac9d8c779f742cadcfe2c0cefed21eb" prot="public" virt="non-virtual"><scope>csmp::SimulatorMonitor</scope><name>ClearAllHeadersAndValues</name></member>
+      <member refid="classcsmp_1_1_simulator_monitor_1ab6d62f35f0980417609a02160abc2673" prot="private" virt="non-virtual"><scope>csmp::SimulatorMonitor</scope><name>current_requested_monitor_time_</name></member>
+      <member refid="classcsmp_1_1_simulator_monitor_1a1f22fd0d4f3c95d064d17d057b92b2fa" prot="public" virt="non-virtual"><scope>csmp::SimulatorMonitor</scope><name>DataExists</name></member>
+      <member refid="classcsmp_1_1_simulator_monitor_1a1caa3f2b23e4a78c90abca28d3a42722" prot="private" virt="non-virtual"><scope>csmp::SimulatorMonitor</scope><name>dimensional_header_indexes_</name></member>
+      <member refid="classcsmp_1_1_simulator_monitor_1a4328f328c737c81cd03cd5eee220d9cb" prot="private" virt="non-virtual"><scope>csmp::SimulatorMonitor</scope><name>dimensional_property_names_</name></member>
+      <member refid="classcsmp_1_1_simulator_monitor_1ae1c0bc905872a3e6c26890e02c602043" prot="private" virt="non-virtual"><scope>csmp::SimulatorMonitor</scope><name>divide_by_region_volume_</name></member>
+      <member refid="classcsmp_1_1_simulator_monitor_1a5e3132be163feb64d7c419e5f667c702" prot="public" virt="non-virtual"><scope>csmp::SimulatorMonitor</scope><name>EraseDataValuesOnly</name></member>
+      <member refid="classcsmp_1_1_simulator_monitor_1a9876d658044210c0f5c0a90ed06b5e88" prot="private" virt="non-virtual"><scope>csmp::SimulatorMonitor</scope><name>file_prefix_</name></member>
+      <member refid="classcsmp_1_1_simulator_monitor_1abe539fafd8a4ed072f81102ce058c51a" prot="private" virt="non-virtual"><scope>csmp::SimulatorMonitor</scope><name>first_monitor_call_</name></member>
+      <member refid="classcsmp_1_1_simulator_monitor_1a84311ff7b0d23377fbedc23909b7cf95" prot="private" virt="non-virtual"><scope>csmp::SimulatorMonitor</scope><name>HasVolumeElements</name></member>
+      <member refid="classcsmp_1_1_simulator_monitor_1a945909bc8e944cf142c2e639c05bb9a4" prot="private" virt="non-virtual"><scope>csmp::SimulatorMonitor</scope><name>include_thickness_attribute_</name></member>
+      <member refid="classcsmp_1_1_simulator_monitor_1a6a97d1e312b485dab469c1945983e61e" prot="public" virt="non-virtual"><scope>csmp::SimulatorMonitor</scope><name>InsertValueHeader</name></member>
+      <member refid="classcsmp_1_1_simulator_monitor_1a5b3c060c8fc978bdfa5937ef16f5527b" prot="private" virt="non-virtual"><scope>csmp::SimulatorMonitor</scope><name>int_header_indexes_</name></member>
+      <member refid="classcsmp_1_1_simulator_monitor_1aee98d04d3288324a2f673a3c7b40abc5" prot="private" virt="non-virtual"><scope>csmp::SimulatorMonitor</scope><name>integrated_property_names_</name></member>
+      <member refid="classcsmp_1_1_simulator_monitor_1a74a6ea9950af6f3d4a52057a5a0a3fea" prot="private" virt="non-virtual"><scope>csmp::SimulatorMonitor</scope><name>is_number</name></member>
+      <member refid="classcsmp_1_1_simulator_monitor_1a3f1dfe432acc37b5081b900482424a94" prot="private" virt="non-virtual"><scope>csmp::SimulatorMonitor</scope><name>last_requested_monitor_time_</name></member>
+      <member refid="classcsmp_1_1_simulator_monitor_1a1d321293121e7de5588dff9ab16e8b08" prot="private" virt="non-virtual"><scope>csmp::SimulatorMonitor</scope><name>model_time_indexes_</name></member>
+      <member refid="classcsmp_1_1_simulator_monitor_1a9f0b870262a891123978021acb27bb7d" prot="public" virt="non-virtual"><scope>csmp::SimulatorMonitor</scope><name>Monitor</name></member>
+      <member refid="classcsmp_1_1_simulator_monitor_1a5d20fde3749dbb8187aa588b9774fafa" prot="private" virt="non-virtual"><scope>csmp::SimulatorMonitor</scope><name>mref_</name></member>
+      <member refid="classcsmp_1_1_simulator_monitor_1a93290365314a2bf5acc63002c2fc7526" prot="private" virt="non-virtual"><scope>csmp::SimulatorMonitor</scope><name>multiply_integrand_with_porosity_</name></member>
+      <member refid="classcsmp_1_1_simulator_monitor_1a1548599e913fc9c7ca7cccd05722376f" prot="private" virt="non-virtual"><scope>csmp::SimulatorMonitor</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_simulator_monitor_1a2722dfe4e8fd138a078828e23f9dd20e" prot="private" virt="non-virtual"><scope>csmp::SimulatorMonitor</scope><name>range_header_indexes_</name></member>
+      <member refid="classcsmp_1_1_simulator_monitor_1a147d745e93dad4275db89d71460bb3c2" prot="private" virt="non-virtual"><scope>csmp::SimulatorMonitor</scope><name>ranged_property_names_</name></member>
+      <member refid="classcsmp_1_1_simulator_monitor_1a423d38fa1262909025a7af79c9747930" prot="public" virt="non-virtual"><scope>csmp::SimulatorMonitor</scope><name>ReadModelTime</name></member>
+      <member refid="classcsmp_1_1_simulator_monitor_1a672e06df34b11a1fbc8967e079da392d" prot="public" virt="non-virtual"><scope>csmp::SimulatorMonitor</scope><name>ReadOldMonitoringData</name></member>
+      <member refid="classcsmp_1_1_simulator_monitor_1ac2e700a72f5e7752bf4718a0f5a785e6" prot="private" virt="non-virtual"><scope>csmp::SimulatorMonitor</scope><name>rowdata_</name></member>
+      <member refid="classcsmp_1_1_simulator_monitor_1ae54e78b986505b0260f3f17ac47f9f96" prot="public" virt="non-virtual"><scope>csmp::SimulatorMonitor</scope><name>ScalarPropertyIntegrals</name></member>
+      <member refid="classcsmp_1_1_simulator_monitor_1a938e22dd2bc90e0ce485e0fd6e979b19" prot="public" virt="non-virtual"><scope>csmp::SimulatorMonitor</scope><name>ScalarPropertyRanges</name></member>
+      <member refid="classcsmp_1_1_simulator_monitor_1aff23c7e5d0c4b11328511c0ad5a8c018" prot="public" virt="non-virtual"><scope>csmp::SimulatorMonitor</scope><name>ScalarPropertyValues</name></member>
+      <member refid="classcsmp_1_1_simulator_monitor_1a74c0b95c386ebc59d1605c30762be26d" prot="public" virt="non-virtual"><scope>csmp::SimulatorMonitor</scope><name>SimulatorMonitor</name></member>
+      <member refid="classcsmp_1_1_simulator_monitor_1a2125fdaf09cd07c25cfeea3b0870b2ed" prot="private" virt="non-virtual"><scope>csmp::SimulatorMonitor</scope><name>SimulatorMonitor</name></member>
+      <member refid="classcsmp_1_1_simulator_monitor_1a9c30716a2e3645642b1744469008bf65" prot="private" virt="non-virtual"><scope>csmp::SimulatorMonitor</scope><name>single_value_header_indexes_</name></member>
+      <member refid="classcsmp_1_1_simulator_monitor_1a0d6d2495da00de68d81b6b69914db512" prot="private" virt="non-virtual"><scope>csmp::SimulatorMonitor</scope><name>single_value_property_names_</name></member>
+      <member refid="classcsmp_1_1_simulator_monitor_1acf1336b9fefdc3eac07db52afa679ce0" prot="private" virt="non-virtual"><scope>csmp::SimulatorMonitor</scope><name>subdomains_to_calculate_dimension_</name></member>
+      <member refid="classcsmp_1_1_simulator_monitor_1aa0a736d30b61e95298a619f60d8ea31f" prot="private" virt="non-virtual"><scope>csmp::SimulatorMonitor</scope><name>subdomains_to_calculate_perimeter_</name></member>
+      <member refid="classcsmp_1_1_simulator_monitor_1aa5845ab3d291d0c4e60983da4cbfbd8f" prot="private" virt="non-virtual"><scope>csmp::SimulatorMonitor</scope><name>UScoreForSpace</name></member>
+      <member refid="classcsmp_1_1_simulator_monitor_1ab7253f65114c128e9611958a6d252a39" prot="private" virt="non-virtual"><scope>csmp::SimulatorMonitor</scope><name>values_</name></member>
+      <member refid="classcsmp_1_1_simulator_monitor_1a2349ab81792edb56548f718a109be4f0" prot="private" virt="non-virtual"><scope>csmp::SimulatorMonitor</scope><name>values_column_headers_</name></member>
+      <member refid="classcsmp_1_1_simulator_monitor_1a8edf77295efb0213160adfe5a5267a90" prot="public" virt="non-virtual"><scope>csmp::SimulatorMonitor</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_simulator_monitor_1a6854a0a8268629ecf3dfd2f6021899a0" prot="public" virt="non-virtual"><scope>csmp::SimulatorMonitor</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_simulator_monitor_1acae1104fa635fbb761eadb06f06b5ebb" prot="private" virt="non-virtual"><scope>csmp::SimulatorMonitor</scope><name>verbose_</name></member>
+      <member refid="classcsmp_1_1_simulator_monitor_1a2784365a674b0f395e4de3109aea61fe" prot="public" virt="non-virtual"><scope>csmp::SimulatorMonitor</scope><name>~SimulatorMonitor</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

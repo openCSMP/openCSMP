@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_685df040edf79c50521b4202ca34ade0" kind="dir">
+    <compoundname>source/includes/interfaces/ANSYS</compoundname>
+    <innerfile refid="_a_n_s_y_s___element_specifications_8h">ANSYS_ElementSpecifications.h</innerfile>
+    <innerfile refid="_a_n_s_y_s___interface_8h">ANSYS_Interface.h</innerfile>
+    <innerfile refid="_a_n_s_y_s___model2_d_8h">ANSYS_Model2D.h</innerfile>
+    <innerfile refid="_a_n_s_y_s___model3_d_8h">ANSYS_Model3D.h</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="source/includes/interfaces/ANSYS/"/>
+  </compounddef>
+</doxygen>

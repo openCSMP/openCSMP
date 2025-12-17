@@ -1,0 +1,33 @@
+.TH "LinearCuboid_Test" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+LinearCuboid_Test
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <LinearCuboid_Test\&.h>\fP
+.SH "Detailed Description"
+.PP 
+
+.PP
+\fBAuthor\fP
+.RS 4
+Hani Akbari (Jan\&. 2017) This class tests implementation of LinearCuboid element\&.
+.RE
+.PP
+1- In constructor, \fBLinearCuboid_Test(bool)\fP we define 8 nodes of a cuboid element in standard oredering and each node has 3 coordinates\&.
+
+.PP
+2- Run() tests integral of NN and dNdN i\&.e\&. integrates multilplication of shape functions and gradient of shape functions over element and prints the result\&.
+
+.PP
+3- Run() tests values of shape functions at nodes : TestSumShapesAtBaryCenter(const Element<3U>&)\&. It also tests sum of values of shape functions at barycenter that must be one : TestSumShapesAtBaryCenter(const Element<3U>& )
+
+.PP
+4- _equalTest(a,b,tol) returns false if |a-b| > tol\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

@@ -1,0 +1,1107 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_sparse_matrix" kind="class" language="C++" prot="public">
+    <compoundname>csmp::SparseMatrix</compoundname>
+    <includes refid="_sparse_matrix_8h" local="no">SparseMatrix.h</includes>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="classcsmp_1_1_sparse_matrix_1a5c6457b0e8e2a963f999c2a5cd5b87a1" prot="public" static="no">
+        <type>std::vector&lt; std::map&lt; size_t, double &gt; &gt;::const_iterator</type>
+        <definition>typedef std::vector&lt;std::map&lt;size_t,double&gt;&gt;::const_iterator csmp::SparseMatrix::rowsConstIterator</definition>
+        <argsstring></argsstring>
+        <name>rowsConstIterator</name>
+        <qualifiedname>csmp::SparseMatrix::rowsConstIterator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="33" column="45" bodyfile="source/includes/math/SparseMatrix.h" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="classcsmp_1_1_sparse_matrix_1a0d5006fd6699c5601720d0bce9a7ad7f" prot="public" static="no">
+        <type>std::map&lt; size_t, double &gt;::const_iterator</type>
+        <definition>typedef std::map&lt;size_t,double&gt;::const_iterator csmp::SparseMatrix::colsConstIterator</definition>
+        <argsstring></argsstring>
+        <name>colsConstIterator</name>
+        <qualifiedname>csmp::SparseMatrix::colsConstIterator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="34" column="56" bodyfile="source/includes/math/SparseMatrix.h" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="classcsmp_1_1_sparse_matrix_1a2e059384e007e181e6661ba20f07946c" prot="public" static="no">
+        <type>std::vector&lt; std::map&lt; size_t, double &gt; &gt;::iterator</type>
+        <definition>typedef std::vector&lt;std::map&lt;size_t,double&gt;&gt;::iterator csmp::SparseMatrix::rowsIterator</definition>
+        <argsstring></argsstring>
+        <name>rowsIterator</name>
+        <qualifiedname>csmp::SparseMatrix::rowsIterator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="35" column="45" bodyfile="source/includes/math/SparseMatrix.h" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="classcsmp_1_1_sparse_matrix_1a616f8317e533e506a5972aac2726abfb" prot="public" static="no">
+        <type>std::map&lt; size_t, double &gt;::iterator</type>
+        <definition>typedef std::map&lt;size_t,double&gt;::iterator csmp::SparseMatrix::colsIterator</definition>
+        <argsstring></argsstring>
+        <name>colsIterator</name>
+        <qualifiedname>csmp::SparseMatrix::colsIterator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="36" column="56" bodyfile="source/includes/math/SparseMatrix.h" bodystart="36" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_sparse_matrix_1ac419903fa90ab991016dda18bbdf9f64" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::map&lt; size_t, double &gt; &gt;</type>
+        <definition>std::vector&lt;std::map&lt;size_t,double&gt; &gt; csmp::SparseMatrix::data_</definition>
+        <argsstring></argsstring>
+        <name>data_</name>
+        <qualifiedname>csmp::SparseMatrix::data_</qualifiedname>
+        <briefdescription>
+<para>row vector with maps that store the non-zero elements of the matrix </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="111" column="18" bodyfile="source/includes/math/SparseMatrix.h" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_sparse_matrix_1a7c2d547a189d230871c9ad5df46c637e" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::SparseMatrix::entries_</definition>
+        <argsstring></argsstring>
+        <name>entries_</name>
+        <qualifiedname>csmp::SparseMatrix::entries_</qualifiedname>
+        <initializer>= 0U</initializer>
+        <briefdescription>
+<para>total number of elements in the matrix </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="112" column="44" bodyfile="source/includes/math/SparseMatrix.h" bodystart="112" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1a17e0d4398993cb9378b7ae90626e6c97" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::SparseMatrix::SparseMatrix</definition>
+        <argsstring>()</argsstring>
+        <name>SparseMatrix</name>
+        <qualifiedname>csmp::SparseMatrix::SparseMatrix</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="25" column="5" bodyfile="source/modules/math/SparseMatrix.cpp" bodystart="12" bodyend="14"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1a10a0e6af2de3b84099a81c95142e82d3" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::SparseMatrix::SparseMatrix</definition>
+        <argsstring>(size_t m_x_n)</argsstring>
+        <name>SparseMatrix</name>
+        <qualifiedname>csmp::SparseMatrix::SparseMatrix</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>m_x_n</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="26" column="14" bodyfile="source/modules/math/SparseMatrix.cpp" bodystart="17" bodyend="20"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1a602a4a8769f756677545bae5b3ee2c93" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::SparseMatrix::SparseMatrix</definition>
+        <argsstring>(const SparseMatrix &amp;)</argsstring>
+        <name>SparseMatrix</name>
+        <qualifiedname>csmp::SparseMatrix::SparseMatrix</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_sparse_matrix" kindref="compound">SparseMatrix</ref> &amp;</type>
+          <defname>sp</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="27" column="5" bodyfile="source/modules/math/SparseMatrix.cpp" bodystart="23" bodyend="27"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1a4027552e8c240b1af0bc829ae9f36665" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::SparseMatrix::SparseMatrix</definition>
+        <argsstring>(SparseMatrix &amp;&amp;)</argsstring>
+        <name>SparseMatrix</name>
+        <qualifiedname>csmp::SparseMatrix::SparseMatrix</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_sparse_matrix" kindref="compound">SparseMatrix</ref> &amp;&amp;</type>
+          <defname>sp</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="28" column="5" bodyfile="source/modules/math/SparseMatrix.cpp" bodystart="30" bodyend="34"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1a1337033ac964d8100f9c5274de46f03b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_sparse_matrix" kindref="compound">SparseMatrix</ref> &amp;</type>
+        <definition>SparseMatrix &amp; csmp::SparseMatrix::operator=</definition>
+        <argsstring>(const SparseMatrix &amp;)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::SparseMatrix::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_sparse_matrix" kindref="compound">SparseMatrix</ref> &amp;</type>
+          <defname>sp</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="29" column="18" bodyfile="source/modules/math/SparseMatrix.cpp" bodystart="38" bodyend="45"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1ad41df1e097225640e2f60ddb7b603695" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_sparse_matrix" kindref="compound">SparseMatrix</ref> &amp;</type>
+        <definition>SparseMatrix &amp; csmp::SparseMatrix::operator=</definition>
+        <argsstring>(SparseMatrix &amp;&amp;)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::SparseMatrix::operator=</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_sparse_matrix" kindref="compound">SparseMatrix</ref> &amp;&amp;</type>
+          <defname>sp</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="30" column="18" bodyfile="source/modules/math/SparseMatrix.cpp" bodystart="48" bodyend="53"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1af686fa4d81e4b69a484e77ceb87be094" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::SparseMatrix::~SparseMatrix</definition>
+        <argsstring>()=default</argsstring>
+        <name>~SparseMatrix</name>
+        <qualifiedname>csmp::SparseMatrix::~SparseMatrix</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="31" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1aaac91f911000b006477b825c75bc6eda" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_sparse_matrix" kindref="compound">SparseMatrix</ref> &amp;</type>
+        <definition>SparseMatrix &amp; csmp::SparseMatrix::operator+=</definition>
+        <argsstring>(const SparseMatrix &amp;)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>csmp::SparseMatrix::operator+=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_sparse_matrix" kindref="compound">SparseMatrix</ref> &amp;</type>
+          <defname>mat</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Operator accumulates sparse matrices. Initially created for OpenMP features. All need to have the same number of row entries. <ref refid="structcsmp_1_1_column" kindref="compound">Column</ref> entries may be differenct <simplesect kind="author"><para>Julian E. Mindel </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="38" column="18" bodyfile="source/modules/math/SparseMatrix.cpp" bodystart="263" bodyend="290"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1a0c9950bf5e7c7d3fdd38ba87c8d940f5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::SparseMatrix::operator()</definition>
+        <argsstring>(size_t, size_t) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>csmp::SparseMatrix::operator()</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <defname>j</defname>
+        </param>
+        <briefdescription>
+<para>operator accumulates sparse matrices. Initially created for OpenMP features. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>standard accessor of matrix elements (asserts i,j in debug mode) </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="41" column="13" bodyfile="source/modules/math/SparseMatrix.cpp" bodystart="113" bodyend="120"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1a2a2d24236bc667ae2196137dcfe96edb" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::SparseMatrix::At</definition>
+        <argsstring>(size_t, size_t) const</argsstring>
+        <name>At</name>
+        <qualifiedname>csmp::SparseMatrix::At</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <defname>j</defname>
+        </param>
+        <briefdescription>
+<para>range-checked accessor for matrix elements </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="44" column="13" bodyfile="source/modules/math/SparseMatrix.cpp" bodystart="123" bodyend="141"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1a76492c150a731df19960249de024b031" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SparseMatrix::Resize</definition>
+        <argsstring>(size_t n_x_m, bool preserve_allocated_memory=true)</argsstring>
+        <name>Resize</name>
+        <qualifiedname>csmp::SparseMatrix::Resize</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>n_x_m</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>preserve_allocated_memory</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+<para>resets the rows=columns of the square matrix, retaining potential extra capacity of the vector used </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="47" column="25" bodyfile="source/modules/math/SparseMatrix.cpp" bodystart="59" bodyend="64"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1aef4ae623451108fe5fb28185b7527c01" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::SparseMatrix::Entries</definition>
+        <argsstring>() const</argsstring>
+        <name>Entries</name>
+        <qualifiedname>csmp::SparseMatrix::Entries</qualifiedname>
+        <briefdescription>
+<para>reports the non-zero elements currently stored in the sparse matrix </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="50" column="25" bodyfile="source/modules/math/SparseMatrix.cpp" bodystart="68" bodyend="71"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1aee70b7ef693deebad47c3b5a9a88a613" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::SparseMatrix::Rows</definition>
+        <argsstring>() const</argsstring>
+        <name>Rows</name>
+        <qualifiedname>csmp::SparseMatrix::Rows</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="51" column="25" bodyfile="source/modules/math/SparseMatrix.cpp" bodystart="101" bodyend="104"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1aeb1a0fdf10891f6fc28079982f902bda" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::SparseMatrix::Cols</definition>
+        <argsstring>() const</argsstring>
+        <name>Cols</name>
+        <qualifiedname>csmp::SparseMatrix::Cols</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="52" column="25" bodyfile="source/modules/math/SparseMatrix.cpp" bodystart="107" bodyend="110"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1ad4fc22e6203144dd5942882b3c4dc167" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>rowsConstIterator</type>
+        <definition>vector&lt; map&lt; size_t, double &gt; &gt;::const_iterator csmp::SparseMatrix::Begin</definition>
+        <argsstring>() const</argsstring>
+        <name>Begin</name>
+        <qualifiedname>csmp::SparseMatrix::Begin</qualifiedname>
+        <briefdescription>
+<para>iterator over the matrix rows </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="53" column="25" bodyfile="source/modules/math/SparseMatrix.cpp" bodystart="75" bodyend="78"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1a33328949ca344a7b9c317d6bcd2b36e4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>rowsConstIterator</type>
+        <definition>vector&lt; map&lt; size_t, double &gt; &gt;::const_iterator csmp::SparseMatrix::End</definition>
+        <argsstring>() const</argsstring>
+        <name>End</name>
+        <qualifiedname>csmp::SparseMatrix::End</qualifiedname>
+        <briefdescription>
+<para>iterator over the rows of the matrix </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="54" column="25" bodyfile="source/modules/math/SparseMatrix.cpp" bodystart="82" bodyend="85"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1add7a549cf6ecc709ed8245792f4c33b3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>colsConstIterator</type>
+        <definition>map&lt; size_t, double &gt;::const_iterator csmp::SparseMatrix::RowBegin</definition>
+        <argsstring>(size_t i) const</argsstring>
+        <name>RowBegin</name>
+        <qualifiedname>csmp::SparseMatrix::RowBegin</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="55" column="25" bodyfile="source/modules/math/SparseMatrix.cpp" bodystart="88" bodyend="92"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1a6695050aa6c81e71079c801554bc86bb" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>colsConstIterator</type>
+        <definition>map&lt; size_t, double &gt;::const_iterator csmp::SparseMatrix::RowEnd</definition>
+        <argsstring>(size_t i) const</argsstring>
+        <name>RowEnd</name>
+        <qualifiedname>csmp::SparseMatrix::RowEnd</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="56" column="25" bodyfile="source/modules/math/SparseMatrix.cpp" bodystart="95" bodyend="99"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1a7e6ecfca93088f3df3d8a4056406ed7c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SparseMatrix::RemoveHalo</definition>
+        <argsstring>(int32_t nrhalo)</argsstring>
+        <name>RemoveHalo</name>
+        <qualifiedname>csmp::SparseMatrix::RemoveHalo</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>nrhalo</declname>
+        </param>
+        <briefdescription>
+<para>zeroing out rows in the context of parallel computations </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="59" column="15" bodyfile="source/modules/math/SparseMatrix.cpp" bodystart="146" bodyend="150"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1a7163c8281f1305400d086314673b0c73" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::SparseMatrix::HasEntry</definition>
+        <argsstring>(size_t i, size_t j) const</argsstring>
+        <name>HasEntry</name>
+        <qualifiedname>csmp::SparseMatrix::HasEntry</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>j</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="60" column="15" bodyfile="source/includes/math/SparseMatrix.h" bodystart="60" bodyend="60"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1a2ad90e342bb5575e6e9dc32466e823a2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SparseMatrix::RemoveEntry</definition>
+        <argsstring>(size_t, size_t)</argsstring>
+        <name>RemoveEntry</name>
+        <qualifiedname>csmp::SparseMatrix::RemoveEntry</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <defname>j</defname>
+        </param>
+        <briefdescription>
+<para>remove a single element from the matrix </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="61" column="15" bodyfile="source/modules/math/SparseMatrix.cpp" bodystart="154" bodyend="161"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1a2301e91687a211598c29b0b0a7c0204b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SparseMatrix::Erase</definition>
+        <argsstring>()</argsstring>
+        <name>Erase</name>
+        <qualifiedname>csmp::SparseMatrix::Erase</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="62" column="15" bodyfile="source/modules/math/SparseMatrix.cpp" bodystart="164" bodyend="168"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1a3cc6df801845cf90401c3e0aeffb9178" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SparseMatrix::Zero</definition>
+        <argsstring>()</argsstring>
+        <name>Zero</name>
+        <qualifiedname>csmp::SparseMatrix::Zero</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="63" column="15" bodyfile="source/modules/math/SparseMatrix.cpp" bodystart="171" bodyend="174"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1a47ce0ca2db45f25c5cdb103ae25a0941" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SparseMatrix::ZeroRow</definition>
+        <argsstring>(size_t row)</argsstring>
+        <name>ZeroRow</name>
+        <qualifiedname>csmp::SparseMatrix::ZeroRow</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>row</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="64" column="15" bodyfile="source/modules/math/SparseMatrix.cpp" bodystart="178" bodyend="182"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1afed837e4ccf3132692c950dca50a81ae" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SparseMatrix::ZeroColumn</definition>
+        <argsstring>(size_t col)</argsstring>
+        <name>ZeroColumn</name>
+        <qualifiedname>csmp::SparseMatrix::ZeroColumn</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>col</declname>
+        </param>
+        <briefdescription>
+<para>beware! - this is not an efficient operation </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="66" column="15" bodyfile="source/modules/math/SparseMatrix.cpp" bodystart="185" bodyend="194"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1ad3c97e1e94ba49b44917bbfa00222d9c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SparseMatrix::Add</definition>
+        <argsstring>(size_t, size_t, double val)</argsstring>
+        <name>Add</name>
+        <qualifiedname>csmp::SparseMatrix::Add</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <defname>j</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+<para>more efficient additions to matrix than attainable with operator() </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="68" column="15" bodyfile="source/modules/math/SparseMatrix.cpp" bodystart="227" bodyend="256"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1a3130d9f7e751ff17e37df33d49ad07d5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SparseMatrix::Assign</definition>
+        <argsstring>(size_t, size_t, double val)</argsstring>
+        <name>Assign</name>
+        <qualifiedname>csmp::SparseMatrix::Assign</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <defname>j</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Assigns value to the i,j&apos;th element in the matrix, overwriting any value that might have resided there before. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="69" column="15" bodyfile="source/modules/math/SparseMatrix.cpp" bodystart="200" bodyend="221"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1a16e7487b8b3070de3d0d4b378447cc94" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SparseMatrix::MultiplyEntryWith</definition>
+        <argsstring>(size_t i, size_t j, double val)</argsstring>
+        <name>MultiplyEntryWith</name>
+        <qualifiedname>csmp::SparseMatrix::MultiplyEntryWith</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>j</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+<para>multiply an element of the matrix with val; if result is zero, the element is eliminated </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="70" column="15" bodyfile="source/modules/math/SparseMatrix.cpp" bodystart="295" bodyend="317"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1ac31cc1d2645bcc59242281142282535d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SparseMatrix::MultiplyWith</definition>
+        <argsstring>(const std::vector&lt; double &gt; &amp;vec, std::vector&lt; double &gt; &amp;res)</argsstring>
+        <name>MultiplyWith</name>
+        <qualifiedname>csmp::SparseMatrix::MultiplyWith</qualifiedname>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>vec</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>res</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="71" column="15" bodyfile="source/modules/math/SparseMatrix.cpp" bodystart="320" bodyend="338"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1a128750bd06e2126dc6f765df36fd5db7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SparseMatrix::ColumnIndices</definition>
+        <argsstring>(size_t row, std::vector&lt; size_t &gt; &amp;indices) const</argsstring>
+        <name>ColumnIndices</name>
+        <qualifiedname>csmp::SparseMatrix::ColumnIndices</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>row</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; size_t &gt; &amp;</type>
+          <declname>indices</declname>
+        </param>
+        <briefdescription>
+<para>returns j&apos;s of non-zero column entries in row </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns the indices j of non-zero column elements in the row of interest.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>row</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>of interest </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>indices</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>is the vector into which the columns where the non-zero elements reside are returned </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="74" column="15" bodyfile="source/modules/math/SparseMatrix.cpp" bodystart="348" bodyend="363"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1af56b248669bef709eea77d325e7048ec" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::SparseMatrix::RecountEntries</definition>
+        <argsstring>() const</argsstring>
+        <name>RecountEntries</name>
+        <qualifiedname>csmp::SparseMatrix::RecountEntries</qualifiedname>
+        <briefdescription>
+<para>if suspected that a recent operation modified number of entries </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="77" column="15" bodyfile="source/modules/math/SparseMatrix.cpp" bodystart="367" bodyend="381"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1a2c21a0e6ea89f264a8e598896875a4f6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::SparseMatrix::InfinityNorm</definition>
+        <argsstring>() const</argsstring>
+        <name>InfinityNorm</name>
+        <qualifiedname>csmp::SparseMatrix::InfinityNorm</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="79" column="15" bodyfile="source/modules/math/SparseMatrix.cpp" bodystart="385" bodyend="397"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1a83b096d4527ed139d603104fb4369d62" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::SparseMatrix::Symmetric</definition>
+        <argsstring>() const</argsstring>
+        <name>Symmetric</name>
+        <qualifiedname>csmp::SparseMatrix::Symmetric</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="81" column="15" bodyfile="source/modules/math/SparseMatrix.cpp" bodystart="401" bodyend="425"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1a158cbe8d16774c072cfb3a43ad1c94cc" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::SparseMatrix::ZeroesInDiagonal</definition>
+        <argsstring>() const</argsstring>
+        <name>ZeroesInDiagonal</name>
+        <qualifiedname>csmp::SparseMatrix::ZeroesInDiagonal</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="82" column="15" bodyfile="source/modules/math/SparseMatrix.cpp" bodystart="432" bodyend="449"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1afda25993a88c4aff54ba30aea03df4cc" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::SparseMatrix::DiagonallyPositive</definition>
+        <argsstring>() const</argsstring>
+        <name>DiagonallyPositive</name>
+        <qualifiedname>csmp::SparseMatrix::DiagonallyPositive</qualifiedname>
+        <briefdescription>
+<para>if there are negative elements in the diagonal of the matrix </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="83" column="15" bodyfile="source/modules/math/SparseMatrix.cpp" bodystart="453" bodyend="468"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1ad4c1b5bc9de350f15e744f62c60534a8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SparseMatrix::SparsityPattern</definition>
+        <argsstring>(const char *txtfile) const</argsstring>
+        <name>SparsityPattern</name>
+        <qualifiedname>csmp::SparseMatrix::SparsityPattern</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>txtfile</declname>
+        </param>
+        <briefdescription>
+<para>writes text matrix of zero&apos;s and one&apos;s to visualise sparsity pattern </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="86" column="15" bodyfile="source/modules/math/SparseMatrix.cpp" bodystart="472" bodyend="495"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1a4492808d84a7a9565fd49782759fab66" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class cspMat1</type>
+          </param>
+          <param>
+            <type>class cspMat2</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::SparseMatrix::Assign</definition>
+        <argsstring>(const cspMat1 &amp;idx, const cspMat2 &amp;data)</argsstring>
+        <name>Assign</name>
+        <qualifiedname>csmp::SparseMatrix::Assign</qualifiedname>
+        <param>
+          <type>const cspMat1 &amp;</type>
+          <declname>idx</declname>
+        </param>
+        <param>
+          <type>const cspMat2 &amp;</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+<para>inserts (<ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>) &apos;data&apos; in sparse matrix at location identified by position matrix &apos;idx&apos; </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="89" column="15" bodyfile="source/modules/math/SparseMatrix.cpp" bodystart="503" bodyend="509"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1a29f1664cc0efb343bc246b7e339e6d7f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SparseMatrix::OutCompressedRowFormat</definition>
+        <argsstring>(int32_t *ia, int32_t *ja, double *a, bool reallocate=true) const</argsstring>
+        <name>OutCompressedRowFormat</name>
+        <qualifiedname>csmp::SparseMatrix::OutCompressedRowFormat</qualifiedname>
+        <param>
+          <type>int32_t *</type>
+          <declname>ia</declname>
+        </param>
+        <param>
+          <type>int32_t *</type>
+          <declname>ja</declname>
+        </param>
+        <param>
+          <type>double *</type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>reallocate</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+<para>output in the form of C-style arrays indexed 0...n-1 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="92" column="15" bodyfile="source/modules/math/SparseMatrix.cpp" bodystart="618" bodyend="680"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1aab48307ad33d77fb2e9c48823c0315d0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SparseMatrix::OutCompressedRowFormat</definition>
+        <argsstring>(long *ia, long *ja, double *a, bool reallocate=true) const</argsstring>
+        <name>OutCompressedRowFormat</name>
+        <qualifiedname>csmp::SparseMatrix::OutCompressedRowFormat</qualifiedname>
+        <param>
+          <type>long *</type>
+          <declname>ia</declname>
+        </param>
+        <param>
+          <type>long *</type>
+          <declname>ja</declname>
+        </param>
+        <param>
+          <type>double *</type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>reallocate</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+<para>This is the version which is used for the old AMG solver. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="93" column="15" bodyfile="source/modules/math/SparseMatrix.cpp" bodystart="760" bodyend="829"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1aafbb3f90912050d145182b1019a1eb0c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SparseMatrix::OutCompressedRowFormat1_n</definition>
+        <argsstring>(int32_t *ia, int32_t *ja, double *a, bool reallocate=true) const</argsstring>
+        <name>OutCompressedRowFormat1_n</name>
+        <qualifiedname>csmp::SparseMatrix::OutCompressedRowFormat1_n</qualifiedname>
+        <param>
+          <type>int32_t *</type>
+          <declname>ia</declname>
+        </param>
+        <param>
+          <type>int32_t *</type>
+          <declname>ja</declname>
+        </param>
+        <param>
+          <type>double *</type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>reallocate</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+<para>output to Fortran arrays indexed 1...n </para>
+        </briefdescription>
+        <detaileddescription>
+<para>IN ORDER TO IDENTIFY EACH ELEMENT IN A, THE USER HAS TO PROVIDE TWO integer ARRAYS IA AND JA. IF NNU DENOTES THE TOTAL NUMBER OF UNKNOWNS, THE NON-ZERO ENTRIES OF ANY ROW I OF L (1&lt;=I&lt;=NNU) ARE STORED IN A(J) WHERE THE RANGE OF J IS GIVEN BY <verbatim>         IA(I) &lt;= J &lt;= IA(I+1)-1.
+</verbatim></para>
+<para>THUS, IA(I) POINTS TO THE POSITION OF THE DIAGONAL ENTRY OF ROW I WITHIN THE VECTOR A. IN PARTICULAR, <verbatim>         IA(1) = 1 ,  IA(NNU+1) = 1 + NNA
+</verbatim></para>
+<para>WHERE NNA DENOTES THE TOTAL NUMBER OF MATRIX ENTRIES STORED. THE POINTER VECTOR JA HAS TO BE DEFINED SUCH THAT ANY ENTRY A(J) CORRESPONDS TO THE UNKNOWN U(JA(J)), I.E., JA(J) identifies THE COLUMN <ref refid="structcsmp_1_1_i_n_d_e_x" kindref="compound">INDEX</ref> OF A(J). IN PARTICULAR, A(IA(I)) IS THE DIAGONAL ENTRY OF ROW I AND CORRESPONDS TO THE UNKNOWN U(I): JA(IA(I))=I.</para>
+<para>IN THIS TERMINOLOGY, THE I-TH EQUATION READS AS FOLLOWS (FOR ANY I WITH 1.LE.I.LE.NNU): <verbatim>      F(I) =        SUM      A(J) * U(JA(J))
+
+               J1 &lt;= J &lt;= J2
+</verbatim></para>
+<para>WHERE F(I) DENOTES THE I-TH COMPONENT OF THE RIGHT HAND SIDE AND <verbatim>          J1 = IA(I) ,  J2 = IA(I+1)-1. 
+</verbatim></para>
+<para>NOTES: THE ENTRY IA(NNU+1) HAS TO POINT TO THE FIRST FREE ENTRY IN VECTORS A AND JA, RESPECTIVELY. OTHERWISE, AMG CANNOT KNOW THE LENGTH OF THE LAST MATRIX ROW.</para>
+<para>THE INPUT VECTORS A, IA AND JA ARE CHANGED BY AMG1R5 SO, AFTER RETURN FROM AMG1R5, THE PACKAGE MUST NOT BE CALLED A SECOND TIME WITHOUT HAVING NEWLY DEFINED THE INPUT VECTORS AND USING ISWTCH=4. OTHERWISE, THE SETUP PHASE WILL FAIL. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="96" column="15" bodyfile="source/modules/math/SparseMatrix.cpp" bodystart="558" bodyend="614"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1a5aeee7e3b5e1c5b77df8cdfa9498e261" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SparseMatrix::OutCompressedRowFormatParallel</definition>
+        <argsstring>(std::vector&lt; int32_t &gt; &amp;, std::vector&lt; int32_t &gt; &amp;, std::vector&lt; double &gt;, int32_t, bool) const</argsstring>
+        <name>OutCompressedRowFormatParallel</name>
+        <qualifiedname>csmp::SparseMatrix::OutCompressedRowFormatParallel</qualifiedname>
+        <param>
+          <type>std::vector&lt; int32_t &gt; &amp;</type>
+          <defname>ia</defname>
+        </param>
+        <param>
+          <type>std::vector&lt; int32_t &gt; &amp;</type>
+          <defname>ja</defname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt;</type>
+          <defname>a</defname>
+        </param>
+        <param>
+          <type>int32_t</type>
+          <defname>nrhalo</defname>
+        </param>
+        <param>
+          <type>bool</type>
+          <defname>reallocate</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="98" column="15" bodyfile="source/modules/math/SparseMatrix.cpp" bodystart="687" bodyend="753"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1a9398d5da381297ffd60e4959acb59b28" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SparseMatrix::In</definition>
+        <argsstring>(const char *file_name_without_extension)</argsstring>
+        <name>In</name>
+        <qualifiedname>csmp::SparseMatrix::In</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>file_name_without_extension</declname>
+        </param>
+        <briefdescription>
+<para>read (square) matrix from text file with zeros </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="102" column="15" bodyfile="source/modules/math/SparseMatrix.cpp" bodystart="841" bodyend="863"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1afb371082ecc3edbdf38176a40d8044a2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SparseMatrix::Out</definition>
+        <argsstring>(long precis=5L) const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::SparseMatrix::Out</qualifiedname>
+        <param>
+          <type>long</type>
+          <declname>precis</declname>
+          <defname>digits</defname>
+          <defval>5L</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Prints matrix dimensions, # of non-zero elements and (non-zero) entries row by row. Each entry is prefaced by its column index. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="104" column="15" bodyfile="source/modules/math/SparseMatrix.cpp" bodystart="871" bodyend="909"/>
+        <referencedby refid="classcsmp_1_1_compressed_row_matrix_1aebd294b1e0e4313410824a6c2aeabee9" compoundref="_compressed_row_matrix_8cpp" startline="830" endline="876">csmp::CompressedRowMatrix::ConvertFromSparseMatrix</referencedby>
+        <referencedby refid="classcsmp_1_1_compressed_row_matrix_1a4efa13a821b88a66dcd6e295bb42c33d" compoundref="_compressed_row_matrix_8cpp" startline="762" endline="825">csmp::CompressedRowMatrix::Initialize</referencedby>
+        <referencedby refid="classcsmp_1_1_solver_1a00f2d834fa620f56e50a8cf37808c466" compoundref="_solver_8cpp" startline="105" endline="146">csmp::Solver::Solve</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1af7f5cbab37a1e9e34d857ad75a06fe0c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SparseMatrix::Out</definition>
+        <argsstring>(const char *file) const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::SparseMatrix::Out</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="105" column="15" bodyfile="source/modules/math/SparseMatrix.cpp" bodystart="913" bodyend="950"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sparse_matrix_1a4161da90c890895b33a36f96971b4d71" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SparseMatrix::OutForMatlab</definition>
+        <argsstring>(const char *file) const</argsstring>
+        <name>OutForMatlab</name>
+        <qualifiedname>csmp::SparseMatrix::OutForMatlab</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/SparseMatrix.h" line="107" column="13" bodyfile="source/modules/math/SparseMatrix.cpp" bodystart="954" bodyend="974"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>For the accumulation of element matrices in finite element calculations. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>S.K. Matthai </para>
+</simplesect>
+<simplesect kind="date"><para>2001 </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::SparseMatrix</label>
+        <link refid="classcsmp_1_1_sparse_matrix"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/math/SparseMatrix.h" line="23" column="1" bodyfile="source/includes/math/SparseMatrix.h" bodystart="23" bodyend="114"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_sparse_matrix_1ad3c97e1e94ba49b44917bbfa00222d9c" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>Add</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1a3130d9f7e751ff17e37df33d49ad07d5" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>Assign</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1a4492808d84a7a9565fd49782759fab66" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>Assign</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1a2a2d24236bc667ae2196137dcfe96edb" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>At</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1ad4fc22e6203144dd5942882b3c4dc167" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>Begin</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1aeb1a0fdf10891f6fc28079982f902bda" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>Cols</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1a0d5006fd6699c5601720d0bce9a7ad7f" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>colsConstIterator</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1a616f8317e533e506a5972aac2726abfb" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>colsIterator</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1a128750bd06e2126dc6f765df36fd5db7" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>ColumnIndices</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1ac419903fa90ab991016dda18bbdf9f64" prot="private" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>data_</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1afda25993a88c4aff54ba30aea03df4cc" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>DiagonallyPositive</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1a33328949ca344a7b9c317d6bcd2b36e4" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>End</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1aef4ae623451108fe5fb28185b7527c01" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>Entries</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1a7c2d547a189d230871c9ad5df46c637e" prot="private" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>entries_</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1a2301e91687a211598c29b0b0a7c0204b" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>Erase</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1a7163c8281f1305400d086314673b0c73" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>HasEntry</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1a9398d5da381297ffd60e4959acb59b28" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>In</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1a2c21a0e6ea89f264a8e598896875a4f6" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>InfinityNorm</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1a16e7487b8b3070de3d0d4b378447cc94" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>MultiplyEntryWith</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1ac31cc1d2645bcc59242281142282535d" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>MultiplyWith</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1a0c9950bf5e7c7d3fdd38ba87c8d940f5" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>operator()</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1aaac91f911000b006477b825c75bc6eda" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>operator+=</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1a1337033ac964d8100f9c5274de46f03b" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1ad41df1e097225640e2f60ddb7b603695" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1afb371082ecc3edbdf38176a40d8044a2" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1af7f5cbab37a1e9e34d857ad75a06fe0c" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1a29f1664cc0efb343bc246b7e339e6d7f" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>OutCompressedRowFormat</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1aab48307ad33d77fb2e9c48823c0315d0" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>OutCompressedRowFormat</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1aafbb3f90912050d145182b1019a1eb0c" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>OutCompressedRowFormat1_n</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1a5aeee7e3b5e1c5b77df8cdfa9498e261" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>OutCompressedRowFormatParallel</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1a4161da90c890895b33a36f96971b4d71" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>OutForMatlab</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1af56b248669bef709eea77d325e7048ec" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>RecountEntries</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1a2ad90e342bb5575e6e9dc32466e823a2" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>RemoveEntry</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1a7e6ecfca93088f3df3d8a4056406ed7c" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>RemoveHalo</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1a76492c150a731df19960249de024b031" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>Resize</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1add7a549cf6ecc709ed8245792f4c33b3" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>RowBegin</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1a6695050aa6c81e71079c801554bc86bb" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>RowEnd</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1aee70b7ef693deebad47c3b5a9a88a613" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>Rows</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1a5c6457b0e8e2a963f999c2a5cd5b87a1" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>rowsConstIterator</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1a2e059384e007e181e6661ba20f07946c" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>rowsIterator</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1a17e0d4398993cb9378b7ae90626e6c97" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>SparseMatrix</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1a10a0e6af2de3b84099a81c95142e82d3" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>SparseMatrix</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1a602a4a8769f756677545bae5b3ee2c93" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>SparseMatrix</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1a4027552e8c240b1af0bc829ae9f36665" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>SparseMatrix</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1ad4c1b5bc9de350f15e744f62c60534a8" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>SparsityPattern</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1a83b096d4527ed139d603104fb4369d62" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>Symmetric</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1a3cc6df801845cf90401c3e0aeffb9178" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>Zero</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1afed837e4ccf3132692c950dca50a81ae" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>ZeroColumn</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1a158cbe8d16774c072cfb3a43ad1c94cc" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>ZeroesInDiagonal</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1a47ce0ca2db45f25c5cdb103ae25a0941" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>ZeroRow</name></member>
+      <member refid="classcsmp_1_1_sparse_matrix_1af686fa4d81e4b69a484e77ceb87be094" prot="public" virt="non-virtual"><scope>csmp::SparseMatrix</scope><name>~SparseMatrix</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

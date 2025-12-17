@@ -1,0 +1,105 @@
+\doxysection{Isoparametric\+Linear\+Pyramid.\+h}
+\hypertarget{_isoparametric_linear_pyramid_8h_source}{}\label{_isoparametric_linear_pyramid_8h_source}\index{source/includes/integration/finite\_elements/IsoparametricLinearPyramid.h@{source/includes/integration/finite\_elements/IsoparametricLinearPyramid.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{ISOPARAMETRIC\_LINEAR\_PYRAMID\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{ISOPARAMETRIC\_LINEAR\_PYRAMID\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_finite_element_8h}{"{}FiniteElement.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid}{IsoparametricLinearPyramid}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_finite_element}{FiniteElement}}\ \{}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a9e24a277013e5dac247c01a21c3fd135}{IsoparametricLinearPyramid}}(\ uint32\_t\ integrationPoints=5\ \textcolor{comment}{/*\ 1,\ 5\ or\ 8\ */});}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a086fe8ab2435cd660f17d920e1e5137c}{Volume}}();}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a93f028356c8cddd2f1ae210f86a029bc}{AspectRatio}}();}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_ad1b4a36b0e840e00f5d52f3d27ccaa88}{InnerRadius}}();}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a373b64b29ec48659211d05cb9d6c1831}{EdgeLengths}}(\ std::vector<\textcolor{keywordtype}{double}>\&\ vec\ );}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a8c3554679a861f5cf65ee525209d4056}{CornerNodes}}(\ std::vector<uint32\_t>\&\ ids\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{virtual}\ uint32\_t\ \ CornerNodes()\ \textcolor{keyword}{const}\ \ \{\ \textcolor{keywordflow}{return}\ 5;\ \}}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a77f231fb9e6a43bbe97aa3b76366aca4}{MidSideNodes}}(\ std::vector<uint32\_t>\&\ ids\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_ab0481d95483075b2ad666c3e5ace5081}{CounterClockwiseNodes}}(\ std::vector<uint32\_t>\&\ ids\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{virtual}\ uint32\_t\ \ MidSideNodes()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ 0;\ \}}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a7c459d9d52b006113e36c0bc1e09f469}{uint32\_t}}\ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a7c459d9d52b006113e36c0bc1e09f469}{NodesPerFace}}(\ uint32\_t\ face\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\_FEM\_TYPE}}\ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a8c636b847b54f12d9052de2e3e154455}{ElementTypeOfFace}}(\ uint32\_t\ face\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\_FEM\_TYPE}}\ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_ab3f857b1bd9fae79a10bbb354f984f91}{ElementTypeOfSegment}}(\ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_ab3f857b1bd9fae79a10bbb354f984f91}{uint32\_t}}\ \textcolor{comment}{/*\ segment\ */}\ )\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ ISOPARAMETRIC\_LINEAR\_BAR;\ \};}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_aa84327ab9e0880c34a360d6f54eeb406}{NodesOfSegment}}(\ uint32\_t\ segm\_id,\ std::vector<uint32\_t>\&\ snids\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_ab1651a0b8fd416319de756e994d9b716}{std}}::\mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_ab1651a0b8fd416319de756e994d9b716}{vector}}<\mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_ab1651a0b8fd416319de756e994d9b716}{uint32\_t}}>\ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_ab1651a0b8fd416319de756e994d9b716}{NodesOfFace}}(\ uint32\_t\ face\_id\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a20b8e7fb59bcdc5b9a871d8407d7257a}{std}}::\mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a20b8e7fb59bcdc5b9a871d8407d7257a}{vector}}<\mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a20b8e7fb59bcdc5b9a871d8407d7257a}{uint32\_t}}>\ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a20b8e7fb59bcdc5b9a871d8407d7257a}{CornerNodesOfFace}}(\ uint32\_t\ face\_id\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_aee60889f9ec03a9abaabb470117e796f}{std}}::\mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_aee60889f9ec03a9abaabb470117e796f}{vector}}<\mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_aee60889f9ec03a9abaabb470117e796f}{uint32\_t}}>\ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_aee60889f9ec03a9abaabb470117e796f}{NodesConnectedTo}}(\ uint32\_t\ node\_id\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a395ab2157167b66ed801121c4f3e9dd0}{UnitNormalToFace}}(\ uint32\_t\ face,\ std::vector<\textcolor{keywordtype}{double}>\&\ unrml\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a2b08a5642237c52723cd1493917334b6}{N}}(std::vector<\textcolor{keywordtype}{double}>\&\ N,\ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ xyz\ );}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a88dc3392cfe695b9dc03c9e348579132}{N\_AtIntegrationPoint}}(\ uint32\_t\ ip,\ std::vector<\textcolor{keywordtype}{double}>\&\ N\ );}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a009d80d643c846f487597d0fc5452af5}{N\_AtBaryCenter}}(\ std::vector<\textcolor{keywordtype}{double}>\&\ N\ );}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a55d2ce2ca27fbc4095749f2643c0d944}{JacobianAtIntegrationPoint}}(\ uint32\_t\ ip\ );}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_af9cb335cdb14c3b155328d6b02e6cb4c}{JacobianAt}}(\ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ rst\ );}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a02c6c1f49a9cd758ffc530a15e56f69b}{dN}}(\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ dn,\ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ xyz\ \ );}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_ab889840ae2d7e955e476ab780d4818eb}{dN}}(\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ DN5\ );}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a5f0f3033fc24c89bb725e5005be5b334}{dN\_AtNode}}(\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ M,\ uint32\_t\ node\ );}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_aba19d9570109d65f19523c9ee9fcc64d}{dN\_AtIntegrationPoint}}(\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ M,\ uint32\_t\ gauss\_point\ );}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a58554db038cb2deda402edaccff9f7e4}{dN\_AtBarycenter}}(\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ M\ );}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_ad0c6bdb4957a7f90c74b225d844b0b46}{Nrst}}(\ \textcolor{keywordtype}{double}\ r,\ \textcolor{keywordtype}{double}\ s,\ \textcolor{keywordtype}{double}\ t,\ std::vector<\textcolor{keywordtype}{double}>\&\ nrst\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a2530bb6d9b6df655423b4beff04ddfe3}{Nrst}}(\ \textcolor{keywordtype}{double}\ r,\ \textcolor{keywordtype}{double}\ s,\ \textcolor{keywordtype}{double}\ t,\ \textcolor{keywordtype}{double}*\ nrst\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a9d130f3c5f010df937a46769c6b53555}{dNr}}(\ \textcolor{keywordtype}{double}\ r,\ \textcolor{keywordtype}{double}\ s,\ \textcolor{keywordtype}{double}\ t,\ std::vector<\textcolor{keywordtype}{double}>\&\ dNr\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a76fc5ea41779c5bac06ef5dac23bdc01}{dNs}}(\ \textcolor{keywordtype}{double}\ r,\ \textcolor{keywordtype}{double}\ s,\ \textcolor{keywordtype}{double}\ t,\ std::vector<\textcolor{keywordtype}{double}>\&\ dNs\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a34b1a95a7b351eb4422a1e104807d0c2}{dNt}}(\ \textcolor{keywordtype}{double}\ r,\ \textcolor{keywordtype}{double}\ s,\ \textcolor{keywordtype}{double}\ t,\ std::vector<\textcolor{keywordtype}{double}>\&\ dNt\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a0b586ded081e52c0df08299da9edcbed}{WeightAtIntegrationPoint}}(\ uint32\_t\ i\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a2b05356ecccf8a78a38c9d4b79493b07}{IntegrationPoint}}(\ uint32\_t\ i,\ std::vector<\textcolor{keywordtype}{double}>\&\ xyz\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_acbbe8983ce4e2172d2a4c11bf4f5fbd5}{ExtrapolateIntegrationPointVariableToNodes}}(\ uint32\_t\ nvars,}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ IVAR,}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\&\ NVAR\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_af4c86619c75cfceceadd513bb97b8bfb}{OutputNodeDataToVTK}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file\_name,}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ var\_name,}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ DATA\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a3aa8b95ed9c82a94fcbe728299bed694}{ReferenceCoordinates}}(\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\ \&\ matCoords)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\ \ \ W;}
+\DoxyCodeLine{00069\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\ \ \ DN,\ NXYZ,\ IP;}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keywordtype}{double}\ \ VolumeOfTetra(}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ verticeIndex1,}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ verticeIndex2,}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ verticeIndex3,}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ verticeIndex4}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keywordtype}{double}\ VolumeOfPyramid();}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keywordtype}{void}\ GenerateIntegrationPoints(\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\ \&Ip,\ std::vector<\textcolor{keywordtype}{double}>\&\ We);}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{comment}{//Local\ \&\ \ Global\ coordinates}}
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keywordtype}{void}\ ParametricToPhysical(std::vector<\textcolor{keywordtype}{double}>\ \&rst,\ std::vector<\textcolor{keywordtype}{double}>\ \&xyz);}
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keywordtype}{void}\ PhysicalToParametric(std::vector<\textcolor{keywordtype}{double}>\&\ rst,\textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ xyz);}
+\DoxyCodeLine{00086\ \};}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00091\ \textcolor{comment}{}}
+\DoxyCodeLine{00092\ \textcolor{comment}{@class\ IsoparametricLinearPyramid\ \ IsoparametricLinearPyramid\ "{}finite\_elements/IsoparametricLinearPyramid.h"{}}}
+\DoxyCodeLine{00093\ \textcolor{comment}{@date\ 1998}}
+\DoxyCodeLine{00094\ \textcolor{comment}{@author\ S.K.\ Matthaei}}
+\DoxyCodeLine{00095\ \textcolor{comment}{@author\ Stephen\ G.\ Roberts\ */}}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \}\ \textcolor{comment}{//\ end\ namespace\ csp}}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

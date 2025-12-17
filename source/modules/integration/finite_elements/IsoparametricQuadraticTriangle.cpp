@@ -1563,7 +1563,7 @@ void IsoparametricQuadraticTriangle::OutputNodeDataToVTK( const char* file_name,
   {
      char  outfile[NAME_STRING], elmt[30];
      strcpy( outfile, file_name );
-     snprintf( elmt, sizeof(elmt), "%lu", CurrentID() );
+     snprintf( elmt, sizeof(elmt), "%zu", CurrentID() );
      strcat( outfile, elmt );
      strcat( outfile, ".vtk" );
 

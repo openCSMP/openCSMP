@@ -1,0 +1,40 @@
+\doxysection{Linear\+Elastic\+Isotropic\+Deformation2\+D\+\_\+\+VVCase.\+h}
+\hypertarget{_linear_elastic_isotropic_deformation2_d___v_v_case_8h_source}{}\label{_linear_elastic_isotropic_deformation2_d___v_v_case_8h_source}\index{tests/integration/LinearElasticIsotropicDeformation2D\_VVCase.h@{tests/integration/LinearElasticIsotropicDeformation2D\_VVCase.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{LINEAR\_ELASTIC\_ISOTROPIC\_DEFORMATION\_2D\_VV\_CASE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{LINEAR\_ELASTIC\_ISOTROPIC\_DEFORMATION\_2D\_VV\_CASE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_test_8h}{"{}Test.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}}
+\DoxyCodeLine{00008\ \ \ \{}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \ \ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_linear_elastic_isotropic_deformation2_d___v_v_case}{LinearElasticIsotropicDeformation2D\_VVCase}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_test}{Test}}}
+\DoxyCodeLine{00011\ \ \ \ \ \{}
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00013\ \ \ \ \ \ \ LinearElasticIsotropicDeformation2D\_VVCase(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ prefix);}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ SetupLinearTriangles();}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ SetupQuadraticTriangles();}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ SetupLinearQuadrilaterals();}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ SetupQuadraticQuadrilaterals();}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_linear_elastic_isotropic_deformation2_d___v_v_case_ae839d07af3b168ac695cac4a7493a226}{Solve}}();}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_linear_elastic_isotropic_deformation2_d___v_v_case_aa3672ead5a1c6c44066f7eecc42d02d3}{run}}();}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ isLinear\_;}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ isTriangle\_;}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ prefix\_;}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ plane\_strain\_\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \};}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

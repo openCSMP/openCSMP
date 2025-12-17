@@ -1,0 +1,83 @@
+.TH "csmp::DataTable" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::DataTable
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBDataTable\fP (std::string name, const std::vector< std::string > &col_headers, const std::vector< std::vector< double > > &rows_of_columns)"
+.br
+.RI "creates a table from values and column headers supplied "
+.ti -1c
+.RI "\fBDataTable\fP (std::string name, const std::vector< std::string > &col_headers, const std::vector< std::string > &row_lables, const std::vector< std::vector< double > > &rows_of_columns)"
+.br
+.ti -1c
+.RI "bool \fBAppendColumn\fP (std::string col_header)"
+.br
+.RI "if table does not already contain a data column with the indicated header it is appended on the right "
+.ti -1c
+.RI "size_t \fBRows\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBColumns\fP () const"
+.br
+.ti -1c
+.RI "bool \fBContainsColumn\fP (std::string column_header) const"
+.br
+.RI "checks whether there is a column header that matches the supplied variable "
+.ti -1c
+.RI "size_t \fBColumnIndex\fP (std::string \fBvariable\fP) const"
+.br
+.RI "finds in which column the values of the target variable are stored; returns UINT_MAX if the variable is not contained "
+.ti -1c
+.RI "double \fBoperator()\fP (size_t row, size_t col) const"
+.br
+.RI "read access of elements in the table by row and column indices "
+.ti -1c
+.RI "double & \fBoperator()\fP (size_t row, size_t col)"
+.br
+.RI "write access "
+.ti -1c
+.RI "\fBDataTable\fP \fBExtractSubTable\fP (const std::set< std::string > &rows, const std::set< std::string > &columns) const"
+.br
+.RI "whre empty sets are supplied as arguments, all column or rows will be extracted "
+.ti -1c
+.RI "\fBDataTable\fP \fBExtractSubTable\fP (const std::vector< int > &rows, const std::vector< int > &columns) const"
+.br
+.ti -1c
+.RI "void \fBWrite_CSV_File\fP (std::string filename) const"
+.br
+.RI "writes the data from the currently stored table into a comma delimited text file "
+.ti -1c
+.RI "void \fBOut\fP () const"
+.br
+.in -1c
+.SH "Member Function Documentation"
+.PP 
+.SS "bool csmp::DataTable::AppendColumn (std::string col_header)"
+
+.PP
+if table does not already contain a data column with the indicated header it is appended on the right If table does not already contain a data column with the indicated header it is appended on the right\&.
+
+.PP
+\fBReturns\fP
+.RS 4
+true if a column was appended, false if the table was unmodified because it already contained a column with the desired header\&. 
+.RE
+.PP
+
+.SS "\fBDataTable\fP csmp::DataTable::ExtractSubTable (const std::vector< int > & rows, const std::vector< int > & columns) const"
+Extract rows and columns by number 
+.SS "double csmp::DataTable::operator() (size_t row, size_t col) const"
+
+.PP
+read access of elements in the table by row and column indices access of elements in the table by row and column indices 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

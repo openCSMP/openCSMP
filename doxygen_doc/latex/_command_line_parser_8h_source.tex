@@ -1,0 +1,160 @@
+\doxysection{Command\+Line\+Parser.\+h}
+\hypertarget{_command_line_parser_8h_source}{}\label{_command_line_parser_8h_source}\index{source/includes/run\_control/CommandLineParser.h@{source/includes/run\_control/CommandLineParser.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{COMMAND\_LINE\_PARSER\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{COMMAND\_LINE\_PARSER\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{iostream}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{stdexcept}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{exception}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{map}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cassert}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{using}\ std::string;}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \ \ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_command_line_parser}{CommandLineParser}}\ \{}
+\DoxyCodeLine{00016\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00017\ \ \ \ \ CommandLineParser(\textcolor{keywordtype}{int}\ argc,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}**\ argv);}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00020\ \ \ \ \ T\ get(string\ shortOption,\ string\ longOption);}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00022\ \ \ \ \ T\ get(string\ shortOption,\ string\ longOption,\ \textcolor{keyword}{const}\ T\ defaultValue);}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00024\ \ \ \ \ T\ get(string\ option);}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00026\ \ \ \ \ T\ get(string\ option,\ \textcolor{keyword}{const}\ T\ defaultValue);}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{bool}\ operands()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00029\ \ \ \ \ string\ getOperands()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{bool}\ unused()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00031\ \ \ \ \ string\ getUnused()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{void}\ print(std::ostream\&\ os)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{typedef}\ std::map<string,\ string>::const\_iterator\ \mbox{\hyperlink{classcsmp_1_1_command_line_parser}{optIterator}};}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{comment}{//\ disallowed}}
+\DoxyCodeLine{00039\ \ \ \ \ CommandLineParser(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_command_line_parser}{CommandLineParser}}\&);}
+\DoxyCodeLine{00040\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_command_line_parser}{CommandLineParser}}\&\ operator=(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_command_line_parser}{CommandLineParser}}\&);}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keywordtype}{bool}\ containsOption(string\ opt)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordtype}{bool}\ containsShortOption(string\ opt)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordtype}{bool}\ isOption(string\ opt)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{bool}\ isShortOption(string\ opt)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordtype}{bool}\ isLongOption(string\ opt)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keywordtype}{bool}\ isEndMarker(string\ str)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keywordtype}{void}\ store(string\ opt,\ string\ arg);}
+\DoxyCodeLine{00052\ \ \ \ \ optIterator\ findArgument(string\ opt)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00053\ \ \ \ \ optIterator\ findArgument(string\ shortOpt,\ string\ longOpt)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00056\ \ \ T\ processArgument(optIterator\ it);}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00058\ \ \ \ \ T\ convertArgument(string\ arg);}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}**\ argv\_;}
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ argc\_;}
+\DoxyCodeLine{00062\ \ \ \ \ string\ operands\_;}
+\DoxyCodeLine{00063\ \ \ \ \ std::map<string,\ string>\ options\_;}
+\DoxyCodeLine{00064\ \};}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ std::ostream\&\ operator<<\ (std::ostream\&\ os,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_command_line_parser}{CommandLineParser}}\&\ parser);}
+\DoxyCodeLine{00067\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00068\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00069\ \textcolor{comment}{@class\ CommandLineParser\ CommandLineParser\ "{}utilities/CommandLineParser.h"{}}}
+\DoxyCodeLine{00070\ \textcolor{comment}{@author\ A.\ Burri}}
+\DoxyCodeLine{00071\ \textcolor{comment}{@date\ 2003}}
+\DoxyCodeLine{00072\ \textcolor{comment}{}}
+\DoxyCodeLine{00073\ \textcolor{comment}{@section\ motivation\ Motivation}}
+\DoxyCodeLine{00074\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00075\ \textcolor{comment}{Command\ line\ parser\ which\ allows\ for\ type-\/safe\ Unix-\/like\ command\ line}}
+\DoxyCodeLine{00076\ \textcolor{comment}{parsing.\ }}
+\DoxyCodeLine{00077\ \textcolor{comment}{}}
+\DoxyCodeLine{00078\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00079\ \textcolor{comment}{@section\ design\ Design\ Intent}}
+\DoxyCodeLine{00080\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00081\ \textcolor{comment}{The\ command\ line\ parser\ makes\ command\ line\ parsing\ safer\ and\ easier.}}
+\DoxyCodeLine{00082\ \textcolor{comment}{Beside\ alleviating\ the\ need\ to\ do\ error-\/prone\ string\ parsing\ it\ offers}}
+\DoxyCodeLine{00083\ \textcolor{comment}{sophisticated\ error\ handling\ capabilities\ through\ exception\ handling.\ }}
+\DoxyCodeLine{00084\ \textcolor{comment}{}}
+\DoxyCodeLine{00085\ \textcolor{comment}{Most\ Unix-\/like\ command\ line\ parsing\ feature\ are\ supported,\ like:}}
+\DoxyCodeLine{00086\ \textcolor{comment}{-\/\ long\ and/or\ short\ options\ (like\ "{}-\/d"{}\ and\ "{}-\/-\/double"{})}}
+\DoxyCodeLine{00087\ \textcolor{comment}{-\/\ type-\/safe\ retrieval}}
+\DoxyCodeLine{00088\ \textcolor{comment}{-\/\ optional\ arguments}}
+\DoxyCodeLine{00089\ \textcolor{comment}{-\/\ listing\ of\ unused\ options}}
+\DoxyCodeLine{00090\ \textcolor{comment}{-\/\ listing\ of\ non-\/arguments\ }}
+\DoxyCodeLine{00091\ \textcolor{comment}{}}
+\DoxyCodeLine{00092\ \textcolor{comment}{For\ a\ more\ complete\ overview\ of\ the\ functionality\ see\ the\ unit-\/test}}
+\DoxyCodeLine{00093\ \textcolor{comment}{class\ of\ the\ CommandLineParser\ class.\ }}
+\DoxyCodeLine{00094\ \textcolor{comment}{}}
+\DoxyCodeLine{00095\ \textcolor{comment}{One\ specialty\ is\ that\ boolean\ options\ (i.e.\ command\ line\ flags)\ aren't}}
+\DoxyCodeLine{00096\ \textcolor{comment}{allowed\ to\ take\ arguments,\ since\ they\ wouldn't\ be\ used\ anyway.\ So\ you}}
+\DoxyCodeLine{00097\ \textcolor{comment}{are\ forced\ to\ use\ the\ end\ of\ options\ marker\ if\ you\ want\ to\ pass\ non-\/}}
+\DoxyCodeLine{00098\ \textcolor{comment}{option\ arguments\ after\ a\ flag.\ }}
+\DoxyCodeLine{00099\ \textcolor{comment}{}}
+\DoxyCodeLine{00100\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00101\ \textcolor{comment}{@section\ applicability\ Applicability}}
+\DoxyCodeLine{00102\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00103\ \textcolor{comment}{Parsing\ of\ command\ lines\ in\ the\ main\ function\ of\ a\ program.\ }}
+\DoxyCodeLine{00104\ \textcolor{comment}{}}
+\DoxyCodeLine{00105\ \textcolor{comment}{@section\ implementation\ Implementation}}
+\DoxyCodeLine{00106\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00107\ \textcolor{comment}{Stand-\/alone\ class.\ Member\ template\ methods\ used.\ The\ command\ line\ is}}
+\DoxyCodeLine{00108\ \textcolor{comment}{parsed\ in\ the\ constructor\ and\ the\ items\ can\ be\ retrieved\ using\ get}}
+\DoxyCodeLine{00109\ \textcolor{comment}{functions.\ }}
+\DoxyCodeLine{00110\ \textcolor{comment}{}}
+\DoxyCodeLine{00111\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00112\ \textcolor{comment}{@section\ examples\ Application\ Examples}}
+\DoxyCodeLine{00113\ \textcolor{comment}{}}
+\DoxyCodeLine{00114\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00115\ \textcolor{comment}{int\ main(int\ argc,\ char**\ argv)\ \{}}
+\DoxyCodeLine{00116\ \textcolor{comment}{\ \ CommandLineParser\ parser(argc,\ argv);}}
+\DoxyCodeLine{00117\ \textcolor{comment}{\ \ }}
+\DoxyCodeLine{00118\ \textcolor{comment}{\ \ //\ Retrieving\ arguments}}
+\DoxyCodeLine{00119\ \textcolor{comment}{\ \ //\ !\ Note\ that\ you\ have\ to\ specify\ the\ template\ parameter\ (return}}
+\DoxyCodeLine{00120\ \textcolor{comment}{\ \ //\ value\ parametrization)\ !}}
+\DoxyCodeLine{00121\ \textcolor{comment}{\ \ try\ \{}}
+\DoxyCodeLine{00122\ \textcolor{comment}{\ \ \ \ double\ d\ =\ parser.get<double>("{}-\/d"{});\ //\ mandatory\ argument}}
+\DoxyCodeLine{00123\ \textcolor{comment}{\ \ \ \ string\ s\ =\ parser.get<const\ char*>("{}-\/s"{},\ "{}Default"{});}}
+\DoxyCodeLine{00124\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //\ optional\ argument}}
+\DoxyCodeLine{00125\ \textcolor{comment}{\ \ \ \ int\ i\ =\ parser.get<int>("{}-\/i"{},\ "{}-\/-\/int"{});}}
+\DoxyCodeLine{00126\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //\ choice\ between\ long\ and}}
+\DoxyCodeLine{00127\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //\ short\ option}}
+\DoxyCodeLine{00128\ \textcolor{comment}{\ \ \ \ bool\ b\ =\ parser.get<bool>("{}-\/b"{});}}
+\DoxyCodeLine{00129\ \textcolor{comment}{\ \ \}\ catch\ (std::runtime\_error\&\ e)\ \{}}
+\DoxyCodeLine{00130\ \textcolor{comment}{\ \ \ \ cout\ <<\ e.what()\ <<\ endl;}}
+\DoxyCodeLine{00131\ \textcolor{comment}{\ \ \ \ exit(1);}}
+\DoxyCodeLine{00132\ \textcolor{comment}{\ \ \}}}
+\DoxyCodeLine{00133\ \textcolor{comment}{\ \ }}
+\DoxyCodeLine{00134\ \textcolor{comment}{\ \ //\ Display\ if\ there\ are\ arguments\ which\ don't\ belong\ to\ an\ option}}
+\DoxyCodeLine{00135\ \textcolor{comment}{\ \ if\ (parser.operands())\ \{}}
+\DoxyCodeLine{00136\ \textcolor{comment}{\ \ \ \ cout\ <<\ "{}Non-\/arguments:\ "{}\ <<\ parser.getOperands()\ <<\ endl;}}
+\DoxyCodeLine{00137\ \textcolor{comment}{\ \ \}}}
+\DoxyCodeLine{00138\ \textcolor{comment}{\ \ }}
+\DoxyCodeLine{00139\ \textcolor{comment}{\ \ //\ Display\ if\ there\ are\ unused\ arguments}}
+\DoxyCodeLine{00140\ \textcolor{comment}{\ \ if\ (parser.unused())\ \{}}
+\DoxyCodeLine{00141\ \textcolor{comment}{\ \ \ \ cout\ <<\ "{}Unused:\ "{}\ <<\ parser.getUnused()\ <<\ endl;}}
+\DoxyCodeLine{00142\ \textcolor{comment}{\ \ \}}}
+\DoxyCodeLine{00143\ \textcolor{comment}{\ \ }}
+\DoxyCodeLine{00144\ \textcolor{comment}{\ \ //\ Output\ command\ line\ to\ screen}}
+\DoxyCodeLine{00145\ \textcolor{comment}{\ \ //\ (could\ be\ redirected\ to\ a\ file\ stream\ as\ well,\ as\ long\ as\ the\ file}}
+\DoxyCodeLine{00146\ \textcolor{comment}{\ \ //\ stream\ is\ opened\ before)}}
+\DoxyCodeLine{00147\ \textcolor{comment}{\ \ cout\ <<\ parser;}}
+\DoxyCodeLine{00148\ \textcolor{comment}{}}
+\DoxyCodeLine{00149\ \textcolor{comment}{\}\ \ }}
+\DoxyCodeLine{00150\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00151\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00152\ \}\ \textcolor{comment}{//\ end\ namespace\ csp}}
+\DoxyCodeLine{00153\ }
+\DoxyCodeLine{00154\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

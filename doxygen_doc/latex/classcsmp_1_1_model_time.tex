@@ -1,0 +1,77 @@
+\doxysection{csmp\+::Model\+Time Class Reference}
+\hypertarget{classcsmp_1_1_model_time}{}\label{classcsmp_1_1_model_time}\index{csmp::ModelTime@{csmp::ModelTime}}
+
+
+The only "{}global"{} variable in CSMP computations that is used to store simulated (as opposed to computation) time so that it can be accessed across classes and processors.  
+
+
+
+
+{\ttfamily \#include $<$Model\+Time.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Model\+Time\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=208pt]{classcsmp_1_1_model_time__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Model\+Time\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=208pt]{classcsmp_1_1_model_time__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_model_time_ab6af5491097910f6b82f6cc92b18becd}\label{classcsmp_1_1_model_time_ab6af5491097910f6b82f6cc92b18becd} 
+double {\bfseries model\+Time}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_model_time_aa647dd987c4836d5512cef53a3cbee5b}\label{classcsmp_1_1_model_time_aa647dd987c4836d5512cef53a3cbee5b} 
+class {\bfseries Generic\+Singleton$<$ Model\+Time $>$}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Static Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_generic_singleton}{csmp\+::\+Generic\+Singleton$<$ Model\+Time $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{classcsmp_1_1_model_time}{Singleton\+Type}} \& {\bfseries Instance} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+The only "{}global"{} variable in CSMP computations that is used to store simulated (as opposed to computation) time so that it can be accessed across classes and processors. 
+
+\begin{DoxyAuthor}{Author}
+P. Lang 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Aug 2011
+\end{DoxyDate}
+To improve global status of the verbose variable. No explicit instantiation required any more.
+
+Usage\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{preprocessor}{\#include\ "{}ModelTime.h"{}}}
+\DoxyCodeLine{...}
+\DoxyCodeLine{bool\&\ model\_time(\ ModelTime::Instance().modelTime\ );}
+
+\end{DoxyCode}
+ 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/model/Model\+Time.\+h\item 
+source/modules/model/Model\+Time.\+cpp\end{DoxyCompactItemize}

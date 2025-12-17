@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_brittle_failure" kind="class" language="C++" prot="public">
+    <compoundname>csmp::BrittleFailure</compoundname>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="classcsmp_1_1_brittle_failure_1ae425db83e4bf557fdd129ed251988fbf" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>FAILURE</type>
+        <definition>FAILURE csmp::BrittleFailure::Evaluate</definition>
+        <argsstring>(const MechanicalProperties &amp;, const csmp::StressInvariants &amp;)</argsstring>
+        <name>Evaluate</name>
+        <qualifiedname>csmp::BrittleFailure::Evaluate</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_mechanical_properties" kindref="compound">MechanicalProperties</ref> &amp;</type>
+          <defname>props</defname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_stress_invariants" kindref="compound">csmp::StressInvariants</ref> &amp;</type>
+          <defname>invars</defname>
+        </param>
+        <briefdescription>
+<para>evaluates failure criteria -1 to 4 without explicit consideration of pore pressure </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Evaluates failure criteria -1 to 4 without the explicit consideration of pore pressure (note that this works for fluid-saturated porous media as well, if the computed stresses are already effective stresses.</para>
+<para><simplesect kind="attention"><para>Since this approach is based on civil engineering concepts, tensile stresses are treated as positive and compressive ones as negative. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/BrittleFailure.h" line="34" column="20" bodyfile="source/modules/thmc/mechanics/BrittleFailure.cpp" bodystart="47" bodyend="96"/>
+        <references refid="structcsmp_1_1_mechanical_properties_1a23f0425b75a0dc654b1a229abca80cbe" compoundref="_mechanical_properties_8h" startline="57">csmp::MechanicalProperties::C_</references>
+        <references refid="group___c_s_m_pglobal_functions_1ga7325b4afa7076aa33147b2c5aef9230c" compoundref="_c_s_m_p__math_utilities_8h" startline="30" endline="30">csmp::degreesToRadians</references>
+        <references refid="classcsmp_1_1_stress_invariants_1a5b794e6806aacb2e16f83fd775b40c2f" compoundref="_stress_invariants_8cpp" startline="105" endline="108">csmp::StressInvariants::DeviatoricStress</references>
+        <references refid="namespacecsmp_1a13b5d55bb94700f5ade9c043610c14f5" compoundref="_mechanical_properties_8cpp" startline="81" endline="85">csmp::frictionAngle</references>
+        <references refid="classcsmp_1_1_stress_invariants_1aa47e11e0bb3f2e3a76253bcea9d35d57" compoundref="_stress_invariants_8cpp" startline="127" endline="130">csmp::StressInvariants::LeastPrincipalStress3</references>
+        <references refid="classcsmp_1_1_stress_invariants_1a19f00e2483ac3f5cec31dfc9e37776fe" compoundref="_stress_invariants_8cpp" startline="115" endline="118">csmp::StressInvariants::MaximumPrincipalStress1</references>
+        <references refid="classcsmp_1_1_stress_invariants_1a2d6612f682bd924d1cfce7b5a6f2cad8" compoundref="_stress_invariants_8cpp" startline="99" endline="102">csmp::StressInvariants::MeanStress</references>
+        <references refid="structcsmp_1_1_mechanical_properties_1a02466d663d4b98028e2dfe5e57694a4d" compoundref="_mechanical_properties_8h" startline="55">csmp::MechanicalProperties::mu_</references>
+        <references refid="structcsmp_1_1_mechanical_properties_1a6dfd02a87a6d575b35affdc3066a5926" compoundref="_mechanical_properties_8h" startline="54">csmp::MechanicalProperties::pstar_</references>
+        <references refid="classcsmp_1_1_stress_invariants_1a6987bd7b54773bda8788883ac9c4b9b9" compoundref="_stress_invariants_8cpp" startline="163" endline="171">csmp::StressInvariants::SmoothMohrCoulombYieldEnvelope</references>
+        <references refid="structcsmp_1_1_mechanical_properties_1a43985b8aa00f82d516409adbf189b5d9" compoundref="_mechanical_properties_8h" startline="52">csmp::MechanicalProperties::TS_</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brittle_failure_1aef7c8a0ec1a31e92c7d2cfbb4dddb113" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>FAILURE</type>
+        <definition>FAILURE csmp::BrittleFailure::Evaluate</definition>
+        <argsstring>(const MechanicalProperties &amp;, const csmp::StressInvariants &amp;, double pf)</argsstring>
+        <name>Evaluate</name>
+        <qualifiedname>csmp::BrittleFailure::Evaluate</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_mechanical_properties" kindref="compound">MechanicalProperties</ref> &amp;</type>
+          <defname>props</defname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_stress_invariants" kindref="compound">csmp::StressInvariants</ref> &amp;</type>
+          <defname>invars</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>pf</declname>
+        </param>
+        <briefdescription>
+<para>evaluates failure criteria -1 to 4 with consideration of pore pressure </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Evaluates failure criteria -1 to 4 considering pore pressure explicitly, establishing the effective stress:</para>
+<para>sigma_ij&apos; = sigma_ij - pf * alpha * delta_ij</para>
+<para>where delta_ij is Kronecker delta.</para>
+<para><simplesect kind="attention"><para>Since this approach is based on civil engineering concepts, tensile stresses are treated as positive and compressive ones as negative.</para>
+</simplesect>
+<simplesect kind="attention"><para>The ordering of the principal stresses in engineering is such that sigma1 is the most negative = least tensile stress.</para>
+</simplesect>
+<xrefsect id="test_1_test000073"><xreftitle>Test</xreftitle><xrefdescription><para>looks OK, but not rigorously tested yet. </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/BrittleFailure.h" line="37" column="20" bodyfile="source/modules/thmc/mechanics/BrittleFailure.cpp" bodystart="116" bodyend="168"/>
+        <references refid="structcsmp_1_1_mechanical_properties_1a18979820fa9278cb7eac7706704e250f" compoundref="_mechanical_properties_8h" startline="51">csmp::MechanicalProperties::alpha_</references>
+        <references refid="structcsmp_1_1_mechanical_properties_1a23f0425b75a0dc654b1a229abca80cbe" compoundref="_mechanical_properties_8h" startline="57">csmp::MechanicalProperties::C_</references>
+        <references refid="group___c_s_m_pglobal_functions_1ga7325b4afa7076aa33147b2c5aef9230c" compoundref="_c_s_m_p__math_utilities_8h" startline="30" endline="30">csmp::degreesToRadians</references>
+        <references refid="classcsmp_1_1_stress_invariants_1a5b794e6806aacb2e16f83fd775b40c2f" compoundref="_stress_invariants_8cpp" startline="105" endline="108">csmp::StressInvariants::DeviatoricStress</references>
+        <references refid="namespacecsmp_1a13b5d55bb94700f5ade9c043610c14f5" compoundref="_mechanical_properties_8cpp" startline="81" endline="85">csmp::frictionAngle</references>
+        <references refid="classcsmp_1_1_stress_invariants_1aa47e11e0bb3f2e3a76253bcea9d35d57" compoundref="_stress_invariants_8cpp" startline="127" endline="130">csmp::StressInvariants::LeastPrincipalStress3</references>
+        <references refid="classcsmp_1_1_stress_invariants_1a19f00e2483ac3f5cec31dfc9e37776fe" compoundref="_stress_invariants_8cpp" startline="115" endline="118">csmp::StressInvariants::MaximumPrincipalStress1</references>
+        <references refid="classcsmp_1_1_stress_invariants_1a2d6612f682bd924d1cfce7b5a6f2cad8" compoundref="_stress_invariants_8cpp" startline="99" endline="102">csmp::StressInvariants::MeanStress</references>
+        <references refid="structcsmp_1_1_mechanical_properties_1a02466d663d4b98028e2dfe5e57694a4d" compoundref="_mechanical_properties_8h" startline="55">csmp::MechanicalProperties::mu_</references>
+        <references refid="structcsmp_1_1_mechanical_properties_1a6dfd02a87a6d575b35affdc3066a5926" compoundref="_mechanical_properties_8h" startline="54">csmp::MechanicalProperties::pstar_</references>
+        <references refid="classcsmp_1_1_stress_invariants_1a6987bd7b54773bda8788883ac9c4b9b9" compoundref="_stress_invariants_8cpp" startline="163" endline="171">csmp::StressInvariants::SmoothMohrCoulombYieldEnvelope</references>
+        <references refid="structcsmp_1_1_mechanical_properties_1a43985b8aa00f82d516409adbf189b5d9" compoundref="_mechanical_properties_8h" startline="52">csmp::MechanicalProperties::TS_</references>
+        <referencedby refid="classcsmp_1_1_brittle_failure_visitor_1a23f93dab10d3970cd4229b22691d1201" compoundref="_brittle_failure_visitor_8cpp" startline="112" endline="170">csmp::BrittleFailureVisitor&lt; dim &gt;::Visit</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::BrittleFailure</label>
+        <link refid="classcsmp_1_1_brittle_failure"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/thmc/mechanics/BrittleFailure.h" line="31" column="1" bodyfile="source/includes/thmc/mechanics/BrittleFailure.h" bodystart="31" bodyend="38"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_brittle_failure_1ae425db83e4bf557fdd129ed251988fbf" prot="public" virt="non-virtual"><scope>csmp::BrittleFailure</scope><name>Evaluate</name></member>
+      <member refid="classcsmp_1_1_brittle_failure_1aef7c8a0ec1a31e92c7d2cfbb4dddb113" prot="public" virt="non-virtual"><scope>csmp::BrittleFailure</scope><name>Evaluate</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

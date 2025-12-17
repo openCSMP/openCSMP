@@ -46,7 +46,7 @@ class Integrator {
     void ReconfigureSolverForRepeatedUse();
 
   protected:
-    void AssignInitialConditions();
+    // TODO: implemement: void AssignInitialConditions();
     void AssignEssentialConditions();
     
     void SolveLinearAlgebraicSystem();

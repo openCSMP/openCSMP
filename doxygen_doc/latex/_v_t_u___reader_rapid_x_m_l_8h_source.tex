@@ -1,0 +1,90 @@
+\doxysection{VTU\+\_\+\+Reader\+Rapid\+XML.\+h}
+\hypertarget{_v_t_u___reader_rapid_x_m_l_8h_source}{}\label{_v_t_u___reader_rapid_x_m_l_8h_source}\index{source/includes/interfaces/VTK/VTU\_ReaderRapidXML.h@{source/includes/interfaces/VTK/VTU\_ReaderRapidXML.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ \ read\_VTU\_File()\ function.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//\ \ Open-\/CSMP}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//\ \ Created\ by\ Stephan\ Matthai\ on\ 26/1/2024.}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{XML\_VTU\_RAPID\_XML\_BASED\_READER\_H}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{XML\_VTU\_RAPID\_XML\_BASED\_READER\_H}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}};}
+\DoxyCodeLine{00017\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_array_variable}{ArrayVariable}};}
+\DoxyCodeLine{00018\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{FlaggedArrayVariable}};}
+\DoxyCodeLine{00019\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_vector_variable}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}};}
+\DoxyCodeLine{00020\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_tensor_variable}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}};}
+\DoxyCodeLine{00021\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_v_set}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}};}
+\DoxyCodeLine{00022\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model_topology}{ModelTopology}};}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ \ \ \ \ Reads\ the\ supplied\ VTK\ (XML=.vtu)\ file\ returning\ the\ mesh\ and\ associated\ properties\ into\ the\ VSet.}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ \ \ \ \ Model\ regions\ are\ inferred\ from\ 'attribute'\ or\ 'region\ id'\ named\ scalar\ cell\ variables.}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ \ \ \ \ The\ region\ information\ is\ returned\ into\ a\ ModelTopology\ object.}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ \ \ \ \ Method\ returns\ error\ codes\ or\ 0\ if\ everything\ went\ OK.}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ \ \ \ \ @param\ fname\ name\ of\ input\ file\ excluding\ the\ extension\ '.vtu.}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ \ \ \ \ @param\ verbose\ prints\ entire\ data\ records\ retrieved\ from\ file.}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ \ \ \ \ @return\ returns\ error\ code\ or\ zero\ if\ all\ data\ records\ were\ read\ successfully.}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00037\ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00038\ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{namespacecsmp_add50842415c57d40507930cb11ed3534}{read\_VTU\_File}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fname,\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&,\ \mbox{\hyperlink{classcsmp_1_1_model_topology}{ModelTopology}}\&,\ \textcolor{keywordtype}{bool}\ verbose=\textcolor{keyword}{false}\ );}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \textcolor{comment}{//\ HELPER\ FUNCTIONS}}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \textcolor{comment}{///\ Compile-\/time\ version\ of\ member\ Size(),\ given\ space\ dimension\ of\ the\ model,\ returns\ variable\ values\ that\ are\ stored\ in\ the\ template\ parameter\ variable.}}
+\DoxyCodeLine{00047\ \textcolor{keyword}{template}<uint32\_t\ dim,\textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ csmp\_var>}
+\DoxyCodeLine{00048\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{namespacecsmp_a0a49ae7f5ca6896a14b39260fb6a29ad}{valuesInType}}(\ \textcolor{keywordtype}{int}\ components\ =\ -\/1\ )\ \{}
+\DoxyCodeLine{00049\ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ \ \ \ \ \ (\ std::is\_same<csmp\_var<dim>,csmp::ScalarVariable>::value\_type\ )\ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{00050\ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\ std::is\_same<csmp\_var<dim>,csmp::VectorVariable<dim>>::value\_type\ )\ \textcolor{keywordflow}{return}\ dim;}
+\DoxyCodeLine{00051\ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\ std::is\_same<csmp\_var<dim>,csmp::TensorVariable<dim>>::value\_type\ )\ \textcolor{keywordflow}{return}\ dim\ *\ dim;}
+\DoxyCodeLine{00052\ \ \ \ \ \ \textcolor{comment}{//\ Array\ and\ flagged\ array\ need\ a\ different\ function\ because\ they\ cannot\ be\ evaluated\ at\ compile\ time}}
+\DoxyCodeLine{00053\ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (\ components\ >=\ dim\ )\ \textcolor{keywordflow}{return}\ components;}
+\DoxyCodeLine{00054\ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::UNSPECIFIED;}
+\DoxyCodeLine{00055\ \ \ \}}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \textcolor{comment}{///\ Compile-\/time\ version\ of\ member\ Size()\ returns\ number\ of\ values\ in\ ScalarVariable\ and\ ArrayVariable\ types.}}
+\DoxyCodeLine{00058\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ csmp\_var>}
+\DoxyCodeLine{00059\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{namespacecsmp_a9aaf54b2d0f3f6ec48f4a006e7b1af5f}{valuesInType}}(\ \textcolor{keyword}{const}\ csmp\_var\&\ var\ =\ csmp\_var\{\}\ )\ \{}
+\DoxyCodeLine{00060\ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ \ \ \ \ \ (\ std::is\_same<csmp\_var,csmp::ScalarVariable>::value\_type\ )\ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{00061\ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\ std::is\_same<csmp\_var,csmp::ArrayVariable>::value\_type\ )\ \textcolor{keywordflow}{return}\ var.Size();}
+\DoxyCodeLine{00062\ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\ std::is\_same<csmp\_var,csmp::FlaggedArrayVariable>::value\_type\ )\ \textcolor{keywordflow}{return}\ var.Size();}
+\DoxyCodeLine{00063\ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\ std::is\_same<csmp\_var,\textcolor{keywordtype}{double}>::value\_type\ )\ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{00064\ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\ std::is\_same<csmp\_var,\textcolor{keywordtype}{int}>::value\_type\ )\ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{00065\ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::UNSPECIFIED;}
+\DoxyCodeLine{00066\ \ \ \}}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \textcolor{comment}{///\ Variable\ type\ deduction\ from\ number\ of\ components;\ functions\ does\ does\ return\ flagged\ array\ type.}}
+\DoxyCodeLine{00069\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00070\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\_TYPE}}\ \mbox{\hyperlink{namespacecsmp_a8b49a46dd0bf16fa32933bf194d73d0c}{inferTypeFromNumberOfComponents}}(\ \textcolor{keywordtype}{int}\ components\ )\ \{}
+\DoxyCodeLine{00071\ \ \ \ \ \ \textcolor{keyword}{static\_assert}(\ dim\ !=\ 1U,\ \textcolor{stringliteral}{"{}inferFromNumberOfComponents:\ impossible\ task\ in\ 1D"{}});}
+\DoxyCodeLine{00072\ \ \ \ \ \ \textcolor{keywordflow}{if}\ \ \ \ \ \ (\ components\ ==\ 1\ )\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::SCALAR;}
+\DoxyCodeLine{00073\ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (\ components\ ==\ dim\ )\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::VECTOR;}
+\DoxyCodeLine{00074\ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (\ components\ ==\ dim\ *\ dim\ )\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::TENSOR;}
+\DoxyCodeLine{00075\ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (\ components\ >\ dim\ )\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::ARRAY;}
+\DoxyCodeLine{00076\ \ \ \ \ \ std::cerr\ <<\textcolor{stringliteral}{"{}\(\backslash\)n\(\backslash\)n"{}}<<\textcolor{stringliteral}{"{}ERROR,\ inferTypeFromNumberOfComponents("{}}<<\ components\ <<\textcolor{stringliteral}{"{}):\ failed\ to\ identify\ csmp::VARIABLE\_TYPE,\ returning\ ARRAY"{}}<<\ std::endl;}
+\DoxyCodeLine{00077\ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::ARRAY;}
+\DoxyCodeLine{00078\ \ \ \}}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ \}\ \textcolor{comment}{//\ end\ CSMP}}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{/*\ XML\_VTU\_RAPID\_XML\_BASED\_READER\_H\ */}}
+
+\end{DoxyCode}

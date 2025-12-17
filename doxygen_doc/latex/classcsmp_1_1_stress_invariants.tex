@@ -1,0 +1,224 @@
+\doxysection{csmp\+::Stress\+Invariants Class Reference}
+\hypertarget{classcsmp_1_1_stress_invariants}{}\label{classcsmp_1_1_stress_invariants}\index{csmp::StressInvariants@{csmp::StressInvariants}}
+
+
+standard decompositions of stress tensor, see Smith \& Griffith  
+
+
+
+
+{\ttfamily \#include "{}main\+\_\+library/constitutive\+\_\+relationships/mechanics/"{}}
+
+
+
+Collaboration diagram for csmp\+::Stress\+Invariants\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=261pt]{classcsmp_1_1_stress_invariants__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_stress_invariants_ac218f2f6a72465d3e667b15a3cdab267}{Stress\+Invariants}} (const \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ 2U $>$ \&)
+\begin{DoxyCompactList}\small\item\em factors the upper triagonal of the symmetric tensor in terms of s, t, and theta \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_stress_invariants_ad9d0c83e3d17d4f98490f7dc9292a130}{Stress\+Invariants}} (const \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ 3U $>$ \&)
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_stress_invariants_a0c0f4851df3ac2c2c7df805769018c7a}{Lode\+Angle}} (const \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ 2U $>$ \&) const
+\begin{DoxyCompactList}\small\item\em theta angle in Mohr-\/\+Coulomb diagram that at which shear stresses are maximized \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_stress_invariants_a0b55b06e6f1c8046766b1d29668a0bfd}{Lode\+Angle}} (const \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ 3U $>$ \&) const
+\item 
+\Hypertarget{classcsmp_1_1_stress_invariants_a2d6612f682bd924d1cfce7b5a6f2cad8}\label{classcsmp_1_1_stress_invariants_a2d6612f682bd924d1cfce7b5a6f2cad8} 
+double {\bfseries Mean\+Stress} () const
+\begin{DoxyCompactList}\small\item\em mean stress = average of principal stresses \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_stress_invariants_a5b794e6806aacb2e16f83fd775b40c2f}\label{classcsmp_1_1_stress_invariants_a5b794e6806aacb2e16f83fd775b40c2f} 
+double {\bfseries Deviatoric\+Stress} () const
+\begin{DoxyCompactList}\small\item\em maximum of the deviatoric stresses = nonisostatic stresses \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_stress_invariants_a19f00e2483ac3f5cec31dfc9e37776fe}{Maximum\+Principal\+Stress1}} () const
+\begin{DoxyCompactList}\small\item\em sigma1 = maximum principal stress (Pa) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_stress_invariants_a85b5eb9efc8f0786798f3b2b86f99443}\label{classcsmp_1_1_stress_invariants_a85b5eb9efc8f0786798f3b2b86f99443} 
+double {\bfseries Intermediate\+Principal\+Stress2} () const
+\begin{DoxyCompactList}\small\item\em sigma2 \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_stress_invariants_aa47e11e0bb3f2e3a76253bcea9d35d57}\label{classcsmp_1_1_stress_invariants_aa47e11e0bb3f2e3a76253bcea9d35d57} 
+double {\bfseries Least\+Principal\+Stress3} () const
+\begin{DoxyCompactList}\small\item\em sigma3 \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_stress_invariants_a4580d9c3d5961cc272559892bc71c61d}{Mohr\+Coulomb\+Yield\+Envelope}} (double friction\+\_\+angle\+\_\+alpha) const
+\begin{DoxyCompactList}\small\item\em K(theta), see Zienkiewitz, volume 2, chapter 4.\+5.\+1, p. 233, alpha is in degrees. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_stress_invariants_a6987bd7b54773bda8788883ac9c4b9b9}{Smooth\+Mohr\+Coulomb\+Yield\+Envelope}} (double friction\+\_\+angle\+\_\+alpha) const
+\begin{DoxyCompactList}\small\item\em K(theta), see Zienkiewitz, volume 2, chapter 4.\+5.\+11, alpha is in degrees. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+standard decompositions of stress tensor, see Smith \& Griffith 
+
+\begin{DoxyAuthor}{Author}
+S.\+K. Matthaei
+\end{DoxyAuthor}
+\hypertarget{compare_floats_8h_motivation}{}\doxysubsection{\texorpdfstring{Motivation}{Motivation}}\label{compare_floats_8h_motivation}
+To extract the standard engineering invariants s, t, and theta from the upper diagonal of a (symmetric diagonally dominant) Cartesian stress tensor, calculate the principal stresses, and evaluate a series of failure criteria.\hypertarget{classcsmp_1_1_visitor_applicability}{}\doxysubsection{\texorpdfstring{Applicability}{Applicability}}\label{classcsmp_1_1_visitor_applicability}
+CSMP geomechanics models.\hypertarget{classcsmp_1_1_time_step_evaluator_collaborations}{}\doxysubsection{\texorpdfstring{Collaborations}{Collaborations}}\label{classcsmp_1_1_time_step_evaluator_collaborations}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+Follows Zienkiewitz volume 2 and Smith and Griffith.\hypertarget{classcsmp_1_1_visitor_examples}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{classcsmp_1_1_visitor_examples}
+To get an \doxylink{structcsmp_1_1_index}{Index} for a variable of interest in order to perform a computation, do the following\+:
+
+\begin{DoxyRefDesc}{Test}
+\item[\mbox{\hyperlink{test__test000074}{Test}}]\end{DoxyRefDesc}
+
+
+\label{doc-constructors}
+\Hypertarget{classcsmp_1_1_stress_invariants_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcsmp_1_1_stress_invariants_ac218f2f6a72465d3e667b15a3cdab267}\index{csmp::StressInvariants@{csmp::StressInvariants}!StressInvariants@{StressInvariants}}
+\index{StressInvariants@{StressInvariants}!csmp::StressInvariants@{csmp::StressInvariants}}
+\doxysubsubsection{\texorpdfstring{StressInvariants()}{StressInvariants()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_stress_invariants_ac218f2f6a72465d3e667b15a3cdab267} 
+csmp\+::\+Stress\+Invariants\+::\+Stress\+Invariants (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ 2U $>$ \&}]{ts}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+factors the upper triagonal of the symmetric tensor in terms of s, t, and theta 
+
+factors the upper triagonal of the symmetric tensor in terms of s, t, and theta
+
+upper diagonal matrix\+:
+
+sigmaxx = Cartesian\+\_\+stress\+\_\+(0,0); sigmayy = Cartesian\+\_\+stress\+\_\+(1,1); sigmaxy = Cartesian\+\_\+stress\+\_\+(0,1); Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_stress_invariants_ac218f2f6a72465d3e667b15a3cdab267_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_stress_invariants_ad9d0c83e3d17d4f98490f7dc9292a130}\index{csmp::StressInvariants@{csmp::StressInvariants}!StressInvariants@{StressInvariants}}
+\index{StressInvariants@{StressInvariants}!csmp::StressInvariants@{csmp::StressInvariants}}
+\doxysubsubsection{\texorpdfstring{StressInvariants()}{StressInvariants()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_stress_invariants_ad9d0c83e3d17d4f98490f7dc9292a130} 
+csmp\+::\+Stress\+Invariants\+::\+Stress\+Invariants (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ 3U $>$ \&}]{ts}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+factors the upper triagonal of the symmetric tensor in terms of s, t, and theta
+
+upper diagonal matrix\+:
+
+sigmaxx = Cartesian\+\_\+stress\+\_\+(0,0); sigmayy = Cartesian\+\_\+stress\+\_\+(1,1); sigmazz = Cartesian\+\_\+stress\+\_\+(2,2); sigmaxy = Cartesian\+\_\+stress\+\_\+(0,1); sigmaxz = Cartesian\+\_\+stress\+\_\+(0,2); sigmayz = Cartesian\+\_\+stress\+\_\+(1,2); Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_stress_invariants_ad9d0c83e3d17d4f98490f7dc9292a130_cgraph}
+\end{center}
+\end{figure}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_stress_invariants_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_stress_invariants_a0c0f4851df3ac2c2c7df805769018c7a}\index{csmp::StressInvariants@{csmp::StressInvariants}!LodeAngle@{LodeAngle}}
+\index{LodeAngle@{LodeAngle}!csmp::StressInvariants@{csmp::StressInvariants}}
+\doxysubsubsection{\texorpdfstring{LodeAngle()}{LodeAngle()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_stress_invariants_a0c0f4851df3ac2c2c7df805769018c7a} 
+double csmp\+::\+Stress\+Invariants\+::\+Lode\+Angle (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ 2U $>$ \&}]{ts}{}\end{DoxyParamCaption}) const}
+
+
+
+theta angle in Mohr-\/\+Coulomb diagram that at which shear stresses are maximized 
+
+2D version Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_stress_invariants_a0c0f4851df3ac2c2c7df805769018c7a_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_stress_invariants_a0b55b06e6f1c8046766b1d29668a0bfd}\index{csmp::StressInvariants@{csmp::StressInvariants}!LodeAngle@{LodeAngle}}
+\index{LodeAngle@{LodeAngle}!csmp::StressInvariants@{csmp::StressInvariants}}
+\doxysubsubsection{\texorpdfstring{LodeAngle()}{LodeAngle()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_stress_invariants_a0b55b06e6f1c8046766b1d29668a0bfd} 
+double csmp\+::\+Stress\+Invariants\+::\+Lode\+Angle (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ 3U $>$ \&}]{ts}{}\end{DoxyParamCaption}) const}
+
+theta angle in Mohr-\/\+Coulomb diagram that at which shear stresses are maximized
+
+\begin{DoxyAttention}{Attention}
+original angle(theta), is in radians (Smith \& Griffiths, eq. 6.\+3. p. 227 
+\end{DoxyAttention}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_stress_invariants_a0b55b06e6f1c8046766b1d29668a0bfd_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_stress_invariants_a19f00e2483ac3f5cec31dfc9e37776fe}\index{csmp::StressInvariants@{csmp::StressInvariants}!MaximumPrincipalStress1@{MaximumPrincipalStress1}}
+\index{MaximumPrincipalStress1@{MaximumPrincipalStress1}!csmp::StressInvariants@{csmp::StressInvariants}}
+\doxysubsubsection{\texorpdfstring{MaximumPrincipalStress1()}{MaximumPrincipalStress1()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_stress_invariants_a19f00e2483ac3f5cec31dfc9e37776fe} 
+double csmp\+::\+Stress\+Invariants\+::\+Maximum\+Principal\+Stress1 (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+sigma1 = maximum principal stress (Pa) 
+
+sigma1 = maximum principal stress (Pa) as obtained from the modified deviatoric and mean stresses, see Smith \& Griffith, p. 234 Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_stress_invariants_a19f00e2483ac3f5cec31dfc9e37776fe_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_stress_invariants_a19f00e2483ac3f5cec31dfc9e37776fe_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_stress_invariants_a4580d9c3d5961cc272559892bc71c61d}\index{csmp::StressInvariants@{csmp::StressInvariants}!MohrCoulombYieldEnvelope@{MohrCoulombYieldEnvelope}}
+\index{MohrCoulombYieldEnvelope@{MohrCoulombYieldEnvelope}!csmp::StressInvariants@{csmp::StressInvariants}}
+\doxysubsubsection{\texorpdfstring{MohrCoulombYieldEnvelope()}{MohrCoulombYieldEnvelope()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_stress_invariants_a4580d9c3d5961cc272559892bc71c61d} 
+double csmp\+::\+Stress\+Invariants\+::\+Mohr\+Coulomb\+Yield\+Envelope (\begin{DoxyParamCaption}\item[{double}]{alpha}{}\end{DoxyParamCaption}) const}
+
+
+
+K(theta), see Zienkiewitz, volume 2, chapter 4.\+5.\+1, p. 233, alpha is in degrees. 
+
+hexagonal K(theta), see Zienkiewitz, volume 2, chapter 4.\+5.\+1, p. 233
+
+\begin{DoxyAttention}{Attention}
+no material parameters (other than the friction angle) are contained in this assessment. However, these need to enter failure calculations that are handled in other classes, such as \doxylink{classcsmp_1_1_brittle_failure}{Brittle\+Failure}. 
+\end{DoxyAttention}
+\Hypertarget{classcsmp_1_1_stress_invariants_a6987bd7b54773bda8788883ac9c4b9b9}\index{csmp::StressInvariants@{csmp::StressInvariants}!SmoothMohrCoulombYieldEnvelope@{SmoothMohrCoulombYieldEnvelope}}
+\index{SmoothMohrCoulombYieldEnvelope@{SmoothMohrCoulombYieldEnvelope}!csmp::StressInvariants@{csmp::StressInvariants}}
+\doxysubsubsection{\texorpdfstring{SmoothMohrCoulombYieldEnvelope()}{SmoothMohrCoulombYieldEnvelope()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_stress_invariants_a6987bd7b54773bda8788883ac9c4b9b9} 
+double csmp\+::\+Stress\+Invariants\+::\+Smooth\+Mohr\+Coulomb\+Yield\+Envelope (\begin{DoxyParamCaption}\item[{double}]{alpha}{}\end{DoxyParamCaption}) const}
+
+
+
+K(theta), see Zienkiewitz, volume 2, chapter 4.\+5.\+11, alpha is in degrees. 
+
+Computing K\+\_\+\+Of\+Theta = 1/\+G\+\_\+\+Of\+Theta ( modified Mohr-\/\+Coulomb envelope with smooth boundaries )\+: Zienkiewitz, Finite element method for solid and structural mechanics, Chapter 4. Inelastic and non-\/linear materials 4.\+11. Non-\/uniqueness and localization in elasto-\/plastic deformations
+
+\begin{DoxyAttention}{Attention}
+no material parameters (other than the friction angle) are contained in this assessment. However, these need to enter failure calculations that are handled in other classes, such as \doxylink{classcsmp_1_1_brittle_failure}{Brittle\+Failure}. 
+\end{DoxyAttention}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_stress_invariants_a6987bd7b54773bda8788883ac9c4b9b9_icgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/thmc/mechanics/Stress\+Invariants.\+h\item 
+source/modules/thmc/mechanics/Stress\+Invariants.\+cpp\end{DoxyCompactItemize}

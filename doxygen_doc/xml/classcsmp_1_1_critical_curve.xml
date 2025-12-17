@@ -1,0 +1,1031 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_critical_curve" kind="class" language="C++" prot="public">
+    <compoundname>csmp::CriticalCurve</compoundname>
+    <includes refid="_critical_curve_8h" local="yes">eos/h2o_nacl/CriticalCurve.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1a191560039edd081b7940b5bbc8771099" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_critical_point_h2_o" kindref="compound">CriticalPointH2O</ref></type>
+        <definition>CriticalPointH2O csmp::CriticalCurve::cp_h2o</definition>
+        <argsstring></argsstring>
+        <name>cp_h2o</name>
+        <qualifiedname>csmp::CriticalCurve::cp_h2o</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="32" column="22" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1ad4d48e99a6f9705dcd9f67de8261d8b7" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::CriticalCurve::temperature_</definition>
+        <argsstring></argsstring>
+        <name>temperature_</name>
+        <qualifiedname>csmp::CriticalCurve::temperature_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="34" column="19" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1ade48ad4c4b013a647c5e8f63f25699e8" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::CriticalCurve::c0_</definition>
+        <argsstring></argsstring>
+        <name>c0_</name>
+        <qualifiedname>csmp::CriticalCurve::c0_</qualifiedname>
+        <briefdescription>
+<para><ref refid="structcsmp_1_1_parameter" kindref="compound">Parameter</ref> c0 (= p_crit_h2o) of eqs 5, Driesner &amp; Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="36" column="20" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1a29496fae065a9c6c1738e43cd6f43030" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::CriticalCurve::c1_</definition>
+        <argsstring></argsstring>
+        <name>c1_</name>
+        <qualifiedname>csmp::CriticalCurve::c1_</qualifiedname>
+        <briefdescription>
+<para><ref refid="structcsmp_1_1_parameter" kindref="compound">Parameter</ref> c1 of eqs 5, Driesner &amp; Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="37" column="20" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1ae5d4e686da442b1766190968a33f9ad7" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::CriticalCurve::c2_</definition>
+        <argsstring></argsstring>
+        <name>c2_</name>
+        <qualifiedname>csmp::CriticalCurve::c2_</qualifiedname>
+        <briefdescription>
+<para><ref refid="structcsmp_1_1_parameter" kindref="compound">Parameter</ref> c2 of eqs 5, Driesner &amp; Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="38" column="20" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1af9b42fc0b3633003a5b065af4c6d6550" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::CriticalCurve::c3_</definition>
+        <argsstring></argsstring>
+        <name>c3_</name>
+        <qualifiedname>csmp::CriticalCurve::c3_</qualifiedname>
+        <briefdescription>
+<para><ref refid="structcsmp_1_1_parameter" kindref="compound">Parameter</ref> c3 of eqs 5, Driesner &amp; Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="39" column="20" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1a846f184cf010de692e2227230419d3cd" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::CriticalCurve::c4_</definition>
+        <argsstring></argsstring>
+        <name>c4_</name>
+        <qualifiedname>csmp::CriticalCurve::c4_</qualifiedname>
+        <briefdescription>
+<para><ref refid="structcsmp_1_1_parameter" kindref="compound">Parameter</ref> c4 of eqs 5, Driesner &amp; Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="40" column="20" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1aac8c698055b2ca9ad6de94aa14e923d1" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::CriticalCurve::c5_</definition>
+        <argsstring></argsstring>
+        <name>c5_</name>
+        <qualifiedname>csmp::CriticalCurve::c5_</qualifiedname>
+        <briefdescription>
+<para><ref refid="structcsmp_1_1_parameter" kindref="compound">Parameter</ref> c5 of eqs 5, Driesner &amp; Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="41" column="20" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1a1c53ccb5d1f3ca5b93c95bf64b33083c" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::CriticalCurve::c6_</definition>
+        <argsstring></argsstring>
+        <name>c6_</name>
+        <qualifiedname>csmp::CriticalCurve::c6_</qualifiedname>
+        <briefdescription>
+<para><ref refid="structcsmp_1_1_parameter" kindref="compound">Parameter</ref> c6 of eqs 5, Driesner &amp; Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="42" column="20" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1aeffaf5fc0fd9ecde98898f064317f2fa" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::CriticalCurve::c7_</definition>
+        <argsstring></argsstring>
+        <name>c7_</name>
+        <qualifiedname>csmp::CriticalCurve::c7_</qualifiedname>
+        <briefdescription>
+<para><ref refid="structcsmp_1_1_parameter" kindref="compound">Parameter</ref> c7 of eqs 5, Driesner &amp; Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="43" column="20" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1a740673745076988754dd7ddd74305469" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::CriticalCurve::c8_</definition>
+        <argsstring></argsstring>
+        <name>c8_</name>
+        <qualifiedname>csmp::CriticalCurve::c8_</qualifiedname>
+        <briefdescription>
+<para><ref refid="structcsmp_1_1_parameter" kindref="compound">Parameter</ref> c8 of eqs 5, Driesner &amp; Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="44" column="20" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1a9be1dc592ab9e3d05485a64615d82121" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::CriticalCurve::c9_</definition>
+        <argsstring></argsstring>
+        <name>c9_</name>
+        <qualifiedname>csmp::CriticalCurve::c9_</qualifiedname>
+        <briefdescription>
+<para><ref refid="structcsmp_1_1_parameter" kindref="compound">Parameter</ref> c9 of eqs 5, Driesner &amp; Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="45" column="20" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1ae6588a8608876da79820ec392f669c93" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::CriticalCurve::c10_</definition>
+        <argsstring></argsstring>
+        <name>c10_</name>
+        <qualifiedname>csmp::CriticalCurve::c10_</qualifiedname>
+        <briefdescription>
+<para><ref refid="structcsmp_1_1_parameter" kindref="compound">Parameter</ref> c10 of eqs 5, Driesner &amp; Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="46" column="20" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1ac770b0fdd03909c5be09565819468777" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::CriticalCurve::c11_</definition>
+        <argsstring></argsstring>
+        <name>c11_</name>
+        <qualifiedname>csmp::CriticalCurve::c11_</qualifiedname>
+        <briefdescription>
+<para><ref refid="structcsmp_1_1_parameter" kindref="compound">Parameter</ref> c11 of eqs 5, Driesner &amp; Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="47" column="20" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1a3cc36ce5c68730e43a724296573c7d14" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::CriticalCurve::c12_</definition>
+        <argsstring></argsstring>
+        <name>c12_</name>
+        <qualifiedname>csmp::CriticalCurve::c12_</qualifiedname>
+        <briefdescription>
+<para><ref refid="structcsmp_1_1_parameter" kindref="compound">Parameter</ref> c12 of eqs 5, Driesner &amp; Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="48" column="20" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1a974e4d49cd77a9a61b614acb4dde9cd7" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::CriticalCurve::c13_</definition>
+        <argsstring></argsstring>
+        <name>c13_</name>
+        <qualifiedname>csmp::CriticalCurve::c13_</qualifiedname>
+        <briefdescription>
+<para><ref refid="structcsmp_1_1_parameter" kindref="compound">Parameter</ref> c13 of eqs 5, Driesner &amp; Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="49" column="20" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1a42fc99bffa887aed52844cb920b465fb" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::CriticalCurve::c14_</definition>
+        <argsstring></argsstring>
+        <name>c14_</name>
+        <qualifiedname>csmp::CriticalCurve::c14_</qualifiedname>
+        <briefdescription>
+<para><ref refid="structcsmp_1_1_parameter" kindref="compound">Parameter</ref> c14 of eqs 5, Driesner &amp; Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="50" column="20" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1a2aadb624aed0b1dd0ce7d84da38d49de" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::CriticalCurve::c1A_</definition>
+        <argsstring></argsstring>
+        <name>c1A_</name>
+        <qualifiedname>csmp::CriticalCurve::c1A_</qualifiedname>
+        <briefdescription>
+<para><ref refid="structcsmp_1_1_parameter" kindref="compound">Parameter</ref> c1A of eqs 5, Driesner &amp; Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="52" column="20" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1a1a5678ce0470b6043a09c84716eeb96d" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::CriticalCurve::c2A_</definition>
+        <argsstring></argsstring>
+        <name>c2A_</name>
+        <qualifiedname>csmp::CriticalCurve::c2A_</qualifiedname>
+        <briefdescription>
+<para><ref refid="structcsmp_1_1_parameter" kindref="compound">Parameter</ref> c2A of eqs 5, Driesner &amp; Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="53" column="20" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1a5982b416df352e75069f3eb6e07f0646" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::CriticalCurve::c3A_</definition>
+        <argsstring></argsstring>
+        <name>c3A_</name>
+        <qualifiedname>csmp::CriticalCurve::c3A_</qualifiedname>
+        <briefdescription>
+<para><ref refid="structcsmp_1_1_parameter" kindref="compound">Parameter</ref> c3A of eqs 5, Driesner &amp; Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="54" column="20" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1a8534a398554cf7e0bb994f215a8c90a7" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::CriticalCurve::c4A_</definition>
+        <argsstring></argsstring>
+        <name>c4A_</name>
+        <qualifiedname>csmp::CriticalCurve::c4A_</qualifiedname>
+        <briefdescription>
+<para><ref refid="structcsmp_1_1_parameter" kindref="compound">Parameter</ref> c4A of eqs 5, Driesner &amp; Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="55" column="20" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1ab382adac875fa15b798a2abf53a7408f" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::CriticalCurve::c5A_</definition>
+        <argsstring></argsstring>
+        <name>c5A_</name>
+        <qualifiedname>csmp::CriticalCurve::c5A_</qualifiedname>
+        <briefdescription>
+<para><ref refid="structcsmp_1_1_parameter" kindref="compound">Parameter</ref> c5A of eqs 5, Driesner &amp; Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="56" column="20" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1a52a53896eec4736833741108d0c9409f" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::CriticalCurve::c6A_</definition>
+        <argsstring></argsstring>
+        <name>c6A_</name>
+        <qualifiedname>csmp::CriticalCurve::c6A_</qualifiedname>
+        <briefdescription>
+<para><ref refid="structcsmp_1_1_parameter" kindref="compound">Parameter</ref> c6A of eqs 5, Driesner &amp; Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="57" column="20" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1adb7b0688e90cc64e10b9dbc43323a3e7" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::CriticalCurve::c7A_</definition>
+        <argsstring></argsstring>
+        <name>c7A_</name>
+        <qualifiedname>csmp::CriticalCurve::c7A_</qualifiedname>
+        <briefdescription>
+<para><ref refid="structcsmp_1_1_parameter" kindref="compound">Parameter</ref> c7A of eqs 5, Driesner &amp; Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="58" column="20" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1ab5be30261f92716ac4e7e9300f858685" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::CriticalCurve::c8A_</definition>
+        <argsstring></argsstring>
+        <name>c8A_</name>
+        <qualifiedname>csmp::CriticalCurve::c8A_</qualifiedname>
+        <briefdescription>
+<para><ref refid="structcsmp_1_1_parameter" kindref="compound">Parameter</ref> c8A of eqs 5, Driesner &amp; Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="59" column="20" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1a4917e7d2f0847b41f9fe64cbfceba3ae" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::CriticalCurve::c9A_</definition>
+        <argsstring></argsstring>
+        <name>c9A_</name>
+        <qualifiedname>csmp::CriticalCurve::c9A_</qualifiedname>
+        <briefdescription>
+<para><ref refid="structcsmp_1_1_parameter" kindref="compound">Parameter</ref> c9A of eqs 5, Driesner &amp; Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="60" column="20" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1ad8f285351c275d47c7b4e965e6c9d790" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::CriticalCurve::c10A_</definition>
+        <argsstring></argsstring>
+        <name>c10A_</name>
+        <qualifiedname>csmp::CriticalCurve::c10A_</qualifiedname>
+        <briefdescription>
+<para><ref refid="structcsmp_1_1_parameter" kindref="compound">Parameter</ref> c10A of eqs 5, Driesner &amp; Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="61" column="20" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1a7005cc1f61d05c5f2d0aab49853226fc" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::CriticalCurve::c11A_</definition>
+        <argsstring></argsstring>
+        <name>c11A_</name>
+        <qualifiedname>csmp::CriticalCurve::c11A_</qualifiedname>
+        <briefdescription>
+<para><ref refid="structcsmp_1_1_parameter" kindref="compound">Parameter</ref> c11A of eqs 5, Driesner &amp; Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="62" column="20" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1af5d9f414c7969c3da1bfec5cbbba7653" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::CriticalCurve::d1_</definition>
+        <argsstring></argsstring>
+        <name>d1_</name>
+        <qualifiedname>csmp::CriticalCurve::d1_</qualifiedname>
+        <briefdescription>
+<para><ref refid="structcsmp_1_1_parameter" kindref="compound">Parameter</ref> d1 of eqs 7, Driesner &amp; Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="64" column="20" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1af81fd8d39950f1c18259759d55ab2992" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::CriticalCurve::d2_</definition>
+        <argsstring></argsstring>
+        <name>d2_</name>
+        <qualifiedname>csmp::CriticalCurve::d2_</qualifiedname>
+        <briefdescription>
+<para><ref refid="structcsmp_1_1_parameter" kindref="compound">Parameter</ref> d2 of eqs 7, Driesner &amp; Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="65" column="20" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="65" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1ac68bdfa11fc90e0341cf28ee1021a220" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::CriticalCurve::d3_</definition>
+        <argsstring></argsstring>
+        <name>d3_</name>
+        <qualifiedname>csmp::CriticalCurve::d3_</qualifiedname>
+        <briefdescription>
+<para><ref refid="structcsmp_1_1_parameter" kindref="compound">Parameter</ref> d3 of eqs 7, Driesner &amp; Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="66" column="20" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1a1f47eaeee690a29db78913a6f6d49b66" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::CriticalCurve::d4_</definition>
+        <argsstring></argsstring>
+        <name>d4_</name>
+        <qualifiedname>csmp::CriticalCurve::d4_</qualifiedname>
+        <briefdescription>
+<para><ref refid="structcsmp_1_1_parameter" kindref="compound">Parameter</ref> d4 of eqs 7, Driesner &amp; Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="67" column="20" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1a76cc5e5679912794634fb34a68dac445" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::CriticalCurve::d5_</definition>
+        <argsstring></argsstring>
+        <name>d5_</name>
+        <qualifiedname>csmp::CriticalCurve::d5_</qualifiedname>
+        <briefdescription>
+<para><ref refid="structcsmp_1_1_parameter" kindref="compound">Parameter</ref> d5 of eqs 7, Driesner &amp; Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="68" column="20" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1a919bfb03697946cbf9916432d5d64d8d" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::CriticalCurve::d6_</definition>
+        <argsstring></argsstring>
+        <name>d6_</name>
+        <qualifiedname>csmp::CriticalCurve::d6_</qualifiedname>
+        <briefdescription>
+<para><ref refid="structcsmp_1_1_parameter" kindref="compound">Parameter</ref> d6 of eqs 7, Driesner &amp; Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="69" column="20" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="69" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1a6622a51079a7d932df8fd093d49f24f6" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::CriticalCurve::d7_</definition>
+        <argsstring></argsstring>
+        <name>d7_</name>
+        <qualifiedname>csmp::CriticalCurve::d7_</qualifiedname>
+        <briefdescription>
+<para><ref refid="structcsmp_1_1_parameter" kindref="compound">Parameter</ref> d7 of eqs 7, Driesner &amp; Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="70" column="20" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1a8a8c51f50d8addf04796b8de59c9d2f2" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::CriticalCurve::d8_</definition>
+        <argsstring></argsstring>
+        <name>d8_</name>
+        <qualifiedname>csmp::CriticalCurve::d8_</qualifiedname>
+        <briefdescription>
+<para><ref refid="structcsmp_1_1_parameter" kindref="compound">Parameter</ref> d8 of eqs 7, Driesner &amp; Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="71" column="20" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1a8beeecc944fb975109d80dc60be1f54e" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::CriticalCurve::d9_</definition>
+        <argsstring></argsstring>
+        <name>d9_</name>
+        <qualifiedname>csmp::CriticalCurve::d9_</qualifiedname>
+        <briefdescription>
+<para><ref refid="structcsmp_1_1_parameter" kindref="compound">Parameter</ref> d9 of eqs 7, Driesner &amp; Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="72" column="20" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1ac7feb930f06119137963f1429d485910" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::CriticalCurve::d10_</definition>
+        <argsstring></argsstring>
+        <name>d10_</name>
+        <qualifiedname>csmp::CriticalCurve::d10_</qualifiedname>
+        <briefdescription>
+<para><ref refid="structcsmp_1_1_parameter" kindref="compound">Parameter</ref> d10 of eqs 7, Driesner &amp; Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="73" column="20" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1a2a7925c16a8f42423cf7d4625255ef3a" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::CriticalCurve::d11_</definition>
+        <argsstring></argsstring>
+        <name>d11_</name>
+        <qualifiedname>csmp::CriticalCurve::d11_</qualifiedname>
+        <briefdescription>
+<para><ref refid="structcsmp_1_1_parameter" kindref="compound">Parameter</ref> d11 of eqs 7, Driesner &amp; Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="74" column="20" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1aa65956aa1ad740deae6bd3d370d709ed" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::CriticalCurve::tcurrent_</definition>
+        <argsstring></argsstring>
+        <name>tcurrent_</name>
+        <qualifiedname>csmp::CriticalCurve::tcurrent_</qualifiedname>
+        <briefdescription>
+<para>temperature [C] for internal use </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="76" column="20" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="76" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1ab48ceb46b5aa48b13cd1e01a7baf5bbc" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::CriticalCurve::molefraction_</definition>
+        <argsstring></argsstring>
+        <name>molefraction_</name>
+        <qualifiedname>csmp::CriticalCurve::molefraction_</qualifiedname>
+        <briefdescription>
+<para>mole fraction NaCl for internal use </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="77" column="20" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1acc8fd04df44c53ee96e864b90e625bcc" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::CriticalCurve::myt_</definition>
+        <argsstring></argsstring>
+        <name>myt_</name>
+        <qualifiedname>csmp::CriticalCurve::myt_</qualifiedname>
+        <briefdescription>
+<para>reduced temperature variable for internal use </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="78" column="20" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1a87e1bb8822dce59aa7ab7e592d6a8fb4" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::CriticalCurve::t_</definition>
+        <argsstring></argsstring>
+        <name>t_</name>
+        <qualifiedname>csmp::CriticalCurve::t_</qualifiedname>
+        <briefdescription>
+<para>another temperature for internal use </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="79" column="20" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1ae07a6dfb9b9d98475294cafb48afdf62" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::CriticalCurve::delta_</definition>
+        <argsstring></argsstring>
+        <name>delta_</name>
+        <qualifiedname>csmp::CriticalCurve::delta_</qualifiedname>
+        <briefdescription>
+<para>convergence criterion </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="80" column="20" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_1a63c3f98c0eddf079b054b92d8e85adad" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::CriticalCurve::dpdt_</definition>
+        <argsstring></argsstring>
+        <name>dpdt_</name>
+        <qualifiedname>csmp::CriticalCurve::dpdt_</qualifiedname>
+        <briefdescription>
+<para>tmeperature derivative of pressure (bar), internal use </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="81" column="20" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="81" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_critical_curve_1a701178f62bd4859b617a62863dca9c0b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::CriticalCurve::CriticalCurve</definition>
+        <argsstring>(const double &amp;externaltemperature)</argsstring>
+        <name>CriticalCurve</name>
+        <qualifiedname>csmp::CriticalCurve::CriticalCurve</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>externaltemperature</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>custom constructor <simplesect kind="attention"><para>Use only this conctructor. <ref refid="classcsmp_1_1_critical_curve" kindref="compound">CriticalCurve</ref> computes results a function of temperature, which istypically computed somewhere outside this class. By using const ref to that external temperature as constructor argument, <ref refid="classcsmp_1_1_critical_curve" kindref="compound">CriticalCurve</ref> is able to decipher the current value and report correct results when being queried. Only this constructor is allowed to ensure that functionality, default constructor has been made private. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="20" column="5" bodyfile="source/modules/eos/h2o_nacl/CriticalCurve.cpp" bodystart="14" bodyend="60"/>
+        <referencedby refid="classcsmp_1_1_brine_1a3ab834697c85d10e2dd3dab232ba3171" compoundref="_brine_8cpp" startline="16" endline="86">csmp::Brine::Brine</referencedby>
+        <referencedby refid="classcsmp_1_1_na_cl_saturated_vapor_1abd993e8f13b163d4832a507285effdfa" compoundref="_na_cl_saturated_vapor_8cpp" startline="14" endline="56">csmp::NaClSaturatedVapor::NaClSaturatedVapor</referencedby>
+        <referencedby refid="classcsmp_1_1_twophase_liquid_1acbc78de0d42d3c379186195beb7672a2" compoundref="_twophase_liquid_8cpp" startline="15" endline="54">csmp::TwophaseLiquid::TwophaseLiquid</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_critical_curve_1a3d2773d4a22b131f5a05df513e5bb6c3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::CriticalCurve::~CriticalCurve</definition>
+        <argsstring>()</argsstring>
+        <name>~CriticalCurve</name>
+        <qualifiedname>csmp::CriticalCurve::~CriticalCurve</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>destructor </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="21" column="5" bodyfile="source/modules/eos/h2o_nacl/CriticalCurve.cpp" bodystart="64" bodyend="66"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_critical_curve_1a0ac6eda93fd5467a7d987b691379ce55" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::CriticalCurve::Pressure</definition>
+        <argsstring>()</argsstring>
+        <name>Pressure</name>
+        <qualifiedname>csmp::CriticalCurve::Pressure</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Pressure [Pa] on critical curve for given temperature </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="23" column="20" bodyfile="source/modules/eos/h2o_nacl/CriticalCurve.cpp" bodystart="71" bodyend="75"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_critical_curve_1a7714a33c97bd33c75b23d09ba4b02df2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::CriticalCurve::MassFractionNaCl</definition>
+        <argsstring>()</argsstring>
+        <name>MassFractionNaCl</name>
+        <qualifiedname>csmp::CriticalCurve::MassFractionNaCl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Mass fraction NaCl on critical curve for given temperature </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="24" column="20" bodyfile="source/modules/eos/h2o_nacl/CriticalCurve.cpp" bodystart="89" bodyend="92"/>
+        <references refid="classcsmp_1_1_critical_curve_1a30dadfe2e11dfb2ba1165884c26aeafb" compoundref="_critical_curve_8cpp" startline="80" endline="84">MoleFractionNaCl</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_critical_curve_1a30dadfe2e11dfb2ba1165884c26aeafb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::CriticalCurve::MoleFractionNaCl</definition>
+        <argsstring>()</argsstring>
+        <name>MoleFractionNaCl</name>
+        <qualifiedname>csmp::CriticalCurve::MoleFractionNaCl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Mole fraction NaCl on critical curve for given temperature </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="25" column="20" bodyfile="source/modules/eos/h2o_nacl/CriticalCurve.cpp" bodystart="80" bodyend="84"/>
+        <referencedby refid="classcsmp_1_1_critical_curve_1a7714a33c97bd33c75b23d09ba4b02df2" compoundref="_critical_curve_8cpp" startline="89" endline="92">MassFractionNaCl</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_critical_curve_1a084068775393ddb1bda3c66147449ea8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::CriticalCurve::TfromP</definition>
+        <argsstring>(const double &amp;press_)</argsstring>
+        <name>TfromP</name>
+        <qualifiedname>csmp::CriticalCurve::TfromP</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>press_</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Find temperature [C] on critical curve for given pressure [Pa] <simplesect kind="attention"><para>NO RANGE CHECK is being performed </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="26" column="20" bodyfile="source/modules/eos/h2o_nacl/CriticalCurve.cpp" bodystart="215" bodyend="238"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_critical_curve_1ac0902665774261b8feb16ad19d729917" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::CriticalCurve::TfromMolefractionNaCl</definition>
+        <argsstring>(const double &amp;molefraction_)</argsstring>
+        <name>TfromMolefractionNaCl</name>
+        <qualifiedname>csmp::CriticalCurve::TfromMolefractionNaCl</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>molefraction_</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Find mole fractions NaCl on critical curve for given pressure [Pa] <simplesect kind="attention"><para>NO RANGE CHECK is being performed </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="27" column="20" bodyfile="source/modules/eos/h2o_nacl/CriticalCurve.cpp" bodystart="244" bodyend="269"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_critical_curve_1ad3018cdd4940e5dc2452cc3ebdf2a3f9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::CriticalCurve::CriticalCurve</definition>
+        <argsstring>()</argsstring>
+        <name>CriticalCurve</name>
+        <qualifiedname>csmp::CriticalCurve::CriticalCurve</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="30" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_critical_curve_1ae33ed230b2fb17fcd20871a21e1b6f8b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CriticalCurve::CheckState</definition>
+        <argsstring>()</argsstring>
+        <name>CheckState</name>
+        <qualifiedname>csmp::CriticalCurve::CheckState</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Update internal variables for current temperature </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="83" column="22" bodyfile="source/modules/eos/h2o_nacl/CriticalCurve.cpp" bodystart="97" bodyend="101"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_critical_curve_1a99b6d64a06234d26c4cfcf494708a11b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::CriticalCurve::Pressure</definition>
+        <argsstring>(const double &amp;t_)</argsstring>
+        <name>Pressure</name>
+        <qualifiedname>csmp::CriticalCurve::Pressure</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>t_</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Equations 5 of Driesner and Heinrich (2007) </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="84" column="20" bodyfile="source/modules/eos/h2o_nacl/CriticalCurve.cpp" bodystart="106" bodyend="134"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_critical_curve_1ae39423f48eeb8cf2d24aa2552cc36f5e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::CriticalCurve::DPressureDT</definition>
+        <argsstring>(const double &amp;t_)</argsstring>
+        <name>DPressureDT</name>
+        <qualifiedname>csmp::CriticalCurve::DPressureDT</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>t_</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Temperature derivative of equations 5 of Driesner and Heinrich (2007) </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="85" column="20" bodyfile="source/modules/eos/h2o_nacl/CriticalCurve.cpp" bodystart="139" bodyend="165"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_critical_curve_1a44e51a39d93b1e15aa0befac0556671b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::CriticalCurve::Molefraction</definition>
+        <argsstring>(const double &amp;t_)</argsstring>
+        <name>Molefraction</name>
+        <qualifiedname>csmp::CriticalCurve::Molefraction</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>t_</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Equations 7 of Driesner and Heinrich (2007) </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="86" column="20" bodyfile="source/modules/eos/h2o_nacl/CriticalCurve.cpp" bodystart="170" bodyend="186"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_critical_curve_1a0ae322b111d77841ace7b108a0008df4" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::CriticalCurve::DMolefractionDT</definition>
+        <argsstring>(const double &amp;t_)</argsstring>
+        <name>DMolefractionDT</name>
+        <qualifiedname>csmp::CriticalCurve::DMolefractionDT</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>t_</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Temperature derivative of equations 7 of Driesner and Heinrich (2007) </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurve.h" line="87" column="20" bodyfile="source/modules/eos/h2o_nacl/CriticalCurve.cpp" bodystart="191" bodyend="208"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Computation of temperature-pressure-compsition relations for the critical curve of the system H2O-NaCl, non-lookup. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><linebreak/>
+</para>
+<para><simplesect kind="author"><para>Thomas Driesner, ETH Zuerich <linebreak/>
+ </para>
+</simplesect>
+</para>
+<sect1 id="compare_floats_8h_1contact">
+<title>Contact</title><para><linebreak/>
+ <ulink url="mailto:thomas.driesner@erdw.ethz.ch">thomas.driesner@erdw.ethz.ch</ulink> <linebreak/>
+</para>
+</sect1>
+<sect1 id="compare_floats_8h_1motivation">
+<title>Motivation</title><para><linebreak/>
+ Although &quot;CriticalCurve&quot; is legacy code from Thomas Driesner&apos;s developments for the H2O-NaCl system, it is REQUIRED in the CSMP++ context. There, it is essential to build accurate lookup tables for the H2O-NaCl system, which are then actually used by CSMP++. As long as we don&apos;t distribute the lookup tables per se for the various platforms, the &quot;CriticalCurve&quot; legacy will remain in CSMP++. <linebreak/>
+</para>
+<para>&quot;CriticalCurve&quot; computes the temperature-pressure-molefraction [Celsius, Pa, mole fraction NaCl] coordinates of the critical curve of the system H2O-NaCl, according to the paper <linebreak/>
+</para>
+<para>Driesner T. and Heinrich C.A. (2007): The system H2O-NaCl. Part I: Correlation formulae for phase relations in temperature-pressure-molefraction space from 0 to 1000oC, 0 to 5000 bar, and 0 to 1 XNaCl. Geochimica et Cosmochimica Acta 71, 4880-4901.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_upwind_control_visitor_1usage">
+<title>Usage</title><para><linebreak/>
+ Construct an instance of &quot;CriticalCurve&quot; with the temperature (in C) as constructor variable. &quot;CriticalCurve&quot; has an internal mechanism to make sure that it always uses the current value of that temperature. Public member names should be self-explanatory, I hope.</para>
+<para><programlisting><codeline><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>t;<sp/></highlight><highlight class="comment">//<sp/>temperature<sp/>[C]<sp/>in<sp/>user&apos;s<sp/>application<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="classcsmp_1_1_critical_curve_1a701178f62bd4859b617a62863dca9c0b" kindref="member">CriticalCurve</ref><sp/>critcurve(t);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+</programlisting></para>
+</sect1>
+<sect1 id="classcsmp_1_1_upwind_control_visitor_1dependencies">
+<title>Dependencies</title><para><linebreak/>
+ requires &quot;CriticalPointH2O.h&quot; <linebreak/>
+</para>
+</sect1>
+<sect1 id="classcsmp_1_1_upwind_control_visitor_1issues">
+<title>Known issues</title><para><linebreak/>
+ Molefraction() is in mole fraction NaCl, to convert to other units, the functions in &quot;ConvertConcentrationUnitsNaCl.h&quot; may be useful <linebreak/>
+</para>
+</sect1>
+<sect1 id="compare_floats_8h_1testing">
+<title>Testing</title><para><linebreak/>
+ testing was done in the period before publication in 2007, prior to writing this documentation, no details are available anymore </para>
+</sect1>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::CriticalCurve</label>
+        <link refid="classcsmp_1_1_critical_curve"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/eos/CriticalCurve.h" line="17" column="3" bodyfile="source/includes/eos/CriticalCurve.h" bodystart="18" bodyend="88"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_critical_curve_1ade48ad4c4b013a647c5e8f63f25699e8" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>c0_</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1ae6588a8608876da79820ec392f669c93" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>c10_</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1ad8f285351c275d47c7b4e965e6c9d790" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>c10A_</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1ac770b0fdd03909c5be09565819468777" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>c11_</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1a7005cc1f61d05c5f2d0aab49853226fc" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>c11A_</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1a3cc36ce5c68730e43a724296573c7d14" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>c12_</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1a974e4d49cd77a9a61b614acb4dde9cd7" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>c13_</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1a42fc99bffa887aed52844cb920b465fb" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>c14_</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1a29496fae065a9c6c1738e43cd6f43030" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>c1_</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1a2aadb624aed0b1dd0ce7d84da38d49de" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>c1A_</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1ae5d4e686da442b1766190968a33f9ad7" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>c2_</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1a1a5678ce0470b6043a09c84716eeb96d" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>c2A_</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1af9b42fc0b3633003a5b065af4c6d6550" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>c3_</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1a5982b416df352e75069f3eb6e07f0646" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>c3A_</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1a846f184cf010de692e2227230419d3cd" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>c4_</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1a8534a398554cf7e0bb994f215a8c90a7" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>c4A_</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1aac8c698055b2ca9ad6de94aa14e923d1" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>c5_</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1ab382adac875fa15b798a2abf53a7408f" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>c5A_</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1a1c53ccb5d1f3ca5b93c95bf64b33083c" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>c6_</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1a52a53896eec4736833741108d0c9409f" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>c6A_</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1aeffaf5fc0fd9ecde98898f064317f2fa" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>c7_</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1adb7b0688e90cc64e10b9dbc43323a3e7" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>c7A_</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1a740673745076988754dd7ddd74305469" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>c8_</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1ab5be30261f92716ac4e7e9300f858685" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>c8A_</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1a9be1dc592ab9e3d05485a64615d82121" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>c9_</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1a4917e7d2f0847b41f9fe64cbfceba3ae" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>c9A_</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1ae33ed230b2fb17fcd20871a21e1b6f8b" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>CheckState</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1a191560039edd081b7940b5bbc8771099" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>cp_h2o</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1a701178f62bd4859b617a62863dca9c0b" prot="public" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>CriticalCurve</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1ad3018cdd4940e5dc2452cc3ebdf2a3f9" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>CriticalCurve</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1ac7feb930f06119137963f1429d485910" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>d10_</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1a2a7925c16a8f42423cf7d4625255ef3a" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>d11_</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1af5d9f414c7969c3da1bfec5cbbba7653" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>d1_</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1af81fd8d39950f1c18259759d55ab2992" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>d2_</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1ac68bdfa11fc90e0341cf28ee1021a220" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>d3_</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1a1f47eaeee690a29db78913a6f6d49b66" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>d4_</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1a76cc5e5679912794634fb34a68dac445" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>d5_</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1a919bfb03697946cbf9916432d5d64d8d" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>d6_</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1a6622a51079a7d932df8fd093d49f24f6" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>d7_</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1a8a8c51f50d8addf04796b8de59c9d2f2" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>d8_</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1a8beeecc944fb975109d80dc60be1f54e" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>d9_</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1ae07a6dfb9b9d98475294cafb48afdf62" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>delta_</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1a0ae322b111d77841ace7b108a0008df4" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>DMolefractionDT</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1a63c3f98c0eddf079b054b92d8e85adad" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>dpdt_</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1ae39423f48eeb8cf2d24aa2552cc36f5e" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>DPressureDT</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1a7714a33c97bd33c75b23d09ba4b02df2" prot="public" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>MassFractionNaCl</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1a44e51a39d93b1e15aa0befac0556671b" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>Molefraction</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1ab48ceb46b5aa48b13cd1e01a7baf5bbc" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>molefraction_</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1a30dadfe2e11dfb2ba1165884c26aeafb" prot="public" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>MoleFractionNaCl</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1acc8fd04df44c53ee96e864b90e625bcc" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>myt_</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1a0ac6eda93fd5467a7d987b691379ce55" prot="public" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>Pressure</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1a99b6d64a06234d26c4cfcf494708a11b" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>Pressure</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1a87e1bb8822dce59aa7ab7e592d6a8fb4" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>t_</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1aa65956aa1ad740deae6bd3d370d709ed" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>tcurrent_</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1ad4d48e99a6f9705dcd9f67de8261d8b7" prot="private" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>temperature_</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1ac0902665774261b8feb16ad19d729917" prot="public" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>TfromMolefractionNaCl</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1a084068775393ddb1bda3c66147449ea8" prot="public" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>TfromP</name></member>
+      <member refid="classcsmp_1_1_critical_curve_1a3d2773d4a22b131f5a05df513e5bb6c3" prot="public" virt="non-virtual"><scope>csmp::CriticalCurve</scope><name>~CriticalCurve</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

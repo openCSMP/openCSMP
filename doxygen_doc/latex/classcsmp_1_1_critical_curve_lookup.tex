@@ -1,0 +1,96 @@
+\doxysection{csmp\+::Critical\+Curve\+Lookup Class Reference}
+\hypertarget{classcsmp_1_1_critical_curve_lookup}{}\label{classcsmp_1_1_critical_curve_lookup}\index{csmp::CriticalCurveLookup@{csmp::CriticalCurveLookup}}
+
+
+Creation of lookup tables temperature-\/pressure-\/compsition relations for the critical curve of the system H2\+O-\/\+Na\+Cl, based on class \doxylink{classcsmp_1_1_critical_curve}{Critical\+Curve}.  
+
+
+
+
+{\ttfamily \#include "{}eos/h2o\+\_\+nacl/\+Critical\+Curve\+Lookup.\+h"{}}
+
+
+
+Collaboration diagram for csmp\+::Critical\+Curve\+Lookup\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=207pt]{classcsmp_1_1_critical_curve_lookup__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_critical_curve_lookup_ae1e0dd1378a70547c127e22530188629}\label{classcsmp_1_1_critical_curve_lookup_ae1e0dd1378a70547c127e22530188629} 
+{\bfseries Critical\+Curve\+Lookup} (const double \&externaltemperature)
+\item 
+\Hypertarget{classcsmp_1_1_critical_curve_lookup_a26cb75733c0e5b108f3f80a35475e628}\label{classcsmp_1_1_critical_curve_lookup_a26cb75733c0e5b108f3f80a35475e628} 
+double {\bfseries Temperature} ()
+\item 
+\Hypertarget{classcsmp_1_1_critical_curve_lookup_a97ce579649d9349dc33bbff12d0b610f}\label{classcsmp_1_1_critical_curve_lookup_a97ce579649d9349dc33bbff12d0b610f} 
+double {\bfseries Pressure} ()
+\item 
+\Hypertarget{classcsmp_1_1_critical_curve_lookup_ac3ad13b48c12b705a74a3d643c7e506d}\label{classcsmp_1_1_critical_curve_lookup_ac3ad13b48c12b705a74a3d643c7e506d} 
+double {\bfseries Mass\+Fraction\+Na\+Cl} ()
+\item 
+\Hypertarget{classcsmp_1_1_critical_curve_lookup_addfa647dbe4d631a4d4d8cd5dd5f262b}\label{classcsmp_1_1_critical_curve_lookup_addfa647dbe4d631a4d4d8cd5dd5f262b} 
+double {\bfseries TfromP} (const double \&press)
+\item 
+\Hypertarget{classcsmp_1_1_critical_curve_lookup_a39d3753ef63d8447fca064db1348adf8}\label{classcsmp_1_1_critical_curve_lookup_a39d3753ef63d8447fca064db1348adf8} 
+double {\bfseries Density} ()
+\item 
+\Hypertarget{classcsmp_1_1_critical_curve_lookup_aaf37be3040f0fe096b04a592841ec319}\label{classcsmp_1_1_critical_curve_lookup_aaf37be3040f0fe096b04a592841ec319} 
+double {\bfseries Enthalpy} ()
+\item 
+\Hypertarget{classcsmp_1_1_critical_curve_lookup_a2c966003a80b35599b16d1a4c88aaa99}\label{classcsmp_1_1_critical_curve_lookup_a2c966003a80b35599b16d1a4c88aaa99} 
+double {\bfseries Heat\+Capacity} ()
+\item 
+\Hypertarget{classcsmp_1_1_critical_curve_lookup_a6895b81c57bcd3a50310c3357018ac25}\label{classcsmp_1_1_critical_curve_lookup_a6895b81c57bcd3a50310c3357018ac25} 
+double {\bfseries Compressibility} ()
+\item 
+\Hypertarget{classcsmp_1_1_critical_curve_lookup_a0967f18c886c1e543350fc281dfb8eb6}\label{classcsmp_1_1_critical_curve_lookup_a0967f18c886c1e543350fc281dfb8eb6} 
+double {\bfseries Viscosity} ()
+\item 
+\Hypertarget{classcsmp_1_1_critical_curve_lookup_a3337c5790f9d20d903b438c01e1b83ba}\label{classcsmp_1_1_critical_curve_lookup_a3337c5790f9d20d903b438c01e1b83ba} 
+double {\bfseries Value\+Of} (const int \&property\+\_\+index)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Creation of lookup tables temperature-\/pressure-\/compsition relations for the critical curve of the system H2\+O-\/\+Na\+Cl, based on class \doxylink{classcsmp_1_1_critical_curve}{Critical\+Curve}. 
+
+\begin{DoxyAuthor}{Author}
+Thomas Driesner, ETH Zuerich 
+\end{DoxyAuthor}
+\hypertarget{compare_floats_8h_contact}{}\doxysubsection{\texorpdfstring{Contact}{Contact}}\label{compare_floats_8h_contact}
+\href{mailto:thomas.driesner@erdw.ethz.ch}{\texttt{thomas.\+driesner@erdw.\+ethz.\+ch}}\hypertarget{compare_floats_8h_motivation}{}\doxysubsection{\texorpdfstring{Motivation}{Motivation}}\label{compare_floats_8h_motivation}
+\doxylink{classcsmp_1_1_critical_curve_lookup}{Critical\+Curve\+Lookup} generates and queries a lookup table that stores the temperature-\/pressure-\/composition \mbox{[}Celsius, bar, mole fraction Na\+Cl\mbox{]} coordinates of the critical curve of the system H2\+O-\/\+Na\+Cl, according to the paper
+
+Driesner T. and Heinrich C.\+A. (2007)\+: The system H2\+O-\/\+Na\+Cl. Part I\+: Correlation formulae for phase relations in temperature-\/pressure-\/composition space from 0 to 1000oC, 0 to 5000 bar, and 0 to 1 XNa\+Cl. Geochimica et Cosmochimica Acta 71, 4880-\/4901.
+
+In addition, mass density \mbox{[}kg/m3\mbox{]}, specific enthalpy \mbox{[}J/kg\mbox{]}, specific isobaric heat capacity \mbox{[}J/kg/C\mbox{]}, isothermal compressibility \mbox{[}Pa\texorpdfstring{$^\wedge$}{\string^}-\/1\mbox{]}, dynamic viscosity \mbox{[}Pa s\mbox{]} on the critical curve are available, and are computed by applying the formulations from the paper
+
+Driesner T. (2007)\+: The system H2\+O-\/\+Na\+Cl. Part II\+: Correlations for molar volume, enthalpy, and isobaric heat capacity from 0 to 1000oC, 1 to 5000 bar, and 0 to 1 XNa\+Cl. Geochimica et Cosmochimica Acta 71, 4902-\/4919.
+
+at the temperature-\/pressure-\/composition coordinates of the critical curve.
+
+The lookup table "{}\+Critical\+Curve\+Lookup\+Table.\+bin"{} is written as a binary file, and stores the properties listed above in a single, 1-\/dimensional std\+::vector$<$double$>$, named storage\+\_\+vector. storage\+\_\+vector comprises subsequent blocks in each of which the values for the one property are stored in sequence of ascending temperature from the critical temperature of water (see file Critical\+Point\+H2\+O.\+cpp) to 1000.\+0e0 degrees Celsius. Each block is of size t\+\_\+dim (the number of entries, the first thing that is computed in the constructor), the sequence is defined in the file "{}\+Lookup\+Property\+Index.\+h"{}. The temperature spacing is variable (see member Get\+Temperature\+Index for details), being densest near the critical temperature of water and largest at the highest temperatures.\hypertarget{classcsmp_1_1_critical_curve_lookup_autotoc_md8}{}\doxysubsection{\texorpdfstring{autotoc\+\_\+md8}{autotoc\+\_\+md8}}\label{classcsmp_1_1_critical_curve_lookup_autotoc_md8}
+\hypertarget{compare_floats_8h_testing}{}\doxysubsection{\texorpdfstring{Testing}{Testing}}\label{compare_floats_8h_testing}
+The lookup version was tested against the original non-\/lookup code (May 26, 2008). Max deviations are\+:
+
+
+\begin{DoxyItemize}
+\item Composition\+: -\/0.\+5\% at 374.\+03 C, above 374.\+3 C, deviations are \texorpdfstring{$<$}{<}0.\+1\% and decay rapidly to negligible values.
+\item Pressure\+: deviations are negligible over the whole temperature range (.00x \% or less)
+\item Density\+: (nota bene\+: this is NOT used in fluid flow simulations in the original ETH scheme as programmed by Thomas Driesner et al.) up to 10\% at 374.\+04, rapidly decaying via 3\% at 374.\+6 to less than 1\% above 375.\+5. Notice that the uncertainties are always maximum between lookup grid point and are "{}exact"{} at the grid points. (Oct 2010, Thomas Driesner\+: as far as I can see, these deviations have been reduced after some debugging; fruther testing required)
+\item Enthalpy\+: (again\+: not used in fluid flow simulations). 2\% at 374.\+04, rapidly decaying, \texorpdfstring{$<$}{<} 0.\+05\% at t \texorpdfstring{$>$}{>} 380 C
+\item Heat\+Capacity\+: (again\+: not used in fluid flow simulations)\+: large deviations at t \texorpdfstring{$<$}{<} 375.\+5, which are solely due to the "{}hard-\/wired"{} value assigned at tcrit\+\_\+h20 (1e10, this happens in \doxylink{classcsmp_1_1_h2_o_lookup}{H2\+OLookup}). From 424 C\+: \texorpdfstring{$<$}{<} 0.\+1\%
+\item Compressibility\+: (again\+: not used ...) Near tcrit\+\_\+h2o suffers from the same problem as Heat\+Capacity, \texorpdfstring{$<$}{<}1\% is reached at about 385 C.
+\item Viscosity\+: (again ...) 7\% at 374.\+04, \texorpdfstring{$<$}{<} 1\% at t\texorpdfstring{$>$}{>} 374.\+5 
+\end{DoxyItemize}
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/eos/Critical\+Curve\+Lookup.\+h\item 
+source/modules/eos/h2o\+\_\+nacl\+\_\+lookup/Critical\+Curve\+Lookup.\+cpp\end{DoxyCompactItemize}

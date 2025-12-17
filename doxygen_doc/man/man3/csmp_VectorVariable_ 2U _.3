@@ -1,0 +1,214 @@
+.TH "csmp::VectorVariable< 2U >" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::VectorVariable< 2U > \- 2D full specialization of vector-type variable template (other vectors are declared in files #1, #2)  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <VectorVariable2\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBVectorVariable\fP (\fBVARIABLE_FLAG\fP f, double val)"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP (\fBVARIABLE_FLAG\fP f1, \fBVARIABLE_FLAG\fP f2, double val1, double val2)"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP (const std::vector< double > &)"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP (const \fBcsmp::Point\fP< 2U > &)"
+.br
+.ti -1c
+.RI "double & \fBoperator()\fP (uint32_t i)"
+.br
+.ti -1c
+.RI "const double & \fBoperator()\fP (uint32_t i) const"
+.br
+.ti -1c
+.RI "double \fBoperator[]\fP (uint32_t i) const"
+.br
+.ti -1c
+.RI "void \fBComponent\fP (uint32_t, double)"
+.br
+.ti -1c
+.RI "double \fBComponent\fP (uint32_t i) const"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP \fBoperator+\fP (double val) const"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP \fBoperator\-\fP (double val) const"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP \fBoperator*\fP (double val) const"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP \fBoperator/\fP (double val) const"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP \fBoperator^\fP (double val) const"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP & \fBoperator+=\fP (double val)"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP & \fBoperator\-=\fP (double val)"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP & \fBoperator*=\fP (double val)"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP & \fBoperator/=\fP (double val)"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP & \fBoperator+=\fP (const \fBScalarVariable\fP &)"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP & \fBoperator\-=\fP (const \fBScalarVariable\fP &)"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP & \fBoperator*=\fP (const \fBScalarVariable\fP &)"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP & \fBoperator/=\fP (const \fBScalarVariable\fP &)"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP \fBoperator+\fP (const \fBVectorVariable\fP &) const"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP \fBoperator\-\fP (const \fBVectorVariable\fP &) const"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP \fBoperator*\fP (const \fBVectorVariable\fP &) const"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP \fBoperator/\fP (const \fBVectorVariable\fP &) const"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP & \fBoperator+=\fP (const \fBVectorVariable\fP &)"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP & \fBoperator\-=\fP (const \fBVectorVariable\fP &)"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP & \fBoperator*=\fP (const \fBVectorVariable\fP &)"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP & \fBoperator/=\fP (const \fBVectorVariable\fP &)"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP & \fBoperator=\fP (double)"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP & \fBoperator=\fP (const \fBPoint\fP< 2U > &)"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP & \fBoperator=\fP (const \fBScalarVariable\fP &)"
+.br
+.ti -1c
+.RI "bool \fBoperator==\fP (const \fBVectorVariable\fP &) const"
+.br
+.ti -1c
+.RI "bool \fBoperator!=\fP (const \fBVectorVariable\fP &) const"
+.br
+.ti -1c
+.RI "bool \fBoperator<\fP (const \fBVectorVariable\fP &) const"
+.br
+.ti -1c
+.RI "\fBVARIABLE_FLAG\fP & \fBFlag\fP (uint32_t i=0)"
+.br
+.ti -1c
+.RI "\fBVARIABLE_FLAG\fP \fBFlag\fP (uint32_t i=0) const"
+.br
+.ti -1c
+.RI "uint32_t \fBSize\fP () const"
+.br
+.ti -1c
+.RI "double \fBLength\fP () const"
+.br
+.ti -1c
+.RI "double \fBAngleTo\fP (const \fBVectorVariable\fP &v) const"
+.br
+.ti -1c
+.RI "\fBPoint\fP< 2U > \fBP\fP () const"
+.br
+.ti -1c
+.RI "bool \fBIsWithinRange\fP (double vmin, double vmax) const"
+.br
+.ti -1c
+.RI "bool \fBHas_NaN_Values\fP () const"
+.br
+.RI "tests whether variable contains NaN value(s) "
+.ti -1c
+.RI "\fBVectorVariable\fP \fBFlip\fP ()"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP \fBProjectOnto\fP (const std::vector< double > &v) const"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP \fBProjectOnto\fP (const \fBVectorVariable\fP &v) const"
+.br
+.ti -1c
+.RI "void \fBInvert\fP ()"
+.br
+.RI "Multiplies by negative unity vector\&. "
+.ti -1c
+.RI "void \fBEuclideanNormalize\fP ()"
+.br
+.RI "L2 norm\&. "
+.ti -1c
+.RI "double \fBDotProduct\fP (const \fBcsmp::Point\fP< 2U > &p) const"
+.br
+.ti -1c
+.RI "double \fBDotProduct\fP (const \fBVectorVariable\fP &v) const"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP \fBCrossProduct\fP (const \fBcsmp::Point\fP< 2U > &p) const"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP \fBCrossProduct\fP (const \fBVectorVariable\fP &v) const"
+.br
+.ti -1c
+.RI "void \fBIn\fP ()"
+.br
+.ti -1c
+.RI "void \fBOut\fP () const"
+.br
+.ti -1c
+.RI "bool \fBIn\fP (std::fstream &fp)"
+.br
+.ti -1c
+.RI "bool \fBOut\fP (std::fstream &fp) const"
+.br
+.in -1c
+.SS "Static Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "static constexpr \fBVARIABLE_TYPE\fP \fBVariableType\fP = VECTOR"
+.br
+.in -1c
+.SS "Friends"
+
+.in +1c
+.ti -1c
+.RI "class \fBTensorVariable< 2U >\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+2D full specialization of vector-type variable template (other vectors are declared in files #1, #2) 
+.SH "Member Function Documentation"
+.PP 
+.SS "double \fBcsmp::VectorVariable\fP< 2U >::AngleTo (const \fBVectorVariable\fP< 2U > & v) const"
+return angle in degrees 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

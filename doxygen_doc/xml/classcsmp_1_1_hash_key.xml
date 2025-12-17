@@ -1,0 +1,400 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_hash_key" kind="class" language="C++" prot="public">
+    <compoundname>csmp::HashKey</compoundname>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_hash_key_1a295cda8e668b5460a4a47cf958e1acf4" prot="private" static="no" mutable="no">
+        <type>char</type>
+        <definition>char csmp::HashKey::key_text[60]</definition>
+        <argsstring>[60]</argsstring>
+        <name>key_text</name>
+        <qualifiedname>csmp::HashKey::key_text</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/HashKey.h" line="9" column="11" bodyfile="source/includes/utilities/HashKey.h" bodystart="9" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_hash_key_1a7c2a1fd218e97fbc989504549d15c061" prot="private" static="no" mutable="no">
+        <type>char</type>
+        <definition>char csmp::HashKey::num[20]</definition>
+        <argsstring>[20]</argsstring>
+        <name>num</name>
+        <qualifiedname>csmp::HashKey::num</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/HashKey.h" line="10" column="11" bodyfile="source/includes/utilities/HashKey.h" bodystart="10" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_hash_key_1a400dfe8aa4d3cc1d408c14cdbb72ad0c" prot="private" static="no" mutable="no">
+        <type>short</type>
+        <definition>short csmp::HashKey::hash_key_digits</definition>
+        <argsstring></argsstring>
+        <name>hash_key_digits</name>
+        <qualifiedname>csmp::HashKey::hash_key_digits</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/HashKey.h" line="11" column="11" bodyfile="source/includes/utilities/HashKey.h" bodystart="11" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_hash_key_1aac496976bfa81904ccdcc5cdadb438d8" prot="private" static="no" mutable="no">
+        <type>std::set&lt; size_t &gt;</type>
+        <definition>std::set&lt;size_t&gt; csmp::HashKey::sorter</definition>
+        <argsstring></argsstring>
+        <name>sorter</name>
+        <qualifiedname>csmp::HashKey::sorter</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/HashKey.h" line="12" column="15" bodyfile="source/includes/utilities/HashKey.h" bodystart="12" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_hash_key_1a8d759caaaecc20521a8d7cb1927cd148" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::HashKey::key</definition>
+        <argsstring></argsstring>
+        <name>key</name>
+        <qualifiedname>csmp::HashKey::key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/HashKey.h" line="13" column="12" bodyfile="source/includes/utilities/HashKey.h" bodystart="13" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_hash_key_1abe2430be79d53c72512d279d01d75f5b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::HashKey::HashKey</definition>
+        <argsstring>()</argsstring>
+        <name>HashKey</name>
+        <qualifiedname>csmp::HashKey::HashKey</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/HashKey.h" line="15" column="5" bodyfile="source/includes/utilities/HashKey.h" bodystart="32" bodyend="37"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_hash_key_1ad81f5eb94a1428fdd0d2039fabc334db" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::HashKey::~HashKey</definition>
+        <argsstring>()</argsstring>
+        <name>~HashKey</name>
+        <qualifiedname>csmp::HashKey::~HashKey</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/HashKey.h" line="16" column="5" bodyfile="source/includes/utilities/HashKey.h" bodystart="16" bodyend="16"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_hash_key_1a17e4e980bcc8c58f70a0016d2a63004d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::HashKey::Key</definition>
+        <argsstring>(size_t a, size_t b)</argsstring>
+        <name>Key</name>
+        <qualifiedname>csmp::HashKey::Key</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>b</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Key(a,b)</para>
+<para>Makes unique hashkey out of 2 unsigned integers. The integers are sorted in increasing order.</para>
+<para><simplesect kind="note"><para>use only unsigned integers here, because negative numbers cannot be concenated. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/HashKey.h" line="17" column="12" bodyfile="source/includes/utilities/HashKey.h" bodystart="47" bodyend="69"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_hash_key_1a79e97c2a967b1547d5bb8d83b1e39d81" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::HashKey::Key</definition>
+        <argsstring>(size_t a, size_t b, size_t c)</argsstring>
+        <name>Key</name>
+        <qualifiedname>csmp::HashKey::Key</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>b</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>c</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/HashKey.h" line="18" column="12" bodyfile="source/includes/utilities/HashKey.h" bodystart="74" bodyend="97"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_hash_key_1ab4b41929473a5fd7c44b8d383368eb28" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::HashKey::Key</definition>
+        <argsstring>(size_t a, size_t b, size_t c, size_t d)</argsstring>
+        <name>Key</name>
+        <qualifiedname>csmp::HashKey::Key</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>b</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>c</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>d</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/HashKey.h" line="19" column="12" bodyfile="source/includes/utilities/HashKey.h" bodystart="101" bodyend="125"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_hash_key_1a1cd2d10569c846b4ffdafbfaff68ff74" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::HashKey::Key</definition>
+        <argsstring>(size_t a, size_t b, char *s)</argsstring>
+        <name>Key</name>
+        <qualifiedname>csmp::HashKey::Key</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>b</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>s</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/HashKey.h" line="21" column="10" bodyfile="source/includes/utilities/HashKey.h" bodystart="131" bodyend="143"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_hash_key_1a7aab6df43372b4bda0de8baa304f7fb3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::HashKey::Key</definition>
+        <argsstring>(size_t a, size_t b, size_t c, char *s)</argsstring>
+        <name>Key</name>
+        <qualifiedname>csmp::HashKey::Key</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>b</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>c</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>s</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/HashKey.h" line="22" column="10" bodyfile="source/includes/utilities/HashKey.h" bodystart="146" bodyend="159"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_hash_key_1aa535ddd3c286334a87b584bae3d4925d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::HashKey::Key</definition>
+        <argsstring>(size_t a, size_t b, size_t c, size_t d, char *s)</argsstring>
+        <name>Key</name>
+        <qualifiedname>csmp::HashKey::Key</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>b</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>c</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>d</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>s</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/HashKey.h" line="23" column="10" bodyfile="source/includes/utilities/HashKey.h" bodystart="163" bodyend="177"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_hash_key_1a46d6c648686270ee667ecc88c51cb1fe" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::HashKey::Key</definition>
+        <argsstring>(size_t a, size_t b, std::string &amp;s)</argsstring>
+        <name>Key</name>
+        <qualifiedname>csmp::HashKey::Key</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>b</declname>
+        </param>
+        <param>
+          <type>std::string &amp;</type>
+          <declname>s</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/HashKey.h" line="25" column="10" bodyfile="source/includes/utilities/HashKey.h" bodystart="182" bodyend="194"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_hash_key_1a625064a2294b95c1ee6129bc7c4eb080" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::HashKey::Key</definition>
+        <argsstring>(size_t a, size_t b, size_t c, std::string &amp;s)</argsstring>
+        <name>Key</name>
+        <qualifiedname>csmp::HashKey::Key</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>b</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>c</declname>
+        </param>
+        <param>
+          <type>std::string &amp;</type>
+          <declname>s</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/HashKey.h" line="26" column="10" bodyfile="source/includes/utilities/HashKey.h" bodystart="197" bodyend="211"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_hash_key_1aa555b97421d974395e4cbe0d42a28304" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::HashKey::Key</definition>
+        <argsstring>(size_t a, size_t b, size_t c, size_t d, std::string &amp;s)</argsstring>
+        <name>Key</name>
+        <qualifiedname>csmp::HashKey::Key</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>b</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>c</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>d</declname>
+        </param>
+        <param>
+          <type>std::string &amp;</type>
+          <declname>s</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/HashKey.h" line="27" column="10" bodyfile="source/includes/utilities/HashKey.h" bodystart="215" bodyend="229"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::HashKey</label>
+        <link refid="classcsmp_1_1_hash_key"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/utilities/HashKey.h" line="8" column="1" bodyfile="source/includes/utilities/HashKey.h" bodystart="8" bodyend="28"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_hash_key_1a400dfe8aa4d3cc1d408c14cdbb72ad0c" prot="private" virt="non-virtual"><scope>csmp::HashKey</scope><name>hash_key_digits</name></member>
+      <member refid="classcsmp_1_1_hash_key_1abe2430be79d53c72512d279d01d75f5b" prot="public" virt="non-virtual"><scope>csmp::HashKey</scope><name>HashKey</name></member>
+      <member refid="classcsmp_1_1_hash_key_1a17e4e980bcc8c58f70a0016d2a63004d" prot="public" virt="non-virtual"><scope>csmp::HashKey</scope><name>Key</name></member>
+      <member refid="classcsmp_1_1_hash_key_1a79e97c2a967b1547d5bb8d83b1e39d81" prot="public" virt="non-virtual"><scope>csmp::HashKey</scope><name>Key</name></member>
+      <member refid="classcsmp_1_1_hash_key_1ab4b41929473a5fd7c44b8d383368eb28" prot="public" virt="non-virtual"><scope>csmp::HashKey</scope><name>Key</name></member>
+      <member refid="classcsmp_1_1_hash_key_1a1cd2d10569c846b4ffdafbfaff68ff74" prot="public" virt="non-virtual"><scope>csmp::HashKey</scope><name>Key</name></member>
+      <member refid="classcsmp_1_1_hash_key_1a7aab6df43372b4bda0de8baa304f7fb3" prot="public" virt="non-virtual"><scope>csmp::HashKey</scope><name>Key</name></member>
+      <member refid="classcsmp_1_1_hash_key_1aa535ddd3c286334a87b584bae3d4925d" prot="public" virt="non-virtual"><scope>csmp::HashKey</scope><name>Key</name></member>
+      <member refid="classcsmp_1_1_hash_key_1a46d6c648686270ee667ecc88c51cb1fe" prot="public" virt="non-virtual"><scope>csmp::HashKey</scope><name>Key</name></member>
+      <member refid="classcsmp_1_1_hash_key_1a625064a2294b95c1ee6129bc7c4eb080" prot="public" virt="non-virtual"><scope>csmp::HashKey</scope><name>Key</name></member>
+      <member refid="classcsmp_1_1_hash_key_1aa555b97421d974395e4cbe0d42a28304" prot="public" virt="non-virtual"><scope>csmp::HashKey</scope><name>Key</name></member>
+      <member refid="classcsmp_1_1_hash_key_1a8d759caaaecc20521a8d7cb1927cd148" prot="private" virt="non-virtual"><scope>csmp::HashKey</scope><name>key</name></member>
+      <member refid="classcsmp_1_1_hash_key_1a295cda8e668b5460a4a47cf958e1acf4" prot="private" virt="non-virtual"><scope>csmp::HashKey</scope><name>key_text</name></member>
+      <member refid="classcsmp_1_1_hash_key_1a7c2a1fd218e97fbc989504549d15c061" prot="private" virt="non-virtual"><scope>csmp::HashKey</scope><name>num</name></member>
+      <member refid="classcsmp_1_1_hash_key_1aac496976bfa81904ccdcc5cdadb438d8" prot="private" virt="non-virtual"><scope>csmp::HashKey</scope><name>sorter</name></member>
+      <member refid="classcsmp_1_1_hash_key_1ad81f5eb94a1428fdd0d2039fabc334db" prot="public" virt="non-virtual"><scope>csmp::HashKey</scope><name>~HashKey</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

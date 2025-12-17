@@ -166,7 +166,7 @@ void TransientPressure_Example::Run()
 
   const double day(86400.);  // 1 year in seconds
   double       maxtime(20. * day), time_increment(0.5 * day), well_pressure;
-  size_t         timestep(1), save_counter(1), save_frequency;
+  size_t       timestep(1), save_counter(1), save_frequency;
   cout << "\nEnter after how many steps you would like to save the results (1 = every step) " << endl;
   cin  >> save_frequency;
 

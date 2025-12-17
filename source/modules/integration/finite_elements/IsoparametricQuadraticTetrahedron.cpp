@@ -87,7 +87,6 @@ IsoparametricQuadraticTetrahedron::IsoparametricQuadraticTetrahedron()
    const double ip_weight(one_divided_by_ips * evolume_in_param_space);
    W[0] = W[1] = W[2] = W[3] = ip_weight;
 
-   // QuadratureRules_4Points();
    UsesLocalCoordinates(true);
    Isoparametric(true);
    VolumeElement();
@@ -1536,7 +1535,7 @@ void IsoparametricQuadraticTetrahedron::OutputNodeDataToVTK( const char* file_na
   {
      char  outfile[NAME_STRING], elmt[30];
      strcpy( outfile, file_name );
-     snprintf( elmt, sizeof(elmt), "%lu", CurrentID() );
+     snprintf( elmt, sizeof(elmt), "%zu", CurrentID() );
      strcat( outfile, elmt );
      strcat( outfile, ".vtk" );
 

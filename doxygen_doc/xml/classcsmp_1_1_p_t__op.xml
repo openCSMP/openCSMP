@@ -1,0 +1,311 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_p_t__op" kind="class" language="C++" prot="public">
+    <compoundname>csmp::PT_op</compoundname>
+    <basecompoundref refid="classcsmp_1_1_math_operator_r_h_s" prot="public" virt="non-virtual">csmp::MathOperatorRHS&lt; dim, Element &gt;</basecompoundref>
+    <includes refid="_p_t__op_8h" local="no">PT_op.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+      <param>
+        <type>template&lt; uint32_t &gt; class</type>
+        <declname>CELL</declname>
+        <defname>CELL</defname>
+        <defval><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref></defval>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_p_t__op_1a884e55237c4ddb8c129ddd189f59f4da" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; dim &gt; &gt;</type>
+        <definition>std::vector&lt;VectorVariable&lt;dim&gt; &gt; csmp::PT_op&lt; dim, CELL &gt;::NODAL_FORCE</definition>
+        <argsstring></argsstring>
+        <name>NODAL_FORCE</name>
+        <qualifiedname>csmp::PT_op::NODAL_FORCE</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/pde_operators/PT_op.h" line="40" column="18" bodyfile="source/includes/integration/pde_operators/PT_op.h" bodystart="40" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_p_t__op_1acabd352a0b07209896667d9131220800" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::PT_op&lt; dim, CELL &gt;::PT_op</definition>
+        <argsstring>(const PropertyDatabase&lt; dim &gt; &amp;, const char *oper, const char *test)</argsstring>
+        <name>PT_op</name>
+        <qualifiedname>csmp::PT_op::PT_op</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>&lt; dim &gt; &amp;</type>
+          <defname>pref</defname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>oper</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>test</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/pde_operators/PT_op.h" line="32" column="5" bodyfile="source/modules/integration/pde_operators/PT_op.cpp" bodystart="12" bodyend="21"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_p_t__op_1af5e973690e5f1f2a2650e59ae610c72a" prot="public" static="no" const="no" explicit="no" inline="no" final="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PT_op&lt; dim, CELL &gt;::GetOperands</definition>
+        <argsstring>(const CELL&lt; dim &gt; &amp;) override final</argsstring>
+        <name>GetOperands</name>
+        <qualifiedname>csmp::PT_op::GetOperands</qualifiedname>
+        <param>
+          <type>const CELL&lt; dim &gt; &amp;</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Reads node data (=vector properties) for further processing by the <ref refid="classcsmp_1_1_p_t__op_1a93c41ad02b3c277098b04293677596b3" kindref="member">ComputeContribution()</ref> method. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/pde_operators/PT_op.h" line="34" column="10" bodyfile="source/modules/integration/pde_operators/PT_op.cpp" bodystart="33" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_p_t__op_1a93c41ad02b3c277098b04293677596b3" prot="public" static="no" const="no" explicit="no" inline="no" final="yes" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::PT_op&lt; dim, CELL &gt;::ComputeContribution</definition>
+        <argsstring>(const CELL&lt; dim &gt; &amp;) override final</argsstring>
+        <name>ComputeContribution</name>
+        <qualifiedname>csmp::PT_op::ComputeContribution</qualifiedname>
+        <reimplements refid="classcsmp_1_1_math_operator_r_h_s_1ab77b3c1f4f078290ec9330a916482ed7">ComputeContribution</reimplements>
+        <param>
+          <type>const CELL&lt; dim &gt; &amp;</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Accumulates nodal vector forces from nodes which are flagged Dirichlet with regard to the target variable. The <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> is therefore a node variable. <linebreak/>
+</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The element from which accumulation into the global matrix takes place and the time-increment over which the force will be applied. <linebreak/>
+</para>
+<para>The result gets stored into the MathOperator right-hand vector.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>To compute nodal forces acting on the boundary of a model. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/pde_operators/PT_op.h" line="35" column="10" bodyfile="source/modules/integration/pde_operators/PT_op.cpp" bodystart="59" bodyend="72"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_p_t__op_1a18034abf49847d0c9b4953c925ce61fd" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="classcsmp_1_1_p_t__op" kindref="compound">PT_op</ref>&lt; dim, CELL &gt; *</type>
+        <definition>PT_op&lt; dim, CELL &gt; * csmp::PT_op&lt; dim, CELL &gt;::clone</definition>
+        <argsstring>() const override</argsstring>
+        <name>clone</name>
+        <qualifiedname>csmp::PT_op::clone</qualifiedname>
+        <reimplements refid="classcsmp_1_1_math_operator_r_h_s_1ae5355392c670d7c81d9822a0efbf767e">clone</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/pde_operators/PT_op.h" line="37" column="11" bodyfile="source/includes/integration/pde_operators/PT_op.h" bodystart="37" bodyend="37"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref> sources, loads etc. for vector solution variable. In mechanics, this operator is known as nodal force vector. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>S.K. Matthai </para>
+</simplesect>
+<simplesect kind="author"><para>S. Roberts </para>
+</simplesect>
+<simplesect kind="date"><para>2000</para>
+</simplesect>
+Use this operand to accumulate nodal vector-type properties flagged Dirichlet into the righthand side of the global matrix equation.</para>
+<para>The forces are distributed onto the Dirichlet nodes such that nodes which are shared by two elements are accumulated correctly:</para>
+<para>F(midpoint node) = (F / boundary-nodes) F(corner node) = (F / boundary-nodes) / 2 </para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>csmp::MathOperatorRHS&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_math_operator_r_h_s"/>
+      </node>
+      <node id="2">
+        <label>csmp::MathOperatorRHS&lt; dim, Element &gt;</label>
+        <link refid="classcsmp_1_1_math_operator_r_h_s"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; dim, Element &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::PT_op&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_p_t__op"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="9">
+        <label>csmp::DenseMatrix&lt; mn_max &gt;</label>
+        <link refid="classcsmp_1_1_dense_matrix"/>
+      </node>
+      <node id="8">
+        <label>csmp::DenseMatrix&lt; DM_MIN &gt;</label>
+        <link refid="classcsmp_1_1_dense_matrix"/>
+        <childnode refid="9" relation="template-instance">
+          <edgelabel>&lt; DM_MIN &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>csmp::Index</label>
+        <link refid="structcsmp_1_1_index"/>
+        <childnode refid="5" relation="usage">
+          <edgelabel>+localVariables</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>+integrationPointVariables</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>+indexTracker</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>csmp::IndexTracker</label>
+        <link refid="classcsmp_1_1_index_tracker"/>
+      </node>
+      <node id="6">
+        <label>csmp::IntegrationPointVariables</label>
+        <link refid="structcsmp_1_1_integration_point_variables"/>
+        <childnode refid="5" relation="usage">
+          <edgelabel>+ipvCell</edgelabel>
+          <edgelabel>+ipvFacet</edgelabel>
+          <edgelabel>+ipvSector</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>csmp::LocalVariables</label>
+        <link refid="structcsmp_1_1_local_variables"/>
+      </node>
+      <node id="10">
+        <label>csmp::MathOperatorRHS&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_math_operator_r_h_s"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>#op</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>#DERIV</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::MathOperatorRHS&lt; dim, Element &gt;</label>
+        <link refid="classcsmp_1_1_math_operator_r_h_s"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>#op</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>#DERIV</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; dim, Element &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::PT_op&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_p_t__op"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::Parameter</label>
+        <link refid="structcsmp_1_1_parameter"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>+key</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/integration/pde_operators/PT_op.h" line="30" column="1" bodyfile="source/includes/integration/pde_operators/PT_op.h" bodystart="30" bodyend="41"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1af950a8b9a3d4ea2229f60d27ab6a69c2" prot="public" virt="non-virtual"><scope>csmp::PT_op</scope><name>Add</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1abeae2ec15ba22135c4c5b3098b6b3537" prot="protected" virt="non-virtual"><scope>csmp::PT_op</scope><name>add_accumulate_</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a0ca505f93c401b561990e652ddeba037" prot="protected" virt="non-virtual"><scope>csmp::PT_op</scope><name>add_accumulate_later_</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a95426d12ae7f3a6eb1bf10c036505e7b" prot="public" virt="non-virtual"><scope>csmp::PT_op</scope><name>AddAccumulate</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a7d3039e3ef140aabc09b14fd9c0f52a6" prot="public" virt="non-virtual"><scope>csmp::PT_op</scope><name>AddAccumulateLater</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1abdc618c15c875eef18858655fb345090" prot="public" virt="non-virtual"><scope>csmp::PT_op</scope><name>AddLater</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a5b96da9a81a4d11ac04946c44c89e72a" prot="protected" virt="non-virtual"><scope>csmp::PT_op</scope><name>application_cycle_</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a8158abc37b41cdd02469b9d18fb83337" prot="protected" virt="non-virtual"><scope>csmp::PT_op</scope><name>application_cycles_</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a51d50bbbd4f27aca48243f24f7fb92e0" prot="public" virt="non-virtual"><scope>csmp::PT_op</scope><name>ApplicationCycle</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a14fff508439c520f875dfd77d117489f" prot="public" virt="non-virtual"><scope>csmp::PT_op</scope><name>ApplicationCycles</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1ad9c03f1d3138a22e0bc40778d0032f6a" prot="public" virt="virtual"><scope>csmp::PT_op</scope><name>AssignToGlobal</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1ac571c4c7d3f98ecd2c34d1cd6d75fa36" prot="public" virt="non-virtual"><scope>csmp::PT_op</scope><name>BasicOperand</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a4d75aa984bee30ef4b78b59f9892bb15" prot="public" virt="non-virtual"><scope>csmp::PT_op</scope><name>BasicOperandDataDepth</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1aee095a41b5ac8a32ee6dc703a4314b50" prot="public" virt="non-virtual"><scope>csmp::PT_op</scope><name>BasicOperandKey</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a41c990f110ad162091910ee8bcbda6cf" prot="public" virt="non-virtual"><scope>csmp::PT_op</scope><name>BasicOperandName</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a6c0a7d5e5796aa4e028f4479a808cfb0" prot="public" virt="non-virtual"><scope>csmp::PT_op</scope><name>BasicOperandOffset</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1ab7c8384f6e49d9d81fe4f7ff41a18e41" prot="public" virt="non-virtual"><scope>csmp::PT_op</scope><name>BasicOperandPlacement</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a22231a19221e8cd8651167a4e2f0f483" prot="public" virt="non-virtual"><scope>csmp::PT_op</scope><name>BasicOperandType</name></member>
+      <member refid="classcsmp_1_1_p_t__op_1a18034abf49847d0c9b4953c925ce61fd" prot="public" virt="virtual"><scope>csmp::PT_op</scope><name>clone</name></member>
+      <member refid="classcsmp_1_1_p_t__op_1a93c41ad02b3c277098b04293677596b3" prot="public" virt="virtual"><scope>csmp::PT_op</scope><name>ComputeContribution</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1ab1b5fad18c56f4849f9ded0940711ad2" prot="protected" virt="non-virtual"><scope>csmp::PT_op</scope><name>DERIV</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1aa6bb4a6c6a96c3e3951433004d0de15b" prot="public" virt="non-virtual"><scope>csmp::PT_op</scope><name>DivideByTimeIncrement</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a7b85528afe467c2ef91668ff0dcab968" prot="protected" virt="non-virtual"><scope>csmp::PT_op</scope><name>factor_</name></member>
+      <member refid="classcsmp_1_1_p_t__op_1af5e973690e5f1f2a2650e59ae610c72a" prot="public" virt="non-virtual"><scope>csmp::PT_op</scope><name>GetOperands</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1ad5614fa4de569146a684d28635eb9ff7" prot="public" virt="virtual" ambiguityscope="csmp::MathOperatorRHS&lt; dim, Element &gt;::"><scope>csmp::PT_op</scope><name>GetOperands</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1ad789282bfcaf0300e8912174871f5e6f" prot="protected" virt="non-virtual"><scope>csmp::PT_op</scope><name>IPOL</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a3d1907ed1b36a73c7591653b0965323e" prot="protected" virt="non-virtual"><scope>csmp::PT_op</scope><name>lump_matrices_</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a91445273130ae00f5188a9991dbffaa6" prot="public" virt="non-virtual"><scope>csmp::PT_op</scope><name>LumpedFormulation</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1ac839f56b47b3732ae505b79843841401" prot="public" virt="non-virtual"><scope>csmp::PT_op</scope><name>MaterialOperand</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a00b31b95962f4495178242201c92cfcd" prot="public" virt="non-virtual"><scope>csmp::PT_op</scope><name>MaterialOperandDataDepth</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a52d354d9bbfc6fd037f70b401cfc2289" prot="public" virt="non-virtual"><scope>csmp::PT_op</scope><name>MaterialOperandKey</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1ad9193c44bf7efa489009fce52afd3d0d" prot="public" virt="non-virtual"><scope>csmp::PT_op</scope><name>MaterialOperandName</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a706cf0840efb0d27a828c5d018335ba9" prot="public" virt="non-virtual"><scope>csmp::PT_op</scope><name>MaterialOperandPlacement</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1af230ea6195bab299ee9e77f217f0d0bc" prot="public" virt="non-virtual"><scope>csmp::PT_op</scope><name>MaterialOperandType</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1aad7e46e90d59322926ae92e98198a706" prot="protected" virt="non-virtual"><scope>csmp::PT_op</scope><name>MTRL</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a4ce7b610b2ed3470e4d159846d03ddeb" prot="public" virt="non-virtual"><scope>csmp::PT_op</scope><name>Multiply</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a2cf305524d12d1bf73302bc00cab0503" prot="protected" virt="non-virtual"><scope>csmp::PT_op</scope><name>multiply_accumulate_</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1aae6e621f2b1ad8b8189282007a87ad58" prot="public" virt="non-virtual"><scope>csmp::PT_op</scope><name>MultiplyAccumulate</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a5cb6c0bce5427dbb968492b49021b138" prot="public" virt="non-virtual"><scope>csmp::PT_op</scope><name>MultiplyBy</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a5a6138f5b4e123f88a9115e1d9315871" prot="public" virt="virtual"><scope>csmp::PT_op</scope><name>MultiplyWithTimeFactor</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a2fae8dab461a98afdd5bb376ffab59d0" prot="public" virt="non-virtual"><scope>csmp::PT_op</scope><name>MultiplyWithTimeIncrement</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1aa700d71b384204010a5514f046b30daf" prot="public" virt="non-virtual"><scope>csmp::PT_op</scope><name>Name</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a0bf5eca393d0470696ddc1f68c49c33a" prot="protected" virt="non-virtual"><scope>csmp::PT_op</scope><name>name_</name></member>
+      <member refid="classcsmp_1_1_p_t__op_1a884e55237c4ddb8c129ddd189f59f4da" prot="private" virt="non-virtual"><scope>csmp::PT_op</scope><name>NODAL_FORCE</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1aeebb771d18fad508b89bab6ba3fdc9e8" prot="protected" virt="non-virtual"><scope>csmp::PT_op</scope><name>op</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a8daf2f4ba7583b116d5c496d81e4cbc0" prot="public" virt="non-virtual"><scope>csmp::PT_op</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a7b331a8a17ea8dee88ebb05f50233649" prot="public" virt="virtual"><scope>csmp::PT_op</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a4ac9c3b2f60149cd6cc4a35681b29e0d" prot="public" virt="non-virtual"><scope>csmp::PT_op</scope><name>PropertyAtIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_p_t__op_1acabd352a0b07209896667d9131220800" prot="public" virt="non-virtual"><scope>csmp::PT_op</scope><name>PT_op</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a4075835995bb9932c4d7c257547e66de" prot="protected" virt="non-virtual"><scope>csmp::PT_op</scope><name>RHS</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a23b92f3ebeee4a6e1673706f740566b4" prot="public" virt="non-virtual"><scope>csmp::PT_op</scope><name>Subtract</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1af76a808d235d684bcc507ea0a9bdac18" prot="protected" virt="non-virtual"><scope>csmp::PT_op</scope><name>subtract_accumulate_</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1ae05aed4df946d473651b5ad4873e7786" prot="protected" virt="non-virtual"><scope>csmp::PT_op</scope><name>subtract_accumulate_later_</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a44292090da69cef35e58f612bf9a82e9" prot="public" virt="non-virtual"><scope>csmp::PT_op</scope><name>SubtractAccumulate</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1aab0a4b47807bdafb917c4683aac6d270" prot="public" virt="non-virtual"><scope>csmp::PT_op</scope><name>SubtractAccumulateLater</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a04a0443ea4ccd22e563baa9b49a2a813" prot="public" virt="non-virtual"><scope>csmp::PT_op</scope><name>SubtractLater</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a22dc4521ebc649242eacb41f1ab8e260" prot="public" virt="non-virtual"><scope>csmp::PT_op</scope><name>TestOperand</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1af4c6867b7a59a8dbd0db7bad48cd2c3d" prot="public" virt="non-virtual"><scope>csmp::PT_op</scope><name>TestOperandDataDepth</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a8e21ef3752c7956c83dd55a033d66353" prot="public" virt="non-virtual"><scope>csmp::PT_op</scope><name>TestOperandKey</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1af7842dfe6f55c020253018e1371450f0" prot="public" virt="non-virtual"><scope>csmp::PT_op</scope><name>TestOperandName</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1ae6df026b0ecf14dd9a4cfa9a08e792b2" prot="public" virt="non-virtual"><scope>csmp::PT_op</scope><name>TestOperandOffset</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a73fb944e6a4f1aeb6566867eb4894b7b" prot="public" virt="non-virtual"><scope>csmp::PT_op</scope><name>TestOperandPlacement</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a9ab51c99368137c5cb79bcf6e7e01296" prot="public" virt="non-virtual"><scope>csmp::PT_op</scope><name>TestOperandType</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a666bb360540f0ed1fad82c821109fc91" prot="protected" virt="non-virtual"><scope>csmp::PT_op</scope><name>time_divide_</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a4bc59dd56b98bb076deada3e1b222627" prot="protected" virt="non-virtual"><scope>csmp::PT_op</scope><name>time_multiply_</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1aea6bcf22aa25daa01f53b49cd16bca24" prot="protected" virt="non-virtual"><scope>csmp::PT_op</scope><name>top</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1ad1c90df52dbb10f0c9eefd445758fc02" prot="public" virt="virtual"><scope>csmp::PT_op</scope><name>WriteOperands</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1ab0f58bc4d43c0f20e003467bfe536157" prot="public" virt="virtual"><scope>csmp::PT_op</scope><name>~MathOperatorRHS</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

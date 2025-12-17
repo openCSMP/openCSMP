@@ -1,0 +1,106 @@
+\doxysection{csmp\+::Mute Class Reference}
+\hypertarget{classcsmp_1_1_mute}{}\label{classcsmp_1_1_mute}\index{csmp::Mute@{csmp::Mute}}
+
+
+Allows redirection of the output streams cout and cerr from the screen to null (output goes nowhere) and file (ascii file)  
+
+
+
+
+{\ttfamily \#include $<$Mute.\+h$>$}
+
+
+
+Collaboration diagram for csmp\+::Mute\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=151pt]{classcsmp_1_1_mute__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_mute_ad0f13cf67b2878438e903e4d38da4639}\label{classcsmp_1_1_mute_ad0f13cf67b2878438e903e4d38da4639} 
+{\bfseries \texorpdfstring{$\sim$}{\string~}\+Mute} ()
+\begin{DoxyCompactList}\small\item\em Dtor does not reinstate ostream. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_mute_aa7ac9ea583f5bfc26aaa6c076f3da5f3}{Null}} (std\+::ostream \&)
+\begin{DoxyCompactList}\small\item\em inactivates output to given stream \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_mute_a8dc10c38b444203aa2800f9e614ff89b}{File}} (std\+::ostream \&, const char \texorpdfstring{$\ast$}{*}text\+\_\+file)
+\begin{DoxyCompactList}\small\item\em redirects output to text file \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_mute_aef180f23de34453a5038786f84ea4764}{Reinstate}} (std\+::ostream \&)
+\begin{DoxyCompactList}\small\item\em brings back original settings \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_mute_a7a2ac13c6054fc8c3d2a196f9cff6310}\label{classcsmp_1_1_mute_a7a2ac13c6054fc8c3d2a196f9cff6310} 
+bool {\bfseries Redirected} () const
+\begin{DoxyCompactList}\small\item\em releases redirection to file \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Allows redirection of the output streams cout and cerr from the screen to null (output goes nowhere) and file (ascii file) 
+
+Class is used to suppress output on systems where the user has no access to the console and/or where sceen output would dramatically slow the computations.
+
+Only a single stream can be handled by an instance, so return values will reflect that.
+
+Application example\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{Mute\ mute;}
+\DoxyCodeLine{cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)nMute\ mode...\(\backslash\)n"{}};}
+\DoxyCodeLine{mute.Null(cout);\ \textcolor{comment}{//\ or\ i.e.\ mute.File(\ cout,\ "{}Output.txt"{});}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{comment}{//\ ...\ here\ goes\ the\ main\ code\ with\ supressed\ output}}
+\DoxyCodeLine{}
+\DoxyCodeLine{mute.Reinstate(cout);}
+
+\end{DoxyCode}
+
+
+a note \textquotesingle{}just in case\textquotesingle{}\+: if you want to supress samg output too, call following for \doxylink{classcsmp_1_1_s_a_m_g___settings}{SAMG\+\_\+\+Settings} instance (here \textquotesingle{}settings\textquotesingle{}) 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{settings.Set\_idmp(-\/1);}
+\DoxyCodeLine{settings.Set\_iout1(-\/1);}
+\DoxyCodeLine{settings.Set\_iout2(-\/1);}
+
+\end{DoxyCode}
+ 
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_mute_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_mute_a8dc10c38b444203aa2800f9e614ff89b}\index{csmp::Mute@{csmp::Mute}!File@{File}}
+\index{File@{File}!csmp::Mute@{csmp::Mute}}
+\doxysubsubsection{\texorpdfstring{File()}{File()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_mute_a8dc10c38b444203aa2800f9e614ff89b} 
+bool csmp\+::\+Mute\+::\+File (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{os}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{text\+\_\+file}{}\end{DoxyParamCaption})}
+
+
+
+redirects output to text file 
+
+Redirects to file, returns false if stream already redirected, true if redirection successful. \Hypertarget{classcsmp_1_1_mute_aa7ac9ea583f5bfc26aaa6c076f3da5f3}\index{csmp::Mute@{csmp::Mute}!Null@{Null}}
+\index{Null@{Null}!csmp::Mute@{csmp::Mute}}
+\doxysubsubsection{\texorpdfstring{Null()}{Null()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_mute_aa7ac9ea583f5bfc26aaa6c076f3da5f3} 
+bool csmp\+::\+Mute\+::\+Null (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{os}{}\end{DoxyParamCaption})}
+
+
+
+inactivates output to given stream 
+
+Redirects to null stream, returns false if stream already redirected, true if redirection successful. \Hypertarget{classcsmp_1_1_mute_aef180f23de34453a5038786f84ea4764}\index{csmp::Mute@{csmp::Mute}!Reinstate@{Reinstate}}
+\index{Reinstate@{Reinstate}!csmp::Mute@{csmp::Mute}}
+\doxysubsubsection{\texorpdfstring{Reinstate()}{Reinstate()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_mute_aef180f23de34453a5038786f84ea4764} 
+bool csmp\+::\+Mute\+::\+Reinstate (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{os}{}\end{DoxyParamCaption})}
+
+
+
+brings back original settings 
+
+Reinstates screen output, returns false if no redirection current, true if reinstation successful. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/run\+\_\+control/Mute.\+h\item 
+source/modules/run\+\_\+control/Mute.\+cpp\end{DoxyCompactItemize}

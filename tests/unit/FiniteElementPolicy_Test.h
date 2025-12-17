@@ -28,7 +28,7 @@ class FiniteElementPolicy_Test : public Test
     // ----------------------------------------------------------
     //std::set<Node<dim>*> CornerNodesOfFace( uint32_t face_id ) const;
     //std::set<Node<dim>*> CornerNodesConnectedTo( uint32_t node_id ) const;
-    //CSMP_FEM_TYPE  FE_Type() const;
+    //CSMP_FE_TYPE  FE_Type() const;
     //FiniteElement* FE() const;
     //bool       IsEquidimensional() const;
     //bool       IsLine() const;

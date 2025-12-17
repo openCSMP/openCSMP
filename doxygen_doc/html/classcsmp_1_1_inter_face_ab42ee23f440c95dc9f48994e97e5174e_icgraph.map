@@ -1,0 +1,5 @@
+<map id="csmp::InterFace::InitialiseNodeVector" name="csmp::InterFace::InitialiseNodeVector">
+<area shape="rect" id="Node000001" title="connects the nodes of already connected higher dimensional neighbor elements to the InterFace" alt="" coords="273,5,445,46"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_inter_face.html#a3f6297a01eb8b91534f8ca0b3515e1de" title="connects interFace to its higher&#45;dimensional neighbors and nodes establishing connections by itself" alt="" coords="5,5,225,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="257,28,225,28,225,23,257,23"/>
+</map>

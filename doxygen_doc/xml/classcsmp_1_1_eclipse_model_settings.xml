@@ -1,0 +1,697 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_eclipse_model_settings" kind="class" language="C++" prot="public">
+    <compoundname>csmp::EclipseModelSettings</compoundname>
+    <includes refid="_eclipse_interface_8h" local="no">EclipseInterface.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_model_settings_1adb8fff5d02875e047d70bcb50b4b3182" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::EclipseModelSettings::mesh_file_prefix_</definition>
+        <argsstring></argsstring>
+        <name>mesh_file_prefix_</name>
+        <qualifiedname>csmp::EclipseModelSettings::mesh_file_prefix_</qualifiedname>
+        <briefdescription>
+<para>mesh setting </para>
+        </briefdescription>
+        <detaileddescription>
+<para>name of model or main mesh file </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="456" column="25" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="456" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_model_settings_1a2022fd4ac2dcc34527523bd0e45f5164" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::EclipseModelSettings::regions_file_prefix_</definition>
+        <argsstring></argsstring>
+        <name>regions_file_prefix_</name>
+        <qualifiedname>csmp::EclipseModelSettings::regions_file_prefix_</qualifiedname>
+        <briefdescription>
+<para>regions file prefix </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="457" column="25" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="457" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_model_settings_1a008ef5ebf0d178104d0917b63ad60dc2" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::EclipseModelSettings::create_boundaries_</definition>
+        <argsstring></argsstring>
+        <name>create_boundaries_</name>
+        <qualifiedname>csmp::EclipseModelSettings::create_boundaries_</qualifiedname>
+        <briefdescription>
+<para>true = create boundaries around model, false = do not create boundaries </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="458" column="25" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="458" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_model_settings_1aba5d3fafb649fb9fa053d66f13f50d3e" prot="public" static="no" mutable="no">
+        <type>std::set&lt; std::string &gt;</type>
+        <definition>std::set&lt;std::string&gt; csmp::EclipseModelSettings::regions_</definition>
+        <argsstring></argsstring>
+        <name>regions_</name>
+        <qualifiedname>csmp::EclipseModelSettings::regions_</qualifiedname>
+        <briefdescription>
+<para>name of regions to be used </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="459" column="12" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="459" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_model_settings_1a4f962604b698fdcf4f770084ab2d2a32" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::EclipseModelSettings::tetra_mesh_</definition>
+        <argsstring></argsstring>
+        <name>tetra_mesh_</name>
+        <qualifiedname>csmp::EclipseModelSettings::tetra_mesh_</qualifiedname>
+        <briefdescription>
+<para>tetrahedral mesh </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="460" column="25" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="460" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_model_settings_1a6dfb38ceccafb88c961c54c8e8ecda97" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::EclipseModelSettings::exclude_inactive_cells_</definition>
+        <argsstring></argsstring>
+        <name>exclude_inactive_cells_</name>
+        <qualifiedname>csmp::EclipseModelSettings::exclude_inactive_cells_</qualifiedname>
+        <briefdescription>
+<para>do not consider inactive cells </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="461" column="25" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="461" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_model_settings_1a4c83fe322f9b63ce9b9b192d8d0bae77" prot="public" static="no" mutable="no">
+        <type>std::map&lt; int, <ref refid="structcsmp_1_1_parameter" kindref="compound">csmp::Parameter</ref> &gt;</type>
+        <definition>std::map&lt;int, csmp::Parameter&gt; csmp::EclipseModelSettings::properties_</definition>
+        <argsstring></argsstring>
+        <name>properties_</name>
+        <qualifiedname>csmp::EclipseModelSettings::properties_</qualifiedname>
+        <briefdescription>
+<para>property settings </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="464" column="14" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="464" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_model_settings_1a4060ecc6bcd5b8d55fecef07b514c674" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::EclipseModelSettings::EclipseModelSettings</definition>
+        <argsstring>(const std::string &amp;mesh_file_prefix)</argsstring>
+        <name>EclipseModelSettings</name>
+        <qualifiedname>csmp::EclipseModelSettings::EclipseModelSettings</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>mesh_file_prefix</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="386" column="12" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="2461" bodyend="2471"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_model_settings_1a47bc80677b1d8719d6e58d6dfab4a3d6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::EclipseModelSettings::~EclipseModelSettings</definition>
+        <argsstring>()</argsstring>
+        <name>~EclipseModelSettings</name>
+        <qualifiedname>csmp::EclipseModelSettings::~EclipseModelSettings</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="387" column="3" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="2473" bodyend="2475"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_model_settings_1a447778570c33dcc62e736b79aaab8bf0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::EclipseModelSettings::MeshSetup</definition>
+        <argsstring>(bool exclude_inactive_cells, bool tetra_mesh, bool create_boundaries=true)</argsstring>
+        <name>MeshSetup</name>
+        <qualifiedname>csmp::EclipseModelSettings::MeshSetup</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>exclude_inactive_cells</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>tetra_mesh</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>create_boundaries</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="389" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="2479" bodyend="2486"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_model_settings_1a1d238739ca1484d9cf0d1303e44850ec" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::EclipseModelSettings::MeshSetup</definition>
+        <argsstring>(const std::string &amp;regions_file_prefix, bool exclude_inactive_cells, bool tetra_mesh, bool create_boundaries=true)</argsstring>
+        <name>MeshSetup</name>
+        <qualifiedname>csmp::EclipseModelSettings::MeshSetup</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>regions_file_prefix</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>exclude_inactive_cells</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>tetra_mesh</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>create_boundaries</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="393" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="2489" bodyend="2502"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_model_settings_1a8bb79b4067c9b9cf8c1e11b2c0fc6ad7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::EclipseModelSettings::MeshSetup</definition>
+        <argsstring>(const std::set&lt; std::string &gt; &amp;regions, bool exclude_inactive_cells, bool tetra_mesh, bool create_boundaries=true)</argsstring>
+        <name>MeshSetup</name>
+        <qualifiedname>csmp::EclipseModelSettings::MeshSetup</qualifiedname>
+        <param>
+          <type>const std::set&lt; std::string &gt; &amp;</type>
+          <declname>regions</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>exclude_inactive_cells</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>tetra_mesh</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>create_boundaries</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="398" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="2505" bodyend="2514"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_model_settings_1aca12634026596d92997010f8a979c74d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::EclipseModelSettings::SatNumPropertySetup</definition>
+        <argsstring>(const std::string &amp;prop_name=&quot;satnum&quot;, const ::csmp::VARIABLE_TYPE &amp;prop_type=::csmp::SCALAR, const ::csmp::PLACEMENT &amp;prop_place=::csmp::ELEMENT)</argsstring>
+        <name>SatNumPropertySetup</name>
+        <qualifiedname>csmp::EclipseModelSettings::SatNumPropertySetup</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>prop_name</declname>
+          <defval>&quot;satnum&quot;</defval>
+        </param>
+        <param>
+          <type>const <ref refid="group___c_s_m_p__global__enumerations_1gacbf62c758c46dc45b3f024638bb89274" kindref="member">::csmp::VARIABLE_TYPE</ref> &amp;</type>
+          <declname>prop_type</declname>
+          <defval>::csmp::SCALAR</defval>
+        </param>
+        <param>
+          <type>const <ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">::csmp::PLACEMENT</ref> &amp;</type>
+          <declname>prop_place</declname>
+          <defval>::csmp::ELEMENT</defval>
+        </param>
+        <briefdescription>
+<para>properties setup </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="404" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="2520" bodyend="2533"/>
+        <references refid="structcsmp_1_1_parameter_1adf8461db474be0f6796afad96ad60c2d" compoundref="_parameter_8h" startline="62">csmp::Parameter::max</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_model_settings_1af187066228a60ea5743a96527f248aae" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::EclipseModelSettings::PvtNumPropertySetup</definition>
+        <argsstring>(const std::string &amp;prop_name=&quot;ptvnum&quot;, const ::csmp::VARIABLE_TYPE &amp;prop_type=::csmp::SCALAR, const ::csmp::PLACEMENT &amp;prop_place=::csmp::ELEMENT)</argsstring>
+        <name>PvtNumPropertySetup</name>
+        <qualifiedname>csmp::EclipseModelSettings::PvtNumPropertySetup</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>prop_name</declname>
+          <defval>&quot;ptvnum&quot;</defval>
+        </param>
+        <param>
+          <type>const <ref refid="group___c_s_m_p__global__enumerations_1gacbf62c758c46dc45b3f024638bb89274" kindref="member">::csmp::VARIABLE_TYPE</ref> &amp;</type>
+          <declname>prop_type</declname>
+          <defval>::csmp::SCALAR</defval>
+        </param>
+        <param>
+          <type>const <ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">::csmp::PLACEMENT</ref> &amp;</type>
+          <declname>prop_place</declname>
+          <defval>::csmp::ELEMENT</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="408" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="2536" bodyend="2549"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_model_settings_1a1f636851033f5bd3193fac0f6c2bd7ee" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::EclipseModelSettings::RockNumPropertySetup</definition>
+        <argsstring>(const std::string &amp;prop_name=&quot;rocktype&quot;, const ::csmp::VARIABLE_TYPE &amp;prop_type=::csmp::SCALAR, const ::csmp::PLACEMENT &amp;prop_place=::csmp::ELEMENT)</argsstring>
+        <name>RockNumPropertySetup</name>
+        <qualifiedname>csmp::EclipseModelSettings::RockNumPropertySetup</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>prop_name</declname>
+          <defval>&quot;rocktype&quot;</defval>
+        </param>
+        <param>
+          <type>const <ref refid="group___c_s_m_p__global__enumerations_1gacbf62c758c46dc45b3f024638bb89274" kindref="member">::csmp::VARIABLE_TYPE</ref> &amp;</type>
+          <declname>prop_type</declname>
+          <defval>::csmp::SCALAR</defval>
+        </param>
+        <param>
+          <type>const <ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">::csmp::PLACEMENT</ref> &amp;</type>
+          <declname>prop_place</declname>
+          <defval>::csmp::ELEMENT</defval>
+        </param>
+        <briefdescription>
+<para>usually this is called &quot;rocknum&quot; </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="413" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="2552" bodyend="2565"/>
+        <references refid="structcsmp_1_1_parameter_1adf8461db474be0f6796afad96ad60c2d" compoundref="_parameter_8h" startline="62">csmp::Parameter::max</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_model_settings_1ae53f446d547bdcd66acb2386f4a5555c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::EclipseModelSettings::EqlNumPropertySetup</definition>
+        <argsstring>(const std::string &amp;prop_name=&quot;eqlnum&quot;, const ::csmp::VARIABLE_TYPE &amp;prop_type=::csmp::SCALAR, const ::csmp::PLACEMENT &amp;prop_place=::csmp::ELEMENT)</argsstring>
+        <name>EqlNumPropertySetup</name>
+        <qualifiedname>csmp::EclipseModelSettings::EqlNumPropertySetup</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>prop_name</declname>
+          <defval>&quot;eqlnum&quot;</defval>
+        </param>
+        <param>
+          <type>const <ref refid="group___c_s_m_p__global__enumerations_1gacbf62c758c46dc45b3f024638bb89274" kindref="member">::csmp::VARIABLE_TYPE</ref> &amp;</type>
+          <declname>prop_type</declname>
+          <defval>::csmp::SCALAR</defval>
+        </param>
+        <param>
+          <type>const <ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">::csmp::PLACEMENT</ref> &amp;</type>
+          <declname>prop_place</declname>
+          <defval>::csmp::ELEMENT</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="417" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="2568" bodyend="2581"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_model_settings_1aee45e38924867bce4dcaf34d829f6549" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::EclipseModelSettings::FipNumPropertySetup</definition>
+        <argsstring>(const std::string &amp;prop_name=&quot;fipnum&quot;, const ::csmp::VARIABLE_TYPE &amp;prop_type=::csmp::SCALAR, const ::csmp::PLACEMENT &amp;prop_place=::csmp::ELEMENT)</argsstring>
+        <name>FipNumPropertySetup</name>
+        <qualifiedname>csmp::EclipseModelSettings::FipNumPropertySetup</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>prop_name</declname>
+          <defval>&quot;fipnum&quot;</defval>
+        </param>
+        <param>
+          <type>const <ref refid="group___c_s_m_p__global__enumerations_1gacbf62c758c46dc45b3f024638bb89274" kindref="member">::csmp::VARIABLE_TYPE</ref> &amp;</type>
+          <declname>prop_type</declname>
+          <defval>::csmp::SCALAR</defval>
+        </param>
+        <param>
+          <type>const <ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">::csmp::PLACEMENT</ref> &amp;</type>
+          <declname>prop_place</declname>
+          <defval>::csmp::ELEMENT</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="421" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="2584" bodyend="2597"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_model_settings_1a35c4fb3be8b926ea8202900b9d806990" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::EclipseModelSettings::NtgPropertySetup</definition>
+        <argsstring>(const std::string &amp;prop_name=&quot;ntg&quot;, const ::csmp::VARIABLE_TYPE &amp;prop_type=::csmp::SCALAR, const ::csmp::PLACEMENT &amp;prop_place=::csmp::ELEMENT)</argsstring>
+        <name>NtgPropertySetup</name>
+        <qualifiedname>csmp::EclipseModelSettings::NtgPropertySetup</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>prop_name</declname>
+          <defval>&quot;ntg&quot;</defval>
+        </param>
+        <param>
+          <type>const <ref refid="group___c_s_m_p__global__enumerations_1gacbf62c758c46dc45b3f024638bb89274" kindref="member">::csmp::VARIABLE_TYPE</ref> &amp;</type>
+          <declname>prop_type</declname>
+          <defval>::csmp::SCALAR</defval>
+        </param>
+        <param>
+          <type>const <ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">::csmp::PLACEMENT</ref> &amp;</type>
+          <declname>prop_place</declname>
+          <defval>::csmp::ELEMENT</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="425" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="2600" bodyend="2613"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_model_settings_1aa36ff94b27415f7b976c8a832442f8f3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::EclipseModelSettings::PoroPropertySetup</definition>
+        <argsstring>(const std::string &amp;prop_name=&quot;porosity&quot;, const ::csmp::VARIABLE_TYPE &amp;prop_type=::csmp::SCALAR, const ::csmp::PLACEMENT &amp;prop_place=::csmp::ELEMENT)</argsstring>
+        <name>PoroPropertySetup</name>
+        <qualifiedname>csmp::EclipseModelSettings::PoroPropertySetup</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>prop_name</declname>
+          <defval>&quot;porosity&quot;</defval>
+        </param>
+        <param>
+          <type>const <ref refid="group___c_s_m_p__global__enumerations_1gacbf62c758c46dc45b3f024638bb89274" kindref="member">::csmp::VARIABLE_TYPE</ref> &amp;</type>
+          <declname>prop_type</declname>
+          <defval>::csmp::SCALAR</defval>
+        </param>
+        <param>
+          <type>const <ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">::csmp::PLACEMENT</ref> &amp;</type>
+          <declname>prop_place</declname>
+          <defval>::csmp::ELEMENT</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="429" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="2616" bodyend="2629"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_model_settings_1afa8969bac8dbb554696150021e92ad09" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::EclipseModelSettings::PermPropertySetup</definition>
+        <argsstring>(const std::string &amp;prop_name=&quot;permeability&quot;, const ::csmp::VARIABLE_TYPE &amp;prop_type=::csmp::SCALAR, const ::csmp::PLACEMENT &amp;prop_place=::csmp::ELEMENT, const std::string &amp;prop_unit=&quot;m2&quot;)</argsstring>
+        <name>PermPropertySetup</name>
+        <qualifiedname>csmp::EclipseModelSettings::PermPropertySetup</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>prop_name</declname>
+          <defval>&quot;permeability&quot;</defval>
+        </param>
+        <param>
+          <type>const <ref refid="group___c_s_m_p__global__enumerations_1gacbf62c758c46dc45b3f024638bb89274" kindref="member">::csmp::VARIABLE_TYPE</ref> &amp;</type>
+          <declname>prop_type</declname>
+          <defval>::csmp::SCALAR</defval>
+        </param>
+        <param>
+          <type>const <ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">::csmp::PLACEMENT</ref> &amp;</type>
+          <declname>prop_place</declname>
+          <defval>::csmp::ELEMENT</defval>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>prop_unit</declname>
+          <defval>&quot;m2&quot;</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="433" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="2632" bodyend="2646"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_model_settings_1a8ba0200374b54537750d46f3864e3817" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::EclipseModelSettings::PressurePropertySetup</definition>
+        <argsstring>(const std::string &amp;prop_name=&quot;pressure&quot;, const ::csmp::VARIABLE_TYPE &amp;prop_type=::csmp::SCALAR, const ::csmp::PLACEMENT &amp;prop_place=::csmp::NODE, const std::string &amp;prop_unit=&quot;Pa&quot;)</argsstring>
+        <name>PressurePropertySetup</name>
+        <qualifiedname>csmp::EclipseModelSettings::PressurePropertySetup</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>prop_name</declname>
+          <defval>&quot;pressure&quot;</defval>
+        </param>
+        <param>
+          <type>const <ref refid="group___c_s_m_p__global__enumerations_1gacbf62c758c46dc45b3f024638bb89274" kindref="member">::csmp::VARIABLE_TYPE</ref> &amp;</type>
+          <declname>prop_type</declname>
+          <defval>::csmp::SCALAR</defval>
+        </param>
+        <param>
+          <type>const <ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">::csmp::PLACEMENT</ref> &amp;</type>
+          <declname>prop_place</declname>
+          <defval>::csmp::NODE</defval>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>prop_unit</declname>
+          <defval>&quot;Pa&quot;</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="438" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="2649" bodyend="2663"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_model_settings_1a31ca5a99c340bd08b53e47e14e5ad514" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::EclipseModelSettings::SwatPropertySetup</definition>
+        <argsstring>(const std::string &amp;prop_name=&quot;saturation water&quot;, const ::csmp::VARIABLE_TYPE &amp;prop_type=::csmp::SCALAR, const ::csmp::PLACEMENT &amp;prop_place=::csmp::NODE)</argsstring>
+        <name>SwatPropertySetup</name>
+        <qualifiedname>csmp::EclipseModelSettings::SwatPropertySetup</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>prop_name</declname>
+          <defval>&quot;saturation water&quot;</defval>
+        </param>
+        <param>
+          <type>const <ref refid="group___c_s_m_p__global__enumerations_1gacbf62c758c46dc45b3f024638bb89274" kindref="member">::csmp::VARIABLE_TYPE</ref> &amp;</type>
+          <declname>prop_type</declname>
+          <defval>::csmp::SCALAR</defval>
+        </param>
+        <param>
+          <type>const <ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">::csmp::PLACEMENT</ref> &amp;</type>
+          <declname>prop_place</declname>
+          <defval>::csmp::NODE</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="443" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="2666" bodyend="2679"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_model_settings_1a514441a3973f6019e8699e6d61312e2b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::EclipseModelSettings::SoilPropertySetup</definition>
+        <argsstring>(const std::string &amp;prop_name=&quot;saturation oil&quot;, const ::csmp::VARIABLE_TYPE &amp;prop_type=::csmp::SCALAR, const ::csmp::PLACEMENT &amp;prop_place=::csmp::NODE)</argsstring>
+        <name>SoilPropertySetup</name>
+        <qualifiedname>csmp::EclipseModelSettings::SoilPropertySetup</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>prop_name</declname>
+          <defval>&quot;saturation oil&quot;</defval>
+        </param>
+        <param>
+          <type>const <ref refid="group___c_s_m_p__global__enumerations_1gacbf62c758c46dc45b3f024638bb89274" kindref="member">::csmp::VARIABLE_TYPE</ref> &amp;</type>
+          <declname>prop_type</declname>
+          <defval>::csmp::SCALAR</defval>
+        </param>
+        <param>
+          <type>const <ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">::csmp::PLACEMENT</ref> &amp;</type>
+          <declname>prop_place</declname>
+          <defval>::csmp::NODE</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="447" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="2682" bodyend="2695"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_model_settings_1a534b2e2794a752d75a3298ca9189af28" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::EclipseModelSettings::SgasPropertySetup</definition>
+        <argsstring>(const std::string &amp;prop_name=&quot;saturation gas&quot;, const ::csmp::VARIABLE_TYPE &amp;prop_type=::csmp::SCALAR, const ::csmp::PLACEMENT &amp;prop_place=::csmp::NODE)</argsstring>
+        <name>SgasPropertySetup</name>
+        <qualifiedname>csmp::EclipseModelSettings::SgasPropertySetup</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>prop_name</declname>
+          <defval>&quot;saturation gas&quot;</defval>
+        </param>
+        <param>
+          <type>const <ref refid="group___c_s_m_p__global__enumerations_1gacbf62c758c46dc45b3f024638bb89274" kindref="member">::csmp::VARIABLE_TYPE</ref> &amp;</type>
+          <declname>prop_type</declname>
+          <defval>::csmp::SCALAR</defval>
+        </param>
+        <param>
+          <type>const <ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">::csmp::PLACEMENT</ref> &amp;</type>
+          <declname>prop_place</declname>
+          <defval>::csmp::NODE</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="451" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="2698" bodyend="2711"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_model_settings_1affc530fa443b1632ed93cfcc73ea496c" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::EclipseModelSettings::EclipseModelSettings</definition>
+        <argsstring>()</argsstring>
+        <name>EclipseModelSettings</name>
+        <qualifiedname>csmp::EclipseModelSettings::EclipseModelSettings</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="467" column="3" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="467" bodyend="467"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>PROPS and several other specifications from the RUNSPECS file record. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>R. Manasipov </para>
+</simplesect>
+<simplesect kind="date"><para>2014-2015</para>
+</simplesect>
+ASCII file interface to read corner point grid from ( *.GRDECL, *.grdecl ) file. In order to build a native CSMP <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> the provided grid information is assigned to <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref> and <ref refid="classcsmp_1_1_model_topology" kindref="compound">ModelTopology</ref> objects. The regions that are constructed by default are: % regions which include all the cells MATRIX MATRIX_ACTIVE MATRIX_INACTIVE % and specific fault regions</para>
+<para>In addition to grid information the properties such as: &apos;permeability&apos;, &apos;porosity&apos;, &apos;pressure&apos;, &apos;saturation&apos; can be readed as well. User is able to control property type and placement. For example one can create tensor or scalar permeability variables or to place &apos;pressure&apos; at the nodes or elements.</para>
+<para><programlisting><codeline><highlight class="normal">KEYWORDS<sp/>that<sp/>can<sp/>be<sp/>currently<sp/>handled:</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">---<sp/>Grid</highlight></codeline>
+<codeline><highlight class="normal">DIMENS</highlight></codeline>
+<codeline><highlight class="normal">DX</highlight></codeline>
+<codeline><highlight class="normal">DY</highlight></codeline>
+<codeline><highlight class="normal">DZ</highlight></codeline>
+<codeline><highlight class="normal">SPECGRID</highlight></codeline>
+<codeline><highlight class="normal">TOPS</highlight></codeline>
+<codeline><highlight class="normal">COORD</highlight></codeline>
+<codeline><highlight class="normal">ZCORN</highlight></codeline>
+<codeline><highlight class="normal">FAULTS</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">---<sp/>Regions</highlight></codeline>
+<codeline><highlight class="normal">ACTNUM</highlight></codeline>
+<codeline><highlight class="normal">SATNUM</highlight></codeline>
+<codeline><highlight class="normal">PVTNUM</highlight></codeline>
+<codeline><highlight class="normal">ROCKNUM</highlight></codeline>
+<codeline><highlight class="normal">EQLNUM</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">---<sp/>Props</highlight></codeline>
+<codeline><highlight class="normal">NTG</highlight></codeline>
+<codeline><highlight class="normal">PORO</highlight></codeline>
+<codeline><highlight class="normal">PERMX<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline><highlight class="normal">well.well_data_.push_back(<sp/>wellcomp<sp/>);</highlight></codeline>
+<codeline><highlight class="normal">PERMY</highlight></codeline>
+<codeline><highlight class="normal">PERMZ</highlight></codeline>
+<codeline><highlight class="normal">PRESSURE</highlight></codeline>
+<codeline><highlight class="normal">SWAT</highlight></codeline>
+<codeline><highlight class="normal">SOIL</highlight></codeline>
+<codeline><highlight class="normal">SGAS</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">---<sp/>Runspec</highlight></codeline>
+<codeline><highlight class="normal">WELSPECS</highlight></codeline>
+<codeline><highlight class="normal">COMPDAT<sp/>(relies<sp/>on<sp/>WELLSPECS<sp/>and<sp/>can<sp/>therefore<sp/>not<sp/>be<sp/>defined<sp/>in<sp/>isolation)</highlight></codeline>
+</programlisting> </para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::EclipseModelSettings</label>
+        <link refid="classcsmp_1_1_eclipse_model_settings"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="383" column="1" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="383" bodyend="468"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_eclipse_model_settings_1a008ef5ebf0d178104d0917b63ad60dc2" prot="public" virt="non-virtual"><scope>csmp::EclipseModelSettings</scope><name>create_boundaries_</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_settings_1a4060ecc6bcd5b8d55fecef07b514c674" prot="public" virt="non-virtual"><scope>csmp::EclipseModelSettings</scope><name>EclipseModelSettings</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_settings_1affc530fa443b1632ed93cfcc73ea496c" prot="private" virt="non-virtual"><scope>csmp::EclipseModelSettings</scope><name>EclipseModelSettings</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_settings_1ae53f446d547bdcd66acb2386f4a5555c" prot="public" virt="non-virtual"><scope>csmp::EclipseModelSettings</scope><name>EqlNumPropertySetup</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_settings_1a6dfb38ceccafb88c961c54c8e8ecda97" prot="public" virt="non-virtual"><scope>csmp::EclipseModelSettings</scope><name>exclude_inactive_cells_</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_settings_1aee45e38924867bce4dcaf34d829f6549" prot="public" virt="non-virtual"><scope>csmp::EclipseModelSettings</scope><name>FipNumPropertySetup</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_settings_1adb8fff5d02875e047d70bcb50b4b3182" prot="public" virt="non-virtual"><scope>csmp::EclipseModelSettings</scope><name>mesh_file_prefix_</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_settings_1a447778570c33dcc62e736b79aaab8bf0" prot="public" virt="non-virtual"><scope>csmp::EclipseModelSettings</scope><name>MeshSetup</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_settings_1a1d238739ca1484d9cf0d1303e44850ec" prot="public" virt="non-virtual"><scope>csmp::EclipseModelSettings</scope><name>MeshSetup</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_settings_1a8bb79b4067c9b9cf8c1e11b2c0fc6ad7" prot="public" virt="non-virtual"><scope>csmp::EclipseModelSettings</scope><name>MeshSetup</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_settings_1a35c4fb3be8b926ea8202900b9d806990" prot="public" virt="non-virtual"><scope>csmp::EclipseModelSettings</scope><name>NtgPropertySetup</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_settings_1afa8969bac8dbb554696150021e92ad09" prot="public" virt="non-virtual"><scope>csmp::EclipseModelSettings</scope><name>PermPropertySetup</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_settings_1aa36ff94b27415f7b976c8a832442f8f3" prot="public" virt="non-virtual"><scope>csmp::EclipseModelSettings</scope><name>PoroPropertySetup</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_settings_1a8ba0200374b54537750d46f3864e3817" prot="public" virt="non-virtual"><scope>csmp::EclipseModelSettings</scope><name>PressurePropertySetup</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_settings_1a4c83fe322f9b63ce9b9b192d8d0bae77" prot="public" virt="non-virtual"><scope>csmp::EclipseModelSettings</scope><name>properties_</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_settings_1af187066228a60ea5743a96527f248aae" prot="public" virt="non-virtual"><scope>csmp::EclipseModelSettings</scope><name>PvtNumPropertySetup</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_settings_1aba5d3fafb649fb9fa053d66f13f50d3e" prot="public" virt="non-virtual"><scope>csmp::EclipseModelSettings</scope><name>regions_</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_settings_1a2022fd4ac2dcc34527523bd0e45f5164" prot="public" virt="non-virtual"><scope>csmp::EclipseModelSettings</scope><name>regions_file_prefix_</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_settings_1a1f636851033f5bd3193fac0f6c2bd7ee" prot="public" virt="non-virtual"><scope>csmp::EclipseModelSettings</scope><name>RockNumPropertySetup</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_settings_1aca12634026596d92997010f8a979c74d" prot="public" virt="non-virtual"><scope>csmp::EclipseModelSettings</scope><name>SatNumPropertySetup</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_settings_1a534b2e2794a752d75a3298ca9189af28" prot="public" virt="non-virtual"><scope>csmp::EclipseModelSettings</scope><name>SgasPropertySetup</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_settings_1a514441a3973f6019e8699e6d61312e2b" prot="public" virt="non-virtual"><scope>csmp::EclipseModelSettings</scope><name>SoilPropertySetup</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_settings_1a31ca5a99c340bd08b53e47e14e5ad514" prot="public" virt="non-virtual"><scope>csmp::EclipseModelSettings</scope><name>SwatPropertySetup</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_settings_1a4f962604b698fdcf4f770084ab2d2a32" prot="public" virt="non-virtual"><scope>csmp::EclipseModelSettings</scope><name>tetra_mesh_</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_settings_1a47bc80677b1d8719d6e58d6dfab4a3d6" prot="public" virt="non-virtual"><scope>csmp::EclipseModelSettings</scope><name>~EclipseModelSettings</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

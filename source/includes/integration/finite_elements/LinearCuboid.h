@@ -14,9 +14,9 @@ class LinearCuboid : public FiniteElement {
   public:
     LinearCuboid();
 
-    virtual double   Volume();
-    virtual double   AspectRatio();
-    virtual double   InnerRadius();
+    virtual double     Volume();
+    virtual double     AspectRatio();
+    virtual double     InnerRadius();
     virtual uint32_t   CornerNodes() const { return 8U; }
     virtual void	     EdgeLengths( std::vector<double>& );
     virtual void       CornerNodes(std::vector<uint32_t>& ids) const;
@@ -37,6 +37,7 @@ class LinearCuboid : public FiniteElement {
     virtual CSMP_FEM_TYPE  ElementTypeOfSegment( uint32_t) const { return LINEAR_BAR; };
     virtual CSMP_FEM_TYPE  ElementTypeOfFace( uint32_t) const { return LINEAR_RECTANGLE; };
     // void TestElementIntegrals(DenseMatrix<DM_MIN>& XY);
+    
   private:
     void dN_Partial_At(std::vector<double>& V, const std::vector<double>& xyz, uint32_t partial);
     void MidSideNodes(std::vector<uint32_t>& ids) const;

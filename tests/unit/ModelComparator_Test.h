@@ -8,8 +8,6 @@ namespace csmp{
 class ModelComparator_Test : public Test
 {
 public:
-    ModelComparator_Test();
-
     virtual void run();
 };
 

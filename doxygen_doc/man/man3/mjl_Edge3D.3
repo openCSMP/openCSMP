@@ -1,0 +1,87 @@
+.TH "mjl::Edge3D" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+mjl::Edge3D
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBEdge3D\fP (const \fBEdge3D\fP &)"
+.br
+.ti -1c
+.RI "\fBEdge3D\fP (const \fBPoint3D\fP &, const \fBPoint3D\fP &)"
+.br
+.ti -1c
+.RI "\fBEdge3D\fP & \fBoperator=\fP (const \fBEdge3D\fP &)"
+.br
+.ti -1c
+.RI "bool \fBoperator<\fP (const \fBEdge3D\fP &) const"
+.br
+.ti -1c
+.RI "void \fBSet\fP (const \fBPoint3D\fP &, const \fBPoint3D\fP &)"
+.br
+.ti -1c
+.RI "INTERSECTION \fBIntersect\fP (const \fBTriangle3D\fP &, double &) const"
+.br
+.ti -1c
+.RI "\fBPoint3D\fP \fBOrigin\fP () const"
+.br
+.ti -1c
+.RI "\fBPoint3D\fP \fBDestination\fP () const"
+.br
+.ti -1c
+.RI "\fBPoint3D\fP \fBPoint\fP (double) const"
+.br
+.ti -1c
+.RI "void \fBMidPoint\fP (\fBPoint3D\fP &) const"
+.br
+.ti -1c
+.RI "double \fBAngleTo\fP (const \fBEdge3D\fP &) const"
+.br
+.RI "see "Mathematische Formeln" p\&. 170, Schnittwinkel\&.\&.\&. "
+.ti -1c
+.RI "double \fBLength\fP () const"
+.br
+.ti -1c
+.RI "void \fBNormalize\fP ()"
+.br
+.ti -1c
+.RI "\fBEdge3D\fP & \fBRot\fP (const \fBPoint3D\fP &rot_axis, bool normalize=false)"
+.br
+.ti -1c
+.RI "void \fBOut\fP () const"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBPoint3D\fP \fBorg_\fP"
+.br
+.ti -1c
+.RI "\fBPoint3D\fP \fBdest_\fP"
+.br
+.in -1c
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBEdge3D\fP & mjl::Edge3D::Rot (const \fBPoint3D\fP & ax, bool normalize = \fRfalse\fP)"
+90o clockwise rotation of edge
+
+.PP
+computes the edge normal as the cross product between the edge and the edge defined by the rot-axis\&. The use can center the rotated unit normal=edge on the edge midpoint by using the center_edge boolean option
+
+.PP
+\fBWarning\fP
+.RS 4
+method works only for a normalized edge 
+.RE
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

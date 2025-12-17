@@ -13,9 +13,6 @@
 #include "Model.h"
 #include "StencilProcessor.h"
 #include "TwoPhaseModel.h"
-#if defined(_OPENMP )
-#include "omp.h"
-#endif
 
 using namespace std;
 
@@ -37,7 +34,7 @@ NodeCenteredFiniteVolumeTransport<dim>::NodeCenteredFiniteVolumeTransport( const
                                                                            bool second_order_in_space,
                                                                            bool second_order_in_time,
                                                                            const char* elmt_thickness_attribute,
-                                                                           const char* velocity_multiplier)
+                                                                           const char* velocity_multiplier )
     : pref_(sg.Database()),
       gref_(sg.Region(group_name)),
       mref_(sg),
@@ -823,12 +820,11 @@ void NodeCenteredFiniteVolumeTransport<dim>::UpdateProjectedVelocitiesAndFluxBal
     typename vector<FV_Parameter>::iterator         stit(STENCIL_DATA.begin());
     assert( gref_.Cells() == STENCIL_DATA.size() );
 
-#if !defined(_OPENMP)
     // for all inside stencils
     while ( eit != gref_.CellsEnd() )
     {
         (*eit)->Read( vel_key_, velo );
-        for ( auto i{0U}; i<(*stit).Facets(); i++ )
+        for ( uint32_t i{0U}; i<(*stit).Facets(); i++ )
         {
             (*eit)->FV()->FacetEdgeNodes( i, inside_node, outside_node );
             // inside node
@@ -845,59 +841,8 @@ void NodeCenteredFiniteVolumeTransport<dim>::UpdateProjectedVelocitiesAndFluxBal
         eit++;
         stit++;
     }
-#else
-#pragma omp parallel
-    {
-        size_t tid = omp_get_thread_num();
-        Element<dim>* ep;
-        double             thread_flux;
-        VectorVariable<dim> thread_velo;
-        size_t               thread_inside_node, thread_outside_node;
-        // for all inside stencils
-#pragma omp for
-        for ( size_t e = 0U ; e < gref_.Cells();e++)
-        {
-            ep = gref_.E(e);
-            ep->Read( vel_key_, thread_velo );
 
-            //----------------------------------------------------
-            //change the element stencil to one for this thread, temporarily.
-            FiniteElement* fe_tmp=ep->FE();
-            // change pointer here
-            ep->Assign(this->femgrs_[tid].E(ep->FE_Type()));
-            //----------------------------------------------------
-
-            //----------------------------------------------------
-            //change the Finite Volume Stencil to one for this thread, temporarily.
-            const FiniteVolumeStencil<dim>* tmp_fvstencil= ep->FV();
-            ep->Assign(this->fvmgrs_[tid].Stencil( ep->FE_Type()));
-            //----------------------------------------------------
-
-            for ( auto i{0U}; i<STENCIL_DATA[e].Facets(); i++ )
-            {
-                ep->FV()->FacetEdgeNodes( i, thread_inside_node, thread_outside_node );
-                // inside node
-                // computing facet normal velocity
-                thread_flux = STENCIL_DATA[e].FacetNormalProjection( i, thread_velo );
-                // storing it in FV_Parameter object
-                STENCIL_DATA[e].FacetNormalVelocity( i, thread_flux );
-                // updating the flux balance
-                FLUX_BALANCE[ ep->N(thread_inside_node)->Idx() ] += thread_flux * STENCIL_DATA[e].FacetArea(i);
-                // outside node
-                // updating facet velocities
-                FLUX_BALANCE[ ep->N(thread_outside_node)->Idx() ] -= thread_flux * STENCIL_DATA[e].FacetArea(i);
-            }
-            // put the FEM back here
-            ep->Assign(fe_tmp);
-
-            //put the FVM stencil back
-            ep->Assign(tmp_fvstencil);
-        }
-    }
-#endif
-
-    for ( typename vector<Node<dim>*>::const_iterator
-          nit=gref_.PerimeterNodesBegin(); nit!=gref_.NodesEnd(); nit++ )
+    for ( auto nit=gref_.PerimeterNodesBegin(); nit!=gref_.NodesEnd(); nit++ )
         FLUX_BALANCE[ (*nit)->Idx() ] = 0.;
 
 } // end UpdateProjectedVelocitiesAndFluxBalances
@@ -1066,29 +1011,10 @@ double  NodeCenteredFiniteVolumeTransport<dim>::AnisotropicCourantIncrement()
     const bool with_diffusion( (diff_key_ == csmp::Index()) ? false : true );
 
     // loop over the elements finding their transsect length in the direction of flow
-#if !defined(_OPENMP)
-    VectorVariable<dim>         vc;
+    VectorVariable<dim>  vc;
     for ( typename vector<Element<dim>*>::const_iterator
           it=gref_.CellsBegin(); it!=gref_.CellsEnd(); it++ ){
         Element<dim> * eit = *it;
-#else
-    vector<double> thread_courant_increments(omp_get_max_threads());
-    vector<uint32_t> thread_counters(omp_get_max_threads());
-#pragma omp parallel
-    {
-        VectorVariable<dim>         vc;
-        size_t tid = omp_get_thread_num();
-        thread_courant_increments[tid]=courant_increment;
-#pragma omp for
-        for ( int32_t e = 0 ; e  < gref_.Cells(); e++ ){
-            Element<dim>* eit = gref_.E(e);
-            //----------------------------------------------------
-            //change the element stencil to one for this thread, temporarily.
-            FiniteElement* fe_tmp=eit->FE();
-            // change pointer here
-            eit->Assign(this->femgrs_[tid].E(eit->FE_Type()));
-            //----------------------------------------------------
-#endif
 
             (eit)->Read( vel_key_, vc );
             double       velocity(vc.Length());
@@ -1139,28 +1065,10 @@ double  NodeCenteredFiniteVolumeTransport<dim>::AnisotropicCourantIncrement()
 
             // guarding against degenerate cases
             if ( velocity > zero and ediameter > zero ) {
-#if !defined(_OPENMP)
                 courant_increment = std::min( courant_increment, ediameter*poro() / velocity );
                 counter++;
-#else
-                thread_courant_increments[tid] = std::min( thread_courant_increments[tid], ediameter*poro() / velocity );
-                thread_counters[tid]++;
-#endif
             }
-
-#if defined(_OPENMP )
-            // put the FEM back here in case of openmp
-            eit->Assign(fe_tmp);
-#endif
-
         }
-#if defined(_OPENMP )
-    } // close the parallel pragma.
-    for (auto i = 0 ; i < thread_counters.size();i++)
-        counter+=thread_counters[i];
-
-    courant_increment = *(std::min_element(thread_courant_increments.begin(),thread_courant_increments.end()));
-#endif
 
     if ( counter == 0U )
         throw csmp::Exception( ERROR, "NodeCenteredFiniteVolumeTransport<dim>::AnisotropicCourantIncrement: ",
@@ -1328,7 +1236,7 @@ less than a millisecond (usually a prohibitively small increment).
 */
 template<uint32_t dim>
 double NodeCenteredFiniteVolumeTransport<dim>::AnisotropicCourantIncrement( TwoPhaseModel<dim>& relperm,
-                                                                              double max_time_increment )
+                                                                            double max_time_increment )
 {
 
     //if ( dim == 1U ) return CourantIncrement( relperm);
@@ -1904,6 +1812,9 @@ double NodeCenteredFiniteVolumeTransport<dim>::AdvectVariable( double time_inter
     return courant_increment;
 
 } // end AdvectVariable
+
+
+
 
 /** Single phase transport, single step
 @author Julian E. Mindel
@@ -3577,16 +3488,12 @@ bool testFiniteVolumeStencil( const PropertyDatabase<dim>& p, const Region<dim>&
 
 } // end testFiniteVolumeStencil
 
-
 template
-bool testFiniteVolumeStencil( const PropertyDatabase<1>&, const Region<1>&,
-NodeCenteredFiniteVolumeTransport<1U>&, long );
+bool testFiniteVolumeStencil<1>( const PropertyDatabase<1>&, const Region<1>&, NodeCenteredFiniteVolumeTransport<1U>&, long );
 template
-bool testFiniteVolumeStencil( const PropertyDatabase<2>&, const Region<2>&,
-NodeCenteredFiniteVolumeTransport<2U>&, long );
+bool testFiniteVolumeStencil<2>( const PropertyDatabase<2>&, const Region<2>&, NodeCenteredFiniteVolumeTransport<2U>&, long );
 template
-bool testFiniteVolumeStencil( const PropertyDatabase<3>&, const Region<3>&,
-NodeCenteredFiniteVolumeTransport<3U>&, long );
+bool testFiniteVolumeStencil<3>( const PropertyDatabase<3>&, const Region<3>&, NodeCenteredFiniteVolumeTransport<3U>&, long );
 
 
 template class NodeCenteredFiniteVolumeTransport<1U>;

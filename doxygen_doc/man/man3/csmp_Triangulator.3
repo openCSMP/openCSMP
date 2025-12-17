@@ -1,0 +1,64 @@
+.TH "csmp::Triangulator" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::Triangulator \- Creates a triangular element mesh from the pixels of the regular grid\&. Boundaries that are defined by changes in the pixel values are used to control how the pixels are split such that a smooth boundary is created\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <Triangulator\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBTrianglesFromRegularGrid\fP (const \fBMatrix\fP &grid, \fBVSet\fP< 2U > &vs)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Creates a triangular element mesh from the pixels of the regular grid\&. Boundaries that are defined by changes in the pixel values are used to control how the pixels are split such that a smooth boundary is created\&. 
+
+
+.PP
+\fBAuthor\fP
+.RS 4
+Stephan K\&. Matthai 
+
+.PP
+Stephen G\&. Roberts 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+1999
+.RE
+.PP
+.SH "Motivation"
+.PP
+Have a simple procedure to go from a geometry drawn with a pixel-type tool or defined by a processed image, to go to a simple triangular finite-element mesh for CSP computations\&. 
+.SH "Member Function Documentation"
+.PP 
+.SS "void csmp::Triangulator::TrianglesFromRegularGrid (const \fBMatrix\fP & grid, \fBVSet\fP< 2U > & vset)"
+A pixel bitmap image is used to generate triangular elements to which a permeability is assigned\&. The permeability is chosen to be that of the upper left pixel of four pixels that are converted into 4 nodes of two triangular elements generated from the square\&.
+
+.PP
+By default, squares are broken as ||\&. However, if the permeability of the upward diagonal pixels is the same, and the permeability of the down-diagonal pixels (left to right) differs, the square is split into two upward-diagonal triangles\&.
+
+.PP
+In the course of the mesh generation, nodes which lie at the model boundary are flagged as such\&. In doing this, a coordinate system is adhered to in which Y points downward while X points to the right\&. This schemen is in accordance with the pixel data that is used as input as the first row of the pixel matrix represents the top of the image\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIgrid\fP A \fBMatrix\fP with 256-integer values representing the color codes for the permeability of the triangular elements which will be generated is the first method argument\&. 
+.br
+\fIvset\fP a \fBVSet\fP, a data container in which the finite-element data are stored as px, py, pz, plist etc\&. arrays\&. 
+.RE
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

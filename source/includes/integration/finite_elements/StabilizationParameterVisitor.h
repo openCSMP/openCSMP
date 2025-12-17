@@ -21,23 +21,16 @@ class StabilizationParameterVisitor : public Visitor<dim> {
     StabilizationParameterVisitor( Model<dim>&,
                                    double coeff,
                                    const char* stab_param );
-  
-    ~StabilizationParameterVisitor();
     
-    virtual void Visit( Model<dim>* m );
-
-    virtual void Visit( Element<dim>* e );
+    void Visit( Element<dim>* ) override final;
     
   private:
-    const PropertyDatabase<dim>& pref;
-    csmp::Index stparam_key;
+    csmp::Index stparam_key_;
     csmp::Index visc_key_;
     
-    double viscosity;
-    double coefficient;
-    std::vector<double> segments;
-    double min_segment;
-    ScalarVariable sp;
+    double viscosity_;
+    double coefficient_;
+    std::vector<double> segments_;
 };
 
 } // namespace csmp

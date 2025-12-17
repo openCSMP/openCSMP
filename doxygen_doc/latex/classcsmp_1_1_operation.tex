@@ -1,0 +1,49 @@
+\doxysection{csmp\+::Operation Class Reference}
+\hypertarget{classcsmp_1_1_operation}{}\label{classcsmp_1_1_operation}\index{csmp::Operation@{csmp::Operation}}
+
+
+{\ttfamily \#include $<$Operation.\+h$>$}
+
+
+
+Collaboration diagram for csmp\+::Operation\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=223pt]{classcsmp_1_1_operation__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_operation_a4d36529cb68c926ba3de9eacd0461986}\label{classcsmp_1_1_operation_a4d36529cb68c926ba3de9eacd0461986} 
+{\bfseries Operation} (const std\+::string \&name, \mbox{\hyperlink{namespacecsmp_a0359e634c5c80ec756c64874375ef439}{OPERATION\+\_\+\+TYPE}}, int execution\+\_\+level, bool multiply\+\_\+with\+\_\+dt)
+\begin{DoxyCompactList}\small\item\em the operation type, execution level and name, are strung together into a key \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_operation_a538f7588fc49c72a6aaf35d93d8a530a}\label{classcsmp_1_1_operation_a538f7588fc49c72a6aaf35d93d8a530a} 
+bool {\bfseries operator$<$} (const \mbox{\hyperlink{classcsmp_1_1_operation}{Operation}} \&op) const
+\begin{DoxyCompactList}\small\item\em to determine place of operation in the sequence of operations \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_operation_a5acd4bc7e6ef5abb921c1fd0600306c7}\label{classcsmp_1_1_operation_a5acd4bc7e6ef5abb921c1fd0600306c7} 
+\mbox{\hyperlink{namespacecsmp_a0359e634c5c80ec756c64874375ef439}{OPERATION\+\_\+\+TYPE}} {\bfseries Operation\+Type} () const
+\begin{DoxyCompactList}\small\item\em addition, subtraction, multiplication, division \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_operation_af67d1aba9966188ed3953404038d899a}\label{classcsmp_1_1_operation_af67d1aba9966188ed3953404038d899a} 
+int {\bfseries Execution\+Level} () const
+\begin{DoxyCompactList}\small\item\em when (in a sequence) the operation shall be performed \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_operation_a727b41df8c87b40f65760cd80e74aa3e}\label{classcsmp_1_1_operation_a727b41df8c87b40f65760cd80e74aa3e} 
+void {\bfseries Multiply\+With\+Time\+Increment} (bool multiply)
+\item 
+\Hypertarget{classcsmp_1_1_operation_a76ca0349a63bf04940ccf8706f7eb15c}\label{classcsmp_1_1_operation_a76ca0349a63bf04940ccf8706f7eb15c} 
+bool {\bfseries Multiply\+With\+Time\+Increment} () const
+\item 
+\Hypertarget{classcsmp_1_1_operation_a5aa33ba842abead5d8a417ac0d1a2aae}\label{classcsmp_1_1_operation_a5aa33ba842abead5d8a417ac0d1a2aae} 
+void {\bfseries Out} () const
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Specifies how to accumulate the Matrix-\/ or Vector operators. TODO\+: add factor for the case where multiplication or division is the operation type? 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/integration/finite\+\_\+volumes/generic\+\_\+transport\+\_\+scheme/Operation.\+h\item 
+source/modules/integration/finite\+\_\+volumes/generic\+\_\+transport\+\_\+scheme/source/Operation.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,297 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="structcsmp_1_1_local_variables" kind="struct" language="C++" prot="public">
+    <compoundname>csmp::LocalVariables</compoundname>
+    <includes refid="_local_variables_8h" local="no">LocalVariables.h</includes>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="structcsmp_1_1_local_variables_1af8bec2aa21bd639c2f0953597f0f8376" prot="public" static="no">
+        <type>uint32_t</type>
+        <definition>using csmp::LocalVariables::int_type =  uint32_t</definition>
+        <argsstring></argsstring>
+        <name>int_type</name>
+        <qualifiedname>csmp::LocalVariables::int_type</qualifiedname>
+        <briefdescription>
+<para>unsigned integer type that is big enough to hold &apos;totalDataDepth&apos; </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/LocalVariables.h" line="10" column="3" bodyfile="source/includes/model/LocalVariables.h" bodystart="10" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcsmp_1_1_local_variables_1a75d8cb27cd97308d3418b6b5a66bb2a0" prot="public" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_local_variables_1af8bec2aa21bd639c2f0953597f0f8376" kindref="member">int_type</ref></type>
+        <definition>int_type csmp::LocalVariables::scalars</definition>
+        <argsstring></argsstring>
+        <name>scalars</name>
+        <qualifiedname>csmp::LocalVariables::scalars</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/LocalVariables.h" line="76" column="13" bodyfile="source/includes/model/LocalVariables.h" bodystart="76" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_local_variables_1aa68ecc5792ac4fa6a7bbdfbd34677638" prot="public" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_local_variables_1af8bec2aa21bd639c2f0953597f0f8376" kindref="member">int_type</ref></type>
+        <definition>int_type csmp::LocalVariables::vectors</definition>
+        <argsstring></argsstring>
+        <name>vectors</name>
+        <qualifiedname>csmp::LocalVariables::vectors</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/LocalVariables.h" line="77" column="13" bodyfile="source/includes/model/LocalVariables.h" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_local_variables_1a302bc74702e321460256a32098d39cf8" prot="public" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_local_variables_1af8bec2aa21bd639c2f0953597f0f8376" kindref="member">int_type</ref></type>
+        <definition>int_type csmp::LocalVariables::tensors</definition>
+        <argsstring></argsstring>
+        <name>tensors</name>
+        <qualifiedname>csmp::LocalVariables::tensors</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/LocalVariables.h" line="78" column="13" bodyfile="source/includes/model/LocalVariables.h" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_local_variables_1a436343d80da07b7b42881ae93f29116c" prot="public" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_local_variables_1af8bec2aa21bd639c2f0953597f0f8376" kindref="member">int_type</ref></type>
+        <definition>int_type csmp::LocalVariables::arrayCount</definition>
+        <argsstring></argsstring>
+        <name>arrayCount</name>
+        <qualifiedname>csmp::LocalVariables::arrayCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/LocalVariables.h" line="79" column="13" bodyfile="source/includes/model/LocalVariables.h" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_local_variables_1a9c297c27a8740e07c6abc135e07b7779" prot="public" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_local_variables_1af8bec2aa21bd639c2f0953597f0f8376" kindref="member">int_type</ref></type>
+        <definition>int_type csmp::LocalVariables::arrayLength</definition>
+        <argsstring></argsstring>
+        <name>arrayLength</name>
+        <qualifiedname>csmp::LocalVariables::arrayLength</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/LocalVariables.h" line="80" column="13" bodyfile="source/includes/model/LocalVariables.h" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_local_variables_1ae39d698222c2384e84dba9b2745377db" prot="public" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_local_variables_1af8bec2aa21bd639c2f0953597f0f8376" kindref="member">int_type</ref></type>
+        <definition>int_type csmp::LocalVariables::flaggedArrayCount</definition>
+        <argsstring></argsstring>
+        <name>flaggedArrayCount</name>
+        <qualifiedname>csmp::LocalVariables::flaggedArrayCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/LocalVariables.h" line="81" column="13" bodyfile="source/includes/model/LocalVariables.h" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_local_variables_1a15e910cbdec59a5eae48150e174b38f9" prot="public" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_local_variables_1af8bec2aa21bd639c2f0953597f0f8376" kindref="member">int_type</ref></type>
+        <definition>int_type csmp::LocalVariables::flaggedArrayLength</definition>
+        <argsstring></argsstring>
+        <name>flaggedArrayLength</name>
+        <qualifiedname>csmp::LocalVariables::flaggedArrayLength</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/LocalVariables.h" line="82" column="13" bodyfile="source/includes/model/LocalVariables.h" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_local_variables_1a0544a4842cfa22681942185107b565c4" prot="public" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_local_variables_1af8bec2aa21bd639c2f0953597f0f8376" kindref="member">int_type</ref></type>
+        <definition>int_type csmp::LocalVariables::totalDataDepth</definition>
+        <argsstring></argsstring>
+        <name>totalDataDepth</name>
+        <qualifiedname>csmp::LocalVariables::totalDataDepth</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/LocalVariables.h" line="83" column="13" bodyfile="source/includes/model/LocalVariables.h" bodystart="83" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_local_variables_1a4c7863e38523356c01c8fea356bbe3ed" prot="public" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_local_variables_1af8bec2aa21bd639c2f0953597f0f8376" kindref="member">int_type</ref></type>
+        <definition>int_type csmp::LocalVariables::totalFlagDepth</definition>
+        <argsstring></argsstring>
+        <name>totalFlagDepth</name>
+        <qualifiedname>csmp::LocalVariables::totalFlagDepth</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/LocalVariables.h" line="84" column="13" bodyfile="source/includes/model/LocalVariables.h" bodystart="84" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structcsmp_1_1_local_variables_1ab4e352f0f774894ebeeed867716a6b03" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::LocalVariables::LocalVariables</definition>
+        <argsstring>()</argsstring>
+        <name>LocalVariables</name>
+        <qualifiedname>csmp::LocalVariables::LocalVariables</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/LocalVariables.h" line="12" column="3" bodyfile="source/includes/model/LocalVariables.h" bodystart="12" bodyend="22"/>
+      </memberdef>
+      <memberdef kind="function" id="structcsmp_1_1_local_variables_1a14e561915842ff391bf275857a821281" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::LocalVariables::LocalVariables</definition>
+        <argsstring>(int_type scalarsVars, int_type vectorVars, int_type tensorVars, int_type array_count, int_type array_length, int_type flag_array_count, int_type flag_array_length, int_type total_data_depth, int_type total_flag_depth)</argsstring>
+        <name>LocalVariables</name>
+        <qualifiedname>csmp::LocalVariables::LocalVariables</qualifiedname>
+        <param>
+          <type><ref refid="structcsmp_1_1_local_variables_1af8bec2aa21bd639c2f0953597f0f8376" kindref="member">int_type</ref></type>
+          <declname>scalarsVars</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_local_variables_1af8bec2aa21bd639c2f0953597f0f8376" kindref="member">int_type</ref></type>
+          <declname>vectorVars</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_local_variables_1af8bec2aa21bd639c2f0953597f0f8376" kindref="member">int_type</ref></type>
+          <declname>tensorVars</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_local_variables_1af8bec2aa21bd639c2f0953597f0f8376" kindref="member">int_type</ref></type>
+          <declname>array_count</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_local_variables_1af8bec2aa21bd639c2f0953597f0f8376" kindref="member">int_type</ref></type>
+          <declname>array_length</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_local_variables_1af8bec2aa21bd639c2f0953597f0f8376" kindref="member">int_type</ref></type>
+          <declname>flag_array_count</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_local_variables_1af8bec2aa21bd639c2f0953597f0f8376" kindref="member">int_type</ref></type>
+          <declname>flag_array_length</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_local_variables_1af8bec2aa21bd639c2f0953597f0f8376" kindref="member">int_type</ref></type>
+          <declname>total_data_depth</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_local_variables_1af8bec2aa21bd639c2f0953597f0f8376" kindref="member">int_type</ref></type>
+          <declname>total_flag_depth</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/LocalVariables.h" line="24" column="3" bodyfile="source/includes/model/LocalVariables.h" bodystart="24" bodyend="43"/>
+      </memberdef>
+      <memberdef kind="function" id="structcsmp_1_1_local_variables_1a792bfbae3c8b82b3f5979f321a277ec0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::LocalVariables::LocalVariables</definition>
+        <argsstring>(const LocalVariables &amp;lvs)</argsstring>
+        <name>LocalVariables</name>
+        <qualifiedname>csmp::LocalVariables::LocalVariables</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_local_variables" kindref="compound">LocalVariables</ref> &amp;</type>
+          <declname>lvs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/LocalVariables.h" line="45" column="3" bodyfile="source/includes/model/LocalVariables.h" bodystart="45" bodyend="55"/>
+      </memberdef>
+      <memberdef kind="function" id="structcsmp_1_1_local_variables_1a6354ed5e4306856a7d5095d2b8ea9dca" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structcsmp_1_1_local_variables" kindref="compound">LocalVariables</ref> &amp;</type>
+        <definition>LocalVariables &amp; csmp::LocalVariables::operator=</definition>
+        <argsstring>(const LocalVariables &amp;lvs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::LocalVariables::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_local_variables" kindref="compound">LocalVariables</ref> &amp;</type>
+          <declname>lvs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/LocalVariables.h" line="57" column="18" bodyfile="source/includes/model/LocalVariables.h" bodystart="57" bodyend="72"/>
+      </memberdef>
+      <memberdef kind="function" id="structcsmp_1_1_local_variables_1ab67b818018abc8d4accb50d0ba0a8c51" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::LocalVariables::Empty</definition>
+        <argsstring>() const</argsstring>
+        <name>Empty</name>
+        <qualifiedname>csmp::LocalVariables::Empty</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/LocalVariables.h" line="74" column="8" bodyfile="source/includes/model/LocalVariables.h" bodystart="74" bodyend="74"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Data class to store physical variable count at given placement. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::LocalVariables</label>
+        <link refid="structcsmp_1_1_local_variables"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/model/LocalVariables.h" line="7" column="1" bodyfile="source/includes/model/LocalVariables.h" bodystart="7" bodyend="85"/>
+    <listofallmembers>
+      <member refid="structcsmp_1_1_local_variables_1a436343d80da07b7b42881ae93f29116c" prot="public" virt="non-virtual"><scope>csmp::LocalVariables</scope><name>arrayCount</name></member>
+      <member refid="structcsmp_1_1_local_variables_1a9c297c27a8740e07c6abc135e07b7779" prot="public" virt="non-virtual"><scope>csmp::LocalVariables</scope><name>arrayLength</name></member>
+      <member refid="structcsmp_1_1_local_variables_1ab67b818018abc8d4accb50d0ba0a8c51" prot="public" virt="non-virtual"><scope>csmp::LocalVariables</scope><name>Empty</name></member>
+      <member refid="structcsmp_1_1_local_variables_1ae39d698222c2384e84dba9b2745377db" prot="public" virt="non-virtual"><scope>csmp::LocalVariables</scope><name>flaggedArrayCount</name></member>
+      <member refid="structcsmp_1_1_local_variables_1a15e910cbdec59a5eae48150e174b38f9" prot="public" virt="non-virtual"><scope>csmp::LocalVariables</scope><name>flaggedArrayLength</name></member>
+      <member refid="structcsmp_1_1_local_variables_1af8bec2aa21bd639c2f0953597f0f8376" prot="public" virt="non-virtual"><scope>csmp::LocalVariables</scope><name>int_type</name></member>
+      <member refid="structcsmp_1_1_local_variables_1ab4e352f0f774894ebeeed867716a6b03" prot="public" virt="non-virtual"><scope>csmp::LocalVariables</scope><name>LocalVariables</name></member>
+      <member refid="structcsmp_1_1_local_variables_1a14e561915842ff391bf275857a821281" prot="public" virt="non-virtual"><scope>csmp::LocalVariables</scope><name>LocalVariables</name></member>
+      <member refid="structcsmp_1_1_local_variables_1a792bfbae3c8b82b3f5979f321a277ec0" prot="public" virt="non-virtual"><scope>csmp::LocalVariables</scope><name>LocalVariables</name></member>
+      <member refid="structcsmp_1_1_local_variables_1a6354ed5e4306856a7d5095d2b8ea9dca" prot="public" virt="non-virtual"><scope>csmp::LocalVariables</scope><name>operator=</name></member>
+      <member refid="structcsmp_1_1_local_variables_1a75d8cb27cd97308d3418b6b5a66bb2a0" prot="public" virt="non-virtual"><scope>csmp::LocalVariables</scope><name>scalars</name></member>
+      <member refid="structcsmp_1_1_local_variables_1a302bc74702e321460256a32098d39cf8" prot="public" virt="non-virtual"><scope>csmp::LocalVariables</scope><name>tensors</name></member>
+      <member refid="structcsmp_1_1_local_variables_1a0544a4842cfa22681942185107b565c4" prot="public" virt="non-virtual"><scope>csmp::LocalVariables</scope><name>totalDataDepth</name></member>
+      <member refid="structcsmp_1_1_local_variables_1a4c7863e38523356c01c8fea356bbe3ed" prot="public" virt="non-virtual"><scope>csmp::LocalVariables</scope><name>totalFlagDepth</name></member>
+      <member refid="structcsmp_1_1_local_variables_1aa68ecc5792ac4fa6a7bbdfbd34677638" prot="public" virt="non-virtual"><scope>csmp::LocalVariables</scope><name>vectors</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

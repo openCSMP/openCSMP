@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="structcsmp_1_1_index_to_pointer_mapping" kind="struct" language="C++" prot="public">
+    <compoundname>csmp::IndexToPointerMapping</compoundname>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::IndexToPointerMapping&lt; uint32_t &gt;</label>
+        <link refid="structcsmp_1_1_index_to_pointer_mapping"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/model/MeshManager.h" line="18" column="10" bodyfile="source/includes/model/MeshManager.h" bodystart="18" bodyend="-1"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,1170 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_example" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>csmp::Example</compoundname>
+    <derivedcompoundref refid="classcsmp_1_1_averaging___example" prot="public" virt="non-virtual">csmp::Averaging_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_curiously_recurring_template___example" prot="public" virt="non-virtual">csmp::CuriouslyRecurringTemplate_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_d_e_s2_phase_flow_with_split_boundary___example" prot="public" virt="non-virtual">csmp::DES2PhaseFlowWithSplitBoundary_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_d_e_s2_phase_slightly_compressible_flow___example" prot="public" virt="non-virtual">csmp::DES2PhaseSlightlyCompressibleFlow_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_d_e_s_advection_diffusion2_d___example" prot="public" virt="non-virtual">csmp::DESAdvectionDiffusion2D_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_d_e_s_advection_diffusion3_d___example" prot="public" virt="non-virtual">csmp::DESAdvectionDiffusion3D_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_dense_matrix___example" prot="public" virt="non-virtual">csmp::DenseMatrix_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_eclipse_mesh_interface___example" prot="public" virt="non-virtual">csmp::EclipseMeshInterface_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_effective_stress_dilatation2_d___example" prot="public" virt="non-virtual">csmp::EffectiveStressDilatation2D_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_error_metric___example" prot="public" virt="non-virtual">csmp::ErrorMetric_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_experimental___example" prot="public" virt="non-virtual">csmp::Experimental_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_field_variable___example" prot="public" virt="non-virtual">csmp::FieldVariable_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_geothermal___example" prot="public" virt="non-virtual">csmp::Geothermal_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_interfaces___example" prot="public" virt="non-virtual">csmp::Interfaces_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_intrepid___example" prot="public" virt="non-virtual">csmp::Intrepid_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_linear_elasticity___example" prot="public" virt="non-virtual">csmp::LinearElasticity_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_linear_solver___example" prot="public" virt="non-virtual">csmp::LinearSolver_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_mechanics_and_multiphase_flow___example" prot="public" virt="non-virtual">csmp::MechanicsAndMultiphaseFlow_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_model_a_n_s_y_s___example" prot="public" virt="non-virtual">csmp::ModelANSYS_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_parallel_plate_fracture___example" prot="public" virt="non-virtual">csmp::ParallelPlateFracture_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_passive_advection_of_tracer___example" prot="public" virt="non-virtual">csmp::PassiveAdvectionOfTracer_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_permeability_tensor___example" prot="public" virt="non-virtual">csmp::PermeabilityTensor_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_policy_based___example" prot="public" virt="non-virtual">csmp::PolicyBased_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_pressure_diffusion___example" prot="public" virt="non-virtual">csmp::PressureDiffusion_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_quadratic_pressure__parallel_plate_permeability___example" prot="public" virt="non-virtual">csmp::QuadraticPressure_parallelPlatePermeability_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_quadrilaterator_to_c_s_m_pbinary___example" prot="public" virt="non-virtual">csmp::QuadrilateratorToCSMPbinary_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_region_properties___example" prot="public" virt="non-virtual">csmp::RegionProperties_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_region___example" prot="public" virt="non-virtual">csmp::Region_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_rhino_mesh___example" prot="public" virt="non-virtual">csmp::RhinoMesh_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_s_k_u_a___example" prot="public" virt="non-virtual">csmp::SKUA_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_slope_mechanics___example" prot="public" virt="non-virtual">csmp::SlopeMechanics_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_split_boundary___example" prot="public" virt="non-virtual">csmp::SplitBoundary_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_statistical_analyzer___example" prot="public" virt="non-virtual">csmp::StatisticalAnalyzer_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_stokes_discrepancy_measure_quadratic___example" prot="public" virt="non-virtual">csmp::StokesDiscrepancyMeasureQuadratic_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_stokes_discrepancy_measure___example" prot="public" virt="non-virtual">csmp::StokesDiscrepancyMeasure_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_stream_function___example" prot="public" virt="non-virtual">csmp::StreamFunction_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_t_d_d_unit_test___example" prot="public" virt="non-virtual">csmp::TDDUnitTest_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_temperature_density_pressure___example" prot="public" virt="non-virtual">csmp::TemperatureDensityPressure_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_templatized_index___example" prot="public" virt="non-virtual">csmp::TemplatizedIndex_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_thermal_convection_e_t_h_z___example" prot="public" virt="non-virtual">csmp::ThermalConvectionETHZ_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_time_stepping_approaches___example" prot="public" virt="non-virtual">csmp::TimeSteppingApproaches_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_topography_driven_flow___example" prot="public" virt="non-virtual">csmp::TopographyDrivenFlow_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_transient_pressure___example" prot="public" virt="non-virtual">csmp::TransientPressure_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_triangulator___example" prot="public" virt="non-virtual">csmp::Triangulator_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_tutorial1___example" prot="public" virt="non-virtual">csmp::Tutorial1_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_tutorial2___example" prot="public" virt="non-virtual">csmp::Tutorial2_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_tutorial3___example" prot="public" virt="non-virtual">csmp::Tutorial3_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_tutorial4___example" prot="public" virt="non-virtual">csmp::Tutorial4_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_tutorial4___example" prot="public" virt="non-virtual">csmp::Tutorial4_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_u_g4___pro_mesh_output___example" prot="public" virt="non-virtual">csmp::UG4_ProMeshOutput_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_variable_management___example" prot="public" virt="non-virtual">csmp::VariableManagement_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_variable_placement___example" prot="public" virt="non-virtual">csmp::VariablePlacement_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_variables_basic___example" prot="public" virt="non-virtual">csmp::VariablesBasic_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_variables___example" prot="public" virt="non-virtual">csmp::Variables_Example</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_visitor___example" prot="public" virt="non-virtual">csmp::Visitor_Example</derivedcompoundref>
+    <sectiondef kind="friend">
+      <memberdef kind="friend" id="classcsmp_1_1_example_1a3d8043bda861de5701589f0d3faf8a98" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class ExampleSuite</definition>
+        <argsstring></argsstring>
+        <name>ExampleSuite</name>
+        <qualifiedname>csmp::Example::ExampleSuite</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_example_suite" kindref="compound">ExampleSuite</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Example.h" line="66" column="14" bodyfile="examples/source/Example.h" bodystart="66" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_example_1a05176f18904d2512905ea9dc71a037c3" prot="private" static="no" mutable="no">
+        <type>std::ostream *</type>
+        <definition>std::ostream* csmp::Example::ostream_</definition>
+        <argsstring></argsstring>
+        <name>ostream_</name>
+        <qualifiedname>csmp::Example::ostream_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Example.h" line="109" column="16" bodyfile="examples/source/Example.h" bodystart="109" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_example_1abf77904123efd4fff10f868d740d4472" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::Example::title_</definition>
+        <argsstring></argsstring>
+        <name>title_</name>
+        <qualifiedname>csmp::Example::title_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Example.h" line="111" column="15" bodyfile="examples/source/Example.h" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_example_1abcfc7c74f7cf945e88e12d0f354aa685" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::Example::category_</definition>
+        <argsstring></argsstring>
+        <name>category_</name>
+        <qualifiedname>csmp::Example::category_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Example.h" line="112" column="15" bodyfile="examples/source/Example.h" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_example_1a50c0fe33e2e077622b97bcdf85312248" prot="private" static="no" mutable="no">
+        <type>std::list&lt; std::string &gt;</type>
+        <definition>std::list&lt;std::string&gt; csmp::Example::descriptions_</definition>
+        <argsstring></argsstring>
+        <name>descriptions_</name>
+        <qualifiedname>csmp::Example::descriptions_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Example.h" line="113" column="13" bodyfile="examples/source/Example.h" bodystart="113" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_example_1a6b602e87dc1e4c232302ac390627a4cb" prot="private" static="no" mutable="no">
+        <type>std::list&lt; std::string &gt;</type>
+        <definition>std::list&lt;std::string&gt; csmp::Example::requirements_</definition>
+        <argsstring></argsstring>
+        <name>requirements_</name>
+        <qualifiedname>csmp::Example::requirements_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Example.h" line="114" column="13" bodyfile="examples/source/Example.h" bodystart="114" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_example_1a52113e7076e28c6cc32e5d9cf9d1595b" prot="private" static="no" mutable="no">
+        <type>std::list&lt; std::string &gt;</type>
+        <definition>std::list&lt;std::string&gt; csmp::Example::authors_</definition>
+        <argsstring></argsstring>
+        <name>authors_</name>
+        <qualifiedname>csmp::Example::authors_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Example.h" line="115" column="13" bodyfile="examples/source/Example.h" bodystart="115" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_example_1a5d7c6734207d162a128fac456a8a6cf4" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int csmp::Example::difficulty_</definition>
+        <argsstring></argsstring>
+        <name>difficulty_</name>
+        <qualifiedname>csmp::Example::difficulty_</qualifiedname>
+        <briefdescription>
+<para><ref refid="classcsmp_1_1_example" kindref="compound">Example</ref> Difficulty: 1-5. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Example.h" line="116" column="7" bodyfile="examples/source/Example.h" bodystart="116" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_example_1a55b5098a7e25da12f36037b0347f63c1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Example::Example</definition>
+        <argsstring>(std::ostream *osptr=0)</argsstring>
+        <name>Example</name>
+        <qualifiedname>csmp::Example::Example</qualifiedname>
+        <param>
+          <type>std::ostream *</type>
+          <declname>osptr</declname>
+          <defval>0</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Example.h" line="69" column="3"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_1ab414b9f392a222139d56428ad915e620" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type></type>
+        <definition>virtual csmp::Example::~Example</definition>
+        <argsstring>()</argsstring>
+        <name>~Example</name>
+        <qualifiedname>csmp::Example::~Example</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Example.h" line="70" column="11" bodyfile="examples/source/Example.h" bodystart="70" bodyend="70"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_1a6e65f9276ebaa3ea88587cc742a81f8f" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void csmp::Example::Run</definition>
+        <argsstring>()=0</argsstring>
+        <name>Run</name>
+        <qualifiedname>csmp::Example::Run</qualifiedname>
+        <reimplementedby refid="classcsmp_1_1_averaging___example_1a24e8a0da0d9c58512a2b859298c694c4">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_curiously_recurring_template___example_1a9b51b54ef8a83015d9f6462f22430995">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_dense_matrix___example_1a783f0dd2014f0db9b447c1be993e4902">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_d_e_s2_phase_flow_with_split_boundary___example_1a77b7b8244c373f877053d85337d07c01">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_d_e_s2_phase_slightly_compressible_flow___example_1aa82c61aec99966380a5e6198979ef05d">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_d_e_s_advection_diffusion2_d___example_1aa2112bb3b83384aa9670b88c332bdb94">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_d_e_s_advection_diffusion3_d___example_1ae3bcecc80597ca6775c84d12b1e3f8b1">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_eclipse_mesh_interface___example_1a99d7b04866bdfa0d7c5013b24ff602a2">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_effective_stress_dilatation2_d___example_1a2c22a09c923b2723d4d4a93f67c27e7b">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_error_metric___example_1aa06d3ce438c041aea3af5366ba06d5c5">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_experimental___example_1ab11abc71f55a26a0c31fbfb1e9d02303">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_field_variable___example_1a91ea54b528a40afd13b0052463065026">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_geothermal___example_1a1904bcf573f482b7d9ec4c7057ad6eef">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_interfaces___example_1a6f17ae8b9480fe22a44758504b948e95">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_intrepid___example_1a3e919e8cc5499b287ecae4a91e8a1d70">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_linear_elasticity___example_1a39759e281a82b4a30cfb3ee1a74873aa">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_linear_solver___example_1af973d2c8d29e3536b5e58a5a5f16c3f4">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_mechanics_and_multiphase_flow___example_1a24a03c910a9880a81cc74082ad1684ea">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_model_a_n_s_y_s___example_1af3065727d1e264cc6781ba3adca33e08">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_parallel_plate_fracture___example_1a0347cfc1e7a53df0d27c1589731924cd">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_passive_advection_of_tracer___example_1ad63fc16390e6e1c1c12a278a3f13c3e9">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_permeability_tensor___example_1adb8049909b705a05d837f5f900afb753">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_policy_based___example_1a576988377c8c202ad5f104fc31d90528">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_pressure_diffusion___example_1acedc50849e6a2394aa136182e8deb1e0">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_quadratic_pressure__parallel_plate_permeability___example_1a2b0b2fb0747926ba785cf1aa9e990187">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_quadrilaterator_to_c_s_m_pbinary___example_1ab423b232059f5dae76a0bd60e89530e7">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_region___example_1a6e311505fab151d46971f6cb638d537f">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_region_properties___example_1aa34082c102196e606641f38525f5e550">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_rhino_mesh___example_1a167a5459d0244f4e8465c33cfffbc4e9">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_s_k_u_a___example_1a6ef0dd021dffd1298928f74222ad25bc">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_slope_mechanics___example_1aec1beffa0ffb261abed63b115f1cd6aa">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_split_boundary___example_1a13d5cada3676e3c6d819d43f847fee2b">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_statistical_analyzer___example_1add60f4dc714ed0de690e575cbf8b33e0">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_stokes_discrepancy_measure___example_1a6b4f5e507099d6f31b467a8e8723ec3b">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_stokes_discrepancy_measure_quadratic___example_1af3ec085f3fa48d409f98ffdf3150ddd8">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_stream_function___example_1a484aa34e6b4ca259ce948451e9407fb6">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_t_d_d_unit_test___example_1a0de455536c16c53bde60a2c9c30edabb">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_temperature_density_pressure___example_1a948f2d9e8d89350dacc8876c946abc53">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_templatized_index___example_1af5f51fdd20504eee38b9301b32b5295b">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_thermal_convection_e_t_h_z___example_1a1fb6d80154779d31000ef43d13551fef">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_time_stepping_approaches___example_1a1c27e9ed8e2aec879889285fad2d2ae9">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_topography_driven_flow___example_1a2a69198f895915e88207c9c4d9d931d3">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_transient_pressure___example_1a89e964ebf19bb565ed302efd36b7f502">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_triangulator___example_1add93822f7629571dbcc04e49c951dc87">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_tutorial1___example_1a07846daf977d900015ee93d913919eab">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_tutorial2___example_1a04e3e6d5cf907fea9fc93e697952b77c">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_tutorial3___example_1a4cb0d92e6a12c9481aaefd496829a22d">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_tutorial4___example_1a485ae38dd2d2a85dfdeec3bb8d16d65b">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_tutorial4___example_1a6287123b76a882026c5b03da70967684">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_u_g4___pro_mesh_output___example_1a101a904c0fcd99596c04473c4dce1abf">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_variable_management___example_1a5b3e6b470930fc17bfeea435df3776a1">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_variable_placement___example_1af21f3e52afd29349780e6149024c6750">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_variables___example_1a4319b4fecc08a9313237fc6ec1293b1d">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_variables_basic___example_1afdc0ec4f20e7391aec847163c9eff768">Run</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_visitor___example_1a389068b568dc44ee1563e7203ff7210b">Run</reimplementedby>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Example.h" line="73" column="16"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_1a8cee542c22a71c15bba5c6ddf959455b" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void csmp::Example::Specifications</definition>
+        <argsstring>()=0</argsstring>
+        <name>Specifications</name>
+        <qualifiedname>csmp::Example::Specifications</qualifiedname>
+        <reimplementedby refid="classcsmp_1_1_averaging___example_1a7429c497385a58bcf066fca2edd5f817">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_curiously_recurring_template___example_1aa2cb23a94cb7f1e11653509f65a7f778">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_dense_matrix___example_1a0e73870ac2f8b60e2c702585656577fe">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_d_e_s2_phase_flow_with_split_boundary___example_1a18f84f35db531a06f3bf6b9ba3cd151b">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_d_e_s2_phase_slightly_compressible_flow___example_1a771f4df379c96d667965356925903ea3">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_d_e_s_advection_diffusion2_d___example_1a7016bed41657920674db68875ba1451e">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_d_e_s_advection_diffusion3_d___example_1a0b8c9575d352ac70f2ef0018eb08621f">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_eclipse_mesh_interface___example_1a66061eb003349590d1073c3fb6ac8cbc">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_effective_stress_dilatation2_d___example_1a33b51e12a9995dd5dc82c21729d27112">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_error_metric___example_1a9182e4023545558b7ba71c3596304412">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_experimental___example_1aed6287f053c16b85e9736c874a65e43d">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_field_variable___example_1a29bf61fdab7a588b25f94ebb54eb7c43">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_geothermal___example_1ae461d0fae8bc68974c98aea0e610706b">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_interfaces___example_1a2e84fa0481fdf69fcfefca005ec26cfa">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_intrepid___example_1a492dd771d68f749a93fd799534d98c66">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_linear_elasticity___example_1ac77f5a05fbd63ea380b8afe743db2363">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_linear_solver___example_1ae45c39596ab4e31366342fd6f8893406">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_mechanics_and_multiphase_flow___example_1abc077fbffa840e3c66f1c9d94ac7ae2d">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_model_a_n_s_y_s___example_1a2cf2b4f20667cda859880f535fc92050">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_parallel_plate_fracture___example_1a8db0316c431fc5afefc19d79c00e4669">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_passive_advection_of_tracer___example_1a13ca8e07c8f4f737f66511707352afee">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_permeability_tensor___example_1a6fbc20d9d711bbdd036e0056621c2404">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_policy_based___example_1a080bf9c4a2540ad31d8c5c10c023afb6">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_pressure_diffusion___example_1ac9e4ffef2ae50925d07ee0969c3105c6">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_quadratic_pressure__parallel_plate_permeability___example_1a89757ab37db2c81cc3bb9b67a98b692e">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_quadrilaterator_to_c_s_m_pbinary___example_1ac34e4715a8914f7d89ab35172eb8fe61">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_region___example_1a5b8d28f8cd2079fbd73e054e17b850ec">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_region_properties___example_1a0353e5e6c45585124531d9b48adb15cb">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_rhino_mesh___example_1a1b659464bf7831c3ebeee95868ec2d36">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_s_k_u_a___example_1a1dbf87064c750ab0e77cc75c7b023ff8">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_slope_mechanics___example_1a8178487e9f2da8c0925a02e4ae16dcdb">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_split_boundary___example_1afdc55f39d682bb08848561ff73cde432">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_statistical_analyzer___example_1acc84c3cc6d3ba296834a9c4b1aec673c">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_stokes_discrepancy_measure___example_1a1417393b77d60514d77d986b685e52a0">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_stokes_discrepancy_measure_quadratic___example_1a1b593f981f71f839a8cab27c3037c5c6">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_stream_function___example_1a0609c31907479bf6ebcb1e4ebd8e0619">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_t_d_d_unit_test___example_1ac44335a75229c26f6418a5472f3e8b98">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_temperature_density_pressure___example_1a05cba308f35da952f9e3736f5d23c1b8">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_templatized_index___example_1aa1e2cbff903a97e6f17b65c2bb62ca95">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_thermal_convection_e_t_h_z___example_1a62c5cdb5704ea1c0c851001040045189">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_time_stepping_approaches___example_1aeb4deb163a7e40d00321024ca321db88">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_topography_driven_flow___example_1a3766811c5d780c7d795d350167531b22">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_transient_pressure___example_1ad5384c2142cb5397d0d0df019b794886">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_triangulator___example_1a3ce53e18e0a0a2f9a6ddd3c603774945">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_tutorial1___example_1ace9654c5c58bc76c2b3085eb56e459a8">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_tutorial2___example_1a6ac06cd4f1866e1120e5af851beb4366">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_tutorial3___example_1a1049f11e167c76331d6f6f787310032d">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_tutorial4___example_1aaa26554262bebb0405e76272d601036b">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_tutorial4___example_1a371d90427291a992ca8be205fcd7982e">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_u_g4___pro_mesh_output___example_1a8caf76c0c8b9f53b0e0d8481ceafc052">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_variable_management___example_1a685ef2ccabeea3ec28cf6dc79eec2ca4">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_variable_placement___example_1a3a323a833bba14ccc5e6c1d428acce60">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_variables___example_1a284ad595ce9ed564ef00990e8fce1813">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_variables_basic___example_1a61591ef87310305c75a1f6434d2a8e7b">Specifications</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_visitor___example_1a238acd72fab9e2bf78d39c7005783e9a">Specifications</reimplementedby>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Example.h" line="75" column="16"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_1adce5953feb4828ee24fb935d416a045b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Example::SetTitle</definition>
+        <argsstring>(const std::string &amp;text)</argsstring>
+        <name>SetTitle</name>
+        <qualifiedname>csmp::Example::SetTitle</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>text</declname>
+        </param>
+        <briefdescription>
+<para>Reporting interface. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Example.h" line="78" column="8" bodyfile="examples/source/Example.h" bodystart="78" bodyend="78"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_1abe2b0fd87714fc83a379d825adb5771b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Example::SetCategory</definition>
+        <argsstring>(const std::string &amp;text)</argsstring>
+        <name>SetCategory</name>
+        <qualifiedname>csmp::Example::SetCategory</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>text</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Example.h" line="79" column="8" bodyfile="examples/source/Example.h" bodystart="79" bodyend="79"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_1a4909bbd859ca62d273c259d1b8b6657a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Example::SetDifficulty</definition>
+        <argsstring>(const int &amp;difficulty)</argsstring>
+        <name>SetDifficulty</name>
+        <qualifiedname>csmp::Example::SetDifficulty</qualifiedname>
+        <param>
+          <type>const int &amp;</type>
+          <declname>difficulty</declname>
+        </param>
+        <briefdescription>
+<para>set function, takes care that 0 &lt; difficulty &lt; 4 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Example.h" line="80" column="8" bodyfile="examples/source/Example.cpp" bodystart="87" bodyend="92"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_1a460febdef7c98c40ba774ba6670ff786" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Example::AddDescription</definition>
+        <argsstring>(const std::string &amp;text)</argsstring>
+        <name>AddDescription</name>
+        <qualifiedname>csmp::Example::AddDescription</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>text</declname>
+        </param>
+        <briefdescription>
+<para>allows to add a descrtiption to an example </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Example.h" line="81" column="8" bodyfile="examples/source/Example.cpp" bodystart="36" bodyend="39"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_1a246f075bb8bf802ca5b9e49096f6a1ca" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Example::AddRequirement</definition>
+        <argsstring>(const std::string &amp;text)</argsstring>
+        <name>AddRequirement</name>
+        <qualifiedname>csmp::Example::AddRequirement</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>text</declname>
+        </param>
+        <briefdescription>
+<para>allows to add a requirement to an example (files etc..) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Example.h" line="82" column="8" bodyfile="examples/source/Example.cpp" bodystart="42" bodyend="45"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_1a7a2776d1a529fdc5185d24804e249fa4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Example::AddAuthor</definition>
+        <argsstring>(const std::string &amp;text)</argsstring>
+        <name>AddAuthor</name>
+        <qualifiedname>csmp::Example::AddAuthor</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>text</declname>
+        </param>
+        <briefdescription>
+<para>allows to add an author to an example </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Example.h" line="83" column="8" bodyfile="examples/source/Example.cpp" bodystart="48" bodyend="51"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_1ab6d059e048b82444c3fcbc36880d70b6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>string csmp::Example::GetTitle</definition>
+        <argsstring>() const</argsstring>
+        <name>GetTitle</name>
+        <qualifiedname>csmp::Example::GetTitle</qualifiedname>
+        <briefdescription>
+<para>example title return function </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Example.h" line="86" column="16" bodyfile="examples/source/Example.cpp" bodystart="55" bodyend="72"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_1af575e4786aca651596ed454ed6d262f6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int csmp::Example::GetDifficulty</definition>
+        <argsstring>() const</argsstring>
+        <name>GetDifficulty</name>
+        <qualifiedname>csmp::Example::GetDifficulty</qualifiedname>
+        <briefdescription>
+<para>return function </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Example.h" line="87" column="16" bodyfile="examples/source/Example.cpp" bodystart="75" bodyend="78"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_1afbbe7869b870b19bcd16dc6a98ee2b2f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>string csmp::Example::GetCategory</definition>
+        <argsstring>() const</argsstring>
+        <name>GetCategory</name>
+        <qualifiedname>csmp::Example::GetCategory</qualifiedname>
+        <briefdescription>
+<para>return function </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Example.h" line="88" column="16" bodyfile="examples/source/Example.cpp" bodystart="81" bodyend="84"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_1a3fd636e079c1b09631a480c3cc5861fc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::list&lt; std::string &gt;::const_iterator</type>
+        <definition>list&lt; string &gt;::const_iterator csmp::Example::GetDescriptionsBegin</definition>
+        <argsstring>()</argsstring>
+        <name>GetDescriptionsBegin</name>
+        <qualifiedname>csmp::Example::GetDescriptionsBegin</qualifiedname>
+        <briefdescription>
+<para>return function </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Example.h" line="100" column="30" bodyfile="examples/source/Example.cpp" bodystart="95" bodyend="98"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_1a23eee344b701096cfe20784858b490b8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::list&lt; std::string &gt;::const_iterator</type>
+        <definition>list&lt; string &gt;::const_iterator csmp::Example::GetDescriptionsEnd</definition>
+        <argsstring>() const</argsstring>
+        <name>GetDescriptionsEnd</name>
+        <qualifiedname>csmp::Example::GetDescriptionsEnd</qualifiedname>
+        <briefdescription>
+<para>return function </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Example.h" line="101" column="30" bodyfile="examples/source/Example.cpp" bodystart="101" bodyend="104"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_1a6ea7892372f1ed54bd66fbc93ed4c1e1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::list&lt; std::string &gt;::const_iterator</type>
+        <definition>list&lt; string &gt;::const_iterator csmp::Example::GetAuthorsBegin</definition>
+        <argsstring>()</argsstring>
+        <name>GetAuthorsBegin</name>
+        <qualifiedname>csmp::Example::GetAuthorsBegin</qualifiedname>
+        <briefdescription>
+<para>return function </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Example.h" line="102" column="30" bodyfile="examples/source/Example.cpp" bodystart="119" bodyend="122"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_1a1381ce20fa12dc1168f422ab348bb7d4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::list&lt; std::string &gt;::const_iterator</type>
+        <definition>list&lt; string &gt;::const_iterator csmp::Example::GetAuthorsEnd</definition>
+        <argsstring>() const</argsstring>
+        <name>GetAuthorsEnd</name>
+        <qualifiedname>csmp::Example::GetAuthorsEnd</qualifiedname>
+        <briefdescription>
+<para>return function </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Example.h" line="103" column="30" bodyfile="examples/source/Example.cpp" bodystart="125" bodyend="128"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_1afb4453025180082963850cd7b86ab7e5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::list&lt; std::string &gt;::const_iterator</type>
+        <definition>list&lt; string &gt;::const_iterator csmp::Example::GetRequirementsBegin</definition>
+        <argsstring>()</argsstring>
+        <name>GetRequirementsBegin</name>
+        <qualifiedname>csmp::Example::GetRequirementsBegin</qualifiedname>
+        <briefdescription>
+<para>return function </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Example.h" line="104" column="30" bodyfile="examples/source/Example.cpp" bodystart="107" bodyend="110"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_1a63d42dff58fdfd642d842a74bb609e1d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::list&lt; std::string &gt;::const_iterator</type>
+        <definition>list&lt; string &gt;::const_iterator csmp::Example::GetRequirementsEnd</definition>
+        <argsstring>() const</argsstring>
+        <name>GetRequirementsEnd</name>
+        <qualifiedname>csmp::Example::GetRequirementsEnd</qualifiedname>
+        <briefdescription>
+<para>return function </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Example.h" line="105" column="30" bodyfile="examples/source/Example.cpp" bodystart="113" bodyend="116"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-func">
+      <memberdef kind="function" id="classcsmp_1_1_example_1a69f06458486c7a3a3669739a2039c4ed" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Example::Initialize</definition>
+        <argsstring>()</argsstring>
+        <name>Initialize</name>
+        <qualifiedname>csmp::Example::Initialize</qualifiedname>
+        <briefdescription>
+<para>assures db to contain data </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Example.h" line="91" column="8" bodyfile="examples/source/Example.cpp" bodystart="21" bodyend="33"/>
+        <referencedby refid="classcsmp_1_1_example_suite_1abafb0a007ac2ca12bc38300e23efb10d" compoundref="_example_suite_8cpp" startline="44" endline="68">csmp::ExampleSuite::RegisterExample</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_1a7104cbfd7020f9e681204f0fb09953b7" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::ostream *</type>
+        <definition>std::ostream * csmp::Example::GetStream</definition>
+        <argsstring>()</argsstring>
+        <name>GetStream</name>
+        <qualifiedname>csmp::Example::GetStream</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Example.h" line="93" column="16" bodyfile="examples/source/Example.h" bodystart="93" bodyend="93"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_1a9814fee9852cbbcb4504f24f205b5e67" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Example::SetStream</definition>
+        <argsstring>(std::ostream *ostream)</argsstring>
+        <name>SetStream</name>
+        <qualifiedname>csmp::Example::SetStream</qualifiedname>
+        <param>
+          <type>std::ostream *</type>
+          <declname>ostream</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Example.h" line="94" column="8" bodyfile="examples/source/Example.h" bodystart="94" bodyend="94"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_1ac867309e60852ae127a00585205f9ac9" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>string csmp::Example::GetExampleFileName</definition>
+        <argsstring>(const char *path)</argsstring>
+        <name>GetExampleFileName</name>
+        <qualifiedname>csmp::Example::GetExampleFileName</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>path</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Example.h" line="95" column="15" bodyfile="examples/source/Example.cpp" bodystart="131" bodyend="135"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_1ac926ad8eb6de45710b9076c8f6304880" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Example::CreateWorkingDirectoryAndCopyInputModelFiles</definition>
+        <argsstring>(std::string &amp;example_name, std::string &amp;model_name, std::string &amp;variable_file, std::string config_file=&quot;&quot;)</argsstring>
+        <name>CreateWorkingDirectoryAndCopyInputModelFiles</name>
+        <qualifiedname>csmp::Example::CreateWorkingDirectoryAndCopyInputModelFiles</qualifiedname>
+        <param>
+          <type>std::string &amp;</type>
+          <declname>example_name</declname>
+        </param>
+        <param>
+          <type>std::string &amp;</type>
+          <declname>model_name</declname>
+        </param>
+        <param>
+          <type>std::string &amp;</type>
+          <declname>variable_file</declname>
+        </param>
+        <param>
+          <type>std::string</type>
+          <declname>config_file</declname>
+          <defval>&quot;&quot;</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Creates new directory &quot;example_outputs/&quot; side by side with the working directory &quot;example_inputs&quot;, moving any file writing by the current example into there.</para>
+<para><simplesect kind="attention"><para>This function expects that the directory that contains the executable is open-csmp/examples/example_inputs/</para>
+</simplesect>
+Context: to run the examples, you need to create a new directory somewhere outside of your repository and copy the example_inputs/ directory from the repository in there, including its subdirectories. Then set this example_inputs/ directory as your working directory (XCode: Product -&gt; Scheme -&gt; Edit Scheme -&gt; custom working directory in the Options tab)</para>
+<para>When you created a CSMP native binary, it gets placed into the directory example_inputs/csmp_native_format_models/ Then, when you run any of the examples, CSMP will create a new directory example_outputs/ in your new directory side-by-side with example_inputs/ and this is where you will find the results of your computations. This is done by this method. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Example.h" line="96" column="8" bodyfile="examples/source/Example.cpp" bodystart="151" bodyend="246"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_example_1a8ce126b04cba9b9af16247517bd4d7d3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Example::Example</definition>
+        <argsstring>(const Example &amp;)</argsstring>
+        <name>Example</name>
+        <qualifiedname>csmp::Example::Example</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_example" kindref="compound">Example</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Example.h" line="118" column="3"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_1aafd59d98f15c63bdc13f7f86373f32b7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_example" kindref="compound">Example</ref> &amp;</type>
+        <definition>Example &amp; csmp::Example::operator=</definition>
+        <argsstring>(const Example &amp;)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::Example::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_example" kindref="compound">Example</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Example.h" line="119" column="11"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>P. Lang </para>
+</simplesect>
+<simplesect kind="date"><para>2010</para>
+</simplesect>
+</para>
+<sect1 id="classcsmp_1_1_visitor_1examples">
+<title>Application Examples</title><para><programlisting><codeline><highlight class="comment">//<sp/>DECLARATION</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;Example.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">csmp<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">class<sp/><sp/></highlight><highlight class="normal">YourExampleClass<sp/>:<sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_example" kindref="compound">Example</ref>{</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>Run();</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>Initialize();</highlight></codeline>
+<codeline><highlight class="normal">};</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>csmp</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>DEFINITION</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;YourExampleClass.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="_c_s_m_p__definitions_8h" kindref="compound">CSMP_definitions.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">...</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">using<sp/></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">std;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">csmp{</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>YourExampleClass::Initialize()</highlight></codeline>
+<codeline><highlight class="normal">{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>SetTitle<sp/>(<sp/></highlight><highlight class="stringliteral">&quot;CSMP<sp/>Example<sp/>1&quot;</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>SetDifficulty(<sp/>1<sp/>);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>AddAuthor<sp/>(<sp/></highlight><highlight class="stringliteral">&quot;SKM&quot;</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>AddDescription(<sp/></highlight><highlight class="stringliteral">&quot;computes<sp/>steady<sp/>state<sp/>pressure<sp/>distribution&quot;</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>AddDescription(<sp/></highlight><highlight class="stringliteral">&quot;2D<sp/>reservoir<sp/>profile&quot;</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>AddRequirement(<sp/></highlight><highlight class="stringliteral">&quot;image(granite_model1)&quot;</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>AddRequirement(<sp/></highlight><highlight class="stringliteral">&quot;configuration(example1.txt)&quot;</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>Initialize()</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>Example1ForSuite::Execute()</highlight></codeline>
+<codeline><highlight class="normal">{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>...your<sp/>application<sp/>code,<sp/>or<sp/>a<sp/>simple<sp/>function<sp/>call<sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>an<sp/>external<sp/>resource</highlight></codeline>
+<codeline><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>Execute()</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>csmp</highlight></codeline>
+</programlisting> </para>
+</sect1>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>csmp::Averaging_Example</label>
+        <link refid="classcsmp_1_1_averaging___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::CuriouslyRecurringTemplate_Example</label>
+        <link refid="classcsmp_1_1_curiously_recurring_template___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>csmp::DES2PhaseFlowWithSplitBoundary_Example</label>
+        <link refid="classcsmp_1_1_d_e_s2_phase_flow_with_split_boundary___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>csmp::DES2PhaseSlightlyCompressibleFlow_Example</label>
+        <link refid="classcsmp_1_1_d_e_s2_phase_slightly_compressible_flow___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>csmp::DESAdvectionDiffusion2D_Example</label>
+        <link refid="classcsmp_1_1_d_e_s_advection_diffusion2_d___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>csmp::DESAdvectionDiffusion3D_Example</label>
+        <link refid="classcsmp_1_1_d_e_s_advection_diffusion3_d___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>csmp::DenseMatrix_Example</label>
+        <link refid="classcsmp_1_1_dense_matrix___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>csmp::EclipseMeshInterface_Example</label>
+        <link refid="classcsmp_1_1_eclipse_mesh_interface___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>csmp::EffectiveStressDilatation2D_Example</label>
+        <link refid="classcsmp_1_1_effective_stress_dilatation2_d___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>csmp::ErrorMetric_Example</label>
+        <link refid="classcsmp_1_1_error_metric___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::Example</label>
+        <link refid="classcsmp_1_1_example"/>
+      </node>
+      <node id="12">
+        <label>csmp::Experimental_Example</label>
+        <link refid="classcsmp_1_1_experimental___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>csmp::FieldVariable_Example</label>
+        <link refid="classcsmp_1_1_field_variable___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>csmp::Geothermal_Example</label>
+        <link refid="classcsmp_1_1_geothermal___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="15">
+        <label>csmp::Interfaces_Example</label>
+        <link refid="classcsmp_1_1_interfaces___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="16">
+        <label>csmp::Intrepid_Example</label>
+        <link refid="classcsmp_1_1_intrepid___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="17">
+        <label>csmp::LinearElasticity_Example</label>
+        <link refid="classcsmp_1_1_linear_elasticity___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="18">
+        <label>csmp::LinearSolver_Example</label>
+        <link refid="classcsmp_1_1_linear_solver___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="19">
+        <label>csmp::MechanicsAndMultiphaseFlow_Example</label>
+        <link refid="classcsmp_1_1_mechanics_and_multiphase_flow___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="20">
+        <label>csmp::ModelANSYS_Example</label>
+        <link refid="classcsmp_1_1_model_a_n_s_y_s___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="21">
+        <label>csmp::ParallelPlateFracture_Example</label>
+        <link refid="classcsmp_1_1_parallel_plate_fracture___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="22">
+        <label>csmp::PassiveAdvectionOfTracer_Example</label>
+        <link refid="classcsmp_1_1_passive_advection_of_tracer___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="23">
+        <label>csmp::PermeabilityTensor_Example</label>
+        <link refid="classcsmp_1_1_permeability_tensor___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="24">
+        <label>csmp::PolicyBased_Example</label>
+        <link refid="classcsmp_1_1_policy_based___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="25">
+        <label>csmp::PressureDiffusion_Example</label>
+        <link refid="classcsmp_1_1_pressure_diffusion___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="26">
+        <label>csmp::QuadraticPressure_parallelPlatePermeability_Example</label>
+        <link refid="classcsmp_1_1_quadratic_pressure__parallel_plate_permeability___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="27">
+        <label>csmp::QuadrilateratorToCSMPbinary_Example</label>
+        <link refid="classcsmp_1_1_quadrilaterator_to_c_s_m_pbinary___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="28">
+        <label>csmp::RegionProperties_Example</label>
+        <link refid="classcsmp_1_1_region_properties___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="29">
+        <label>csmp::Region_Example</label>
+        <link refid="classcsmp_1_1_region___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="30">
+        <label>csmp::RhinoMesh_Example</label>
+        <link refid="classcsmp_1_1_rhino_mesh___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="31">
+        <label>csmp::SKUA_Example</label>
+        <link refid="classcsmp_1_1_s_k_u_a___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="32">
+        <label>csmp::SlopeMechanics_Example</label>
+        <link refid="classcsmp_1_1_slope_mechanics___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="33">
+        <label>csmp::SplitBoundary_Example</label>
+        <link refid="classcsmp_1_1_split_boundary___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="34">
+        <label>csmp::StatisticalAnalyzer_Example</label>
+        <link refid="classcsmp_1_1_statistical_analyzer___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="35">
+        <label>csmp::StokesDiscrepancyMeasureQuadratic_Example</label>
+        <link refid="classcsmp_1_1_stokes_discrepancy_measure_quadratic___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="36">
+        <label>csmp::StokesDiscrepancyMeasure_Example</label>
+        <link refid="classcsmp_1_1_stokes_discrepancy_measure___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="37">
+        <label>csmp::StreamFunction_Example</label>
+        <link refid="classcsmp_1_1_stream_function___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="38">
+        <label>csmp::TDDUnitTest_Example</label>
+        <link refid="classcsmp_1_1_t_d_d_unit_test___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="39">
+        <label>csmp::TemperatureDensityPressure_Example</label>
+        <link refid="classcsmp_1_1_temperature_density_pressure___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="40">
+        <label>csmp::TemplatizedIndex_Example</label>
+        <link refid="classcsmp_1_1_templatized_index___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="41">
+        <label>csmp::ThermalConvectionETHZ_Example</label>
+        <link refid="classcsmp_1_1_thermal_convection_e_t_h_z___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="42">
+        <label>csmp::TimeSteppingApproaches_Example</label>
+        <link refid="classcsmp_1_1_time_stepping_approaches___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="43">
+        <label>csmp::TopographyDrivenFlow_Example</label>
+        <link refid="classcsmp_1_1_topography_driven_flow___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="44">
+        <label>csmp::TransientPressure_Example</label>
+        <link refid="classcsmp_1_1_transient_pressure___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="45">
+        <label>csmp::Triangulator_Example</label>
+        <link refid="classcsmp_1_1_triangulator___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="46">
+        <label>csmp::Tutorial1_Example</label>
+        <link refid="classcsmp_1_1_tutorial1___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="47">
+        <label>csmp::Tutorial2_Example</label>
+        <link refid="classcsmp_1_1_tutorial2___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="48">
+        <label>csmp::Tutorial3_Example</label>
+        <link refid="classcsmp_1_1_tutorial3___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="49">
+        <label>csmp::Tutorial4_Example</label>
+        <link refid="classcsmp_1_1_tutorial4___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="50">
+        <label>csmp::UG4_ProMeshOutput_Example</label>
+        <link refid="classcsmp_1_1_u_g4___pro_mesh_output___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="51">
+        <label>csmp::VariableManagement_Example</label>
+        <link refid="classcsmp_1_1_variable_management___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="52">
+        <label>csmp::VariablePlacement_Example</label>
+        <link refid="classcsmp_1_1_variable_placement___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="53">
+        <label>csmp::VariablesBasic_Example</label>
+        <link refid="classcsmp_1_1_variables_basic___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="54">
+        <label>csmp::Variables_Example</label>
+        <link refid="classcsmp_1_1_variables___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="55">
+        <label>csmp::Visitor_Example</label>
+        <link refid="classcsmp_1_1_visitor___example"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::Example</label>
+        <link refid="classcsmp_1_1_example"/>
+      </node>
+    </collaborationgraph>
+    <location file="examples/source/Example.h" line="63" column="1" bodyfile="examples/source/Example.h" bodystart="64" bodyend="120"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_example_1a7a2776d1a529fdc5185d24804e249fa4" prot="public" virt="non-virtual"><scope>csmp::Example</scope><name>AddAuthor</name></member>
+      <member refid="classcsmp_1_1_example_1a460febdef7c98c40ba774ba6670ff786" prot="public" virt="non-virtual"><scope>csmp::Example</scope><name>AddDescription</name></member>
+      <member refid="classcsmp_1_1_example_1a246f075bb8bf802ca5b9e49096f6a1ca" prot="public" virt="non-virtual"><scope>csmp::Example</scope><name>AddRequirement</name></member>
+      <member refid="classcsmp_1_1_example_1a52113e7076e28c6cc32e5d9cf9d1595b" prot="private" virt="non-virtual"><scope>csmp::Example</scope><name>authors_</name></member>
+      <member refid="classcsmp_1_1_example_1abcfc7c74f7cf945e88e12d0f354aa685" prot="private" virt="non-virtual"><scope>csmp::Example</scope><name>category_</name></member>
+      <member refid="classcsmp_1_1_example_1ac926ad8eb6de45710b9076c8f6304880" prot="protected" virt="non-virtual"><scope>csmp::Example</scope><name>CreateWorkingDirectoryAndCopyInputModelFiles</name></member>
+      <member refid="classcsmp_1_1_example_1a50c0fe33e2e077622b97bcdf85312248" prot="private" virt="non-virtual"><scope>csmp::Example</scope><name>descriptions_</name></member>
+      <member refid="classcsmp_1_1_example_1a5d7c6734207d162a128fac456a8a6cf4" prot="private" virt="non-virtual"><scope>csmp::Example</scope><name>difficulty_</name></member>
+      <member refid="classcsmp_1_1_example_1a55b5098a7e25da12f36037b0347f63c1" prot="public" virt="non-virtual"><scope>csmp::Example</scope><name>Example</name></member>
+      <member refid="classcsmp_1_1_example_1a8ce126b04cba9b9af16247517bd4d7d3" prot="private" virt="non-virtual"><scope>csmp::Example</scope><name>Example</name></member>
+      <member refid="classcsmp_1_1_example_1a3d8043bda861de5701589f0d3faf8a98" prot="private" virt="non-virtual"><scope>csmp::Example</scope><name>ExampleSuite</name></member>
+      <member refid="classcsmp_1_1_example_1a6ea7892372f1ed54bd66fbc93ed4c1e1" prot="public" virt="non-virtual"><scope>csmp::Example</scope><name>GetAuthorsBegin</name></member>
+      <member refid="classcsmp_1_1_example_1a1381ce20fa12dc1168f422ab348bb7d4" prot="public" virt="non-virtual"><scope>csmp::Example</scope><name>GetAuthorsEnd</name></member>
+      <member refid="classcsmp_1_1_example_1afbbe7869b870b19bcd16dc6a98ee2b2f" prot="public" virt="non-virtual"><scope>csmp::Example</scope><name>GetCategory</name></member>
+      <member refid="classcsmp_1_1_example_1a3fd636e079c1b09631a480c3cc5861fc" prot="public" virt="non-virtual"><scope>csmp::Example</scope><name>GetDescriptionsBegin</name></member>
+      <member refid="classcsmp_1_1_example_1a23eee344b701096cfe20784858b490b8" prot="public" virt="non-virtual"><scope>csmp::Example</scope><name>GetDescriptionsEnd</name></member>
+      <member refid="classcsmp_1_1_example_1af575e4786aca651596ed454ed6d262f6" prot="public" virt="non-virtual"><scope>csmp::Example</scope><name>GetDifficulty</name></member>
+      <member refid="classcsmp_1_1_example_1ac867309e60852ae127a00585205f9ac9" prot="protected" virt="non-virtual"><scope>csmp::Example</scope><name>GetExampleFileName</name></member>
+      <member refid="classcsmp_1_1_example_1afb4453025180082963850cd7b86ab7e5" prot="public" virt="non-virtual"><scope>csmp::Example</scope><name>GetRequirementsBegin</name></member>
+      <member refid="classcsmp_1_1_example_1a63d42dff58fdfd642d842a74bb609e1d" prot="public" virt="non-virtual"><scope>csmp::Example</scope><name>GetRequirementsEnd</name></member>
+      <member refid="classcsmp_1_1_example_1a7104cbfd7020f9e681204f0fb09953b7" prot="protected" virt="non-virtual"><scope>csmp::Example</scope><name>GetStream</name></member>
+      <member refid="classcsmp_1_1_example_1ab6d059e048b82444c3fcbc36880d70b6" prot="public" virt="non-virtual"><scope>csmp::Example</scope><name>GetTitle</name></member>
+      <member refid="classcsmp_1_1_example_1a69f06458486c7a3a3669739a2039c4ed" prot="protected" virt="non-virtual"><scope>csmp::Example</scope><name>Initialize</name></member>
+      <member refid="classcsmp_1_1_example_1aafd59d98f15c63bdc13f7f86373f32b7" prot="private" virt="non-virtual"><scope>csmp::Example</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_example_1a05176f18904d2512905ea9dc71a037c3" prot="private" virt="non-virtual"><scope>csmp::Example</scope><name>ostream_</name></member>
+      <member refid="classcsmp_1_1_example_1a6b602e87dc1e4c232302ac390627a4cb" prot="private" virt="non-virtual"><scope>csmp::Example</scope><name>requirements_</name></member>
+      <member refid="classcsmp_1_1_example_1a6e65f9276ebaa3ea88587cc742a81f8f" prot="public" virt="pure-virtual"><scope>csmp::Example</scope><name>Run</name></member>
+      <member refid="classcsmp_1_1_example_1abe2b0fd87714fc83a379d825adb5771b" prot="public" virt="non-virtual"><scope>csmp::Example</scope><name>SetCategory</name></member>
+      <member refid="classcsmp_1_1_example_1a4909bbd859ca62d273c259d1b8b6657a" prot="public" virt="non-virtual"><scope>csmp::Example</scope><name>SetDifficulty</name></member>
+      <member refid="classcsmp_1_1_example_1a9814fee9852cbbcb4504f24f205b5e67" prot="protected" virt="non-virtual"><scope>csmp::Example</scope><name>SetStream</name></member>
+      <member refid="classcsmp_1_1_example_1adce5953feb4828ee24fb935d416a045b" prot="public" virt="non-virtual"><scope>csmp::Example</scope><name>SetTitle</name></member>
+      <member refid="classcsmp_1_1_example_1a8cee542c22a71c15bba5c6ddf959455b" prot="public" virt="pure-virtual"><scope>csmp::Example</scope><name>Specifications</name></member>
+      <member refid="classcsmp_1_1_example_1abf77904123efd4fff10f868d740d4472" prot="private" virt="non-virtual"><scope>csmp::Example</scope><name>title_</name></member>
+      <member refid="classcsmp_1_1_example_1ab414b9f392a222139d56428ad915e620" prot="public" virt="virtual"><scope>csmp::Example</scope><name>~Example</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

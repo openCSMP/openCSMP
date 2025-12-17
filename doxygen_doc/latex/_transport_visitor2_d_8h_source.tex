@@ -1,0 +1,77 @@
+\doxysection{Transport\+Visitor2\+D.\+h}
+\hypertarget{_transport_visitor2_d_8h_source}{}\label{_transport_visitor2_d_8h_source}\index{source/includes/regular\_grids/TransportVisitor2D.h@{source/includes/regular\_grids/TransportVisitor2D.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_TRANSPORT\_VISITOR\_2D\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_TRANSPORT\_VISITOR\_2D\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_visitor_8h}{"{}Visitor.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_element_grid_8h}{"{}ElementGrid.h"{}}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_finite_difference_grid_8h}{"{}FiniteDifferenceGrid.h"{}}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_a_p___bool_vector_8h}{"{}AP\_BoolVector.h"{}}}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_property_database}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}};}
+\DoxyCodeLine{00012\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_model}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}};}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00015\ \textcolor{comment}{@author\ S.K.\ Matthaei}}
+\DoxyCodeLine{00016\ \textcolor{comment}{@author\ S.\ Geiger}}
+\DoxyCodeLine{00017\ \textcolor{comment}{@author\ S.\ Roberts}}
+\DoxyCodeLine{00018\ \textcolor{comment}{@date\ 2002}}
+\DoxyCodeLine{00019\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_transport_visitor2_d}{TransportVisitor2D}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_transport_visitor2_d}{Visitor}}<2U>\ \{}
+\DoxyCodeLine{00022\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00023\ \ \ \ \ TransportVisitor2D(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<2U>\&,}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ advected\_prop,}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ advecting\_prop\ );}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ \string~TransportVisitor2D();}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ Visit(Element<2U>*\ );}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ Visit(\mbox{\hyperlink{classcsmp_1_1_model}{Model}}<2U>*\ );}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordtype}{bool}\ AdvectUntil(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<2U>\&,\ \textcolor{keywordtype}{double}\ final\_time\ );}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ size\_t\ \ \ \ MaximumIncrements()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ MaximumIncrements(\ size\_t\ maxi\ );}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ InterpolateOnlyWithinGrid(\ \textcolor{keywordtype}{bool}\ interpolate\_just\_within\_grid\ );}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00040\ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<2U>\&\ \ \ \ \ \ \ pref;}
+\DoxyCodeLine{00041\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_difference_grid}{FiniteDifferenceGrid}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ grid;}
+\DoxyCodeLine{00042\ \ \ \ \ \ std::vector<ElementGrid>\ \ \ \ \ \ \ \ \ \ egrids;}
+\DoxyCodeLine{00043\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_bool_vector}{BoolVector}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ visited;}
+\DoxyCodeLine{00044\ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ resolution;}
+\DoxyCodeLine{00045\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ XY,\ NN;}
+\DoxyCodeLine{00046\ \ \ \ \ \ std::vector<VectorVariable<2U>\ >\ \ P;}
+\DoxyCodeLine{00047\ \ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\ \ \ \ \ \ \ \ \ \ \ \ \ xy;}
+\DoxyCodeLine{00048\ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ time\_increment;}
+\DoxyCodeLine{00049\ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ v\_key,\ prop\_key;}
+\DoxyCodeLine{00050\ \ \ \ \ \ size\_t\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ max\_increments;}
+\DoxyCodeLine{00051\ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ interpolate\_only\_within\_grid;}
+\DoxyCodeLine{00052\ \ \ \ \ \ \textcolor{keywordtype}{char}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ transp\_prop[200],\ adv\_prop[200];}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \ \textcolor{keywordtype}{void}\ StoreResultsInGrid();}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \ \textcolor{keywordtype}{bool}\ IsInsideTriangle(\ \textcolor{keywordtype}{double}\ x,\ \textcolor{keywordtype}{double}\ y,\ \textcolor{keywordtype}{bool}\ update=\textcolor{keyword}{true}\ );}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ \ \textcolor{keywordtype}{void}\ MinMaxCoordinates(\ \textcolor{keywordtype}{double}\&\ min\_x,\ \textcolor{keywordtype}{double}\&\ max\_x,}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\&\ min\_y,\ \textcolor{keywordtype}{double}\&\ max\_y\ );}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \ \textcolor{keywordtype}{void}\ InitializeElementGrid(\ size\_t\ idx\ );}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \ \ \ \ \ \textcolor{keywordtype}{void}\ InputPropertyFromGrid(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<2U>\&,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ prop\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00064\ \ \ \ \ \ \textcolor{keywordtype}{void}\ WritePropertyToGrid(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<2U>\&,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ prop\ );}
+\DoxyCodeLine{00065\ \};}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \textcolor{comment}{/*\ copyright\ (c)\ 2002\ by\ S.\ K.\ Matthaei\ \&\ S.\ G.\ Roberts\ \&\ S.\ Geiger\ */}}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

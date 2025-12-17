@@ -2,12 +2,7 @@
 #define AP_ALGEBRA_UTILITIES_H
 
 #include "CSMP_definitions.h"
-
-#ifdef FV_STENCIL_TESTING
-#include "FiniteVolumeStencil_refactored.h"
-#else
 #include "FiniteVolumeStencil.h"
-#endif
 
 namespace csmp {
   

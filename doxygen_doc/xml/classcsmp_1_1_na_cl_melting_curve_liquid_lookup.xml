@@ -1,0 +1,525 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_na_cl_melting_curve_liquid_lookup" kind="class" language="C++" prot="public">
+    <compoundname>csmp::NaClMeltingCurveLiquidLookup</compoundname>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1aab60ec8ab8f820dc302ade2561b92409" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::NaClMeltingCurveLiquidLookup::temperature</definition>
+        <argsstring></argsstring>
+        <name>temperature</name>
+        <qualifiedname>csmp::NaClMeltingCurveLiquidLookup::temperature</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveLiquidLookup.h" line="34" column="26" bodyfile="source/includes/eos/NaClMeltingCurveLiquidLookup.h" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1a9487b7a66cdc3ee5a0df7ff2ebc79fe4" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::NaClMeltingCurveLiquidLookup::pressure</definition>
+        <argsstring></argsstring>
+        <name>pressure</name>
+        <qualifiedname>csmp::NaClMeltingCurveLiquidLookup::pressure</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveLiquidLookup.h" line="35" column="26" bodyfile="source/includes/eos/NaClMeltingCurveLiquidLookup.h" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1a420392076beaf8e6a6448f4882049d5a" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClMeltingCurveLiquidLookup::tcurrent</definition>
+        <argsstring></argsstring>
+        <name>tcurrent</name>
+        <qualifiedname>csmp::NaClMeltingCurveLiquidLookup::tcurrent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveLiquidLookup.h" line="37" column="27" bodyfile="source/includes/eos/NaClMeltingCurveLiquidLookup.h" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1a0405c503f9e27d2ca1bc2c7a32239580" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClMeltingCurveLiquidLookup::pcurrent</definition>
+        <argsstring></argsstring>
+        <name>pcurrent</name>
+        <qualifiedname>csmp::NaClMeltingCurveLiquidLookup::pcurrent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveLiquidLookup.h" line="38" column="27" bodyfile="source/includes/eos/NaClMeltingCurveLiquidLookup.h" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1a39976e19dd58a40255c0597b2297aa2d" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClMeltingCurveLiquidLookup::xcurrent</definition>
+        <argsstring></argsstring>
+        <name>xcurrent</name>
+        <qualifiedname>csmp::NaClMeltingCurveLiquidLookup::xcurrent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveLiquidLookup.h" line="39" column="27" bodyfile="source/includes/eos/NaClMeltingCurveLiquidLookup.h" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1a5fa0f7483664e603d56a04ad2fc465af" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClMeltingCurveLiquidLookup::t_res</definition>
+        <argsstring></argsstring>
+        <name>t_res</name>
+        <qualifiedname>csmp::NaClMeltingCurveLiquidLookup::t_res</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveLiquidLookup.h" line="40" column="27" bodyfile="source/includes/eos/NaClMeltingCurveLiquidLookup.h" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1ad21b84621e9c85dfd728d778725661cd" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClMeltingCurveLiquidLookup::tnorm</definition>
+        <argsstring></argsstring>
+        <name>tnorm</name>
+        <qualifiedname>csmp::NaClMeltingCurveLiquidLookup::tnorm</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveLiquidLookup.h" line="41" column="27" bodyfile="source/includes/eos/NaClMeltingCurveLiquidLookup.h" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1affa61a0710ca7cb623be80800cbf49a5" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClMeltingCurveLiquidLookup::pnorm</definition>
+        <argsstring></argsstring>
+        <name>pnorm</name>
+        <qualifiedname>csmp::NaClMeltingCurveLiquidLookup::pnorm</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveLiquidLookup.h" line="42" column="27" bodyfile="source/includes/eos/NaClMeltingCurveLiquidLookup.h" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1a34946c898d25aee54d4ea3f287207b1b" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClMeltingCurveLiquidLookup::tmin</definition>
+        <argsstring></argsstring>
+        <name>tmin</name>
+        <qualifiedname>csmp::NaClMeltingCurveLiquidLookup::tmin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveLiquidLookup.h" line="43" column="27" bodyfile="source/includes/eos/NaClMeltingCurveLiquidLookup.h" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1a7d4485f8e589f307e932e35e9dffaef6" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::NaClMeltingCurveLiquidLookup::it</definition>
+        <argsstring></argsstring>
+        <name>it</name>
+        <qualifiedname>csmp::NaClMeltingCurveLiquidLookup::it</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveLiquidLookup.h" line="45" column="29" bodyfile="source/includes/eos/NaClMeltingCurveLiquidLookup.h" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1a85ca0a6ea31e8bc83bca3d2cdfc34486" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::NaClMeltingCurveLiquidLookup::t_dim</definition>
+        <argsstring></argsstring>
+        <name>t_dim</name>
+        <qualifiedname>csmp::NaClMeltingCurveLiquidLookup::t_dim</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveLiquidLookup.h" line="46" column="29" bodyfile="source/includes/eos/NaClMeltingCurveLiquidLookup.h" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1a801e137f81802104fcf84d8e70585d9c" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::NaClMeltingCurveLiquidLookup::i_guess</definition>
+        <argsstring></argsstring>
+        <name>i_guess</name>
+        <qualifiedname>csmp::NaClMeltingCurveLiquidLookup::i_guess</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveLiquidLookup.h" line="47" column="29" bodyfile="source/includes/eos/NaClMeltingCurveLiquidLookup.h" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1afa3c2dfce15298d9b02ea776f2717b27" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::NaClMeltingCurveLiquidLookup::i_max</definition>
+        <argsstring></argsstring>
+        <name>i_max</name>
+        <qualifiedname>csmp::NaClMeltingCurveLiquidLookup::i_max</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveLiquidLookup.h" line="48" column="29" bodyfile="source/includes/eos/NaClMeltingCurveLiquidLookup.h" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1a2744688bd478726f0a5651683ad391f9" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::NaClMeltingCurveLiquidLookup::i_min</definition>
+        <argsstring></argsstring>
+        <name>i_min</name>
+        <qualifiedname>csmp::NaClMeltingCurveLiquidLookup::i_min</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveLiquidLookup.h" line="49" column="29" bodyfile="source/includes/eos/NaClMeltingCurveLiquidLookup.h" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1ab6c3cdf0079467608c741542f2571f5e" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::NaClMeltingCurveLiquidLookup::it_min</definition>
+        <argsstring></argsstring>
+        <name>it_min</name>
+        <qualifiedname>csmp::NaClMeltingCurveLiquidLookup::it_min</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveLiquidLookup.h" line="50" column="29" bodyfile="source/includes/eos/NaClMeltingCurveLiquidLookup.h" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1af216148f51acf614d041e58d58d679a4" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::NaClMeltingCurveLiquidLookup::it_max</definition>
+        <argsstring></argsstring>
+        <name>it_max</name>
+        <qualifiedname>csmp::NaClMeltingCurveLiquidLookup::it_max</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveLiquidLookup.h" line="51" column="29" bodyfile="source/includes/eos/NaClMeltingCurveLiquidLookup.h" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1a11a0e4330c3eafac599f2eb1645b36a3" prot="private" static="no" mutable="no">
+        <type>States</type>
+        <definition>States csmp::NaClMeltingCurveLiquidLookup::state</definition>
+        <argsstring></argsstring>
+        <name>state</name>
+        <qualifiedname>csmp::NaClMeltingCurveLiquidLookup::state</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveLiquidLookup.h" line="52" column="29" bodyfile="source/includes/eos/NaClMeltingCurveLiquidLookup.h" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1ad4a1f7eefd7c0f124cdc4016d6bd4aef" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::NaClMeltingCurveLiquidLookup::storage_vector</definition>
+        <argsstring></argsstring>
+        <name>storage_vector</name>
+        <qualifiedname>csmp::NaClMeltingCurveLiquidLookup::storage_vector</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveLiquidLookup.h" line="55" column="19" bodyfile="source/includes/eos/NaClMeltingCurveLiquidLookup.h" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1ad183becf5fdda9f79248cc7e0360e611" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_triple_point_na_cl" kindref="compound">TriplePointNaCl</ref></type>
+        <definition>TriplePointNaCl csmp::NaClMeltingCurveLiquidLookup::tp_nacl</definition>
+        <argsstring></argsstring>
+        <name>tp_nacl</name>
+        <qualifiedname>csmp::NaClMeltingCurveLiquidLookup::tp_nacl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveLiquidLookup.h" line="57" column="29" bodyfile="source/includes/eos/NaClMeltingCurveLiquidLookup.h" bodystart="57" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1a37a1413b68c34fab306265aa69a8b47d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::NaClMeltingCurveLiquidLookup::NaClMeltingCurveLiquidLookup</definition>
+        <argsstring>(const double &amp;externaltemperature, const double &amp;externalpressure)</argsstring>
+        <name>NaClMeltingCurveLiquidLookup</name>
+        <qualifiedname>csmp::NaClMeltingCurveLiquidLookup::NaClMeltingCurveLiquidLookup</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>externaltemperature</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>externalpressure</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveLiquidLookup.h" line="17" column="5" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClMeltingCurveLiquidLookup.cpp" bodystart="10" bodyend="143"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1a06dbb6fceb93609782dbefc8c2b5b3fb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::NaClMeltingCurveLiquidLookup::~NaClMeltingCurveLiquidLookup</definition>
+        <argsstring>()</argsstring>
+        <name>~NaClMeltingCurveLiquidLookup</name>
+        <qualifiedname>csmp::NaClMeltingCurveLiquidLookup::~NaClMeltingCurveLiquidLookup</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveLiquidLookup.h" line="19" column="5" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClMeltingCurveLiquidLookup.cpp" bodystart="145" bodyend="147"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1a8f5ed9ec10395a1402f49706ee85e958" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NaClMeltingCurveLiquidLookup::TmeltFromP</definition>
+        <argsstring>()</argsstring>
+        <name>TmeltFromP</name>
+        <qualifiedname>csmp::NaClMeltingCurveLiquidLookup::TmeltFromP</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveLiquidLookup.h" line="21" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClMeltingCurveLiquidLookup.cpp" bodystart="152" bodyend="152"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1ad6290b396a36508ff6ea557ef7eb3d55" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NaClMeltingCurveLiquidLookup::PmeltFromT</definition>
+        <argsstring>()</argsstring>
+        <name>PmeltFromT</name>
+        <qualifiedname>csmp::NaClMeltingCurveLiquidLookup::PmeltFromT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveLiquidLookup.h" line="22" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClMeltingCurveLiquidLookup.cpp" bodystart="153" bodyend="153"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1a2d2c21664aa1662927934d4c549180d6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NaClMeltingCurveLiquidLookup::MassFractionNaCl</definition>
+        <argsstring>()</argsstring>
+        <name>MassFractionNaCl</name>
+        <qualifiedname>csmp::NaClMeltingCurveLiquidLookup::MassFractionNaCl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveLiquidLookup.h" line="23" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClMeltingCurveLiquidLookup.cpp" bodystart="154" bodyend="154"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1aab1f1f5d3ea62227158711469ee99671" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NaClMeltingCurveLiquidLookup::Density</definition>
+        <argsstring>()</argsstring>
+        <name>Density</name>
+        <qualifiedname>csmp::NaClMeltingCurveLiquidLookup::Density</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveLiquidLookup.h" line="24" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClMeltingCurveLiquidLookup.cpp" bodystart="155" bodyend="155"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1ab2c99a9f0a93204a750a28dadc197cce" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NaClMeltingCurveLiquidLookup::Enthalpy</definition>
+        <argsstring>()</argsstring>
+        <name>Enthalpy</name>
+        <qualifiedname>csmp::NaClMeltingCurveLiquidLookup::Enthalpy</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveLiquidLookup.h" line="25" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClMeltingCurveLiquidLookup.cpp" bodystart="156" bodyend="156"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1abd9a1cbbc171e03df81e8ba9afa50621" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NaClMeltingCurveLiquidLookup::HeatCapacity</definition>
+        <argsstring>()</argsstring>
+        <name>HeatCapacity</name>
+        <qualifiedname>csmp::NaClMeltingCurveLiquidLookup::HeatCapacity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveLiquidLookup.h" line="26" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClMeltingCurveLiquidLookup.cpp" bodystart="157" bodyend="157"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1a222f976f0dd99090843aabb8199431d7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NaClMeltingCurveLiquidLookup::Compressibility</definition>
+        <argsstring>()</argsstring>
+        <name>Compressibility</name>
+        <qualifiedname>csmp::NaClMeltingCurveLiquidLookup::Compressibility</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveLiquidLookup.h" line="27" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClMeltingCurveLiquidLookup.cpp" bodystart="158" bodyend="158"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1a17e60aafb1e95a66fad9ffc279b7a527" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NaClMeltingCurveLiquidLookup::Viscosity</definition>
+        <argsstring>()</argsstring>
+        <name>Viscosity</name>
+        <qualifiedname>csmp::NaClMeltingCurveLiquidLookup::Viscosity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveLiquidLookup.h" line="28" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClMeltingCurveLiquidLookup.cpp" bodystart="159" bodyend="159"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1a220028227a9489ea9cb80cf4939053e1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NaClMeltingCurveLiquidLookup::TfromP</definition>
+        <argsstring>(const double &amp;press)</argsstring>
+        <name>TfromP</name>
+        <qualifiedname>csmp::NaClMeltingCurveLiquidLookup::TfromP</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>press</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveLiquidLookup.h" line="29" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClMeltingCurveLiquidLookup.cpp" bodystart="194" bodyend="227"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1ade5f8a92a59785ccd757d9429a8d5d67" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NaClMeltingCurveLiquidLookup::ValueOf</definition>
+        <argsstring>(const int &amp;property_index)</argsstring>
+        <name>ValueOf</name>
+        <qualifiedname>csmp::NaClMeltingCurveLiquidLookup::ValueOf</qualifiedname>
+        <param>
+          <type>const int &amp;</type>
+          <declname>property_index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveLiquidLookup.h" line="30" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClMeltingCurveLiquidLookup.cpp" bodystart="162" bodyend="169"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1a5cdd2f47b2157ff58b5c8fe0be1342a7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::NaClMeltingCurveLiquidLookup::GetTemperatureIndex</definition>
+        <argsstring>(const double &amp;myt)</argsstring>
+        <name>GetTemperatureIndex</name>
+        <qualifiedname>csmp::NaClMeltingCurveLiquidLookup::GetTemperatureIndex</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>myt</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurveLiquidLookup.h" line="59" column="29" bodyfile="source/modules/eos/h2o_nacl_lookup/NaClMeltingCurveLiquidLookup.cpp" bodystart="173" bodyend="191"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::NaClMeltingCurveLiquidLookup</label>
+        <link refid="classcsmp_1_1_na_cl_melting_curve_liquid_lookup"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/eos/NaClMeltingCurveLiquidLookup.h" line="12" column="3" bodyfile="source/includes/eos/NaClMeltingCurveLiquidLookup.h" bodystart="13" bodyend="61"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1a222f976f0dd99090843aabb8199431d7" prot="public" virt="non-virtual"><scope>csmp::NaClMeltingCurveLiquidLookup</scope><name>Compressibility</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1aab1f1f5d3ea62227158711469ee99671" prot="public" virt="non-virtual"><scope>csmp::NaClMeltingCurveLiquidLookup</scope><name>Density</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1ab2c99a9f0a93204a750a28dadc197cce" prot="public" virt="non-virtual"><scope>csmp::NaClMeltingCurveLiquidLookup</scope><name>Enthalpy</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1a5cdd2f47b2157ff58b5c8fe0be1342a7" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurveLiquidLookup</scope><name>GetTemperatureIndex</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1abd9a1cbbc171e03df81e8ba9afa50621" prot="public" virt="non-virtual"><scope>csmp::NaClMeltingCurveLiquidLookup</scope><name>HeatCapacity</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1a801e137f81802104fcf84d8e70585d9c" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurveLiquidLookup</scope><name>i_guess</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1afa3c2dfce15298d9b02ea776f2717b27" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurveLiquidLookup</scope><name>i_max</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1a2744688bd478726f0a5651683ad391f9" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurveLiquidLookup</scope><name>i_min</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1a7d4485f8e589f307e932e35e9dffaef6" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurveLiquidLookup</scope><name>it</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1af216148f51acf614d041e58d58d679a4" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurveLiquidLookup</scope><name>it_max</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1ab6c3cdf0079467608c741542f2571f5e" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurveLiquidLookup</scope><name>it_min</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1a2d2c21664aa1662927934d4c549180d6" prot="public" virt="non-virtual"><scope>csmp::NaClMeltingCurveLiquidLookup</scope><name>MassFractionNaCl</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1a37a1413b68c34fab306265aa69a8b47d" prot="public" virt="non-virtual"><scope>csmp::NaClMeltingCurveLiquidLookup</scope><name>NaClMeltingCurveLiquidLookup</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1a0405c503f9e27d2ca1bc2c7a32239580" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurveLiquidLookup</scope><name>pcurrent</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1ad6290b396a36508ff6ea557ef7eb3d55" prot="public" virt="non-virtual"><scope>csmp::NaClMeltingCurveLiquidLookup</scope><name>PmeltFromT</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1affa61a0710ca7cb623be80800cbf49a5" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurveLiquidLookup</scope><name>pnorm</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1a9487b7a66cdc3ee5a0df7ff2ebc79fe4" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurveLiquidLookup</scope><name>pressure</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1a11a0e4330c3eafac599f2eb1645b36a3" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurveLiquidLookup</scope><name>state</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1ad4a1f7eefd7c0f124cdc4016d6bd4aef" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurveLiquidLookup</scope><name>storage_vector</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1a85ca0a6ea31e8bc83bca3d2cdfc34486" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurveLiquidLookup</scope><name>t_dim</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1a5fa0f7483664e603d56a04ad2fc465af" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurveLiquidLookup</scope><name>t_res</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1a420392076beaf8e6a6448f4882049d5a" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurveLiquidLookup</scope><name>tcurrent</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1aab60ec8ab8f820dc302ade2561b92409" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurveLiquidLookup</scope><name>temperature</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1a220028227a9489ea9cb80cf4939053e1" prot="public" virt="non-virtual"><scope>csmp::NaClMeltingCurveLiquidLookup</scope><name>TfromP</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1a8f5ed9ec10395a1402f49706ee85e958" prot="public" virt="non-virtual"><scope>csmp::NaClMeltingCurveLiquidLookup</scope><name>TmeltFromP</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1a34946c898d25aee54d4ea3f287207b1b" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurveLiquidLookup</scope><name>tmin</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1ad21b84621e9c85dfd728d778725661cd" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurveLiquidLookup</scope><name>tnorm</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1ad183becf5fdda9f79248cc7e0360e611" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurveLiquidLookup</scope><name>tp_nacl</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1ade5f8a92a59785ccd757d9429a8d5d67" prot="public" virt="non-virtual"><scope>csmp::NaClMeltingCurveLiquidLookup</scope><name>ValueOf</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1a17e60aafb1e95a66fad9ffc279b7a527" prot="public" virt="non-virtual"><scope>csmp::NaClMeltingCurveLiquidLookup</scope><name>Viscosity</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1a39976e19dd58a40255c0597b2297aa2d" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurveLiquidLookup</scope><name>xcurrent</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_liquid_lookup_1a06dbb6fceb93609782dbefc8c2b5b3fb" prot="public" virt="non-virtual"><scope>csmp::NaClMeltingCurveLiquidLookup</scope><name>~NaClMeltingCurveLiquidLookup</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,157 @@
+\doxysection{csmp\+::CVFEM\+\_\+\+Pressure\+Gradient\+Visitor\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_c_v_f_e_m___pressure_gradient_visitor}{}\label{classcsmp_1_1_c_v_f_e_m___pressure_gradient_visitor}\index{csmp::CVFEM\_PressureGradientVisitor$<$ dim $>$@{csmp::CVFEM\_PressureGradientVisitor$<$ dim $>$}}
+
+
+{\ttfamily \#include $<$CVFEM\+\_\+\+Pressure\+Gradient\+Visitor.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::CVFEM\+\_\+\+Pressure\+Gradient\+Visitor\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=254pt]{classcsmp_1_1_c_v_f_e_m___pressure_gradient_visitor__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::CVFEM\+\_\+\+Pressure\+Gradient\+Visitor\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=254pt]{classcsmp_1_1_c_v_f_e_m___pressure_gradient_visitor__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___pressure_gradient_visitor_ac9d1c555c6fbb18f99253058f7236568}{CVFEM\+\_\+\+Pressure\+Gradient\+Visitor}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&model, const char \texorpdfstring{$\ast$}{*}fluid\+\_\+pressure, const char \texorpdfstring{$\ast$}{*}lithostatic\+\_\+pressure, const char \texorpdfstring{$\ast$}{*}permeability, const char \texorpdfstring{$\ast$}{*}KgradP, const char \texorpdfstring{$\ast$}{*}grad\+P\+\_\+scaling)
+\item 
+\mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___pressure_gradient_visitor_a7ad4c7abe9d33d729bdda433eecbf346}{\texorpdfstring{$\sim$}{\string~}\+CVFEM\+\_\+\+Pressure\+Gradient\+Visitor}} ()
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___pressure_gradient_visitor_a906cc0826f2dc4c5cc9b397560b74a67}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___pressure_gradient_visitor_adf21ca703db3a6207d8fa9faeb9fd0dc}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_region}{Region}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_visitor_a1097abaa59d3a35d65c0cb6335e2719c}{Visitor}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} level=MODEL, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} target=ELEMENT)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_visitor_a04cef3d343b9721c4d636f5496ccfa42}{Application\+Level}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} p)
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Application\+Level} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_visitor_a05b9c8127e47ce0ca524e2804c14251a}{Application\+Target}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} p)
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Application\+Target} () const
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a005bb17978ed03376bc3f7c1c329c936}{Set\+Initial\+Properties}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}model)
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a07433f464353062d91f21684b9378dec}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_ac735e758870331b6639ea969504c47bf}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_boundary}{Boundary}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void {\bfseries Visit} (\mbox{\hyperlink{classcsmp_1_1_split_boundary}{Split\+Boundary}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_abdca6daa1802e3727868d2d614c65015}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_face}{Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a0f21f0cfcf5328584883eb38effb58d4}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void {\bfseries Visit} (\mbox{\hyperlink{classcsmp_1_1_edge}{Edge}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a46449d8a657dbe4a2db5f1126e08323d}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+bool {\bfseries Verbose} ()
+\item 
+void {\bfseries Verbose} (bool verbose)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries application\+\_\+level\+\_\+}
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries application\+\_\+target\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim$>$\newline
+class csmp\+::\+CVFEM\+\_\+\+Pressure\+Gradient\+Visitor$<$ dim $>$}
+Calculating the pressure gradient within the CVFEM scheme (Weis et al., Geofluids, 2014).
+
+\begin{DoxyAuthor}{Author}
+Philipp Weis, ETH Zuerich 
+\end{DoxyAuthor}
+\hypertarget{compare_floats_8h_contact}{}\doxysubsection{\texorpdfstring{Contact}{Contact}}\label{compare_floats_8h_contact}
+\href{mailto:philipp.weis@erdw.ethz.ch}{\texttt{philipp.\+weis@erdw.\+ethz.\+ch}}
+
+@changes changes Latest Changes\hypertarget{compare_floats_8h_motivation}{}\doxysubsection{\texorpdfstring{Motivation}{Motivation}}\label{compare_floats_8h_motivation}
+For the fully-\/upwinded scheme including fluid viscosity and relative permeability, the CVFEM scheme needs the varibale KgradP instead of velcotities to perform the finite volume calculations.\hypertarget{classcsmp_1_1_upwind_control_visitor_usage}{}\doxysubsection{\texorpdfstring{Usage}{Usage}}\label{classcsmp_1_1_upwind_control_visitor_usage}
+Used within the CVFEM scheme (Weis et al., Geofluids, 2014).
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{The\ visitor\ calculates\ the\ pressure\ gradient\ at\ the\ elements\ barycenter\ from\ the\ nodal\ variable\ \textcolor{stringliteral}{"{}fluid\ pressure"{}}.}
+\DoxyCodeLine{This\ vector\ variable\ is\ multiplied\ with\ the\ element\ permeability\ k.}
+\DoxyCodeLine{k\ *\ grad(\ P\ )}
+
+\end{DoxyCode}
+\hypertarget{classcsmp_1_1_upwind_control_visitor_dependencies}{}\doxysubsection{\texorpdfstring{Dependencies}{Dependencies}}\label{classcsmp_1_1_upwind_control_visitor_dependencies}
+\hypertarget{classcsmp_1_1_upwind_control_visitor_issues}{}\doxysubsection{\texorpdfstring{Known issues}{Known issues}}\label{classcsmp_1_1_upwind_control_visitor_issues}
+The variable gradp\+\_\+scaling is not well documented and only needed in combination with the permeability vistor. The bool gradient\+\_\+scaling can\textquotesingle{}t be changed from outside.\hypertarget{compare_floats_8h_testing}{}\doxysubsection{\texorpdfstring{Testing}{Testing}}\label{compare_floats_8h_testing}
+testing was done in the period before publication in 2014. 
+
+\label{doc-constructors}
+\Hypertarget{classcsmp_1_1_c_v_f_e_m___pressure_gradient_visitor_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcsmp_1_1_c_v_f_e_m___pressure_gradient_visitor_ac9d1c555c6fbb18f99253058f7236568}\index{csmp::CVFEM\_PressureGradientVisitor$<$ dim $>$@{csmp::CVFEM\_PressureGradientVisitor$<$ dim $>$}!CVFEM\_PressureGradientVisitor@{CVFEM\_PressureGradientVisitor}}
+\index{CVFEM\_PressureGradientVisitor@{CVFEM\_PressureGradientVisitor}!csmp::CVFEM\_PressureGradientVisitor$<$ dim $>$@{csmp::CVFEM\_PressureGradientVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{CVFEM\_PressureGradientVisitor()}{CVFEM\_PressureGradientVisitor()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_c_v_f_e_m___pressure_gradient_visitor_ac9d1c555c6fbb18f99253058f7236568} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___pressure_gradient_visitor}{csmp\+::\+CVFEM\+\_\+\+Pressure\+Gradient\+Visitor}}$<$ dim $>$\+::\+CVFEM\+\_\+\+Pressure\+Gradient\+Visitor (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&}]{model}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{fluid\+\_\+pressure}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{lithostatic\+\_\+pressure}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{permeability}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{KgradP}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{grad\+P\+\_\+scaling}{}\end{DoxyParamCaption})}
+
+custom constructor \Hypertarget{classcsmp_1_1_c_v_f_e_m___pressure_gradient_visitor_a7ad4c7abe9d33d729bdda433eecbf346}\index{csmp::CVFEM\_PressureGradientVisitor$<$ dim $>$@{csmp::CVFEM\_PressureGradientVisitor$<$ dim $>$}!````~CVFEM\_PressureGradientVisitor@{\texorpdfstring{$\sim$}{\string~}CVFEM\_PressureGradientVisitor}}
+\index{````~CVFEM\_PressureGradientVisitor@{\texorpdfstring{$\sim$}{\string~}CVFEM\_PressureGradientVisitor}!csmp::CVFEM\_PressureGradientVisitor$<$ dim $>$@{csmp::CVFEM\_PressureGradientVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}CVFEM\_PressureGradientVisitor()}{\string~CVFEM\_PressureGradientVisitor()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_c_v_f_e_m___pressure_gradient_visitor_a7ad4c7abe9d33d729bdda433eecbf346} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___pressure_gradient_visitor}{csmp\+::\+CVFEM\+\_\+\+Pressure\+Gradient\+Visitor}}$<$ dim $>$\+::\texorpdfstring{$\sim$}{\string~}\mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___pressure_gradient_visitor}{CVFEM\+\_\+\+Pressure\+Gradient\+Visitor}} (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+default destructor 
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_c_v_f_e_m___pressure_gradient_visitor_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_c_v_f_e_m___pressure_gradient_visitor_a906cc0826f2dc4c5cc9b397560b74a67}\index{csmp::CVFEM\_PressureGradientVisitor$<$ dim $>$@{csmp::CVFEM\_PressureGradientVisitor$<$ dim $>$}!Visit@{Visit}}
+\index{Visit@{Visit}!csmp::CVFEM\_PressureGradientVisitor$<$ dim $>$@{csmp::CVFEM\_PressureGradientVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Visit()}{Visit()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_c_v_f_e_m___pressure_gradient_visitor_a906cc0826f2dc4c5cc9b397560b74a67} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___pressure_gradient_visitor}{csmp\+::\+CVFEM\+\_\+\+Pressure\+Gradient\+Visitor}}$<$ dim $>$\+::\+Visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}}]{n}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+visit function for \doxylink{classcsmp_1_1_element}{Element} 
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}.
+
+\Hypertarget{classcsmp_1_1_c_v_f_e_m___pressure_gradient_visitor_adf21ca703db3a6207d8fa9faeb9fd0dc}\index{csmp::CVFEM\_PressureGradientVisitor$<$ dim $>$@{csmp::CVFEM\_PressureGradientVisitor$<$ dim $>$}!Visit@{Visit}}
+\index{Visit@{Visit}!csmp::CVFEM\_PressureGradientVisitor$<$ dim $>$@{csmp::CVFEM\_PressureGradientVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Visit()}{Visit()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_c_v_f_e_m___pressure_gradient_visitor_adf21ca703db3a6207d8fa9faeb9fd0dc} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___pressure_gradient_visitor}{csmp\+::\+CVFEM\+\_\+\+Pressure\+Gradient\+Visitor}}$<$ dim $>$\+::\+Visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_region}{Region}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}}]{n}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+visit function for \doxylink{classcsmp_1_1_region}{Region} 
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/integration/cvfe\+\_\+hydrothermal/CVFEM\+\_\+\+Pressure\+Gradient\+Visitor.\+h\item 
+source/modules/integration/cvfe\+\_\+hydrothermal/CVFEM\+\_\+\+Pressure\+Gradient\+Visitor.\+cpp\end{DoxyCompactItemize}

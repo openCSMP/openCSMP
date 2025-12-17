@@ -1,0 +1,234 @@
+\doxysection{csmp\+::Solver Class Reference}
+\hypertarget{classcsmp_1_1_solver}{}\label{classcsmp_1_1_solver}\index{csmp::Solver@{csmp::Solver}}
+
+
+Inverts global solution matrices matrices of the finite-\/element computations using a variety of solution procedures sparse matrices (class \doxylink{classcsmp_1_1_sparse_matrix}{Sparse\+Matrix}). \doxylink{classcsmp_1_1_solver}{Solver} base class in strategy pattern.  
+
+
+
+
+{\ttfamily \#include $<$Solver.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Solver\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_solver__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Solver\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=220pt]{classcsmp_1_1_solver__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_solver_a331d12fc9b8cb28b1d9614fdd1059a48}{Solver}} ()
+\item 
+\Hypertarget{classcsmp_1_1_solver_af729d5eb6bc55bdbe950f5eb1b7cd11b}\label{classcsmp_1_1_solver_af729d5eb6bc55bdbe950f5eb1b7cd11b} 
+{\bfseries Solver} (\mbox{\hyperlink{classcsmp_1_1_solver_settings}{Solver\+Settings}} \texorpdfstring{$\ast$}{*}settings)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_solver_a7707a8bf03e9dde6396aecc144730c68}{Verbose}} (bool verb)
+\item 
+\Hypertarget{classcsmp_1_1_solver_aa6ac00a1cf7acf5b7aae4df7b8ac4c80}\label{classcsmp_1_1_solver_aa6ac00a1cf7acf5b7aae4df7b8ac4c80} 
+bool {\bfseries Verbose} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_solver_a00f2d834fa620f56e50a8cf37808c466}{Solve}} (\mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{Sparse\+Matrix}} \&G, std\+::vector$<$ double $>$ \&rh, std\+::vector$<$ double $>$ \&x, size\+\_\+t no\+\_\+unknowns=1U)
+\item 
+\Hypertarget{classcsmp_1_1_solver_aad63f80f59d6763b4d0a4c93677df7f9}\label{classcsmp_1_1_solver_aad63f80f59d6763b4d0a4c93677df7f9} 
+void {\bfseries Solve} (\mbox{\hyperlink{classcsmp_1_1_compressed_row_matrix}{Compressed\+Row\+Matrix}} \&G, std\+::vector$<$ double $>$ \&rh, std\+::vector$<$ double $>$ \&x, size\+\_\+t no\+\_\+unknowns=1U)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_solver_afb9380e536b4d7080c89cf143421c6f2}{Out}} (const \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{Sparse\+Matrix}} \&mat, const char \texorpdfstring{$\ast$}{*}fname="{}Sparse\+Matrix"{}) const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_solver_a38054ec4ca8ea1fca61e4e32abf82c0e}{Out}} (const std\+::vector$<$ double $>$ \&vec, const char \texorpdfstring{$\ast$}{*}fname="{}CSP\+\_\+\+Vec"{}) const
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_solver_a352359e5ec450c03b8cf8b4fa2d06c2a}{Calculate\+Residual}} (const \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{Sparse\+Matrix}} \&A, const std\+::vector$<$ double $>$ \&b, const std\+::vector$<$ double $>$ \&x) const
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_solver_aa134b5de63e32e0a305f9ed4c660a16c}{Input\+Solver\+Settings}} (\mbox{\hyperlink{classcsmp_1_1_solver_settings}{Solver\+Settings}} \&settings)
+\item 
+\Hypertarget{classcsmp_1_1_solver_abf2c92c54a1e3b493ce1cd8ce981cf8e}\label{classcsmp_1_1_solver_abf2c92c54a1e3b493ce1cd8ce981cf8e} 
+virtual \mbox{\hyperlink{classcsmp_1_1_solver_settings}{Solver\+Settings}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+Solver\+Settings} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_solver_a027b3b616917c0fcd7a300b8a51b6c41}{Solve\+Matrix\+Equation}} (\mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{Sparse\+Matrix}} \&A, std\+::vector$<$ double $>$ \&b, std\+::vector$<$ double $>$ \&x, size\+\_\+t no\+\_\+unknowns)=0
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_solver_ad6e05cc358ab9c92cf037cfa24e9f8f9}{Solve\+Matrix\+Equation}} (\mbox{\hyperlink{classcsmp_1_1_compressed_row_matrix}{Compressed\+Row\+Matrix}} \&A, std\+::vector$<$ double $>$ \&b, std\+::vector$<$ double $>$ \&x, size\+\_\+t no\+\_\+unknowns)=0
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_solver_a52350f4db63c9e48f7354146d9c12d79}\label{classcsmp_1_1_solver_a52350f4db63c9e48f7354146d9c12d79} 
+\mbox{\hyperlink{classcsmp_1_1_solver_settings}{Solver\+Settings}} \texorpdfstring{$\ast$}{*} {\bfseries solver\+\_\+settings\+\_\+} = nullptr
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Inverts global solution matrices matrices of the finite-\/element computations using a variety of solution procedures sparse matrices (class \doxylink{classcsmp_1_1_sparse_matrix}{Sparse\+Matrix}). \doxylink{classcsmp_1_1_solver}{Solver} base class in strategy pattern. 
+
+\begin{DoxyAuthor}{Author}
+S.\+K. Matthaei 
+
+Stephen G. Roberts 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+1999
+\end{DoxyDate}
+\hypertarget{classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_design}{}\doxysubsection{\texorpdfstring{Design Intent}{Design Intent}}\label{classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_design}
+To encapsulate numerical algebraic methods in an object which services the \doxylink{classcsmp_1_1_p_d_e___integrator}{PDE\+\_\+\+Integrator} and other class objects.\hypertarget{classcsmp_1_1_visitor_applicability}{}\doxysubsection{\texorpdfstring{Applicability}{Applicability}}\label{classcsmp_1_1_visitor_applicability}
+Currently the solver offers an algebraic multigrid method (AMG), a conjugate gradient method (CG), and a Gaussian elimination method (GE) as solution schemes. Gaussian elimination can be applied to non-\/symmetric matrices as they arise if advection-\/dispersion matrices are accumulated into the global solution matrix. The algebraic multigrid and conjugate gradient methods require symmetric positive-\/definite (no negative elements in the diagonal) solution matrices in order to be applicable.
+
+Dependent on the size of the computation different solution methods are appropriate\+: If you have a very small test problem, like a 30 x 30 matrix, CG ist as fast or faster than AMG and it will require less storage. Above a size of 50 x 50, AMG becomes much faster than the other methods.\hypertarget{classcsmp_1_1_solver_participants}{}\doxysubsection{\texorpdfstring{Participants}{Participants}}\label{classcsmp_1_1_solver_participants}
+Each inversion involves a sparse global solution matrix of type Sp\+Mat, a righthand, and a solution vector of type \doxylink{classvector}{vector$<$double$>$}.\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+The \doxylink{classcsmp_1_1_solver}{Solver} uses the Meschach++ and the AMG libraries to carry out the matrix operations. The user sets the private variable solution method, whose default is algebraic multigrid.\hypertarget{classcsmp_1_1_visitor_examples}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{classcsmp_1_1_visitor_examples}
+The \doxylink{classcsmp_1_1_solver}{Solver} is called by the Algorithm and Algorithm objects, when they are submitted to the \doxylink{classcsmp_1_1_model}{Model} through its Apply() interfaces. In this process the Algorithm hands the solver the global solution matrix \textquotesingle{}G\textquotesingle{}, the solution vector \textquotesingle{}x\textquotesingle{} and the righthand vector \textquotesingle{}rh\textquotesingle{}.\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{SolveMatrixEquation(\ G,\ rh,\ x\ );}
+
+\end{DoxyCode}
+
+
+The \doxylink{classcsmp_1_1_solver}{Solver} then returns the solution into \textquotesingle{}x\textquotesingle{} and it is tested further by the Algorithm before it is mapped back to the \doxylink{classcsmp_1_1_model}{Model} variable storage. 
+
+\label{doc-constructors}
+\Hypertarget{classcsmp_1_1_solver_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcsmp_1_1_solver_a331d12fc9b8cb28b1d9614fdd1059a48}\index{csmp::Solver@{csmp::Solver}!Solver@{Solver}}
+\index{Solver@{Solver}!csmp::Solver@{csmp::Solver}}
+\doxysubsubsection{\texorpdfstring{Solver()}{Solver()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_solver_a331d12fc9b8cb28b1d9614fdd1059a48} 
+csmp\+::\+Solver\+::\+Solver (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+Default constructor chooses the algebraic multigrid method as solution method, sets the pivot factor to 0.\+5, and the residual multiplication factor to 1.\+0e-\/15. Verbose is disabled and therefore no solution matrices or vectors will be printed. 
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_solver_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_solver_a352359e5ec450c03b8cf8b4fa2d06c2a}\index{csmp::Solver@{csmp::Solver}!CalculateResidual@{CalculateResidual}}
+\index{CalculateResidual@{CalculateResidual}!csmp::Solver@{csmp::Solver}}
+\doxysubsubsection{\texorpdfstring{CalculateResidual()}{CalculateResidual()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_solver_a352359e5ec450c03b8cf8b4fa2d06c2a} 
+double csmp\+::\+Solver\+::\+Calculate\+Residual (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{Sparse\+Matrix}} \&}]{A}{, }\item[{const std\+::vector$<$ double $>$ \&}]{b}{, }\item[{const std\+::vector$<$ double $>$ \&}]{x}{}\end{DoxyParamCaption}) const}
+
+Calculates the size of the residual error by comparing the product A\texorpdfstring{$\ast$}{*}x with the righthand vector b. ~\newline
+\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+The global solution matrix, the righthand vector, and the solution vector.\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+To calculate the residual of a solution to see whether the solver reached some convergence and how good the solution actually is. \Hypertarget{classcsmp_1_1_solver_aa134b5de63e32e0a305f9ed4c660a16c}\index{csmp::Solver@{csmp::Solver}!InputSolverSettings@{InputSolverSettings}}
+\index{InputSolverSettings@{InputSolverSettings}!csmp::Solver@{csmp::Solver}}
+\doxysubsubsection{\texorpdfstring{InputSolverSettings()}{InputSolverSettings()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_solver_aa134b5de63e32e0a305f9ed4c660a16c} 
+void csmp\+::\+Solver\+::\+Input\+Solver\+Settings (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_solver_settings}{Solver\+Settings}} \&}]{settings}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___solver_a387f3ebfa2fb98fb9b24c4f9ef4b37e0}{csmp\+::\+SAMG\+\_\+\+Solver}}.
+
+\Hypertarget{classcsmp_1_1_solver_afb9380e536b4d7080c89cf143421c6f2}\index{csmp::Solver@{csmp::Solver}!Out@{Out}}
+\index{Out@{Out}!csmp::Solver@{csmp::Solver}}
+\doxysubsubsection{\texorpdfstring{Out()}{Out()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_solver_afb9380e536b4d7080c89cf143421c6f2} 
+void csmp\+::\+Solver\+::\+Out (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{Sparse\+Matrix}} \&}]{mat}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{fname}{ = {\ttfamily "{}SparseMatrix"{}}}\end{DoxyParamCaption}) const}
+
+Outputs the solution matrix to a textfile in \doxylink{classcsmp_1_1_sparse_matrix}{Sparse\+Matrix} output format.\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+The first argument is a constant reference to the solution matrix and the second argument is the name of the file which the matrix will be output to. To this file name, the global runtime of the model and the extension \textquotesingle{}.text\textquotesingle{} will be appended. ~\newline
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+\doxylink{classcsmp_1_1_solver_afb9380e536b4d7080c89cf143421c6f2}{Out()} calls the Meschach function sp\+\_\+foutput().\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+To independently test the solution matrix or to transfer it to another solver.\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+A successful write will be reported. \Hypertarget{classcsmp_1_1_solver_a38054ec4ca8ea1fca61e4e32abf82c0e}\index{csmp::Solver@{csmp::Solver}!Out@{Out}}
+\index{Out@{Out}!csmp::Solver@{csmp::Solver}}
+\doxysubsubsection{\texorpdfstring{Out()}{Out()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_solver_a38054ec4ca8ea1fca61e4e32abf82c0e} 
+void csmp\+::\+Solver\+::\+Out (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ double $>$ \&}]{vec}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{fname}{ = {\ttfamily "{}CSP\+\_\+Vec"{}}}\end{DoxyParamCaption}) const}
+
+Outputs the Meschach++ vector \textquotesingle{}vec\textquotesingle{} to a textfile in Meschach++ output format.\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+The first argument is a constant reference to the Meschach vector and the second argument is the name of the file which the vector will be output to. To this file name, the global runtime of the model and the extension \textquotesingle{}.text\textquotesingle{} will be appended. ~\newline
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+\doxylink{classcsmp_1_1_solver_afb9380e536b4d7080c89cf143421c6f2}{Out()} calls the Meschach function v\+\_\+foutput() on a standard C filestream.\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+To independently examine a solution or righthand vector or to transfer it to another solver.\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+A failure to open the output file or a successful write will be reported. \Hypertarget{classcsmp_1_1_solver_a00f2d834fa620f56e50a8cf37808c466}\index{csmp::Solver@{csmp::Solver}!Solve@{Solve}}
+\index{Solve@{Solve}!csmp::Solver@{csmp::Solver}}
+\doxysubsubsection{\texorpdfstring{Solve()}{Solve()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_solver_a00f2d834fa620f56e50a8cf37808c466} 
+void csmp\+::\+Solver\+::\+Solve (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{Sparse\+Matrix}} \&}]{A}{, }\item[{std\+::vector$<$ double $>$ \&}]{b}{, }\item[{std\+::vector$<$ double $>$ \&}]{x}{, }\item[{size\+\_\+t}]{no\+\_\+unknowns}{ = {\ttfamily 1U}}\end{DoxyParamCaption})}
+
+Calls solution methods from the Meschach++ and algebraic multigrid libraries to invert the global solution matrix. If the solution process fails, the solution matrix and the righthand vector are output to textfiles whose name contains the runtime in seconds and which have the extension \textquotesingle{}.text\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em A} & The sparse solution matrix A, \\
+\hline
+{\em b} & the righthand vector \textquotesingle{}b\textquotesingle{} with boundary conditions, \\
+\hline
+{\em x} & the solution vector.\\
+\hline
+\end{DoxyParams}
+After successful matrix inversion, the solution vector is returned into \textquotesingle{}x\textquotesingle{}.\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+Solve\+Matrix\+Equation() first tries to calculate a "{}typical"{} size of the residual (the difference between the exact and the numerical solution). Secondly, based on this residual it sets the \textquotesingle{}tolerance\textquotesingle{} for the matrix inversion. This involves an initial guess with correct boundary conditions and assumes that the righthand vector b has been setup with Dirichlet boundary conditions and the solution matrix with corresponding 1\textquotesingle{}s on its diagonal.
+
+If the matrix inversion fails, Solve\+Matrix\+Equation() calls the method \doxylink{classcsmp_1_1_solver_afb9380e536b4d7080c89cf143421c6f2}{Out()} on the solution matrix and the righthand vector.\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+Everytime an Algorithm is passed to the \doxylink{classcsmp_1_1_model}{Model}, its computation involves the solution of a matrix equation.\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+If verbose is enabled the method will print out the solution matrix, the solution vector, and the righthand vector. Also it will report a gues of the initial residual and the actual residual of the obtained solution\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{Typical\ initial\ Residue\ \ \ =\ 5.21798}
+\DoxyCodeLine{Residual\ after\ solution\ \ \ =\ 3.58661e-\/16}
+
+\end{DoxyCode}
+
+
+Important is that this output gives the ratio between the typical initial residue and the residual after the solution (here 1.\+0e+16). This ratio is essentially the signal-\/to-\/noise ratio and must (as a minimum for the solution to be meaningful), be greater than the ratio between the largest and the smallest dependent-\/variable value which was specified as initial or as boundary condition. ~\newline
+
+
+When the AMG solver is used, the residual relative to the initial residual is given inside of the AMG output (see above). It is found as the L2 vector norm. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=346pt]{classcsmp_1_1_solver_a00f2d834fa620f56e50a8cf37808c466_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_solver_ad6e05cc358ab9c92cf037cfa24e9f8f9}\index{csmp::Solver@{csmp::Solver}!SolveMatrixEquation@{SolveMatrixEquation}}
+\index{SolveMatrixEquation@{SolveMatrixEquation}!csmp::Solver@{csmp::Solver}}
+\doxysubsubsection{\texorpdfstring{SolveMatrixEquation()}{SolveMatrixEquation()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_solver_ad6e05cc358ab9c92cf037cfa24e9f8f9} 
+virtual void csmp\+::\+Solver\+::\+Solve\+Matrix\+Equation (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_compressed_row_matrix}{Compressed\+Row\+Matrix}} \&}]{A}{, }\item[{std\+::vector$<$ double $>$ \&}]{b}{, }\item[{std\+::vector$<$ double $>$ \&}]{x}{, }\item[{size\+\_\+t}]{no\+\_\+unknowns}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}, {\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___solver_af849b38b8bf9f8500590777e5fd1e7d7}{csmp\+::\+SAMG\+\_\+\+Solver}}.
+
+\Hypertarget{classcsmp_1_1_solver_a027b3b616917c0fcd7a300b8a51b6c41}\index{csmp::Solver@{csmp::Solver}!SolveMatrixEquation@{SolveMatrixEquation}}
+\index{SolveMatrixEquation@{SolveMatrixEquation}!csmp::Solver@{csmp::Solver}}
+\doxysubsubsection{\texorpdfstring{SolveMatrixEquation()}{SolveMatrixEquation()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_solver_a027b3b616917c0fcd7a300b8a51b6c41} 
+virtual void csmp\+::\+Solver\+::\+Solve\+Matrix\+Equation (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{Sparse\+Matrix}} \&}]{A}{, }\item[{std\+::vector$<$ double $>$ \&}]{b}{, }\item[{std\+::vector$<$ double $>$ \&}]{x}{, }\item[{size\+\_\+t}]{no\+\_\+unknowns}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}, {\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{classcsmp_1_1_eigen_solver_a0ffb14a664cea504c82d0ea803ffd424}{csmp\+::\+Eigen\+Solver}}, \mbox{\hyperlink{classcsmp_1_1_gauss_jordan___solver_af3fb776a09e01d35a3221c2949d5f0b8}{csmp\+::\+Gauss\+Jordan\+\_\+\+Solver}}, \mbox{\hyperlink{classcsmp_1_1_l_udcmp___solver_a49f4efa710edc9f3145854786d321c9d}{csmp\+::\+LUdcmp\+\_\+\+Solver}}, and \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___solver_a6a4dbbe3dd011d95514026e4bcd52e33}{csmp\+::\+SAMG\+\_\+\+Solver}}.
+
+\Hypertarget{classcsmp_1_1_solver_a7707a8bf03e9dde6396aecc144730c68}\index{csmp::Solver@{csmp::Solver}!Verbose@{Verbose}}
+\index{Verbose@{Verbose}!csmp::Solver@{csmp::Solver}}
+\doxysubsubsection{\texorpdfstring{Verbose()}{Verbose()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_solver_a7707a8bf03e9dde6396aecc144730c68} 
+void csmp\+::\+Solver\+::\+Verbose (\begin{DoxyParamCaption}\item[{bool}]{verb}{}\end{DoxyParamCaption})}
+
+When verbose is switched on, the \doxylink{classcsmp_1_1_solver}{Solver} will print the global solution matrix, the solution vector, and the righthand side to stdout. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/integration/solver/Solver.\+h\item 
+source/modules/integration/solver/Solver.\+cpp\end{DoxyCompactItemize}

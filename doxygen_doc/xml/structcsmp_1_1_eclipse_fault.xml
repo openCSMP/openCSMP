@@ -1,0 +1,87 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="structcsmp_1_1_eclipse_fault" kind="struct" language="C++" prot="public">
+    <compoundname>csmp::EclipseFault</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcsmp_1_1_eclipse_fault_1a8623c3708d18a76ea16091699b768936" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; std::pair&lt; <ref refid="structijk" kindref="compound">ijk</ref>, <ref refid="namespacecsmp_1ae8bbaf7555417ec6195d15112682a43d" kindref="member">::csmp::CORNER_POINT_CELL_FACE_INDEX</ref> &gt; &gt;</type>
+        <definition>std::vector&lt; std::pair&lt;ijk, ::csmp::CORNER_POINT_CELL_FACE_INDEX&gt; &gt; csmp::EclipseFault::fault</definition>
+        <argsstring></argsstring>
+        <name>fault</name>
+        <qualifiedname>csmp::EclipseFault::fault</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="122" column="15" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="122" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structcsmp_1_1_eclipse_fault_1aef8113bcb017ab30d7066659a9ff5905" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::EclipseFault::Reserve</definition>
+        <argsstring>(size_t count)</argsstring>
+        <name>Reserve</name>
+        <qualifiedname>csmp::EclipseFault::Reserve</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>count</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="124" column="8" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="124" bodyend="127"/>
+      </memberdef>
+      <memberdef kind="function" id="structcsmp_1_1_eclipse_fault_1a93b952b6dafcbbec74e310ffb5ae63ae" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::EclipseFault::Add</definition>
+        <argsstring>(uint32_t i, uint32_t j, uint32_t, ::csmp::CORNER_POINT_CELL_FACE_INDEX face)</argsstring>
+        <name>Add</name>
+        <qualifiedname>csmp::EclipseFault::Add</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>j</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+        </param>
+        <param>
+          <type><ref refid="namespacecsmp_1ae8bbaf7555417ec6195d15112682a43d" kindref="member">::csmp::CORNER_POINT_CELL_FACE_INDEX</ref></type>
+          <declname>face</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="129" column="8" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="129" bodyend="132"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::EclipseFault</label>
+        <link refid="structcsmp_1_1_eclipse_fault"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="120" column="1" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="121" bodyend="133"/>
+    <listofallmembers>
+      <member refid="structcsmp_1_1_eclipse_fault_1a93b952b6dafcbbec74e310ffb5ae63ae" prot="public" virt="non-virtual"><scope>csmp::EclipseFault</scope><name>Add</name></member>
+      <member refid="structcsmp_1_1_eclipse_fault_1a8623c3708d18a76ea16091699b768936" prot="public" virt="non-virtual"><scope>csmp::EclipseFault</scope><name>fault</name></member>
+      <member refid="structcsmp_1_1_eclipse_fault_1aef8113bcb017ab30d7066659a9ff5905" prot="public" virt="non-virtual"><scope>csmp::EclipseFault</scope><name>Reserve</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

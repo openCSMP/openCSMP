@@ -1,0 +1,415 @@
+.TH "csmp::ImplicitTransport< dim >" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::ImplicitTransport< dim >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <ImplicitTransport\&.h>\fP
+.PP
+Inherits \fBcsmp::IntegralEquation< dim, variables::VariableSet_TracerTransfer >\fP, \fBcsmp::Accumulator< dim, ImplicitTransport >\fP, \fBcsmp::Integrator< dim, ImplicitTransport >\fP, \fBcsmp::PostProcessor< dim, ImplicitTransport >\fP, \fBcsmp::FluxEvaluator< dim, ImplicitTransport >\fP, and \fBcsmp::TimeStepEvaluator< dim, ImplicitTransport >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBImplicitTransport\fP (\fBModel\fP< dim > &, const std::string &target_region, const \fBGoverningEquation\fP< dim > &, bool second_order_in_space)"
+.br
+.RI "constructor for target region; by default all driving forces are considered; default equation is used; model non-const because FVs may have to be created "
+.ti -1c
+.RI "double \fBTimeIncrementAndFluxBalance\fP (double max_time_increment)"
+.br
+.ti -1c
+.RI "double \fBTimeIncrement\fP ()"
+.br
+.RI "computes the time constraint "
+.ti -1c
+.RI "void \fBUpdateFluxesAndFluxBalances\fP ()"
+.br
+.RI "initialises transport class for current pressure/velocity/transport variable field "
+.ti -1c
+.RI "void \fBAdvectVariable\fP (double time_interval)"
+.br
+.RI "executes incremental time-stepping (a suitable time increment is computed by scheme) and writes the results back to model "
+.ti -1c
+.RI "double \fBIncomingVolumetricFlow\fP () const"
+.br
+.ti -1c
+.RI "double \fBOutgoingVolumetricFlow\fP () const"
+.br
+.ti -1c
+.RI "\fBRegion\fP< dim > & \fBComputationDomain\fP ()"
+.br
+.ti -1c
+.RI "const \fBRegion\fP< dim > & \fBComputationDomain\fP () const"
+.br
+.ti -1c
+.RI "\fBLinearAlgebraicSystem\fP & \fBLinearSystem\fP ()"
+.br
+.ti -1c
+.RI "const \fBLinearAlgebraicSystem\fP & \fBLinearSystem\fP () const"
+.br
+.ti -1c
+.RI "bool \fBHasHaloStencils\fP () const"
+.br
+.RI "true if the computational domain has parts that are removed from the model boundary "
+.ti -1c
+.RI "std::vector< \fBElement\fP< dim > * >::const_iterator \fBHaloCellsBegin\fP () const"
+.br
+.ti -1c
+.RI "std::vector< \fBElement\fP< dim > * >::const_iterator \fBHaloCellsEnd\fP () const"
+.br
+.ti -1c
+.RI "void \fBVerbose\fP (bool value)"
+.br
+.ti -1c
+.RI "bool \fBVerbose\fP () const"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::IntegralEquation< dim, variables::VariableSet_TracerTransfer >\fP
+.in +1c
+.ti -1c
+.RI "\fBIntegralEquation\fP (const \fBPropertyDatabase\fP< dim > &)"
+.br
+.RI "advection with sources and sinks "
+.ti -1c
+.RI "\fBIntegralEquation\fP (const \fBPropertyDatabase\fP< dim > &, const std::set< csmp::ADE_TERM > &ADE_components)"
+.br
+.RI "builds equation for one of the available options and using the variables supplied in the set "
+.ti -1c
+.RI "\fB~IntegralEquation\fP ()"
+.br
+.RI "deletes all copies of MathOperators "
+.ti -1c
+.RI "void \fBAdd\fP (const \fBOperation\fP &, \fBMatrixOperator\fP< dim > *)"
+.br
+.RI "operators are added in the user-specified sequence (add, subtract, multiply, specified in operators "
+.ti -1c
+.RI "void \fBAdd\fP (const \fBOperation\fP &, \fBVectorOperator\fP< dim > *)"
+.br
+.ti -1c
+.RI "void \fBAddPostProcess\fP (\fBMatrixOperator\fP< dim > *)"
+.br
+.RI "post-processing operations involving the solution variable (these will never have to be modified) "
+.ti -1c
+.RI "MatrixOperatorConstIterator \fBLHS_OperatorsBegin\fP () const"
+.br
+.ti -1c
+.RI "MatrixOperatorConstIterator \fBLHS_OperatorsEnd\fP () const"
+.br
+.ti -1c
+.RI "VectorOperatorConstIterator \fBRHS_OperatorsBegin\fP () const"
+.br
+.ti -1c
+.RI "VectorOperatorConstIterator \fBRHS_OperatorsEnd\fP () const"
+.br
+.ti -1c
+.RI "PostProcessingOperatorConstIterator \fBPostProcessingOperatorsBegin\fP () const"
+.br
+.ti -1c
+.RI "PostProcessingOperatorConstIterator \fBPostProcessingOperatorsEnd\fP () const"
+.br
+.ti -1c
+.RI "void \fBOut\fP () const"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::variables::VariableSet_TracerTransfer\fP
+.in +1c
+.ti -1c
+.RI "template<uint32_t dim> \fBVariableSet_TracerTransfer\fP (const \fBPropertyDatabase\fP< dim > &db)"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::Accumulator< dim, ImplicitTransport >\fP
+.in +1c
+.ti -1c
+.RI "void \fBSetUp\fP ()"
+.br
+.RI "initalises sparse matrix and vector, taking into account how many solution variables there are "
+.ti -1c
+.RI "void \fBAccumulate\fP (double time_increment=1\&.)"
+.br
+.RI "accumuates finite volume / hybride FVM _ FEM transport equation into global system "
+.ti -1c
+.RI "void \fBBalanceFlowsThroughTruncatedBoundaryFiniteVolumes\fP (\fBSparseMatrix\fP &lhs, std::vector< double > &rhs, double time_increment=1\&.)"
+.br
+.RI "compensate (+) balance at inflow boundaries, (-) balance at outflow boundaries, and any potential divergence of flow at no-flow boundaries "
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::Integrator< dim, ImplicitTransport >\fP
+.in +1c
+.ti -1c
+.RI "\fBIntegrator\fP (size_t m_x_n, double lower_limit, double upper_limit)"
+.br
+.RI "m=n since solution matrix is square, limits should include permitted tolerances "
+.ti -1c
+.RI "void \fBIntegrateOver\fP (double time_increment)"
+.br
+.RI "uses \fBIntegralEquation\fP and \fBAccumulator\fP to build system and \fBSolver\fP to solve it "
+.ti -1c
+.RI "void \fBReconfigureSolverForRepeatedUse\fP ()"
+.br
+.RI "transform solver settings from initial use to reuse of settings and previous solution "
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::PostProcessor< dim, ImplicitTransport >\fP
+.in +1c
+.ti -1c
+.RI "void \fBPostProcess\fP ()"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::FluxEvaluator< dim, ImplicitTransport >\fP
+.in +1c
+.ti -1c
+.RI "void \fBAdvective_O1_FluxesAndBalances\fP (\fBElement\fP< dim > *const) const"
+.br
+.RI "computes F = (A_i vD \&. n_i) and its products with the upstream C0 on all facets, also computes FV flux balances "
+.ti -1c
+.RI "void \fBVolumetricFlowAndTransportVariableFluxBalances\fP (\fBModelSubDomain\fP< dim, CELL > &, std::vector< CELL< dim > * > &halo_stencils)"
+.br
+.RI "computes volumetric flows and (chemical) fluxes across facets using FacetFlux (facet flux) and stores them in target region "
+.ti -1c
+.RI "void \fBFluxBalancesAtBoundary\fP (\fBNode\fP< dim > *const) const"
+.br
+.RI "computes flux balances on boundary FVs, using precomputed facet fluxes; volumetric balances are set to zero "
+.ti -1c
+.RI "void \fBTransportVariableFluxes\fP (\fBElement\fP< dim > *const) const"
+.br
+.RI "computes first-order facet fluxes, F = ff * C0; ff=(pre-computed) volumetric flow, C0=transport variable "
+.ti -1c
+.RI "void \fBTransportVariableFluxesAndBalances\fP (\fBElement\fP< dim > *const) const"
+.br
+.RI "like \fBTransportVariableFluxes()\fP, but computes FV balances of F as well, storing them in 'accumulation'\&. "
+.ti -1c
+.RI "void \fBFluxBalancesFromFacetFluxes\fP (\fBNode\fP< dim > *const) const"
+.br
+.RI "computes balance of transport variable fluxes from precomputed facet fluxes and transport variable "
+.ti -1c
+.RI "double \fBFluxBalanceAndOutFlow\fP (\fBNode\fP< dim > *const) const"
+.br
+.RI "stores FV flux balances computed from current facet fluxes and C0 concentrations; returns outflow from cell "
+.ti -1c
+.RI "double \fBInFlow\fP (const \fBNode\fP< dim > *const) const"
+.br
+.RI "computes the volumetric flow into the current cell; "
+.ti -1c
+.RI "double \fBOutFlow\fP (const \fBNode\fP< dim > *const) const"
+.br
+.RI "computes the volumetric flow outside of the current cell; "
+.ti -1c
+.RI "double \fBVolumetricFlowBalance\fP (const \fBNode\fP< dim > *const) const"
+.br
+.RI "computes the volumetric flow outside of the current cell; "
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::TimeStepEvaluator< dim, ImplicitTransport >\fP
+.in +1c
+.ti -1c
+.RI "\fBTimeStepEvaluator\fP (double step_size_reduction_factor=0\&.5, double max_time_increment=86400\&. *365\&.)"
+.br
+.ti -1c
+.RI "double \fBOutFlowLessThanContentIncrement\fP (\fBNode\fP< dim > *const, double outflow) const"
+.br
+.RI "returns robust delta_t criterion in the presence of fluid sources and sinks; also computes and stores flux balance "
+.ti -1c
+.RI "double \fBOutFlowLessThanContentIncrementBoundary\fP (const \fBNode\fP< dim > *const, double outflow) const"
+.br
+.RI "returns robust delta_t criterion in the presence of fluid sources and sinks at model boundary (no variables are touched) "
+.ti -1c
+.RI "double \fBStreamlineCFL\fP (const \fBElement\fP< dim > *const) const"
+.br
+.RI "anisotropic CFL for the strictly hyperbolic case; also computes and stores flux balance "
+.ti -1c
+.RI "void \fBStepSizeReductionFactor\fP (double=0\&.5)"
+.br
+.RI "adjust setting for the solve (default=0\&.5) "
+.ti -1c
+.RI "double \fBMaxTimeIncrement\fP () const"
+.br
+.RI "return maximum time-increment that is applied if there is ~no flow "
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Public Types inherited from \fBcsmp::IntegralEquation< dim, variables::VariableSet_TracerTransfer >\fP
+.in +1c
+.ti -1c
+.RI "typedef std::map< \fBOperation\fP, \fBMatrixOperator\fP< dim > * >::const_iterator \fBMatrixOperatorConstIterator\fP"
+.br
+.ti -1c
+.RI "typedef std::map< \fBOperation\fP, \fBVectorOperator\fP< dim > * >::const_iterator \fBVectorOperatorConstIterator\fP"
+.br
+.ti -1c
+.RI "typedef std::map< std::string, \fBMatrixOperator\fP< dim > * >::const_iterator \fBPostProcessingOperatorConstIterator\fP"
+.br
+.in -1c
+
+Public Attributes inherited from \fBcsmp::IntegralEquation< dim, variables::VariableSet_TracerTransfer >\fP
+.in +1c
+.ti -1c
+.RI "const \fBvariables::VariableSet_TracerTransfer\fP & \fBNotation\fP"
+.br
+.RI "access to the \fBINDEX\fP keys for the variables used in this equation "
+.in -1c
+
+Public Attributes inherited from \fBcsmp::variables::VariableSet_TracerTransfer\fP
+.in +1c
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< SCALAR, NODE > \fBkey_out_\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< SCALAR, NODE > \fBkey_acc_\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< SCALAR, ELEMENT > \fBkey_CT\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< SCALAR, NODE > \fBkey_PF0\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< SCALAR, NODE > \fBkey_FVPV\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< SCALAR, NODE > \fBkey_FB\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< SCALAR, SECTOR_INTEGRATION_POINT > \fBkey_SPV\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< SCALAR, SECTOR_INTEGRATION_POINT > \fBkey_SV\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< SCALAR, NODE > \fBkey_NQV\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< SCALAR, ELEMENT > \fBkey_QV\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< SCALAR, NODE > \fBkey_PF\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< TENSOR, ELEMENT > \fBkey_k\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< TENSOR, ELEMENT > \fBkey_kk\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< VECTOR, FACET_INTEGRATION_POINT > \fBkey_fAk\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< VECTOR, FACET_INTEGRATION_POINT > \fBkey_fn\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< SCALAR, ELEMENT > \fBkey_THI\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< VECTOR, ELEMENT > \fBkey_V\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< SCALAR, MODEL > \fBkey_MU\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< SCALAR, MODEL > \fBkey_RHO\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< SCALAR, NODE > \fBkey_C\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< SCALAR, NODE > \fBkey_C0\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< SCALAR, NODE > \fBkey_C1\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< TENSOR, ELEMENT > \fBkey_K\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< TENSOR, ELEMENT > \fBkey_KK\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< SCALAR, ELEMENT > \fBkey_D\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< SCALAR, FACET_INTEGRATION_POINT > \fBkey_ffC\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< SCALAR, FACET_INTEGRATION_POINT > \fBkey_ff\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< SCALAR, FACET_INTEGRATION_POINT > \fBkey_fA\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::INDEX\fP< SCALAR, ELEMENT > \fBkey_PHI\fP"
+.br
+.in -1c
+
+Protected Member Functions inherited from \fBcsmp::Integrator< dim, ImplicitTransport >\fP
+.in +1c
+.ti -1c
+.RI "void \fBAssignInitialConditions\fP ()"
+.br
+.ti -1c
+.RI "void \fBAssignEssentialConditions\fP ()"
+.br
+.ti -1c
+.RI "void \fBSolveLinearAlgebraicSystem\fP ()"
+.br
+.ti -1c
+.RI "double \fBVerifyAndAssignResults\fP (bool show_range, bool do_range_check)"
+.br
+.RI "transfer results updating concentration, zeroing out 'new concentration' values, and performing range checks; returns error "
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim>
+.br
+class csmp::ImplicitTransport< dim >"TODO: include thickness attributes to support computations with lower-dimensional elements TODO: make this algorithm general so that it can also be applied to \fBBoundary\fP and \fBSplitBoundary\fP objects TODO: Implement bijective grid-to-grid mapping to loose grid orientation effects completely! 
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim> void \fBcsmp::ImplicitTransport\fP< dim >::AdvectVariable (double time_interval)"
+
+.PP
+executes incremental time-stepping (a suitable time increment is computed by scheme) and writes the results back to model 
+.IP "1." 4
+Computation of (velocity and) facet fluxes
+.IP "2." 4
+Evaluation of time increment, flux balances and flux balance concentration products
+.IP "3." 4
+Assembly of solution
+.IP "4." 4
+Assignment of boundary conditions (treatment of truncated FVs at the boundary)
+.IP "5." 4
+tranfer of results into 'concentration', vacating 'new concentration' for next assembly\&. 
+.PP
+
+.SS "template<uint32_t dim> double \fBcsmp::ImplicitTransport\fP< dim >::IncomingVolumetricFlow () const"
+Reports the volumetric flow into the computational region\&. 
+.SS "template<uint32_t dim> double \fBcsmp::ImplicitTransport\fP< dim >::OutgoingVolumetricFlow () const"
+Reports the volumetric flow outside of the computational region\&.
+
+.PP
+\fBTodo\fP
+.RS 4
+SKM check whether the variable 'outflow' can be used for this, saving some computations\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim> double \fBcsmp::ImplicitTransport\fP< dim >::TimeIncrement ()"
+
+.PP
+computes the time constraint Computation of time increment (default limited to 1 year)\&. 
+.SS "template<uint32_t dim> double \fBcsmp::ImplicitTransport\fP< dim >::TimeIncrementAndFluxBalance (double max_time_increment)"
+Computation of time increment, flux balance, and temporary new concentration\&. 
+.SS "template<uint32_t dim> void \fBcsmp::ImplicitTransport\fP< dim >::UpdateFluxesAndFluxBalances ()"
+
+.PP
+initialises transport class for current pressure/velocity/transport variable field stub to FV auxiliary function 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

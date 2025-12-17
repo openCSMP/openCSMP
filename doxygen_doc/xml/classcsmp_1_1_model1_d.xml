@@ -1,0 +1,963 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_model1_d" kind="class" language="C++" prot="public">
+    <compoundname>csmp::Model1D</compoundname>
+    <basecompoundref refid="classcsmp_1_1_model" prot="public" virt="non-virtual">csmp::Model&lt; 1U &gt;</basecompoundref>
+    <includes refid="_model1_d_8h" local="no">Model1D.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+        <defval>1U</defval>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_model1_d_1ab86767314f4bbe2c63bb356b0febaa37" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Model1D&lt; dim &gt;::Model1D</definition>
+        <argsstring>(const std::string &amp;input_file)</argsstring>
+        <name>Model1D</name>
+        <qualifiedname>csmp::Model1D::Model1D</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>input_file</declname>
+        </param>
+        <briefdescription>
+<para>input from csmp native fileset </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Default constructor of <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> is called. Then if binary file option is set to true: the model get build from &quot;bin_file&quot;.vset and &quot;bin_file&quot;.dat files. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Model1D.h" line="16" column="5" bodyfile="source/modules/model/Model1D.cpp" bodystart="19" bodyend="23"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_model1_d_1abcb3d8da0faf8080db6b75d9e3f37f2b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Model1D&lt; dim &gt;::Model1D</definition>
+        <argsstring>(const std::string &amp;model_name, double length, size_t elements, const std::vector&lt; double &gt; &amp;splitnode_coordinates=std::vector&lt; double &gt;(), const Point&lt; dim &gt; &amp;origin=Point&lt; dim &gt;(), const Point&lt; dim &gt; &amp;destination=Point&lt; dim &gt;())</argsstring>
+        <name>Model1D</name>
+        <qualifiedname>csmp::Model1D::Model1D</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>model_name</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>length</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>elements</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>splitnode_coordinates</declname>
+          <defval>std::vector&lt; double &gt;()</defval>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &amp;</type>
+          <declname>origin</declname>
+          <defval><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt;()</defval>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &amp;</type>
+          <declname>destination</declname>
+          <defval><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt;()</defval>
+        </param>
+        <briefdescription>
+<para>creates an uniform mesh </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Model1D.h" line="19" column="5" bodyfile="source/modules/model/Model1D.cpp" bodystart="51" bodyend="62"/>
+        <references refid="classcsmp_1_1_model1_d_1a72b5381838930ddd41463ebaa0051d0d" compoundref="_model1_d_8cpp" startline="175" endline="183">csmp::Model1D&lt; dim &gt;::Initialize</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_model1_d_1a5e2e6ccc020a9a62c8262cb435a5dbc0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Model1D&lt; dim &gt;::Model1D</definition>
+        <argsstring>(const std::string &amp;model_name, const std::string &amp;variable_file, double length, size_t elements, const std::vector&lt; double &gt; &amp;splitnode_coordinates=std::vector&lt; double &gt;(), const Point&lt; dim &gt; &amp;origin=Point&lt; dim &gt;(), const Point&lt; dim &gt; &amp;destination=Point&lt; dim &gt;())</argsstring>
+        <name>Model1D</name>
+        <qualifiedname>csmp::Model1D::Model1D</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>model_name</declname>
+          <defname>name</defname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>variable_file</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>length</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>elements</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>splitnode_coordinates</declname>
+          <defval>std::vector&lt; double &gt;()</defval>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &amp;</type>
+          <declname>origin</declname>
+          <defval><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt;()</defval>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &amp;</type>
+          <declname>destination</declname>
+          <defval><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt;()</defval>
+        </param>
+        <briefdescription>
+<para>creates an uniform mesh </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Default constructor of <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> is called. Then the model is build using the method Initialize. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Model1D.h" line="27" column="5" bodyfile="source/modules/model/Model1D.cpp" bodystart="33" bodyend="46"/>
+        <references refid="classcsmp_1_1_model1_d_1a72b5381838930ddd41463ebaa0051d0d" compoundref="_model1_d_8cpp" startline="175" endline="183">csmp::Model1D&lt; dim &gt;::Initialize</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_model1_d_1accd1da012b7ff19f2824e665d2b3400a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Model1D&lt; dim &gt;::Model1D</definition>
+        <argsstring>(const std::string &amp;model_name, double length, double dx_min, double dx_max, double width_of_transition_zone, MeshDensity *density, const std::vector&lt; double &gt; &amp;splitnode_coordinates=std::vector&lt; double &gt;(), const Point&lt; dim &gt; &amp;origin=Point&lt; dim &gt;(), const Point&lt; dim &gt; &amp;destination=Point&lt; dim &gt;())</argsstring>
+        <name>Model1D</name>
+        <qualifiedname>csmp::Model1D::Model1D</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>model_name</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>length</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>dx_min</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>dx_max</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>width_of_transition_zone</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_mesh_density" kindref="compound">MeshDensity</ref> *</type>
+          <declname>density</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>splitnode_coordinates</declname>
+          <defval>std::vector&lt; double &gt;()</defval>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &amp;</type>
+          <declname>origin</declname>
+          <defval><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt;()</defval>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &amp;</type>
+          <declname>destination</declname>
+          <defval><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt;()</defval>
+        </param>
+        <briefdescription>
+<para>creates a refined mesh </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Model1D.h" line="36" column="5" bodyfile="source/modules/model/Model1D.cpp" bodystart="85" bodyend="98"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_model1_d_1a19eb7e5ced955763c359997f6c3d0394" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Model1D&lt; dim &gt;::Model1D</definition>
+        <argsstring>(const std::string &amp;model_name, const std::string &amp;variable_file, double length, double min_size, double max_size, double width_of_transition_zone, MeshDensity *density, const std::vector&lt; double &gt; &amp;splitnode_coordinates=std::vector&lt; double &gt;(), const Point&lt; dim &gt; &amp;origin=Point&lt; dim &gt;(), const Point&lt; dim &gt; &amp;destination=Point&lt; dim &gt;())</argsstring>
+        <name>Model1D</name>
+        <qualifiedname>csmp::Model1D::Model1D</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>model_name</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>variable_file</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>length</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>min_size</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>max_size</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>width_of_transition_zone</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_mesh_density" kindref="compound">MeshDensity</ref> *</type>
+          <declname>density</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>splitnode_coordinates</declname>
+          <defval>std::vector&lt; double &gt;()</defval>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &amp;</type>
+          <declname>origin</declname>
+          <defval><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt;()</defval>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &amp;</type>
+          <declname>destination</declname>
+          <defval><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt;()</defval>
+        </param>
+        <briefdescription>
+<para>creates a refined mesh </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Model1D.h" line="47" column="5" bodyfile="source/modules/model/Model1D.cpp" bodystart="67" bodyend="82"/>
+        <references refid="classcsmp_1_1_model1_d_1a72b5381838930ddd41463ebaa0051d0d" compoundref="_model1_d_8cpp" startline="175" endline="183">csmp::Model1D&lt; dim &gt;::Initialize</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_model1_d_1a1c9a83e953620640dc485c04b48ab9e0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Model1D&lt; dim &gt;::Model1D</definition>
+        <argsstring>(const std::string &amp;model_name, const std::vector&lt; double &gt; &amp;node_coordinates, const std::vector&lt; double &gt; &amp;splitnode_coordinates=std::vector&lt; double &gt;(), const Point&lt; dim &gt; &amp;origin=Point&lt; dim &gt;(), const Point&lt; dim &gt; &amp;destination=Point&lt; dim &gt;())</argsstring>
+        <name>Model1D</name>
+        <qualifiedname>csmp::Model1D::Model1D</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>model_name</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>node_coordinates</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>splitnode_coordinates</declname>
+          <defval>std::vector&lt; double &gt;()</defval>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &amp;</type>
+          <declname>origin</declname>
+          <defval><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt;()</defval>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &amp;</type>
+          <declname>destination</declname>
+          <defval><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt;()</defval>
+        </param>
+        <briefdescription>
+<para>creates a custom mesh with <ref refid="classvector" kindref="compound">vector( 1D node coordinates )</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Model1D.h" line="59" column="5" bodyfile="source/modules/model/Model1D.cpp" bodystart="120" bodyend="130"/>
+        <references refid="classcsmp_1_1_model1_d_1a72b5381838930ddd41463ebaa0051d0d" compoundref="_model1_d_8cpp" startline="175" endline="183">csmp::Model1D&lt; dim &gt;::Initialize</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_model1_d_1a391c683902a794190b00ecac7c12a520" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Model1D&lt; dim &gt;::Model1D</definition>
+        <argsstring>(const std::string &amp;model_name, const std::string &amp;variable_file, const std::vector&lt; double &gt; &amp;node_coordinates, const std::vector&lt; double &gt; &amp;splitnode_coordinates=std::vector&lt; double &gt;(), const Point&lt; dim &gt; &amp;origin=Point&lt; dim &gt;(), const Point&lt; dim &gt; &amp;destination=Point&lt; dim &gt;())</argsstring>
+        <name>Model1D</name>
+        <qualifiedname>csmp::Model1D::Model1D</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>model_name</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>variable_file</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>node_coordinates</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>splitnode_coordinates</declname>
+          <defval>std::vector&lt; double &gt;()</defval>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &amp;</type>
+          <declname>origin</declname>
+          <defval><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt;()</defval>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &amp;</type>
+          <declname>destination</declname>
+          <defval><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt;()</defval>
+        </param>
+        <briefdescription>
+<para>creates a custom mesh with <ref refid="classvector" kindref="compound">vector( 1D node coordinates )</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Model1D.h" line="66" column="5" bodyfile="source/modules/model/Model1D.cpp" bodystart="103" bodyend="115"/>
+        <references refid="classcsmp_1_1_model1_d_1a72b5381838930ddd41463ebaa0051d0d" compoundref="_model1_d_8cpp" startline="175" endline="183">csmp::Model1D&lt; dim &gt;::Initialize</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_model1_d_1a48c088972efbdd849b2af2c21f5c87a4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Model1D&lt; dim &gt;::Model1D</definition>
+        <argsstring>(const std::string &amp;model_name, const std::vector&lt; Point&lt; dim &gt; &gt; &amp;node_coordinates, const std::vector&lt; Point&lt; dim &gt; &gt; &amp;splitnode_coordinates=std::vector&lt; Point&lt; dim &gt; &gt;(), const Point&lt; dim &gt; &amp;origin=Point&lt; dim &gt;(), const Point&lt; dim &gt; &amp;destination=Point&lt; dim &gt;())</argsstring>
+        <name>Model1D</name>
+        <qualifiedname>csmp::Model1D::Model1D</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>model_name</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &gt; &amp;</type>
+          <declname>node_coordinates</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &gt; &amp;</type>
+          <declname>splitnode_coordinates</declname>
+          <defval>std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &gt;()</defval>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &amp;</type>
+          <declname>origin</declname>
+          <defval><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt;()</defval>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &amp;</type>
+          <declname>destination</declname>
+          <defval><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt;()</defval>
+        </param>
+        <briefdescription>
+<para>creates a custom mesh with <ref refid="classvector" kindref="compound">vector( 1D, 2D or 3D node coordinates )</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Model1D.h" line="74" column="5" bodyfile="source/modules/model/Model1D.cpp" bodystart="152" bodyend="162"/>
+        <references refid="classcsmp_1_1_model1_d_1a72b5381838930ddd41463ebaa0051d0d" compoundref="_model1_d_8cpp" startline="175" endline="183">csmp::Model1D&lt; dim &gt;::Initialize</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_model1_d_1ad18f73fdb9b7c511b129e778ac51fb1c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Model1D&lt; dim &gt;::Model1D</definition>
+        <argsstring>(const std::string &amp;model_name, const std::string &amp;variable_file, const std::vector&lt; Point&lt; dim &gt; &gt; &amp;node_coordinates, const std::vector&lt; Point&lt; dim &gt; &gt; &amp;splitnode_coordinates=std::vector&lt; Point&lt; dim &gt; &gt;(), const Point&lt; dim &gt; &amp;origin=Point&lt; dim &gt;(), const Point&lt; dim &gt; &amp;destination=Point&lt; dim &gt;())</argsstring>
+        <name>Model1D</name>
+        <qualifiedname>csmp::Model1D::Model1D</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>model_name</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>variable_file</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &gt; &amp;</type>
+          <declname>node_coordinates</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &gt; &amp;</type>
+          <declname>splitnode_coordinates</declname>
+          <defval>std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &gt;()</defval>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &amp;</type>
+          <declname>origin</declname>
+          <defval><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt;()</defval>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &amp;</type>
+          <declname>destination</declname>
+          <defval><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt;()</defval>
+        </param>
+        <briefdescription>
+<para>creates a custom mesh with <ref refid="classvector" kindref="compound">vector( 1D, 2D or 3D node coordinates )</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Model1D.h" line="81" column="5" bodyfile="source/modules/model/Model1D.cpp" bodystart="135" bodyend="147"/>
+        <references refid="classcsmp_1_1_model1_d_1a72b5381838930ddd41463ebaa0051d0d" compoundref="_model1_d_8cpp" startline="175" endline="183">csmp::Model1D&lt; dim &gt;::Initialize</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_model1_d_1a79f57479b3eebb230f2d217bda95b95a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Model1D&lt; dim &gt;::~Model1D</definition>
+        <argsstring>()</argsstring>
+        <name>~Model1D</name>
+        <qualifiedname>csmp::Model1D::~Model1D</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Model1D.h" line="88" column="5" bodyfile="source/modules/model/Model1D.cpp" bodystart="166" bodyend="168"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-func">
+      <memberdef kind="function" id="classcsmp_1_1_model1_d_1a72b5381838930ddd41463ebaa0051d0d" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Model1D&lt; dim &gt;::Initialize</definition>
+        <argsstring>(VSet&lt; dim &gt; &amp;)</argsstring>
+        <name>Initialize</name>
+        <qualifiedname>csmp::Model1D::Initialize</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <defname>vset</defname>
+        </param>
+        <briefdescription>
+<para>creates mesh from <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Model1D.h" line="92" column="10" bodyfile="source/modules/model/Model1D.cpp" bodystart="175" bodyend="183"/>
+        <referencedby refid="classcsmp_1_1_model1_d_1a4b4a2f5c873c58161475ddff0e15025c" compoundref="_model1_d_8cpp" startline="229" endline="243">csmp::Model1D&lt; dim &gt;::Initialize</referencedby>
+        <referencedby refid="classcsmp_1_1_model1_d_1a47cb401891685141fcdf1ec1d3fff85a" compoundref="_model1_d_8cpp" startline="250" endline="264">csmp::Model1D&lt; dim &gt;::Initialize</referencedby>
+        <referencedby refid="classcsmp_1_1_model1_d_1acae067ebd6df311edf72588fe1d54ce3" compoundref="_model1_d_8cpp" startline="210" endline="223">csmp::Model1D&lt; dim &gt;::Initialize</referencedby>
+        <referencedby refid="classcsmp_1_1_model1_d_1a32b6f1974259e069b95042709f0e9696" compoundref="_model1_d_8cpp" startline="188" endline="202">csmp::Model1D&lt; dim &gt;::Initialize</referencedby>
+        <referencedby refid="classcsmp_1_1_model1_d_1a72b5381838930ddd41463ebaa0051d0d" compoundref="_model1_d_8cpp" startline="175" endline="183">csmp::Model1D&lt; 1U &gt;::Initialize</referencedby>
+        <referencedby refid="classcsmp_1_1_model1_d_1a391c683902a794190b00ecac7c12a520" compoundref="_model1_d_8cpp" startline="103" endline="115">csmp::Model1D&lt; dim &gt;::Model1D</referencedby>
+        <referencedby refid="classcsmp_1_1_model1_d_1ad18f73fdb9b7c511b129e778ac51fb1c" compoundref="_model1_d_8cpp" startline="135" endline="147">csmp::Model1D&lt; dim &gt;::Model1D</referencedby>
+        <referencedby refid="classcsmp_1_1_model1_d_1a19eb7e5ced955763c359997f6c3d0394" compoundref="_model1_d_8cpp" startline="67" endline="82">csmp::Model1D&lt; dim &gt;::Model1D</referencedby>
+        <referencedby refid="classcsmp_1_1_model1_d_1a5e2e6ccc020a9a62c8262cb435a5dbc0" compoundref="_model1_d_8cpp" startline="33" endline="46">csmp::Model1D&lt; dim &gt;::Model1D</referencedby>
+        <referencedby refid="classcsmp_1_1_model1_d_1a1c9a83e953620640dc485c04b48ab9e0" compoundref="_model1_d_8cpp" startline="120" endline="130">csmp::Model1D&lt; dim &gt;::Model1D</referencedby>
+        <referencedby refid="classcsmp_1_1_model1_d_1a48c088972efbdd849b2af2c21f5c87a4" compoundref="_model1_d_8cpp" startline="152" endline="162">csmp::Model1D&lt; dim &gt;::Model1D</referencedby>
+        <referencedby refid="classcsmp_1_1_model1_d_1abcb3d8da0faf8080db6b75d9e3f37f2b" compoundref="_model1_d_8cpp" startline="51" endline="62">csmp::Model1D&lt; dim &gt;::Model1D</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_model1_d_1a32b6f1974259e069b95042709f0e9696" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Model1D&lt; dim &gt;::Initialize</definition>
+        <argsstring>(double length, size_t elements, const std::vector&lt; double &gt; &amp;, const Point&lt; dim &gt; &amp;, const Point&lt; dim &gt; &amp;)</argsstring>
+        <name>Initialize</name>
+        <qualifiedname>csmp::Model1D::Initialize</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>length</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>elements</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <defname>splitnode_coordinates</defname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &amp;</type>
+          <defname>origin</defname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &amp;</type>
+          <defname>destination</defname>
+        </param>
+        <briefdescription>
+<para>creates an uniform mesh </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Model1D.h" line="95" column="10" bodyfile="source/modules/model/Model1D.cpp" bodystart="188" bodyend="202"/>
+        <references refid="classcsmp_1_1_model1_d_1a72b5381838930ddd41463ebaa0051d0d" compoundref="_model1_d_8cpp" startline="175" endline="183">csmp::Model1D&lt; dim &gt;::Initialize</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_model1_d_1acae067ebd6df311edf72588fe1d54ce3" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Model1D&lt; dim &gt;::Initialize</definition>
+        <argsstring>(double length, double dx_min, double dx_max, double width_of_transition_zone, MeshDensity *density, const std::vector&lt; double &gt; &amp;, const Point&lt; dim &gt; &amp;, const Point&lt; dim &gt; &amp;)</argsstring>
+        <name>Initialize</name>
+        <qualifiedname>csmp::Model1D::Initialize</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>length</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>dx_min</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>dx_max</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>width_of_transition_zone</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_mesh_density" kindref="compound">MeshDensity</ref> *</type>
+          <declname>density</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <defname>splitnode_coordinates</defname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &amp;</type>
+          <defname>origin</defname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &amp;</type>
+          <defname>destination</defname>
+        </param>
+        <briefdescription>
+<para>creates an exponentially refined mesh </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Model1D.h" line="100" column="10" bodyfile="source/modules/model/Model1D.cpp" bodystart="210" bodyend="223"/>
+        <references refid="classcsmp_1_1_model1_d_1a72b5381838930ddd41463ebaa0051d0d" compoundref="_model1_d_8cpp" startline="175" endline="183">csmp::Model1D&lt; dim &gt;::Initialize</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_model1_d_1a4b4a2f5c873c58161475ddff0e15025c" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Model1D&lt; dim &gt;::Initialize</definition>
+        <argsstring>(const std::vector&lt; double &gt; &amp;, const std::vector&lt; double &gt; &amp;, const Point&lt; dim &gt; &amp;, const Point&lt; dim &gt; &amp;)</argsstring>
+        <name>Initialize</name>
+        <qualifiedname>csmp::Model1D::Initialize</qualifiedname>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <defname>node_coordinates</defname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <defname>splitnode_coordinates</defname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &amp;</type>
+          <defname>origin</defname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &amp;</type>
+          <defname>destination</defname>
+        </param>
+        <briefdescription>
+<para>creates a custom mesh with <ref refid="classvector" kindref="compound">vector( 1D node coordinates )</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Model1D.h" line="107" column="10" bodyfile="source/modules/model/Model1D.cpp" bodystart="229" bodyend="243"/>
+        <references refid="classcsmp_1_1_model1_d_1a72b5381838930ddd41463ebaa0051d0d" compoundref="_model1_d_8cpp" startline="175" endline="183">csmp::Model1D&lt; dim &gt;::Initialize</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_model1_d_1a47cb401891685141fcdf1ec1d3fff85a" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Model1D&lt; dim &gt;::Initialize</definition>
+        <argsstring>(const std::vector&lt; Point&lt; dim &gt; &gt; &amp;, const std::vector&lt; Point&lt; dim &gt; &gt; &amp;, const Point&lt; dim &gt; &amp;, const Point&lt; dim &gt; &amp;)</argsstring>
+        <name>Initialize</name>
+        <qualifiedname>csmp::Model1D::Initialize</qualifiedname>
+        <param>
+          <type>const std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &gt; &amp;</type>
+          <defname>node_coordinates</defname>
+        </param>
+        <param>
+          <type>const std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &gt; &amp;</type>
+          <defname>splitnode_coordinates</defname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &amp;</type>
+          <defname>origin</defname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &amp;</type>
+          <defname>destination</defname>
+        </param>
+        <briefdescription>
+<para>creates a custom mesh with <ref refid="classvector" kindref="compound">vector( 1D, 2D or 3D node coordinates )</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Model1D.h" line="112" column="10" bodyfile="source/modules/model/Model1D.cpp" bodystart="250" bodyend="264"/>
+        <references refid="classcsmp_1_1_model1_d_1a72b5381838930ddd41463ebaa0051d0d" compoundref="_model1_d_8cpp" startline="175" endline="183">csmp::Model1D&lt; dim &gt;::Initialize</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Line model that is templatized so that it can also be placed into three-dimensional space. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="6">
+        <label>csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;</label>
+        <link refid="classcsmp_1_1_boundary_interface"/>
+      </node>
+      <node id="5">
+        <label>csmp::BoundaryInterface&lt; dim, Model &gt;</label>
+        <link refid="classcsmp_1_1_boundary_interface"/>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; dim, Model &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>csmp::LocalVariableStorage&lt; dim, STOREE &gt;</label>
+        <link refid="classcsmp_1_1_local_variable_storage"/>
+      </node>
+      <node id="9">
+        <label>csmp::LocalVariableStorage&lt; dim, Model &gt;</label>
+        <link refid="classcsmp_1_1_local_variable_storage"/>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; dim, Model &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>csmp::Model&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_model"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>csmp::Model1D&lt; 1U &gt;</label>
+        <link refid="classcsmp_1_1_model1_d"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; 1U &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::Model1D&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_model1_d"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Model&lt; 1U &gt;</label>
+        <link refid="classcsmp_1_1_model"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; 1U &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>csmp::RegionInterface&lt; dim, REGION_COMPLEX &gt;</label>
+        <link refid="classcsmp_1_1_region_interface"/>
+      </node>
+      <node id="3">
+        <label>csmp::RegionInterface&lt; dim, Model &gt;</label>
+        <link refid="classcsmp_1_1_region_interface"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; dim, Model &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>csmp::SplitBoundaryInterface&lt; dim, SPLITBOUNDARY_COMPLEX &gt;</label>
+        <link refid="classcsmp_1_1_split_boundary_interface"/>
+      </node>
+      <node id="7">
+        <label>csmp::SplitBoundaryInterface&lt; dim, Model &gt;</label>
+        <link refid="classcsmp_1_1_split_boundary_interface"/>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; dim, Model &gt;</edgelabel>
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="6">
+        <label>csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;</label>
+        <link refid="classcsmp_1_1_boundary_interface"/>
+      </node>
+      <node id="5">
+        <label>csmp::BoundaryInterface&lt; dim, Model &gt;</label>
+        <link refid="classcsmp_1_1_boundary_interface"/>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; dim, Model &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>csmp::LocalVariableStorage&lt; dim, STOREE &gt;</label>
+        <link refid="classcsmp_1_1_local_variable_storage"/>
+      </node>
+      <node id="9">
+        <label>csmp::LocalVariableStorage&lt; dim, Model &gt;</label>
+        <link refid="classcsmp_1_1_local_variable_storage"/>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; dim, Model &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>csmp::Model&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_model"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::Model1D&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_model1_d"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Model&lt; 1U &gt;</label>
+        <link refid="classcsmp_1_1_model"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; 1U &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>csmp::RegionInterface&lt; dim, REGION_COMPLEX &gt;</label>
+        <link refid="classcsmp_1_1_region_interface"/>
+      </node>
+      <node id="3">
+        <label>csmp::RegionInterface&lt; dim, Model &gt;</label>
+        <link refid="classcsmp_1_1_region_interface"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; dim, Model &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>csmp::SplitBoundaryInterface&lt; dim, SPLITBOUNDARY_COMPLEX &gt;</label>
+        <link refid="classcsmp_1_1_split_boundary_interface"/>
+      </node>
+      <node id="7">
+        <label>csmp::SplitBoundaryInterface&lt; dim, Model &gt;</label>
+        <link refid="classcsmp_1_1_split_boundary_interface"/>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; dim, Model &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/model/Model1D.h" line="11" column="1" bodyfile="source/includes/model/Model1D.h" bodystart="11" bodyend="115"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_model_1a2e12f259012989765f3269d8ea721092" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>Accept</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a9bdc4e94ff3dbf306bdcccfefd721969" prot="protected" virt="non-virtual"><scope>csmp::Model1D</scope><name>AddBoundary</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1ae81c2b297f4166821bc3de2856e055ae" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>AddProperty</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a0ef20e1c34990ef368737e0060a84b1c" prot="protected" virt="non-virtual"><scope>csmp::Model1D</scope><name>AddSplitBoundary</name></member>
+      <member refid="classcsmp_1_1_model_1a1f470e567edc05fb61d72ba12dbda6b8" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>Apply</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a0f98d57cdb8354375492e1ecab895b05" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>AssertFiniteVolumeIntegrationPointPlacement</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a5143bb03ae0bda92a0c01260dee54615" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>AssertIntegrationPointPlacement</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a4cc75be181f8519badea275810fe8275" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>AssertPlacement</name></member>
+      <member refid="classcsmp_1_1_model_1afa95b2a116d4772dcc7ef61c4a7b6c2c" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>AssignCellCharacteristicsTo</name></member>
+      <member refid="classcsmp_1_1_model_1a0da00f2577ff08d7ee4d6cc1ede60d34" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>AssignNodeCoordinatesTo</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a3a5c416879b0f17829f989a65c4a18a1" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>AssimilateRegion</name></member>
+      <member refid="classcsmp_1_1_model_1a935a4dea2784b6a57ff0f6d1b888323b" prot="protected" virt="non-virtual"><scope>csmp::Model1D</scope><name>BinaryBoundariesFileName</name></member>
+      <member refid="classcsmp_1_1_model_1a9ab51937d76c554fee2f22a31220f9c0" prot="protected" virt="non-virtual"><scope>csmp::Model1D</scope><name>BinaryRegionsFileName</name></member>
+      <member refid="classcsmp_1_1_model_1a233cebc02de94805352d84bbb3936d89" prot="protected" virt="non-virtual"><scope>csmp::Model1D</scope><name>BinarySplitBoundariesFileName</name></member>
+      <member refid="classcsmp_1_1_model_1aee11ba02736a22c1b82c8f70d63519bb" prot="protected" virt="non-virtual"><scope>csmp::Model1D</scope><name>BinaryVariablesFileName</name></member>
+      <member refid="classcsmp_1_1_model_1a04cff6fae0c64ae7a8dce5f57ad8eee6" prot="protected" virt="non-virtual"><scope>csmp::Model1D</scope><name>BinaryVsetFileName</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1afc9322d44807e26716d48f2c616d3b78" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>Boundaries</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a2771e6533d70e579027431c1ee070926" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>BoundariesBegin</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a1c2e56d21a8535986a71d7a2e37f03ee" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>BoundariesEnd</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1ae4bfaeada6c1968a38b739272df2e8a5" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>BoundariesOut</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1ab40b76a0d54da3105648ed8e454cdd98" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>Boundary</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a093f6e8261b159874d8537dd3abc0927" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>boundaryConstIterator</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a995b5c3880056bdc0f2e9940be241b7d" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>BoundaryInterface</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1ad9e5b080197df15de0fc223a7793de2d" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>boundaryIterator</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a9ec05234ca81cb71c04c9b5e57064a8c" prot="protected" virt="non-virtual"><scope>csmp::Model1D</scope><name>boundaryMap_</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a170a0b5502f6e14e6ea475714b6764db" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>BoxShaped</name></member>
+      <member refid="classcsmp_1_1_model_1a79de9bdafebf73cfe8d7472b46c5ac54" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>ChangePropertyStatus</name></member>
+      <member refid="classcsmp_1_1_model_1a8175c191fb82044c968d087ce6ca5c20" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>ChangePropertyStatusWhere</name></member>
+      <member refid="classcsmp_1_1_region_interface_1ab61ce01e8782b79e4e2b1bdbc619a9dc" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>CheckRegionIdentifierIsUpToDate</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1ad82b6e1229b2eaa3311dc068aa3f0ba6" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>ContainsBoundary</name></member>
+      <member refid="classcsmp_1_1_region_interface_1aad7bc91dc4450d45f48103c85ae940e5" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>ContainsRegion</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1afb450a873c86b4ce2468d4d29920cb2d" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>ContainsSplitBoundary</name></member>
+      <member refid="classcsmp_1_1_model_1a28e317bfa74330d1b2ce9763e52803c6" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>CopyGradientOfProperty_A_To_B</name></member>
+      <member refid="classcsmp_1_1_region_interface_1ad6890490309612e7b94004a89026b392" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>CopyRegion</name></member>
+      <member refid="classcsmp_1_1_model_1acf6ea2249b3f45d733262b3977a61a1f" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>CopyReplace</name></member>
+      <member refid="classcsmp_1_1_region_interface_1adf554e6b22902ffe7e6793538a05f8d4" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>CountAndLabelUniqueRegions</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1ad24b7f5db1277b6a7837a700d103d153" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>CreateBoundaryAround</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a4e8a32b74b875851b1805944812b3a70" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>CreateBoundaryBetween</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a7f343a42577037dff47093f62a90b84b" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>CreateBoundaryName</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a7aef8cb4f10754a119e7df1309b9d98a" prot="protected" virt="non-virtual"><scope>csmp::Model1D</scope><name>CreateBoundaryNameFrom</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a46772c373bade27cc1bfd5de6a7f2cb1" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>CreateExternalBoundaryFrom</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a41271a0826a7dfae74abdb5cf4856b4f" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>CreateInternalBoundaryFrom</name></member>
+      <member refid="classcsmp_1_1_model_1aff7668a969afb1b8934e63a27b47ca31" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>CreateProperty</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a0a4e52dd0e6018a0b751be1dfc4b13a5" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>CreateSplitBoundaryBetween</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1aabc87e8481fc15687fdb428da104a5d2" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>CreateSplitBoundaryFrom</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1acb2fac24571ca74f7ffae218347d80b0" prot="protected" virt="non-virtual"><scope>csmp::Model1D</scope><name>CreateSplitBoundaryName</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1ac2f3505cd6c6368e76cc7fbbdf3a5361" prot="protected" virt="non-virtual"><scope>csmp::Model1D</scope><name>CreateSplitBoundaryNameFrom</name></member>
+      <member refid="classcsmp_1_1_model_1a538d966f27bfa2c6a791f5ed4fd7f446" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>Database</name></member>
+      <member refid="classcsmp_1_1_model_1a6c9c1075f4048ab03276569f580fce19" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>DeleteProperty</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a3b56bab7bc4a1db37bfc4d4176457349" prot="public" virt="non-virtual" ambiguityscope="csmp::LocalVariableStorage&lt; dim, Model &gt;::"><scope>csmp::Model1D</scope><name>DeleteProperty</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a34e5f96c416a4e88a8b189b7700515f8" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>DetectAndCreateSplitBoundaries</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a110040be6c3f197163729b7c4ea81069" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>EmptyLVS</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1ad0eed3c326997f854db44d5a7320a1e2" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>EstablishBoundariesFromRegions</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1aa3b79631cd879e55338d14803caae786" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>EstablishBoxBoundaries</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a806f539a7761ee70feaa892a22d040ff" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>EstablishBoxBoundariesFromNodeFlags</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a432e8ca3268d6ef31eaf6b9fd23a3e7c" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>EstablishBoxBoundariesFromOrientation</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1ad1c6156ff7aa50d5a1c26d12d32006f7" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>EstablishEdgeBoundariesOfBoxShapedModel</name></member>
+      <member refid="classcsmp_1_1_model_1a13852cb18c944af4b5f132e5714f4d7a" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>ExtrapolateCellToNodeProperty</name></member>
+      <member refid="classcsmp_1_1_model_1a4bfc03c69ae4b2523a1b9d40da381823" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>ExtrapolateIntegrationPointToNodeProperty</name></member>
+      <member refid="classcsmp_1_1_model_1a527ae316cdaa330e3e1897dc10eda71c" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>FE_Manager</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1ad66b7d53568c18e4241ad24ef51f51d7" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>FindBoundaryByName</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a8c12cd3934001fdeea4d927a94bd4e9d" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>FindBoundaryByNames</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a8c05e87268deed28098c8770b79fb183" prot="protected" virt="non-virtual"><scope>csmp::Model1D</scope><name>FindSplitBoundaryByNames</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1abc0392784790ae33fdc9759a7bf19615" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>FormBoundariesFrom</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a01c89d70b2cc76f81224c318f0840bb8" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>FormModelRegion</name></member>
+      <member refid="classcsmp_1_1_region_interface_1afdab232b6b3ef6880224f6f72ade4cb5" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>FormRectangularRegion</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a54852db0700b343b2c21d420fa387797" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>FormRegionFrom</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a47865ffc9553be4af8b2f5ed92bb5061" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>FormRegionInBoundingBox</name></member>
+      <member refid="classcsmp_1_1_region_interface_1aefd55525755bb027d8b6204b2ce604c3" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>FormRegionsFrom</name></member>
+      <member refid="classcsmp_1_1_region_interface_1aba5ce4ad7998c91591500e6385bd5fe3" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>FormRegionsFromMaterialIDs</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a893076f9f7bf4711e6d4897f719bb2b5" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>FormRegionsFromPropertyValues</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a30cbaf4eabbcff716be8742b47e0c869" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>FormSplitBoundariesFrom</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a4e541b2682544636c2cd62d569716946" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>HasValidModelRegion</name></member>
+      <member refid="classcsmp_1_1_model_1ac629d1175ce8e74dbdc3974553b14531" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>IndexByPropertyValues</name></member>
+      <member refid="classcsmp_1_1_model1_d_1a72b5381838930ddd41463ebaa0051d0d" prot="protected" virt="non-virtual"><scope>csmp::Model1D</scope><name>Initialize</name></member>
+      <member refid="classcsmp_1_1_model1_d_1a32b6f1974259e069b95042709f0e9696" prot="protected" virt="non-virtual"><scope>csmp::Model1D</scope><name>Initialize</name></member>
+      <member refid="classcsmp_1_1_model1_d_1acae067ebd6df311edf72588fe1d54ce3" prot="protected" virt="non-virtual"><scope>csmp::Model1D</scope><name>Initialize</name></member>
+      <member refid="classcsmp_1_1_model1_d_1a4b4a2f5c873c58161475ddff0e15025c" prot="protected" virt="non-virtual"><scope>csmp::Model1D</scope><name>Initialize</name></member>
+      <member refid="classcsmp_1_1_model1_d_1a47cb401891685141fcdf1ec1d3fff85a" prot="protected" virt="non-virtual"><scope>csmp::Model1D</scope><name>Initialize</name></member>
+      <member refid="classcsmp_1_1_model_1a3beebcda9fd039ea50be5e7b41948bfe" prot="protected" virt="non-virtual"><scope>csmp::Model1D</scope><name>InitializeLocalVariableStorage</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a573cc9956b043b7010b5c70eebc47a40" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>InputBoundariesFromBinary</name></member>
+      <member refid="classcsmp_1_1_model_1a0420507bc518fc8f233ecdccfaaf531e" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>InputBoundaryFlags</name></member>
+      <member refid="classcsmp_1_1_model_1af02c3aae20950e871acfafd520dd532f" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>InputBoundaryValue</name></member>
+      <member refid="classcsmp_1_1_model_1a54b42649c2116beae5b32cb0e8750dab" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>InputFromBinaryFile</name></member>
+      <member refid="classcsmp_1_1_model_1ab7e40578f44ca6ced2cf05db309f122e" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>InputPropertyValue</name></member>
+      <member refid="classcsmp_1_1_region_interface_1abf1c6bc80311fc070ff4da11211093d8" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>InputRegionsFromBinary</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a56710d6c84622848e351e794f8e71381" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>InputSplitBoundariesFromBinary</name></member>
+      <member refid="classcsmp_1_1_model_1a9d88f8a2aa52d8c26944faf4ae8c5e6c" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>InputVariableFrom</name></member>
+      <member refid="classcsmp_1_1_model_1a1c8cd5a8dabcd4733b9545d813e78559" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>InputVariablesFrom</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a01c9167b824ee1726bd64390319bcd47" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>InsertLowerDimensionalRegionsIntoSplitBoundaries</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a0f810da61d370f5942a8478c3b32ccbc" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>InsertRegionIntoSplitBoundary</name></member>
+      <member refid="classcsmp_1_1_model_1a8a437f9aa192afd88f871720f320bd8e" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>InstantiateFiniteVolumes</name></member>
+      <member refid="classcsmp_1_1_model_1a69f9911b3ea97c2db09cd990442126f9" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>InterpolateBoundaryValues</name></member>
+      <member refid="classcsmp_1_1_model_1a242fb0eb48c3c42c69a204882d5704e4" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>InterpolateIntegrationPointToCellProperty</name></member>
+      <member refid="classcsmp_1_1_model_1acec8aaf9553395187eef0cd4105e5197" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>InterpolateNodeToCellProperty</name></member>
+      <member refid="classcsmp_1_1_model_1ac613db5a43becbf675a09fab65ff37a4" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>InterpolateNodeToIntegrationPointProperty</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1af8d883b322003e0e831b114a53120eef" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>IsBoundaryName</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a6ee3292130db84d62ea9b3ddbb81461d" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>IsUnique</name></member>
+      <member refid="classcsmp_1_1_model_1ae5e7ec4fee6a39db1fa287bdbc88f77e" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>IsWithinRange</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1aa8f995011429356bfd7e7744794c9b9b" prot="public" virt="non-virtual" ambiguityscope="csmp::LocalVariableStorage&lt; dim, Model &gt;::"><scope>csmp::Model1D</scope><name>IsWithinRange</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1aa711649557c9cd84c0a69e7e1ffe301b" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>LocalVariableStorage</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a3568b1d87af863a457f038ca8982bcea" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>LVS</name></member>
+      <member refid="classcsmp_1_1_region_interface_1accd91c4d081a411697194ba99b0b9d88" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>MergeRegions</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a932d9bf33ebc1f1feff208c0a8a5e900" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>MergeSplitBoundaries</name></member>
+      <member refid="classcsmp_1_1_model_1acdd487a168aedd26d138cb74127f87b0" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>Mesh</name></member>
+      <member refid="classcsmp_1_1_model_1af05be8dbc1bdfd766ae01def456e8314" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>MinMaxCoordinates</name></member>
+      <member refid="classcsmp_1_1_model_1ae98b627c7aa1d3422044856e211fdf96" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>MinMaxOf</name></member>
+      <member refid="classcsmp_1_1_model_1acefd52598cd77133895e29d4f9cf8814" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>Model</name></member>
+      <member refid="classcsmp_1_1_model1_d_1ab86767314f4bbe2c63bb356b0febaa37" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>Model1D</name></member>
+      <member refid="classcsmp_1_1_model1_d_1abcb3d8da0faf8080db6b75d9e3f37f2b" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>Model1D</name></member>
+      <member refid="classcsmp_1_1_model1_d_1a5e2e6ccc020a9a62c8262cb435a5dbc0" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>Model1D</name></member>
+      <member refid="classcsmp_1_1_model1_d_1accd1da012b7ff19f2824e665d2b3400a" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>Model1D</name></member>
+      <member refid="classcsmp_1_1_model1_d_1a19eb7e5ced955763c359997f6c3d0394" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>Model1D</name></member>
+      <member refid="classcsmp_1_1_model1_d_1a1c9a83e953620640dc485c04b48ab9e0" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>Model1D</name></member>
+      <member refid="classcsmp_1_1_model1_d_1a391c683902a794190b00ecac7c12a520" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>Model1D</name></member>
+      <member refid="classcsmp_1_1_model1_d_1a48c088972efbdd849b2af2c21f5c87a4" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>Model1D</name></member>
+      <member refid="classcsmp_1_1_model1_d_1ad18f73fdb9b7c511b129e778ac51fb1c" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>Model1D</name></member>
+      <member refid="classcsmp_1_1_model_1a1215540ea41e232f4e5c845e5466f92d" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>MoveNodeCoordinatesBy</name></member>
+      <member refid="classcsmp_1_1_region_interface_1afc081b026c8c072b1fef0c9df85b6ce6" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>MoveToNonUniqueRegions</name></member>
+      <member refid="classcsmp_1_1_region_interface_1ab4d772d282e5e1a4a529f0d0cf9aedcf" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>MoveToUniqueRegions</name></member>
+      <member refid="classcsmp_1_1_model_1ad122aa50ee0c315e3aa2720f81ad0f74" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>Name</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1add3acd9ec49db71e0e5bf4f8dda13744" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>operator==</name></member>
+      <member refid="classcsmp_1_1_model_1a39c10e94cf437465bf27cf9b6b53b0a8" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1ade5ec5a8e9afb482c1619924cf8259b2" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>OutLVS</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a4e58d1c493b2e439a430621ea11df640" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>OutputBoundariesToBinary</name></member>
+      <member refid="classcsmp_1_1_model_1a359e24041d64774eb63b4c583a2c08bc" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>OutputMeshTo</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a4baedc0566e529f2a54d46a56e62a138" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>OutputRegionsToBinary</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a4ddcf39d8581ca63a8b618741a5385d5" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>OutputSplitBoundariesToBinary</name></member>
+      <member refid="classcsmp_1_1_model_1a40267f0970a5f782de8ae9916da1e005" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>OutputToBinaryFile</name></member>
+      <member refid="classcsmp_1_1_model_1adf5297f19ae1481d29afd513aaa29699" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>OutputVariableTo</name></member>
+      <member refid="classcsmp_1_1_model_1a1f918e53e2331dbe07719e023535152b" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>OutputVariableToScreen</name></member>
+      <member refid="classcsmp_1_1_region_interface_1ac9096a4b2be14096aafa13fc61322bce" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>PartitionRegionIntoContiguousSubRegions</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a1261d193620bc36dfed780945f7f6751" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>PartitionRegionIntoContiguousSubRegions_Bromage</name></member>
+      <member refid="classcsmp_1_1_model_1a0d0aad3ae1bce2e9ae382ef3aa6d284f" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>Placement</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a7317f73445deb0ffe24f8d7c2d8fa705" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>PrintDomainIndices</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a4387c2c28afd79c9142834fc4a976b48" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>Read</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a15454666d6c782ff34dc7cbcd5654881" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>ReadArrayEntry</name></member>
+      <member refid="classcsmp_1_1_region_interface_1aa4904242d78be33ce82cca5065e35c5b" prot="protected" virt="non-virtual"><scope>csmp::Model1D</scope><name>RebuildUniqueRegions</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a726722b33ee2b3fe7e739de1cc23ef61" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>Region</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a76b7f2f0b92cb59c95116e06d31a120a" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>RegionByDomainIndex</name></member>
+      <member refid="classcsmp_1_1_region_interface_1ad3c0608a067423428f7123c13a80346b" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>regionConstIterator</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a24356853ec2de423c20a55b22c7244b8" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>RegionDifference</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a4167afbf2ee98fda0fd380bcbcbb1fb8" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>RegionIncludes</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a6b3627eec17360f841826792fc846e3e" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>RegionInterface</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a35cbd8c6094105001f9b2bc740263939" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>RegionIntersection</name></member>
+      <member refid="classcsmp_1_1_region_interface_1ac93adcf7fe57c7630ea5f07af6e7bada" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>regionIterator</name></member>
+      <member refid="classcsmp_1_1_region_interface_1ae9135b7a7051bdd188b1ea03c9e1078b" prot="protected" virt="non-virtual"><scope>csmp::Model1D</scope><name>regionMap_</name></member>
+      <member refid="classcsmp_1_1_region_interface_1ab4e46d0953e5ac0004b53d240b4c79dc" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>Regions</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a039af112e1af659415de489780acc0fc" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>RegionsBegin</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a42be1c04db6a8b874ebe54724c72eb6d" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>RegionsEnd</name></member>
+      <member refid="classcsmp_1_1_region_interface_1abcf00391fd601c027d59e03ecacc7023" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>RegionsOut</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a8b2d9d622d7203e8e050cb9ca7811b46" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>RegionSymmetricDifference</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a21a8c8d8c50e40797b13e059d83a0773" prot="protected" virt="non-virtual"><scope>csmp::Model1D</scope><name>regionTraits_</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a02754829ba2beb42af7bdf232f646188" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>RegionUnion</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1ae8976912d2d26ce92222880798dba583" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>RemoveBoundary</name></member>
+      <member refid="classcsmp_1_1_region_interface_1afdc209398fea9597da430153ace32208" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>RemoveFromRegion</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a753c2b6332c5c14f228abbf81568123c" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>RemoveRegion</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a830b59da55e4235995ebfc6affa254e6" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>RemoveRegionPartitionsFor</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a85db4d8207a4baec857b7352926900a2" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>RemoveSplitBoundary</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a0a622ed266b74e15e39f8ad734ad7a3d" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>RenameRegion</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a7a7f6185d60844c2f5acc1bcf475e215" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>ResizePropertyStorage</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a69879ca6a06d881fe3ef71251cca84ff" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>SeparateUniqueRegionsBySplitBoundaries</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a6eb99206ead464836c322df187ef4d2f" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>SharedPerimeterFaces</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a3d663bc8af57097f34baa6bb0a4242d9" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>SplitBoundaries</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a6810f0a2f352d7e258c592583d4288f0" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>SplitBoundariesBegin</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1ab4643e71e068ffcebc662ea4ee9e7403" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>SplitBoundariesEnd</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a523aa296793f798a9aa89e3f6334a66d" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>SplitBoundariesOut</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a5bba3cfaaf7f3ae8a1f4f29d8809e796" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>SplitBoundary</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a3f4f82c375ed9ab373c4b3d976bd8b92" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>splitBoundaryConstIterator</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a93b412f12c1ab04c06cbceec5a545a98" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>SplitBoundaryInterface</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a459a94f78fd569ddf0e2cff1a970e401" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>splitBoundaryIterator</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a8b0e0207c170947f916a79ced2262ef7" prot="protected" virt="non-virtual"><scope>csmp::Model1D</scope><name>splitBoundaryMap_</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a13c8a3dae3a8ba916f712f7e96d000d1" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>Status</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a8642fe6f83bb6981e7c0d6ab5b2c0248" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>Store</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a0e9b7ddb382ce5e6bbb03158289dd5d4" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>StoreArrayEntry</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a482c445697287f2ae4d8b76319725d7a" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>StoreLocalState</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a45d2da858a30e67ffd9993c81705c180" prot="protected" virt="non-virtual"><scope>csmp::Model1D</scope><name>uniqueRegionMap_</name></member>
+      <member refid="classcsmp_1_1_region_interface_1ac86acab5c8c0c3412e429f321f9b3553" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>UniqueRegions</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a916ae01f21232f48b60fe780f252bdd1" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>UniqueRegionsBegin</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a96069c1357b77587e58f698593f10e34" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>UniqueRegionsEnd</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a0f61dad58f69e668195d5a8bbcfdc9cf" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>UpdateRegions</name></member>
+      <member refid="classcsmp_1_1_model_1aa508619f940dab016d03df48e4a2bd7e" prot="protected" virt="non-virtual"><scope>csmp::Model1D</scope><name>UpdateSubdomainPropertyStorage</name></member>
+      <member refid="classcsmp_1_1_model_1ab53b48cf02b4209d52a47484189168b6" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a8e78dcdf294a7c03e43880b5e362fa73" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>~BoundaryInterface</name></member>
+      <member refid="classcsmp_1_1_model_1a5330b8f1f65b441691a80a749f5e0015" prot="public" virt="virtual"><scope>csmp::Model1D</scope><name>~Model</name></member>
+      <member refid="classcsmp_1_1_model1_d_1a79f57479b3eebb230f2d217bda95b95a" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>~Model1D</name></member>
+      <member refid="classcsmp_1_1_region_interface_1ab3dd95b675711d592d29496e48d0726c" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>~RegionInterface</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a196823862fcb230a82e5d0ca21a47142" prot="public" virt="non-virtual"><scope>csmp::Model1D</scope><name>~SplitBoundaryInterface</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,31 @@
+.TH "csmp::LoopUnroller" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::LoopUnroller
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBUnroll\fP (const char *file, int i, const char *var1, const char *var2, const char *expression)"
+.br
+.RI "simple i loop, e\&.g\&. data[i] += obj\&.data[j] "
+.ti -1c
+.RI "void \fBUnroll\fP (const char *file, int i, int j, const char *var1, const char *var2, const char *expression)"
+.br
+.RI "simple i,j loop, e\&.g\&. data[i][j] += obj\&.data[j][j] "
+.ti -1c
+.RI "void \fBUnroll\fP (const char *file, const char *rows, const char *cols, int i, int j, const char *var1, const char *expression1, const char *var2)"
+.br
+.in -1c
+.SH "Member Function Documentation"
+.PP 
+.SS "void csmp::LoopUnroller::Unroll (const char * file, const char * rows, const char * cols, int isz, int jsz, const char * var1, const char * var2, const char * expression)"
+version with inbuilt checks for the current size of the matrix assumes that loop variables are called i,j simple i,j loop, e\&.g\&. data[i][j] += obj\&.data[j][j] 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

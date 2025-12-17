@@ -19,47 +19,46 @@ class BrooksCoreyWithHysteresisCO2 : public TwoPhaseModel<dim> {
 
     BrooksCoreyWithHysteresisCO2( const PropertyDatabase<dim>& database,
                  const char* lamda, const char* pc_entry );
-                           
-    virtual ~BrooksCoreyWithHysteresisCO2();
   
-    /// not constant as it sets the saturation inflection point
-    virtual void Initialize( Element<dim>& e );
-    
     // relative permeabilities
-    virtual double krn_Phase() const;
-    virtual double krw_Phase() const;
+    double krn_Phase() const override final;
+    double krw_Phase() const override final;
 
     // derivative of fractional flow (advection multipliers)
-    virtual double dfds() const;
+    double dfds() const override final;
     
     // maximum absolute value returned by dfdS                              
-    virtual double MaxFractionalFlowDerivative() const;
+    double MaxFractionalFlowDerivative() const override final;
 
     // derivatives of gravitational flow (advection multipliers)                                      
-    virtual double dGds() const;
+    double dGds() const override final;
     
     // capillary pressure
-    virtual double pc_Phase( size_t phase ) const;
+    double pc_Phase() const override final;
     
     // capillary pressure derivatives
-    virtual double dpcds_Phase( size_t phase ) const;
+    double dpcds_Phase() const override final;
       
     // linearized fractional flow derivative
-    virtual double ShockSpeed() const;
-    virtual double ShockHeight() const;
+    double ShockSpeed() const override final;
+    double ShockHeight() const override final;
     
-    virtual void Out( uint32_t phase ) const;
+    void Out( uint32_t phase ) const override final;
+
+  private:
+      /// not constant as it sets (stores) the saturation inflection point on the element
+    void Initialize( Element<dim>& );
 
   private:
     BrooksCoreyWithHysteresisCO2();
-    csmp::Index          pd_key, lamda_key, sormax_key, 
-                         sat_previous_key, sat_inflection_key;
-    const double       acc_gravity_; 
-    double             sat_previous, // previous timestep water saturation
-                         sat_inflection, // brancing point to scaning curve
-                         sormax; //maximum residual oil saturation
-    bool                 imbibing, //True when wetting phase increases
-                         on_scaning_curve; //True when it is on scaning curve                     
+    csmp::Index   pd_key, lamda_key, sormax_key,
+                  sat_previous_key, sat_inflection_key;
+    const double  acc_gravity_;
+    double        sat_previous,     ///< previous timestep water saturation
+                  sat_inflection,   ///< brancing point to scaning curve
+                  sormax;           ///< maximum residual oil saturation
+    bool          imbibing,         ///< True when wetting phase increases
+                  on_scaning_curve; ///< True when it is on scaning curve
     double CC, CK, Sot, Snorm, kroDswinflection, Sof_1_Snorm, kroI_1_Snorm, pm1, pm2; //temporary values for calculating krn()
 };
 

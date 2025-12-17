@@ -32,20 +32,20 @@ class StressesAndStrains<2U> : public MathOperatorLHS<2U,Element> {
                         bool  principal_vectors ); ///< compute principal stresses and strains
     
     /// get displacement values to compute {d} vector
-    virtual void GetOperands( const Element<2U>& );
+    void GetOperands( const Element<2U>& ) override final;
 
     /// {e} = [B]{d}, {s} = [D]{e} at integration points
-    virtual void ComputeContribution( const Element<2U>& );
+    void ComputeContribution( const Element<2U>& ) override final;
 
     /// write {e} to each elements
-    virtual void WriteOperands( Element<2U>& );
+    void WriteOperands( Element<2U>& ) override final;
     
     void PlaneStress( bool yes_no=true );
     
-    inline bool IsPlaneStress() const { return !plane_strain_; }
+    bool IsPlaneStress() const { return !plane_strain_; }
     
     void PrincipalStrainsAndStresses( bool yes_no );
-    virtual StressesAndStrains<2U>* clone() const { return new StressesAndStrains<2U> (*this); }
+    StressesAndStrains<2U>* clone() const override final { return new StressesAndStrains<2U> (*this); }
   protected:
     std::vector<ScalarVariable >      youngs_, pratio_;
     std::vector<DenseMatrix<DM_MIN> >  STIFF_;

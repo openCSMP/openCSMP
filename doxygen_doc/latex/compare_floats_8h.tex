@@ -1,0 +1,73 @@
+\doxysection{source/includes/math/compare\+Floats.h File Reference}
+\hypertarget{compare_floats_8h}{}\label{compare_floats_8h}\index{source/includes/math/compareFloats.h@{source/includes/math/compareFloats.h}}
+{\ttfamily \#include $<$limits$>$}\newline
+{\ttfamily \#include $<$cmath$>$}\newline
+Include dependency graph for compare\+Floats.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=189pt]{compare_floats_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=218pt]{compare_floats_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespacecsmp}{csmp}}
+\begin{DoxyCompactList}\small\item\em Complex System Modeling Platform. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{namespacecsmp_a2c017adb4563d418b21f1d1f9d52064f}\label{namespacecsmp_a2c017adb4563d418b21f1d1f9d52064f} 
+bool {\bfseries csmp\+::approximately\+Equal} (double a, double b)
+\item 
+\Hypertarget{namespacecsmp_a55f45a2a3b6c6c726325c94cd3f3cb00}\label{namespacecsmp_a55f45a2a3b6c6c726325c94cd3f3cb00} 
+bool {\bfseries csmp\+::essentially\+Equal} (double a, double b)
+\item 
+\Hypertarget{namespacecsmp_a41d81a181361c217b29a14d2c143c8e0}\label{namespacecsmp_a41d81a181361c217b29a14d2c143c8e0} 
+bool {\bfseries csmp\+::definitely\+Greater\+Than} (double a, double b)
+\item 
+\Hypertarget{namespacecsmp_a392597a52ccd738e7efd5c897675910e}\label{namespacecsmp_a392597a52ccd738e7efd5c897675910e} 
+bool {\bfseries csmp\+::definitely\+Less\+Than} (double a, double b)
+\item 
+\Hypertarget{namespacecsmp_aacc5ab75eb7bbb77510b4a91d5653e9d}\label{namespacecsmp_aacc5ab75eb7bbb77510b4a91d5653e9d} 
+bool {\bfseries csmp\+::approximately\+Equal} (double a, double b, double epsilon)
+\item 
+\Hypertarget{namespacecsmp_a4a7c4dec8f7cbd9d9669ba439a8eb674}\label{namespacecsmp_a4a7c4dec8f7cbd9d9669ba439a8eb674} 
+bool {\bfseries csmp\+::essentially\+Equal} (double a, double b, double epsilon)
+\item 
+\Hypertarget{namespacecsmp_ae7bf3459c04aab8b937f94f7b903fb94}\label{namespacecsmp_ae7bf3459c04aab8b937f94f7b903fb94} 
+bool {\bfseries csmp\+::definitely\+Greater\+Than} (double a, double b, double epsilon)
+\item 
+\Hypertarget{namespacecsmp_a54b46fd1f88aa1c650069674d2baf19e}\label{namespacecsmp_a54b46fd1f88aa1c650069674d2baf19e} 
+bool {\bfseries csmp\+::definitely\+Less\+Than} (double a, double b, double epsilon)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+"{}math/compare\+Floats.\+h"{} ~\newline
+
+
+\begin{DoxyAuthor}{Author}
+Thomas Driesner, ETH Zuerich ~\newline
+ 
+\end{DoxyAuthor}
+\hypertarget{compare_floats_8h_contact}{}\doxysubsection{\texorpdfstring{Contact}{Contact}}\label{compare_floats_8h_contact}
+~\newline
+ \href{mailto:thomas.driesner@erdw.ethz.ch}{\texttt{thomas.\+driesner@erdw.\+ethz.\+ch}} ~\newline
+
+
+@changes changes Latest Changes ~\newline
+ Oct. 6, 2012\+: ported to CSMP++\hypertarget{compare_floats_8h_motivation}{}\doxysubsection{\texorpdfstring{Motivation}{Motivation}}\label{compare_floats_8h_motivation}
+~\newline
+ A selection of inline functions for float comparisons that account for numerical precision. Function names should be self-\/explanatory. Functions can be traced back to Knuth\textquotesingle{}s book and were found on\+: \href{http://stackoverflow.com/questions/17333/most-effective-way-for-float-and-double-comparison}{\texttt{http\+://stackoverflow.\+com/questions/17333/most-\/effective-\/way-\/for-\/float-\/and-\/double-\/comparison}}\hypertarget{compare_floats_8h_testing}{}\doxysubsection{\texorpdfstring{Testing}{Testing}}\label{compare_floats_8h_testing}
+~\newline
+ code was taken as is without further testing 

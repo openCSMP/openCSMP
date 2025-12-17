@@ -1,0 +1,227 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_mass_based_stencil_processor" kind="class" language="C++" prot="public">
+    <compoundname>csmp::MassBasedStencilProcessor</compoundname>
+    <basecompoundref refid="structcsmp_1_1_explicit_stencil_processor" prot="public" virt="non-virtual">csmp::ExplicitStencilProcessor&lt; dim &gt;</basecompoundref>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_mass_based_stencil_processor_1afb4a6c68a75e24d43bae2e65f3ccf298" prot="public" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::MassBasedStencilProcessor&lt; dim &gt;::adv_rhs_key_</definition>
+        <argsstring></argsstring>
+        <name>adv_rhs_key_</name>
+        <qualifiedname>csmp::MassBasedStencilProcessor::adv_rhs_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/MassBasedStencilProcessor.h" line="20" column="15" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/MassBasedStencilProcessor.h" bodystart="20" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_mass_based_stencil_processor_1adfacec21096c905d88de040c4c8a1a56" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::MassBasedStencilProcessor&lt; dim &gt;::psi2_</definition>
+        <argsstring></argsstring>
+        <name>psi2_</name>
+        <qualifiedname>csmp::MassBasedStencilProcessor::psi2_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/MassBasedStencilProcessor.h" line="22" column="15" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/MassBasedStencilProcessor.h" bodystart="22" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_mass_based_stencil_processor_1a38177ba65dea9e394491f44e369f6d85" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::MassBasedStencilProcessor&lt; dim &gt;::MassBasedStencilProcessor</definition>
+        <argsstring>(const csmp::Index &amp;adv_lhs_key, const csmp::Index &amp;adv_rhs_key, const csmp::Index &amp;velo_key)</argsstring>
+        <name>MassBasedStencilProcessor</name>
+        <qualifiedname>csmp::MassBasedStencilProcessor::MassBasedStencilProcessor</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <declname>adv_lhs_key</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <declname>adv_rhs_key</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <declname>velo_key</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/MassBasedStencilProcessor.h" line="14" column="3" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/MassBasedStencilProcessor.cpp" bodystart="10" bodyend="18"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_mass_based_stencil_processor_1a4b2d47c4796d3ac158ae966783385128" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::MassBasedStencilProcessor&lt; dim &gt;::InitializeFirstOrder</definition>
+        <argsstring>(const FV_Parameter &amp;param, const Element&lt; dim &gt; &amp;e, const VARIABLE_TYPE &amp;vt=SCALAR, uint32_t var_comp_nr=0)</argsstring>
+        <name>InitializeFirstOrder</name>
+        <qualifiedname>csmp::MassBasedStencilProcessor::InitializeFirstOrder</qualifiedname>
+        <reimplements refid="structcsmp_1_1_explicit_stencil_processor_1a2c79c04ce02dc3a1595b75dfa641ec6e">InitializeFirstOrder</reimplements>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_f_v___parameter" kindref="compound">FV_Parameter</ref> &amp;</type>
+          <declname>param</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; &amp;</type>
+          <declname>e</declname>
+        </param>
+        <param>
+          <type>const <ref refid="group___c_s_m_p__global__enumerations_1gacbf62c758c46dc45b3f024638bb89274" kindref="member">VARIABLE_TYPE</ref> &amp;</type>
+          <declname>vt</declname>
+          <defval>SCALAR</defval>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>var_comp_nr</declname>
+          <defval>0</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Initializes sector pore volume and facet flux vectors for current finite element = finite volume stencil. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/MassBasedStencilProcessor.h" line="18" column="16" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/MassBasedStencilProcessor.cpp" bodystart="27" bodyend="143"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>csmp::ExplicitStencilProcessor&lt; dim &gt;</label>
+        <link refid="structcsmp_1_1_explicit_stencil_processor"/>
+      </node>
+      <node id="1">
+        <label>csmp::MassBasedStencilProcessor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_mass_based_stencil_processor"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="8">
+        <label>csmp::DenseMatrix&lt; mn_max &gt;</label>
+        <link refid="classcsmp_1_1_dense_matrix"/>
+      </node>
+      <node id="7">
+        <label>csmp::DenseMatrix&lt; DM_MIN &gt;</label>
+        <link refid="classcsmp_1_1_dense_matrix"/>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; DM_MIN &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::ExplicitStencilProcessor&lt; dim &gt;</label>
+        <link refid="structcsmp_1_1_explicit_stencil_processor"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>+adv1_key_</edgelabel>
+          <edgelabel>+diff_key_</edgelabel>
+          <edgelabel>+vel_key_</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>+DN_</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::Index</label>
+        <link refid="structcsmp_1_1_index"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>+localVariables</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>+integrationPointVariables</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>+indexTracker</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>csmp::IndexTracker</label>
+        <link refid="classcsmp_1_1_index_tracker"/>
+      </node>
+      <node id="5">
+        <label>csmp::IntegrationPointVariables</label>
+        <link refid="structcsmp_1_1_integration_point_variables"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>+ipvCell</edgelabel>
+          <edgelabel>+ipvFacet</edgelabel>
+          <edgelabel>+ipvSector</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>csmp::LocalVariables</label>
+        <link refid="structcsmp_1_1_local_variables"/>
+      </node>
+      <node id="1">
+        <label>csmp::MassBasedStencilProcessor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_mass_based_stencil_processor"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>+adv_rhs_key_</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/MassBasedStencilProcessor.h" line="11" column="1" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/MassBasedStencilProcessor.h" bodystart="11" bodyend="23"/>
+    <listofallmembers>
+      <member refid="structcsmp_1_1_explicit_stencil_processor_1a1cf01e83d7aca9072a40cf0c28346271" prot="public" virt="non-virtual"><scope>csmp::MassBasedStencilProcessor</scope><name>AccumulateExplicitAdvectionDiffusionSolution1</name></member>
+      <member refid="structcsmp_1_1_explicit_stencil_processor_1a0352bc4180cbdaa6fa03289280f15f61" prot="public" virt="non-virtual"><scope>csmp::MassBasedStencilProcessor</scope><name>AccumulateExplicitAdvectionDiffusionSolution2</name></member>
+      <member refid="structcsmp_1_1_explicit_stencil_processor_1a6a68702c72eeb4500acc2adc93be92ea" prot="public" virt="non-virtual"><scope>csmp::MassBasedStencilProcessor</scope><name>AccumulateExplicitAdvectionDiffusionSolution2</name></member>
+      <member refid="structcsmp_1_1_explicit_stencil_processor_1a7c301535ae36efa7c6290ceab9b7f8bf" prot="public" virt="non-virtual"><scope>csmp::MassBasedStencilProcessor</scope><name>AccumulateExplicitAdvectionSolution2</name></member>
+      <member refid="structcsmp_1_1_explicit_stencil_processor_1a65527bebff3f1a67eee6f50499eaaf99" prot="public" virt="non-virtual"><scope>csmp::MassBasedStencilProcessor</scope><name>AccumulateExplicitAdvectionSolution2</name></member>
+      <member refid="structcsmp_1_1_explicit_stencil_processor_1add8058818b54bbd02683a3f7a71c544e" prot="public" virt="non-virtual"><scope>csmp::MassBasedStencilProcessor</scope><name>AccumulateExplicitTwoPhaseSolution1</name></member>
+      <member refid="structcsmp_1_1_explicit_stencil_processor_1a3f388d15cedce931bf5a25c9da293dea" prot="public" virt="non-virtual"><scope>csmp::MassBasedStencilProcessor</scope><name>AccumulateExplicitTwoPhaseSolution1_Visc</name></member>
+      <member refid="structcsmp_1_1_explicit_stencil_processor_1a0301f5db3201c93e045534d698aa0e1c" prot="public" virt="non-virtual"><scope>csmp::MassBasedStencilProcessor</scope><name>AccumulateExplicitTwoPhaseSolution2</name></member>
+      <member refid="structcsmp_1_1_explicit_stencil_processor_1a4b7e3894cb0000fa3017961deeeb2523" prot="public" virt="non-virtual"><scope>csmp::MassBasedStencilProcessor</scope><name>AccumulateExplicitTwoPhaseSolution2</name></member>
+      <member refid="structcsmp_1_1_explicit_stencil_processor_1adfc7a0c642a2ce7bcc4efeb3dc4283c9" prot="public" virt="non-virtual"><scope>csmp::MassBasedStencilProcessor</scope><name>AccumulateExplicitTwoPhaseSolution2</name></member>
+      <member refid="structcsmp_1_1_explicit_stencil_processor_1a35c7218a7338cfee579aba8754afea71" prot="public" virt="non-virtual"><scope>csmp::MassBasedStencilProcessor</scope><name>AccumulateExplicitTwoPhaseSolution2</name></member>
+      <member refid="structcsmp_1_1_explicit_stencil_processor_1a0bec19fd62e414c4fd01d912c59b29ef" prot="public" virt="non-virtual"><scope>csmp::MassBasedStencilProcessor</scope><name>AccumulateExplicitTwoPhaseSolution2_Visc</name></member>
+      <member refid="structcsmp_1_1_explicit_stencil_processor_1aafe4c7b7451b360ed772aced4a464c79" prot="public" virt="non-virtual"><scope>csmp::MassBasedStencilProcessor</scope><name>AccumulateExplicitTwoPhaseSolution2_Visc</name></member>
+      <member refid="structcsmp_1_1_explicit_stencil_processor_1a8ef964be17d9e2344a39dc295b3015ef" prot="public" virt="non-virtual"><scope>csmp::MassBasedStencilProcessor</scope><name>AccumulateExplicitTwoPhaseSolutionAtBoundary</name></member>
+      <member refid="structcsmp_1_1_explicit_stencil_processor_1a2006a320253ff173fe6d1da7a95be13d" prot="public" virt="non-virtual"><scope>csmp::MassBasedStencilProcessor</scope><name>adv1_key_</name></member>
+      <member refid="classcsmp_1_1_mass_based_stencil_processor_1afb4a6c68a75e24d43bae2e65f3ccf298" prot="public" virt="non-virtual"><scope>csmp::MassBasedStencilProcessor</scope><name>adv_rhs_key_</name></member>
+      <member refid="structcsmp_1_1_explicit_stencil_processor_1a041eaec717e681952bafccc7e05c4715" prot="public" virt="non-virtual"><scope>csmp::MassBasedStencilProcessor</scope><name>diff_key_</name></member>
+      <member refid="structcsmp_1_1_explicit_stencil_processor_1aaa65fab00b637b46226ef51a5705da6a" prot="public" virt="non-virtual"><scope>csmp::MassBasedStencilProcessor</scope><name>DN_</name></member>
+      <member refid="structcsmp_1_1_explicit_stencil_processor_1a2a7ff06b0f93c1a202b210665ef83ecb" prot="public" virt="non-virtual"><scope>csmp::MassBasedStencilProcessor</scope><name>dsdn_</name></member>
+      <member refid="structcsmp_1_1_explicit_stencil_processor_1a4d2d709a22818f06650116b72df120e8" prot="public" virt="non-virtual"><scope>csmp::MassBasedStencilProcessor</scope><name>eidx_</name></member>
+      <member refid="structcsmp_1_1_explicit_stencil_processor_1a6247d6982596b0075bc237814fc12a81" prot="public" virt="non-virtual"><scope>csmp::MassBasedStencilProcessor</scope><name>ExplicitStencilProcessor</name></member>
+      <member refid="structcsmp_1_1_explicit_stencil_processor_1a5bea5e0d66bfd4f8c9f91a68e8550de7" prot="public" virt="non-virtual"><scope>csmp::MassBasedStencilProcessor</scope><name>ExplicitStencilProcessor</name></member>
+      <member refid="structcsmp_1_1_explicit_stencil_processor_1a1dd4d8ad248149dea68b74ab2ec5d91f" prot="protected" virt="non-virtual"><scope>csmp::MassBasedStencilProcessor</scope><name>ExplicitStencilProcessor</name></member>
+      <member refid="structcsmp_1_1_explicit_stencil_processor_1a65c6dc7bb9b7d7afe9d9b44ce6cdc716" prot="public" virt="non-virtual"><scope>csmp::MassBasedStencilProcessor</scope><name>facet_flux_</name></member>
+      <member refid="structcsmp_1_1_explicit_stencil_processor_1a57477488ca6d81eac02ae223e78f6990" prot="public" virt="non-virtual"><scope>csmp::MassBasedStencilProcessor</scope><name>grad_</name></member>
+      <member refid="classcsmp_1_1_mass_based_stencil_processor_1a4b2d47c4796d3ac158ae966783385128" prot="public" virt="virtual"><scope>csmp::MassBasedStencilProcessor</scope><name>InitializeFirstOrder</name></member>
+      <member refid="structcsmp_1_1_explicit_stencil_processor_1a75d75d2ef0e1e9cd898707e1e6a3c1a2" prot="public" virt="non-virtual"><scope>csmp::MassBasedStencilProcessor</scope><name>inside_node_</name></member>
+      <member refid="classcsmp_1_1_mass_based_stencil_processor_1a38177ba65dea9e394491f44e369f6d85" prot="public" virt="non-virtual"><scope>csmp::MassBasedStencilProcessor</scope><name>MassBasedStencilProcessor</name></member>
+      <member refid="structcsmp_1_1_explicit_stencil_processor_1a2f2a92fbe93286d4cb3c77542b92f4b6" prot="public" virt="non-virtual"><scope>csmp::MassBasedStencilProcessor</scope><name>Out</name></member>
+      <member refid="structcsmp_1_1_explicit_stencil_processor_1a298755945ae0026a6d5d5314d3c8de94" prot="public" virt="non-virtual"><scope>csmp::MassBasedStencilProcessor</scope><name>outside_node_</name></member>
+      <member refid="structcsmp_1_1_explicit_stencil_processor_1a95eaab478bd3d514cca9363417e219d1" prot="public" virt="non-virtual"><scope>csmp::MassBasedStencilProcessor</scope><name>pc_</name></member>
+      <member refid="structcsmp_1_1_explicit_stencil_processor_1a6cd8ebbc887bf1c9d879235d2ba06f78" prot="public" virt="non-virtual"><scope>csmp::MassBasedStencilProcessor</scope><name>pc_grad_</name></member>
+      <member refid="structcsmp_1_1_explicit_stencil_processor_1a55173e702e1013cf6d40e48a55d54d4e" prot="public" virt="non-virtual"><scope>csmp::MassBasedStencilProcessor</scope><name>psi1_</name></member>
+      <member refid="classcsmp_1_1_mass_based_stencil_processor_1adfacec21096c905d88de040c4c8a1a56" prot="public" virt="non-virtual"><scope>csmp::MassBasedStencilProcessor</scope><name>psi2_</name></member>
+      <member refid="structcsmp_1_1_explicit_stencil_processor_1a0cfdcc2b0d3a932fc82fb7b9ea560b3b" prot="public" virt="non-virtual"><scope>csmp::MassBasedStencilProcessor</scope><name>sector_pore_volume_</name></member>
+      <member refid="structcsmp_1_1_explicit_stencil_processor_1a5a296d3a0aa5e425eaf6125b8ef3277b" prot="public" virt="non-virtual"><scope>csmp::MassBasedStencilProcessor</scope><name>src_</name></member>
+      <member refid="structcsmp_1_1_explicit_stencil_processor_1a933167c78fe49270b48f85b87a0b94ce" prot="public" virt="non-virtual"><scope>csmp::MassBasedStencilProcessor</scope><name>vel_key_</name></member>
+      <member refid="structcsmp_1_1_explicit_stencil_processor_1a6fde42414ef4b898ad62379d24cbf192" prot="public" virt="virtual"><scope>csmp::MassBasedStencilProcessor</scope><name>~ExplicitStencilProcessor</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

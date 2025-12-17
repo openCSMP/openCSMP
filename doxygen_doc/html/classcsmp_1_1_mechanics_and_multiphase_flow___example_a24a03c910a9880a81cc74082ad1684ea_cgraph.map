@@ -1,0 +1,11 @@
+<map id="csmp::MechanicsAndMultiphaseFlow_Example::Run" name="csmp::MechanicsAndMultiphaseFlow_Example::Run">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,92,216,133"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_isoparametric_quadratic_triangle.html#a1e17d7f0eca3b8aef1193869ed7bf4a8" title="sets the integration points in the inside of the triangle near the nodes (default is midside node int..." alt="" coords="264,5,488,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="167,89,263,55,285,48,286,53,265,60,168,94"/>
+<area shape="rect" id="Node000003" href="$classcsmp_1_1_standard___i_o___handler.html#af0c6c5b2725833937b5c92ef1a586cf3" title="prints all the recorded information to the output text file &#39;doc_file&#39;" alt="" coords="268,70,484,96"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="216,98,253,94,253,99,216,103"/>
+<area shape="rect" id="Node000004" href="$classcsmp_1_1_stresses_and_strains_3_012_u_01_4.html#a52ef96b3500558c0bb685f7cfe6748f3" title=" " alt="" coords="287,120,464,161"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="216,121,272,127,271,132,216,126"/>
+<area shape="rect" id="Node000005" href="$classcsmp_1_1_standard___i_o___handler.html#a5526bf3f6d3e2d6aab9b084fc474c334" title="prompts user to make a binary choice which is collected from stdin returned" alt="" coords="283,185,469,226"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="163,131,265,170,288,178,287,183,263,175,161,136"/>
+</map>

@@ -1,0 +1,239 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_operation" kind="class" language="C++" prot="public">
+    <compoundname>csmp::Operation</compoundname>
+    <includes refid="_operation_8h" local="no">Operation.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_operation_1a747f788d02364ad844c4361087e774d8" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::Operation::name_</definition>
+        <argsstring></argsstring>
+        <name>name_</name>
+        <qualifiedname>csmp::Operation::name_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/Operation.h" line="44" column="20" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/Operation.h" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_operation_1ae1c4b245cd9c09f4c10e2113854e6a07" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::Operation::key_</definition>
+        <argsstring></argsstring>
+        <name>key_</name>
+        <qualifiedname>csmp::Operation::key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/Operation.h" line="44" column="26" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/Operation.h" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_operation_1a927da621b82b19139364623d3439ea4a" prot="private" static="no" mutable="no">
+        <type><ref refid="namespacecsmp_1a0359e634c5c80ec756c64874375ef439" kindref="member">OPERATION_TYPE</ref></type>
+        <definition>OPERATION_TYPE csmp::Operation::operation_type_</definition>
+        <argsstring></argsstring>
+        <name>operation_type_</name>
+        <qualifiedname>csmp::Operation::operation_type_</qualifiedname>
+        <initializer>= ADD</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/Operation.h" line="45" column="20" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/Operation.h" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_operation_1a7b6655304d9dbc5da93e47b1d015e83e" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int csmp::Operation::execution_level_</definition>
+        <argsstring></argsstring>
+        <name>execution_level_</name>
+        <qualifiedname>csmp::Operation::execution_level_</qualifiedname>
+        <initializer>= 1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/Operation.h" line="46" column="20" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/Operation.h" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_operation_1a37434b1bd628b50fba4f1a1f3ec9496b" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::Operation::multiply_with_time_increment_</definition>
+        <argsstring></argsstring>
+        <name>multiply_with_time_increment_</name>
+        <qualifiedname>csmp::Operation::multiply_with_time_increment_</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/Operation.h" line="47" column="20" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/Operation.h" bodystart="47" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_operation_1a4d36529cb68c926ba3de9eacd0461986" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Operation::Operation</definition>
+        <argsstring>(const std::string &amp;name, OPERATION_TYPE, int execution_level, bool multiply_with_dt)</argsstring>
+        <name>Operation</name>
+        <qualifiedname>csmp::Operation::Operation</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="namespacecsmp_1a0359e634c5c80ec756c64874375ef439" kindref="member">OPERATION_TYPE</ref></type>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>execution_level</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>multiply_with_dt</declname>
+        </param>
+        <briefdescription>
+<para>the operation type, execution level and name, are strung together into a key </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/Operation.h" line="27" column="5" bodyfile="source/modules/integration/finite_volumes/generic_transport_scheme/source/Operation.cpp" bodystart="36" bodyend="43"/>
+        <references refid="classcsmp_1_1_operation_1a4d36529cb68c926ba3de9eacd0461986" compoundref="_operation_8cpp" startline="36" endline="43">Operation</references>
+        <referencedby refid="classcsmp_1_1_operation_1a4d36529cb68c926ba3de9eacd0461986" compoundref="_operation_8cpp" startline="36" endline="43">Operation</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operation_1a538f7588fc49c72a6aaf35d93d8a530a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Operation::operator&lt;</definition>
+        <argsstring>(const Operation &amp;op) const</argsstring>
+        <name>operator&lt;</name>
+        <qualifiedname>csmp::Operation::operator&lt;</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_operation" kindref="compound">Operation</ref> &amp;</type>
+          <declname>op</declname>
+        </param>
+        <briefdescription>
+<para>to determine place of operation in the sequence of operations </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/Operation.h" line="30" column="5" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/Operation.h" bodystart="30" bodyend="30"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operation_1a5acd4bc7e6ef5abb921c1fd0600306c7" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="namespacecsmp_1a0359e634c5c80ec756c64874375ef439" kindref="member">OPERATION_TYPE</ref></type>
+        <definition>OPERATION_TYPE csmp::Operation::OperationType</definition>
+        <argsstring>() const</argsstring>
+        <name>OperationType</name>
+        <qualifiedname>csmp::Operation::OperationType</qualifiedname>
+        <briefdescription>
+<para>addition, subtraction, multiplication, division </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/Operation.h" line="33" column="20" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/Operation.h" bodystart="33" bodyend="33"/>
+        <referencedby refid="classcsmp_1_1_integral_equation_1a5954014d82d68575b13b50537607bc4b" compoundref="_integral_equation_8cpp" startline="169" endline="184">csmp::IntegralEquation&lt; dim, VARIABLE_SET &gt;::Add</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operation_1af67d1aba9966188ed3953404038d899a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>int</type>
+        <definition>int csmp::Operation::ExecutionLevel</definition>
+        <argsstring>() const</argsstring>
+        <name>ExecutionLevel</name>
+        <qualifiedname>csmp::Operation::ExecutionLevel</qualifiedname>
+        <briefdescription>
+<para>when (in a sequence) the operation shall be performed </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/Operation.h" line="36" column="9" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/Operation.h" bodystart="36" bodyend="36"/>
+        <referencedby refid="classcsmp_1_1_integral_equation_1a5954014d82d68575b13b50537607bc4b" compoundref="_integral_equation_8cpp" startline="169" endline="184">csmp::IntegralEquation&lt; dim, VARIABLE_SET &gt;::Add</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operation_1a727b41df8c87b40f65760cd80e74aa3e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Operation::MultiplyWithTimeIncrement</definition>
+        <argsstring>(bool multiply)</argsstring>
+        <name>MultiplyWithTimeIncrement</name>
+        <qualifiedname>csmp::Operation::MultiplyWithTimeIncrement</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>multiply</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/Operation.h" line="38" column="10" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/Operation.h" bodystart="38" bodyend="38"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operation_1a76ca0349a63bf04940ccf8706f7eb15c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Operation::MultiplyWithTimeIncrement</definition>
+        <argsstring>() const</argsstring>
+        <name>MultiplyWithTimeIncrement</name>
+        <qualifiedname>csmp::Operation::MultiplyWithTimeIncrement</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/Operation.h" line="39" column="10" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/Operation.h" bodystart="39" bodyend="39"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_operation_1a5aa33ba842abead5d8a417ac0d1a2aae" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Operation::Out</definition>
+        <argsstring>() const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::Operation::Out</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/Operation.h" line="41" column="10" bodyfile="source/modules/integration/finite_volumes/generic_transport_scheme/source/Operation.cpp" bodystart="47" bodyend="55"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Specifies how to accumulate the Matrix- or Vector operators. TODO: add factor for the case where multiplication or division is the operation type? </para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::Operation</label>
+        <link refid="classcsmp_1_1_operation"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/integration/finite_volumes/generic_transport_scheme/Operation.h" line="24" column="1" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/Operation.h" bodystart="24" bodyend="48"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_operation_1a7b6655304d9dbc5da93e47b1d015e83e" prot="private" virt="non-virtual"><scope>csmp::Operation</scope><name>execution_level_</name></member>
+      <member refid="classcsmp_1_1_operation_1af67d1aba9966188ed3953404038d899a" prot="public" virt="non-virtual"><scope>csmp::Operation</scope><name>ExecutionLevel</name></member>
+      <member refid="classcsmp_1_1_operation_1ae1c4b245cd9c09f4c10e2113854e6a07" prot="private" virt="non-virtual"><scope>csmp::Operation</scope><name>key_</name></member>
+      <member refid="classcsmp_1_1_operation_1a37434b1bd628b50fba4f1a1f3ec9496b" prot="private" virt="non-virtual"><scope>csmp::Operation</scope><name>multiply_with_time_increment_</name></member>
+      <member refid="classcsmp_1_1_operation_1a727b41df8c87b40f65760cd80e74aa3e" prot="public" virt="non-virtual"><scope>csmp::Operation</scope><name>MultiplyWithTimeIncrement</name></member>
+      <member refid="classcsmp_1_1_operation_1a76ca0349a63bf04940ccf8706f7eb15c" prot="public" virt="non-virtual"><scope>csmp::Operation</scope><name>MultiplyWithTimeIncrement</name></member>
+      <member refid="classcsmp_1_1_operation_1a747f788d02364ad844c4361087e774d8" prot="private" virt="non-virtual"><scope>csmp::Operation</scope><name>name_</name></member>
+      <member refid="classcsmp_1_1_operation_1a4d36529cb68c926ba3de9eacd0461986" prot="public" virt="non-virtual"><scope>csmp::Operation</scope><name>Operation</name></member>
+      <member refid="classcsmp_1_1_operation_1a927da621b82b19139364623d3439ea4a" prot="private" virt="non-virtual"><scope>csmp::Operation</scope><name>operation_type_</name></member>
+      <member refid="classcsmp_1_1_operation_1a5acd4bc7e6ef5abb921c1fd0600306c7" prot="public" virt="non-virtual"><scope>csmp::Operation</scope><name>OperationType</name></member>
+      <member refid="classcsmp_1_1_operation_1a538f7588fc49c72a6aaf35d93d8a530a" prot="public" virt="non-virtual"><scope>csmp::Operation</scope><name>operator&lt;</name></member>
+      <member refid="classcsmp_1_1_operation_1a5aa33ba842abead5d8a417ac0d1a2aae" prot="public" virt="non-virtual"><scope>csmp::Operation</scope><name>Out</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

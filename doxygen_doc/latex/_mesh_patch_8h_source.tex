@@ -1,0 +1,68 @@
+\doxysection{Mesh\+Patch.\+h}
+\hypertarget{_mesh_patch_8h_source}{}\label{_mesh_patch_8h_source}\index{source/includes/model/MeshPatch.h@{source/includes/model/MeshPatch.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ \ MeshPatchAttributes.h}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ \ CSMP\_unit\_tests}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ \ Created\ by\ Stephan\ Matthai\ on\ 23/5/21.}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//\ \ Copyright\ ©\ 2021\ Stephan\ Matthai.\ All\ rights\ reserved.}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_MESH\_PATCH\_H}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_MESH\_PATCH\_H}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_finite_element_8h}{"{}FiniteElement.h"{}}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}plf\_colony.h"{}}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_element}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}};}
+\DoxyCodeLine{00018\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_node}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}};}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ \ \ \ \ \ Contiguous\ mesh\ patch\ that\ can,\ but\ does\ not\ have\ to\ be\ integrated\ into\ a\ Model.}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ \ \ \ \ \ The\ idea\ is\ to\ temporarily\ store\ parts\ of\ a\ mesh\ during\ rebuilding\ operations;}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ \ \ \ \ \ Size\ info\ is\ used\ also\ to\ keep\ number\ information\ uptodate.}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ @author\ SKM}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ @date\ 23/5/21}}
+\DoxyCodeLine{00027\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00028\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00029\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_mesh_patch}{MeshPatch}}\ \{}
+\DoxyCodeLine{00030\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{comment}{///\ specify\ whether\ this\ is\ a\ volume,\ surface\ or\ line\ element\ patch}}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classcsmp_1_1_mesh_patch_a72de8a95992b3e14d60b9137d9c96073}{MeshPatch}}(\ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gae70f4082919c7730a8934bfcac658ea2}{CELL\_SHAPE}}\ cs\ )\ :\ cell\_dimension\_\{cs\}\ \{\}}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \textcolor{comment}{///\ creates\ an\ interconnected\ element\ patch\ from\ the\ shared\ faces\ of\ the\ supplied\ elements;\ replicates\ nodes\ upon\ request,\ and\ returns\ perimeter\ nodes\ and\ size\ of\ patch}}
+\DoxyCodeLine{00035\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_mesh_patch_a59427cdb469c501b7d31b64cf1bee212}{size\_t}}\ \mbox{\hyperlink{classcsmp_1_1_mesh_patch_a59427cdb469c501b7d31b64cf1bee212}{BuildInterveningPatch}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_mesh_patch_a59427cdb469c501b7d31b64cf1bee212}{std}}::\mbox{\hyperlink{classcsmp_1_1_mesh_patch_a59427cdb469c501b7d31b64cf1bee212}{vector}}<\mbox{\hyperlink{classcsmp_1_1_mesh_patch_a59427cdb469c501b7d31b64cf1bee212}{std}}::\mbox{\hyperlink{classcsmp_1_1_mesh_patch_a59427cdb469c501b7d31b64cf1bee212}{pair}}<\mbox{\hyperlink{classcsmp_1_1_mesh_patch_a59427cdb469c501b7d31b64cf1bee212}{std}}::\mbox{\hyperlink{classcsmp_1_1_mesh_patch_a59427cdb469c501b7d31b64cf1bee212}{pair}}<\mbox{\hyperlink{classcsmp_1_1_mesh_patch_a59427cdb469c501b7d31b64cf1bee212}{Element}}<\mbox{\hyperlink{classcsmp_1_1_mesh_patch_a59427cdb469c501b7d31b64cf1bee212}{dim}}>*,\mbox{\hyperlink{classcsmp_1_1_mesh_patch_a59427cdb469c501b7d31b64cf1bee212}{uint32\_t}}>,}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_mesh_patch_a59427cdb469c501b7d31b64cf1bee212}{std}}::\mbox{\hyperlink{classcsmp_1_1_mesh_patch_a59427cdb469c501b7d31b64cf1bee212}{pair}}<\mbox{\hyperlink{classcsmp_1_1_mesh_patch_a59427cdb469c501b7d31b64cf1bee212}{Element}}<\mbox{\hyperlink{classcsmp_1_1_mesh_patch_a59427cdb469c501b7d31b64cf1bee212}{dim}}>*,\mbox{\hyperlink{classcsmp_1_1_mesh_patch_a59427cdb469c501b7d31b64cf1bee212}{uint32\_t}}>\ >\ >\&,}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_mesh_patch_a59427cdb469c501b7d31b64cf1bee212}{copy\_nodes}},}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_mesh_patch_a59427cdb469c501b7d31b64cf1bee212}{std}}::\mbox{\hyperlink{classcsmp_1_1_mesh_patch_a59427cdb469c501b7d31b64cf1bee212}{vector}}<\mbox{\hyperlink{classcsmp_1_1_mesh_patch_a59427cdb469c501b7d31b64cf1bee212}{Node}}<\mbox{\hyperlink{classcsmp_1_1_mesh_patch_a59427cdb469c501b7d31b64cf1bee212}{dim}}>*>\ \ \mbox{\hyperlink{classcsmp_1_1_mesh_patch_a59427cdb469c501b7d31b64cf1bee212}{perimeter\_node\_ptrs}}\ );}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{comment}{///\ how\ many\ different\ finite\ element\ types\ the\ patch\ contains}}
+\DoxyCodeLine{00041\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_mesh_patch_a91b2cd56af3c4eb464d0162b59672efa}{size\_t}}\ \mbox{\hyperlink{classcsmp_1_1_mesh_patch_a91b2cd56af3c4eb464d0162b59672efa}{CellTypes}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{comment}{///\ whether\ this\ is\ a\ LINE,\ SURFACE\ or\ VOLUME\ mesh}}
+\DoxyCodeLine{00043\ \ \ \ \ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gae70f4082919c7730a8934bfcac658ea2}{CELL\_SHAPE}}\ \mbox{\hyperlink{classcsmp_1_1_mesh_patch_a2dfff4371950d90cdc211709a429d6ac}{CellGeometry}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00044\ \ \ \ \ size\_t\ Cells()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00045\ \ \ \ \ size\_t\ Nodes()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{typename}\ plf::colony<Element<dim>>::iterator\ ElementsBegin();}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keyword}{typename}\ plf::colony<Element<dim>>::iterator\ ElementsEnd();}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keyword}{typename}\ plf::colony<Node<dim>>::iterator\ NodesBegin();}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keyword}{typename}\ plf::colony<Node<dim>>::iterator\ NodesEnd();}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00054\ \ \ \ \ std::map<CSMP\_FEM\_TYPE,FiniteElement*>\ \ fe\_ptrs\_;\ \ \ \ \ \ \ \ \textcolor{comment}{///<\ finite-\/element\ pointers\ used\ in\ the\ FE\ policy}}
+\DoxyCodeLine{00055\ \ \ \ \ plf::colony<Node<dim>>\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ nodes\_;\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ \ nodes\ (if\ they\ are\ pre-\/existing,\ a\ light\ copy\ without\ properties\ is\ made)}}
+\DoxyCodeLine{00056\ \ \ \ \ plf::colony<Element<dim>>\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ elements\_;\ \ \ \ \ \ \ \textcolor{comment}{///<\ \ elements}}
+\DoxyCodeLine{00057\ \ \ \ \ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gae70f4082919c7730a8934bfcac658ea2}{CELL\_SHAPE}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cell\_dimension\_;\ \textcolor{comment}{///<\ \ types\ of\ elements\ in\ the\ patch}}
+\DoxyCodeLine{00058\ \};}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \}\ \textcolor{comment}{//\ end\ csmp}}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{/*\ CSMP\_MESH\_PATCH\_ATTRIBUTES\_H\ */}}
+
+\end{DoxyCode}

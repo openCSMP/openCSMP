@@ -1,0 +1,602 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_statistical_analyzer" kind="class" language="C++" prot="public">
+    <compoundname>csmp::StatisticalAnalyzer</compoundname>
+    <includes refid="_statistical_analyzer_8h" local="no">StatisticalAnalyzer.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_statistical_analyzer_1ab455c4788d40adb3139d278e66bae642" prot="private" static="no" mutable="no">
+        <type>const <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+        <definition>const Model&lt;dim&gt;&amp; csmp::StatisticalAnalyzer&lt; dim &gt;::sref</definition>
+        <argsstring></argsstring>
+        <name>sref</name>
+        <qualifiedname>csmp::StatisticalAnalyzer::sref</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/StatisticalAnalyzer.h" line="102" column="29" bodyfile="source/includes/analysis/StatisticalAnalyzer.h" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_statistical_analyzer_1ad66d35e8f9882109330f9833b2106405" prot="private" static="no" mutable="no">
+        <type>const <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>&lt; dim &gt; &amp;</type>
+        <definition>const PropertyDatabase&lt;dim&gt;&amp; csmp::StatisticalAnalyzer&lt; dim &gt;::pref</definition>
+        <argsstring></argsstring>
+        <name>pref</name>
+        <qualifiedname>csmp::StatisticalAnalyzer::pref</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/StatisticalAnalyzer.h" line="103" column="29" bodyfile="source/includes/analysis/StatisticalAnalyzer.h" bodystart="103" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_statistical_analyzer_1a4348a06e38916b8253ede128b31b010d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::StatisticalAnalyzer&lt; dim &gt;::StatisticalAnalyzer</definition>
+        <argsstring>(const Model&lt; dim &gt; &amp;)</argsstring>
+        <name>StatisticalAnalyzer</name>
+        <qualifiedname>csmp::StatisticalAnalyzer::StatisticalAnalyzer</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <defname>sg</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/StatisticalAnalyzer.h" line="24" column="5" bodyfile="source/modules/analysis/StatisticalAnalyzer.cpp" bodystart="15" bodyend="19"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_statistical_analyzer_1ac2adbf7d35bd390e8655527a5458cd34" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::StatisticalAnalyzer&lt; dim &gt;::~StatisticalAnalyzer</definition>
+        <argsstring>()</argsstring>
+        <name>~StatisticalAnalyzer</name>
+        <qualifiedname>csmp::StatisticalAnalyzer::~StatisticalAnalyzer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/StatisticalAnalyzer.h" line="25" column="5" bodyfile="source/modules/analysis/StatisticalAnalyzer.cpp" bodystart="23" bodyend="25"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_statistical_analyzer_1ab2e44dbfee3b073ee83780f0f0245f4d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::StatisticalAnalyzer&lt; dim &gt;::DefineBins</definition>
+        <argsstring>(const char *bin_ascii_file, HistogramBins &amp;) const</argsstring>
+        <name>DefineBins</name>
+        <qualifiedname>csmp::StatisticalAnalyzer::DefineBins</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>bin_ascii_file</declname>
+          <defname>bin_file</defname>
+        </param>
+        <param>
+          <type>HistogramBins &amp;</type>
+          <defname>data</defname>
+        </param>
+        <briefdescription>
+<para>specify via ascii input file, the x-axis range of the histogram columns, i.e. the bin size </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Function defines the bins for the histogram on the basis of the user input as specified in file which is read by this function. The file should contain the following information:</para>
+<para>title number of bin-dilimiter values (integer) bin bound values (floating point) EOF</para>
+<para><ref refid="classcsmp_1_1_example" kindref="compound">Example</ref> &apos;myfile.bins&apos; 8 1.0e-5 2.0e-5 4.0e-5 6.0e-5 8.0e-5 1.0e-4 2.0e-4 6.0e-4 EOF </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/StatisticalAnalyzer.h" line="28" column="10" bodyfile="source/modules/analysis/StatisticalAnalyzer.cpp" bodystart="1413" bodyend="1464"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_statistical_analyzer_1aae8db381dad50be17ae2ddb6d22a3ee0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::StatisticalAnalyzer&lt; dim &gt;::DefineBins</definition>
+        <argsstring>(HistogramBins &amp;bins, double first_val,...) const</argsstring>
+        <name>DefineBins</name>
+        <qualifiedname>csmp::StatisticalAnalyzer::DefineBins</qualifiedname>
+        <param>
+          <type>HistogramBins &amp;</type>
+          <declname>bins</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>first_val</declname>
+        </param>
+        <param>
+          <type>...</type>
+        </param>
+        <briefdescription>
+<para>specify the binsize using bin ranges specified by a sequence of double values of user-defined length </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/StatisticalAnalyzer.h" line="31" column="10" bodyfile="source/modules/analysis/StatisticalAnalyzer.cpp" bodystart="1472" bodyend="1509"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_statistical_analyzer_1a18b993a0035174202d32b126a97afb0b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::StatisticalAnalyzer&lt; dim &gt;::DefineBins</definition>
+        <argsstring>(const double minimum, const double maximum, const size_t number_of_bins, HistogramBins &amp;data) const</argsstring>
+        <name>DefineBins</name>
+        <qualifiedname>csmp::StatisticalAnalyzer::DefineBins</qualifiedname>
+        <param>
+          <type>const double</type>
+          <declname>minimum</declname>
+        </param>
+        <param>
+          <type>const double</type>
+          <declname>maximum</declname>
+        </param>
+        <param>
+          <type>const size_t</type>
+          <declname>number_of_bins</declname>
+        </param>
+        <param>
+          <type>HistogramBins &amp;</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+<para>creats histogram bins by providing the data range and number of devisions </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/StatisticalAnalyzer.h" line="34" column="10" bodyfile="source/modules/analysis/StatisticalAnalyzer.cpp" bodystart="1513" bodyend="1549"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_statistical_analyzer_1a51b63c9e021f29ea73c62ac884442bb7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::StatisticalAnalyzer&lt; dim &gt;::RegionPropertyHistograms</definition>
+        <argsstring>(const char *prop, const HistogramBins &amp;bins, std::map&lt; std::string, std::pair&lt; HistogramBins, size_t &gt; &gt; &amp;results) const</argsstring>
+        <name>RegionPropertyHistograms</name>
+        <qualifiedname>csmp::StatisticalAnalyzer::RegionPropertyHistograms</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>prop</declname>
+          <briefdescription><para>analysed element variable </para>
+</briefdescription>
+        </param>
+        <param>
+          <type>const HistogramBins &amp;</type>
+          <declname>bins</declname>
+          <briefdescription><para>bin ranges from &lt; to &lt;= </para>
+</briefdescription>
+        </param>
+        <param>
+          <type>std::map&lt; std::string, std::pair&lt; HistogramBins, size_t &gt; &gt; &amp;</type>
+          <declname>results</declname>
+        </param>
+        <briefdescription>
+<para>normalizes number of counts by element volume </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/StatisticalAnalyzer.h" line="40" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_statistical_analyzer_1ab3d0f3b485cf4f62bea5a6055fce78a0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::StatisticalAnalyzer&lt; dim &gt;::RegionPropertyHistograms</definition>
+        <argsstring>(const char *prop, const HistogramBins &amp;bins, std::map&lt; std::string, std::pair&lt; HistogramBins, size_t &gt; &gt; &amp;results, bool normalize) const</argsstring>
+        <name>RegionPropertyHistograms</name>
+        <qualifiedname>csmp::StatisticalAnalyzer::RegionPropertyHistograms</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>prop</declname>
+        </param>
+        <param>
+          <type>const HistogramBins &amp;</type>
+          <declname>bins</declname>
+        </param>
+        <param>
+          <type>std::map&lt; std::string, std::pair&lt; HistogramBins, size_t &gt; &gt; &amp;</type>
+          <declname>results</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>normalize</declname>
+        </param>
+        <briefdescription>
+<para>normalize by counts; </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="attention"><para>this makes sense only for regular grids </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/StatisticalAnalyzer.h" line="46" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_statistical_analyzer_1ae4d01d3b13c978029168683652c69028" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::StatisticalAnalyzer&lt; dim &gt;::RegionPropertyHistogramsElement</definition>
+        <argsstring>(const char *prop, const HistogramBins &amp;bins, std::map&lt; std::string, std::pair&lt; HistogramBins, size_t &gt; &gt; &amp;results) const</argsstring>
+        <name>RegionPropertyHistogramsElement</name>
+        <qualifiedname>csmp::StatisticalAnalyzer::RegionPropertyHistogramsElement</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>prop</declname>
+        </param>
+        <param>
+          <type>const HistogramBins &amp;</type>
+          <declname>bins</declname>
+        </param>
+        <param>
+          <type>std::map&lt; std::string, std::pair&lt; HistogramBins, size_t &gt; &gt; &amp;</type>
+          <declname>results</declname>
+        </param>
+        <briefdescription>
+<para>analyzes properties element by element interpolating variables to barycenter if necessary </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Goes through all Regions of current <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> and calculates the area/volume of the region with property values within the ranges defined in &apos;bins&apos;. Normalizes the computed values by the total area/volume of the <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref>. Returns a map of bins and area/volume normalized values for each region using the region name as key / identifier. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/StatisticalAnalyzer.h" line="55" column="10" bodyfile="source/modules/analysis/StatisticalAnalyzer.cpp" bodystart="332" bodyend="513"/>
+        <references refid="classcsmp_1_1_scalar_variable_1a7f0ab5431406d975d6e1de988f369176" compoundref="_scalar_variable_8cpp" startline="6" endline="6">csmp::ScalarVariable::operator()</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_statistical_analyzer_1a55a5fa7c318c71fc8d374b6410fcb1ba" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::StatisticalAnalyzer&lt; dim &gt;::RegionPropertyHistogramsIntegrationPoint</definition>
+        <argsstring>(const char *prop, const HistogramBins &amp;bins, std::map&lt; std::string, std::pair&lt; HistogramBins, size_t &gt; &gt; &amp;results, const std::string &amp;flow_domain) const</argsstring>
+        <name>RegionPropertyHistogramsIntegrationPoint</name>
+        <qualifiedname>csmp::StatisticalAnalyzer::RegionPropertyHistogramsIntegrationPoint</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>prop</declname>
+        </param>
+        <param>
+          <type>const HistogramBins &amp;</type>
+          <declname>bins</declname>
+        </param>
+        <param>
+          <type>std::map&lt; std::string, std::pair&lt; HistogramBins, size_t &gt; &gt; &amp;</type>
+          <declname>results</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>flow_domain</declname>
+        </param>
+        <briefdescription>
+<para>analyzes properties element by element, integral over interpolation points of each element; written for velocity </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Goes through all Regions of current <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> and calculates the area/volume of the region with property values within the ranges defined in &apos;bins&apos;. Normalizes the computed values by the total area/volume of the <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref>. Returns a map of bins and area/volume normalized values for each region using the region name as key / identifier. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/StatisticalAnalyzer.h" line="60" column="10" bodyfile="source/modules/analysis/StatisticalAnalyzer.cpp" bodystart="526" bodyend="623"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_statistical_analyzer_1a9e84507a4be8573cc25a495fedb9caef" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::StatisticalAnalyzer&lt; dim &gt;::RegionPropertyHistogramsElementProperty2BinningBasedOnProperty1</definition>
+        <argsstring>(const char *prop1, const char *prop2, const HistogramBins &amp;bins, std::map&lt; std::string, std::pair&lt; HistogramBins, size_t &gt; &gt; &amp;results1, std::map&lt; std::string, std::pair&lt; HistogramBins, size_t &gt; &gt; &amp;results2, bool weighted_by_porosity=false) const</argsstring>
+        <name>RegionPropertyHistogramsElementProperty2BinningBasedOnProperty1</name>
+        <qualifiedname>csmp::StatisticalAnalyzer::RegionPropertyHistogramsElementProperty2BinningBasedOnProperty1</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>prop1</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>prop2</declname>
+        </param>
+        <param>
+          <type>const HistogramBins &amp;</type>
+          <declname>bins</declname>
+        </param>
+        <param>
+          <type>std::map&lt; std::string, std::pair&lt; HistogramBins, size_t &gt; &gt; &amp;</type>
+          <declname>results1</declname>
+        </param>
+        <param>
+          <type>std::map&lt; std::string, std::pair&lt; HistogramBins, size_t &gt; &gt; &amp;</type>
+          <declname>results2</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>weighted_by_porosity</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>as previous method, but binning second property based on first property occurance </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Whoever wrote this, should explain what it does ! </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/StatisticalAnalyzer.h" line="65" column="10" bodyfile="source/modules/analysis/StatisticalAnalyzer.cpp" bodystart="633" bodyend="1055"/>
+        <references refid="classcsmp_1_1_scalar_variable_1a7f0ab5431406d975d6e1de988f369176" compoundref="_scalar_variable_8cpp" startline="6" endline="6">csmp::ScalarVariable::operator()</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_statistical_analyzer_1a1af3afc3edafeb87415b24aa61527968" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::StatisticalAnalyzer&lt; dim &gt;::OutputRegionPropertyHistograms</definition>
+        <argsstring>(const char *prop, const std::map&lt; std::string, std::pair&lt; HistogramBins, size_t &gt; &gt; &amp;results) const</argsstring>
+        <name>OutputRegionPropertyHistograms</name>
+        <qualifiedname>csmp::StatisticalAnalyzer::OutputRegionPropertyHistograms</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>prop</declname>
+        </param>
+        <param>
+          <type>const std::map&lt; std::string, std::pair&lt; HistogramBins, size_t &gt; &gt; &amp;</type>
+          <declname>results</declname>
+        </param>
+        <briefdescription>
+<para>for each model region, a separate histogram is created using the user-specified bins </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/StatisticalAnalyzer.h" line="76" column="10" bodyfile="source/modules/analysis/StatisticalAnalyzer.cpp" bodystart="1215" bodyend="1242"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_statistical_analyzer_1a6e94f1fd1fc979de10aded5e754db352" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::StatisticalAnalyzer&lt; dim &gt;::OutputRegionPropertyHistogramsMaple</definition>
+        <argsstring>(const char *prop, const HistogramBins &amp;bins, const std::map&lt; std::string, std::pair&lt; HistogramBins, size_t &gt; &gt; &amp;results, bool log10_of_bin_values) const</argsstring>
+        <name>OutputRegionPropertyHistogramsMaple</name>
+        <qualifiedname>csmp::StatisticalAnalyzer::OutputRegionPropertyHistogramsMaple</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>prop</declname>
+        </param>
+        <param>
+          <type>const HistogramBins &amp;</type>
+          <declname>bins</declname>
+        </param>
+        <param>
+          <type>const std::map&lt; std::string, std::pair&lt; HistogramBins, size_t &gt; &gt; &amp;</type>
+          <declname>results</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>log10_of_bin_values</declname>
+        </param>
+        <briefdescription>
+<para>writes Maple statlist format with weights; results must be copied and pasted into Maple workbook </para>
+        </briefdescription>
+        <detaileddescription>
+<para>In Maple paste the data into the list as shown below:</para>
+<para>with(stats): <blockquote><para>with(stats[statplots]): data1:=[ Weight(1..3, 5), Weight(3..5, 10), Weight(5..7, 8)]: histogram(data1, color=cyan); </para>
+</blockquote></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/StatisticalAnalyzer.h" line="81" column="10" bodyfile="source/modules/analysis/StatisticalAnalyzer.cpp" bodystart="1258" bodyend="1291"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_statistical_analyzer_1a038c6b2b9cf9a129532bb5787698bf18" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::StatisticalAnalyzer&lt; dim &gt;::OutputRegionPropertyAbundancePolygonsMaple</definition>
+        <argsstring>(const char *prop, const HistogramBins &amp;bins, const std::map&lt; std::string, std::pair&lt; HistogramBins, size_t &gt; &gt; &amp;results, bool log10_of_bin_values) const</argsstring>
+        <name>OutputRegionPropertyAbundancePolygonsMaple</name>
+        <qualifiedname>csmp::StatisticalAnalyzer::OutputRegionPropertyAbundancePolygonsMaple</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>prop</declname>
+        </param>
+        <param>
+          <type>const HistogramBins &amp;</type>
+          <declname>bins</declname>
+        </param>
+        <param>
+          <type>const std::map&lt; std::string, std::pair&lt; HistogramBins, size_t &gt; &gt; &amp;</type>
+          <declname>results</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>log10_of_bin_values</declname>
+        </param>
+        <briefdescription>
+<para>for copy/paste to Maple: list of [bin-center,histogram column-height] pairs to plot curves </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/StatisticalAnalyzer.h" line="88" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_statistical_analyzer_1a4939379ad87de0e789bcf297486f72a3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::StatisticalAnalyzer&lt; dim &gt;::OutputRegionPropertyAbundancePolygonsMaple</definition>
+        <argsstring>(const char *prop, const char *file_name_prefix, const std::vector&lt; std::pair&lt; double, double &gt; &gt; &amp;bins, const std::map&lt; std::string, std::pair&lt; HistogramBins, size_t &gt; &gt; &amp;results, bool log10_of_bin_values) const</argsstring>
+        <name>OutputRegionPropertyAbundancePolygonsMaple</name>
+        <qualifiedname>csmp::StatisticalAnalyzer::OutputRegionPropertyAbundancePolygonsMaple</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>prop</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>file_name_prefix</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; std::pair&lt; double, double &gt; &gt; &amp;</type>
+          <declname>bins</declname>
+        </param>
+        <param>
+          <type>const std::map&lt; std::string, std::pair&lt; HistogramBins, size_t &gt; &gt; &amp;</type>
+          <declname>results</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>log10_of_bin_values</declname>
+        </param>
+        <briefdescription>
+<para>like previous method, but name can include filename etc. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/StatisticalAnalyzer.h" line="95" column="10"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_statistical_analyzer_1a4bee956e19cafb52fb7c0a601f71d694" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::StatisticalAnalyzer&lt; dim &gt;::WriteHistogramToTextfile</definition>
+        <argsstring>(const char *fname, const HistogramBins &amp;hist, size_t points) const</argsstring>
+        <name>WriteHistogramToTextfile</name>
+        <qualifiedname>csmp::StatisticalAnalyzer::WriteHistogramToTextfile</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>fname</declname>
+        </param>
+        <param>
+          <type>const HistogramBins &amp;</type>
+          <declname>hist</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>points</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><xrefsect id="todo_1_todo000044"><xreftitle>Todo</xreftitle><xrefdescription><para>(3-D) Why explicitly in there if access through model available </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/StatisticalAnalyzer.h" line="105" column="10" bodyfile="source/modules/analysis/StatisticalAnalyzer.cpp" bodystart="1061" bodyend="1080"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_statistical_analyzer_1a8c71dc10bf9a0deb76c4e6acdb199341" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::StatisticalAnalyzer&lt; dim &gt;::WriteHistogramToMapleTextfile</definition>
+        <argsstring>(const char *fname, const char *datasetname, const HistogramBins &amp;bins, const HistogramBins &amp;hist, size_t points, bool log10_of_bin_data=false) const</argsstring>
+        <name>WriteHistogramToMapleTextfile</name>
+        <qualifiedname>csmp::StatisticalAnalyzer::WriteHistogramToMapleTextfile</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>fname</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>datasetname</declname>
+        </param>
+        <param>
+          <type>const HistogramBins &amp;</type>
+          <declname>bins</declname>
+        </param>
+        <param>
+          <type>const HistogramBins &amp;</type>
+          <declname>hist</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>points</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>log10_of_bin_data</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Output to Maple (old statistics package), format:</para>
+<para>writing: datasetname := [ Weight(1..3, 5), Weight(3..5, 10), Weight(5..7, 8) ]: </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/StatisticalAnalyzer.h" line="107" column="10" bodyfile="source/modules/analysis/StatisticalAnalyzer.cpp" bodystart="1092" bodyend="1148"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_statistical_analyzer_1a9ecd512f412a07ae87407959bc10b3e6" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::StatisticalAnalyzer&lt; dim &gt;::WriteCurvePointsToMapleTextfile</definition>
+        <argsstring>(const char *fname, const char *datasetname, const HistogramBins &amp;bins, const HistogramBins &amp;hist, size_t points, bool log10_of_bin_data=false) const</argsstring>
+        <name>WriteCurvePointsToMapleTextfile</name>
+        <qualifiedname>csmp::StatisticalAnalyzer::WriteCurvePointsToMapleTextfile</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>fname</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>datasetname</declname>
+        </param>
+        <param>
+          <type>const HistogramBins &amp;</type>
+          <declname>bins</declname>
+        </param>
+        <param>
+          <type>const HistogramBins &amp;</type>
+          <declname>hist</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>points</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>log10_of_bin_data</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>writing: datasetname := [ [bin_bound1+bin_bound2/2., value1], [bin_bound2+bin_bound3/2., value2],... ]: </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/StatisticalAnalyzer.h" line="113" column="10" bodyfile="source/modules/analysis/StatisticalAnalyzer.cpp" bodystart="1156" bodyend="1208"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Class for the generation of volume-weighted and other histograms from CSMP models and their unique regions. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><xrefsect id="todo_1_todo000043"><xreftitle>Todo</xreftitle><xrefdescription><para>refactor such that Maple specific output is done by MapleInterface class.</para>
+</xrefdescription></xrefsect></para>
+<para>@uthor Stephan Matthai <simplesect kind="date"><para>2001 </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::StatisticalAnalyzer&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_statistical_analyzer"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/analysis/StatisticalAnalyzer.h" line="22" column="1" bodyfile="source/includes/analysis/StatisticalAnalyzer.h" bodystart="22" bodyend="118"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_statistical_analyzer_1ab2e44dbfee3b073ee83780f0f0245f4d" prot="public" virt="non-virtual"><scope>csmp::StatisticalAnalyzer</scope><name>DefineBins</name></member>
+      <member refid="classcsmp_1_1_statistical_analyzer_1aae8db381dad50be17ae2ddb6d22a3ee0" prot="public" virt="non-virtual"><scope>csmp::StatisticalAnalyzer</scope><name>DefineBins</name></member>
+      <member refid="classcsmp_1_1_statistical_analyzer_1a18b993a0035174202d32b126a97afb0b" prot="public" virt="non-virtual"><scope>csmp::StatisticalAnalyzer</scope><name>DefineBins</name></member>
+      <member refid="classcsmp_1_1_statistical_analyzer_1a038c6b2b9cf9a129532bb5787698bf18" prot="public" virt="non-virtual"><scope>csmp::StatisticalAnalyzer</scope><name>OutputRegionPropertyAbundancePolygonsMaple</name></member>
+      <member refid="classcsmp_1_1_statistical_analyzer_1a4939379ad87de0e789bcf297486f72a3" prot="public" virt="non-virtual"><scope>csmp::StatisticalAnalyzer</scope><name>OutputRegionPropertyAbundancePolygonsMaple</name></member>
+      <member refid="classcsmp_1_1_statistical_analyzer_1a1af3afc3edafeb87415b24aa61527968" prot="public" virt="non-virtual"><scope>csmp::StatisticalAnalyzer</scope><name>OutputRegionPropertyHistograms</name></member>
+      <member refid="classcsmp_1_1_statistical_analyzer_1a6e94f1fd1fc979de10aded5e754db352" prot="public" virt="non-virtual"><scope>csmp::StatisticalAnalyzer</scope><name>OutputRegionPropertyHistogramsMaple</name></member>
+      <member refid="classcsmp_1_1_statistical_analyzer_1ad66d35e8f9882109330f9833b2106405" prot="private" virt="non-virtual"><scope>csmp::StatisticalAnalyzer</scope><name>pref</name></member>
+      <member refid="classcsmp_1_1_statistical_analyzer_1a51b63c9e021f29ea73c62ac884442bb7" prot="public" virt="non-virtual"><scope>csmp::StatisticalAnalyzer</scope><name>RegionPropertyHistograms</name></member>
+      <member refid="classcsmp_1_1_statistical_analyzer_1ab3d0f3b485cf4f62bea5a6055fce78a0" prot="public" virt="non-virtual"><scope>csmp::StatisticalAnalyzer</scope><name>RegionPropertyHistograms</name></member>
+      <member refid="classcsmp_1_1_statistical_analyzer_1ae4d01d3b13c978029168683652c69028" prot="public" virt="non-virtual"><scope>csmp::StatisticalAnalyzer</scope><name>RegionPropertyHistogramsElement</name></member>
+      <member refid="classcsmp_1_1_statistical_analyzer_1a9e84507a4be8573cc25a495fedb9caef" prot="public" virt="non-virtual"><scope>csmp::StatisticalAnalyzer</scope><name>RegionPropertyHistogramsElementProperty2BinningBasedOnProperty1</name></member>
+      <member refid="classcsmp_1_1_statistical_analyzer_1a55a5fa7c318c71fc8d374b6410fcb1ba" prot="public" virt="non-virtual"><scope>csmp::StatisticalAnalyzer</scope><name>RegionPropertyHistogramsIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_statistical_analyzer_1ab455c4788d40adb3139d278e66bae642" prot="private" virt="non-virtual"><scope>csmp::StatisticalAnalyzer</scope><name>sref</name></member>
+      <member refid="classcsmp_1_1_statistical_analyzer_1a4348a06e38916b8253ede128b31b010d" prot="public" virt="non-virtual"><scope>csmp::StatisticalAnalyzer</scope><name>StatisticalAnalyzer</name></member>
+      <member refid="classcsmp_1_1_statistical_analyzer_1a9ecd512f412a07ae87407959bc10b3e6" prot="private" virt="non-virtual"><scope>csmp::StatisticalAnalyzer</scope><name>WriteCurvePointsToMapleTextfile</name></member>
+      <member refid="classcsmp_1_1_statistical_analyzer_1a8c71dc10bf9a0deb76c4e6acdb199341" prot="private" virt="non-virtual"><scope>csmp::StatisticalAnalyzer</scope><name>WriteHistogramToMapleTextfile</name></member>
+      <member refid="classcsmp_1_1_statistical_analyzer_1a4bee956e19cafb52fb7c0a601f71d694" prot="private" virt="non-virtual"><scope>csmp::StatisticalAnalyzer</scope><name>WriteHistogramToTextfile</name></member>
+      <member refid="classcsmp_1_1_statistical_analyzer_1ac2adbf7d35bd390e8655527a5458cd34" prot="public" virt="non-virtual"><scope>csmp::StatisticalAnalyzer</scope><name>~StatisticalAnalyzer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

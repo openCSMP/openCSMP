@@ -1,0 +1,167 @@
+.TH "csmp::CopyReplaceVisitor< Var, dim >" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::CopyReplaceVisitor< Var, dim >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <CopyReplaceVisitor\&.h>\fP
+.PP
+Inherits \fBcsmp::Visitor< dim >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBCopyReplaceVisitor\fP (const \fBPropertyDatabase\fP< dim > &, const char *prop_a, const char *prop_b)"
+.br
+.RI "custom constructor: replaces property b with the value of a "
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBModel\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBRegion\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBElement\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBFace\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBInterFace\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBNode\fP< dim > *)"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::Visitor< dim >\fP
+.in +1c
+.ti -1c
+.RI "\fBVisitor\fP (\fBPLACEMENT\fP level=MODEL, \fBPLACEMENT\fP target=ELEMENT)"
+.br
+.ti -1c
+.RI "void \fBApplicationLevel\fP (\fBPLACEMENT\fP p)"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBApplicationLevel\fP () const"
+.br
+.ti -1c
+.RI "void \fBApplicationTarget\fP (\fBPLACEMENT\fP p)"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBApplicationTarget\fP () const"
+.br
+.ti -1c
+.RI "virtual void \fBSetInitialProperties\fP (\fBModel\fP< dim > *model)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBBoundary\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBSplitBoundary\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBEdge\fP< dim > *)"
+.br
+.ti -1c
+.RI "bool \fBVerbose\fP ()"
+.br
+.ti -1c
+.RI "void \fBVerbose\fP (bool verbose)"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Attributes inherited from \fBcsmp::Visitor< dim >\fP
+.in +1c
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBapplication_level_\fP"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBapplication_target_\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename Var, uint32_t dim>
+.br
+class csmp::CopyReplaceVisitor< Var, dim >"Replaces distributed properties with the user supplied values
+
+.PP
+\fBAuthor\fP
+.RS 4
+S\&.K\&. Matthai 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2006
+.RE
+.PP
+\fBNote\fP
+.RS 4
+updated 17/12/2016 removing flag tracking and OpenMP stuff, new visitor should be built for this\&. \fBNode\fP tracking relied on indices which is no longer a give\&. 
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename Var, uint32_t dim> void \fBcsmp::CopyReplaceVisitor\fP< Var, dim >::Visit (\fBElement\fP< dim > * eptr)\fR [virtual]\fP"
+Considers wide spectrum of placements:
+.IP "\(bu" 2
+element
+.IP "\(bu" 2
+element integration point
+.IP "\(bu" 2
+sector integration point
+.IP "\(bu" 2
+finite volume facet integration point 
+.PP
+
+.PP
+Reimplemented from \fBcsmp::Visitor< dim >\fP\&.
+.SS "template<typename Var, uint32_t dim> void \fBcsmp::CopyReplaceVisitor\fP< Var, dim >::Visit (\fBFace\fP< dim > * f)\fR [virtual]\fP"
+The key method of the visitor design pattern\&. Visit() must be defined for the target object (for instance \fBNode\fP objects, or \fBElement\fP objects)\&. Since the argument is the actual object, its entire interface is accessible to the visitor in order to carry out operations\&. Overload this method in the derived class to gain access to target objects and perform the actions that are desired for the visitation\&. 
+.br
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIf\fP is a pointer to the target \fBFace\fP (forming part of a boundary)\&. 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBcsmp::Visitor< dim >\fP\&.
+.SS "template<typename Var, uint32_t dim> void \fBcsmp::CopyReplaceVisitor\fP< Var, dim >::Visit (\fBInterFace\fP< dim > * eptr)\fR [virtual]\fP"
+
+.PP
+Reimplemented from \fBcsmp::Visitor< dim >\fP\&.
+.SS "template<typename Var, uint32_t dim> void \fBcsmp::CopyReplaceVisitor\fP< Var, dim >::Visit (\fBModel\fP< dim > * gptr)\fR [virtual]\fP"
+
+.PP
+Reimplemented from \fBcsmp::Visitor< dim >\fP\&.
+.SS "template<typename Var, uint32_t dim> void \fBcsmp::CopyReplaceVisitor\fP< Var, dim >::Visit (\fBNode\fP< dim > * nptr)\fR [virtual]\fP"
+
+.PP
+\fBAttention\fP
+.RS 4
+watch out that you do not visit the same node many times over\&. 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBcsmp::Visitor< dim >\fP\&.
+.SS "template<typename Var, uint32_t dim> void \fBcsmp::CopyReplaceVisitor\fP< Var, dim >::Visit (\fBRegion\fP< dim > * gptr)\fR [virtual]\fP"
+
+.PP
+Reimplemented from \fBcsmp::Visitor< dim >\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

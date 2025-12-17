@@ -23,10 +23,9 @@ class NT_op : public MathOperatorRHS<dim,CELL> {
 
   public:
     NT_op( const PropertyDatabase<dim>&, const char* oper, const char* test );
-    virtual ~NT_op() {}
     
-    virtual void GetOperands( const CELL<dim>& );
-    virtual void ComputeContribution( const CELL<dim>& );
+    void GetOperands( const CELL<dim>& ) override final;
+    void ComputeContribution( const CELL<dim>& ) override final;
 
   private:
     std::vector<ScalarVariable >  M_;

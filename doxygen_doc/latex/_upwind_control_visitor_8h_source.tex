@@ -1,0 +1,136 @@
+\doxysection{Upwind\+Control\+Visitor.\+h}
+\hypertarget{_upwind_control_visitor_8h_source}{}\label{_upwind_control_visitor_8h_source}\index{source/includes/integration/cvfe\_hydrothermal/UpwindControlVisitor.h@{source/includes/integration/cvfe\_hydrothermal/UpwindControlVisitor.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{UPWIND\_CONTROL\_VISITOR\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{UPWIND\_CONTROL\_VISITOR\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_visitor_8h}{"{}Visitor.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_model_8h}{"{}Model.h"{}}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_explicit_finite_volume_transport_p_h_x_8h}{"{}ExplicitFiniteVolumeTransportPHX.h"{}}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{comment}{/*\ \ \ Changelog}}
+\DoxyCodeLine{00009\ \textcolor{comment}{\ \ \ \ \ February\ 2015,\ Philipp\ Weis:}}
+\DoxyCodeLine{00010\ \textcolor{comment}{\ \ \ \ \ -\/\ initial\ port\ to\ CSMP++\ and\ strong\ simplification\ as\ compared\ to\ the\ csmp5-\/version.}}
+\DoxyCodeLine{00011\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_model}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}};}
+\DoxyCodeLine{00016\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{ExplicitFiniteVolumeTransportPHX}};}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00020\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor}{UpwindControlVisitor}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_visitor}{Visitor}}<dim>\ \{}
+\DoxyCodeLine{00021\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00022\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor_a814951b1e3a9068888a933461293fd5c}{UpwindControlVisitor}}(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ model,}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{ExplicitFiniteVolumeTransportPHX}}<dim>\&\ fv\_vapor,\ \textcolor{comment}{//\ specialized\ FV\ transport\ class\ for\ vapor\ phase}}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{ExplicitFiniteVolumeTransportPHX}}<dim>\&\ fv\_liquid,\ \textcolor{comment}{//\ specialized\ FV\ transport\ class\ for\ liquid\ phase}}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ permeability,\ \textcolor{comment}{//\ element\ permeability}}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ porosity,\ \textcolor{comment}{//\ element\ porosity\ for\ pore\ velocity\ calculations}}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<std::string>\&\ densities,\ \textcolor{comment}{//\ vapor\ and\ liquid\ densities}}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<std::string>\&\ relperm\_vis,\ \textcolor{comment}{//\ relative\ permeabilities\ for\ vapor\ and\ liquid}}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<std::string>\&\ saturations,\ \textcolor{comment}{//\ vapor\ and\ liquid\ saturations}}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<std::string>\&\ cfl\_variables,\ \textcolor{comment}{//\ vapor\ and\ lquid\ cfl\ values}}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<std::string>\&\ velocities,\ \textcolor{comment}{//\ vapor\ and\ liquid\ velocities}}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<std::string>\&\ pore\_velocities);\ \textcolor{comment}{//\ vapor\ and\ liquid\ pore\ velocities}}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~\mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor_af4e50aa40a25bdd2dd6953450c678967}{UpwindControlVisitor}}();}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{void}\ Verbose();}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor_a2542e8cdbbe9525617a8209124b57129}{Visit}}(\mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ );}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor_aa5444c545d3456822d3b4e9e46240f66}{Visit}}(\mbox{\hyperlink{classcsmp_1_1_region}{Region}}<dim>*\ );}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor_ae42d1d56df01843ebc29eb87a6fe248d}{Reset}}();\ \textcolor{comment}{//\ reset\ all\ bopleans}}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor_a8f7f85665d253c289ba7810ba4ea8034}{Recalculate}}();\ \textcolor{comment}{//\ get\ boolean\ recalculate}}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor_a0a3efcae36865a7ecdbf01cd3607c62b}{Flipping}}(\ \textcolor{keywordtype}{bool}\ flip\ );\ \textcolor{comment}{//\ set\ boolean\ flip}}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor_a7b7e391e7fb6e324ba34bcd64c92914c}{Recalculate}}(\ \textcolor{keywordtype}{bool}\ recalc\ );\ \textcolor{comment}{//\ ser\ boolean\ recalculate\ }}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor_a7e32d7f653435f8d7be89cd0d46c7c6a}{Gravity}}(\ \textcolor{keywordtype}{bool}\ with\_gravity\ );\ \textcolor{comment}{//\ activate\ or\ deactivate\ gravity\ component}}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor_a2d7eb88956ceb0259c73465cb2be4cfe}{WithVelocity}}(\ \textcolor{keywordtype}{bool}\ with\_velocity\ );\ \textcolor{comment}{//\ activate\ or\ deactive\ velocity\ calculations}}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor_a443fa7dae6f4fcbafbc5eb9b8e75b2b8}{SetLargestTimeStep}}(\ \textcolor{keywordtype}{double}\ timestep\ );\ \textcolor{comment}{//\ change\ maximum\ time\ step\ size}}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor_aff20e04fdcae35cc022658ef20a61033}{Adjust\_CFL\_Criterion}}(\ \textcolor{keywordtype}{double}\ scale\_factor,\ \textcolor{keywordtype}{bool}\ take\_pore\_velocity);\ \textcolor{comment}{//\ modify\ cfl\ criterion}}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\ \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor_a9834142be3dffb7265c3b4e87f60f845}{UpwindMatrix}}(\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ rho\_index,\ size\_t\ eidx);\ \textcolor{comment}{//\ access\ function\ to\ specific\ upwind\ matrix}}
+\DoxyCodeLine{00051\ \ \ \ \ std::vector<DenseMatrix<DM\_MIN>\ >\&\ UpwindMatrices(\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ rho\_index);\ \textcolor{comment}{//\ access\ function\ to\ specific\ vector\ of\ upwind\ matrices}}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordtype}{void}\ DetermineUpwindNodes(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&\ e\ );}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{ExplicitFiniteVolumeTransportPHX}}<dim>\&\ fv\_transport\_vapor;}
+\DoxyCodeLine{00057\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{ExplicitFiniteVolumeTransportPHX}}<dim>\&\ fv\_transport\_liquid;}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ std::vector<csmp::Index>\ rho\_key,\ relperm\_visc\_key,\ S\_key;}
+\DoxyCodeLine{00060\ \ \ \ \ std::vector<csmp::Index>\ uc\_key,\ cfl\_key,\ pore\_vel\_key,\ vel\_key;}
+\DoxyCodeLine{00061\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ k\_key,\ phi\_key,\ KgradP\_key,\ tot\_pore\_vel\_key,\ tot\_vel\_key,\ p\_key,\ sh\_key;}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ k,\ uc\_scal,\ phi;}
+\DoxyCodeLine{00064\ \ \ \ \ std::vector<ScalarVariable>\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sh;}
+\DoxyCodeLine{00065\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ KgradP,\ total\_pore\_velocity,\ total\_velocity;}
+\DoxyCodeLine{00066\ \ \ \ \ std::vector<VectorVariable<dim>\ >\ \ \ \ \ \ \ \ \ \ \ pore\_phase\_velocity,\ phase\_velocity;}
+\DoxyCodeLine{00067\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor}{std}}::\mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor}{vector}}<\mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor}{std}}::\mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor}{vector}}<\mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor}{ScalarVariable}}>\ >\ \ \ \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor}{rho}},\ \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor}{relperm\_visc}},\ \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor}{S}};}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor}{std}}::\mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor}{vector}}<\mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor}{std}}::\mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor}{vector}}<\mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor}{DenseMatrix}}<\mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor}{DM\_MIN}}>\ >\ >\ \ \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor}{Upwinder}};}
+\DoxyCodeLine{00070\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\ facet\_normals,\ projection,\ grad,\ inversed\_facet\_normals;}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \ \ \ \ std::vector<ScalarVariable>\ cfl;}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor}{std}}::\mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor}{vector}}<\mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor}{std}}::\mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor}{vector}}<\textcolor{keywordtype}{double}>\ >\ \ \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor}{facet\_pore\_velocity}};}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\ \ facet\_normal;}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \ \ \ \ uint32\_t\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ VERTICAL\_AXIS;}
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keywordtype}{double}\ gravity,\ pot\_crit;}
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keywordtype}{double}\ decision1,\ decision2;}
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keywordtype}{double}\ velocity,\ abs\_velocity,\ norm,\ mobility,\ density,\ sat;}
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keywordtype}{double}\ normal\_component,\ g;}
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keywordtype}{double}\ distance,\ largest\_time\_step;}
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keywordtype}{double}\ cfl\_scaling;}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \ \ \ \ uint32\_t\ \ xyz;\ \ \ \ \ \ \ \textcolor{comment}{//\ 1=x,\ 2=y,\ 3=z}}
+\DoxyCodeLine{00087\ \ \ \ \ uint32\_t\ \ inside\_node\_,\ outside\_node\_;}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keywordtype}{bool}\ recalculate,\ flipping,\ grav,\ with\_velocity,\ facet\_cfl;}
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keywordtype}{bool}\ cfl\_with\_pore\_velocity;}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \ \ \ \ uint32\_t\ phases,\ facets;}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \};}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00097\ \textcolor{comment}{\ \ \ \ \ @class\ UpwindControlVisitor\ UpwindControlVisitor.h}}
+\DoxyCodeLine{00098\ \textcolor{comment}{}}
+\DoxyCodeLine{00099\ \textcolor{comment}{\ \ \ \ \ @author\ Philipp\ Weis,\ ETH\ Zuerich}}
+\DoxyCodeLine{00100\ \textcolor{comment}{\ \ \ \ \ @section\ contact\ Contact}}
+\DoxyCodeLine{00101\ \textcolor{comment}{\ \ \ \ \ philipp.weis@erdw.ethz.ch}}
+\DoxyCodeLine{00102\ \textcolor{comment}{}}
+\DoxyCodeLine{00103\ \textcolor{comment}{\ \ \ \ \ @changes\ changes\ Latest\ Changes\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00104\ \textcolor{comment}{\ \ }}
+\DoxyCodeLine{00105\ \textcolor{comment}{\ \ \ \ \ @section\ motivation\ Motivation}}
+\DoxyCodeLine{00106\ \textcolor{comment}{\ \ \ \ \ \ Specialized\ visitor\ to\ define\ upwind\ nodes\ for\ CVFEM\ scheme.}}
+\DoxyCodeLine{00107\ \textcolor{comment}{}}
+\DoxyCodeLine{00108\ \textcolor{comment}{\ \ \ \ \ @section\ usage\ Usage}}
+\DoxyCodeLine{00109\ \textcolor{comment}{\ \ \ \ \ \ To\ be\ used\ within\ the\ CVFEM\ scheme\ (Weis\ et\ al.,\ Geofluids,\ 2014).}}
+\DoxyCodeLine{00110\ \textcolor{comment}{}}
+\DoxyCodeLine{00111\ \textcolor{comment}{\ \ \ \ \ @code}}
+\DoxyCodeLine{00112\ \textcolor{comment}{\ \ \ \ \ Calculates\ upwind\ nodes\ and\ store\ information\ in\ a\ matrix.}}
+\DoxyCodeLine{00113\ \textcolor{comment}{\ \ \ \ \ Calculates\ velocity\ and\ pore\ velocity\ vectors\ for\ graphical\ representations\ only!}}
+\DoxyCodeLine{00114\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00115\ \textcolor{comment}{\ \ \ \ \ @endcode}}
+\DoxyCodeLine{00116\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00117\ \textcolor{comment}{\ \ \ \ \ @section\ dependencies\ Dependencies}}
+\DoxyCodeLine{00118\ \textcolor{comment}{\ \ \ \ \ The\ functions\ are\ tailored\ for\ use\ in\ ExplicitFiniteVolumeTransportPHX.}}
+\DoxyCodeLine{00119\ \textcolor{comment}{\ \ \ \ \ This\ visitor\ is\ needed\ in\ TwoPhaseTransportPHX\ and\ Upwind-\/PDE-\/operators.}}
+\DoxyCodeLine{00120\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00121\ \textcolor{comment}{\ \ \ \ \ @section\ issues\ Known\ issues}}
+\DoxyCodeLine{00122\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00123\ \textcolor{comment}{\ \ \ \ \ @section\ testing\ Testing}}
+\DoxyCodeLine{00124\ \textcolor{comment}{\ \ \ \ \ testing\ was\ done\ in\ the\ period\ before\ publication\ in\ 2014.}}
+\DoxyCodeLine{00125\ \textcolor{comment}{}}
+\DoxyCodeLine{00126\ \textcolor{comment}{\ \ */}}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ \ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

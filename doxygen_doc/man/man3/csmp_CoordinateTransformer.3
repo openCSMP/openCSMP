@@ -1,0 +1,86 @@
+.TH "csmp::CoordinateTransformer< dim >" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::CoordinateTransformer< dim > \- utility to convert between coordinate systems and flip axes  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <CoordinateTransformer\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBCoordinateTransformer\fP ()"
+.br
+.RI "no translation, scaling nor inversion of coordinate axis "
+.ti -1c
+.RI "void \fBTransform\fP (\fBPoint\fP< dim > &) const"
+.br
+.RI "transform point coordinates using all specified operations, "
+.ti -1c
+.RI "\fBPoint\fP< dim > \fBTransform\fP (const std::vector< double > &) const"
+.br
+.ti -1c
+.RI "void \fBTranslate\fP (uint32_t axis, double distance_meters)"
+.br
+.RI "translation along the specified axis "
+.ti -1c
+.RI "void \fBFlipAxis\fP (uint32_t axis)"
+.br
+.RI "multiplies coordinates of specified axis by -1 "
+.ti -1c
+.RI "void \fBExchangeAxes\fP (uint32_t axis_a, uint32_t axis_b)"
+.br
+.RI "exchange of axis "
+.ti -1c
+.RI "void \fBReset\fP ()"
+.br
+.RI "returns settings to ones which preserve value of input coordinate "
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim>
+.br
+class csmp::CoordinateTransformer< dim >"utility to convert between coordinate systems and flip axes 
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<uint32_t dim> \fBcsmp::CoordinateTransformer\fP< dim >::CoordinateTransformer ()"
+
+.PP
+no translation, scaling nor inversion of coordinate axis initialises translations to zero and flip vector to 1 < in x,y,z direction
+
+.PP
+< coordinate multiplier
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim> void \fBcsmp::CoordinateTransformer\fP< dim >::ExchangeAxes (uint32_t axis_a, uint32_t axis_b)"
+
+.PP
+exchange of axis classical swap 
+.SS "template<uint32_t dim> void \fBcsmp::CoordinateTransformer\fP< dim >::Reset ()"
+
+.PP
+returns settings to ones which preserve value of input coordinate sets to preserve input coordinate 
+.SS "template<uint32_t dim> \fBPoint\fP< dim > \fBcsmp::CoordinateTransformer\fP< dim >::Transform (const std::vector< double > & vec) const"
+processes translations etc\&. returning the point 
+.SS "template<uint32_t dim> void \fBcsmp::CoordinateTransformer\fP< dim >::Transform (\fBPoint\fP< dim > & p) const"
+
+.PP
+transform point coordinates using all specified operations, 
+.PP
+\fBTodo\fP
+.RS 4
+make sure that specified sequence is honored 
+.RE
+.PP
+
+.PP
+processes translations etc\&. returning the point 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

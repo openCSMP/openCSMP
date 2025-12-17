@@ -1,0 +1,1536 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor" kind="class" language="C++" prot="public">
+    <compoundname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</compoundname>
+    <basecompoundref refid="classcsmp_1_1_visitor" prot="public" virt="non-virtual">csmp::Visitor&lt; dim &gt;</basecompoundref>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1afc8c2de6744a048a5da8228251025860" prot="private" static="no" mutable="no">
+        <type>const <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>&lt; dim &gt; &amp;</type>
+        <definition>const PropertyDatabase&lt;dim&gt;&amp; csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::prop_ref_</definition>
+        <argsstring></argsstring>
+        <name>prop_ref_</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::prop_ref_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="99" column="29" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="99" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1ab4c7ce7f4d3aab470b6f91791c1ae0c4" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+        <definition>Model&lt; dim&gt;&amp; csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::model_ref_</definition>
+        <argsstring></argsstring>
+        <name>model_ref_</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::model_ref_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="100" column="28" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="100" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1adcb6dd8427d1c298185bffb1e2046da2" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::water_pressure_key_</definition>
+        <argsstring></argsstring>
+        <name>water_pressure_key_</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::water_pressure_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="102" column="19" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a229a24ee896b37603479a8e17559f537" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::oil_pressure_key_</definition>
+        <argsstring></argsstring>
+        <name>oil_pressure_key_</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::oil_pressure_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="102" column="38" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a8f697735987897a4629e17f58623e7fa" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::temperature_key_</definition>
+        <argsstring></argsstring>
+        <name>temperature_key_</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::temperature_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="102" column="56" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a7a4eeab8f2af53d46f615efec203df76" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::water_density_key_</definition>
+        <argsstring></argsstring>
+        <name>water_density_key_</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::water_density_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="102" column="73" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1ad2c5ce43466211a5630f362cdc8d6c6c" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::oil_density_key_</definition>
+        <argsstring></argsstring>
+        <name>oil_density_key_</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::oil_density_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="103" column="19" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1ae9fd751005b77efc77edd10baf28ed61" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::water_visc_key_</definition>
+        <argsstring></argsstring>
+        <name>water_visc_key_</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::water_visc_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="103" column="36" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a69eac43d4b4772ec0a47e2711785320b" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::oil_visc_key_</definition>
+        <argsstring></argsstring>
+        <name>oil_visc_key_</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::oil_visc_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="103" column="52" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a384c8d79d6e70125a64a456f5ab7f6e7" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::water_comp_key_</definition>
+        <argsstring></argsstring>
+        <name>water_comp_key_</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::water_comp_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="103" column="66" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a6ff92ea2496d284c082b459646a7449c" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::oil_comp_key_</definition>
+        <argsstring></argsstring>
+        <name>oil_comp_key_</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::oil_comp_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="103" column="82" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a89b0136e74ce7e48580c7fc39123d31f" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::API</definition>
+        <argsstring></argsstring>
+        <name>API</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::API</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="106" column="12" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a449cb55972c98a1282da943f6ec5d19d" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::Rs</definition>
+        <argsstring></argsstring>
+        <name>Rs</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::Rs</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="106" column="16" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a2740fbda68e80cc25218462cb7e3429f" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::spGr_gas</definition>
+        <argsstring></argsstring>
+        <name>spGr_gas</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::spGr_gas</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="106" column="19" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a1b1d7fc848a39057ff82fb6ee4fc97d4" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::spGr_STO</definition>
+        <argsstring></argsstring>
+        <name>spGr_STO</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::spGr_STO</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="106" column="28" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a5fdd5206c4cd7b389776b793c4b962dd" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::Pb</definition>
+        <argsstring></argsstring>
+        <name>Pb</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::Pb</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="106" column="37" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a19bc483fc0225f7f3d74fab7dd22fc3c" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::Tr</definition>
+        <argsstring></argsstring>
+        <name>Tr</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::Tr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="106" column="40" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1af81531f8382d9c38a159e49ffaaba283" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::Rsb</definition>
+        <argsstring></argsstring>
+        <name>Rsb</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::Rsb</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="106" column="43" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1ae404c7f68f4d9c6f198150082d602dc5" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::spGr_sp</definition>
+        <argsstring></argsstring>
+        <name>spGr_sp</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::spGr_sp</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="106" column="47" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1af274e3360d09163538eb1e448aabf6d9" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::rho_o_b</definition>
+        <argsstring></argsstring>
+        <name>rho_o_b</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::rho_o_b</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="106" column="55" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1ab1dc831deab2969d539a57072497f498" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::my_o_b</definition>
+        <argsstring></argsstring>
+        <name>my_o_b</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::my_o_b</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="106" column="63" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a23b0362b80518c6a893885bf2f8bb028" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::salinity</definition>
+        <argsstring></argsstring>
+        <name>salinity</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::salinity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="106" column="70" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1ad78eb97608f452a816c6ec1bf38e2b93" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::Z1</definition>
+        <argsstring></argsstring>
+        <name>Z1</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::Z1</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="110" column="12" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="110" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1ad923d2d8377b4247c98b3b6579240b05" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::Z2</definition>
+        <argsstring></argsstring>
+        <name>Z2</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::Z2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="110" column="15" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="110" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a6840d8ffa19744f6a403a81bbe44ddaf" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::Z3</definition>
+        <argsstring></argsstring>
+        <name>Z3</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::Z3</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="110" column="18" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="110" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1af505de0aedebf852cac3fbb213375f52" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::Z5</definition>
+        <argsstring></argsstring>
+        <name>Z5</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::Z5</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="110" column="21" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="110" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a18697192c9a3db9b0c7b7ba2563ffaed" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::A</definition>
+        <argsstring></argsstring>
+        <name>A</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::A</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="112" column="12" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a35eb0b03ecd67ee469141fa0ec9a2095" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::Z</definition>
+        <argsstring></argsstring>
+        <name>Z</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::Z</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="115" column="12" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="115" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a732565a6db1277569f92117c77fc3f2c" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::Z4</definition>
+        <argsstring></argsstring>
+        <name>Z4</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::Z4</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="115" column="13" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="115" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1ad7994163a750199d0fc26decc3e765fe" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::Z6</definition>
+        <argsstring></argsstring>
+        <name>Z6</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::Z6</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="115" column="15" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="115" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a5df28bf0e6f141d4c9479bfc5eda3cb3" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::cofb</definition>
+        <argsstring></argsstring>
+        <name>cofb</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::cofb</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="115" column="18" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="115" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1affaf750e31085e2325095ac0e41297d6" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::co</definition>
+        <argsstring></argsstring>
+        <name>co</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::co</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="115" column="23" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="115" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1aa54ff205317e2177aa6178638b3e9ae2" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::rho_o</definition>
+        <argsstring></argsstring>
+        <name>rho_o</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::rho_o</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="115" column="26" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="115" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1acfe723c08678dd0cb47cdd42e3e007da" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::my_o</definition>
+        <argsstring></argsstring>
+        <name>my_o</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::my_o</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="115" column="31" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="115" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a006c7e0018d4d26166c5dbc6667880b0" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::rho_w_pure_coeffs[5]</definition>
+        <argsstring>[5]</argsstring>
+        <name>rho_w_pure_coeffs</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::rho_w_pure_coeffs</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>SKM: MOVE COEFFICIENTS INTO *.cpp FILE - CONSTRUCTOR ARGUMENT LIST Roman, 2013: Initialization of const arrays was not allowed in C++ before C++11 standard due to unique definition rule keep non-const arrays until the constructor argument list will be implemented </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="124" column="12" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="124" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1acf0661f3e69b8edc504fb297093d6e07" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::Ew_coeffs[5]</definition>
+        <argsstring>[5]</argsstring>
+        <name>Ew_coeffs</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::Ew_coeffs</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="125" column="12" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="125" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a9fb96854a8924b9b649b84df427b3759" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::Fw_coeffs[5]</definition>
+        <argsstring>[5]</argsstring>
+        <name>Fw_coeffs</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::Fw_coeffs</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="126" column="12" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="126" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a88bed72451b46a45f3edadd5f54a8d75" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::rho_w_pure_p_ref</definition>
+        <argsstring></argsstring>
+        <name>rho_w_pure_p_ref</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::rho_w_pure_p_ref</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="128" column="12" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="128" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a0005dbdc62bbcd71766f42052e927d40" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::Ew</definition>
+        <argsstring></argsstring>
+        <name>Ew</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::Ew</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="128" column="29" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="128" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1abd43d3dd9baf5926a7953092ad6d2c98" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::Fw</definition>
+        <argsstring></argsstring>
+        <name>Fw</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::Fw</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="128" column="32" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="128" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1afd83d94d9f69acc9d46c32f54d6f6727" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::Iw_p_ref</definition>
+        <argsstring></argsstring>
+        <name>Iw_p_ref</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::Iw_p_ref</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="128" column="35" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="128" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1acd359275e50f8c722613b7b6ff812fcc" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::Iw</definition>
+        <argsstring></argsstring>
+        <name>Iw</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::Iw</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="128" column="44" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="128" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a08d13a29ad38843e74c616ff9016e90f" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::c_w_pure</definition>
+        <argsstring></argsstring>
+        <name>c_w_pure</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::c_w_pure</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="129" column="12" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="129" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a526154d72777a6cfdd64294b18eac998" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::rho_w_pure</definition>
+        <argsstring></argsstring>
+        <name>rho_w_pure</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::rho_w_pure</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="129" column="21" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="129" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1ad9cd270504e4c0aebeac09310a1cd458" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::dm_2_coeffs[5]</definition>
+        <argsstring>[5]</argsstring>
+        <name>dm_2_coeffs</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::dm_2_coeffs</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="135" column="12" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="135" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a7de64e3fd09107e71a0761a982f20470" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::dm_3_2_coeffs[5]</definition>
+        <argsstring>[5]</argsstring>
+        <name>dm_3_2_coeffs</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::dm_3_2_coeffs</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="136" column="12" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="136" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a3a5b3341a8c202d4007abe0a76a92b7f" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::dm_1_coeffs[5]</definition>
+        <argsstring>[5]</argsstring>
+        <name>dm_1_coeffs</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::dm_1_coeffs</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="137" column="12" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="137" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a18cca3f633289d4c04eef9afa928069d" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::dm_1_2_coeffs[5]</definition>
+        <argsstring>[5]</argsstring>
+        <name>dm_1_2_coeffs</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::dm_1_2_coeffs</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="138" column="12" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="138" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1accd15fa51b2d895ed53ca1da0523eaba" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::M</definition>
+        <argsstring></argsstring>
+        <name>M</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::M</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="140" column="12" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="140" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a2ae22f439f27779ee88124a630eb700c" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::dm_2</definition>
+        <argsstring></argsstring>
+        <name>dm_2</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::dm_2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="140" column="14" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="140" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1ab8a73f260b6e755b629a45c8828b6342" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::dm_3_2</definition>
+        <argsstring></argsstring>
+        <name>dm_3_2</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::dm_3_2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="140" column="19" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="140" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a619885d3060170e9097207a6d82d6dae" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::dm_1</definition>
+        <argsstring></argsstring>
+        <name>dm_1</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::dm_1</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="140" column="26" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="140" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a1f4e7bacdc7831890bc00a79c504e7d6" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::dm_1_2</definition>
+        <argsstring></argsstring>
+        <name>dm_1_2</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::dm_1_2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="140" column="31" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="140" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1adaddff66d7c1dae13eaf3516cea217bb" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::Eb</definition>
+        <argsstring></argsstring>
+        <name>Eb</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::Eb</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="141" column="12" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="141" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1aca7aaa1d641e9825faef813e6fe65184" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::Fb</definition>
+        <argsstring></argsstring>
+        <name>Fb</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::Fb</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="141" column="15" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="141" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a2bbc481af6216ae6905a5399b9dbf946" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::rho_b_p_ref</definition>
+        <argsstring></argsstring>
+        <name>rho_b_p_ref</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::rho_b_p_ref</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="143" column="12" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="143" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1af6f8eddb5e063b25f7b3c9a013b40de9" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::em_coeffs[5]</definition>
+        <argsstring>[5]</argsstring>
+        <name>em_coeffs</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::em_coeffs</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="149" column="12" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="149" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1ae9db323de2299969048c92664d8deba3" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::fm_3_2_coeffs[5]</definition>
+        <argsstring>[5]</argsstring>
+        <name>fm_3_2_coeffs</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::fm_3_2_coeffs</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="150" column="12" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="150" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1ac4ebb3cc2c589d09fee166c3d1461a00" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::fm_1_coeffs[5]</definition>
+        <argsstring>[5]</argsstring>
+        <name>fm_1_coeffs</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::fm_1_coeffs</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="151" column="12" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="151" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a723dcdcb8e5d7a89de398ece56ee16fb" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::fm_1_2_coeffs[5]</definition>
+        <argsstring>[5]</argsstring>
+        <name>fm_1_2_coeffs</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::fm_1_2_coeffs</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="152" column="12" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="152" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1ab45b1e23796c04441a6741e75f0b0b06" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::Em</definition>
+        <argsstring></argsstring>
+        <name>Em</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::Em</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="154" column="12" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="154" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1aebb0816aab46ecde6d74fa34f36e759d" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::Fm_3_2</definition>
+        <argsstring></argsstring>
+        <name>Fm_3_2</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::Fm_3_2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="154" column="15" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="154" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1ac4e8a0a56535af72c613e4cc6a43d067" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::Fm_1</definition>
+        <argsstring></argsstring>
+        <name>Fm_1</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::Fm_1</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="154" column="22" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="154" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a9c2f9bc533bac56f49131043abac46f5" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::Fm_1_2</definition>
+        <argsstring></argsstring>
+        <name>Fm_1_2</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::Fm_1_2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="154" column="27" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="154" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a1ecd00a54362300c8148c9295979f637" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::Ib_p_ref</definition>
+        <argsstring></argsstring>
+        <name>Ib_p_ref</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::Ib_p_ref</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="155" column="12" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="155" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a057f029b870a0b6cadedf7fbf2e496da" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::Ib</definition>
+        <argsstring></argsstring>
+        <name>Ib</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::Ib</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="155" column="21" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="155" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a24e38db81f477aa74815a2f9c219f52e" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::c_b</definition>
+        <argsstring></argsstring>
+        <name>c_b</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::c_b</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="156" column="12" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="156" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a14238c8b0f11a7502c6c0d522685af71" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::rho_b</definition>
+        <argsstring></argsstring>
+        <name>rho_b</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::rho_b</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="156" column="16" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="156" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a16d3d4396da4cec072fa9d4e4f45e31f" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::di[10]</definition>
+        <argsstring>[10]</argsstring>
+        <name>di</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::di</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="159" column="12" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="159" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a1600f90a2364b274e51537b63a918b4d" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::log_my_w_pure</definition>
+        <argsstring></argsstring>
+        <name>log_my_w_pure</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::log_my_w_pure</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="161" column="12" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="161" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a3dc2c5f5967adb7a454aaead9fcc9547" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::my_w_pure</definition>
+        <argsstring></argsstring>
+        <name>my_w_pure</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::my_w_pure</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="161" column="26" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="161" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a9fc030ebc0efb1149eb3f932615e1a9d" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::log_my_b_rel</definition>
+        <argsstring></argsstring>
+        <name>log_my_b_rel</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::log_my_b_rel</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="161" column="36" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="161" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a5fb292681388cc684df8c7790bf5dc68" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::my_b_rel</definition>
+        <argsstring></argsstring>
+        <name>my_b_rel</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::my_b_rel</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="161" column="49" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="161" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a93f4b5dfee50c3c67b4156063538fb00" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::my_b</definition>
+        <argsstring></argsstring>
+        <name>my_b</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::my_b</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="161" column="58" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="161" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a720f5fc10a5932153267a722d95b6950" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::TwoPhaseUndersaturatedFluidPropertyVisitor</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;model, const FluidPropertyVisitorConfiguration &amp;config)</argsstring>
+        <name>TwoPhaseUndersaturatedFluidPropertyVisitor</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::TwoPhaseUndersaturatedFluidPropertyVisitor</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <declname>model</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_fluid_property_visitor_configuration" kindref="compound">FluidPropertyVisitorConfiguration</ref> &amp;</type>
+          <declname>config</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="52" column="5" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.cpp" bodystart="24" bodyend="112"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1ab94e7429cda30b68c4e55b04410494f3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type></type>
+        <definition>virtual csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::~TwoPhaseUndersaturatedFluidPropertyVisitor</definition>
+        <argsstring>()</argsstring>
+        <name>~TwoPhaseUndersaturatedFluidPropertyVisitor</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::~TwoPhaseUndersaturatedFluidPropertyVisitor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="56" column="13" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="56" bodyend="56"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1aab6d3747ed48268304fb052094876235" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::Visit</definition>
+        <argsstring>(Node&lt; dim &gt; *node)</argsstring>
+        <name>Visit</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::Visit</qualifiedname>
+        <reimplements refid="classcsmp_1_1_visitor_1a46449d8a657dbe4a2db5f1126e08323d">Visit</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; dim &gt; *</type>
+          <declname>node</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="58" column="18" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.cpp" bodystart="269" bodyend="312"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a1f0b3bb75f9f6f1f0f099748a88e50cf" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::Visit</definition>
+        <argsstring>(Model&lt; dim &gt; *model)</argsstring>
+        <name>Visit</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::Visit</qualifiedname>
+        <reimplements refid="classcsmp_1_1_visitor_1a07433f464353062d91f21684b9378dec">Visit</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; *</type>
+          <declname>model</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="59" column="18" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.cpp" bodystart="315" bodyend="320"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1ab361ace9ed82e856b0ecd4a15d49686f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::CalculateConstantVariables</definition>
+        <argsstring>()</argsstring>
+        <name>CalculateConstantVariables</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::CalculateConstantVariables</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="61" column="10" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.cpp" bodystart="115" bodyend="131"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a91315239d4cf66ca8522f4baeac86915" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::SpiveyOilCompressibilityCorrelation</definition>
+        <argsstring>(double P, double T)</argsstring>
+        <name>SpiveyOilCompressibilityCorrelation</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::SpiveyOilCompressibilityCorrelation</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>P</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>T</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="63" column="10" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.cpp" bodystart="134" bodyend="160"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a8c740edd1c21823697af740c984714e5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::DensityOilGreaterPb</definition>
+        <argsstring>(double P)</argsstring>
+        <name>DensityOilGreaterPb</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::DensityOilGreaterPb</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>P</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="65" column="10" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.cpp" bodystart="162" bodyend="165"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1aa815a8d28eb28bc889cd6df80ca8b0a4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::PetroskyFarshadOilViscosityGreaterPb</definition>
+        <argsstring>(double P)</argsstring>
+        <name>PetroskyFarshadOilViscosityGreaterPb</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::PetroskyFarshadOilViscosityGreaterPb</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>P</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="67" column="10" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.cpp" bodystart="168" bodyend="171"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a1111bd34e085c233648d4d7e8bc544e0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::SpiveyBrineAFactors</definition>
+        <argsstring>(double T)</argsstring>
+        <name>SpiveyBrineAFactors</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::SpiveyBrineAFactors</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>T</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="70" column="10" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.cpp" bodystart="180" bodyend="197"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a1ab75dfd97bd6ea31303b80d3c9bc1bd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::SpiveyA</definition>
+        <argsstring>(const double ai[], double T) const</argsstring>
+        <name>SpiveyA</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::SpiveyA</qualifiedname>
+        <param>
+          <type>const double</type>
+          <declname>ai</declname>
+          <array>[]</array>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>T</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="73" column="12" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.cpp" bodystart="174" bodyend="177"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1ac075bcd9f733ddc16af94d7c330c7a83" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::SpiveyBrineCompressibilityPure</definition>
+        <argsstring>(double P)</argsstring>
+        <name>SpiveyBrineCompressibilityPure</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::SpiveyBrineCompressibilityPure</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>P</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="76" column="10" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.cpp" bodystart="200" bodyend="204"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a7cc4e934cc33d70b814e5541b1673b37" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::SpiveyBrineDensityPure</definition>
+        <argsstring>(double P)</argsstring>
+        <name>SpiveyBrineDensityPure</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::SpiveyBrineDensityPure</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>P</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="79" column="10" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.cpp" bodystart="207" bodyend="212"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a2b8051aeccbd5de7faa342aa78db5add" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::SpiveyBrindeDensityPRef</definition>
+        <argsstring>(double m)</argsstring>
+        <name>SpiveyBrindeDensityPRef</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::SpiveyBrindeDensityPRef</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>m</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="82" column="10" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.cpp" bodystart="215" bodyend="218"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1ac553c131dec8d0163ea7c48ecb96f30c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::SpiveyBrineCompressibility</definition>
+        <argsstring>(double P, double m)</argsstring>
+        <name>SpiveyBrineCompressibility</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::SpiveyBrineCompressibility</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>P</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>m</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="85" column="10" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.cpp" bodystart="221" bodyend="227"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a5cb2bed4af7bc979bd4a817ac66dd95f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::SpiveyBrineDensity</definition>
+        <argsstring>(double P)</argsstring>
+        <name>SpiveyBrineDensity</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::SpiveyBrineDensity</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>P</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="88" column="10" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.cpp" bodystart="230" bodyend="235"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a92d35877dada151c99499dcf40200170" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::MaoDuanWaterViscosityPure</definition>
+        <argsstring>(double T)</argsstring>
+        <name>MaoDuanWaterViscosityPure</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::MaoDuanWaterViscosityPure</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>T</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="90" column="10" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.cpp" bodystart="238" bodyend="252"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1ae43e39b99800ec2c5518782eb4066634" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::MaoDuanBrineRelativeViscosity</definition>
+        <argsstring>(double T, double m)</argsstring>
+        <name>MaoDuanBrineRelativeViscosity</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::MaoDuanBrineRelativeViscosity</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>T</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>m</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="94" column="10" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.cpp" bodystart="256" bodyend="265"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1ae230a81c05606ebf7bbf01638586a31d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;::SalinityToConcentration</definition>
+        <argsstring>(double S) const</argsstring>
+        <name>SalinityToConcentration</name>
+        <qualifiedname>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor::SalinityToConcentration</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>S</declname>
+        </param>
+        <briefdescription>
+<para>Spivey et. al 1999 Compressibility of oil at pressures higher than Pb. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="96" column="12" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="168" bodyend="170"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Visitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_visitor"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Visitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_visitor"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" line="49" column="3" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h" bodystart="49" bodyend="162"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a18697192c9a3db9b0c7b7ba2563ffaed" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>A</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a89b0136e74ce7e48580c7fc39123d31f" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>API</name></member>
+      <member refid="classcsmp_1_1_visitor_1af785c6c9fdbe53d3edcb37e5eebf13ae" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>application_level_</name></member>
+      <member refid="classcsmp_1_1_visitor_1a4ba2f25168d6531e7a850f5f2d0dc9bb" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>application_target_</name></member>
+      <member refid="classcsmp_1_1_visitor_1a04cef3d343b9721c4d636f5496ccfa42" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>ApplicationLevel</name></member>
+      <member refid="classcsmp_1_1_visitor_1a221f8440bf8d6aa7ad970d60383f8b0c" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>ApplicationLevel</name></member>
+      <member refid="classcsmp_1_1_visitor_1a05b9c8127e47ce0ca524e2804c14251a" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>ApplicationTarget</name></member>
+      <member refid="classcsmp_1_1_visitor_1ac7084587d6daea17badc51e2a0caddf8" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>ApplicationTarget</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a24e38db81f477aa74815a2f9c219f52e" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>c_b</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a08d13a29ad38843e74c616ff9016e90f" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>c_w_pure</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1ab361ace9ed82e856b0ecd4a15d49686f" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>CalculateConstantVariables</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1affaf750e31085e2325095ac0e41297d6" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>co</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a5df28bf0e6f141d4c9479bfc5eda3cb3" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>cofb</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a8c740edd1c21823697af740c984714e5" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>DensityOilGreaterPb</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a16d3d4396da4cec072fa9d4e4f45e31f" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>di</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a619885d3060170e9097207a6d82d6dae" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>dm_1</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a1f4e7bacdc7831890bc00a79c504e7d6" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>dm_1_2</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a18cca3f633289d4c04eef9afa928069d" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>dm_1_2_coeffs</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a3a5b3341a8c202d4007abe0a76a92b7f" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>dm_1_coeffs</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a2ae22f439f27779ee88124a630eb700c" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>dm_2</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1ad9cd270504e4c0aebeac09310a1cd458" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>dm_2_coeffs</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1ab8a73f260b6e755b629a45c8828b6342" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>dm_3_2</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a7de64e3fd09107e71a0761a982f20470" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>dm_3_2_coeffs</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1adaddff66d7c1dae13eaf3516cea217bb" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>Eb</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1ab45b1e23796c04441a6741e75f0b0b06" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>Em</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1af6f8eddb5e063b25f7b3c9a013b40de9" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>em_coeffs</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a0005dbdc62bbcd71766f42052e927d40" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>Ew</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1acf0661f3e69b8edc504fb297093d6e07" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>Ew_coeffs</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1aca7aaa1d641e9825faef813e6fe65184" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>Fb</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1ac4e8a0a56535af72c613e4cc6a43d067" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>Fm_1</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a9c2f9bc533bac56f49131043abac46f5" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>Fm_1_2</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a723dcdcb8e5d7a89de398ece56ee16fb" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>fm_1_2_coeffs</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1ac4ebb3cc2c589d09fee166c3d1461a00" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>fm_1_coeffs</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1aebb0816aab46ecde6d74fa34f36e759d" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>Fm_3_2</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1ae9db323de2299969048c92664d8deba3" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>fm_3_2_coeffs</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1abd43d3dd9baf5926a7953092ad6d2c98" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>Fw</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a9fb96854a8924b9b649b84df427b3759" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>Fw_coeffs</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a057f029b870a0b6cadedf7fbf2e496da" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>Ib</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a1ecd00a54362300c8148c9295979f637" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>Ib_p_ref</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1acd359275e50f8c722613b7b6ff812fcc" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>Iw</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1afd83d94d9f69acc9d46c32f54d6f6727" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>Iw_p_ref</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a9fc030ebc0efb1149eb3f932615e1a9d" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>log_my_b_rel</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a1600f90a2364b274e51537b63a918b4d" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>log_my_w_pure</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1accd15fa51b2d895ed53ca1da0523eaba" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>M</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1ae43e39b99800ec2c5518782eb4066634" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>MaoDuanBrineRelativeViscosity</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a92d35877dada151c99499dcf40200170" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>MaoDuanWaterViscosityPure</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1ab4c7ce7f4d3aab470b6f91791c1ae0c4" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>model_ref_</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a93f4b5dfee50c3c67b4156063538fb00" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>my_b</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a5fb292681388cc684df8c7790bf5dc68" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>my_b_rel</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1acfe723c08678dd0cb47cdd42e3e007da" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>my_o</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1ab1dc831deab2969d539a57072497f498" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>my_o_b</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a3dc2c5f5967adb7a454aaead9fcc9547" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>my_w_pure</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a6ff92ea2496d284c082b459646a7449c" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>oil_comp_key_</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1ad2c5ce43466211a5630f362cdc8d6c6c" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>oil_density_key_</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a229a24ee896b37603479a8e17559f537" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>oil_pressure_key_</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a69eac43d4b4772ec0a47e2711785320b" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>oil_visc_key_</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a5fdd5206c4cd7b389776b793c4b962dd" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>Pb</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1aa815a8d28eb28bc889cd6df80ca8b0a4" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>PetroskyFarshadOilViscosityGreaterPb</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1afc8c2de6744a048a5da8228251025860" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>prop_ref_</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a14238c8b0f11a7502c6c0d522685af71" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>rho_b</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a2bbc481af6216ae6905a5399b9dbf946" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>rho_b_p_ref</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1aa54ff205317e2177aa6178638b3e9ae2" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>rho_o</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1af274e3360d09163538eb1e448aabf6d9" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>rho_o_b</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a526154d72777a6cfdd64294b18eac998" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>rho_w_pure</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a006c7e0018d4d26166c5dbc6667880b0" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>rho_w_pure_coeffs</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a88bed72451b46a45f3edadd5f54a8d75" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>rho_w_pure_p_ref</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a449cb55972c98a1282da943f6ec5d19d" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>Rs</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1af81531f8382d9c38a159e49ffaaba283" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>Rsb</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a23b0362b80518c6a893885bf2f8bb028" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>salinity</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1ae230a81c05606ebf7bbf01638586a31d" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>SalinityToConcentration</name></member>
+      <member refid="classcsmp_1_1_visitor_1a005bb17978ed03376bc3f7c1c329c936" prot="public" virt="virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>SetInitialProperties</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a2740fbda68e80cc25218462cb7e3429f" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>spGr_gas</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1ae404c7f68f4d9c6f198150082d602dc5" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>spGr_sp</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a1b1d7fc848a39057ff82fb6ee4fc97d4" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>spGr_STO</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a1ab75dfd97bd6ea31303b80d3c9bc1bd" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>SpiveyA</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a2b8051aeccbd5de7faa342aa78db5add" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>SpiveyBrindeDensityPRef</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a1111bd34e085c233648d4d7e8bc544e0" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>SpiveyBrineAFactors</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1ac553c131dec8d0163ea7c48ecb96f30c" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>SpiveyBrineCompressibility</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1ac075bcd9f733ddc16af94d7c330c7a83" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>SpiveyBrineCompressibilityPure</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a5cb2bed4af7bc979bd4a817ac66dd95f" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>SpiveyBrineDensity</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a7cc4e934cc33d70b814e5541b1673b37" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>SpiveyBrineDensityPure</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a91315239d4cf66ca8522f4baeac86915" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>SpiveyOilCompressibilityCorrelation</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a8f697735987897a4629e17f58623e7fa" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>temperature_key_</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a19bc483fc0225f7f3d74fab7dd22fc3c" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>Tr</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a720f5fc10a5932153267a722d95b6950" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>TwoPhaseUndersaturatedFluidPropertyVisitor</name></member>
+      <member refid="classcsmp_1_1_visitor_1a5dc481fceb0110431c4d1d6cbcc9ceff" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_visitor_1a9361155291d48571710c2a67406ce730" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1aab6d3747ed48268304fb052094876235" prot="public" virt="virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a1f0b3bb75f9f6f1f0f099748a88e50cf" prot="public" virt="virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1ac71cf14aab11139d8b03b39d4e4709bc" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1ac735e758870331b6639ea969504c47bf" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1af861179da1638c602df6c753cb3026f6" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a1a3ed57d253eef9a0097232c7359627c" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1abdca6daa1802e3727868d2d614c65015" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a0f21f0cfcf5328584883eb38effb58d4" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a8f1e9b73d04a90ad49171151bc233dbe" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a1097abaa59d3a35d65c0cb6335e2719c" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>Visitor</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a384c8d79d6e70125a64a456f5ab7f6e7" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>water_comp_key_</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a7a4eeab8f2af53d46f615efec203df76" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>water_density_key_</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1adcb6dd8427d1c298185bffb1e2046da2" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>water_pressure_key_</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1ae9fd751005b77efc77edd10baf28ed61" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>water_visc_key_</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a35eb0b03ecd67ee469141fa0ec9a2095" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>Z</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1ad78eb97608f452a816c6ec1bf38e2b93" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>Z1</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1ad923d2d8377b4247c98b3b6579240b05" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>Z2</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a6840d8ffa19744f6a403a81bbe44ddaf" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>Z3</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1a732565a6db1277569f92117c77fc3f2c" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>Z4</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1af505de0aedebf852cac3fbb213375f52" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>Z5</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1ad7994163a750199d0fc26decc3e765fe" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>Z6</name></member>
+      <member refid="classcsmp_1_1_two_phase_undersaturated_fluid_property_visitor_1ab94e7429cda30b68c4e55b04410494f3" prot="public" virt="virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>~TwoPhaseUndersaturatedFluidPropertyVisitor</name></member>
+      <member refid="classcsmp_1_1_visitor_1ab83b6d2b06153f5b7b1050bfffdb2707" prot="public" virt="virtual"><scope>csmp::TwoPhaseUndersaturatedFluidPropertyVisitor</scope><name>~Visitor</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

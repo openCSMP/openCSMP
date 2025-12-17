@@ -1,0 +1,106 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_element_with_variable_storage" kind="class" language="C++" prot="public">
+    <compoundname>csmp::ElementWithVariableStorage</compoundname>
+    <basecompoundref refid="classcsmp_1_1_local_variable_storage" prot="public" virt="non-virtual">csmp::LocalVariableStorage&lt; dim, Element &gt;</basecompoundref>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_element_with_variable_storage_1a4cd2b862f69104f81c71d1eda78f9478" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Var</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::ElementWithVariableStorage&lt; dim &gt;::NodePropertyVector</definition>
+        <argsstring>(const csmp::Index &amp;, std::vector&lt; Var &gt; &amp;) const</argsstring>
+        <name>NodePropertyVector</name>
+        <qualifiedname>csmp::ElementWithVariableStorage::NodePropertyVector</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+        </param>
+        <param>
+          <type>std::vector&lt; Var &gt; &amp;</type>
+        </param>
+        <briefdescription>
+<para>returns property values at the nodes </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/ElementPolicyIntegrity_Test.h" line="85" column="16"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::ElementWithVariableStorage&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_element_with_variable_storage"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::LocalVariableStorage&lt; dim, STOREE &gt;</label>
+        <link refid="classcsmp_1_1_local_variable_storage"/>
+      </node>
+      <node id="2">
+        <label>csmp::LocalVariableStorage&lt; dim, Element &gt;</label>
+        <link refid="classcsmp_1_1_local_variable_storage"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; dim, Element &gt;</edgelabel>
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::ElementWithVariableStorage&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_element_with_variable_storage"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::LocalVariableStorage&lt; dim, STOREE &gt;</label>
+        <link refid="classcsmp_1_1_local_variable_storage"/>
+      </node>
+      <node id="2">
+        <label>csmp::LocalVariableStorage&lt; dim, Element &gt;</label>
+        <link refid="classcsmp_1_1_local_variable_storage"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; dim, Element &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="tests/unit/ElementPolicyIntegrity_Test.h" line="80" column="1" bodyfile="tests/unit/ElementPolicyIntegrity_Test.h" bodystart="80" bodyend="86"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_local_variable_storage_1ae81c2b297f4166821bc3de2856e055ae" prot="public" virt="non-virtual"><scope>csmp::ElementWithVariableStorage</scope><name>AddProperty</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a0f98d57cdb8354375492e1ecab895b05" prot="public" virt="non-virtual"><scope>csmp::ElementWithVariableStorage</scope><name>AssertFiniteVolumeIntegrationPointPlacement</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a5143bb03ae0bda92a0c01260dee54615" prot="public" virt="non-virtual"><scope>csmp::ElementWithVariableStorage</scope><name>AssertIntegrationPointPlacement</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a4cc75be181f8519badea275810fe8275" prot="public" virt="non-virtual"><scope>csmp::ElementWithVariableStorage</scope><name>AssertPlacement</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a3b56bab7bc4a1db37bfc4d4176457349" prot="public" virt="non-virtual"><scope>csmp::ElementWithVariableStorage</scope><name>DeleteProperty</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a110040be6c3f197163729b7c4ea81069" prot="public" virt="non-virtual"><scope>csmp::ElementWithVariableStorage</scope><name>EmptyLVS</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1aa8f995011429356bfd7e7744794c9b9b" prot="public" virt="non-virtual"><scope>csmp::ElementWithVariableStorage</scope><name>IsWithinRange</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1aa711649557c9cd84c0a69e7e1ffe301b" prot="public" virt="non-virtual"><scope>csmp::ElementWithVariableStorage</scope><name>LocalVariableStorage</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a3568b1d87af863a457f038ca8982bcea" prot="public" virt="non-virtual"><scope>csmp::ElementWithVariableStorage</scope><name>LVS</name></member>
+      <member refid="classcsmp_1_1_element_with_variable_storage_1a4cd2b862f69104f81c71d1eda78f9478" prot="public" virt="non-virtual"><scope>csmp::ElementWithVariableStorage</scope><name>NodePropertyVector</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1add3acd9ec49db71e0e5bf4f8dda13744" prot="public" virt="non-virtual"><scope>csmp::ElementWithVariableStorage</scope><name>operator==</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1ade5ec5a8e9afb482c1619924cf8259b2" prot="public" virt="non-virtual"><scope>csmp::ElementWithVariableStorage</scope><name>OutLVS</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a4387c2c28afd79c9142834fc4a976b48" prot="public" virt="non-virtual"><scope>csmp::ElementWithVariableStorage</scope><name>Read</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a15454666d6c782ff34dc7cbcd5654881" prot="public" virt="non-virtual"><scope>csmp::ElementWithVariableStorage</scope><name>ReadArrayEntry</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a7a7f6185d60844c2f5acc1bcf475e215" prot="public" virt="non-virtual"><scope>csmp::ElementWithVariableStorage</scope><name>ResizePropertyStorage</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a13c8a3dae3a8ba916f712f7e96d000d1" prot="public" virt="non-virtual"><scope>csmp::ElementWithVariableStorage</scope><name>Status</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a8642fe6f83bb6981e7c0d6ab5b2c0248" prot="public" virt="non-virtual"><scope>csmp::ElementWithVariableStorage</scope><name>Store</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a0e9b7ddb382ce5e6bbb03158289dd5d4" prot="public" virt="non-virtual"><scope>csmp::ElementWithVariableStorage</scope><name>StoreArrayEntry</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a482c445697287f2ae4d8b76319725d7a" prot="public" virt="non-virtual"><scope>csmp::ElementWithVariableStorage</scope><name>StoreLocalState</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

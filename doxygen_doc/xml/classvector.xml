@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classvector" kind="class" language="C++" prot="public">
+    <compoundname>vector</compoundname>
+    <derivedcompoundref refid="structcsmp_1_1_inter_face_parent_elements" prot="public" virt="non-virtual">csmp::const_iterator&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="structcsmp_1_1_inter_face_parent_elements" prot="public" virt="non-virtual">csmp::InterFaceParentElements&lt; dim &gt;</derivedcompoundref>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>csmp::const_iterator&lt; dim &gt;</label>
+        <link refid="structcsmp_1_1_inter_face_parent_elements"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; dim &gt;::const_iterator</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::InterFaceParentElements&lt; dim &gt;</label>
+        <link refid="structcsmp_1_1_inter_face_parent_elements"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>vector</label>
+        <link refid="classvector"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>vector</label>
+        <link refid="classvector"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/model/SplitBoundary.h" line="28" column="1"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

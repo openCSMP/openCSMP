@@ -1,0 +1,778 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_computational_settings" kind="class" language="C++" prot="public">
+    <compoundname>csmp::ComputationalSettings</compoundname>
+    <includes refid="_computational_settings_8h" local="no">ComputationalSettings.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_computational_settings_1ae8d455c8ef6fc24efe7b6e72d9df68f2" prot="private" static="no" mutable="no">
+        <type>TIME_STRATEGY</type>
+        <definition>TIME_STRATEGY csmp::ComputationalSettings::time_strategy_</definition>
+        <argsstring></argsstring>
+        <name>time_strategy_</name>
+        <qualifiedname>csmp::ComputationalSettings::time_strategy_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/ComputationalSettings.h" line="83" column="25" bodyfile="source/includes/run_control/ComputationalSettings.h" bodystart="83" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_computational_settings_1a05e5930df0a0ae17322671edb746c977" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::ComputationalSettings::run_duration_</definition>
+        <argsstring></argsstring>
+        <name>run_duration_</name>
+        <qualifiedname>csmp::ComputationalSettings::run_duration_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/ComputationalSettings.h" line="84" column="23" bodyfile="source/includes/run_control/ComputationalSettings.h" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_computational_settings_1acf62c311fd6a1b2f75ba173903c18311" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::ComputationalSettings::time_increment_</definition>
+        <argsstring></argsstring>
+        <name>time_increment_</name>
+        <qualifiedname>csmp::ComputationalSettings::time_increment_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/ComputationalSettings.h" line="85" column="23" bodyfile="source/includes/run_control/ComputationalSettings.h" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_computational_settings_1a6f3a3472b79f5bd956b3dbcd665cbce4" prot="private" static="no" mutable="no">
+        <type>std::set&lt; double &gt;</type>
+        <definition>std::set&lt;double&gt; csmp::ComputationalSettings::output_times_</definition>
+        <argsstring></argsstring>
+        <name>output_times_</name>
+        <qualifiedname>csmp::ComputationalSettings::output_times_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/ComputationalSettings.h" line="86" column="15" bodyfile="source/includes/run_control/ComputationalSettings.h" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_computational_settings_1ae6a83ee628fb5f678a35d577ea18caf2" prot="private" static="no" mutable="no">
+        <type>std::set&lt; double &gt;</type>
+        <definition>std::set&lt;double&gt; csmp::ComputationalSettings::monitor_times_</definition>
+        <argsstring></argsstring>
+        <name>monitor_times_</name>
+        <qualifiedname>csmp::ComputationalSettings::monitor_times_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/ComputationalSettings.h" line="87" column="15" bodyfile="source/includes/run_control/ComputationalSettings.h" bodystart="87" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_computational_settings_1ad6c3810d5908041acdc8f836c7f36345" prot="private" static="no" mutable="no">
+        <type>std::set&lt; double &gt;::const_iterator</type>
+        <definition>std::set&lt;double&gt;::const_iterator csmp::ComputationalSettings::it_</definition>
+        <argsstring></argsstring>
+        <name>it_</name>
+        <qualifiedname>csmp::ComputationalSettings::it_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/ComputationalSettings.h" line="88" column="32" bodyfile="source/includes/run_control/ComputationalSettings.h" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_computational_settings_1add1e33ec35a3c7c41c29e2b60bf2fd7e" prot="private" static="no" mutable="no">
+        <type>std::set&lt; double &gt;::const_iterator</type>
+        <definition>std::set&lt;double&gt;::const_iterator csmp::ComputationalSettings::itm_</definition>
+        <argsstring></argsstring>
+        <name>itm_</name>
+        <qualifiedname>csmp::ComputationalSettings::itm_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/ComputationalSettings.h" line="89" column="32" bodyfile="source/includes/run_control/ComputationalSettings.h" bodystart="89" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_computational_settings_1a12432c0a322077c376d77e570c821875" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>ComputationalSettings::ComputationalSettings</definition>
+        <argsstring>()</argsstring>
+        <name>ComputationalSettings</name>
+        <qualifiedname>csmp::ComputationalSettings::ComputationalSettings</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The default constructor sets the time stepping strategy to conservative and the run duration to zero. No output times are entered into the output time set. <linebreak/>
+</para>
+<para>The default time increment is 60 seconds. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/ComputationalSettings.h" line="19" column="5" bodyfile="source/modules/run_control/ComputationalSettings.cpp" bodystart="21" bodyend="28"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_computational_settings_1ab3ed6e0021476e2ffaf03359d972bc4a" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>ComputationalSettings::~ComputationalSettings</definition>
+        <argsstring>()</argsstring>
+        <name>~ComputationalSettings</name>
+        <qualifiedname>csmp::ComputationalSettings::~ComputationalSettings</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/ComputationalSettings.h" line="20" column="13" bodyfile="source/modules/run_control/ComputationalSettings.cpp" bodystart="31" bodyend="33"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_computational_settings_1a1ee281cb98c0a2ec31c2eef0c9965aeb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void ComputationalSettings::SetOutputTimes</definition>
+        <argsstring>(const std::set&lt; double &gt; &amp;times, bool overwrite=true)</argsstring>
+        <name>SetOutputTimes</name>
+        <qualifiedname>csmp::ComputationalSettings::SetOutputTimes</qualifiedname>
+        <param>
+          <type>const std::set&lt; double &gt; &amp;</type>
+          <declname>times</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>overwrite</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Permits the user to enter a series of unique output times as supplied in the argument set. Either over-writing or adding to existing list is optional. Overwrite is the default settings. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/ComputationalSettings.h" line="24" column="20" bodyfile="source/modules/run_control/ComputationalSettings.cpp" bodystart="123" bodyend="133"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_computational_settings_1af6aaf26c0a9a442aa63d16a09d5663a2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void ComputationalSettings::AddOutputTime</definition>
+        <argsstring>(double time)</argsstring>
+        <name>AddOutputTime</name>
+        <qualifiedname>csmp::ComputationalSettings::AddOutputTime</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>time</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Adds a new output time increment to the current set of output times. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/ComputationalSettings.h" line="25" column="20" bodyfile="source/modules/run_control/ComputationalSettings.cpp" bodystart="295" bodyend="298"/>
+        <referencedby refid="namespacecsmp_1a6c8335a9dee7b4aefcd304affbc44657" compoundref="_text_file_i_o_8cpp" startline="3272" endline="3349">csmp::readComputationalSettings</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_computational_settings_1adabeb6b980392b0121a459c2fc05cc82" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool ComputationalSettings::IsOutputTime</definition>
+        <argsstring>(double time, double tolerance) const</argsstring>
+        <name>IsOutputTime</name>
+        <qualifiedname>csmp::ComputationalSettings::IsOutputTime</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>time</declname>
+          <defname>value</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>tolerance</declname>
+          <defname>tol</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Checks whether the nearest time-increment lies within the user-specified tolerance. If so the method returns true, else false. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/ComputationalSettings.h" line="27" column="20" bodyfile="source/modules/run_control/ComputationalSettings.cpp" bodystart="157" bodyend="175"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_computational_settings_1a8ebbe897d7b71bc6edfb7a214c661a43" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double ComputationalSettings::TimeToNearestOutputTime</definition>
+        <argsstring>(double current_time) const</argsstring>
+        <name>TimeToNearestOutputTime</name>
+        <qualifiedname>csmp::ComputationalSettings::TimeToNearestOutputTime</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>current_time</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns time difference to closest output time as currently stored by the object. If the output time occurs in the past, the time difference would be negative but it is not considered. Only output times which occur in the future are considered and they are all positive. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/ComputationalSettings.h" line="29" column="18" bodyfile="source/modules/run_control/ComputationalSettings.cpp" bodystart="210" bodyend="224"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_computational_settings_1ad4f69210543817b7c0b7035a84ffd8ac" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double ComputationalSettings::NearestOutputTime</definition>
+        <argsstring>(double current_time) const</argsstring>
+        <name>NearestOutputTime</name>
+        <qualifiedname>csmp::ComputationalSettings::NearestOutputTime</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>current_time</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns the nearest registered output time step with respect to the current_time. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/ComputationalSettings.h" line="30" column="18" bodyfile="source/modules/run_control/ComputationalSettings.cpp" bodystart="255" bodyend="269"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_computational_settings_1a113f1b6e9b1f62bf46bea8500299d217" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t ComputationalSettings::OutputTimePosition</definition>
+        <argsstring>(double time)</argsstring>
+        <name>OutputTimePosition</name>
+        <qualifiedname>csmp::ComputationalSettings::OutputTimePosition</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>time</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/ComputationalSettings.h" line="31" column="20" bodyfile="source/modules/run_control/ComputationalSettings.cpp" bodystart="358" bodyend="361"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_computational_settings_1af66379a14ee87ed9d59ac2b278538c34" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void ComputationalSettings::SetMonitorTimes</definition>
+        <argsstring>(const std::set&lt; double &gt; &amp;times, bool overwrite=true)</argsstring>
+        <name>SetMonitorTimes</name>
+        <qualifiedname>csmp::ComputationalSettings::SetMonitorTimes</qualifiedname>
+        <param>
+          <type>const std::set&lt; double &gt; &amp;</type>
+          <declname>times</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>overwrite</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Permits the user to enter a series of unique monitoring times as supplied in the argument set. Either over-writing or adding to existing list is optional. Overwrite is the default settings. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/ComputationalSettings.h" line="35" column="20" bodyfile="source/modules/run_control/ComputationalSettings.cpp" bodystart="139" bodyend="149"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_computational_settings_1a9654443048f310e185311bdaa3edc501" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void ComputationalSettings::AddMonitorTime</definition>
+        <argsstring>(double time)</argsstring>
+        <name>AddMonitorTime</name>
+        <qualifiedname>csmp::ComputationalSettings::AddMonitorTime</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>time</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Adds a new output time increment to the current set of output times. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/ComputationalSettings.h" line="36" column="20" bodyfile="source/modules/run_control/ComputationalSettings.cpp" bodystart="302" bodyend="305"/>
+        <referencedby refid="namespacecsmp_1a6c8335a9dee7b4aefcd304affbc44657" compoundref="_text_file_i_o_8cpp" startline="3272" endline="3349">csmp::readComputationalSettings</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_computational_settings_1a490ba48b863f7f89d4f8cbf17f66e405" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool ComputationalSettings::IsMonitorTime</definition>
+        <argsstring>(double time, double tolerance) const</argsstring>
+        <name>IsMonitorTime</name>
+        <qualifiedname>csmp::ComputationalSettings::IsMonitorTime</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>time</declname>
+          <defname>value</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>tolerance</declname>
+          <defname>tol</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Checks whether the nearest time-increment lies within the user-specified tolerance. If so the method returns true, else false. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/ComputationalSettings.h" line="38" column="20" bodyfile="source/modules/run_control/ComputationalSettings.cpp" bodystart="182" bodyend="200"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_computational_settings_1a45b096af4dd72548f54aac426cf88a4f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double ComputationalSettings::TimeToNearestMonitorTime</definition>
+        <argsstring>(double current_time) const</argsstring>
+        <name>TimeToNearestMonitorTime</name>
+        <qualifiedname>csmp::ComputationalSettings::TimeToNearestMonitorTime</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>current_time</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns time difference to closest monitor time as currently stored by the object. If the output time occurs in the past, the time difference would be negative but it is not considered. Only output times which occur in the future are considered and they are all positive. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/ComputationalSettings.h" line="40" column="18" bodyfile="source/modules/run_control/ComputationalSettings.cpp" bodystart="233" bodyend="247"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_computational_settings_1a4633428d5ff28e431f193d74d8ba7452" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double ComputationalSettings::NearestMonitorTime</definition>
+        <argsstring>(double current_time) const</argsstring>
+        <name>NearestMonitorTime</name>
+        <qualifiedname>csmp::ComputationalSettings::NearestMonitorTime</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>current_time</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns the nearest registered monitoring time step with respect to the current_time. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/ComputationalSettings.h" line="41" column="18" bodyfile="source/modules/run_control/ComputationalSettings.cpp" bodystart="276" bodyend="290"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_computational_settings_1ac3fc9f0fb849e03b07085b811ad99683" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t ComputationalSettings::MonitorTimePosition</definition>
+        <argsstring>(double time)</argsstring>
+        <name>MonitorTimePosition</name>
+        <qualifiedname>csmp::ComputationalSettings::MonitorTimePosition</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>time</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/ComputationalSettings.h" line="42" column="20" bodyfile="source/modules/run_control/ComputationalSettings.cpp" bodystart="363" bodyend="366"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_computational_settings_1a6b2579e094e9148fd5371aa383228c2d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void ComputationalSettings::Duration</definition>
+        <argsstring>(double duration)</argsstring>
+        <name>Duration</name>
+        <qualifiedname>csmp::ComputationalSettings::Duration</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>duration</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Sets the duration of the current run to the argument value. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/ComputationalSettings.h" line="46" column="20" bodyfile="source/modules/run_control/ComputationalSettings.cpp" bodystart="309" bodyend="322"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_computational_settings_1ae3b5cbf8d6be6fb4c14c9e9928139ba4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double ComputationalSettings::Duration</definition>
+        <argsstring>() const</argsstring>
+        <name>Duration</name>
+        <qualifiedname>csmp::ComputationalSettings::Duration</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns the scheduled duration of the current simulation. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/ComputationalSettings.h" line="47" column="18" bodyfile="source/modules/run_control/ComputationalSettings.cpp" bodystart="327" bodyend="330"/>
+        <referencedby refid="classcsmp_1_1_thermal_convection_e_t_h_z___example_1a1fb6d80154779d31000ef43d13551fef" compoundref="_thermal_convection_e_t_h_z___example_8cpp" startline="78" endline="375">csmp::ThermalConvectionETHZ_Example::Run</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_computational_settings_1a4a13f7402fca02e085c6c3d209bff58d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void ComputationalSettings::TimeSteppingApproach</definition>
+        <argsstring>(TIME_STRATEGY time_stepping_approach)</argsstring>
+        <name>TimeSteppingApproach</name>
+        <qualifiedname>csmp::ComputationalSettings::TimeSteppingApproach</qualifiedname>
+        <param>
+          <type>TIME_STRATEGY</type>
+          <declname>time_stepping_approach</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Sets the time-stepping strategy parameter. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/ComputationalSettings.h" line="49" column="20" bodyfile="source/modules/run_control/ComputationalSettings.cpp" bodystart="336" bodyend="339"/>
+        <referencedby refid="namespacecsmp_1a6c8335a9dee7b4aefcd304affbc44657" compoundref="_text_file_i_o_8cpp" startline="3272" endline="3349">csmp::readComputationalSettings</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_computational_settings_1a6a85b6cd49ef3a9d0510836dd14d1440" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>TIME_STRATEGY</type>
+        <definition>TIME_STRATEGY ComputationalSettings::TimeSteppingApproach</definition>
+        <argsstring>() const</argsstring>
+        <name>TimeSteppingApproach</name>
+        <qualifiedname>csmp::ComputationalSettings::TimeSteppingApproach</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns the current time stepping approach as captured by one of the switches of the enumeration TIME_STRATEGY:</para>
+<para><programlisting><codeline><highlight class="normal">PEDANTIC,<sp/>CONSERVATIVE,<sp/>MODERATE,<sp/>AGGRESSIVE,<sp/>DARING</highlight></codeline>
+</programlisting> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/ComputationalSettings.h" line="50" column="20" bodyfile="source/modules/run_control/ComputationalSettings.cpp" bodystart="352" bodyend="355"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_computational_settings_1afcf16f9c2cc4d782de3914ed10793c96" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void ComputationalSettings::TimeIncrement</definition>
+        <argsstring>(double)</argsstring>
+        <name>TimeIncrement</name>
+        <qualifiedname>csmp::ComputationalSettings::TimeIncrement</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>dt</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/ComputationalSettings.h" line="52" column="20" bodyfile="source/modules/run_control/ComputationalSettings.cpp" bodystart="368" bodyend="371"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_computational_settings_1a3fe0ef597f114f3e040134bd5f6a57e0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double ComputationalSettings::TimeIncrement</definition>
+        <argsstring>() const</argsstring>
+        <name>TimeIncrement</name>
+        <qualifiedname>csmp::ComputationalSettings::TimeIncrement</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/ComputationalSettings.h" line="53" column="18" bodyfile="source/modules/run_control/ComputationalSettings.cpp" bodystart="373" bodyend="376"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_computational_settings_1a1f03f42ee0f7b9e15f6aeab1eae38b07" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void ComputationalSettings::EstablishMultipliers</definition>
+        <argsstring>(double &amp;pf_multiplier, double &amp;adv_multiplier) const</argsstring>
+        <name>EstablishMultipliers</name>
+        <qualifiedname>csmp::ComputationalSettings::EstablishMultipliers</qualifiedname>
+        <param>
+          <type>double &amp;</type>
+          <declname>pf_multiplier</declname>
+        </param>
+        <param>
+          <type>double &amp;</type>
+          <declname>adv_multiplier</declname>
+        </param>
+        <briefdescription>
+<para>based on the time-stepping strategy, pressure-step and saturation step multipliers are suggested </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Changes the supplied arguments pf- and advection multiplier to reflect the user-defined timestepping approach; options are:</para>
+<para>pedantic, conservative, moderate=normal, aggressive, daring, prescribed <linebreak/>
+</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The strategy chosen by the user with the options:</para>
+<para><programlisting><codeline><highlight class="normal">PEDANTIC,<sp/>CONSERVATIVE,<sp/>MODERATE,<sp/>AGGRESSIVE,<sp/>DARING.</highlight></codeline>
+</programlisting></para>
+<para>The fluid pressure solve frequency multiplier and a multiplier that decides by how much the Courant number shall be overstepped. The latter must be &lt;= 1 if the explicit advection scheme is used. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/ComputationalSettings.h" line="56" column="10" bodyfile="source/modules/run_control/ComputationalSettings.cpp" bodystart="71" bodyend="114"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_computational_settings_1abdde6c2e9424ffb90a2e78f8ce213558" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>double</type>
+        <definition>template double ComputationalSettings::TimeIncrementFromVelocityChange&lt; 3U &gt;</definition>
+        <argsstring>(const Model&lt; dim &gt; &amp;sg, double log_velocity_change, double current_delta_t, double max_delta_t)</argsstring>
+        <name>TimeIncrementFromVelocityChange</name>
+        <qualifiedname>csmp::ComputationalSettings::TimeIncrementFromVelocityChange</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <declname>sg</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>log_velocity_change</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>current_delta_t</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>max_delta_t</declname>
+        </param>
+        <briefdescription>
+<para>algorithm that monitors the flow velocity change from timestep to timestep and suggests a timeincrement on this basis </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Calculates the maximum permissible time increment based on the current change in velocity and the maximum allowed change in velocity for the next time step. If the velocity does not change, the maximum time increment provided by the user is returned. The variables &quot;volume flux&quot; and &quot;previous volume flux&quot; are compared and must be computed by the user in the main program. The velocity change is only computed if the velocity is below a minimum threshold (1.0e-15 m/s). <linebreak/>
+</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para><itemizedlist>
+<listitem><para>The allowed velocity change (in log units)</para>
+</listitem><listitem><para>The current time increment (in sec)</para>
+</listitem><listitem><para>The maximum time increment (in sec). </para>
+</listitem></itemizedlist>
+</para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/ComputationalSettings.h" line="61" column="12" bodyfile="source/modules/run_control/ComputationalSettings.cpp" bodystart="398" bodyend="460"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_computational_settings_1af26529a42c533eb920e360436c7a1d85" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ComputationalSettings::RemoveAllOutputtimes</definition>
+        <argsstring>()</argsstring>
+        <name>RemoveAllOutputtimes</name>
+        <qualifiedname>csmp::ComputationalSettings::RemoveAllOutputtimes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/ComputationalSettings.h" line="66" column="21" bodyfile="source/includes/run_control/ComputationalSettings.h" bodystart="66" bodyend="66"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_computational_settings_1af90cf2be20b8bee96d9ec31a89c49d29" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ComputationalSettings::RemoveAllMonitortimes</definition>
+        <argsstring>()</argsstring>
+        <name>RemoveAllMonitortimes</name>
+        <qualifiedname>csmp::ComputationalSettings::RemoveAllMonitortimes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/ComputationalSettings.h" line="67" column="21" bodyfile="source/includes/run_control/ComputationalSettings.h" bodystart="67" bodyend="67"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_computational_settings_1a98e7b2e006f44615e6ed5e1736cf176f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double ComputationalSettings::PopOutputTime</definition>
+        <argsstring>()</argsstring>
+        <name>PopOutputTime</name>
+        <qualifiedname>csmp::ComputationalSettings::PopOutputTime</qualifiedname>
+        <briefdescription>
+<para>step through output times </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Increments the time-step iterator to the next stored output time and returns the corresponding time value. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/ComputationalSettings.h" line="70" column="38" bodyfile="source/modules/run_control/ComputationalSettings.cpp" bodystart="481" bodyend="488"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_computational_settings_1a2d6cf1e23e5a7f7430466d761f3c49f7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::set&lt; double &gt;::const_iterator</type>
+        <definition>std::set&lt; double &gt;::const_iterator ComputationalSettings::OutputTimesBegin</definition>
+        <argsstring>() const</argsstring>
+        <name>OutputTimesBegin</name>
+        <qualifiedname>csmp::ComputationalSettings::OutputTimesBegin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/ComputationalSettings.h" line="71" column="31" bodyfile="source/modules/run_control/ComputationalSettings.cpp" bodystart="38" bodyend="39"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_computational_settings_1a857cc96a37848678b393d363c6dff502" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::set&lt; double &gt;::const_iterator</type>
+        <definition>std::set&lt; double &gt;::const_iterator ComputationalSettings::OutputTimesEnd</definition>
+        <argsstring>() const</argsstring>
+        <name>OutputTimesEnd</name>
+        <qualifiedname>csmp::ComputationalSettings::OutputTimesEnd</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/ComputationalSettings.h" line="72" column="31" bodyfile="source/modules/run_control/ComputationalSettings.cpp" bodystart="41" bodyend="42"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_computational_settings_1acaf2f85103fe60bb058b8c5962da335c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ComputationalSettings::PopMonitorTime</definition>
+        <argsstring>()</argsstring>
+        <name>PopMonitorTime</name>
+        <qualifiedname>csmp::ComputationalSettings::PopMonitorTime</qualifiedname>
+        <briefdescription>
+<para>step through monitor times </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/ComputationalSettings.h" line="75" column="38"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_computational_settings_1afb870eaf2ede8ba2fbe20b4f813b9dba" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::set&lt; double &gt;::const_iterator</type>
+        <definition>std::set&lt; double &gt;::const_iterator ComputationalSettings::MonitorTimesBegin</definition>
+        <argsstring>() const</argsstring>
+        <name>MonitorTimesBegin</name>
+        <qualifiedname>csmp::ComputationalSettings::MonitorTimesBegin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/ComputationalSettings.h" line="76" column="31" bodyfile="source/modules/run_control/ComputationalSettings.cpp" bodystart="44" bodyend="45"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_computational_settings_1a98d3104973cecd0d0843005f7c3ce60c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::set&lt; double &gt;::const_iterator</type>
+        <definition>std::set&lt; double &gt;::const_iterator ComputationalSettings::MonitorTimesEnd</definition>
+        <argsstring>() const</argsstring>
+        <name>MonitorTimesEnd</name>
+        <qualifiedname>csmp::ComputationalSettings::MonitorTimesEnd</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/ComputationalSettings.h" line="77" column="31" bodyfile="source/modules/run_control/ComputationalSettings.cpp" bodystart="47" bodyend="48"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_computational_settings_1a06d9f769dfe83f9f64526b0144f0d35d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void ComputationalSettings::Out</definition>
+        <argsstring>() const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::ComputationalSettings::Out</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Prints the current computational settings to screen. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/ComputationalSettings.h" line="79" column="20" bodyfile="source/modules/run_control/ComputationalSettings.cpp" bodystart="495" bodyend="513"/>
+        <referencedby refid="namespacecsmp_1a6c8335a9dee7b4aefcd304affbc44657" compoundref="_text_file_i_o_8cpp" startline="3272" endline="3349">csmp::readComputationalSettings</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_computational_settings_1ad29c8fd2b389cbc8e6a9ede0ced12efb" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void ComputationalSettings::Out</definition>
+        <argsstring>(const char *filename) const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::ComputationalSettings::Out</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>filename</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Writes the current run parameters to the ASCII text file that the user specifies as the first method argument. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/ComputationalSettings.h" line="80" column="20" bodyfile="source/modules/run_control/ComputationalSettings.cpp" bodystart="522" bodyend="540"/>
+        <references refid="namespacecsmp_1ab7660628fe095b5892a425abcdbb06de" compoundref="_computational_settings_8cpp" startline="586" endline="602">csmp::parseTimeStrategy</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>base class for generic configurations </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::ComputationalSettings</label>
+        <link refid="classcsmp_1_1_computational_settings"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/run_control/ComputationalSettings.h" line="17" column="1" bodyfile="source/includes/run_control/ComputationalSettings.h" bodystart="17" bodyend="90"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_computational_settings_1a9654443048f310e185311bdaa3edc501" prot="public" virt="non-virtual"><scope>csmp::ComputationalSettings</scope><name>AddMonitorTime</name></member>
+      <member refid="classcsmp_1_1_computational_settings_1af6aaf26c0a9a442aa63d16a09d5663a2" prot="public" virt="non-virtual"><scope>csmp::ComputationalSettings</scope><name>AddOutputTime</name></member>
+      <member refid="classcsmp_1_1_computational_settings_1a12432c0a322077c376d77e570c821875" prot="public" virt="non-virtual"><scope>csmp::ComputationalSettings</scope><name>ComputationalSettings</name></member>
+      <member refid="classcsmp_1_1_computational_settings_1a6b2579e094e9148fd5371aa383228c2d" prot="public" virt="non-virtual"><scope>csmp::ComputationalSettings</scope><name>Duration</name></member>
+      <member refid="classcsmp_1_1_computational_settings_1ae3b5cbf8d6be6fb4c14c9e9928139ba4" prot="public" virt="non-virtual"><scope>csmp::ComputationalSettings</scope><name>Duration</name></member>
+      <member refid="classcsmp_1_1_computational_settings_1a1f03f42ee0f7b9e15f6aeab1eae38b07" prot="public" virt="non-virtual"><scope>csmp::ComputationalSettings</scope><name>EstablishMultipliers</name></member>
+      <member refid="classcsmp_1_1_computational_settings_1a490ba48b863f7f89d4f8cbf17f66e405" prot="public" virt="non-virtual"><scope>csmp::ComputationalSettings</scope><name>IsMonitorTime</name></member>
+      <member refid="classcsmp_1_1_computational_settings_1adabeb6b980392b0121a459c2fc05cc82" prot="public" virt="non-virtual"><scope>csmp::ComputationalSettings</scope><name>IsOutputTime</name></member>
+      <member refid="classcsmp_1_1_computational_settings_1ad6c3810d5908041acdc8f836c7f36345" prot="private" virt="non-virtual"><scope>csmp::ComputationalSettings</scope><name>it_</name></member>
+      <member refid="classcsmp_1_1_computational_settings_1add1e33ec35a3c7c41c29e2b60bf2fd7e" prot="private" virt="non-virtual"><scope>csmp::ComputationalSettings</scope><name>itm_</name></member>
+      <member refid="classcsmp_1_1_computational_settings_1ae6a83ee628fb5f678a35d577ea18caf2" prot="private" virt="non-virtual"><scope>csmp::ComputationalSettings</scope><name>monitor_times_</name></member>
+      <member refid="classcsmp_1_1_computational_settings_1ac3fc9f0fb849e03b07085b811ad99683" prot="public" virt="non-virtual"><scope>csmp::ComputationalSettings</scope><name>MonitorTimePosition</name></member>
+      <member refid="classcsmp_1_1_computational_settings_1afb870eaf2ede8ba2fbe20b4f813b9dba" prot="public" virt="non-virtual"><scope>csmp::ComputationalSettings</scope><name>MonitorTimesBegin</name></member>
+      <member refid="classcsmp_1_1_computational_settings_1a98d3104973cecd0d0843005f7c3ce60c" prot="public" virt="non-virtual"><scope>csmp::ComputationalSettings</scope><name>MonitorTimesEnd</name></member>
+      <member refid="classcsmp_1_1_computational_settings_1a4633428d5ff28e431f193d74d8ba7452" prot="public" virt="non-virtual"><scope>csmp::ComputationalSettings</scope><name>NearestMonitorTime</name></member>
+      <member refid="classcsmp_1_1_computational_settings_1ad4f69210543817b7c0b7035a84ffd8ac" prot="public" virt="non-virtual"><scope>csmp::ComputationalSettings</scope><name>NearestOutputTime</name></member>
+      <member refid="classcsmp_1_1_computational_settings_1a06d9f769dfe83f9f64526b0144f0d35d" prot="public" virt="virtual"><scope>csmp::ComputationalSettings</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_computational_settings_1ad29c8fd2b389cbc8e6a9ede0ced12efb" prot="public" virt="virtual"><scope>csmp::ComputationalSettings</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_computational_settings_1a6f3a3472b79f5bd956b3dbcd665cbce4" prot="private" virt="non-virtual"><scope>csmp::ComputationalSettings</scope><name>output_times_</name></member>
+      <member refid="classcsmp_1_1_computational_settings_1a113f1b6e9b1f62bf46bea8500299d217" prot="public" virt="non-virtual"><scope>csmp::ComputationalSettings</scope><name>OutputTimePosition</name></member>
+      <member refid="classcsmp_1_1_computational_settings_1a2d6cf1e23e5a7f7430466d761f3c49f7" prot="public" virt="non-virtual"><scope>csmp::ComputationalSettings</scope><name>OutputTimesBegin</name></member>
+      <member refid="classcsmp_1_1_computational_settings_1a857cc96a37848678b393d363c6dff502" prot="public" virt="non-virtual"><scope>csmp::ComputationalSettings</scope><name>OutputTimesEnd</name></member>
+      <member refid="classcsmp_1_1_computational_settings_1acaf2f85103fe60bb058b8c5962da335c" prot="public" virt="non-virtual"><scope>csmp::ComputationalSettings</scope><name>PopMonitorTime</name></member>
+      <member refid="classcsmp_1_1_computational_settings_1a98e7b2e006f44615e6ed5e1736cf176f" prot="public" virt="non-virtual"><scope>csmp::ComputationalSettings</scope><name>PopOutputTime</name></member>
+      <member refid="classcsmp_1_1_computational_settings_1af90cf2be20b8bee96d9ec31a89c49d29" prot="public" virt="non-virtual"><scope>csmp::ComputationalSettings</scope><name>RemoveAllMonitortimes</name></member>
+      <member refid="classcsmp_1_1_computational_settings_1af26529a42c533eb920e360436c7a1d85" prot="public" virt="non-virtual"><scope>csmp::ComputationalSettings</scope><name>RemoveAllOutputtimes</name></member>
+      <member refid="classcsmp_1_1_computational_settings_1a05e5930df0a0ae17322671edb746c977" prot="private" virt="non-virtual"><scope>csmp::ComputationalSettings</scope><name>run_duration_</name></member>
+      <member refid="classcsmp_1_1_computational_settings_1af66379a14ee87ed9d59ac2b278538c34" prot="public" virt="non-virtual"><scope>csmp::ComputationalSettings</scope><name>SetMonitorTimes</name></member>
+      <member refid="classcsmp_1_1_computational_settings_1a1ee281cb98c0a2ec31c2eef0c9965aeb" prot="public" virt="non-virtual"><scope>csmp::ComputationalSettings</scope><name>SetOutputTimes</name></member>
+      <member refid="classcsmp_1_1_computational_settings_1acf62c311fd6a1b2f75ba173903c18311" prot="private" virt="non-virtual"><scope>csmp::ComputationalSettings</scope><name>time_increment_</name></member>
+      <member refid="classcsmp_1_1_computational_settings_1ae8d455c8ef6fc24efe7b6e72d9df68f2" prot="private" virt="non-virtual"><scope>csmp::ComputationalSettings</scope><name>time_strategy_</name></member>
+      <member refid="classcsmp_1_1_computational_settings_1afcf16f9c2cc4d782de3914ed10793c96" prot="public" virt="non-virtual"><scope>csmp::ComputationalSettings</scope><name>TimeIncrement</name></member>
+      <member refid="classcsmp_1_1_computational_settings_1a3fe0ef597f114f3e040134bd5f6a57e0" prot="public" virt="non-virtual"><scope>csmp::ComputationalSettings</scope><name>TimeIncrement</name></member>
+      <member refid="classcsmp_1_1_computational_settings_1abdde6c2e9424ffb90a2e78f8ce213558" prot="public" virt="non-virtual"><scope>csmp::ComputationalSettings</scope><name>TimeIncrementFromVelocityChange</name></member>
+      <member refid="classcsmp_1_1_computational_settings_1a4a13f7402fca02e085c6c3d209bff58d" prot="public" virt="non-virtual"><scope>csmp::ComputationalSettings</scope><name>TimeSteppingApproach</name></member>
+      <member refid="classcsmp_1_1_computational_settings_1a6a85b6cd49ef3a9d0510836dd14d1440" prot="public" virt="non-virtual"><scope>csmp::ComputationalSettings</scope><name>TimeSteppingApproach</name></member>
+      <member refid="classcsmp_1_1_computational_settings_1a45b096af4dd72548f54aac426cf88a4f" prot="public" virt="non-virtual"><scope>csmp::ComputationalSettings</scope><name>TimeToNearestMonitorTime</name></member>
+      <member refid="classcsmp_1_1_computational_settings_1a8ebbe897d7b71bc6edfb7a214c661a43" prot="public" virt="non-virtual"><scope>csmp::ComputationalSettings</scope><name>TimeToNearestOutputTime</name></member>
+      <member refid="classcsmp_1_1_computational_settings_1ab3ed6e0021476e2ffaf03359d972bc4a" prot="public" virt="virtual"><scope>csmp::ComputationalSettings</scope><name>~ComputationalSettings</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

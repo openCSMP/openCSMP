@@ -1,0 +1,5 @@
+<map id="csmp::LinearTriangle" name="csmp::LinearTriangle">
+<area shape="rect" id="Node000001" title="Straight&#45;sided, analytically integrated triangular element for 2D calculations." alt="" coords="11,913,163,1182"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_finite_element.html" title="CSMP&#39;s base class of all finite elements whose functionality is provided through polymorphism." alt="" coords="5,5,169,865"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="90,880,90,913,85,913,85,880"/>
+</map>

@@ -1,0 +1,77 @@
+\doxysection{csmp\+::Polygon\+Grid\+Manager Class Reference}
+\hypertarget{classcsmp_1_1_polygon_grid_manager}{}\label{classcsmp_1_1_polygon_grid_manager}\index{csmp::PolygonGridManager@{csmp::PolygonGridManager}}
+
+
+Collaboration diagram for csmp\+::Polygon\+Grid\+Manager\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=209pt]{classcsmp_1_1_polygon_grid_manager__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_polygon_grid_manager_ab06266c03c0d54a386e816473e996bdd}\label{classcsmp_1_1_polygon_grid_manager_ab06266c03c0d54a386e816473e996bdd} 
+{\bfseries Polygon\+Grid\+Manager} (const \mbox{\hyperlink{classcsmp_1_1_polygon_grid_manager}{Polygon\+Grid\+Manager}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_polygon_grid_manager_a9a7e3b663da37674166310ab6f2581ad}\label{classcsmp_1_1_polygon_grid_manager_a9a7e3b663da37674166310ab6f2581ad} 
+\mbox{\hyperlink{classcsmp_1_1_polygon_grid_manager}{Polygon\+Grid\+Manager}} \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_polygon_grid_manager}{Polygon\+Grid\+Manager}} \&)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_polygon_grid_manager_ab7ac87a7f5171f04c7a7327a0b673c86}{Clear}} ()
+\item 
+\Hypertarget{classcsmp_1_1_polygon_grid_manager_af877a9c660c4f7737ce86ae3e82c7308}\label{classcsmp_1_1_polygon_grid_manager_af877a9c660c4f7737ce86ae3e82c7308} 
+size\+\_\+t {\bfseries Get\+Num\+Nodes} () const
+\begin{DoxyCompactList}\small\item\em nodes \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_polygon_grid_manager_a7dbbd73a65f05625d773d6de7c874fd3}\label{classcsmp_1_1_polygon_grid_manager_a7dbbd73a65f05625d773d6de7c874fd3} 
+const \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ \& {\bfseries Get\+Point} (size\+\_\+t nid) const
+\item 
+\Hypertarget{classcsmp_1_1_polygon_grid_manager_aea7797b4f9923812f3b92821d0e7d88d}\label{classcsmp_1_1_polygon_grid_manager_aea7797b4f9923812f3b92821d0e7d88d} 
+\mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+Node} (size\+\_\+t nid)
+\item 
+\Hypertarget{classcsmp_1_1_polygon_grid_manager_ae7ac5079efb8b4c808735bfdc2aadf35}\label{classcsmp_1_1_polygon_grid_manager_ae7ac5079efb8b4c808735bfdc2aadf35} 
+\mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+Node} (const \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ \&)
+\item 
+\mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classcsmp_1_1_polygon_grid_manager_aad481de6e7f41323761afd0b7e53d98a}{Add\+Node}} (const \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ \&)
+\item 
+\Hypertarget{classcsmp_1_1_polygon_grid_manager_a9a91ca08bae65c6372a188c4883e053d}\label{classcsmp_1_1_polygon_grid_manager_a9a91ca08bae65c6372a188c4883e053d} 
+void {\bfseries Out} () const
+\begin{DoxyCompactList}\small\item\em prints object state to screen \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_polygon_grid_manager_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_polygon_grid_manager_aad481de6e7f41323761afd0b7e53d98a}\index{csmp::PolygonGridManager@{csmp::PolygonGridManager}!AddNode@{AddNode}}
+\index{AddNode@{AddNode}!csmp::PolygonGridManager@{csmp::PolygonGridManager}}
+\doxysubsubsection{\texorpdfstring{AddNode()}{AddNode()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_polygon_grid_manager_aad481de6e7f41323761afd0b7e53d98a} 
+\mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} csmp\+::\+Polygon\+Grid\+Manager\+::\+Add\+Node (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ \&}]{pt}{}\end{DoxyParamCaption})}
+
+Methods dynamically allocates nodes on the heap, storing the pointers to them in the grid\+\_\+nodes\+\_\+ array, but also returning them to its caller.
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000124}{Todo}}]SKM\+: when vector is resized all the stored pointers will be invalidated during rereconstruction; avoid! \end{DoxyRefDesc}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_polygon_grid_manager_aad481de6e7f41323761afd0b7e53d98a_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_polygon_grid_manager_ab7ac87a7f5171f04c7a7327a0b673c86}\index{csmp::PolygonGridManager@{csmp::PolygonGridManager}!Clear@{Clear}}
+\index{Clear@{Clear}!csmp::PolygonGridManager@{csmp::PolygonGridManager}}
+\doxysubsubsection{\texorpdfstring{Clear()}{Clear()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_polygon_grid_manager_ab7ac87a7f5171f04c7a7327a0b673c86} 
+void csmp\+::\+Polygon\+Grid\+Manager\+::\+Clear (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+deleting the grid nodes that the pointers in the grid\+\_\+nodes vector point to. delete nodes
+
+clear points
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/interfaces/\+Eclipse/Polygon\+Grid.\+h\item 
+source/modules/interfaces/\+Eclipse/Polygon\+Grid.\+cpp\end{DoxyCompactItemize}

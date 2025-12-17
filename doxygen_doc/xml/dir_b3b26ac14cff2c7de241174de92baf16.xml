@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_b3b26ac14cff2c7de241174de92baf16" kind="dir">
+    <compoundname>build/CMakeFiles/open-csmp-core.dir/source/modules/interfaces/Fracman</compoundname>
+    <innerfile refid="_frac_man___fracture_8cpp_8o_8d">FracMan_Fracture.cpp.o.d</innerfile>
+    <innerfile refid="_frac_man___interface_8cpp_8o_8d">FracMan_Interface.cpp.o.d</innerfile>
+    <innerfile refid="_f_r_e_d___fracture_8cpp_8o_8d">FRED_Fracture.cpp.o.d</innerfile>
+    <innerfile refid="_f_r_e_d___interface_8cpp_8o_8d">FRED_Interface.cpp.o.d</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="build/CMakeFiles/open-csmp-core.dir/source/modules/interfaces/Fracman/"/>
+  </compounddef>
+</doxygen>

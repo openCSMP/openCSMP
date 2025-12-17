@@ -23,9 +23,7 @@ class NumIntegral_op_PT_P_dV : public MathOperatorRHS<dim,CELL> {
     NumIntegral_op_PT_P_dV( const PropertyDatabase<dim>&, 
                             const char* oper, const char* test );
 
-    virtual ~NumIntegral_op_PT_P_dV() {}
-
-    virtual void ComputeContribution( const CELL<dim>& );
+    void ComputeContribution( const CELL<dim>& ) override final;
 
   private:
     uint32_t  nodal_degrees_of_freedom;

@@ -1,0 +1,1016 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_thermal_visitor" kind="class" language="C++" prot="public">
+    <compoundname>csmp::ThermalVisitor</compoundname>
+    <basecompoundref refid="classcsmp_1_1_visitor" prot="public" virt="non-virtual">csmp::Visitor&lt; dim &gt;</basecompoundref>
+    <includes refid="_thermal_visitor_8h" local="no">ThermalVisitor.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1a73508cdcdadfbef47b294b8332be9acb" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+        <definition>Model&lt;dim&gt;&amp; csmp::ThermalVisitor&lt; dim &gt;::model_</definition>
+        <argsstring></argsstring>
+        <name>model_</name>
+        <qualifiedname>csmp::ThermalVisitor::model_</qualifiedname>
+        <briefdescription>
+<para>variables </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="62" column="13" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1ad084e2c7c98a086895a69a2308a7019b" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::string &gt; *</type>
+        <definition>std::vector&lt;std::string&gt;* csmp::ThermalVisitor&lt; dim &gt;::to_initialize_keys_</definition>
+        <argsstring></argsstring>
+        <name>to_initialize_keys_</name>
+        <qualifiedname>csmp::ThermalVisitor::to_initialize_keys_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="64" column="19" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1adcc54bd50577a549ebd448bf49095faf" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::ThermalVisitor&lt; dim &gt;::nCPT</definition>
+        <argsstring></argsstring>
+        <name>nCPT</name>
+        <qualifiedname>csmp::ThermalVisitor::nCPT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="66" column="23" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1aff7c30b8784dd144e029df83456560aa" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::ThermalVisitor&lt; dim &gt;::cp_fluid</definition>
+        <argsstring></argsstring>
+        <name>cp_fluid</name>
+        <qualifiedname>csmp::ThermalVisitor::cp_fluid</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="67" column="23" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1afb1f7393a91e172df340cd4f473660fc" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::ThermalVisitor&lt; dim &gt;::cp_rock</definition>
+        <argsstring></argsstring>
+        <name>cp_rock</name>
+        <qualifiedname>csmp::ThermalVisitor::cp_rock</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="68" column="23" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1acdc0d15fcaed359a2f9c091c4f93ce0f" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::ThermalVisitor&lt; dim &gt;::rho_rock</definition>
+        <argsstring></argsstring>
+        <name>rho_rock</name>
+        <qualifiedname>csmp::ThermalVisitor::rho_rock</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="69" column="23" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="69" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1a441bfc33c0c566929ae4cbb07685b00b" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::ThermalVisitor&lt; dim &gt;::t</definition>
+        <argsstring></argsstring>
+        <name>t</name>
+        <qualifiedname>csmp::ThermalVisitor::t</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="70" column="23" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1a9e8dd9269453d6f9174cf08f2efbd8c7" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::ThermalVisitor&lt; dim &gt;::p</definition>
+        <argsstring></argsstring>
+        <name>p</name>
+        <qualifiedname>csmp::ThermalVisitor::p</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="71" column="23" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1a79c400dcd267be9495b7d353e845f98e" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::ThermalVisitor&lt; dim &gt;::hl</definition>
+        <argsstring></argsstring>
+        <name>hl</name>
+        <qualifiedname>csmp::ThermalVisitor::hl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="72" column="23" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1a8759038315e0e2d296dd9506811cd116" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::ThermalVisitor&lt; dim &gt;::hCl</definition>
+        <argsstring></argsstring>
+        <name>hCl</name>
+        <qualifiedname>csmp::ThermalVisitor::hCl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="73" column="23" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1ab27840eb6998a139b0fa6763710d9b9b" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::ThermalVisitor&lt; dim &gt;::hClp</definition>
+        <argsstring></argsstring>
+        <name>hClp</name>
+        <qualifiedname>csmp::ThermalVisitor::hClp</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="74" column="23" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1afd29c25bb119ca5f16e0bff4bebf2e67" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::ThermalVisitor&lt; dim &gt;::hVl</definition>
+        <argsstring></argsstring>
+        <name>hVl</name>
+        <qualifiedname>csmp::ThermalVisitor::hVl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="75" column="23" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="75" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1a2b76fc3fc14288b29e98cafad3988a68" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::ThermalVisitor&lt; dim &gt;::mt</definition>
+        <argsstring></argsstring>
+        <name>mt</name>
+        <qualifiedname>csmp::ThermalVisitor::mt</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="76" column="23" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="76" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1af1865dc94678e3f338af711b20104e1e" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::ThermalVisitor&lt; dim &gt;::rl</definition>
+        <argsstring></argsstring>
+        <name>rl</name>
+        <qualifiedname>csmp::ThermalVisitor::rl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="77" column="23" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1a7b8d05602548172f39ad800644cab771" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::ThermalVisitor&lt; dim &gt;::volume_factor</definition>
+        <argsstring></argsstring>
+        <name>volume_factor</name>
+        <qualifiedname>csmp::ThermalVisitor::volume_factor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="78" column="23" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1a1dc97da53f12afb9277f2e9f70aa05b4" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::ThermalVisitor&lt; dim &gt;::mu</definition>
+        <argsstring></argsstring>
+        <name>mu</name>
+        <qualifiedname>csmp::ThermalVisitor::mu</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="79" column="23" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1ab5ac6e536c1d5133c7e69c3ea4df8d45" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::ThermalVisitor&lt; dim &gt;::phi</definition>
+        <argsstring></argsstring>
+        <name>phi</name>
+        <qualifiedname>csmp::ThermalVisitor::phi</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="80" column="23" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1a10eb515464720a18a2f9209bf1b2a765" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::ThermalVisitor&lt; dim &gt;::nQ</definition>
+        <argsstring></argsstring>
+        <name>nQ</name>
+        <qualifiedname>csmp::ThermalVisitor::nQ</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="81" column="23" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1ace317b0e67c6090713f47d63f0829dda" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::ThermalVisitor&lt; dim &gt;::dRho</definition>
+        <argsstring></argsstring>
+        <name>dRho</name>
+        <qualifiedname>csmp::ThermalVisitor::dRho</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="82" column="23" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1a8f450af2d52f7c13ba2ad7afbacf5789" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::ThermalVisitor&lt; dim &gt;::beta_rock</definition>
+        <argsstring></argsstring>
+        <name>beta_rock</name>
+        <qualifiedname>csmp::ThermalVisitor::beta_rock</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="83" column="23" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="83" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1a5e118f70747e72f99f0ce084691a8fad" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::ThermalVisitor&lt; dim &gt;::beta_fluid</definition>
+        <argsstring></argsstring>
+        <name>beta_fluid</name>
+        <qualifiedname>csmp::ThermalVisitor::beta_fluid</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="84" column="13" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1a1ef36e9d2171c61cd6c8ede607aab89d" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::ThermalVisitor&lt; dim &gt;::beta_tot</definition>
+        <argsstring></argsstring>
+        <name>beta_tot</name>
+        <qualifiedname>csmp::ThermalVisitor::beta_tot</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="85" column="23" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1a73c5e6308b2c87a86739a52e55f4d702" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::ThermalVisitor&lt; dim &gt;::nCPT_key_</definition>
+        <argsstring></argsstring>
+        <name>nCPT_key_</name>
+        <qualifiedname>csmp::ThermalVisitor::nCPT_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="87" column="23" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="87" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1a0fdfc180db2bdd41ff53642b885245e9" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::ThermalVisitor&lt; dim &gt;::cp_fluid_key_</definition>
+        <argsstring></argsstring>
+        <name>cp_fluid_key_</name>
+        <qualifiedname>csmp::ThermalVisitor::cp_fluid_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="88" column="23" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1abde810264ea5e9a1598efa110ef7e157" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::ThermalVisitor&lt; dim &gt;::cp_rock_key_</definition>
+        <argsstring></argsstring>
+        <name>cp_rock_key_</name>
+        <qualifiedname>csmp::ThermalVisitor::cp_rock_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="89" column="23" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="89" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1a7e719c29bb27903fa0496e9ffb430926" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::ThermalVisitor&lt; dim &gt;::rho_rock_key_</definition>
+        <argsstring></argsstring>
+        <name>rho_rock_key_</name>
+        <qualifiedname>csmp::ThermalVisitor::rho_rock_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="90" column="23" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="90" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1a09ff181c5425af81698bb47773627e54" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::ThermalVisitor&lt; dim &gt;::t_key_</definition>
+        <argsstring></argsstring>
+        <name>t_key_</name>
+        <qualifiedname>csmp::ThermalVisitor::t_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="91" column="23" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1ad6252a5c8f4469dea86dcfe41b8b6dfb" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::ThermalVisitor&lt; dim &gt;::p_key_</definition>
+        <argsstring></argsstring>
+        <name>p_key_</name>
+        <qualifiedname>csmp::ThermalVisitor::p_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="92" column="23" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1a3dd01e2574e0b1c5ed675d341abeabae" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::ThermalVisitor&lt; dim &gt;::hl_key_</definition>
+        <argsstring></argsstring>
+        <name>hl_key_</name>
+        <qualifiedname>csmp::ThermalVisitor::hl_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="93" column="23" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="93" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1ac4f0ad1c043268d5a27fa6669db4dfb5" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::ThermalVisitor&lt; dim &gt;::hCl_key_</definition>
+        <argsstring></argsstring>
+        <name>hCl_key_</name>
+        <qualifiedname>csmp::ThermalVisitor::hCl_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="94" column="23" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="94" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1aef3074d4ac2694f077a4e5a141e9188b" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::ThermalVisitor&lt; dim &gt;::hClp_key_</definition>
+        <argsstring></argsstring>
+        <name>hClp_key_</name>
+        <qualifiedname>csmp::ThermalVisitor::hClp_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="95" column="23" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="95" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1a7d941f3fcbb6f19a55db8897a53ee0b4" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::ThermalVisitor&lt; dim &gt;::hVl_key_</definition>
+        <argsstring></argsstring>
+        <name>hVl_key_</name>
+        <qualifiedname>csmp::ThermalVisitor::hVl_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="96" column="23" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="96" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1a62c9da96dedaf5e4c7f4cdbea72a5e9c" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::ThermalVisitor&lt; dim &gt;::mt_key_</definition>
+        <argsstring></argsstring>
+        <name>mt_key_</name>
+        <qualifiedname>csmp::ThermalVisitor::mt_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="97" column="23" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="97" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1ae61f50bc4d88d47c9f6ce6700876d3ec" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::ThermalVisitor&lt; dim &gt;::rl_key_</definition>
+        <argsstring></argsstring>
+        <name>rl_key_</name>
+        <qualifiedname>csmp::ThermalVisitor::rl_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="98" column="23" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="98" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1a5344f4fce9c614c6701c776cb8bdc43e" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::ThermalVisitor&lt; dim &gt;::mu_key_</definition>
+        <argsstring></argsstring>
+        <name>mu_key_</name>
+        <qualifiedname>csmp::ThermalVisitor::mu_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="99" column="23" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="99" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1aa1ebe2758efd8c57902d6d4c6c7c2eb8" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::ThermalVisitor&lt; dim &gt;::volume_factor_key_</definition>
+        <argsstring></argsstring>
+        <name>volume_factor_key_</name>
+        <qualifiedname>csmp::ThermalVisitor::volume_factor_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="100" column="23" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="100" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1a59a086188a57fad96554900779846def" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::ThermalVisitor&lt; dim &gt;::nphi_key_</definition>
+        <argsstring></argsstring>
+        <name>nphi_key_</name>
+        <qualifiedname>csmp::ThermalVisitor::nphi_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="101" column="23" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="101" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1a161974b1adfa18d5f7402d94abf7e6fa" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::ThermalVisitor&lt; dim &gt;::nQ_key_</definition>
+        <argsstring></argsstring>
+        <name>nQ_key_</name>
+        <qualifiedname>csmp::ThermalVisitor::nQ_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="102" column="23" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1a8b9e8e9b940fa868a884537701a04a69" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::ThermalVisitor&lt; dim &gt;::dRho_key_</definition>
+        <argsstring></argsstring>
+        <name>dRho_key_</name>
+        <qualifiedname>csmp::ThermalVisitor::dRho_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="103" column="23" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1aa6c72990d16ae48fb3a4e7c68436273a" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::ThermalVisitor&lt; dim &gt;::beta_rock_key_</definition>
+        <argsstring></argsstring>
+        <name>beta_rock_key_</name>
+        <qualifiedname>csmp::ThermalVisitor::beta_rock_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="104" column="23" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="104" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1a0a019878a87dd2ae78f7f80bbce7536f" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::ThermalVisitor&lt; dim &gt;::beta_fluid_key_</definition>
+        <argsstring></argsstring>
+        <name>beta_fluid_key_</name>
+        <qualifiedname>csmp::ThermalVisitor::beta_fluid_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="105" column="23" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="105" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1a2e9233d9c60cc7d510c46b8e386879af" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::ThermalVisitor&lt; dim &gt;::beta_tot_key_</definition>
+        <argsstring></argsstring>
+        <name>beta_tot_key_</name>
+        <qualifiedname>csmp::ThermalVisitor::beta_tot_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="106" column="23" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1afb22b88dc359f20f2cf36c36b1cd2eb6" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::ThermalVisitor&lt; dim &gt;::pore_volume</definition>
+        <argsstring></argsstring>
+        <name>pore_volume</name>
+        <qualifiedname>csmp::ThermalVisitor::pore_volume</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="108" column="23" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="108" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1a50dc347a75e93e70b930497292659f3f" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::ThermalVisitor&lt; dim &gt;::rock_volume</definition>
+        <argsstring></argsstring>
+        <name>rock_volume</name>
+        <qualifiedname>csmp::ThermalVisitor::rock_volume</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="109" column="23" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="109" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1a7fc91d849bb20b292c8bd107aec7e598" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::ThermalVisitor&lt; dim &gt;::dhCl_</definition>
+        <argsstring></argsstring>
+        <name>dhCl_</name>
+        <qualifiedname>csmp::ThermalVisitor::dhCl_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="110" column="23" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="110" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1a4d2d3f8091a28126347a6a21366a2980" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::ThermalVisitor&lt; dim &gt;::dT</definition>
+        <argsstring></argsstring>
+        <name>dT</name>
+        <qualifiedname>csmp::ThermalVisitor::dT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="111" column="23" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_thermal_visitor_1ae828ec416cff24924654bcfb9bca6a5b" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_h2_o_lookup" kindref="compound">H2OLookup</ref></type>
+        <definition>H2OLookup csmp::ThermalVisitor&lt; dim &gt;::water</definition>
+        <argsstring></argsstring>
+        <name>water</name>
+        <qualifiedname>csmp::ThermalVisitor::water</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="113" column="23" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="113" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_thermal_visitor_1a8119ac79a9d7d6c8e8309ff893a00466" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::ThermalVisitor&lt; dim &gt;::ThermalVisitor</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;, std::vector&lt; std::string &gt; *to_initialize_keys=nullptr)</argsstring>
+        <name>ThermalVisitor</name>
+        <qualifiedname>csmp::ThermalVisitor::ThermalVisitor</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <defname>model</defname>
+        </param>
+        <param>
+          <type>std::vector&lt; std::string &gt; *</type>
+          <declname>to_initialize_keys</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="26" column="7" bodyfile="source/modules/thmc/single_phase_flow/ThermalVisitor.cpp" bodystart="11" bodyend="71"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_thermal_visitor_1a4e95d063d4082b0a7e09a614dab5e53d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::ThermalVisitor&lt; dim &gt;::ThermalVisitor</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;model, Index nCPT_key, Index cp_fluid_key, Index cp_rock_key, Index rho_rock_key, Index t_key, Index p_key, Index hl_key, Index hCl_key, Index hClp_key, Index hVl_key, Index mt_key, Index rl_key, Index mu_key, Index nphi_key, Index nQ_key, Index dRho_key, Index volume_factor_key, Index beta_rock_key, Index beta_tot_key, Index beta_fluid_key)</argsstring>
+        <name>ThermalVisitor</name>
+        <qualifiedname>csmp::ThermalVisitor::ThermalVisitor</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <declname>model</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref></type>
+          <declname>nCPT_key</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref></type>
+          <declname>cp_fluid_key</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref></type>
+          <declname>cp_rock_key</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref></type>
+          <declname>rho_rock_key</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref></type>
+          <declname>t_key</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref></type>
+          <declname>p_key</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref></type>
+          <declname>hl_key</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref></type>
+          <declname>hCl_key</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref></type>
+          <declname>hClp_key</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref></type>
+          <declname>hVl_key</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref></type>
+          <declname>mt_key</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref></type>
+          <declname>rl_key</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref></type>
+          <declname>mu_key</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref></type>
+          <declname>nphi_key</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref></type>
+          <declname>nQ_key</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref></type>
+          <declname>dRho_key</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref></type>
+          <declname>volume_factor_key</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref></type>
+          <declname>beta_rock_key</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref></type>
+          <declname>beta_tot_key</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref></type>
+          <declname>beta_fluid_key</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="28" column="7" bodyfile="source/modules/thmc/single_phase_flow/ThermalVisitor.cpp" bodystart="74" bodyend="125"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_thermal_visitor_1a22295af43fd251c9a4eded783dc1360e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::ThermalVisitor&lt; dim &gt;::~ThermalVisitor</definition>
+        <argsstring>()</argsstring>
+        <name>~ThermalVisitor</name>
+        <qualifiedname>csmp::ThermalVisitor::~ThermalVisitor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="50" column="7" bodyfile="source/modules/thmc/single_phase_flow/ThermalVisitor.cpp" bodystart="129" bodyend="131"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_thermal_visitor_1aa869eeec7d556b382a67db630584a798" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::ThermalVisitor&lt; dim &gt;::SetInitialProperties</definition>
+        <argsstring>(Model&lt; dim &gt; *model)</argsstring>
+        <name>SetInitialProperties</name>
+        <qualifiedname>csmp::ThermalVisitor::SetInitialProperties</qualifiedname>
+        <reimplements refid="classcsmp_1_1_visitor_1a005bb17978ed03376bc3f7c1c329c936">SetInitialProperties</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; *</type>
+          <declname>model</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Loops over the nodes writing basis fluid (from H2O-EOS) and rock properties there.</para>
+<para><xrefsect id="todo_1_todo000224"><xreftitle>Todo</xreftitle><xrefdescription><para>if this visitor gets applied to another region than the model, all hell will break loose! - fix</para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="51" column="12" bodyfile="source/modules/thmc/single_phase_flow/ThermalVisitor.cpp" bodystart="258" bodyend="307"/>
+        <references refid="classcsmp_1_1_scalar_variable_1a7f0ab5431406d975d6e1de988f369176" compoundref="_scalar_variable_8cpp" startline="6" endline="6">csmp::ScalarVariable::operator()</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_thermal_visitor_1a970358a6e4f0503cd7c7b8706cfa9a11" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ThermalVisitor&lt; dim &gt;::ApplyTemperatureBoundaryConditionsToTransportedVariables</definition>
+        <argsstring>()</argsstring>
+        <name>ApplyTemperatureBoundaryConditionsToTransportedVariables</name>
+        <qualifiedname>csmp::ThermalVisitor::ApplyTemperatureBoundaryConditionsToTransportedVariables</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="52" column="10" bodyfile="source/modules/thmc/single_phase_flow/ThermalVisitor.cpp" bodystart="234" bodyend="247"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_thermal_visitor_1a88f447191342709a98afffdfc1f3a92c" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::ThermalVisitor&lt; dim &gt;::Visit</definition>
+        <argsstring>(Node&lt; dim &gt; *)</argsstring>
+        <name>Visit</name>
+        <qualifiedname>csmp::ThermalVisitor::Visit</qualifiedname>
+        <reimplements refid="classcsmp_1_1_visitor_1a46449d8a657dbe4a2db5f1126e08323d">Visit</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; dim &gt; *</type>
+          <defname>n</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>This is the key part of this <ref refid="classcsmp_1_1_node" kindref="compound">Node</ref> visitor. </para>
+        </detaileddescription>
+        <inbodydescription>
+<para>for wells</para>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="54" column="20" bodyfile="source/modules/thmc/single_phase_flow/ThermalVisitor.cpp" bodystart="142" bodyend="230"/>
+        <references refid="classcsmp_1_1_scalar_variable_1a7f0ab5431406d975d6e1de988f369176" compoundref="_scalar_variable_8cpp" startline="6" endline="6">csmp::ScalarVariable::operator()</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_thermal_visitor_1a3ee1dce7aee71aa932c2c7c8d2dc8df2" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::ThermalVisitor&lt; dim &gt;::Visit</definition>
+        <argsstring>(Model&lt; dim &gt; *)</argsstring>
+        <name>Visit</name>
+        <qualifiedname>csmp::ThermalVisitor::Visit</qualifiedname>
+        <reimplements refid="classcsmp_1_1_visitor_1a07433f464353062d91f21684b9378dec">Visit</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; *</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="55" column="20" bodyfile="source/modules/thmc/single_phase_flow/ThermalVisitor.cpp" bodystart="134" bodyend="136"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_thermal_visitor_1a66ddaf4b8ebade32a0f3429013a5071f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::ThermalVisitor&lt; dim &gt;::ThermalVisitor</definition>
+        <argsstring>()</argsstring>
+        <name>ThermalVisitor</name>
+        <qualifiedname>csmp::ThermalVisitor::ThermalVisitor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="58" column="7"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Computes PT-dependent fluid properties for flow simulations. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>Thomas Driesner, ETH Zuerich </para>
+</simplesect>
+</para>
+<sect1 id="compare_floats_8h_1contact">
+<title>Contact</title><para><ulink url="mailto:thomas.driesner@erdw.ethz.ch">thomas.driesner@erdw.ethz.ch</ulink> </para>
+</sect1>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::ThermalVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_thermal_visitor"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Visitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_visitor"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::ThermalVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_thermal_visitor"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Visitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_visitor"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/thmc/single_phase_flow/ThermalVisitor.h" line="23" column="1" bodyfile="source/includes/thmc/single_phase_flow/ThermalVisitor.h" bodystart="24" bodyend="115"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_visitor_1af785c6c9fdbe53d3edcb37e5eebf13ae" prot="protected" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>application_level_</name></member>
+      <member refid="classcsmp_1_1_visitor_1a4ba2f25168d6531e7a850f5f2d0dc9bb" prot="protected" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>application_target_</name></member>
+      <member refid="classcsmp_1_1_visitor_1a04cef3d343b9721c4d636f5496ccfa42" prot="public" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>ApplicationLevel</name></member>
+      <member refid="classcsmp_1_1_visitor_1a221f8440bf8d6aa7ad970d60383f8b0c" prot="public" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>ApplicationLevel</name></member>
+      <member refid="classcsmp_1_1_visitor_1a05b9c8127e47ce0ca524e2804c14251a" prot="public" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>ApplicationTarget</name></member>
+      <member refid="classcsmp_1_1_visitor_1ac7084587d6daea17badc51e2a0caddf8" prot="public" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>ApplicationTarget</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1a970358a6e4f0503cd7c7b8706cfa9a11" prot="public" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>ApplyTemperatureBoundaryConditionsToTransportedVariables</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1a5e118f70747e72f99f0ce084691a8fad" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>beta_fluid</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1a0a019878a87dd2ae78f7f80bbce7536f" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>beta_fluid_key_</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1a8f450af2d52f7c13ba2ad7afbacf5789" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>beta_rock</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1aa6c72990d16ae48fb3a4e7c68436273a" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>beta_rock_key_</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1a1ef36e9d2171c61cd6c8ede607aab89d" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>beta_tot</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1a2e9233d9c60cc7d510c46b8e386879af" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>beta_tot_key_</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1aff7c30b8784dd144e029df83456560aa" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>cp_fluid</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1a0fdfc180db2bdd41ff53642b885245e9" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>cp_fluid_key_</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1afb1f7393a91e172df340cd4f473660fc" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>cp_rock</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1abde810264ea5e9a1598efa110ef7e157" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>cp_rock_key_</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1a7fc91d849bb20b292c8bd107aec7e598" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>dhCl_</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1ace317b0e67c6090713f47d63f0829dda" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>dRho</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1a8b9e8e9b940fa868a884537701a04a69" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>dRho_key_</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1a4d2d3f8091a28126347a6a21366a2980" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>dT</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1a8759038315e0e2d296dd9506811cd116" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>hCl</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1ac4f0ad1c043268d5a27fa6669db4dfb5" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>hCl_key_</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1ab27840eb6998a139b0fa6763710d9b9b" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>hClp</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1aef3074d4ac2694f077a4e5a141e9188b" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>hClp_key_</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1a79c400dcd267be9495b7d353e845f98e" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>hl</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1a3dd01e2574e0b1c5ed675d341abeabae" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>hl_key_</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1afd29c25bb119ca5f16e0bff4bebf2e67" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>hVl</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1a7d941f3fcbb6f19a55db8897a53ee0b4" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>hVl_key_</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1a73508cdcdadfbef47b294b8332be9acb" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>model_</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1a2b76fc3fc14288b29e98cafad3988a68" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>mt</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1a62c9da96dedaf5e4c7f4cdbea72a5e9c" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>mt_key_</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1a1dc97da53f12afb9277f2e9f70aa05b4" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>mu</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1a5344f4fce9c614c6701c776cb8bdc43e" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>mu_key_</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1adcc54bd50577a549ebd448bf49095faf" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>nCPT</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1a73c5e6308b2c87a86739a52e55f4d702" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>nCPT_key_</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1a59a086188a57fad96554900779846def" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>nphi_key_</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1a10eb515464720a18a2f9209bf1b2a765" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>nQ</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1a161974b1adfa18d5f7402d94abf7e6fa" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>nQ_key_</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1a9e8dd9269453d6f9174cf08f2efbd8c7" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>p</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1ad6252a5c8f4469dea86dcfe41b8b6dfb" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>p_key_</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1ab5ac6e536c1d5133c7e69c3ea4df8d45" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>phi</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1afb22b88dc359f20f2cf36c36b1cd2eb6" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>pore_volume</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1acdc0d15fcaed359a2f9c091c4f93ce0f" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>rho_rock</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1a7e719c29bb27903fa0496e9ffb430926" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>rho_rock_key_</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1af1865dc94678e3f338af711b20104e1e" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>rl</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1ae61f50bc4d88d47c9f6ce6700876d3ec" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>rl_key_</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1a50dc347a75e93e70b930497292659f3f" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>rock_volume</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1aa869eeec7d556b382a67db630584a798" prot="public" virt="virtual"><scope>csmp::ThermalVisitor</scope><name>SetInitialProperties</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1a441bfc33c0c566929ae4cbb07685b00b" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>t</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1a09ff181c5425af81698bb47773627e54" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>t_key_</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1a8119ac79a9d7d6c8e8309ff893a00466" prot="public" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>ThermalVisitor</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1a4e95d063d4082b0a7e09a614dab5e53d" prot="public" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>ThermalVisitor</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1a66ddaf4b8ebade32a0f3429013a5071f" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>ThermalVisitor</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1ad084e2c7c98a086895a69a2308a7019b" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>to_initialize_keys_</name></member>
+      <member refid="classcsmp_1_1_visitor_1a5dc481fceb0110431c4d1d6cbcc9ceff" prot="public" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_visitor_1a9361155291d48571710c2a67406ce730" prot="public" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1a88f447191342709a98afffdfc1f3a92c" prot="public" virt="virtual"><scope>csmp::ThermalVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1a3ee1dce7aee71aa932c2c7c8d2dc8df2" prot="public" virt="virtual"><scope>csmp::ThermalVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1ac71cf14aab11139d8b03b39d4e4709bc" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::ThermalVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1ac735e758870331b6639ea969504c47bf" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::ThermalVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1af861179da1638c602df6c753cb3026f6" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::ThermalVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a1a3ed57d253eef9a0097232c7359627c" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::ThermalVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1abdca6daa1802e3727868d2d614c65015" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::ThermalVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a0f21f0cfcf5328584883eb38effb58d4" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::ThermalVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a8f1e9b73d04a90ad49171151bc233dbe" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::ThermalVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a1097abaa59d3a35d65c0cb6335e2719c" prot="public" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>Visitor</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1a7b8d05602548172f39ad800644cab771" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>volume_factor</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1aa1ebe2758efd8c57902d6d4c6c7c2eb8" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>volume_factor_key_</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1ae828ec416cff24924654bcfb9bca6a5b" prot="private" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>water</name></member>
+      <member refid="classcsmp_1_1_thermal_visitor_1a22295af43fd251c9a4eded783dc1360e" prot="public" virt="non-virtual"><scope>csmp::ThermalVisitor</scope><name>~ThermalVisitor</name></member>
+      <member refid="classcsmp_1_1_visitor_1ab83b6d2b06153f5b7b1050bfffdb2707" prot="public" virt="virtual"><scope>csmp::ThermalVisitor</scope><name>~Visitor</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

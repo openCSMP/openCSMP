@@ -1,0 +1,9 @@
+<map id="csmp::Node::UnitNormal" name="csmp::Node::UnitNormal">
+<area shape="rect" id="Node000001" title="for node forming part of line elements (2D) or surface elements (3D), method returns a unit normal th..." alt="" coords="5,31,172,56"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_node.html#a3ed80521d49889a0920f99ecfe302577" title="output current state of class Node" alt="" coords="220,31,341,56"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="172,41,204,41,204,46,172,46"/>
+<area shape="rect" id="Node000003" href="$group___c_s_m_pglobal_functions.html#gace4345cb4dde7fac354305651c61f464" title="turn enumeration into string" alt="" coords="389,5,537,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="341,32,374,28,374,33,342,38"/>
+<area shape="rect" id="Node000004" href="$group___c_s_m_p__global__enumerations.html#ga206f1b664c5588e466a71877739d500b" title="converts classifiers to strings so that they can be printed" alt="" coords="390,55,536,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="342,49,376,53,375,59,341,54"/>
+</map>

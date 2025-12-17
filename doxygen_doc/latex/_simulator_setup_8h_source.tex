@@ -1,0 +1,231 @@
+\doxysection{Simulator\+Setup.\+h}
+\hypertarget{_simulator_setup_8h_source}{}\label{_simulator_setup_8h_source}\index{source/includes/run\_control/SimulatorSetup.h@{source/includes/run\_control/SimulatorSetup.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{SIMULATOR\_SETUP\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{SIMULATOR\_SETUP\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_index_8h}{"{}Index.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_simulator_setup_parameter_8h}{"{}SimulatorSetupParameter.h"{}}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_error_handler_8h}{"{}ErrorHandler.h"{}}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{list}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{algorithm}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{iostream}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_explicit_mass_based_transport_8h}{"{}ExplicitMassBasedTransport.h"{}}}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_mass_based_stencil_processor_8h}{"{}MassBasedStencilProcessor.h"{}}}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_p_d_e___integrator_8h}{"{}PDE\_Integrator.h"{}}}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_simulator_monitor_8h}{"{}SimulatorMonitor.h"{}}}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_property_at_point_visitor_8h}{"{}PropertyAtPointVisitor.h"{}}}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_computational_settings_8h}{"{}ComputationalSettings.h"{}}}}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ \ \ \ Relates\ to\ the\ geothermal\ simulator\ application}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ \ \ \ @todo\ documentation\ is\ needed\ (probably\ Julian\ Mindel)}}
+\DoxyCodeLine{00027\ \textcolor{comment}{}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ \ \ \ @todo\ SKM\ move\ to\ applications,\ geothermal\ energy\ storage\ simulator}}
+\DoxyCodeLine{00029\ \textcolor{comment}{}}
+\DoxyCodeLine{00030\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00031\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00032\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{SimulatorSetup}}\ \{}
+\DoxyCodeLine{00033\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00034\ \ \ \ \ SimulatorSetup(std::string\ geometry\_prefix,}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ project\_name,}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<\textcolor{keywordtype}{bool}\ >\ options,}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ verbose\ =\ \textcolor{keyword}{false});}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~\mbox{\hyperlink{classcsmp_1_1_simulator_setup_ae382a604bf62fe726f4cc25a24ef3337}{SimulatorSetup}}();}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{comment}{//\ Initializer\ methods\ to\ be\ used\ by\ subclasses}}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keywordtype}{void}\ LoadModel();\ \ \ \textcolor{comment}{//\ Load\ models\ (2D\ and\ 3D\ for\ now)}}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordtype}{void}\ Initialize(\textcolor{keywordtype}{bool}\ verbose\ =\ \textcolor{keyword}{false});}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ CreateParameterList()=0;}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ CheckOptions()=0;}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup_a1622f2998438085f7a3b813e1f05a421}{AddPreExistingModelVariables}}();}
+\DoxyCodeLine{00047\ \ \ \ \ std::vector<\textcolor{keywordtype}{bool}>\&\ GetOptions()\{\textcolor{keywordflow}{return}\ options\_;\}}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keyword}{virtual}\ std::vector<\textcolor{keywordtype}{bool}>\ LoadDefaultOptions();}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keywordtype}{bool}\ CheckVariables();}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keywordtype}{void}\ CreateAllProperties();}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keywordtype}{void}\ CreatePreviousProperties();}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordtype}{bool}\ CheckProperties();}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keywordtype}{void}\ CheckInputRanges();}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordtype}{void}\ CheckModel();}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordtype}{void}\ CheckModelMinMaxCoordinates();}
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup_a8fa811eab6e45aa6ba6719bb072d0749}{OutputSampleVariablesFile}}(std::string\ filename\ =\ \textcolor{stringliteral}{"{}SimulatorSetupSampleVariables.txt"{}});}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keywordtype}{void}\ OutputSampleConfigurationFile();}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordtype}{void}\ OutputSampleRegionsFile();}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup_acdc5cab4f7e60cac5dabf5236badd3f2}{OutputParameterListCode}}();}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup_abb85d25c075998016512114f2d436c5b}{ReadOptionsFromRegionsFile}}();}
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{comment}{//void\ ReadMonitoringFilesForRestart();}}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keywordtype}{void}\ LoadBoundaryAndWellNames();}
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keywordtype}{void}\ LoadWells();}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup_a8eec0fd7d63b8d03105bb8eb4fb7a6c0}{LoadMonitor}}();}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keywordtype}{void}\ LoadControlSimulatorSetupParameters();}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keywordtype}{void}\ ModelSetupFromConfigFile();}
+\DoxyCodeLine{00067\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_computational_settings}{ComputationalSettings}}\&\ RunSettings()\{\textcolor{keywordflow}{return}\ \textcolor{keyword}{this}-\/>run\_settings\_;\}}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{comment}{//\ Auxiliary\ internal\ methods\ (left\ public\ on\ purpose\ for\ now!)}}
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{comment}{//void\ AddKey(\ const\ std::string\ \&name);}}
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{comment}{//void\ AddKeys(\ );}}
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keywordtype}{void}\ OutputParameterListToScreen();}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup_a80c329bc8e39cdadfde173215265df09}{SetupWellRatesBasedOnRateVariables}}();}
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keywordtype}{void}\ TriggerRestart()\{\textcolor{keyword}{this}-\/>restart\_=\textcolor{keyword}{true};\}}
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keywordtype}{bool}\ YesOrNo();}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{comment}{//\ Access\ methods}}
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keywordtype}{bool}\ Interactive()\{\textcolor{keywordflow}{return}\ interactive\_;\}}
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keywordtype}{bool}\ Restart()\{\textcolor{keywordflow}{return}\ restart\_;\}}
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keywordtype}{void}\ Restart(\textcolor{keywordtype}{bool}\ restart)\{\textcolor{keyword}{this}-\/>restart\_=restart;\}}
+\DoxyCodeLine{00085\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>*\ GetModel()\{\textcolor{keywordflow}{return}\ \textcolor{keyword}{this}-\/>model\_;\}}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \ \ \ \ \textcolor{keywordtype}{bool}\ Verbose()\{\textcolor{keywordflow}{return}\ verbose\_;\}}
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keywordtype}{void}\ Verbose(\textcolor{keywordtype}{bool}\ choice)\{\ verbose\_=choice;\}}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \ \ \ \ std::string\ GetGeometryPrefix()\{\textcolor{keywordflow}{return}\ \textcolor{keyword}{this}-\/>geometry\_file\_prefix\_;\}}
+\DoxyCodeLine{00091\ \ \ \ \ std::string\ GetProjectName()\{\textcolor{keywordflow}{return}\ \textcolor{keyword}{this}-\/>name\_;\}}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_computational_settings}{ComputationalSettings}}\&\ GetRunSettings()\{\textcolor{keywordflow}{return}\ \textcolor{keyword}{this}-\/>run\_settings\_;\}}
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{comment}{//std::string\&\ PropName(const\ std::string\&\ prop);}}
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{comment}{//Index\&\ PropKey(const\ std::string\ \&prop);}}
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{comment}{//bool\ PropNameExists(const\ std::\ std::string\ \&\ prop);}}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ \ \ \ \ std::vector<std::string>\&\ GetWells()\{\textcolor{keywordflow}{return}\ well\_regions\_;\}}
+\DoxyCodeLine{00099\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{map}}<\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{string}},\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{pair}}<\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{string}},\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{string}}\ >\ >\&\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{GetWellRateVars}}()\{\textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{well\_rate\_vars\_}};\}}
+\DoxyCodeLine{00100\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{vector}}<\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{string}}>\&\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{GetTopBoundaries}}()\{\textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{top\_boundaries\_}};\}}
+\DoxyCodeLine{00101\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{vector}}<\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{string}}>\&\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{GetLateralBoundaries}}()\{\textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{lateral\_boundaries\_}};\}}
+\DoxyCodeLine{00102\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{vector}}<\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{string}}>\&\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{GetBottomBoundaries}}()\{\textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{bottom\_boundaries\_}};\}}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{comment}{//\ Output\ lists}}
+\DoxyCodeLine{00105\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{list}}<\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{string}}>\&\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{GetVTUPropList}}()\{\textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{vtuOutputProps\_}};\}}
+\DoxyCodeLine{00106\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{list}}<\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{string}}>\&\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{GetRegOutList}}()\{\textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{vtuOutputRegions\_}};\}}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{list}}<\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{string}}>\&\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{GetMonitoredPropList}}()\{\textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{monitoredProps\_}};\}}
+\DoxyCodeLine{00109\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{list}}<\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{string}}>\&\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{GetMonitoredRegionsList}}()\{\textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{monitoredRegions\_}};\}}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{list}}<\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{string}}>\&\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{GetMonitoredRangePropList}}()\{\textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{monitoredRangeProps\_}};\}}
+\DoxyCodeLine{00112\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{list}}<\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{string}}>\&\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{GetMonitoredIntegralPropList}}()\{\textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{monitoredIntegralProps\_}};\}}
+\DoxyCodeLine{00113\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{list}}<\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{string}}>\&\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{GetMonitoredValuePropList}}()\{\textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{monitoredValueProps\_}};\}}
+\DoxyCodeLine{00114\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{list}}<\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{string}}>\&\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{GetMonitoredRegionIntegralList}}()\ \{\textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{monitoredRegionIntegralList\_}};\}}
+\DoxyCodeLine{00115\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{list}}<\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{string}}>\&\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{GetMonitoredRegionRangeList}}()\ \ \ \ \{\textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{monitoredRegionRangeList\_}};\}}
+\DoxyCodeLine{00116\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{list}}<\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{string}}>\&\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{GetMonitoredRegionDimensionList}}()\{\textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{monitoredRegionDimensionList\_}};\}}
+\DoxyCodeLine{00117\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{list}}<\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{string}}>\&\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{GetMonitoredRegionPerimeterList}}()\{\textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{monitoredRegionPerimeterList\_}};\}}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \ \ \ \ \textcolor{comment}{//std::list<std::string>\&\ GetIntegralProps()\{return\ integral\_properties\_;\}}}
+\DoxyCodeLine{00120\ \ \ \ \ \textcolor{comment}{//std::list<std::string>\&\ GetRangeProps()\{return\ range\_properties\_;\}}}
+\DoxyCodeLine{00121\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{list}}<\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{SimulatorSetupParameter}}>\&\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{GetParameterList}}()\{\textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{parameter\_list\_}};\}}
+\DoxyCodeLine{00122\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{SimulatorMonitor}}<\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{dim}}>*\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{GetSimulatorMonitor}}()\{\textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{simulator\_monitor\_}};\}}
+\DoxyCodeLine{00123\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{InsertNewMonitorDataValues}}(\textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{time}});}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ \ \ \ \ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00126\ \ \ \ \ \textcolor{comment}{//\ Integrator\ +\ solver\ setup\ management}}
+\DoxyCodeLine{00127\ \ \ \ \ \textcolor{comment}{/**\ @todo\ in\ principle,\ integrators\ will\ be\ executed\ in\ the\ sequence\ they\ were\ created.}}
+\DoxyCodeLine{00128\ \textcolor{comment}{\ \ \ \ \ \ \ \ This\ could\ be\ done\ by\ checking\ the\ order\ of\ the\ SAMG\_Solvers,\ to\ avoid\ creating\ wrappers\ for\ PDE\_Integrator\ and\ NCFVT\ classes.}}
+\DoxyCodeLine{00129\ \textcolor{comment}{\ \ \ \ \ \ \ \ This\ seems\ easier\ said\ than\ done,\ as\ many\ things\ need\ to\ happen\ between\ solver\ calls.\ \ Perhaps\ it\ is\ better\ to\ allow}}
+\DoxyCodeLine{00130\ \textcolor{comment}{\ \ \ \ \ \ \ \ the\ usage\ of\ names\ are\ keys\ and\ call\ the\ correct\ one\ when\ desired.\ \ This\ is\ left\ to\ the\ user.}}
+\DoxyCodeLine{00131\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{00132\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup_aeabddb09a6d075feebef30e2ce87d125}{Add\_DESCompatible\_Integrator}}(std::string\ name);}
+\DoxyCodeLine{00133\ \ \ \ \ \textcolor{keywordtype}{void}\ AddLegacy\_FE\_Integrator(std::string\ name);}
+\DoxyCodeLine{00134\ \ \ \ \ \textcolor{keywordtype}{void}\ DeleteLegacy\_FE\_Integrator(std::string\ name);\ \textcolor{comment}{///\ J.E.M.\ Added\ because\ we\ need\ to\ remove\ Legacy\ FE\ integrators\ if\ we\ switch\ variable\ flags\ to\ PLAIN.}}
+\DoxyCodeLine{00135\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup_aad6ee480043ba9b7418036c3b63f7294}{AddLegacy\_FEFV\_Integrator}}(std::string\ name,std::vector<std::string>\ variables);}
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00137\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&\ Database()\{\textcolor{keywordflow}{return}\ \textcolor{keyword}{this}-\/>GetModel()-\/>Database();\}}
+\DoxyCodeLine{00138\ \ \ \ \ std::set<std::string>\&\ GetInternalVars()\{\textcolor{keywordflow}{return}\ internal\_vars\_;\}}
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00140\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \textcolor{preprocessor}{CSMP\_WITH\_SAMG\_SOLVER}}
+\DoxyCodeLine{00141\ \ \ \ \ \textcolor{comment}{//FEFV\_Algorithm<dim>*\ GetDESCompatibleIntegrator(SAMG\_Solver*\ samg)\ ;}}
+\DoxyCodeLine{00142\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{PDE\_Integrator}}<\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{dim}},\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{Element}}>*\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{GetLegacy\_FE\_Integrator}}(\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{SAMG\_Solver}}*\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{samg}});}
+\DoxyCodeLine{00143\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{NodeCenteredFiniteVolumeTransport}}<\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{dim}}>*\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{GetLegacy\_FEFV\_Integrator}}(\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{SAMG\_Solver}}*\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{samg}});}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ \ \ \ \ \textcolor{comment}{//FEFV\_Algorithm<dim>*\ GetDESCompatibleIntegrator(std::string\ name);}}
+\DoxyCodeLine{00146\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{PDE\_Integrator}}<\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{dim}},\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{Element}}>*\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{GetLegacy\_FE\_Integrator}}(\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{string}}\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{name}});}
+\DoxyCodeLine{00147\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{NodeCenteredFiniteVolumeTransport}}<\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{dim}}>*\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{GetLegacy\_FEFV\_Integrator}}(\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{string}}\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{name}});}
+\DoxyCodeLine{00148\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{QuietIntegrators}}();}
+\DoxyCodeLine{00149\ }
+\DoxyCodeLine{00150\ \ \ \ \ \textcolor{comment}{//std::map<\ SAMG\_Solver*,FEFV\_Algorithm<dim>*\ \ >\&\ \ GetDESCompatibleIntegrators()\{return\ \ des\_compatible\_integrators\_;\}}}
+\DoxyCodeLine{00151\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{map}}<\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{SAMG\_Solver}}*,\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{PDE\_Integrator}}<\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{dim}},\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{Element}}>*\ >\&\ \ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{GetLegacy\_FE\_Integrators}}()\{\textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{legacy\_FE\_integrators\_}};\}}
+\DoxyCodeLine{00152\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{map}}<\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{SAMG\_Solver}}*,\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{NodeCenteredFiniteVolumeTransport}}<\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{dim}}>*\ >\&\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{GetLegacy\_FEFV\_Integrators}}()\ \{\textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{legacy\_FEFV\_integrators\_}};\}}
+\DoxyCodeLine{00153\ }
+\DoxyCodeLine{00154\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{SAMG\_Settings}}*\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{GetIntegratorSolverSettings}}(\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{string}}\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{name}});}
+\DoxyCodeLine{00155\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{map}}<\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{string}},\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{SAMG\_Settings}}*>\&\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{GetAllSAMGSettings}}()\ \{\textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{solver\_settings\_}};\}}
+\DoxyCodeLine{00156\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{else}}
+\DoxyCodeLine{00157\ \ \ \ \ \textcolor{comment}{///\ add\ extra\ functionality\ for\ laternative\ solve}}
+\DoxyCodeLine{00158\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00159\ }
+\DoxyCodeLine{00160\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00161\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_simulator_setup_a939746f13700fb02f45f244a2319d40a}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup_a939746f13700fb02f45f244a2319d40a}{list}}<\mbox{\hyperlink{classcsmp_1_1_simulator_setup_a939746f13700fb02f45f244a2319d40a}{SimulatorSetupParameter}}>\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup_a939746f13700fb02f45f244a2319d40a}{parameter\_list\_}};}
+\DoxyCodeLine{00162\ \ \ \ \ \textcolor{keywordtype}{bool}\ created\_lists\_;}
+\DoxyCodeLine{00163\ \ \ \ \ \textcolor{comment}{//std::map<std::string,std::string>\ dict\_;\ \ \ \ \ \ \ \ \ \ //\ dictionary\ of\ necessary\ variables\ and\ its\ names}}
+\DoxyCodeLine{00164\ \ \ \ \ \textcolor{comment}{//std::map<std::string,csmp::Index>\ idict\_;\ \ \ \ \ \ \ \ \ //\ dictionary\ of\ necessary\ variables\ and\ its\ keys}}
+\DoxyCodeLine{00165\ \ \ \ \ \textcolor{keywordtype}{bool}\ interactive\_;\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ interactive}}
+\DoxyCodeLine{00166\ }
+\DoxyCodeLine{00167\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00168\ }
+\DoxyCodeLine{00169\ \ \ \ \ \textcolor{comment}{//\ construction}}
+\DoxyCodeLine{00170\ \ \ \ \ std::string\ name\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Prefix\ for\ -\/configuration.txt,\ -\/regions.txt,\ and\ -\/variables.txt}}
+\DoxyCodeLine{00171\ \ \ \ \ std::string\ geometry\_file\_prefix\_;\ \ \ \textcolor{comment}{//\ Prefix\ for\ .asc\ and\ .dat\ files.}}
+\DoxyCodeLine{00172\ }
+\DoxyCodeLine{00173\ \ \ \ \ std::vector<\textcolor{keywordtype}{bool}>\ options\_;}
+\DoxyCodeLine{00174\ \ \ \ \ \textcolor{keywordtype}{bool}\ validated\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Define\ if\ settings\ have\ been\ validated\ or\ not.}}
+\DoxyCodeLine{00175\ }
+\DoxyCodeLine{00176\ \ \ \ \ \textcolor{keywordtype}{bool}\ debug\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Debug\ Mode}}
+\DoxyCodeLine{00177\ \ \ \ \ \textcolor{keywordtype}{bool}\ verbose\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Verbose\ Mode}}
+\DoxyCodeLine{00178\ \ \ \ \ \textcolor{keywordtype}{bool}\ restart\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Restart}}
+\DoxyCodeLine{00179\ }
+\DoxyCodeLine{00180\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \textcolor{preprocessor}{CSMP\_WITH\_SAMG\_SOLVER}}
+\DoxyCodeLine{00181\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00182\ \ \ \ \ \textcolor{comment}{//\ integrators\ and\ associated\ solvers.}}
+\DoxyCodeLine{00183\ \ \ \ \ \textcolor{comment}{//std::map<\ SAMG\_Solver*,FEFV\_Algorithm<dim>*\ >\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ des\_compatible\_integrators\_;}}
+\DoxyCodeLine{00184\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{map}}<\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{SAMG\_Solver}}*,\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{PDE\_Integrator}}<\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{dim}},\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{Element}}>*\ >\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{legacy\_FE\_integrators\_}};}
+\DoxyCodeLine{00185\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{map}}<\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{SAMG\_Solver}}*,\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{NodeCenteredFiniteVolumeTransport}}<\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{dim}}>*\ >\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{legacy\_FEFV\_integrators\_}};}
+\DoxyCodeLine{00186\ }
+\DoxyCodeLine{00187\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{map}}<\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{string}},\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{SAMG\_Solver}}*>\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{name\_samgsolver\_}};}
+\DoxyCodeLine{00188\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{map}}<\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{string}},\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{SAMG\_Settings}}*>\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{solver\_settings\_}};}
+\DoxyCodeLine{00189\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{else}}
+\DoxyCodeLine{00190\ \ \ \ \ \textcolor{comment}{///\ add\ extra\ functionality\ for\ laternative\ solve}}
+\DoxyCodeLine{00191\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00192\ }
+\DoxyCodeLine{00193\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00194\ \ \ \ \ \textcolor{comment}{//\ property\ and\ geometry\ groups.}}
+\DoxyCodeLine{00195\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>*\ model\_;}
+\DoxyCodeLine{00196\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_computational_settings}{ComputationalSettings}}\ \ run\_settings\_;}
+\DoxyCodeLine{00197\ \ \ \ \ std::vector<std::string>\ lateral\_boundaries\_,top\_boundaries\_,bottom\_boundaries\_;}
+\DoxyCodeLine{00198\ \ \ \ \ std::vector<std::string>\ well\_regions\_;}
+\DoxyCodeLine{00199\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{map}}<\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{string}},\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{pair}}<\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{string}},\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{string}}\ >\ >\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{well\_rate\_vars\_}};\ \textcolor{comment}{//map\ of\ well\ names\ to\ well\_rate\ variables\ and\ distributed\ fluid\ volume\ source\ variables.}}
+\DoxyCodeLine{00200\ \ \ \ \ std::set<std::string>\ internal\_vars\_;}
+\DoxyCodeLine{00201\ \ \ \ \ \textcolor{comment}{//key\ is\ the\ well\ name,\ pair\ is\ constructed\ out\ of\ region\ variable\ (e.g.\ volume\ flow\ rate)}}
+\DoxyCodeLine{00202\ \ \ \ \ \textcolor{comment}{//and\ distributed\ (element\ placed)\ variable\ (e.g.\ fluid\ volume\ source).}}
+\DoxyCodeLine{00203\ }
+\DoxyCodeLine{00204\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00205\ \ \ \ \ \textcolor{comment}{//\ Monitoring\ and\ Output}}
+\DoxyCodeLine{00206\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_simulator_monitor}{SimulatorMonitor}}<dim>*\ simulator\_monitor\_;}
+\DoxyCodeLine{00207\ \ \ \ \ std::list<std::string>\ monitoredProps\_;\ \ \ \ \ \ \textcolor{comment}{//\ this\ list\ is\ created\ in\ the\ CreateParametersList\ method.}}
+\DoxyCodeLine{00208\ \ \ \ \ std::list<std::string>\ monitoredRegions\_;\ \ \ \ \textcolor{comment}{//\ this\ list\ is\ generated\ when\ reading\ the\ -\/regions\ file.}}
+\DoxyCodeLine{00209\ }
+\DoxyCodeLine{00210\ \ \ \ \ std::list<std::string>\ vtuOutputProps\_;\ \ \ \ \ \ \textcolor{comment}{//\ this\ list\ is\ created\ in\ the\ CreateParametersList\ method.}}
+\DoxyCodeLine{00211\ \ \ \ \ std::list<std::string>\ vtuOutputRegions\_;\ \ \ \ \textcolor{comment}{//\ this\ list\ is\ generated\ when\ reading\ the\ -\/regions\ file.\ ("{}Model"{}\ is\ in\ it\ by\ default)}}
+\DoxyCodeLine{00212\ }
+\DoxyCodeLine{00213\ \ \ \ \ std::list<std::string>\ monitoredRangeProps\_,monitoredIntegralProps\_,monitoredValueProps\_;\ \textcolor{comment}{//\ these\ lists\ are\ generated\ by\ the\ -\/control.txt\ file.}}
+\DoxyCodeLine{00214\ \ \ \ \ std::list<std::string>\ monitoredRegionIntegralList\_,\ monitoredRegionRangeList\_,monitoredRegionDimensionList\_,\ monitoredRegionPerimeterList\_;\ \textcolor{comment}{//\ these\ lists\ are\ generated\ by\ the\ -\/control.txt\ file.}}
+\DoxyCodeLine{00215\ }
+\DoxyCodeLine{00216\ \ \ \ \ \textcolor{comment}{//\ Not\ used\ yet.}}
+\DoxyCodeLine{00217\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_at_point_visitor}{PropertyAtPointVisitor}}<dim>*\ property\_at\_point\_;}
+\DoxyCodeLine{00218\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{map}}<\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{string}},\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{map}}<\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{size\_t}},\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{vector}}<\textcolor{keywordtype}{double}>\ >\ >\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{points\_to\_monitor\_}};}
+\DoxyCodeLine{00219\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{std}}::\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{map}}<\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{size\_t}},\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{Element}}<\mbox{\hyperlink{classcsmp_1_1_simulator_setup}{dim}}>*>\ \mbox{\hyperlink{classcsmp_1_1_simulator_setup}{point\_in\_element\_in\_region\_}};}
+\DoxyCodeLine{00220\ }
+\DoxyCodeLine{00221\ \};}
+\DoxyCodeLine{00222\ }
+\DoxyCodeLine{00223\ \}\ \textcolor{comment}{//\ end\ csmp}}
+\DoxyCodeLine{00224\ }
+\DoxyCodeLine{00225\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{//\ SIMULATORSETUP\_H}}
+
+\end{DoxyCode}

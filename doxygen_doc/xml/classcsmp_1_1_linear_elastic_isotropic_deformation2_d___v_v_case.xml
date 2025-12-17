@@ -1,0 +1,251 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_linear_elastic_isotropic_deformation2_d___v_v_case" kind="class" language="C++" prot="public">
+    <compoundname>csmp::LinearElasticIsotropicDeformation2D_VVCase</compoundname>
+    <basecompoundref refid="classcsmp_1_1_test" prot="public" virt="non-virtual">csmp::Test</basecompoundref>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_linear_elastic_isotropic_deformation2_d___v_v_case_1a96d0f5e740b0276f6a28b8b32caa7741" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::LinearElasticIsotropicDeformation2D_VVCase::isLinear_</definition>
+        <argsstring></argsstring>
+        <name>isLinear_</name>
+        <qualifiedname>csmp::LinearElasticIsotropicDeformation2D_VVCase::isLinear_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/LinearElasticIsotropicDeformation2D_VVCase.h" line="25" column="12" bodyfile="tests/integration/LinearElasticIsotropicDeformation2D_VVCase.h" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_linear_elastic_isotropic_deformation2_d___v_v_case_1a8df2172dc1855cae0e0deac6e8e74751" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::LinearElasticIsotropicDeformation2D_VVCase::isTriangle_</definition>
+        <argsstring></argsstring>
+        <name>isTriangle_</name>
+        <qualifiedname>csmp::LinearElasticIsotropicDeformation2D_VVCase::isTriangle_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/LinearElasticIsotropicDeformation2D_VVCase.h" line="26" column="12" bodyfile="tests/integration/LinearElasticIsotropicDeformation2D_VVCase.h" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_linear_elastic_isotropic_deformation2_d___v_v_case_1a8ddc70edd4ade878ca37e40a3b705112" prot="private" static="no" mutable="no">
+        <type>const char *</type>
+        <definition>const char* csmp::LinearElasticIsotropicDeformation2D_VVCase::prefix_</definition>
+        <argsstring></argsstring>
+        <name>prefix_</name>
+        <qualifiedname>csmp::LinearElasticIsotropicDeformation2D_VVCase::prefix_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/LinearElasticIsotropicDeformation2D_VVCase.h" line="27" column="18" bodyfile="tests/integration/LinearElasticIsotropicDeformation2D_VVCase.h" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_linear_elastic_isotropic_deformation2_d___v_v_case_1ac5b0c527c612d56c5eafadc3cc9e8ee2" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::LinearElasticIsotropicDeformation2D_VVCase::plane_strain_</definition>
+        <argsstring></argsstring>
+        <name>plane_strain_</name>
+        <qualifiedname>csmp::LinearElasticIsotropicDeformation2D_VVCase::plane_strain_</qualifiedname>
+        <initializer>= true</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/LinearElasticIsotropicDeformation2D_VVCase.h" line="28" column="12" bodyfile="tests/integration/LinearElasticIsotropicDeformation2D_VVCase.h" bodystart="28" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_linear_elastic_isotropic_deformation2_d___v_v_case_1a77d1c43016c2174af51c322262cd923a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::LinearElasticIsotropicDeformation2D_VVCase::LinearElasticIsotropicDeformation2D_VVCase</definition>
+        <argsstring>(const char *prefix)</argsstring>
+        <name>LinearElasticIsotropicDeformation2D_VVCase</name>
+        <qualifiedname>csmp::LinearElasticIsotropicDeformation2D_VVCase::LinearElasticIsotropicDeformation2D_VVCase</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>prefix</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/LinearElasticIsotropicDeformation2D_VVCase.h" line="13" column="7" bodyfile="tests/integration/LinearElasticIsotropicDeformation2D_VVCase.cpp" bodystart="21" bodyend="27"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_elastic_isotropic_deformation2_d___v_v_case_1a7c15490cd353e9a610c4b9a69eeda0b1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::LinearElasticIsotropicDeformation2D_VVCase::SetupLinearTriangles</definition>
+        <argsstring>()</argsstring>
+        <name>SetupLinearTriangles</name>
+        <qualifiedname>csmp::LinearElasticIsotropicDeformation2D_VVCase::SetupLinearTriangles</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/LinearElasticIsotropicDeformation2D_VVCase.h" line="15" column="12" bodyfile="tests/integration/LinearElasticIsotropicDeformation2D_VVCase.cpp" bodystart="327" bodyend="332"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_elastic_isotropic_deformation2_d___v_v_case_1a7b0b7608dde179888ce1b4916e216c72" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::LinearElasticIsotropicDeformation2D_VVCase::SetupQuadraticTriangles</definition>
+        <argsstring>()</argsstring>
+        <name>SetupQuadraticTriangles</name>
+        <qualifiedname>csmp::LinearElasticIsotropicDeformation2D_VVCase::SetupQuadraticTriangles</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/LinearElasticIsotropicDeformation2D_VVCase.h" line="16" column="12" bodyfile="tests/integration/LinearElasticIsotropicDeformation2D_VVCase.cpp" bodystart="341" bodyend="345"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_elastic_isotropic_deformation2_d___v_v_case_1a5a43946d3841b1f5e7e62f17667ddcd8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::LinearElasticIsotropicDeformation2D_VVCase::SetupLinearQuadrilaterals</definition>
+        <argsstring>()</argsstring>
+        <name>SetupLinearQuadrilaterals</name>
+        <qualifiedname>csmp::LinearElasticIsotropicDeformation2D_VVCase::SetupLinearQuadrilaterals</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/LinearElasticIsotropicDeformation2D_VVCase.h" line="18" column="12" bodyfile="tests/integration/LinearElasticIsotropicDeformation2D_VVCase.cpp" bodystart="334" bodyend="339"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_elastic_isotropic_deformation2_d___v_v_case_1a6f24a3f17b8bdbdd573bee4b65e5d8ac" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::LinearElasticIsotropicDeformation2D_VVCase::SetupQuadraticQuadrilaterals</definition>
+        <argsstring>()</argsstring>
+        <name>SetupQuadraticQuadrilaterals</name>
+        <qualifiedname>csmp::LinearElasticIsotropicDeformation2D_VVCase::SetupQuadraticQuadrilaterals</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/LinearElasticIsotropicDeformation2D_VVCase.h" line="19" column="12" bodyfile="tests/integration/LinearElasticIsotropicDeformation2D_VVCase.cpp" bodystart="347" bodyend="351"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_elastic_isotropic_deformation2_d___v_v_case_1ae839d07af3b168ac695cac4a7493a226" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::LinearElasticIsotropicDeformation2D_VVCase::Solve</definition>
+        <argsstring>()</argsstring>
+        <name>Solve</name>
+        <qualifiedname>csmp::LinearElasticIsotropicDeformation2D_VVCase::Solve</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para><hruler/>
+ </para>
+<sect1 id="classcsmp_1_1_linear_elastic_isotropic_deformation2_d___v_v_case_1autotoc_md46_1s1"><sect2 id="classcsmp_1_1_linear_elastic_isotropic_deformation2_d___v_v_case_1autotoc_md46">
+<title>BEGIN TESTING OF MODEL CONSTRUCTION ---------------------------------------------<mdash/></title><para><hruler/>
+ </para>
+</sect2></sect1>
+<sect1 id="classcsmp_1_1_linear_elastic_isotropic_deformation2_d___v_v_case_1autotoc_md47_1s1"><sect2 id="classcsmp_1_1_linear_elastic_isotropic_deformation2_d___v_v_case_1autotoc_md47">
+<title>BEGIN TESTING OF LINEAR ELASTICITY ---------------------------------------------<mdash/></title></sect2></sect1>
+        </inbodydescription>
+        <location file="tests/integration/LinearElasticIsotropicDeformation2D_VVCase.h" line="21" column="12" bodyfile="tests/integration/LinearElasticIsotropicDeformation2D_VVCase.cpp" bodystart="114" bodyend="321"/>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9a2d373b048f997a96c661862c40f2fcae" compoundref="_c_s_m_p__global__enumerations_8h" startline="64">csmp::DIRICH</references>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9a024f07cd6361eadc6efee518fce8cdbc" compoundref="_c_s_m_p__global__enumerations_8h" startline="65">csmp::NEUMANN</references>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6" compoundref="_c_s_m_p__global__enumerations_8h" startline="58">csmp::PLAIN</references>
+        <referencedby refid="classcsmp_1_1_linear_elastic_isotropic_deformation2_d___v_v_case_1aa3672ead5a1c6c44066f7eecc42d02d3" compoundref="_linear_elastic_isotropic_deformation2_d___v_v_case_8cpp" startline="75" endline="109">run</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_elastic_isotropic_deformation2_d___v_v_case_1aa3672ead5a1c6c44066f7eecc42d02d3" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::LinearElasticIsotropicDeformation2D_VVCase::run</definition>
+        <argsstring>()</argsstring>
+        <name>run</name>
+        <qualifiedname>csmp::LinearElasticIsotropicDeformation2D_VVCase::run</qualifiedname>
+        <reimplements refid="classcsmp_1_1_test_1af63cd2af47d8d03819b05cf8bfb27eac">run</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Author: M. Nejati <ndash/> Adapted by E.Pezzulli for Melbourne repository </para>
+<sect1 id="classcsmp_1_1_linear_elastic_isotropic_deformation2_d___v_v_case_1autotoc_md44">
+<title>Linear Elastic: Plane stress/Strain problem under uniform traction</title><para>Domain: Omega: w x h Rectangle (Provided meshes is for a 10x10 square plane) Mesh: Square_10x10_LinearTrianglesCoarse (Quadrilaterials dont work bcause of incorrect Ansys mesh) Square_10x10_QuadraticTrianglesCoarse Var File: LinearElasticIsotropicDeformation2D_VVCase-variables.txt Reg File: LinearElasticIsotropicDeformation2D_VVCase-regions.txt Material: Linear ELastic Isotropic Material: E=Young&apos;s Modulus, nu= Poisson&apos;s Ratio; Loading: Uniaxial/Biaxial Tension/Compression on RIGHT and TOP Boundaries BC: Zero x and y displacements on LEFT and BOTTOM Edges, rexpectively</para>
+<para><hruler/>
+</para>
+<para>Assume a rectangular plane of width and height of w, and h, subjected to uniform stresses S1 and S2 in x and y directions, respectively. If Ux and Uy are the solutions of displacements in x and y directions, respectively: BC: The displacement boundary conditions are Ux=0 on LEFT and Uy=0 on BOTTOM; The Neumann conditions are: Sx=S1 on RIGHT and Sy=S2 on TOP. Solution of stress and displacement at point (x,y) over the domain Omega:</para>
+<para>Plane Stress: Sx(x,y)=S1 Sy(x,y)=S2 Ux(x,y)=1/E * (S1-nuS2)x Uy(x,y)=1/E * (S2-nuS1)y</para>
+<para>Plain Strain: Sx(x,y)=S1 Sy(x,y)=S2 Ux(x,y)=1/E * (S1-nuS2-nu^2(S1+S2))x Uy(x,y)=1/E * (S2-nuS1-nu^2(S1+S2))y</para>
+<para>The following implemetation, together with the other elastic tests by MN, uses the capability to assign faces over the boundaries of the domain. In this case, all the 2D elements building the regions TOP, BOTTOM, LEFT and RIGHT are deleted, and equivalent faces are created instead. Using this functionality, one can apply boundary integrals only on the boundaries with known faces. An alternative method is to keep the elements, and apply the boundary interals as rhs terms. One can easily switch between these two methodologies below. However, the use of boundary faces has the following advantages: 1) The lower dimension elements are deleted, and therefore they can not have any contribution to the LHS of the system. In the case of the presence of boundary elements, one has to make sure that they do not contribute to the stiffness matrix. This can be done, for example, by making Young&apos;s modulus zero on these boundary elements. 2) When using RHS operators to add a boundary integral, an iteration happens over all the elements, including the domain higher dimension elements, to accumulate the boundary integrals. Although the contribution of domain elements can be forced to be zero (by making the operand zero for all domain elements), this iteration is very expensive compared to the one that just iterates over the boundary faces. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/LinearElasticIsotropicDeformation2D_VVCase.h" line="22" column="20" bodyfile="tests/integration/LinearElasticIsotropicDeformation2D_VVCase.cpp" bodystart="75" bodyend="109"/>
+        <references refid="classcsmp_1_1_linear_elastic_isotropic_deformation2_d___v_v_case_1ae839d07af3b168ac695cac4a7493a226" compoundref="_linear_elastic_isotropic_deformation2_d___v_v_case_8cpp" startline="114" endline="321">Solve</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::LinearElasticIsotropicDeformation2D_VVCase</label>
+        <link refid="classcsmp_1_1_linear_elastic_isotropic_deformation2_d___v_v_case"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Test</label>
+        <link refid="classcsmp_1_1_test"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::LinearElasticIsotropicDeformation2D_VVCase</label>
+        <link refid="classcsmp_1_1_linear_elastic_isotropic_deformation2_d___v_v_case"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Test</label>
+        <link refid="classcsmp_1_1_test"/>
+      </node>
+    </collaborationgraph>
+    <location file="tests/integration/LinearElasticIsotropicDeformation2D_VVCase.h" line="10" column="3" bodyfile="tests/integration/LinearElasticIsotropicDeformation2D_VVCase.h" bodystart="11" bodyend="30"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_test_1ad3346b23b36fbe34ac5f306a2a5d0e28" prot="protected" virt="non-virtual"><scope>csmp::LinearElasticIsotropicDeformation2D_VVCase</scope><name>do_equal</name></member>
+      <member refid="classcsmp_1_1_test_1aee0da28e82775ce7d1ebd3b9fae9bf7d" prot="protected" virt="non-virtual"><scope>csmp::LinearElasticIsotropicDeformation2D_VVCase</scope><name>do_fail</name></member>
+      <member refid="classcsmp_1_1_test_1a9976e7601c20a057d2f0ed2f8318c862" prot="public" virt="non-virtual"><scope>csmp::LinearElasticIsotropicDeformation2D_VVCase</scope><name>do_succeed</name></member>
+      <member refid="classcsmp_1_1_test_1a0bf5d355d1455b2bc113ba2572e95ad8" prot="protected" virt="non-virtual"><scope>csmp::LinearElasticIsotropicDeformation2D_VVCase</scope><name>do_test</name></member>
+      <member refid="classcsmp_1_1_test_1ab8d7cbdfd0588aa57d7ce4d2574d665b" prot="public" virt="non-virtual"><scope>csmp::LinearElasticIsotropicDeformation2D_VVCase</scope><name>getName</name></member>
+      <member refid="classcsmp_1_1_test_1a47920cfd13f92f0860ca62ade4f2e150" prot="public" virt="non-virtual"><scope>csmp::LinearElasticIsotropicDeformation2D_VVCase</scope><name>getNumFailed</name></member>
+      <member refid="classcsmp_1_1_test_1af0f3b897ba4ff0cb7c94cde8be1fb32b" prot="public" virt="non-virtual"><scope>csmp::LinearElasticIsotropicDeformation2D_VVCase</scope><name>getNumPassed</name></member>
+      <member refid="classcsmp_1_1_test_1ac340370a07ff5fd4bd85bae93f0a3dac" prot="public" virt="non-virtual"><scope>csmp::LinearElasticIsotropicDeformation2D_VVCase</scope><name>getStream</name></member>
+      <member refid="classcsmp_1_1_test_1adfad3f1f85aa766958ffcc59070e2d2d" prot="public" virt="non-virtual"><scope>csmp::LinearElasticIsotropicDeformation2D_VVCase</scope><name>hasName</name></member>
+      <member refid="classcsmp_1_1_linear_elastic_isotropic_deformation2_d___v_v_case_1a96d0f5e740b0276f6a28b8b32caa7741" prot="private" virt="non-virtual"><scope>csmp::LinearElasticIsotropicDeformation2D_VVCase</scope><name>isLinear_</name></member>
+      <member refid="classcsmp_1_1_linear_elastic_isotropic_deformation2_d___v_v_case_1a8df2172dc1855cae0e0deac6e8e74751" prot="private" virt="non-virtual"><scope>csmp::LinearElasticIsotropicDeformation2D_VVCase</scope><name>isTriangle_</name></member>
+      <member refid="classcsmp_1_1_linear_elastic_isotropic_deformation2_d___v_v_case_1a77d1c43016c2174af51c322262cd923a" prot="public" virt="non-virtual"><scope>csmp::LinearElasticIsotropicDeformation2D_VVCase</scope><name>LinearElasticIsotropicDeformation2D_VVCase</name></member>
+      <member refid="classcsmp_1_1_linear_elastic_isotropic_deformation2_d___v_v_case_1ac5b0c527c612d56c5eafadc3cc9e8ee2" prot="private" virt="non-virtual"><scope>csmp::LinearElasticIsotropicDeformation2D_VVCase</scope><name>plane_strain_</name></member>
+      <member refid="classcsmp_1_1_linear_elastic_isotropic_deformation2_d___v_v_case_1a8ddc70edd4ade878ca37e40a3b705112" prot="private" virt="non-virtual"><scope>csmp::LinearElasticIsotropicDeformation2D_VVCase</scope><name>prefix_</name></member>
+      <member refid="classcsmp_1_1_test_1aa241dcb3adf0ec6716ed08739bd3f79b" prot="public" virt="non-virtual"><scope>csmp::LinearElasticIsotropicDeformation2D_VVCase</scope><name>report</name></member>
+      <member refid="classcsmp_1_1_test_1a5d334e867a3de4afd434dd9b0034234c" prot="public" virt="virtual"><scope>csmp::LinearElasticIsotropicDeformation2D_VVCase</scope><name>reset</name></member>
+      <member refid="classcsmp_1_1_linear_elastic_isotropic_deformation2_d___v_v_case_1aa3672ead5a1c6c44066f7eecc42d02d3" prot="public" virt="virtual"><scope>csmp::LinearElasticIsotropicDeformation2D_VVCase</scope><name>run</name></member>
+      <member refid="classcsmp_1_1_test_1a3e006cad54b35d9e20561f4a64843b4e" prot="public" virt="non-virtual"><scope>csmp::LinearElasticIsotropicDeformation2D_VVCase</scope><name>setName</name></member>
+      <member refid="classcsmp_1_1_test_1a20ba6ab18fcaaf806df6348a3b2e032b" prot="public" virt="non-virtual"><scope>csmp::LinearElasticIsotropicDeformation2D_VVCase</scope><name>setStream</name></member>
+      <member refid="classcsmp_1_1_linear_elastic_isotropic_deformation2_d___v_v_case_1a5a43946d3841b1f5e7e62f17667ddcd8" prot="public" virt="non-virtual"><scope>csmp::LinearElasticIsotropicDeformation2D_VVCase</scope><name>SetupLinearQuadrilaterals</name></member>
+      <member refid="classcsmp_1_1_linear_elastic_isotropic_deformation2_d___v_v_case_1a7c15490cd353e9a610c4b9a69eeda0b1" prot="public" virt="non-virtual"><scope>csmp::LinearElasticIsotropicDeformation2D_VVCase</scope><name>SetupLinearTriangles</name></member>
+      <member refid="classcsmp_1_1_linear_elastic_isotropic_deformation2_d___v_v_case_1a6f24a3f17b8bdbdd573bee4b65e5d8ac" prot="public" virt="non-virtual"><scope>csmp::LinearElasticIsotropicDeformation2D_VVCase</scope><name>SetupQuadraticQuadrilaterals</name></member>
+      <member refid="classcsmp_1_1_linear_elastic_isotropic_deformation2_d___v_v_case_1a7b0b7608dde179888ce1b4916e216c72" prot="public" virt="non-virtual"><scope>csmp::LinearElasticIsotropicDeformation2D_VVCase</scope><name>SetupQuadraticTriangles</name></member>
+      <member refid="classcsmp_1_1_linear_elastic_isotropic_deformation2_d___v_v_case_1ae839d07af3b168ac695cac4a7493a226" prot="public" virt="non-virtual"><scope>csmp::LinearElasticIsotropicDeformation2D_VVCase</scope><name>Solve</name></member>
+      <member refid="classcsmp_1_1_test_1aa4e274174d16215448eab6198bdb5979" prot="public" virt="non-virtual"><scope>csmp::LinearElasticIsotropicDeformation2D_VVCase</scope><name>Test</name></member>
+      <member refid="classcsmp_1_1_test_1ac154a16a5e086fe52e032c30722f5060" prot="public" virt="virtual"><scope>csmp::LinearElasticIsotropicDeformation2D_VVCase</scope><name>~Test</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

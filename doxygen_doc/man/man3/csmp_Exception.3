@@ -1,0 +1,75 @@
+.TH "csmp::Exception" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::Exception \- base class for CSMP-specific exception handling using an exception qualifier (\fBCSMP_MESSAGE\fP), an originator (the class and method from where the exception comes from, and a string that contains the message that describes what happened locally\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <Exception\&.h>\fP
+.PP
+Inherits std::exception\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBException\fP (\fBCSMP_MESSAGE\fP, const std::string &originator, const std::string &message)"
+.br
+.RI "use as: throw \fBcsmp::Exception\fP( WARNING, "class::method where this comes from", messsage ); "
+.ti -1c
+.RI "\fBException\fP (\fBCSMP_MESSAGE\fP, const std::string &originator, const std::string &parameter, const std::string &message)"
+.br
+.ti -1c
+.RI "\fBException\fP (const \fBException\fP &)"
+.br
+.ti -1c
+.RI "\fBException\fP & \fBoperator=\fP (const \fBException\fP &)"
+.br
+.ti -1c
+.RI "virtual const char * \fBwhat\fP () const  throw ()"
+.br
+.ti -1c
+.RI "std::string \fBWhat\fP () const"
+.br
+.RI "returns what() for the underlying standard exception "
+.ti -1c
+.RI "std::string \fBOriginator\fP () const"
+.br
+.RI "the class and method (or function) from which the exception was thrown "
+.ti -1c
+.RI "\fBCSMP_MESSAGE\fP \fBMessage\fP () const"
+.br
+.RI "what went wrong in as much as was known at the executation of the program from where the exception was thrown "
+.ti -1c
+.RI "void \fBOut\fP () const"
+.br
+.RI "prints all data assocatiated with the exception (following the convention for all CSMP classes) "
+.in -1c
+.SH "Detailed Description"
+.PP 
+base class for CSMP-specific exception handling using an exception qualifier (\fBCSMP_MESSAGE\fP), an originator (the class and method from where the exception comes from, and a string that contains the message that describes what happened locally\&. 
+
+
+.PP
+\fBNote\fP
+.RS 4
+no need to use a \fBcsmp::Exception\fP if the case is well described by one of the standard exceptions\&.
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Stephan Matthai 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+1999 
+.RE
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

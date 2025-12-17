@@ -1,0 +1,43 @@
+\doxysection{ANSYS\+\_\+\+Model2\+D\+\_\+\+Test.\+h}
+\hypertarget{_a_n_s_y_s___model2_d___test_8h_source}{}\label{_a_n_s_y_s___model2_d___test_8h_source}\index{tests/unit/ANSYS\_Model2D\_Test.h@{tests/unit/ANSYS\_Model2D\_Test.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{ANSYS\_MODEL2D\_TEST\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{ANSYS\_MODEL2D\_TEST\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_test_8h}{"{}Test.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{comment}{//\ P.\ Lang\ 2011}}
+\DoxyCodeLine{00009\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___model2_d___test}{ANSYS\_Model2D\_Test}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_test}{Test}}}
+\DoxyCodeLine{00010\ \ \ \{}
+\DoxyCodeLine{00011\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ verbose\_\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00014\ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___model2_d___test_a0166c3db667a0bf477f9429c2b91ebe3}{run}}();}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \textcolor{comment}{///\ misc\ checks\ on\ boundary\ flags\ etc.}}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___model2_d___test_a048890bc2c95d665c570b00808a2e6d8}{Test\_ANSYS\_ModelConstructionAndSaving2D}}(\ \textcolor{keyword}{const}\ std::string\&\ input\_file\_name=\textcolor{stringliteral}{"{}HorFracs2D"{}}\ );}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \textcolor{comment}{///\ using\ line\ element\ VSet}}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___model2_d___test_a773aa1191bb59f36c9c679519652d199}{Test\_printLineElementRegion}}();}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \textcolor{comment}{///\ same\ test\ as\ in\ VData\_Test,\ but\ with\ a\ more\ realistic\ model\ created\ in\ ANSYS}}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___model2_d___test_a800ca4db17e423ecea2d4efef5254513}{Test\_CreateConsistentLineElementOrientations2D}}();}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \textcolor{comment}{///\ tests\ the\ creation\ of\ an\ internal\ boundary\ from\ the\ line-\/element\ regions}}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___model2_d___test_a2cab51f731582bc0cb8b89c6ddbdb1de}{Test\_CreateInternalBoundary}}();}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \textcolor{comment}{///\ tests\ the\ creation\ of\ an\ internal\ split\ boundaries\ from\ the\ line-\/element\ region\ and\ between\ domains}}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___model2_d___test_a6cbc9d20d490600765382c3c9fc6de63}{Test\_CreateSplitBoundaries}}();}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \textcolor{comment}{///\ tests\ creation\ of\ SplitBoundaries\ between\ all\ regions\ of\ a\ model\ ('Fluid\_Flower')}}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___model2_d___test_a97191dae5e4395146d0a2a626a3ca387}{Test\_CreateSplitBoundariesBetweenUniqueRegions}}();}
+\DoxyCodeLine{00033\ \ \ \};}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{//\ ANSYS\_MODEL2D\_TEST\_H}}
+
+\end{DoxyCode}

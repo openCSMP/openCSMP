@@ -1,0 +1,23 @@
+<map id="csmp::PicardIntegrator&lt; dim, CELLTYPE &gt;" name="csmp::PicardIntegrator&lt; dim, CELLTYPE &gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="240,2888,383,2990"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_iterative_integrator.html" title=" " alt="" coords="225,2574,399,2839"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="314,2854,314,2888,309,2888,309,2854"/>
+<area shape="rect" id="Node000003" href="$classcsmp_1_1_p_d_e___integrator.html" title=" " alt="" coords="190,1392,422,2149"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="311,2164,314,2574,308,2574,306,2164"/>
+<area shape="rect" id="Node000009" href="$classcsmp_1_1_iterative_integrator.html" title="Base class for the iterative itegration of PDEs using the FE method." alt="" coords="328,2198,502,2503"/>
+<area shape="poly" id="edge12_Node000009_Node000003" title=" " alt="" coords="382,2163,389,2198,384,2199,377,2164"/>
+<area shape="rect" id="Node000004" href="$classcsmp_1_1_sparse_matrix.html" title="For the accumulation of element matrices in finite element calculations." alt="" coords="5,194,133,463"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="52,463,35,636,29,740,27,852,29,969,36,1088,51,1206,74,1321,95,1388,121,1455,185,1580,180,1582,116,1457,90,1390,69,1322,46,1207,31,1088,23,969,21,852,24,740,30,636,47,463"/>
+<area shape="rect" id="Node000008" href="$classcsmp_1_1_p_d_e___integrator.html" title="Accumulator and integrator for FEM or FVM&#45;derived integral forms of PDEs and their solution by solvin..." alt="" coords="116,565,323,1321"/>
+<area shape="poly" id="edge8_Node000008_Node000004" title=" " alt="" coords="105,462,125,547,120,549,99,463"/>
+<area shape="rect" id="Node000005" href="$classcsmp_1_1_solver.html" title="Inverts global solution matrices matrices of the finite&#45;element computations using a variety of solut..." alt="" coords="409,163,561,494"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="490,494,487,666,479,873,462,1098,433,1322,423,1376,418,1375,428,1321,457,1098,474,873,482,666,484,494"/>
+<area shape="poly" id="edge9_Node000008_Node000005" title=" " alt="" coords="411,450,345,566,332,594,327,592,340,563,407,448"/>
+<area shape="rect" id="Node000006" href="$classcsmp_1_1_solver_settings.html" title=" " alt="" coords="417,5,553,92"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="488,91,488,146,482,146,482,91"/>
+<area shape="rect" id="Node000007" href="$structcsmp_1_1_p_d_e___integrator_1_1_s_i_z_e_s.html" title=" " alt="" coords="190,278,369,379"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="297,378,320,465,338,564,363,789,372,966,368,1142,356,1368,355,1376,350,1375,351,1368,363,1142,367,966,358,790,333,565,315,466,292,380"/>
+<area shape="poly" id="edge10_Node000008_Node000007" title=" " alt="" coords="278,379,261,548,256,547,272,378"/>
+<area shape="poly" id="edge7_Node000003_Node000008" title=" " alt="" coords="244,1336,247,1368,250,1392,244,1393,242,1369,238,1337"/>
+<area shape="poly" id="edge11_Node000002_Node000009" title=" " alt="" coords="369,2518,352,2575,347,2574,364,2517"/>
+</map>

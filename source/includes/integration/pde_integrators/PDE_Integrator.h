@@ -309,7 +309,7 @@ class PDE_Integrator {
     /// returns a reference to the current solver object
     Solver&       GetSolver() const;
   
-    /// returns PDE integrator into the state created by default constructor ( @todo is Reset is this needed?)
+    /// returns PDE integrator into the state created by default constructor
     virtual void  Reset( bool delete_math_operators=true );
 
     /// outputs solution vector; @attention this produces meaningful results only after application of the PDE integrator

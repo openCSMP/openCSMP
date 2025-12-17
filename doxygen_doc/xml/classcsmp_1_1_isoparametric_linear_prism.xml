@@ -1,0 +1,1385 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_isoparametric_linear_prism" kind="class" language="C++" prot="public">
+    <compoundname>csmp::IsoparametricLinearPrism</compoundname>
+    <basecompoundref refid="classcsmp_1_1_finite_element" prot="public" virt="non-virtual">csmp::FiniteElement</basecompoundref>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_isoparametric_linear_prism_1a71d6c887381d3c6969750bcc4cbb9104" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::IsoparametricLinearPrism::W</definition>
+        <argsstring></argsstring>
+        <name>W</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::W</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="92" column="19" bodyfile="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_isoparametric_linear_prism_1ad54d6fc599f1155eac5576a2dc92b408" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt;</type>
+        <definition>DenseMatrix&lt;DM_MIN&gt; csmp::IsoparametricLinearPrism::NXYZ</definition>
+        <argsstring></argsstring>
+        <name>NXYZ</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::NXYZ</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="93" column="19" bodyfile="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" bodystart="93" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_isoparametric_linear_prism_1a32f32e225b6bb1756ba58661ceae9a1b" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt;</type>
+        <definition>DenseMatrix&lt;DM_MIN&gt; csmp::IsoparametricLinearPrism::IP</definition>
+        <argsstring></argsstring>
+        <name>IP</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::IP</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="93" column="24" bodyfile="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" bodystart="93" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_prism_1aef049f1e5ef0ca25c9db832824dd4454" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::IsoparametricLinearPrism::IsoparametricLinearPrism</definition>
+        <argsstring>(uint32_t integrationPoints=6)</argsstring>
+        <name>IsoparametricLinearPrism</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::IsoparametricLinearPrism</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>integrationPoints</declname>
+          <defval>6</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="18" column="14" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearPrism.cpp" bodystart="10" bodyend="101"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_prism_1a19d22823f25c5498aa7ee769c74935e5" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::IsoparametricLinearPrism::Volume</definition>
+        <argsstring>()</argsstring>
+        <name>Volume</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::Volume</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a16025c5d7f2ac217d2dbedad5d561a06">Volume</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Computes Integral N dA = sum_1...n Wi Ji Ni. This formulation also gives a meaningful area if the element boundaries are curved. For a description of numerical integration of isoparametric quadratic triangular elements, refer to Cook et al. (1989) 3rd Ed., p. 183.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The finite element which supplies the nodal coordinates from which the area is computed.</para>
+<para><simplesect kind="return"><para>The area (m2) of the finite element. </para>
+</simplesect>
+</para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="20" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearPrism.cpp" bodystart="1180" bodyend="1203"/>
+        <referencedby refid="namespacecsmp_1a454b86bd00b667e07e864d97e187fcde" compoundref="_v_set_8cpp" startline="1017" endline="1179">csmp::extrapolateElementToNodeProperty</referencedby>
+        <referencedby refid="classcsmp_1_1_isoparametric_linear_prism_1a5a97535f17ba2fe211645d27cc24f25e" compoundref="_isoparametric_linear_prism_8cpp" startline="1342" endline="1357">InnerRadius</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_prism_1aaa664417cb363205a66347d907726f0a" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::IsoparametricLinearPrism::AspectRatio</definition>
+        <argsstring>()</argsstring>
+        <name>AspectRatio</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::AspectRatio</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a6c6148f7a38b639b721013dbd8f8d3f5">AspectRatio</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Computes the element aspect ratio as the ratio between the longest and the shortest boundary segment.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> is consulted for its global coordinates. \ </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="21" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearPrism.cpp" bodystart="1083" bodyend="1098"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_prism_1a5a97535f17ba2fe211645d27cc24f25e" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::IsoparametricLinearPrism::InnerRadius</definition>
+        <argsstring>()</argsstring>
+        <name>InnerRadius</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::InnerRadius</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a3ad8c30e7136d47df5ca95907647c538">InnerRadius</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>This method attempts to calculate the inner radius of the curved-sided quad by talking 1/6 of the perimeter and dividing this measure by the area of the quad.</para>
+<para>The procedure is empirically based giving a good match if the quadss are relatively even-sided and have straight edges.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The parent element is queried for its node coordinates. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="22" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearPrism.cpp" bodystart="1342" bodyend="1357"/>
+        <references refid="classcsmp_1_1_isoparametric_linear_prism_1a19d22823f25c5498aa7ee769c74935e5" compoundref="_isoparametric_linear_prism_8cpp" startline="1180" endline="1203">Volume</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_prism_1aef302c98c4e86fb197483b68d2348bde" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearPrism::EdgeLengths</definition>
+        <argsstring>(std::vector&lt; double &gt; &amp;vec)</argsstring>
+        <name>EdgeLengths</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::EdgeLengths</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1ac2348fa774457d4adde9354189277d9e">EdgeLengths</reimplements>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>vec</declname>
+          <defname>len</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>len</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The lengths of the 12 segments will be returned into the vector which is the second method argument.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>The segment lengths are computed as simple Euclidian distance between corner vertices of the edge. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="23" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearPrism.cpp" bodystart="1111" bodyend="1161"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_prism_1ac167683317315d95dcfbc00d7e8cf952" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearPrism::CornerNodes</definition>
+        <argsstring>(std::vector&lt; uint32_t &gt; &amp;ids) const</argsstring>
+        <name>CornerNodes</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::CornerNodes</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1ae3f0ae4a9ad3424ccc4553ff270b155e">CornerNodes</reimplements>
+        <param>
+          <type>std::vector&lt; uint32_t &gt; &amp;</type>
+          <declname>ids</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns local node ids of the 4 nodes located at the corners of the quadratic tetrahedral element.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ids</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Returns an unsigned integer vector with the 4 local corner node ID numbers for the element. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="24" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearPrism.cpp" bodystart="323" bodyend="332"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_prism_1ab282749483809d6068af792135a272ad" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type>uint32_t</type>
+        <definition>virtual uint32_t csmp::IsoparametricLinearPrism::CornerNodes</definition>
+        <argsstring>() const</argsstring>
+        <name>CornerNodes</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::CornerNodes</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1abf2597e5cf0563435169689ee94d57a1">CornerNodes</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="25" column="23" bodyfile="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" bodystart="25" bodyend="25"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_prism_1ab6746a86481dc778ee7b17c9a8172d9a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearPrism::MidSideNodes</definition>
+        <argsstring>(std::vector&lt; uint32_t &gt; &amp;ids) const</argsstring>
+        <name>MidSideNodes</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::MidSideNodes</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a8149423046e10426a7eb520164ad3a38">MidSideNodes</reimplements>
+        <param>
+          <type>std::vector&lt; uint32_t &gt; &amp;</type>
+          <declname>ids</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns 0 local node ids of the nodes located at the midsides of the element.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ids</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Returns an unsigned integer vector with the 4 local midside-node ID numbers for the element. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="26" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearPrism.cpp" bodystart="1370" bodyend="1374"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_prism_1a113a81c1e176675ad75c4e6253fb209c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearPrism::CounterClockwiseNodes</definition>
+        <argsstring>(std::vector&lt; uint32_t &gt; &amp;ids) const</argsstring>
+        <name>CounterClockwiseNodes</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::CounterClockwiseNodes</qualifiedname>
+        <param>
+          <type>std::vector&lt; uint32_t &gt; &amp;</type>
+          <declname>ids</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns the counter-clockwise local node numbering for the element.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ids</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Returns the counter-clockwise local node numbering for the element. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="27" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearPrism.cpp" bodystart="342" bodyend="351"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_prism_1a46e8b776f44b4a81157656a6a8737c88" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type>uint32_t</type>
+        <definition>virtual uint32_t csmp::IsoparametricLinearPrism::MidSideNodes</definition>
+        <argsstring>() const</argsstring>
+        <name>MidSideNodes</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::MidSideNodes</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1aec5a871df4af8c883e496f6283872780">MidSideNodes</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="28" column="23" bodyfile="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" bodystart="28" bodyend="28"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_prism_1aad6aeeb3fbc4a42cfd508c458b8e4941" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::IsoparametricLinearPrism::NodesPerFace</definition>
+        <argsstring>(uint32_t face) const</argsstring>
+        <name>NodesPerFace</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::NodesPerFace</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a3cb7bc938ad00c9f4dbfbfa94c13e781">NodesPerFace</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>face</declname>
+          <defname>face_id</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Starting with the smallest local node number, the face nodes are returned in counter clockwise order from the outside looking in. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="29" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearPrism.cpp" bodystart="457" bodyend="468"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_prism_1aad304836aea3fa43563baea74e6ddd9e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="group___c_s_m_pglobal_enums_1ga182d1fe97a0151d464d8170c0fafa872" kindref="member">CSMP_FEM_TYPE</ref></type>
+        <definition>CSMP_FEM_TYPE csmp::IsoparametricLinearPrism::ElementTypeOfFace</definition>
+        <argsstring>(uint32_t face) const</argsstring>
+        <name>ElementTypeOfFace</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::ElementTypeOfFace</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a066cbd92cd983a3c2e73859286280587">ElementTypeOfFace</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>face</declname>
+        </param>
+        <briefdescription>
+<para>reports the element type that would match that of its corresponding face </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para><xrefsect id="todo_1_todo000069"><xreftitle>Todo</xreftitle><xrefdescription><para>(2-P) Remove typid by name fct </para>
+</xrefdescription></xrefsect></para>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="31" column="28" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearPrism.cpp" bodystart="521" bodyend="528"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_prism_1a2b18e7ddc9cd1968287d22b0f4b9fd74" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="group___c_s_m_pglobal_enums_1ga182d1fe97a0151d464d8170c0fafa872" kindref="member">CSMP_FEM_TYPE</ref></type>
+        <definition>virtual CSMP_FEM_TYPE csmp::IsoparametricLinearPrism::ElementTypeOfSegment</definition>
+        <argsstring>(uint32_t) const</argsstring>
+        <name>ElementTypeOfSegment</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::ElementTypeOfSegment</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a136f53aa9d4cd295a984ca46c0864ff7">ElementTypeOfSegment</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>segment</declname>
+        </param>
+        <briefdescription>
+<para>reports the element type that would match that of its corresponding segment </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para><xrefsect id="todo_1_todo000070"><xreftitle>Todo</xreftitle><xrefdescription><para>(2-P) Remove typid by name fct </para>
+</xrefdescription></xrefsect></para>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="32" column="28" bodyfile="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" bodystart="32" bodyend="32"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_prism_1a6d08e010aef3dec1b1b5bbc681aa970b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearPrism::NodesOfSegment</definition>
+        <argsstring>(uint32_t segm_id, std::vector&lt; uint32_t &gt; &amp;snids) const</argsstring>
+        <name>NodesOfSegment</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::NodesOfSegment</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a443213e98dc0cc9692bd3eef5a168295">NodesOfSegment</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>segm_id</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; uint32_t &gt; &amp;</type>
+          <declname>snids</declname>
+        </param>
+        <briefdescription>
+<para>reports the egde nodes (0..nodes-1) which can be more than 2 in higher-order elements </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="34" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearPrism.cpp" bodystart="355" bodyend="397"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_prism_1ae06a2521f4e024d1cdbd95328a742087" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>std::vector&lt; uint32_t &gt;</type>
+        <definition>vector&lt; uint32_t &gt; csmp::IsoparametricLinearPrism::NodesOfFace</definition>
+        <argsstring>(uint32_t face_id) const</argsstring>
+        <name>NodesOfFace</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::NodesOfFace</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a32fc14575277846326041fe914209f9a">NodesOfFace</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>face_id</declname>
+        </param>
+        <briefdescription>
+<para>reports the face nodes (0..nodes-1) of the given face </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="37" column="26" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearPrism.cpp" bodystart="472" bodyend="483"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_prism_1a378a031bfa5619de70e01a5bfe5a31ed" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>std::vector&lt; uint32_t &gt;</type>
+        <definition>vector&lt; uint32_t &gt; csmp::IsoparametricLinearPrism::CornerNodesOfFace</definition>
+        <argsstring>(uint32_t face_id) const</argsstring>
+        <name>CornerNodesOfFace</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::CornerNodesOfFace</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a9614d03193a707898a0b26336a61d9d9">CornerNodesOfFace</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>face_id</declname>
+        </param>
+        <briefdescription>
+<para>returns the local numbers of the corner nodes of the face </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="38" column="26" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearPrism.cpp" bodystart="486" bodyend="497"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_prism_1afd62718afcf8969ade1ef0ed886b2e25" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>std::vector&lt; uint32_t &gt;</type>
+        <definition>std::vector&lt; uint32_t &gt; csmp::IsoparametricLinearPrism::NodesConnectedTo</definition>
+        <argsstring>(uint32_t node_id) const</argsstring>
+        <name>NodesConnectedTo</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::NodesConnectedTo</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1ab7196476d9fb740d91384c6c4521b0f5">NodesConnectedTo</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>node</declname>
+        </param>
+        <briefdescription>
+<para>returns the local numbers of the nodes at the other end of the sgment that the argument node is on </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="39" column="26" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearPrism.cpp" bodystart="501" bodyend="515"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_prism_1a9981c27373244ecaf7af94f009d1f85c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearPrism::UnitNormalToFace</definition>
+        <argsstring>(uint32_t face, std::vector&lt; double &gt; &amp;unrml) const</argsstring>
+        <name>UnitNormalToFace</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::UnitNormalToFace</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a39eb6d5a1827783a679870277b4c68b8">UnitNormalToFace</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>face</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>unrml</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Uses the TriangularFacet and <ref refid="classcsmp_1_1_quadrilateral_facet" kindref="compound">QuadrilateralFacet</ref> classes to compute the normals to the prism faces. Based of the face nodes as specified in <ref refid="classcsmp_1_1_isoparametric_linear_prism_1ae06a2521f4e024d1cdbd95328a742087" kindref="member">NodesOfFace()</ref></para>
+<para><simplesect kind="author"><para>SKM 15/2/2016</para>
+</simplesect>
+<xrefsect id="test_1_test000011"><xreftitle>Test</xreftitle><xrefdescription><para>OK </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="41" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearPrism.cpp" bodystart="1003" bodyend="1066"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_prism_1ae87862e24a894772540e4e60e1c9140e" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearPrism::N</definition>
+        <argsstring>(std::vector&lt; double &gt; &amp;N, const std::vector&lt; double &gt; &amp;xyz)</argsstring>
+        <name>N</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::N</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1aac8b400d7e198282e0b8196df3338858">N</reimplements>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>N</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>xyz</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Outputs the shape functions at the point &apos;xyz&apos; which must lie within the Prism. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="43" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearPrism.cpp" bodystart="702" bodyend="712"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_prism_1a29a2402fbccabaf8ff12bf871319040f" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearPrism::N_AtIntegrationPoint</definition>
+        <argsstring>(uint32_t ip, std::vector&lt; double &gt; &amp;N)</argsstring>
+        <name>N_AtIntegrationPoint</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::N_AtIntegrationPoint</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1ac1168c0c1cc280d1a1ecba676877d13b">N_AtIntegrationPoint</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>ip</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>N</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Computes the interpolation function values at the specified integration point &apos;ip&apos;.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>N</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The interpolation function values are returned into the third argument. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="44" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearPrism.cpp" bodystart="300" bodyend="305"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_prism_1afb4e1d40cc3c368fe0d51a6498a4ad79" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearPrism::N_AtBaryCenter</definition>
+        <argsstring>(std::vector&lt; double &gt; &amp;N)</argsstring>
+        <name>N_AtBaryCenter</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::N_AtBaryCenter</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a6df28d2a7b4bcaff49cb726d6ef0890b">N_AtBaryCenter</reimplements>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>N</declname>
+        </param>
+        <briefdescription>
+<para>reports the values of the interpolation functions at the center of gravity of the element </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="45" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearPrism.cpp" bodystart="282" bodyend="289"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_prism_1aa91eb3e0495fa63af15ac252bca997a1" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearPrism::JacobianAtIntegrationPoint</definition>
+        <argsstring>(uint32_t ip)</argsstring>
+        <name>JacobianAtIntegrationPoint</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::JacobianAtIntegrationPoint</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1ac6a31722bbf25abad86ccea3b653953e">JacobianAtIntegrationPoint</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>ip</declname>
+        </param>
+        <briefdescription>
+<para>initialises JAC = DN*XY (intpl. derivative * coordinate matrix) parametric-to-physical space transformation matrix for given quadrature point </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="46" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearPrism.cpp" bodystart="268" bodyend="276"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_prism_1aa4fe2377b1bcd7a5319645ad5004e65a" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearPrism::JacobianAt</definition>
+        <argsstring>(const std::vector&lt; double &gt; &amp;rst)</argsstring>
+        <name>JacobianAt</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::JacobianAt</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a246043f81c66c9f65e08c6a5190ea381">JacobianAt</reimplements>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>rst</declname>
+        </param>
+        <briefdescription>
+<para>initialises JAC = DN*XY (intpl. derivative * coordinate matrix) parametric-to-physical space transformation matrix for given quadrature point defined in parametric space (r,s,t) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="47" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearPrism.cpp" bodystart="1495" bodyend="1504"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_prism_1a0cee16dcd439265594f8c9c178df7637" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::IsoparametricLinearPrism::dN</definition>
+        <argsstring>(DenseMatrix&lt; DM_MIN &gt; &amp;dn, const std::vector&lt; double &gt; &amp;xyz)</argsstring>
+        <name>dN</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::dN</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <declname>dn</declname>
+          <defname>DN</defname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>xyz</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Computes derivatives of shape functions at a point XY given in global coordinates within the element (also given in global coordinates).</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The element is used to obtain the global shape of the triangle and the interpolation function derivatives at the point XY are returned into the matrix M of dimensions rows = spatial dimensions x columns = nodes.</para>
+<para><simplesect kind="return"><para>The interpolation-function derivative matrix is returned into the second method argument. </para>
+</simplesect>
+</para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="49" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearPrism.cpp" bodystart="662" bodyend="696"/>
+        <references refid="classcsmp_1_1_isoparametric_linear_prism_1ac8f4dce61ec1363a09768f48310fa97a" compoundref="_isoparametric_linear_prism_8cpp" startline="609" endline="642">dN</references>
+        <references refid="classcsmp_1_1_finite_element_1a3639fc962596899333d6a65cb1ef66ce" compoundref="_finite_element_8cpp" startline="893" endline="975">csmp::FiniteElement::JacobianInverse</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_prism_1ac8f4dce61ec1363a09768f48310fa97a" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearPrism::dN</definition>
+        <argsstring>(DenseMatrix&lt; DM_MIN &gt; &amp;DN6)</argsstring>
+        <name>dN</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::dN</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a3bf543b54ba24535aced15598495730f">dN</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <declname>DN6</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Compute derivatives of shape functions at corresponding nodes with respect to the global coordinate system.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The element is used to obtain the global shape of the triangle and the interpolation function derivatives at each node are returned into the matrix M of dimensions rows = spatial dimensions x columns = nodes.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>DN6</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The interpolation-function derivative matrix is returned into the second method argument. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="50" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearPrism.cpp" bodystart="609" bodyend="642"/>
+        <references refid="classcsmp_1_1_finite_element_1a3639fc962596899333d6a65cb1ef66ce" compoundref="_finite_element_8cpp" startline="893" endline="975">csmp::FiniteElement::JacobianInverse</references>
+        <referencedby refid="classcsmp_1_1_isoparametric_linear_prism_1a0cee16dcd439265594f8c9c178df7637" compoundref="_isoparametric_linear_prism_8cpp" startline="662" endline="696">dN</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_prism_1a2a9f617ad79f749a0dc238f41dbf6cb4" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::IsoparametricLinearPrism::dN_AtNode</definition>
+        <argsstring>(DenseMatrix&lt; DM_MIN &gt; &amp;M, uint32_t node)</argsstring>
+        <name>dN_AtNode</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::dN_AtNode</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a89d6f320e17b4cfe1f9ddbeade1c9255">dN_AtNode</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <declname>M</declname>
+          <defname>B</defname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>node</declname>
+          <defname>nd</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><orderedlist>
+<listitem><para>Pre-multiplies local interpolation function derivative matrix, B, with node coordinates to obtain the Jacobian matrix, J at the desired node point.</para>
+</listitem><listitem><para>The Jacobian matrix J is inverted and multiplied with B to obtain the global interpolation function derivative matrix at the point i (i=0...i=gauss points-1).</para>
+</listitem></orderedlist>
+</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The first argument is a reference to the parent <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> object, the second argument is the result matrix, the third argument indicates the gauss point at which the derivative matrix is computed and the fourth argument specifies the degrees of freedom per node, for which the B matrix shall be transformed.</para>
+<para><simplesect kind="return"><para>The global interpolation function derivative matrix is returned into the second method argument. The method also returns the determinant of the Jacobian matrix since it is often needed in integration procedures. </para>
+</simplesect>
+</para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="51" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearPrism.cpp" bodystart="741" bodyend="765"/>
+        <references refid="classcsmp_1_1_finite_element_1a3639fc962596899333d6a65cb1ef66ce" compoundref="_finite_element_8cpp" startline="893" endline="975">csmp::FiniteElement::JacobianInverse</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_prism_1a9afbf1aa9966651568562ffda8bcba6b" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::IsoparametricLinearPrism::dN_AtIntegrationPoint</definition>
+        <argsstring>(DenseMatrix&lt; DM_MIN &gt; &amp;M, uint32_t gauss_point)</argsstring>
+        <name>dN_AtIntegrationPoint</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::dN_AtIntegrationPoint</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a885bb35784705f295c5f8ad9aa47f227">dN_AtIntegrationPoint</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <declname>M</declname>
+          <defname>B</defname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>gauss_point</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><orderedlist>
+<listitem><para>Pre-multiplies local interpolation function derivative matrix, B, with node coordinates to obtain the Jacobian matrix, J.</para>
+</listitem><listitem><para>The Jacobian matrix J is inverted and multiplied with B to obtain the global interpolation function derivative matrix at the gauss point i (i=0...i=gauss points-1).</para>
+</listitem></orderedlist>
+</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The first argument is a reference to the parent <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> object, the second argument is the result matrix, the third argument indicates the gauss point at which the derivative matrix is computed and the fourth argument specifies the degrees of freedom per node, for which the B matrix shall be transformed.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>B</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The global interpolation function derivative matrix is returned into the second method argument. The method also returns the determinant of the Jacobian matrix since it is often needed in integration procedures. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="52" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearPrism.cpp" bodystart="1265" bodyend="1292"/>
+        <references refid="classcsmp_1_1_finite_element_1a3639fc962596899333d6a65cb1ef66ce" compoundref="_finite_element_8cpp" startline="893" endline="975">csmp::FiniteElement::JacobianInverse</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_prism_1aa3d8c85176ce21c9cd38526d522a0ed5" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::IsoparametricLinearPrism::dN_AtBarycenter</definition>
+        <argsstring>(DenseMatrix&lt; DM_MIN &gt; &amp;M)</argsstring>
+        <name>dN_AtBarycenter</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::dN_AtBarycenter</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a703b7ce9d818248bbd9864dffee30b7c">dN_AtBarycenter</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <defname>DM</defname>
+        </param>
+        <briefdescription>
+<para>returns first derivative of interpolaton functions at center of gravity; determinant of the Jacobian is returned as well </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="53" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearPrism.cpp" bodystart="1297" bodyend="1324"/>
+        <references refid="classcsmp_1_1_finite_element_1a3639fc962596899333d6a65cb1ef66ce" compoundref="_finite_element_8cpp" startline="893" endline="975">csmp::FiniteElement::JacobianInverse</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_prism_1a8ff79a4ddb34f5fe69206f25399bfc1d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::IsoparametricLinearPrism::WeightAtIntegrationPoint</definition>
+        <argsstring>(uint32_t i) const</argsstring>
+        <name>WeightAtIntegrationPoint</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::WeightAtIntegrationPoint</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1ac224265aa216deebfcf44b54d2689d1d">WeightAtIntegrationPoint</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+<para>returns the integration weight of the desired quadrature point </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="55" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearPrism.cpp" bodystart="530" bodyend="530"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_prism_1a4b8ce3016024ff06e66890f0e0857f3b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearPrism::IntegrationPoint</definition>
+        <argsstring>(uint32_t i, std::vector&lt; double &gt; &amp;xyz) const</argsstring>
+        <name>IntegrationPoint</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::IntegrationPoint</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1aef00dcb02705580693988e47924a055d">IntegrationPoint</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>i</declname>
+          <defname>ip</defname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>xyz</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>integration point location transformed into global coordinates <simplesect kind="warning"><para>the matrix XYZ must be uptodate </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="56" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearPrism.cpp" bodystart="1468" bodyend="1483"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_prism_1a02801bde0da7f9f56e3c584e10f8288a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearPrism::ExtrapolateIntegrationPointVariableToNodes</definition>
+        <argsstring>(uint32_t nvars, const std::vector&lt; double &gt; &amp;IVAR, std::vector&lt; double &gt; &amp;NVAR) const</argsstring>
+        <name>ExtrapolateIntegrationPointVariableToNodes</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::ExtrapolateIntegrationPointVariableToNodes</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1ae7ea6940dcaa8403c7c35e70db4ba21c">ExtrapolateIntegrationPointVariableToNodes</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>nvars</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>IVAR</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>NVAR</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Method returns a vector with a size of 3, containing the consecutively ordered local node numbers of the side of the element which lies at the indicated model boundary. If the element is not on the model boundary an error is reported and the vector is initialized to unspecified.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The parent <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>, the target boundary of the the <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> of elements, and a Meschach vector which will hold the the local indices of the identified nodes (0...5).</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>fnids</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The resulting local node id&apos;s are returned into the third method argument.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>While only the element knows which nodes are located at the mode boundary, the <ref refid="classcsmp_1_1_finite_element" kindref="compound">FiniteElement</ref> knows in which order these appear.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>To assign Neumann boundary conditions with a PDE operator for surface integrals. As the linear character of the element do not expect high accuracy, one integration point is enough and used in most of the applications (FE, V1 by Zienkewitch).</para>
+<para>Because in the local coordinate system, the pyramid is always straight sided, and the derivatives of the interpolation functions are bilinear, variable values computed at integration points can simply be extrapolated to the nodes. This involves the steps:</para>
+<para><orderedlist>
+<listitem><para>Compute the interpolation function coefficients for the pyramid which is defined by the one integration point.</para>
+</listitem><listitem><para>For each node point compute the values of the interpolation functions and use these to extrapolate the values of the variables at the nodes. </para>
+</listitem></orderedlist>
+</para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="58" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearPrism.cpp" bodystart="1440" bodyend="1459"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_prism_1a61dc16e628c1460af9b8c7c14da878f4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearPrism::OutputNodeDataToVTK</definition>
+        <argsstring>(const char *file_name, const char *var_name, DenseMatrix&lt; DM_MIN &gt; &amp;DATA) const</argsstring>
+        <name>OutputNodeDataToVTK</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::OutputNodeDataToVTK</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a67341585f83bc9d941c67e7a84801248">OutputNodeDataToVTK</reimplements>
+        <param>
+          <type>const char *</type>
+          <declname>file_name</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>var_name</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <declname>DATA</declname>
+        </param>
+        <briefdescription>
+<para>prints the current finite element into a visualisation toolkit (VTK) textfile for visual examination </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="62" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearPrism.cpp" bodystart="1507" bodyend="1587"/>
+        <references refid="group___c_s_m_p__global__enumerations_1ga8413f7c3b4f238c5a98a846198d49469">csmp::NAME_STRING</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_prism_1a19b01da2ad0b9a912c129a8d59146007" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearPrism::Nrst</definition>
+        <argsstring>(double r, double s, double t, std::vector&lt; double &gt; &amp;N) const</argsstring>
+        <name>Nrst</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::Nrst</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a34bd4d39b1a026b1de15f028e9692bd8">Nrst</reimplements>
+        <param>
+          <type>double</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>s</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>t</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>N</declname>
+        </param>
+        <briefdescription>
+<para>interpolation functions in parametric space </para>
+        </briefdescription>
+        <detaileddescription>
+<para>void IsoparametricLinearPrism::Nrst( double r, double s, vector&lt;double&gt;&amp; N ) const</para>
+<para>Description:</para>
+<para>Returns the value of the element interpolation functions at the point &apos;rst&apos; in local coordinates.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The floating point coordinates &apos;r&apos;, &apos;s&apos; and &apos;t&apos; of the point at which the interpolation shall be carried out.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>N</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The fourth method argument is the vector into which the values of the n=nodes interpolation functions at the point &apos;rst&apos; will be returned.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>See in source code header file.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Method is used to compute property values at the integration points of the element. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="67" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearPrism.cpp" bodystart="134" bodyend="156"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_prism_1ab991a16509b935cc3b2202bfb7929537" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearPrism::Nrst</definition>
+        <argsstring>(double r, double s, double t, double *N) const</argsstring>
+        <name>Nrst</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::Nrst</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>s</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>t</declname>
+        </param>
+        <param>
+          <type>double *</type>
+          <declname>N</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="68" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearPrism.cpp" bodystart="158" bodyend="178"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_prism_1a4a83087c213f17cbf357e35f42775200" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearPrism::dNr</definition>
+        <argsstring>(double r, double s, double t, std::vector&lt; double &gt; &amp;dNr) const</argsstring>
+        <name>dNr</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::dNr</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a5b77ad8925c75b096867822e83bed7cd">dNr</reimplements>
+        <param>
+          <type>double</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>s</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>t</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>dNr</declname>
+          <defname>DNR</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>This method and the complementary method <ref refid="classcsmp_1_1_isoparametric_linear_prism_1a13d7d9d7d177be033d1854343909867a" kindref="member">dNs()</ref> compute the shape function derivates with respect to the local coordinate axis &apos;r&apos;, and &apos;s&apos;.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The method takes the local coordinates of the point at which the shape function derivatives shall be evaluated as third argument.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>DNR</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The shape function derivatives are returned into the second method argument which is a floating point vector of the size n=nodes per element.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>see inlined source code in the header file.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>The shape function derivatives are needed in most integration procedures for elements. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="70" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearPrism.cpp" bodystart="203" bodyend="221"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_prism_1a13d7d9d7d177be033d1854343909867a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearPrism::dNs</definition>
+        <argsstring>(double r, double s, double t, std::vector&lt; double &gt; &amp;dNs) const</argsstring>
+        <name>dNs</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::dNs</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a1c5cfe76807ea0d685c8e22d74c5582e">dNs</reimplements>
+        <param>
+          <type>double</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>s</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>t</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>DNS</declname>
+        </param>
+        <briefdescription>
+<para>2D element interpolation functions derivatives N(r,s,t)/ds </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="76" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearPrism.cpp" bodystart="223" bodyend="241"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_prism_1acfd7f65e867bcd1d286b6a7646ddd0e7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearPrism::dNt</definition>
+        <argsstring>(double r, double s, double t, std::vector&lt; double &gt; &amp;dNt) const</argsstring>
+        <name>dNt</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::dNt</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a6c22543bd89563413954beb8697fa914">dNt</reimplements>
+        <param>
+          <type>double</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>s</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>t</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>DNT</declname>
+        </param>
+        <briefdescription>
+<para>2D element interpolation functions derivatives N(r,s,t)/dt </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="82" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearPrism.cpp" bodystart="244" bodyend="262"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_prism_1a8d5562b5d1754674a15bf145b5fe1255" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearPrism::ReferenceCoordinates</definition>
+        <argsstring>(DenseMatrix&lt; DM_MIN &gt; &amp;matCoords) const</argsstring>
+        <name>ReferenceCoordinates</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::ReferenceCoordinates</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a34a5c030987c7e9842af332f5ed0d61b">ReferenceCoordinates</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <declname>matCoords</declname>
+        </param>
+        <briefdescription>
+<para>for element types defined using a local coordinate system, returns the node coordinates into the argument matrix </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns the reference coordinates of the element.</para>
+<para><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix&lt;DM_MIN&gt;</ref> &amp; matCoords; -&gt; Holds the reference coordinates of the finite element. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="88" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearPrism.cpp" bodystart="1487" bodyend="1493"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_prism_1a231f24bf415e4a2a850335f858b30984" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::IsoparametricLinearPrism::AreaOfBase</definition>
+        <argsstring>(std::vector&lt; double &gt; &amp;Vertice1XYZ, std::vector&lt; double &gt; &amp;Vertice2XYZ, std::vector&lt; double &gt; &amp;Vertice3XYZ)</argsstring>
+        <name>AreaOfBase</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::AreaOfBase</qualifiedname>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>Vertice1XYZ</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>Vertice2XYZ</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>Vertice3XYZ</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="95" column="12" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearPrism.cpp" bodystart="575" bodyend="589"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_prism_1abf981a6acfe95f14d26b698e53262227" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::IsoparametricLinearPrism::VolumeOfRegularPrism</definition>
+        <argsstring>()</argsstring>
+        <name>VolumeOfRegularPrism</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::VolumeOfRegularPrism</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="101" column="12" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearPrism.cpp" bodystart="1208" bodyend="1237"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_prism_1a4f9dc80ab80b76993e7f20f023640d7e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearPrism::GenerateIntegrationPoints</definition>
+        <argsstring>(DenseMatrix&lt; DM_MIN &gt; &amp;ipoints, std::vector&lt; double &gt; &amp;weights)</argsstring>
+        <name>GenerateIntegrationPoints</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::GenerateIntegrationPoints</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <declname>ipoints</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>weights</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="103" column="10" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearPrism.cpp" bodystart="536" bodyend="572"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_prism_1a643b1cd3bea868032899fb8e0573025f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearPrism::ParametricToPhysical</definition>
+        <argsstring>(std::vector&lt; double &gt; &amp;rst, std::vector&lt; double &gt; &amp;xyz)</argsstring>
+        <name>ParametricToPhysical</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::ParametricToPhysical</qualifiedname>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>rst</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>xyz</declname>
+        </param>
+        <briefdescription>
+<para>Projection function from rst-&gt;xyz. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="105" column="10" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearPrism.cpp" bodystart="771" bodyend="783"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_prism_1a93e991e38a872dedf26a7409f8a8d85c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearPrism::PhysicalToParametric</definition>
+        <argsstring>(std::vector&lt; double &gt; &amp;rst, const std::vector&lt; double &gt; &amp;xyz)</argsstring>
+        <name>PhysicalToParametric</name>
+        <qualifiedname>csmp::IsoparametricLinearPrism::PhysicalToParametric</qualifiedname>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>rst</declname>
+          <defname>rSt</defname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>xyz</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Projection function from xyz-&gt;rst Starts from the 2/3 2/3 0 point in the parametric space </para>
+        </detaileddescription>
+        <inbodydescription>
+<para>Newton-Raphson iterations</para>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="106" column="10" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearPrism.cpp" bodystart="791" bodyend="990"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="date"><para>1998 </para>
+</simplesect>
+<simplesect kind="author"><para>S.K. Matthai </para>
+</simplesect>
+<simplesect kind="author"><para>Stephen G. Roberts </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>csmp::FiniteElement</label>
+        <link refid="classcsmp_1_1_finite_element"/>
+      </node>
+      <node id="1">
+        <label>csmp::IsoparametricLinearPrism</label>
+        <link refid="classcsmp_1_1_isoparametric_linear_prism"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="4">
+        <label>csmp::DenseMatrix&lt; mn_max &gt;</label>
+        <link refid="classcsmp_1_1_dense_matrix"/>
+      </node>
+      <node id="3">
+        <label>csmp::DenseMatrix&lt; DM_MIN &gt;</label>
+        <link refid="classcsmp_1_1_dense_matrix"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; DM_MIN &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::FiniteElement</label>
+        <link refid="classcsmp_1_1_finite_element"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>#M</edgelabel>
+          <edgelabel>+JAC</edgelabel>
+          <edgelabel>+JINV</edgelabel>
+          <edgelabel>+XY</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::IsoparametricLinearPrism</label>
+        <link refid="classcsmp_1_1_isoparametric_linear_prism"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" line="16" column="1" bodyfile="source/includes/integration/finite_elements/IsoparametricLinearPrism.h" bodystart="16" bodyend="107"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1a231f24bf415e4a2a850335f858b30984" prot="private" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>AreaOfBase</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1aaa664417cb363205a66347d907726f0a" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>AspectRatio</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ab4ad41c705b9691a4d01ee979b6214cc" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>cne</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1ac167683317315d95dcfbc00d7e8cf952" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>CornerNodes</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1ab282749483809d6068af792135a272ad" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>CornerNodes</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1a378a031bfa5619de70e01a5bfe5a31ed" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>CornerNodesOfFace</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1a113a81c1e176675ad75c4e6253fb209c" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>CounterClockwiseNodes</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a9831bfb64a8fa07f20eb7024fc5a22f2" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>CurrentID</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ab44758c4df00ff2cac338fbf7580b8d0" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>CurrentID</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a93be3242020acc01e32f26ee56c5d487" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>Dim</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ab749771eccc931e112125efe7bf8252c" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>dim</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1a0cee16dcd439265594f8c9c178df7637" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>dN</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1ac8f4dce61ec1363a09768f48310fa97a" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>dN</name></member>
+      <member refid="classcsmp_1_1_finite_element_1adb4103981ca8a56bbea237ef71c0cdc1" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>dN_At</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1aa3d8c85176ce21c9cd38526d522a0ed5" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>dN_AtBarycenter</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1a9afbf1aa9966651568562ffda8bcba6b" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>dN_AtIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1a2a9f617ad79f749a0dc238f41dbf6cb4" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>dN_AtNode</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a8602e2b2682d1734501fa44da5f4a230" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>DNR</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1a4a83087c213f17cbf357e35f42775200" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>dNr</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a84befa0a4da0b4b8469ec5e7be89860e" prot="public" virt="virtual" ambiguityscope="csmp::FiniteElement::"><scope>csmp::IsoparametricLinearPrism</scope><name>dNr</name></member>
+      <member refid="classcsmp_1_1_finite_element_1af159e5f99a0281ae603ca6ddde9bf6bf" prot="public" virt="virtual" ambiguityscope="csmp::FiniteElement::"><scope>csmp::IsoparametricLinearPrism</scope><name>dNr</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a1a9d9ee7a3326164b35a523273dc54c9" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>DNS</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1a13d7d9d7d177be033d1854343909867a" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>dNs</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a6d2fb4557b0681959501365138c9d3c3" prot="public" virt="virtual" ambiguityscope="csmp::FiniteElement::"><scope>csmp::IsoparametricLinearPrism</scope><name>dNs</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a203a9d019620abee39fdbe7847ee8df0" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>DNT</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1acfd7f65e867bcd1d286b6a7646ddd0e7" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>dNt</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1aef302c98c4e86fb197483b68d2348bde" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>EdgeLengths</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ac2a37f7440f83acbcda169280fcb84b0" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>ElementType</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ac0a98e18654722a181c17a7e01b67e56" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>ElementType</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1aad304836aea3fa43563baea74e6ddd9e" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>ElementTypeOfFace</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1a2b18e7ddc9cd1968287d22b0f4b9fd74" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>ElementTypeOfSegment</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a5684660784d3f15adffb485e8f47d9f3" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>epe</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1a02801bde0da7f9f56e3c584e10f8288a" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>ExtrapolateIntegrationPointVariableToNodes</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a9666661fa30a04d97f6c04a059a6bba6" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>Faces</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a746f7ba1b4acf8dd74f39e3962f0707f" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>FiniteElement</name></member>
+      <member refid="classcsmp_1_1_finite_element_1aa7a383bc5d1c0ee8f71ecb6c604db2ec" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>FiniteElement</name></member>
+      <member refid="classcsmp_1_1_finite_element_1aa61e202519a3523f70da1f1854170c64" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>FiniteElement</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a36972113f6f8351c891431038f8514bd" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>fpe</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1a4f9dc80ab80b76993e7f20f023640d7e" prot="private" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>GenerateIntegrationPoints</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a0729a0486b6febb96160f3e184c3f33f" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>gpe</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a564e0da11c00c28430fb146d5597c6ce" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>IDX</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ad4aaeb22c3a8da44a33361057ef2097f" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>InitialID</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1a5a97535f17ba2fe211645d27cc24f25e" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>InnerRadius</name></member>
+      <member refid="classcsmp_1_1_finite_element_1aa5c7e3d4b60cdaa863b70edad755b09a" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>Integral_dNT_K_dN</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a5d79c3309e261dd0939e5b733aac83d9" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>IntegraldNdN</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a84a69958fd3567565d4dc83037664d97" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>IntegralNN</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1a4b8ce3016024ff06e66890f0e0857f3b" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>IntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a35ee85b7635207926c97d4bf0bec7d1d" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>IntegrationPoints</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a8439ec45c22a2741b8782de67de98862" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>InteriorNodes</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a2d45ffc4fd8598af124125bfe93a2597" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>InteriorNodes</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ae2d5d559efe7f2b27dc5ec5e271c9b68" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>Interpolation</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1a32f32e225b6bb1756ba58661ceae9a1b" prot="private" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>IP</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a4390186773409c6a5e30feb449e55f17" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>IsLine</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a5d0543e1e432fdf65177495d72e4d51c" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>Isoparametric</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ac57108260f93ab6ef491448def2e9c50" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>Isoparametric</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1aef049f1e5ef0ca25c9db832824dd4454" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>IsoparametricLinearPrism</name></member>
+      <member refid="classcsmp_1_1_finite_element_1aca610ffda39cad1d959db0ec403c3019" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>IsSimplex</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a09d0c59e19d2cd5a6e46b7dc60fd5f07" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>IsSurface</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a7ffd856e7bb1b9c1009d572775925c8d" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>IsVolume</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ac8f4f6ea8649710e01ea018c61d93a30" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>itp</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a5de71dcc5e56c2e814d31d798969f437" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>JAC</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ae62e0c447141f0e2b7f7a4eb8412278b" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>Jacobian</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a81d93860f25ffe781837581f45caac4c" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>Jacobian</name></member>
+      <member refid="classcsmp_1_1_finite_element_1af63fe74d4b20b02d72574d8380f5e41a" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>Jacobian</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1aa4fe2377b1bcd7a5319645ad5004e65a" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>JacobianAt</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1aa91eb3e0495fa63af15ac252bca997a1" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>JacobianAtIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ae758e82d3b214e9f9c5bda10cd20b515" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>JacobianDeterminant</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a3639fc962596899333d6a65cb1ef66ce" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>JacobianInverse</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a5c3fd117b986587599dcb441feeb000a" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>JINV</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ac3204e22e57b8658797037802003c490" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>LineElement</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a64381c8d0e2f4840551c2da986fb9a25" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>M</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1ab6746a86481dc778ee7b17c9a8172d9a" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>MidSideNodes</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1a46e8b776f44b4a81157656a6a8737c88" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>MidSideNodes</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1ae87862e24a894772540e4e60e1c9140e" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>N</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1afb4e1d40cc3c368fe0d51a6498a4ad79" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>N_AtBaryCenter</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1a29a2402fbccabaf8ff12bf871319040f" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>N_AtIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ad75cb0ef9bea852c900e58b74662b0d4" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>Neighbors</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a2509e6d8ab556b6a65a9036a62485df4" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>nne</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ad1e29de6aed41fb434a485b875d7d8d4" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>Nodes</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1afd62718afcf8969ade1ef0ed886b2e25" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>NodesConnectedTo</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1ae06a2521f4e024d1cdbd95328a742087" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>NodesOfFace</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1a6d08e010aef3dec1b1b5bbc681aa970b" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>NodesOfSegment</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1aad6aeeb3fbc4a42cfd508c458b8e4941" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>NodesPerFace</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a329300ec856aa91bfe492daf93556b04" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>npe</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a9d9ced72fa35fd6a9fc755a219590820" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>npf</name></member>
+      <member refid="classcsmp_1_1_finite_element_1af583becda82f4fef39bbe2d4c3b41cea" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>Nr</name></member>
+      <member refid="classcsmp_1_1_finite_element_1adb2baab01a52b040d73c10623a0605b2" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>Nrs</name></member>
+      <member refid="classcsmp_1_1_finite_element_1aa13754bef9eb502c77561f216d0258e7" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>NRST</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1a19b01da2ad0b9a912c129a8d59146007" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>Nrst</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1ab991a16509b935cc3b2202bfb7929537" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>Nrst</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1ad54d6fc599f1155eac5576a2dc92b408" prot="private" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>NXYZ</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a1aa0c4f0fabe88be0c254f121d5a483b" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a698633a6c268ac88c82929093cd65cc1" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a94820d970b7a970757c91dac9934b424" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>OrderOfShapeFunctions</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ae963674dc3ef25ce0e7bd8d2937c75ee" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1a61dc16e628c1460af9b8c7c14da878f4" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>OutputNodeDataToVTK</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1a643b1cd3bea868032899fb8e0573025f" prot="private" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>ParametricToPhysical</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1a93e991e38a872dedf26a7409f8a8d85c" prot="private" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>PhysicalToParametric</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1a8d5562b5d1754674a15bf145b5fe1255" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>ReferenceCoordinates</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a7f488b707067cb6d1ee0b25a97c883a2" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>Segments</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a609a2f0f70b086a278d112761c07c9de" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>spe</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a930e53402dc4847a3084e38853d3bfd6" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>SurfaceElement</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a1dedbd91a6e8765f57dfdaf999494b76" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>UnitNormal</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ae600307171225f53a2615aaffd5afb18" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>UnitNormalAtFaceBarycenter</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1a9981c27373244ecaf7af94f009d1f85c" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>UnitNormalToFace</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ad4d20a792255fd2b0984b255ec3e6817" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>UsesLocalCoordinates</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a8211ac6a7c8734f142eaa51f459d25af" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>UsesLocalCoordinates</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1a19d22823f25c5498aa7ee769c74935e5" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>Volume</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ad92268835407ea5fc1df04583a754637" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>VolumeElement</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1abf981a6acfe95f14d26b698e53262227" prot="private" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>VolumeOfRegularPrism</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1a71d6c887381d3c6969750bcc4cbb9104" prot="private" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>W</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_prism_1a8ff79a4ddb34f5fe69206f25399bfc1d" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>WeightAtIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>XY</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ae4bd0bcbccb811f852c26668f6959f14" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>XYZ</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a56c5bc7db73c50f4448380eeee48fa3f" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>XYZ</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a4e65701c3dcf1f2c98688d3204bccb6d" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearPrism</scope><name>~FiniteElement</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

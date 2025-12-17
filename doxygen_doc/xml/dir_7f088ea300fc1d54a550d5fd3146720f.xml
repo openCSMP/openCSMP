@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_7f088ea300fc1d54a550d5fd3146720f" kind="dir">
+    <compoundname>source/modules/eos</compoundname>
+    <innerdir refid="dir_c4c1f3aab8a1dd62b9445773effd50ff">source/modules/eos/h2o</innerdir>
+    <innerdir refid="dir_e4760be0ef7be7455eb4f44fd78b4941">source/modules/eos/h2o_nacl</innerdir>
+    <innerdir refid="dir_a1f4776db5768d413448f15d9a70ba18">source/modules/eos/h2o_nacl_co2</innerdir>
+    <innerdir refid="dir_ee869a0e1788e9d11ad5c000375ebe7b">source/modules/eos/h2o_nacl_lookup</innerdir>
+    <innerfile refid="_get_lookup_indices_8cpp">GetLookupIndices.cpp</innerfile>
+    <innerfile refid="_look_up_storage_8cpp">LookUpStorage.cpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="source/modules/eos/"/>
+  </compounddef>
+</doxygen>

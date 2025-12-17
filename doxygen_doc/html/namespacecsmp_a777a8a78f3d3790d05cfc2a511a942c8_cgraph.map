@@ -1,0 +1,7 @@
+<map id="csmp::outputRegionBoundaryToVTK" name="csmp::outputRegionBoundaryToVTK">
+<area shape="rect" id="Node000001" title="output the perimeter surface of a region to VTK file" alt="" coords="5,23,199,64"/>
+<area shape="rect" id="Node000002" href="$group___c_s_m_p__global__enumerations.html#ga8413f7c3b4f238c5a98a846198d49469" title="some fixed string sizes (max filename length on NTFS partition / arbitrary #&lt;32k)" alt="" coords="252,5,410,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="199,30,236,26,237,31,199,35"/>
+<area shape="rect" id="Node000003" href="$namespacecsmp.html#a0d17c2215c8ac2f43df3dfdae7bcb272" title="for the given CSMP element type, finds the matching VTK geometric primitive" alt="" coords="247,55,416,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="199,51,231,54,231,60,199,56"/>
+</map>

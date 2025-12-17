@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_d6fdc804d3589ef308a8ec09a7e4414f" kind="dir">
+    <compoundname>non-GIT-files</compoundname>
+    <innerfile refid="_variable_set___tracer_transfer_8h">VariableSet_TracerTransfer.h</innerfile>
+    <innerfile refid="_variable_set___two_phase_flow_8h">VariableSet_TwoPhaseFlow.h</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="non-GIT-files/"/>
+  </compounddef>
+</doxygen>

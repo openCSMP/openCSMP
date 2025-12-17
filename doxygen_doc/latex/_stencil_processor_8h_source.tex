@@ -1,0 +1,188 @@
+\doxysection{Stencil\+Processor.\+h}
+\hypertarget{_stencil_processor_8h_source}{}\label{_stencil_processor_8h_source}\index{source/includes/integration/finite\_volumes/legacy\_transport\_scheme/StencilProcessor.h@{source/includes/integration/finite\_volumes/legacy\_transport\_scheme/StencilProcessor.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{STENCIL\_PROCESSOR\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{STENCIL\_PROCESSOR\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_dense_matrix_8h}{"{}DenseMatrix.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_f_v___parameter}{FV\_Parameter}};}
+\DoxyCodeLine{00010\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_element}{uint32\_t}}>\ \ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}};}
+\DoxyCodeLine{00011\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_two_phase_model}{uint32\_t}}>\ \ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_model}{TwoPhaseModel}};}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00014\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor}{StencilProcessor}}\ \{}
+\DoxyCodeLine{00015\ \ \ \ \ \string~\mbox{\hyperlink{structcsmp_1_1_stencil_processor_a958eae17afface235cca81314acd2c7d}{StencilProcessor}}();}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{comment}{///\ advection\ only}}
+\DoxyCodeLine{00017\ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_af6e2ccb46a2c71c36e023d0f4b7ac6c3}{StencilProcessor}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\&\ adv1\_key,\ \ \ \ \textcolor{comment}{//\ the\ advected\ nodal\ property}}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\&\ velo\_key,\ \ \ \ \textcolor{comment}{//\ transport\ velocity}}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\&\ src\_key,\ \ \ \ \ \textcolor{comment}{//\ nodal\ source\ \ }}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\&\ velo\_mult\_key);\ \textcolor{comment}{//\ velocity\ multiplier}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{comment}{///\ advection\ and\ diffusion}}
+\DoxyCodeLine{00023\ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_afe11c686645c90cf8e849d357c99d4b8}{StencilProcessor}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\&\ adv1\_key,\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ the\ advected\ nodal\ property}}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\&\ velo\_key,\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ the\ Darcian\ transport\ velocity}}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\&\ diffusivity\_key,\ \ \ \textcolor{comment}{//\ diffusivity\ of\ adv.\ prop.}}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\&\ src\_key,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ nodal\ source\ \ }}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\&\ velo\_mult\_key);\ \ \ \ \textcolor{comment}{//\ velocity\ multiplier}}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_a04413378a77601001ec58fcd5d46403d}{StencilProcessor}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor}{StencilProcessor}}\&\ tfs\ );}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{comment}{///\ Advection\ Diffusion\ Equation}}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{comment}{///\ first-\/order\ scheme\ for\ advection-\/diffusion\ equation:\ \ sector\ volumes,\ advected\ variable\ values,\ and\ facet\ fluxes}}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_a3e31116cd90d8a6152e0037346dd6b3b}{InitializeFirstOrder}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_f_v___parameter}{FV\_Parameter}}\&\ param,}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&\ e\ ,}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\_TYPE}}\ \&vt=SCALAR,\ uint32\_t\ var\_comp\_nr=0);}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{comment}{///\ Computes\ Flux\ Mismatch\ for\ FVs\ at\ the\ Boundaries}}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_a330f328ff1dd80f3a54b883b4782fcac}{ComputeBoundaryFluxMismatch}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_f_v___parameter}{FV\_Parameter}}\&\ param,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&\ e);}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{comment}{///\ second-\/order\ scheme\ for\ advection-\/diffusion\ equation:\ sector\ volumes,\ advected\ variable\ values,\ facet\ fluxes,\ and\ facet\ advected\ variable\ values}}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_a4146bc21ebe57a4e4d506efcafd3f27b}{InitializeSecondOrder}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_f_v___parameter}{FV\_Parameter}}\&\ param,}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&\ e\ );}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{comment}{///\ second-\/order\ in\ time\ scheme\ for\ advection-\/diffusion\ equation:\ advected\ variable\ values\ at\ nodes\ and\ interpolated\ to\ facets}}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_ab898d075f0eadc386f72ab199371a13f}{InitializeAdvectedVariableValues}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&\ e\ );}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{comment}{///\ for\ advection\ (isat1)}}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad5c6897f43fecff241c501042efc2f20}{IsotropicallyLimitTransportProperties}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&\ e,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad5c6897f43fecff241c501042efc2f20}{std}}::\mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad5c6897f43fecff241c501042efc2f20}{vector}}<\mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad5c6897f43fecff241c501042efc2f20}{std}}::\mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad5c6897f43fecff241c501042efc2f20}{pair}}<\textcolor{keywordtype}{double},\textcolor{keywordtype}{double}>\ >\&\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad5c6897f43fecff241c501042efc2f20}{SMINMAX}}\ );}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordtype}{void}\ ApplyLeastSquareMethodToLimitTransportProperties(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&\ e,}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<std::pair<\textcolor{keywordtype}{double},\textcolor{keywordtype}{double}>\ >\&\ SMINMAX,}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ csmp::Index\&\ mass\_center\_key,}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ csmp::Index\&\ grad\_sn\_key,}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ csmp::Index\&\ grad\_sn\_limiter\_key\ );}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{comment}{///\ second-\/order\ version}}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_a5354af203cfe106a1e78bb2b5a33f171}{LimitExplicitSourceTerm}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&\ e,}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_a5354af203cfe106a1e78bb2b5a33f171}{std}}::\mbox{\hyperlink{structcsmp_1_1_stencil_processor_a5354af203cfe106a1e78bb2b5a33f171}{vector}}<\mbox{\hyperlink{structcsmp_1_1_stencil_processor_a5354af203cfe106a1e78bb2b5a33f171}{std}}::\mbox{\hyperlink{structcsmp_1_1_stencil_processor_a5354af203cfe106a1e78bb2b5a33f171}{pair}}<\textcolor{keywordtype}{double},\textcolor{keywordtype}{double}>\ >\&\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_a5354af203cfe106a1e78bb2b5a33f171}{SMINMAX}},}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_a5354af203cfe106a1e78bb2b5a33f171}{inside\_var\_value}},}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_a5354af203cfe106a1e78bb2b5a33f171}{outside\_var\_value}},}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_a5354af203cfe106a1e78bb2b5a33f171}{psi\_dash\_f}},\ \ \ \ \ \ \ \ \textcolor{comment}{//\ average\ value\ at\ facet}}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_a5354af203cfe106a1e78bb2b5a33f171}{flux}}\ );}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{comment}{///\ theta-\/limiting\ (in\ time)}}
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_a5ffe6e8a86d79b199167a28a240bd24a}{EvaluateThetaValues}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&\ e,}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ \ FVPOREVOL,\ \textcolor{comment}{//\ vols\ of\ FV's}}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ \ SAT0,\ \textcolor{comment}{//\ advected\ variable\ value\ at\ t0}}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_a5ffe6e8a86d79b199167a28a240bd24a}{std}}::\mbox{\hyperlink{structcsmp_1_1_stencil_processor_a5ffe6e8a86d79b199167a28a240bd24a}{vector}}<\mbox{\hyperlink{structcsmp_1_1_stencil_processor_a5ffe6e8a86d79b199167a28a240bd24a}{std}}::\mbox{\hyperlink{structcsmp_1_1_stencil_processor_a5ffe6e8a86d79b199167a28a240bd24a}{vector}}<\textcolor{keywordtype}{double}>\ >\&\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_a5ffe6e8a86d79b199167a28a240bd24a}{FACETFLUXES0}},\ \textcolor{comment}{//\ old\ timestep}}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_a5ffe6e8a86d79b199167a28a240bd24a}{std}}::\mbox{\hyperlink{structcsmp_1_1_stencil_processor_a5ffe6e8a86d79b199167a28a240bd24a}{vector}}<\mbox{\hyperlink{structcsmp_1_1_stencil_processor_a5ffe6e8a86d79b199167a28a240bd24a}{std}}::\mbox{\hyperlink{structcsmp_1_1_stencil_processor_a5ffe6e8a86d79b199167a28a240bd24a}{vector}}<\textcolor{keywordtype}{double}>\ >\&\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_a5ffe6e8a86d79b199167a28a240bd24a}{LTDSATS0}},\ \ \ \ \ \textcolor{comment}{//\ old\ timestep}}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_a5ffe6e8a86d79b199167a28a240bd24a}{time\_increment}},}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_a5ffe6e8a86d79b199167a28a240bd24a}{use\_max\_theta}}\ );}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{comment}{///\ Incompressible\ Two\ Phase\ Flow\ Equation}}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{comment}{///\ first-\/order\ scheme\ for\ two\ phase\ flow\ (\ linearazed\ form\ ):\ as\ in\ reference\ documentation}}
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_aec4936809fe739f076b49e7dd1e3bafb}{AccumulateImplicitTwoPhaseSolution1}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_f_v___parameter}{FV\_Parameter}}\&\ param,}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&\ e,}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_two_phase_model}{TwoPhaseModel}}<dim>\&\ relperm\ );}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{comment}{///\ second-\/order\ scheme\ for\ two\ phase\ flow\ (\ linearized\ form\ ):\ as\ in\ InitializeSecondOrder\ for\ single\ phase}}
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_a77a72118a815fd892aef4f629a725d4b}{AccumulateImplicitTwoPhaseSolution2}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_f_v___parameter}{FV\_Parameter}}\&\ param,}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&\ e,}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_two_phase_model}{TwoPhaseModel}}<dim>\&\ relperm\ );}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{comment}{///\ first-\/order\ scheme\ for\ two-\/phase\ flow\ (\ nonlinear\ Newton\ Raphson\ approach\ ):}}
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_a0b69025b2aeb2e1eea16284258950c6d}{AccumulateImplicitTwoPhaseSolution1\_NonlinearNewtonRaphson}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_f_v___parameter}{FV\_Parameter}}\&\ param,}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&\ e,}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_two_phase_model}{TwoPhaseModel}}<dim>\&\ relperm,}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ with\_gravity\_forces,}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ with\_capillary\_spreading);}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{comment}{///\ second-\/order\ scheme\ for\ two-\/phase\ flow\ (\ nonlinear\ Newton\ Raphson\ approach,\ standart\ limiter\ ):}}
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad10a4fe54c082b551af661d1898eb9f6}{AccumulateImplicitTwoPhaseSolution2\_NonlinearNewtonRaphson}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad10a4fe54c082b551af661d1898eb9f6}{std}}::\mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad10a4fe54c082b551af661d1898eb9f6}{vector}}<\mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad10a4fe54c082b551af661d1898eb9f6}{std}}::\mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad10a4fe54c082b551af661d1898eb9f6}{pair}}<\textcolor{keywordtype}{double},\textcolor{keywordtype}{double}>\ >\&\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad10a4fe54c082b551af661d1898eb9f6}{SMINMAX}},}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad10a4fe54c082b551af661d1898eb9f6}{FV\_Parameter}}\&\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad10a4fe54c082b551af661d1898eb9f6}{param}},}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad10a4fe54c082b551af661d1898eb9f6}{Element}}<\mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad10a4fe54c082b551af661d1898eb9f6}{dim}}>\&\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad10a4fe54c082b551af661d1898eb9f6}{e}},}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad10a4fe54c082b551af661d1898eb9f6}{TwoPhaseModel}}<\mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad10a4fe54c082b551af661d1898eb9f6}{dim}}>\&\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad10a4fe54c082b551af661d1898eb9f6}{relperm}},}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad10a4fe54c082b551af661d1898eb9f6}{with\_gravity\_forces}},}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad10a4fe54c082b551af661d1898eb9f6}{with\_capillary\_spreading}});}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{comment}{///\ second-\/order\ scheme\ for\ two-\/phase\ flow\ (\ nonlinear\ Newton\ Raphson\ approach,\ lsm\ gradient\ limiter\ ):}}
+\DoxyCodeLine{00105\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad10a4fe54c082b551af661d1898eb9f6}{AccumulateImplicitTwoPhaseSolution2\_NonlinearNewtonRaphson}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad10a4fe54c082b551af661d1898eb9f6}{std}}::\mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad10a4fe54c082b551af661d1898eb9f6}{vector}}<\mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad10a4fe54c082b551af661d1898eb9f6}{std}}::\mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad10a4fe54c082b551af661d1898eb9f6}{pair}}<\textcolor{keywordtype}{double},\textcolor{keywordtype}{double}>\ >\&\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad10a4fe54c082b551af661d1898eb9f6}{SMINMAX}},}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad10a4fe54c082b551af661d1898eb9f6}{FV\_Parameter}}\&\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad10a4fe54c082b551af661d1898eb9f6}{param}},}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad10a4fe54c082b551af661d1898eb9f6}{Element}}<\mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad10a4fe54c082b551af661d1898eb9f6}{dim}}>\&\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad10a4fe54c082b551af661d1898eb9f6}{e}},}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad10a4fe54c082b551af661d1898eb9f6}{TwoPhaseModel}}<\mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad10a4fe54c082b551af661d1898eb9f6}{dim}}>\&\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad10a4fe54c082b551af661d1898eb9f6}{relperm}},}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad10a4fe54c082b551af661d1898eb9f6}{with\_gravity\_forces}},}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad10a4fe54c082b551af661d1898eb9f6}{with\_capillary\_spreading}},}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad10a4fe54c082b551af661d1898eb9f6}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad10a4fe54c082b551af661d1898eb9f6}{Index}}\&\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad10a4fe54c082b551af661d1898eb9f6}{mass\_center\_key}},}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad10a4fe54c082b551af661d1898eb9f6}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad10a4fe54c082b551af661d1898eb9f6}{Index}}\&\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad10a4fe54c082b551af661d1898eb9f6}{grad\_sn\_key}},}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad10a4fe54c082b551af661d1898eb9f6}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad10a4fe54c082b551af661d1898eb9f6}{Index}}\&\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_ad10a4fe54c082b551af661d1898eb9f6}{grad\_sn\_limiter\_key}});}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \ \ \ \ \textcolor{comment}{///\ inflow\ \&\ outflow\ boundary\ correction\ for\ two-\/phase\ flow}}
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_a9a67320d8745554bab77552ffa937282}{CorrectImplicitTwoPhaseSolutionAtBoundary\_NonlinearNewtonRaphson}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_f_v___parameter}{FV\_Parameter}}\&\ param,}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&\ e,}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_two_phase_model}{TwoPhaseModel}}<dim>\&\ relperm,}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ pnid,}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\&\ flux,}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ with\_gravity\_forces,}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ with\_capillary\_spreading);}
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_a3dda69a3d8daf801c09477133e5e8f95}{Out}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ \ \ \ \ \textcolor{comment}{//\ public\ variables\ \ \ }}
+\DoxyCodeLine{00128\ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_a205ecbb2a177e85193fd9879ceae34ce}{size\_t}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_a205ecbb2a177e85193fd9879ceae34ce}{eidx\_}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ local\ array\ index\ for\ the\ stencil}}
+\DoxyCodeLine{00129\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ diff\_coeff\_,\ velo\_mult\_;}
+\DoxyCodeLine{00130\ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_ac054afc5447fa17b3f18d095bb49f96d}{std}}::\mbox{\hyperlink{structcsmp_1_1_stencil_processor_ac054afc5447fa17b3f18d095bb49f96d}{vector}}<\textcolor{keywordtype}{double}>\ \ \ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_ac054afc5447fa17b3f18d095bb49f96d}{sector\_pore\_volume\_}};\ \textcolor{comment}{///<\ the\ volume\ of\ each\ finite-\/volume\ sector\ multiplied\ by\ its\ porosity}}
+\DoxyCodeLine{00131\ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_a4c7134aa7487540da603c5bf718de8b9}{std}}::\mbox{\hyperlink{structcsmp_1_1_stencil_processor_a4c7134aa7487540da603c5bf718de8b9}{vector}}<\textcolor{keywordtype}{double}>\ \ \ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_a4c7134aa7487540da603c5bf718de8b9}{facet\_flux\_}};\ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ scalar\ volume\ flux\ across\ finite-\/volume\ facets}}
+\DoxyCodeLine{00132\ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\ \ \ facet\_flux\_rhs\_;}
+\DoxyCodeLine{00133\ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_adc46e9a7b26bdbb252e3a51218f15165}{std}}::\mbox{\hyperlink{structcsmp_1_1_stencil_processor_adc46e9a7b26bdbb252e3a51218f15165}{vector}}<\mbox{\hyperlink{structcsmp_1_1_stencil_processor_adc46e9a7b26bdbb252e3a51218f15165}{uint32\_t}}>\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_adc46e9a7b26bdbb252e3a51218f15165}{upstream\_node\_}};\ \ \ \ \ \ \textcolor{comment}{///<\ inside\ or\ outside\ node\ local\ index}}
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00135\ \ \ \ \ \textcolor{comment}{//\ interpolated\ values\ of\ advected\ quantity\ at\ facet\ integration\ points}}
+\DoxyCodeLine{00136\ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_ae59b68844d98ea920c00d26cca55e11d}{std}}::\mbox{\hyperlink{structcsmp_1_1_stencil_processor_ae59b68844d98ea920c00d26cca55e11d}{vector}}<\textcolor{keywordtype}{double}>\ \ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_ae59b68844d98ea920c00d26cca55e11d}{psi1\_}},\ \ \ \ \ \ \textcolor{comment}{///<\ transported\ variable\ at\ t+dt}}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_a50781b9785ee43e8b03309bb8cb6052b}{ipsi1\_}},\ \ \ \ \ \textcolor{comment}{///<\ interpolated\ transported\ variable\ (t+dt)\ (can\ be\ limited)}}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_a3f61cbdb446a719d2edff651ec59699c}{theta\_}};\ \ \ \ \ \textcolor{comment}{///<\ limiter\ values\ for\ each\ FV\ facet}}
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00140\ \ \ \ \ \textcolor{comment}{//\ fluid\ sources\ (+)\ or\ sinks\ (-\/)\ due\ to\ deviations\ from\ conservative\ fluxes}}
+\DoxyCodeLine{00141\ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_a2d23d3fa5417c42413e726b225bb11da}{std}}::\mbox{\hyperlink{structcsmp_1_1_stencil_processor_a2d23d3fa5417c42413e726b225bb11da}{vector}}<\textcolor{keywordtype}{double}>\ \ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_a2d23d3fa5417c42413e726b225bb11da}{nodal\_src\_}};\ \textcolor{comment}{///<\ nodal\ source/sink\ term}}
+\DoxyCodeLine{00142\ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_ada0666288934fec86a80cf9171521edc}{std}}::\mbox{\hyperlink{structcsmp_1_1_stencil_processor_ada0666288934fec86a80cf9171521edc}{vector}}<\textcolor{keywordtype}{double}>\ \ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_ada0666288934fec86a80cf9171521edc}{src\_}};\ \ \ \ \ \ \ \textcolor{comment}{///<\ sector\ /\ divergece\ related\ sources\ for\ lhs}}
+\DoxyCodeLine{00143\ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_a87e6535e7156eb72fdbfbb8f1364affb}{std}}::\mbox{\hyperlink{structcsmp_1_1_stencil_processor_a87e6535e7156eb72fdbfbb8f1364affb}{vector}}<\textcolor{keywordtype}{double}>\ \ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_a87e6535e7156eb72fdbfbb8f1364affb}{rhs\_src\_}};\ \ \ \textcolor{comment}{///<\ sector\ /\ divergece\ related\ sources\ for\ rhs}}
+\DoxyCodeLine{00144\ \ \ \ \ \textcolor{comment}{///\ node\ position\ w.r.t.\ the\ finite\ volume\ facet\ normal}}
+\DoxyCodeLine{00145\ \ \ \ \ \textcolor{keyword}{mutable}\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_afc5f5ed14ae87d23645070ddf7bb23de}{uint32\_t}}\ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_afc5f5ed14ae87d23645070ddf7bb23de}{inside\_node\_}},\ outside\_node\_;}
+\DoxyCodeLine{00146\ }
+\DoxyCodeLine{00147\ \ \ \ \ \textcolor{comment}{//\ variable\ keys\ }}
+\DoxyCodeLine{00148\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_a73c9935f98a6100b822a7991b5c5013a}{adv1\_key\_}};\ \ \ \ \ \ \textcolor{comment}{///<\ \ advected\ nodal\ quantity\ at\ t\ +\ dt}}
+\DoxyCodeLine{00149\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_a83c4361c2d3fda5e1741e766d1ad4a5f}{vel\_key\_}};\ \ \ \ \ \ \ \textcolor{comment}{///<\ transport\ velocity\ at\ t}}
+\DoxyCodeLine{00150\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_a7338d32a635f95c4b90f646cd8e5d44e}{diff\_key\_}};\ \ \ \ \ \ \textcolor{comment}{///<\ \ diffusivity\ of\ advected\ nodal\ quantity}}
+\DoxyCodeLine{00151\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_a124673141966c798f1bcdf1846fd9854}{src\_key\_}};\ \ \ \ \ \ \ \textcolor{comment}{///<\ \ \ nodal\ source\ \ \ }}
+\DoxyCodeLine{00152\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_aef73b9455d87bebd4f5f7aa3eb64b125}{velo\_mult\_key\_}};\ \textcolor{comment}{///<\ velocity\ multiplier\ key}}
+\DoxyCodeLine{00153\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\ \ \ \ DN\_,DNT\_,\ dpcds\_grad\_;}
+\DoxyCodeLine{00154\ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\ \ dpcdsn\_,\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor_a315550c0a647350facfcd218440530ae}{dsdn\_}};\ \textcolor{comment}{///<\ capillary\ pressure\ and\ saturation\ gradients}}
+\DoxyCodeLine{00155\ }
+\DoxyCodeLine{00156\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00157\ \ \ \ \ StencilProcessor();}
+\DoxyCodeLine{00158\ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_stencil_processor}{StencilProcessor}}\&\ operator=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor}{StencilProcessor}}\&\ tfs\ );}
+\DoxyCodeLine{00159\ \};}
+\DoxyCodeLine{00160\ }
+\DoxyCodeLine{00161\ }
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00164\ }
+\DoxyCodeLine{00165\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00166\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00167\ \textcolor{comment}{@class\ StencilProcessor\ \ StencilProcessor\ "{}generic\_node\_centered\_finite\_volumes\(\backslash\)StencilProcessor.h"{}}}
+\DoxyCodeLine{00168\ \textcolor{comment}{@author\ S.K.\ Matthaei}}
+\DoxyCodeLine{00169\ \textcolor{comment}{@date\ 2004}}
+\DoxyCodeLine{00170\ \textcolor{comment}{}}
+\DoxyCodeLine{00171\ \textcolor{comment}{@section\ motivation\ Motivation}}
+\DoxyCodeLine{00172\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00173\ \textcolor{comment}{}}
+\DoxyCodeLine{00174\ \textcolor{comment}{When\ visiting\ the\ edges\ of\ each\ finite\ element,\ this\ object\ deals\ with}}
+\DoxyCodeLine{00175\ \textcolor{comment}{the\ accumulation\ of\ the\ fluxes,\ saturations\ etc.\ for\ the\ transport}}
+\DoxyCodeLine{00176\ \textcolor{comment}{schemes.\ }}
+\DoxyCodeLine{00177\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00178\ }
+\DoxyCodeLine{00179\ }
+\DoxyCodeLine{00180\ \}\ \textcolor{comment}{//\ namespace\ csmp}}
+\DoxyCodeLine{00181\ }
+\DoxyCodeLine{00182\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

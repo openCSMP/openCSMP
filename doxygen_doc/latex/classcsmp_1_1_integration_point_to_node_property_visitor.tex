@@ -1,0 +1,170 @@
+\doxysection{csmp\+::Integration\+Point\+To\+Node\+Property\+Visitor\texorpdfstring{$<$}{<} Var, dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_integration_point_to_node_property_visitor}{}\label{classcsmp_1_1_integration_point_to_node_property_visitor}\index{csmp::IntegrationPointToNodePropertyVisitor$<$ Var, dim $>$@{csmp::IntegrationPointToNodePropertyVisitor$<$ Var, dim $>$}}
+
+
+{\ttfamily \#include $<$Integration\+Point\+To\+Node\+Property\+Visitor.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Integration\+Point\+To\+Node\+Property\+Visitor\texorpdfstring{$<$}{<} Var, dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=243pt]{classcsmp_1_1_integration_point_to_node_property_visitor__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Integration\+Point\+To\+Node\+Property\+Visitor\texorpdfstring{$<$}{<} Var, dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=243pt]{classcsmp_1_1_integration_point_to_node_property_visitor__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_integration_point_to_node_property_visitor_acbf9823d6af17544ce9f3f38deb4d4d1}{Integration\+Point\+To\+Node\+Property\+Visitor}} (const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&p, const char \texorpdfstring{$\ast$}{*}cpoint\+\_\+prop, const char \texorpdfstring{$\ast$}{*}node\+\_\+prop, size\+\_\+t nodes)
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_integration_point_to_node_property_visitor_a69452f30e4841713dadff8b0344d36ee}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\begin{DoxyCompactList}\small\item\em second application cycle (weighting) \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_integration_point_to_node_property_visitor_a6180554ce2e177a131be352467986380}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\begin{DoxyCompactList}\small\item\em first application cycle (extrapolation) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_integration_point_to_node_property_visitor_a72fac5c464a2c811463d9589cdca7809}\label{classcsmp_1_1_integration_point_to_node_property_visitor_a72fac5c464a2c811463d9589cdca7809} 
+void {\bfseries Apply\+Weighting\+To\+Extrapolated\+Values} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_visitor_a1097abaa59d3a35d65c0cb6335e2719c}{Visitor}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} level=MODEL, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} target=ELEMENT)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_visitor_a04cef3d343b9721c4d636f5496ccfa42}{Application\+Level}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} p)
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Application\+Level} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_visitor_a05b9c8127e47ce0ca524e2804c14251a}{Application\+Target}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} p)
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Application\+Target} () const
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a005bb17978ed03376bc3f7c1c329c936}{Set\+Initial\+Properties}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}model)
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a07433f464353062d91f21684b9378dec}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_ac71cf14aab11139d8b03b39d4e4709bc}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_region}{Region}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_ac735e758870331b6639ea969504c47bf}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_boundary}{Boundary}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void {\bfseries Visit} (\mbox{\hyperlink{classcsmp_1_1_split_boundary}{Split\+Boundary}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_abdca6daa1802e3727868d2d614c65015}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_face}{Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a0f21f0cfcf5328584883eb38effb58d4}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void {\bfseries Visit} (\mbox{\hyperlink{classcsmp_1_1_edge}{Edge}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+bool {\bfseries Verbose} ()
+\item 
+void {\bfseries Verbose} (bool verbose)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries application\+\_\+level\+\_\+}
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries application\+\_\+target\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename Var, uint32\+\_\+t dim$>$\newline
+class csmp\+::\+Integration\+Point\+To\+Node\+Property\+Visitor$<$ Var, dim $>$}
+\begin{DoxyVerb}Replaces value of FE-integratiion-point property 'a' with node property value 'b',
+testing (for the case where all the node values are the same) whether the FE interpolation returns the same value.
+\end{DoxyVerb}
+
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000150}{Todo}}](1) \doxylink{classcsmp_1_1_integration_point_to_node_property_visitor}{Integration\+Point\+To\+Node\+Property\+Visitor} is not extrapolating correctly (A) 
+
+(1) SKM\+: consider using the element specific method Extrapolate\+Integration\+Point\+To\+Node\+Property for this task\end{DoxyRefDesc}
+
+
+\label{doc-constructors}
+\Hypertarget{classcsmp_1_1_integration_point_to_node_property_visitor_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcsmp_1_1_integration_point_to_node_property_visitor_acbf9823d6af17544ce9f3f38deb4d4d1}\index{csmp::IntegrationPointToNodePropertyVisitor$<$ Var, dim $>$@{csmp::IntegrationPointToNodePropertyVisitor$<$ Var, dim $>$}!IntegrationPointToNodePropertyVisitor@{IntegrationPointToNodePropertyVisitor}}
+\index{IntegrationPointToNodePropertyVisitor@{IntegrationPointToNodePropertyVisitor}!csmp::IntegrationPointToNodePropertyVisitor$<$ Var, dim $>$@{csmp::IntegrationPointToNodePropertyVisitor$<$ Var, dim $>$}}
+\doxysubsubsection{\texorpdfstring{IntegrationPointToNodePropertyVisitor()}{IntegrationPointToNodePropertyVisitor()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_integration_point_to_node_property_visitor_acbf9823d6af17544ce9f3f38deb4d4d1} 
+template$<$typename Var, uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_integration_point_to_node_property_visitor}{csmp\+::\+Integration\+Point\+To\+Node\+Property\+Visitor}}$<$ Var, dim $>$\+::\+Integration\+Point\+To\+Node\+Property\+Visitor (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&}]{p}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{cpoint\+\_\+prop}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{node\+\_\+prop}{, }\item[{size\+\_\+t}]{nodes}{}\end{DoxyParamCaption})}
+
+Steps\+:
+
+
+\begin{DoxyItemize}
+\item \doxylink{classcsmp_1_1_visitor}{Visitor} requires all nodes in the mesh to be numbered consecutively
+\item the target node property has to be set to zero prior to the accumulation
+\item Values are interpolated to nodes where these are accumulated
+\item the nodal contributions are weighted by the distance of the element barycenter to each node (all weights are summed so that the absolute value can be rectified once the accumulation is complete). 
+\end{DoxyItemize}Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=236pt]{classcsmp_1_1_integration_point_to_node_property_visitor_acbf9823d6af17544ce9f3f38deb4d4d1_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=236pt]{classcsmp_1_1_integration_point_to_node_property_visitor_acbf9823d6af17544ce9f3f38deb4d4d1_icgraph}
+\end{center}
+\end{figure}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_integration_point_to_node_property_visitor_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_integration_point_to_node_property_visitor_a6180554ce2e177a131be352467986380}\index{csmp::IntegrationPointToNodePropertyVisitor$<$ Var, dim $>$@{csmp::IntegrationPointToNodePropertyVisitor$<$ Var, dim $>$}!Visit@{Visit}}
+\index{Visit@{Visit}!csmp::IntegrationPointToNodePropertyVisitor$<$ Var, dim $>$@{csmp::IntegrationPointToNodePropertyVisitor$<$ Var, dim $>$}}
+\doxysubsubsection{\texorpdfstring{Visit()}{Visit()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_integration_point_to_node_property_visitor_a6180554ce2e177a131be352467986380} 
+template$<$typename Var, uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_integration_point_to_node_property_visitor}{csmp\+::\+Integration\+Point\+To\+Node\+Property\+Visitor}}$<$ Var, dim $>$\+::\+Visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}}]{eptr}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+first application cycle (extrapolation) 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}.
+
+\Hypertarget{classcsmp_1_1_integration_point_to_node_property_visitor_a69452f30e4841713dadff8b0344d36ee}\index{csmp::IntegrationPointToNodePropertyVisitor$<$ Var, dim $>$@{csmp::IntegrationPointToNodePropertyVisitor$<$ Var, dim $>$}!Visit@{Visit}}
+\index{Visit@{Visit}!csmp::IntegrationPointToNodePropertyVisitor$<$ Var, dim $>$@{csmp::IntegrationPointToNodePropertyVisitor$<$ Var, dim $>$}}
+\doxysubsubsection{\texorpdfstring{Visit()}{Visit()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_integration_point_to_node_property_visitor_a69452f30e4841713dadff8b0344d36ee} 
+template$<$typename Var, uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_integration_point_to_node_property_visitor}{csmp\+::\+Integration\+Point\+To\+Node\+Property\+Visitor}}$<$ Var, dim $>$\+::\+Visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}}]{nptr}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+second application cycle (weighting) 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/model/Integration\+Point\+To\+Node\+Property\+Visitor.\+h\item 
+source/modules/model/Integration\+Point\+To\+Node\+Property\+Visitor.\+cpp\end{DoxyCompactItemize}

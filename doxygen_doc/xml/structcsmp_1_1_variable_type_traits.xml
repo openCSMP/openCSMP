@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="structcsmp_1_1_variable_type_traits" kind="struct" language="C++" prot="public">
+    <compoundname>csmp::VariableTypeTraits</compoundname>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+      <param>
+        <type><ref refid="group___c_s_m_p__global__enumerations_1gacbf62c758c46dc45b3f024638bb89274" kindref="member">VARIABLE_TYPE</ref></type>
+        <declname>vt</declname>
+        <defname>vt</defname>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>csmp::VariableTypeTraits&lt; dim, ARRAY &gt;</label>
+        <link refid="structcsmp_1_1_variable_type_traits_3_01dim_00_01_a_r_r_a_y_01_4"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; dim, ARRAY &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::VariableTypeTraits&lt; dim, FLAGGEDARRAY &gt;</label>
+        <link refid="structcsmp_1_1_variable_type_traits_3_01dim_00_01_f_l_a_g_g_e_d_a_r_r_a_y_01_4"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; dim, FLAGGEDARRAY &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>csmp::VariableTypeTraits&lt; dim, SCALAR &gt;</label>
+        <link refid="structcsmp_1_1_variable_type_traits_3_01dim_00_01_s_c_a_l_a_r_01_4"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; dim, SCALAR &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>csmp::VariableTypeTraits&lt; dim, TENSOR &gt;</label>
+        <link refid="structcsmp_1_1_variable_type_traits_3_01dim_00_01_t_e_n_s_o_r_01_4"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; dim, TENSOR &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>csmp::VariableTypeTraits&lt; dim, VECTOR &gt;</label>
+        <link refid="structcsmp_1_1_variable_type_traits_3_01dim_00_01_v_e_c_t_o_r_01_4"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; dim, VECTOR &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::VariableTypeTraits&lt; dim, vt &gt;</label>
+        <link refid="structcsmp_1_1_variable_type_traits"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::VariableTypeTraits&lt; dim, vt &gt;</label>
+        <link refid="structcsmp_1_1_variable_type_traits"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/model/VariableTypeTraits.h" line="14" column="3" bodyfile="source/includes/model/VariableTypeTraits.h" bodystart="15" bodyend="16"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

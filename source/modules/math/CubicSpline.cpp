@@ -3,6 +3,7 @@
 #include <fstream>
 #include <cassert>
 #include <algorithm>
+#include <cstdint>
 
 #include "CubicSpline.h"
 

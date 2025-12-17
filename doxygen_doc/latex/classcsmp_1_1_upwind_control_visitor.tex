@@ -1,0 +1,267 @@
+\doxysection{csmp\+::Upwind\+Control\+Visitor\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_upwind_control_visitor}{}\label{classcsmp_1_1_upwind_control_visitor}\index{csmp::UpwindControlVisitor$<$ dim $>$@{csmp::UpwindControlVisitor$<$ dim $>$}}
+
+
+{\ttfamily \#include $<$Upwind\+Control\+Visitor.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Upwind\+Control\+Visitor\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_upwind_control_visitor__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Upwind\+Control\+Visitor\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_upwind_control_visitor__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor_a814951b1e3a9068888a933461293fd5c}{Upwind\+Control\+Visitor}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&model, \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{Explicit\+Finite\+Volume\+Transport\+PHX}}$<$ dim $>$ \&fv\+\_\+vapor, \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{Explicit\+Finite\+Volume\+Transport\+PHX}}$<$ dim $>$ \&fv\+\_\+liquid, const char \texorpdfstring{$\ast$}{*}permeability, const char \texorpdfstring{$\ast$}{*}porosity, std\+::vector$<$ std\+::string $>$ \&densities, std\+::vector$<$ std\+::string $>$ \&relperm\+\_\+vis, std\+::vector$<$ std\+::string $>$ \&saturations, std\+::vector$<$ std\+::string $>$ \&cfl\+\_\+variables, std\+::vector$<$ std\+::string $>$ \&velocities, std\+::vector$<$ std\+::string $>$ \&pore\+\_\+velocities)
+\item 
+virtual \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor_af4e50aa40a25bdd2dd6953450c678967}{\texorpdfstring{$\sim$}{\string~}\+Upwind\+Control\+Visitor}} ()
+\item 
+\Hypertarget{classcsmp_1_1_upwind_control_visitor_ac2b25bdaec4456e7abc29dc61af9c2c0}\label{classcsmp_1_1_upwind_control_visitor_ac2b25bdaec4456e7abc29dc61af9c2c0} 
+void {\bfseries Verbose} ()
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor_a2542e8cdbbe9525617a8209124b57129}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor_aa5444c545d3456822d3b4e9e46240f66}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_region}{Region}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor_ae42d1d56df01843ebc29eb87a6fe248d}{Reset}} ()
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor_a8f7f85665d253c289ba7810ba4ea8034}{Recalculate}} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor_a0a3efcae36865a7ecdbf01cd3607c62b}{Flipping}} (bool flip)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor_a7b7e391e7fb6e324ba34bcd64c92914c}{Recalculate}} (bool recalc)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor_a7e32d7f653435f8d7be89cd0d46c7c6a}{Gravity}} (bool with\+\_\+gravity)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor_a2d7eb88956ceb0259c73465cb2be4cfe}{With\+Velocity}} (bool with\+\_\+velocity)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor_a443fa7dae6f4fcbafbc5eb9b8e75b2b8}{Set\+Largest\+Time\+Step}} (double timestep)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor_aff20e04fdcae35cc022658ef20a61033}{Adjust\+\_\+\+CFL\+\_\+\+Criterion}} (double scale\+\_\+factor, bool take\+\_\+pore\+\_\+velocity)
+\item 
+\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor_a9834142be3dffb7265c3b4e87f60f845}{Upwind\+Matrix}} (\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} rho\+\_\+index, size\+\_\+t eidx)
+\item 
+\Hypertarget{classcsmp_1_1_upwind_control_visitor_a3612dd4b0d1ebfb908778641170a09f2}\label{classcsmp_1_1_upwind_control_visitor_a3612dd4b0d1ebfb908778641170a09f2} 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ $>$ \& {\bfseries Upwind\+Matrices} (\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} rho\+\_\+index)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_visitor_a1097abaa59d3a35d65c0cb6335e2719c}{Visitor}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} level=MODEL, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} target=ELEMENT)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_visitor_a04cef3d343b9721c4d636f5496ccfa42}{Application\+Level}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} p)
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Application\+Level} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_visitor_a05b9c8127e47ce0ca524e2804c14251a}{Application\+Target}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} p)
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Application\+Target} () const
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a005bb17978ed03376bc3f7c1c329c936}{Set\+Initial\+Properties}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}model)
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a07433f464353062d91f21684b9378dec}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_ac735e758870331b6639ea969504c47bf}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_boundary}{Boundary}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void {\bfseries Visit} (\mbox{\hyperlink{classcsmp_1_1_split_boundary}{Split\+Boundary}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_abdca6daa1802e3727868d2d614c65015}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_face}{Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a0f21f0cfcf5328584883eb38effb58d4}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void {\bfseries Visit} (\mbox{\hyperlink{classcsmp_1_1_edge}{Edge}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a46449d8a657dbe4a2db5f1126e08323d}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+bool {\bfseries Verbose} ()
+\item 
+void {\bfseries Verbose} (bool verbose)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries application\+\_\+level\+\_\+}
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries application\+\_\+target\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim$>$\newline
+class csmp\+::\+Upwind\+Control\+Visitor$<$ dim $>$}
+\begin{DoxyAuthor}{Author}
+Philipp Weis, ETH Zuerich 
+\end{DoxyAuthor}
+\hypertarget{compare_floats_8h_contact}{}\doxysubsection{\texorpdfstring{Contact}{Contact}}\label{compare_floats_8h_contact}
+\href{mailto:philipp.weis@erdw.ethz.ch}{\texttt{philipp.\+weis@erdw.\+ethz.\+ch}}
+
+@changes changes Latest Changes ~\newline
+\hypertarget{compare_floats_8h_motivation}{}\doxysubsection{\texorpdfstring{Motivation}{Motivation}}\label{compare_floats_8h_motivation}
+Specialized visitor to define upwind nodes for CVFEM scheme.\hypertarget{classcsmp_1_1_upwind_control_visitor_usage}{}\doxysubsection{\texorpdfstring{Usage}{Usage}}\label{classcsmp_1_1_upwind_control_visitor_usage}
+To be used within the CVFEM scheme (Weis et al., Geofluids, 2014).
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{Calculates\ upwind\ nodes\ and\ \mbox{\hyperlink{namespacecsmp_a7e1fb631510192d4a0bb05c36cbf14ec}{store}}\ information\ in\ a\ matrix.}
+\DoxyCodeLine{Calculates\ velocity\ and\ pore\ velocity\ vectors\ \textcolor{keywordflow}{for}\ graphical\ representations\ only!}
+
+\end{DoxyCode}
+\hypertarget{classcsmp_1_1_upwind_control_visitor_dependencies}{}\doxysubsection{\texorpdfstring{Dependencies}{Dependencies}}\label{classcsmp_1_1_upwind_control_visitor_dependencies}
+The functions are tailored for use in \doxylink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{Explicit\+Finite\+Volume\+Transport\+PHX}. This visitor is needed in \doxylink{classcsmp_1_1_two_phase_transport_p_h_x}{Two\+Phase\+Transport\+PHX} and Upwind-\/\+PDE-\/operators.\hypertarget{classcsmp_1_1_upwind_control_visitor_issues}{}\doxysubsection{\texorpdfstring{Known issues}{Known issues}}\label{classcsmp_1_1_upwind_control_visitor_issues}
+\hypertarget{compare_floats_8h_testing}{}\doxysubsection{\texorpdfstring{Testing}{Testing}}\label{compare_floats_8h_testing}
+testing was done in the period before publication in 2014. 
+
+\label{doc-constructors}
+\Hypertarget{classcsmp_1_1_upwind_control_visitor_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcsmp_1_1_upwind_control_visitor_a814951b1e3a9068888a933461293fd5c}\index{csmp::UpwindControlVisitor$<$ dim $>$@{csmp::UpwindControlVisitor$<$ dim $>$}!UpwindControlVisitor@{UpwindControlVisitor}}
+\index{UpwindControlVisitor@{UpwindControlVisitor}!csmp::UpwindControlVisitor$<$ dim $>$@{csmp::UpwindControlVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{UpwindControlVisitor()}{UpwindControlVisitor()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_upwind_control_visitor_a814951b1e3a9068888a933461293fd5c} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor}{csmp\+::\+Upwind\+Control\+Visitor}}$<$ dim $>$\+::\+Upwind\+Control\+Visitor (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&}]{model}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{Explicit\+Finite\+Volume\+Transport\+PHX}}$<$ dim $>$ \&}]{fv\+\_\+liquid}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{Explicit\+Finite\+Volume\+Transport\+PHX}}$<$ dim $>$ \&}]{fv\+\_\+vapor}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{permeability}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{porosity}{, }\item[{std\+::vector$<$ std\+::string $>$ \&}]{densities}{, }\item[{std\+::vector$<$ std\+::string $>$ \&}]{relperm\+\_\+vis}{, }\item[{std\+::vector$<$ std\+::string $>$ \&}]{saturations}{, }\item[{std\+::vector$<$ std\+::string $>$ \&}]{cfl\+\_\+variables}{, }\item[{std\+::vector$<$ std\+::string $>$ \&}]{velocities}{, }\item[{std\+::vector$<$ std\+::string $>$ \&}]{pore\+\_\+velocities}{}\end{DoxyParamCaption})}
+
+custom constructor Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=218pt]{classcsmp_1_1_upwind_control_visitor_a814951b1e3a9068888a933461293fd5c_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=218pt]{classcsmp_1_1_upwind_control_visitor_a814951b1e3a9068888a933461293fd5c_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_upwind_control_visitor_af4e50aa40a25bdd2dd6953450c678967}\index{csmp::UpwindControlVisitor$<$ dim $>$@{csmp::UpwindControlVisitor$<$ dim $>$}!````~UpwindControlVisitor@{\texorpdfstring{$\sim$}{\string~}UpwindControlVisitor}}
+\index{````~UpwindControlVisitor@{\texorpdfstring{$\sim$}{\string~}UpwindControlVisitor}!csmp::UpwindControlVisitor$<$ dim $>$@{csmp::UpwindControlVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}UpwindControlVisitor()}{\string~UpwindControlVisitor()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_upwind_control_visitor_af4e50aa40a25bdd2dd6953450c678967} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor}{csmp\+::\+Upwind\+Control\+Visitor}}$<$ dim $>$\+::\texorpdfstring{$\sim$}{\string~}\mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor}{Upwind\+Control\+Visitor}} (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+default destructor 
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_upwind_control_visitor_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_upwind_control_visitor_aff20e04fdcae35cc022658ef20a61033}\index{csmp::UpwindControlVisitor$<$ dim $>$@{csmp::UpwindControlVisitor$<$ dim $>$}!Adjust\_CFL\_Criterion@{Adjust\_CFL\_Criterion}}
+\index{Adjust\_CFL\_Criterion@{Adjust\_CFL\_Criterion}!csmp::UpwindControlVisitor$<$ dim $>$@{csmp::UpwindControlVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Adjust\_CFL\_Criterion()}{Adjust\_CFL\_Criterion()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_upwind_control_visitor_aff20e04fdcae35cc022658ef20a61033} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor}{csmp\+::\+Upwind\+Control\+Visitor}}$<$ dim $>$\+::\+Adjust\+\_\+\+CFL\+\_\+\+Criterion (\begin{DoxyParamCaption}\item[{double}]{scale\+\_\+factor}{, }\item[{bool}]{take\+\_\+pore\+\_\+velocity}{}\end{DoxyParamCaption})}
+
+modify calculation of cfl criterion \Hypertarget{classcsmp_1_1_upwind_control_visitor_a0a3efcae36865a7ecdbf01cd3607c62b}\index{csmp::UpwindControlVisitor$<$ dim $>$@{csmp::UpwindControlVisitor$<$ dim $>$}!Flipping@{Flipping}}
+\index{Flipping@{Flipping}!csmp::UpwindControlVisitor$<$ dim $>$@{csmp::UpwindControlVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Flipping()}{Flipping()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_upwind_control_visitor_a0a3efcae36865a7ecdbf01cd3607c62b} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor}{csmp\+::\+Upwind\+Control\+Visitor}}$<$ dim $>$\+::\+Flipping (\begin{DoxyParamCaption}\item[{bool}]{flip}{}\end{DoxyParamCaption})}
+
+set boolean flip \Hypertarget{classcsmp_1_1_upwind_control_visitor_a7e32d7f653435f8d7be89cd0d46c7c6a}\index{csmp::UpwindControlVisitor$<$ dim $>$@{csmp::UpwindControlVisitor$<$ dim $>$}!Gravity@{Gravity}}
+\index{Gravity@{Gravity}!csmp::UpwindControlVisitor$<$ dim $>$@{csmp::UpwindControlVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Gravity()}{Gravity()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_upwind_control_visitor_a7e32d7f653435f8d7be89cd0d46c7c6a} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor}{csmp\+::\+Upwind\+Control\+Visitor}}$<$ dim $>$\+::\+Gravity (\begin{DoxyParamCaption}\item[{bool}]{with\+\_\+gravity}{}\end{DoxyParamCaption})}
+
+activate or deactivate gravity component \Hypertarget{classcsmp_1_1_upwind_control_visitor_a8f7f85665d253c289ba7810ba4ea8034}\index{csmp::UpwindControlVisitor$<$ dim $>$@{csmp::UpwindControlVisitor$<$ dim $>$}!Recalculate@{Recalculate}}
+\index{Recalculate@{Recalculate}!csmp::UpwindControlVisitor$<$ dim $>$@{csmp::UpwindControlVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Recalculate()}{Recalculate()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_upwind_control_visitor_a8f7f85665d253c289ba7810ba4ea8034} 
+template$<$uint32\+\_\+t dim$>$ \\
+bool \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor}{csmp\+::\+Upwind\+Control\+Visitor}}$<$ dim $>$\+::\+Recalculate (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+set boolean recalculate \Hypertarget{classcsmp_1_1_upwind_control_visitor_a7b7e391e7fb6e324ba34bcd64c92914c}\index{csmp::UpwindControlVisitor$<$ dim $>$@{csmp::UpwindControlVisitor$<$ dim $>$}!Recalculate@{Recalculate}}
+\index{Recalculate@{Recalculate}!csmp::UpwindControlVisitor$<$ dim $>$@{csmp::UpwindControlVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Recalculate()}{Recalculate()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_upwind_control_visitor_a7b7e391e7fb6e324ba34bcd64c92914c} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor}{csmp\+::\+Upwind\+Control\+Visitor}}$<$ dim $>$\+::\+Recalculate (\begin{DoxyParamCaption}\item[{bool}]{recalc}{}\end{DoxyParamCaption})}
+
+set recalculate boolean \Hypertarget{classcsmp_1_1_upwind_control_visitor_ae42d1d56df01843ebc29eb87a6fe248d}\index{csmp::UpwindControlVisitor$<$ dim $>$@{csmp::UpwindControlVisitor$<$ dim $>$}!Reset@{Reset}}
+\index{Reset@{Reset}!csmp::UpwindControlVisitor$<$ dim $>$@{csmp::UpwindControlVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Reset()}{Reset()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_upwind_control_visitor_ae42d1d56df01843ebc29eb87a6fe248d} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor}{csmp\+::\+Upwind\+Control\+Visitor}}$<$ dim $>$\+::\+Reset (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+reset booleans \Hypertarget{classcsmp_1_1_upwind_control_visitor_a443fa7dae6f4fcbafbc5eb9b8e75b2b8}\index{csmp::UpwindControlVisitor$<$ dim $>$@{csmp::UpwindControlVisitor$<$ dim $>$}!SetLargestTimeStep@{SetLargestTimeStep}}
+\index{SetLargestTimeStep@{SetLargestTimeStep}!csmp::UpwindControlVisitor$<$ dim $>$@{csmp::UpwindControlVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{SetLargestTimeStep()}{SetLargestTimeStep()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_upwind_control_visitor_a443fa7dae6f4fcbafbc5eb9b8e75b2b8} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor}{csmp\+::\+Upwind\+Control\+Visitor}}$<$ dim $>$\+::\+Set\+Largest\+Time\+Step (\begin{DoxyParamCaption}\item[{double}]{timestep}{}\end{DoxyParamCaption})}
+
+set maximum size of time step \Hypertarget{classcsmp_1_1_upwind_control_visitor_a9834142be3dffb7265c3b4e87f60f845}\index{csmp::UpwindControlVisitor$<$ dim $>$@{csmp::UpwindControlVisitor$<$ dim $>$}!UpwindMatrix@{UpwindMatrix}}
+\index{UpwindMatrix@{UpwindMatrix}!csmp::UpwindControlVisitor$<$ dim $>$@{csmp::UpwindControlVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{UpwindMatrix()}{UpwindMatrix()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_upwind_control_visitor_a9834142be3dffb7265c3b4e87f60f845} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor}{csmp\+::\+Upwind\+Control\+Visitor}}$<$ dim $>$\+::\+Upwind\+Matrix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}}}]{rho\+\_\+index}{, }\item[{size\+\_\+t}]{eidx}{}\end{DoxyParamCaption})}
+
+access to upwind matrix of specified phase (density) and element \Hypertarget{classcsmp_1_1_upwind_control_visitor_a2542e8cdbbe9525617a8209124b57129}\index{csmp::UpwindControlVisitor$<$ dim $>$@{csmp::UpwindControlVisitor$<$ dim $>$}!Visit@{Visit}}
+\index{Visit@{Visit}!csmp::UpwindControlVisitor$<$ dim $>$@{csmp::UpwindControlVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Visit()}{Visit()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_upwind_control_visitor_a2542e8cdbbe9525617a8209124b57129} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor}{csmp\+::\+Upwind\+Control\+Visitor}}$<$ dim $>$\+::\+Visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}}]{n}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+visit function for elements 
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_upwind_control_visitor_a2542e8cdbbe9525617a8209124b57129_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_upwind_control_visitor_aa5444c545d3456822d3b4e9e46240f66}\index{csmp::UpwindControlVisitor$<$ dim $>$@{csmp::UpwindControlVisitor$<$ dim $>$}!Visit@{Visit}}
+\index{Visit@{Visit}!csmp::UpwindControlVisitor$<$ dim $>$@{csmp::UpwindControlVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Visit()}{Visit()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_upwind_control_visitor_aa5444c545d3456822d3b4e9e46240f66} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor}{csmp\+::\+Upwind\+Control\+Visitor}}$<$ dim $>$\+::\+Visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_region}{Region}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}}]{n}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+visit function for region 
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}.
+
+\Hypertarget{classcsmp_1_1_upwind_control_visitor_a2d7eb88956ceb0259c73465cb2be4cfe}\index{csmp::UpwindControlVisitor$<$ dim $>$@{csmp::UpwindControlVisitor$<$ dim $>$}!WithVelocity@{WithVelocity}}
+\index{WithVelocity@{WithVelocity}!csmp::UpwindControlVisitor$<$ dim $>$@{csmp::UpwindControlVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{WithVelocity()}{WithVelocity()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_upwind_control_visitor_a2d7eb88956ceb0259c73465cb2be4cfe} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor}{csmp\+::\+Upwind\+Control\+Visitor}}$<$ dim $>$\+::\+With\+Velocity (\begin{DoxyParamCaption}\item[{bool}]{velo}{}\end{DoxyParamCaption})}
+
+set boolean for velocity calculations 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/integration/cvfe\+\_\+hydrothermal/CVFEM\+\_\+\+Upwind\+\_\+\+Num\+Integral\+\_\+d\+NT\+\_\+op\+\_\+d\+N\+\_\+d\+V.\+h\item 
+source/includes/integration/cvfe\+\_\+hydrothermal/Upwind\+Control\+Visitor.\+h\item 
+source/modules/integration/cvfe\+\_\+hydrothermal/Upwind\+Control\+Visitor.\+cpp\end{DoxyCompactItemize}

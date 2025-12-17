@@ -1,0 +1,67 @@
+\doxysection{Boundary\+\_\+\+Test.\+h}
+\hypertarget{_boundary___test_8h_source}{}\label{_boundary___test_8h_source}\index{tests/unit/Boundary\_Test.h@{tests/unit/Boundary\_Test.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{BOUNDARY\_TEST\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{BOUNDARY\_TEST\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_test_8h}{"{}Test.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_model_8h}{"{}Model.h"{}}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_v_t_u___interface_8h}{"{}VTU\_Interface.h"{}}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{comment}{/**\ tests\ integrity\ of\ boundary\ also\ after\ retrieval\ from\ CSMP\ native\ binary\ model}}
+\DoxyCodeLine{00011\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ \ \ \ \ \ \ \ @author\ P.\ Lang}}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ \ \ \ \ \ \ \ @date\ 2011}}
+\DoxyCodeLine{00014\ \textcolor{comment}{}}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ \ \ \ \ \ \ \ @author\ SKM\ (adding\ extra\ tests)}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ \ \ \ \ \ \ \ @date\ 2024}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00018\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_boundary___test}{Boundary\_Test}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_test}{Test}}\ \{}
+\DoxyCodeLine{00019\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00020\ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ run();}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00023\ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ verbose\_\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \textcolor{keywordtype}{void}\ runLegacy();\ \textcolor{comment}{//\ Ansys\ models\ TODO:\ refactor\ to\ use\ CSMP\ native\ models}}
+\DoxyCodeLine{00026\ \ \ \textcolor{keywordtype}{void}\ runCurrent();\ \textcolor{comment}{//\ Ansys\ models}}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00029\ \ \ size\_t\ InputElementAreaAsVolumeVariable(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,\ \mbox{\hyperlink{classcsmp_1_1_boundary}{Boundary}}<dim>\&,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ variableName\ );}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00032\ \ \ \textcolor{keywordtype}{void}\ TestBoxBoundary(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,\ \textcolor{keyword}{const}\ std::string\&\ boundary,\ \mbox{\hyperlink{classcsmp_1_1_v_t_u___interface}{VTU\_Interface}}<dim>\&\ );}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00035\ \ \ \textcolor{keywordtype}{void}\ CheckFaceNeighbors(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_boundary}{Boundary}}<dim>\&\ );}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00038\ \ \ \textcolor{keywordtype}{void}\ CheckNodeFlags(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_boundary}{Boundary}}<dim>\&,\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}}\ flag,\ \textcolor{keywordtype}{bool}\ interiorOnly\ =\ \textcolor{keyword}{false}\ );}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00041\ \ \ \textcolor{keywordtype}{void}\ CheckFaceUnitNormalOrientation(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_boundary}{Boundary}}<dim>\&\ );}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \textcolor{comment}{///\ using\ prism\_test\ because\ it\ has\ a\ host\ of\ element\ types}}
+\DoxyCodeLine{00044\ \ \ \textcolor{keywordtype}{void}\ UnitNormalTest3D();}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00047\ \ \ \textcolor{keywordtype}{void}\ CheckNodeParents(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_boundary}{Boundary}}<dim>\&\ );}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00050\ \ \ \textcolor{keywordtype}{void}\ ElementNodes(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_region}{Region}}<dim>\&\ );}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00053\ \ \ \textcolor{keywordtype}{void}\ NoSurfaceElementsAsNodeParents(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_region}{Region}}<dim>\&\ );}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \textcolor{comment}{///\ checks\ that\ variable\ flags\ are\ set\ correctly\ for\ INTERIOR,\ PERIMETER\ and\ COMPLETE\ discriminators}}
+\DoxyCodeLine{00056\ \ \ \textcolor{keywordtype}{bool}\ Test\_ChangeBoundaryStatus();}
+\DoxyCodeLine{00057\ \};}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{//\ BOUNDARY\_TEST\_H}}
+
+\end{DoxyCode}

@@ -1,0 +1,115 @@
+.TH "csmp::JaggedArray3D< T >" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::JaggedArray3D< T >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <JaggedArray3D\&.h>\fP
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "using \fBkey\fP = std::tuple<uint32_t, uint32_t, uint32_t>"
+.br
+.ti -1c
+.RI "using \fBumap\fP = std::unordered_map<key,T,\fBTupleHash\fP>"
+.br
+.ti -1c
+.RI "using \fBreference\fP = typename std::unordered_map<key,T>::reference"
+.br
+.ti -1c
+.RI "using \fBconst_reference\fP = typename std::unordered_map<key,T>::const_reference"
+.br
+.ti -1c
+.RI "using \fBiterator\fP = typename std::unordered_map<key,T>::iterator"
+.br
+.ti -1c
+.RI "using \fBconst_iterator\fP = typename std::unordered_map<key,T>::const_iterator"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBJaggedArray3D\fP ()=default"
+.br
+.RI "default constructor constructs an empty array "
+.ti -1c
+.RI "\fBJaggedArray3D\fP (std::initializer_list< std::initializer_list< std::initializer_list< T > > >)"
+.br
+.RI "construction using initialiser list (which must be known at compile time) "
+.ti -1c
+.RI "\fBJaggedArray3D\fP (const std::vector< std::vector< std::vector< T > > > &)"
+.br
+.RI "construct from a monster vector of vector of vectors "
+.ti -1c
+.RI "iterator \fBbegin\fP ()"
+.br
+.RI "iterators "
+.ti -1c
+.RI "iterator \fBend\fP ()"
+.br
+.ti -1c
+.RI "const_iterator \fBbegin\fP () const"
+.br
+.ti -1c
+.RI "const_iterator \fBend\fP () const"
+.br
+.ti -1c
+.RI "void \fBset\fP (uint32_t k, uint32_t i, uint32_t j, T value)"
+.br
+.RI "Insert or modify elements\&. "
+.ti -1c
+.RI "T \fBoperator()\fP (uint32_t k, uint32_t i, uint32_t j) const"
+.br
+.RI "read elements using operator() return NaN if they don't exist "
+.ti -1c
+.RI "T & \fBoperator()\fP (uint32_t k, uint32_t i, uint32_t j)"
+.br
+.RI "read/modify elements (slower) "
+.ti -1c
+.RI "bool \fBcontains\fP (const std::tuple< uint32_t, uint32_t, uint32_t > &index)"
+.br
+.RI "quickest way to test for element existance with a predefined tuple (use std::make_tuple) "
+.ti -1c
+.RI "void \fBerase\fP (uint32_t k, uint32_t i, uint32_t j)"
+.br
+.RI "erase an element at a specific location "
+.ti -1c
+.RI "uint32_t \fBslices\fP () const"
+.br
+.ti -1c
+.RI "uint32_t \fBrows\fP () const"
+.br
+.ti -1c
+.RI "uint32_t \fBmax_cols\fP () const"
+.br
+.RI "max because the number of columns can vary in a jagged array "
+.ti -1c
+.RI "std::tuple< uint32_t, uint32_t, uint32_t > \fBmax_kij\fP () const"
+.br
+.RI "returns the numbers of slices, rows, and maximum number of columns "
+.ti -1c
+.RI "void \fBOut\fP () const"
+.br
+.RI "print all elements to std out "
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<class T>
+.br
+class csmp::JaggedArray3D< T >"Three-dimensional jagged array (where the number of columns can vary), implemented via an unordered_map plus hashing function '\fBTupleHash\fP' Tested and compared in '\fBJaggedArray3D_Comparison_Test\fP'\&. For dense regularly shaped matrix, \fBJaggedArray3D\fP is slower than \fBDynamicArray3D\fP and a vector of vecto of vectors\&. Good uses are for sparse 3D matrices the entries of which are in a flux (changing rapidly during a computation)\&. 
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<class T> \fBcsmp::JaggedArray3D\fP< T >::JaggedArray3D (const std::vector< std::vector< std::vector< T > > > & vec)\fR [explicit]\fP"
+
+.PP
+construct from a monster vector of vector of vectors construct from a monster of vector of vector of vectors 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

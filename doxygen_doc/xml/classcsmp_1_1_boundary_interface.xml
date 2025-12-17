@@ -1,0 +1,1175 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_boundary_interface" kind="class" language="C++" prot="public">
+    <compoundname>csmp::BoundaryInterface</compoundname>
+    <includes refid="_boundary_interface_8h" local="no">BoundaryInterface.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+      <param>
+        <type>template&lt; uint32_t &gt; class</type>
+        <declname>BOUNDARY_COMPLEX</declname>
+        <defname>BOUNDARY_COMPLEX</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="classcsmp_1_1_boundary_interface_1ad9e5b080197df15de0fc223a7793de2d" prot="public" static="no">
+        <type>std::map&lt; std::string, <ref refid="classcsmp_1_1_boundary" kindref="compound">csmp::Boundary</ref>&lt; dim &gt; &gt;::iterator</type>
+        <definition>typedef std::map&lt;std::string,csmp::Boundary&lt;dim&gt;&gt;::iterator csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;::boundaryIterator</definition>
+        <argsstring></argsstring>
+        <name>boundaryIterator</name>
+        <qualifiedname>csmp::BoundaryInterface::boundaryIterator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/BoundaryInterface.h" line="56" column="43" bodyfile="source/includes/model/BoundaryInterface.h" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="classcsmp_1_1_boundary_interface_1a093f6e8261b159874d8537dd3abc0927" prot="public" static="no">
+        <type>std::map&lt; std::string, <ref refid="classcsmp_1_1_boundary" kindref="compound">csmp::Boundary</ref>&lt; dim &gt; &gt;::const_iterator</type>
+        <definition>typedef std::map&lt;std::string,csmp::Boundary&lt;dim&gt;&gt;::const_iterator csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;::boundaryConstIterator</definition>
+        <argsstring></argsstring>
+        <name>boundaryConstIterator</name>
+        <qualifiedname>csmp::BoundaryInterface::boundaryConstIterator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/BoundaryInterface.h" line="57" column="49" bodyfile="source/includes/model/BoundaryInterface.h" bodystart="57" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="friend">
+      <memberdef kind="friend" id="classcsmp_1_1_boundary_interface_1a09b67aeb3907dc5aa8625fa1514bf694" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class Boundary_Test</definition>
+        <argsstring></argsstring>
+        <name>Boundary_Test</name>
+        <qualifiedname>csmp::BoundaryInterface::Boundary_Test</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_boundary___test" kindref="compound">Boundary_Test</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/BoundaryInterface.h" line="49" column="18" bodyfile="source/includes/model/BoundaryInterface.h" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="friend" id="classcsmp_1_1_boundary_interface_1a136b1488cdcd5c98e0ea3a2c34dd6480" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class BoundaryInterface_Test</definition>
+        <argsstring></argsstring>
+        <name>BoundaryInterface_Test</name>
+        <qualifiedname>csmp::BoundaryInterface::BoundaryInterface_Test</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_boundary_interface___test" kindref="compound">BoundaryInterface_Test</ref></type>
+        </param>
+        <briefdescription>
+<para>to gain access to protected member functions for testing </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/BoundaryInterface.h" line="50" column="18" bodyfile="source/includes/model/BoundaryInterface.h" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="friend" id="classcsmp_1_1_boundary_interface_1aa5d36d2b6156a65c7e8f3c13bbfe474d" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class Box_Test</definition>
+        <argsstring></argsstring>
+        <name>Box_Test</name>
+        <qualifiedname>csmp::BoundaryInterface::Box_Test</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_box___test" kindref="compound">Box_Test</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/BoundaryInterface.h" line="153" column="16" bodyfile="source/includes/model/BoundaryInterface.h" bodystart="153" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="friend" id="classcsmp_1_1_boundary_interface_1ac5a102c3fa820bfdae75912a557c16fb" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class BoundaryInterFace_Test</definition>
+        <argsstring></argsstring>
+        <name>BoundaryInterFace_Test</name>
+        <qualifiedname>csmp::BoundaryInterface::BoundaryInterFace_Test</qualifiedname>
+        <param>
+          <type>BoundaryInterFace_Test</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/BoundaryInterface.h" line="154" column="16" bodyfile="source/includes/model/BoundaryInterface.h" bodystart="154" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_boundary_interface_1a9ec05234ca81cb71c04c9b5e57064a8c" prot="protected" static="no" mutable="no">
+        <type>std::map&lt; std::string, <ref refid="classcsmp_1_1_boundary" kindref="compound">csmp::Boundary</ref>&lt; dim &gt; &gt;</type>
+        <definition>std::map&lt;std::string,csmp::Boundary&lt;dim&gt; &gt; csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;::boundaryMap_</definition>
+        <argsstring></argsstring>
+        <name>boundaryMap_</name>
+        <qualifiedname>csmp::BoundaryInterface::boundaryMap_</qualifiedname>
+        <briefdescription>
+<para>storage of the boundaries </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/BoundaryInterface.h" line="151" column="14" bodyfile="source/includes/model/BoundaryInterface.h" bodystart="151" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_boundary_interface_1a995b5c3880056bdc0f2e9940be241b7d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;::BoundaryInterface</definition>
+        <argsstring>()</argsstring>
+        <name>BoundaryInterface</name>
+        <qualifiedname>csmp::BoundaryInterface::BoundaryInterface</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/BoundaryInterface.h" line="45" column="5" bodyfile="source/includes/model/BoundaryInterface.h" bodystart="45" bodyend="45"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_interface_1aedd5c464a8121a28627aab369b8f2403" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;::BoundaryInterface</definition>
+        <argsstring>(const BoundaryInterface &amp;)=delete</argsstring>
+        <name>BoundaryInterface</name>
+        <qualifiedname>csmp::BoundaryInterface::BoundaryInterface</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_boundary_interface" kindref="compound">BoundaryInterface</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/BoundaryInterface.h" line="46" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_interface_1a8e78dcdf294a7c03e43880b5e362fa73" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;::~BoundaryInterface</definition>
+        <argsstring>()</argsstring>
+        <name>~BoundaryInterface</name>
+        <qualifiedname>csmp::BoundaryInterface::~BoundaryInterface</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/BoundaryInterface.h" line="47" column="5" bodyfile="source/includes/model/BoundaryInterface.h" bodystart="47" bodyend="47"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_interface_1ab40b76a0d54da3105648ed8e454cdd98" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_boundary" kindref="compound">csmp::Boundary</ref>&lt; dim &gt; &amp;</type>
+        <definition>csmp::Boundary&lt; dim &gt; &amp; csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;::Boundary</definition>
+        <argsstring>(const std::string &amp;bName)</argsstring>
+        <name>Boundary</name>
+        <qualifiedname>csmp::BoundaryInterface::Boundary</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>bName</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/BoundaryInterface.h" line="52" column="27"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_interface_1ab6d9b0f7dcdd1a2b77dc1c5b568ddd1b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>const <ref refid="classcsmp_1_1_boundary" kindref="compound">csmp::Boundary</ref>&lt; dim &gt; &amp;</type>
+        <definition>const csmp::Boundary&lt; dim &gt; &amp; csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;::Boundary</definition>
+        <argsstring>(const std::string &amp;bName) const</argsstring>
+        <name>Boundary</name>
+        <qualifiedname>csmp::BoundaryInterface::Boundary</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>bName</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/BoundaryInterface.h" line="53" column="27"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_interface_1ad82b6e1229b2eaa3311dc068aa3f0ba6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;::ContainsBoundary</definition>
+        <argsstring>(const std::string &amp;bName) const</argsstring>
+        <name>ContainsBoundary</name>
+        <qualifiedname>csmp::BoundaryInterface::ContainsBoundary</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>bName</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/BoundaryInterface.h" line="54" column="33" bodyfile="source/modules/model/BoundaryInterface.cpp" bodystart="59" bodyend="63"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_interface_1a2771e6533d70e579027431c1ee070926" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>boundaryIterator</type>
+        <definition>BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;::boundaryIterator csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;::BoundariesBegin</definition>
+        <argsstring>()</argsstring>
+        <name>BoundariesBegin</name>
+        <qualifiedname>csmp::BoundaryInterface::BoundariesBegin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/BoundaryInterface.h" line="59" column="28" bodyfile="source/modules/model/BoundaryInterface.cpp" bodystart="24" bodyend="25"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_interface_1a1c2e56d21a8535986a71d7a2e37f03ee" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>boundaryIterator</type>
+        <definition>BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;::boundaryIterator csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;::BoundariesEnd</definition>
+        <argsstring>()</argsstring>
+        <name>BoundariesEnd</name>
+        <qualifiedname>csmp::BoundaryInterface::BoundariesEnd</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/BoundaryInterface.h" line="60" column="28" bodyfile="source/modules/model/BoundaryInterface.cpp" bodystart="29" bodyend="30"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_interface_1a89bbae050e1bbcee04f262dba1de3adc" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>boundaryConstIterator</type>
+        <definition>BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;::boundaryConstIterator csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;::BoundariesBegin</definition>
+        <argsstring>() const</argsstring>
+        <name>BoundariesBegin</name>
+        <qualifiedname>csmp::BoundaryInterface::BoundariesBegin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/BoundaryInterface.h" line="61" column="28" bodyfile="source/modules/model/BoundaryInterface.cpp" bodystart="34" bodyend="35"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_interface_1aa8a2e8bf0c1f33a4407738fd29a64cc5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>boundaryConstIterator</type>
+        <definition>BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;::boundaryConstIterator csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;::BoundariesEnd</definition>
+        <argsstring>() const</argsstring>
+        <name>BoundariesEnd</name>
+        <qualifiedname>csmp::BoundaryInterface::BoundariesEnd</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/BoundaryInterface.h" line="62" column="28" bodyfile="source/modules/model/BoundaryInterface.cpp" bodystart="39" bodyend="40"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_interface_1ab5bc3897b365ba69484288cecb498d3c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>boundaryIterator</type>
+        <definition>BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;::boundaryIterator csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;::Boundary</definition>
+        <argsstring>(const csmp::Boundary&lt; dim &gt; &amp;)</argsstring>
+        <name>Boundary</name>
+        <qualifiedname>csmp::BoundaryInterface::Boundary</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_boundary" kindref="compound">csmp::Boundary</ref>&lt; dim &gt; &amp;</type>
+          <defname>bref</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/BoundaryInterface.h" line="63" column="28" bodyfile="source/modules/model/BoundaryInterface.cpp" bodystart="44" bodyend="50"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_interface_1afc9322d44807e26716d48f2c616d3b78" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;::Boundaries</definition>
+        <argsstring>() const</argsstring>
+        <name>Boundaries</name>
+        <qualifiedname>csmp::BoundaryInterface::Boundaries</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/BoundaryInterface.h" line="64" column="28" bodyfile="source/modules/model/BoundaryInterface.cpp" bodystart="53" bodyend="54"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_interface_1a7f343a42577037dff47093f62a90b84b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>string csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;::CreateBoundaryName</definition>
+        <argsstring>(const std::string &amp;inside_region, const std::string &amp;outside_region)</argsstring>
+        <name>CreateBoundaryName</name>
+        <qualifiedname>csmp::BoundaryInterface::CreateBoundaryName</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>inside_region</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>outside_region</declname>
+        </param>
+        <briefdescription>
+<para>creates a name for a new boundary that shall be created between two touching unique (non-overlapping) regions </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Creates a name for a new boundary that shall be created between two touching unique (non-overlapping) regions</para>
+<para>Name will be &apos;BOUNDARY&apos; + inner + &quot;_&quot; + outer contacting regions. If the name already exists, a number will be appended to boundary to make it unique.</para>
+<para><simplesect kind="author"><para>SKM </para>
+</simplesect>
+<simplesect kind="date"><para>17/4/22 </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/BoundaryInterface.h" line="67" column="17" bodyfile="source/modules/model/BoundaryInterface.cpp" bodystart="115" bodyend="128"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_interface_1ad66b7d53568c18e4241ad24ef51f51d7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>string csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;::FindBoundaryByName</definition>
+        <argsstring>(const std::set&lt; std::string &gt; &amp;intersected_regions) const</argsstring>
+        <name>FindBoundaryByName</name>
+        <qualifiedname>csmp::BoundaryInterface::FindBoundaryByName</qualifiedname>
+        <param>
+          <type>const std::set&lt; std::string &gt; &amp;</type>
+          <declname>intersected_regions</declname>
+        </param>
+        <briefdescription>
+<para>searches for a boundary that intersects the supplied higher-dimensional region(s); returns null string (&apos;\0&apos;) if not found </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns name of the first <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> (patch) that contains the supplied region name strings or any other other strings in an arbitrary order.</para>
+<para>if the boundary does not exist, method returns \O string.</para>
+<para><simplesect kind="author"><para>SKM </para>
+</simplesect>
+<simplesect kind="date"><para>March 2016 </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/BoundaryInterface.h" line="70" column="18" bodyfile="source/modules/model/BoundaryInterface.cpp" bodystart="143" bodyend="170"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_interface_1a8c12cd3934001fdeea4d927a94bd4e9d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;::FindBoundaryByNames</definition>
+        <argsstring>(const std::set&lt; std::string &gt; &amp;intersected_regions, std::set&lt; std::string &gt; &amp;region_patches_found) const</argsstring>
+        <name>FindBoundaryByNames</name>
+        <qualifiedname>csmp::BoundaryInterface::FindBoundaryByNames</qualifiedname>
+        <param>
+          <type>const std::set&lt; std::string &gt; &amp;</type>
+          <declname>intersected_regions</declname>
+        </param>
+        <param>
+          <type>std::set&lt; std::string &gt; &amp;</type>
+          <declname>region_patches_found</declname>
+        </param>
+        <briefdescription>
+<para>searches for the boundaries whose name contains the supplied strings (region names etc.) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Searches the model for boundaries the name of which contains the search strings provided via the first set. The results are returnd into the second set.</para>
+<para><simplesect kind="note"><para>Use this method, for example, to retrieve multiple boundary patches that were generated from a single lower-dimensional regon, like a fault surface.</para>
+</simplesect>
+<simplesect kind="author"><para>SKM </para>
+</simplesect>
+<simplesect kind="date"><para>March 2016 </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/BoundaryInterface.h" line="73" column="13" bodyfile="source/modules/model/BoundaryInterface.cpp" bodystart="185" bodyend="216"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_interface_1af8d883b322003e0e831b114a53120eef" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;::IsBoundaryName</definition>
+        <argsstring>(const std::string &amp;regionName) const</argsstring>
+        <name>IsBoundaryName</name>
+        <qualifiedname>csmp::BoundaryInterface::IsBoundaryName</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>regionName</declname>
+        </param>
+        <briefdescription>
+<para>checks whether name contains the strings BOUNDARY or any of the predefined boundary names </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Checks whether the name contains any substring that is indicative of a model boundary, this includes LEFT, RIGHT, TOP, BOTTOM, FRONT, BACK, IRREGULAR and any name that is preceded by the string BOUNDARY.</para>
+<para><simplesect kind="note"><para><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref> edge and corner names are not checked for </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/BoundaryInterface.h" line="77" column="10" bodyfile="source/modules/model/BoundaryInterface.cpp" bodystart="232" bodyend="246"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_interface_1a170a0b5502f6e14e6ea475714b6764db" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;::BoxShaped</definition>
+        <argsstring>() const</argsstring>
+        <name>BoxShaped</name>
+        <qualifiedname>csmp::BoundaryInterface::BoxShaped</qualifiedname>
+        <briefdescription>
+<para>checks whether the model contains the <ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref>=equivalent boundaries TOP, BOTTOM etc. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Checks whether a model is box-shaped while we can&apos;t ask RectangularShapedModel anymore since boundary regions were replaced by boundaries. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/BoundaryInterface.h" line="80" column="10" bodyfile="source/modules/model/BoundaryInterface.cpp" bodystart="307" bodyend="332"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_interface_1abc0392784790ae33fdc9759a7bf19615" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;::FormBoundariesFrom</definition>
+        <argsstring>(const ModelTopology &amp;)</argsstring>
+        <name>FormBoundariesFrom</name>
+        <qualifiedname>csmp::BoundaryInterface::FormBoundariesFrom</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_model_topology" kindref="compound">ModelTopology</ref> &amp;</type>
+          <defname>topo</defname>
+        </param>
+        <briefdescription>
+<para>uses the <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> ids stored in the model topology object to form boundaries using <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> objects which already exist; returns number of boundaries formed </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Assuming that the necessary <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> objects already exist, this method creates Boundaries interpreting the <ref refid="structcsmp_1_1_cell" kindref="compound">Cell</ref> &apos;idx&apos; stored in the model topology object as <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> &apos;idx&apos; ranging between n_elements..interfaces-1 </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/BoundaryInterface.h" line="88" column="12" bodyfile="source/modules/model/BoundaryInterface.cpp" bodystart="342" bodyend="395"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_interface_1a41271a0826a7dfae74abdb5cf4856b4f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::pair&lt; std::set&lt; std::string &gt;, bool &gt;</type>
+        <definition>pair&lt; set&lt; string &gt;, bool &gt; csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;::CreateInternalBoundaryFrom</definition>
+        <argsstring>(const char *dimension_minus1_region)</argsstring>
+        <name>CreateInternalBoundaryFrom</name>
+        <qualifiedname>csmp::BoundaryInterface::CreateInternalBoundaryFrom</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>dimension_minus1_region</declname>
+          <defname>dim_1_region</defname>
+        </param>
+        <briefdescription>
+<para>converts lower-dimensional <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref> into uniquely named <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> patches, assigning more specific names to these; the input <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref> and its elements are removed </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Converts lower-dimensional region into Boundarie(s) of faces, decomposed into patches. The <ref refid="classcsmp_1_1_mesh_manager" kindref="compound">MeshManager</ref> updates the connectivity. The original region is removed (including removal from &quot;Model&quot;) to non-unique regions.</para>
+<para>Uses node-to-parent relationship to find the higher dimensional elements that will share a face with the <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>: usng <ref refid="namespacecsmp_1ad5202c6b521360ae1a186a5452878a3c" kindref="member">higherDimensionalNeighbors()</ref></para>
+<para><simplesect kind="return"><para>pair of the set oof boundary patches that were created from the region and boolean that tells whether the operation was completely successful.</para>
+</simplesect>
+Algorithmic steps:</para>
+<para><orderedlist>
+<listitem><para>Verify input lower-dimensional region object from which the boundary shall be created: must be lower dimensional and must lie inside of model</para>
+</listitem><listitem><para>Determine the number of boundary segments (sub-boundaries) that the new boundary will consist of. The output of this step will be a map of <ref refid="classcsmp_1_1_face_construction_data" kindref="compound">FaceConstructionData</ref> in which the names of the new boundary segments are the keys.</para>
+</listitem><listitem><para>In the <ref refid="classcsmp_1_1_mesh_manager" kindref="compound">MeshManager</ref> object,</para>
+<para>3.1 create all required face objects</para>
+<para>3.2 connect them with one another (neighbors); Boundary::EstablishNeighborConnectivity( vector&lt;Face&lt;dim&gt;*&gt;&amp; ); this is important because any <ref refid="classcsmp_1_1_model_sub_domain" kindref="compound">ModelSubDomain</ref> creation relies on this connectivity during identification of interior and perimeter.</para>
+</listitem><listitem><para>Create the <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> segments, one-by-one from the map&lt;bname, FaceConstructionData&gt;; this involves connecting the faces to their higher dimensional neighbours.</para>
+</listitem><listitem><para>For the nodes located on the new boundaries, update / recreate the parent element vectors so that these no longer include neither the elements from which the <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> was created nor the new faces.</para>
+</listitem><listitem><para>Remove the parent region of the new boundary(ies) from the region “Model.” The region is also put into the non-unique region map.</para>
+</listitem><listitem><para>Assign <ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref> flags to new nodes if any.</para>
+</listitem><listitem><para>By default, but optional removes parent region (including its elements). </para>
+</listitem></orderedlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/BoundaryInterface.h" line="91" column="16" bodyfile="source/modules/model/BoundaryInterface.cpp" bodystart="488" bodyend="747"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_interface_1a46772c373bade27cc1bfd5de6a7f2cb1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::pair&lt; std::string, bool &gt;</type>
+        <definition>pair&lt; string, bool &gt; csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;::CreateExternalBoundaryFrom</definition>
+        <argsstring>(const char *dimension_minus1_region, bool check_topo_attributes_of_nodes)</argsstring>
+        <name>CreateExternalBoundaryFrom</name>
+        <qualifiedname>csmp::BoundaryInterface::CreateExternalBoundaryFrom</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>dimension_minus1_region</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>check_topo_attributes_of_nodes</declname>
+        </param>
+        <briefdescription>
+<para>converts lower-dimensional <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref> on the outside of the model into a <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref>; returns whether this conversion was successful as well as the boundary name </para>
+        </briefdescription>
+        <detaileddescription>
+<para>converts lower-dimensional <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref> on the outside of the model into a <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref>; returns whether this conversion was successful as well as the boundary name </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/BoundaryInterface.h" line="94" column="16" bodyfile="source/modules/model/BoundaryInterface.cpp" bodystart="1805" bodyend="1875"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_interface_1ad24b7f5db1277b6a7837a700d103d153" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;::CreateBoundaryAround</definition>
+        <argsstring>(const char *region)</argsstring>
+        <name>CreateBoundaryAround</name>
+        <qualifiedname>csmp::BoundaryInterface::CreateBoundaryAround</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>region</declname>
+          <defname>region_name</defname>
+        </param>
+        <briefdescription>
+<para>creates INTERNAL boundary, ignoring already existing boundaries or split-boundaries as well as lower-dimensional regions, region will be on inside </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Creates <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> around the supplied region ignoring pre-exisiting Boundaries of SplitBoundaries identified by nodes flagged as INTERNAL or the presence of NodeManifolds. Also ignores external model boundaries.</para>
+<para>The resulting <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> is flagged as INTERNAL.</para>
+<para><simplesect kind="attention"><para>By default, there is no partitioning of the boundary into patches based in the juxtaposition of different layers and the region. Instead, the boundary is named BOUNDARY_&quot;region&quot;_HULL.</para>
+</simplesect>
+<simplesect kind="attention"><para>the detection of existing boundaries relies on their nodes being flagged as !NOT, if these are not present the method might duplicate existing boundaries.</para>
+</simplesect>
+<xrefsect id="todo_1_todo000139"><xreftitle>Todo</xreftitle><xrefdescription><para>should HULL be partitioned for consistency with boundary naming conventions? - this would require the identification of the names of the adjacent regions. It could be made optional / dependent on the presence of an initialised region identifier.</para>
+</xrefdescription></xrefsect></para>
+<para><simplesect kind="author"><para>SKM </para>
+</simplesect>
+<simplesect kind="date"><para>27/10/21 refactored </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/BoundaryInterface.h" line="97" column="10" bodyfile="source/modules/model/BoundaryInterface.cpp" bodystart="1174" bodyend="1256"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_interface_1a4e8a32b74b875851b1805944812b3a70" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::pair&lt; std::string, bool &gt;</type>
+        <definition>pair&lt; string, bool &gt; csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;::CreateBoundaryBetween</definition>
+        <argsstring>(const char *region1, const char *region2)</argsstring>
+        <name>CreateBoundaryBetween</name>
+        <qualifiedname>csmp::BoundaryInterface::CreateBoundaryBetween</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>region1</declname>
+          <defname>group1</defname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>region2</declname>
+          <defname>group2</defname>
+        </param>
+        <briefdescription>
+<para>insert lower-dimensional <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref> between two equidimensional unique regions, and then converts it into <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref>; returns boundary name </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Method forms a <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> between the two supplied regions. This will involve the creation and connection of Faces.</para>
+<para>This method will only work for unique Regions which are not overlapping.</para>
+<para>This method makes no sense for the region &apos;<ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&apos; as it encompasses all unique regions.</para>
+<para><simplesect kind="return"><para>returns pair singnalling the success of the operation and giving the name of the boundary.</para>
+</simplesect>
+<simplesect kind="attention"><para>: BoundariesInterface cannot be created in 1D models or between regions which contain one-dimensional elements.</para>
+</simplesect>
+<simplesect kind="note"><para>the BOX boundary flag will always be internal for this type of boundary because it lies between higher dimensional regions.</para>
+</simplesect>
+NAMING THE NEW BOUNDARY</para>
+<para>(1. name of the master region from which the boundary was created if any)</para>
+<para><orderedlist>
+<listitem><para>&quot;BOUNDARY&quot;</para>
+</listitem><listitem><para>the patch identifier number attached to boundary (making the boundary patch unique, avoiding duplications)</para>
+</listitem><listitem><para>the name of the inner region, i.e. the region that the lower-dimensional element normals point away from</para>
+</listitem><listitem><para>the name of the outer region, i.e. that into which the normals point</para>
+</listitem></orderedlist>
+</para>
+<para><simplesect kind="note"><para>Where the boundary just intersects a layer (same material on either side), the layer name appears only once. The second instance is replaced by INTERSECTION.</para>
+</simplesect>
+</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>Attempts to create a lower-dimensional region between higher dimensional ones. This is done in the following steps:</para>
+<para><orderedlist>
+<listitem><para>Checks:</para>
+</listitem></orderedlist>
+<itemizedlist>
+<listitem><para>do the input regions exist</para>
+</listitem><listitem><para>are they higher dimensional</para>
+</listitem><listitem><para>is there not already a region that has the name that the new region will get?</para>
+</listitem></itemizedlist>
+<orderedlist>
+<listitem><para>Using the Perimeter faces of the candiate regions, matching faces are found and the inside and outside elements are determined as well as recording their face numbers.</para>
+</listitem><listitem><para>The <ref refid="classcsmp_1_1_mesh_manager" kindref="compound">MeshManager</ref> is instructed to create the required <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> objects AND connect them with one another. (no objects need to be deleted because it is assumed that there is no line element region at this boundary) <xrefsect id="todo_1_todo000138"><xreftitle>Todo</xreftitle><xrefdescription><para>check</para>
+</xrefdescription></xrefsect></para>
+</listitem><listitem><para>The <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> is constructed from the <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> objects.</para>
+</listitem></orderedlist>
+</para>
+<para><simplesect kind="note"><para>the <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref> will be oriented such that the elements of the first region will be on the inside (normals pointing outward from this region).</para>
+</simplesect>
+<simplesect kind="note"><para>this region is not necessarily contiguous</para>
+</simplesect>
+<simplesect kind="author"><para>SKM </para>
+</simplesect>
+<simplesect kind="date"><para>refactored 2/4/2022 </para>
+</simplesect>
+</para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/BoundaryInterface.h" line="100" column="16" bodyfile="source/modules/model/BoundaryInterface.cpp" bodystart="1088" bodyend="1145"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_interface_1ad1c6156ff7aa50d5a1c26d12d32006f7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;::EstablishEdgeBoundariesOfBoxShapedModel</definition>
+        <argsstring>()</argsstring>
+        <name>EstablishEdgeBoundariesOfBoxShapedModel</name>
+        <qualifiedname>csmp::BoundaryInterface::EstablishEdgeBoundariesOfBoxShapedModel</qualifiedname>
+        <briefdescription>
+<para>creates EDGE# <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> line objects for box-shaped model by intersecting side boundaries objects </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Creates <ref refid="classcsmp_1_1_edge" kindref="compound">Edge</ref> boundary objects (of dim-2 <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> objects) for box-shaped model from side boundaries</para>
+<para><orderedlist>
+<listitem><para>verifies that that the side boundaries of the box-shaped model are there</para>
+</listitem></orderedlist>
+</para>
+<para><simplesect kind="attention"><para>EXCEPTION: the edge curves are represented by <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> objects, however these are dim-2 entities. Following CSMP&apos;s rules, these edges will be connected to their face neighbors AND their higher-dimensional parent elements with which they share edges.</para>
+</simplesect>
+<xrefsect id="test_1_test000034"><xreftitle>Test</xreftitle><xrefdescription><para>OK - for BoxHalfs3D</para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/BoundaryInterface.h" line="103" column="10" bodyfile="source/modules/model/BoundaryInterface.cpp" bodystart="1502" bodyend="1636"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_interface_1aa3b79631cd879e55338d14803caae786" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;::EstablishBoxBoundaries</definition>
+        <argsstring>()</argsstring>
+        <name>EstablishBoxBoundaries</name>
+        <qualifiedname>csmp::BoundaryInterface::EstablishBoxBoundaries</qualifiedname>
+        <briefdescription>
+<para>creates <ref refid="classcsmp_1_1_boundary" kindref="compound">csmp::Boundary</ref> objects replacing lower-dimensional <ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref> named regions with boundaries with the same names </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Forms boundaries considering names of <ref refid="_box_8h" kindref="compound">Box.h</ref>-defined strings only, e.g., BACK, BOTTOM, RIGHT, TOP, FRONT, IRREGULAR and INTERNAL. Regions with these names are converted to boundaries removing them and their Elements that are replaced by <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> objects. The new boundaries are given the standard names and are flagged correspondingly.</para>
+<para><simplesect kind="remark"><para>input regions must be lower-dimensional (surfaces in 3D and lines in 1D) </para>
+</simplesect>
+<simplesect kind="remark"><para>input regions must be unique (space exclusive) </para>
+</simplesect>
+<simplesect kind="remark"><para>connectivity of <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> objects must match / preserve that of previous <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> objects </para>
+</simplesect>
+<simplesect kind="remark"><para>when elements become faces they need to be tagged so that one can detect which region they were created from (idx?)</para>
+</simplesect>
+<simplesect kind="note"><para>if the TOP region is missing, but a IRREGULAR region is there in stead, this is converted into the corresponding boundary. In this case, the model is still regarded as BOX_SHAPED.</para>
+</simplesect>
+<simplesect kind="note"><para><ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> creation itself does not deal with the generation of <ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref> flags for the model edges and corners. This is accomplished subsequently (in this method) by calling <ref refid="group___c_s_m_pglobal_functions_1ga20ee477d00c1041c66b394b9acb5d15b" kindref="member">recreateBoxBoundaryFlags()</ref>.</para>
+</simplesect>
+<simplesect kind="attention"><para>this method does not take care of the updating of the non-unique regions that are affected by the conversion of Regions into boundaries. This is done afterwards by methods of the <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> class.</para>
+</simplesect>
+<simplesect kind="author"><para>refactored by SKM 2016 </para>
+</simplesect>
+<simplesect kind="author"><para>refactored by SKM 2018 </para>
+</simplesect>
+<simplesect kind="author"><para>SKM 2021 </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/BoundaryInterface.h" line="106" column="10" bodyfile="source/modules/model/BoundaryInterface.cpp" bodystart="1710" bodyend="1792"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_interface_1ad0eed3c326997f854db44d5a7320a1e2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::set&lt; std::string &gt;</type>
+        <definition>set&lt; string &gt; csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;::EstablishBoundariesFromRegions</definition>
+        <argsstring>()</argsstring>
+        <name>EstablishBoundariesFromRegions</name>
+        <qualifiedname>csmp::BoundaryInterface::EstablishBoundariesFromRegions</qualifiedname>
+        <briefdescription>
+<para>inserts box boundary or irregular <ref refid="classcsmp_1_1_boundary" kindref="compound">csmp::Boundary</ref> objects for all eligible regions in the model; returns the names of the created boudaries </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Creates boundary around &quot;Model&quot; region determining whether lower-dimensional regions shall become a boundary segments on the basis of whether their name contains the string &quot;BOUNDARY&quot; or is one of the reserved boundary names.</para>
+<para>When a boundary (of <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> objects) is created, the underpinning lower-dimensional (parent) region is removed from the region &quot;Model&quot;. It is also moved from the unique to the non-unique region map if it was stored there originally.</para>
+<para><simplesect kind="remark"><para>builds boundaries only considering unique, lower-dimensional regions (line-element boundaries will not be created).</para>
+</simplesect>
+<simplesect kind="return"><para>if all the created <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> objects can be assigned to boundaries (as identified by the string BOUNDARY) the method returns true. If not, the remaining <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> objects will be retained as a <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> object named "Model_BOUNDARY and the method returns false.</para>
+</simplesect>
+<simplesect kind="attention"><para>by contrast to <ref refid="classcsmp_1_1_boundary_interface_1aa3b79631cd879e55338d14803caae786" kindref="member">EstablishBoxBoundaries()</ref>, EstablishBoundaries() does not require to be applied to box-shaped models, but is more general.</para>
+</simplesect>
+<xrefsect id="test_1_test000035"><xreftitle>Test</xreftitle><xrefdescription><para>updated by SKM 2016 </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/BoundaryInterface.h" line="109" column="15" bodyfile="source/modules/model/BoundaryInterface.cpp" bodystart="1908" bodyend="2028"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_interface_1a432e8ca3268d6ef31eaf6b9fd23a3e7c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;::EstablishBoxBoundariesFromOrientation</definition>
+        <argsstring>()</argsstring>
+        <name>EstablishBoxBoundariesFromOrientation</name>
+        <qualifiedname>csmp::BoundaryInterface::EstablishBoxBoundariesFromOrientation</qualifiedname>
+        <briefdescription>
+<para>tries to create <ref refid="classcsmp_1_1_box" kindref="compound">Box</ref> <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> objects surrounding &apos;<ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&apos; into TOP, BOTTOM, IRREGULAR if possible; updates <ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref> flags </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Method caps elements that share one of their faces with the model boundary with <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> objects. In a second step it assigns these to the <ref refid="classcsmp_1_1_box" kindref="compound">Box</ref> boundaries: TOP, BOTTOM,LEFT, RIGHT, etc. INTERNAL, IRREGULAR, or <ref refid="classcsmp_1_1_edge" kindref="compound">Edge</ref> boundaries are not created.</para>
+<para><simplesect kind="attention"><para>method assumes that the perimeter of region &quot;Model&quot; correctly identifies the outside faces of the elements of the model. </para>
+</simplesect>
+<simplesect kind="attention"><para>this method was designed primarily for three-dimensional models.</para>
+</simplesect>
+<simplesect kind="author"><para>SKM </para>
+</simplesect>
+<simplesect kind="date"><para>21/8/2018 </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/BoundaryInterface.h" line="112" column="10" bodyfile="source/modules/model/BoundaryInterface.cpp" bodystart="2085" bodyend="2211"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_interface_1a806f539a7761ee70feaa892a22d040ff" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;::EstablishBoxBoundariesFromNodeFlags</definition>
+        <argsstring>(bool recreate_box_boundary_flags_before)</argsstring>
+        <name>EstablishBoxBoundariesFromNodeFlags</name>
+        <qualifiedname>csmp::BoundaryInterface::EstablishBoxBoundariesFromNodeFlags</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>recreate_box_boundary_flags_before</declname>
+        </param>
+        <briefdescription>
+<para>creates 3D BOX boundaries using the node flags to identify sides, edges, and corners; use for simple models where corresponding lines or surfaces are missing </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Creates BOX boundaries using the node flags to identify sides, edges, and corners; use for simple models where corresponding lines or surfaces are missing.</para>
+<para>The result are <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> objects with standard names such as TOP, BOTTOM, INTERNAL, IRREGULAR, EDGE1, CNR2 etc.</para>
+<para><simplesect kind="attention"><para>method assumes that boundary flags were assigned correctly to the nodes, else a method which does this is called.</para>
+</simplesect>
+Procedure<itemizedlist>
+<listitem><para>using the node flags of the perimeter elements faces, boundary by boundary <ref refid="classcsmp_1_1_v_data" kindref="compound">VData</ref> are created that are subsequently employed to create the <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> objects of the new boundaries. Then these are created. </para>
+</listitem></itemizedlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/BoundaryInterface.h" line="115" column="10" bodyfile="source/modules/model/BoundaryInterface.cpp" bodystart="2258" bodyend="2368"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_interface_1ae8976912d2d26ce92222880798dba583" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;::RemoveBoundary</definition>
+        <argsstring>(const char *boundary, bool erase_faces)</argsstring>
+        <name>RemoveBoundary</name>
+        <qualifiedname>csmp::BoundaryInterface::RemoveBoundary</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>boundary</declname>
+          <defname>boundary_name</defname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>erase_faces</declname>
+        </param>
+        <briefdescription>
+<para>Removes boundary with deletion of its faces in the <ref refid="classcsmp_1_1_mesh_manager" kindref="compound">MeshManager</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Removes the boundary from the map, prompting the <ref refid="classcsmp_1_1_mesh_manager" kindref="compound">MeshManager</ref> to delete the corresponding <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> objects if so required. Interior nodes that had a boundary specific <ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref> flag are set back to NOT.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>boundary_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>either one of the box boundaries or a name that contains the string BOUNDARY (case insentivite) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>erase_faces</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>deletes the <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> objects that were defining the boundary</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="attention"><para>this does not remove the <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> objects associated with the boundary; call <ref refid="classcsmp_1_1_mesh_manager" kindref="compound">MeshManager</ref> to do this. <verbatim>@author SKM (refactored - since design was flawed)
+@date 15/8/2020
+</verbatim> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/BoundaryInterface.h" line="118" column="10" bodyfile="source/modules/model/BoundaryInterface.cpp" bodystart="799" bodyend="823"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_interface_1a363ed5b8e8cbb1e5a6ae26051753e01d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;::RemoveBoundary</definition>
+        <argsstring>(csmp::Boundary&lt; dim &gt; &amp;, bool erase_faces)</argsstring>
+        <name>RemoveBoundary</name>
+        <qualifiedname>csmp::BoundaryInterface::RemoveBoundary</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_boundary" kindref="compound">csmp::Boundary</ref>&lt; dim &gt; &amp;</type>
+          <defname>boundary</defname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>erase_faces</declname>
+        </param>
+        <briefdescription>
+<para>Remove boundary, also deleting associated face objects if so requested. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Removes the boundary from the map, prompting the <ref refid="classcsmp_1_1_mesh_manager" kindref="compound">MeshManager</ref> to delete the corresponding <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> objects if so required. Interior nodes that had a boundary specific <ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref> flag are set back to NOT.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>boundary</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>reference to valid boundary in the model</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="attention"><para>this does not remove the <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> objects associated with the boundary; call <ref refid="classcsmp_1_1_mesh_manager" kindref="compound">MeshManager</ref> to do this. <verbatim>@author SKM (refactored - since design was flawed)
+@date 15/8/2020
+</verbatim> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/BoundaryInterface.h" line="121" column="10" bodyfile="source/modules/model/BoundaryInterface.cpp" bodystart="839" bodyend="856"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_interface_1ae4bfaeada6c1968a38b739272df2e8a5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;::BoundariesOut</definition>
+        <argsstring>() const</argsstring>
+        <name>BoundariesOut</name>
+        <qualifiedname>csmp::BoundaryInterface::BoundariesOut</qualifiedname>
+        <briefdescription>
+<para>prints boundary names and other stats to screen; returns number of boundaries </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/BoundaryInterface.h" line="129" column="12" bodyfile="source/modules/model/BoundaryInterface.cpp" bodystart="2377" bodyend="2406"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_interface_1a4e58d1c493b2e439a430621ea11df640" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;::OutputBoundariesToBinary</definition>
+        <argsstring>(const char *file_name) const</argsstring>
+        <name>OutputBoundariesToBinary</name>
+        <qualifiedname>csmp::BoundaryInterface::OutputBoundariesToBinary</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>file_name</declname>
+        </param>
+        <briefdescription>
+<para>method used in the storage of a model to binary file </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Writes all the boundaries to binary file, remembering all details of their implementation.</para>
+<para><simplesect kind="attention"><para>method expects that a unique global nnumbering of <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> and <ref refid="classcsmp_1_1_node" kindref="compound">Node</ref> objects was established prior to its application.</para>
+</simplesect>
+<simplesect kind="attention"><para>ONLY METHOD that provides complete information about each boundary: interior vs. perimeter nodes and element; boudary faces etc.</para>
+</simplesect>
+<simplesect kind="author"><para>SKM 3/4/2016 </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/BoundaryInterface.h" line="132" column="10" bodyfile="source/modules/model/BoundaryInterface.cpp" bodystart="880" bodyend="939"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_interface_1a573cc9956b043b7010b5c70eebc47a40" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;::InputBoundariesFromBinary</definition>
+        <argsstring>(const char *file_name, const std::set&lt; std::string &gt; &amp;subset_variables)</argsstring>
+        <name>InputBoundariesFromBinary</name>
+        <qualifiedname>csmp::BoundaryInterface::InputBoundariesFromBinary</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>file_name</declname>
+        </param>
+        <param>
+          <type>const std::set&lt; std::string &gt; &amp;</type>
+          <declname>subset_variables</declname>
+        </param>
+        <briefdescription>
+<para>reads boundaries stored in CSMP native binary file written by OutputBoundariesToBinary; if set non-empty will only read subset of variables </para>
+        </briefdescription>
+        <detaileddescription>
+<para>reads and initialises boundaries from file written by <ref refid="classcsmp_1_1_boundary_interface_1a4e58d1c493b2e439a430621ea11df640" kindref="member">OutputBoundariesToBinary()</ref> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/BoundaryInterface.h" line="135" column="10" bodyfile="source/modules/model/BoundaryInterface.cpp" bodystart="948" bodyend="1024"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-func">
+      <memberdef kind="function" id="classcsmp_1_1_boundary_interface_1a7aef8cb4f10754a119e7df1309b9d98a" prot="protected" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>string csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;::CreateBoundaryNameFrom</definition>
+        <argsstring>(const FaceConstructionData&lt; dim &gt; &amp;, const std::vector&lt; std::string &gt; &amp;region_names) const</argsstring>
+        <name>CreateBoundaryNameFrom</name>
+        <qualifiedname>csmp::BoundaryInterface::CreateBoundaryNameFrom</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_face_construction_data" kindref="compound">FaceConstructionData</ref>&lt; dim &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const std::vector&lt; std::string &gt; &amp;</type>
+          <declname>region_names</declname>
+        </param>
+        <briefdescription>
+<para>combines strings (including &apos;BOUNDARY&apos;) into a unique name of the boundary </para>
+        </briefdescription>
+        <detaileddescription>
+<para>LOCAL METHOD (not known beyond this compilation unit)</para>
+<para>creates underscore-separated unique names for the region patches based on the juxtapositions relationships across the lower-dimensional regions, the names are composed of:</para>
+<para><orderedlist>
+<listitem><para>the name of the master region</para>
+</listitem><listitem><para>&quot;BOUNDARY&quot;</para>
+</listitem><listitem><para>the patch identifier number attached to boundary</para>
+</listitem><listitem><para>the name of the inner region, i.e. the region that the lower-dimensional element normals point away from</para>
+</listitem><listitem><para>the name of the outer region, i.e. that into which the normals point</para>
+</listitem></orderedlist>
+</para>
+<para><simplesect kind="attention"><para>where the boundary just intersects a single layer (same material on either side), the layer name appears only once. The second instance is replaced by INTERSECTION. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/BoundaryInterface.h" line="141" column="17" bodyfile="source/modules/model/BoundaryInterface.cpp" bodystart="271" bodyend="298"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_interface_1a9bdc4e94ff3dbf306bdcccfefd721969" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;::AddBoundary</definition>
+        <argsstring>(const char *name, typename std::vector&lt; Face&lt; dim &gt; * &gt;::iterator facesBegin, typename std::vector&lt; Face&lt; dim &gt; * &gt;::iterator facesEnd, BOX_BOUNDARY)</argsstring>
+        <name>AddBoundary</name>
+        <qualifiedname>csmp::BoundaryInterface::AddBoundary</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>name</declname>
+          <defname>boundary_name</defname>
+        </param>
+        <param>
+          <type>typename std::vector&lt; <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>&lt; dim &gt; * &gt;::iterator</type>
+          <declname>facesBegin</declname>
+        </param>
+        <param>
+          <type>typename std::vector&lt; <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>&lt; dim &gt; * &gt;::iterator</type>
+          <declname>facesEnd</declname>
+        </param>
+        <param>
+          <type><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref></type>
+          <defname>bflag</defname>
+        </param>
+        <briefdescription>
+<para>creates boundary from already interconnected faces that also know their parent elements </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Creates boundary from Faces that already know their parent elements and are interconnected to one another!</para>
+<para>The connectivity between the Faces is (re)established.</para>
+<para><simplesect kind="note"><para>the supplied <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> pointer vector is moved into boundary and will therefore not be accessible anymore after this method has been called.</para>
+</simplesect>
+<simplesect kind="author"><para>SKM </para>
+</simplesect>
+<simplesect kind="date"><para>1/4/2016 </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/BoundaryInterface.h" line="145" column="10" bodyfile="source/modules/model/BoundaryInterface.cpp" bodystart="411" bodyend="438"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Policy of <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> class for the management of internal and external boundaries which are of a lower spatial dimensional than the model and consist of <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> objects. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>The <ref refid="classcsmp_1_1_boundary_interface" kindref="compound">BoundaryInterface</ref> manages the boundaries of the model, including their construction and removal.</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>By contrast with the <ref refid="classcsmp_1_1_region_interface" kindref="compound">RegionInterface</ref> whose interfaces for <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref> creation rely on the existance of a master region that contains all elements of the model, no such region exists for the boundaries, but boundaries are typically constructed from lower-dimensional regions tagged via the name string &apos;BOUNDARY&apos; as future boundaries in the geomodelling process.</para>
+<para><simplesect kind="note"><para>the <ref refid="classcsmp_1_1_boundary_interface" kindref="compound">BoundaryInterface</ref> is not responsible for the management of <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> objects. These are handled by the <ref refid="classcsmp_1_1_mesh_manager" kindref="compound">MeshManager</ref>. The only thing that the <ref refid="classcsmp_1_1_boundary_interface" kindref="compound">BoundaryInterface</ref> does is to allow the creation / modification of Boundaries and to give access to them.</para>
+</simplesect>
+<simplesect kind="author"><para>S.K. Matthai </para>
+</simplesect>
+<simplesect kind="author"><para>P. Lang </para>
+</simplesect>
+<simplesect kind="date"><para>2010, 2017 </para>
+</simplesect>
+</para>
+</sect1>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="4">
+        <label>csmp::ANSYS_Model2D</label>
+        <link refid="classcsmp_1_1_a_n_s_y_s___model2_d"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>csmp::ANSYS_Model3D</label>
+        <link refid="classcsmp_1_1_a_n_s_y_s___model3_d"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;</label>
+        <link refid="classcsmp_1_1_boundary_interface"/>
+      </node>
+      <node id="2">
+        <label>csmp::BoundaryInterface&lt; dim, Model &gt;</label>
+        <link refid="classcsmp_1_1_boundary_interface"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; dim, Model &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>csmp::CGNS_Model&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_c_g_n_s___model"/>
+        <childnode refid="13" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>csmp::EclipseModel</label>
+        <link refid="classcsmp_1_1_eclipse_model"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>csmp::Model&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_model"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>csmp::Model1D&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_model1_d"/>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>csmp::Model1D&lt; 1U &gt;</label>
+        <link refid="classcsmp_1_1_model1_d"/>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; 1U &gt;</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>csmp::Model&lt; 1U &gt;</label>
+        <link refid="classcsmp_1_1_model"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="13" relation="template-instance">
+          <edgelabel>&lt; 1U &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::Model&lt; 2U &gt;</label>
+        <link refid="classcsmp_1_1_model"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="13" relation="template-instance">
+          <edgelabel>&lt; 2U &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>csmp::Model&lt; 3 &gt;</label>
+        <link refid="classcsmp_1_1_model"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="13" relation="template-instance">
+          <edgelabel>&lt; 3 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>csmp::Model&lt; 3U &gt;</label>
+        <link refid="classcsmp_1_1_model"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="13" relation="template-instance">
+          <edgelabel>&lt; 3U &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>csmp::SKUA_Model</label>
+        <link refid="classcsmp_1_1_s_k_u_a___model"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;</label>
+        <link refid="classcsmp_1_1_boundary_interface"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/model/BoundaryInterface.h" line="43" column="1" bodyfile="source/includes/model/BoundaryInterface.h" bodystart="43" bodyend="155"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_boundary_interface_1a9bdc4e94ff3dbf306bdcccfefd721969" prot="protected" virt="non-virtual"><scope>csmp::BoundaryInterface</scope><name>AddBoundary</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1afc9322d44807e26716d48f2c616d3b78" prot="public" virt="non-virtual"><scope>csmp::BoundaryInterface</scope><name>Boundaries</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a2771e6533d70e579027431c1ee070926" prot="public" virt="non-virtual"><scope>csmp::BoundaryInterface</scope><name>BoundariesBegin</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a89bbae050e1bbcee04f262dba1de3adc" prot="public" virt="non-virtual"><scope>csmp::BoundaryInterface</scope><name>BoundariesBegin</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a1c2e56d21a8535986a71d7a2e37f03ee" prot="public" virt="non-virtual"><scope>csmp::BoundaryInterface</scope><name>BoundariesEnd</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1aa8a2e8bf0c1f33a4407738fd29a64cc5" prot="public" virt="non-virtual"><scope>csmp::BoundaryInterface</scope><name>BoundariesEnd</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1ae4bfaeada6c1968a38b739272df2e8a5" prot="public" virt="non-virtual"><scope>csmp::BoundaryInterface</scope><name>BoundariesOut</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1ab40b76a0d54da3105648ed8e454cdd98" prot="public" virt="non-virtual"><scope>csmp::BoundaryInterface</scope><name>Boundary</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1ab6d9b0f7dcdd1a2b77dc1c5b568ddd1b" prot="public" virt="non-virtual"><scope>csmp::BoundaryInterface</scope><name>Boundary</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1ab5bc3897b365ba69484288cecb498d3c" prot="public" virt="non-virtual"><scope>csmp::BoundaryInterface</scope><name>Boundary</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a09b67aeb3907dc5aa8625fa1514bf694" prot="public" virt="non-virtual"><scope>csmp::BoundaryInterface</scope><name>Boundary_Test</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a093f6e8261b159874d8537dd3abc0927" prot="public" virt="non-virtual"><scope>csmp::BoundaryInterface</scope><name>boundaryConstIterator</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a995b5c3880056bdc0f2e9940be241b7d" prot="public" virt="non-virtual"><scope>csmp::BoundaryInterface</scope><name>BoundaryInterface</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1aedd5c464a8121a28627aab369b8f2403" prot="public" virt="non-virtual"><scope>csmp::BoundaryInterface</scope><name>BoundaryInterface</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1ac5a102c3fa820bfdae75912a557c16fb" prot="protected" virt="non-virtual"><scope>csmp::BoundaryInterface</scope><name>BoundaryInterFace_Test</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a136b1488cdcd5c98e0ea3a2c34dd6480" prot="public" virt="non-virtual"><scope>csmp::BoundaryInterface</scope><name>BoundaryInterface_Test</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1ad9e5b080197df15de0fc223a7793de2d" prot="public" virt="non-virtual"><scope>csmp::BoundaryInterface</scope><name>boundaryIterator</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a9ec05234ca81cb71c04c9b5e57064a8c" prot="protected" virt="non-virtual"><scope>csmp::BoundaryInterface</scope><name>boundaryMap_</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1aa5d36d2b6156a65c7e8f3c13bbfe474d" prot="protected" virt="non-virtual"><scope>csmp::BoundaryInterface</scope><name>Box_Test</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a170a0b5502f6e14e6ea475714b6764db" prot="public" virt="non-virtual"><scope>csmp::BoundaryInterface</scope><name>BoxShaped</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1ad82b6e1229b2eaa3311dc068aa3f0ba6" prot="public" virt="non-virtual"><scope>csmp::BoundaryInterface</scope><name>ContainsBoundary</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1ad24b7f5db1277b6a7837a700d103d153" prot="public" virt="non-virtual"><scope>csmp::BoundaryInterface</scope><name>CreateBoundaryAround</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a4e8a32b74b875851b1805944812b3a70" prot="public" virt="non-virtual"><scope>csmp::BoundaryInterface</scope><name>CreateBoundaryBetween</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a7f343a42577037dff47093f62a90b84b" prot="public" virt="non-virtual"><scope>csmp::BoundaryInterface</scope><name>CreateBoundaryName</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a7aef8cb4f10754a119e7df1309b9d98a" prot="protected" virt="non-virtual"><scope>csmp::BoundaryInterface</scope><name>CreateBoundaryNameFrom</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a46772c373bade27cc1bfd5de6a7f2cb1" prot="public" virt="non-virtual"><scope>csmp::BoundaryInterface</scope><name>CreateExternalBoundaryFrom</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a41271a0826a7dfae74abdb5cf4856b4f" prot="public" virt="non-virtual"><scope>csmp::BoundaryInterface</scope><name>CreateInternalBoundaryFrom</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1ad0eed3c326997f854db44d5a7320a1e2" prot="public" virt="non-virtual"><scope>csmp::BoundaryInterface</scope><name>EstablishBoundariesFromRegions</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1aa3b79631cd879e55338d14803caae786" prot="public" virt="non-virtual"><scope>csmp::BoundaryInterface</scope><name>EstablishBoxBoundaries</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a806f539a7761ee70feaa892a22d040ff" prot="public" virt="non-virtual"><scope>csmp::BoundaryInterface</scope><name>EstablishBoxBoundariesFromNodeFlags</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a432e8ca3268d6ef31eaf6b9fd23a3e7c" prot="public" virt="non-virtual"><scope>csmp::BoundaryInterface</scope><name>EstablishBoxBoundariesFromOrientation</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1ad1c6156ff7aa50d5a1c26d12d32006f7" prot="public" virt="non-virtual"><scope>csmp::BoundaryInterface</scope><name>EstablishEdgeBoundariesOfBoxShapedModel</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1ad66b7d53568c18e4241ad24ef51f51d7" prot="public" virt="non-virtual"><scope>csmp::BoundaryInterface</scope><name>FindBoundaryByName</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a8c12cd3934001fdeea4d927a94bd4e9d" prot="public" virt="non-virtual"><scope>csmp::BoundaryInterface</scope><name>FindBoundaryByNames</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1abc0392784790ae33fdc9759a7bf19615" prot="public" virt="non-virtual"><scope>csmp::BoundaryInterface</scope><name>FormBoundariesFrom</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a573cc9956b043b7010b5c70eebc47a40" prot="public" virt="non-virtual"><scope>csmp::BoundaryInterface</scope><name>InputBoundariesFromBinary</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1af8d883b322003e0e831b114a53120eef" prot="public" virt="non-virtual"><scope>csmp::BoundaryInterface</scope><name>IsBoundaryName</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a4e58d1c493b2e439a430621ea11df640" prot="public" virt="non-virtual"><scope>csmp::BoundaryInterface</scope><name>OutputBoundariesToBinary</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1ae8976912d2d26ce92222880798dba583" prot="public" virt="non-virtual"><scope>csmp::BoundaryInterface</scope><name>RemoveBoundary</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a363ed5b8e8cbb1e5a6ae26051753e01d" prot="public" virt="non-virtual"><scope>csmp::BoundaryInterface</scope><name>RemoveBoundary</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a8e78dcdf294a7c03e43880b5e362fa73" prot="public" virt="non-virtual"><scope>csmp::BoundaryInterface</scope><name>~BoundaryInterface</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

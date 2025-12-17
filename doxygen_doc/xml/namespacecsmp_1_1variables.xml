@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="namespacecsmp_1_1variables" kind="namespace" language="C++">
+    <compoundname>csmp::variables</compoundname>
+    <innerclass refid="structcsmp_1_1variables_1_1_variable_set___tracer_transfer" prot="public">csmp::variables::VariableSet_TracerTransfer</innerclass>
+    <innerclass refid="structcsmp_1_1variables_1_1_variable_set___two_phase_flow" prot="public">csmp::variables::VariableSet_TwoPhaseFlow</innerclass>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="non-GIT-files/VariableSet_TracerTransfer.h" line="14" column="14"/>
+  </compounddef>
+</doxygen>

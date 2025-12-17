@@ -1,0 +1,132 @@
+\doxysection{csmp\+::Finite\+Element\+\_\+\+Test Class Reference}
+\hypertarget{classcsmp_1_1_finite_element___test}{}\label{classcsmp_1_1_finite_element___test}\index{csmp::FiniteElement\_Test@{csmp::FiniteElement\_Test}}
+
+
+Generic \doxylink{classcsmp_1_1_test}{Test} for any FEM subclass.  
+
+
+
+
+{\ttfamily \#include $<$Finite\+Element\+\_\+\+Test.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Finite\+Element\+\_\+\+Test\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=230pt]{classcsmp_1_1_finite_element___test__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Finite\+Element\+\_\+\+Test\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=230pt]{classcsmp_1_1_finite_element___test__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_finite_element___test_ab613a7604758fbaa44bad09d0ebce84a}\label{classcsmp_1_1_finite_element___test_ab613a7604758fbaa44bad09d0ebce84a} 
+{\bfseries Finite\+Element\+\_\+\+Test} (\mbox{\hyperlink{classcsmp_1_1_finite_element}{Finite\+Element}} \texorpdfstring{$\ast$}{*}testee, const char \texorpdfstring{$\ast$}{*}results\+\_\+file, bool verbose)
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element___test_a558d6c0823507f1e7faae23a3e49d74f}{run}} ()
+\begin{DoxyCompactList}\small\item\em tests fem operations against provided data in text file \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element___test_a6c1cbf45b9e623792234e2a1f441354b}\label{classcsmp_1_1_finite_element___test_a6c1cbf45b9e623792234e2a1f441354b} 
+void {\bfseries Test\+Local\+Coordinate\+Functions\+Returned\+As\+\_\+vector} (int interpolation\+\_\+order)
+\begin{DoxyCompactList}\small\item\em testing declerative programming extensions \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Test} (std\+::ostream \texorpdfstring{$\ast$}{*}osptr=0)
+\item 
+long {\bfseries get\+Num\+Passed} () const
+\item 
+long {\bfseries get\+Num\+Failed} () const
+\item 
+const std\+::ostream \texorpdfstring{$\ast$}{*} {\bfseries get\+Stream} () const
+\item 
+void {\bfseries set\+Stream} (std\+::ostream \texorpdfstring{$\ast$}{*}osptr)
+\item 
+void {\bfseries set\+Name} (std\+::string test\+Name)
+\item 
+std\+::string {\bfseries get\+Name} () const
+\item 
+bool {\bfseries has\+Name} () const
+\item 
+void {\bfseries do\+\_\+succeed} ()
+\item 
+long {\bfseries report} () const
+\item 
+virtual void {\bfseries reset} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}}
+\begin{DoxyCompactItemize}
+\item 
+void {\bfseries do\+\_\+equal} (double expr, double value, double tol, const std\+::string \&lbl, const char \texorpdfstring{$\ast$}{*}fname, long lineno)
+\item 
+void {\bfseries do\+\_\+test} (bool cond, const std\+::string \&lbl, const char \texorpdfstring{$\ast$}{*}fname, long lineno)
+\item 
+void {\bfseries do\+\_\+fail} (const std\+::string \&lbl, const char \texorpdfstring{$\ast$}{*}fname, long lineno)
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}}
+\begin{DoxyCompactItemize}
+\item 
+const char \texorpdfstring{$\ast$}{*} {\bfseries prefix\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Generic \doxylink{classcsmp_1_1_test}{Test} for any FEM subclass. 
+
+\begin{DoxyAuthor}{Author}
+Philipp Lang
+\end{DoxyAuthor}
+Uses the \doxylink{classcsmp_1_1_finite_element___test_data}{Finite\+Element\+\_\+\+Test\+Data} class to test FEMs. Please see there for instructions on the text file that is used for testing.
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000249}{Todo}}](3) Consecutive\+Nodes\+At\+Boundary Test(not implemented for most FEMs) 
+
+(3) Think about \+\_\+equal vs \+\_\+test in some cases 
+
+(3) Add more feedback when ordering matters\end{DoxyRefDesc}
+\hypertarget{classcsmp_1_1_finite_element___test_prerequisites}{}\doxysubsection{\texorpdfstring{FEM Prerequisites}{FEM Prerequisites}}\label{classcsmp_1_1_finite_element___test_prerequisites}
+Coordinate matrix has to be at least of size 2x2, meaning no less than a 2D line element may be tested. 
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_finite_element___test_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_finite_element___test_a558d6c0823507f1e7faae23a3e49d74f}\index{csmp::FiniteElement\_Test@{csmp::FiniteElement\_Test}!run@{run}}
+\index{run@{run}!csmp::FiniteElement\_Test@{csmp::FiniteElement\_Test}}
+\doxysubsubsection{\texorpdfstring{run()}{run()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element___test_a558d6c0823507f1e7faae23a3e49d74f} 
+void csmp\+::\+Finite\+Element\+\_\+\+Test\+::run (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+tests fem operations against provided data in text file 
+
+
+
+Implements \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=328pt]{classcsmp_1_1_finite_element___test_a558d6c0823507f1e7faae23a3e49d74f_cgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+tests/unit/Finite\+Element\+\_\+\+Test.\+h\item 
+tests/unit/Finite\+Element\+\_\+\+Test.\+cpp\end{DoxyCompactItemize}

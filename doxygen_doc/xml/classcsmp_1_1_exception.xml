@@ -1,0 +1,302 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_exception" kind="class" language="C++" prot="public">
+    <compoundname>csmp::Exception</compoundname>
+    <basecompoundref prot="private" virt="non-virtual">std::exception</basecompoundref>
+    <includes refid="_exception_8h" local="no">Exception.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_exception_1a94318d88a76922b55703b6b6f0c9a872" prot="private" static="no" mutable="no">
+        <type><ref refid="namespacecsmp_1a6a7cd0f08693c4632eea521f4ab13cb8" kindref="member">CSMP_MESSAGE</ref></type>
+        <definition>CSMP_MESSAGE csmp::Exception::csmp_exception_</definition>
+        <argsstring></argsstring>
+        <name>csmp_exception_</name>
+        <qualifiedname>csmp::Exception::csmp_exception_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/Exception.h" line="57" column="18" bodyfile="source/includes/run_control/Exception.h" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_exception_1a0cf3a087811ba70020c28b0e8c0ce13b" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::Exception::originator_</definition>
+        <argsstring></argsstring>
+        <name>originator_</name>
+        <qualifiedname>csmp::Exception::originator_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/Exception.h" line="58" column="18" bodyfile="source/includes/run_control/Exception.h" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_exception_1a9321c6695e2478e4feed7e4598c80e06" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::Exception::message_</definition>
+        <argsstring></argsstring>
+        <name>message_</name>
+        <qualifiedname>csmp::Exception::message_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/Exception.h" line="59" column="18" bodyfile="source/includes/run_control/Exception.h" bodystart="59" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_exception_1aeeb5f6b6949fce20e2e4c91c1e844559" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Exception::Exception</definition>
+        <argsstring>(CSMP_MESSAGE, const std::string &amp;originator, const std::string &amp;message)</argsstring>
+        <name>Exception</name>
+        <qualifiedname>csmp::Exception::Exception</qualifiedname>
+        <param>
+          <type><ref refid="namespacecsmp_1a6a7cd0f08693c4632eea521f4ab13cb8" kindref="member">CSMP_MESSAGE</ref></type>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>originator</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>message</declname>
+        </param>
+        <briefdescription>
+<para>use as: throw <ref refid="classcsmp_1_1_exception" kindref="compound">csmp::Exception</ref>( WARNING, &quot;class::method where this comes from&quot;, messsage ); </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/Exception.h" line="28" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_exception_1a9b36107adf7bf63bb7c5b16f25cf984f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Exception::Exception</definition>
+        <argsstring>(CSMP_MESSAGE, const std::string &amp;originator, const std::string &amp;parameter, const std::string &amp;message)</argsstring>
+        <name>Exception</name>
+        <qualifiedname>csmp::Exception::Exception</qualifiedname>
+        <param>
+          <type><ref refid="namespacecsmp_1a6a7cd0f08693c4632eea521f4ab13cb8" kindref="member">CSMP_MESSAGE</ref></type>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>originator</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>parameter</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>message</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/Exception.h" line="32" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_exception_1a82bd17f608226ee4be0e896783c8a9ae" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>csmp::Exception::~Exception</definition>
+        <argsstring>()</argsstring>
+        <name>~Exception</name>
+        <qualifiedname>csmp::Exception::~Exception</qualifiedname>
+        <exceptions> throw ()</exceptions>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/Exception.h" line="37" column="13" bodyfile="source/modules/run_control/Exception.cpp" bodystart="96" bodyend="99"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_exception_1aed87e7e2cb837a915d98481ee720849e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Exception::Exception</definition>
+        <argsstring>(const Exception &amp;)</argsstring>
+        <name>Exception</name>
+        <qualifiedname>csmp::Exception::Exception</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_exception" kindref="compound">Exception</ref> &amp;</type>
+          <defname>excp</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/Exception.h" line="39" column="5" bodyfile="source/modules/run_control/Exception.cpp" bodystart="49" bodyend="52"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_exception_1a4e9fd82a177cc6c27628acb0042db325" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_exception" kindref="compound">Exception</ref> &amp;</type>
+        <definition>Exception &amp; csmp::Exception::operator=</definition>
+        <argsstring>(const Exception &amp;)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::Exception::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_exception" kindref="compound">Exception</ref> &amp;</type>
+          <defname>excp</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/Exception.h" line="40" column="15" bodyfile="source/modules/run_control/Exception.cpp" bodystart="55" bodyend="63"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_exception_1a6b9b99d30db827fe4d6f4db5559c2988" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>const char *</type>
+        <definition>const char * csmp::Exception::what</definition>
+        <argsstring>() const</argsstring>
+        <name>what</name>
+        <qualifiedname>csmp::Exception::what</qualifiedname>
+        <exceptions> throw ()</exceptions>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/Exception.h" line="42" column="24" bodyfile="source/modules/run_control/Exception.cpp" bodystart="84" bodyend="87"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_exception_1af89cbd55496472087c037ee19caff8c4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>string csmp::Exception::What</definition>
+        <argsstring>() const</argsstring>
+        <name>What</name>
+        <qualifiedname>csmp::Exception::What</qualifiedname>
+        <briefdescription>
+<para>returns what() for the underlying standard exception </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/Exception.h" line="45" column="19" bodyfile="source/modules/run_control/Exception.cpp" bodystart="66" bodyend="69"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_exception_1ae5b044f37d5fcdf3f69be12d3ec781bc" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>string csmp::Exception::Originator</definition>
+        <argsstring>() const</argsstring>
+        <name>Originator</name>
+        <qualifiedname>csmp::Exception::Originator</qualifiedname>
+        <briefdescription>
+<para>the class and method (or function) from which the exception was thrown </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/Exception.h" line="48" column="19" bodyfile="source/modules/run_control/Exception.cpp" bodystart="72" bodyend="75"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_exception_1a844fdf88ddb365d0fb5ae63dbe5b7547" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="namespacecsmp_1a6a7cd0f08693c4632eea521f4ab13cb8" kindref="member">CSMP_MESSAGE</ref></type>
+        <definition>CSMP_MESSAGE csmp::Exception::Message</definition>
+        <argsstring>() const</argsstring>
+        <name>Message</name>
+        <qualifiedname>csmp::Exception::Message</qualifiedname>
+        <briefdescription>
+<para>what went wrong in as much as was known at the executation of the program from where the exception was thrown </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/Exception.h" line="51" column="19" bodyfile="source/modules/run_control/Exception.cpp" bodystart="78" bodyend="81"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_exception_1ab8a55ea01f63ceded4a827a661faef83" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Exception::Out</definition>
+        <argsstring>() const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::Exception::Out</qualifiedname>
+        <briefdescription>
+<para>prints all data assocatiated with the exception (following the convention for all CSMP classes) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/Exception.h" line="54" column="19" bodyfile="source/modules/run_control/Exception.cpp" bodystart="90" bodyend="94"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_exception_1a2b9b7029213daec48ace4a25243fc3b2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Exception::Exception</definition>
+        <argsstring>()</argsstring>
+        <name>Exception</name>
+        <qualifiedname>csmp::Exception::Exception</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/Exception.h" line="60" column="5" bodyfile="source/modules/run_control/Exception.cpp" bodystart="8" bodyend="13"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>base class for CSMP-specific exception handling using an exception qualifier (<ref refid="namespacecsmp_1a6a7cd0f08693c4632eea521f4ab13cb8" kindref="member">CSMP_MESSAGE</ref>), an originator (the class and method from where the exception comes from, and a string that contains the message that describes what happened locally. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="note"><para>no need to use a <ref refid="classcsmp_1_1_exception" kindref="compound">csmp::Exception</ref> if the case is well described by one of the standard exceptions.</para>
+</simplesect>
+<simplesect kind="author"><para>Stephan Matthai </para>
+</simplesect>
+<simplesect kind="date"><para>1999 </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::Exception</label>
+        <link refid="classcsmp_1_1_exception"/>
+        <childnode refid="2" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::exception</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::Exception</label>
+        <link refid="classcsmp_1_1_exception"/>
+        <childnode refid="2" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::exception</label>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/run_control/Exception.h" line="25" column="1" bodyfile="source/includes/run_control/Exception.h" bodystart="25" bodyend="61"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_exception_1a94318d88a76922b55703b6b6f0c9a872" prot="private" virt="non-virtual"><scope>csmp::Exception</scope><name>csmp_exception_</name></member>
+      <member refid="classcsmp_1_1_exception_1aeeb5f6b6949fce20e2e4c91c1e844559" prot="public" virt="non-virtual"><scope>csmp::Exception</scope><name>Exception</name></member>
+      <member refid="classcsmp_1_1_exception_1a9b36107adf7bf63bb7c5b16f25cf984f" prot="public" virt="non-virtual"><scope>csmp::Exception</scope><name>Exception</name></member>
+      <member refid="classcsmp_1_1_exception_1aed87e7e2cb837a915d98481ee720849e" prot="public" virt="non-virtual"><scope>csmp::Exception</scope><name>Exception</name></member>
+      <member refid="classcsmp_1_1_exception_1a2b9b7029213daec48ace4a25243fc3b2" prot="private" virt="non-virtual"><scope>csmp::Exception</scope><name>Exception</name></member>
+      <member refid="classcsmp_1_1_exception_1a844fdf88ddb365d0fb5ae63dbe5b7547" prot="public" virt="non-virtual"><scope>csmp::Exception</scope><name>Message</name></member>
+      <member refid="classcsmp_1_1_exception_1a9321c6695e2478e4feed7e4598c80e06" prot="private" virt="non-virtual"><scope>csmp::Exception</scope><name>message_</name></member>
+      <member refid="classcsmp_1_1_exception_1a4e9fd82a177cc6c27628acb0042db325" prot="public" virt="non-virtual"><scope>csmp::Exception</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_exception_1ae5b044f37d5fcdf3f69be12d3ec781bc" prot="public" virt="non-virtual"><scope>csmp::Exception</scope><name>Originator</name></member>
+      <member refid="classcsmp_1_1_exception_1a0cf3a087811ba70020c28b0e8c0ce13b" prot="private" virt="non-virtual"><scope>csmp::Exception</scope><name>originator_</name></member>
+      <member refid="classcsmp_1_1_exception_1ab8a55ea01f63ceded4a827a661faef83" prot="public" virt="non-virtual"><scope>csmp::Exception</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_exception_1af89cbd55496472087c037ee19caff8c4" prot="public" virt="non-virtual"><scope>csmp::Exception</scope><name>What</name></member>
+      <member refid="classcsmp_1_1_exception_1a6b9b99d30db827fe4d6f4db5559c2988" prot="public" virt="virtual"><scope>csmp::Exception</scope><name>what</name></member>
+      <member refid="classcsmp_1_1_exception_1a82bd17f608226ee4be0e896783c8a9ae" prot="public" virt="virtual"><scope>csmp::Exception</scope><name>~Exception</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

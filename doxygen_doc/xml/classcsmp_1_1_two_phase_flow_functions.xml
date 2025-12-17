@@ -1,0 +1,1025 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_two_phase_flow_functions" kind="class" language="C++" prot="public">
+    <compoundname>csmp::TwoPhaseFlowFunctions</compoundname>
+    <includes refid="_two_phase_flow_functions_8h" local="no">TwoPhaseFlowFunctions.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+      <param>
+        <type>template&lt; uint32_t &gt; class</type>
+        <declname>USER</declname>
+        <defname>USER</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_flow_functions_1aa4c35723be480893a04b7d9bbd714d5d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseFlowFunctions&lt; dim, USER &gt;::Sw</definition>
+        <argsstring>(Element&lt; dim &gt; *const e) const</argsstring>
+        <name>Sw</name>
+        <qualifiedname>csmp::TwoPhaseFlowFunctions::Sw</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; *const</type>
+          <declname>e</declname>
+        </param>
+        <briefdescription>
+<para>current water saturation initialised inside of the model </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseFlowFunctions.h" line="27" column="12" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseFlowFunctions.cpp" bodystart="14" bodyend="18"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_flow_functions_1a8e815f1d0e3d35290fd8012738f9e104" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseFlowFunctions&lt; dim, USER &gt;::Mobility</definition>
+        <argsstring>(Element&lt; dim &gt; *const, uint32_t phase) const</argsstring>
+        <name>Mobility</name>
+        <qualifiedname>csmp::TwoPhaseFlowFunctions::Mobility</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>phase</declname>
+        </param>
+        <briefdescription>
+<para>lambda parameter: 0 for water, 1 for the non-wetting phase </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Mobility of phase i, kri(sw) / mu_i. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseFlowFunctions.h" line="30" column="12" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseFlowFunctions.cpp" bodystart="27" bodyend="43"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_flow_functions_1ae13f971b41fa6659d59deb823ce2d53f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseFlowFunctions&lt; dim, USER &gt;::Mobility_at</definition>
+        <argsstring>(Element&lt; dim &gt; *const, uint32_t phase, double sw) const</argsstring>
+        <name>Mobility_at</name>
+        <qualifiedname>csmp::TwoPhaseFlowFunctions::Mobility_at</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>phase</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>sw</declname>
+        </param>
+        <briefdescription>
+<para>lambda parameter: 0 for water, 1 for the non-wetting phase (using prescribed sw) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Mobility of phase i, kri(sw) / mu_i. Using prescribed sw value, instead of intepolated value. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseFlowFunctions.h" line="33" column="12" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseFlowFunctions.cpp" bodystart="53" bodyend="69"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_flow_functions_1adfd3f10a6452ceec887ac6ee94bd8d11" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseFlowFunctions&lt; dim, USER &gt;::MobilityDerivative</definition>
+        <argsstring>(Element&lt; dim &gt; *const, uint32_t phase, bool evaluate_numerically=false) const</argsstring>
+        <name>MobilityDerivative</name>
+        <qualifiedname>csmp::TwoPhaseFlowFunctions::MobilityDerivative</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>phase</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>evaluate_numerically</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>d lambda_i / dsw </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Mobility saturation derivative for phase i. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseFlowFunctions.h" line="36" column="12" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseFlowFunctions.cpp" bodystart="78" bodyend="87"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_flow_functions_1a3583273f56e339059560bae1603257fa" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseFlowFunctions&lt; dim, USER &gt;::MobilityDerivative_at</definition>
+        <argsstring>(Element&lt; dim &gt; *const, uint32_t phase, double sw) const</argsstring>
+        <name>MobilityDerivative_at</name>
+        <qualifiedname>csmp::TwoPhaseFlowFunctions::MobilityDerivative_at</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>phase</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>sw</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Mobility saturation derivative for phase i. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseFlowFunctions.h" line="38" column="12" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseFlowFunctions.cpp" bodystart="96" bodyend="105"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_flow_functions_1aff163b77e8e057a168b63bc49ad02f70" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseFlowFunctions&lt; dim, USER &gt;::TotalMobility</definition>
+        <argsstring>(Element&lt; dim &gt; *const) const</argsstring>
+        <name>TotalMobility</name>
+        <qualifiedname>csmp::TwoPhaseFlowFunctions::TotalMobility</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+<para>lambda_t: sum of phase mobilities </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Sum of mobilities (not multiplied with permeability). </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseFlowFunctions.h" line="41" column="12" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseFlowFunctions.cpp" bodystart="115" bodyend="120"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_flow_functions_1a02064e66435763d9f45572881696ee9b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseFlowFunctions&lt; dim, USER &gt;::TotalMobility_at</definition>
+        <argsstring>(Element&lt; dim &gt; *const, double sw) const</argsstring>
+        <name>TotalMobility_at</name>
+        <qualifiedname>csmp::TwoPhaseFlowFunctions::TotalMobility_at</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>sw</declname>
+        </param>
+        <briefdescription>
+<para>lambda_t: sum of phase mobilities (using prescribed sw) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Sum of mobilities (not multiplied with permeability). Using prescribed sw value, instead of intepolated value. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseFlowFunctions.h" line="44" column="12" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseFlowFunctions.cpp" bodystart="130" bodyend="135"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_flow_functions_1ab23f9375ae7f476e0eaecef7baa6e4dc" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseFlowFunctions&lt; dim, USER &gt;::MobilityProduct</definition>
+        <argsstring>(Element&lt; dim &gt; *const) const</argsstring>
+        <name>MobilityProduct</name>
+        <qualifiedname>csmp::TwoPhaseFlowFunctions::MobilityProduct</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+<para>lambda overbar: l1 * l2 / l1 + l2 = mobility product / total mobility also known as G </para>
+        </briefdescription>
+        <detaileddescription>
+<para>G - parameter known as mobility product, lambda overbar.</para>
+<para>Computes G = lamdba_w * lambda_n / (lambda_w + lambda_n), cf., van Duijn and de Neef (1998). Note that Initialize() must be called first. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseFlowFunctions.h" line="47" column="12" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseFlowFunctions.cpp" bodystart="150" bodyend="154"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_flow_functions_1a0c9df8a94676491e468a0c1d42795d05" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseFlowFunctions&lt; dim, USER &gt;::MobilityProductDerivative</definition>
+        <argsstring>(Element&lt; dim &gt; *const, bool evaluate_numerically=false) const</argsstring>
+        <name>MobilityProductDerivative</name>
+        <qualifiedname>csmp::TwoPhaseFlowFunctions::MobilityProductDerivative</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>evaluate_numerically</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>d lambda overbar / dsw also known as dGds </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Saturation derivative of mobility product. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseFlowFunctions.h" line="50" column="12" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseFlowFunctions.cpp" bodystart="167" bodyend="187"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_flow_functions_1ad204036ce2dec252065021b10678cefd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseFlowFunctions&lt; dim, USER &gt;::MobilityProductDerivative_at</definition>
+        <argsstring>(Element&lt; dim &gt; *const, double sw) const</argsstring>
+        <name>MobilityProductDerivative_at</name>
+        <qualifiedname>csmp::TwoPhaseFlowFunctions::MobilityProductDerivative_at</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>sw</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Saturation derivative of mobility product. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseFlowFunctions.h" line="52" column="12" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseFlowFunctions.cpp" bodystart="200" bodyend="218"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_flow_functions_1a7a0f8565a17ea1a85363c7327f97fee4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseFlowFunctions&lt; dim, USER &gt;::f</definition>
+        <argsstring>(Element&lt; dim &gt; *const, uint32_t phase) const</argsstring>
+        <name>f</name>
+        <qualifiedname>csmp::TwoPhaseFlowFunctions::f</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>phase</declname>
+        </param>
+        <briefdescription>
+<para>fractional flow; 0=water, 1=non-wetting phase </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Computes the fractional flow of the wetting (ehase=1) and non-wetting (ehase=2) phases using the relative k&apos;s. and viscosities. Note that Initialize() must be called first. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseFlowFunctions.h" line="55" column="12" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseFlowFunctions.cpp" bodystart="237" bodyend="245"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_flow_functions_1a5e1ace14d22cf90a5e137805f099b336" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseFlowFunctions&lt; dim, USER &gt;::f_at</definition>
+        <argsstring>(Element&lt; dim &gt; *const, uint32_t phase, double sw) const</argsstring>
+        <name>f_at</name>
+        <qualifiedname>csmp::TwoPhaseFlowFunctions::f_at</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>phase</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>sw</declname>
+        </param>
+        <briefdescription>
+<para>fractional flow; 0=water, 1=non-wetting phase (using prescribed sw) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Computes the fractional flow of the wetting (ehase=1) and non-wetting (ehase=2) phases using prescribed sw value, instead of intepolated value. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseFlowFunctions.h" line="58" column="12" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseFlowFunctions.cpp" bodystart="262" bodyend="283"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_flow_functions_1a4cbb7f650140e0f5c31fbe38a7338bd4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseFlowFunctions&lt; dim, USER &gt;::Permeability</definition>
+        <argsstring>(Element&lt; dim &gt; *const) const</argsstring>
+        <name>Permeability</name>
+        <qualifiedname>csmp::TwoPhaseFlowFunctions::Permeability</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+        </param>
+        <briefdescription>
+<para>Permeability. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseFlowFunctions.h" line="61" column="12"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_flow_functions_1a41d0e0204c5ea1eecd96e04f41376dd8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseFlowFunctions&lt; dim, USER &gt;::dfds</definition>
+        <argsstring>(Element&lt; dim &gt; *const, uint32_t phase) const</argsstring>
+        <name>dfds</name>
+        <qualifiedname>csmp::TwoPhaseFlowFunctions::dfds</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>phase</declname>
+        </param>
+        <briefdescription>
+<para>derivative of fractional flow (used in advection multiplier); note that fw+fn=1, dfw_dsw=dfn_dsn </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Derivative of fractional flow function (advection multipliers).</para>
+<para><xrefsect id="todo_1_todo000233"><xreftitle>Todo</xreftitle><xrefdescription><para>check whether code for end-member cases has to be reinstated. </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseFlowFunctions.h" line="64" column="12" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseFlowFunctions.cpp" bodystart="297" bodyend="311"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_flow_functions_1a27eab09c3d0ae37c4e37ec13dd8df655" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseFlowFunctions&lt; dim, USER &gt;::dfds_at</definition>
+        <argsstring>(Element&lt; dim &gt; *const, double sw) const</argsstring>
+        <name>dfds_at</name>
+        <qualifiedname>csmp::TwoPhaseFlowFunctions::dfds_at</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>sw</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Derivative of fractional flow function at specific sw, for wetting phase 0</para>
+<para><xrefsect id="todo_1_todo000234"><xreftitle>Todo</xreftitle><xrefdescription><para>check whether code for end-member cases has to be reinstated. </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseFlowFunctions.h" line="66" column="12" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseFlowFunctions.cpp" bodystart="325" bodyend="337"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_flow_functions_1a842bd5a14959aa69fa952455640bc36a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseFlowFunctions&lt; dim, USER &gt;::MaxFractionalFlowDerivative</definition>
+        <argsstring>(Element&lt; dim &gt; *const) const</argsstring>
+        <name>MaxFractionalFlowDerivative</name>
+        <qualifiedname>csmp::TwoPhaseFlowFunctions::MaxFractionalFlowDerivative</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+<para>maximum value of previous derivative </para>
+        </briefdescription>
+        <detaileddescription>
+<para>@attension: Generally &quot;MaxFractionalqFlowDerivative&quot; is not speed. It is after Buckley-Leverett problem </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseFlowFunctions.h" line="69" column="12" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseFlowFunctions.cpp" bodystart="750" bodyend="756"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_flow_functions_1a5d4bbc14660932b74f00f8499784e71a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseFlowFunctions&lt; dim, USER &gt;::AdvectionMultiplier</definition>
+        <argsstring>(Element&lt; dim &gt; *const) const</argsstring>
+        <name>AdvectionMultiplier</name>
+        <qualifiedname>csmp::TwoPhaseFlowFunctions::AdvectionMultiplier</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+<para>multiplier for advection viscosity coefficient in the case of non-linear advection </para>
+        </briefdescription>
+        <detaileddescription>
+<para>fractional flow derivative for wetting phase = 0.</para>
+<para>If not overloaded, this returns the derivative of the fractional flow function at the current saturation of the wetting phase (see Helmig, 1997, p. 108, eqn. 3.74, term 2 (first part). </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseFlowFunctions.h" line="72" column="11" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseFlowFunctions.cpp" bodystart="354" bodyend="358"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_flow_functions_1a4a1087561974cfd736c2be0e9d81c3f4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseFlowFunctions&lt; dim, USER &gt;::ShockSpeed</definition>
+        <argsstring>(Element&lt; dim &gt; *const) const</argsstring>
+        <name>ShockSpeed</name>
+        <qualifiedname>csmp::TwoPhaseFlowFunctions::ShockSpeed</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+<para>outputs the shock wave celerity </para>
+        </briefdescription>
+        <detaileddescription>
+<para>shock speed base on Buckley Leverett theory </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseFlowFunctions.h" line="75" column="12" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseFlowFunctions.cpp" bodystart="767" bodyend="771"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_flow_functions_1a41a0273052d41f0ba081d2ed0bb0544b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseFlowFunctions&lt; dim, USER &gt;::ShockHeight</definition>
+        <argsstring>(Element&lt; dim &gt; *const) const</argsstring>
+        <name>ShockHeight</name>
+        <qualifiedname>csmp::TwoPhaseFlowFunctions::ShockHeight</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+<para>outputs the water saturation at the non-wetting phase shock front </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseFlowFunctions.h" line="78" column="12" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseFlowFunctions.cpp" bodystart="779" bodyend="802"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_flow_functions_1adf3785cd6e0f56a4f56b16698cf1a5cb" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseFlowFunctions&lt; dim, USER &gt;::ShockSpeedAndHeight</definition>
+        <argsstring>(Element&lt; dim &gt; *const, double &amp;speed, double &amp;height) const</argsstring>
+        <name>ShockSpeedAndHeight</name>
+        <qualifiedname>csmp::TwoPhaseFlowFunctions::ShockSpeedAndHeight</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>double &amp;</type>
+          <declname>speed</declname>
+        </param>
+        <param>
+          <type>double &amp;</type>
+          <declname>height</declname>
+        </param>
+        <briefdescription>
+<para>calculated shock height and speed </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseFlowFunctions.h" line="81" column="14" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseFlowFunctions.cpp" bodystart="812" bodyend="818"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_flow_functions_1ab171e4e81f6e13024d434dd2c2704a53" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseFlowFunctions&lt; dim, USER &gt;::GravityMultiplier</definition>
+        <argsstring>(Element&lt; dim &gt; *const, VectorVariable&lt; dim &gt; &amp;dip_vec) const</argsstring>
+        <name>GravityMultiplier</name>
+        <qualifiedname>csmp::TwoPhaseFlowFunctions::GravityMultiplier</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; dim &gt; &amp;</type>
+          <declname>dip_vec</declname>
+          <defname>dip_vc</defname>
+        </param>
+        <briefdescription>
+<para>multipliers for gravity-driven flow (advection multiplier and source term) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>k * delta_rho * g </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseFlowFunctions.h" line="84" column="10" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseFlowFunctions.cpp" bodystart="369" bodyend="393"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_flow_functions_1aba1760c4175e399fe5eed6939ab1d4fc" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseFlowFunctions&lt; dim, USER &gt;::GravityMultiplier_G</definition>
+        <argsstring>(Element&lt; dim &gt; *const, VectorVariable&lt; dim &gt; &amp;dip_vec) const</argsstring>
+        <name>GravityMultiplier_G</name>
+        <qualifiedname>csmp::TwoPhaseFlowFunctions::GravityMultiplier_G</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; dim &gt; &amp;</type>
+          <declname>dip_vec</declname>
+          <defname>dip_vc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>See Sebastian Geiger&apos;s thesis (2004), closed form, i.e.</para>
+<para>G = lambda_overbar * k * delta_rho * g </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseFlowFunctions.h" line="86" column="10" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseFlowFunctions.cpp" bodystart="407" bodyend="413"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_flow_functions_1a61764ee0bc11afb6bdc45c68fea29402" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseFlowFunctions&lt; dim, USER &gt;::GravityMultiplier_dGds</definition>
+        <argsstring>(Element&lt; dim &gt; *const, VectorVariable&lt; dim &gt; &amp;dip_vec) const</argsstring>
+        <name>GravityMultiplier_dGds</name>
+        <qualifiedname>csmp::TwoPhaseFlowFunctions::GravityMultiplier_dGds</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; dim &gt; &amp;</type>
+          <declname>dip_vec</declname>
+          <defname>dip_vc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Computes multiplier for advection gravity coefficient. The divergence lamda_ div k g (rhw-rhn) must be dealt with separately, see Helmig, 1997, p. 108, eqn. 3.74, term 2 (second part). </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseFlowFunctions.h" line="88" column="10" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseFlowFunctions.cpp" bodystart="427" bodyend="433"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_flow_functions_1a3d5af31b69a0cba26bbbe8017792702d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseFlowFunctions&lt; dim, USER &gt;::DiffusionMultiplier</definition>
+        <argsstring>(Element&lt; dim &gt; *const, size_t phase) const</argsstring>
+        <name>DiffusionMultiplier</name>
+        <qualifiedname>csmp::TwoPhaseFlowFunctions::DiffusionMultiplier</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>phase</declname>
+        </param>
+        <briefdescription>
+<para>multiplier for diffusion coefficient in the case of non-linear diffusion uses viscosity(phase) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns the diffusion coefficient for the phase of interest. If not overloaeded, the hydraulic conductivity is returned. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseFlowFunctions.h" line="91" column="12" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseFlowFunctions.cpp" bodystart="444" bodyend="451"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_flow_functions_1a7e4d7221b06b72bb90cb2aa6b2f0f10a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseFlowFunctions&lt; dim, USER &gt;::CapillaryDiffusionMultiplier</definition>
+        <argsstring>(Element&lt; dim &gt; *const) const</argsstring>
+        <name>CapillaryDiffusionMultiplier</name>
+        <qualifiedname>csmp::TwoPhaseFlowFunctions::CapillaryDiffusionMultiplier</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+<para>driven by capillary pressure gradient </para>
+        </briefdescription>
+        <detaileddescription>
+<para>See Helmig, 1997, p. 108, eqn. 3.74, term 1. This takes into account the permeability in direction of flow x lambda_overbar x pc-gradient. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseFlowFunctions.h" line="94" column="12" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseFlowFunctions.cpp" bodystart="465" bodyend="470"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_flow_functions_1a4ed58f82aed71734001c46fafe37a3b0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseFlowFunctions&lt; dim, USER &gt;::CapillaryDiffusionMultiplier_Phase</definition>
+        <argsstring>(Element&lt; dim &gt; *const, size_t phase) const</argsstring>
+        <name>CapillaryDiffusionMultiplier_Phase</name>
+        <qualifiedname>csmp::TwoPhaseFlowFunctions::CapillaryDiffusionMultiplier_Phase</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>phase</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseFlowFunctions.h" line="96" column="12" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseFlowFunctions.cpp" bodystart="479" bodyend="486"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_flow_functions_1a1ebdf0d643ec5f0fb5a85779bf8a3e12" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseFlowFunctions&lt; dim, USER &gt;::ShockFrontVelocity</definition>
+        <argsstring>(Element&lt; dim &gt; *const) const</argsstring>
+        <name>ShockFrontVelocity</name>
+        <qualifiedname>csmp::TwoPhaseFlowFunctions::ShockFrontVelocity</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+<para>calculating the Shock velocity </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The Shock front wave calculated after estimation of tangent Saturation point. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseFlowFunctions.h" line="99" column="12" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseFlowFunctions.cpp" bodystart="833" bodyend="840"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_flow_functions_1aeb164bd5471009c921c455b65a4fd67d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseFlowFunctions&lt; dim, USER &gt;::dfds_Numerical</definition>
+        <argsstring>(Element&lt; dim &gt; *const, uint32_t phase, double delta_s=0.001) const</argsstring>
+        <name>dfds_Numerical</name>
+        <qualifiedname>csmp::TwoPhaseFlowFunctions::dfds_Numerical</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>phase</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>delta_s</declname>
+          <defval>0.001</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseFlowFunctions.h" line="101" column="12" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseFlowFunctions.cpp" bodystart="502" bodyend="519"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_flow_functions_1a22a444b0c017e83b3f9230a1a54c0176" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseFlowFunctions&lt; dim, USER &gt;::dfds_at_Numerical</definition>
+        <argsstring>(Element&lt; dim &gt; *const, double sw, double delta_s=0.001) const</argsstring>
+        <name>dfds_at_Numerical</name>
+        <qualifiedname>csmp::TwoPhaseFlowFunctions::dfds_at_Numerical</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>sw</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>delta_s</declname>
+          <defname>h</defname>
+          <defval>0.001</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Derivative of fractional flow function at specific sw, for a particular phase (0 = wetting, 1 = non-wetting)</para>
+<para><xrefsect id="todo_1_todo000235"><xreftitle>Todo</xreftitle><xrefdescription><para>check whether code for end-member cases has to be reinstated. </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseFlowFunctions.h" line="103" column="12" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseFlowFunctions.cpp" bodystart="535" bodyend="545"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_flow_functions_1ac96665fcb718f0ab8509e6f83c3c1a2c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseFlowFunctions&lt; dim, USER &gt;::dGds_Numerical</definition>
+        <argsstring>(Element&lt; dim &gt; *const, double delta_s=0.000001) const</argsstring>
+        <name>dGds_Numerical</name>
+        <qualifiedname>csmp::TwoPhaseFlowFunctions::dGds_Numerical</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>delta_s</declname>
+          <defval>0.000001</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseFlowFunctions.h" line="105" column="12" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseFlowFunctions.cpp" bodystart="553" bodyend="568"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_flow_functions_1a40d52d74e94507cdaff5648fe840f963" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseFlowFunctions&lt; dim, USER &gt;::dlwds_Numerical</definition>
+        <argsstring>(Element&lt; dim &gt; *const, double delta_s=0.001) const</argsstring>
+        <name>dlwds_Numerical</name>
+        <qualifiedname>csmp::TwoPhaseFlowFunctions::dlwds_Numerical</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>delta_s</declname>
+          <defval>0.001</defval>
+        </param>
+        <briefdescription>
+<para>derivative of wetting phase mobility </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseFlowFunctions.h" line="107" column="12" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseFlowFunctions.cpp" bodystart="577" bodyend="581"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_flow_functions_1aa615b626de0a2393419b4b567b423cd1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseFlowFunctions&lt; dim, USER &gt;::dlnds_Numerical</definition>
+        <argsstring>(Element&lt; dim &gt; *const, double delta_s=0.001) const</argsstring>
+        <name>dlnds_Numerical</name>
+        <qualifiedname>csmp::TwoPhaseFlowFunctions::dlnds_Numerical</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>delta_s</declname>
+          <defval>0.001</defval>
+        </param>
+        <briefdescription>
+<para>derivative of non-wetting phase mobility </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseFlowFunctions.h" line="109" column="12" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseFlowFunctions.cpp" bodystart="592" bodyend="597"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_flow_functions_1a31abf288927a0a9e4f33417e1948b84a" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>USER&lt; dim &gt; *</type>
+        <definition>USER&lt; dim &gt; * csmp::TwoPhaseFlowFunctions&lt; dim, USER &gt;::User</definition>
+        <argsstring>()</argsstring>
+        <name>User</name>
+        <qualifiedname>csmp::TwoPhaseFlowFunctions::User</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseFlowFunctions.h" line="113" column="10" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseFlowFunctions.h" bodystart="113" bodyend="113"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_flow_functions_1a8a716002e582bfdd9673a5c148153d28" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>USER&lt; dim &gt; const *</type>
+        <definition>USER&lt; dim &gt; const  * csmp::TwoPhaseFlowFunctions&lt; dim, USER &gt;::User</definition>
+        <argsstring>() const</argsstring>
+        <name>User</name>
+        <qualifiedname>csmp::TwoPhaseFlowFunctions::User</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseFlowFunctions.h" line="114" column="16" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseFlowFunctions.h" bodystart="114" bodyend="114"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_flow_functions_1aa2b6e1b66ebb7a788c5b219b14a88a9a" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseFlowFunctions&lt; dim, USER &gt;::InflectionPointSaturation</definition>
+        <argsstring>(Element&lt; dim &gt; *const) const</argsstring>
+        <name>InflectionPointSaturation</name>
+        <qualifiedname>csmp::TwoPhaseFlowFunctions::InflectionPointSaturation</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+<para>calculating the Inflection point </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The Inflection Saturation <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>, calculated from the maxima of 1st derivative fractional flow function See page 144 from Helmig book. This can be more accurate by puting in the loop of more and more finer maxima serach algorithm. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseFlowFunctions.h" line="119" column="12" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseFlowFunctions.cpp" bodystart="613" bodyend="654"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_flow_functions_1ac3aa5bc8f0432544aa8639895a809bf9" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseFlowFunctions&lt; dim, USER &gt;::TangentPointSaturation</definition>
+        <argsstring>(Element&lt; dim &gt; *const) const</argsstring>
+        <name>TangentPointSaturation</name>
+        <qualifiedname>csmp::TwoPhaseFlowFunctions::TangentPointSaturation</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+<para>calculating the Tangent <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The Tanget Saturation <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>, calculated from the Buckley-Leverett problem See Eq. 1.86 in page 44 from Guinot book. To find root of this nonlinear function, I use The Secant Algorithm. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseFlowFunctions.h" line="122" column="12" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseFlowFunctions.cpp" bodystart="672" bodyend="683"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_flow_functions_1a12dd04829b6dab67b47892609b10833e" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseFlowFunctions&lt; dim, USER &gt;::TangentOfFractionalFlowFunction</definition>
+        <argsstring>(Element&lt; dim &gt; *const, double S) const</argsstring>
+        <name>TangentOfFractionalFlowFunction</name>
+        <qualifiedname>csmp::TwoPhaseFlowFunctions::TangentOfFractionalFlowFunction</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>S</declname>
+        </param>
+        <briefdescription>
+<para>calculating Buckley Leverett function... this has to be zero at shock point </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The Buckley- Leverett function See Eq. 1.86 in page 44 from Guinot book. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseFlowFunctions.h" line="125" column="12" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseFlowFunctions.cpp" bodystart="698" bodyend="703"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_flow_functions_1a96ffba063847ab121423439b941ba930" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseFlowFunctions&lt; dim, USER &gt;::FindRootSecantMethod</definition>
+        <argsstring>(Element&lt; dim &gt; *const, double S1, double S2) const</argsstring>
+        <name>FindRootSecantMethod</name>
+        <qualifiedname>csmp::TwoPhaseFlowFunctions::FindRootSecantMethod</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>S1</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>S2</declname>
+        </param>
+        <briefdescription>
+<para>finding root of Buckley Leverett function... which results is shock point saturation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Using the the SecantMethod to find the root of The Buckley- Leverett function See Eq. 1.86 in page 44 from Guinot book. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseFlowFunctions.h" line="128" column="12" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseFlowFunctions.cpp" bodystart="719" bodyend="736"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>2-phase multiphase flow functions for immiscible displacement of slightly compressible fluids. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Generates all relevant input values for 2-phase immiscible (saturation-based volume) transport scheme. Uses the SaturationFunctions and <ref refid="classcsmp_1_1_fluid" kindref="compound">Fluid</ref> module and the constitutive relationships specified therein. </para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="4">
+        <label>csmp::FlowFunctionsModule1&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_flow_functions_module1"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::FlowFunctionsModule1&lt; 3U &gt;</label>
+        <link refid="classcsmp_1_1_flow_functions_module1"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; 3U &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>csmp::FlowFunctionsModule2&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_flow_functions_module2"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>csmp::FlowFunctionsModule2&lt; 3U &gt;</label>
+        <link refid="classcsmp_1_1_flow_functions_module2"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; 3U &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>csmp::FlowFunctionsModule3&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_flow_functions_module3"/>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>csmp::FlowFunctionsModule3&lt; 3U &gt;</label>
+        <link refid="classcsmp_1_1_flow_functions_module3"/>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; 3U &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::TwoPhaseFlowFunctions&lt; dim, FlowFunctionsModule1 &gt;</label>
+        <link refid="classcsmp_1_1_two_phase_flow_functions"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; dim, FlowFunctionsModule1 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>csmp::TwoPhaseFlowFunctions&lt; dim, FlowFunctionsModule2 &gt;</label>
+        <link refid="classcsmp_1_1_two_phase_flow_functions"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; dim, FlowFunctionsModule2 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>csmp::TwoPhaseFlowFunctions&lt; dim, FlowFunctionsModule3 &gt;</label>
+        <link refid="classcsmp_1_1_two_phase_flow_functions"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; dim, FlowFunctionsModule3 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::TwoPhaseFlowFunctions&lt; dim, USER &gt;</label>
+        <link refid="classcsmp_1_1_two_phase_flow_functions"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::TwoPhaseFlowFunctions&lt; dim, USER &gt;</label>
+        <link refid="classcsmp_1_1_two_phase_flow_functions"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/thmc/two_phase_flow/TwoPhaseFlowFunctions.h" line="24" column="1" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseFlowFunctions.h" bodystart="24" bodyend="129"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1a5d4bbc14660932b74f00f8499784e71a" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseFlowFunctions</scope><name>AdvectionMultiplier</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1a7e4d7221b06b72bb90cb2aa6b2f0f10a" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseFlowFunctions</scope><name>CapillaryDiffusionMultiplier</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1a4ed58f82aed71734001c46fafe37a3b0" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseFlowFunctions</scope><name>CapillaryDiffusionMultiplier_Phase</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1a41d0e0204c5ea1eecd96e04f41376dd8" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseFlowFunctions</scope><name>dfds</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1a27eab09c3d0ae37c4e37ec13dd8df655" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseFlowFunctions</scope><name>dfds_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1a22a444b0c017e83b3f9230a1a54c0176" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseFlowFunctions</scope><name>dfds_at_Numerical</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1aeb164bd5471009c921c455b65a4fd67d" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseFlowFunctions</scope><name>dfds_Numerical</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1ac96665fcb718f0ab8509e6f83c3c1a2c" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseFlowFunctions</scope><name>dGds_Numerical</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1a3d5af31b69a0cba26bbbe8017792702d" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseFlowFunctions</scope><name>DiffusionMultiplier</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1aa615b626de0a2393419b4b567b423cd1" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseFlowFunctions</scope><name>dlnds_Numerical</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1a40d52d74e94507cdaff5648fe840f963" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseFlowFunctions</scope><name>dlwds_Numerical</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1a7a0f8565a17ea1a85363c7327f97fee4" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseFlowFunctions</scope><name>f</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1a5e1ace14d22cf90a5e137805f099b336" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseFlowFunctions</scope><name>f_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1a96ffba063847ab121423439b941ba930" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseFlowFunctions</scope><name>FindRootSecantMethod</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1ab171e4e81f6e13024d434dd2c2704a53" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseFlowFunctions</scope><name>GravityMultiplier</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1a61764ee0bc11afb6bdc45c68fea29402" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseFlowFunctions</scope><name>GravityMultiplier_dGds</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1aba1760c4175e399fe5eed6939ab1d4fc" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseFlowFunctions</scope><name>GravityMultiplier_G</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1aa2b6e1b66ebb7a788c5b219b14a88a9a" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseFlowFunctions</scope><name>InflectionPointSaturation</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1a842bd5a14959aa69fa952455640bc36a" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseFlowFunctions</scope><name>MaxFractionalFlowDerivative</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1a8e815f1d0e3d35290fd8012738f9e104" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseFlowFunctions</scope><name>Mobility</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1ae13f971b41fa6659d59deb823ce2d53f" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseFlowFunctions</scope><name>Mobility_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1adfd3f10a6452ceec887ac6ee94bd8d11" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseFlowFunctions</scope><name>MobilityDerivative</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1a3583273f56e339059560bae1603257fa" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseFlowFunctions</scope><name>MobilityDerivative_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1ab23f9375ae7f476e0eaecef7baa6e4dc" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseFlowFunctions</scope><name>MobilityProduct</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1a0c9df8a94676491e468a0c1d42795d05" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseFlowFunctions</scope><name>MobilityProductDerivative</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1ad204036ce2dec252065021b10678cefd" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseFlowFunctions</scope><name>MobilityProductDerivative_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1a4cbb7f650140e0f5c31fbe38a7338bd4" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseFlowFunctions</scope><name>Permeability</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1a1ebdf0d643ec5f0fb5a85779bf8a3e12" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseFlowFunctions</scope><name>ShockFrontVelocity</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1a41a0273052d41f0ba081d2ed0bb0544b" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseFlowFunctions</scope><name>ShockHeight</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1a4a1087561974cfd736c2be0e9d81c3f4" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseFlowFunctions</scope><name>ShockSpeed</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1adf3785cd6e0f56a4f56b16698cf1a5cb" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseFlowFunctions</scope><name>ShockSpeedAndHeight</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1aa4c35723be480893a04b7d9bbd714d5d" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseFlowFunctions</scope><name>Sw</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1a12dd04829b6dab67b47892609b10833e" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseFlowFunctions</scope><name>TangentOfFractionalFlowFunction</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1ac3aa5bc8f0432544aa8639895a809bf9" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseFlowFunctions</scope><name>TangentPointSaturation</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1aff163b77e8e057a168b63bc49ad02f70" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseFlowFunctions</scope><name>TotalMobility</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1a02064e66435763d9f45572881696ee9b" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseFlowFunctions</scope><name>TotalMobility_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1a31abf288927a0a9e4f33417e1948b84a" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseFlowFunctions</scope><name>User</name></member>
+      <member refid="classcsmp_1_1_two_phase_flow_functions_1a8a716002e582bfdd9673a5c148153d28" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseFlowFunctions</scope><name>User</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

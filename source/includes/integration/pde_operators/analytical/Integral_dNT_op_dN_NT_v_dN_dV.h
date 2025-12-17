@@ -21,8 +21,8 @@ class Integral_dNT_op_dN_NT_v_dN_dV : public MathOperatorLHS<dim,CELL> {
                                     const char* oper,  const char* velo, 
                                     const char* basic, const char* test );
     
-    virtual void GetOperands( const CELL<dim>& );
-    virtual void ComputeContribution( const CELL<dim>& );
+    void GetOperands( const CELL<dim>& ) override final;
+    void ComputeContribution( const CELL<dim>& ) override final;
   
   private:
     DenseMatrix<DM_MIN>  B, BT;

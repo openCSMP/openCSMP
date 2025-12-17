@@ -1,0 +1,140 @@
+\doxysection{CVFEM\+\_\+\+Visitor.\+h}
+\hypertarget{_c_v_f_e_m___visitor_8h_source}{}\label{_c_v_f_e_m___visitor_8h_source}\index{source/includes/integration/cvfe\_hydrothermal/CVFEM\_Visitor.h@{source/includes/integration/cvfe\_hydrothermal/CVFEM\_Visitor.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CVFEM\_VISITOR\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CVFEM\_VISITOR\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_visitor_8h}{"{}Visitor.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_dense_matrix_8h}{"{}DenseMatrix.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{comment}{/*\ \ \ Changelog}}
+\DoxyCodeLine{00008\ \textcolor{comment}{\ \ \ \ \ February\ 2015,\ Philipp\ Weis:}}
+\DoxyCodeLine{00009\ \textcolor{comment}{\ \ \ \ \ -\/\ initial\ port\ to\ CSMP++\ and\ strong\ simplification\ as\ compared\ to\ the\ csmp5-\/version.}}
+\DoxyCodeLine{00010\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_element}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}};}
+\DoxyCodeLine{00015\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_model}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}};}
+\DoxyCodeLine{00016\ \textcolor{keyword}{template}<uint32\_t,\textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}>\ \textcolor{keyword}{class}\ CVFEM\_MathOperatorLHS;}
+\DoxyCodeLine{00017\ \textcolor{keyword}{template}<uint32\_t,\textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}>\ \textcolor{keyword}{class}\ CVFEM\_MathOperatorRHS;}
+\DoxyCodeLine{00018\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_property_database}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}};}
+\DoxyCodeLine{00019\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}};}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ @class\ CVFEM\_Visitor\ CVFEM\_Visitor.h}}
+\DoxyCodeLine{00024\ \textcolor{comment}{}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ @author\ Philipp\ Weis,\ ETH\ Zuerich}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ @section\ contact\ Contact}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ philipp.weis@erdw.ethz.ch}}
+\DoxyCodeLine{00028\ \textcolor{comment}{}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ @changes\ changes\ Latest\ Changes}}
+\DoxyCodeLine{00030\ \textcolor{comment}{}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ @section\ motivation\ Motivation}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ \ Specialized\ visitor\ that\ allows\ the\ use\ of\ CVFEM\_MathOperators.}}
+\DoxyCodeLine{00033\ \textcolor{comment}{Initially\ used\ for\ consistency\ checks\ for\ development\ of\ CVFEM\ scheme.}}
+\DoxyCodeLine{00034\ \textcolor{comment}{Currently\ not\ in\ use.}}
+\DoxyCodeLine{00035\ \textcolor{comment}{Could\ be\ used\ in\ future\ as\ replacement\ for\ FV\ calculations}}
+\DoxyCodeLine{00036\ \textcolor{comment}{}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ @section\ usage\ Usage}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ \ To\ be\ used\ within\ the\ CVFEM\ scheme\ (Weis\ et\ al.,\ Geofluids,\ 2014).}}
+\DoxyCodeLine{00039\ \textcolor{comment}{}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ @code}}
+\DoxyCodeLine{00041\ \textcolor{comment}{Can\ assemble\ PDE\_operators\ in\ the\ same\ way\ as\ the\ PDE\_integrator.}}
+\DoxyCodeLine{00042\ \textcolor{comment}{\ \ \ \ \ \ }}
+\DoxyCodeLine{00043\ \textcolor{comment}{\ @endcode}}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ @section\ dependencies\ Dependencies}}
+\DoxyCodeLine{00046\ \textcolor{comment}{CVFEM\_MathOperatorLHS}}
+\DoxyCodeLine{00047\ \textcolor{comment}{CVFEM\_MathOperatorRHS}}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00049\ \textcolor{comment}{\ @section\ issues\ Known\ issues}}
+\DoxyCodeLine{00050\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00051\ \textcolor{comment}{\ @section\ testing\ Testing}}
+\DoxyCodeLine{00052\ \textcolor{comment}{\ testing\ was\ done\ in\ the\ period\ before\ publication\ in\ 2014.}}
+\DoxyCodeLine{00053\ \textcolor{comment}{}}
+\DoxyCodeLine{00054\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00055\ \textcolor{keyword}{template}<uint32\_t\ dim,\ \textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ CELL=\mbox{\hyperlink{classcsmp_1_1_element}{Element}}>}
+\DoxyCodeLine{00056\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___visitor}{CVFEM\_Visitor}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_visitor}{Visitor}}<dim>\ \{}
+\DoxyCodeLine{00057\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00058\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___visitor_a66cd1e8a399f075b8a46668d4fe92d9f}{CVFEM\_Visitor}}(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ model,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ variable);}
+\DoxyCodeLine{00059\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___visitor_ac4fd2c149f4e409e940bb5a3bf60886d}{CVFEM\_Visitor}}(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ model,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ operand,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ variable);}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~\mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___visitor_af0e619b79b8f9de3148abcb51345a9af}{CVFEM\_Visitor}}();}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___visitor_af14e9df3ec4a7f6a1058799a36a9ad86}{Visit}}(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ );}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keywordtype}{void}\ Add(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&,}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CVFEM\_MathOperatorLHS<dim,CELL>*\ lhs\_op\ );}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keywordtype}{void}\ Add(\ CVFEM\_MathOperatorRHS<dim,CELL>*\ rhs\_op\ );}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keywordtype}{void}\ Add(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&,}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CVFEM\_MathOperatorLHS<dim,CELL>*\ lhs\_op,}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ upwind\_variable\ );}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keywordtype}{void}\ Add(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&,}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CVFEM\_MathOperatorRHS<dim,CELL>*\ rhs\_op,}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ upwind\_variable\ );}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keywordtype}{void}\ SetTimeIncrement(\ \textcolor{keywordtype}{double}\ time\_increment\ );}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keyword}{struct}\ Operator\_LHS\{\ CVFEM\_MathOperatorLHS<dim,CELL>*\ lhs\_operator;}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ basic\_operand\_key;}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<ScalarVariable>\ basic\_operands;}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Operator\_LHS(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&\ pref,\ CVFEM\_MathOperatorLHS<dim,CELL>*\ lhs\_op\ );\ \};}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{keyword}{struct}\ Operator\_LHS\_Upwind\{\ CVFEM\_MathOperatorLHS<dim,CELL>*\ lhs\_operator;}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ basic\_operand\_key;}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<ScalarVariable>\ \ \ \ \ \ basic\_operands;}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ upwind\_operand\_key;}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ constructor}}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Operator\_LHS\_Upwind(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&\ pref,}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CVFEM\_MathOperatorLHS<dim,CELL>*\ lhs\_op,}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ upwind\_variable\ );}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keyword}{struct}\ Operator\_RHS\{\ CVFEM\_MathOperatorRHS<dim,CELL>*\ rhs\_operator;}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Operator\_RHS(\ CVFEM\_MathOperatorRHS<dim,CELL>*\ rhs\_op\ );}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{keyword}{struct}\ Operator\_RHS\_Upwind\{\ CVFEM\_MathOperatorRHS<dim,CELL>*\ rhs\_operator;}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ upwind\_operand\_key;}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Operator\_RHS\_Upwind(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&\ pref,}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CVFEM\_MathOperatorRHS<dim,CELL>*\ rhs\_op,}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ upwind\_variable\ );\ \};}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ \ \ \ \ \textcolor{keywordtype}{void}\ GetOperands(\ \textcolor{keyword}{const}\ CELL<dim>\&\ );}
+\DoxyCodeLine{00107\ \ \ \ \ \textcolor{keywordtype}{void}\ ComputeContribution(\ \textcolor{keyword}{const}\ CELL<dim>\&\ );}
+\DoxyCodeLine{00108\ \ \ \ \ \textcolor{keywordtype}{void}\ WriteOperands(\ CELL<dim>\&\ );}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ \ \ \ \ std::vector<Operator\_LHS>\ \ \ \ \ \ \ \ \ lhs\_operators;}
+\DoxyCodeLine{00111\ \ \ \ \ std::vector<Operator\_LHS\_Upwind>\ \ lhs\_operators\_upwind;}
+\DoxyCodeLine{00112\ \ \ \ \ std::vector<Operator\_RHS>\ \ \ \ \ \ \ \ \ rhs\_operators;}
+\DoxyCodeLine{00113\ \ \ \ \ std::vector<Operator\_RHS\_Upwind>\ \ rhs\_operators\_upwind;}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___visitor}{std}}::\mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___visitor}{vector}}<\mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___visitor}{Operator\_LHS}}>::\mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___visitor}{iterator}}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___visitor}{lhs\_it}};}
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___visitor}{std}}::\mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___visitor}{vector}}<\mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___visitor}{Operator\_LHS\_Upwind}}>::\mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___visitor}{iterator}}\ \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___visitor}{lhs\_it\_up}};}
+\DoxyCodeLine{00117\ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___visitor}{std}}::\mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___visitor}{vector}}<\mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___visitor}{Operator\_RHS}}>::\mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___visitor}{iterator}}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___visitor}{rhs\_it}};}
+\DoxyCodeLine{00118\ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___visitor}{std}}::\mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___visitor}{vector}}<\mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___visitor}{Operator\_RHS\_Upwind}}>::\mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___visitor}{iterator}}\ \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___visitor}{rhs\_it\_up}};}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00120\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ variable\_key,\ operand\_key;}
+\DoxyCodeLine{00121\ \ \ \ \ std::vector<ScalarVariable>\ \ variable,\ nodal\_operand;}
+\DoxyCodeLine{00122\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ element\_operand;}
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\ \ \ \ \ \ \ \ LHS;}
+\DoxyCodeLine{00125\ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\ \ \ \ \ \ \ \ RHS;}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ \ \ \ \ \textcolor{keywordtype}{double}\ dt;}
+\DoxyCodeLine{00128\ \ \ \ \ \textcolor{keywordtype}{bool}\ with\_operand;}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ \};}
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00132\ \ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00134\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

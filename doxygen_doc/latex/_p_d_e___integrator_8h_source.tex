@@ -1,0 +1,455 @@
+\doxysection{PDE\+\_\+\+Integrator.\+h}
+\hypertarget{_p_d_e___integrator_8h_source}{}\label{_p_d_e___integrator_8h_source}\index{source/includes/integration/pde\_integrators/PDE\_Integrator.h@{source/includes/integration/pde\_integrators/PDE\_Integrator.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_PDE\_INTEGRATOR\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_PDE\_INTEGRATOR\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_math_operator_r_h_s_8h}{"{}MathOperatorRHS.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_math_operator_l_h_s_8h}{"{}MathOperatorLHS.h"{}}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_sparse_matrix_8h}{"{}SparseMatrix.h"{}}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_element}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}};}
+\DoxyCodeLine{00011\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_face}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_face}{Face}};}
+\DoxyCodeLine{00012\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_inter_face}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_inter_face}{InterFace}};}
+\DoxyCodeLine{00013\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_nimble_region}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_nimble_region}{NimbleRegion}};}
+\DoxyCodeLine{00014\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_model}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}};}
+\DoxyCodeLine{00015\ \textcolor{keyword}{template}<\mbox{\hyperlink{namespacecsmp}{uint32\_t}},\textcolor{keyword}{template}<\mbox{\hyperlink{namespacecsmp}{uint32\_t}}>\ \textcolor{keyword}{class}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{namespacecsmp}{ModelSubDomain}};}
+\DoxyCodeLine{00016\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_region}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_region}{Region}};}
+\DoxyCodeLine{00017\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_boundary}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_boundary}{Boundary}};}
+\DoxyCodeLine{00018\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_split_boundary}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_split_boundary}{SplitBoundary}};}
+\DoxyCodeLine{00019\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_solver}{Solver}};}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_p_d_e___integrator___test}{PDE\_Integrator\_Test}};}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00024\ \textcolor{comment}{}}
+\DoxyCodeLine{00025\ \textcolor{comment}{@brief\ Accumulator\ and\ integrator\ for\ FEM\ or\ FVM-\/derived\ integral\ forms\ of\ PDEs}}
+\DoxyCodeLine{00026\ \textcolor{comment}{and\ their\ solution\ by\ solving\ linear\ sets\ of\ linear\ algebraic\ equations\ (system\ Ax=b).}}
+\DoxyCodeLine{00027\ \textcolor{comment}{Applicable\ to\ CSMP++\ Model\ objects\ or\ their\ subregions.}}
+\DoxyCodeLine{00028\ \textcolor{comment}{}}
+\DoxyCodeLine{00029\ \textcolor{comment}{@author\ S.K.\ Matthai}}
+\DoxyCodeLine{00030\ \textcolor{comment}{@author\ Stephen\ G.\ Roberts}}
+\DoxyCodeLine{00031\ \textcolor{comment}{@author\ various\ extra\ contributions\ (Adrian\ Burri,\ Julian\ Mindel,\ Kho\ Luat\ Tran).}}
+\DoxyCodeLine{00032\ \textcolor{comment}{@date\ 1997}}
+\DoxyCodeLine{00033\ \textcolor{comment}{@date\ replaced\ by\ merge\ of\ PDE\_Integrator\ 1/4/\_22}}
+\DoxyCodeLine{00034\ \textcolor{comment}{@date\ working\ toward\ a\ rigorous\ test\ of\ the\ functionality\ and\ better\ user\ feedback}}
+\DoxyCodeLine{00035\ \textcolor{comment}{}}
+\DoxyCodeLine{00036\ \textcolor{comment}{@section\ motivation\ Motivation}}
+\DoxyCodeLine{00037\ \textcolor{comment}{}}
+\DoxyCodeLine{00038\ \textcolor{comment}{To\ encapsulate\ the\ integration\ /\ numerical\ solution\ of}}
+\DoxyCodeLine{00039\ \textcolor{comment}{partial-\/differential\ equations\ (PDE).\ This}}
+\DoxyCodeLine{00040\ \textcolor{comment}{process\ entails}}
+\DoxyCodeLine{00041\ \textcolor{comment}{}}
+\DoxyCodeLine{00042\ \textcolor{comment}{(0)\ the\ creation\ of\ a\ sparsity\ pattern}}
+\DoxyCodeLine{00043\ \textcolor{comment}{(1)\ the\ assembly\ of\ a\ sparse\ solution\ matrix,\ G,\ using\ integral\ contributions\ from\ finite\ elements\ or\ finite\ volumes,}}
+\DoxyCodeLine{00044\ \textcolor{comment}{(2)\ the\ assembly\ of\ a\ right-\/hand\ vector\ with\ essential\ and\ initial\ conditions;\ before,\ Dirichlet\ conditions\ are\ eliminated.}}
+\DoxyCodeLine{00045\ \textcolor{comment}{(3)\ Inversion\ of\ the\ matrix\ equation\ Ax=b\ to\ find\ the\ solution\ vector\ x.}}
+\DoxyCodeLine{00046\ \textcolor{comment}{(4)\ Mapping\ the\ results\ from\ the\ result\ vector\ 'x'\ back\ onto\ the\ mesh,\ performing\ range\ checks.}}
+\DoxyCodeLine{00047\ \textcolor{comment}{}}
+\DoxyCodeLine{00048\ \textcolor{comment}{}}
+\DoxyCodeLine{00049\ \textcolor{comment}{@section\ design\ Design}}
+\DoxyCodeLine{00050\ \textcolor{comment}{}}
+\DoxyCodeLine{00051\ \textcolor{comment}{The\ 'strategy'\ design\ pattern\ is\ used\ to\ separate\ the\ PDE\ operator\ /\ integrator\ implementation\ from\ the}}
+\DoxyCodeLine{00052\ \textcolor{comment}{the\ type\ of\ finite\ element(s)\ or\ FV's\ used\ and\ the\ solution\ method\ chosen.}}
+\DoxyCodeLine{00053\ \textcolor{comment}{As\ a\ consequence,\ the\ same\ PDE\ operator\ objects\ and\ solution\ methods\ can}}
+\DoxyCodeLine{00054\ \textcolor{comment}{be\ used\ for\ a\ range\ of\ computational\ cell\ types\ with}}
+\DoxyCodeLine{00055\ \textcolor{comment}{different\ node\ numbers\ and\ so\ forth.}}
+\DoxyCodeLine{00056\ \textcolor{comment}{The\ Bridge\ pattern\ is\ used\ to\ decouple\ specific\ cell\ types\ and\ interpolation\ orders\ from\ the}}
+\DoxyCodeLine{00057\ \textcolor{comment}{way\ the\ contributions\ from\ the\ finite\ elements\ are\ integrated.\ These\ implementations}}
+\DoxyCodeLine{00058\ \textcolor{comment}{are\ found\ in\ collections\ of\ subclasses\ of\ the\ MathOperatorLHS\ and\ MathOperatorRHS,}}
+\DoxyCodeLine{00059\ \textcolor{comment}{which\ are\ grouped\ together\ in\ specific\ PDE\ operator\ libraries.}}
+\DoxyCodeLine{00060\ \textcolor{comment}{These\ are\ further\ subdivided\ into\ ones\ for\ analytic\ and\ others\ for\ numeric\ integration.}}
+\DoxyCodeLine{00061\ \textcolor{comment}{}}
+\DoxyCodeLine{00062\ \textcolor{comment}{The\ PDE\_Integrator\ class\ is\ a\ base\ class\ from\ which\ specific\ PDE\_Integrator\ subclasses\ can}}
+\DoxyCodeLine{00063\ \textcolor{comment}{be\ inherited.\ These\ subclasses\ \ are\ found\ in\ the\ pde\_integrators\ directory\ in\ the\ source.}}
+\DoxyCodeLine{00064\ \textcolor{comment}{Subclasses\ are\ implemented\ to\ support\ nonlinear\ iteration\ loops}}
+\DoxyCodeLine{00065\ \textcolor{comment}{and\ more\ user-\/friendly\ high-\/level\ forms\ of\ integrators\ like\ the\ SteadyStateDiffusor.}}
+\DoxyCodeLine{00066\ \textcolor{comment}{}}
+\DoxyCodeLine{00067\ \textcolor{comment}{}}
+\DoxyCodeLine{00068\ \textcolor{comment}{@section\ applicability\ Applicability}}
+\DoxyCodeLine{00069\ \textcolor{comment}{}}
+\DoxyCodeLine{00070\ \textcolor{comment}{PDE\_Integrator\ supports\ the\ solution\ of\ elliptic,\ parabolic\ and\ even\ hyperbolic\ PDEs\ in\ 2D\ and\ 3D\ .}}
+\DoxyCodeLine{00071\ \textcolor{comment}{These\ computations\ can\ be\ targeted\ on\ the\ entire\ Model,\ Regions\ thereof\ and\ Boundary\ objects..}}
+\DoxyCodeLine{00072\ \textcolor{comment}{}}
+\DoxyCodeLine{00073\ \textcolor{comment}{}}
+\DoxyCodeLine{00074\ \textcolor{comment}{@section\ participant\ Participants}}
+\DoxyCodeLine{00075\ \textcolor{comment}{}}
+\DoxyCodeLine{00076\ \textcolor{comment}{Each\ PDE\_Integrator\ contains\ maps\ of\ pointers\ to\ left\ and\ righthand\ operators}}
+\DoxyCodeLine{00077\ \textcolor{comment}{that\ are\ inherited\ from\ the\ MathOperatorLHS\ and\ MathOperatorRHS\ base}}
+\DoxyCodeLine{00078\ \textcolor{comment}{classes.\ Other\ variables\ set\ the\ state\ of\ the\ algorithm,\ the\ time\_increment}}
+\DoxyCodeLine{00079\ \textcolor{comment}{in\ transient\ calculations\ and\ so\ forth.}}
+\DoxyCodeLine{00080\ \textcolor{comment}{}}
+\DoxyCodeLine{00081\ \textcolor{comment}{To\ solve\ the\ system\ of\ equations,\ the\ PDE\_Integrator\ uses\ a\ Solver\ object.}}
+\DoxyCodeLine{00082\ \textcolor{comment}{Different\ solvers\ can\ be\ configured,\ applied\ and\ managed\ via\ the\ Strategy\ pattern}}
+\DoxyCodeLine{00083\ \textcolor{comment}{as\ described\ in\ the\ users\ guide.}}
+\DoxyCodeLine{00084\ \textcolor{comment}{}}
+\DoxyCodeLine{00085\ \textcolor{comment}{}}
+\DoxyCodeLine{00086\ \textcolor{comment}{@section\ collaborations\ Collaborations}}
+\DoxyCodeLine{00087\ \textcolor{comment}{}}
+\DoxyCodeLine{00088\ \textcolor{comment}{PDE\_Integrator\ interact\ with\ Model,\ Region,\ Boundary\ and\ SplitBoundary\ objects.}}
+\DoxyCodeLine{00089\ \textcolor{comment}{It\ queries\ these\ objects\ for\ the\ data\ needed\ to\ setup\ the\ solution\ matrices\ and\ vectors.}}
+\DoxyCodeLine{00090\ \textcolor{comment}{It\ also\ uses\ them\ to\ managed\ evolving\ boundary\ conditions,\ including\ ones}}
+\DoxyCodeLine{00091\ \textcolor{comment}{needed\ to\ dynamically\ couple\ domains\ together.}}
+\DoxyCodeLine{00092\ \textcolor{comment}{}}
+\DoxyCodeLine{00093\ \textcolor{comment}{PDE\_Integrator\ also\ collaborates\ with\ the\ MeshManager\ and\ the}}
+\DoxyCodeLine{00094\ \textcolor{comment}{PropertyDatabase\ to\ gain\ access\ to\ variables\ and\ finite\ elements}}
+\DoxyCodeLine{00095\ \textcolor{comment}{(Element\ class\ instances).}}
+\DoxyCodeLine{00096\ \textcolor{comment}{}}
+\DoxyCodeLine{00097\ \textcolor{comment}{PDE\_Integrator\ obtains\ the\ finite-\/element\ contributions\ from\ the\ Element\ class}}
+\DoxyCodeLine{00098\ \textcolor{comment}{that\ in\ turn\ has\ access\ to\ specific\ finite-\/element\ functionality\ via\ its\ FE\ policy.}}
+\DoxyCodeLine{00099\ \textcolor{comment}{The\ interior\ workings\ of\ this\ remain\ hidden\ behind\ the\ interface\ of\ the\ specific\ element\ that\ is\ assembled.}}
+\DoxyCodeLine{00100\ \textcolor{comment}{This\ is\ implemented\ as\ based\ on\ a\ 'bridge'\ pattern.}}
+\DoxyCodeLine{00101\ \textcolor{comment}{}}
+\DoxyCodeLine{00102\ \textcolor{comment}{}}
+\DoxyCodeLine{00103\ \textcolor{comment}{@section\ consequences\ Consequences}}
+\DoxyCodeLine{00104\ \textcolor{comment}{}}
+\DoxyCodeLine{00105\ \textcolor{comment}{The\ design\ as\ a\ full-\/function\ base\ class\ implies\ that\ to\ create\ a\ PDE\ operator\ subclass\ one\ only\ has\ to}}
+\DoxyCodeLine{00106\ \textcolor{comment}{overwrite\ those\ methods\ that\ one\ wants\ to\ modify.}}
+\DoxyCodeLine{00107\ \textcolor{comment}{Other\ code\ does\ not\ need\ to\ be}}
+\DoxyCodeLine{00108\ \textcolor{comment}{modified.\ To\ create\ additional\ PDE\ operators,\ inherit\ these\ from\ MathOperatorLHS\ or}}
+\DoxyCodeLine{00109\ \textcolor{comment}{MathOperatorRHS.}}
+\DoxyCodeLine{00110\ \textcolor{comment}{}}
+\DoxyCodeLine{00111\ \textcolor{comment}{}}
+\DoxyCodeLine{00112\ \textcolor{comment}{@section\ implementation\ Implementation}}
+\DoxyCodeLine{00113\ \textcolor{comment}{}}
+\DoxyCodeLine{00114\ \textcolor{comment}{The\ PDE\_Integrator\ is\ a\ stand-\/alone\ object,\ which\ is\ passed\ to\ the\ Model\ or\ applied}}
+\DoxyCodeLine{00115\ \textcolor{comment}{to\ one\ of\ its\ regions\ or\ boundaries\ with\ the\ IntegrateOver()\ method.}}
+\DoxyCodeLine{00116\ \textcolor{comment}{The\ interaction\ with\ the\ Model\ follows\ a\ visitor-\/like\ pattern.\ The\ Model}}
+\DoxyCodeLine{00117\ \textcolor{comment}{passes\ the\ PDE\_Integrator\ on\ to\ a\ region\ to\ which\ its\ application\ has\ been\ restricted.}}
+\DoxyCodeLine{00118\ \textcolor{comment}{Inside\ the\ Model,\ the\ following\ steps\ take\ place\ when\ a}}
+\DoxyCodeLine{00119\ \textcolor{comment}{PDE\_Integrator\ is\ applied\ by\ calling\ Model::Apply():}}
+\DoxyCodeLine{00120\ \textcolor{comment}{}}
+\DoxyCodeLine{00121\ \textcolor{comment}{To\ start\ with,\ the\ Model\ checks\ whether\ the\ PDE\_Integrator\ must\ be\ handed\ down\ to}}
+\DoxyCodeLine{00122\ \textcolor{comment}{a\ specific\ region,\ boundary\ or\ split\ boundary.\ Then\ the\ PDE\_Integrator\ builds\ or\ updates\ its}}
+\DoxyCodeLine{00123\ \textcolor{comment}{vectors\ and\ matrices\ so\ that\ they\ can\ store\ a\ sufficient\ number\ of\ entries:}}
+\DoxyCodeLine{00124\ \textcolor{comment}{}}
+\DoxyCodeLine{00125\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00126\ \textcolor{comment}{PDE\_Integrator::EstablishMatrixSetup(\ mesh,\ phys\_vars\ );}}
+\DoxyCodeLine{00127\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00128\ \textcolor{comment}{}}
+\DoxyCodeLine{00129\ \textcolor{comment}{Now\ the\ PDE\_Integrator\ accumulates\ the\ contributions\ to\ the\ global\ solution}}
+\DoxyCodeLine{00130\ \textcolor{comment}{matrix\ seqentially:}}
+\DoxyCodeLine{00131\ \textcolor{comment}{}}
+\DoxyCodeLine{00132\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00133\ \textcolor{comment}{PDE\_Integrator::Accumulate\ (\ mesh,\ property\_collection\ );}}
+\DoxyCodeLine{00134\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00135\ \textcolor{comment}{}}
+\DoxyCodeLine{00136\ \textcolor{comment}{If\ the\ computation\ is\ a\ transient\ one,\ initial\ conditions\ are\ added\ into}}
+\DoxyCodeLine{00137\ \textcolor{comment}{the\ righthand\ vector:}}
+\DoxyCodeLine{00138\ \textcolor{comment}{}}
+\DoxyCodeLine{00139\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00140\ \textcolor{comment}{PDE\_Integrator::AssignInitialConditions(\ mesh,\ property\_collection\ );}}
+\DoxyCodeLine{00141\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00142\ \textcolor{comment}{}}
+\DoxyCodeLine{00143\ \textcolor{comment}{Then,\ the\ boundary\ conditions\ are\ applied\ to\ the\ lefthand\ and\ righthand}}
+\DoxyCodeLine{00144\ \textcolor{comment}{side:}}
+\DoxyCodeLine{00145\ \textcolor{comment}{}}
+\DoxyCodeLine{00146\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00147\ \textcolor{comment}{PDE\_Integrator::AssignEssentialConditions(\ mesh,\ property\_collection\ );}}
+\DoxyCodeLine{00148\ \textcolor{comment}{Here\ an\ elimination\ is\ performed,\ retaining,\ if\ so,\ the\ symmetric\ shape\ of\ the\ solution\ matrix.}}
+\DoxyCodeLine{00149\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00150\ \textcolor{comment}{}}
+\DoxyCodeLine{00151\ \textcolor{comment}{If\ the\ computation\ is\ a\ transient\ one,\ and\ the\ time-\/stepping\ solution\ method\ is\ Backward}}
+\DoxyCodeLine{00152\ \textcolor{comment}{Euler\ implicit,\ then\ righthand-\/side\ source\ terms\ (typically\ fluid}}
+\DoxyCodeLine{00153\ \textcolor{comment}{source\ or\ other\ rates)\ are\ added\ to\ to\ the\ righthand\ vector\ after\ initial\ conditions\ were\ multiplied\ into\ it.}}
+\DoxyCodeLine{00154\ \textcolor{comment}{For\ such\ integrals\ LateAccumulate\ needs\ to\ be\ specified.}}
+\DoxyCodeLine{00155\ \textcolor{comment}{}}
+\DoxyCodeLine{00156\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00157\ \textcolor{comment}{PDE\_Integrator::LateAccumulate(\ mesh,\ property\_collection\ );}}
+\DoxyCodeLine{00158\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00159\ \textcolor{comment}{}}
+\DoxyCodeLine{00160\ \textcolor{comment}{Now\ the\ solver\ is\ invoked\ to\ solve\ the\ ensuing\ linear\ algebraic\ system\ \ LHS\ *\ x\ =\ RHS.}}
+\DoxyCodeLine{00161\ \textcolor{comment}{}}
+\DoxyCodeLine{00162\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00163\ \textcolor{comment}{PDE\_Integrator::Solve();}}
+\DoxyCodeLine{00164\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00165\ \textcolor{comment}{}}
+\DoxyCodeLine{00166\ \textcolor{comment}{The\ results\ from\ the\ computation\ are\ mapped\ back\ into\ property\ storage:}}
+\DoxyCodeLine{00167\ \textcolor{comment}{}}
+\DoxyCodeLine{00168\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00169\ \textcolor{comment}{PDE\_Integrator::OutputResults(\ mesh,\ property\_collection\ );}}
+\DoxyCodeLine{00170\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00171\ \textcolor{comment}{}}
+\DoxyCodeLine{00172\ \textcolor{comment}{and\ post-\/processing\ operations\ are\ applied:}}
+\DoxyCodeLine{00173\ \textcolor{comment}{}}
+\DoxyCodeLine{00174\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00175\ \textcolor{comment}{PDE\_Integrator::PostProcess(\ mesh,\ property\_collection\ );}}
+\DoxyCodeLine{00176\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00177\ \textcolor{comment}{}}
+\DoxyCodeLine{00178\ \textcolor{comment}{Post-\/processing\ may\ be,\ for\ instance,\ the\ computation\ of\ flow\ velocities}}
+\DoxyCodeLine{00179\ \textcolor{comment}{from\ computed\ fluid-\/pressure\ gradients\ and\ permeability\ values.}}
+\DoxyCodeLine{00180\ \textcolor{comment}{}}
+\DoxyCodeLine{00181\ \textcolor{comment}{Important\ also\ is\ the\ mapping\ from\ global\ node\ ID\ numbers\ to\ entry}}
+\DoxyCodeLine{00182\ \textcolor{comment}{positions\ in\ the\ global\ solution\ matrix\ troughout\ the\ solution\ process:}}
+\DoxyCodeLine{00183\ \textcolor{comment}{In\ the\ simplest\ case,\ of\ a\ single\ degree-\/of-\/freedom\ per\ node\ and\ a\ global\ computation,\ the}}
+\DoxyCodeLine{00184\ \textcolor{comment}{mapping\ is:}}
+\DoxyCodeLine{00185\ \textcolor{comment}{}}
+\DoxyCodeLine{00186\ \textcolor{comment}{G(n,n),\ rh(n)\ -\/>\ n\ =\ node-\/ID-\/1}}
+\DoxyCodeLine{00187\ \textcolor{comment}{}}
+\DoxyCodeLine{00188\ \textcolor{comment}{For\ vector\ variables:}}
+\DoxyCodeLine{00189\ \textcolor{comment}{}}
+\DoxyCodeLine{00190\ \textcolor{comment}{G(n,n),\ rh(n)\ -\/>\ n\ =\ (node-\/ID-\/1)\ *\ dimensions\ +\ j}}
+\DoxyCodeLine{00191\ \textcolor{comment}{}}
+\DoxyCodeLine{00192\ \textcolor{comment}{where\ j\ is\ the\ index\ variable\ for\ the\ spatial\ dimensions\ x,\ y,\ z.}}
+\DoxyCodeLine{00193\ \textcolor{comment}{}}
+\DoxyCodeLine{00194\ \textcolor{comment}{For\ tensor\ variables:}}
+\DoxyCodeLine{00195\ \textcolor{comment}{}}
+\DoxyCodeLine{00196\ \textcolor{comment}{G(n,n),\ rh(n)\ -\/>\ n\ =\ (node-\/ID-\/1)\ *\ dimensions\string^2\ i*dimensions\ +\ j}}
+\DoxyCodeLine{00197\ \textcolor{comment}{}}
+\DoxyCodeLine{00198\ \textcolor{comment}{where\ i,\ j\ are\ the\ index\ variables\ corresponding\ to\ the\ rows\ and}}
+\DoxyCodeLine{00199\ \textcolor{comment}{column\ indices\ of\ the\ tensor\ variable\ with\ the\ i\_max\ =\ j\_max\ =}}
+\DoxyCodeLine{00200\ \textcolor{comment}{spatial\ dimensions.}}
+\DoxyCodeLine{00201\ \textcolor{comment}{}}
+\DoxyCodeLine{00202\ \textcolor{comment}{In\ the\ case\ of\ Region\ computations,\ an\ instance\ of\ the\ class}}
+\DoxyCodeLine{00203\ \textcolor{comment}{IndexMapper\ transforms\ the\ global\ node\ ID\ numbers\ into\ the\ scaled}}
+\DoxyCodeLine{00204\ \textcolor{comment}{ID\ numbers\ 1...n-\/nodes\ in\ group.\ Subsequently,\ the\ same\ transformations}}
+\DoxyCodeLine{00205\ \textcolor{comment}{are\ applied\ for\ vector\ and\ tensor\ variables.}}
+\DoxyCodeLine{00206\ \textcolor{comment}{}}
+\DoxyCodeLine{00207\ \textcolor{comment}{}}
+\DoxyCodeLine{00208\ \textcolor{comment}{@section\ examples\ Application\ Examples}}
+\DoxyCodeLine{00209\ \textcolor{comment}{}}
+\DoxyCodeLine{00210\ \textcolor{comment}{The\ simple\ most\ computation\ with\ an\ PDE\_Integrator\ is\ a\ 3D\ steady-\/state}}
+\DoxyCodeLine{00211\ \textcolor{comment}{computation\ of\ fluid\ pressure.\ This\ involves\ the\ definition\ and}}
+\DoxyCodeLine{00212\ \textcolor{comment}{instantiation\ of\ some\ PDE\ operators\ as\ first\ step:}}
+\DoxyCodeLine{00213\ \textcolor{comment}{}}
+\DoxyCodeLine{00214\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00215\ \textcolor{comment}{\ \ //\ compute\ steady-\/state\ fluid\ pressure\ from\ [K]\{p\}\ =\ \{q\}}}
+\DoxyCodeLine{00216\ \textcolor{comment}{\ \ PDE\_Integrator<2U>\ \ fluid\_pressure;}}
+\DoxyCodeLine{00217\ \textcolor{comment}{}}
+\DoxyCodeLine{00218\ \textcolor{comment}{\ \ NumIntegral\_dNT\_op\_dN\_dV<2U>\ \ conductance(\ example\_model.Database(),\ "{}conductivity"{},\ \ \ "{}fluid\ pressure"{},\ "{}fluid\ pressure"{}\ );}}
+\DoxyCodeLine{00219\ \textcolor{comment}{\ \ NumIntegral\_NT\_op\_N\_dV<2U>\ \ \ \ source(\ example\_model.Database(),\ "{}fluid\ volume\ source"{},\ "{}fluid\ pressure"{}\ );}}
+\DoxyCodeLine{00220\ \textcolor{comment}{\ \ VelocityAndVolumeFlux<2U>\ \ \ \ \ velo(\ example\_model,\ "{}conductivity"{},\ "{}porosity"{},\ "{}fluid\ pressure"{},\ true\ );}}
+\DoxyCodeLine{00221\ \textcolor{comment}{}}
+\DoxyCodeLine{00222\ \textcolor{comment}{\ \ fluid\_pressure.Add(\ \&conductance\ );}}
+\DoxyCodeLine{00223\ \textcolor{comment}{\ \ fluid\_pressure.Add(\ \&source\ );}}
+\DoxyCodeLine{00224\ \textcolor{comment}{\ \ fluid\_pressure.AddPostProcess(\ \&velo\ );}}
+\DoxyCodeLine{00225\ \textcolor{comment}{\ \ example\_model.Apply(\ fluid\_pressure\ );}}
+\DoxyCodeLine{00226\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00227\ \textcolor{comment}{}}
+\DoxyCodeLine{00228\ \textcolor{comment}{}}
+\DoxyCodeLine{00229\ \textcolor{comment}{A\ more\ advanced\ calculation\ of\ displacements,\ strains\ and\ stresses\ is}}
+\DoxyCodeLine{00230\ \textcolor{comment}{done\ in\ the\ following\ example:}}
+\DoxyCodeLine{00231\ \textcolor{comment}{}}
+\DoxyCodeLine{00232\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00233\ \textcolor{comment}{\ \ PDE\_Integrator<2U>\ \ deformation;}}
+\DoxyCodeLine{00234\ \textcolor{comment}{\ \ if\ (\ restricted\_to\_rock\ )\ deformation.RestrictApplicationTo("{}rock"{});}}
+\DoxyCodeLine{00235\ \textcolor{comment}{}}
+\DoxyCodeLine{00236\ \textcolor{comment}{\ \ PT\_op<2U>\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ bforces(\ p\_ref,\ "{}force"{},\ "{}displacement"{}\ );}}
+\DoxyCodeLine{00237\ \textcolor{comment}{\ \ NumIntegral\_BT\_D\_B\_dV<2U>\ \ \ \ stiffness(\ p\_ref,\ "{}Young's\ modulus"{},\ "{}Poisson's\ ratio"{},\ "{}displacement"{},\ "{}displacement"{});}}
+\DoxyCodeLine{00238\ \textcolor{comment}{\ \ if\ (\ with\_plane\_stress\ )\ stiffness.PlaneStress();}}
+\DoxyCodeLine{00239\ \textcolor{comment}{\ \ NumIntegral\_PT\_op\_dS<2U>\ \ \ \ \ bstresses(\ p\_ref,\ "{}Neumann\ stress"{},\ "{}displacement"{}\ );}}
+\DoxyCodeLine{00240\ \textcolor{comment}{\ \ NumIntegral\_PT\_op\_dV<2U>\ \ \ \ \ bodyforce(\ p\_ref,\ "{}gravity\ force"{},\ "{}displacement"{});}}
+\DoxyCodeLine{00241\ \textcolor{comment}{\ \ NumIntegral\_BT\_D\_op\_dV<2U>\ \ \ volstrain(\ p\_ref,\ "{}dilatation"{},\ "{}Young's\ modulus"{},\ "{}Poisson's\ ratio"{},\ "{}displacement"{});}}
+\DoxyCodeLine{00242\ \textcolor{comment}{\ \ NumIntegral\_BT\_op\_dV<2U>\ \ \ \ \ porepressure(\ p\_ref,\ "{}fluid\ pressure"{},\ "{}displacement"{});}}
+\DoxyCodeLine{00243\ \textcolor{comment}{}}
+\DoxyCodeLine{00244\ \textcolor{comment}{\ \ deformation.Add(\ \&stiffness\ );}}
+\DoxyCodeLine{00245\ \textcolor{comment}{\ \ deformation.Add(\ \&bforces\ );\ \ //\ must\ always\ be\ there\ so\ that\ Dirichlet\ conditions\ are\ accumulated}}
+\DoxyCodeLine{00246\ \textcolor{comment}{\ \ if\ (\ with\_boundary\_stresses\ )\ deformation.Add(\ \&bstresses\ );}}
+\DoxyCodeLine{00247\ \textcolor{comment}{\ \ if\ (\ with\_body\_forces\ )\ \ \ \ \ \ \ deformation.Add(\ \&bodyforce\ );}}
+\DoxyCodeLine{00248\ \textcolor{comment}{\ \ if\ (\ with\_volume\_strains\ )\ \ \ \ deformation.Add(\ \&volstrain\ );}}
+\DoxyCodeLine{00249\ \textcolor{comment}{\ \ if\ (\ with\_pore\_pressure\ )\ \ \ \ \ deformation.Add(\ \&porepressure\ );}}
+\DoxyCodeLine{00250\ \textcolor{comment}{}}
+\DoxyCodeLine{00251\ \textcolor{comment}{\ \ StressesAndStrains<2U>\ \ postpro(\ example\_model,\ "{}Young's\ modulus"{},}}
+\DoxyCodeLine{00252\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}Poisson's\ ratio"{},\ "{}displacement"{},\ true,\ true\ );}}
+\DoxyCodeLine{00253\ \textcolor{comment}{}}
+\DoxyCodeLine{00254\ \textcolor{comment}{\ \ if\ (\ with\_plane\_stress\ )\ postpro.PlaneStress();}}
+\DoxyCodeLine{00255\ \textcolor{comment}{\ \ \ deformation.AddPostProcess(\ \&postpro\ );}}
+\DoxyCodeLine{00256\ \textcolor{comment}{}}
+\DoxyCodeLine{00257\ \textcolor{comment}{\ \ example\_model.Apply(\ deformation\ );}}
+\DoxyCodeLine{00258\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00259\ \textcolor{comment}{}}
+\DoxyCodeLine{00260\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00261\ \textcolor{keyword}{template}<\mbox{\hyperlink{namespacecsmp}{uint32\_t}}\ \mbox{\hyperlink{namespacecsmp}{dim}},\textcolor{keyword}{template}<\mbox{\hyperlink{namespacecsmp}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{namespacecsmp}{CELLTYPE}}=\mbox{\hyperlink{namespacecsmp}{Element}}>}
+\DoxyCodeLine{00262\ \textcolor{keyword}{class}\ \mbox{\hyperlink{namespacecsmp}{PDE\_Integrator}}\ \{}
+\DoxyCodeLine{00263\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00264\ \ \ \ \ \textcolor{keyword}{typedef}\ \textcolor{keyword}{typename}\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{map}}<\mbox{\hyperlink{namespacecsmp}{Parameter}},\mbox{\hyperlink{namespacecsmp}{size\_t}}>::\mbox{\hyperlink{namespacecsmp}{const\_iterator}}\ \mbox{\hyperlink{namespacecsmp}{operandsConstIterator}};\ \textcolor{comment}{///<\ constant\ iterator\ over\ solution\ variables}}
+\DoxyCodeLine{00265\ \ \ \ \ \textcolor{keyword}{typedef}\ \textcolor{keyword}{typename}\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{map}}<\mbox{\hyperlink{namespacecsmp}{Parameter}},\mbox{\hyperlink{namespacecsmp}{size\_t}}>::\mbox{\hyperlink{namespacecsmp}{iterator}}\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{operandsIterator}};\ \ \ \ \ \ \textcolor{comment}{///<\ iterator\ over\ solution\ variables}}
+\DoxyCodeLine{00266\ }
+\DoxyCodeLine{00267\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{PDE\_Integrator}}();}
+\DoxyCodeLine{00268\ }
+\DoxyCodeLine{00269\ \ \ \ \ \textcolor{comment}{///\ create\ an\ integrator\ with\ a\ solver\ managed\ elsewhere}}
+\DoxyCodeLine{00270\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{namespacecsmp}{PDE\_Integrator}}(\ \mbox{\hyperlink{namespacecsmp}{Solver}}\&\ );}
+\DoxyCodeLine{00271\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~\mbox{\hyperlink{namespacecsmp}{PDE\_Integrator}}();}
+\DoxyCodeLine{00272\ \ \ \ \ \textcolor{comment}{///\ do\ not\ copy\ because\ of\ all\ the\ pointer\ ramificatons}}
+\DoxyCodeLine{00273\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{PDE\_Integrator}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{PDE\_Integrator}}\&\ )\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00274\ \ \ \ \ \textcolor{comment}{///\ do\ not\ assign}}
+\DoxyCodeLine{00275\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{PDE\_Integrator}}\&\ \mbox{\hyperlink{namespacecsmp}{operator}}=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{PDE\_Integrator}}\&\ )\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00276\ }
+\DoxyCodeLine{00277\ \ \ \ \ \textcolor{comment}{///\ add\ desired\ integral\ terms\ (pde\ operators)\ to\ the\ left-\/hand\ side\ matrix\ of\ the\ algebraic\ system\ of\ equations}}
+\DoxyCodeLine{00278\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{Add}}(\ \mbox{\hyperlink{namespacecsmp}{MathOperatorLHS}}<\mbox{\hyperlink{namespacecsmp}{dim}},\mbox{\hyperlink{namespacecsmp}{CELLTYPE}}>*\ );}
+\DoxyCodeLine{00279\ }
+\DoxyCodeLine{00280\ \ \ \ \ \textcolor{comment}{///\ add\ desired\ integral\ terms\ (pde\ operators)\ to\ the\ right-\/hand\ side\ vector\ of\ the\ algebraic\ system\ of\ equations}}
+\DoxyCodeLine{00281\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{Add}}(\ \mbox{\hyperlink{namespacecsmp}{MathOperatorRHS}}<\mbox{\hyperlink{namespacecsmp}{dim}},\mbox{\hyperlink{namespacecsmp}{CELLTYPE}}>*\ );}
+\DoxyCodeLine{00282\ }
+\DoxyCodeLine{00283\ \ \ \ \ \textcolor{comment}{///\ adds\ math\ operators\ that\ will\ be\ applied\ in\ a\ second\ loop\ after\ the\ matrix\ has\ been\ inverted}}
+\DoxyCodeLine{00284\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{AddPostProcess}}(\ \mbox{\hyperlink{namespacecsmp}{MathOperatorLHS}}<\mbox{\hyperlink{namespacecsmp}{dim}},\mbox{\hyperlink{namespacecsmp}{CELLTYPE}}>*\ );}
+\DoxyCodeLine{00285\ }
+\DoxyCodeLine{00286\ \ \ \ \ \textcolor{comment}{///\ adds\ integral\ terms\ on\ the\ boundary\ of\ the\ computational\ domain\ if\ any}}
+\DoxyCodeLine{00287\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{AddBoundaryIntegral}}(\ \mbox{\hyperlink{namespacecsmp}{MathOperatorRHS}}<\mbox{\hyperlink{namespacecsmp}{dim}},\mbox{\hyperlink{namespacecsmp}{Face}}>*\ );}
+\DoxyCodeLine{00288\ }
+\DoxyCodeLine{00289\ \ \ \ \ \textcolor{comment}{///\ for\ the\ computation\ of\ fluxes\ across\ internal\ split\ boundaries}}
+\DoxyCodeLine{00290\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{AddSplitBoundaryIntegral}}(\ \mbox{\hyperlink{namespacecsmp}{MathOperatorRHS}}<\mbox{\hyperlink{namespacecsmp}{dim}},\mbox{\hyperlink{namespacecsmp}{InterFace}}>*\ );}
+\DoxyCodeLine{00291\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{AddSplitBoundaryIntegral}}(\ \mbox{\hyperlink{namespacecsmp}{MathOperatorLHS}}<\mbox{\hyperlink{namespacecsmp}{dim}},\mbox{\hyperlink{namespacecsmp}{InterFace}}>*\ );}
+\DoxyCodeLine{00292\ }
+\DoxyCodeLine{00293\ \ \ \ \ \textcolor{comment}{///\ sets\ the\ time-\/increment\ for-\/\ and\ triggers\ a\ transient\ calculation\ (use\ 1/t\ if\ problem\ has\ been\ set\ up\ that\ way)}}
+\DoxyCodeLine{00294\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{TimeIncrement}}(\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{namespacecsmp}{dt}}\ );}
+\DoxyCodeLine{00295\ }
+\DoxyCodeLine{00296\ \ \ \ \ \textcolor{comment}{///\ returns\ whether\ a\ finite-\/difference\ time\ increment\ has\ been\ set}}
+\DoxyCodeLine{00297\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{Transient}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00298\ }
+\DoxyCodeLine{00299\ \ \ \ \ \textcolor{comment}{///\ accumulates,\ assembles,\ and\ solves\ PDEs\ in\ domain\ of\ interest;\ @param\ debug\ prompts\ output\ of\ solution\ matrices\ to\ file;\ uses\ node\ numbering}}
+\DoxyCodeLine{00300\ \ \ \ \ \textcolor{comment}{//\ TODO:\ do\ we\ need\ this\ method}}
+\DoxyCodeLine{00301\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{IntegrateOver}}(\ \mbox{\hyperlink{namespacecsmp}{ModelSubDomain}}<\mbox{\hyperlink{namespacecsmp}{dim}},\mbox{\hyperlink{namespacecsmp}{CELLTYPE}}>\&,\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp}{debug}}=\textcolor{keyword}{false}\ );}
+\DoxyCodeLine{00302\ }
+\DoxyCodeLine{00303\ \ \ \ \ \textcolor{comment}{///\ also\ considers\ \ "{}dS"{}\ pde\ operators\ from\ Boundary\ or\ SplitBoundary\ objects\ if\ these\ share\ nodes\ with\ domain\ on\ which\ the\ solution\ is\ obtained}}
+\DoxyCodeLine{00304\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{IntegrateOver}}(\ \mbox{\hyperlink{namespacecsmp}{Model}}<\mbox{\hyperlink{namespacecsmp}{dim}}>\&,\ \mbox{\hyperlink{namespacecsmp}{ModelSubDomain}}<\mbox{\hyperlink{namespacecsmp}{dim}},\mbox{\hyperlink{namespacecsmp}{CELLTYPE}}>\&,\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp}{debug}}=\textcolor{keyword}{false}\ );}
+\DoxyCodeLine{00305\ }
+\DoxyCodeLine{00306\ \ \ \ \ \textcolor{comment}{///\ switch\ to\ another\ solver\ deleting\ any\ dynamically\ allocated\ solver\ that\ was\ associated\ with\ integrator}}
+\DoxyCodeLine{00307\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{SetSolver}}(\ \mbox{\hyperlink{namespacecsmp}{Solver}}\&\ );}
+\DoxyCodeLine{00308\ }
+\DoxyCodeLine{00309\ \ \ \ \ \textcolor{comment}{///\ returns\ a\ reference\ to\ the\ current\ solver\ object}}
+\DoxyCodeLine{00310\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{Solver}}\&\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{GetSolver}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00311\ }
+\DoxyCodeLine{00312\ \ \ \ \ \textcolor{comment}{///\ returns\ PDE\ integrator\ into\ the\ state\ created\ by\ default\ constructor\ (\ @todo\ is\ Reset\ is\ this\ needed?)}}
+\DoxyCodeLine{00313\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{namespacecsmp}{Reset}}(\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp}{delete\_math\_operators}}=\textcolor{keyword}{true}\ );}
+\DoxyCodeLine{00314\ }
+\DoxyCodeLine{00315\ \ \ \ \ \textcolor{comment}{///\ outputs\ solution\ vector;\ @attention\ this\ produces\ meaningful\ results\ only\ after\ application\ of\ the\ PDE\ integrator}}
+\DoxyCodeLine{00316\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{SolutionVector}}(\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\textcolor{keywordtype}{double}>\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00317\ }
+\DoxyCodeLine{00318\ \ \ \ \ \textcolor{comment}{///\ optional\ input\ of\ a\ solution\ vector\ with\ an\ initial\ guess\ of\ the\ result;\ for\ SAMG\ set\ ifirst=0\ so\ that\ this\ vector\ is\ used}}
+\DoxyCodeLine{00319\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{FirstGuess}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\textcolor{keywordtype}{double}>\&\ );}
+\DoxyCodeLine{00320\ }
+\DoxyCodeLine{00321\ \ \ \ \ \textcolor{comment}{///\ if\ an\ evolutionary\ problem\ where\ only\ the\ right-\/hand\ side\ changes,\ the\ matrix\ needs\ to\ be\ assembled\ only\ once}}
+\DoxyCodeLine{00322\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{RetainGlobalSolutionMatrix}}(\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp}{yes\_or\_no}}\ );}
+\DoxyCodeLine{00323\ }
+\DoxyCodeLine{00324\ \ \ \ \ \textcolor{comment}{///\ 'swap\ trick'\ keeps\ size\ and\ capacity\ of\ solution\ and\ righthand\ vectors\ equal}}
+\DoxyCodeLine{00325\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{TrimExcessCapacityOfVectors}}(\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp}{trim}}\ );}
+\DoxyCodeLine{00326\ }
+\DoxyCodeLine{00327\ \ \ \ \ \textcolor{comment}{///\ writes\ out\ the\ sparsity\ pattern\ of\ the\ solution\ matrix}}
+\DoxyCodeLine{00328\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{WriteGlobalMatrixBitMapToText}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \mbox{\hyperlink{namespacecsmp}{file\_name}}\ );}
+\DoxyCodeLine{00329\ }
+\DoxyCodeLine{00330\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{ListMathOperatorsLHS}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00331\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{ListMathOperatorsRHS}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00332\ }
+\DoxyCodeLine{00333\ \ \ \ \ \textcolor{comment}{///\ outputs\ the\ system\ A\ x\ =\ b\ to\ the\ screen}}
+\DoxyCodeLine{00334\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{OutputGlobals}}(\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{namespacecsmp}{precision}}=1\ );}
+\DoxyCodeLine{00335\ }
+\DoxyCodeLine{00336\ \ \ \ \ \textcolor{comment}{///\ prints\ current\ parameters\ settings\ and\ pde\ operators\ to\ screen}}
+\DoxyCodeLine{00337\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{Out}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00338\ }
+\DoxyCodeLine{00339\ \ \ \ \ \textcolor{comment}{///\ extra\ detailed\ screen\ output\ about\ the\ assembly\ \ solution\ progress}}
+\DoxyCodeLine{00340\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{Verbose}}(\ \textcolor{keywordtype}{bool}\ );}
+\DoxyCodeLine{00341\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{Verbose}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00342\ }
+\DoxyCodeLine{00343\ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00344\ }
+\DoxyCodeLine{00345\ \ \ \ \ \textcolor{comment}{///\ checks\ whether\ any\ Boundary\ object\ in\ the\ model\ is\ a\ surface\ of\ the\ computational\ domain}}
+\DoxyCodeLine{00346\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{list}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{string}}>\ \mbox{\hyperlink{namespacecsmp}{IdentifySharedBoundaries}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{Model}}<\mbox{\hyperlink{namespacecsmp}{dim}}>\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{ModelSubDomain}}<\mbox{\hyperlink{namespacecsmp}{dim}},\mbox{\hyperlink{namespacecsmp}{CELLTYPE}}>\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00347\ }
+\DoxyCodeLine{00348\ \ \ \ \ \textcolor{comment}{///\ checks\ whether\ any\ SplitBoundary\ object\ in\ the\ model\ is\ a\ surface\ of\ the\ computational\ domain}}
+\DoxyCodeLine{00349\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{list}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{string}}>\ \mbox{\hyperlink{namespacecsmp}{IdentifySharedSplitBoundaries}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{Model}}<\mbox{\hyperlink{namespacecsmp}{dim}}>\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{ModelSubDomain}}<\mbox{\hyperlink{namespacecsmp}{dim}},\mbox{\hyperlink{namespacecsmp}{CELLTYPE}}>\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00350\ }
+\DoxyCodeLine{00351\ \ \ \ \ \textcolor{comment}{///\ resizes\ sparse\ solution\ matrix\ and\ establishes\ variable\ offsets\ if\ a\ system\ of\ equations\ will\ be\ solved,\ but\ without\ boundary\ or\ splitboundary\ integrals}}
+\DoxyCodeLine{00352\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp}{EstablishMatrixSetup}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{ModelSubDomain}}<\mbox{\hyperlink{namespacecsmp}{dim}},\mbox{\hyperlink{namespacecsmp}{CELLTYPE}}>\&\ );}
+\DoxyCodeLine{00353\ }
+\DoxyCodeLine{00354\ \ \ \ \ \textcolor{comment}{///\ for\ the\ elimination\ of\ Dirichlet\ constraints\ from\ the\ solution\ matrix;\ called\ after\ EstablishMatrixSetup\ but\ before\ accumulation}}
+\DoxyCodeLine{00355\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{namespacecsmp}{ReduceSystemSizeEliminatingEssentialConditions}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{ModelSubDomain}}<\mbox{\hyperlink{namespacecsmp}{dim}},\mbox{\hyperlink{namespacecsmp}{CELLTYPE}}>\&,\ \mbox{\hyperlink{namespacecsmp}{size\_t}}\ \mbox{\hyperlink{namespacecsmp}{max\_offset}}\ );}
+\DoxyCodeLine{00356\ }
+\DoxyCodeLine{00357\ \ \ \ \ \textcolor{comment}{///\ in\ time-\/dependent\ calculations\ this\ method\ assigns\ initial\ conditions\ to\ the\ RHS;\ uses\ node\ numbering}}
+\DoxyCodeLine{00358\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{namespacecsmp}{AssignInitialConditions}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{ModelSubDomain}}<\mbox{\hyperlink{namespacecsmp}{dim}},\mbox{\hyperlink{namespacecsmp}{CELLTYPE}}>\&\ );}
+\DoxyCodeLine{00359\ }
+\DoxyCodeLine{00360\ \ \ \ \ \textcolor{comment}{///\ modifies\ right-\/hand\ vector;\ adding\ Dirichlet\ condition\ terms\ that\ were\ elimitated\ before}}
+\DoxyCodeLine{00361\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{namespacecsmp}{AssignEssentialConditions}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{ModelSubDomain}}<\mbox{\hyperlink{namespacecsmp}{dim}},\mbox{\hyperlink{namespacecsmp}{CELLTYPE}}>\&\ );}
+\DoxyCodeLine{00362\ }
+\DoxyCodeLine{00363\ \ \ \ \ \textcolor{comment}{///\ accumulates\ finite\ element\ integrals\ into\ solution\ matrix\ and\ right-\/hand\ side;\ uses\ node\ numbering}}
+\DoxyCodeLine{00364\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{namespacecsmp}{Accumulate}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{ModelSubDomain}}<\mbox{\hyperlink{namespacecsmp}{dim}},\mbox{\hyperlink{namespacecsmp}{CELLTYPE}}>\&\ );}
+\DoxyCodeLine{00365\ }
+\DoxyCodeLine{00366\ \ \ \ \ \textcolor{comment}{///\ accumulates\ finite-\/element\ integrals\ to\ matrix\ and\ vector\ after\ the\ corresponding\ entries\ were\ already\ multiplied\ with\ the\ initial\ conditions;\ uses\ node\ numbering}}
+\DoxyCodeLine{00367\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{namespacecsmp}{LateAccumulate}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{ModelSubDomain}}<\mbox{\hyperlink{namespacecsmp}{dim}},\mbox{\hyperlink{namespacecsmp}{CELLTYPE}}>\&\ );}
+\DoxyCodeLine{00368\ }
+\DoxyCodeLine{00369\ \ \ \ \ \textcolor{comment}{///\ accumulates\ surface\ integrals\ from\ Neumann-\/flagged\ Face\ object\ variables\ representing\ those\ parts\ of\ all\ boundaries\ that\ delimit\ the\ computational\ domain}}
+\DoxyCodeLine{00370\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{namespacecsmp}{AccumulateBoundaryIntegrals}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{ModelSubDomain}}<\mbox{\hyperlink{namespacecsmp}{dim}},\mbox{\hyperlink{namespacecsmp}{CELLTYPE}}>\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{Boundary}}<\mbox{\hyperlink{namespacecsmp}{dim}}>\&\ );}
+\DoxyCodeLine{00371\ \ \ \ \ \textcolor{comment}{///\ version\ that\ uses\ 'boundary\_faces\_'\ to\ accumulate\ over}}
+\DoxyCodeLine{00372\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{namespacecsmp}{AccumulateBoundaryIntegrals}}();}
+\DoxyCodeLine{00373\ }
+\DoxyCodeLine{00374\ \ \ \ \ \textcolor{comment}{///\ accumulation\ of\ Robin-\/type\ boundary\ conditions\ to\ SplitBoundary\ interfaces}}
+\DoxyCodeLine{00375\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{namespacecsmp}{AccumulateSplitBoundaryIntegrals}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{ModelSubDomain}}<\mbox{\hyperlink{namespacecsmp}{dim}},\mbox{\hyperlink{namespacecsmp}{CELLTYPE}}>\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{SplitBoundary}}<\mbox{\hyperlink{namespacecsmp}{dim}}>\&\ );}
+\DoxyCodeLine{00376\ \ \ \ \ \textcolor{comment}{///\ version\ that\ uses\ 'splitboundary\_interfaces\_'\ to\ accumulate\ over}}
+\DoxyCodeLine{00377\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{namespacecsmp}{AccumulateSplitBoundaryIntegrals}}();}
+\DoxyCodeLine{00378\ }
+\DoxyCodeLine{00379\ \ \ \ \ \textcolor{comment}{///\ late\ accumulates\ surface\ integrals\ from\ Neumann-\/flagged\ Face\ object\ variables\ representing\ those\ parts\ of\ all\ boundaries\ that\ delimit\ the\ computational\ domain}}
+\DoxyCodeLine{00380\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{namespacecsmp}{LateAccumulateBoundaryIntegrals}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{ModelSubDomain}}<\mbox{\hyperlink{namespacecsmp}{dim}},\mbox{\hyperlink{namespacecsmp}{CELLTYPE}}>\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{Boundary}}<\mbox{\hyperlink{namespacecsmp}{dim}}>\&\ );}
+\DoxyCodeLine{00381\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{namespacecsmp}{LateAccumulateBoundaryIntegrals}}();}
+\DoxyCodeLine{00382\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{namespacecsmp}{LateAccumulateSplitBoundaryIntegrals}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{ModelSubDomain}}<\mbox{\hyperlink{namespacecsmp}{dim}},\mbox{\hyperlink{namespacecsmp}{CELLTYPE}}>\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{SplitBoundary}}<\mbox{\hyperlink{namespacecsmp}{dim}}>\&\ );}
+\DoxyCodeLine{00383\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{namespacecsmp}{LateAccumulateSplitBoundaryIntegrals}}();}
+\DoxyCodeLine{00384\ }
+\DoxyCodeLine{00385\ \ \ \ \ \textcolor{comment}{///\ couples\ domains\ separated\ by\ SplitBoundaries\ using\ the\ information\ from\ NodeManifolds\ @todo:\ \ refactor\ this\ method\ from\ Luat\ to\ increase\ efficiency}}
+\DoxyCodeLine{00386\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp}{CoupleDomainsAcrossSplitBoundary}}(\ \mbox{\hyperlink{namespacecsmp}{ModelSubDomain}}<\mbox{\hyperlink{namespacecsmp}{dim}},\mbox{\hyperlink{namespacecsmp}{CELLTYPE}}>\&\ );}
+\DoxyCodeLine{00387\ }
+\DoxyCodeLine{00388\ \ \ \ \ \textcolor{comment}{///\ calls\ connected\ solver\ object\ to\ find\ x\ in\ G\ x\ =\ rh\ problem}}
+\DoxyCodeLine{00389\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{namespacecsmp}{Solve}}();}
+\DoxyCodeLine{00390\ }
+\DoxyCodeLine{00391\ \ \ \ \ \textcolor{comment}{///\ allows\ to\ apply\ pde\ operators\ to\ post-\/process\ the\ newly\ computed\ solution}}
+\DoxyCodeLine{00392\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{namespacecsmp}{PostProcess}}(\ \mbox{\hyperlink{namespacecsmp}{ModelSubDomain}}<\mbox{\hyperlink{namespacecsmp}{dim}},\mbox{\hyperlink{namespacecsmp}{CELLTYPE}}>\&\ );}
+\DoxyCodeLine{00393\ }
+\DoxyCodeLine{00394\ \ \ \ \ \textcolor{comment}{///\ transfers\ the\ results\ stored\ in\ solution\ vector\ onto\ the\ nodes\ of\ the\ computational\ domain;\ uses\ node\ numbering}}
+\DoxyCodeLine{00395\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{namespacecsmp}{OutputResults}}(\ \mbox{\hyperlink{namespacecsmp}{ModelSubDomain}}<\mbox{\hyperlink{namespacecsmp}{dim}},\mbox{\hyperlink{namespacecsmp}{CELLTYPE}}>\&\ );}
+\DoxyCodeLine{00396\ }
+\DoxyCodeLine{00397\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{map}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{string}},\mbox{\hyperlink{namespacecsmp}{MathOperatorLHS}}<\mbox{\hyperlink{namespacecsmp}{dim}},\mbox{\hyperlink{namespacecsmp}{CELLTYPE}}>*>\ \ \mbox{\hyperlink{namespacecsmp}{lhs\_operators\_}};\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ stencils\ for\ lefthand\ solution\ matrix}}
+\DoxyCodeLine{00398\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{map}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{string}},\mbox{\hyperlink{namespacecsmp}{MathOperatorRHS}}<\mbox{\hyperlink{namespacecsmp}{dim}},\mbox{\hyperlink{namespacecsmp}{CELLTYPE}}>*>\ \ \mbox{\hyperlink{namespacecsmp}{rhs\_operators\_}};\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ stencils\ for\ righthand\ vector}}
+\DoxyCodeLine{00399\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{map}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{string}},\mbox{\hyperlink{namespacecsmp}{MathOperatorLHS}}<\mbox{\hyperlink{namespacecsmp}{dim}},\mbox{\hyperlink{namespacecsmp}{CELLTYPE}}>*>\ \ \mbox{\hyperlink{namespacecsmp}{postpro\_operators\_}};\ \ \ \ \ \ \ \textcolor{comment}{///<\ post-\/processing:\ Darcy\ velocities,\ stresses\ from\ strains\ etc.}}
+\DoxyCodeLine{00400\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{map}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{string}},\mbox{\hyperlink{namespacecsmp}{MathOperatorRHS}}<\mbox{\hyperlink{namespacecsmp}{dim}},\mbox{\hyperlink{namespacecsmp}{Face}}>*>\ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{rhs\_boundary\_operators\_}};\ \ \textcolor{comment}{///<\ surface\ integrals\ for\ accumulation\ over\ boundary}}
+\DoxyCodeLine{00401\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{map}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{string}},\mbox{\hyperlink{namespacecsmp}{MathOperatorLHS}}<\mbox{\hyperlink{namespacecsmp}{dim}},\mbox{\hyperlink{namespacecsmp}{InterFace}}>*>\ \mbox{\hyperlink{namespacecsmp}{lhs\_split\_boundary\_operators\_}};\ \ \textcolor{comment}{///<\ implicit\ integral\ coupling\ terms\ for\ SplitBoundary}}
+\DoxyCodeLine{00402\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{map}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{string}},\mbox{\hyperlink{namespacecsmp}{MathOperatorRHS}}<\mbox{\hyperlink{namespacecsmp}{dim}},\mbox{\hyperlink{namespacecsmp}{InterFace}}>*>\ \mbox{\hyperlink{namespacecsmp}{rhs\_split\_boundary\_operators\_}};\ \ \textcolor{comment}{///<\ explicit\ integral\ coupling\ terms\ for\ SplitBoundary}}
+\DoxyCodeLine{00403\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{map}}<\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{namespacecsmp}{Parameter}},\mbox{\hyperlink{namespacecsmp}{size\_t}}>\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{basic\_operands\_}};}
+\DoxyCodeLine{00404\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{map}}<\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{namespacecsmp}{Parameter}},\mbox{\hyperlink{namespacecsmp}{size\_t}}>\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{test\_operands\_}};\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ dependent\ variables\ in\ the\ solved\ system\ of\ equations}}
+\DoxyCodeLine{00405\ }
+\DoxyCodeLine{00406\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{namespacecsmp}{Face}}<\mbox{\hyperlink{namespacecsmp}{dim}}>*>\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{boundary\_faces\_}};\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ empty\ if\ computation\ applies\ to\ entire\ model;\ else\ Faces\ needed\ for\ dS\ integrals}}
+\DoxyCodeLine{00407\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{namespacecsmp}{InterFace}}<\mbox{\hyperlink{namespacecsmp}{dim}}>*>\ \ \mbox{\hyperlink{namespacecsmp}{splitboundary\_interfaces\_}};\ \textcolor{comment}{///<\ empty\ if\ computation\ applies\ to\ entire\ model;\ else\ InterFaces\ needed\ for\ domain\ coupling}}
+\DoxyCodeLine{00408\ }
+\DoxyCodeLine{00409\ \textcolor{comment}{//\ TODO:\ must\ use\ CompressedRowMatrix}}
+\DoxyCodeLine{00410\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{SparseMatrix}}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{G\_}};\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ solution\ matrix}}
+\DoxyCodeLine{00411\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\textcolor{keywordtype}{double}>\ \ \ \mbox{\hyperlink{namespacecsmp}{rh\_}};\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ righthand\ vector}}
+\DoxyCodeLine{00412\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\textcolor{keywordtype}{double}>\ \ \ \mbox{\hyperlink{namespacecsmp}{x\_}};\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ solution\ vector}}
+\DoxyCodeLine{00413\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{size\_t}}>\ \ \ \mbox{\hyperlink{namespacecsmp}{DOF\_indexes\_}};\ \textcolor{comment}{///<\ indices\ of\ DOFs,\ but\ only\ of\ the\ non-\/Dirichlet\ dofs,\ size\ enumerated\ 0\ -\/\ DOF-\/1\ (including\ Dirich\ DOF)}}
+\DoxyCodeLine{00414\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\textcolor{keywordtype}{double}>\ \ \ \mbox{\hyperlink{namespacecsmp}{pivotVector\_}};\ \textcolor{comment}{///<\ mapping\ from\ DOFs\ to\ actual\ node\ numbers}}
+\DoxyCodeLine{00415\ }
+\DoxyCodeLine{00416\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{Solver}}*\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{solver\_}}\ =\ \textcolor{keywordtype}{nullptr};}
+\DoxyCodeLine{00417\ }
+\DoxyCodeLine{00418\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{size\_t}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{dof\_per\_node\_}};}
+\DoxyCodeLine{00419\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{setup\_established\_}},\ \mbox{\hyperlink{namespacecsmp}{retain\_matrix\_}},\ \mbox{\hyperlink{namespacecsmp}{trim\_vectors\_}};\ \textcolor{comment}{///<\ false,\ false,\ false\ to\ start\ with}}
+\DoxyCodeLine{00420\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{newed\_Solver\_object\_}};}
+\DoxyCodeLine{00421\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{time\_increment\_}};}
+\DoxyCodeLine{00422\ }
+\DoxyCodeLine{00423\ \ \ \ \ \textcolor{keyword}{struct}\ \mbox{\hyperlink{namespacecsmp}{SIZES}}\ \{}
+\DoxyCodeLine{00424\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{size\_t}}\ \mbox{\hyperlink{namespacecsmp}{nodes}};}
+\DoxyCodeLine{00425\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{size\_t}}\ \mbox{\hyperlink{namespacecsmp}{elements}};}
+\DoxyCodeLine{00426\ \ \ \ \ \ \ \}\ \mbox{\hyperlink{namespacecsmp}{target\_}};}
+\DoxyCodeLine{00427\ }
+\DoxyCodeLine{00428\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00429\ }
+\DoxyCodeLine{00430\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp}{verbose\_}}\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00431\ }
+\DoxyCodeLine{00432\ \ \ \ \ \textcolor{keyword}{friend}\ \mbox{\hyperlink{namespacecsmp}{PDE\_Integrator\_Test}};}
+\DoxyCodeLine{00433\ \};}
+\DoxyCodeLine{00434\ }
+\DoxyCodeLine{00435\ }
+\DoxyCodeLine{00436\ \textcolor{comment}{///\ collects\ pointers\ to\ Faces\ that\ may\ be\ needed\ to\ accumulate\ surface\ integrals\ on\ a\ computational\ domain\ consisting\ of\ elements}}
+\DoxyCodeLine{00437\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00438\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp_aa98b3c508d1b32e629ba4f4f8c2f8d5e}{collectBorderFacesOfComputationRegion}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,\ \textcolor{keyword}{const}\ ModelSubDomain<dim,Element>\&,}
+\DoxyCodeLine{00439\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<\textcolor{keyword}{const}\ csmp::Face<dim>*>\&\ boundary\_faces\ );}
+\DoxyCodeLine{00440\ }
+\DoxyCodeLine{00441\ \textcolor{comment}{///\ collects\ pointers\ to\ \ InterFaces\ that\ may\ be\ needed\ to\ accumulate\ splitboundary\ integrals\ on\ a\ computational\ domain\ consisting\ of\ elements}}
+\DoxyCodeLine{00442\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00443\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp_a9f11b9dac7d3f4407f1a3e8dffcb32f2}{collectInterfacesInComputationRegion}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,\ \textcolor{keyword}{const}\ ModelSubDomain<dim,Element>\&,}
+\DoxyCodeLine{00444\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<\textcolor{keyword}{const}\ csmp::InterFace<dim>*>\&\ splitboundary\_interfaces\ );}
+\DoxyCodeLine{00445\ }
+\DoxyCodeLine{00446\ }
+\DoxyCodeLine{00447\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00448\ }
+\DoxyCodeLine{00449\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{/*\ CSMP\_PDE\_INTEGRATOR\_H\ */}}
+
+\end{DoxyCode}

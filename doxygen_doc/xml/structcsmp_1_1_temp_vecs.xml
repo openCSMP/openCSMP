@@ -1,0 +1,265 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="structcsmp_1_1_temp_vecs" kind="struct" language="C++" prot="public">
+    <compoundname>csmp::TempVecs</compoundname>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcsmp_1_1_temp_vecs_1a2ca90b8a5f5791fe0109b8122b3fa528" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &gt; &gt;</type>
+        <definition>std::vector&lt;std::vector&lt;Point&lt;dim&gt; &gt; &gt; csmp::TempVecs&lt; dim &gt;::facet_integration_points</definition>
+        <argsstring></argsstring>
+        <name>facet_integration_points</name>
+        <qualifiedname>csmp::TempVecs::facet_integration_points</qualifiedname>
+        <briefdescription>
+<para>[isrf][spts][dim] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/integration/finite_volumes/FiniteVolumeStencil.cpp" line="178" column="22" bodyfile="source/modules/integration/finite_volumes/FiniteVolumeStencil.cpp" bodystart="178" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_temp_vecs_1ad27cb29af65da870105d938eb4cbc3dc" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; std::vector&lt; double &gt; &gt;</type>
+        <definition>std::vector&lt;std::vector&lt;double&gt; &gt; csmp::TempVecs&lt; dim &gt;::facet_integration_weights</definition>
+        <argsstring></argsstring>
+        <name>facet_integration_weights</name>
+        <qualifiedname>csmp::TempVecs::facet_integration_weights</qualifiedname>
+        <briefdescription>
+<para>[isrf][spts] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/integration/finite_volumes/FiniteVolumeStencil.cpp" line="179" column="27" bodyfile="source/modules/integration/finite_volumes/FiniteVolumeStencil.cpp" bodystart="179" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_temp_vecs_1ad2f2d99de58dc85d7b6ff71bb8e2f85b" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &gt;</type>
+        <definition>std::vector&lt;Point&lt;dim&gt; &gt; csmp::TempVecs&lt; dim &gt;::facet_normals</definition>
+        <argsstring></argsstring>
+        <name>facet_normals</name>
+        <qualifiedname>csmp::TempVecs::facet_normals</qualifiedname>
+        <briefdescription>
+<para>[isrf][dim] //[node*3][dim] -3d </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/integration/finite_volumes/FiniteVolumeStencil.cpp" line="180" column="36" bodyfile="source/modules/integration/finite_volumes/FiniteVolumeStencil.cpp" bodystart="180" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_temp_vecs_1a621507e2c160acbe31599b13e130e289" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; std::vector&lt; std::pair&lt; double, double &gt; &gt; &gt;</type>
+        <definition>std::vector&lt;std::vector&lt;std::pair&lt;double,double&gt; &gt; &gt; csmp::TempVecs&lt; dim &gt;::facet_normal_xforms</definition>
+        <argsstring></argsstring>
+        <name>facet_normal_xforms</name>
+        <qualifiedname>csmp::TempVecs::facet_normal_xforms</qualifiedname>
+        <briefdescription>
+<para>[isrf][node] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/integration/finite_volumes/FiniteVolumeStencil.cpp" line="181" column="17" bodyfile="source/modules/integration/finite_volumes/FiniteVolumeStencil.cpp" bodystart="181" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_temp_vecs_1ac8804a9c046f6d3373b91debbf7cf7e7" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &gt;</type>
+        <definition>std::vector&lt;Point&lt;dim&gt; &gt; csmp::TempVecs&lt; dim &gt;::facet_parametric_normals</definition>
+        <argsstring></argsstring>
+        <name>facet_parametric_normals</name>
+        <qualifiedname>csmp::TempVecs::facet_parametric_normals</qualifiedname>
+        <briefdescription>
+<para>[isrf][dim] //[node*3][dim] -3d </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/integration/finite_volumes/FiniteVolumeStencil.cpp" line="182" column="36" bodyfile="source/modules/integration/finite_volumes/FiniteVolumeStencil.cpp" bodystart="182" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_temp_vecs_1a0bfc6afe3d0c601cd1407f22d7b62c89" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; std::vector&lt; double &gt; &gt;</type>
+        <definition>std::vector&lt;std::vector&lt;double&gt; &gt; csmp::TempVecs&lt; dim &gt;::facet_projection_weights</definition>
+        <argsstring></argsstring>
+        <name>facet_projection_weights</name>
+        <qualifiedname>csmp::TempVecs::facet_projection_weights</qualifiedname>
+        <briefdescription>
+<para>[isrf][spts] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/integration/finite_volumes/FiniteVolumeStencil.cpp" line="183" column="27" bodyfile="source/modules/integration/finite_volumes/FiniteVolumeStencil.cpp" bodystart="183" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_temp_vecs_1a147cc752866ac7692c94b94309f62d87" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; std::vector&lt; uint32_t &gt; &gt;</type>
+        <definition>std::vector&lt;std::vector&lt;uint32_t&gt; &gt; csmp::TempVecs&lt; dim &gt;::facets_surrounding_node</definition>
+        <argsstring></argsstring>
+        <name>facets_surrounding_node</name>
+        <qualifiedname>csmp::TempVecs::facets_surrounding_node</qualifiedname>
+        <briefdescription>
+<para>[node][facet] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/integration/finite_volumes/FiniteVolumeStencil.cpp" line="184" column="25" bodyfile="source/modules/integration/finite_volumes/FiniteVolumeStencil.cpp" bodystart="184" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_temp_vecs_1aa9768fbbe1ecf0de5ad7883e728dea2f" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &gt;</type>
+        <definition>std::vector&lt;Point&lt;dim&gt; &gt; csmp::TempVecs&lt; dim &gt;::facet_edge_midpoints</definition>
+        <argsstring></argsstring>
+        <name>facet_edge_midpoints</name>
+        <qualifiedname>csmp::TempVecs::facet_edge_midpoints</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/integration/finite_volumes/FiniteVolumeStencil.cpp" line="185" column="36" bodyfile="source/modules/integration/finite_volumes/FiniteVolumeStencil.cpp" bodystart="185" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_temp_vecs_1a47d22f4f4bcfd8e543250be2f00047f5" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &gt; &gt;</type>
+        <definition>std::vector&lt;std::vector&lt;Point&lt;dim&gt; &gt; &gt; csmp::TempVecs&lt; dim &gt;::facet_points</definition>
+        <argsstring></argsstring>
+        <name>facet_points</name>
+        <qualifiedname>csmp::TempVecs::facet_points</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/integration/finite_volumes/FiniteVolumeStencil.cpp" line="186" column="22" bodyfile="source/modules/integration/finite_volumes/FiniteVolumeStencil.cpp" bodystart="186" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_temp_vecs_1ad7ccae8aa6d0aa6613af2b90ff09ed8e" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; FV_FACET_TYPE &gt;</type>
+        <definition>std::vector&lt;FV_FACET_TYPE&gt; csmp::TempVecs&lt; dim &gt;::facet_types</definition>
+        <argsstring></argsstring>
+        <name>facet_types</name>
+        <qualifiedname>csmp::TempVecs::facet_types</qualifiedname>
+        <briefdescription>
+<para>[isrf] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/integration/finite_volumes/FiniteVolumeStencil.cpp" line="187" column="34" bodyfile="source/modules/integration/finite_volumes/FiniteVolumeStencil.cpp" bodystart="187" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_temp_vecs_1ae8ae0a07548d53bbf99b8e0b092680d6" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; std::pair&lt; uint32_t, uint32_t &gt; &gt;</type>
+        <definition>std::vector&lt;std::pair&lt;uint32_t,uint32_t&gt; &gt; csmp::TempVecs&lt; dim &gt;::edges_of_element</definition>
+        <argsstring></argsstring>
+        <name>edges_of_element</name>
+        <qualifiedname>csmp::TempVecs::edges_of_element</qualifiedname>
+        <briefdescription>
+<para>= facets </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/integration/finite_volumes/FiniteVolumeStencil.cpp" line="188" column="18" bodyfile="source/modules/integration/finite_volumes/FiniteVolumeStencil.cpp" bodystart="188" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_temp_vecs_1a2d185810a59585eddda1fbe19b0c1ed4" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &gt; &gt;</type>
+        <definition>std::vector&lt;std::vector&lt;Point&lt;dim&gt; &gt; &gt; csmp::TempVecs&lt; dim &gt;::sector_integration_points</definition>
+        <argsstring></argsstring>
+        <name>sector_integration_points</name>
+        <qualifiedname>csmp::TempVecs::sector_integration_points</qualifiedname>
+        <briefdescription>
+<para>[ivol][vpts][dim] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/integration/finite_volumes/FiniteVolumeStencil.cpp" line="189" column="22" bodyfile="source/modules/integration/finite_volumes/FiniteVolumeStencil.cpp" bodystart="189" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_temp_vecs_1a8432b645819a4b7f063476e9cd336e84" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; std::vector&lt; double &gt; &gt;</type>
+        <definition>std::vector&lt;std::vector&lt;double&gt; &gt; csmp::TempVecs&lt; dim &gt;::sector_integration_weights</definition>
+        <argsstring></argsstring>
+        <name>sector_integration_weights</name>
+        <qualifiedname>csmp::TempVecs::sector_integration_weights</qualifiedname>
+        <briefdescription>
+<para>[ivol][vpts] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/integration/finite_volumes/FiniteVolumeStencil.cpp" line="190" column="27" bodyfile="source/modules/integration/finite_volumes/FiniteVolumeStencil.cpp" bodystart="190" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_temp_vecs_1a7fe5bbae878313265c08a72e4f7c53d7" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &gt; &gt;</type>
+        <definition>std::vector&lt;std::vector&lt;Point&lt;dim&gt; &gt; &gt; csmp::TempVecs&lt; dim &gt;::sector_points</definition>
+        <argsstring></argsstring>
+        <name>sector_points</name>
+        <qualifiedname>csmp::TempVecs::sector_points</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/integration/finite_volumes/FiniteVolumeStencil.cpp" line="191" column="22" bodyfile="source/modules/integration/finite_volumes/FiniteVolumeStencil.cpp" bodystart="191" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_temp_vecs_1a73238608c31c6c918dcd6f086b99d614" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; std::vector&lt; std::pair&lt; uint32_t, uint32_t &gt; &gt; &gt;</type>
+        <definition>std::vector&lt;std::vector&lt;std::pair&lt;uint32_t,uint32_t&gt; &gt; &gt; csmp::TempVecs&lt; dim &gt;::sector_edges</definition>
+        <argsstring></argsstring>
+        <name>sector_edges</name>
+        <qualifiedname>csmp::TempVecs::sector_edges</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/integration/finite_volumes/FiniteVolumeStencil.cpp" line="192" column="18" bodyfile="source/modules/integration/finite_volumes/FiniteVolumeStencil.cpp" bodystart="192" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Temporary storage used to convert vectors of vectors to the dynamic array based storage </para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::TempVecs&lt; dim &gt;</label>
+        <link refid="structcsmp_1_1_temp_vecs"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/modules/integration/finite_volumes/FiniteVolumeStencil.cpp" line="177" column="1" bodyfile="source/modules/integration/finite_volumes/FiniteVolumeStencil.cpp" bodystart="177" bodyend="193"/>
+    <listofallmembers>
+      <member refid="structcsmp_1_1_temp_vecs_1ae8ae0a07548d53bbf99b8e0b092680d6" prot="public" virt="non-virtual"><scope>csmp::TempVecs</scope><name>edges_of_element</name></member>
+      <member refid="structcsmp_1_1_temp_vecs_1aa9768fbbe1ecf0de5ad7883e728dea2f" prot="public" virt="non-virtual"><scope>csmp::TempVecs</scope><name>facet_edge_midpoints</name></member>
+      <member refid="structcsmp_1_1_temp_vecs_1a2ca90b8a5f5791fe0109b8122b3fa528" prot="public" virt="non-virtual"><scope>csmp::TempVecs</scope><name>facet_integration_points</name></member>
+      <member refid="structcsmp_1_1_temp_vecs_1ad27cb29af65da870105d938eb4cbc3dc" prot="public" virt="non-virtual"><scope>csmp::TempVecs</scope><name>facet_integration_weights</name></member>
+      <member refid="structcsmp_1_1_temp_vecs_1a621507e2c160acbe31599b13e130e289" prot="public" virt="non-virtual"><scope>csmp::TempVecs</scope><name>facet_normal_xforms</name></member>
+      <member refid="structcsmp_1_1_temp_vecs_1ad2f2d99de58dc85d7b6ff71bb8e2f85b" prot="public" virt="non-virtual"><scope>csmp::TempVecs</scope><name>facet_normals</name></member>
+      <member refid="structcsmp_1_1_temp_vecs_1ac8804a9c046f6d3373b91debbf7cf7e7" prot="public" virt="non-virtual"><scope>csmp::TempVecs</scope><name>facet_parametric_normals</name></member>
+      <member refid="structcsmp_1_1_temp_vecs_1a47d22f4f4bcfd8e543250be2f00047f5" prot="public" virt="non-virtual"><scope>csmp::TempVecs</scope><name>facet_points</name></member>
+      <member refid="structcsmp_1_1_temp_vecs_1a0bfc6afe3d0c601cd1407f22d7b62c89" prot="public" virt="non-virtual"><scope>csmp::TempVecs</scope><name>facet_projection_weights</name></member>
+      <member refid="structcsmp_1_1_temp_vecs_1ad7ccae8aa6d0aa6613af2b90ff09ed8e" prot="public" virt="non-virtual"><scope>csmp::TempVecs</scope><name>facet_types</name></member>
+      <member refid="structcsmp_1_1_temp_vecs_1a147cc752866ac7692c94b94309f62d87" prot="public" virt="non-virtual"><scope>csmp::TempVecs</scope><name>facets_surrounding_node</name></member>
+      <member refid="structcsmp_1_1_temp_vecs_1a73238608c31c6c918dcd6f086b99d614" prot="public" virt="non-virtual"><scope>csmp::TempVecs</scope><name>sector_edges</name></member>
+      <member refid="structcsmp_1_1_temp_vecs_1a2d185810a59585eddda1fbe19b0c1ed4" prot="public" virt="non-virtual"><scope>csmp::TempVecs</scope><name>sector_integration_points</name></member>
+      <member refid="structcsmp_1_1_temp_vecs_1a8432b645819a4b7f063476e9cd336e84" prot="public" virt="non-virtual"><scope>csmp::TempVecs</scope><name>sector_integration_weights</name></member>
+      <member refid="structcsmp_1_1_temp_vecs_1a7fe5bbae878313265c08a72e4f7c53d7" prot="public" virt="non-virtual"><scope>csmp::TempVecs</scope><name>sector_points</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

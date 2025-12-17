@@ -5,17 +5,16 @@
 #include "Exception.h"
 #include "ErrorHandler.h"
 #include "CSMP_mathUtilities.h"
-//#include <fstream>
 
-#ifndef SAMG_MULTIPLE_INSTANCES
-#include "samg.h"
-#else
+#if defined(SAMG_MULTIPLE_INSTANCES) && defined(LEGACY_SAMG)
 #include "samg.h"
 #include "samg1.h"
 #include "samg2.h"
 #include "samg3.h"
 #include "samg4.h"
 #include "samg5.h"
+#else
+#include "samg.h"
 #endif
 
 
@@ -39,8 +38,8 @@ SAMG_Solver::SAMG_Solver()
       output_amg_data_to_text_files_(false),
       newed_SAMG_Settings_object(true)
 {
-    assert( solver_settings_ != NULL );
-    assert( settings_ != NULL );
+    assert( solver_settings_ != nullptr );
+    assert( settings_ != nullptr );
 }
 
 
@@ -60,8 +59,8 @@ SAMG_Solver::SAMG_Solver( SAMG_Settings* settings ) :
     output_amg_data_to_text_files_(false),
     newed_SAMG_Settings_object(false)
 {
-    assert( solver_settings_ != NULL );
-    assert( settings_ != NULL );
+    assert( solver_settings_ != nullptr );
+    assert( settings_ != nullptr );
 }
 
 
@@ -113,16 +112,12 @@ SAMG_Solver& SAMG_Solver::operator=( const SAMG_Solver& solver )
         ierr_   = solver.ierr_;
         output_amg_data_to_text_files_ = solver.output_amg_data_to_text_files_;
     }
-    assert( solver_settings_ != NULL );
-    assert( settings_ != NULL );
+    assert( solver_settings_ != nullptr );
+    assert( settings_ != nullptr );
     return *this;
 }
 
 
-SAMG_Solver::~SAMG_Solver()
-{
-    if ( newed_SAMG_Settings_object ) delete settings_;
-}
 
 /** Set new solver settings.
 
@@ -141,9 +136,15 @@ void SAMG_Solver::InputSolverSettings( SolverSettings& settings )
     settings_ = static_cast<SAMG_Settings*>(&settings);
  }
 
+
+
+
 SolverSettings* SAMG_Solver::GetSolverSettings() {
     return settings_;
 }
+
+
+
 
 void SAMG_Solver::SolveMatrixEquation( CompressedRowMatrix& A,
                                        vector<double>& b,
@@ -153,11 +154,11 @@ void SAMG_Solver::SolveMatrixEquation( CompressedRowMatrix& A,
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
   /// 1. Calculate number of non-zero elements in A
-  size_t new_nnu = A.ia.size() - 1;
-  size_t new_nna = A.ja.size();
-  size_t new_nsys = no_unknowns;
-  u_.resize( new_nnu );
-  f_.resize( new_nnu );
+  int32_t new_nnu = static_cast<int32_t>(A.ia.size() - 1);
+  int32_t new_nna = static_cast<int32_t>(A.ja.size());
+  int32_t new_nsys = static_cast<int32_t>(no_unknowns);
+  u_.resize( static_cast<size_t>(new_nnu) );
+  f_.resize( static_cast<size_t>(new_nnu) );
 
   crmat_ = A;
   crmat_.ConvertToSAMGFormat();
@@ -167,11 +168,11 @@ void SAMG_Solver::SolveMatrixEquation( CompressedRowMatrix& A,
     << new_nnu << " NNA(total unknowns): " << new_nna << "   ";
 
   // set arrays for systems
-  if ( new_nsys > 1U ) {
+  if ( new_nsys > 1 ) {
     // only rebuild arrays if settings have changed
     if ( new_nnu != nnu_ || new_nsys != nsys_ ) {
       if ( new_nnu != nnu_ ) {
-        iu_.resize( new_nnu );
+        iu_.resize( static_cast<size_t>(new_nnu) );
         ndiu_ = static_cast<int32_t>(iu_.size()); // update the size indicator for iu vector
       }
 
@@ -180,7 +181,7 @@ void SAMG_Solver::SolveMatrixEquation( CompressedRowMatrix& A,
       // coupled systems with solution vector [x1, y1, x2, y2, x3, y3, ...., xn, yn]
       // IU must gave the form [1,2,1,2,1,2,...,1,2]
       if ( settings_->UsePointBasedApproach() ) {
-        for ( int32_t i = 0; i<(iu_.size() / new_nsys); i++ )
+        for ( int32_t i = 0; i<(static_cast<int32_t>(iu_.size()) / new_nsys); i++ )
           for ( int32_t j = 0; j<new_nsys; j++ )
             iu_[k++] = j + 1;
       }
@@ -189,7 +190,7 @@ void SAMG_Solver::SolveMatrixEquation( CompressedRowMatrix& A,
       // IU must have the form [1,1,1,...,n,2,2,2,...,n]
       else {
         for ( int32_t j = 0; j<new_nsys; j++ )
-          for ( int32_t i = 0; i<(iu_.size() / new_nsys); i++ )
+          for ( int32_t i = 0; i<(static_cast<int32_t>(iu_.size()) / new_nsys); i++ )
             iu_[k++] = j + 1;
       }
     }
@@ -199,13 +200,13 @@ void SAMG_Solver::SolveMatrixEquation( CompressedRowMatrix& A,
       // only rebuild arrays if settings have changed
       if ( new_nnu != nnu_ || new_nsys != nsys_ ) {
         if ( new_nnu != nnu_ ) {
-          ip_.resize( new_nnu );
+          ip_.resize( static_cast<size_t>(new_nnu) );
           ndip_ = static_cast<int32_t>(ip_.size()); // resizing the ip vector size indicator
         }
 
         uint32_t  k( 0 );
         // IP must be the corresponding node number format [1,1,2,2,3,3,...,n,n]
-        for ( int32_t i = 0; i<(ip_.size() / new_nsys); i++ )
+        for ( int32_t i = 0; i<(static_cast<int32_t>(ip_.size()) / new_nsys); i++ )
           for ( int32_t j = 0; j<new_nsys; j++ )
             ip_[k++] = i + 1;
       }
@@ -226,7 +227,7 @@ void SAMG_Solver::SolveMatrixEquation( CompressedRowMatrix& A,
   // To be done for scalar systems as well
 
   if ( new_nsys != nsys_ ) {
-    iscale_.resize( new_nsys );
+    iscale_.resize( static_cast<size_t>(new_nsys) );
     // putting zero values into this array switches the scaling off
     fill( iscale_.begin(), iscale_.end(), 0 );
   }
@@ -242,15 +243,15 @@ void SAMG_Solver::SolveMatrixEquation( CompressedRowMatrix& A,
 #pragma omp parallel for // algorithm has been done this way to complete idea of "first touch".
 #endif
     for ( int32_t i{0}; i < nnu_; i++ ) {
-      u_[i] = x[i%nsys_*(nnu_ / nsys_) + i / nsys_]; // initial guess for the solution vector
-      f_[i] = b[i%nsys_*(nnu_ / nsys_) + i / nsys_]; // right-hand side
+      u_[ static_cast<size_t>(i) ] = x[ static_cast<size_t>(i%nsys_*(nnu_ / nsys_) + i / nsys_) ]; // initial guess for the solution vector
+      f_[ static_cast<size_t>(i) ] = b[ static_cast<size_t>(i%nsys_*(nnu_ / nsys_) + i / nsys_) ]; // right-hand side
     }
   }
   else {
 #if defined(_OPENMP )
 #pragma omp parallel for // algorithm has been done this way to complete idea of "first touch".
 #endif
-    for ( int32_t i{0}; i<nnu_; i++ ) {
+    for ( size_t i{0u}; i<static_cast<size_t>(nnu_); i++ ) {
       u_[i] = x[i]; // initial guess for the solution vector
       f_[i] = b[i]; // right-hand side
     }
@@ -666,7 +667,7 @@ void SAMG_Solver::SolveMatrixEquation( CompressedRowMatrix& A,
   // solver returned ok so lets place contents back into x
   if ( settings_->UsePointBasedApproach() )
     for ( int32_t i{0U}; i < nnu_; i++ )
-      x[i%nsys_*(nnu_ / nsys_) + i / nsys_] = u_[i];
+      x[ static_cast<size_t>(i%nsys_*(nnu_ / nsys_) + i / nsys_) ] = u_[ static_cast<size_t>(i) ];
   else x = u_;
 
   // 2. writing SAMG solver input/output data to file
@@ -694,17 +695,17 @@ void SAMG_Solver::SolveMatrixEquation( SparseMatrix& A,
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     /// 1. Calculate number of non-zero elements in A
-    size_t new_nnu = A.Rows();
-    size_t new_nna = A.Entries();
-    size_t new_nsys = no_unknowns;
-    u_.resize(new_nnu);
-    f_.resize(new_nnu);
+    int32_t new_nnu = static_cast<int32_t>(A.Rows());
+    int32_t new_nna = static_cast<int32_t>(A.Entries());
+    int32_t new_nsys = static_cast<int32_t>(no_unknowns);
+    u_.resize( static_cast<size_t>(new_nnu) );
+    f_.resize( static_cast<size_t>(new_nnu) );
 
     if (Verbose()) cout << "\n\n*** SAMG_Solver::SolveMatrixEquation: 'Created CompressedRowMatrix ...' ***\n\n";
     cout.flush();
 
     if ( settings_->UsePointBasedApproach() )
-        crmat_.InitializePointBased( A, new_nsys );
+        crmat_.InitializePointBased( A, static_cast<size_t>(new_nsys) );
     else
         crmat_.Initialize( A );
 
@@ -713,11 +714,11 @@ void SAMG_Solver::SolveMatrixEquation( SparseMatrix& A,
              << new_nnu << " NNA(total unknowns): " << new_nna << "   ";
 
     // set arrays for systems
-    if ( new_nsys > 1U ) {
+    if ( new_nsys > 1 ) {
         // only rebuild arrays if settings have changed
         if ( new_nnu != nnu_ || new_nsys != nsys_ ) {
             if ( new_nnu != nnu_ ) {
-                iu_.resize(new_nnu);
+                iu_.resize( static_cast<size_t>(new_nnu) );
                 ndiu_ = static_cast<int32_t>(iu_.size()); // update the size indicator for iu vector
             }
 
@@ -726,7 +727,7 @@ void SAMG_Solver::SolveMatrixEquation( SparseMatrix& A,
             // coupled systems with solution vector [x1, y1, x2, y2, x3, y3, ...., xn, yn]
             // IU must gave the form [1,2,1,2,1,2,...,1,2]
             if ( settings_->UsePointBasedApproach() ) {
-                for ( int32_t i=0; i<(iu_.size()/new_nsys); i++ )
+                for ( int32_t i=0; i<(static_cast<int32_t>(iu_.size())/new_nsys); i++ )
                     for ( int32_t j=0; j<new_nsys; j++ )
                         iu_[k++] = j+1;
             }
@@ -735,7 +736,7 @@ void SAMG_Solver::SolveMatrixEquation( SparseMatrix& A,
             // IU must have the form [1,1,1,...,n,2,2,2,...,n]
             else {
                 for ( int32_t j=0; j<new_nsys; j++ )
-                    for ( int32_t i=0; i<(iu_.size()/new_nsys); i++ )
+                    for ( int32_t i=0; i<(static_cast<int32_t>(iu_.size())/new_nsys); i++ )
                         iu_[k++] = j+1;
             }
         }
@@ -745,13 +746,13 @@ void SAMG_Solver::SolveMatrixEquation( SparseMatrix& A,
             // only rebuild arrays if settings have changed
             if ( new_nnu != nnu_ || new_nsys != nsys_ ) {
                 if ( new_nnu != nnu_ ) {
-                    ip_.resize(new_nnu);
+                    ip_.resize(static_cast<size_t>(new_nnu));
                     ndip_ = static_cast<int32_t>(ip_.size()); // resizing the ip vector size indicator
                 }
 
                 uint32_t  k(0);
                 // IP must be the corresponding node number format [1,1,2,2,3,3,...,n,n]
-                for ( int32_t i=0; i<(ip_.size()/new_nsys); i++ )
+                for ( int32_t i=0; i<(static_cast<int32_t>(ip_.size())/new_nsys); i++ )
                     for ( int32_t j=0; j<new_nsys; j++ )
                         ip_[k++] = i+1;
             }
@@ -772,7 +773,7 @@ void SAMG_Solver::SolveMatrixEquation( SparseMatrix& A,
     // To be done for scalar systems as well
 
     if (new_nsys != nsys_) {
-        iscale_.resize(new_nsys);
+        iscale_.resize(static_cast<size_t>(new_nsys));
         // putting zero values into this array switches the scaling off
         fill( iscale_.begin(), iscale_.end(), 0 );
     }
@@ -788,15 +789,15 @@ void SAMG_Solver::SolveMatrixEquation( SparseMatrix& A,
 #pragma omp parallel for // algorithm has been done this way to complete idea of "first touch".
 #endif
         for ( int32_t i{0U}; i < nnu_; i++ ) {
-            u_[i] = x[i%nsys_*(nnu_/nsys_)+i/nsys_]; // initial guess for the solution vector
-            f_[i] = b[i%nsys_*(nnu_/nsys_)+i/nsys_]; // right-hand side
+            u_[ static_cast<size_t>(i) ] = x[ static_cast<size_t>(i%nsys_*(nnu_/nsys_)+i/nsys_) ]; // initial guess for the solution vector
+            f_[ static_cast<size_t>(i) ] = b[ static_cast<size_t>(i%nsys_*(nnu_/nsys_)+i/nsys_) ]; // right-hand side
         }
     }
     else {
 #if defined(_OPENMP )
 #pragma omp parallel for // algorithm has been done this way to complete idea of "first touch".
 #endif
-        for ( int32_t i=0U; i<nnu_; i++ ) {
+        for ( size_t i=0U; i<static_cast<size_t>(nnu_); i++ ) {
             u_[i] = x[i]; // initial guess for the solution vector
             f_[i] = b[i]; // right-hand side
         }
@@ -842,12 +843,26 @@ void SAMG_Solver::SolveMatrixEquation( SparseMatrix& A,
     int32_t nrd = settings_->Get_nrd();
     int32_t nru = settings_->Get_nru();
     int32_t ncg = settings_->Get_ncg();
+#if defined(_OPENMP )
+    int32_t icolor_omp = settings_->Get_icolor_omp();
+    int32_t iordered_omp = settings_->Get_iordered_omp();
+    int32_t irestriction_openmp = settings_->Get_irestriction_openmp();
+    int32_t samg_omp_num_threads_external = settings_->Get_samg_omp_num_threads_external();
+#endif
 
     /// SAMG matrix output to file
     int32_t ioform = settings_->Get_ioform();                          // matrix output format parameter (ASCII characters)
     int32_t ioform_length = settings_->Get_ioform_length();            // matrix output format parameter lenght (number of ASCII characters)
     int* filnam_dump = settings_->Get_filnam_dump();                 // matrix output format filename (ASCII characters)
     int32_t filnam_dump_length = settings_->Get_filnam_dump_length();  // matrix output format filename lenght (number of ASCII characters)
+
+#ifndef LEGACY_SAMG
+    // Note: not necessarily elegant way to transform to char*, but cannot use to_string
+    std::string str=to_string(settings_->GetSolverInstance());
+    char * writable = new char[str.size() + 1];
+    std::copy(str.begin(), str.end(), writable);
+    writable[str.size()] = '\0'; // don't forget the terminating 0
+#endif
 
 
     /// Define SAMG hidden parameters
@@ -876,6 +891,7 @@ void SAMG_Solver::SolveMatrixEquation( SparseMatrix& A,
 #endif
 
 #ifdef SAMG_MULTIPLE_INSTANCES
+#ifdef LEGACY_SAMG
         if ( settings_->GetSolverInstance() == 0 ) {
             SAMG_SET_NCG( &ncg );
 
@@ -984,6 +1000,37 @@ void SAMG_Solver::SolveMatrixEquation( SparseMatrix& A,
             SAMG5_SET_NRD(&nrd);
             SAMG5_SET_NRU(&nru);
         }
+#else // if not using legacy samg
+
+        SAMG_SET_NCG_CTX(SAMG_CCTXT(writable),&ncg );
+
+        /// Check applicability of reused coarsening setup
+#ifdef RENOUNCE_COARSENING
+        CheckSparsityCriterion( levelx );
+#endif
+        SAMG_SET_LEVELX_CTX(SAMG_CCTXT(writable), &levelx );
+
+        SAMG_SET_CLSOLVER_FINEST_CTX(SAMG_CCTXT(writable), &clsolver_finest );
+
+
+        /// SAMG output to file
+        if ( settings_->Get_idmp() > 1 ){
+            SAMG_ISET_IOFORM_CTX(SAMG_CCTXT(writable),&ioform, &ioform_length);
+            SAMG_ISET_FILNAM_DUMP_CTX(SAMG_CCTXT(writable), filnam_dump, &filnam_dump_length );
+        }
+        SAMG_SET_MODE_MESS_CTX(SAMG_CCTXT(writable),&mode_mess);
+        SAMG_SET_NRD_CTX(SAMG_CCTXT(writable),&nrd);
+        SAMG_SET_NRU_CTX(SAMG_CCTXT(writable),&nru);
+        SAMG_SET_ICOLOR_OMP_CTX(SAMG_CCTXT(writable),&icolor_omp);
+        SAMG_SET_IORDERED_OMP_CTX(SAMG_CCTXT(writable),&iordered_omp);
+        SAMG_SET_IRESTRICTION_OPENMP_CTX(SAMG_CCTXT(writable),&irestriction_openmp);
+
+        //if desired, control the number of threads that SAMG uses in OpenMP context
+        if (samg_omp_num_threads_external > 0)
+            SAMG_SET_OMP_NUM_THREADS_EXTERNAL_CTX(SAMG_CCTXT(writable),&samg_omp_num_threads_external);
+
+
+#endif
 #endif
 
     } else {
@@ -992,6 +1039,7 @@ void SAMG_Solver::SolveMatrixEquation( SparseMatrix& A,
 #ifndef SAMG_MULTIPLE_INSTANCES
         SAMG_RESET_HIDDEN();
 #else
+#ifdef LEGACY_SAMG
         if ( settings_->GetSolverInstance() == 0 ) {
             SAMG_RESET_HIDDEN();
         } else if ( settings_->GetSolverInstance() == 1 ) {
@@ -1009,6 +1057,9 @@ void SAMG_Solver::SolveMatrixEquation( SparseMatrix& A,
         else if ( settings_->GetSolverInstance() == 5 ) {
             SAMG5_RESET_HIDDEN();
         }
+#else
+        SAMG_RESET_HIDDEN_CTX(SAMG_CCTXT(writable));
+#endif
 
 #endif
 #else
@@ -1048,6 +1099,7 @@ void SAMG_Solver::SolveMatrixEquation( SparseMatrix& A,
 #endif
 
 #ifdef SAMG_MULTIPLE_INSTANCES
+#ifdef LEGACY_SAMG
     if (Verbose()) cout <<"\n*** SAMG_Solver::SolveMatrixEquation: Calling SAMG instance: "<< settings_->GetSolverInstance() <<" ***\n\n";
     cout.flush();
 
@@ -1063,9 +1115,7 @@ void SAMG_Solver::SolveMatrixEquation( SparseMatrix& A,
 			int* ip(0);
 			SAMG(&nnu_, &nna_, &nsys_,
 				&crmat_.ia[0], &crmat_.ja[0], &crmat_.a[0], &f_[0], &u_[0],
-				&iu_[0], &ndiu_, 
--> !    ip,
-        &ndip_, &matrix, &iscale_[0],
+				&iu_[0], &ndiu_, ip, &ndip_, &matrix, &iscale_[0],
 				&res_in_, &res_out_, &ncyc_done_, &ierr_,
 				&nsolve, &ifirst, &eps, &ncyc, &iswtch,
 				&a_cmplx, &g_cmplx, &p_cmplx, &w_avrge,
@@ -1205,15 +1255,41 @@ cerr <<"\n..................................................................."<<
     else
         throw csmp::Exception( ERROR, "SAMG_Solver::SolveMatrixEquation:",
                                "Desired solver instance is not available in current SAMG library" );
+
+#else // if not LEGACY_SAMG
+    if (Verbose()) cout <<"\n*** SAMG_Solver::SolveMatrixEquation: Calling SAMG instance: "<< settings_->GetSolverInstance() <<" ***\n\n";
+    cout.flush();
+
+    /// Check applicability of reusing previous coarsening setup unless primary solver control is enabled by iswit(>5)
+#ifdef NO_PRIMARY_SOLVER_CONTROL
+    CheckCycleCriterion( iswtch );
 #endif
+    SAMG_CTX(SAMG_CCTXT(writable), &nnu_, &nna_, &nsys_,
+          &crmat_.ia[0], &crmat_.ja[0], &crmat_.a[0], &f_[0], &u_[0],
+            &iu_[0], &ndiu_, &ip_[0], &ndip_, &matrix, &iscale_[0],
+            &res_in_, &res_out_, &ncyc_done_, &ierr_,
+            &nsolve, &ifirst, &eps, &ncyc, &iswtch,
+            &a_cmplx, &g_cmplx, &p_cmplx, &w_avrge,
+            &chktol, &idump, &iout );
+
+    /// Collect number of iteration cycles from SAMG output unless primary solver control is enabled by iswit(>5)
+#ifdef NO_PRIMARY_SOLVER_CONTROL
+    UpdateCycleCriterion( iswtch );
+#endif
+    // don't forget to free the string after finished using it
+    delete[] writable;
+
+#endif // LEGACY_SAMG
+#endif // SAMG_MULTIPLE_INSTANCES
 
     if ( ierr_ > 0 ) {
         csmp_error.Note( ERROR, "SAMG_Solver::SolveMatrixEquation: ",
                           "SAMG solver returned with an error; error code: ", (to_string(ierr_)).c_str() );
 
     } else if ( ierr_ < 0 and ierr_ != -841 ) { // bicgstab restart
-        csmp_error.Note( WARNING, "SAMG_Solver::SolveMatrixEquation:",
-                           "SAMG solver returned with a warning; code: ", (to_string(ierr_)).c_str() );
+        if (this->Verbose())
+            csmp_error.Note( WARNING, " SAMG_Solver::SolveMatrixEquation:",
+                               "SAMG solver returned with a warning; code: ", (to_string(ierr_)).c_str() );
     }
 
     /// SAMG convergence check
@@ -1221,8 +1297,8 @@ cerr <<"\n..................................................................."<<
 
     // solver returned ok so lets place contents back into x
     if ( settings_->UsePointBasedApproach() )
-        for ( auto i{0U}; i < nnu_; i++ )
-            x[i%nsys_*(nnu_/nsys_)+i/nsys_] = u_[i];
+        for ( int32_t i{0}; i < nnu_; i++ )
+            x[ static_cast<size_t>(i%nsys_*(nnu_/nsys_)+i/nsys_) ] = u_[static_cast<size_t>(i) ];
     else x = u_;
 
     // 2. writing SAMG solver input/output data to file
@@ -1235,9 +1311,14 @@ cerr <<"\n..................................................................."<<
 }
 
 
+
+
+
 void  SAMG_Solver::Write_SAMG_TextOutput( bool write ) {
     output_amg_data_to_text_files_ = write;
 }
+
+
 
 
 void SAMG_Solver::OutputVectors() const
@@ -1251,11 +1332,11 @@ void SAMG_Solver::OutputVectors() const
 
     // output u and f to screen
     ofs<<"\n\nu:"<< endl;
-    for (unsigned int i=0;i!=nnu_;i++)
+    for ( unsigned int i{0u}; i!=static_cast<size_t>(nnu_); i++ )
         ofs<<i+1<<", "<<u_[i]<< endl;
 
     ofs<<"\n\nf:"<< endl;
-    for (unsigned int i=0;i!=nnu_;i++)
+    for (unsigned int i{0u}; i!=static_cast<size_t>(nnu_); i++ )
         ofs<<i+1<<", "<<f_[i]<< endl;
 }
 
@@ -1316,11 +1397,11 @@ bool  SAMG_Solver::Write_SAMG_TextInputFile( const char* file ) const
     out_file += ".amg";
     ofs.open(out_file.c_str());
     // this order is O.K. because the indices are not printed
-    for ( size_t i{0U}; i<nnu_+1U; i++ ) ofs << crmat_.ia[i] << endl;
-    for ( size_t i{0U}; i<nna_;    i++ ) ofs << crmat_.ja[i] << endl;
+    for ( size_t i{0U}; i<static_cast<size_t>(nnu_+1); i++ ) ofs << crmat_.ia[i] << endl;
+    for ( size_t i{0U}; i<static_cast<size_t>(nna_);   i++ ) ofs << crmat_.ja[i] << endl;
     ofs.setf(ios::scientific);
     long prec = ofs.precision(15);
-    for ( size_t i{0U}; i<nna_;   i++ ) ofs << crmat_.a[i] << endl;
+    for ( size_t i{0U}; i<static_cast<size_t>(nna_);   i++ ) ofs << crmat_.a[i] << endl;
     ofs.unsetf( ios::scientific );
     ofs.precision(prec);
     ofs.close();
@@ -1371,8 +1452,8 @@ bool  SAMG_Solver::Write_SAMG_TextInputFile( const char* file ) const
     ofs.open(out_file.c_str());
     ofs.setf(ios::scientific);
     prec = ofs.precision(15);
-    auto i{0};
-    for ( size_t row=0U; row!=nnu_; row++ )
+    size_t i=0U;
+    for ( size_t row=0U; row!=static_cast<size_t>(nnu_); row++ )
     {
         ofs <<"\n"<<(row+1)<<"\t"; // node number
         for ( int32_t j=crmat_.ia[row]; j!=crmat_.ia[row+1]; j++, i++ )
@@ -1401,7 +1482,7 @@ bool  SAMG_Solver::Write_SAMG_TextInputFile( const char* file ) const
         out_file  = file;
         out_file += ".iu";
         ofs.open(out_file.c_str());
-        for ( i=0; i<ndiu_; i++ ) ofs << iu_[i] << endl;
+        for ( i=0; i<static_cast<size_t>(ndiu_); i++ ) ofs << iu_[i] << endl;
         ofs.close();
         cout <<"\nSAMG_Solver::Write_SAMG_TextInputFile: file '"<< out_file;
         cout <<" written successfully."<< endl;
@@ -1419,7 +1500,7 @@ bool  SAMG_Solver::Write_SAMG_TextInputFile( const char* file ) const
         out_file  = file;
         out_file += ".ip";
         ofs.open(out_file.c_str());
-        for ( i=0; i<ndip_; i++ ) ofs << ip_[i] << endl;
+        for ( i=0; i<static_cast<size_t>(ndip_); i++ ) ofs << ip_[i] << endl;
         ofs.close();
         cout <<"\nSAMG_Adaptor::Write_SAMG_TextInputFile: file '"<< out_file;
         cout <<" written successfully."<< endl;

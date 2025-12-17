@@ -1,0 +1,236 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="class_token_iterator" kind="class" language="C++" prot="public">
+    <compoundname>TokenIterator</compoundname>
+    <innerclass refid="class_token_iterator_1_1_capture_state" prot="public">TokenIterator::CaptureState</innerclass>
+    <templateparamlist>
+      <param>
+        <type>class InputIter</type>
+      </param>
+      <param>
+        <type>class Pred</type>
+        <defval><ref refid="struct_isalpha" kindref="compound">Isalpha</ref></defval>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="class_token_iterator_1a7833e430a03d30949ea0e05b0394b579" prot="private" static="no" mutable="no">
+        <type>InputIter</type>
+        <definition>InputIter TokenIterator&lt; InputIter, Pred &gt;::first</definition>
+        <argsstring></argsstring>
+        <name>first</name>
+        <qualifiedname>TokenIterator::first</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/BE_TokenIterator.h" line="33" column="13" bodyfile="source/includes/utilities/BE_TokenIterator.h" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_token_iterator_1a1a4fd6b4121f753e8ee1b1e9d931928a" prot="private" static="no" mutable="no">
+        <type>InputIter</type>
+        <definition>InputIter TokenIterator&lt; InputIter, Pred &gt;::last</definition>
+        <argsstring></argsstring>
+        <name>last</name>
+        <qualifiedname>TokenIterator::last</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/BE_TokenIterator.h" line="34" column="13" bodyfile="source/includes/utilities/BE_TokenIterator.h" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_token_iterator_1ab42cf1c865f0384df024f3dc1e749015" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string TokenIterator&lt; InputIter, Pred &gt;::word</definition>
+        <argsstring></argsstring>
+        <name>word</name>
+        <qualifiedname>TokenIterator::word</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/BE_TokenIterator.h" line="35" column="15" bodyfile="source/includes/utilities/BE_TokenIterator.h" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_token_iterator_1ac917b4559e6e203d6f6f06f85fa36d08" prot="private" static="no" mutable="no">
+        <type>Pred</type>
+        <definition>Pred TokenIterator&lt; InputIter, Pred &gt;::predicate</definition>
+        <argsstring></argsstring>
+        <name>predicate</name>
+        <qualifiedname>TokenIterator::predicate</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/BE_TokenIterator.h" line="36" column="8" bodyfile="source/includes/utilities/BE_TokenIterator.h" bodystart="36" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_token_iterator_1ad33fdd8530bc6a7f37044a56b89ceb4d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>TokenIterator&lt; InputIter, Pred &gt;::TokenIterator</definition>
+        <argsstring>(InputIter begin, InputIter end, Pred pred=Pred())</argsstring>
+        <name>TokenIterator</name>
+        <qualifiedname>TokenIterator::TokenIterator</qualifiedname>
+        <param>
+          <type>InputIter</type>
+          <declname>begin</declname>
+        </param>
+        <param>
+          <type>InputIter</type>
+          <declname>end</declname>
+        </param>
+        <param>
+          <type>Pred</type>
+          <declname>pred</declname>
+          <defval>Pred()</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/BE_TokenIterator.h" line="38" column="3" bodyfile="source/includes/utilities/BE_TokenIterator.h" bodystart="38" bodyend="42"/>
+      </memberdef>
+      <memberdef kind="function" id="class_token_iterator_1a083d262275be9cb87f3b32760583907e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>TokenIterator&lt; InputIter, Pred &gt;::TokenIterator</definition>
+        <argsstring>()</argsstring>
+        <name>TokenIterator</name>
+        <qualifiedname>TokenIterator::TokenIterator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/BE_TokenIterator.h" line="43" column="3" bodyfile="source/includes/utilities/BE_TokenIterator.h" bodystart="43" bodyend="43"/>
+      </memberdef>
+      <memberdef kind="function" id="class_token_iterator_1a15a57604d903840b724bb4e89504200a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="class_token_iterator" kindref="compound">TokenIterator</ref> &amp;</type>
+        <definition>TokenIterator &amp; TokenIterator&lt; InputIter, Pred &gt;::operator++</definition>
+        <argsstring>()</argsstring>
+        <name>operator++</name>
+        <qualifiedname>TokenIterator::operator++</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/BE_TokenIterator.h" line="45" column="17" bodyfile="source/includes/utilities/BE_TokenIterator.h" bodystart="45" bodyend="51"/>
+      </memberdef>
+      <memberdef kind="function" id="class_token_iterator_1a35a3ded5821af45185909137bc07ae4e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="class_token_iterator_1_1_capture_state" kindref="compound">CaptureState</ref></type>
+        <definition>CaptureState TokenIterator&lt; InputIter, Pred &gt;::operator++</definition>
+        <argsstring>(int)</argsstring>
+        <name>operator++</name>
+        <qualifiedname>TokenIterator::operator++</qualifiedname>
+        <param>
+          <type>int</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/BE_TokenIterator.h" line="59" column="16" bodyfile="source/includes/utilities/BE_TokenIterator.h" bodystart="59" bodyend="63"/>
+      </memberdef>
+      <memberdef kind="function" id="class_token_iterator_1a37c2cde23fe72293046a3dfd35ff2ebb" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::string</type>
+        <definition>std::string TokenIterator&lt; InputIter, Pred &gt;::operator*</definition>
+        <argsstring>() const</argsstring>
+        <name>operator*</name>
+        <qualifiedname>TokenIterator::operator*</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/BE_TokenIterator.h" line="65" column="15" bodyfile="source/includes/utilities/BE_TokenIterator.h" bodystart="65" bodyend="65"/>
+      </memberdef>
+      <memberdef kind="function" id="class_token_iterator_1a87ee45dc86e02839c9e69aca84b49acd" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>const std::string *</type>
+        <definition>const std::string * TokenIterator&lt; InputIter, Pred &gt;::operator-&gt;</definition>
+        <argsstring>() const</argsstring>
+        <name>operator-&gt;</name>
+        <qualifiedname>TokenIterator::operator-&gt;</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/BE_TokenIterator.h" line="66" column="21" bodyfile="source/includes/utilities/BE_TokenIterator.h" bodystart="66" bodyend="66"/>
+      </memberdef>
+      <memberdef kind="function" id="class_token_iterator_1a2e3ef79c57ae17f3c76c23f6aefa9f78" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool TokenIterator&lt; InputIter, Pred &gt;::operator==</definition>
+        <argsstring>(const TokenIterator &amp;)</argsstring>
+        <name>operator==</name>
+        <qualifiedname>TokenIterator::operator==</qualifiedname>
+        <param>
+          <type>const <ref refid="class_token_iterator" kindref="compound">TokenIterator</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/BE_TokenIterator.h" line="68" column="8" bodyfile="source/includes/utilities/BE_TokenIterator.h" bodystart="68" bodyend="70"/>
+      </memberdef>
+      <memberdef kind="function" id="class_token_iterator_1adca7e8a48d2f8876063abec64f2e0df7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool TokenIterator&lt; InputIter, Pred &gt;::operator!=</definition>
+        <argsstring>(const TokenIterator &amp;rv)</argsstring>
+        <name>operator!=</name>
+        <qualifiedname>TokenIterator::operator!=</qualifiedname>
+        <param>
+          <type>const <ref refid="class_token_iterator" kindref="compound">TokenIterator</ref> &amp;</type>
+          <declname>rv</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/BE_TokenIterator.h" line="71" column="8" bodyfile="source/includes/utilities/BE_TokenIterator.h" bodystart="71" bodyend="73"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>TokenIterator&lt; InputIter, Pred &gt;</label>
+        <link refid="class_token_iterator"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/utilities/BE_TokenIterator.h" line="32" column="1" bodyfile="source/includes/utilities/BE_TokenIterator.h" bodystart="32" bodyend="74"/>
+    <listofallmembers>
+      <member refid="class_token_iterator_1a7833e430a03d30949ea0e05b0394b579" prot="private" virt="non-virtual"><scope>TokenIterator</scope><name>first</name></member>
+      <member refid="class_token_iterator_1a1a4fd6b4121f753e8ee1b1e9d931928a" prot="private" virt="non-virtual"><scope>TokenIterator</scope><name>last</name></member>
+      <member refid="class_token_iterator_1adca7e8a48d2f8876063abec64f2e0df7" prot="public" virt="non-virtual"><scope>TokenIterator</scope><name>operator!=</name></member>
+      <member refid="class_token_iterator_1a37c2cde23fe72293046a3dfd35ff2ebb" prot="public" virt="non-virtual"><scope>TokenIterator</scope><name>operator*</name></member>
+      <member refid="class_token_iterator_1a15a57604d903840b724bb4e89504200a" prot="public" virt="non-virtual"><scope>TokenIterator</scope><name>operator++</name></member>
+      <member refid="class_token_iterator_1a35a3ded5821af45185909137bc07ae4e" prot="public" virt="non-virtual"><scope>TokenIterator</scope><name>operator++</name></member>
+      <member refid="class_token_iterator_1a87ee45dc86e02839c9e69aca84b49acd" prot="public" virt="non-virtual"><scope>TokenIterator</scope><name>operator-&gt;</name></member>
+      <member refid="class_token_iterator_1a2e3ef79c57ae17f3c76c23f6aefa9f78" prot="public" virt="non-virtual"><scope>TokenIterator</scope><name>operator==</name></member>
+      <member refid="class_token_iterator_1ac917b4559e6e203d6f6f06f85fa36d08" prot="private" virt="non-virtual"><scope>TokenIterator</scope><name>predicate</name></member>
+      <member refid="class_token_iterator_1ad33fdd8530bc6a7f37044a56b89ceb4d" prot="public" virt="non-virtual"><scope>TokenIterator</scope><name>TokenIterator</name></member>
+      <member refid="class_token_iterator_1a083d262275be9cb87f3b32760583907e" prot="public" virt="non-virtual"><scope>TokenIterator</scope><name>TokenIterator</name></member>
+      <member refid="class_token_iterator_1ab42cf1c865f0384df024f3dc1e749015" prot="private" virt="non-virtual"><scope>TokenIterator</scope><name>word</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

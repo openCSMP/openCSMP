@@ -1,0 +1,125 @@
+.TH "csmp::TwoPhaseModelwithHysteresis_Test" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::TwoPhaseModelwithHysteresis_Test
+.SH SYNOPSIS
+.br
+.PP
+.PP
+Inherits \fBcsmp::Test\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual void \fBrun\fP ()"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::Test\fP
+.in +1c
+.ti -1c
+.RI "\fBTest\fP (std::ostream *osptr=0)"
+.br
+.ti -1c
+.RI "long \fBgetNumPassed\fP () const"
+.br
+.ti -1c
+.RI "long \fBgetNumFailed\fP () const"
+.br
+.ti -1c
+.RI "const std::ostream * \fBgetStream\fP () const"
+.br
+.ti -1c
+.RI "void \fBsetStream\fP (std::ostream *osptr)"
+.br
+.ti -1c
+.RI "void \fBsetName\fP (std::string testName)"
+.br
+.ti -1c
+.RI "std::string \fBgetName\fP () const"
+.br
+.ti -1c
+.RI "bool \fBhasName\fP () const"
+.br
+.ti -1c
+.RI "void \fBdo_succeed\fP ()"
+.br
+.ti -1c
+.RI "long \fBreport\fP () const"
+.br
+.ti -1c
+.RI "virtual void \fBreset\fP ()"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Member Functions inherited from \fBcsmp::Test\fP
+.in +1c
+.ti -1c
+.RI "void \fBdo_equal\fP (double expr, double value, double tol, const std::string &lbl, const char *fname, long lineno)"
+.br
+.ti -1c
+.RI "void \fBdo_test\fP (bool cond, const std::string &lbl, const char *fname, long lineno)"
+.br
+.ti -1c
+.RI "void \fBdo_fail\fP (const std::string &lbl, const char *fname, long lineno)"
+.br
+.in -1c
+
+Protected Attributes inherited from \fBcsmp::Test\fP
+.in +1c
+.ti -1c
+.RI "const char * \fBprefix_\fP"
+.br
+.in -1c
+.SH "Member Function Documentation"
+.PP 
+.SS "void csmp::TwoPhaseModelwithHysteresis_Test::run ()\fR [virtual]\fP"
+12) This is main file to run\&.\&.\&. 12\&.1) Create an 1D model without any spliting point in the model\&.
+
+.PP
+12\&.2) Assign the storage keys and properties for the test\&.
+
+.PP
+12\&.3) Start using the Saturation functions functionallity in the 1D model
+
+.PP
+12\&.3\&.1) accumulate the nodes with water satuaration from 0 to 1 \&.\&.\&.
+
+.PP
+12\&.3\&.2) define the Hysteresis relative permeability model Parameters on each elements
+
+.PP
+Important
+
+.PP
+AWD, AOD, CWD, COD, AWI, AOI, CWI, COI based on the paper by Skjaeveland et al\&. 2000 Note: In "*-variable\&.txt" file, this has to be defined as: Hysteresis relative permeability model Parameters HisBCparam none 8 0\&.00E+00 5\&.00E+07 ELEMENT ^ This number counts as a "DataDepth" for the array
+
+.PP
+array<array<double,2>,2> a_ = {{{{0\&.5,0\&.25}},{{0\&.25,0\&.5}}}} ; array<array<double,2>,2> c_ = {{{{3\&.0,3\&.0}},{{-2\&.0,-2\&.0}}}} ;
+
+.PP
+array<array<double,2>,2> a_ = {{{{0\&.4,0\&.858}},{{0\&.9,4\&.48}}}} ; array<array<double,2>,2> c_ {{{{1\&.15,0\&.315}},{{-0\&.015,-5\&.e-07}}}} ;
+
+.PP
+12\&.3\&.3) printing out water satuaration of each nodes
+
+.PP
+12\&.3\&.4) loop over each element and assign the process and constants to calculate the Pc , dPcdS , krw , krn , dkrwds , dkrnds , fw , Sh , Sv and etc\&.
+
+.PP
+Important:
+
+.PP
+Mahyar: here I define contants for imbibitions and drainage for example for primary dranage aw = 0\&.5, ao = 0\&.25, cw =3\&.0, co=0\&.0\&. for the second dranage aw = 0\&.5, ao = 0\&.25, cw =3\&.0, co=-2\&.0\&. for the second imbibitions aw = 0\&.25, ao = 0\&.5, cw = 3\&.0, co=-2\&.0\&.
+
+.PP
+\fBTest\fP has been done in all functions for Flow Functions
+.PP
+Implements \fBcsmp::Test\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

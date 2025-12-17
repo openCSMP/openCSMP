@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_35bea275ef5e0f679b39daa32c433e13" kind="dir">
+    <compoundname>source/modules/math</compoundname>
+    <innerfile refid="_a_p__algebra_utilities_8cpp">AP_algebraUtilities.cpp</innerfile>
+    <innerfile refid="_compressed_row_matrix_8cpp">CompressedRowMatrix.cpp</innerfile>
+    <innerfile refid="_compressed_row_matrix_parallel_8cpp">CompressedRowMatrixParallel.cpp</innerfile>
+    <innerfile refid="_consecutive_sequence_checker_8cpp">ConsecutiveSequenceChecker.cpp</innerfile>
+    <innerfile refid="_c_s_m_p__math_utilities_8cpp">CSMP_mathUtilities.cpp</innerfile>
+    <innerfile refid="_c_s_r_matrix_8cpp">CSRMatrix.cpp</innerfile>
+    <innerfile refid="_cubic_spline_8cpp">CubicSpline.cpp</innerfile>
+    <innerfile refid="_dense_matrix_8cpp">DenseMatrix.cpp</innerfile>
+    <innerfile refid="dense_matrix_methods_8cpp">denseMatrixMethods.cpp</innerfile>
+    <innerfile refid="_jagged_array3_d_8cpp">JaggedArray3D.cpp</innerfile>
+    <innerfile refid="_newton_raphson_8cpp">NewtonRaphson.cpp</innerfile>
+    <innerfile refid="_o_d_e___stiff_solver_8cpp">ODE_StiffSolver.cpp</innerfile>
+    <innerfile refid="_random_field_generator_8cpp">RandomFieldGenerator.cpp</innerfile>
+    <innerfile refid="_sparse_matrix_8cpp">SparseMatrix.cpp</innerfile>
+    <innerfile refid="_sum_of_products_8cpp">SumOfProducts.cpp</innerfile>
+    <innerfile refid="_sum_of_products_with_exponents_8cpp">SumOfProductsWithExponents.cpp</innerfile>
+    <innerfile refid="tensor_operations_8cpp">tensorOperations.cpp</innerfile>
+    <innerfile refid="vector_operations_8cpp">vectorOperations.cpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="source/modules/math/"/>
+  </compounddef>
+</doxygen>

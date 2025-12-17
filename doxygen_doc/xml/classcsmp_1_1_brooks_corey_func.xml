@@ -1,0 +1,562 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_brooks_corey_func" kind="class" language="C++" prot="public">
+    <compoundname>csmp::BrooksCoreyFunc</compoundname>
+    <includes refid="_brooks_corey_func_8h" local="no">BrooksCoreyFunc.h</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_func_1a3d3081f94e2565722b686acc8d090eb8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::BrooksCoreyFunc::BrooksCoreyFunc</definition>
+        <argsstring>()</argsstring>
+        <name>BrooksCoreyFunc</name>
+        <qualifiedname>csmp::BrooksCoreyFunc::BrooksCoreyFunc</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyFunc.h" line="11" column="5" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreyFunc.cpp" bodystart="8" bodyend="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_func_1ad35d56f7f4030e9b96d3f08c41cf0d16" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::BrooksCoreyFunc::~BrooksCoreyFunc</definition>
+        <argsstring>()</argsstring>
+        <name>~BrooksCoreyFunc</name>
+        <qualifiedname>csmp::BrooksCoreyFunc::~BrooksCoreyFunc</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyFunc.h" line="12" column="5" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreyFunc.cpp" bodystart="14" bodyend="16"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_func_1a409d5918d06a708bd4c1886f32112fa6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreyFunc::VelocityMultiplierF</definition>
+        <argsstring>(double x, double pcentry, double lambda, double visc_ratio, double reswet, double resnonwet, int cho)</argsstring>
+        <name>VelocityMultiplierF</name>
+        <qualifiedname>csmp::BrooksCoreyFunc::VelocityMultiplierF</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>pcentry</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>lambda</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>visc_ratio</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>reswet</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>resnonwet</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>cho</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyFunc.h" line="13" column="9" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreyFunc.cpp" bodystart="223" bodyend="259"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_func_1ade4f89ca1dd23c310211f3ec91477d3c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreyFunc::ffbc</definition>
+        <argsstring>(double x, double lambda, double visc_ratio, double reswet, double resnonwet)</argsstring>
+        <name>ffbc</name>
+        <qualifiedname>csmp::BrooksCoreyFunc::ffbc</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>lambda</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>visc_ratio</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>reswet</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>resnonwet</declname>
+        </param>
+        <briefdescription>
+<para>fractional flow function in terms of nonwetting phase </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyFunc.h" line="17" column="8" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreyFunc.cpp" bodystart="19" bodyend="32"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_func_1a481a4c56e37c93721298c0e005ad9da7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreyFunc::ffbcd</definition>
+        <argsstring>(double x, double lambda, double visc_ratio, double reswet, double resnonwet)</argsstring>
+        <name>ffbcd</name>
+        <qualifiedname>csmp::BrooksCoreyFunc::ffbcd</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>lambda</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>visc_ratio</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>reswet</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>resnonwet</declname>
+        </param>
+        <briefdescription>
+<para>derivative of fractional flow function in terms of nonwetting phase </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyFunc.h" line="18" column="8" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreyFunc.cpp" bodystart="35" bodyend="51"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_func_1a72e5654059cdbde1ba29d2ec8dac4d34" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreyFunc::gfbc</definition>
+        <argsstring>(double x, double lambda, double visc_ratio, double reswet, double resnonwet)</argsstring>
+        <name>gfbc</name>
+        <qualifiedname>csmp::BrooksCoreyFunc::gfbc</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>lambda</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>visc_ratio</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>reswet</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>resnonwet</declname>
+        </param>
+        <briefdescription>
+<para>gravity function in terms of nonwetting phase </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyFunc.h" line="19" column="8" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreyFunc.cpp" bodystart="54" bodyend="67"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_func_1abff7fee6812f30abd38e2c2c5ca48f24" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreyFunc::gfbcd</definition>
+        <argsstring>(double x, double lambda, double visc_ratio, double reswet, double resnonwet)</argsstring>
+        <name>gfbcd</name>
+        <qualifiedname>csmp::BrooksCoreyFunc::gfbcd</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>lambda</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>visc_ratio</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>reswet</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>resnonwet</declname>
+        </param>
+        <briefdescription>
+<para>derivative of gravity function in terms of nonwetting phase </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyFunc.h" line="20" column="8" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreyFunc.cpp" bodystart="71" bodyend="93"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_func_1a922f12d31458ebae08436cd6eeed0c23" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreyFunc::pcbc</definition>
+        <argsstring>(double x, double pcentry, double lambda, double reswet, double resnonwet)</argsstring>
+        <name>pcbc</name>
+        <qualifiedname>csmp::BrooksCoreyFunc::pcbc</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>pcentry</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>lambda</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>reswet</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>resnonwet</declname>
+        </param>
+        <briefdescription>
+<para>capillary pressure function, x is here x nonwetting </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyFunc.h" line="21" column="8" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreyFunc.cpp" bodystart="96" bodyend="106"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_func_1a657f064ba1ef0b002691869f7325144a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreyFunc::pcwbc</definition>
+        <argsstring>(double x, double pcentry, double lambda, double reswet, double resnonwet)</argsstring>
+        <name>pcwbc</name>
+        <qualifiedname>csmp::BrooksCoreyFunc::pcwbc</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>pcentry</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>lambda</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>reswet</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>resnonwet</declname>
+        </param>
+        <briefdescription>
+<para>capillary pressure function, x is here x wetting </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyFunc.h" line="22" column="8" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreyFunc.cpp" bodystart="109" bodyend="119"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_func_1a397fe64d41c8b4040934c51ef199e906" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreyFunc::diffbc</definition>
+        <argsstring>(double x, double pcentry, double lambda, double mu, double reswet, double resnonwet)</argsstring>
+        <name>diffbc</name>
+        <qualifiedname>csmp::BrooksCoreyFunc::diffbc</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>pcentry</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>lambda</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>mu</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>reswet</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>resnonwet</declname>
+        </param>
+        <briefdescription>
+<para>nonlinear diffusion term for the two-phase flow problem, careful: term is negative, assuming the diffusive flux is counted positive </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyFunc.h" line="23" column="8" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreyFunc.cpp" bodystart="122" bodyend="137"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_func_1abd0d3860b47acd2c557194442bc23777" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreyFunc::relp1bc</definition>
+        <argsstring>(double x, double lambda, double reswet, double resnonwet)</argsstring>
+        <name>relp1bc</name>
+        <qualifiedname>csmp::BrooksCoreyFunc::relp1bc</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>lambda</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>reswet</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>resnonwet</declname>
+        </param>
+        <briefdescription>
+<para>relative permeability of nonwetting phase (for Richard&apos;s equation), x is here x nonwetting </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyFunc.h" line="24" column="8" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreyFunc.cpp" bodystart="140" bodyend="149"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_func_1af9d6797ec49c3ed434653ac29db3b079" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreyFunc::relp2bc</definition>
+        <argsstring>(double x, double lambda, double reswet, double resnonwet)</argsstring>
+        <name>relp2bc</name>
+        <qualifiedname>csmp::BrooksCoreyFunc::relp2bc</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>lambda</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>reswet</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>resnonwet</declname>
+        </param>
+        <briefdescription>
+<para>relative permeability of wetting phase (for Richard&apos;s equation), careful: x is here x wetting!!! </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyFunc.h" line="25" column="8" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreyFunc.cpp" bodystart="152" bodyend="161"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_func_1af1cf947b043532ed6a1605fa292942cc" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreyFunc::relp1bcd</definition>
+        <argsstring>(double x, double lambda, double reswet, double resnonwet)</argsstring>
+        <name>relp1bcd</name>
+        <qualifiedname>csmp::BrooksCoreyFunc::relp1bcd</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>lambda</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>reswet</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>resnonwet</declname>
+        </param>
+        <briefdescription>
+<para>relative permeability of nonwetting phase (for Richard&apos;s equation), careful: x is here x nonwetting </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyFunc.h" line="26" column="8" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreyFunc.cpp" bodystart="164" bodyend="173"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_func_1a71839d06109b9796c0197e789adf1eef" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreyFunc::relp2bcd</definition>
+        <argsstring>(double x, double lambda, double reswet, double resnonwet)</argsstring>
+        <name>relp2bcd</name>
+        <qualifiedname>csmp::BrooksCoreyFunc::relp2bcd</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>lambda</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>reswet</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>resnonwet</declname>
+        </param>
+        <briefdescription>
+<para>derivative of relative permeability of wetting phase (for Richard&apos;s equation), careful: x is here x wetting!!! </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyFunc.h" line="27" column="8" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreyFunc.cpp" bodystart="176" bodyend="185"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_func_1aa3e6ade63f92491cd8f94dae2f332b8e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreyFunc::diffrichnwbc</definition>
+        <argsstring>(double x, double pcentry, double lambda, double reswet, double resnonwet)</argsstring>
+        <name>diffrichnwbc</name>
+        <qualifiedname>csmp::BrooksCoreyFunc::diffrichnwbc</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>pcentry</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>lambda</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>reswet</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>resnonwet</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>nonlinear diffusion term for Richard&apos;s equation if flowing fluid is nonwetting, <simplesect kind="warning"><para>term is negative, assuming the diffusive flux is counted positive </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyFunc.h" line="28" column="8" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreyFunc.cpp" bodystart="189" bodyend="202"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_func_1a5503845d4e6e85236d9e9ac892f17776" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreyFunc::diffrichwbc</definition>
+        <argsstring>(double x, double pcentry, double lambda, double reswet, double resnonwet)</argsstring>
+        <name>diffrichwbc</name>
+        <qualifiedname>csmp::BrooksCoreyFunc::diffrichwbc</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>pcentry</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>lambda</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>reswet</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>resnonwet</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>nonlinear diffusion term for Richard&apos;s equation if flowing fluid is wetting, <simplesect kind="warning"><para>term is negative, assuming the diffusive flux is counted positive </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyFunc.h" line="29" column="8" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreyFunc.cpp" bodystart="206" bodyend="219"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>Insa Neuweiler </para>
+</simplesect>
+<simplesect kind="date"><para>2002 </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::BrooksCoreyFunc</label>
+        <link refid="classcsmp_1_1_brooks_corey_func"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/thmc/two_phase_flow/BrooksCoreyFunc.h" line="9" column="1" bodyfile="source/includes/thmc/two_phase_flow/BrooksCoreyFunc.h" bodystart="9" bodyend="31"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_brooks_corey_func_1a3d3081f94e2565722b686acc8d090eb8" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyFunc</scope><name>BrooksCoreyFunc</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_func_1a397fe64d41c8b4040934c51ef199e906" prot="private" virt="non-virtual"><scope>csmp::BrooksCoreyFunc</scope><name>diffbc</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_func_1aa3e6ade63f92491cd8f94dae2f332b8e" prot="private" virt="non-virtual"><scope>csmp::BrooksCoreyFunc</scope><name>diffrichnwbc</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_func_1a5503845d4e6e85236d9e9ac892f17776" prot="private" virt="non-virtual"><scope>csmp::BrooksCoreyFunc</scope><name>diffrichwbc</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_func_1ade4f89ca1dd23c310211f3ec91477d3c" prot="private" virt="non-virtual"><scope>csmp::BrooksCoreyFunc</scope><name>ffbc</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_func_1a481a4c56e37c93721298c0e005ad9da7" prot="private" virt="non-virtual"><scope>csmp::BrooksCoreyFunc</scope><name>ffbcd</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_func_1a72e5654059cdbde1ba29d2ec8dac4d34" prot="private" virt="non-virtual"><scope>csmp::BrooksCoreyFunc</scope><name>gfbc</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_func_1abff7fee6812f30abd38e2c2c5ca48f24" prot="private" virt="non-virtual"><scope>csmp::BrooksCoreyFunc</scope><name>gfbcd</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_func_1a922f12d31458ebae08436cd6eeed0c23" prot="private" virt="non-virtual"><scope>csmp::BrooksCoreyFunc</scope><name>pcbc</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_func_1a657f064ba1ef0b002691869f7325144a" prot="private" virt="non-virtual"><scope>csmp::BrooksCoreyFunc</scope><name>pcwbc</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_func_1abd0d3860b47acd2c557194442bc23777" prot="private" virt="non-virtual"><scope>csmp::BrooksCoreyFunc</scope><name>relp1bc</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_func_1af1cf947b043532ed6a1605fa292942cc" prot="private" virt="non-virtual"><scope>csmp::BrooksCoreyFunc</scope><name>relp1bcd</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_func_1af9d6797ec49c3ed434653ac29db3b079" prot="private" virt="non-virtual"><scope>csmp::BrooksCoreyFunc</scope><name>relp2bc</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_func_1a71839d06109b9796c0197e789adf1eef" prot="private" virt="non-virtual"><scope>csmp::BrooksCoreyFunc</scope><name>relp2bcd</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_func_1a409d5918d06a708bd4c1886f32112fa6" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyFunc</scope><name>VelocityMultiplierF</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_func_1ad35d56f7f4030e9b96d3f08c41cf0d16" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyFunc</scope><name>~BrooksCoreyFunc</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

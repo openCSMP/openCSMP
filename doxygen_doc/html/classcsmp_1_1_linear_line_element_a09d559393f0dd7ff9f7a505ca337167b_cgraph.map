@@ -1,0 +1,7 @@
+<map id="csmp::LinearLineElement::UnitNormal" name="csmp::LinearLineElement::UnitNormal">
+<area shape="rect" id="Node000001" title="returns the unit normal computed as the cross&#45;product between the line and the supplied vector vc" alt="" coords="5,23,174,64"/>
+<area shape="rect" id="Node000002" href="$classmjl_1_1_edge3_d.html#a123634a7e645399bb07768b1628a5fbc" title=" " alt="" coords="222,5,344,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="174,30,206,26,206,31,174,35"/>
+<area shape="rect" id="Node000003" href="$classmjl_1_1_edge.html#aa096f2213bacb2ee22c408a94a0f19ff" title="pivots an edge 90o clockwise around it&#39;s midpoint" alt="" coords="230,55,336,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="174,51,215,56,215,62,174,57"/>
+</map>

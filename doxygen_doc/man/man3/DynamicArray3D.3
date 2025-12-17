@@ -1,0 +1,207 @@
+.TH "DynamicArray3D< T >" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+DynamicArray3D< T > \- \fBDynamicArray3D\fP - three dimensional array based on vector\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <DynamicArray3D\&.h>\fP
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "using \fBdata_type\fP = std::vector<T>"
+.br
+.ti -1c
+.RI "using \fBvalue_type\fP = typename std::vector<T>::value_type"
+.br
+.ti -1c
+.RI "using \fBsize_type\fP = typename std::vector<T>::size_type"
+.br
+.ti -1c
+.RI "using \fBreference\fP = typename std::vector<T>::reference"
+.br
+.ti -1c
+.RI "using \fBconst_reference\fP = typename std::vector<T>::const_reference"
+.br
+.ti -1c
+.RI "using \fBiterator\fP = typename std::vector<T>::iterator"
+.br
+.ti -1c
+.RI "using \fBconst_iterator\fP = typename std::vector<T>::const_iterator"
+.br
+.ti -1c
+.RI "using \fBreverse_iterator\fP = typename std::vector<T>::reverse_iterator"
+.br
+.ti -1c
+.RI "using \fBconst_reverse_iterator\fP = typename std::vector<T>::const_reverse_iterator"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBDynamicArray3D\fP (size_type depth, size_type rows, size_type cols)"
+.br
+.ti -1c
+.RI "\fBDynamicArray3D\fP (size_type depth, size_type rows, size_type cols, const_reference val)"
+.br
+.ti -1c
+.RI "\fBDynamicArray3D\fP (std::initializer_list< std::initializer_list< data_type > > vals)"
+.br
+.ti -1c
+.RI "iterator \fBbegin\fP ()"
+.br
+.ti -1c
+.RI "iterator \fBend\fP ()"
+.br
+.ti -1c
+.RI "const_iterator \fBbegin\fP () const"
+.br
+.ti -1c
+.RI "const_iterator \fBend\fP () const"
+.br
+.ti -1c
+.RI "const_iterator \fBcbegin\fP () const"
+.br
+.ti -1c
+.RI "const_iterator \fBcend\fP () const"
+.br
+.ti -1c
+.RI "reverse_iterator \fBrbegin\fP ()"
+.br
+.ti -1c
+.RI "reverse_iterator \fBrend\fP ()"
+.br
+.ti -1c
+.RI "const_reverse_iterator \fBrbegin\fP () const"
+.br
+.ti -1c
+.RI "const_reverse_iterator \fBrend\fP () const"
+.br
+.ti -1c
+.RI "const_reverse_iterator \fBcrbegin\fP () const"
+.br
+.ti -1c
+.RI "const_reverse_iterator \fBcrend\fP () const"
+.br
+.ti -1c
+.RI "reference \fBoperator()\fP (size_type const depth, size_type const row, size_type const column)"
+.br
+.ti -1c
+.RI "const_reference \fBoperator()\fP (size_type const depth, size_type const row, size_type const column) const"
+.br
+.ti -1c
+.RI "reference \fBat\fP (size_type const depth, size_type const row, size_type const column)"
+.br
+.ti -1c
+.RI "const_reference \fBat\fP (size_type const depth, size_type const row, size_type const column) const"
+.br
+.ti -1c
+.RI "void \fBresize\fP (size_type new_depth, size_type new_rows, size_type new_cols)"
+.br
+.ti -1c
+.RI "size_type \fBsize\fP () const"
+.br
+.ti -1c
+.RI "size_type \fBcapacity\fP () const"
+.br
+.ti -1c
+.RI "bool \fBempty\fP () const"
+.br
+.ti -1c
+.RI "size_type \fBmax_size\fP () const"
+.br
+.ti -1c
+.RI "size_type \fBdepth\fP () const"
+.br
+.ti -1c
+.RI "size_type \fBrows\fP () const"
+.br
+.ti -1c
+.RI "size_type \fBcols\fP () const"
+.br
+.ti -1c
+.RI "void \fBswap\fP (\fBDynamicArray3D\fP &rhs)"
+.br
+.ti -1c
+.RI "void \fBout\fP () const"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<class T>
+.br
+class DynamicArray3D< T >"\fBDynamicArray3D\fP - three dimensional array based on vector\&. 
+
+dataType arrayName[depth][row size][column size] = { { {depth0row0col0, depth0row0col1, \&.\&.\&.}, {depth0row1col0, depth0row1col1, \&.\&.\&.}, }
+
+.PP
+usage with operator(depth,row,column) 
+.PP
+.nf
+for (int i = 0; i < depth; i++) {
+printf("Depth %d:\\n", i + 1); 
+for (int j = 0; j < rows; j++) { 
+    for (int k = 0; k < cols; k++) { 
+        printf("%d ", arr[i][j][k]); 
+    } 
+    printf("\\n"); 
+} 
+printf("\\n");
+}
+
+.fi
+.PP
+
+.PP
+directly initializing 3D array at the time of declaration 
+.PP
+.nf
+int arr1[2][3][4] = { { { 1, 2, 3, 4 },
+                        { 5, 6, 7, 8 },
+                        { 9, 10, 11, 12 } },
+                      { { 13, 14, 15, 16 },
+                        { 17, 18, 19, 20 },
+                        { 21, 22, 23, 24 } } };
+
+.fi
+.PP
+
+.PP
+Printing arr1 Depth 1: 1 2 3 4 5 6 7 8 9 10 11 12
+
+.PP
+Depth 2: 13 14 15 16 17 18 19 20 21 22 23 24 
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<class T> \fBDynamicArray3D\fP< T >\fB::DynamicArray3D\fP (std::initializer_list< std::initializer_list< data_type > > vals)\fR [inline]\fP"
+matrix constructor taking initialiser list supporting initialisation by: \fBDynamicArray3D<double>\fP (2 x 3 x 2) 
+.PP
+.nf
+ array[i0] => [j0] => [k0, k1]
+              [j1] => [k0, k1]
+              [j2] => [k0, k1]
+ array[1]  => [0] => [0, 1]
+              [1] => [0, 1]
+              [2] => [0, 1]
+ 
+// (2 x 3 x 4)
+DynamicArray3D arr1 = { { { 1, 2, 3, 4 },
+                             { 5, 6, 7, 8 },
+                             { 9, 10, 11, 12 } },
+                           { { 13, 14, 15, 16 },
+                             { 17, 18, 19, 20 },
+                             { 21, 22, 23, 24 } } };
+
+.fi
+.PP
+ 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

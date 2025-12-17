@@ -1,0 +1,75 @@
+.TH "csmp::Attorney< Client >" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::Attorney< Client > \- \fBAttorney\fP design pattern gives access to protected / private member variables and methods\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <Attorney\&.h>\fP
+.PP
+Inherits Client\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBAttorney\fP (Client &client)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<class Client>
+.br
+class csmp::Attorney< Client >"\fBAttorney\fP design pattern gives access to protected / private member variables and methods\&. 
+
+
+.SH "Motivation"
+.PP
+Unit tests may require access to internal variables and methods to test the basic internal works of a class\&.
+.SH "Design Intent"
+.PP
+This version is templated to
+.IP "1." 4
+avoid friend declaration in the class being tested\&. Cluttering a class with friend declarations which are not relevant to the way the class is used in the code is not helpful to the user\&.
+.IP "2." 4
+give selective access to members and methods\&. A friend declaration gives access to all protected and private members and methods\&. This templated version requires explicit declaration of which members become accessible\&.
+.PP
+.SH "Example"
+.PP
+Declare an \fBAttorney\fP of the class to be tested and declare members and methods to be made accessible like so:
+
+.PP
+.PP
+.nf
+template<uint32_t dim>
+class PDE_Integrator_Attorney : public Attorney<class PDE_Integrator<dim>> {
+public:
+    using Attorney<PDE_Integrator<dim>>::Attorney; // Inherit Attorney constructor
+    using PDE_Integrator<dim>::EstablishMatrixSetup;
+    using PDE_Integrator<dim>::lhs_operators_;
+};
+.fi
+.PP
+
+.PP
+Then, in your test, create an \fBAttorney\fP and use it like so:
+
+.PP
+.PP
+.nf
+PDE_Integrator<2U,Element> pde_integrator( \&.\&.\&. );
+PDE_Integrator_Attorney<2U> attorney( pde_integrator );
+LHS_FixedValueMatrix<2U>  lhs( \&.\&.\&. );
+attorney\&.Add(&lhs);
+attorney\&.EstablishMatrixSetup( \&.\&.\&. ); // <\- Accessing protected method
+_test( attorney\&.lhs_operators_\&.size() == 1 ); // <\- Accessing protected member variable
+.fi
+.PP
+ 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

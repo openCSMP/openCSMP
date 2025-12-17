@@ -21,6 +21,8 @@ void ExampleSuite::Run()
   Initialize();
   WriteExamplesFile();
   SuiteHeader();
+  cout << "\n\t"<<"Make sure to launch 'open-csmp-examples' from within the 'example-inputs/' directory!"<<"\n\n";
+  cout.flush();
   UIMenu();
 }
 
@@ -72,7 +74,6 @@ size_t ExampleSuite::RegisterExample( Example *example )
 /// initialize suite db
 void ExampleSuite::Initialize()
 {
-
 }
 
 /// ostream all categories
@@ -106,10 +107,10 @@ void ExampleSuite::UIMenu() const
 }
 
 /// UI menu for Level Example Details
-void ExampleSuite::UIExampleDetailsMenu( size_t exampleIndex,
+void ExampleSuite::UIExampleDetailsMenu( int exampleIndex,
                                          map<string,vector<Example*>* >::const_iterator category ) const
 {
-  Example* example = category->second->at( exampleIndex );
+  Example* example = category->second->at( static_cast<size_t>(exampleIndex) );
   ExampleDetails( example );
 
   if( ChooseExampleAction() == true )
@@ -128,7 +129,7 @@ void ExampleSuite::UIExamplesMenu( map<string,vector<Example*>* >::const_iterato
 {
   OstreamUnderlined( "Category '" + category->first + "'" );
   ExamplesList( category );
-  size_t exampleIndex( ChooseExample( (category->second ) ) );
+  auto exampleIndex( ChooseExample( (category->second ) ) );
   if( exampleIndex == -1 )
     UICategoryMenu();
   else
@@ -140,7 +141,7 @@ void ExampleSuite::UIExamplesMenu( map<string,vector<Example*>* >::const_iterato
 /// UI menu for Level Category
 void ExampleSuite::UICategoryMenu() const
 {
-  OstreamUnderlined( "Suite Categories:" );
+  OstreamUnderlined( "Example Categories:" );
   map<string,vector<Example*>* >::const_iterator category;
   CategoriesList();
   category = ChooseCategory();
@@ -154,13 +155,13 @@ void ExampleSuite::UICategoryMenu() const
 void ExampleSuite::SortExampleVector( vector<Example*>& examples )
 {
   // finding all occuring difficulties and establish an example vector for each
-  vector<uint32_t> difficulties;
+  vector<int> difficulties;
   vector<vector<Example*>* > sortedExamples;
   bool newDifficulty;
   for( vector<Example*>::const_iterator it = examples.begin(); it != examples.end(); ++it )
   {
     newDifficulty = true;
-    for( vector<uint32_t>::iterator iit = difficulties.begin(); iit != difficulties.end(); ++iit )
+    for( auto iit = difficulties.begin(); iit != difficulties.end(); ++iit )
       if( (*it)->GetDifficulty() == (*iit) )
         newDifficulty = false;
     if( newDifficulty )
@@ -201,7 +202,7 @@ void ExampleSuite::ExampleDetails( Example* example ) const
 void ExampleSuite::OstreamUnderlined( string text ) const
 {
   *ostream_ << endl << text << endl;
-  for( auto i = 1; i <= text.length(); ++i )
+  for( size_t i = 1; i <= text.length(); ++i )
     *ostream_ << "-";
   *ostream_ << endl;
 }
@@ -209,10 +210,10 @@ void ExampleSuite::OstreamUnderlined( string text ) const
 void ExampleSuite::OstreamDoubleUnderlined( string text ) const
 {
   *ostream_ << endl;
-  for( auto i = 1; i <= text.length(); ++i )
+  for( size_t i = 1; i <= text.length(); ++i )
     *ostream_ << "=";
   *ostream_ << endl << text << endl;
-  for( auto i = 1; i <= text.length(); ++i )
+  for( size_t i = 1; i <= text.length(); ++i )
     *ostream_ << "=";
   *ostream_ << endl;
 }
@@ -225,11 +226,11 @@ void ExampleSuite::SuiteHeader() const
 }
 
 /// UI to choose example
-size_t ExampleSuite::ChooseExample( const std::vector<Example*>* examples ) const
+int ExampleSuite::ChooseExample( const std::vector<Example*>* examples ) const
 {
   *ostream_ << "\n\nPlease enter example number(-1 to get back): ";
   size_t examplesCount( examples->size() );
-  size_t exampleIndex( ChoiceWithinRange( -1, examplesCount ) );
+  auto exampleIndex( ChoiceWithinRange( -1, examplesCount ) );
   return exampleIndex;
 }
 
@@ -237,7 +238,7 @@ size_t ExampleSuite::ChooseExample( const std::vector<Example*>* examples ) cons
 bool ExampleSuite::ChooseExampleAction() const
 {
   *ostream_ << "\n\nHow do you want to proceed(-1 to get back, 1 to run example): ";
-  size_t choice( ChoiceWithinRange( -1, 1 ) );
+  auto choice( ChoiceWithinRange( -1, 1 ) );
   if( choice == -1 )
     return false;
   else
@@ -247,14 +248,14 @@ bool ExampleSuite::ChooseExampleAction() const
 /// UI to choose category
 map<string,vector<Example*>* >::const_iterator ExampleSuite::ChooseCategory() const
 {
-  *ostream_ << "\n\nPlease enter category number or q to exit: ";
+  *ostream_ << "\n\nChoose example by category or type 'q' to quit: ";
   int categoryIndex( ChoiceWithinRange( 1, categories_.size() ) );
 
   // quit
   if( categoryIndex == -1 )
       return categories_.end();
 
-  size_t counter( 1 );
+  int counter( 1 );
   for( map<string,vector<Example*>* >::const_iterator it = categories_.begin();
        it != categories_.end(); ++it )
   {
@@ -264,6 +265,7 @@ map<string,vector<Example*>* >::const_iterator ExampleSuite::ChooseCategory() co
   // should never get to here: maybe implement ERROR
   return categories_.end();
 }
+
 
 /// assure that user choice is within range, otherwise reprompt
 int ExampleSuite::ChoiceWithinRange( double min, double max ) const
@@ -283,7 +285,7 @@ int ExampleSuite::ChoiceWithinRange( double min, double max ) const
           choice = atoi(input.c_str());
           if ( (!choice) || (atoi(input.c_str()) - choice) || choice < min || choice > max)
           {
-            *ostream_ << "\n\nInvalid. Please reenter: ";
+            *ostream_ << "\n\nInvalid. Please re-enter: ";
             valid = false;
           }
           else

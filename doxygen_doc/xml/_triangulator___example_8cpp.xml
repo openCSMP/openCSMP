@@ -1,0 +1,1403 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="_triangulator___example_8cpp" kind="file" language="C++">
+    <compoundname>Triangulator_Example.cpp</compoundname>
+    <includes refid="_triangulator___example_8h" local="yes">Triangulator_Example.h</includes>
+    <includes refid="_c_s_m_p__definitions_8h" local="yes">CSMP_definitions.h</includes>
+    <includes refid="_model_8h" local="yes">Model.h</includes>
+    <includes refid="_region_8h" local="yes">Region.h</includes>
+    <includes refid="_text_interface_8h" local="yes">TextInterface.h</includes>
+    <includes refid="_c_s_m_p__high_level_utilities_8h" local="yes">CSMP_highLevelUtilities.h</includes>
+    <includes refid="convert_color_to_permeability_8h" local="yes">convertColorToPermeability.h</includes>
+    <includes refid="_property_at_point_visitor_8h" local="yes">PropertyAtPointVisitor.h</includes>
+    <includes refid="_integral___n_t__op___n__d_v_8h" local="yes">Integral_NT_op_N_dV.h</includes>
+    <includes refid="_integral__d_n_t__op__d_n__d_v_8h" local="yes">Integral_dNT_op_dN_dV.h</includes>
+    <includes refid="_velocity_and_volume_flux_8h" local="yes">VelocityAndVolumeFlux.h</includes>
+    <includes refid="_p_d_e___integrator_8h" local="yes">PDE_Integrator.h</includes>
+    <includes refid="_linear_solver_8h" local="yes">LinearSolver.h</includes>
+    <includes refid="_matrix_8h" local="yes">Matrix.h</includes>
+    <includes refid="_constant_factor_8h" local="yes">ConstantFactor.h</includes>
+    <includes refid="_triangulator_8h" local="yes">Triangulator.h</includes>
+    <includes refid="_j_p_e_g___interface_8h" local="yes">JPEG_Interface.h</includes>
+    <includes refid="_v_t_k___interface_8h" local="yes">VTK_Interface.h</includes>
+    <incdepgraph>
+      <node id="3">
+        <label>Example.h</label>
+        <link refid="_example_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>examples/source/Triangulator_Example.cpp</label>
+        <link refid="_triangulator___example_8cpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="50" relation="include">
+        </childnode>
+        <childnode refid="91" relation="include">
+        </childnode>
+        <childnode refid="96" relation="include">
+        </childnode>
+        <childnode refid="98" relation="include">
+        </childnode>
+        <childnode refid="99" relation="include">
+        </childnode>
+        <childnode refid="100" relation="include">
+        </childnode>
+        <childnode refid="106" relation="include">
+        </childnode>
+        <childnode refid="108" relation="include">
+        </childnode>
+        <childnode refid="112" relation="include">
+        </childnode>
+        <childnode refid="113" relation="include">
+        </childnode>
+        <childnode refid="114" relation="include">
+        </childnode>
+        <childnode refid="118" relation="include">
+        </childnode>
+        <childnode refid="119" relation="include">
+        </childnode>
+        <childnode refid="122" relation="include">
+        </childnode>
+        <childnode refid="123" relation="include">
+        </childnode>
+        <childnode refid="126" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>Triangulator_Example.h</label>
+        <link refid="_triangulator___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="122">
+        <label>Triangulator.h</label>
+        <link refid="_triangulator_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="60">
+        <label>FiniteElement.h</label>
+        <link refid="_finite_element_8h"/>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+        <childnode refid="61" relation="include">
+        </childnode>
+      </node>
+      <node id="81">
+        <label>FiniteElementPolicy.h</label>
+        <link refid="_finite_element_policy_8h_source"/>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="60" relation="include">
+        </childnode>
+      </node>
+      <node id="54">
+        <label>VData.h</label>
+        <link refid="_v_data_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+      </node>
+      <node id="53">
+        <label>VSet.h</label>
+        <link refid="_v_set_8h_source"/>
+        <childnode refid="54" relation="include">
+        </childnode>
+        <childnode refid="55" relation="include">
+        </childnode>
+      </node>
+      <node id="82">
+        <label>FiniteVolumePolicy.h</label>
+        <link refid="_finite_volume_policy_8h_source"/>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="83" relation="include">
+        </childnode>
+        <childnode refid="72" relation="include">
+        </childnode>
+        <childnode refid="86" relation="include">
+        </childnode>
+        <childnode refid="87" relation="include">
+        </childnode>
+        <childnode refid="61" relation="include">
+        </childnode>
+        <childnode refid="62" relation="include">
+        </childnode>
+        <childnode refid="63" relation="include">
+        </childnode>
+        <childnode refid="66" relation="include">
+        </childnode>
+        <childnode refid="69" relation="include">
+        </childnode>
+        <childnode refid="70" relation="include">
+        </childnode>
+      </node>
+      <node id="83">
+        <label>FiniteVolumeStencil.h</label>
+        <link refid="_finite_volume_stencil_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="60" relation="include">
+        </childnode>
+        <childnode refid="84" relation="include">
+        </childnode>
+        <childnode refid="85" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+      </node>
+      <node id="90">
+        <label>FiniteVolumeStencilManager.h</label>
+        <link refid="_finite_volume_stencil_manager_8h_source"/>
+        <childnode refid="60" relation="include">
+        </childnode>
+        <childnode refid="83" relation="include">
+        </childnode>
+      </node>
+      <node id="113">
+        <label>PDE_Integrator.h</label>
+        <link refid="_p_d_e___integrator_8h_source"/>
+        <childnode refid="107" relation="include">
+        </childnode>
+        <childnode refid="109" relation="include">
+        </childnode>
+        <childnode refid="110" relation="include">
+        </childnode>
+      </node>
+      <node id="106">
+        <label>Integral_NT_op_N_dV.h</label>
+        <link refid="_integral___n_t__op___n__d_v_8h_source"/>
+        <childnode refid="107" relation="include">
+        </childnode>
+      </node>
+      <node id="108">
+        <label>Integral_dNT_op_dN_dV.h</label>
+        <link refid="_integral__d_n_t__op__d_n__d_v_8h_source"/>
+        <childnode refid="109" relation="include">
+        </childnode>
+      </node>
+      <node id="115">
+        <label>EigenSolver.h</label>
+        <link refid="_eigen_solver_8h_source"/>
+        <childnode refid="116" relation="include">
+        </childnode>
+      </node>
+      <node id="114">
+        <label>LinearSolver.h</label>
+        <link refid="_linear_solver_8h_source"/>
+        <childnode refid="115" relation="include">
+        </childnode>
+      </node>
+      <node id="116">
+        <label>Solver.h</label>
+        <link refid="_solver_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="117" relation="include">
+        </childnode>
+      </node>
+      <node id="117">
+        <label>SolverSettings.h</label>
+        <link refid="_solver_settings_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="123">
+        <label>JPEG_Interface.h</label>
+        <link refid="_j_p_e_g___interface_8h_source"/>
+        <childnode refid="124" relation="include">
+        </childnode>
+      </node>
+      <node id="96">
+        <label>TextInterface.h</label>
+        <link refid="_text_interface_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="61" relation="include">
+        </childnode>
+        <childnode refid="97" relation="include">
+        </childnode>
+      </node>
+      <node id="126">
+        <label>VTK_Interface.h</label>
+        <link refid="_v_t_k___interface_8h_source"/>
+        <childnode refid="60" relation="include">
+        </childnode>
+        <childnode refid="127" relation="include">
+        </childnode>
+      </node>
+      <node id="127">
+        <label>VTK_Type.h</label>
+        <link refid="_v_t_k___type_8h_source"/>
+        <childnode refid="60" relation="include">
+        </childnode>
+      </node>
+      <node id="125">
+        <label>CSMP_mathUtilities.h</label>
+        <link refid="_c_s_m_p__math_utilities_8h"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="61" relation="include">
+        </childnode>
+      </node>
+      <node id="111">
+        <label>CompressedRowMatrix.h</label>
+        <link refid="_compressed_row_matrix_8h_source"/>
+        <childnode refid="110" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="57" relation="include">
+        </childnode>
+        <childnode refid="92" relation="include">
+        </childnode>
+      </node>
+      <node id="61">
+        <label>DenseMatrix.h</label>
+        <link refid="_dense_matrix_8h"/>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="62" relation="include">
+        </childnode>
+        <childnode refid="63" relation="include">
+        </childnode>
+        <childnode refid="66" relation="include">
+        </childnode>
+        <childnode refid="69" relation="include">
+        </childnode>
+        <childnode refid="70" relation="include">
+        </childnode>
+      </node>
+      <node id="84">
+        <label>DynamicArray2D.h</label>
+        <link refid="_dynamic_array2_d_8h_source"/>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+      </node>
+      <node id="85">
+        <label>DynamicArray3D.h</label>
+        <link refid="_dynamic_array3_d_8h_source"/>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+      </node>
+      <node id="110">
+        <label>SparseMatrix.h</label>
+        <link refid="_sparse_matrix_8h_source"/>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+      </node>
+      <node id="69">
+        <label>ArrayVariable.h</label>
+        <link refid="_array_variable_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="70" relation="include">
+        </childnode>
+      </node>
+      <node id="94">
+        <label>BoundaryInterface.h</label>
+        <link refid="_boundary_interface_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="51" relation="include">
+        </childnode>
+      </node>
+      <node id="51">
+        <label>Box.h</label>
+        <link refid="_box_8h"/>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>CSMP_definitions.h</label>
+        <link refid="_c_s_m_p__definitions_8h"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="43" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+      </node>
+      <node id="46">
+        <label>CSMP_global_enumerations.h</label>
+        <link refid="_c_s_m_p__global__enumerations_8h_source"/>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
+      </node>
+      <node id="80">
+        <label>Element.h</label>
+        <link refid="_element_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="60" relation="include">
+        </childnode>
+        <childnode refid="81" relation="include">
+        </childnode>
+        <childnode refid="82" relation="include">
+        </childnode>
+        <childnode refid="73" relation="include">
+        </childnode>
+        <childnode refid="51" relation="include">
+        </childnode>
+      </node>
+      <node id="88">
+        <label>Face.h</label>
+        <link refid="_face_8h_source"/>
+        <childnode refid="73" relation="include">
+        </childnode>
+        <childnode refid="60" relation="include">
+        </childnode>
+        <childnode refid="81" relation="include">
+        </childnode>
+        <childnode refid="82" relation="include">
+        </childnode>
+      </node>
+      <node id="59">
+        <label>FiniteElementManager.h</label>
+        <link refid="_finite_element_manager_8h_source"/>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="60" relation="include">
+        </childnode>
+      </node>
+      <node id="70">
+        <label>FlaggedArrayVariable.h</label>
+        <link refid="_flagged_array_variable_8h_source"/>
+        <childnode refid="69" relation="include">
+        </childnode>
+      </node>
+      <node id="103">
+        <label>GenericSingleton.h</label>
+        <link refid="_generic_singleton_8h_source"/>
+      </node>
+      <node id="45">
+        <label>Index.h</label>
+        <link refid="_index_8h_source"/>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+        <childnode refid="49" relation="include">
+        </childnode>
+      </node>
+      <node id="58">
+        <label>IndexTracker.h</label>
+        <link refid="_index_tracker_8h_source"/>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+      </node>
+      <node id="49">
+        <label>IntegrationPointVariables.h</label>
+        <link refid="_integration_point_variables_8h_source"/>
+        <childnode refid="48" relation="include">
+        </childnode>
+      </node>
+      <node id="89">
+        <label>InterFace.h</label>
+        <link refid="_inter_face_8h_source"/>
+        <childnode refid="73" relation="include">
+        </childnode>
+        <childnode refid="60" relation="include">
+        </childnode>
+        <childnode refid="81" relation="include">
+        </childnode>
+        <childnode refid="82" relation="include">
+        </childnode>
+      </node>
+      <node id="120">
+        <label>Interrelation.h</label>
+        <link refid="_interrelation_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="121" relation="include">
+        </childnode>
+      </node>
+      <node id="73">
+        <label>LocalVariableStorage.h</label>
+        <link refid="_local_variable_storage_8h_source"/>
+        <childnode refid="74" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="62" relation="include">
+        </childnode>
+        <childnode refid="63" relation="include">
+        </childnode>
+        <childnode refid="66" relation="include">
+        </childnode>
+        <childnode refid="69" relation="include">
+        </childnode>
+        <childnode refid="70" relation="include">
+        </childnode>
+        <childnode refid="75" relation="include">
+        </childnode>
+        <childnode refid="76" relation="include">
+        </childnode>
+      </node>
+      <node id="74">
+        <label>LocalVariableStorageIndexArithmetic.h</label>
+        <link refid="_local_variable_storage_index_arithmetic_8h_source"/>
+      </node>
+      <node id="48">
+        <label>LocalVariables.h</label>
+        <link refid="_local_variables_8h_source"/>
+      </node>
+      <node id="109">
+        <label>MathOperatorLHS.h</label>
+        <link refid="_math_operator_l_h_s_8h_source"/>
+        <childnode refid="57" relation="include">
+        </childnode>
+        <childnode refid="61" relation="include">
+        </childnode>
+        <childnode refid="110" relation="include">
+        </childnode>
+        <childnode refid="111" relation="include">
+        </childnode>
+        <childnode refid="62" relation="include">
+        </childnode>
+        <childnode refid="63" relation="include">
+        </childnode>
+        <childnode refid="66" relation="include">
+        </childnode>
+        <childnode refid="69" relation="include">
+        </childnode>
+        <childnode refid="70" relation="include">
+        </childnode>
+      </node>
+      <node id="107">
+        <label>MathOperatorRHS.h</label>
+        <link refid="_math_operator_r_h_s_8h_source"/>
+        <childnode refid="57" relation="include">
+        </childnode>
+        <childnode refid="61" relation="include">
+        </childnode>
+        <childnode refid="62" relation="include">
+        </childnode>
+        <childnode refid="63" relation="include">
+        </childnode>
+        <childnode refid="66" relation="include">
+        </childnode>
+        <childnode refid="69" relation="include">
+        </childnode>
+        <childnode refid="70" relation="include">
+        </childnode>
+      </node>
+      <node id="118">
+        <label>Matrix.h</label>
+        <link refid="_matrix_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="84" relation="include">
+        </childnode>
+      </node>
+      <node id="71">
+        <label>MeshManager.h</label>
+        <link refid="_mesh_manager_8h_source"/>
+        <childnode refid="72" relation="include">
+        </childnode>
+        <childnode refid="78" relation="include">
+        </childnode>
+        <childnode refid="80" relation="include">
+        </childnode>
+        <childnode refid="88" relation="include">
+        </childnode>
+        <childnode refid="89" relation="include">
+        </childnode>
+        <childnode refid="59" relation="include">
+        </childnode>
+        <childnode refid="90" relation="include">
+        </childnode>
+        <childnode refid="79" relation="include">
+        </childnode>
+        <childnode refid="91" relation="include">
+        </childnode>
+      </node>
+      <node id="50">
+        <label>Model.h</label>
+        <link refid="_model_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="51" relation="include">
+        </childnode>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="56" relation="include">
+        </childnode>
+        <childnode refid="59" relation="include">
+        </childnode>
+        <childnode refid="71" relation="include">
+        </childnode>
+        <childnode refid="93" relation="include">
+        </childnode>
+        <childnode refid="94" relation="include">
+        </childnode>
+        <childnode refid="95" relation="include">
+        </childnode>
+        <childnode refid="73" relation="include">
+        </childnode>
+      </node>
+      <node id="92">
+        <label>ModelSubDomain.h</label>
+        <link refid="_model_sub_domain_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="73" relation="include">
+        </childnode>
+      </node>
+      <node id="72">
+        <label>Node.h</label>
+        <link refid="_node_8h_source"/>
+        <childnode refid="51" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+        <childnode refid="73" relation="include">
+        </childnode>
+        <childnode refid="77" relation="include">
+        </childnode>
+      </node>
+      <node id="78">
+        <label>NodeManifold.h</label>
+        <link refid="_node_manifold_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+        <childnode refid="79" relation="include">
+        </childnode>
+      </node>
+      <node id="77">
+        <label>NodeParentElementVector.h</label>
+        <link refid="_node_parent_element_vector_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="121">
+        <label>Operand.h</label>
+        <link refid="_operand_8h_source"/>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="66" relation="include">
+        </childnode>
+        <childnode refid="69" relation="include">
+        </childnode>
+        <childnode refid="70" relation="include">
+        </childnode>
+        <childnode refid="102" relation="include">
+        </childnode>
+      </node>
+      <node id="57">
+        <label>Parameter.h</label>
+        <link refid="_parameter_8h_source"/>
+        <childnode refid="45" relation="include">
+        </childnode>
+      </node>
+      <node id="52">
+        <label>Point.h</label>
+        <link refid="_point_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="100">
+        <label>PropertyAtPointVisitor.h</label>
+        <link refid="_property_at_point_visitor_8h_source"/>
+        <childnode refid="101" relation="include">
+        </childnode>
+        <childnode refid="50" relation="include">
+        </childnode>
+        <childnode refid="102" relation="include">
+        </childnode>
+        <childnode refid="89" relation="include">
+        </childnode>
+        <childnode refid="91" relation="include">
+        </childnode>
+      </node>
+      <node id="55">
+        <label>PropertyData.h</label>
+        <link refid="_property_data_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="56">
+        <label>PropertyDatabase.h</label>
+        <link refid="_property_database_8h"/>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="57" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="58" relation="include">
+        </childnode>
+      </node>
+      <node id="86">
+        <label>QuadrilateralFacet.h</label>
+        <link refid="_quadrilateral_facet_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+      </node>
+      <node id="91">
+        <label>Region.h</label>
+        <link refid="_region_8h_source"/>
+        <childnode refid="80" relation="include">
+        </childnode>
+        <childnode refid="92" relation="include">
+        </childnode>
+      </node>
+      <node id="93">
+        <label>RegionInterface.h</label>
+        <link refid="_region_interface_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="62">
+        <label>ScalarVariable.h</label>
+        <link refid="_scalar_variable_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="95">
+        <label>SplitBoundaryInterface.h</label>
+        <link refid="_split_boundary_interface_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="51" relation="include">
+        </childnode>
+      </node>
+      <node id="66">
+        <label>TensorVariable.h</label>
+        <link refid="_tensor_variable_8h_source"/>
+        <childnode refid="62" relation="include">
+        </childnode>
+        <childnode refid="63" relation="include">
+        </childnode>
+        <childnode refid="67" relation="include">
+        </childnode>
+        <childnode refid="68" relation="include">
+        </childnode>
+      </node>
+      <node id="67">
+        <label>TensorVariable1.h</label>
+        <link refid="_tensor_variable1_8h_source"/>
+        <childnode refid="62" relation="include">
+        </childnode>
+        <childnode refid="64" relation="include">
+        </childnode>
+      </node>
+      <node id="68">
+        <label>TensorVariable2.h</label>
+        <link refid="_tensor_variable2_8h_source"/>
+        <childnode refid="62" relation="include">
+        </childnode>
+        <childnode refid="63" relation="include">
+        </childnode>
+        <childnode refid="65" relation="include">
+        </childnode>
+      </node>
+      <node id="87">
+        <label>TriangularFacet.h</label>
+        <link refid="_triangular_facet_8h"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+      </node>
+      <node id="63">
+        <label>VectorVariable.h</label>
+        <link refid="_vector_variable_8h_source"/>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="62" relation="include">
+        </childnode>
+        <childnode refid="64" relation="include">
+        </childnode>
+        <childnode refid="65" relation="include">
+        </childnode>
+      </node>
+      <node id="64">
+        <label>VectorVariable1.h</label>
+        <link refid="_vector_variable1_8h_source"/>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="62" relation="include">
+        </childnode>
+      </node>
+      <node id="65">
+        <label>VectorVariable2.h</label>
+        <link refid="_vector_variable2_8h_source"/>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="62" relation="include">
+        </childnode>
+      </node>
+      <node id="101">
+        <label>Visitor.h</label>
+        <link refid="_visitor_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="75">
+        <label>enumTypeCompatibilityChecks.h</label>
+        <link refid="enum_type_compatibility_checks_8h_source"/>
+        <childnode refid="46" relation="include">
+        </childnode>
+      </node>
+      <node id="76">
+        <label>localVariableDispatch.h</label>
+        <link refid="local_variable_dispatch_8h_source"/>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+        <childnode refid="49" relation="include">
+        </childnode>
+      </node>
+      <node id="119">
+        <label>ConstantFactor.h</label>
+        <link refid="_constant_factor_8h_source"/>
+        <childnode refid="120" relation="include">
+        </childnode>
+      </node>
+      <node id="124">
+        <label>FiniteDifferenceGrid.h</label>
+        <link refid="_finite_difference_grid_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="125" relation="include">
+        </childnode>
+      </node>
+      <node id="102">
+        <label>ErrorHandler.h</label>
+        <link refid="_error_handler_8h_source"/>
+        <childnode refid="103" relation="include">
+        </childnode>
+        <childnode refid="104" relation="include">
+        </childnode>
+        <childnode refid="105" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+      </node>
+      <node id="104">
+        <label>Exception.h</label>
+        <link refid="_exception_8h_source"/>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+      </node>
+      <node id="112">
+        <label>VelocityAndVolumeFlux.h</label>
+        <link refid="_velocity_and_volume_flux_8h_source"/>
+        <childnode refid="109" relation="include">
+        </childnode>
+        <childnode refid="61" relation="include">
+        </childnode>
+        <childnode refid="63" relation="include">
+        </childnode>
+      </node>
+      <node id="105">
+        <label>BE_Time.h</label>
+        <link refid="_b_e___time_8h_source"/>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+      </node>
+      <node id="98">
+        <label>CSMP_highLevelUtilities.h</label>
+        <link refid="_c_s_m_p__high_level_utilities_8h"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="97">
+        <label>CoordinateTransformer.h</label>
+        <link refid="_coordinate_transformer_8h_source"/>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+      </node>
+      <node id="99">
+        <label>convertColorToPermeability.h</label>
+        <link refid="convert_color_to_permeability_8h_source"/>
+        <childnode refid="25" relation="include">
+        </childnode>
+      </node>
+      <node id="16">
+        <label>algorithm</label>
+      </node>
+      <node id="17">
+        <label>array</label>
+      </node>
+      <node id="15">
+        <label>cassert</label>
+      </node>
+      <node id="10">
+        <label>cctype</label>
+      </node>
+      <node id="13">
+        <label>cfloat</label>
+      </node>
+      <node id="18">
+        <label>chrono</label>
+      </node>
+      <node id="14">
+        <label>climits</label>
+      </node>
+      <node id="5">
+        <label>cmath</label>
+      </node>
+      <node id="9">
+        <label>cstdarg</label>
+      </node>
+      <node id="8">
+        <label>cstddef</label>
+      </node>
+      <node id="47">
+        <label>cstdint</label>
+      </node>
+      <node id="6">
+        <label>cstdio</label>
+      </node>
+      <node id="7">
+        <label>cstdlib</label>
+      </node>
+      <node id="11">
+        <label>cstring</label>
+      </node>
+      <node id="12">
+        <label>ctime</label>
+      </node>
+      <node id="19">
+        <label>deque</label>
+      </node>
+      <node id="20">
+        <label>exception</label>
+      </node>
+      <node id="21">
+        <label>filesystem</label>
+      </node>
+      <node id="22">
+        <label>fstream</label>
+      </node>
+      <node id="23">
+        <label>functional</label>
+      </node>
+      <node id="24">
+        <label>iomanip</label>
+      </node>
+      <node id="25">
+        <label>iostream</label>
+      </node>
+      <node id="26">
+        <label>istream</label>
+      </node>
+      <node id="27">
+        <label>iterator</label>
+      </node>
+      <node id="28">
+        <label>limits</label>
+      </node>
+      <node id="29">
+        <label>list</label>
+      </node>
+      <node id="30">
+        <label>map</label>
+      </node>
+      <node id="31">
+        <label>memory</label>
+      </node>
+      <node id="32">
+        <label>numeric</label>
+      </node>
+      <node id="33">
+        <label>ostream</label>
+      </node>
+      <node id="79">
+        <label>plf_colony.h</label>
+      </node>
+      <node id="34">
+        <label>random</label>
+      </node>
+      <node id="35">
+        <label>set</label>
+      </node>
+      <node id="36">
+        <label>sstream</label>
+      </node>
+      <node id="37">
+        <label>stdexcept</label>
+      </node>
+      <node id="38">
+        <label>string</label>
+      </node>
+      <node id="40">
+        <label>type_traits</label>
+      </node>
+      <node id="39">
+        <label>typeinfo</label>
+      </node>
+      <node id="44">
+        <label>unordered_map</label>
+      </node>
+      <node id="43">
+        <label>unordered_set</label>
+      </node>
+      <node id="41">
+        <label>utility</label>
+      </node>
+      <node id="42">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <innernamespace refid="namespacecsmp">csmp</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#include<sp/>&quot;Triangulator_Example.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="comment">//<sp/>inclusion<sp/>of<sp/>class<sp/>declarations<sp/>necessary<sp/>for<sp/>this<sp/>simulation</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="_c_s_m_p__definitions_8h" kindref="compound">CSMP_definitions.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="comment">//<sp/>main<sp/>library</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;Model.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;Region.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;TextInterface.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="_c_s_m_p__high_level_utilities_8h" kindref="compound">CSMP_highLevelUtilities.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;convertColorToPermeability.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;PropertyAtPointVisitor.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight><highlight class="comment">//<sp/>pde<sp/>operator<sp/>library</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;Integral_NT_op_N_dV.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;Integral_dNT_op_dN_dV.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;VelocityAndVolumeFlux.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight><highlight class="comment">//<sp/>algebraic<sp/>multigrid<sp/>solvers</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;PDE_Integrator.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;LinearSolver.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;Matrix.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight><highlight class="comment">//<sp/>interrelations<sp/>library</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;ConstantFactor.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight><highlight class="comment">//<sp/>interface<sp/>library</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;Triangulator.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;JPEG_Interface.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;VTK_Interface.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;TextInterface.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>DEBUG</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>CSMP_WITH_IMAGE_OUTPUT<sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>there<sp/>is<sp/>a<sp/>memory<sp/>bug<sp/>in<sp/>the<sp/>JPEG<sp/>library<sp/>that<sp/>is<sp/>picked<sp/>up<sp/>by<sp/>address<sp/>sanitizer<sp/>(left-shift<sp/>of<sp/>negative<sp/>value)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight><highlight class="preprocessor">#undef<sp/>CSMP_WITH_IMAGE_OUTPUT<sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>not<sp/>commented<sp/>out<sp/>when<sp/>running<sp/>in<sp/>release<sp/>mode</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"></highlight><highlight class="keyword">using<sp/>namespace<sp/></highlight><highlight class="normal">std;</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"></highlight><highlight class="keyword">using<sp/>namespace<sp/></highlight><highlight class="normal">std::filesystem;</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacecsmp" kindref="compound">csmp</ref><sp/>{</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"></highlight></codeline>
+<codeline lineno="44"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>Triangulator_Example::Specifications()</highlight></codeline>
+<codeline lineno="45"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_example_1adce5953feb4828ee24fb935d416a045b" kindref="member">SetTitle</ref>(<sp/></highlight><highlight class="stringliteral">&quot;Triangulator<sp/>based<sp/>meshing<sp/>of<sp/>image<sp/>files&quot;</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_example_1a4909bbd859ca62d273c259d1b8b6657a" kindref="member">SetDifficulty</ref>(<sp/>1<sp/>);</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/>SetCategory(<sp/></highlight><highlight class="stringliteral">&quot;Meshing<sp/>Interfaces&quot;</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_example_1a7a2776d1a529fdc5185d24804e249fa4" kindref="member">AddAuthor</ref>(<sp/></highlight><highlight class="stringliteral">&quot;SKM&quot;</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_example_1a460febdef7c98c40ba774ba6670ff786" kindref="member">AddDescription</ref>(<sp/></highlight><highlight class="stringliteral">&quot;Uses<sp/>Triangular<sp/>to<sp/>make<sp/>2D<sp/>triangular<sp/>FE<sp/>mesh<sp/>from<sp/>color-coded<sp/>image<sp/>in<sp/>text<sp/>file&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_example_1a460febdef7c98c40ba774ba6670ff786" kindref="member">AddDescription</ref>(<sp/></highlight><highlight class="stringliteral">&quot;Perform<sp/>steady-state<sp/>fluid<sp/>pressure<sp/>computation<sp/>on<sp/>mesh&quot;</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_example_1a460febdef7c98c40ba774ba6670ff786" kindref="member">AddDescription</ref>(<sp/></highlight><highlight class="stringliteral">&quot;source<sp/>file<sp/>in:<sp/>Triangulator_Example&quot;</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_example_1a246f075bb8bf802ca5b9e49096f6a1ca" kindref="member">AddRequirement</ref>(<sp/></highlight><highlight class="stringliteral">&quot;image(granite_model1),<sp/>configuration(example1.txt)&quot;</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="54"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"></highlight></codeline>
+<codeline lineno="56"><highlight class="normal"></highlight></codeline>
+<codeline lineno="57"><highlight class="normal"></highlight></codeline>
+<codeline lineno="58"><highlight class="normal"></highlight></codeline>
+<codeline lineno="59"><highlight class="normal"></highlight></codeline>
+<codeline lineno="79" refid="classcsmp_1_1_triangulator___example_1add93822f7629571dbcc04e49c951dc87" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_triangulator___example_1add93822f7629571dbcc04e49c951dc87" kindref="member">Triangulator_Example::Run</ref>()</highlight></codeline>
+<codeline lineno="80"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>0.<sp/>Building<sp/>a<sp/>triangular<sp/>element<sp/>mesh<sp/>from<sp/>a<sp/>pixelated<sp/>image</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>------------------------------------------------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/>cout<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;\nmain:<sp/>Please<sp/>specify<sp/>256-color-coded<sp/>geometry<sp/>input<sp/>file<sp/>(text):<sp/>&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">string</highlight><highlight class="normal"><sp/>model_name;</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/>cin<sp/>&gt;&gt;<sp/>model_name;</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"></highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>setting<sp/>path<sp/>to<sp/>bitmaps_and_other/<sp/>where<sp/>the<sp/>color-coded<sp/>file<sp/>is<sp/>contained</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/>current_path(</highlight><highlight class="stringliteral">&quot;bitmaps_and_other&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>0.1<sp/>Reading<sp/>a<sp/>pixelated<sp/>permeability<sp/>image<sp/>ASCII<sp/>file<sp/>into<sp/>the</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="91"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/><sp/><sp/>new<sp/>Matrix<sp/>&apos;pixelcolors&apos;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>m,<sp/>n;</highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_text_interface" kindref="compound">TextInterface</ref>().<ref refid="classcsmp_1_1_text_interface_1a14eeb2660269c4095290e0dae9b4c0d6" kindref="member">SizeofPixelTextImage256</ref>(<sp/>model_name.c_str(),<sp/>m,<sp/>n<sp/>);</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/>cout<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;\nmain:<sp/>The<sp/>size<sp/>(in<sp/>pixels)<sp/>of<sp/>the<sp/>input<sp/>image<sp/>is:<sp/>&quot;</highlight><highlight class="normal">&lt;&lt;<sp/>n<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;h<sp/>x<sp/>&quot;</highlight><highlight class="normal">&lt;&lt;<sp/>m;</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"><sp/><sp/>cout<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;v&quot;</highlight><highlight class="normal">&lt;&lt;<sp/>endl;</highlight></codeline>
+<codeline lineno="96"><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_matrix" kindref="compound">Matrix</ref><sp/><sp/>pixelcolors(m,n);</highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_text_interface" kindref="compound">TextInterface</ref>().<ref refid="classcsmp_1_1_text_interface_1a6d560187e62ad65b4a6d24c40be5698e" kindref="member">ReadPixelTextImage256</ref>(<sp/>model_name.c_str(),<sp/>pixelcolors<sp/>);</highlight></codeline>
+<codeline lineno="98"><highlight class="normal"></highlight></codeline>
+<codeline lineno="99"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>0.2<sp/>Converting<sp/>the<sp/>256-color<sp/>values<sp/>into<sp/>permeabilities</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/><ref refid="namespacecsmp_1aa40a58eeb2dfce379f7668dc60084fef" kindref="member">convertColorToPermeability</ref>(<sp/>1.,<sp/>pixelcolors<sp/>);</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"></highlight></codeline>
+<codeline lineno="102"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>0.3<sp/>Building<sp/>a<sp/>2d<sp/>mesh<sp/>of<sp/>triangular<sp/>elements,<sp/>incorporating<sp/>the</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/><sp/><sp/>permeability<sp/>data<sp/>and<sp/>the<sp/>boundary<sp/>conditions.<sp/>The<sp/>mesh<sp/>is</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="104"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/><sp/><sp/>stored<sp/>in<sp/>the<sp/>VSet<sp/>object<sp/>&apos;vset&apos;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="105"><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet&lt;2U&gt;</ref><sp/><sp/>vset;</highlight></codeline>
+<codeline lineno="106"><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_triangulator" kindref="compound">Triangulator</ref>().<ref refid="classcsmp_1_1_triangulator_1ab420a7832700c821881b3916a4bf6021" kindref="member">TrianglesFromRegularGrid</ref>(<sp/>pixelcolors,<sp/>vset<sp/>);</highlight></codeline>
+<codeline lineno="107"><highlight class="normal"></highlight></codeline>
+<codeline lineno="108"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>0.4<sp/>Scaling<sp/>the<sp/>geometrical<sp/>input<sp/>object<sp/>that<sp/>will<sp/>become<sp/>the<sp/>Region</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="109"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/><sp/><sp/>The<sp/>origin<sp/>of<sp/>the<sp/>object<sp/>is<sp/>assumed<sp/>to<sp/>be<sp/>zero.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="110"><highlight class="normal"><sp/><sp/>cout<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;\nmain:<sp/>Enter<sp/>the<sp/>horizontal<sp/>and<sp/>vertical<sp/>dimensions<sp/>that<sp/>you<sp/>want<sp/>to<sp/>scale<sp/>the<sp/>model<sp/>to<sp/>(m):<sp/>&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="111"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>extent1,<sp/>extent2;</highlight></codeline>
+<codeline lineno="112"><highlight class="normal"><sp/><sp/>cin<sp/>&gt;&gt;<sp/>extent1<sp/>&gt;&gt;<sp/>extent2;</highlight></codeline>
+<codeline lineno="113"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>zero(0.);</highlight></codeline>
+<codeline lineno="114"><highlight class="normal"><sp/><sp/>vset.<ref refid="classcsmp_1_1_v_data_1a523b13143104dd2b68cb2f0a57d056c2" kindref="member">ScaleCoordinateToRange</ref>(<sp/></highlight><highlight class="charliteral">&apos;x&apos;</highlight><highlight class="normal">,<sp/>zero,<sp/>extent1<sp/>);</highlight></codeline>
+<codeline lineno="115"><highlight class="normal"><sp/><sp/>vset.<ref refid="classcsmp_1_1_v_data_1aba224e8cb623ef2d4b706d3473d2f70e" kindref="member">CoordinateRange</ref>(<sp/></highlight><highlight class="charliteral">&apos;x&apos;</highlight><highlight class="normal">,<sp/>zero,<sp/>extent1<sp/>);</highlight></codeline>
+<codeline lineno="116"><highlight class="normal"><sp/><sp/>cout<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;\nAssigned<sp/>X<sp/>range:<sp/>&quot;</highlight><highlight class="normal">&lt;&lt;<sp/>zero<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;<sp/>to<sp/>&quot;</highlight><highlight class="normal">&lt;&lt;<sp/>extent1<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;<sp/>meter.&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/>endl;</highlight></codeline>
+<codeline lineno="117"><highlight class="normal"><sp/><sp/>vset.<ref refid="classcsmp_1_1_v_data_1a523b13143104dd2b68cb2f0a57d056c2" kindref="member">ScaleCoordinateToRange</ref>(<sp/></highlight><highlight class="charliteral">&apos;y&apos;</highlight><highlight class="normal">,<sp/>zero,<sp/>extent2<sp/>);</highlight></codeline>
+<codeline lineno="118"><highlight class="normal"><sp/><sp/>vset.<ref refid="classcsmp_1_1_v_data_1aba224e8cb623ef2d4b706d3473d2f70e" kindref="member">CoordinateRange</ref>(<sp/></highlight><highlight class="charliteral">&apos;y&apos;</highlight><highlight class="normal">,<sp/>zero,<sp/>extent2<sp/>);</highlight></codeline>
+<codeline lineno="119"><highlight class="normal"><sp/><sp/>cout<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;\nAssigned<sp/>Y<sp/>range:<sp/>&quot;</highlight><highlight class="normal">&lt;&lt;<sp/>zero<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;<sp/>to<sp/>&quot;</highlight><highlight class="normal">&lt;&lt;<sp/>extent2<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;<sp/>meter.&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/>endl;</highlight></codeline>
+<codeline lineno="120"><highlight class="normal"></highlight></codeline>
+<codeline lineno="121"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>1.<sp/>A<sp/>Region<sp/>named<sp/>&quot;Model&quot;<sp/>is<sp/>built</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="122"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/><sp/><sp/>from<sp/>a<sp/>mesh<sp/>based<sp/>on<sp/>a<sp/>color<sp/>coded<sp/>image</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="123"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>-------------------------------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="124"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>moving<sp/>to<sp/>directory<sp/>that<sp/>contains<sp/>variables<sp/>file</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="125"><highlight class="normal"><sp/><sp/>current_path(</highlight><highlight class="stringliteral">&quot;../variables_and_configuration_files&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="126"><highlight class="normal"></highlight></codeline>
+<codeline lineno="127"><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_model" kindref="compound">Model&lt;2U&gt;</ref><sp/><sp/>model(<sp/>vset,<sp/></highlight><highlight class="stringliteral">&quot;example1.txt&quot;</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="128"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="129"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>now<sp/>up<sp/>to<sp/>create<sp/>a<sp/>working<sp/>directory</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="130"><highlight class="normal"><sp/><sp/>current_path(</highlight><highlight class="stringliteral">&quot;../../&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="131"><highlight class="normal"><sp/><sp/>create_directory(</highlight><highlight class="stringliteral">&quot;example_outputs&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="132"><highlight class="normal"><sp/><sp/>current_path(</highlight><highlight class="stringliteral">&quot;example_outputs&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="133"><highlight class="normal"><sp/><sp/>create_directory(</highlight><highlight class="stringliteral">&quot;Triangulator_Example&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="134"><highlight class="normal"><sp/><sp/>current_path(</highlight><highlight class="stringliteral">&quot;Triangulator_Example&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="135"><highlight class="normal"></highlight></codeline>
+<codeline lineno="136"><highlight class="normal"><sp/><sp/>vset.<ref refid="classcsmp_1_1_v_set_1ac1e76ff26b8868ea0487c854fa829af3" kindref="member">Erase</ref>();</highlight></codeline>
+<codeline lineno="137"><highlight class="normal"><sp/><sp/><ref refid="namespacecsmp_1ae53f6925f2decb8b6ace6efd79f3578e" kindref="member">stripDomainEdgesFor</ref>(<sp/>model,<sp/></highlight><highlight class="stringliteral">&quot;permeability&quot;</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="138"><highlight class="normal"></highlight></codeline>
+<codeline lineno="139"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>2.<sp/>Assignment<sp/>of<sp/>material<sp/>properties<sp/>&amp;<sp/>initial<sp/>conditions</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="140"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>---------------------------------------------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="141"><highlight class="normal"><sp/><sp/>model.<ref refid="classcsmp_1_1_model_1ab7e40578f44ca6ced2cf05db309f122e" kindref="member">InputPropertyValue</ref>(<sp/></highlight><highlight class="stringliteral">&quot;porosity&quot;</highlight><highlight class="normal">,<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="namespacecsmp_1a045796fbaba7d5053c66ae8e794e5f9b" kindref="member">makeScalar</ref>(<ref refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6" kindref="member">PLAIN</ref>,0.1)<sp/>);</highlight></codeline>
+<codeline lineno="142"><highlight class="normal"><sp/><sp/>model.<ref refid="classcsmp_1_1_model_1ab7e40578f44ca6ced2cf05db309f122e" kindref="member">InputPropertyValue</ref>(<sp/></highlight><highlight class="stringliteral">&quot;fluid<sp/>volume<sp/>source&quot;</highlight><highlight class="normal">,<sp/><ref refid="namespacecsmp_1a045796fbaba7d5053c66ae8e794e5f9b" kindref="member">makeScalar</ref>(<ref refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6" kindref="member">PLAIN</ref>,0.0)<sp/>);</highlight></codeline>
+<codeline lineno="143"><highlight class="normal"><sp/><sp/>model.<ref refid="classcsmp_1_1_model_1ab7e40578f44ca6ced2cf05db309f122e" kindref="member">InputPropertyValue</ref>(<sp/></highlight><highlight class="stringliteral">&quot;fluid<sp/>pressure&quot;</highlight><highlight class="normal">,<sp/><sp/><sp/><sp/><sp/><sp/><ref refid="namespacecsmp_1a045796fbaba7d5053c66ae8e794e5f9b" kindref="member">makeScalar</ref>(<ref refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6" kindref="member">PLAIN</ref>,0.0)<sp/>);</highlight></codeline>
+<codeline lineno="144"><highlight class="normal"></highlight></codeline>
+<codeline lineno="145"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>3.<sp/>Assignment<sp/>of<sp/>Dirichlet<sp/>fluid<sp/>pressure<sp/>conditions</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="146"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/><sp/><sp/>at<sp/>top<sp/>and<sp/>bottom<sp/>boundary<sp/>of<sp/>the<sp/>model</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="147"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>---------------------------------------------------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="148"><highlight class="normal"><sp/><sp/>model.<ref refid="classcsmp_1_1_model_1af02c3aae20950e871acfafd520dd532f" kindref="member">InputBoundaryValue</ref>(<sp/>TOP,<sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;fluid<sp/>pressure&quot;</highlight><highlight class="normal">,<sp/><ref refid="namespacecsmp_1a045796fbaba7d5053c66ae8e794e5f9b" kindref="member">makeScalar</ref>(<ref refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9a2d373b048f997a96c661862c40f2fcae" kindref="member">DIRICH</ref>,1.0e+5)<sp/>);</highlight></codeline>
+<codeline lineno="149"><highlight class="normal"><sp/><sp/>model.<ref refid="classcsmp_1_1_model_1af02c3aae20950e871acfafd520dd532f" kindref="member">InputBoundaryValue</ref>(<sp/>BOTTOM,<sp/></highlight><highlight class="stringliteral">&quot;fluid<sp/>pressure&quot;</highlight><highlight class="normal">,<sp/><ref refid="namespacecsmp_1a045796fbaba7d5053c66ae8e794e5f9b" kindref="member">makeScalar</ref>(<ref refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9a2d373b048f997a96c661862c40f2fcae" kindref="member">DIRICH</ref>,1.0e+7)<sp/>);</highlight></codeline>
+<codeline lineno="150"><highlight class="normal"></highlight></codeline>
+<codeline lineno="151"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>4.<sp/>Calculation<sp/>of<sp/>hydraulic<sp/>conductivity<sp/>from<sp/>permeability<sp/>using<sp/>Interrelation<sp/>subclass</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="152"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>---------------------------------------------------------------------------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="153"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/>model.OutputVariableToScreen(&quot;permeability&quot;);</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="154"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>fluid_viscosity(1.0e-03);</highlight></codeline>
+<codeline lineno="155"><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_constant_factor" kindref="compound">ConstantFactor&lt;2U,divides&gt;</ref><sp/><sp/>conductivity(<sp/>model.<ref refid="classcsmp_1_1_model_1a538d966f27bfa2c6a791f5ed4fd7f446" kindref="member">Database</ref>(),</highlight></codeline>
+<codeline lineno="156"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;conductivity&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;permeability&quot;</highlight><highlight class="normal">,</highlight></codeline>
+<codeline lineno="157"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fluid_viscosity<sp/>);</highlight></codeline>
+<codeline lineno="158"><highlight class="normal"><sp/><sp/>model.<ref refid="classcsmp_1_1_model_1a1f470e567edc05fb61d72ba12dbda6b8" kindref="member">Apply</ref>(<sp/>conductivity<sp/>);</highlight></codeline>
+<codeline lineno="159"><highlight class="normal"><sp/><sp/><ref refid="namespacecsmp_1aae2ab24b16cda68ebbe6547ffd0ef896" kindref="member">printRangeOfVariable</ref>(<sp/>model,<sp/></highlight><highlight class="stringliteral">&quot;conductivity&quot;</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="160"><highlight class="normal"></highlight></codeline>
+<codeline lineno="161"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>5.<sp/>Output<sp/>results<sp/>to<sp/>VTK,<sp/>ASCII<sp/>Text,<sp/>and<sp/>JPEG<sp/>binary<sp/>files</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="162"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>-----------------------------------------------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="163"><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_v_t_k___interface" kindref="compound">VTK_Interface&lt;2U&gt;</ref><sp/><sp/>vtk_output;</highlight></codeline>
+<codeline lineno="164"><highlight class="normal"></highlight></codeline>
+<codeline lineno="165"><highlight class="normal"><sp/><sp/>vtk_output.<ref refid="classcsmp_1_1_v_t_k___interface_1a4a0463e2ef123a7bdd112ed6e9b50c7c" kindref="member">OutputDataToVTK</ref>(<sp/>model,<sp/></highlight><highlight class="stringliteral">&quot;fluid-pressure&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;fluid<sp/>pressure&quot;</highlight><highlight class="normal">,<sp/>0<sp/>);</highlight></codeline>
+<codeline lineno="166"><highlight class="normal"><sp/><sp/>vtk_output.<ref refid="classcsmp_1_1_v_t_k___interface_1a4a0463e2ef123a7bdd112ed6e9b50c7c" kindref="member">OutputDataToVTK</ref>(<sp/>model,<sp/></highlight><highlight class="stringliteral">&quot;conductivity&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;conductivity&quot;</highlight><highlight class="normal">,<sp/><sp/><sp/><sp/><sp/>0<sp/>);</highlight></codeline>
+<codeline lineno="167"><highlight class="normal"></highlight></codeline>
+<codeline lineno="168"><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_text_interface" kindref="compound">TextInterface</ref><sp/>text_output;</highlight></codeline>
+<codeline lineno="169"><highlight class="normal"></highlight></codeline>
+<codeline lineno="170"><highlight class="normal"><sp/><sp/>text_output.<ref refid="classcsmp_1_1_text_interface_1aa6df1c08a62013f2b5c3a2aed6480bc5" kindref="member">OutputDataAsTextColumnsNumbered</ref>(<sp/>model,<sp/></highlight><highlight class="stringliteral">&quot;fluid-pressure&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;fluid<sp/>pressure&quot;</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="171"><highlight class="normal"><sp/><sp/>text_output.<ref refid="classcsmp_1_1_text_interface_1aa6df1c08a62013f2b5c3a2aed6480bc5" kindref="member">OutputDataAsTextColumnsNumbered</ref>(<sp/>model,<sp/></highlight><highlight class="stringliteral">&quot;conductivity&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;conductivity&quot;</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="172"><highlight class="normal"></highlight></codeline>
+<codeline lineno="173"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>CSMP_WITH_IMAGE_OUTPUT</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="174"><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_j_p_e_g___interface" kindref="compound">JPEG_Interface</ref><sp/>jpg_output;</highlight></codeline>
+<codeline lineno="175"><highlight class="normal"></highlight><highlight class="comment">//<sp/>undefined<sp/>behaviour<sp/>caused<sp/>here!</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="176"><highlight class="normal"><sp/><sp/>jpg_output.OutputDataToJPG(<sp/>model,<sp/></highlight><highlight class="stringliteral">&quot;conductivity&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;conductivity&quot;</highlight><highlight class="normal">,<sp/>0<sp/>);</highlight></codeline>
+<codeline lineno="177"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="178"><highlight class="normal"></highlight></codeline>
+<codeline lineno="179"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>6.<sp/>Building<sp/>PDE_Integrator<sp/>&quot;total_pressure&quot;<sp/>by<sp/>applying<sp/>the<sp/>PDE<sp/>operator<sp/>subclasses</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="180"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/><sp/><sp/>A<sp/>post<sp/>processing<sp/>operation<sp/>is<sp/>added<sp/>to<sp/>compute<sp/>the<sp/>fluid<sp/>velocities<sp/>and</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="181"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/><sp/><sp/>fluid<sp/>fluxes<sp/>(by<sp/>setting<sp/>the<sp/>boolean<sp/>variable<sp/>in<sp/>the<sp/>constructor<sp/>of<sp/>the<sp/>post-</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="182"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/><sp/><sp/>processor<sp/>to<sp/>true,<sp/>the<sp/>element<sp/>velocities<sp/>are<sp/>averaged<sp/>to<sp/>the<sp/>nodes)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="183"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>--------------------------------------------------------------------------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="184"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>CSMP_WITH_SAMG_SOLVER</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="185"><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_s_a_m_g___settings" kindref="compound">SAMG_Settings</ref><sp/><sp/>settings;<sp/><sp/>settings.<ref refid="classcsmp_1_1_s_a_m_g___settings_1a427236e642c2f321b779bcfc0432a895" kindref="member">Set_iout1</ref>(2);</highlight></codeline>
+<codeline lineno="186"><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_s_a_m_g___solver" kindref="compound">SAMG_Solver</ref><sp/><sp/><sp/><sp/>samg_solver(&amp;settings);</highlight></codeline>
+<codeline lineno="187"><highlight class="normal"></highlight></codeline>
+<codeline lineno="188"><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_p_d_e___integrator" kindref="compound">PDE_Integrator&lt;2U,Element&gt;</ref><sp/><sp/>total_pressure(samg_solver);</highlight></codeline>
+<codeline lineno="189"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="190"><highlight class="normal"><sp/><sp/>CSMP_DEFAULT_LINEAR_SOLVER<sp/><sp/>linear_solver;</highlight></codeline>
+<codeline lineno="191"><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_p_d_e___integrator" kindref="compound">PDE_Integrator&lt;2U,Element&gt;</ref><sp/><sp/>total_pressure(linear_solver);</highlight></codeline>
+<codeline lineno="192"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="193"><highlight class="normal"></highlight></codeline>
+<codeline lineno="194"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>conductance<sp/>matrix<sp/>[K]<sp/>on<sp/>the<sp/>left-hand<sp/>side</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="195"><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_integral__d_n_t__op__d_n__d_v" kindref="compound">Integral_dNT_op_dN_dV&lt;2U&gt;</ref><sp/><sp/><sp/><sp/>conductance(<sp/>model.<ref refid="classcsmp_1_1_model_1a538d966f27bfa2c6a791f5ed4fd7f446" kindref="member">Database</ref>(),<sp/></highlight><highlight class="stringliteral">&quot;conductivity&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;fluid<sp/>pressure&quot;</highlight><highlight class="normal">,<sp/><sp/></highlight><highlight class="stringliteral">&quot;fluid<sp/>pressure&quot;</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="196"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>source<sp/>vector<sp/>{Q}<sp/>on<sp/>the<sp/>right-hand<sp/>side</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="197"><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_integral___n_t__op___n__d_v" kindref="compound">Integral_NT_op_N_dV&lt;2U&gt;</ref><sp/><sp/><sp/><sp/><sp/><sp/>source(<sp/>model.<ref refid="classcsmp_1_1_model_1a538d966f27bfa2c6a791f5ed4fd7f446" kindref="member">Database</ref>(),<sp/><sp/></highlight><highlight class="stringliteral">&quot;fluid<sp/>volume<sp/>source&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;fluid<sp/>pressure&quot;</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="198"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>post-processing<sp/>operation<sp/>to<sp/>compute<sp/>flow<sp/>velocities</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="199"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>interpolate_values_to_nodes(</highlight><highlight class="keyword">true</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="200"><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_velocity_and_volume_flux" kindref="compound">VelocityAndVolumeFlux&lt;2U&gt;</ref><sp/><sp/><sp/><sp/>velocity(<sp/>model,<sp/><sp/></highlight><highlight class="stringliteral">&quot;conductivity&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;porosity&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;fluid<sp/>pressure&quot;</highlight><highlight class="normal">,<sp/>interpolate_values_to_nodes<sp/>);</highlight></codeline>
+<codeline lineno="201"><highlight class="normal"></highlight></codeline>
+<codeline lineno="202"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>add<sp/>PDE_Operators<sp/>to<sp/>the<sp/>FE<sp/>Algorithm</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="203"><highlight class="normal"><sp/><sp/>total_pressure.<ref refid="classcsmp_1_1_p_d_e___integrator_1a7f18d7e4c1e881aa24b0009819797bca" kindref="member">Add</ref>(<sp/>&amp;conductance<sp/>);</highlight></codeline>
+<codeline lineno="204"><highlight class="normal"><sp/><sp/>total_pressure.<ref refid="classcsmp_1_1_p_d_e___integrator_1a7f18d7e4c1e881aa24b0009819797bca" kindref="member">Add</ref>(<sp/>&amp;source<sp/>);</highlight></codeline>
+<codeline lineno="205"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>add<sp/>post-process<sp/>to<sp/>the<sp/>FE<sp/>Algorithm</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="206"><highlight class="normal"><sp/><sp/>total_pressure.<ref refid="classcsmp_1_1_p_d_e___integrator_1a9b087f7039baf4844d22fe4b2284379c" kindref="member">AddPostProcess</ref>(<sp/>&amp;velocity<sp/>);</highlight></codeline>
+<codeline lineno="207"><highlight class="normal"></highlight></codeline>
+<codeline lineno="208"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Solve<sp/>[K]{p}<sp/>=<sp/>{Q}<sp/>by<sp/>passing<sp/>the<sp/>algorithm<sp/>to<sp/>the<sp/>model</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="209"><highlight class="normal"><sp/><sp/>model.<ref refid="classcsmp_1_1_model_1a1f470e567edc05fb61d72ba12dbda6b8" kindref="member">Apply</ref>(<sp/>total_pressure<sp/>);</highlight></codeline>
+<codeline lineno="210"><highlight class="normal"></highlight></codeline>
+<codeline lineno="211"><highlight class="normal"></highlight></codeline>
+<codeline lineno="212"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>7.<sp/>Screen<sp/>ranges<sp/>of<sp/>computed<sp/>variables</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="213"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>--------------------------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="214"><highlight class="normal"><sp/><sp/><ref refid="namespacecsmp_1aae2ab24b16cda68ebbe6547ffd0ef896" kindref="member">printRangeOfVariable</ref>(<sp/>model,<sp/></highlight><highlight class="stringliteral">&quot;fluid<sp/>pressure&quot;</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="215"><highlight class="normal"><sp/><sp/><ref refid="namespacecsmp_1aae2ab24b16cda68ebbe6547ffd0ef896" kindref="member">printRangeOfVariable</ref>(<sp/>model,<sp/></highlight><highlight class="stringliteral">&quot;velocity&quot;</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="216"><highlight class="normal"><sp/><sp/><ref refid="namespacecsmp_1aae2ab24b16cda68ebbe6547ffd0ef896" kindref="member">printRangeOfVariable</ref>(<sp/>model,<sp/></highlight><highlight class="stringliteral">&quot;pore<sp/>velocity&quot;</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="217"><highlight class="normal"><sp/><sp/><ref refid="namespacecsmp_1aae2ab24b16cda68ebbe6547ffd0ef896" kindref="member">printRangeOfVariable</ref>(<sp/>model,<sp/></highlight><highlight class="stringliteral">&quot;volume<sp/>flux&quot;</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="218"><highlight class="normal"><sp/><sp/><ref refid="namespacecsmp_1aae2ab24b16cda68ebbe6547ffd0ef896" kindref="member">printRangeOfVariable</ref>(<sp/>model,<sp/></highlight><highlight class="stringliteral">&quot;nodal<sp/>volume<sp/>flux&quot;</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="219"><highlight class="normal"></highlight></codeline>
+<codeline lineno="220"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>VTK<sp/>output</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="221"><highlight class="normal"><sp/><sp/>vtk_output.<ref refid="classcsmp_1_1_v_t_k___interface_1a4a0463e2ef123a7bdd112ed6e9b50c7c" kindref="member">OutputDataToVTK</ref>(<sp/>model,<sp/></highlight><highlight class="stringliteral">&quot;fluid-pressure&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;fluid<sp/>pressure&quot;</highlight><highlight class="normal">,<sp/><sp/><sp/><sp/>0<sp/>);</highlight></codeline>
+<codeline lineno="222"><highlight class="normal"><sp/><sp/>vtk_output.<ref refid="classcsmp_1_1_v_t_k___interface_1a4a0463e2ef123a7bdd112ed6e9b50c7c" kindref="member">OutputDataToVTK</ref>(<sp/>model,<sp/></highlight><highlight class="stringliteral">&quot;velocity&quot;</highlight><highlight class="normal">,<sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;velocity&quot;</highlight><highlight class="normal">,<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0<sp/>);</highlight></codeline>
+<codeline lineno="223"><highlight class="normal"><sp/><sp/>vtk_output.<ref refid="classcsmp_1_1_v_t_k___interface_1a4a0463e2ef123a7bdd112ed6e9b50c7c" kindref="member">OutputDataToVTK</ref>(<sp/>model,<sp/></highlight><highlight class="stringliteral">&quot;nvelocity&quot;</highlight><highlight class="normal">,<sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;nodal<sp/>velocity&quot;</highlight><highlight class="normal">,<sp/><sp/><sp/><sp/>0<sp/>);</highlight></codeline>
+<codeline lineno="224"><highlight class="normal"><sp/><sp/>vtk_output.<ref refid="classcsmp_1_1_v_t_k___interface_1a4a0463e2ef123a7bdd112ed6e9b50c7c" kindref="member">OutputDataToVTK</ref>(<sp/>model,<sp/></highlight><highlight class="stringliteral">&quot;volume-flux&quot;</highlight><highlight class="normal">,<sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;volume<sp/>flux&quot;</highlight><highlight class="normal">,<sp/><sp/><sp/><sp/><sp/><sp/><sp/>0<sp/>);</highlight></codeline>
+<codeline lineno="225"><highlight class="normal"><sp/><sp/>vtk_output.<ref refid="classcsmp_1_1_v_t_k___interface_1a4a0463e2ef123a7bdd112ed6e9b50c7c" kindref="member">OutputDataToVTK</ref>(<sp/>model,<sp/></highlight><highlight class="stringliteral">&quot;nvolume-flux&quot;</highlight><highlight class="normal">,<sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;nodal<sp/>volume<sp/>flux&quot;</highlight><highlight class="normal">,<sp/>0<sp/>);</highlight></codeline>
+<codeline lineno="226"><highlight class="normal"></highlight></codeline>
+<codeline lineno="227"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>JPG<sp/>output<sp/>(only<sp/>scalar<sp/>variables<sp/>can<sp/>be<sp/>visualized)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="228"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>CSMP_WITH_IMAGE_OUTPUT</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="229"><highlight class="normal"><sp/><sp/>jpg_output.OutputDataToJPG(<sp/>model,<sp/></highlight><highlight class="stringliteral">&quot;fluid-pressure&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;fluid<sp/>pressure&quot;</highlight><highlight class="normal">,<sp/><sp/><sp/><sp/>0<sp/>);</highlight></codeline>
+<codeline lineno="230"><highlight class="normal"><sp/><sp/>jpg_output.OutputDataToJPG(<sp/>model,<sp/></highlight><highlight class="stringliteral">&quot;volume-flux&quot;</highlight><highlight class="normal">,<sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;volume<sp/>flux&quot;</highlight><highlight class="normal">,<sp/><sp/><sp/><sp/><sp/><sp/><sp/>0<sp/>);</highlight></codeline>
+<codeline lineno="231"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="232"><highlight class="normal"></highlight></codeline>
+<codeline lineno="233"><highlight class="normal"></highlight></codeline>
+<codeline lineno="234"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>8.<sp/>Form<sp/>a<sp/>Group<sp/>named<sp/>&quot;granite&quot;<sp/>in<sp/>order<sp/>to<sp/>access</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="235"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/><sp/><sp/>intrusion<sp/>in<sp/>the<sp/>center<sp/>of<sp/>the<sp/>model.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="236"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/><sp/><sp/>Group<sp/>granite<sp/>is<sp/>build<sp/>from<sp/>finite<sp/>elements<sp/>in</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="237"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/><sp/><sp/>the<sp/>permeability<sp/>range<sp/>between<sp/>1.0e-21<sp/>to<sp/>1.0e-18<sp/>m2</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="238"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>-------------------------------------------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="239"><highlight class="normal"><sp/><sp/>cout<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;\nFORMING<sp/>A<sp/>REGION<sp/>CALLED<sp/>&apos;granite&apos;&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/>endl;</highlight></codeline>
+<codeline lineno="240"><highlight class="normal"><sp/><sp/>model.<ref refid="classcsmp_1_1_region_interface_1a54852db0700b343b2c21d420fa387797" kindref="member">FormRegionFrom</ref>(<sp/></highlight><highlight class="stringliteral">&quot;granite&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;permeability&quot;</highlight><highlight class="normal">,<sp/>1.0e-21,<sp/>1.0e-18<sp/>);</highlight></codeline>
+<codeline lineno="241"><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_region" kindref="compound">Region&lt;2&gt;</ref>&amp;<sp/>granite_domain(model.<ref refid="classcsmp_1_1_region_interface_1a726722b33ee2b3fe7e739de1cc23ef61" kindref="member">Region</ref>(</highlight><highlight class="stringliteral">&quot;granite&quot;</highlight><highlight class="normal">));</highlight></codeline>
+<codeline lineno="242"><highlight class="normal"></highlight></codeline>
+<codeline lineno="243"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>add<sp/>fluid<sp/>volume<sp/>source<sp/>term<sp/>to<sp/>region<sp/>granite<sp/>and<sp/>repeat<sp/>computation</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="244"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>source_term(1.0e-13);<sp/></highlight><highlight class="comment">//<sp/>m3<sp/>m-2<sp/>s-1</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="245"><highlight class="normal"><sp/><sp/>granite_domain.<ref refid="classcsmp_1_1_region_1a698725f786d1e10970f1f3158bb347c8" kindref="member">InputPropertyValue</ref>(<sp/></highlight><highlight class="stringliteral">&quot;fluid<sp/>volume<sp/>source&quot;</highlight><highlight class="normal">,<sp/><ref refid="namespacecsmp_1a045796fbaba7d5053c66ae8e794e5f9b" kindref="member">makeScalar</ref>(<ref refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6" kindref="member">PLAIN</ref>,source_term)<sp/>);</highlight></codeline>
+<codeline lineno="246"><highlight class="normal"></highlight></codeline>
+<codeline lineno="247"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>fixing<sp/>pressure<sp/>at<sp/>perimeter<sp/>of<sp/>group</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="248"><highlight class="normal"><sp/><sp/>granite_domain.<ref refid="classcsmp_1_1_model_sub_domain_1a88ef5a0e3360ff49b5108e668a36225b" kindref="member">ChangePropertyStatus</ref>(<sp/></highlight><highlight class="stringliteral">&quot;fluid<sp/>pressure&quot;</highlight><highlight class="normal">,<sp/><ref refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9a2d373b048f997a96c661862c40f2fcae" kindref="member">DIRICH</ref>,<sp/>PERIMETER<sp/>);</highlight></codeline>
+<codeline lineno="249"><highlight class="normal"></highlight></codeline>
+<codeline lineno="250"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>recomputing<sp/>fluid<sp/>pressure<sp/>in<sp/>the<sp/>granite<sp/>taking<sp/>into<sp/>account<sp/>the<sp/>source<sp/>term</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="251"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>debug{</highlight><highlight class="keyword">false</highlight><highlight class="normal">};</highlight></codeline>
+<codeline lineno="252"><highlight class="normal"><sp/><sp/>total_pressure.<ref refid="classcsmp_1_1_p_d_e___integrator_1ad61ac6f16df2a486dd51cd8dd216e212" kindref="member">IntegrateOver</ref>(<sp/>model,<sp/>granite_domain,<sp/>debug<sp/>);</highlight></codeline>
+<codeline lineno="253"><highlight class="normal"></highlight></codeline>
+<codeline lineno="254"><highlight class="normal"><sp/><sp/><ref refid="namespacecsmp_1aae2ab24b16cda68ebbe6547ffd0ef896" kindref="member">printRangeOfVariable</ref>(<sp/>model,<sp/></highlight><highlight class="stringliteral">&quot;granite&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;fluid<sp/>pressure&quot;</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="255"><highlight class="normal"><sp/><sp/><ref refid="namespacecsmp_1aae2ab24b16cda68ebbe6547ffd0ef896" kindref="member">printRangeOfVariable</ref>(<sp/>model,<sp/></highlight><highlight class="stringliteral">&quot;granite&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;velocity&quot;</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="256"><highlight class="normal"><sp/><sp/><ref refid="namespacecsmp_1aae2ab24b16cda68ebbe6547ffd0ef896" kindref="member">printRangeOfVariable</ref>(<sp/>model,<sp/></highlight><highlight class="stringliteral">&quot;granite&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;pore<sp/>velocity&quot;</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="257"><highlight class="normal"><sp/><sp/><ref refid="namespacecsmp_1aae2ab24b16cda68ebbe6547ffd0ef896" kindref="member">printRangeOfVariable</ref>(<sp/>model,<sp/></highlight><highlight class="stringliteral">&quot;granite&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;volume<sp/>flux&quot;</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="258"><highlight class="normal"><sp/><sp/><ref refid="namespacecsmp_1aae2ab24b16cda68ebbe6547ffd0ef896" kindref="member">printRangeOfVariable</ref>(<sp/>model,<sp/></highlight><highlight class="stringliteral">&quot;granite&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;nodal<sp/>volume<sp/>flux&quot;</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="259"><highlight class="normal"></highlight></codeline>
+<codeline lineno="260"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>CSMP_WITH_IMAGE_OUTPUT</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="261"><highlight class="normal"><sp/><sp/>jpg_output.OutputDataToJPG(<sp/>model,<sp/></highlight><highlight class="stringliteral">&quot;fluid-pressure&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;fluid<sp/>pressure&quot;</highlight><highlight class="normal">,<sp/>1<sp/>);</highlight></codeline>
+<codeline lineno="262"><highlight class="normal"><sp/><sp/>jpg_output.OutputDataToJPG(<sp/>model,<sp/></highlight><highlight class="stringliteral">&quot;volume-flux&quot;</highlight><highlight class="normal">,<sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;volume<sp/>flux&quot;</highlight><highlight class="normal">,<sp/><sp/><sp/><sp/>1<sp/>);</highlight></codeline>
+<codeline lineno="263"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="264"><highlight class="normal"></highlight></codeline>
+<codeline lineno="265"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>output<sp/>of<sp/>the<sp/>region<sp/>&quot;granite&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="266"><highlight class="normal"><sp/><sp/>vtk_output.<ref refid="classcsmp_1_1_v_t_k___interface_1a4a0463e2ef123a7bdd112ed6e9b50c7c" kindref="member">OutputDataToVTK</ref>(<sp/>model,<sp/></highlight><highlight class="stringliteral">&quot;granite&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;fluid-pressure&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;fluid<sp/>pressure&quot;</highlight><highlight class="normal">,<sp/>1,<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="267"><highlight class="normal"><sp/><sp/>vtk_output.<ref refid="classcsmp_1_1_v_t_k___interface_1a4a0463e2ef123a7bdd112ed6e9b50c7c" kindref="member">OutputDataToVTK</ref>(<sp/>model,<sp/></highlight><highlight class="stringliteral">&quot;granite&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;velocity&quot;</highlight><highlight class="normal">,<sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;velocity&quot;</highlight><highlight class="normal">,<sp/><sp/><sp/><sp/><sp/><sp/><sp/>1,<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="268"><highlight class="normal"></highlight></codeline>
+<codeline lineno="269"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>---------------------------------------------------------------------------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="270"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>9.<sp/>finding<sp/>the<sp/>pressure<sp/>value<sp/>at<sp/>a<sp/>point<sp/>of<sp/>interest</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="271"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>---------------------------------------------------------------------------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="272"><highlight class="normal"><sp/><sp/>map&lt;size_t,std::vector&lt;double&gt;<sp/>&gt;<sp/><sp/>points;</highlight></codeline>
+<codeline lineno="273"><highlight class="normal"><sp/><sp/>vector&lt;double&gt;<sp/><sp/>point1(2);</highlight></codeline>
+<codeline lineno="274"><highlight class="normal"><sp/><sp/>point1[0]<sp/>=<sp/>5000.;<sp/>point1[1]<sp/>=<sp/>2000.;</highlight></codeline>
+<codeline lineno="275"><highlight class="normal"><sp/><sp/>cout<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;\nmain:<sp/>Please<sp/>enter<sp/>the<sp/>x<sp/>and<sp/>y<sp/>coordinates<sp/>of<sp/>a<sp/>point<sp/>at<sp/>which<sp/>you<sp/>would<sp/>like<sp/>to<sp/>know<sp/>the<sp/>&apos;fluid<sp/>pressure&apos;<sp/>(m):<sp/>&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="276"><highlight class="normal"><sp/><sp/>cin<sp/>&gt;&gt;<sp/>point1[0]<sp/>&gt;&gt;<sp/>point1[1];</highlight></codeline>
+<codeline lineno="277"><highlight class="normal"><sp/><sp/>points[1]<sp/>=<sp/>point1;</highlight></codeline>
+<codeline lineno="278"><highlight class="normal"></highlight></codeline>
+<codeline lineno="279"><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_property_at_point_visitor" kindref="compound">PropertyAtPointVisitor&lt;2U&gt;</ref><sp/><sp/>point_probe(<sp/>model,<sp/>points,<sp/></highlight><highlight class="stringliteral">&quot;fluid<sp/>pressure&quot;</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="280"><highlight class="normal"><sp/><sp/>model.<ref refid="classcsmp_1_1_model_1a2e12f259012989765f3269d8ea721092" kindref="member">Accept</ref>(<sp/>point_probe<sp/>);</highlight></codeline>
+<codeline lineno="281"><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;2U&gt;</ref>*<sp/><sp/>eptr(point_probe.<ref refid="classcsmp_1_1_property_at_point_visitor_1ab9896fbfb90b80cb1cd19cb54ca33f83" kindref="member">ElementThatContains</ref>(1));</highlight></codeline>
+<codeline lineno="282"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<sp/>eptr<sp/>!=<sp/>NULL<sp/>)<sp/>cout<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;\nmain:<sp/>element<sp/>&quot;</highlight><highlight class="normal">&lt;&lt;<sp/>eptr-&gt;<ref refid="classcsmp_1_1_element_1a3f8ae10231344f76c0319889726fd5ea" kindref="member">Idx</ref>()<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;<sp/>contains<sp/>searched<sp/>point.\n&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="283"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>cout<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;\nmain:<sp/>point<sp/>not<sp/>found.\n&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="284"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="285"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref><sp/>pf_key<sp/>=<sp/>model.<ref refid="classcsmp_1_1_model_1a538d966f27bfa2c6a791f5ed4fd7f446" kindref="member">Database</ref>().StorageKey(</highlight><highlight class="stringliteral">&quot;fluid<sp/>pressure&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="286"><highlight class="normal"><sp/><sp/>cout<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;\nmain:<sp/>Fluid<sp/>pressure<sp/>pressure<sp/>at<sp/>point:<sp/>&quot;</highlight><highlight class="normal">&lt;&lt;<sp/>eptr-&gt;<ref refid="classcsmp_1_1_finite_element_policy_1a765acd90b4a49d2f309b31451f347bd2" kindref="member">PropertyValueAtBaryCenter</ref>(<sp/>pf_key<sp/>);</highlight></codeline>
+<codeline lineno="287"><highlight class="normal"></highlight></codeline>
+<codeline lineno="288"><highlight class="normal"><sp/><sp/>cout<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;\nmain:<sp/>That&apos;s<sp/>it...&quot;</highlight><highlight class="normal">&lt;&lt;<sp/>endl;</highlight></codeline>
+<codeline lineno="289"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="290"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>end<sp/>Run</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="291"><highlight class="normal"></highlight></codeline>
+<codeline lineno="292"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>csmp</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="examples/source/Triangulator_Example.cpp"/>
+  </compounddef>
+</doxygen>

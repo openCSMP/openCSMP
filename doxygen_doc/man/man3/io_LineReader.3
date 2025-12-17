@@ -1,0 +1,52 @@
+.TH "io::LineReader" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+io::LineReader
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBLineReader\fP (const \fBLineReader\fP &)=delete"
+.br
+.ti -1c
+.RI "\fBLineReader\fP & \fBoperator=\fP (const \fBLineReader\fP &)=delete"
+.br
+.ti -1c
+.RI "\fBLineReader\fP (const char *file_name, FILE *file)"
+.br
+.ti -1c
+.RI "\fBLineReader\fP (const std::string &file_name, FILE *file)"
+.br
+.ti -1c
+.RI "\fBLineReader\fP (const char *file_name)"
+.br
+.ti -1c
+.RI "\fBLineReader\fP (const std::string &file_name)"
+.br
+.ti -1c
+.RI "void \fBset_file_name\fP (const std::string &file_name)"
+.br
+.ti -1c
+.RI "void \fBset_file_name\fP (const char *file_name)"
+.br
+.ti -1c
+.RI "const char * \fBget_truncated_file_name\fP () const"
+.br
+.ti -1c
+.RI "void \fBset_file_line\fP (unsigned file_line)"
+.br
+.ti -1c
+.RI "unsigned \fBget_file_line\fP () const"
+.br
+.ti -1c
+.RI "char * \fBnext_line\fP ()"
+.br
+.in -1c
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

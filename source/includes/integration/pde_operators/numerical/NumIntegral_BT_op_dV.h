@@ -24,9 +24,9 @@ class NumIntegral_BT_op_dV : public MathOperatorRHS<dim,CELL> {
     NumIntegral_BT_op_dV( const PropertyDatabase<dim>&,
                           const char* oper, const char* test );
 
-    virtual void ComputeContribution( const CELL<dim>& );
+    void ComputeContribution( const CELL<dim>& ) override final;
     
-    virtual NumIntegral_BT_op_dV<dim,CELL>* clone() const { return new NumIntegral_BT_op_dV<dim,CELL> (*this); }
+    NumIntegral_BT_op_dV<dim,CELL>* clone() const override { return new NumIntegral_BT_op_dV<dim,CELL> (*this); }
     
   private:  
     DenseMatrix<DM_MIN>  B, BT, STR; 

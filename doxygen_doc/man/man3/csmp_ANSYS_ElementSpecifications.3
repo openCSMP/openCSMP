@@ -1,0 +1,464 @@
+.TH "csmp::ANSYS_ElementSpecifications" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::ANSYS_ElementSpecifications \- Represents ANSYS element type specifications that are needed prior to model construction in order to identify corresponding element types in CSMP++\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <ANSYS_ElementSpecifications\&.h>\fP
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static \fBCSMP_FEM_TYPE\fP \fBCSMP_TypeFrom_ANSYS_Type\fP (int8_t ANSYS_finite_element_type, bool isoparametric, uint32_t dim)"
+.br
+.ti -1c
+.RI "static \fBCSMP_FEM_TYPE\fP \fBCSMP_TypeFrom_ANSYS_TypeName\fP (const std::string &ANSYS_finite_element_type, bool isoparametric, uint32_t dim)"
+.br
+.ti -1c
+.RI "static std::string \fBCSMP_TypeNameFrom_ANSYS_Type\fP (int8_t ANSYS_finite_element_type, bool isoparametric, uint32_t dim)"
+.br
+.ti -1c
+.RI "static std::string \fBCSMP_TypeNameFrom_ANSYS_TypeName\fP (const std::string &ANSYS_finite_element_type, bool isoparametric, uint32_t dim)"
+.br
+.ti -1c
+.RI "static int8_t \fBANSYS_Type\fP (const std::string &FEtype)"
+.br
+.ti -1c
+.RI "static size_t \fBNodesPerElementOfType\fP (int8_t ANSYS_finite_element_type)"
+.br
+.ti -1c
+.RI "static size_t \fBFacesPerElementOfType\fP (int8_t ANSYS_finite_element_type)"
+.br
+.ti -1c
+.RI "static size_t \fBNeighborsPerElementOfType\fP (int8_t ANSYS_finite_element_type)"
+.br
+.ti -1c
+.RI "static size_t \fBNodesPerFaceForElementOfType\fP (int8_t ANSYS_finite_element_type, size_t face)"
+.br
+.ti -1c
+.RI "static size_t \fBFaceNodeForElementOfType\fP (int8_t ANSYS_finite_element_type, size_t face, size_t face_node)"
+.br
+.ti -1c
+.RI "static bool \fBLineElement\fP (int8_t ANSYS_finite_element_type)"
+.br
+.ti -1c
+.RI "static bool \fBSurfaceElement\fP (int8_t ANSYS_finite_element_type)"
+.br
+.ti -1c
+.RI "static bool \fBVolumeElement\fP (int8_t ANSYS_finite_element_type)"
+.br
+.ti -1c
+.RI "static size_t \fBMinimumSpatialDimension\fP (const std::string &ANSYS_finite_element_type)"
+.br
+.ti -1c
+.RI "static bool \fBLineElement\fP (const std::string &ANSYS_finite_element_type)"
+.br
+.ti -1c
+.RI "static bool \fBSurfaceElement\fP (const std::string &ANSYS_finite_element_type)"
+.br
+.ti -1c
+.RI "static bool \fBVolumeElement\fP (const std::string &ANSYS_finite_element_type)"
+.br
+.ti -1c
+.RI "static void \fBLineElements\fP (std::list< std::string > &line_elements)"
+.br
+.ti -1c
+.RI "static void \fBSurfaceElements\fP (std::list< std::string > &surf_elements)"
+.br
+.ti -1c
+.RI "static void \fBVolumeElements\fP (std::list< std::string > &vol_elements)"
+.br
+.ti -1c
+.RI "static size_t \fBInterpolationOrder\fP (const std::string &etype)"
+.br
+.ti -1c
+.RI "static size_t \fBInterpolationOrder\fP (int8_t etype)"
+.br
+.ti -1c
+.RI "static bool \fBLinearElement\fP (int8_t etype)"
+.br
+.ti -1c
+.RI "static bool \fBQuadraticElement\fP (int8_t etype)"
+.br
+.ti -1c
+.RI "static bool \fBCubicElement\fP (int8_t etype)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Represents ANSYS element type specifications that are needed prior to model construction in order to identify corresponding element types in CSMP++\&. 
+
+
+.PP
+\fBAuthor\fP
+.RS 4
+S\&.K\&. Matthai 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2003
+.RE
+.PP
+.SH "Motivation"
+.PP
+Relates the ANSYS finite element types to the generic finite element names that are used inside of CSP\&. Also additional diagnostics are obtained as to whether the element is a line, surface, or volume, and whether the element uses linear, quadratic or cubic basis functions\&. Furthermore the element can be queried for the number of neighbors and its minimum spatial dimension\&.
+.SH "Implementation"
+.PP
+ANSYS definitions of element types and their identification numbers are the following\&. They are only partially mapped to CSP and incorporated into enumerations to avoid the pollution of the csp namespace\&. 
+.br
+
+.PP
+.PP
+.nf
+#ifndef MAX_NODES_ELEMENT
+#define MIXED       0
+#define NODE        1
+#define BAR_2       2
+#define BAR_3       3
+#define TETRA_4     4
+#define TETRA_10    5
+#define HEXA_8      6
+#define HEXA_20     7
+#define TRI_3       8
+#define TRI_3_X     9
+#define TRI_6       10
+#define TRI_6_X     11
+#define PENTA_6     12 // prism elements 
+#define PENTA_15    13
+#define PENTA_18    21 // quadratic prisms with face nodes on sides
+#define QUAD_4      14
+#define QUAD_4_X    15
+#define QUAD_8      16
+#define QUAD_8_X    17
+#define PYRA_5      18
+
+#define QUAD_9      19
+#define HEXA_27     20
+#define PYRA_14     22
+
+#define PYRA_13     24
+
+#define POLYGON     23
+
+#define N_ELEMENT_TYPES 25
+
+#define MAX_NODES_ELEMENT   27
+#define MAX_EDGES_ELEMENT   12
+#define MAX_FACES_ELEMENT    6
+#define MAX_FACE_SIDES      10
+
+Element masks are defined in terms of member functions which
+recognize line\-, surface\-, and volumetric elements:
+
+#define EDGE_ELEMENT_MASK      ((1 << BAR_2) | (1 << BAR_3))
+#define SURFACE_ELEMENT_MASK   ((1 << TRI_3) | (1 << TRI_6) | \\
+                (1 << QUAD_4) | (1 << QUAD_8))
+#define VOLUME_ELEMENT_MASK    ((1 << TETRA_4) | (1 << TETRA_10) | \\
+                (1 << HEXA_8) | (1 << HEXA_20) | \\
+                (1 << PENTA_6) | (1 << PENTA_15) | \\
+                (1 << PYRA_5) | (1 << HEXA_27) | \\
+                (1 << PENTA_18) | (1 << PYRA_14) | \\
+                (1 << PYRA_13))
+
+            
+#define LINEAR_ELEMENT_MASK    ((1 << NODE) | (1 << BAR_2) | \\
+                (1 << TETRA_4) | (1 << HEXA_8) | \\
+                (1 << TRI_3) | (1 << PENTA_6) | \\
+                (1 << QUAD_4) | (1 << PYRA_5))
+
+#define QUADRATIC_ELEMENT_MASK ((1 << BAR_3) | (1 << TETRA_10) | \\
+                (1 << HEXA_20) | (1 << TRI_6) | \\
+                (1 << PENTA_15) | (1 << QUAD_8) | \\
+                (1 << QUAD_9) | (1 << HEXA_27) |  \\
+                (1 << PENTA_18) | (1 << PYRA_14) | \\
+                (1 << PYRA_13))
+.fi
+.PP
+
+.PP
+TODO: make all the member functions static so this becomes a trait like numeric_limits<>() 
+.SH "Member Function Documentation"
+.PP 
+.SS "int8_t csmp::ANSYS_ElementSpecifications::ANSYS_Type (const std::string & FEtype)\fR [static]\fP"
+Returns the ANSYS integer flag corresponding to the ANSYS element name string\&. 
+.SS "\fBCSMP_FEM_TYPE\fP csmp::ANSYS_ElementSpecifications::CSMP_TypeFrom_ANSYS_Type (int8_t etype, bool isoparametric, uint32_t dim)\fR [static]\fP"
+Returns the CSMP finite element type enum identifier that corresponds to the ANSYS type as identified by an integer identifier\&. The user needs to specify whether an isoparametric or globally interpolated element shall be returned because ANSYS elements can be converted into both\&. 
+.br
+
+.PP
+Note however that ANSYS fits quadratic or cubic elements to the bounding curves\&. Thus, global interpolation will give incorrect results as it works only for straight-sided elements\&. 
+.SS "\fBCSMP_FEM_TYPE\fP csmp::ANSYS_ElementSpecifications::CSMP_TypeFrom_ANSYS_TypeName (const std::string & ANSYS_element_type, bool isoparametric, uint32_t dim)\fR [static]\fP"
+Returns the CSMP finite element type enum identifier that corresponds to the ANSYS type as identified by a character string\&. The user needs to specify whether an isoparametric or globally interpolated element shall be returned because ANSYS elements can be converted into both\&. 
+.br
+
+.PP
+Note however that ANSYS fits quadratic or cubic elements to the bounding curves\&. Thus, global interpolation will give incorrect results as it works only for straight-sided elements\&. 
+.SS "std::string csmp::ANSYS_ElementSpecifications::CSMP_TypeNameFrom_ANSYS_Type (int8_t etype, bool isoparametric, uint32_t dim)\fR [static]\fP"
+Returns the CSP finite element type name that corresponds to the ANSYS type as identified by an integer identifier\&. The user needs to specify whether an isoparametric or globally interpolated element shall be returned because ANSYS elements can be converted into both\&. 
+.br
+
+.PP
+Note however that ANSYS fits quadratic or cubic elements to the bounding curves\&. Thus, global interpolation will give incorrect results as it works only for straight-sided elements\&. 
+.SS "bool csmp::ANSYS_ElementSpecifications::CubicElement (int8_t etype)\fR [static]\fP"
+Returns whether the ANSYS element type specifier denotes a finite element type that uses cubic basis functions\&. ANSYS element types with such characteristics are: 
+.br
+
+.PP
+.PP
+.nf
+cubic
+==============
+HEXA_32     32
+.fi
+.PP
+ 
+.SS "size_t csmp::ANSYS_ElementSpecifications::InterpolationOrder (const std::string & etype)\fR [static]\fP"
+Method deduces order of element interpolation functions from the input finite-element type\&.
+.SH "Input Arguments"
+.PP
+The ANSYS type name of the finite element that shall be queried\&. 
+.br
+
+.PP
+\fBReturns\fP
+.RS 4
+size_t giving the order of interpolation (1=linear, 2=quadratic etc\&.)
+.RE
+.PP
+The interpolation order is returned as an unsigned integer value: 1 = linear, 2 = quadratic, 3 = cubic\&. 
+.SS "bool csmp::ANSYS_ElementSpecifications::LinearElement (int8_t etype)\fR [static]\fP"
+Returns whether the ANSYS element type specifier denotes a finite element type that uses linear basis functions\&. ANSYS element types with such characteristics are: 
+.br
+
+.PP
+.PP
+.nf
+linear
+==============
+BAR_2        2
+TETRA_4      4
+HEXA_8       6
+TRI_3        8
+TRI_3_X      9
+PENTA_6     12
+QUAD_4      14
+QUAD_4_X    15
+PYRA_5      18
+.fi
+.PP
+ 
+.SS "bool csmp::ANSYS_ElementSpecifications::LineElement (int8_t etype)\fR [static]\fP"
+Returns true if the ANSYS input element type is a line\&. Possible ANSYS types are: 
+.br
+
+.PP
+.PP
+.nf
+element type     identifier
+#define BAR_2       2
+#define BAR_3       3
+.fi
+.PP
+ 
+.SS "void csmp::ANSYS_ElementSpecifications::LineElements (std::list< std::string > & line_elements)\fR [static]\fP"
+Returns a list of line type elements that includes both the ANSYS types and the corresponding CSP types (see \fBFiniteElement\&.h\fP)\&. The output strings are: 
+.br
+
+.PP
+.PP
+.nf
+ANSYS element type
+BAR_2  BAR_3  BAR_4
+CSMP types
+LINEAR_BAR  
+ISOPARAMETRIC_LINEAR_BAR
+ISOPARAMETRIC_QUADRATIC_BAR
+ISOPARAMETRIC_CUBIC_BAR
+.fi
+.PP
+ 
+.SS "size_t csmp::ANSYS_ElementSpecifications::MinimumSpatialDimension (const std::string & ANSYS_finite_element_type)\fR [static]\fP"
+The element type used defines the spatial dimension of the model\&. It is indicative only of the minimum dimension since lines and surfaces can also exist in 3D space, which the name makes explicit\&. 
+.br
+.SH "Input Arguments"
+.PP
+Method expects a string argument that contains the ANSYS element type to deduce the spatial dimension from\&. 
+.br
+
+.PP
+\fBReturns\fP
+.RS 4
+size_t The minimum spatial dimension is returned as an unsigned integer ranging from 1(=1D) to 3(=3D)\&. 
+.RE
+.PP
+
+.SS "size_t csmp::ANSYS_ElementSpecifications::NeighborsPerElementOfType (int8_t etype)\fR [static]\fP"
+Returns the number of neighbors of the input ANSYS finite element type\&. 
+.SS "size_t csmp::ANSYS_ElementSpecifications::NodesPerElementOfType (int8_t etype)\fR [static]\fP"
+Returns the number of nodes of the ANSYS element type as identified by the ANSYS element number\&. 
+.br
+
+.PP
+ANSYS defines the following element identification strings and flags: 
+.br
+
+.PP
+.PP
+.nf
+element type     identifier
+#define BAR_2       2   #define TETRA_4     4
+#define BAR_3       3   #define TETRA_10    5
+
+#define HEXA_8      6   #define QUAD_4      14  #define QUAD_8_X    17
+#define HEXA_20     7   #define QUAD_4_X    15  #define QUAD_9      19
+#define HEXA_27     20  #define QUAD_8      16
+
+#define TRI_3       8
+#define TRI_3_X     9
+#define TRI_6       10
+#define TRI_6_X     11
+
+#define PENTA_6     12  #define PYRA_5      18
+#define PENTA_15    13  #define PYRA_14     22
+#define PENTA_18    21  #define PYRA_13     24
+
+#define POLYGON     23
+.fi
+.PP
+ 
+.SS "bool csmp::ANSYS_ElementSpecifications::QuadraticElement (int8_t etype)\fR [static]\fP"
+Returns whether the ANSYS element type specifier denotes a finite element type that uses quadratic basis functions\&. ANSYS element types with such characteristics are: 
+.br
+
+.PP
+.PP
+.nf
+quadratic
+==============
+TETRA_10     5
+BAR_3 3
+HEXA_20      7
+TRI_6       10
+TRI_6_X     11
+PENTA_15    13
+QUAD_8      16
+QUAD_8_X    17
+QUAD_9      19
+PENTA_18    21
+PYRA_14     22
+PYRA_13     24
+.fi
+.PP
+ 
+.SS "bool csmp::ANSYS_ElementSpecifications::SurfaceElement (int8_t etype)\fR [static]\fP"
+Returns true if the ANSYS input element type is a surface element\&. Possible surface element types are: 
+.br
+
+.PP
+.PP
+.nf
+element type     identifier
+#define QUAD_4      14  #define QUAD_8_X    17
+#define QUAD_4_X    15  #define QUAD_9      19
+#define QUAD_8      16
+
+#define TRI_3         8
+#define TRI_3_X     9
+#define TRI_6        10
+#define TRI_6_X  11
+.fi
+.PP
+ 
+.SS "void csmp::ANSYS_ElementSpecifications::SurfaceElements (std::list< std::string > & surf_elements)\fR [static]\fP"
+Returns a list of the ANSYS surface element type names and the corresponding CSP types\&. These are:
+
+.PP
+.PP
+.nf
+ANSYS element type     identifier
+TRI_3       8
+TRI_3_X     9
+TRI_6       10
+TRI_6_X     11
+QUAD_4      14                  
+QUAD_4_X    15                  
+QUAD_8      16
+QUAD_8_X    17
+QUAD_9      19
+CSP types
+LINEAR_TRIANGLE
+LINEAR_TRIANGLE3D
+ISOPARAMETRIC_LINEAR_TRIANGLE
+BARYCENTRIC_LINEAR_TRIANGLE
+QUADRATIC_TRIANGLE
+BARYCENTRIC_QUADRATIC_TRIANGLE
+ISOPARAMETRIC_QUADRATIC_TRIANGLE
+ISOPARAMETRIC_CUBIC_TRIANGLE
+ISOPARAMETRIC_LINEAR_QUADRILATERAL
+ISOPARAMETRIC_BARYCENTRIC_LINEAR_QUADRILATERAL
+ISOPARAMETRIC_QUADRATIC_QUADRILATERAL
+ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_QUADRILATERAL
+ISOPARAMETRIC_CUBIC_QUADRILATERAL
+.fi
+.PP
+ 
+.SS "bool csmp::ANSYS_ElementSpecifications::VolumeElement (int8_t etype)\fR [static]\fP"
+Returns true if the ANSYS input element type is a volumetric element\&. Possible ANSYS volumetric element types are: 
+.br
+
+.PP
+.PP
+.nf
+element type     identifier
+#define TETRA_4     4   #define TETRA_10    5
+
+#define HEXA_8      6   
+#define HEXA_20     7   
+#define HEXA_27     20  
+
+#define PENTA_6     12  #define PYRA_5      18
+#define PENTA_15    13  #define PYRA_14     22
+#define PENTA_18    21  #define PYRA_13     24
+.fi
+.PP
+ 
+.SS "void csmp::ANSYS_ElementSpecifications::VolumeElements (std::list< std::string > & vol_elements)\fR [static]\fP"
+Returns a list of the ANSYS element type names that denote volumetric elements and the corresponding CSP types\&. These are: 
+.br
+
+.PP
+.PP
+.nf
+ANSYS element type     identifier
+#define TETRA_4     4   #define TETRA_10    5
+#define HEXA_8      6   
+#define HEXA_20     7   
+#define HEXA_27     20  
+#define PENTA_6     12  #define PYRA_5      18
+#define PENTA_15    13  #define PYRA_14     22
+#define PENTA_18    21  #define PYRA_13     24
+CSMP element type
+LINEAR_TETRAHEDRON
+ISOPARAMETRIC_LINEAR_TETRAHEDRON
+ISOPARAMETRIC_LINEAR_HEXAHEDRON
+ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20
+ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27
+ISOPARAMETRIC_LINEAR_PYRAMID
+ISOPARAMETRIC_QUADRATIC_PYRAMID13
+ISOPARAMETRIC_QUADRATIC_PYRAMID14
+ISOPARAMETRIC_LINEAR_PRISM
+ISOPARAMETRIC_LINEAR_PRISM
+ISOPARAMETRIC_QUADRATIC_PRISM15
+ISOPARAMETRIC_QUADRATIC_PRISM18
+.fi
+.PP
+ 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

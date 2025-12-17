@@ -1,0 +1,363 @@
+\doxysection{csmp\+::Flagged\+Array\+Variable Class Reference}
+\hypertarget{classcsmp_1_1_flagged_array_variable}{}\label{classcsmp_1_1_flagged_array_variable}\index{csmp::FlaggedArrayVariable@{csmp::FlaggedArrayVariable}}
+
+
+Storage for an arbitrary number of variables and flags with a size that is not predefined but can be determined at runtime.  
+
+
+
+
+{\ttfamily \#include $<$Flagged\+Array\+Variable.\+h$>$}
+
+
+
+Collaboration diagram for csmp\+::Flagged\+Array\+Variable\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=210pt]{classcsmp_1_1_flagged_array_variable__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_ae6ad4446e88a452f70a23a2f024c225d}\label{classcsmp_1_1_flagged_array_variable_ae6ad4446e88a452f70a23a2f024c225d} 
+typedef std\+::vector$<$ double $>$ {\bfseries Flagged\+Array\+Container}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_a62b18957163af9789b5e9877fd97b709}\label{classcsmp_1_1_flagged_array_variable_a62b18957163af9789b5e9877fd97b709} 
+{\bfseries Flagged\+Array\+Variable} ()
+\begin{DoxyCompactList}\small\item\em Default constructor. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_aea3a8adc03b882cda1ecaf452498db3b}\label{classcsmp_1_1_flagged_array_variable_aea3a8adc03b882cda1ecaf452498db3b} 
+{\bfseries Flagged\+Array\+Variable} (const \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_a15894c7b3d905513d20a0340bd8f6fff}\label{classcsmp_1_1_flagged_array_variable_a15894c7b3d905513d20a0340bd8f6fff} 
+{\footnotesize template$<$uint32\+\_\+t dim$>$ }\\{\bfseries Flagged\+Array\+Variable} (const char \texorpdfstring{$\ast$}{*}array\+Property\+Name, const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&pd, double default\+Value=std\+::numeric\+\_\+limits$<$ double $>$\+::quiet\+\_\+\+NaN(), \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} flag=\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gga98d2031b830da37499a1b512d9dca4b9a6c4de567ce41f96e0e61175ca75945b3}{ANY}})
+\begin{DoxyCompactList}\small\item\em Automatically sets size to corresponding index, flag to ANY. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_a14f5ffc11a0253f8b4f6333889327ef6}\label{classcsmp_1_1_flagged_array_variable_a14f5ffc11a0253f8b4f6333889327ef6} 
+{\bfseries Flagged\+Array\+Variable} (uint32\+\_\+t array\+Size, double default\+Value=0., \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} flag=\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gga98d2031b830da37499a1b512d9dca4b9a6c4de567ce41f96e0e61175ca75945b3}{ANY}})
+\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_a9f58a1c098db8508d284b6fee2e67b43}\label{classcsmp_1_1_flagged_array_variable_a9f58a1c098db8508d284b6fee2e67b43} 
+{\bfseries Flagged\+Array\+Variable} (const \mbox{\hyperlink{structcsmp_1_1_index}{Index}} \&array\+Key, double default\+Value=0., \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} flag=\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gga98d2031b830da37499a1b512d9dca4b9a6c4de567ce41f96e0e61175ca75945b3}{ANY}})
+\begin{DoxyCompactList}\small\item\em As \doxylink{classcsmp_1_1_property_database}{Property\+Database} constructor, but using index right away. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_a79f1dfcfd058e327ecfe41283ad6a82a}\label{classcsmp_1_1_flagged_array_variable_a79f1dfcfd058e327ecfe41283ad6a82a} 
+\mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \&)
+\begin{DoxyCompactList}\small\item\em assignments \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_a162c40cc3bbc62a44738a6e01befcb45}\label{classcsmp_1_1_flagged_array_variable_a162c40cc3bbc62a44738a6e01befcb45} 
+void {\bfseries Copy\+Values\+Only} (\mbox{\hyperlink{classcsmp_1_1_array_variable}{Array\+Variable}} \&av)
+\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_ae958073b65d4c4f2c9e515e93ba14308}\label{classcsmp_1_1_flagged_array_variable_ae958073b65d4c4f2c9e515e93ba14308} 
+\mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \& {\bfseries operator=} (double)
+\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_a5a99fb87e711b7f9620d27963e58a4a6}\label{classcsmp_1_1_flagged_array_variable_a5a99fb87e711b7f9620d27963e58a4a6} 
+\mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&)
+\item 
+\mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable_a4641e9be026b303245d00b115273cb8d}{operator+}} (double) const
+\begin{DoxyCompactList}\small\item\em standard operations \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_a7c9946db4087a6af5d947b2e4e4dc7bf}\label{classcsmp_1_1_flagged_array_variable_a7c9946db4087a6af5d947b2e4e4dc7bf} 
+\mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} {\bfseries operator-\/} (double) const
+\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_a641eac1072431767dcfb145bba34f1d9}\label{classcsmp_1_1_flagged_array_variable_a641eac1072431767dcfb145bba34f1d9} 
+\mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} {\bfseries operator\texorpdfstring{$\ast$}{*}} (double) const
+\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_a4d7d6f88d80ccf6474bba119d502c708}\label{classcsmp_1_1_flagged_array_variable_a4d7d6f88d80ccf6474bba119d502c708} 
+\mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} {\bfseries operator/} (double) const
+\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_a81d102275cc40dfc9c6c98f5c5f8e34f}\label{classcsmp_1_1_flagged_array_variable_a81d102275cc40dfc9c6c98f5c5f8e34f} 
+\mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} {\bfseries operator\texorpdfstring{$^\wedge$}{\string^}} (double) const
+\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_a047b71f042099cd07dffbee03beca176}\label{classcsmp_1_1_flagged_array_variable_a047b71f042099cd07dffbee03beca176} 
+\mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \& {\bfseries operator+=} (double)
+\begin{DoxyCompactList}\small\item\em Standard Operations with current object. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_a63fe88c78bf4d1294ab2746472335007}\label{classcsmp_1_1_flagged_array_variable_a63fe88c78bf4d1294ab2746472335007} 
+\mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \& {\bfseries operator-\/=} (double)
+\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_aaebb4fe80a102c4387f2c5d60e80a71b}\label{classcsmp_1_1_flagged_array_variable_aaebb4fe80a102c4387f2c5d60e80a71b} 
+\mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \& {\bfseries operator\texorpdfstring{$\ast$}{*}=} (double)
+\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_ae276184b1ac7578216b10858ff155ecc}\label{classcsmp_1_1_flagged_array_variable_ae276184b1ac7578216b10858ff155ecc} 
+\mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \& {\bfseries operator/=} (double)
+\item 
+\mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \& \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable_a340114754e8b45913120159e5b816d5f}{operator+=}} (const \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&)
+\begin{DoxyCompactList}\small\item\em Standard Operations with current object. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_a54bfed2f90ee6d8adca311ec59c09f1d}\label{classcsmp_1_1_flagged_array_variable_a54bfed2f90ee6d8adca311ec59c09f1d} 
+\mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \& {\bfseries operator-\/=} (const \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_afb6cba8ca5558d059a41162681a50d3b}\label{classcsmp_1_1_flagged_array_variable_afb6cba8ca5558d059a41162681a50d3b} 
+\mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \& {\bfseries operator\texorpdfstring{$\ast$}{*}=} (const \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_a261c69ad74c51c2033d37fd5b2d51c9f}\label{classcsmp_1_1_flagged_array_variable_a261c69ad74c51c2033d37fd5b2d51c9f} 
+\mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \& {\bfseries operator/=} (const \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&)
+\item 
+\mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \& \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable_ac218afc751177c750c7982126278f3b8}{operator+=}} (const \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \&)
+\begin{DoxyCompactList}\small\item\em value by value operations \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_afdfd1dd415acf0405c21a74a67b87341}\label{classcsmp_1_1_flagged_array_variable_afdfd1dd415acf0405c21a74a67b87341} 
+\mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \& {\bfseries operator-\/=} (const \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_af6002d42c2b0e841b2b835da1fae074a}\label{classcsmp_1_1_flagged_array_variable_af6002d42c2b0e841b2b835da1fae074a} 
+\mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \& {\bfseries operator\texorpdfstring{$\ast$}{*}=} (const \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_af51ddbf5ec91dba563a69380e783640c}\label{classcsmp_1_1_flagged_array_variable_af51ddbf5ec91dba563a69380e783640c} 
+\mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \& {\bfseries operator/=} (const \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_a7aea6122e0964b1cffab0fd8d96f6942}\label{classcsmp_1_1_flagged_array_variable_a7aea6122e0964b1cffab0fd8d96f6942} 
+\mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} {\bfseries operator-\/} (const \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \&) const
+\begin{DoxyCompactList}\small\item\em element-\/by-\/element operations \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_a0c89ae84540d7a349d4c8f078abbbf35}\label{classcsmp_1_1_flagged_array_variable_a0c89ae84540d7a349d4c8f078abbbf35} 
+\mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} {\bfseries operator\texorpdfstring{$\ast$}{*}} (const \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \&) const
+\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_a75ec9accef6b50f65bc7d9b8684c5a71}\label{classcsmp_1_1_flagged_array_variable_a75ec9accef6b50f65bc7d9b8684c5a71} 
+\mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} {\bfseries operator+} (const \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \&) const
+\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_a04b554fb612f3f915076ad0258b6039c}\label{classcsmp_1_1_flagged_array_variable_a04b554fb612f3f915076ad0258b6039c} 
+\mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} {\bfseries operator/} (const \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \&) const
+\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_ab1c62f77bec9efd97ed939874cd9fff5}\label{classcsmp_1_1_flagged_array_variable_ab1c62f77bec9efd97ed939874cd9fff5} 
+bool {\bfseries operator==} (const \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \&) const
+\begin{DoxyCompactList}\small\item\em arithmetical comparison of array values \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_ac49766cdf4cddeabf1ef7f85d49b77dd}\label{classcsmp_1_1_flagged_array_variable_ac49766cdf4cddeabf1ef7f85d49b77dd} 
+bool {\bfseries operator!=} (const \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \&) const
+\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_aeb4d0c1ae3e95e7ed0814522ebe77250}\label{classcsmp_1_1_flagged_array_variable_aeb4d0c1ae3e95e7ed0814522ebe77250} 
+bool {\bfseries operator$<$} (const \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \&) const
+\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_ade0dc102137689d4b4b68b2137cbdfd2}\label{classcsmp_1_1_flagged_array_variable_ade0dc102137689d4b4b68b2137cbdfd2} 
+bool {\bfseries operator$<$=} (const \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \&) const
+\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_a057bac67b1096fddff5c8ad0c3b807a3}\label{classcsmp_1_1_flagged_array_variable_a057bac67b1096fddff5c8ad0c3b807a3} 
+bool {\bfseries operator$>$} (const \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \&) const
+\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_aab2dcf3e8236fbc008119617327a9391}\label{classcsmp_1_1_flagged_array_variable_aab2dcf3e8236fbc008119617327a9391} 
+bool {\bfseries operator$>$=} (const \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \&) const
+\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_ab0776a3a15398aed284087d0e4b4c317}\label{classcsmp_1_1_flagged_array_variable_ab0776a3a15398aed284087d0e4b4c317} 
+double {\bfseries operator\mbox{[}$\,$\mbox{]}} (size\+\_\+t) const
+\begin{DoxyCompactList}\small\item\em accessors to the data \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_aefae918a9993d4bbf212278279337bba}\label{classcsmp_1_1_flagged_array_variable_aefae918a9993d4bbf212278279337bba} 
+double \& {\bfseries operator()} (size\+\_\+t)
+\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_ac88b4b142339590b1f5558026caf9a4d}\label{classcsmp_1_1_flagged_array_variable_ac88b4b142339590b1f5558026caf9a4d} 
+void {\bfseries Component} (uint32\+\_\+t, double)
+\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_a583cdbd798e1add7f2fc43bdd77cab30}\label{classcsmp_1_1_flagged_array_variable_a583cdbd798e1add7f2fc43bdd77cab30} 
+double {\bfseries Component} (uint32\+\_\+t) const
+\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_a999bd9489d55a72c31032e09182390c3}\label{classcsmp_1_1_flagged_array_variable_a999bd9489d55a72c31032e09182390c3} 
+uint32\+\_\+t {\bfseries Size} () const
+\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_a3122c9acdd833eb1cb9332ff8362984a}\label{classcsmp_1_1_flagged_array_variable_a3122c9acdd833eb1cb9332ff8362984a} 
+void {\bfseries Resize} (uint32\+\_\+t new\+Size, double new\+Value=std\+::numeric\+\_\+limits$<$ double $>$\+::quiet\+\_\+\+NaN())
+\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_a096522c60387f965b46daf279a985400}\label{classcsmp_1_1_flagged_array_variable_a096522c60387f965b46daf279a985400} 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} {\bfseries Flag} (const size\+\_\+t \&) const
+\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_a4586df6480114cbc06a8c198739e0751}\label{classcsmp_1_1_flagged_array_variable_a4586df6480114cbc06a8c198739e0751} 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} \& {\bfseries Flag} (const size\+\_\+t \&)
+\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_a35e650e56cc6e9b4383c0c9d45fdba4f}\label{classcsmp_1_1_flagged_array_variable_a35e650e56cc6e9b4383c0c9d45fdba4f} 
+void {\bfseries Flag} (const size\+\_\+t \&, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}})
+\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_a084e5253d45cff96b1fd546e7ecf5015}\label{classcsmp_1_1_flagged_array_variable_a084e5253d45cff96b1fd546e7ecf5015} 
+bool {\bfseries Is\+Within\+Range} (double min, double max) const
+\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_aca90bc5082248bf78d7abc8370a0054f}\label{classcsmp_1_1_flagged_array_variable_aca90bc5082248bf78d7abc8370a0054f} 
+bool {\bfseries Has\+\_\+\+Na\+N\+\_\+\+Values} () const
+\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_a49b26572c9ab97b65dde7a7444e1a2bb}\label{classcsmp_1_1_flagged_array_variable_a49b26572c9ab97b65dde7a7444e1a2bb} 
+void {\bfseries Min\+Max} (double \&min, double \&max) const
+\begin{DoxyCompactList}\small\item\em returns the minimum and maximum of the values stored in the array variable \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_aa25ce4c4398a06378c1b1b18caed2da1}\label{classcsmp_1_1_flagged_array_variable_aa25ce4c4398a06378c1b1b18caed2da1} 
+void {\bfseries Sort} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable_af1ff13929df0d3156c7000d069be58bb}{Out}} (long digits=3) const
+\begin{DoxyCompactList}\small\item\em printing array values to screen \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_aa7bed49982d089e6fdfe009b061c686a}\label{classcsmp_1_1_flagged_array_variable_aa7bed49982d089e6fdfe009b061c686a} 
+bool {\bfseries Out} (const char \texorpdfstring{$\ast$}{*}filename, size\+\_\+t precision=9) const
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable_adde9be588a61b39335055d91592849ec}{Out}} (std\+::fstream \&fp) const
+\begin{DoxyCompactList}\small\item\em SKM\+: DO NOT USE C-\/\+STYLE I/O -\/ for internal csmp binary IO. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable_a2c61e87e8127d1afe880297b1e3507c1}{In}} (std\+::fstream \&fp)
+\begin{DoxyCompactList}\small\item\em Reads the array from given file pointer (binary format) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_a018d241a6674352eb1f5a94da30eb35b}\label{classcsmp_1_1_flagged_array_variable_a018d241a6674352eb1f5a94da30eb35b} 
+Flagged\+Array\+Container\+::const\+\_\+iterator {\bfseries Begin} () const
+\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_aa1d5d6f72f86638978adce038c6244cb}\label{classcsmp_1_1_flagged_array_variable_aa1d5d6f72f86638978adce038c6244cb} 
+Flagged\+Array\+Container\+::const\+\_\+iterator {\bfseries End} () const
+\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_af0b612f2459b66c1c585af59d77e55d2}\label{classcsmp_1_1_flagged_array_variable_af0b612f2459b66c1c585af59d77e55d2} 
+double {\bfseries Next\+Largest\+Entry} (double) const
+\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_ab75c41734d4c12a769c351148f01078b}\label{classcsmp_1_1_flagged_array_variable_ab75c41734d4c12a769c351148f01078b} 
+bool {\bfseries Has\+Larger\+Entry} (double) const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_flagged_array_variable_a12c135b24dc8224ceda9be0b6dab97f9}\label{classcsmp_1_1_flagged_array_variable_a12c135b24dc8224ceda9be0b6dab97f9} 
+static constexpr \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}} {\bfseries Variable\+Type} = FLAGGEDARRAY
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Storage for an arbitrary number of variables and flags with a size that is not predefined but can be determined at runtime. 
+
+\begin{DoxyAuthor}{Author}
+Roman Manasipov, Philipp Lang 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2013
+\end{DoxyDate}
+In order to support arbitrary sized variables to be discretized in CSMP. Based on implementation of \doxylink{classcsmp_1_1_array_variable}{Array\+Variable} by Philipp Lang but has additional container of flags for each data component\hypertarget{classcsmp_1_1_upwind_control_visitor_usage}{}\doxysubsection{\texorpdfstring{Usage}{Usage}}\label{classcsmp_1_1_upwind_control_visitor_usage}
+To instantiate an \doxylink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable} of arbitrary size\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{classcsmp_1_1_flagged_array_variable_a62b18957163af9789b5e9877fd97b709}{FlaggedArrayVariable}}\ fav;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0\ entries,\ flag\ set\ to\ Any}}
+\DoxyCodeLine{\mbox{\hyperlink{classcsmp_1_1_flagged_array_variable_a62b18957163af9789b5e9877fd97b709}{FlaggedArrayVariable}}\ fav(4,\ 10.,\ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gga98d2031b830da37499a1b512d9dca4b9a2d373b048f997a96c661862c40f2fcae}{DIRICH}}\ );\ \textcolor{comment}{//\ 4\ entries\ with\ value\ 10.,\ flag\ set\ to\ Dirichlet}}
+
+\end{DoxyCode}
+
+
+When using \doxylink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable} in Store/\+Read operations, we need to first create an instance of appropriate size, i.\+e. the same size as provided in the \doxylink{classcsmp_1_1_property_database}{Property\+Database}. A constructor which does exactly this\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{classcsmp_1_1_flagged_array_variable_a62b18957163af9789b5e9877fd97b709}{FlaggedArrayVariable}}\ fav(\ \textcolor{stringliteral}{"{}element\ array"{}},\ model.Database()\ );\ \textcolor{comment}{//\ size\ as\ specified\ in\ PropertyDatabase,\ values\ =\ 0.,\ flag\ =\ any}}
+
+\end{DoxyCode}
+
+
+Again, the alternative would be to manually initiate the correct size. With an \doxylink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable} of appropriate size, you may use functions like
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{model.InputPropertyValue(\ \textcolor{stringliteral}{"{}element\ flagged\ array"{}},\ fav\ );}
+
+\end{DoxyCode}
+
+
+Or something low level in the likes of
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{Index\ efaKey(\ model.Database().StorageKey(\textcolor{stringliteral}{"{}element\ flagged\ array"{}})\ );}
+\DoxyCodeLine{\textcolor{keywordflow}{for}(\ vector<Element<3>*>::const\_iterator\ it(\ model.Region(\textcolor{stringliteral}{"{}Model"{}}).CellsBegin()\ );\ it\ !=\ model.Region(\textcolor{stringliteral}{"{}Model"{}}).CellsEnd();\ ++it\ )}
+\DoxyCodeLine{\ \ (*it)-\/>Read(\ efaKey,\ fav\ );}
+
+\end{DoxyCode}
+
+
+\doxylink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable} operations are possible as defined through the interface 
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_flagged_array_variable_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_flagged_array_variable_a2c61e87e8127d1afe880297b1e3507c1}\index{csmp::FlaggedArrayVariable@{csmp::FlaggedArrayVariable}!In@{In}}
+\index{In@{In}!csmp::FlaggedArrayVariable@{csmp::FlaggedArrayVariable}}
+\doxysubsubsection{\texorpdfstring{In()}{In()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_flagged_array_variable_a2c61e87e8127d1afe880297b1e3507c1} 
+bool csmp\+::\+Flagged\+Array\+Variable\+::\+In (\begin{DoxyParamCaption}\item[{std\+::fstream \&}]{fp}{}\end{DoxyParamCaption})}
+
+
+
+Reads the array from given file pointer (binary format) 
+
+See bool \doxylink{classcsmp_1_1_flagged_array_variable_adde9be588a61b39335055d91592849ec}{Flagged\+Array\+Variable\+::\+Out( std\+::fstream\& fp ) const}
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{in,out}}  & {\em fp} & If non-\/null, the fp.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if it succeeds, false if it fails. 
+\end{DoxyReturn}
+\Hypertarget{classcsmp_1_1_flagged_array_variable_a4641e9be026b303245d00b115273cb8d}\index{csmp::FlaggedArrayVariable@{csmp::FlaggedArrayVariable}!operator+@{operator+}}
+\index{operator+@{operator+}!csmp::FlaggedArrayVariable@{csmp::FlaggedArrayVariable}}
+\doxysubsubsection{\texorpdfstring{operator+()}{operator+()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_flagged_array_variable_a4641e9be026b303245d00b115273cb8d} 
+\mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} csmp\+::\+Flagged\+Array\+Variable\+::operator+ (\begin{DoxyParamCaption}\item[{double}]{val}{}\end{DoxyParamCaption}) const}
+
+
+
+standard operations 
+
+Standard Operations with temporary object. \Hypertarget{classcsmp_1_1_flagged_array_variable_ac218afc751177c750c7982126278f3b8}\index{csmp::FlaggedArrayVariable@{csmp::FlaggedArrayVariable}!operator+=@{operator+=}}
+\index{operator+=@{operator+=}!csmp::FlaggedArrayVariable@{csmp::FlaggedArrayVariable}}
+\doxysubsubsection{\texorpdfstring{operator+=()}{operator+=()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_flagged_array_variable_ac218afc751177c750c7982126278f3b8} 
+\mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \& csmp\+::\+Flagged\+Array\+Variable\+::operator+= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \&}]{av}{}\end{DoxyParamCaption})}
+
+
+
+value by value operations 
+
+Operations with Flagged\+Array\+Variables. \Hypertarget{classcsmp_1_1_flagged_array_variable_a340114754e8b45913120159e5b816d5f}\index{csmp::FlaggedArrayVariable@{csmp::FlaggedArrayVariable}!operator+=@{operator+=}}
+\index{operator+=@{operator+=}!csmp::FlaggedArrayVariable@{csmp::FlaggedArrayVariable}}
+\doxysubsubsection{\texorpdfstring{operator+=()}{operator+=()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_flagged_array_variable_a340114754e8b45913120159e5b816d5f} 
+\mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \& csmp\+::\+Flagged\+Array\+Variable\+::operator+= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&}]{sc}{}\end{DoxyParamCaption})}
+
+
+
+Standard Operations with current object. 
+
+Operations with Scalar\+Variables \Hypertarget{classcsmp_1_1_flagged_array_variable_af1ff13929df0d3156c7000d069be58bb}\index{csmp::FlaggedArrayVariable@{csmp::FlaggedArrayVariable}!Out@{Out}}
+\index{Out@{Out}!csmp::FlaggedArrayVariable@{csmp::FlaggedArrayVariable}}
+\doxysubsubsection{\texorpdfstring{Out()}{Out()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_flagged_array_variable_af1ff13929df0d3156c7000d069be58bb} 
+void csmp\+::\+Flagged\+Array\+Variable\+::\+Out (\begin{DoxyParamCaption}\item[{long}]{digits}{ = {\ttfamily 3}}\end{DoxyParamCaption}) const}
+
+
+
+printing array values to screen 
+
+outputs values to screen up to 10 values per row \Hypertarget{classcsmp_1_1_flagged_array_variable_adde9be588a61b39335055d91592849ec}\index{csmp::FlaggedArrayVariable@{csmp::FlaggedArrayVariable}!Out@{Out}}
+\index{Out@{Out}!csmp::FlaggedArrayVariable@{csmp::FlaggedArrayVariable}}
+\doxysubsubsection{\texorpdfstring{Out()}{Out()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_flagged_array_variable_adde9be588a61b39335055d91592849ec} 
+bool csmp\+::\+Flagged\+Array\+Variable\+::\+Out (\begin{DoxyParamCaption}\item[{std\+::fstream \&}]{fp}{}\end{DoxyParamCaption}) const}
+
+
+
+SKM\+: DO NOT USE C-\/\+STYLE I/O -\/ for internal csmp binary IO. 
+
+Outs the array to given file pointer (binary format)
+
+Order\+:
+\begin{DoxyEnumerate}
+\item Flag
+\item Size
+\item Data
+\end{DoxyEnumerate}
+
+Roman, 2013\+: Changed order due to multiple flags\+:
+\begin{DoxyEnumerate}
+\item Size
+\item Flags
+\item Data
+\end{DoxyEnumerate}
+
+\begin{DoxyAuthor}{Author}
+P. Lang 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+9/28/2012
+\end{DoxyDate}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{in,out}}  & {\em fp} & If non-\/null, the fp.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if it succeeds, false if it fails. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/model/Flagged\+Array\+Variable.\+h\item 
+source/modules/model/Flagged\+Array\+Variable.\+cpp\end{DoxyCompactItemize}

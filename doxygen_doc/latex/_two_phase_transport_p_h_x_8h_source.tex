@@ -1,0 +1,105 @@
+\doxysection{Two\+Phase\+Transport\+PHX.\+h}
+\hypertarget{_two_phase_transport_p_h_x_8h_source}{}\label{_two_phase_transport_p_h_x_8h_source}\index{source/includes/integration/cvfe\_hydrothermal/TwoPhaseTransportPHX.h@{source/includes/integration/cvfe\_hydrothermal/TwoPhaseTransportPHX.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{TWO\_PHASE\_TRANSPORT\_PHX\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{TWO\_PHASE\_TRANSPORT\_PHX\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{comment}{/*\ \ \ Changelog}}
+\DoxyCodeLine{00005\ \textcolor{comment}{\ \ \ \ \ February\ 2015,\ Philipp\ Weis:}}
+\DoxyCodeLine{00006\ \textcolor{comment}{\ \ \ \ \ -\/\ initial\ port\ to\ CSMP++.}}
+\DoxyCodeLine{00007\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_scalar_variable_8h}{"{}ScalarVariable.h"{}}}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_model}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}};}
+\DoxyCodeLine{00014\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor}{UpwindControlVisitor}};}
+\DoxyCodeLine{00015\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{ExplicitFiniteVolumeTransportPHX}};}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{comment}{///\ class\ to\ handle\ two-\/phase\ flow\ caclulations\ of\ FV\ part\ within\ the\ CVFEM\ scheme\ (Weis\ et\ al.,\ Geofluids,\ 2014).}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00020\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_transport_p_h_x}{TwoPhaseTransportPHX}}\ \{}
+\DoxyCodeLine{00021\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_two_phase_transport_p_h_x_ae88631fdb919d0ea34e869f8fd447d0f}{TwoPhaseTransportPHX}}(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ model,}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor}{UpwindControlVisitor}}<dim>\&\ upwind\_visitor,\ \textcolor{comment}{//\ visitor\ defining\ upwind\ nodes}}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{ExplicitFiniteVolumeTransportPHX}}<dim>\&\ fv\_vapor,\ \textcolor{comment}{//\ class\ for\ transport\ with\ vapor\ phase}}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{ExplicitFiniteVolumeTransportPHX}}<dim>\&\ fv\_liquid);\ \textcolor{comment}{//\ class\ for\ transport\ with\ liquid\ phase}}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~\mbox{\hyperlink{classcsmp_1_1_two_phase_transport_p_h_x_ac78148d8e5347425186175e75187fb52}{TwoPhaseTransportPHX}}();}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_two_phase_transport_p_h_x_a240068112a3cc1887405b2c16f858eb7}{AdvectMassConserved}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ time\_increment);\ \textcolor{comment}{//\ main\ function\ to\ coordinate\ two-\/phase\ flow}}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_transport_p_h_x_a60f2e022141cb618bb46ecc399656308}{SetLargestTimeStep}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ max\_time\_step\ );\ \textcolor{comment}{//\ modify\ maximum\ size\ of\ time\ step}}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_transport_p_h_x_a3cf131fdc705fc72095be6f741ad037d}{WithGravityComponentLiquidAndVapor}}();\ \textcolor{comment}{//\ active\ gravity\ component}}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_transport_p_h_x_ac51a53468b6b2e8ad0491ea389afe3c1}{UpdateProjection}}(\ );\ \textcolor{comment}{//\ update\ projection\ of\ velocity\ onto\ facet\ normal}}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_transport_p_h_x_a6275a81efc763fbcf06db0578331baef}{AddAdvectionVariable}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ new\_lhs\_liquid,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ new\_rhs\_liquid,}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ new\_lhs\_vapor,\ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ new\_rhs\_vapor\ );\ \textcolor{comment}{//\ adding\ further\ variables\ for\ FV\ calculations}}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ model\_ref;\ \textcolor{comment}{//\ TODO:\ don't\ store}}
+\DoxyCodeLine{00040\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor}{UpwindControlVisitor}}<dim>\&\ UpwindVisitor;}
+\DoxyCodeLine{00041\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{ExplicitFiniteVolumeTransportPHX}}<dim>\&\ fv\_transport\_vapor;}
+\DoxyCodeLine{00042\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{ExplicitFiniteVolumeTransportPHX}}<dim>\&\ fv\_transport\_liquid;}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keywordtype}{void}\ \ DetermineFacetFluxes(\ );\ \textcolor{comment}{//\ calculating\ facet\ fluxes\ for\ both\ phases}}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordtype}{void}\ \ CheckDryFiniteVolumesAndAdjustTimestep(\ );\ \textcolor{comment}{//\ checking\ mass-\/based\ time\ step\ criterion\ and\ adjusting\ time\ step\ if\ necessary}}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{void}\ \ PerformFacetFluxes(\ );\ \textcolor{comment}{//\ finalize\ FV\ calculations}}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordtype}{void}\ \ TrackFluxes(\ );\ \textcolor{comment}{//\ special\ function\ to\ track\ fluxes\ of\ magmatic\ fluids}}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ cfl\_dt,\ time\_step\_factor;}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ upper\_shell\_T,\ lower\_shell\_T;}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{comment}{//\ tracking\ fluxes}}
+\DoxyCodeLine{00053\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ tffi\_key,\ tffo\_key,}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mlfi\_key,\ mlfo\_key,}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mvfi\_key,\ mvfo\_key,}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ slfi\_key,\ slfo\_key,}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ svfi\_key,\ svfo\_key,}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ T\_key;}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ tffi,\ tffo,\ mlfi,\ mlfo,\ mvfi,\ mvfo;}
+\DoxyCodeLine{00061\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ slfi,\ slfo,\ svfi,\ svfo,\ temperature;}
+\DoxyCodeLine{00062\ \};}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00065\ \textcolor{comment}{\ \ \ \ \ @class\ TwoPhaseTransportPHX\ TwoPhaseTransportPHX.h}}
+\DoxyCodeLine{00066\ \textcolor{comment}{}}
+\DoxyCodeLine{00067\ \textcolor{comment}{\ \ \ \ \ @author\ Philipp\ Weis,\ ETH\ Zuerich}}
+\DoxyCodeLine{00068\ \textcolor{comment}{\ \ \ \ \ @section\ contact\ Contact}}
+\DoxyCodeLine{00069\ \textcolor{comment}{\ \ \ \ \ philipp.weis@erdw.ethz.ch}}
+\DoxyCodeLine{00070\ \textcolor{comment}{}}
+\DoxyCodeLine{00071\ \textcolor{comment}{\ \ \ \ \ @changes\ changes\ Latest\ Changes\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00072\ \textcolor{comment}{\ \ }}
+\DoxyCodeLine{00073\ \textcolor{comment}{\ \ \ \ \ @section\ motivation\ Motivation}}
+\DoxyCodeLine{00074\ \textcolor{comment}{\ \ \ \ \ \ Class\ for\ two-\/phase\ flow\ calculations\ within\ CVFEM\ scheme.}}
+\DoxyCodeLine{00075\ \textcolor{comment}{}}
+\DoxyCodeLine{00076\ \textcolor{comment}{\ \ \ \ \ @section\ usage\ Usage}}
+\DoxyCodeLine{00077\ \textcolor{comment}{\ \ \ \ \ \ To\ be\ used\ within\ the\ CVFEM\ scheme\ (Weis\ et\ al.,\ Geofluids,\ 2014).}}
+\DoxyCodeLine{00078\ \textcolor{comment}{}}
+\DoxyCodeLine{00079\ \textcolor{comment}{\ \ \ \ \ @code}}
+\DoxyCodeLine{00080\ \textcolor{comment}{\ \ \ \ \ Controls\ two-\/phase\ flow\ calculations\ by\ coordating\ flow\ of\ vapor\ and\ liquid\ phase}}
+\DoxyCodeLine{00081\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00082\ \textcolor{comment}{\ \ \ \ \ @endcode}}
+\DoxyCodeLine{00083\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00084\ \textcolor{comment}{\ \ \ \ \ @section\ dependencies\ Dependencies}}
+\DoxyCodeLine{00085\ \textcolor{comment}{\ \ \ \ \ Needs\ ExplicitFiniteVolumeTransportPHX\ and\ UpwindControlVisitor}}
+\DoxyCodeLine{00086\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00087\ \textcolor{comment}{\ \ \ \ \ @section\ issues\ Known\ issues}}
+\DoxyCodeLine{00088\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00089\ \textcolor{comment}{\ \ \ \ \ @section\ testing\ Testing}}
+\DoxyCodeLine{00090\ \textcolor{comment}{\ \ \ \ \ testing\ was\ done\ in\ the\ period\ before\ publication\ in\ 2014.}}
+\DoxyCodeLine{00091\ \textcolor{comment}{}}
+\DoxyCodeLine{00092\ \textcolor{comment}{\ \ */}}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \}\ \textcolor{comment}{//\ end\ namespace\ csmp}}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

@@ -1,0 +1,12 @@
+<map id="csmp::INDEX&lt; ty, pl &gt;" name="csmp::INDEX&lt; ty, pl &gt;">
+<area shape="rect" id="Node000001" title="Templatized version allowing for compile&#45;time type selection." alt="" coords="195,1311,338,1479"/>
+<area shape="rect" id="Node000002" href="$structcsmp_1_1_index.html" title="Accessor for discretized physical variables." alt="" coords="201,768,333,1261"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="269,1276,269,1311,264,1311,264,1276"/>
+<area shape="rect" id="Node000003" href="$structcsmp_1_1_local_variables.html" title="Data class to store physical variable count at given placement." alt="" coords="5,5,141,316"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="49,316,41,404,39,500,47,600,67,696,90,759,121,819,157,874,192,923,188,926,152,877,117,821,85,761,61,698,41,600,34,500,36,403,44,315"/>
+<area shape="rect" id="Node000004" href="$structcsmp_1_1_integration_point_variables.html" title=" " alt="" coords="172,488,367,636"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="143,299,229,472,224,474,139,301"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="271,636,270,721,270,751,265,751,265,721,266,636"/>
+<area shape="rect" id="Node000005" href="$classcsmp_1_1_index_tracker.html" title="Keeps track of all Index objects once they have been registered." alt="" coords="393,427,519,697"/>
+<area shape="poly" id="edge5_Node000002_Node000005" title=" " alt="" coords="443,697,429,745,390,831,344,909,340,906,386,828,424,743,438,696"/>
+</map>

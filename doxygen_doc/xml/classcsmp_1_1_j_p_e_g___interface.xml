@@ -1,0 +1,156 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_j_p_e_g___interface" kind="class" language="C++" prot="public">
+    <compoundname>csmp::JPEG_Interface</compoundname>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_j_p_e_g___interface_1a28451ab754b69c32bd134a6c3e25e3ee" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_finite_difference_grid" kindref="compound">FiniteDifferenceGrid</ref></type>
+        <definition>FiniteDifferenceGrid csmp::JPEG_Interface::regular_grid</definition>
+        <argsstring></argsstring>
+        <name>regular_grid</name>
+        <qualifiedname>csmp::JPEG_Interface::regular_grid</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/JPEG/JPEG_Interface.h" line="25" column="27" bodyfile="source/includes/interfaces/JPEG/JPEG_Interface.h" bodystart="25" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_j_p_e_g___interface_1a175f75ec0a6c1cdece72f1826be02248" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::JPEG_Interface::JPEG_Interface</definition>
+        <argsstring>()</argsstring>
+        <name>JPEG_Interface</name>
+        <qualifiedname>csmp::JPEG_Interface::JPEG_Interface</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/JPEG/JPEG_Interface.h" line="12" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_j_p_e_g___interface_1ab59b4323b74feac2dc3477039c546651" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::JPEG_Interface::~JPEG_Interface</definition>
+        <argsstring>()</argsstring>
+        <name>~JPEG_Interface</name>
+        <qualifiedname>csmp::JPEG_Interface::~JPEG_Interface</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/JPEG/JPEG_Interface.h" line="13" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_j_p_e_g___interface_1a6e3cbf3026ce3c9e5ec15893100b2dab" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::JPEG_Interface::OutputDataToJPG</definition>
+        <argsstring>(Model&lt; 2U &gt; &amp;, const char *file_name, const char *var_name, long timestep, bool gray=false, bool sqrt_of_value=false)</argsstring>
+        <name>OutputDataToJPG</name>
+        <qualifiedname>csmp::JPEG_Interface::OutputDataToJPG</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; 2U &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>file_name</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>var_name</declname>
+        </param>
+        <param>
+          <type>long</type>
+          <declname>timestep</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>gray</declname>
+          <defval>false</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>sqrt_of_value</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/JPEG/JPEG_Interface.h" line="15" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_j_p_e_g___interface_1a05b7429a41abe1a57b38aeb1a6e9c37d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::JPEG_Interface::OutputDataToJPG</definition>
+        <argsstring>(Model&lt; 2U &gt; &amp;, const char *file_name, const char *var_name, long timestep, double data_min, double data_max, bool gray=false, bool sqrt_of_value=false)</argsstring>
+        <name>OutputDataToJPG</name>
+        <qualifiedname>csmp::JPEG_Interface::OutputDataToJPG</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; 2U &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>file_name</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>var_name</declname>
+        </param>
+        <param>
+          <type>long</type>
+          <declname>timestep</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>data_min</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>data_max</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>gray</declname>
+          <defval>false</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>sqrt_of_value</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/JPEG/JPEG_Interface.h" line="19" column="10"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::JPEG_Interface</label>
+        <link refid="classcsmp_1_1_j_p_e_g___interface"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/interfaces/JPEG/JPEG_Interface.h" line="10" column="1" bodyfile="source/includes/interfaces/JPEG/JPEG_Interface.h" bodystart="10" bodyend="26"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_j_p_e_g___interface_1a175f75ec0a6c1cdece72f1826be02248" prot="public" virt="non-virtual"><scope>csmp::JPEG_Interface</scope><name>JPEG_Interface</name></member>
+      <member refid="classcsmp_1_1_j_p_e_g___interface_1a6e3cbf3026ce3c9e5ec15893100b2dab" prot="public" virt="non-virtual"><scope>csmp::JPEG_Interface</scope><name>OutputDataToJPG</name></member>
+      <member refid="classcsmp_1_1_j_p_e_g___interface_1a05b7429a41abe1a57b38aeb1a6e9c37d" prot="public" virt="non-virtual"><scope>csmp::JPEG_Interface</scope><name>OutputDataToJPG</name></member>
+      <member refid="classcsmp_1_1_j_p_e_g___interface_1a28451ab754b69c32bd134a6c3e25e3ee" prot="private" virt="non-virtual"><scope>csmp::JPEG_Interface</scope><name>regular_grid</name></member>
+      <member refid="classcsmp_1_1_j_p_e_g___interface_1ab59b4323b74feac2dc3477039c546651" prot="public" virt="non-virtual"><scope>csmp::JPEG_Interface</scope><name>~JPEG_Interface</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

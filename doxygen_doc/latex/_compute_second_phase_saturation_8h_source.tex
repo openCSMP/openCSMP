@@ -1,0 +1,81 @@
+\doxysection{Compute\+Second\+Phase\+Saturation.\+h}
+\hypertarget{_compute_second_phase_saturation_8h_source}{}\label{_compute_second_phase_saturation_8h_source}\index{source/includes/thmc/two\_phase\_flow/ComputeSecondPhaseSaturation.h@{source/includes/thmc/two\_phase\_flow/ComputeSecondPhaseSaturation.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{ComputeSecondPhaseSaturation\_h\_\_}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{ComputeSecondPhaseSaturation\_h\_\_}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_interrelation_8h}{"{}Interrelation.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00010\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_compute_second_phase_saturation}{ComputeSecondPhaseSaturation}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_interrelation}{Interrelation}}<dim>\ \{}
+\DoxyCodeLine{00011\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ ref\_sat;}
+\DoxyCodeLine{00012\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ new\_sat;}
+\DoxyCodeLine{00013\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ sat;}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00016\ \ \ \ \ ComputeSecondPhaseSaturation(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&\ p,}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ reference\_saturation,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ new\_saturation\ );}
+\DoxyCodeLine{00018\ \ \ \ \ \string~ComputeSecondPhaseSaturation()\ \{\};}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_compute_second_phase_saturation_a1a30a46881904adedb286afbae866d8f}{Calculate}}();}
+\DoxyCodeLine{00020\ \};}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00024\ \textcolor{comment}{@class\ ComputeSecondPhaseSaturation\ \ ComputeSecondPhaseSaturation\ "{}two\_phase\_flow/ComputeSecondPhaseSaturation.h"{}}}
+\DoxyCodeLine{00025\ \textcolor{comment}{@author\ S.K.\ Matthaei}}
+\DoxyCodeLine{00026\ \textcolor{comment}{@author\ S.\ Geiger}}
+\DoxyCodeLine{00027\ \textcolor{comment}{@author\ S.\ Roberts}}
+\DoxyCodeLine{00028\ \textcolor{comment}{@date\ 2001}}
+\DoxyCodeLine{00029\ \textcolor{comment}{}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00031\ \textcolor{comment}{@section\ motivation\ Motivation}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00033\ \textcolor{comment}{Since\ only\ one\ phase\ is\ propagated\ in\ the\ FiniteVolumeFluidPhaseVisitor,}}
+\DoxyCodeLine{00034\ \textcolor{comment}{the\ saturation\ of\ the\ second\ phase\ must\ be\ computed\ afterwards,\ which}}
+\DoxyCodeLine{00035\ \textcolor{comment}{is\ done\ by\ this\ simple\ interrelation,\ such\ that\ all\ saturation\ dependend}}
+\DoxyCodeLine{00036\ \textcolor{comment}{properties\ can\ be\ computed\ afterwards.\ The\ user\ must\ define}}
+\DoxyCodeLine{00037\ \textcolor{comment}{in\ the\ constructor\ of\ this\ object\ the\ saturation\ that\ was\ computed}}
+\DoxyCodeLine{00038\ \textcolor{comment}{in\ the\ FiniteVolumeFluidPhaseVisitor\ (i.e.,\ reference\ saturation)\ and}}
+\DoxyCodeLine{00039\ \textcolor{comment}{the\ saturation\ which\ shall\ be\ computed\ by\ this\ interrelation\ (i.e.,\ new\ oder}}
+\DoxyCodeLine{00040\ \textcolor{comment}{second\ phase\ saturation)\ by\ subtracting\ the\ reference\ saturation\ from\ 1.0.}}
+\DoxyCodeLine{00041\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00042\ \textcolor{comment}{}}
+\DoxyCodeLine{00043\ \textcolor{comment}{Of\ course,\ the\ saturation\ of\ the\ second\ phase\ can\ also\ be\ computed\ by}}
+\DoxyCodeLine{00044\ \textcolor{comment}{the\ FiniteVolumeFluidPhaseVisitor,\ which\ is,\ however,\ computationally}}
+\DoxyCodeLine{00045\ \textcolor{comment}{more\ expensive\ than\ applying\ this\ interrelation.}}
+\DoxyCodeLine{00046\ \textcolor{comment}{}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00048\ \textcolor{comment}{@section\ implementation\ Implementation}}
+\DoxyCodeLine{00049\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00050\ \textcolor{comment}{The\ user\ must\ provide\ the\ character\ strings\ of\ the\ reference\ saturation}}
+\DoxyCodeLine{00051\ \textcolor{comment}{(first\ character\ string\ in\ the\ constructor)\ and\ the\ saturation\ to\ be\ }}
+\DoxyCodeLine{00052\ \textcolor{comment}{computed\ (second\ character\ string\ in\ the\ constructor)\ to\ the\ constructor}}
+\DoxyCodeLine{00053\ \textcolor{comment}{of\ this\ interrelation.\ }}
+\DoxyCodeLine{00054\ \textcolor{comment}{}}
+\DoxyCodeLine{00055\ \textcolor{comment}{As\ part\ of\ the\ Interrelation\ base\ class,\ this\ interrelation\ is\ passed}}
+\DoxyCodeLine{00056\ \textcolor{comment}{to\ the\ Model\ in\ the\ main()\ program.\ It\ should\ be\ done\ during\ the\ transient\ loop,\ such}}
+\DoxyCodeLine{00057\ \textcolor{comment}{that\ the\ saturations\ are\ both\ constantly\ updated.\ Some\ functions\ of\ the}}
+\DoxyCodeLine{00058\ \textcolor{comment}{FiniteVolumeFluidPhaseVisitor\ also\ require\ a\ reference\ to\ this\ interrelation,}}
+\DoxyCodeLine{00059\ \textcolor{comment}{since\ the\ saturation\ of\ the\ second\ phase\ must\ be\ updated\ within\ the\ time-\/loop}}
+\DoxyCodeLine{00060\ \textcolor{comment}{constantly.\ See\ the\ CSMP\ documentation\ for\ more\ detail\ on\ the\ Interrelation\ }}
+\DoxyCodeLine{00061\ \textcolor{comment}{base\ class\ and\ their\ derived\ classes\ and\ the\ FiniteVolumeFluidPhaseVisitor\ }}
+\DoxyCodeLine{00062\ \textcolor{comment}{documentation\ for\ details\ on\ the\ different\ member\ functions.}}
+\DoxyCodeLine{00063\ \textcolor{comment}{}}
+\DoxyCodeLine{00064\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00065\ \textcolor{comment}{@section\ examples\ Application\ Examples}}
+\DoxyCodeLine{00066\ \textcolor{comment}{}}
+\DoxyCodeLine{00067\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00068\ \textcolor{comment}{//\ oil\ is\ propagated,\ computing\ the\ water\ saturation\ <br>}}
+\DoxyCodeLine{00069\ \textcolor{comment}{//\ when\ the\ interrelation\ is\ passed\ to\ the\ Model\ <br>}}
+\DoxyCodeLine{00070\ \textcolor{comment}{ComputeSecondPhaseSaturation\ second\_phase(\ p\_ref,\ "{}saturation\ oil"{},\ "{}saturation\ water"{}\ );\ \ }}
+\DoxyCodeLine{00071\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00072\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00073\ \}}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

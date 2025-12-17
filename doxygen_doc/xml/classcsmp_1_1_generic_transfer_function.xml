@@ -1,0 +1,342 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_generic_transfer_function" kind="class" language="C++" prot="public">
+    <compoundname>csmp::GenericTransferFunction</compoundname>
+    <includes refid="_generic_transfer_function_8h" local="no">GenericTransferFunction.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_generic_transfer_function_1a389de87a6985ee9664e947d955d6cbeb" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::GenericTransferFunction::phim_</definition>
+        <argsstring></argsstring>
+        <name>phim_</name>
+        <qualifiedname>csmp::GenericTransferFunction::phim_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/fractures/GenericTransferFunction.h" line="37" column="12" bodyfile="source/includes/thmc/fractures/GenericTransferFunction.h" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_generic_transfer_function_1a1da99fec1452f4823076653516f37e63" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::GenericTransferFunction::pd_</definition>
+        <argsstring></argsstring>
+        <name>pd_</name>
+        <qualifiedname>csmp::GenericTransferFunction::pd_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/fractures/GenericTransferFunction.h" line="37" column="18" bodyfile="source/includes/thmc/fractures/GenericTransferFunction.h" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_generic_transfer_function_1a041e1b320288ad68af994c4971febb22" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::GenericTransferFunction::BC_param_</definition>
+        <argsstring></argsstring>
+        <name>BC_param_</name>
+        <qualifiedname>csmp::GenericTransferFunction::BC_param_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/fractures/GenericTransferFunction.h" line="37" column="22" bodyfile="source/includes/thmc/fractures/GenericTransferFunction.h" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_generic_transfer_function_1a3b463247b5701aa13d0c6ba8045e01f4" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::GenericTransferFunction::muw_</definition>
+        <argsstring></argsstring>
+        <name>muw_</name>
+        <qualifiedname>csmp::GenericTransferFunction::muw_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/fractures/GenericTransferFunction.h" line="37" column="32" bodyfile="source/includes/thmc/fractures/GenericTransferFunction.h" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_generic_transfer_function_1a20670b4288defffcc48c92662f61c476" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::GenericTransferFunction::mun_</definition>
+        <argsstring></argsstring>
+        <name>mun_</name>
+        <qualifiedname>csmp::GenericTransferFunction::mun_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/fractures/GenericTransferFunction.h" line="37" column="37" bodyfile="source/includes/thmc/fractures/GenericTransferFunction.h" bodystart="37" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_generic_transfer_function_1ae7083f24195a210e9427aea3777a52d0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::GenericTransferFunction::GenericTransferFunction</definition>
+        <argsstring>(double phim, double pd, double BC_param, double muw, double mun)</argsstring>
+        <name>GenericTransferFunction</name>
+        <qualifiedname>csmp::GenericTransferFunction::GenericTransferFunction</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>phim</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>pd</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>BC_param</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>muw</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>mun</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/fractures/GenericTransferFunction.h" line="11" column="5" bodyfile="source/modules/thmc/fractures/GenericTransferFunction.cpp" bodystart="5" bodyend="17"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_generic_transfer_function_1a1bc38359d90f263a77c2e24ca5ed8bf3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::GenericTransferFunction::~GenericTransferFunction</definition>
+        <argsstring>()</argsstring>
+        <name>~GenericTransferFunction</name>
+        <qualifiedname>csmp::GenericTransferFunction::~GenericTransferFunction</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/fractures/GenericTransferFunction.h" line="15" column="5" bodyfile="source/modules/thmc/fractures/GenericTransferFunction.cpp" bodystart="20" bodyend="22"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_generic_transfer_function_1a60c492724d2787fd5b18732baae2af4c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::GenericTransferFunction::Transfer</definition>
+        <argsstring>(double sw_block, double sw_initial, double sw_farfield, double km, double block_radius) const</argsstring>
+        <name>Transfer</name>
+        <qualifiedname>csmp::GenericTransferFunction::Transfer</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>sw_block</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>sw_initial</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>sw_farfield</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>km</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>block_radius</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Computes transfer rate assuming that fracture saturation of the invading phase is fixed=1. This approximation has to be seen in the context of the Af(sw) scaling which is subsequently applied to the transfer rate in the block.</para>
+<para><simplesect kind="return"><para>flux (volume * saturation per second) of the defending phase </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/fractures/GenericTransferFunction.h" line="17" column="14" bodyfile="source/modules/thmc/fractures/GenericTransferFunction.cpp" bodystart="33" bodyend="50"/>
+        <referencedby refid="classcsmp_1_1_fracture_matrix_upscaled_1a62ca084046ecd8b03ed546c006883d74" compoundref="_fracture_matrix_upscaled_8cpp" startline="205" endline="223">csmp::FractureMatrixUpscaled&lt; dim &gt;::krn_Phase</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_generic_transfer_function_1a1c49ea6e9d4078968e0bd87e7c1252ca" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::GenericTransferFunction::krw_BC</definition>
+        <argsstring>(double sw_eff) const</argsstring>
+        <name>krw_BC</name>
+        <qualifiedname>csmp::GenericTransferFunction::krw_BC</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>sw_eff</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/fractures/GenericTransferFunction.h" line="24" column="13" bodyfile="source/includes/thmc/fractures/GenericTransferFunction.h" bodystart="49" bodyend="55"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_generic_transfer_function_1a2a424de42bd0193c9c7a806c21072d20" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::GenericTransferFunction::krn_BC</definition>
+        <argsstring>(double sw_eff) const</argsstring>
+        <name>krn_BC</name>
+        <qualifiedname>csmp::GenericTransferFunction::krn_BC</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>sw_eff</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/fractures/GenericTransferFunction.h" line="25" column="13" bodyfile="source/includes/thmc/fractures/GenericTransferFunction.h" bodystart="58" bodyend="64"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_generic_transfer_function_1ab5f91d3192d9bbf0c3c778c73b7f47bb" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::GenericTransferFunction::Lambda_w_BC</definition>
+        <argsstring>(double sw_eff) const</argsstring>
+        <name>Lambda_w_BC</name>
+        <qualifiedname>csmp::GenericTransferFunction::Lambda_w_BC</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>sw_eff</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/fractures/GenericTransferFunction.h" line="27" column="13" bodyfile="source/includes/thmc/fractures/GenericTransferFunction.h" bodystart="67" bodyend="70"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_generic_transfer_function_1abb3a83797da2cfd55c980eb5791a6c05" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::GenericTransferFunction::Lambda_n_BC</definition>
+        <argsstring>(double sw_eff) const</argsstring>
+        <name>Lambda_n_BC</name>
+        <qualifiedname>csmp::GenericTransferFunction::Lambda_n_BC</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>sw_eff</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/fractures/GenericTransferFunction.h" line="28" column="13" bodyfile="source/includes/thmc/fractures/GenericTransferFunction.h" bodystart="73" bodyend="76"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_generic_transfer_function_1a8de4846d0071e74d9610bc43312fda16" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::GenericTransferFunction::LambdaTotal</definition>
+        <argsstring>(double sw_eff) const</argsstring>
+        <name>LambdaTotal</name>
+        <qualifiedname>csmp::GenericTransferFunction::LambdaTotal</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>sw_eff</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/fractures/GenericTransferFunction.h" line="30" column="13" bodyfile="source/includes/thmc/fractures/GenericTransferFunction.h" bodystart="79" bodyend="82"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_generic_transfer_function_1a62d45ae55efcd277c8797bcd1e29a00a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::GenericTransferFunction::LambdaOverbar</definition>
+        <argsstring>(double sw_eff) const</argsstring>
+        <name>LambdaOverbar</name>
+        <qualifiedname>csmp::GenericTransferFunction::LambdaOverbar</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>sw_eff</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/fractures/GenericTransferFunction.h" line="31" column="13" bodyfile="source/modules/thmc/fractures/GenericTransferFunction.cpp" bodystart="55" bodyend="66"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_generic_transfer_function_1a17afae45648334d977e27372f0397664" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::GenericTransferFunction::Pc</definition>
+        <argsstring>(double sw) const</argsstring>
+        <name>Pc</name>
+        <qualifiedname>csmp::GenericTransferFunction::Pc</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>sw</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/fractures/GenericTransferFunction.h" line="33" column="13" bodyfile="source/includes/thmc/fractures/GenericTransferFunction.h" bodystart="86" bodyend="90"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_generic_transfer_function_1afbb014b668c9058974894c5553150dc1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::GenericTransferFunction::dPcds</definition>
+        <argsstring>(double sw) const</argsstring>
+        <name>dPcds</name>
+        <qualifiedname>csmp::GenericTransferFunction::dPcds</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>sw</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/fractures/GenericTransferFunction.h" line="34" column="13" bodyfile="source/includes/thmc/fractures/GenericTransferFunction.h" bodystart="93" bodyend="99"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>GTF, see doi 0.2118/121244-MS. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::GenericTransferFunction</label>
+        <link refid="classcsmp_1_1_generic_transfer_function"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/thmc/fractures/GenericTransferFunction.h" line="9" column="1" bodyfile="source/includes/thmc/fractures/GenericTransferFunction.h" bodystart="9" bodyend="38"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_generic_transfer_function_1a041e1b320288ad68af994c4971febb22" prot="private" virt="non-virtual"><scope>csmp::GenericTransferFunction</scope><name>BC_param_</name></member>
+      <member refid="classcsmp_1_1_generic_transfer_function_1afbb014b668c9058974894c5553150dc1" prot="public" virt="non-virtual"><scope>csmp::GenericTransferFunction</scope><name>dPcds</name></member>
+      <member refid="classcsmp_1_1_generic_transfer_function_1ae7083f24195a210e9427aea3777a52d0" prot="public" virt="non-virtual"><scope>csmp::GenericTransferFunction</scope><name>GenericTransferFunction</name></member>
+      <member refid="classcsmp_1_1_generic_transfer_function_1a2a424de42bd0193c9c7a806c21072d20" prot="public" virt="non-virtual"><scope>csmp::GenericTransferFunction</scope><name>krn_BC</name></member>
+      <member refid="classcsmp_1_1_generic_transfer_function_1a1c49ea6e9d4078968e0bd87e7c1252ca" prot="public" virt="non-virtual"><scope>csmp::GenericTransferFunction</scope><name>krw_BC</name></member>
+      <member refid="classcsmp_1_1_generic_transfer_function_1abb3a83797da2cfd55c980eb5791a6c05" prot="public" virt="non-virtual"><scope>csmp::GenericTransferFunction</scope><name>Lambda_n_BC</name></member>
+      <member refid="classcsmp_1_1_generic_transfer_function_1ab5f91d3192d9bbf0c3c778c73b7f47bb" prot="public" virt="non-virtual"><scope>csmp::GenericTransferFunction</scope><name>Lambda_w_BC</name></member>
+      <member refid="classcsmp_1_1_generic_transfer_function_1a62d45ae55efcd277c8797bcd1e29a00a" prot="public" virt="non-virtual"><scope>csmp::GenericTransferFunction</scope><name>LambdaOverbar</name></member>
+      <member refid="classcsmp_1_1_generic_transfer_function_1a8de4846d0071e74d9610bc43312fda16" prot="public" virt="non-virtual"><scope>csmp::GenericTransferFunction</scope><name>LambdaTotal</name></member>
+      <member refid="classcsmp_1_1_generic_transfer_function_1a20670b4288defffcc48c92662f61c476" prot="private" virt="non-virtual"><scope>csmp::GenericTransferFunction</scope><name>mun_</name></member>
+      <member refid="classcsmp_1_1_generic_transfer_function_1a3b463247b5701aa13d0c6ba8045e01f4" prot="private" virt="non-virtual"><scope>csmp::GenericTransferFunction</scope><name>muw_</name></member>
+      <member refid="classcsmp_1_1_generic_transfer_function_1a17afae45648334d977e27372f0397664" prot="public" virt="non-virtual"><scope>csmp::GenericTransferFunction</scope><name>Pc</name></member>
+      <member refid="classcsmp_1_1_generic_transfer_function_1a1da99fec1452f4823076653516f37e63" prot="private" virt="non-virtual"><scope>csmp::GenericTransferFunction</scope><name>pd_</name></member>
+      <member refid="classcsmp_1_1_generic_transfer_function_1a389de87a6985ee9664e947d955d6cbeb" prot="private" virt="non-virtual"><scope>csmp::GenericTransferFunction</scope><name>phim_</name></member>
+      <member refid="classcsmp_1_1_generic_transfer_function_1a60c492724d2787fd5b18732baae2af4c" prot="public" virt="non-virtual"><scope>csmp::GenericTransferFunction</scope><name>Transfer</name></member>
+      <member refid="classcsmp_1_1_generic_transfer_function_1a1bc38359d90f263a77c2e24ca5ed8bf3" prot="public" virt="non-virtual"><scope>csmp::GenericTransferFunction</scope><name>~GenericTransferFunction</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

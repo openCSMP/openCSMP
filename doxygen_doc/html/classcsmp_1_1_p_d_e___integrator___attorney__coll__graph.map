@@ -1,0 +1,11 @@
+<map id="csmp::PDE_Integrator_Attorney&lt; dim &gt;" name="csmp::PDE_Integrator_Attorney&lt; dim &gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="56,424,197,506"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_attorney.html" title=" " alt="" coords="46,294,207,375"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="129,390,129,424,124,424,124,390"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,121,141,202"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="93,216,117,293,112,295,87,217"/>
+<area shape="rect" id="Node000004" href="$classcsmp_1_1_attorney.html" title="Attorney design pattern gives access to protected / private member variables and methods." alt="" coords="165,128,323,195"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="216,209,156,295,151,292,211,206"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="222,5,266,72"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="246,87,246,129,241,129,241,87"/>
+</map>

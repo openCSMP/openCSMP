@@ -1,0 +1,230 @@
+\doxysection{Dynamic\+Array3D\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{class_dynamic_array3_d}{}\label{class_dynamic_array3_d}\index{DynamicArray3D$<$ T $>$@{DynamicArray3D$<$ T $>$}}
+
+
+\doxylink{class_dynamic_array3_d}{Dynamic\+Array3D} -\/ three dimensional array based on vector.  
+
+
+
+
+{\ttfamily \#include $<$Dynamic\+Array3\+D.\+h$>$}
+
+
+
+Collaboration diagram for Dynamic\+Array3D\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=187pt]{class_dynamic_array3_d__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_dynamic_array3_d_a974c746e3ba2871ac7e2af4c156fce11}\label{class_dynamic_array3_d_a974c746e3ba2871ac7e2af4c156fce11} 
+using {\bfseries data\+\_\+type} = std\+::vector$<$T$>$
+\item 
+\Hypertarget{class_dynamic_array3_d_a05949f3727afa1867c8770b1742039d6}\label{class_dynamic_array3_d_a05949f3727afa1867c8770b1742039d6} 
+using {\bfseries value\+\_\+type} = typename std\+::vector$<$T$>$\+::value\+\_\+type
+\item 
+\Hypertarget{class_dynamic_array3_d_a42487c005eafaa5053c719ee64d18391}\label{class_dynamic_array3_d_a42487c005eafaa5053c719ee64d18391} 
+using {\bfseries size\+\_\+type} = typename std\+::vector$<$T$>$\+::size\+\_\+type
+\item 
+\Hypertarget{class_dynamic_array3_d_a9a4750e78e0467917b87d4f76a2e76bc}\label{class_dynamic_array3_d_a9a4750e78e0467917b87d4f76a2e76bc} 
+using {\bfseries reference} = typename std\+::vector$<$T$>$\+::reference
+\item 
+\Hypertarget{class_dynamic_array3_d_a8e6faa6a6b578c44f952f6df36918e5d}\label{class_dynamic_array3_d_a8e6faa6a6b578c44f952f6df36918e5d} 
+using {\bfseries const\+\_\+reference} = typename std\+::vector$<$T$>$\+::const\+\_\+reference
+\item 
+\Hypertarget{class_dynamic_array3_d_a22c3a6529d18ed03a74335cbe7970da3}\label{class_dynamic_array3_d_a22c3a6529d18ed03a74335cbe7970da3} 
+using {\bfseries iterator} = typename std\+::vector$<$T$>$\+::iterator
+\item 
+\Hypertarget{class_dynamic_array3_d_a70323d76ff247eb0d2cc5af39dc971b2}\label{class_dynamic_array3_d_a70323d76ff247eb0d2cc5af39dc971b2} 
+using {\bfseries const\+\_\+iterator} = typename std\+::vector$<$T$>$\+::const\+\_\+iterator
+\item 
+\Hypertarget{class_dynamic_array3_d_a0892d5746bf1724d839f8070f9cc5e17}\label{class_dynamic_array3_d_a0892d5746bf1724d839f8070f9cc5e17} 
+using {\bfseries reverse\+\_\+iterator} = typename std\+::vector$<$T$>$\+::reverse\+\_\+iterator
+\item 
+\Hypertarget{class_dynamic_array3_d_ae700bad21efdd50630586fbf71791a59}\label{class_dynamic_array3_d_ae700bad21efdd50630586fbf71791a59} 
+using {\bfseries const\+\_\+reverse\+\_\+iterator} = typename std\+::vector$<$T$>$\+::const\+\_\+reverse\+\_\+iterator
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_dynamic_array3_d_ab135180a5e3a5489bcec2650bcb94b6b}\label{class_dynamic_array3_d_ab135180a5e3a5489bcec2650bcb94b6b} 
+{\bfseries Dynamic\+Array3D} (size\+\_\+type depth, size\+\_\+type rows, size\+\_\+type cols)
+\item 
+\Hypertarget{class_dynamic_array3_d_a9ad6153de6cae4ada089fb8eaf7c8e01}\label{class_dynamic_array3_d_a9ad6153de6cae4ada089fb8eaf7c8e01} 
+{\bfseries Dynamic\+Array3D} (size\+\_\+type depth, size\+\_\+type rows, size\+\_\+type cols, const\+\_\+reference val)
+\item 
+\mbox{\hyperlink{class_dynamic_array3_d_aa6449b959d737a68b1e74ceb57c03c68}{Dynamic\+Array3D}} (std\+::initializer\+\_\+list$<$ std\+::initializer\+\_\+list$<$ data\+\_\+type $>$ $>$ vals)
+\item 
+\Hypertarget{class_dynamic_array3_d_abc0e19dbb0aa489ca20746d857e5e957}\label{class_dynamic_array3_d_abc0e19dbb0aa489ca20746d857e5e957} 
+iterator {\bfseries begin} ()
+\item 
+\Hypertarget{class_dynamic_array3_d_a9c111426cfafb9ce58b1bb7c446e9ba6}\label{class_dynamic_array3_d_a9c111426cfafb9ce58b1bb7c446e9ba6} 
+iterator {\bfseries end} ()
+\item 
+\Hypertarget{class_dynamic_array3_d_a7676c0d2f65b2fd20ebd040d30c525cf}\label{class_dynamic_array3_d_a7676c0d2f65b2fd20ebd040d30c525cf} 
+const\+\_\+iterator {\bfseries begin} () const
+\item 
+\Hypertarget{class_dynamic_array3_d_a019a3cbf140eca798723c7cbe9dbd52d}\label{class_dynamic_array3_d_a019a3cbf140eca798723c7cbe9dbd52d} 
+const\+\_\+iterator {\bfseries end} () const
+\item 
+\Hypertarget{class_dynamic_array3_d_ae09521749b35723c8533af81d274fa3a}\label{class_dynamic_array3_d_ae09521749b35723c8533af81d274fa3a} 
+const\+\_\+iterator {\bfseries cbegin} () const
+\item 
+\Hypertarget{class_dynamic_array3_d_aa058e991a4ffe768598fe3d139be9756}\label{class_dynamic_array3_d_aa058e991a4ffe768598fe3d139be9756} 
+const\+\_\+iterator {\bfseries cend} () const
+\item 
+\Hypertarget{class_dynamic_array3_d_a67a8d41ab05a71d8dc5744c3f3623f59}\label{class_dynamic_array3_d_a67a8d41ab05a71d8dc5744c3f3623f59} 
+reverse\+\_\+iterator {\bfseries rbegin} ()
+\item 
+\Hypertarget{class_dynamic_array3_d_a74bf957d21e16db49dac26ee71459172}\label{class_dynamic_array3_d_a74bf957d21e16db49dac26ee71459172} 
+reverse\+\_\+iterator {\bfseries rend} ()
+\item 
+\Hypertarget{class_dynamic_array3_d_a0f3da7044ce965511e4bed7a38343adb}\label{class_dynamic_array3_d_a0f3da7044ce965511e4bed7a38343adb} 
+const\+\_\+reverse\+\_\+iterator {\bfseries rbegin} () const
+\item 
+\Hypertarget{class_dynamic_array3_d_a5db11b7e6c512bc47cc0f74c96b60b93}\label{class_dynamic_array3_d_a5db11b7e6c512bc47cc0f74c96b60b93} 
+const\+\_\+reverse\+\_\+iterator {\bfseries rend} () const
+\item 
+\Hypertarget{class_dynamic_array3_d_adf1479e892025249bf06b72c67d7dfe7}\label{class_dynamic_array3_d_adf1479e892025249bf06b72c67d7dfe7} 
+const\+\_\+reverse\+\_\+iterator {\bfseries crbegin} () const
+\item 
+\Hypertarget{class_dynamic_array3_d_a41ea848734c6ff2f805e65fbc1ee105b}\label{class_dynamic_array3_d_a41ea848734c6ff2f805e65fbc1ee105b} 
+const\+\_\+reverse\+\_\+iterator {\bfseries crend} () const
+\item 
+\Hypertarget{class_dynamic_array3_d_a01069bbf5cf48106de093711494f26f0}\label{class_dynamic_array3_d_a01069bbf5cf48106de093711494f26f0} 
+reference {\bfseries operator()} (size\+\_\+type const depth, size\+\_\+type const row, size\+\_\+type const column)
+\item 
+\Hypertarget{class_dynamic_array3_d_a2d238ea1a534bb595bf4b3f9f2f732f5}\label{class_dynamic_array3_d_a2d238ea1a534bb595bf4b3f9f2f732f5} 
+const\+\_\+reference {\bfseries operator()} (size\+\_\+type const depth, size\+\_\+type const row, size\+\_\+type const column) const
+\item 
+\Hypertarget{class_dynamic_array3_d_a0dd1ca4813c4b3ad0d61e49b7ac8cd9d}\label{class_dynamic_array3_d_a0dd1ca4813c4b3ad0d61e49b7ac8cd9d} 
+reference {\bfseries at} (size\+\_\+type const depth, size\+\_\+type const row, size\+\_\+type const column)
+\item 
+\Hypertarget{class_dynamic_array3_d_ae2f1a6ce1520253f8740e2613c69e807}\label{class_dynamic_array3_d_ae2f1a6ce1520253f8740e2613c69e807} 
+const\+\_\+reference {\bfseries at} (size\+\_\+type const depth, size\+\_\+type const row, size\+\_\+type const column) const
+\item 
+\Hypertarget{class_dynamic_array3_d_a23a9524275505622707b4c06c42557d3}\label{class_dynamic_array3_d_a23a9524275505622707b4c06c42557d3} 
+void {\bfseries resize} (size\+\_\+type new\+\_\+depth, size\+\_\+type new\+\_\+rows, size\+\_\+type new\+\_\+cols)
+\item 
+\Hypertarget{class_dynamic_array3_d_aa69b14da2c3c3756c13d87ddbb74364d}\label{class_dynamic_array3_d_aa69b14da2c3c3756c13d87ddbb74364d} 
+size\+\_\+type {\bfseries size} () const
+\item 
+\Hypertarget{class_dynamic_array3_d_ad017b12ba63813feea6cebf6b407ffa3}\label{class_dynamic_array3_d_ad017b12ba63813feea6cebf6b407ffa3} 
+size\+\_\+type {\bfseries capacity} () const
+\item 
+\Hypertarget{class_dynamic_array3_d_ad1cccbfbee98ee50e2de6c688dd380f3}\label{class_dynamic_array3_d_ad1cccbfbee98ee50e2de6c688dd380f3} 
+bool {\bfseries empty} () const
+\item 
+\Hypertarget{class_dynamic_array3_d_af59eda3fb14a24b59cf91f4595c051eb}\label{class_dynamic_array3_d_af59eda3fb14a24b59cf91f4595c051eb} 
+size\+\_\+type {\bfseries max\+\_\+size} () const
+\item 
+\Hypertarget{class_dynamic_array3_d_ae938d649e37dfea01c1e95490577e38c}\label{class_dynamic_array3_d_ae938d649e37dfea01c1e95490577e38c} 
+size\+\_\+type {\bfseries depth} () const
+\item 
+\Hypertarget{class_dynamic_array3_d_a5e51b61c9ef605b35ec58ff5b5bb764d}\label{class_dynamic_array3_d_a5e51b61c9ef605b35ec58ff5b5bb764d} 
+size\+\_\+type {\bfseries rows} () const
+\item 
+\Hypertarget{class_dynamic_array3_d_a1abbdb1aa4094a975573387b78d93660}\label{class_dynamic_array3_d_a1abbdb1aa4094a975573387b78d93660} 
+size\+\_\+type {\bfseries cols} () const
+\item 
+\Hypertarget{class_dynamic_array3_d_a987b7071a3e3b0f667d7fb6be6dc5a39}\label{class_dynamic_array3_d_a987b7071a3e3b0f667d7fb6be6dc5a39} 
+void {\bfseries swap} (\mbox{\hyperlink{class_dynamic_array3_d}{Dynamic\+Array3D}} \&rhs)
+\item 
+\Hypertarget{class_dynamic_array3_d_a3f21f091f32502c156a9371604ef4180}\label{class_dynamic_array3_d_a3f21f091f32502c156a9371604ef4180} 
+void {\bfseries out} () const
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$class T$>$\newline
+class Dynamic\+Array3\+D$<$ T $>$}
+\doxylink{class_dynamic_array3_d}{Dynamic\+Array3D} -\/ three dimensional array based on vector. 
+
+data\+Type array\+Name\mbox{[}depth\mbox{]}\mbox{[}row size\mbox{]}\mbox{[}column size\mbox{]} = \{ \{ \{depth0row0col0, depth0row0col1, ...\}, \{depth0row1col0, depth0row1col1, ...\}, \}
+
+usage with operator(depth,row,column) 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ depth;\ i++)\ \{}
+\DoxyCodeLine{printf(\textcolor{stringliteral}{"{}Depth\ \%d:\(\backslash\)n"{}},\ i\ +\ 1);\ }
+\DoxyCodeLine{\textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ j\ =\ 0;\ j\ <\ rows;\ j++)\ \{\ }
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ k\ =\ 0;\ k\ <\ cols;\ k++)\ \{\ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}\%d\ "{}},\ arr[i][j][k]);\ }
+\DoxyCodeLine{\ \ \ \ \}\ }
+\DoxyCodeLine{\ \ \ \ printf(\textcolor{stringliteral}{"{}\(\backslash\)n"{}});\ }
+\DoxyCodeLine{\}\ }
+\DoxyCodeLine{printf(\textcolor{stringliteral}{"{}\(\backslash\)n"{}});}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+
+
+directly initializing 3D array at the time of declaration 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{int}\ arr1[2][3][4]\ =\ \{\ \{\ \{\ 1,\ 2,\ 3,\ 4\ \},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ 5,\ 6,\ 7,\ 8\ \},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ 9,\ 10,\ 11,\ 12\ \}\ \},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ \{\ 13,\ 14,\ 15,\ 16\ \},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ 17,\ 18,\ 19,\ 20\ \},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ 21,\ 22,\ 23,\ 24\ \}\ \}\ \};}
+
+\end{DoxyCode}
+
+
+Printing arr1 Depth 1\+: 1 2 3 4 5 6 7 8 9 10 11 12
+
+Depth 2\+: 13 14 15 16 17 18 19 20 21 22 23 24 
+
+\label{doc-constructors}
+\Hypertarget{class_dynamic_array3_d_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_dynamic_array3_d_aa6449b959d737a68b1e74ceb57c03c68}\index{DynamicArray3D$<$ T $>$@{DynamicArray3D$<$ T $>$}!DynamicArray3D@{DynamicArray3D}}
+\index{DynamicArray3D@{DynamicArray3D}!DynamicArray3D$<$ T $>$@{DynamicArray3D$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{DynamicArray3D()}{DynamicArray3D()}}
+{\footnotesize\ttfamily \label{class_dynamic_array3_d_aa6449b959d737a68b1e74ceb57c03c68} 
+template$<$class T$>$ \\
+\mbox{\hyperlink{class_dynamic_array3_d}{Dynamic\+Array3D}}$<$ T $>$\mbox{\hyperlink{class_dynamic_array3_d}{\+::\+Dynamic\+Array3D}} (\begin{DoxyParamCaption}\item[{std\+::initializer\+\_\+list$<$ std\+::initializer\+\_\+list$<$ data\+\_\+type $>$ $>$}]{vals}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+matrix constructor taking initialiser list supporting initialisation by\+: \doxylink{class_dynamic_array3_d}{Dynamic\+Array3\+D$<$double$>$} (2 x 3 x 2) 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ array[i0]\ =>\ [j0]\ =>\ [k0,\ k1]}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ [j1]\ =>\ [k0,\ k1]}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ [j2]\ =>\ [k0,\ k1]}
+\DoxyCodeLine{\ array[1]\ \ =>\ [0]\ =>\ [0,\ 1]}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ [1]\ =>\ [0,\ 1]}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ [2]\ =>\ [0,\ 1]}
+\DoxyCodeLine{\ }
+\DoxyCodeLine{\textcolor{comment}{//\ (2\ x\ 3\ x\ 4)}}
+\DoxyCodeLine{DynamicArray3D\ arr1\ =\ \{\ \{\ \{\ 1,\ 2,\ 3,\ 4\ \},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ 5,\ 6,\ 7,\ 8\ \},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ 9,\ 10,\ 11,\ 12\ \}\ \},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ \{\ 13,\ 14,\ 15,\ 16\ \},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ 17,\ 18,\ 19,\ 20\ \},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ 21,\ 22,\ 23,\ 24\ \}\ \}\ \};}
+
+\end{DoxyCode}
+ Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=252pt]{class_dynamic_array3_d_aa6449b959d737a68b1e74ceb57c03c68_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=252pt]{class_dynamic_array3_d_aa6449b959d737a68b1e74ceb57c03c68_icgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/math/Dynamic\+Array3\+D.\+h\end{DoxyCompactItemize}

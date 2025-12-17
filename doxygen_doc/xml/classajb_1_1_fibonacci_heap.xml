@@ -1,0 +1,546 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classajb_1_1_fibonacci_heap" kind="class" language="C++" prot="public">
+    <compoundname>ajb::FibonacciHeap</compoundname>
+    <includes refid="_fibonacci_heap_8h" local="no">FibonacciHeap.h</includes>
+    <templateparamlist>
+      <param>
+        <type>typename K</type>
+      </param>
+      <param>
+        <type>typename V</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-type">
+      <memberdef kind="typedef" id="classajb_1_1_fibonacci_heap_1a7dae1caadf6ea17016bb124cf0c798f7" prot="private" static="no">
+        <type>K</type>
+        <definition>typedef K ajb::FibonacciHeap&lt; K, V &gt;::key_type</definition>
+        <argsstring></argsstring>
+        <name>key_type</name>
+        <qualifiedname>ajb::FibonacciHeap::key_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FibonacciHeap.h" line="129" column="15" bodyfile="source/includes/utilities/FibonacciHeap.h" bodystart="129" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="classajb_1_1_fibonacci_heap_1a93dfa1a48d4fe0ec707e8db180cbf259" prot="private" static="no">
+        <type>V</type>
+        <definition>typedef V ajb::FibonacciHeap&lt; K, V &gt;::value_type</definition>
+        <argsstring></argsstring>
+        <name>value_type</name>
+        <qualifiedname>ajb::FibonacciHeap::value_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FibonacciHeap.h" line="130" column="15" bodyfile="source/includes/utilities/FibonacciHeap.h" bodystart="130" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="classajb_1_1_fibonacci_heap_1a00958f618899baa63634f68ff7d93f57" prot="private" static="no">
+        <type><ref refid="structajb_1_1detail_1_1_fibonacci_heap___node" kindref="compound">detail::FibonacciHeap_Node</ref>&lt; K, V &gt; *</type>
+        <definition>typedef detail::FibonacciHeap_Node&lt;K,V&gt;* ajb::FibonacciHeap&lt; K, V &gt;::node_ptr</definition>
+        <argsstring></argsstring>
+        <name>node_ptr</name>
+        <qualifiedname>ajb::FibonacciHeap::node_ptr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FibonacciHeap.h" line="131" column="40" bodyfile="source/includes/utilities/FibonacciHeap.h" bodystart="131" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="classajb_1_1_fibonacci_heap_1a503d07efe312f58447873ca3b93b200c" prot="private" static="no">
+        <type>const <ref refid="structajb_1_1detail_1_1_fibonacci_heap___node" kindref="compound">detail::FibonacciHeap_Node</ref>&lt; K, V &gt; *</type>
+        <definition>typedef const detail::FibonacciHeap_Node&lt;K,V&gt;* ajb::FibonacciHeap&lt; K, V &gt;::const_node_ptr</definition>
+        <argsstring></argsstring>
+        <name>const_node_ptr</name>
+        <qualifiedname>ajb::FibonacciHeap::const_node_ptr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FibonacciHeap.h" line="132" column="46" bodyfile="source/includes/utilities/FibonacciHeap.h" bodystart="132" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="classajb_1_1_fibonacci_heap_1a1e38fe14cc687a0b04b223878f730f4c" prot="public" static="no">
+        <type><ref refid="structajb_1_1detail_1_1_fibonacci_heap___node" kindref="compound">node_ptr</ref></type>
+        <definition>typedef node_ptr ajb::FibonacciHeap&lt; K, V &gt;::finger</definition>
+        <argsstring></argsstring>
+        <name>finger</name>
+        <qualifiedname>ajb::FibonacciHeap::finger</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FibonacciHeap.h" line="258" column="22" bodyfile="source/includes/utilities/FibonacciHeap.h" bodystart="258" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="classajb_1_1_fibonacci_heap_1a87ff603dd2afac20d91059aa23799079" prot="public" static="no">
+        <type><ref refid="structajb_1_1detail_1_1_fibonacci_heap___node" kindref="compound">const_node_ptr</ref></type>
+        <definition>typedef const_node_ptr ajb::FibonacciHeap&lt; K, V &gt;::const_finger</definition>
+        <argsstring></argsstring>
+        <name>const_finger</name>
+        <qualifiedname>ajb::FibonacciHeap::const_finger</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FibonacciHeap.h" line="259" column="28" bodyfile="source/includes/utilities/FibonacciHeap.h" bodystart="259" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classajb_1_1_fibonacci_heap_1a37424e56e897e0d5e4dedcfe9de17eb4" prot="private" static="no" mutable="no">
+        <type><ref refid="structajb_1_1detail_1_1_fibonacci_heap___node" kindref="compound">node_ptr</ref></type>
+        <definition>node_ptr ajb::FibonacciHeap&lt; K, V &gt;::root_</definition>
+        <argsstring></argsstring>
+        <name>root_</name>
+        <qualifiedname>ajb::FibonacciHeap::root_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FibonacciHeap.h" line="134" column="14" bodyfile="source/includes/utilities/FibonacciHeap.h" bodystart="134" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classajb_1_1_fibonacci_heap_1aa21f341a60e87e71049c8a160955c2f0" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t ajb::FibonacciHeap&lt; K, V &gt;::count_</definition>
+        <argsstring></argsstring>
+        <name>count_</name>
+        <qualifiedname>ajb::FibonacciHeap::count_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FibonacciHeap.h" line="135" column="12" bodyfile="source/includes/utilities/FibonacciHeap.h" bodystart="135" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classajb_1_1_fibonacci_heap_1a790f482b18cf788538b177a695c3f496" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t ajb::FibonacciHeap&lt; K, V &gt;::max_degree_</definition>
+        <argsstring></argsstring>
+        <name>max_degree_</name>
+        <qualifiedname>ajb::FibonacciHeap::max_degree_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FibonacciHeap.h" line="136" column="12" bodyfile="source/includes/utilities/FibonacciHeap.h" bodystart="136" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classajb_1_1_fibonacci_heap_1a8bf800cea0a9be5e4fc997f68c07c4cc" prot="private" static="no" mutable="no">
+        <type><ref refid="structajb_1_1detail_1_1_fibonacci_heap___node" kindref="compound">node_ptr</ref></type>
+        <definition>node_ptr ajb::FibonacciHeap&lt; K, V &gt;::consolidation_[std::numeric_limits&lt; uint32_t &gt;::digits+1]</definition>
+        <argsstring>[std::numeric_limits&lt; uint32_t &gt;::digits+1]</argsstring>
+        <name>consolidation_</name>
+        <qualifiedname>ajb::FibonacciHeap::consolidation_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FibonacciHeap.h" line="137" column="14" bodyfile="source/includes/utilities/FibonacciHeap.h" bodystart="137" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classajb_1_1_fibonacci_heap_1abedb30db7509d22dd9f783ce65629682" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>ajb::FibonacciHeap&lt; K, V &gt;::FibonacciHeap</definition>
+        <argsstring>(const FibonacciHeap &amp;)=delete</argsstring>
+        <name>FibonacciHeap</name>
+        <qualifiedname>ajb::FibonacciHeap::FibonacciHeap</qualifiedname>
+        <param>
+          <type>const <ref refid="classajb_1_1_fibonacci_heap" kindref="compound">FibonacciHeap</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FibonacciHeap.h" line="125" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classajb_1_1_fibonacci_heap_1a8b859a6ca24f1f776c1b0977b28f702f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>ajb::FibonacciHeap&lt; K, V &gt;::FibonacciHeap</definition>
+        <argsstring>(FibonacciHeap &amp;&amp;)=delete</argsstring>
+        <name>FibonacciHeap</name>
+        <qualifiedname>ajb::FibonacciHeap::FibonacciHeap</qualifiedname>
+        <param>
+          <type><ref refid="classajb_1_1_fibonacci_heap" kindref="compound">FibonacciHeap</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FibonacciHeap.h" line="126" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classajb_1_1_fibonacci_heap_1a62d0bcdb3858cee5c986103a482a4bff" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classajb_1_1_fibonacci_heap" kindref="compound">FibonacciHeap</ref> &amp;</type>
+        <definition>FibonacciHeap &amp; ajb::FibonacciHeap&lt; K, V &gt;::operator=</definition>
+        <argsstring>(const FibonacciHeap &amp;)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>ajb::FibonacciHeap::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classajb_1_1_fibonacci_heap" kindref="compound">FibonacciHeap</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FibonacciHeap.h" line="127" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="classajb_1_1_fibonacci_heap_1a2bb8b82e5abefc02987fe5cb48bbaf1f" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void ajb::FibonacciHeap&lt; K, V &gt;::promote_children_of_root</definition>
+        <argsstring>()</argsstring>
+        <name>promote_children_of_root</name>
+        <qualifiedname>ajb::FibonacciHeap::promote_children_of_root</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FibonacciHeap.h" line="140" column="10" bodyfile="source/includes/utilities/FibonacciHeap.h" bodystart="140" bodyend="156"/>
+      </memberdef>
+      <memberdef kind="function" id="classajb_1_1_fibonacci_heap_1aef1651d4f2c69ac08bd818dd340d07af" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void ajb::FibonacciHeap&lt; K, V &gt;::cascading_cut</definition>
+        <argsstring>(node_ptr node)</argsstring>
+        <name>cascading_cut</name>
+        <qualifiedname>ajb::FibonacciHeap::cascading_cut</qualifiedname>
+        <param>
+          <type><ref refid="structajb_1_1detail_1_1_fibonacci_heap___node" kindref="compound">node_ptr</ref></type>
+          <declname>node</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FibonacciHeap.h" line="159" column="10" bodyfile="source/includes/utilities/FibonacciHeap.h" bodystart="159" bodyend="177"/>
+      </memberdef>
+      <memberdef kind="function" id="classajb_1_1_fibonacci_heap_1ae4b23cbc904732a92c556f0f07b390f6" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void ajb::FibonacciHeap&lt; K, V &gt;::remove_current_root</definition>
+        <argsstring>()</argsstring>
+        <name>remove_current_root</name>
+        <qualifiedname>ajb::FibonacciHeap::remove_current_root</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FibonacciHeap.h" line="180" column="10" bodyfile="source/includes/utilities/FibonacciHeap.h" bodystart="180" bodyend="239"/>
+      </memberdef>
+      <memberdef kind="function" id="classajb_1_1_fibonacci_heap_1a1951e0812d4d162ac7d8ec55432ba46a" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structajb_1_1detail_1_1_fibonacci_heap___node" kindref="compound">node_ptr</ref></type>
+        <definition>node_ptr ajb::FibonacciHeap&lt; K, V &gt;::insert_node</definition>
+        <argsstring>(node_ptr new_node)</argsstring>
+        <name>insert_node</name>
+        <qualifiedname>ajb::FibonacciHeap::insert_node</qualifiedname>
+        <param>
+          <type><ref refid="structajb_1_1detail_1_1_fibonacci_heap___node" kindref="compound">node_ptr</ref></type>
+          <declname>new_node</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FibonacciHeap.h" line="241" column="14" bodyfile="source/includes/utilities/FibonacciHeap.h" bodystart="241" bodyend="254"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classajb_1_1_fibonacci_heap_1a723b86974a77cd8465e6b1bdc92c6264" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>ajb::FibonacciHeap&lt; K, V &gt;::FibonacciHeap</definition>
+        <argsstring>()</argsstring>
+        <name>FibonacciHeap</name>
+        <qualifiedname>ajb::FibonacciHeap::FibonacciHeap</qualifiedname>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FibonacciHeap.h" line="262" column="5" bodyfile="source/includes/utilities/FibonacciHeap.h" bodystart="262" bodyend="265"/>
+        <references refid="classajb_1_1_fibonacci_heap_1a723b86974a77cd8465e6b1bdc92c6264" compoundref="_fibonacci_heap_8h" startline="262" endline="265">ajb::FibonacciHeap&lt; K, V &gt;::FibonacciHeap</references>
+        <referencedby refid="classajb_1_1_fibonacci_heap_1a723b86974a77cd8465e6b1bdc92c6264" compoundref="_fibonacci_heap_8h" startline="262" endline="265">ajb::FibonacciHeap&lt; K, V &gt;::FibonacciHeap</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classajb_1_1_fibonacci_heap_1aee871d2f5dc14522c9c9fe6445f79d3f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void ajb::FibonacciHeap&lt; K, V &gt;::clear</definition>
+        <argsstring>()</argsstring>
+        <name>clear</name>
+        <qualifiedname>ajb::FibonacciHeap::clear</qualifiedname>
+        <briefdescription>
+<para>Remove all elements from the heap. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FibonacciHeap.h" line="268" column="10" bodyfile="source/includes/utilities/FibonacciHeap.h" bodystart="268" bodyend="284"/>
+        <referencedby refid="classajb_1_1_fibonacci_heap_1adcd0bdaa76476a8f90436972899e4ca3" compoundref="_fibonacci_heap_8h" startline="287" endline="290">ajb::FibonacciHeap&lt; K, V &gt;::~FibonacciHeap</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classajb_1_1_fibonacci_heap_1adcd0bdaa76476a8f90436972899e4ca3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>ajb::FibonacciHeap&lt; K, V &gt;::~FibonacciHeap</definition>
+        <argsstring>()</argsstring>
+        <name>~FibonacciHeap</name>
+        <qualifiedname>ajb::FibonacciHeap::~FibonacciHeap</qualifiedname>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FibonacciHeap.h" line="287" column="5" bodyfile="source/includes/utilities/FibonacciHeap.h" bodystart="287" bodyend="290"/>
+        <references refid="classajb_1_1_fibonacci_heap_1aee871d2f5dc14522c9c9fe6445f79d3f" compoundref="_fibonacci_heap_8h" startline="268" endline="284">ajb::FibonacciHeap&lt; K, V &gt;::clear</references>
+      </memberdef>
+      <memberdef kind="function" id="classajb_1_1_fibonacci_heap_1af34745d53a6820f8230fdba5fa464c9c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint64_t</type>
+        <definition>uint64_t ajb::FibonacciHeap&lt; K, V &gt;::size</definition>
+        <argsstring>() const</argsstring>
+        <name>size</name>
+        <qualifiedname>ajb::FibonacciHeap::size</qualifiedname>
+        <briefdescription>
+<para>Number of elements in the heap. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FibonacciHeap.h" line="293" column="14" bodyfile="source/includes/utilities/FibonacciHeap.h" bodystart="293" bodyend="296"/>
+      </memberdef>
+      <memberdef kind="function" id="classajb_1_1_fibonacci_heap_1ad48fb2bee1cc0630b0f8d0a1017d15cd" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool ajb::FibonacciHeap&lt; K, V &gt;::empty</definition>
+        <argsstring>() const</argsstring>
+        <name>empty</name>
+        <qualifiedname>ajb::FibonacciHeap::empty</qualifiedname>
+        <briefdescription>
+<para>Is the heap empty. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FibonacciHeap.h" line="299" column="10" bodyfile="source/includes/utilities/FibonacciHeap.h" bodystart="299" bodyend="302"/>
+      </memberdef>
+      <memberdef kind="function" id="classajb_1_1_fibonacci_heap_1a2c544a843ee9afe6d648289c017dbab6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structajb_1_1detail_1_1_fibonacci_heap___node" kindref="compound">finger</ref></type>
+        <definition>finger ajb::FibonacciHeap&lt; K, V &gt;::insert</definition>
+        <argsstring>(K key, V value)</argsstring>
+        <name>insert</name>
+        <qualifiedname>ajb::FibonacciHeap::insert</qualifiedname>
+        <param>
+          <type>K</type>
+          <declname>key</declname>
+        </param>
+        <param>
+          <type>V</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Insert an element in the heap (move semantics) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FibonacciHeap.h" line="306" column="12" bodyfile="source/includes/utilities/FibonacciHeap.h" bodystart="306" bodyend="310"/>
+      </memberdef>
+      <memberdef kind="function" id="classajb_1_1_fibonacci_heap_1a19a59f74679507d84f5308142cf3644e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structajb_1_1detail_1_1_fibonacci_heap___node" kindref="compound">finger</ref></type>
+        <definition>finger ajb::FibonacciHeap&lt; K, V &gt;::insert</definition>
+        <argsstring>(node_ptr new_node)</argsstring>
+        <name>insert</name>
+        <qualifiedname>ajb::FibonacciHeap::insert</qualifiedname>
+        <param>
+          <type><ref refid="structajb_1_1detail_1_1_fibonacci_heap___node" kindref="compound">node_ptr</ref></type>
+          <declname>new_node</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FibonacciHeap.h" line="312" column="12" bodyfile="source/includes/utilities/FibonacciHeap.h" bodystart="312" bodyend="316"/>
+      </memberdef>
+      <memberdef kind="function" id="classajb_1_1_fibonacci_heap_1a1a7aa7fd7de30f0d1873b9df407bb887" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structajb_1_1detail_1_1_fibonacci_heap___node" kindref="compound">finger</ref></type>
+        <definition>finger ajb::FibonacciHeap&lt; K, V &gt;::minimum</definition>
+        <argsstring>()</argsstring>
+        <name>minimum</name>
+        <qualifiedname>ajb::FibonacciHeap::minimum</qualifiedname>
+        <briefdescription>
+<para>Get the minimum element in the heap. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FibonacciHeap.h" line="319" column="12" bodyfile="source/includes/utilities/FibonacciHeap.h" bodystart="319" bodyend="322"/>
+      </memberdef>
+      <memberdef kind="function" id="classajb_1_1_fibonacci_heap_1a2aa3165f51d2d96444fbee5d9d9c9f42" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structajb_1_1detail_1_1_fibonacci_heap___node" kindref="compound">const_finger</ref></type>
+        <definition>const_finger ajb::FibonacciHeap&lt; K, V &gt;::minimum</definition>
+        <argsstring>() const</argsstring>
+        <name>minimum</name>
+        <qualifiedname>ajb::FibonacciHeap::minimum</qualifiedname>
+        <briefdescription>
+<para>Get the minimum element in the heap. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FibonacciHeap.h" line="325" column="18" bodyfile="source/includes/utilities/FibonacciHeap.h" bodystart="325" bodyend="328"/>
+      </memberdef>
+      <memberdef kind="function" id="classajb_1_1_fibonacci_heap_1a77acaacabe9e7a9d7c4863a3c21e33d5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void ajb::FibonacciHeap&lt; K, V &gt;::remove_minimum</definition>
+        <argsstring>()</argsstring>
+        <name>remove_minimum</name>
+        <qualifiedname>ajb::FibonacciHeap::remove_minimum</qualifiedname>
+        <briefdescription>
+<para>Remove the minimum element in the heap. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FibonacciHeap.h" line="331" column="10" bodyfile="source/includes/utilities/FibonacciHeap.h" bodystart="331" bodyend="334"/>
+      </memberdef>
+      <memberdef kind="function" id="classajb_1_1_fibonacci_heap_1ac552b0d580138c6107b206375a345dc1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void ajb::FibonacciHeap&lt; K, V &gt;::decrease_key</definition>
+        <argsstring>(finger node, K new_key)</argsstring>
+        <name>decrease_key</name>
+        <qualifiedname>ajb::FibonacciHeap::decrease_key</qualifiedname>
+        <param>
+          <type><ref refid="structajb_1_1detail_1_1_fibonacci_heap___node" kindref="compound">finger</ref></type>
+          <declname>node</declname>
+        </param>
+        <param>
+          <type>K</type>
+          <declname>new_key</declname>
+        </param>
+        <briefdescription>
+<para>Decrease the key of an element in the heap. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FibonacciHeap.h" line="337" column="10" bodyfile="source/includes/utilities/FibonacciHeap.h" bodystart="337" bodyend="355"/>
+      </memberdef>
+      <memberdef kind="function" id="classajb_1_1_fibonacci_heap_1a9048e8e17d225328a7c0126deabf34a3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void ajb::FibonacciHeap&lt; K, V &gt;::remove</definition>
+        <argsstring>(node_ptr node)</argsstring>
+        <name>remove</name>
+        <qualifiedname>ajb::FibonacciHeap::remove</qualifiedname>
+        <param>
+          <type><ref refid="structajb_1_1detail_1_1_fibonacci_heap___node" kindref="compound">node_ptr</ref></type>
+          <declname>node</declname>
+        </param>
+        <briefdescription>
+<para>Remove an element from the heap. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FibonacciHeap.h" line="358" column="10" bodyfile="source/includes/utilities/FibonacciHeap.h" bodystart="358" bodyend="365"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>A Fibonacci min-heap. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>See: Fredman &amp; Tarjan, &quot;Fibonacci heaps and their uses in improved network
+  optimization algorithms&quot;, JACM 34 (3): 596–615, Jul 1987.</para>
+<para>doi:10.1145/28869.28874 </para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>ajb::FibonacciHeap&lt; K, V &gt;</label>
+        <link refid="classajb_1_1_fibonacci_heap"/>
+      </node>
+      <node id="2">
+        <label>ajb::FibonacciHeap&lt; double, size_t &gt;</label>
+        <link refid="classajb_1_1_fibonacci_heap"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; double, size_t &gt;</edgelabel>
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>ajb::FibonacciHeap&lt; K, V &gt;</label>
+        <link refid="classajb_1_1_fibonacci_heap"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/utilities/FibonacciHeap.h" line="123" column="1" bodyfile="source/includes/utilities/FibonacciHeap.h" bodystart="124" bodyend="367"/>
+    <listofallmembers>
+      <member refid="classajb_1_1_fibonacci_heap_1aef1651d4f2c69ac08bd818dd340d07af" prot="private" virt="non-virtual"><scope>ajb::FibonacciHeap</scope><name>cascading_cut</name></member>
+      <member refid="classajb_1_1_fibonacci_heap_1aee871d2f5dc14522c9c9fe6445f79d3f" prot="public" virt="non-virtual"><scope>ajb::FibonacciHeap</scope><name>clear</name></member>
+      <member refid="classajb_1_1_fibonacci_heap_1a8bf800cea0a9be5e4fc997f68c07c4cc" prot="private" virt="non-virtual"><scope>ajb::FibonacciHeap</scope><name>consolidation_</name></member>
+      <member refid="classajb_1_1_fibonacci_heap_1a87ff603dd2afac20d91059aa23799079" prot="public" virt="non-virtual"><scope>ajb::FibonacciHeap</scope><name>const_finger</name></member>
+      <member refid="classajb_1_1_fibonacci_heap_1a503d07efe312f58447873ca3b93b200c" prot="private" virt="non-virtual"><scope>ajb::FibonacciHeap</scope><name>const_node_ptr</name></member>
+      <member refid="classajb_1_1_fibonacci_heap_1aa21f341a60e87e71049c8a160955c2f0" prot="private" virt="non-virtual"><scope>ajb::FibonacciHeap</scope><name>count_</name></member>
+      <member refid="classajb_1_1_fibonacci_heap_1ac552b0d580138c6107b206375a345dc1" prot="public" virt="non-virtual"><scope>ajb::FibonacciHeap</scope><name>decrease_key</name></member>
+      <member refid="classajb_1_1_fibonacci_heap_1ad48fb2bee1cc0630b0f8d0a1017d15cd" prot="public" virt="non-virtual"><scope>ajb::FibonacciHeap</scope><name>empty</name></member>
+      <member refid="classajb_1_1_fibonacci_heap_1abedb30db7509d22dd9f783ce65629682" prot="private" virt="non-virtual"><scope>ajb::FibonacciHeap</scope><name>FibonacciHeap</name></member>
+      <member refid="classajb_1_1_fibonacci_heap_1a8b859a6ca24f1f776c1b0977b28f702f" prot="private" virt="non-virtual"><scope>ajb::FibonacciHeap</scope><name>FibonacciHeap</name></member>
+      <member refid="classajb_1_1_fibonacci_heap_1a723b86974a77cd8465e6b1bdc92c6264" prot="public" virt="non-virtual"><scope>ajb::FibonacciHeap</scope><name>FibonacciHeap</name></member>
+      <member refid="classajb_1_1_fibonacci_heap_1a1e38fe14cc687a0b04b223878f730f4c" prot="public" virt="non-virtual"><scope>ajb::FibonacciHeap</scope><name>finger</name></member>
+      <member refid="classajb_1_1_fibonacci_heap_1a2c544a843ee9afe6d648289c017dbab6" prot="public" virt="non-virtual"><scope>ajb::FibonacciHeap</scope><name>insert</name></member>
+      <member refid="classajb_1_1_fibonacci_heap_1a19a59f74679507d84f5308142cf3644e" prot="public" virt="non-virtual"><scope>ajb::FibonacciHeap</scope><name>insert</name></member>
+      <member refid="classajb_1_1_fibonacci_heap_1a1951e0812d4d162ac7d8ec55432ba46a" prot="private" virt="non-virtual"><scope>ajb::FibonacciHeap</scope><name>insert_node</name></member>
+      <member refid="classajb_1_1_fibonacci_heap_1a7dae1caadf6ea17016bb124cf0c798f7" prot="private" virt="non-virtual"><scope>ajb::FibonacciHeap</scope><name>key_type</name></member>
+      <member refid="classajb_1_1_fibonacci_heap_1a790f482b18cf788538b177a695c3f496" prot="private" virt="non-virtual"><scope>ajb::FibonacciHeap</scope><name>max_degree_</name></member>
+      <member refid="classajb_1_1_fibonacci_heap_1a1a7aa7fd7de30f0d1873b9df407bb887" prot="public" virt="non-virtual"><scope>ajb::FibonacciHeap</scope><name>minimum</name></member>
+      <member refid="classajb_1_1_fibonacci_heap_1a2aa3165f51d2d96444fbee5d9d9c9f42" prot="public" virt="non-virtual"><scope>ajb::FibonacciHeap</scope><name>minimum</name></member>
+      <member refid="classajb_1_1_fibonacci_heap_1a00958f618899baa63634f68ff7d93f57" prot="private" virt="non-virtual"><scope>ajb::FibonacciHeap</scope><name>node_ptr</name></member>
+      <member refid="classajb_1_1_fibonacci_heap_1a62d0bcdb3858cee5c986103a482a4bff" prot="private" virt="non-virtual"><scope>ajb::FibonacciHeap</scope><name>operator=</name></member>
+      <member refid="classajb_1_1_fibonacci_heap_1a2bb8b82e5abefc02987fe5cb48bbaf1f" prot="private" virt="non-virtual"><scope>ajb::FibonacciHeap</scope><name>promote_children_of_root</name></member>
+      <member refid="classajb_1_1_fibonacci_heap_1a9048e8e17d225328a7c0126deabf34a3" prot="public" virt="non-virtual"><scope>ajb::FibonacciHeap</scope><name>remove</name></member>
+      <member refid="classajb_1_1_fibonacci_heap_1ae4b23cbc904732a92c556f0f07b390f6" prot="private" virt="non-virtual"><scope>ajb::FibonacciHeap</scope><name>remove_current_root</name></member>
+      <member refid="classajb_1_1_fibonacci_heap_1a77acaacabe9e7a9d7c4863a3c21e33d5" prot="public" virt="non-virtual"><scope>ajb::FibonacciHeap</scope><name>remove_minimum</name></member>
+      <member refid="classajb_1_1_fibonacci_heap_1a37424e56e897e0d5e4dedcfe9de17eb4" prot="private" virt="non-virtual"><scope>ajb::FibonacciHeap</scope><name>root_</name></member>
+      <member refid="classajb_1_1_fibonacci_heap_1af34745d53a6820f8230fdba5fa464c9c" prot="public" virt="non-virtual"><scope>ajb::FibonacciHeap</scope><name>size</name></member>
+      <member refid="classajb_1_1_fibonacci_heap_1a93dfa1a48d4fe0ec707e8db180cbf259" prot="private" virt="non-virtual"><scope>ajb::FibonacciHeap</scope><name>value_type</name></member>
+      <member refid="classajb_1_1_fibonacci_heap_1adcd0bdaa76476a8f90436972899e4ca3" prot="public" virt="non-virtual"><scope>ajb::FibonacciHeap</scope><name>~FibonacciHeap</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

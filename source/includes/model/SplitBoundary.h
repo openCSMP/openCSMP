@@ -94,7 +94,7 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
     
     /// constructor of split boundary with given name from set of juxtaposed elements; prompts MeshManager to create elements
     SplitBoundary( std::string splitboundaryname, const PropertyDatabase<dim>&, 
-                   const FiniteElementManager&, MeshManager<dim>&, const InterFaceParentElements<dim>& );
+                   MeshManager<dim>&, const InterFaceParentElements<dim>& );
                    
     SplitBoundary( std::string splitboundaryname, const PropertyDatabase<dim>& );
     

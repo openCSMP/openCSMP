@@ -77,22 +77,24 @@ Point<3U>  normalAtFacetCenter( const Point<3U>& pt0,
 } // end normalAtFacetCenter
 
 /// normal is zero as it points into the coordinate direction that does not exist
-Point<2U>  normalAtFacetCenter( const Point<2U>& pt0,
-                                const Point<2U>& pt1,
-                                const Point<2U>& pt2,
-                                const Point<2U>& pt3 )
+Point<2U>  normalAtFacetCenter( const Point<2U>&,
+                                const Point<2U>&,
+                                const Point<2U>&,
+                                const Point<2U>& )
 {
-    return Point<2U>();
+    return Point<2U>( std::numeric_limits<double>::quiet_NaN(),
+                      std::numeric_limits<double>::quiet_NaN() );
 }
 
 /// normal is zero as it points into the coordinate direction that does not exist
-Point<1U>  normalAtFacetCenter( const Point<1U>& pt0,
-                                const Point<1U>& pt1,
-                                const Point<1U>& pt2,
-                                const Point<1U>& pt3 )
+Point<1U>  normalAtFacetCenter( const Point<1U>&,
+                                const Point<1U>&,
+                                const Point<1U>&,
+                                const Point<1U>& )
 {
-    return Point<1U>();
+    return Point<1U>( std::numeric_limits<double>::quiet_NaN() );
 }
+
 
 /// one-point quadrature
 double  facetArea1( const Point<3U>& pt0, 
@@ -119,6 +121,7 @@ double  facetArea1( const Point<3U>& pt0,
   return 4. * sqrt(efg0 * efg2 - efg1 * efg1);
   
 } // end facetArea1
+
 
 
 

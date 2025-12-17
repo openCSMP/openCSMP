@@ -1,0 +1,49 @@
+\doxysection{Num\+Integral\+\_\+\+PT\+\_\+op\+\_\+d\+S.\+h}
+\hypertarget{_num_integral___p_t__op__d_s_8h_source}{}\label{_num_integral___p_t__op__d_s_8h_source}\index{source/includes/integration/pde\_operators/numerical/NumIntegral\_PT\_op\_dS.h@{source/includes/integration/pde\_operators/numerical/NumIntegral\_PT\_op\_dS.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{NUM\_INTEGRAL\_PT\_OP\_DS\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{NUM\_INTEGRAL\_PT\_OP\_DS\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_math_operator_r_h_s_8h}{"{}MathOperatorRHS.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_face}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_face}{Face}};}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{comment}{/**\ Scalars,\ or\ vectors\ acting\ on\ model\ boundary\ surfaces\ as\ tractions/stresses}}
+\DoxyCodeLine{00012\ \textcolor{comment}{}}
+\DoxyCodeLine{00013\ \textcolor{comment}{@date\ 2000-\/2013}}
+\DoxyCodeLine{00014\ \textcolor{comment}{@author\ Dr.\ Stephan\ K.\ Matthai}}
+\DoxyCodeLine{00015\ \textcolor{comment}{@author\ Stephen\ G.\ Roberts}}
+\DoxyCodeLine{00016\ \textcolor{comment}{@author\ M.\ Nejati}}
+\DoxyCodeLine{00017\ \textcolor{comment}{@author\ P.S.\ Lang}}
+\DoxyCodeLine{00018\ \textcolor{comment}{}}
+\DoxyCodeLine{00019\ \textcolor{comment}{Operator\ to\ be\ applied\ to\ boundary,\ with\ NEUMANN\ variables\ considered\ only.\ Scalars\ are\ considered\ positiv\ if\ directed}}
+\DoxyCodeLine{00020\ \textcolor{comment}{towards\ inside\ of\ boundary.}}
+\DoxyCodeLine{00021\ \textcolor{comment}{}}
+\DoxyCodeLine{00022\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00023\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00024\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_num_integral___p_t__op__d_s}{NumIntegral\_PT\_op\_dS}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_num_integral___p_t__op__d_s}{MathOperatorRHS}}<\mbox{\hyperlink{classcsmp_1_1_num_integral___p_t__op__d_s}{dim}},\mbox{\hyperlink{classcsmp_1_1_num_integral___p_t__op__d_s}{Face}}>\ \{}
+\DoxyCodeLine{00025\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00026\ \ \ \ \ NumIntegral\_PT\_op\_dS(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&\ p,}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ oper,\ \ \ \ \textcolor{comment}{//\ VECTOR/SCALAR\ variable\ on\ FACE\ \ \ }}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ test\ );\ \ \textcolor{comment}{//\ VECTOR\ variable\ on\ NODE}}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_num_integral___p_t__op__d_s_a5135a64ddea9a05c229596496eb075eb}{GetOperands}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_face}{Face}}<dim>\&\ )\ \textcolor{keyword}{override}\ \textcolor{keyword}{final};}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_num_integral___p_t__op__d_s_a955e8a05bc01e8e478b36ac2f8b1b99d}{ComputeContribution}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_face}{Face}}<dim>\&\ )\ \textcolor{keyword}{override}\ \textcolor{keyword}{final};}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_num_integral___p_t__op__d_s}{NumIntegral\_PT\_op\_dS}}<dim>*\ clone()\ \textcolor{keyword}{const}\ \textcolor{keyword}{override}\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classcsmp_1_1_num_integral___p_t__op__d_s}{NumIntegral\_PT\_op\_dS}}<dim>\ (*\textcolor{keyword}{this});\ \}}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00036\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\ \ oper\_;\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ Face\ variable\ value}}
+\DoxyCodeLine{00037\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ \ \ scalar\_;\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ Face\ scalar\ value}}
+\DoxyCodeLine{00038\ \};}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

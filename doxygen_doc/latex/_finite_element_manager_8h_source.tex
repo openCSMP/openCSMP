@@ -1,0 +1,76 @@
+\doxysection{Finite\+Element\+Manager.\+h}
+\hypertarget{_finite_element_manager_8h_source}{}\label{_finite_element_manager_8h_source}\index{source/includes/model/FiniteElementManager.h@{source/includes/model/FiniteElementManager.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_FINITE\_ELEMENT\_MANAGER\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_FINITE\_ELEMENT\_MANAGER\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{iostream}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{list}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_finite_element_8h}{"{}FiniteElement.h"{}}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{enum}\ \{\ ELEMENT\_POLYTYPES=7\ \};\ \textcolor{comment}{//\ maximum\ number\ of\ types\ connected\ in\ any\ one\ model}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00013\ \textcolor{comment}{@brief\ Container\ storing\ instances\ of\ the\ finite\ element\ types\ used\ in\ any\ particular\ instance\ of\ the\ class\ Model.}}
+\DoxyCodeLine{00014\ \textcolor{comment}{}}
+\DoxyCodeLine{00015\ \textcolor{comment}{@author\ S.K.\ Matthai}}
+\DoxyCodeLine{00016\ \textcolor{comment}{@author\ Stephen\ G.\ Roberts}}
+\DoxyCodeLine{00017\ \textcolor{comment}{@author\ S.\ Geiger}}
+\DoxyCodeLine{00018\ \textcolor{comment}{@date\ 2001}}
+\DoxyCodeLine{00019\ \textcolor{comment}{}}
+\DoxyCodeLine{00020\ \textcolor{comment}{@section\ motivation\ Motivation}}
+\DoxyCodeLine{00021\ \textcolor{comment}{}}
+\DoxyCodeLine{00022\ \textcolor{comment}{@todo\ SKM:\ currently\ all\ the\ existing\ element\ types\ are\ hardwired\ into\ this\ class}}
+\DoxyCodeLine{00023\ \textcolor{comment}{and\ must\ always\ be\ present.\ Make\ this\ dynamic,\ loading\ elements\ only\ on\ demand.}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00025\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00026\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_finite_element_manager}{FiniteElementManager}}\ \{}
+\DoxyCodeLine{00027\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00028\ \ \ \ \ FiniteElementManager();}
+\DoxyCodeLine{00029\ \ \ \ \ FiniteElementManager(\ uint32\_t\ dimensions,}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ interpolation\_order,}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ isoparametric\ );}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ FiniteElementManager(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_finite_element_manager}{FiniteElementManager}}\&\ mgr\ );}
+\DoxyCodeLine{00034\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_element_manager}{FiniteElementManager}}\&\ operator=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_finite_element_manager}{FiniteElementManager}}\&\ mgr\ );}
+\DoxyCodeLine{00035\ \ \ \ \ \string~FiniteElementManager();}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keywordtype}{void}\ InitializeElements(\ uint32\_t\ dim,\ uint32\_t\ interpolation\_order,\ \textcolor{keywordtype}{bool}\ isoparametric\ );}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ uint32\_t\ \ \ \ \ \ \ \ \ \ Dimensions()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ ContainsElementType(\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\_FEM\_TYPE}}\ etype\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ CurrentElementTypes(\ std::list<CSMP\_FEM\_TYPE>\&\ etypes\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00042\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_element}{FiniteElement}}*\ \ \ \ E(\ int8\_t\ csmp\_etype\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00043\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_element}{FiniteElement}}*\ \ \ \ E(\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\_FEM\_TYPE}}\ csmp\_etype\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00044\ \ \ \ \ uint32\_t\ \ \ \ \ \ \ \ \ \ NodesOfElementType(\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\_FEM\_TYPE}}\ etype\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{comment}{//\ standard\ types}}
+\DoxyCodeLine{00046\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_element}{FiniteElement}}*\ \ \ \ LinearBarElement()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00047\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_element}{FiniteElement}}*\ \ \ \ LinearTriangleElement()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00048\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_element}{FiniteElement}}*\ \ \ \ LinearTetrahedronElement()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{comment}{//\ can\ be\ changed,\ but\ intermediate\ nodes\ will\ become\ defunct}}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ InterpolationOrder(\ uint32\_t\ interpolation\_order\ );\ \textcolor{comment}{//\ TODO:\ does\ not\ allocate\ new\ suite\ of\ elements!}}
+\DoxyCodeLine{00052\ \ \ \ \ uint32\_t\ \ \ \ \ \ \ \ \ \ InterpolationOrder()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ UsesElementsWithLocalCoordinateSystem()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ Out()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ mixed\_element\_formulation;\ \textcolor{comment}{///<\ different-\/order\ elements\ at\ same\ time}}
+\DoxyCodeLine{00059\ \ \ \ \ uint32\_t\ \ dimensions,\ interpolation;}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{comment}{//\ volume\ elements}}
+\DoxyCodeLine{00061\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_element}{FiniteElement}}*\ \ hexa\_ptr,\ *pyra\_ptr,\ *pris\_ptr,\ *tetr\_ptr;}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{comment}{//\ surface\ elements}}
+\DoxyCodeLine{00063\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_element}{FiniteElement}}*\ \ quad\_ptr,\ *tria\_ptr;}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{comment}{//\ line\ elements}}
+\DoxyCodeLine{00065\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_element}{FiniteElement}}*\ \ line\_ptr;}
+\DoxyCodeLine{00066\ \};}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

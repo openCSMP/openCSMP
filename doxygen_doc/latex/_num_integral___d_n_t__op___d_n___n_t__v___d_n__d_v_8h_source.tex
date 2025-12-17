@@ -1,0 +1,40 @@
+\doxysection{Num\+Integral\+\_\+\+DNT\+\_\+op\+\_\+\+DN\+\_\+\+NT\+\_\+v\+\_\+\+DN\+\_\+d\+V.\+h}
+\hypertarget{_num_integral___d_n_t__op___d_n___n_t__v___d_n__d_v_8h_source}{}\label{_num_integral___d_n_t__op___d_n___n_t__v___d_n__d_v_8h_source}\index{source/includes/integration/pde\_operators/numerical/NumIntegral\_DNT\_op\_DN\_NT\_v\_DN\_dV.h@{source/includes/integration/pde\_operators/numerical/NumIntegral\_DNT\_op\_DN\_NT\_v\_DN\_dV.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_NUM\_INTEGRAL\_DNT\_OP\_DN\_NT\_V\_DN\_DV\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_NUM\_INTEGRAL\_DNT\_OP\_DN\_NT\_V\_DN\_DV\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_math_operator_l_h_s_8h}{"{}MathOperatorLHS.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_element}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}};}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{comment}{///\ advection-\/dispersion\ integral,\ see\ Istok\ (1989),\ use\ to\ obtain\ steady-\/state\ solutions\ for\ small\ Peclet\ number\ flows}}
+\DoxyCodeLine{00011\ \textcolor{keyword}{template}<uint32\_t\ dim,\ \textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ CELL=\mbox{\hyperlink{classcsmp_1_1_element}{Element}}>}
+\DoxyCodeLine{00012\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_num_integral___d_n_t__op___d_n___n_t__v___d_n__d_v}{NumIntegral\_DNT\_op\_DN\_NT\_v\_DN\_dV}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_num_integral___d_n_t__op___d_n___n_t__v___d_n__d_v}{MathOperatorLHS}}<\mbox{\hyperlink{classcsmp_1_1_num_integral___d_n_t__op___d_n___n_t__v___d_n__d_v}{dim}},\mbox{\hyperlink{classcsmp_1_1_num_integral___d_n_t__op___d_n___n_t__v___d_n__d_v}{CELL}}>\ \{}
+\DoxyCodeLine{00013\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00014\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_num_integral___d_n_t__op___d_n___n_t__v___d_n__d_v_a590ee5c6dd79cc2d6af5d0db44cacaf4}{NumIntegral\_DNT\_op\_DN\_NT\_v\_DN\_dV}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&,}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ diffusion\_oper,\ \ \ \textcolor{comment}{///<\ element\ prop,\ for\ instance\ thermal\ conductivity}}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ advection\_oper,\ \ \ \textcolor{comment}{///<\ element\ prop,\ for\ instance\ heat\ transport\ velocity}}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ basic,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ e.g.,\ fluid\ pressure}}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ test\ );\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ e.g.,\ fluid\ pressure}}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_num_integral___d_n_t__op___d_n___n_t__v___d_n__d_v_a47377b21d629acf9ebdc10f23b18f381}{GetOperands}}(\ \textcolor{keyword}{const}\ CELL<dim>\&\ )\ \textcolor{keyword}{override}\ \textcolor{keyword}{final};}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_num_integral___d_n_t__op___d_n___n_t__v___d_n__d_v_acd13c3296f1a0b2898ad49fd9f972a50}{ComputeContribution}}(\ \textcolor{keyword}{const}\ CELL<dim>\&\ )\ \textcolor{keyword}{override}\ \textcolor{keyword}{final};}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \ \ NumIntegral\_DNT\_op\_DN\_NT\_v\_DN\_dV<dim,CELL>*\ clone()\ \textcolor{keyword}{const}\ \textcolor{keyword}{override}\ \textcolor{keyword}{final}\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{new}\ NumIntegral\_DNT\_op\_DN\_NT\_v\_DN\_dV<dim,CELL>(*\textcolor{keyword}{this});\ \}}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00026\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\ \ DN,\ DNT,\ VIP,\ NT3;}
+\DoxyCodeLine{00027\ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\ \ IPOL;\ \ \ \ \textcolor{comment}{///<\ basis\ function\ values\ (at\ integration\ point)}}
+\DoxyCodeLine{00028\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\ \ velo\_;\ \ \ \textcolor{comment}{///<\ Darcy\ flow\ velocity}}
+\DoxyCodeLine{00029\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ adv\_key;\ \textcolor{comment}{///<\ index\ of\ the\ variable\ that\ shall\ be\ advected}}
+\DoxyCodeLine{00030\ \};}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{/*\ CSMP\_NUM\_INTEGRAL\_DNT\_OP\_DN\_NT\_V\_DN\_DV\_H\ */}}
+
+\end{DoxyCode}

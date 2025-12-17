@@ -1,0 +1,74 @@
+\doxysection{Constant\+Factor.\+h}
+\hypertarget{_constant_factor_8h_source}{}\label{_constant_factor_8h_source}\index{source/includes/property\_manipulation/ConstantFactor.h@{source/includes/property\_manipulation/ConstantFactor.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CONSTANT\_FACTOR\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CONSTANT\_FACTOR\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_interrelation_8h}{"{}Interrelation.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{template}<uint32\_t\ dim,\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{class}\ operation>}
+\DoxyCodeLine{00009\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_constant_factor}{ConstantFactor}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_interrelation}{Interrelation}}<\ dim>\ \{}
+\DoxyCodeLine{00010\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00011\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ res\_;}
+\DoxyCodeLine{00012\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ arg\_;}
+\DoxyCodeLine{00013\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ factor\_,\ val\_;}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \ \ \ \ operation<\mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ >\ operate\_;}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ res\_prop\_equal\_to\_arg\_prop\_;}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00019\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_constant_factor_a0e70c4cb3760a3a07f84a1d78a7f8624}{ConstantFactor}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&\ p,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ resultProperty,}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ argumentProperty,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ factor);}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ \string~ConstantFactor()\ \{\};}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_constant_factor_a29ee4393b5cffd0413981d2b72233b2e}{ChangeFactor}}(\ \textcolor{keywordtype}{double}\ factor\ );}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_constant_factor_a264cd7f6c3139c38227fd9cda341b395}{Calculate}}();}
+\DoxyCodeLine{00027\ \};}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00030\ \textcolor{comment}{}}
+\DoxyCodeLine{00031\ \textcolor{comment}{@class\ ConstantFactor\ ConstantFactor\ "{}interrelations/ConstantFactor.h"{}}}
+\DoxyCodeLine{00032\ \textcolor{comment}{@author\ S.K.\ Matthaei}}
+\DoxyCodeLine{00033\ \textcolor{comment}{@author\ S.\ Geiger}}
+\DoxyCodeLine{00034\ \textcolor{comment}{@author\ S.\ Roberts}}
+\DoxyCodeLine{00035\ \textcolor{comment}{@date\ 2002}}
+\DoxyCodeLine{00036\ \textcolor{comment}{}}
+\DoxyCodeLine{00037\ \textcolor{comment}{}}
+\DoxyCodeLine{00038\ \textcolor{comment}{ConstantFactor\ is\ an\ interrelation\ which\ allows\ users\ to\ combine\ an}}
+\DoxyCodeLine{00039\ \textcolor{comment}{arbitrary\ number\ of\ variables.\ An\ STL\ binary\ function\ object\ is\ used\ to}}
+\DoxyCodeLine{00040\ \textcolor{comment}{define\ the\ operation\ used\ to\ combine\ the\ variables.\ For\ most\ }}
+\DoxyCodeLine{00041\ \textcolor{comment}{applications,\ std::multiplies\ (for\ multiplication)\ and\ std::plus\ (for}}
+\DoxyCodeLine{00042\ \textcolor{comment}{summation)\ of\ the\ STL\ base\ library\ will\ be\ used,\ but\ in\ principle\ one}}
+\DoxyCodeLine{00043\ \textcolor{comment}{is\ free\ to\ define\ an\ arbitrary\ binary\ function.}}
+\DoxyCodeLine{00044\ \textcolor{comment}{}}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00046\ \textcolor{comment}{@section\ applicability\ Applicability}}
+\DoxyCodeLine{00047\ \textcolor{comment}{}}
+\DoxyCodeLine{00048\ \textcolor{comment}{Use\ this\ interrelation\ when\ you\ need\ to\ combine\ different\ variables.}}
+\DoxyCodeLine{00049\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00050\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00051\ \textcolor{comment}{@section\ implementation\ Implementation}}
+\DoxyCodeLine{00052\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00053\ \textcolor{comment}{The\ implementation\ makes\ use\ of\ the\ STL\ binary\ function\ classes}}
+\DoxyCodeLine{00054\ \textcolor{comment}{and\ the\ Operand\ class.\ Therefore,\ combining\ element\ and\ nodal\ variables}}
+\DoxyCodeLine{00055\ \textcolor{comment}{should\ be\ possible\ (not\ tested).\ The\ first\ operand\ is\ used\ to}}
+\DoxyCodeLine{00056\ \textcolor{comment}{initialize\ the\ result\ operand,\ which\ results\ in\ the\ following\ behaviour}}
+\DoxyCodeLine{00057\ \textcolor{comment}{when\ using\ non-\/commutative\ operands\ (here\ shown\ for\ std::minus):}}
+\DoxyCodeLine{00058\ \textcolor{comment}{}}
+\DoxyCodeLine{00059\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00060\ \textcolor{comment}{result\_property\ =\ first\_property\ -\/\ (\(\backslash\)sum\ other\_properties).}}
+\DoxyCodeLine{00061\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00062\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

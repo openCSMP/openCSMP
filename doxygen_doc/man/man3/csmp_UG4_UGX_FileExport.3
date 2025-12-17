@@ -1,0 +1,184 @@
+.TH "csmp::UG4_UGX_FileExport< dim >" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::UG4_UGX_FileExport< dim >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <UG4_UGX_FileExport\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBUG4_UGX_FileExport\fP (const \fBModel\fP< dim > &)"
+.br
+.ti -1c
+.RI "bool \fBWrite_UGX_FileASCII\fP (const \fBModel\fP< dim > &, const std::string &file_name)"
+.br
+.RI "filename without extension which will be appended "
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim>
+.br
+class csmp::UG4_UGX_FileExport< dim >"Export interface for writing text files in the \&.ugx format using XML for the formatting\&. Explanations of the UG4 output tags\&.
+
+.PP
+Drawing on the information provided in 'file_io_ugx*' in conjunction with the GridWriterUGX class\&. Some enumerations in grid/grid_base_objects\&.h
+
+.PP
+To assign properties to the grid, attachment traits are used\&. These are: vertex, edge, face and volume\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+Design choices had to be made to crerate the additional edge and face data that UG4 needs for during the output:
+.RE
+.PP
+Importantly, CSMP models store edges and faces only if these are needed as lower-dimensional entities for computations (well and fracture modelling, assignment of boundary condtions etc\&.)\&. In UG4 they are always needed and their numbering must be unique\&.
+
+.PP
+The choice made for the implementation of this CSMP-UG4 interface is that those edges and faces that are present in the CSMP model are later identified in the edges and faces vectors created for UG\&. What is output is the "model domain" plus the faces (and interfaces) touching it\&. Their 'idx' is mapped that of the edge and faces created for UG\&.
+
+.PP
+\fBRegion\fP and \fBBoundary\fP output enlists all the nodes, edges and faces that belong to these, although UG4 only wants them to be listed once\&. Here, the feature in Promesh which eliminates excess edges and faces is relied upon\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+properties are no associated with regions but communicated as node, edge, face and volume attachments\&. Since the CSMP model only contains property values for those elements, faces, interfaces and nodes present in there, no-data values are printed for all the other ones needed by UG\&.
+.RE
+.PP
+.SH "Example"
+.PP
+One of the UGX files from the examples directorty ofg UG4\&. @Code
+
+.PP
+<?xml version="1\&.0" encoding="utf-8"?> <grid name="defGrid"> <vertices coords="3">0 0 0 0\&.5 \&.\&.\&. </vertices>
+
+.PP
+<edges>1 8 \&.\&.\&.</edges> <triangles>1 8 232 \&.\&.\&.</quadrilaterals> <tetrahedrons>90 36 226 232 226 \&.\&.\&.</tetrahedrons> <hexahedrons>10 92 196 98 6 84 193 102 \&.\&.\&.</hexahedrons> <pyramids>80 90 8 1 232 \&.\&.\&.</pyramids>
+
+.PP
+<volume_attachment name="PORO" type="double" passOn="1" global="1">0\&.34971 0\&.337518 0\&.326172 \&.\&.\&.</volume_attachment> <volume_attachment name="PERM" type="double" passOn="1" global="1">1\&.91727 2\&.05433 2\&.14788 \&.\&.\&.</volume_attachment>
+
+.PP
+<subset_handler name="defSH"> <subset name="Flex" color="0\&.588235 0\&.588235 1 1" state="262144"> <vertices>12 13 14 15 16 17 \&.\&.\&.</vertices> <edges>8 9 10 11 12 13 14 15 \&.\&.\&.</edges> <faces>338 339 340 341 \&.\&.\&.</faces> <volumes>80 81 82 83 \&.\&.\&.</volumes> </subset>
+
+.PP
+<subset name="Fixed" color="1 0 0 1" state="393216"> <vertices>36 226 90 232 \&.\&.\&.</vertices> <edges>536 73 582 539 501 \&.\&.\&.</edges> <faces>84 10 80 85 86 81 11 \&.\&.\&.</faces> <volumes>0 1 2 3 4 5 6 7 8 9 10 \&.\&.\&.</volumes> </subset>
+
+.PP
+<subset name="Force" color="0 1 0 1" state="393216"> <vertices>63 182 224 144 145 225</vertices> <edges>256 456 454 181 182 459 461</edges> <faces>517 523</faces> </subset>
+
+.PP
+</subset_handler> <selector name="defSel"> <projection_handler name="defPH" subset_handler="0"> <default type="default">0 0</default> </projection_handler> </grid>
+.SH "tags used"
+.PP
+The hierarchical XML tags above are getting processed here using the functionality in XML\&. Comments in XML files are inserted using The tags suported here were defined by Andreas Vogel, and this is the correspondence list to CSMP types:
+
+.PP
+grid -> mesh vertices -> nodes edges, triangles, quadrilaterals -> line elements, triangular elements, quadrilateral elements etc\&. subset = region or boundary subset_handler -> class without specific purpose yet\&. Only a single subset handler needs to be present\&. Its name is "defSH" (default subset handler)
+
+.PP
+projection_handler for the transformation of coordinates to another systems
+
+.PP
+vertex, edge, face, volume -> element type independent identifier of elements of a specific topologic dimensionality
+
+.PP
+\fBAttention\fP
+.RS 4
+the \&.ugx format requires lists for all the subentities of the actual finite elements in a mesh\&. These are listed using the implicit integer numbers of the nodes ( vertices)\&. It follows, that a 3D models needs:
+.RE
+.PP
+<edges> unique pairs of nodes that define the edges of all elements in the model
+
+.PP
+<triangles> the vertex ids (0\&.\&.n-1) that define the faces of simplex elements <quadrilaterals> the faces of hexadral, prism, and pyramid elements
+
+.PP
+Note that these numbers have to be repeated for each region and boundary of the mesh, using the same numbering implicit to their order\&.
+.SH "the properties of a model"
+.PP
+Variables are stored as "attachments\&."
+.SH "Types"
+.PP
+common_attachments\&.h defines the types of variables that can be associated with nodes, edges, faces and elements\&. These are spelled out also in` global_attachments\&.h -> attachment_info_traits -> distinguishing double, float, int, bool, vector1, vector2, vector3, vector4\&.
+
+.PP
+Vectors and matrices are typedef'd in /common/math/ug_math_types\&.h
+
+.PP
+matrix22, matrix33, matrix44
+
+.PP
+All these types are referred to via strings in the output \&.ugx file\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+UGX file only stores straight-sided elements with corner nodes only\&. Any refinement occurs inside of UG\&. This may include obtaining body-fitted representations of curves etc\&.
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+SKM #date 3/12/2-23 
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim> bool \fBcsmp::UG4_UGX_FileExport\fP< dim >::Write_UGX_FileASCII (const \fBModel\fP< dim > & model, const std::string & file_name)"
+
+.PP
+filename without extension which will be appended Writes UGX file in text format (UTF-8), in which all CSMP elements are assigned property values in the form of face_attachments and volume_attachments\&. Naive version where the XML tags are handcrafted\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fImodel\fP CSMP model 
+.br
+\fIfile_name\fP filename without extension\&. \&.UGX will be appended\&.
+.RE
+.PP
+\fBAttention\fP
+.RS 4
+method assumes that the nodes and elements have already been numbered from 0\&.\&.n-1 following UG's conventions
+
+.PP
+no_data_value = -numeric_limits<float>::max() will be written for each edge, face, and volume for which there is no equivalent in CSMP model
+.RE
+.PP
+.SH "Sequence (using the keywords that were defined by S\&. Reiter for the UGX format"
+.PP
+vertices edges faces (triangles, quads) volumes (tetra, hexa, prism, pyra)
+
+.PP
+vertex_attachments (Dirichlet conditions etc\&.) 
+.PP
+\fBTodo\fP
+.RS 4
+edge_attachments to implement the line element properties from CSM face_attachments (surfaces elements) volume_attachments (volume elements)
+.RE
+.PP
+
+.PP
+subsetblock - \fBcsmp::Region\fP named objects 
+.PP
+\fBTodo\fP
+.RS 4
+subsetblock - \fBcsmp::Boundary\fP named objects 
+
+.PP
+setsetblock - \fBcsmp::SplitBoundary\fP objects
+.RE
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

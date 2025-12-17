@@ -29,7 +29,7 @@ namespace csmp {
 template<uint32_t dim>
 size_t currentCellTypes( const MeshManager<dim>& mesh, PLACEMENT etype, size_t& volume_cells, size_t& surface_cells, size_t& line_cells )
  {
-    size_t n_cells_model{ mesh.Elements() + mesh.Faces() + mesh.InterFaces() };
+    size_t n_cells_model{ mesh.Elements() + mesh.Faces() + mesh.Interfaces() };
     volume_cells = surface_cells = line_cells = 0U;
     
     // elements
@@ -57,8 +57,8 @@ size_t currentCellTypes( const MeshManager<dim>& mesh, PLACEMENT etype, size_t& 
       }
     // interfaces
     else if ( etype == INTER_FACE ) {
-         surface_cells = count_if( mesh.InterFacesBegin(), mesh.InterFacesEnd(), []( const InterFace<dim>& e ){ return e.IsSurface(); } );
-         line_cells = mesh.InterFaces() - surface_cells;
+         surface_cells = count_if( mesh.InterfacesBegin(), mesh.InterfacesEnd(), []( const InterFace<dim>& e ){ return e.IsSurface(); } );
+         line_cells = mesh.Interfaces() - surface_cells;
       }
     else cerr <<"\n\n"<< "currentCellTypes: invalid celltype: "<< parsePlacement(etype) << endl;
  
@@ -230,19 +230,19 @@ size_t detectOrphanNodes( MeshManager<dim>& mesh, set<Node<dim>*>& orphan_nodes 
     // loop over elements, faces and interfaces, returning storing pointers to their nodes in a vector
     for ( auto it=mesh.ElementsBegin(); it!=mesh.ElementsEnd(); ++it ) {
          const auto n_nodes{ (*it).Nodes() };
-         for ( auto i{0U}; i<n_nodes; i++ )
+         for ( uint32_t i{0U}; i<n_nodes; i++ )
            node_ptrs.insert( (*it).N(i) );
       }
     if ( mesh.Faces() > 0 )
       for ( auto it=mesh.FacesBegin(); it!=mesh.FacesEnd(); ++it ) {
            const auto n_nodes{ (*it).Nodes() };
-           for ( auto i{0U}; i<n_nodes; i++ )
+           for ( uint32_t i{0U}; i<n_nodes; i++ )
              node_ptrs.insert( (*it).N(i) );
         }
-    if ( mesh.InterFaces() > 0 )
-      for ( auto it=mesh.InterFacesBegin(); it!=mesh.InterFacesEnd(); ++it ) {
+    if ( mesh.Interfaces() > 0 )
+      for ( auto it=mesh.InterfacesBegin(); it!=mesh.InterfacesEnd(); ++it ) {
            const auto n_nodes{ (*it).Nodes() };
-           for ( auto i{0U}; i<n_nodes; i++ )
+           for ( uint32_t i{0U}; i<n_nodes; i++ )
              node_ptrs.insert( (*it).N(i) );
         }
     
@@ -320,7 +320,7 @@ size_t findContiguousMeshPatch( CELL<dim>* const eptr, set<CELL<dim>*>& cells_co
                  const auto  n_neighbors{ nit->Neighbors() };
                  assert( n_neighbors <= max_cell_nbors );
                  new_neighbor_cells.reserve( n_neighbors );
-                 for ( auto j{0U}; j<n_neighbors; ++j )
+                 for ( uint32_t j{0U}; j<n_neighbors; ++j )
                    if ( nit->Neighbor(j) != nullptr )
                      new_neighbor_cells.push_back( nit->Neighbor(j) );
                  // marking the neighbor cell as discovered
@@ -375,7 +375,7 @@ size_t  findContiguousMeshPatches( typename plf::colony<CELL<dim>>::iterator beg
      
       // getting a copy of the element pointers of the mesh (without writing an adaptor from colony iterator to cell pointer)
       vector<CELL<dim>*>   cells;
-      cells.reserve( distance(begin,end) );
+      cells.reserve( static_cast<size_t>(distance(begin,end)) );
       while ( begin != end ) {
           cells.push_back( &(*begin) );
           ++begin;
@@ -2083,6 +2083,35 @@ bool findCollocatedCells( typename vector<Element<3U>*>::const_iterator,
 
 
 
+template<uint32_t dim>
+bool areUnitNormalsToFacesAreOutwardPointing( const Element<dim>* eptr )
+ {
+    assert( eptr != nullptr );
+    Point<dim> ebctr = eptr->BaryCenter();
+    bool nrmls_are_outward_pointing{true};
+    
+    for ( uint32_t face{0}; face<eptr->Faces(); ++face ) {
+         // computing unit vector from barycentre to face barycenter
+         Point<dim> ctr_face_vec = eptr->FaceBaryCenter(face) - ebctr;
+         ctr_face_vec.NormalizeLengthTo(1.);
+         // computing unit normal to face
+         vector<double> unrml;
+         eptr->UnitNormalToFace( face, unrml );
+         Point<dim> face_nrml(unrml);
+         // if the unit_vec is pointing in opposite direction of normal, normal is inward pointing
+         if ( dotProduct(ctr_face_vec,face_nrml) < 0. ) {
+              cout <<"\n\n"<<"Element "<< eptr->Idx() <<": face "<< face <<": normal "<< face_nrml <<" is inward pointing."<< endl;
+              nrmls_are_outward_pointing = false;
+           }
+     }
+   return nrmls_are_outward_pointing;
+    
+ } // end
+
+template bool areUnitNormalsToFacesAreOutwardPointing( const Element<3>* );
+template bool areUnitNormalsToFacesAreOutwardPointing( const Element<2>* );
+
+
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
@@ -2691,7 +2720,7 @@ Element<3u>* const pointInVolumeElement( Region<3u>& region, const Point<3u>& qu
         double maxy = -std::numeric_limits<double>::max();
         double maxz = -std::numeric_limits<double>::max();
         const auto iNrNodes = (*eit)->Nodes();
-        for ( auto iNode = 0; iNode < iNrNodes; ++iNode ) {
+        for ( uint32_t iNode = 0; iNode < iNrNodes; ++iNode ) {
           auto n = (*eit)->N(iNode);
           minx = std::min(minx, n->x());
           maxx = std::max(maxx, n->x());
@@ -2767,10 +2796,17 @@ template size_t collocatedNodes( const Element<3>* const );
 
 
 
-/// pretty prints line elements as a chain from beginning to end
+/**
+    Pretty prints line elements as a chain from beginning to end.
+    
+     Ideally (where the numbers are nodes and the labels are BOX_BOUNDARY flags)
+     you should get something like: TOP 1->-0 0--11 11->-12...56->-56 BOTTOM.
+*/
 template<uint32_t dim>
 size_t printLineElementRegion( const Model<dim>& model, const char* region_name, bool renumber_nodes )
  {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
     const Region<dim>& line_domain( model.Region(region_name) );
     if ( renumber_nodes ) line_domain.RenumberNodes();
     
@@ -2778,7 +2814,7 @@ size_t printLineElementRegion( const Model<dim>& model, const char* region_name,
     const Element<dim>* eptr2 = (*prev(line_domain.CellsEnd(),1));
     
     const Element<dim>* previous_ptr{nullptr};
-    size_t              traversed_elmts{0U};
+    size_t              traversed_elmts{0U}, total_line_elmts{ line_domain.Cells() };
     
     bool forward = ( eptr1->Neighbor(0) != nullptr ) ? true : false;
     
@@ -2789,7 +2825,7 @@ size_t printLineElementRegion( const Model<dim>& model, const char* region_name,
               if ( !eptr1->IsLine() )
                 throw csmp::Exception( ERROR, "printLineElementRegion", "current element is not a line element; aborting printing" );
               // Ideally (where the numbers are nodes and the labels are BOX_BOUNDARY flags)
-              // we should get something like: TOP 1--0 0--11 11--12...56--56 BOTTOM
+              // we should get something like: TOP 1->-0 0--11 11->-12...56->-56 BOTTOM
               if ( !eptr1->Neighbor(1) )
                 cout <<"  "<< parseBoundary( eptr1->N(0)->AtBoundary() ) <<" "<< eptr1->N(0)->Idx();
               else cout << eptr1->N(0)->Idx();
@@ -2808,6 +2844,10 @@ size_t printLineElementRegion( const Model<dim>& model, const char* region_name,
                    break;
                 }
               traversed_elmts++;
+              if ( traversed_elmts > total_line_elmts ) {
+                   csmp_error.Note( ERROR, "printLineElementRegion", "traversed more elements than in regions; check output for issues with line element connectivity" );
+                   break;
+                }
            }
       }
     // backward
@@ -2834,6 +2874,10 @@ size_t printLineElementRegion( const Model<dim>& model, const char* region_name,
                    break;
                 }
               traversed_elmts++;
+              if ( traversed_elmts > total_line_elmts ) {
+                   csmp_error.Note( ERROR, "printLineElementRegion", "traversed more elements than in regions; check output for issues with line element connectivity" );
+                   break;
+                }
            }
       }
       
@@ -2860,7 +2904,7 @@ template<uint32_t dim>
 void printNodeCoordinates( typename vector<Node<dim>*>::const_iterator first,
                            typename vector<Node<dim>*>::const_iterator last )
  {
-     size_t n_nodes = distance(first,last);
+     long n_nodes = distance(first,last);
      if ( n_nodes == 0 ) {
           cerr <<"\nprintNodeCoordinates: supplied iterator range is empty, nothing could be printed."<< endl;
           return;
@@ -2957,7 +3001,7 @@ double averageNodeSpacing( typename vector<Node<dim>*>::const_iterator first,
     //ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     assert( first != last );
     
-    const long n_nodes{ distance(first,last) };
+    const auto n_nodes{ distance(first,last) };
     double     sum_of_node_spacings{ 0. };
     
     while( first != last ) {

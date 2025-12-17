@@ -1,0 +1,119 @@
+\doxysection{Steady\+State\+Diffusor.\+h}
+\hypertarget{_steady_state_diffusor_8h_source}{}\label{_steady_state_diffusor_8h_source}\index{source/includes/integration/pde\_integrators/SteadyStateDiffusor.h@{source/includes/integration/pde\_integrators/SteadyStateDiffusor.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{STEADY\_STATE\_DIFFUSOR\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{STEADY\_STATE\_DIFFUSOR\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_p_d_e___integrator_8h}{"{}PDE\_Integrator.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_num_integral__d_n_t__op__d_n__d_v_8h}{"{}NumIntegral\_dNT\_op\_dN\_dV.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \textcolor{preprocessor}{CSMP\_WITH\_SAMG\_SOLVER}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{stringliteral}{"{}SAMG\_Solver.h"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{stringliteral}{"{}SAMG\_Settings.h"{}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{stringliteral}{"{}SAMG\_Exception.h"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{else}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_linear_solver_8h}{"{}LinearSolver.h"{}}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_model}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}};}
+\DoxyCodeLine{00018\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_element}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}};}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{keyword}{template}<uint32\_t\ dim,\textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_num_integral___n_t__op___n__d_v}{NumIntegral\_NT\_op\_N\_dV}};}
+\DoxyCodeLine{00021\ \textcolor{keyword}{template}<uint32\_t\ dim,\textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_point_source__rhsop}{PointSource\_rhsop}};}
+\DoxyCodeLine{00022\ \textcolor{keyword}{template}<uint32\_t\ dim,\textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_num_integral__d_n_t__op__d_v}{NumIntegral\_dNT\_op\_dV}};}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{comment}{/**\ Spatial\ integration\ of\ steady-\/state\ partial-\/differential\ diffusion\ eqns:\ k\ div\string^2=q+...,\ }}
+\DoxyCodeLine{00025\ \textcolor{comment}{}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ \ \ \ @attention\ Gradient\ multiplier\ is\ currently\ not\ used\ and\ has\ no\ influence\ on\ results.}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ \ \ \ @todo\ (3)\ Make\ generic\ so\ that\ it\ can\ take\ both\ numerically\ and\ analytically\ integrated\ FEs}}
+\DoxyCodeLine{00028\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00029\ \textcolor{keyword}{template}<uint32\_t\ dim,\textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ CELLTYPE=\mbox{\hyperlink{classcsmp_1_1_element}{Element}}>}
+\DoxyCodeLine{00030\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_steady_state_diffusor}{SteadyStateDiffusor}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_steady_state_diffusor}{PDE\_Integrator}}<\mbox{\hyperlink{classcsmp_1_1_steady_state_diffusor}{dim}},\mbox{\hyperlink{classcsmp_1_1_steady_state_diffusor}{CELLTYPE}}>\ \{}
+\DoxyCodeLine{00031\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ SteadyStateDiffusor(\ \ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ diffusivity,}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ diffusing\_variable,}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ spatial\_source\_variable,}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ LumpedRHS\ );}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ SteadyStateDiffusor(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ diffusivity,}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ diffusing\_variable,}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ spatial\_source\_variable\ );}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ SteadyStateDiffusor(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ diffusivity,}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ diffusing\_variable,}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ spatial\_source\_variable,\ \ \textcolor{comment}{//\ on\ element\ or\ integration\ points}}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ point\_source\_variable\ );\ \ \textcolor{comment}{//\ on\ the\ nodes}}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{comment}{///\ integrating\ gradient\ terms\ applied\ to\ the\ righthand\ sides;\ no\ sources}}
+\DoxyCodeLine{00050\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_steady_state_diffusor_a6dcd659fa0518a987f2a406f1c9e408d}{SteadyStateDiffusor}}(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ diffusivity,}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ diffusing\_variable,}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ gradient\_variable,\ \textcolor{keywordtype}{double}\ gradient\_multiplier\ );}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{comment}{///\ as\ above,\ but\ with\ FE\ source\ terms}}
+\DoxyCodeLine{00056\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_steady_state_diffusor_a6b4b185778d2be225cdee4f13441bd00}{SteadyStateDiffusor}}(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ diffusivity,}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ diffusing\_variable,}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ spatial\_source\_variable,}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ gradient\_variable,\ \textcolor{keywordtype}{double}\ gradient\_multiplier\ );}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \ \ SteadyStateDiffusor(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ lhs\_diffusivity,}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ rhs\_diffusivity,}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ diffusing\_variable,}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ spatial\_source\_variable,}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ gradient\_variable,\ \textcolor{keywordtype}{double}\ gradient\_multiplier\ );}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~SteadyStateDiffusor();}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{comment}{///\ K\ div\string^2\ =\ q}}
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_steady_state_diffusor_a9d2895525509fd9a2ff7eb05f3cdfd67}{ComputeSteadyState}}(\ ModelSubDomain<dim,CELLTYPE>\&\ subDomain,\ \textcolor{keywordtype}{bool}\ verbose=\textcolor{keyword}{false}\ );}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_steady_state_diffusor_a0e5f327abcfa08bb619cb8a98157b2a5}{AdjustSolverSettings}}();}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \textcolor{preprocessor}{CSMP\_WITH\_SAMG\_SOLVER}}
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{comment}{///\ Access\ to\ SAMG\ solver\ settings\ owned\ by\ SteadyStateDiffusor\ object}}
+\DoxyCodeLine{00078\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_steady_state_diffusor}{SAMG\_Settings}}\&\ \mbox{\hyperlink{classcsmp_1_1_steady_state_diffusor}{GetSolverSettings}}();}
+\DoxyCodeLine{00079\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{else}}
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{comment}{///\ add\ extra\ functionality\ for\ alternative\ solver\ if\ needed}}
+\DoxyCodeLine{00081\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00084\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_steady_state_diffusor_a526b0f304642347e5799b0263d091929}{NumIntegral\_dNT\_op\_dN\_dV}}<\mbox{\hyperlink{classcsmp_1_1_steady_state_diffusor_a526b0f304642347e5799b0263d091929}{dim}},\mbox{\hyperlink{classcsmp_1_1_steady_state_diffusor_a526b0f304642347e5799b0263d091929}{CELLTYPE}}>\ \ \ \mbox{\hyperlink{classcsmp_1_1_steady_state_diffusor_a526b0f304642347e5799b0263d091929}{conductance\_}};}
+\DoxyCodeLine{00085\ \ \ \ \ NumIntegral\_NT\_op\_N\_dV<dim,CELLTYPE>*\ \ \ \ source\_;}
+\DoxyCodeLine{00086\ \ \ \ \ PointSource\_rhsop<dim,CELLTYPE>*\ \ \ \ \ \ \ \ \ nodal\_source\_;}
+\DoxyCodeLine{00087\ \ \ \ \ NumIntegral\_dNT\_op\_dV<dim,CELLTYPE>*\ \ \ \ \ gravity\_;}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \textcolor{preprocessor}{CSMP\_WITH\_SAMG\_SOLVER}}
+\DoxyCodeLine{00090\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_steady_state_diffusor}{SAMG\_Settings}}\ \ \mbox{\hyperlink{classcsmp_1_1_steady_state_diffusor}{settings\_}};}
+\DoxyCodeLine{00091\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_steady_state_diffusor}{SAMG\_Solver}}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_steady_state_diffusor}{solver\_}};}
+\DoxyCodeLine{00092\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{else}}
+\DoxyCodeLine{00093\ \ \ \ \ \mbox{\hyperlink{_linear_solver_8h_a67f69281c4c153f5d049253c34561031}{CSMP\_DEFAULT\_LINEAR\_SOLVER}}\ solver\_;}
+\DoxyCodeLine{00094\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \ grad\_multiplier\_;}
+\DoxyCodeLine{00096\ \ \ \ \ std::string\ \ \ dep\_var\_name\_;}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00099\ \ \ \ \ SteadyStateDiffusor();}
+\DoxyCodeLine{00100\ \ \ \ \ SteadyStateDiffusor(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_steady_state_diffusor}{SteadyStateDiffusor}}\&\ );}
+\DoxyCodeLine{00101\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \textcolor{preprocessor}{CSMP\_WITH\_SAMG\_SOLVER}}
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_steady_state_diffusor}{Adjust\_SAMG\_ForSubsequentSolves}}();}
+\DoxyCodeLine{00103\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{else}}
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{comment}{///\ add\ extra\ functionality\ for\ alternative\ solver\ if\ needed}}
+\DoxyCodeLine{00105\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00108\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ firstCall\_;}
+\DoxyCodeLine{00109\ \};}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ \}\ \textcolor{comment}{//\ end\ csmp}}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

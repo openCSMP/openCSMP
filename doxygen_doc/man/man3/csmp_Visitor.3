@@ -1,0 +1,197 @@
+.TH "csmp::Visitor< dim >" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::Visitor< dim >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <Visitor\&.h>\fP
+.PP
+Inherited by \fBcsmp::AlterationVisitor< dim >\fP, \fBcsmp::BoundaryFluxVisitor< dim >\fP, \fBcsmp::BoundaryStressVisitor< dim >\fP, \fBcsmp::BoundaryStressVisitor< dim >\fP, \fBcsmp::BrittleFailureVisitor< dim >\fP, \fBcsmp::CVFEM_PressureGradientVisitor< dim >\fP, \fBcsmp::CVFEM_Visitor< dim, CELL >\fP, \fBcsmp::CapillaryNumberVisitor< dim >\fP, \fBcsmp::ComputeGravityTermVisitor< dim >\fP, \fBcsmp::ComputeMixturePropertyVisitor< dim >\fP, \fBcsmp::ComputeSinglePhaseGravityTermVisitor< dim, CELL >\fP, \fBcsmp::ConductivityVisitor< dim, CELL >\fP, \fBcsmp::CopyReplaceVisitor< Var, dim >\fP, \fBcsmp::DataInputVisitor< Var, dim >\fP, \fBcsmp::DispersivityVisitor< dim >\fP, \fBcsmp::EffectiveStressVisitor< dim >\fP, \fBcsmp::ElementToNodePropertyVisitor< Var, dim >\fP, \fBcsmp::FEM_DataInputVisitor< Var, dim >\fP, \fBcsmp::FEM_DataOutputVisitor< Var, dim >\fP, \fBcsmp::FemFromGridVisitor< dim >\fP, \fBcsmp::FemToGridVisitor< dim >\fP, \fBcsmp::FlatBoundaryStressVisitor< dim >\fP, \fBcsmp::FractureBrooksCoreyParameterVisitor< dim >\fP, \fBcsmp::FractureCapillaryPressureVisitor< dim >\fP, \fBcsmp::FractureComputeCapillaryGradientVisitor< dim >\fP, \fBcsmp::FractureComputeVelocityVisitor< dim >\fP, \fBcsmp::FracturePecletNumberVisitor< dim >\fP, \fBcsmp::GravityProjectionVisitor< dim >\fP, \fBcsmp::HydroFractureVisitor< dim >\fP, \fBcsmp::IAPWS_H2OPropertiesVisitor< dim >\fP, \fBcsmp::IntegrationPointToNodePropertyVisitor< Var, dim >\fP, \fBcsmp::InterFaceFractureVisitor< dim >\fP, \fBcsmp::MeshRenumberVisitor< dim >\fP, \fBcsmp::MeshRenumberVisitor< dim >\fP, \fBcsmp::MohrCoulombFailure_Visitor< dim >\fP, \fBcsmp::NaClH2OPropertiesVisitorPHX< dim >\fP, \fBcsmp::OverburdenPressureVisitor< dim >\fP, \fBcsmp::PoreVolumeVisitor< dim >\fP, \fBcsmp::PressureSaturationInitializer< dim >\fP, \fBcsmp::PropertyAtPointVisitor< dim >\fP, \fBcsmp::RegionBoundaryFluxVisitor< dim, COMPUTATION_DOMAIN >\fP, \fBcsmp::SinglePhaseVelocityVisitor< dim, CELL >\fP, \fBcsmp::SourceVisitor< dim >\fP, \fBcsmp::StabilizationParameterVisitor< dim >\fP, \fBcsmp::ThermalVisitor< dim >\fP, \fBcsmp::TwoPhaseUndersaturatedFluidPropertyVisitor< dim >\fP, \fBcsmp::UpwindControlVisitor< dim >\fP, and \fBcsmp::VolumeOutput_Visitor< dim >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBVisitor\fP (\fBPLACEMENT\fP level=MODEL, \fBPLACEMENT\fP target=ELEMENT)"
+.br
+.ti -1c
+.RI "void \fBApplicationLevel\fP (\fBPLACEMENT\fP p)"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBApplicationLevel\fP () const"
+.br
+.ti -1c
+.RI "void \fBApplicationTarget\fP (\fBPLACEMENT\fP p)"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBApplicationTarget\fP () const"
+.br
+.ti -1c
+.RI "virtual void \fBSetInitialProperties\fP (\fBModel\fP< dim > *model)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBModel\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBRegion\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBBoundary\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBSplitBoundary\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBElement\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBFace\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBInterFace\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBEdge\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBNode\fP< dim > *)"
+.br
+.ti -1c
+.RI "bool \fBVerbose\fP ()"
+.br
+.ti -1c
+.RI "void \fBVerbose\fP (bool verbose)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBapplication_level_\fP"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBapplication_target_\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim>
+.br
+class csmp::Visitor< dim >"Visitors are designed to facilitate computations on any of the objects that are contained inside a \fBModel\fP\&. Thus, one may for instance derive an equation of state type visitor to go around the nodes looking up pressure and temperature and use this information to calculate nodal fluid densities\&. As an important difference to Interrelations, visitors are not restricted to the computation of a single variable and they can also be used to gain access to the full finite-element or finite-volume functionality of CSMP\&. Thus, one can use a visitor to find a specific finite element that contains a user-specified point\&. This is done by across mesh traversal\&. In contrast, interrelations are restricted to sequential node-by-node, element-by-element calculations\&. 
+.br
+
+.PP
+\fBAuthor\fP
+.RS 4
+S\&.K\&. Matthai 
+
+.PP
+Stephen G\&. Roberts 
+
+.PP
+S\&. Geiger 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2001
+.RE
+.PP
+.SH "Motivation"
+.PP
+To make the classical \fBVisitor\fP design pattern available to CSMP users (for documentation of pattern, refer to Gamma et al\&. 1996, Addison and Wesley, p\&. 331)\&.
+.SH "Applicability"
+.PP
+Visitors in CSMP are designed to allow visitations of the \fBModel\fP hierarchy of objects: \fBModel\fP > \fBRegion\fP > \fBElement\fP > > \fBNode\fP, as well as interfaces\&. The user can derive visitors from this base class in order to perform different operations on any of the objects encountered during a visitation\&. 
+.br
+.SH "Application Examples"
+.PP
+Have a look at the \fBAlterationVisitor\fP of the equation of state visitors in order to understand this design pattern\&. 
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<uint32_t dim> \fBcsmp::Visitor\fP< dim >::Visitor (\fBPLACEMENT\fP level = \fRMODEL\fP, \fBPLACEMENT\fP target = \fRELEMENT\fP)\fR [explicit]\fP"
+Constructor of visitor object\&. The user can specify the application level and application target of the visitor by supplying enum \fBPLACEMENT\fP argument\&. Per default, visitors act on \fBElement\fP objects\&. 
+.br
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIlevel\fP \fBPLACEMENT\fP that will be used to determine where in the object hierarchy the visitation begins, i\&.e\&. \fBModel\fP or \fBRegion\fP etc\&.
+.br
+\fItarget\fP for which the Visit() method will be called that actually carries out the computation, for instance on the \fBNode\fP or on the \fBElement\fP\&. 
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim> void \fBcsmp::Visitor\fP< dim >::ApplicationLevel (\fBPLACEMENT\fP p)"
+The application level determines the type of object that the visitor will be applied to by the \fBModel\fP\&. The visitor itself may then still continue to migrate down the hierarchy of objects, but not upwards\&. This method sets, and or (without argument) returns the application level of the visitor on which it is called\&. 
+.br
+.SH "Input Arguments"
+.PP
+The class of object that the visitor shall be applied to\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+If no argument is specified, the method will return the current setting of target\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim> void \fBcsmp::Visitor\fP< dim >::ApplicationTarget (\fBPLACEMENT\fP p)"
+The target of a visitation is the lowest level of the hierarchy it will be applied to, i\&.e\&. \fBNode\fP, IntegrationPoint, \fBElement\fP or \fBFace\fP\&. 
+.br
+
+.PP
+If no argument is specified, the method will return the current setting of target\&.
+.SH "Messages"
+.PP
+If the argument supplied is not applicable, the method reports an error\&. 
+.SS "template<uint32_t dim> void \fBcsmp::Visitor\fP< dim >::SetInitialProperties (\fBModel\fP< dim > * model)\fR [virtual]\fP"
+
+.PP
+Reimplemented in \fBcsmp::ThermalVisitor< dim >\fP\&.
+.SS "template<uint32_t dim> void \fBcsmp::Visitor\fP< dim >::Visit (\fBBoundary\fP< dim > * )\fR [virtual]\fP"
+
+.PP
+Reimplemented in \fBcsmp::BoundaryStressVisitor< dim >\fP, \fBcsmp::BoundaryStressVisitor< dim >\fP, and \fBcsmp::FlatBoundaryStressVisitor< dim >\fP\&.
+.SS "template<uint32_t dim> void \fBcsmp::Visitor\fP< dim >::Visit (\fBElement\fP< dim > * )\fR [virtual]\fP"
+
+.PP
+Reimplemented in \fBcsmp::BrittleFailureVisitor< dim >\fP, \fBcsmp::ComputeGravityTermVisitor< dim >\fP, \fBcsmp::CopyReplaceVisitor< Var, dim >\fP, \fBcsmp::CVFEM_PressureGradientVisitor< dim >\fP, \fBcsmp::CVFEM_Visitor< dim, CELL >\fP, \fBcsmp::DataInputVisitor< Var, dim >\fP, \fBcsmp::EffectiveStressVisitor< dim >\fP, \fBcsmp::ElementToNodePropertyVisitor< Var, dim >\fP, \fBcsmp::FemToGridVisitor< dim >\fP, \fBcsmp::GravityProjectionVisitor< dim >\fP, \fBcsmp::HydroFractureVisitor< dim >\fP, \fBcsmp::IAPWS_H2OPropertiesVisitor< dim >\fP, \fBcsmp::IntegrationPointToNodePropertyVisitor< Var, dim >\fP, \fBcsmp::MohrCoulombFailure_Visitor< dim >\fP, \fBcsmp::OverburdenPressureVisitor< dim >\fP, \fBcsmp::PropertyAtPointVisitor< dim >\fP, \fBcsmp::SourceVisitor< dim >\fP, and \fBcsmp::UpwindControlVisitor< dim >\fP\&.
+.SS "template<uint32_t dim> void \fBcsmp::Visitor\fP< dim >::Visit (\fBFace\fP< dim > * f)\fR [virtual]\fP"
+The key method of the visitor design pattern\&. Visit() must be defined for the target object (for instance \fBNode\fP objects, or \fBElement\fP objects)\&. Since the argument is the actual object, its entire interface is accessible to the visitor in order to carry out operations\&. Overload this method in the derived class to gain access to target objects and perform the actions that are desired for the visitation\&. 
+.br
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIf\fP is a pointer to the target \fBFace\fP (forming part of a boundary)\&. 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBcsmp::BoundaryStressVisitor< dim >\fP, \fBcsmp::BoundaryStressVisitor< dim >\fP, \fBcsmp::CopyReplaceVisitor< Var, dim >\fP, \fBcsmp::DataInputVisitor< Var, dim >\fP, and \fBcsmp::FlatBoundaryStressVisitor< dim >\fP\&.
+.SS "template<uint32_t dim> void \fBcsmp::Visitor\fP< dim >::Visit (\fBInterFace\fP< dim > * )\fR [virtual]\fP"
+
+.PP
+Reimplemented in \fBcsmp::DataInputVisitor< Var, dim >\fP, and \fBcsmp::InterFaceFractureVisitor< dim >\fP\&.
+.SS "template<uint32_t dim> void \fBcsmp::Visitor\fP< dim >::Visit (\fBModel\fP< dim > * )\fR [virtual]\fP"
+
+.PP
+Reimplemented in \fBcsmp::IAPWS_H2OPropertiesVisitor< dim >\fP, and \fBcsmp::OverburdenPressureVisitor< dim >\fP\&.
+.SS "template<uint32_t dim> void \fBcsmp::Visitor\fP< dim >::Visit (\fBNode\fP< dim > * )\fR [virtual]\fP"
+
+.PP
+Reimplemented in \fBcsmp::AlterationVisitor< dim >\fP, \fBcsmp::CopyReplaceVisitor< Var, dim >\fP, \fBcsmp::ElementToNodePropertyVisitor< Var, dim >\fP, \fBcsmp::IAPWS_H2OPropertiesVisitor< dim >\fP, \fBcsmp::IntegrationPointToNodePropertyVisitor< Var, dim >\fP, \fBcsmp::PoreVolumeVisitor< dim >\fP, \fBcsmp::RegionBoundaryFluxVisitor< dim, COMPUTATION_DOMAIN >\fP, and \fBcsmp::ThermalVisitor< dim >\fP\&.
+.SS "template<uint32_t dim> void \fBcsmp::Visitor\fP< dim >::Visit (\fBRegion\fP< dim > * )\fR [virtual]\fP"
+
+.PP
+Reimplemented in \fBcsmp::CVFEM_PressureGradientVisitor< dim >\fP, \fBcsmp::FemToGridVisitor< dim >\fP, \fBcsmp::PoreVolumeVisitor< dim >\fP, and \fBcsmp::UpwindControlVisitor< dim >\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

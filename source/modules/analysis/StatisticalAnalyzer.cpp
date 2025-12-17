@@ -84,7 +84,7 @@ const
            grit=sref.UniqueRegionsBegin(); grit!=sref.UniqueRegionsEnd(); grit++ )
        {  
           double total_volume = 0.; 
-          uint32_t  n(0);
+          size_t  n(0);
            for ( auto it=(*grit).second.CellsBegin(); it!=(*grit).second.CellsEnd(); it++ )
              {
                 total_volume += volume = (*it)->Volume();
@@ -104,7 +104,7 @@ const
                                       "Array variables are not handled yet.");
                
                 // adding the value to the corresponding column of the histogram
-                uint32_t  i(0U);
+                size_t  i(0U);
                 for ( typename HistogramBins::const_iterator
                       vit=bins.begin(); vit!=bins.end(); vit++, i++ )
                   {
@@ -126,7 +126,7 @@ const
             
            // 3. storing result map and zeroing vector for next region
            //---------------------------------------------------------
-           results[ (*grit).first ] = pair<HistogramBins,uint32_t>(result,n);
+           results[ (*grit).first ] = pair<HistogramBins,size_t>(result,n);
          
            // zeroing out the column values
            for ( rit=result.begin(); rit!=result.end(); rit++ ) (*rit).second = 0.;
@@ -308,7 +308,7 @@ const
 
          // 3. storing result map and zeroing vector for next group
          //--------------------------------------------------------
-         results[ (*grit).first ] = pair<HistogramBins,uint32_t>(result,n);
+         results[ (*grit).first ] = pair<HistogramBins,size_t>(result,n);
          for ( auto it=result.begin(); it!=result.end(); it++ ) (*it).second = 0.;
 
      } // end for all groups
@@ -504,7 +504,7 @@ const
 
           // 2. storing result map and zeroing vector for next group
           //--------------------------------------------------------
-          results[ (*grit).first ] = pair<HistogramBins,uint32_t>(result,(*grit).second.Cells());
+          results[ (*grit).first ] = pair<HistogramBins,size_t>(result,(*grit).second.Cells());
           for ( HistogramBins::iterator
                 ritt=result.begin(); ritt!=result.end(); ritt++ ) (*ritt).second = 0.;
 
@@ -567,7 +567,7 @@ const
             val = 0.;
             element_vol = 0.;
             //volume = (*it)->Volume();
-            for ( auto n=0; n<(*it)->IntegrationPoints(); ++n ) {
+            for ( uint32_t n=0; n<(*it)->IntegrationPoints(); ++n ) {
                 if ((*it)->PropertyValueAtIntegrationPoint( p_key, n) >= patm) {
                     (*it)->PropertyValueAtIntegrationPoint( prop_key, n, vc );
                     double det_J((*it)->det_JINV_AtIntegrationPoint(n));
@@ -617,7 +617,7 @@ const
         cout<<endl;
         // 2. storing result map and zeroing vector for next group
         //--------------------------------------------------------
-        results[ flow_domain ] = pair<HistogramBins,uint32_t>(result,subdomain.Cells());
+        results[ flow_domain ] = pair<HistogramBins,size_t>(result,subdomain.Cells());
         for ( auto r=result.begin(); r!=result.end(); r++ ) (*r).second = 0.;
         
     } // end RegionPropertyHistogramsIntegrationPoint
@@ -1042,11 +1042,11 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
 
           // 2. storing result map and zeroing vector for next group
           //--------------------------------------------------------
-          results1[ (*grit).first ] = pair<HistogramBins,uint32_t>(result1,(*grit).second.Cells());
+          results1[ (*grit).first ] = pair<HistogramBins,size_t>(result1,(*grit).second.Cells());
           for ( HistogramBins::iterator
                 rit=result1.begin(); rit!=result1.end(); rit++ ) (*rit).second = 0.;
 
-          results2[ (*grit).first ] = pair<HistogramBins,uint32_t>(result2,(*grit).second.Cells());
+          results2[ (*grit).first ] = pair<HistogramBins,size_t>(result2,(*grit).second.Cells());
           for ( HistogramBins::iterator
                 rit=result2.begin(); rit!=result2.end(); rit++ ) (*rit).second = 0.;
 
@@ -1480,7 +1480,7 @@ void StatisticalAnalyzer<dim>::DefineBins( HistogramBins& bins, double first_val
 
     // point ap to last named argument in function
     va_start( ap, first_val );
-    int isize(0);
+    size_t isize(0);
     while ( (val=va_arg(ap,double)) != 0. )
       {
          isize++;
@@ -1530,7 +1530,7 @@ void StatisticalAnalyzer<dim>::DefineBins( const double minimum,
     double  first_val, val;
 
 
-    for ( auto n=0U; n < (number_of_bins + 1); n++ ) {
+    for ( size_t n=0U; n < (number_of_bins + 1); n++ ) {
          val = minimum + n * bin_size;
          if ( n == 0 ) first_val = val;
          else data.push_back( make_pair(first_val,val) );

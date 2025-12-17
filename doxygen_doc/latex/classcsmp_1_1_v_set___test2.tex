@@ -1,0 +1,98 @@
+\doxysection{csmp\+::VSet\+\_\+\+Test2 Class Reference}
+\hypertarget{classcsmp_1_1_v_set___test2}{}\label{classcsmp_1_1_v_set___test2}\index{csmp::VSet\_Test2@{csmp::VSet\_Test2}}
+
+
+{\ttfamily \#include $<$VSet\+\_\+\+Test2.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::VSet\+\_\+\+Test2\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=172pt]{classcsmp_1_1_v_set___test2__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::VSet\+\_\+\+Test2\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=172pt]{classcsmp_1_1_v_set___test2__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_v_set___test2_aacee712f8db1c352072c99b90c962b9b}\label{classcsmp_1_1_v_set___test2_aacee712f8db1c352072c99b90c962b9b} 
+{\bfseries VSet\+\_\+\+Test2} (bool verbose=false)
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_v_set___test2_a2a4a9c5046b20ef4fdd81fbadce97758}{run}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Test} (std\+::ostream \texorpdfstring{$\ast$}{*}osptr=0)
+\item 
+long {\bfseries get\+Num\+Passed} () const
+\item 
+long {\bfseries get\+Num\+Failed} () const
+\item 
+const std\+::ostream \texorpdfstring{$\ast$}{*} {\bfseries get\+Stream} () const
+\item 
+void {\bfseries set\+Stream} (std\+::ostream \texorpdfstring{$\ast$}{*}osptr)
+\item 
+void {\bfseries set\+Name} (std\+::string test\+Name)
+\item 
+std\+::string {\bfseries get\+Name} () const
+\item 
+bool {\bfseries has\+Name} () const
+\item 
+void {\bfseries do\+\_\+succeed} ()
+\item 
+long {\bfseries report} () const
+\item 
+virtual void {\bfseries reset} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}}
+\begin{DoxyCompactItemize}
+\item 
+void {\bfseries do\+\_\+equal} (double expr, double value, double tol, const std\+::string \&lbl, const char \texorpdfstring{$\ast$}{*}fname, long lineno)
+\item 
+void {\bfseries do\+\_\+test} (bool cond, const std\+::string \&lbl, const char \texorpdfstring{$\ast$}{*}fname, long lineno)
+\item 
+void {\bfseries do\+\_\+fail} (const std\+::string \&lbl, const char \texorpdfstring{$\ast$}{*}fname, long lineno)
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}}
+\begin{DoxyCompactItemize}
+\item 
+const char \texorpdfstring{$\ast$}{*} {\bfseries prefix\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Second test focussing on the \doxylink{classcsmp_1_1_v_set}{VSet}\textquotesingle{}s extended functionality (higher level) Tests the use of \doxylink{classcsmp_1_1_v_set}{VSet} in model construction storage to disk, and reconstruction from binary file. 
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_v_set___test2_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_v_set___test2_a2a4a9c5046b20ef4fdd81fbadce97758}\index{csmp::VSet\_Test2@{csmp::VSet\_Test2}!run@{run}}
+\index{run@{run}!csmp::VSet\_Test2@{csmp::VSet\_Test2}}
+\doxysubsubsection{\texorpdfstring{run()}{run()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_v_set___test2_a2a4a9c5046b20ef4fdd81fbadce97758} 
+void csmp\+::\+VSet\+\_\+\+Test2\+::run (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Testing whether processing of the \doxylink{classcsmp_1_1_v_set}{VSet} produces valid model with correct line-\/element normal orientations etc. 
+
+Implements \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+tests/unit/VSet\+\_\+\+Test2.\+h\item 
+tests/unit/VSet\+\_\+\+Test2.\+cpp\end{DoxyCompactItemize}

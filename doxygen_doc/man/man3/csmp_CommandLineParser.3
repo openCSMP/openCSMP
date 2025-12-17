@@ -1,0 +1,152 @@
+.TH "csmp::CommandLineParser" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::CommandLineParser
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBCommandLineParser\fP (int argc, const char **argv)"
+.br
+.ti -1c
+.RI "template<typename T> T \fBget\fP (string shortOption, string longOption)"
+.br
+.ti -1c
+.RI "template<typename T> T \fBget\fP (string shortOption, string longOption, const T defaultValue)"
+.br
+.ti -1c
+.RI "template<typename T> T \fBget\fP (string option)"
+.br
+.ti -1c
+.RI "template<typename T> T \fBget\fP (string option, const T defaultValue)"
+.br
+.ti -1c
+.RI "bool \fBoperands\fP () const"
+.br
+.ti -1c
+.RI "string \fBgetOperands\fP () const"
+.br
+.ti -1c
+.RI "bool \fBunused\fP () const"
+.br
+.ti -1c
+.RI "string \fBgetUnused\fP () const"
+.br
+.ti -1c
+.RI "void \fBprint\fP (std::ostream &os) const"
+.br
+.ti -1c
+.RI "template<> int \fBconvertArgument\fP (string arg)"
+.br
+.ti -1c
+.RI "template<> double \fBconvertArgument\fP (string arg)"
+.br
+.ti -1c
+.RI "template<> const char * \fBconvertArgument\fP (string arg)"
+.br
+.ti -1c
+.RI "template<> bool \fBconvertArgument\fP (string arg)"
+.br
+.ti -1c
+.RI "template<> bool \fBget\fP (string shortOption, string longOption)"
+.br
+.ti -1c
+.RI "template<> bool \fBget\fP (string option)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.PP
+\fBAuthor\fP
+.RS 4
+A\&. Burri 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2003
+.RE
+.PP
+.SH "Motivation"
+.PP
+Command line parser which allows for type-safe Unix-like command line parsing\&.
+.SH "Design Intent"
+.PP
+The command line parser makes command line parsing safer and easier\&. Beside alleviating the need to do error-prone string parsing it offers sophisticated error handling capabilities through exception handling\&.
+
+.PP
+Most Unix-like command line parsing feature are supported, like:
+.IP "\(bu" 2
+long and/or short options (like "-d" and "--double")
+.IP "\(bu" 2
+type-safe retrieval
+.IP "\(bu" 2
+optional arguments
+.IP "\(bu" 2
+listing of unused options
+.IP "\(bu" 2
+listing of non-arguments
+.PP
+
+.PP
+For a more complete overview of the functionality see the unit-test class of the \fBCommandLineParser\fP class\&.
+
+.PP
+One specialty is that boolean options (i\&.e\&. command line flags) aren't allowed to take arguments, since they wouldn't be used anyway\&. So you are forced to use the end of options marker if you want to pass non- option arguments after a flag\&.
+.SH "Applicability"
+.PP
+Parsing of command lines in the main function of a program\&.
+.SH "Implementation"
+.PP
+Stand-alone class\&. Member template methods used\&. The command line is parsed in the constructor and the items can be retrieved using get functions\&.
+.SH "Application Examples"
+.PP
+.PP
+.nf
+int main(int argc, char** argv) {
+  CommandLineParser parser(argc, argv);
+  
+  // Retrieving arguments
+  // ! Note that you have to specify the template parameter (return
+  // value parametrization) !
+  try {
+    double d = parser\&.get<double>("\-d"); // mandatory argument
+    string s = parser\&.get<const char*>("\-s", "Default");
+                                            // optional argument
+    int i = parser\&.get<int>("\-i", "\-\-int");
+                                            // choice between long and
+                                            // short option
+    bool b = parser\&.get<bool>("\-b");
+  } catch (std::runtime_error& e) {
+    cout << e\&.what() << endl;
+    exit(1);
+  }
+  
+  // Display if there are arguments which don't belong to an option
+  if (parser\&.operands()) {
+    cout << "Non\-arguments: " << parser\&.getOperands() << endl;
+  }
+  
+  // Display if there are unused arguments
+  if (parser\&.unused()) {
+    cout << "Unused: " << parser\&.getUnused() << endl;
+  }
+  
+  // Output command line to screen
+  // (could be redirected to a file stream as well, as long as the file
+  // stream is opened before)
+  cout << parser;
+
+}  
+.fi
+.PP
+ 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

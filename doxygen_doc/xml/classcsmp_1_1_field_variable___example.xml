@@ -1,0 +1,174 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_field_variable___example" kind="class" language="C++" prot="public">
+    <compoundname>csmp::FieldVariable_Example</compoundname>
+    <basecompoundref refid="classcsmp_1_1_example" prot="public" virt="non-virtual">csmp::Example</basecompoundref>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_field_variable___example_1a30e43dae558a14c0ee555a4783abd5db" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::FieldVariable_Example::FieldVariable_Example</definition>
+        <argsstring>(std::ostream *osptr=nullptr)</argsstring>
+        <name>FieldVariable_Example</name>
+        <qualifiedname>csmp::FieldVariable_Example::FieldVariable_Example</qualifiedname>
+        <param>
+          <type>std::ostream *</type>
+          <declname>osptr</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/FieldVariable_Example.h" line="12" column="5" bodyfile="examples/source/FieldVariable_Example.cpp" bodystart="10" bodyend="14"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_field_variable___example_1a29bf61fdab7a588b25f94ebb54eb7c43" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::FieldVariable_Example::Specifications</definition>
+        <argsstring>() override</argsstring>
+        <name>Specifications</name>
+        <qualifiedname>csmp::FieldVariable_Example::Specifications</qualifiedname>
+        <reimplements refid="classcsmp_1_1_example_1a8cee542c22a71c15bba5c6ddf959455b">Specifications</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/FieldVariable_Example.h" line="15" column="10" bodyfile="examples/source/FieldVariable_Example.cpp" bodystart="16" bodyend="25"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_field_variable___example_1a91ea54b528a40afd13b0052463065026" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::FieldVariable_Example::Run</definition>
+        <argsstring>() override</argsstring>
+        <name>Run</name>
+        <qualifiedname>csmp::FieldVariable_Example::Run</qualifiedname>
+        <reimplements refid="classcsmp_1_1_example_1a6e65f9276ebaa3ea88587cc742a81f8f">Run</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/FieldVariable_Example.h" line="16" column="10" bodyfile="examples/source/FieldVariable_Example.cpp" bodystart="27" bodyend="49"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_field_variable___example_1a281121907a06e18d9dcb1fcfe9b84ad5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FieldVariable_Example::DemonstrateBasicOperations</definition>
+        <argsstring>(Model&lt; 3 &gt; &amp;model)</argsstring>
+        <name>DemonstrateBasicOperations</name>
+        <qualifiedname>csmp::FieldVariable_Example::DemonstrateBasicOperations</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; 3 &gt; &amp;</type>
+          <declname>model</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>For model-wide operations </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/FieldVariable_Example.h" line="20" column="10" bodyfile="examples/source/FieldVariable_Example.cpp" bodystart="55" bodyend="90"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_field_variable___example_1a5efa098443f05a9cf7669abd84e39c28" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FieldVariable_Example::DemonstrateExpressionTemplates</definition>
+        <argsstring>(Model&lt; 3 &gt; &amp;model)</argsstring>
+        <name>DemonstrateExpressionTemplates</name>
+        <qualifiedname>csmp::FieldVariable_Example::DemonstrateExpressionTemplates</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; 3 &gt; &amp;</type>
+          <declname>model</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/FieldVariable_Example.h" line="21" column="10" bodyfile="examples/source/FieldVariable_Example.cpp" bodystart="92" bodyend="119"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_field_variable___example_1a37c60bca7ca7e81d90ef69ea4f7381fa" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FieldVariable_Example::DemonstrateOperatorOverloads</definition>
+        <argsstring>(Model&lt; 3 &gt; &amp;model)</argsstring>
+        <name>DemonstrateOperatorOverloads</name>
+        <qualifiedname>csmp::FieldVariable_Example::DemonstrateOperatorOverloads</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; 3 &gt; &amp;</type>
+          <declname>model</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/FieldVariable_Example.h" line="22" column="10" bodyfile="examples/source/FieldVariable_Example.cpp" bodystart="121" bodyend="148"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>csmp::Example</label>
+        <link refid="classcsmp_1_1_example"/>
+      </node>
+      <node id="1">
+        <label>csmp::FieldVariable_Example</label>
+        <link refid="classcsmp_1_1_field_variable___example"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>csmp::Example</label>
+        <link refid="classcsmp_1_1_example"/>
+      </node>
+      <node id="1">
+        <label>csmp::FieldVariable_Example</label>
+        <link refid="classcsmp_1_1_field_variable___example"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="examples/source/FieldVariable_Example.h" line="10" column="1" bodyfile="examples/source/FieldVariable_Example.h" bodystart="10" bodyend="23"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_example_1a7a2776d1a529fdc5185d24804e249fa4" prot="public" virt="non-virtual"><scope>csmp::FieldVariable_Example</scope><name>AddAuthor</name></member>
+      <member refid="classcsmp_1_1_example_1a460febdef7c98c40ba774ba6670ff786" prot="public" virt="non-virtual"><scope>csmp::FieldVariable_Example</scope><name>AddDescription</name></member>
+      <member refid="classcsmp_1_1_example_1a246f075bb8bf802ca5b9e49096f6a1ca" prot="public" virt="non-virtual"><scope>csmp::FieldVariable_Example</scope><name>AddRequirement</name></member>
+      <member refid="classcsmp_1_1_example_1ac926ad8eb6de45710b9076c8f6304880" prot="protected" virt="non-virtual"><scope>csmp::FieldVariable_Example</scope><name>CreateWorkingDirectoryAndCopyInputModelFiles</name></member>
+      <member refid="classcsmp_1_1_field_variable___example_1a281121907a06e18d9dcb1fcfe9b84ad5" prot="private" virt="non-virtual"><scope>csmp::FieldVariable_Example</scope><name>DemonstrateBasicOperations</name></member>
+      <member refid="classcsmp_1_1_field_variable___example_1a5efa098443f05a9cf7669abd84e39c28" prot="private" virt="non-virtual"><scope>csmp::FieldVariable_Example</scope><name>DemonstrateExpressionTemplates</name></member>
+      <member refid="classcsmp_1_1_field_variable___example_1a37c60bca7ca7e81d90ef69ea4f7381fa" prot="private" virt="non-virtual"><scope>csmp::FieldVariable_Example</scope><name>DemonstrateOperatorOverloads</name></member>
+      <member refid="classcsmp_1_1_example_1a55b5098a7e25da12f36037b0347f63c1" prot="public" virt="non-virtual"><scope>csmp::FieldVariable_Example</scope><name>Example</name></member>
+      <member refid="classcsmp_1_1_field_variable___example_1a30e43dae558a14c0ee555a4783abd5db" prot="public" virt="non-virtual"><scope>csmp::FieldVariable_Example</scope><name>FieldVariable_Example</name></member>
+      <member refid="classcsmp_1_1_example_1a6ea7892372f1ed54bd66fbc93ed4c1e1" prot="public" virt="non-virtual"><scope>csmp::FieldVariable_Example</scope><name>GetAuthorsBegin</name></member>
+      <member refid="classcsmp_1_1_example_1a1381ce20fa12dc1168f422ab348bb7d4" prot="public" virt="non-virtual"><scope>csmp::FieldVariable_Example</scope><name>GetAuthorsEnd</name></member>
+      <member refid="classcsmp_1_1_example_1afbbe7869b870b19bcd16dc6a98ee2b2f" prot="public" virt="non-virtual"><scope>csmp::FieldVariable_Example</scope><name>GetCategory</name></member>
+      <member refid="classcsmp_1_1_example_1a3fd636e079c1b09631a480c3cc5861fc" prot="public" virt="non-virtual"><scope>csmp::FieldVariable_Example</scope><name>GetDescriptionsBegin</name></member>
+      <member refid="classcsmp_1_1_example_1a23eee344b701096cfe20784858b490b8" prot="public" virt="non-virtual"><scope>csmp::FieldVariable_Example</scope><name>GetDescriptionsEnd</name></member>
+      <member refid="classcsmp_1_1_example_1af575e4786aca651596ed454ed6d262f6" prot="public" virt="non-virtual"><scope>csmp::FieldVariable_Example</scope><name>GetDifficulty</name></member>
+      <member refid="classcsmp_1_1_example_1ac867309e60852ae127a00585205f9ac9" prot="protected" virt="non-virtual"><scope>csmp::FieldVariable_Example</scope><name>GetExampleFileName</name></member>
+      <member refid="classcsmp_1_1_example_1afb4453025180082963850cd7b86ab7e5" prot="public" virt="non-virtual"><scope>csmp::FieldVariable_Example</scope><name>GetRequirementsBegin</name></member>
+      <member refid="classcsmp_1_1_example_1a63d42dff58fdfd642d842a74bb609e1d" prot="public" virt="non-virtual"><scope>csmp::FieldVariable_Example</scope><name>GetRequirementsEnd</name></member>
+      <member refid="classcsmp_1_1_example_1a7104cbfd7020f9e681204f0fb09953b7" prot="protected" virt="non-virtual"><scope>csmp::FieldVariable_Example</scope><name>GetStream</name></member>
+      <member refid="classcsmp_1_1_example_1ab6d059e048b82444c3fcbc36880d70b6" prot="public" virt="non-virtual"><scope>csmp::FieldVariable_Example</scope><name>GetTitle</name></member>
+      <member refid="classcsmp_1_1_example_1a69f06458486c7a3a3669739a2039c4ed" prot="protected" virt="non-virtual"><scope>csmp::FieldVariable_Example</scope><name>Initialize</name></member>
+      <member refid="classcsmp_1_1_field_variable___example_1a91ea54b528a40afd13b0052463065026" prot="public" virt="virtual"><scope>csmp::FieldVariable_Example</scope><name>Run</name></member>
+      <member refid="classcsmp_1_1_example_1abe2b0fd87714fc83a379d825adb5771b" prot="public" virt="non-virtual"><scope>csmp::FieldVariable_Example</scope><name>SetCategory</name></member>
+      <member refid="classcsmp_1_1_example_1a4909bbd859ca62d273c259d1b8b6657a" prot="public" virt="non-virtual"><scope>csmp::FieldVariable_Example</scope><name>SetDifficulty</name></member>
+      <member refid="classcsmp_1_1_example_1a9814fee9852cbbcb4504f24f205b5e67" prot="protected" virt="non-virtual"><scope>csmp::FieldVariable_Example</scope><name>SetStream</name></member>
+      <member refid="classcsmp_1_1_example_1adce5953feb4828ee24fb935d416a045b" prot="public" virt="non-virtual"><scope>csmp::FieldVariable_Example</scope><name>SetTitle</name></member>
+      <member refid="classcsmp_1_1_field_variable___example_1a29bf61fdab7a588b25f94ebb54eb7c43" prot="public" virt="virtual"><scope>csmp::FieldVariable_Example</scope><name>Specifications</name></member>
+      <member refid="classcsmp_1_1_example_1ab414b9f392a222139d56428ad915e620" prot="public" virt="virtual"><scope>csmp::FieldVariable_Example</scope><name>~Example</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

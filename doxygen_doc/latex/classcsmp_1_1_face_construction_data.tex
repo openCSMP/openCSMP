@@ -1,0 +1,135 @@
+\doxysection{csmp\+::Face\+Construction\+Data\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_face_construction_data}{}\label{classcsmp_1_1_face_construction_data}\index{csmp::FaceConstructionData$<$ dim $>$@{csmp::FaceConstructionData$<$ dim $>$}}
+
+
+Container of pairs of pointers to \doxylink{classcsmp_1_1_element}{Element} objects juxtaposed along a shared face identified by its local face number. Used in the construction of \doxylink{classcsmp_1_1_boundary}{Boundary} and \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} objects.  
+
+
+
+
+{\ttfamily \#include $<$Face\+Construction\+Data.\+h$>$}
+
+
+
+Collaboration diagram for csmp\+::Face\+Construction\+Data\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=216pt]{classcsmp_1_1_face_construction_data__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_face_construction_data_ab05c33c9264f5ea65b80ab8a35c3faba}\label{classcsmp_1_1_face_construction_data_ab05c33c9264f5ea65b80ab8a35c3faba} 
+{\bfseries Face\+Construction\+Data} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&parent\+\_\+element, std\+::pair$<$ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}, \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$ \&neighbor\+\_\+elements, std\+::pair$<$ uint32\+\_\+t, uint32\+\_\+t $>$ \&neighbor\+\_\+element\+\_\+faces, std\+::pair$<$ long, long $>$ \&neighbor\+\_\+element\+\_\+materials, long this\+\_\+material)
+\item 
+\Hypertarget{classcsmp_1_1_face_construction_data_a59559098120813247a4668b5cd6e2d79}\label{classcsmp_1_1_face_construction_data_a59559098120813247a4668b5cd6e2d79} 
+{\bfseries Face\+Construction\+Data} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&parent\+\_\+element, std\+::pair$<$ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}, \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$ \&neighbor\+\_\+elements, std\+::pair$<$ uint32\+\_\+t, uint32\+\_\+t $>$ \&neighbor\+\_\+element\+\_\+faces, std\+::pair$<$ long, long $>$ \&neighbor\+\_\+element\+\_\+materials, long this\+\_\+material, uint32\+\_\+t number\+\_\+of\+\_\+patch\+\_\+this\+\_\+data\+\_\+belongs\+\_\+to)
+\item 
+\Hypertarget{classcsmp_1_1_face_construction_data_ab7bf5ccab0978b8d13adf8677f7d8e76}\label{classcsmp_1_1_face_construction_data_ab7bf5ccab0978b8d13adf8677f7d8e76} 
+std\+::pair$<$ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}, \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$ {\bfseries Neighbor\+Elements} () const
+\begin{DoxyCompactList}\small\item\em inner (first) and out (second) higher-\/order parent element \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classcsmp_1_1_face_construction_data_a755fa43ededa0dd4aa4e57b90f47423d}{Lower\+Dim\+Element}} ()
+\begin{DoxyCompactList}\small\item\em idx of lower-\/dimensional element from which face data were derived if it exists \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const \mbox{\hyperlink{classcsmp_1_1_face_construction_data_a1361171918c2c7924afc3a684d2fb890}{Inner\+Element}} () const
+\begin{DoxyCompactList}\small\item\em idx of element on the opposite site of the outward pointing normal \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_face_construction_data_a82c63b74486f01334a43c03fa35e8fb4}\label{classcsmp_1_1_face_construction_data_a82c63b74486f01334a43c03fa35e8fb4} 
+uint32\+\_\+t {\bfseries Inner\+Element\+Face} () const
+\begin{DoxyCompactList}\small\item\em the local id of the face located at the boundary \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const \mbox{\hyperlink{classcsmp_1_1_face_construction_data_acf9920ec4e143c7ab0a75e1d0e04aeb5}{Outer\+Element}} () const
+\begin{DoxyCompactList}\small\item\em idx of element on the side to which the normal points to \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_face_construction_data_a4fdb6f556f6618bf7ef341b3329b7870}\label{classcsmp_1_1_face_construction_data_a4fdb6f556f6618bf7ef341b3329b7870} 
+uint32\+\_\+t {\bfseries Outer\+Element\+Face} () const
+\item 
+\Hypertarget{classcsmp_1_1_face_construction_data_ae59ebdabe9fff46a778e6e97366daa96}\label{classcsmp_1_1_face_construction_data_ae59ebdabe9fff46a778e6e97366daa96} 
+long {\bfseries Element\+Material} () const
+\begin{DoxyCompactList}\small\item\em the material out of which the element consists from which the boundary face shall be constructed \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_face_construction_data_a606fe32e8a1db262baf0fd2946f54eaa}\label{classcsmp_1_1_face_construction_data_a606fe32e8a1db262baf0fd2946f54eaa} 
+void {\bfseries Materials} (std\+::vector$<$ long $>$ \&) const
+\begin{DoxyCompactList}\small\item\em in the order\+: 1) parent, 2) inner, 3) outer \end{DoxyCompactList}\item 
+std\+::pair$<$ long, long $>$ \mbox{\hyperlink{classcsmp_1_1_face_construction_data_a1b1e754e5b677491df4bc27ddaf955f3}{Materials}} () const
+\begin{DoxyCompactList}\small\item\em Returns the materials of the neighboring higher-\/dimensional elements, inside followed by outside. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_face_construction_data_a9e84a255cf7065383d4dfc0195f9846c}\label{classcsmp_1_1_face_construction_data_a9e84a255cf7065383d4dfc0195f9846c} 
+void {\bfseries Patch\+Number} (uint32\+\_\+t number)
+\begin{DoxyCompactList}\small\item\em identifier of the boundary that the face will belong to \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_face_construction_data_a67021de3225314b6ef3227508ed2d355}\label{classcsmp_1_1_face_construction_data_a67021de3225314b6ef3227508ed2d355} 
+uint32\+\_\+t {\bfseries Patch\+Number} () const
+\item 
+\Hypertarget{classcsmp_1_1_face_construction_data_ac50f846976be81bb5d9f91ce305ce9ef}\label{classcsmp_1_1_face_construction_data_ac50f846976be81bb5d9f91ce305ce9ef} 
+void {\bfseries Out} () const
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim$>$\newline
+class csmp\+::\+Face\+Construction\+Data$<$ dim $>$}
+Container of pairs of pointers to \doxylink{classcsmp_1_1_element}{Element} objects juxtaposed along a shared face identified by its local face number. Used in the construction of \doxylink{classcsmp_1_1_boundary}{Boundary} and \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} objects. 
+
+The juxtaposed elements must have the same dimension as the model. The first element in the pair is the inside one and the second one the outside one. Material values identify which regions they belong to. There is also a \doxylink{classcsmp_1_1_face}{Face} or \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} patch number used to identify the new modelsubdomain that will be created with the help of \doxylink{classcsmp_1_1_face_construction_data}{Face\+Construction\+Data}.
+
+\begin{DoxyAttention}{Attention}
+\doxylink{classcsmp_1_1_face_construction_data}{Face\+Construction\+Data} is populated by the function
+\end{DoxyAttention}
+\doxylink{namespacecsmp_ad5202c6b521360ae1a186a5452878a3c}{higher\+Dimensional\+Neighbors( csmp\+::\+Element$<$dim$>$\&, const csmp\+::\+Index\& )}; 
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_face_construction_data_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_face_construction_data_a1361171918c2c7924afc3a684d2fb890}\index{csmp::FaceConstructionData$<$ dim $>$@{csmp::FaceConstructionData$<$ dim $>$}!InnerElement@{InnerElement}}
+\index{InnerElement@{InnerElement}!csmp::FaceConstructionData$<$ dim $>$@{csmp::FaceConstructionData$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{InnerElement()}{InnerElement()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_face_construction_data_a1361171918c2c7924afc3a684d2fb890} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const \mbox{\hyperlink{classcsmp_1_1_face_construction_data}{csmp\+::\+Face\+Construction\+Data}}$<$ dim $>$\+::\+Inner\+Element (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+idx of element on the opposite site of the outward pointing normal 
+
+on the opposite site of the outward pointing normal \Hypertarget{classcsmp_1_1_face_construction_data_a755fa43ededa0dd4aa4e57b90f47423d}\index{csmp::FaceConstructionData$<$ dim $>$@{csmp::FaceConstructionData$<$ dim $>$}!LowerDimElement@{LowerDimElement}}
+\index{LowerDimElement@{LowerDimElement}!csmp::FaceConstructionData$<$ dim $>$@{csmp::FaceConstructionData$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{LowerDimElement()}{LowerDimElement()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_face_construction_data_a755fa43ededa0dd4aa4e57b90f47423d} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classcsmp_1_1_face_construction_data}{csmp\+::\+Face\+Construction\+Data}}$<$ dim $>$\+::\+Lower\+Dim\+Element (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+idx of lower-\/dimensional element from which face data were derived if it exists 
+
+lower-\/dimensional parent element from which face data were recovered in part
+
+\begin{DoxyAttention}{Attention}
+this pointer is non-\/const because it has to be null-\/assignable 
+\end{DoxyAttention}
+\Hypertarget{classcsmp_1_1_face_construction_data_a1b1e754e5b677491df4bc27ddaf955f3}\index{csmp::FaceConstructionData$<$ dim $>$@{csmp::FaceConstructionData$<$ dim $>$}!Materials@{Materials}}
+\index{Materials@{Materials}!csmp::FaceConstructionData$<$ dim $>$@{csmp::FaceConstructionData$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Materials()}{Materials()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_face_construction_data_a1b1e754e5b677491df4bc27ddaf955f3} 
+template$<$uint32\+\_\+t dim$>$ \\
+pair$<$ long, long $>$ \mbox{\hyperlink{classcsmp_1_1_face_construction_data}{csmp\+::\+Face\+Construction\+Data}}$<$ dim $>$\+::\+Materials (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Returns the materials of the neighboring higher-\/dimensional elements, inside followed by outside. 
+
+those of the neighboring higher-\/dimensional elements \Hypertarget{classcsmp_1_1_face_construction_data_acf9920ec4e143c7ab0a75e1d0e04aeb5}\index{csmp::FaceConstructionData$<$ dim $>$@{csmp::FaceConstructionData$<$ dim $>$}!OuterElement@{OuterElement}}
+\index{OuterElement@{OuterElement}!csmp::FaceConstructionData$<$ dim $>$@{csmp::FaceConstructionData$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{OuterElement()}{OuterElement()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_face_construction_data_acf9920ec4e143c7ab0a75e1d0e04aeb5} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const \mbox{\hyperlink{classcsmp_1_1_face_construction_data}{csmp\+::\+Face\+Construction\+Data}}$<$ dim $>$\+::\+Outer\+Element (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+idx of element on the side to which the normal points to 
+
+on the side to which the normal points to 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/model/Mesh\+Manager.\+h\item 
+source/includes/model/Face\+Construction\+Data.\+h\item 
+source/modules/model/Face\+Construction\+Data.\+cpp\end{DoxyCompactItemize}

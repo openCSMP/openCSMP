@@ -1,0 +1,213 @@
+\doxysection{H2\+ONa\+Cl\+Thermal\+Equilibrator.\+h}
+\hypertarget{_h2_o_na_cl_thermal_equilibrator_8h_source}{}\label{_h2_o_na_cl_thermal_equilibrator_8h_source}\index{source/includes/eos/H2ONaClThermalEquilibrator.h@{source/includes/eos/H2ONaClThermalEquilibrator.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \ \ \textcolor{preprocessor}{H2ONACLTHERMALEQUILIBRATOR\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \ \ \textcolor{preprocessor}{H2ONACLTHERMALEQUILIBRATOR\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_error_handler_8h}{"{}ErrorHandler.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_h2_o_na_cl_fluid_properties_8h}{"{}H2ONaClFluidProperties.h"{}}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_fluidproperties_8h}{"{}Fluidproperties.h"{}}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_h2_o_thermal_equilibrator_8h}{"{}H2OThermalEquilibrator.h"{}}}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{comment}{//new\ June\ 14,\ 2011}}
+\DoxyCodeLine{00011\ \textcolor{comment}{//\ needs\ improvement/generalization}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_rock_8h}{"{}Rock.h"{}}}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}}
+\DoxyCodeLine{00016\ \{}
+\DoxyCodeLine{00017\ \ \ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_h2_o_na_cl_thermal_equilibrator}{H2ONaClThermalEquilibrator}}}
+\DoxyCodeLine{00018\ \ \ \{}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{comment}{//***TD***\ cross-\/check\ the\ actual\ porosity\ meaning\ such\ that\ any\ implicit\ scaling\ with\ volume\ or\ so\ is\ clearly\ spelled\ out\ in\ documentation}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00023\ \ \ \ \ H2ONaClThermalEquilibrator(\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ external\_mass\_rock,\ \ \textcolor{comment}{//\ [kg]}}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ external\_cp\_rock,\ \ \ \ \textcolor{comment}{//\ [J/kg/K]}}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ external\_rho\_rock,\ \ \ \textcolor{comment}{//\ [kg/m\string^3]}}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ external\_porosity,\ \ \ \textcolor{comment}{//\ [\ ]}}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ external\_mass\_fluid,\ \textcolor{comment}{//\ [kg]}}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ external\_wt\_current,\ \textcolor{comment}{//\ [wt\%\ NaCl]}}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ external\_t\_previous,\ \textcolor{comment}{//\ [C]}}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ external\_p\_current,\ \ \textcolor{comment}{//\ [bar]}}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ external\_H\_current,\ \ \textcolor{comment}{//\ [J]\ NOT\ [J/kg]}}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ external\_H\_previous,\ \textcolor{comment}{//\ [J]}}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\&\ \ \ \ \ fixed\_external\_t,}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ t\_fix,}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ external\_t\_diff,}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\&\ verbose);}
+\DoxyCodeLine{00037\ \ \ \ \ \string~H2ONaClThermalEquilibrator();}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_fluidproperties}{Fluidproperties}}\ \ \ \ \ \ \ \ \ \ \ \ Liquid();}
+\DoxyCodeLine{00040\ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_fluidproperties}{Fluidproperties}}\ \ \ \ \ \ \ \ \ \ \ \ Vapor();}
+\DoxyCodeLine{00041\ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_fluidproperties}{Fluidproperties}}\ \ \ \ \ \ \ \ \ \ \ \ Bulk();}
+\DoxyCodeLine{00042\ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_fluidproperties}{Fluidproperties}}\ \ \ \ \ \ \ \ \ \ \ \ Salt();}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ThreePhaseProperties(\mbox{\hyperlink{structcsmp_1_1_fluidproperties}{Fluidproperties}}\&\ bulk\_external,}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_fluidproperties}{Fluidproperties}}\&\ liquid\_external,}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_fluidproperties}{Fluidproperties}}\&\ vapor\_external,}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_fluidproperties}{Fluidproperties}}\&\ salt\_external);}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_fluidproperties}{Fluidproperties}}\ \ \ \ \ \ \ \ \ \ \ \ ReportLiquidProperties(\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ t,}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ p,}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ x,}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ h);}
+\DoxyCodeLine{00053\ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_fluidproperties}{Fluidproperties}}\ \ \ \ \ \ \ \ \ \ \ \ ReportVaporProperties(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ t,}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ p,}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ x,}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ h);}
+\DoxyCodeLine{00057\ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_fluidproperties}{Fluidproperties}}\ \ \ \ \ \ \ \ \ \ \ \ ReportBulkProperties(\ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ t,}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ p,}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ x,}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ h);}
+\DoxyCodeLine{00061\ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_fluidproperties}{Fluidproperties}}\ \ \ \ \ \ \ \ \ \ \ \ ReportSaltProperties(\ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ t,}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ p,}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ x,}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ h);}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Resid();}
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ n\_iterations();}
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Equilibrated();}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Fatal();}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ \ \ \ \ \ \ \ \ \ \ \ mass\_rock;}
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ \ \ \ \ \ \ \ \ \ \ \ cp\_rock;}
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ \ \ \ \ \ \ \ \ \ \ \ rho\_rock;}
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ \ \ \ \ \ \ \ \ \ \ \ phi;}
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ \ \ \ \ \ \ \ \ \ \ \ mass\_fluid;}
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ \ \ \ \ \ \ \ \ \ \ \ wt\_current;}
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ \ \ \ \ \ \ \ \ \ \ \ t\_previous;}
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ \ \ \ \ \ \ \ \ \ \ \ p\_current;}
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ \ \ \ \ \ \ \ \ \ \ \ H\_current;}
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ \ \ \ \ \ \ \ \ \ \ \ H\_previous;}
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ \ \ \ \ \ \ \ \ \ \ \ t\_fix;}
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ \ \ \ \ \ \ \ \ \ \ \ t\_diff;}
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\&\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fixed\_t;}
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\&\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ verbose;}
+\DoxyCodeLine{00087\ \ \ \ \ \textcolor{comment}{//\ \ \ \ const\ bool\&\ lognode;}}
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ equilibrated;}
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fatal;}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ convergence\_criterion;\ \textcolor{comment}{//\ fraction\ of\ fluid\ enthalpy}}
+\DoxyCodeLine{00092\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ minimum\_dt;}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ t\_eq;}
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ x\_current\_eq;}
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ h\_fluid\_eq;}
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ h\_fluid\_test;}
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmin;}
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmax;}
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ resid;}
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Hmax;}
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Hmin;}
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mass\_rock\_eq;}
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cp\_rock\_eq;}
+\DoxyCodeLine{00105\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mass\_fluid\_eq;}
+\DoxyCodeLine{00106\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ wt\_current\_eq;}
+\DoxyCodeLine{00107\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ t\_previous\_eq;}
+\DoxyCodeLine{00108\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ p\_current\_eq;}
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ H\_current\_eq;}
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ H\_previous\_eq;}
+\DoxyCodeLine{00111\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ H\_test;}
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tdummy;}
+\DoxyCodeLine{00113\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ hdummy;}
+\DoxyCodeLine{00114\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ t\_previous\_ini;}
+\DoxyCodeLine{00115\ \ \ \ \ \textcolor{comment}{//\ new\ debug\ stuff}}
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mass\_rock\_ini;}
+\DoxyCodeLine{00117\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cp\_rock\_ini;}
+\DoxyCodeLine{00118\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rho\_rock\_ini;}
+\DoxyCodeLine{00119\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ porosity\_ini;}
+\DoxyCodeLine{00120\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mass\_fluid\_ini;}
+\DoxyCodeLine{00121\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ wt\_current\_ini;}
+\DoxyCodeLine{00122\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ x\_current\_ini;}
+\DoxyCodeLine{00123\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ p\_current\_ini;}
+\DoxyCodeLine{00124\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ H\_current\_ini;}
+\DoxyCodeLine{00125\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ H\_previous\_ini;}
+\DoxyCodeLine{00126\ \ \ \ \ \textcolor{comment}{//\ end\ new\ debug\ stuff}}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ icrit;}
+\DoxyCodeLine{00129\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ icrit\_max;}
+\DoxyCodeLine{00130\ \ \ \ \ \textcolor{comment}{//id\ long\ myid;}}
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00132\ \ \ \ \ \textcolor{comment}{//\ \ \ \ ofstream\ logfile,Hfile;}}
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00134\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_rock}{Rock}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rock;}
+\DoxyCodeLine{00135\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_h2_o_na_cl_fluid_properties}{H2ONaClFluidProperties}}\ \ \ \ \ fluid;}
+\DoxyCodeLine{00136\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_h2_o_thermal_equilibrator}{H2OThermalEquilibrator}}\ \ \ \ \ water\_equilibrator;}
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00138\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ComputeTotalEnthalpyAtTemperature(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ t\ );}
+\DoxyCodeLine{00139\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ErrorCheckHmin(\textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\&\ i);}
+\DoxyCodeLine{00140\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ErrorCheckHmax(\textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\&\ i);}
+\DoxyCodeLine{00141\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FluidPropertiesErrorCheck();}
+\DoxyCodeLine{00142\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PrintStatusToCerr();}
+\DoxyCodeLine{00143\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ErrorConditionsToScreen();}
+\DoxyCodeLine{00144\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FindInitialValues();}
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00146\ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_fluidproperties}{Fluidproperties}}\ \ \ \ \ \ \ \ \ \ \ \ liquidprops;}
+\DoxyCodeLine{00147\ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_fluidproperties}{Fluidproperties}}\ \ \ \ \ \ \ \ \ \ \ \ vaporprops;}
+\DoxyCodeLine{00148\ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_fluidproperties}{Fluidproperties}}\ \ \ \ \ \ \ \ \ \ \ \ bulkprops;}
+\DoxyCodeLine{00149\ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_fluidproperties}{Fluidproperties}}\ \ \ \ \ \ \ \ \ \ \ \ saltprops;}
+\DoxyCodeLine{00150\ }
+\DoxyCodeLine{00151\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Equilibrate();}
+\DoxyCodeLine{00152\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UpdateEquilibratedFluidproperties();}
+\DoxyCodeLine{00153\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ AssignAllPropertiesViaReport();}
+\DoxyCodeLine{00154\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ AssignAllPropertiesNormally();}
+\DoxyCodeLine{00155\ }
+\DoxyCodeLine{00156\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_error_handler}{ErrorHandler}}\&\ \ \ \ \ \ \ \ \ \ \ \ \ \ csmp\_error;}
+\DoxyCodeLine{00157\ \ \ \};}
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00159\ }
+\DoxyCodeLine{00160\ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00161\ \textcolor{comment}{\ \ \ \ \ @class\ H2ONaClThermalEquilibrator.h\ "{}eos/h2o\_nacl/H2ONaClThermalEquilibrator.h"{}\ (preliminary)}}
+\DoxyCodeLine{00162\ \textcolor{comment}{}}
+\DoxyCodeLine{00163\ \textcolor{comment}{\ \ \ \ \ @author\ Thomas\ Driesner,\ ETH\ Zuerich}}
+\DoxyCodeLine{00164\ \textcolor{comment}{\ \ \ \ \ @section\ contact\ Contact}}
+\DoxyCodeLine{00165\ \textcolor{comment}{\ \ \ \ \ thomas.driesner@erdw.ethz.ch}}
+\DoxyCodeLine{00166\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00167\ \textcolor{comment}{\ \ \ \ \ @section\ motivation\ Motivation}}
+\DoxyCodeLine{00168\ \textcolor{comment}{\ \ \ \ \ H2ONaClThermalEquilibrator\ performs\ an\ isobaric\ thermal\ equilibration\ between\ a\ mass\ of\ rock\ and\ a\ mass\ of\ fluid\ (from\ the\ system\ H2O-\/NaCl)\ given\ a\ total\ enthalpy\ for\ this\ system.\ }}
+\DoxyCodeLine{00169\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00170\ \textcolor{comment}{\ \ \ \ \ @section\ assumptions\ Assumptions}}
+\DoxyCodeLine{00171\ \textcolor{comment}{\ \ \ \ \ Currently,\ we\ assume\ that\ we\ can\ consistently\ treat\ treat\ the\ rock's\ enthalpy\ as\ h\_rock\ =\ cp\_rock*t\ .\ As\ only\ differences\ are\ used,\ this\ principally\ wrong\ formula\ [rather,\ it'd\ be\ h0+integral(cp\_rock(t)\ dt)],\ should\ work\ here.\ \ It\ does,\ however,\ fail\ in\ the\ case\ of\ a\ t-\/dependent\ heat\ capacity.}}
+\DoxyCodeLine{00172\ \textcolor{comment}{}}
+\DoxyCodeLine{00173\ \textcolor{comment}{\ \ \ \ \ @section\ usage\ Usage}}
+\DoxyCodeLine{00174\ \textcolor{comment}{\ \ \ \ \ Construct\ an\ instance\ of\ H2ONaClThermalEquilibrator\ with\ references\ to\ the\ following\ properties\ (units\ are\ given\ in\ square\ brackets)\ as\ constructor\ arguments:}}
+\DoxyCodeLine{00175\ \textcolor{comment}{\ \ \ \ \ -\/\ const\ double\&\ external\_mass\_rock\ \ [kg]\ \ \ \ :\ the\ mass\ of\ rock\ that\ shall\ be\ equilibrated\ with\ the\ fluid}}
+\DoxyCodeLine{00176\ \textcolor{comment}{\ \ \ \ \ -\/\ const\ double\&\ external\_cp\_rock\ \ \ \ [J/kg/K]:\ the\ rock's\ isobaric\ heat\ capacity\ (assumed\ to\ be\ independent\ of\ temperature)}}
+\DoxyCodeLine{00177\ \textcolor{comment}{\ \ \ \ \ -\/\ const\ double\&\ external\_rho\_rock\ \ \ [kg/m\string^3]:\ the\ rock's\ mass\ density}}
+\DoxyCodeLine{00178\ \textcolor{comment}{\ \ \ \ \ -\/\ const\ double\&\ external\_porosity\ \ \ [\ ]\ \ \ \ \ :\ (currently\ not\ used)\ the\ rock's\ porosity\ (this\ is\ allowed\ to\ be\ different\ from\ the\ actual\ fluid\ volume);\ }}
+\DoxyCodeLine{00179\ \textcolor{comment}{\ \ \ \ \ -\/\ const\ double\&\ external\_mass\_fluid\ [kg]\ \ \ \ :\ the\ mass\ of\ "{}fluid"{}\ -\/\ this\ is\ kg\ H2O\ +\ kg\ NaCl\ (solid+dissolved);\ including\ the\ solid\ is\ essential\ here\ as\ salt\ may\ be\ dissolved\ during\ equilibration}}
+\DoxyCodeLine{00180\ \textcolor{comment}{\ \ \ \ \ -\/\ const\ double\&\ external\_wt\_current\ [\ ]\ \ \ \ \ :\ 100\ *\ [kg\ NaCl\ (solid+dissolved)]\ /\ [kg\ NaCl\ (solid+dissolved)\ +\ kg\ H2O]}}
+\DoxyCodeLine{00181\ \textcolor{comment}{\ \ \ \ \ -\/\ const\ double\&\ external\_t\_previous\ [C]\ \ \ \ \ :\ temperature\ at\ thermal\ equilibrium\ from\ the\ previous\ time\ step}}
+\DoxyCodeLine{00182\ \textcolor{comment}{\ \ \ \ \ -\/\ const\ double\&\ external\_p\_current\ \ [bar]\ \ \ :\ preesure\ ar\ which\ thermal\ equilibration\ will\ be\ performed}}
+\DoxyCodeLine{00183\ \textcolor{comment}{\ \ \ \ \ -\/\ const\ double\&\ external\_H\_current\ \ [J]\ \ \ \ \ :\ total\ enthalpy\ in\ system\ (total\ enthalpy\ of\ rock\ +\ total\ enthalpy\ of\ fluid);\ this\ is\ the\ result\ of\ a\ transport\ step,\ including\ advection\ and\ thermal\ diffusion}}
+\DoxyCodeLine{00184\ \textcolor{comment}{\ \ \ \ \ -\/\ const\ double\&\ external\_H\_previous\ [J]\ \ \ \ \ :\ the\ above\ at\ \ the\ previous\ time\ step}}
+\DoxyCodeLine{00185\ \textcolor{comment}{\ \ \ \ \ -\/\ const\ bool\&\ \ \ \ \ \ fixed\_external\_t\ \ \ \ [\ ]\ \ \ \ \ :\ a\ bool,\ mostly\ for\ use\ at\ fixed\ temperature\ boundary\ condition;\ if\ true,\ no\ thermal\ equilibration\ will\ be\ performed,\ the\ fluid\ properties\ and\ volume\ at\ p\_current\ and\ t\_fix\ (see\ next\ entry)\ will\ be\ calculated}}
+\DoxyCodeLine{00186\ \textcolor{comment}{\ \ \ \ \ -\/\ const\ double\&\ t\_fix\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ [C]\ \ \ \ \ :\ the\ fixed\ temperature\ to\ be\ used\ if\ fixed\_external\_t\ ==\ true}}
+\DoxyCodeLine{00187\ \textcolor{comment}{\ \ \ \ \ -\/\ const\ double\&\ external\_t\_diff\ \ \ \ \ [C]\ \ \ \ \ :\ rock\ temperature\ after\ the\ thermal\ diffusion\ step\ and\ prior\ to\ equilibration.\ By\ default,\ if\ thermal\ equilibration\ fails,\ this\ will\ be\ assumed\ to\ be\ the\ best\ proxy\ to\ an\ equilibration\ result}}
+\DoxyCodeLine{00188\ \textcolor{comment}{}}
+\DoxyCodeLine{00189\ \textcolor{comment}{\ \ \ \ \ H2ONaClThermalEquilibrator\ is\ typically\ used\ by\ NaClH2OPropertiesVisitor.}}
+\DoxyCodeLine{00190\ \textcolor{comment}{}}
+\DoxyCodeLine{00191\ \textcolor{comment}{\ \ \ \ \ @code}}
+\DoxyCodeLine{00192\ \textcolor{comment}{\ \ \ \ \ @endcode}}
+\DoxyCodeLine{00193\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00194\ \textcolor{comment}{\ \ \ \ \ @section\ dependencies\ Dependencies}}
+\DoxyCodeLine{00195\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00196\ \textcolor{comment}{\ \ \ \ \ @section\ issues\ Known\ issues\ }}
+\DoxyCodeLine{00197\ \textcolor{comment}{}}
+\DoxyCodeLine{00198\ \textcolor{comment}{\ \ \ \ \ @section\ todo\ To\ do\ list}}
+\DoxyCodeLine{00199\ \textcolor{comment}{\ \ \ \ \ -\/\ Constitutive\ relation\ for\ rock\ enthalpies}}
+\DoxyCodeLine{00200\ \textcolor{comment}{\ \ \ \ \ -\/\ make\ t\_diff\ as\ default\ in\ non-\/equilibration\ case\ an\ option}}
+\DoxyCodeLine{00201\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00202\ \textcolor{comment}{\ \ \ \ \ @section\ testing\ Testing}}
+\DoxyCodeLine{00203\ \textcolor{comment}{\ \ */}}
+\DoxyCodeLine{00204\ }
+\DoxyCodeLine{00205\ }
+\DoxyCodeLine{00206\ \}\textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00207\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

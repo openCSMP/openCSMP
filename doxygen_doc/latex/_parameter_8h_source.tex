@@ -1,0 +1,80 @@
+\doxysection{Parameter.\+h}
+\hypertarget{_parameter_8h_source}{}\label{_parameter_8h_source}\index{source/includes/model/Parameter.h@{source/includes/model/Parameter.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_PARAMETER\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_PARAMETER\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_index_8h}{"{}Index.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00009\ \textcolor{comment}{\ \ \ \ @brief\ Record\ that\ describes\ the\ physical\ variables\ that\ are\ stored\ on\ a\ model:}}
+\DoxyCodeLine{00010\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00011\ \textcolor{comment}{\ \ \ \ Stores\ variable\ name\ and\ notation\ (potential\ in\ correspondance\ with\ publications),}}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ \ \ \ SI\ unit,\ type,\ range\ (simulaton-\/specific\ physically\ meaningful\ minimum\ and\ maximum\ value,\ }}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ \ \ \ and\ background\ information\ on\ the\ variable\ and\ its\ usage.}}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ \ \ \ Usage\ can\ be\ used\ to\ tell\ a\ GUI\ which}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ \ \ \ parameters\ have\ to\ be\ input\ by\ the\ user,\ distinguishing\ them\ from\ }}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ \ \ \ dependent\ (computed)\ values\ and/or\ the\ result\ of\ constitutive\ relation}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ \ \ \ calculations.\ However,\ there\ is\ no\ fixed\ terminology\ communicating\ this}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ \ \ \ yet.}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ \ \ \ Parameter\ records\ are\ managed\ by\ the\ PropertyDatabase\ class.}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ \ \ \ @author\ Stephan\ K.\ Matthai}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ \ \ \ @date\ 1994}}
+\DoxyCodeLine{00025\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00026\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}}\ \{}
+\DoxyCodeLine{00027\ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_parameter_a50b0a94a6cb1194d7b2e0131601d4781}{Parameter}}();}
+\DoxyCodeLine{00028\ \ \ \ \ Parameter(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}}\&\ );}
+\DoxyCodeLine{00029\ \ \ \ \ \string~Parameter();}
+\DoxyCodeLine{00030\ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}}\&\ operator=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}}\&\ );}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{comment}{///\ comparitor\ (to\ verify\ uniqueness\ of\ a\ new\ parameter\ definition}}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \mbox{\hyperlink{structcsmp_1_1_parameter_a0ff58fff4e71da3b6d5af52e8bb9a876}{operator}}==(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}}\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ operator!=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}}\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{comment}{///\ less-\/than\ operator\ so\ that\ Parameters\ can\ be\ stored\ in\ STL\ associative\ containers}}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \mbox{\hyperlink{structcsmp_1_1_parameter_a484346f95582c5339b9feaff39621047}{operator}}<(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}}\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{comment}{///\ define\ a\ physical\ variable\ at\ runtime,\ using\ console\ input\ (stdin)}}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \mbox{\hyperlink{structcsmp_1_1_parameter_ab0addaa017dcca8bb981d9fcb2fdf7f1}{DefineFromStdin}}();}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{comment}{///\ checks\ whether\ the\ supplied\ value\ lies\ within\ min/max\ defined\ for\ this\ parameter}}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \mbox{\hyperlink{structcsmp_1_1_parameter_a82b62daf14ee5dbb201f771bcd6e687a}{IsWithinRange}}(\ \textcolor{keywordtype}{double}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{comment}{///\ expected\ range\ of\ this\ parameter\ in\ the\ specific\ simulation}}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \mbox{\hyperlink{structcsmp_1_1_parameter_ae4bc69b0db56bb80f9054230a56801a7}{Range}}(\ \textcolor{keywordtype}{double}\&\ vmin,\ \textcolor{keywordtype}{double}\&\ vmax\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordtype}{double}\ \ MinValue()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ min;\ \}}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keywordtype}{double}\ \ MaxValue()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structcsmp_1_1_parameter_adf8461db474be0f6796afad96ad60c2d}{max}};\ \}}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{comment}{///\ prints\ parameter\ record\ to\ screen}}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \mbox{\hyperlink{structcsmp_1_1_parameter_a6322aed5b5e8bec35b7bc1d452e3fbef}{Out}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{comment}{///\ writes\ parameter\ record\ to\ a\ binary\ file}}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \mbox{\hyperlink{structcsmp_1_1_parameter_ab3899525b130cb7d333fcc8e8a91cf8a}{Out}}(\ std::fstream\&\ fp\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{comment}{///\ reads\ parameter\ record\ from\ a\ binary\ file}}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \mbox{\hyperlink{structcsmp_1_1_parameter_a69b7de5e6144dd88c2ece04c3635496c}{In}}(\ std::fstream\&\ fp\ );}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_parameter_a4bc99142bdcf01a769243e4e9797ec5c}{std}}::\mbox{\hyperlink{structcsmp_1_1_parameter_a4bc99142bdcf01a769243e4e9797ec5c}{string}}\ \ \mbox{\hyperlink{structcsmp_1_1_parameter_a4bc99142bdcf01a769243e4e9797ec5c}{name}};\ \ \ \ \ \ \ \ \textcolor{comment}{///<\ typically\ a\ human-\/readable\ name\ like\ 'fluid\ pressure'\ that\ can\ contain\ blanks\ (no\ tabs\ or\ line\ breaks)}}
+\DoxyCodeLine{00060\ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_parameter_a7d55b9b928470c551ce78d4ac19c70b8}{std}}::\mbox{\hyperlink{structcsmp_1_1_parameter_a7d55b9b928470c551ce78d4ac19c70b8}{string}}\ \ \mbox{\hyperlink{structcsmp_1_1_parameter_a7d55b9b928470c551ce78d4ac19c70b8}{notation}};\ \ \ \ \textcolor{comment}{///<\ e.g.,\ k\ for\ permeability,\ v\ for\ velocity\ etc.}}
+\DoxyCodeLine{00061\ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_parameter_a6c51b10e7b20939096b0afc1a4a3c30b}{std}}::\mbox{\hyperlink{structcsmp_1_1_parameter_a6c51b10e7b20939096b0afc1a4a3c30b}{string}}\ \ \mbox{\hyperlink{structcsmp_1_1_parameter_a6c51b10e7b20939096b0afc1a4a3c30b}{unit}};\ \ \ \ \ \ \ \ \textcolor{comment}{///<\ normally\ SI\ unit\ like\ kg/m2}}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ min,\ \mbox{\hyperlink{structcsmp_1_1_parameter_adf8461db474be0f6796afad96ad60c2d}{max}};\ \ \ \ \textcolor{comment}{///<\ physically\ meaningful\ value\ range,\ specific\ to\ simulation\ problem}}
+\DoxyCodeLine{00063\ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_parameter_a92826c316c5e6bec1a4165af5d8583bf}{std}}::\mbox{\hyperlink{structcsmp_1_1_parameter_a92826c316c5e6bec1a4165af5d8583bf}{string}}\ \ \mbox{\hyperlink{structcsmp_1_1_parameter_a92826c316c5e6bec1a4165af5d8583bf}{usage}};\ \ \ \ \ \ \ \textcolor{comment}{///<\ with\ regard\ to\ computation:\ INPUT,\ COMPUTED\ etc.}}
+\DoxyCodeLine{00064\ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_parameter_a04882f9555060d0e2dbf66bf4ae1b7c7}{std}}::\mbox{\hyperlink{structcsmp_1_1_parameter_a04882f9555060d0e2dbf66bf4ae1b7c7}{string}}\ \ \mbox{\hyperlink{structcsmp_1_1_parameter_a04882f9555060d0e2dbf66bf4ae1b7c7}{explanation}};\ \textcolor{comment}{///<\ how\ property\ is\ used,\ e.g.,\ stress\ calculation\ etc.}}
+\DoxyCodeLine{00065\ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_parameter_a5a88c8deb8444fee2d206e6e6a22c3ec}{std}}::\mbox{\hyperlink{structcsmp_1_1_parameter_a5a88c8deb8444fee2d206e6e6a22c3ec}{string}}\ \ \mbox{\hyperlink{structcsmp_1_1_parameter_a5a88c8deb8444fee2d206e6e6a22c3ec}{reference}};\ \ \ \textcolor{comment}{///<\ to\ a\ paper\ that\ describes\ a\ related\ calculation}}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keyword}{mutable}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \mbox{\hyperlink{structcsmp_1_1_parameter_a86d8a4c9b06424663af8ad98c43a1d92}{key}};\ \ \textcolor{comment}{///<\ variable\ accessor\ for\ this\ parameter\ as\ calculated\ and\ assigned\ by\ PropertyDatabase}}
+\DoxyCodeLine{00067\ \ \};}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \textcolor{comment}{///\ to\ print\ parameter\ description\ in\ compact\ form\ to\ an\ output\ stream}}
+\DoxyCodeLine{00070\ \mbox{\hyperlink{namespacecsmp_af3850dc2c96e3ea130d99f2ccad25752}{std}}::\mbox{\hyperlink{namespacecsmp_af3850dc2c96e3ea130d99f2ccad25752}{ostream}}\&\ \ \mbox{\hyperlink{namespacecsmp_af3850dc2c96e3ea130d99f2ccad25752}{operator}}<<(\ std::ostream\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}}\&\ );}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

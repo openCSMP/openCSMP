@@ -1,0 +1,127 @@
+\doxysection{Layered\+Composite\+Processor1.\+h}
+\hypertarget{_layered_composite_processor1_8h_source}{}\label{_layered_composite_processor1_8h_source}\index{source/includes/thmc/two\_phase\_flow/LayeredCompositeProcessor1.h@{source/includes/thmc/two\_phase\_flow/LayeredCompositeProcessor1.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ \ LayeredCompositeProcessor1.h}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ \ CSMP\_FECFVM\_Simulator}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ \ Created\ by\ Stephan\ Matthai\ on\ 26/6/19.}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//\ \ Copyright\ ©\ 2019\ Stephan\ Matthai.\ All\ rights\ reserved.}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{LAYERED\_COMPOSITE\_PROCESSOR1\_H}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{LAYERED\_COMPOSITE\_PROCESSOR1\_H}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ \ \ Implementation\ of\ relative\ permeability\ model\ of\ Maartje\ Boon}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ \ \ for\ layered\ rocktypes\ =\ composities.}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ \ \ The\ values\ are\ supplied\ by\ parameter\ table\ that\ initialises\ model\ for\ rocktype.}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ \ \ Documentation\ in\ Maple\ worksheet\ 'Maartje\_relperms'.}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ \ \ Calculation\ procedure}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ \ \ 0.\ for\ given\ rocktype,\ table\ is\ initialised\ from\ file}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ \ 1.\ Average\ saturation\ values,\ sw\ are\ calculated\ for\ each\ row\ for\ the\ given\ capillary\ number}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ \ \ 2.\ The\ relative\ permeability\ is\ calculated\ by\ linear\ interpolation\ between\ the\ rocks\ of\ interest,\ for\ the\ wetting\ and\ the\ nonwetting\ phase}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ \ \ This\ model\ is\ meant\ to\ be\ extended\ to\ the\ case\ where\ horizontal\ relperms\ differ\ from\ vertical\ ones.}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ \ \ The\ input\ table\ is\ supposed\ to\ have\ the\ following\ format\ (\#\ comment\ lines\ to\ be\ ignored).}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ \ \ @code}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ \ \ HARP\_FSst\_Slt\_new\_names.txt\ -\/\ Input\ data\ table\ to\ find\ Heterogeneity\ Aware\ Relative\ Permeability\ (HARP\ ?)\ as\ a\ function\ of\ sw\ and\ Nc\ =\ k\ grad\ P\ /\ sigma,\ sigma\ =\ interfacial\ tension\ H2O-\/CO2}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ \#\ comment\ line}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ \ \ \ 2\ \#\ total\ number\ of\ rocktypes\ in\ file}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ 1\ \#\ rocktype\ identifier\ 1:\ FSst-\/Slt\ (Fine\ Sandstone\ -\/\ Silt)\ Planar\ Bedding}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ \ \ \ 30\ 6\ \#\ table\ size(rows\ vs.\ columns)}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ \ \ \ \#\ F-\/flow\ \ \ \ Sw\_VL\ (cell\ average)\ \ Sw\_CL(cell\ average)\ \ Sw\_low\_CL\ \ Sw\_high\_CL\ \ \ \ Sfactor}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ \ \ \ 0.990000000000000\ \ 0.958327612404074\ \ 0.978851642918739\ \ 1\ \ 0.957703285837478\ \ 137051613.363363}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ \ \ \ 0.956206896551724\ \ 0.935003844772692\ \ 0.964807268982292\ \ 1\ \ 0.929614537964584\ \ 28739845.1229135}}
+\DoxyCodeLine{00041\ \textcolor{comment}{\ \ \ \ 0.922413793103448\ \ 0.922536293954733\ \ 0.959418405274487\ \ 1\ \ 0.918836810548975\ \ 43986865.1983833}}
+\DoxyCodeLine{00042\ \textcolor{comment}{\ \ \ \ @endcode}}
+\DoxyCodeLine{00043\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ \ \ \ //\ saturations}}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ \ \ \ double\ Sw\_VL\_,\ Sw\_CL\_;\ \ \ \ \ \ \ \ \ \ ///<\ cell\ saturations\ at\ viscous\ and\ capillary\ limit}}
+\DoxyCodeLine{00046\ \textcolor{comment}{\ \ \ \ double\ Sw\_low\_CL\_,\ Sw\_high\_CL\_;\ ///<\ average\ saturations\ at\ CL\ in\ the\ different\ layers\ a}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ \ \ \ double\ Sw\_at\_Nc\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ///<\ saturation\ at\ the\ capillary\ number\ of\ interest}}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ \ \ \ double\ Sfactor\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ///<\ scaling\ factor}}
+\DoxyCodeLine{00049\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00050\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_layered_composite_processor1}{LayeredCompositeProcessor1}}\ \{}
+\DoxyCodeLine{00051\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classcsmp_1_1_layered_composite_processor1_acbcd00d75d65169a004b462cf71bf5e9}{LayeredCompositeProcessor1}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ RRT\_data\ );}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_layered_composite_processor1_aad29df6350147e36d610ee3f22eb8424}{ReadRockTypeData}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ datafile\ );}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{comment}{//\ KEY\ METHODS\ FOR\ THE\ USER\ -\/\ non-\/constant\ as\ they\ modify\ the\ RRT\ table}}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_layered_composite_processor1_a83dca058fcc73a2c5a3263a8db52c6a5}{krw}}(\ \textcolor{keywordtype}{double}\ sw,\ \textcolor{keywordtype}{double}\ Nc,\ \textcolor{keywordtype}{int}\ rocktype\ );}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordtype}{double}\ krn(\ \textcolor{keywordtype}{double}\ sw,\ \textcolor{keywordtype}{double}\ Nc,\ \textcolor{keywordtype}{int}\ rocktype\ );}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{comment}{///\ computes\ wetting-\/\ and\ non-\/wetting\ phase\ relative\ permeabilities\ in\ one\ operation}}
+\DoxyCodeLine{00061\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_layered_composite_processor1_ae187616de6f7d984f43c1b69fc4ccc9a}{std}}::\mbox{\hyperlink{classcsmp_1_1_layered_composite_processor1_ae187616de6f7d984f43c1b69fc4ccc9a}{pair}}<\textcolor{keywordtype}{double},\textcolor{keywordtype}{double}>\ \mbox{\hyperlink{classcsmp_1_1_layered_composite_processor1_ae187616de6f7d984f43c1b69fc4ccc9a}{RelativePermeability}}(\ \textcolor{keywordtype}{double}\ sw,\ \textcolor{keywordtype}{double}\ Nc,\ \textcolor{keywordtype}{int}\ rocktype\ );}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_layered_composite_processor1_a99303e1684582a978888df66e46e70a6}{pc}}(\ \textcolor{keywordtype}{double}\ sw,\ \textcolor{keywordtype}{int}\ rocktype\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{comment}{///\ writes\ textfile\ with\ sw,\ krw(sw,Nc),\ krn(sw,Nc)\ values\ computed\ for\ rocktype\ in\ 0.05\ saturation\ increments}}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_layered_composite_processor1_a1e842c388edf0031cb841a58773b43b3}{WriteRelativePermeabilityTable}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ filename,\ \textcolor{keywordtype}{int}\ rocktype,\ \textcolor{keywordtype}{double}\ Nc\ );}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{comment}{///\ reports\ the\ stored\ rocktype\ table(s)\ etc.}}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_layered_composite_processor1_a49201419b69f894cd82ca563d457fe9b}{Out}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{comment}{//\ permeability\ averages}}
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{comment}{///\ vertical\ thickness\ weighted\ (harmonic)\ mean\ of\ the\ vertical\ layer\ permeabilities}}
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keywordtype}{double}\ k\_AverageY()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{comment}{///\ horizontal\ thickness\ weighted\ average\ of\ the\ horizontal\ layer\ permeabilities}}
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keywordtype}{double}\ k\_AverageX()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{comment}{///\ water\ saturation\ in\ cell\ at\ given\ capillary\ number;\ calculated\ from\ entries\ in\ table}}
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keywordtype}{double}\ SwAtNc(\ \textcolor{keywordtype}{double}\ Nc,\ \textcolor{keywordtype}{double}\ Sw\_VL,\ \textcolor{keywordtype}{double}\ Sw\_CL,\ \textcolor{keywordtype}{double}\ Sfactor\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{comment}{///\ corresponding\ sw\ in\ low-\/k\ laminations}}
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keywordtype}{double}\ SwAtNc\_Low\_k\_Layer(\ \textcolor{keywordtype}{double}\ Nc,\ \textcolor{keywordtype}{double}\ Sw\_VL,\ \textcolor{keywordtype}{double}\ Sw\_low\_CL,\ \textcolor{keywordtype}{double}\ Sfactor\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{comment}{///\ corresponding\ sw\ in\ high-\/k\ laminations}}
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keywordtype}{double}\ SwAtNc\_High\_k\_Layer(\ \textcolor{keywordtype}{double}\ Nc,\ \textcolor{keywordtype}{double}\ Sw\_VL,\ \textcolor{keywordtype}{double}\ Sw\_high\_CL,\ \textcolor{keywordtype}{double}\ Sfactor\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{comment}{///\ effective\ sw\ in\ low-\/k\ laminations}}
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keywordtype}{double}\ SwStarLow(\ \textcolor{keywordtype}{double}\ Sw\_low\_at\_Nc\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{comment}{///\ effective\ sw\ in\ low-\/k\ laminations}}
+\DoxyCodeLine{00087\ \ \ \ \ \textcolor{keywordtype}{double}\ SwStarHigh(\ \textcolor{keywordtype}{double}\ Sw\_high\_at\_Nc\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{comment}{///\ krw\ relperm\ of\ low-\/k\ layer\ at\ given\ saturation\ and\ capillary\ number}}
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keywordtype}{double}\ KrwLow(\ \textcolor{keywordtype}{double}\ SwStar\_low\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{comment}{///\ krw\ relperm\ of\ high-\/k\ layer\ at\ given\ saturation\ and\ capillary\ number}}
+\DoxyCodeLine{00092\ \ \ \ \ \textcolor{keywordtype}{double}\ KrwHigh(\ \textcolor{keywordtype}{double}\ SwStar\_high\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{comment}{///\ krn\ relperm\ of\ low-\/k\ layer\ at\ given\ saturation\ and\ capillary\ number}}
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keywordtype}{double}\ KrnLow(\ \textcolor{keywordtype}{double}\ SwStar\_low\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{comment}{///\ krn\ relperm\ of\ high-\/k\ layer\ at\ given\ saturation\ and\ capillary\ number}}
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{keywordtype}{double}\ KrnHigh(\ \textcolor{keywordtype}{double}\ SwStar\_high\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{comment}{///\ relative\ permeability\ at\ the\ given\ water\ saturation\ and\ capillary\ number}}
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{keywordtype}{double}\ KrwComposite(\ \textcolor{keywordtype}{double}\ swAtNc\_Low\_k\_Layer,\ \textcolor{keywordtype}{double}\ swAtNc\_High\_k\_Layer\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{keywordtype}{double}\ KrnComposite(\ \textcolor{keywordtype}{double}\ swAtNc\_Low\_k\_Layer,\ \textcolor{keywordtype}{double}\ swAtNc\_High\_k\_Layer\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \ \ \textcolor{keyword}{private}:\ \textcolor{comment}{//\ parameters\ \&\ data}}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ \ \ \ \ \textcolor{keyword}{enum}\ \{\ f,\ Sw\_VL,\ Sw\_CL,\ Sw\_CL\_low\_k,\ Sw\_CL\_high\_k,\ Sfactor\ \};}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \ \ \ \ \textcolor{comment}{//\ material\ properties\ -\/\ should\ be\ part\ of\ rocktype}}
+\DoxyCodeLine{00108\ \ \ \ \ \textcolor{keywordtype}{double}\ k\_low\_,\ k\_high\_;\ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ layer\ permeabilities}}
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{keywordtype}{double}\ phi\_low\_,\ phi\_high\_;\ \ \ \ \ \textcolor{comment}{///<\ porosities\ of\ low\ and\ high\ k\ layers}}
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{keywordtype}{double}\ LY\_low\_,\ LY\_high\_;\ \ \ \ \ \ \ \textcolor{comment}{///<\ cumulative\ layer\ thickness\ in\ the\ vertical\ direction\ (Y),\ normalized\ summing\ to\ 1}}
+\DoxyCodeLine{00111\ \ \ \ \ \textcolor{keywordtype}{double}\ Swi\_low\_,\ Swi\_high\_;\ \ \ \ \ \textcolor{comment}{///<\ irreducible\ saturations\ of\ the\ 2\ different\ layers}}
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{keywordtype}{double}\ m\_low\_,\ m\_high\_;\ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ van\ Genuchten\ exponents\ for\ the\ 2\ different\ layers}}
+\DoxyCodeLine{00113\ \ \ \ \ \textcolor{keywordtype}{double}\ pd\_low\_,\ pd\_high\_;\ \ \ \ \ \ \ \textcolor{comment}{///<\ capillary\ (drainage)\ entry\ pressure\ of\ low\ and\ high\ k\ layers}}
+\DoxyCodeLine{00114\ \ \ \ \ \textcolor{keywordtype}{double}\ bcp\_low\_,\ bcp\_high\_;\ \ \ \ \ \textcolor{comment}{///<\ Brooks-\/Corey\ 64'\ exponents\ for\ low\ and\ high\ k\ layers}}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_layered_composite_processor1}{std}}::\mbox{\hyperlink{classcsmp_1_1_layered_composite_processor1}{vector}}<\mbox{\hyperlink{classcsmp_1_1_layered_composite_processor1}{std}}::\mbox{\hyperlink{classcsmp_1_1_layered_composite_processor1}{vector}}<\mbox{\hyperlink{classcsmp_1_1_layered_composite_processor1}{std}}::\mbox{\hyperlink{classcsmp_1_1_layered_composite_processor1}{vector}}<\textcolor{keywordtype}{double}>\ >\ >\ \mbox{\hyperlink{classcsmp_1_1_layered_composite_processor1}{RRT\_}};\ \ \textcolor{comment}{///<\ data\ table\ for\ n-\/rocktypes\ with\ extra\ 3\ columns\ for\ sw,\ krw,\ krn}}
+\DoxyCodeLine{00117\ \};}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \}\ \textcolor{comment}{//\ end\ csmp}}
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{/*\ LAYERED\_COMPOSITE\_PROCESSOR1\_H\ */}}
+
+\end{DoxyCode}

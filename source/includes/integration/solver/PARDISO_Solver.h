@@ -24,14 +24,13 @@ struct PARDISO_SolverSettings : public SolverSettings {
 class PARDISO_Solver : public Solver {
   public:
       explicit PARDISO_Solver( PARDISO_SolverSettings& );
-      virtual ~PARDISO_Solver();
   
   protected:
       // TODO: this does not override the base class!
       virtual void SolveMatrixEquation( csmp::SparseMatrix& A,
                                         std::vector<double>& b,
                                         std::vector<double>& x,
-                                        double solver_tolerance );
+                                        size_t no_unknowns );
 
   private:
       PARDISO_SolverSettings& settings_;

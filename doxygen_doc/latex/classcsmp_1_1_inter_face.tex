@@ -1,0 +1,1023 @@
+\doxysection{csmp\+::Inter\+Face\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_inter_face}{}\label{classcsmp_1_1_inter_face}\index{csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}}
+
+
+Surface (3D) or line (2D) element connector for elements which share faces but not nodes.  
+
+
+
+
+{\ttfamily \#include $<$Inter\+Face.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Inter\+Face\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_inter_face__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Inter\+Face\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_inter_face__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_inter_face_a3982be1738de51e08f42905b1cad662b}{Inter\+Face}} (\mbox{\hyperlink{classcsmp_1_1_element}{csmp\+::\+Element}}$<$ dim $>$ \&, \mbox{\hyperlink{classcsmp_1_1_element}{csmp\+::\+Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}inner\+\_\+parent, \mbox{\hyperlink{classcsmp_1_1_element}{csmp\+::\+Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}outer\+\_\+parent, uint32\+\_\+t adjacent\+\_\+face\+\_\+of\+\_\+inner\+\_\+element, uint32\+\_\+t adjacent\+\_\+face\+\_\+of\+\_\+outer\+\_\+element, const \mbox{\hyperlink{structcsmp_1_1_local_variables}{Local\+Variables}} \&interface\+\_\+props, const \mbox{\hyperlink{structcsmp_1_1_integration_point_variables}{Integration\+Point\+Variables}} \&interface\+\_\+integration\+\_\+point\+\_\+props)
+\begin{DoxyCompactList}\small\item\em New! SKM 29/7/2022\+: constructs \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} using the nodes and their numbering in the \doxylink{classcsmp_1_1_inter_face}{Inter\+Face}\textquotesingle{}s higher-\/dimensional neighbors. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_inter_face_afe4d2d8b17066f22c467bda0a3f871d3}{Inter\+Face}} (\mbox{\hyperlink{classcsmp_1_1_face}{csmp\+::\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}, const \mbox{\hyperlink{structcsmp_1_1_local_variables}{Local\+Variables}} \&interface\+\_\+props, const \mbox{\hyperlink{structcsmp_1_1_integration_point_variables}{Integration\+Point\+Variables}} \&interface\+\_\+integration\+\_\+point\+\_\+props, std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$ outside\+\_\+nodes)
+\begin{DoxyCompactList}\small\item\em constructs complete \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} using the \doxylink{classcsmp_1_1_face}{Face} nodes as inside nodes (in same order) and outside nodes supplied opposite order matching the inside nodes \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_inter_face_a4780a2166939f668f261040fae91a97d}{Inter\+Face}} (\mbox{\hyperlink{classcsmp_1_1_finite_element}{csmp\+::\+Finite\+Element}} \texorpdfstring{$\ast$}{*}, const \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{csmp\+::\+Finite\+Volume\+Stencil}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}, const \mbox{\hyperlink{structcsmp_1_1_local_variables}{Local\+Variables}} \&interface\+\_\+props, const \mbox{\hyperlink{structcsmp_1_1_integration_point_variables}{Integration\+Point\+Variables}} \&interface\+\_\+integration\+\_\+point\+\_\+props)
+\begin{DoxyCompactList}\small\item\em default\+: incomplete construction without connection to nodes \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_inter_face_a7d61fc0d3460f59b19eda9720ec67f3a}\label{classcsmp_1_1_inter_face_a7d61fc0d3460f59b19eda9720ec67f3a} 
+{\bfseries Inter\+Face} (size\+\_\+t index, \mbox{\hyperlink{classcsmp_1_1_finite_element}{csmp\+::\+Finite\+Element}} \texorpdfstring{$\ast$}{*}, const \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{csmp\+::\+Finite\+Volume\+Stencil}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}, const \mbox{\hyperlink{structcsmp_1_1_local_variables}{Local\+Variables}} \&interface\+\_\+props, const \mbox{\hyperlink{structcsmp_1_1_integration_point_variables}{Integration\+Point\+Variables}} \&interface\+\_\+integration\+\_\+point\+\_\+props)
+\begin{DoxyCompactList}\small\item\em reconstruction of model from native binary file \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_inter_face_a6e0738e873d482d388e80fd3b39f52f0}\label{classcsmp_1_1_inter_face_a6e0738e873d482d388e80fd3b39f52f0} 
+{\bfseries Inter\+Face} (const \mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em copy constructor \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_inter_face_a13648fccb7091058b4cd28474388821a}\label{classcsmp_1_1_inter_face_a13648fccb7091058b4cd28474388821a} 
+\mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em assignment \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_inter_face_a81a5c1c571e7c45595ac74dd91dab489}\label{classcsmp_1_1_inter_face_a81a5c1c571e7c45595ac74dd91dab489} 
+{\bfseries Inter\+Face} (\mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \&\&)
+\begin{DoxyCompactList}\small\item\em move constructor \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_inter_face_ab9bfb520dec9069bcefb8a46131bdef7}\label{classcsmp_1_1_inter_face_ab9bfb520dec9069bcefb8a46131bdef7} 
+\mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \& {\bfseries operator=} (\mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \&\&)
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_inter_face_ae5b10885272dc209932a687ff3c3a642}{operator==}} (const \mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em self-\/detection in the interface construction process \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_inter_face_ace8fbc2599aac9549174a0c37fb7b5dd}\label{classcsmp_1_1_inter_face_ace8fbc2599aac9549174a0c37fb7b5dd} 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_inter_face}{csmp\+::\+Inter\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$ \& {\bfseries Neighbor\+Element\+Vector} ()
+\begin{DoxyCompactList}\small\item\em reference to provide efficiency hack in \doxylink{classcsmp_1_1_mesh_manager}{Mesh\+Manager} \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_inter_face_a55347d7059fd9d37a17f8d990de1419e}{Assign}} (uint32\+\_\+t n\+\_\+local, \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}} side)
+\begin{DoxyCompactList}\small\item\em assigns nodes of higher-\/dimensional neigbor elements to interface in the order they have in their corresponding faces \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_inter_face_a68bdf61b72cc4daab037728b6b161ad7}{Assign}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const inner\+\_\+elmt, uint32\+\_\+t inner\+\_\+local\+\_\+face\+\_\+id, \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const outer\+\_\+elmt, uint32\+\_\+t outer\+\_\+local\+\_\+face\+\_\+id)
+\begin{DoxyCompactList}\small\item\em connects inter\+Face to its higher-\/dimensional neighbors \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_inter_face_a3f6297a01eb8b91534f8ca0b3515e1de}\label{classcsmp_1_1_inter_face_a3f6297a01eb8b91534f8ca0b3515e1de} 
+void {\bfseries Assign\+Elements\+And\+Nodes} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const inner\+\_\+elmt, \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const outer\+\_\+elmt)
+\begin{DoxyCompactList}\small\item\em connects inter\+Face to its higher-\/dimensional neighbors and nodes establishing connections by itself \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_inter_face_a0f60186e7abffa80147a6601e3cd7ef4}\label{classcsmp_1_1_inter_face_a0f60186e7abffa80147a6601e3cd7ef4} 
+void {\bfseries Assign} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const parent, uint32\+\_\+t face\+Id, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}} side)
+\begin{DoxyCompactList}\small\item\em connects \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} to its higher-\/dimensional neighbor on the given side \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_inter_face_a4d907535d6313d4efa7e267883b40144}{Assign}} (uint32\+\_\+t nbor, \mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const)
+\begin{DoxyCompactList}\small\item\em connects \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} to its equidimensional neighbors (=number of \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} finite-\/element faces) \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_inter_face_a91fc9761553034d8df290d13b8845f13}{Unassign}} (const \mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const)
+\begin{DoxyCompactList}\small\item\em sets neighbor pointer that was pointing to the argument object to \textquotesingle{}nullptr\textquotesingle{} \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_inter_face_ab466a31fb0d8887bdeac63d18de6fe8b}\label{classcsmp_1_1_inter_face_ab466a31fb0d8887bdeac63d18de6fe8b} 
+void {\bfseries Unassign\+Neighbor} (uint32\+\_\+t nbor)
+\begin{DoxyCompactList}\small\item\em removal of any \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} attached to this neighbor slot \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_inter_face_a19cb5f7ce356294d923512e64be7e43c}\label{classcsmp_1_1_inter_face_a19cb5f7ce356294d923512e64be7e43c} 
+void {\bfseries Assign} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const intervening\+\_\+elmt)
+\begin{DoxyCompactList}\small\item\em connect / disconnect interface to a lower-\/dimensional element with extra nodes situated inside the \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} in a triple-\/layer mesh representation for fractures \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_inter_face_a22789aad676bb48928cb91b6ec2b506f}\label{classcsmp_1_1_inter_face_a22789aad676bb48928cb91b6ec2b506f} 
+void {\bfseries Un\+Assign\+Intervening\+Element} ()
+\item 
+\Hypertarget{classcsmp_1_1_inter_face_a6800acbb1713dbf386629d839f1f8b6a}\label{classcsmp_1_1_inter_face_a6800acbb1713dbf386629d839f1f8b6a} 
+void {\bfseries Accept} (\mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor}}$<$ dim $>$ \&vis)
+\begin{DoxyCompactList}\small\item\em to apply visitors whose application level is \doxylink{classcsmp_1_1_boundary}{Boundary} and target is \doxylink{classcsmp_1_1_face}{Face} \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_inter_face_a85dc9621be6bbe71f5dd3786c1152df8}\label{classcsmp_1_1_inter_face_a85dc9621be6bbe71f5dd3786c1152df8} 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Placement} () const
+\begin{DoxyCompactList}\small\item\em of variables that are discretised on interfaces; required by \doxylink{classcsmp_1_1_local_variable_storage}{Local\+Variable\+Storage} \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_inter_face_a58ef99834e765994942487f1bf4445c8}\label{classcsmp_1_1_inter_face_a58ef99834e765994942487f1bf4445c8} 
+uint32\+\_\+t {\bfseries Nodes} () const
+\begin{DoxyCompactList}\small\item\em node\+\_\+connector\+\_\+.\+size() = total nodes on both sides of \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} \end{DoxyCompactList}\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_inter_face_a39bb64ee97ba1487d11ee9bd4fe8ff38}{Faces}} () const
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_inter_face_a7945c2fdd2965b0a06053916740f54d5}{Neighbors}} () const
+\begin{DoxyCompactList}\small\item\em the \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} object neighbors of the \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} (one per face of interface) \end{DoxyCompactList}\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_inter_face_a5c7cae9fc3072590f2b59c73727c8753}{Connected\+Neighbors}} () const
+\begin{DoxyCompactList}\small\item\em the \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} object neighbors which are connected with the \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} and not null. \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator \mbox{\hyperlink{classcsmp_1_1_inter_face_a6c974a5838835bf58efa4c50c6be4ff9}{Nodes\+Begin}} () const
+\begin{DoxyCompactList}\small\item\em only constant iterators are provided because the user is not supposed to change the node pr neighbor connectivity (done by \doxylink{classcsmp_1_1_mesh_manager}{Mesh\+Manager}); \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_inter_face_a116214841aaeb96ae4b2a72707f4bb6b}\label{classcsmp_1_1_inter_face_a116214841aaeb96ae4b2a72707f4bb6b} 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator {\bfseries Nodes\+End} () const
+\item 
+\Hypertarget{classcsmp_1_1_inter_face_ae811b7fea46e899785bfb35f39afb2ec}\label{classcsmp_1_1_inter_face_ae811b7fea46e899785bfb35f39afb2ec} 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator {\bfseries Corner\+Nodes\+Begin} () const
+\item 
+\Hypertarget{classcsmp_1_1_inter_face_a94065ebee317398b26aad7541be156b8}\label{classcsmp_1_1_inter_face_a94065ebee317398b26aad7541be156b8} 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator {\bfseries Corner\+Nodes\+End} () const
+\item 
+\Hypertarget{classcsmp_1_1_inter_face_ae4e77d4fc6f1b8ea932b6b8e53a159f1}\label{classcsmp_1_1_inter_face_ae4e77d4fc6f1b8ea932b6b8e53a159f1} 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_inter_face}{csmp\+::\+Inter\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator {\bfseries Neighbors\+Begin} () const
+\item 
+\Hypertarget{classcsmp_1_1_inter_face_a2047a8409acc2e87f0407459c0c117a1}\label{classcsmp_1_1_inter_face_a2047a8409acc2e87f0407459c0c117a1} 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_inter_face}{csmp\+::\+Inter\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator {\bfseries Neighbors\+End} () const
+\item 
+\mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const \mbox{\hyperlink{classcsmp_1_1_inter_face_abc296812926dcaf14b4955e09c358962}{N}} (uint32\+\_\+t n\+\_\+local) const
+\begin{DoxyCompactList}\small\item\em access ONLY to the nodes on the Current\+\_\+\+Side of the interface (determined by member current\+\_\+side\+\_\+) \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const \mbox{\hyperlink{classcsmp_1_1_inter_face_a620df98a862d850d845a1c066e57cdf9}{N}} (uint32\+\_\+t n\+\_\+local, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}} side) const
+\begin{DoxyCompactList}\small\item\em access the nodes that are connected to either, the inside or the outside of the \doxylink{classcsmp_1_1_face}{Face} \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const \mbox{\hyperlink{classcsmp_1_1_inter_face_aed805180ccd56161ebb5de81630489b4}{MatchingN}} (uint32\+\_\+t n\+\_\+local, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}} side) const
+\item 
+\Hypertarget{classcsmp_1_1_inter_face_aa3cc939e0e4dda4d38823bdd8fd5862d}\label{classcsmp_1_1_inter_face_aa3cc939e0e4dda4d38823bdd8fd5862d} 
+void {\bfseries Current\+Side} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}} side)
+\begin{DoxyCompactList}\small\item\em switches internal state variable that sets interface side \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_inter_face_a551918209480e471dfa467f480054e07}\label{classcsmp_1_1_inter_face_a551918209480e471dfa467f480054e07} 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}} {\bfseries Current\+Side} () const
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_inter_face_a14df8357783e352b4b57c8798c011121}{Is\+End\+Point\+Node}} (uint32\+\_\+t n\+\_\+local) const
+\begin{DoxyCompactList}\small\item\em END\+\_\+\+POINT is a classifier that applies on the perimeter of \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} objects terminating within models where INSIDE and OUTSIDE nodes are identical. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_inter_face}{csmp\+::\+Inter\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const \mbox{\hyperlink{classcsmp_1_1_inter_face_a81860f80143efdb206150afc3a9f7189}{Neighbor}} (uint32\+\_\+t) const
+\begin{DoxyCompactList}\small\item\em returns neighbor \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} of interface \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_inter_face_a66d1a728b2e037fdad8bb63ba97777ed}\label{classcsmp_1_1_inter_face_a66d1a728b2e037fdad8bb63ba97777ed} 
+void {\bfseries Idx} (size\+\_\+t) const
+\begin{DoxyCompactList}\small\item\em on-\/the-\/fly 0..n-\/1 numbering stored in mutable local variable and used for computations in interfaces (displacement gradients etc.) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_inter_face_ae85de2da8a54770ed77c00fdabf43fb1}\label{classcsmp_1_1_inter_face_ae85de2da8a54770ed77c00fdabf43fb1} 
+size\+\_\+t {\bfseries Idx} () const
+\item 
+\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const \mbox{\hyperlink{classcsmp_1_1_inter_face_afa61128ccc60bf71ff743448b7654d41}{Parent}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}}) const
+\begin{DoxyCompactList}\small\item\em access the higher dimensional elements on either side of interface; \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_inter_face_a86c12fac4a4ea6b2e2fa8b3db6fbd61a}\label{classcsmp_1_1_inter_face_a86c12fac4a4ea6b2e2fa8b3db6fbd61a} 
+\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const {\bfseries Inner\+Parent} () const
+\begin{DoxyCompactList}\small\item\em higher-\/dimensional element located on side opposite to where the unit normal points; will always be present \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const \mbox{\hyperlink{classcsmp_1_1_inter_face_af0cd776b8d04e905c494fe0d34926841}{Outer\+Parent}} () const
+\begin{DoxyCompactList}\small\item\em higher-\/dimensional element located on the side of the interface to which the unit normal points; \end{DoxyCompactList}\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_inter_face_af785645e02c15c42a6e8ae31c9c77926}{Parent\+Node\+Number}} (uint32\+\_\+t n\+\_\+local, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}} side) const
+\begin{DoxyCompactList}\small\item\em Local node numbers in higher-\/dimensional adjacent elements; costly to compute. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_inter_face_a615247e91fb46929fd3e06ed4d42f794}\label{classcsmp_1_1_inter_face_a615247e91fb46929fd3e06ed4d42f794} 
+\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} {\bfseries Intervening\+Element} ()
+\begin{DoxyCompactList}\small\item\em access to the \doxylink{classcsmp_1_1_element}{Element} object from which the original face was created if it still is there (use Has\+Base() \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_inter_face_a9dd931e64dca464521792d58b5f5bce2}\label{classcsmp_1_1_inter_face_a9dd931e64dca464521792d58b5f5bce2} 
+const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} {\bfseries Intervening\+Element} () const
+\item 
+\Hypertarget{classcsmp_1_1_inter_face_a891d4a921d20cbb6943cfb890a28664d}\label{classcsmp_1_1_inter_face_a891d4a921d20cbb6943cfb890a28664d} 
+bool {\bfseries Has\+Intervening\+Element} () const
+\begin{DoxyCompactList}\small\item\em is an equi-\/dimensional element connected to the MIDDLE element pointer of this \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_inter_face_a0db784a0f15f9711a89623111a5c5c79}{Are\+Nodes\+Collocated}} (double tolerance=std\+::numeric\+\_\+limits$<$ double $>$\+::epsilon()) const
+\begin{DoxyCompactList}\small\item\em tests whether the INSIDE nodes match the OUTSIDE nodes w.\+r.\+t. their position \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_inter_face_a1851c7a90800c95e7072cce0df889f8f}{Parent\+Face\+ID}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}}, uint32\+\_\+t idx)
+\begin{DoxyCompactList}\small\item\em local number of the face in the inner parent element, which borders against the interface \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_inter_face_aceb3eb5c26bd5822709607c420bafdcd}\label{classcsmp_1_1_inter_face_aceb3eb5c26bd5822709607c420bafdcd} 
+uint32\+\_\+t {\bfseries Inner\+Parent\+Face\+ID} () const
+\begin{DoxyCompactList}\small\item\em return face ID of inner parent element \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_inter_face_a710109e0ec046cd8be933b3a24bcd099}\label{classcsmp_1_1_inter_face_a710109e0ec046cd8be933b3a24bcd099} 
+uint32\+\_\+t {\bfseries Outer\+Parent\+Face\+ID} () const
+\begin{DoxyCompactList}\small\item\em return face ID of outer parent element \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_inter_face_a3879937ba3ce8ca6b8138377b5995570}\label{classcsmp_1_1_inter_face_a3879937ba3ce8ca6b8138377b5995570} 
+uint32\+\_\+t {\bfseries Parent\+Face\+ID} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}} side) const
+\begin{DoxyCompactList}\small\item\em return face ID of inner or outer parent element depending on index \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_inter_face_a0ddadfde2424b151837d0a9201ed0719}{Area}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}}=INSIDE) const
+\begin{DoxyCompactList}\small\item\em returns area of the interface; MIDDLE case is returned only if there is an intervening element \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ dim $>$ \mbox{\hyperlink{classcsmp_1_1_inter_face_a5426cc263a39d5e18c78ac5449233c67}{Unit\+Normal}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}} side) const
+\begin{DoxyCompactList}\small\item\em returns the outward-\/pointing unit normal (from INSIDE to OUTSIDE) using the middle element (if any) or inside node coordinates to construct face \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ dim $>$ \mbox{\hyperlink{classcsmp_1_1_inter_face_a48cc96462e33fb5d736df8a61192b8a2}{Unit\+Normal}} () const
+\begin{DoxyCompactList}\small\item\em returns the outward-\/pointing unit normal (from INSIDE to OUTSIDE) using the middle element (if any) or bisector node coordinates to construct face \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_inter_face_aaa326222e2e5ac63f3f73ffe32991fa7}{Node\+Spacing}} (uint32\+\_\+t n\+\_\+local) const
+\begin{DoxyCompactList}\small\item\em computes distance between corresponding pairs of nodes; \end{DoxyCompactList}\item 
+{\footnotesize template$<$class Var$>$ }\\void \mbox{\hyperlink{classcsmp_1_1_inter_face_ad4baf0efc8d0053b1d138a0859e2c28a}{Node\+Property\+Vector}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, std\+::vector$<$ Var $>$ \&, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}}=INSIDE) const
+\begin{DoxyCompactList}\small\item\em returns a vector of the property of interest discretized on the node \end{DoxyCompactList}\item 
+{\footnotesize template$<$class Var$>$ }\\void \mbox{\hyperlink{classcsmp_1_1_inter_face_aff0925958068b922df6b79da3e81be48}{Matching\+Node\+Property\+Vector}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, std\+::vector$<$ Var $>$ \&, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}}) const
+\begin{DoxyCompactList}\small\item\em returns a vector of the property of interest discretized on the node \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \mbox{\hyperlink{classcsmp_1_1_inter_face_aeeda11db11cfac3e9de963c892d4fb3c}{Bary\+Center}} () const
+\begin{DoxyCompactList}\small\item\em the centre of gravity of the element (returns the mid-\/point of the 2-\/sides if detached) \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_inter_face_a7b7b0aaed868b05d8f7fd61736e40fbe}{Length\+In\+Direction}} (const \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&vec\+Direction) const
+\begin{DoxyCompactList}\small\item\em projects node points onto line returning max distance between them; vec direction can have any length \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_inter_face_a997fd0b64d77364d82a741aaa20a4ac9}{Node\+Coordinate\+Matrix}} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&) const
+\begin{DoxyCompactList}\small\item\em as needed by \doxylink{classcsmp_1_1_finite_element_policy}{Finite\+Element\+Policy} (uses current\+\_\+side\+\_\+ to retrieve matrix) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_inter_face_a4294021b29937a0e21c7726dc3bc23b5}\label{classcsmp_1_1_inter_face_a4294021b29937a0e21c7726dc3bc23b5} 
+void {\bfseries Node\+Coordinate\+Matrix} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}} side) const
+\begin{DoxyCompactList}\small\item\em as needed in the accumulation process in pde operators for a specifc side \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_inter_face_af73a866dec2bd0009fedb53ca743948c}\label{classcsmp_1_1_inter_face_af73a866dec2bd0009fedb53ca743948c} 
+void {\bfseries Out} () const
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_finite_element_policy}{csmp\+::\+Finite\+Element\+Policy$<$ dim, Inter\+Face $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Finite\+Element\+Policy} (const \mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \&) noexcept
+\item 
+\mbox{\hyperlink{classcsmp_1_1_finite_element_policy}{Finite\+Element\+Policy}} \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_finite_element_policy}{Finite\+Element\+Policy}} \&p) noexcept
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a8a6b224d1d3482c35e577ffc3b9a1230}{Assign}} (\mbox{\hyperlink{classcsmp_1_1_finite_element}{Finite\+Element}} \texorpdfstring{$\ast$}{*}fe\+\_\+ptr)
+\begin{DoxyCompactList}\small\item\em for deferred assignment or changing the element at runtime \end{DoxyCompactList}\item 
+void {\bfseries Assign\+Finite\+Element\+Null\+Ptr} () noexcept
+\item 
+\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}} {\bfseries FE\+\_\+\+Type} () const noexcept
+\begin{DoxyCompactList}\small\item\em the type is an enumeration that is used in the generation of finite elements \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_finite_element}{Finite\+Element}} \texorpdfstring{$\ast$}{*} {\bfseries FE} () const noexcept
+\begin{DoxyCompactList}\small\item\em you are allowed to switch the element at runtime and modifies the volatile data it stores \end{DoxyCompactList}\item 
+bool {\bfseries Is\+Equidimensional} () const
+\begin{DoxyCompactList}\small\item\em true for volumes in 3D, surfaces in 2D, and line elements in 1D, else this is a lower dimensional element \end{DoxyCompactList}\item 
+bool {\bfseries Is\+Line} () const
+\item 
+bool {\bfseries Is\+Surface} () const
+\item 
+bool {\bfseries Is\+Volume} () const
+\item 
+uint32\+\_\+t {\bfseries Interpolation} () const
+\item 
+bool {\bfseries Uses\+Local\+Coordinates} () const
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_ac5f3d16eb6043c3009d924142f10dc43}{Integration\+Points}} () const
+\begin{DoxyCompactList}\small\item\em number of element integration points for current quadrature scheme \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_ab081bcacc1a48b61826173e6457d2de1}{Integration\+Point}} (uint32\+\_\+t ip) const
+\begin{DoxyCompactList}\small\item\em returns the location of the integration point in global coordinates \end{DoxyCompactList}\item 
+double {\bfseries Weight\+At\+Integration\+Point} (uint32\+\_\+t i) const
+\item 
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a77e05282a77bb85927eb55bdaaa68d2a}{Rst\+To\+XYZ}} (\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ rst) const
+\begin{DoxyCompactList}\small\item\em mapping of local points from local to global coordinates \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a59be5ecef2c9588aee1dd0948b81b471}{N\+\_\+\+At}} (const \mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \&rst) const
+\begin{DoxyCompactList}\small\item\em interpolation function values at local points \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a6a65623b4219d8f3da0aa5a33272ebea}{N\+\_\+\+At\+Global\+Point}} (std\+::vector$<$ double $>$ \&N, const std\+::vector$<$ double $>$ \&xyz) const
+\begin{DoxyCompactList}\small\item\em for elements with local coordinates, this method uses an iterative approach to find the correspoding location in parametric space \end{DoxyCompactList}\item 
+void {\bfseries N\+\_\+\+At\+Bary\+Center} (std\+::vector$<$ double $>$ \&N) const
+\item 
+void {\bfseries N\+\_\+\+At\+Integration\+Point} (uint32\+\_\+t ipoint, std\+::vector$<$ double $>$ \&N) const
+\item 
+void {\bfseries Integral\+\_\+d\+NT\+\_\+\+K\+\_\+dN} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&M, \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&K) const
+\begin{DoxyCompactList}\small\item\em first (constant) derivatives of linear interpolation functions of analytically integrated simplex \end{DoxyCompactList}\item 
+void {\bfseries dN} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&) const
+\item 
+double {\bfseries d\+N\+\_\+\+At\+Node} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&, uint32\+\_\+t nd, uint32\+\_\+t dof=1) const
+\begin{DoxyCompactList}\small\item\em first derivatives of interpolation functions at the given node (returned is determinant of Jacobian matrix at i,j) \end{DoxyCompactList}\item 
+double {\bfseries d\+N\+\_\+\+At\+Bary\+Center} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&, uint32\+\_\+t dof=1) const
+\begin{DoxyCompactList}\small\item\em first derivatives of interpolation functions at the (returned is determinant of Jacobian matrix at i,j) \end{DoxyCompactList}\item 
+double {\bfseries d\+N\+\_\+\+At\+Integration\+Point} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&, uint32\+\_\+t gp, uint32\+\_\+t dof=1) const
+\begin{DoxyCompactList}\small\item\em first derivatives of interpolation functions at Gauss point gp (returned is determinant of Jacobian matrix at i,j) \end{DoxyCompactList}\item 
+double {\bfseries det\+\_\+\+JINV\+\_\+\+At\+Integration\+Point} (uint32\+\_\+t ipoint) const
+\begin{DoxyCompactList}\small\item\em returned is determinant of Jacobian matrix at given Gauss point \end{DoxyCompactList}\item 
+void {\bfseries Integral\+NN} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&M) const
+\begin{DoxyCompactList}\small\item\em interpolation function products matrix for analytically integrated element \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a8f08eac65fbebe1bf083a13e507d20d1}{Coordinate\+Matrix}} () const
+\begin{DoxyCompactList}\small\item\em initialises the nodes x dim matrix XY stored in the connected finite element class \end{DoxyCompactList}\item 
+double {\bfseries Property\+Integral} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&scalar\+\_\+property) const
+\begin{DoxyCompactList}\small\item\em integrates a scalar property over the element and returns this value \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a97425cbfdb7e21eaa48d9fc455c73cb5}{Property\+Value\+At}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, const std\+::vector$<$ double $>$ \&xyz, Var \&) const
+\begin{DoxyCompactList}\small\item\em interpolates node property values to the point of interest (in global coordinates); \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a765acd90b4a49d2f309b31451f347bd2}{Property\+Value\+At\+Bary\+Center}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, Var \&) const
+\begin{DoxyCompactList}\small\item\em returns the value of any property interpolated to the element\textquotesingle{}s center of gravity \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a9bb80abd0181bcc607f9fe6f76207b10}{Property\+Value\+At\+Integration\+Point}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&node\+\_\+prop, uint32\+\_\+t integration\+\_\+point, Var \&) const
+\begin{DoxyCompactList}\small\item\em returns the value of any property interpolated to the integration point of interest \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a4e01522e7321abe783521bb9720134ee}{Integration\+Point\+Property\+Vector}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, std\+::vector$<$ Var $>$ \&) const
+\begin{DoxyCompactList}\small\item\em returns property values at the integration points \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a1499c9885a547d55b3749ccf3321195f}{Extrapolate\+Integration\+Point\+Variable\+To\+Nodes}} (uint32\+\_\+t nvars, const std\+::vector$<$ double $>$ \&integration\+\_\+point\+\_\+var, std\+::vector$<$ double $>$ \&node\+\_\+variable) const
+\begin{DoxyCompactList}\small\item\em uses linear extrapolation of property values from the integration points to the nodes \end{DoxyCompactList}\item 
+double {\bfseries Volume} () const
+\begin{DoxyCompactList}\small\item\em reports volume, area\texorpdfstring{$\ast$}{*}1, and length\texorpdfstring{$\ast$}{*}1\texorpdfstring{$\ast$}{*}1 products for volumetric, surfacic and line elements respectively \end{DoxyCompactList}\item 
+double {\bfseries Aspect\+Ratio} () const
+\begin{DoxyCompactList}\small\item\em ratio of longest to shortest edge=segment \end{DoxyCompactList}\item 
+double {\bfseries Inner\+Radius} () const
+\begin{DoxyCompactList}\small\item\em the radius of an inscribed circle / sphere \end{DoxyCompactList}\item 
+uint32\+\_\+t {\bfseries Segments} () const
+\begin{DoxyCompactList}\small\item\em number of edges = segments in the finite element of interest \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a043f97fcd42926600cb944592e40f075}{Segment\+Mid\+Point}} (uint32\+\_\+t segm) const
+\begin{DoxyCompactList}\small\item\em retrieve position of the segment (element edge) mid-\/points \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a20aa7fe21942056f9ef670b28bfadfa8}{Segment\+Length}} (uint32\+\_\+t segm) const
+\begin{DoxyCompactList}\small\item\em returns the length of the nth segment=edge of the finite element \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a39e2379c97598a8e6f33be8a6bfcf035}{Segment\+Lengths}} (std\+::vector$<$ double $>$ \&) const
+\begin{DoxyCompactList}\small\item\em returns a vector with the lengths of all finite element segments = edges \end{DoxyCompactList}\item 
+std\+::set$<$ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a060eafe8a4ad9ba2317bed9340c68b3a}{Corner\+Nodes\+Of\+Face}} (uint32\+\_\+t face\+\_\+id) const
+\begin{DoxyCompactList}\small\item\em returns search key to match element faces; pointers in order so that they can be searched \end{DoxyCompactList}\item 
+std\+::set$<$ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_acdaccbd7a5d2c7414b7313e73f29dd78}{Corner\+Nodes\+Connected\+To}} (uint32\+\_\+t node\+\_\+id) const
+\begin{DoxyCompactList}\small\item\em returns set of nodes that are neighbors of the target node in this element \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_af6c030a937fbfecd002756d67353271e}{Face\+Bary\+Center}} (uint32\+\_\+t face) const
+\begin{DoxyCompactList}\small\item\em retrieve barycenter of element face \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a202387b7bb52a9ff75f00ae354ba8ef2}{Unit\+Normal\+To\+Face}} (uint32\+\_\+t face) const
+\begin{DoxyCompactList}\small\item\em returns unit normal to face of element i \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ {\bfseries Unit\+Normal} () const
+\begin{DoxyCompactList}\small\item\em computes unit normal to element if it is planar (3D) or linear (2D); vector components are returned into point \end{DoxyCompactList}\item 
+void {\bfseries Output\+Property\+To\+VTK} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, const char \texorpdfstring{$\ast$}{*}file\+\_\+name, const char \texorpdfstring{$\ast$}{*}var\+\_\+name) const
+\begin{DoxyCompactList}\small\item\em outputs finite element and discretised variable to VTK file \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_local_variable_storage}{csmp\+::\+Local\+Variable\+Storage$<$ dim, Inter\+Face $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+bool {\bfseries operator==} (const \mbox{\hyperlink{classcsmp_1_1_local_variable_storage}{Local\+Variable\+Storage}}$<$ dim, \mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}} $>$ \&) const
+\begin{DoxyCompactList}\small\item\em Goto overload for storees without \doxylink{structcsmp_1_1_integration_point_variables}{Integration\+Point\+Variables}. \end{DoxyCompactList}\item 
+void {\bfseries Resize\+Property\+Storage} (const \mbox{\hyperlink{structcsmp_1_1_local_variables}{Local\+Variables}} \&)
+\begin{DoxyCompactList}\small\item\em Goto overload for storees without \doxylink{structcsmp_1_1_integration_point_variables}{Integration\+Point\+Variables}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_local_variable_storage_ae81c2b297f4166821bc3de2856e055ae}{Add\+Property}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&)
+\begin{DoxyCompactList}\small\item\em Creates an empty space in the storage preserving the original variable values. \doxylink{structcsmp_1_1_local_variables}{Local\+Variables} in \doxylink{structcsmp_1_1_index}{Index} have to reflect NEW state (incl added) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_local_variable_storage_a3b56bab7bc4a1db37bfc4d4176457349}{Delete\+Property}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&)
+\begin{DoxyCompactList}\small\item\em Deletes data and flags of property \doxylink{structcsmp_1_1_local_variables}{Local\+Variables} in \doxylink{structcsmp_1_1_index}{Index} have to reflect CURRENT state (incl property to be removed) \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_local_variable_storage_aa8f995011429356bfd7e7744794c9b9b}{Is\+Within\+Range}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, double, double) const
+\item 
+double {\bfseries Read} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\begin{DoxyCompactList}\small\item\em Scalar variable value. \end{DoxyCompactList}\item 
+void {\bfseries Store} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, const \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&)
+\begin{DoxyCompactList}\small\item\em Scalar variable. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} {\bfseries Status} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\begin{DoxyCompactList}\small\item\em Scalar \& Array variable flag. \end{DoxyCompactList}\item 
+void {\bfseries Store\+Array\+Entry} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, double array\+\_\+elmt\+\_\+value, int\+\_\+type)
+\item 
+double {\bfseries Read\+Array\+Entry} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, int\+\_\+type array\+\_\+elmt) const
+\begin{DoxyCompactList}\small\item\em reads single double element inside of the target array \end{DoxyCompactList}\item 
+bool {\bfseries Empty\+LVS} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_local_variable_storage_ade5ec5a8e9afb482c1619924cf8259b2}{Out\+LVS}} () const
+\item 
+void {\bfseries Assert\+Placement} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\begin{DoxyCompactList}\small\item\em We check in debug only. \end{DoxyCompactList}\item 
+void {\bfseries Assert\+Integration\+Point\+Placement} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\begin{DoxyCompactList}\small\item\em We check in debug only. \end{DoxyCompactList}\item 
+void {\bfseries Assert\+Finite\+Volume\+Integration\+Point\+Placement} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\begin{DoxyCompactList}\small\item\em We check in debug only. \end{DoxyCompactList}\item 
+void {\bfseries Store\+Local\+State} (const \mbox{\hyperlink{structcsmp_1_1_local_variables}{Local\+Variables}} \&lv)
+\begin{DoxyCompactList}\small\item\em We store in debug only. \end{DoxyCompactList}\item 
+void {\bfseries LVS} (const Data \&data)
+\begin{DoxyCompactList}\small\item\em copy or move supplied data into storage \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_inter_face_ae5278d380e0652e51bb7d4ddb8226f89}{Bisector\+Coordinate\+Matrix}} () const
+\begin{DoxyCompactList}\small\item\em calculates the coordinate matrix from node coordinates representing the average of the inside and outside nodes of the interface \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_inter_face_aba19762d24d4cd193786a928a8f3abbe}{Bisector\+Coordinate\+Matrix}} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&XY) const
+\begin{DoxyCompactList}\small\item\em calculates the coordinate matrix from node coordinates representing the average of the inside and outside nodes of the interface \end{DoxyCompactList}\item 
+std\+::pair$<$ uint32\+\_\+t, uint32\+\_\+t $>$ \mbox{\hyperlink{classcsmp_1_1_inter_face_a4118fc6ea88b72124408f8c88fabf91e}{Shared\+Element\+Faces\+And\+Face\+IDs}} ()
+\begin{DoxyCompactList}\small\item\em finds the local numbers of the faces of the higher-\/dimensional element that will be connected by the interface; uses point coordinates that must be matched \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_inter_face_ab42ee23f440c95dc9f48994e97e5174e}{Initialise\+Node\+Vector}} ()
+\begin{DoxyCompactList}\small\item\em connects the nodes of already connected higher dimensional neighbor elements to the \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_inter_face_a5432c6513839ff9cf850ed24aa43a4df}\label{classcsmp_1_1_inter_face_a5432c6513839ff9cf850ed24aa43a4df} 
+{\footnotesize template$<$uint32\+\_\+t$>$ }\\class {\bfseries Mesh\+Manager}
+\begin{DoxyCompactList}\small\item\em for exclusive use by \doxylink{classcsmp_1_1_mesh_manager}{Mesh\+Manager} \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_inter_face_acf333931e8137a860eb3404d2a646d3c}\label{classcsmp_1_1_inter_face_acf333931e8137a860eb3404d2a646d3c} 
+class {\bfseries Inter\+Face\+\_\+\+Test}
+\begin{DoxyCompactList}\small\item\em friend declaration needed for the testing of private methods \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim$>$\newline
+class csmp\+::\+Inter\+Face$<$ dim $>$}
+Surface (3D) or line (2D) element connector for elements which share faces but not nodes. 
+
+To connect disconnected patches of a mesh, facilitating the application of tractions, boundary fluxes etc. and for the representation of jump discontinuities of variables discretised on the nodes and interpolated with the element interpolation functions\hypertarget{classcsmp_1_1_split_boundary_conventions}{}\doxysubsection{\texorpdfstring{Conventions}{Conventions}}\label{classcsmp_1_1_split_boundary_conventions}
+For compatibility (usage conformance) with the \doxylink{classcsmp_1_1_face}{Face} and the \doxylink{classcsmp_1_1_element}{Element}, a range of methods are retained which make sense only, however, if the side of the interface is specified. For this purpose,
+
+current\+\_\+side\+\_\+
+
+allows to set the state of the \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} to INSIDE, OUTSIDE or MIDDLE; default is INSIDE.
+
+If one wants to acces the nodes of an interface in the way one is used to from \doxylink{classcsmp_1_1_element}{Element} or \doxylink{classcsmp_1_1_face}{Face}, the method
+
+Inter\+Face\+::\+N( n\+\_\+node, interface\+\_\+side ) has to be used.
+
+The nodes are ordered sequentially, INSIDE nodes first, then outside nodes. The inside nodes follow the numbering of the nodes of the face of the higher-\/dimensional element on the inside. The outside nodes follow the face-\/node number of the OUTSIDE parent element. This means that they are stored in the opposite order as those on the inside.
+
+Inside and outside nodes start out to be matched (by point location). Because of their different ordering (demanded to get the correct normals), the first inside node matches the last outside node. It follows that 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{auto}\ n\_nodes\ =\ \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_aa15ab6c8637cfc881bba2a5068034fa1}{FE}}()-\/>Nodes()\ \textcolor{comment}{//\ of\ the\ finite\ element\ type\ of\ the\ interface.}}
+\DoxyCodeLine{\textcolor{keywordflow}{for}\ (\ \textcolor{keyword}{auto}\ i\{0U\};\ i<n\_nodes;\ i++\ )}
+\DoxyCodeLine{\ \ assert(\ \mbox{\hyperlink{classcsmp_1_1_inter_face_abc296812926dcaf14b4955e09c358962}{N}}(0,INSIDE)-\/>Coordinate()\ ==\ \mbox{\hyperlink{classcsmp_1_1_inter_face_abc296812926dcaf14b4955e09c358962}{N}}(n\_nodes-\/i-\/1U,OUTSIDE)-\/>Coordinate()\ );}
+
+\end{DoxyCode}
+ should not fail.
+
+The normal to the interface points from the INSIDE to the OUTSIDE element of the \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} and it is inherited from the lower dimensional element that the \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} (or \doxylink{classcsmp_1_1_face}{Face}) was built from. The boolean variable collocated\+\_\+nodes, tells whether the nodes on opposite sides of the \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} are collocated, meaning that they have the same location (collocated\+\_\+nodes=true) or whether they were separated over the course of a simulation (collocated\+\_\+nodes=false). Default is true.
+
+If the nodes are not collocated, the \doxylink{classcsmp_1_1_inter_face_a5426cc263a39d5e18c78ac5449233c67}{Unit\+Normal()} method will return the normal to the mirror symmetry plane between the 2 sides of the \doxylink{classcsmp_1_1_inter_face}{Inter\+Face}.
+
+Nodes in the middle can only be accessed if the MIDDLE element pointer has been assigned to a lower-\/dimensional intervening element inside of the \doxylink{classcsmp_1_1_inter_face}{Inter\+Face}. If this is indeed the case, then access it via Base\+Element(). The base (\doxylink{classcsmp_1_1_element}{csmp\+::\+Element}) of the \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} is a nullptr by default, but it can be connected to an intervening lower-\/dimensional element mesh once the \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} has been created.
+
+\begin{DoxyNote}{Note}
+Inter\+Faces are not listed as parents in their nodes.
+\end{DoxyNote}
+\begin{DoxyAuthor}{Author}
+SKM \& Junchul Kim, refactored changing design to node-\/pointer based etc. 
+
+first version by P. Lang 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2011, 2014, 2016, 2019, 2022. 
+\end{DoxyDate}
+
+
+\label{doc-constructors}
+\Hypertarget{classcsmp_1_1_inter_face_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcsmp_1_1_inter_face_a3982be1738de51e08f42905b1cad662b}\index{csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}!InterFace@{InterFace}}
+\index{InterFace@{InterFace}!csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{InterFace()}{InterFace()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_inter_face_a3982be1738de51e08f42905b1cad662b} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_inter_face}{csmp\+::\+Inter\+Face}}$<$ dim $>$\+::\+Inter\+Face (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{csmp\+::\+Element}}$<$ dim $>$ \&}]{elmt}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_element}{csmp\+::\+Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}}]{inner\+\_\+parent}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_element}{csmp\+::\+Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}}]{outer\+\_\+parent}{, }\item[{uint32\+\_\+t}]{adjacent\+\_\+face\+\_\+of\+\_\+inner\+\_\+element}{, }\item[{uint32\+\_\+t}]{adjacent\+\_\+face\+\_\+of\+\_\+outer\+\_\+element}{, }\item[{const \mbox{\hyperlink{structcsmp_1_1_local_variables}{Local\+Variables}} \&}]{interface\+\_\+props}{, }\item[{const \mbox{\hyperlink{structcsmp_1_1_integration_point_variables}{Integration\+Point\+Variables}} \&}]{interface\+\_\+integration\+\_\+point\+\_\+props}{}\end{DoxyParamCaption})}
+
+
+
+New! SKM 29/7/2022\+: constructs \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} using the nodes and their numbering in the \doxylink{classcsmp_1_1_inter_face}{Inter\+Face}\textquotesingle{}s higher-\/dimensional neighbors. 
+
+New! SKM 29/7/2022\+: constructs \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} using the nodes and their numbering from the \doxylink{classcsmp_1_1_inter_face}{Inter\+Face}\textquotesingle{}s higher-\/dimensional neighbors. A check is performed to ascertain that the nodes are indeed collocated. If not, the outside nodes are rotated until a match is obtained or a FATAL\+\_\+\+ERROR is reported.
+
+\begin{DoxyAttention}{Attention}
+constructor expects that the Nodes have already been multiplicated and turned into manifolds elsewhere. Nodes of face of outside element are taken and rotated to be matching in the "{}reverse"{} order to Inside \doxylink{classcsmp_1_1_node}{Node}. Note\+: "{}reverse"{} is in quotation marks because it\textquotesingle{}s not quite reversed if you consider Mid\+Point Nodes
+
+outside nodes are rotated so that the last corner node of Inside matches with the first corner node on the outside this is needed to ensure Matching\+N(i,\+INSIDE) == Matching\+N(i,\+OUTSIDE) this breaks the idea that outside nodes match with the nodes of the face of outside element (they may be rotated ) Therefore N(i,\+OUTSIDE) != Outer\+Parent-\/\texorpdfstring{$>$}{>}N( Outer\+Parent-\/\texorpdfstring{$>$}{>}Nodes\+Of\+Face( outer\+\_\+parent\+\_\+face\+\_\+id)\mbox{[}i\mbox{]} ) 
+\end{DoxyAttention}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=215pt]{classcsmp_1_1_inter_face_a3982be1738de51e08f42905b1cad662b_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=215pt]{classcsmp_1_1_inter_face_a3982be1738de51e08f42905b1cad662b_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_inter_face_afe4d2d8b17066f22c467bda0a3f871d3}\index{csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}!InterFace@{InterFace}}
+\index{InterFace@{InterFace}!csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{InterFace()}{InterFace()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_inter_face_afe4d2d8b17066f22c467bda0a3f871d3} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_inter_face}{csmp\+::\+Inter\+Face}}$<$ dim $>$\+::\+Inter\+Face (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_face}{csmp\+::\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}}]{fptr}{, }\item[{const \mbox{\hyperlink{structcsmp_1_1_local_variables}{Local\+Variables}} \&}]{interface\+\_\+props}{, }\item[{const \mbox{\hyperlink{structcsmp_1_1_integration_point_variables}{Integration\+Point\+Variables}} \&}]{interface\+\_\+integration\+\_\+point\+\_\+props}{, }\item[{std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$}]{outside\+\_\+nodes}{}\end{DoxyParamCaption})}
+
+
+
+constructs complete \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} using the \doxylink{classcsmp_1_1_face}{Face} nodes as inside nodes (in same order) and outside nodes supplied opposite order matching the inside nodes 
+
+Contructs complete \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} using the \doxylink{classcsmp_1_1_face}{Face} nodes as inside nodes; outside nodes ready to use in opposite order are supplied by node-\/pointer vector\textquotesingle{}
+
+\begin{DoxyNote}{Note}
+it takes care of assigning the higher dimensional neighbor elements 
+
+assigns outside nodes to \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} also changing these nodes on the higher-\/dimensional outside element 
+
+detaches the neighbor connection between the higher dimensional elements 
+\end{DoxyNote}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=215pt]{classcsmp_1_1_inter_face_afe4d2d8b17066f22c467bda0a3f871d3_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=215pt]{classcsmp_1_1_inter_face_afe4d2d8b17066f22c467bda0a3f871d3_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_inter_face_a4780a2166939f668f261040fae91a97d}\index{csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}!InterFace@{InterFace}}
+\index{InterFace@{InterFace}!csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{InterFace()}{InterFace()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_inter_face_a4780a2166939f668f261040fae91a97d} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_inter_face}{csmp\+::\+Inter\+Face}}$<$ dim $>$\+::\+Inter\+Face (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_finite_element}{csmp\+::\+Finite\+Element}} \texorpdfstring{$\ast$}{*}}]{f}{, }\item[{const \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{csmp\+::\+Finite\+Volume\+Stencil}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}}]{fvs}{, }\item[{const \mbox{\hyperlink{structcsmp_1_1_local_variables}{Local\+Variables}} \&}]{interface\+\_\+props}{, }\item[{const \mbox{\hyperlink{structcsmp_1_1_integration_point_variables}{Integration\+Point\+Variables}} \&}]{interface\+\_\+integration\+\_\+point\+\_\+props}{}\end{DoxyParamCaption})}
+
+
+
+default\+: incomplete construction without connection to nodes 
+
+custom constructor which also builds variable storage; used in most cases Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=215pt]{classcsmp_1_1_inter_face_a4780a2166939f668f261040fae91a97d_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=215pt]{classcsmp_1_1_inter_face_a4780a2166939f668f261040fae91a97d_icgraph}
+\end{center}
+\end{figure}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_inter_face_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_inter_face_a0ddadfde2424b151837d0a9201ed0719}\index{csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}!Area@{Area}}
+\index{Area@{Area}!csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Area()}{Area()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_inter_face_a0ddadfde2424b151837d0a9201ed0719} 
+template$<$uint32\+\_\+t dim$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_inter_face}{csmp\+::\+Inter\+Face}}$<$ dim $>$\+::\+Area (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}}}]{side}{ = {\ttfamily INSIDE}}\end{DoxyParamCaption}) const}
+
+
+
+returns area of the interface; MIDDLE case is returned only if there is an intervening element 
+
+Computes the interface area from scratch and not using the Coordinate\+Matrix / \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} FEM machinery. The area is computed taking the side of the interface into account. Thus, it will give different results for INSIDE and OUTSIDE if the nodes on either side no longer match. \Hypertarget{classcsmp_1_1_inter_face_a0db784a0f15f9711a89623111a5c5c79}\index{csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}!AreNodesCollocated@{AreNodesCollocated}}
+\index{AreNodesCollocated@{AreNodesCollocated}!csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{AreNodesCollocated()}{AreNodesCollocated()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_inter_face_a0db784a0f15f9711a89623111a5c5c79} 
+template$<$uint32\+\_\+t dim$>$ \\
+bool \mbox{\hyperlink{classcsmp_1_1_inter_face}{csmp\+::\+Inter\+Face}}$<$ dim $>$\+::\+Are\+Nodes\+Collocated (\begin{DoxyParamCaption}\item[{double}]{tolerance}{ = {\ttfamily std\+:\+:numeric\+\_\+limits$<$double$>$\+:\+:epsilon()}}\end{DoxyParamCaption}) const}
+
+
+
+tests whether the INSIDE nodes match the OUTSIDE nodes w.\+r.\+t. their position 
+
+Performs test using the distance\+To operator on the node points \Hypertarget{classcsmp_1_1_inter_face_a68bdf61b72cc4daab037728b6b161ad7}\index{csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}!Assign@{Assign}}
+\index{Assign@{Assign}!csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Assign()}{Assign()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_inter_face_a68bdf61b72cc4daab037728b6b161ad7} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_inter_face}{csmp\+::\+Inter\+Face}}$<$ dim $>$\+::\+Assign (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const}]{inner\+\_\+elmt}{, }\item[{uint32\+\_\+t}]{inner\+\_\+local\+\_\+face\+\_\+id}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const}]{outer\+\_\+elmt}{, }\item[{uint32\+\_\+t}]{outer\+\_\+local\+\_\+face\+\_\+id}{}\end{DoxyParamCaption})}
+
+
+
+connects inter\+Face to its higher-\/dimensional neighbors 
+
+Connects face to the higher-\/dimensional elements which it is sandwiched between. These elements are stored in the local pair of pointers called parents\+\_\+.
+
+\begin{DoxyAttention}{Attention}
+The node numbering of the \doxylink{classcsmp_1_1_face}{Face} determines the direction of its normal. Here the convention is assumed that the first parent element is that on the inside of the \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} with regard to the outward pointing normal and the second element is on the outside.
+\end{DoxyAttention}
+Same method as in \doxylink{classcsmp_1_1_face}{Face}, but -\/ in addition -\/ connects \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} to the multiplicated nodes on either side. \Hypertarget{classcsmp_1_1_inter_face_a55347d7059fd9d37a17f8d990de1419e}\index{csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}!Assign@{Assign}}
+\index{Assign@{Assign}!csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Assign()}{Assign()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_inter_face_a55347d7059fd9d37a17f8d990de1419e} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_inter_face}{csmp\+::\+Inter\+Face}}$<$ dim $>$\+::\+Assign (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{n\+\_\+local}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}}]{nptr}{, }\item[{\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}}}]{side}{}\end{DoxyParamCaption})}
+
+
+
+assigns nodes of higher-\/dimensional neigbor elements to interface in the order they have in their corresponding faces 
+
+Assigns nodes to node\+\_\+connector\+\_\+ vector of the \doxylink{classcsmp_1_1_inter_face}{Inter\+Face}
+
+\begin{DoxyNote}{Note}
+the nodes on the inner side of the interface are the first stored in the node connector vector, the outer ones follow in this single node vector.
+\end{DoxyNote}
+\begin{DoxyAuthor}{Author}
+SKM 16/6/2016 
+\end{DoxyAuthor}
+\Hypertarget{classcsmp_1_1_inter_face_a4d907535d6313d4efa7e267883b40144}\index{csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}!Assign@{Assign}}
+\index{Assign@{Assign}!csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Assign()}{Assign()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_inter_face_a4d907535d6313d4efa7e267883b40144} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_inter_face}{csmp\+::\+Inter\+Face}}$<$ dim $>$\+::\+Assign (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{i}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{ifc\+\_\+ptr}{}\end{DoxyParamCaption})}
+
+
+
+connects \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} to its equidimensional neighbors (=number of \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} finite-\/element faces) 
+
+Assigning neighbor \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} objects on either side of the \doxylink{classcsmp_1_1_inter_face}{Inter\+Face}. \Hypertarget{classcsmp_1_1_inter_face_aeeda11db11cfac3e9de963c892d4fb3c}\index{csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}!BaryCenter@{BaryCenter}}
+\index{BaryCenter@{BaryCenter}!csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{BaryCenter()}{BaryCenter()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_inter_face_aeeda11db11cfac3e9de963c892d4fb3c} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \mbox{\hyperlink{classcsmp_1_1_inter_face}{csmp\+::\+Inter\+Face}}$<$ dim $>$\+::\+Bary\+Center (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+the centre of gravity of the element (returns the mid-\/point of the 2-\/sides if detached) 
+
+\doxylink{classcsmp_1_1_inter_face_aeeda11db11cfac3e9de963c892d4fb3c}{Bary\+Center()} calculates the node coordinate average for the element. This coordinate value is equivalent to the center of gravity of the \doxylink{classcsmp_1_1_element}{Element} type.\hypertarget{classcsmp_1_1_two_phase_file_based_input}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{classcsmp_1_1_two_phase_file_based_input}
+The barycentre is returned into a CSMP vector variable a reference to which is supplied as single argument.\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+The element barycentre could be used for instance to output element material properties from the \doxylink{classcsmp_1_1_model}{Model} as point data. This is done if you use the \doxylink{classcsmp_1_1_model}{Model} Output\+To\+Text\+File() methods.
+
+\begin{DoxyReturn}{Returns}
+The \doxylink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG} of the returned vector variable will not be changed by Bary\+Centre().
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+could be madfe more
+\end{DoxyNote}
+\begin{DoxyRefDesc}{Test}
+\item[\mbox{\hyperlink{test__test000047}{Test}}]O.\+K. SKM25/8/14 after refactoring loop\end{DoxyRefDesc}
+\Hypertarget{classcsmp_1_1_inter_face_ae5278d380e0652e51bb7d4ddb8226f89}\index{csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}!BisectorCoordinateMatrix@{BisectorCoordinateMatrix}}
+\index{BisectorCoordinateMatrix@{BisectorCoordinateMatrix}!csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{BisectorCoordinateMatrix()}{BisectorCoordinateMatrix()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_inter_face_ae5278d380e0652e51bb7d4ddb8226f89} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_inter_face}{csmp\+::\+Inter\+Face}}$<$ dim $>$\+::\+Bisector\+Coordinate\+Matrix (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+calculates the coordinate matrix from node coordinates representing the average of the inside and outside nodes of the interface 
+
+Interface bisector plane. \Hypertarget{classcsmp_1_1_inter_face_aba19762d24d4cd193786a928a8f3abbe}\index{csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}!BisectorCoordinateMatrix@{BisectorCoordinateMatrix}}
+\index{BisectorCoordinateMatrix@{BisectorCoordinateMatrix}!csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{BisectorCoordinateMatrix()}{BisectorCoordinateMatrix()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_inter_face_aba19762d24d4cd193786a928a8f3abbe} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_inter_face}{csmp\+::\+Inter\+Face}}$<$ dim $>$\+::\+Bisector\+Coordinate\+Matrix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&}]{XY}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+calculates the coordinate matrix from node coordinates representing the average of the inside and outside nodes of the interface 
+
+Interface bisector with XY Dense matrix to be overwritten. \Hypertarget{classcsmp_1_1_inter_face_a5c7cae9fc3072590f2b59c73727c8753}\index{csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}!ConnectedNeighbors@{ConnectedNeighbors}}
+\index{ConnectedNeighbors@{ConnectedNeighbors}!csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{ConnectedNeighbors()}{ConnectedNeighbors()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_inter_face_a5c7cae9fc3072590f2b59c73727c8753} 
+template$<$uint32\+\_\+t dim$>$ \\
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_inter_face}{csmp\+::\+Inter\+Face}}$<$ dim $>$\+::\+Connected\+Neighbors (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+the \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} object neighbors which are connected with the \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} and not null. 
+
+return the number of the Interface object neighbors which are connected with the \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} and not null. \Hypertarget{classcsmp_1_1_inter_face_a39bb64ee97ba1487d11ee9bd4fe8ff38}\index{csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}!Faces@{Faces}}
+\index{Faces@{Faces}!csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Faces()}{Faces()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_inter_face_a39bb64ee97ba1487d11ee9bd4fe8ff38} 
+template$<$uint32\+\_\+t dim$>$ \\
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_inter_face}{csmp\+::\+Inter\+Face}}$<$ dim $>$\+::\+Faces (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+Again this number is the same as that of the number of faces of the underlying finite element inspite of the fact that the \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} has two sides. \Hypertarget{classcsmp_1_1_inter_face_ab42ee23f440c95dc9f48994e97e5174e}\index{csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}!InitialiseNodeVector@{InitialiseNodeVector}}
+\index{InitialiseNodeVector@{InitialiseNodeVector}!csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{InitialiseNodeVector()}{InitialiseNodeVector()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_inter_face_ab42ee23f440c95dc9f48994e97e5174e} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_inter_face}{csmp\+::\+Inter\+Face}}$<$ dim $>$\+::\+Initialise\+Node\+Vector (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+connects the nodes of already connected higher dimensional neighbor elements to the \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} 
+
+
+\begin{DoxyEnumerate}
+\item From the finite element connected to the Interface we know the topology of the faces of the higher-\/dimensional neighbor elements so that we can assign their nodes. Start with the inside element.
+\end{DoxyEnumerate}
+
+(We rely on the fact that the nodes on either side of the interface are collocated)
+
+
+\begin{DoxyEnumerate}
+\item Find the faces connected to this element and assign them
+\item Get its nodes
+\item Assign the nodes in the same order as for that face since the normal points into the Interface
+\item Repeat for other side
+\end{DoxyEnumerate}
+
+\begin{DoxyAttention}{Attention}
+special provisions are made in 1D where there is no corresponding elemnent type for the Interface. Thus the number of nodes is assumed to be 1, duplicated to 2. 
+\end{DoxyAttention}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_inter_face_ab42ee23f440c95dc9f48994e97e5174e_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_inter_face_a14df8357783e352b4b57c8798c011121}\index{csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}!IsEndPointNode@{IsEndPointNode}}
+\index{IsEndPointNode@{IsEndPointNode}!csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{IsEndPointNode()}{IsEndPointNode()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_inter_face_a14df8357783e352b4b57c8798c011121} 
+template$<$uint32\+\_\+t dim$>$ \\
+bool \mbox{\hyperlink{classcsmp_1_1_inter_face}{csmp\+::\+Inter\+Face}}$<$ dim $>$\+::\+Is\+End\+Point\+Node (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{n\+\_\+local}{}\end{DoxyParamCaption}) const}
+
+
+
+END\+\_\+\+POINT is a classifier that applies on the perimeter of \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} objects terminating within models where INSIDE and OUTSIDE nodes are identical. 
+
+END\+\_\+\+POINT is a classifier that applies on the perimeter of \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} objects (perimeter Inter\+Faces) terminating within models where INSIDE and OUTSIDE nodes are identical.
+
+
+\begin{DoxyParams}{Parameters}
+{\em n\+\_\+local} & either a node on the inside or on the outside of the interface, which is the same as that on the opposite side if the node is on the perimeter (3D) or at a free-\/standing end point (2D) of a \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary}. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classcsmp_1_1_inter_face_a7b7b0aaed868b05d8f7fd61736e40fbe}\index{csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}!LengthInDirection@{LengthInDirection}}
+\index{LengthInDirection@{LengthInDirection}!csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{LengthInDirection()}{LengthInDirection()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_inter_face_a7b7b0aaed868b05d8f7fd61736e40fbe} 
+template$<$uint32\+\_\+t dim$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_inter_face}{csmp\+::\+Inter\+Face}}$<$ dim $>$\+::\+Length\+In\+Direction (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&}]{vec\+Direction}{}\end{DoxyParamCaption}) const}
+
+
+
+projects node points onto line returning max distance between them; vec direction can have any length 
+
+Measures the length of the element (in physical space) in a certain direction.
+
+
+\begin{DoxyParams}{Parameters}
+{\em vec\+Direction} & direction in which the element is to be measured\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Length of the element.
+\end{DoxyReturn}
+@sectin implementation Implementation
+
+The main idea is to measure the height of the oriented bounding box (oriented by the direction of vec\+Direction) which surrounds the element. This is done by projecting each node onto the direction vector and calculating the difference between the largest and smallest magnitude. The distance between both projections will be given by the absolute value of this difference.\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+The length of the element in a certain dimension is used to weigh the error of the element, when evaluating the quality of a certain mesh.
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000151}{Todo}}]this method could be optimised if only the corner nodes would be used\end{DoxyRefDesc}
+\Hypertarget{classcsmp_1_1_inter_face_aed805180ccd56161ebb5de81630489b4}\index{csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}!MatchingN@{MatchingN}}
+\index{MatchingN@{MatchingN}!csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{MatchingN()}{MatchingN()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_inter_face_aed805180ccd56161ebb5de81630489b4} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const \mbox{\hyperlink{classcsmp_1_1_inter_face}{csmp\+::\+Inter\+Face}}$<$ dim $>$\+::\+MatchingN (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{n}{, }\item[{\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}}}]{side}{}\end{DoxyParamCaption}) const}
+
+Returns pointers to the node which match with the INSIDE ordering of the interface\hypertarget{classcsmp_1_1_two_phase_file_based_input}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{classcsmp_1_1_two_phase_file_based_input}
+An integer from 0...n-\/1, where n is the number of nodes per face of the \doxylink{classcsmp_1_1_element}{Element} adjacent to the \doxylink{classcsmp_1_1_inter_face}{Inter\+Face}. The nodes on the outside match with (are collocated with) the nodes on the INSIDE, and therefore they no longer reflect the numbering given by the outer parent elemnts \doxylink{classcsmp_1_1_face}{Face}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em side} & side refers to the first or second parent element.\\
+\hline
+\end{DoxyParams}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+\begin{DoxyAttention}{Attention}
+since the nodes match the face nodes of of the adjacent higher-\/dimensional elements, they are numbered like these within the node container. It follows that the inside nodes in the node connector are in normal order, but the ones for the outside are in reverse order starting with the last node. Consequently, this method traverses the outside nodes in a reverse order, in order to output Nodes on the outside which are matched with nodes on the inside.
+\end{DoxyAttention}
+\begin{DoxyWarning}{Warning}
+The ordering on the outside is INCONSISTENT with the ordering given from N(i,outside)!
+\end{DoxyWarning}
+A range check is performed.
+
+\begin{DoxyReturn}{Returns}
+A pointer to the Target node. 
+\end{DoxyReturn}
+\Hypertarget{classcsmp_1_1_inter_face_aff0925958068b922df6b79da3e81be48}\index{csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}!MatchingNodePropertyVector@{MatchingNodePropertyVector}}
+\index{MatchingNodePropertyVector@{MatchingNodePropertyVector}!csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{MatchingNodePropertyVector()}{MatchingNodePropertyVector()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_inter_face_aff0925958068b922df6b79da3e81be48} 
+template$<$uint32\+\_\+t dim$>$ \\
+template$<$class Var$>$ \\
+template void \mbox{\hyperlink{classcsmp_1_1_inter_face}{csmp\+::\+Inter\+Face}}$<$ dim $>$\+::\+Matching\+Node\+Property\+Vector (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&}]{}{, }\item[{std\+::vector$<$ Var $>$ \&}]{}{, }\item[{\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}}}]{}{}\end{DoxyParamCaption}) const}
+
+
+
+returns a vector of the property of interest discretized on the node 
+
+returns property values at the nodes. \begin{DoxyVerb} @attention the order of the nodes corresponds to the numbering of the face of the corresponding higher dimensional element
+ on the in- or outside. Unless the return_nodes_outside_that_match_inside == true
+\end{DoxyVerb}
+ Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=341pt]{classcsmp_1_1_inter_face_aff0925958068b922df6b79da3e81be48_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_inter_face_abc296812926dcaf14b4955e09c358962}\index{csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}!N@{N}}
+\index{N@{N}!csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{N()}{N()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_inter_face_abc296812926dcaf14b4955e09c358962} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const \mbox{\hyperlink{classcsmp_1_1_inter_face}{csmp\+::\+Inter\+Face}}$<$ dim $>$\+::N (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{n}{}\end{DoxyParamCaption}) const}
+
+
+
+access ONLY to the nodes on the Current\+\_\+\+Side of the interface (determined by member current\+\_\+side\+\_\+) 
+
+Access to nodes on the CURRENT\+\_\+\+SIDE of the interface. Taken from member current\+\_\+side\+\_\+ 
+\begin{DoxyParams}{Parameters}
+{\em n} & must be the local node index counting from 0 to the number of nodes on one side of the element \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classcsmp_1_1_inter_face_a620df98a862d850d845a1c066e57cdf9}\index{csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}!N@{N}}
+\index{N@{N}!csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{N()}{N()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_inter_face_a620df98a862d850d845a1c066e57cdf9} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const \mbox{\hyperlink{classcsmp_1_1_inter_face}{csmp\+::\+Inter\+Face}}$<$ dim $>$\+::N (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{n}{, }\item[{\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}}}]{side}{}\end{DoxyParamCaption}) const}
+
+
+
+access the nodes that are connected to either, the inside or the outside of the \doxylink{classcsmp_1_1_face}{Face} 
+
+Returns pointers to the nodes on either side of the Interface.\hypertarget{classcsmp_1_1_two_phase_file_based_input}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{classcsmp_1_1_two_phase_file_based_input}
+An integer from 0...n-\/1, where n is the number of nodes per face of the \doxylink{classcsmp_1_1_element}{Element}. These are numbered counterclockwise looking from the outside into the face of parent element 1.
+
+
+\begin{DoxyParams}{Parameters}
+{\em side} & side refers to the first or second parent element.\\
+\hline
+\end{DoxyParams}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+\begin{DoxyAttention}{Attention}
+since the nodes match the face of of the adjacent higher-\/dimensional elements, they are numbered like these within the node container. It follows that the inside nodes in the node connector are in normal order, but the ones for the outside are in reverse order starting with the last node. This is taking into account when they are returned by this method.
+\end{DoxyAttention}
+A range check is performed.
+
+\begin{DoxyReturn}{Returns}
+A pointer to the Target node. 
+\end{DoxyReturn}
+\Hypertarget{classcsmp_1_1_inter_face_a81860f80143efdb206150afc3a9f7189}\index{csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}!Neighbor@{Neighbor}}
+\index{Neighbor@{Neighbor}!csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Neighbor()}{Neighbor()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_inter_face_a81860f80143efdb206150afc3a9f7189} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_inter_face}{csmp\+::\+Inter\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const \mbox{\hyperlink{classcsmp_1_1_inter_face}{csmp\+::\+Inter\+Face}}$<$ dim $>$\+::\+Neighbor (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{n}{}\end{DoxyParamCaption}) const}
+
+
+
+returns neighbor \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} of interface 
+
+Returns the equal dimensional neighbor of the \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} which also is an interface element. \Hypertarget{classcsmp_1_1_inter_face_a7945c2fdd2965b0a06053916740f54d5}\index{csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}!Neighbors@{Neighbors}}
+\index{Neighbors@{Neighbors}!csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Neighbors()}{Neighbors()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_inter_face_a7945c2fdd2965b0a06053916740f54d5} 
+template$<$uint32\+\_\+t dim$>$ \\
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_inter_face}{csmp\+::\+Inter\+Face}}$<$ dim $>$\+::\+Neighbors (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+the \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} object neighbors of the \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} (one per face of interface) 
+
+Returns the total number of neighbors of the \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} , which is equivalent to the number of interface finite element faces although either side of the Interface has different nodes. \Hypertarget{classcsmp_1_1_inter_face_a997fd0b64d77364d82a741aaa20a4ac9}\index{csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}!NodeCoordinateMatrix@{NodeCoordinateMatrix}}
+\index{NodeCoordinateMatrix@{NodeCoordinateMatrix}!csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{NodeCoordinateMatrix()}{NodeCoordinateMatrix()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_inter_face_a997fd0b64d77364d82a741aaa20a4ac9} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_inter_face}{csmp\+::\+Inter\+Face}}$<$ dim $>$\+::\+Node\+Coordinate\+Matrix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&}]{XY}{}\end{DoxyParamCaption}) const}
+
+
+
+as needed by \doxylink{classcsmp_1_1_finite_element_policy}{Finite\+Element\+Policy} (uses current\+\_\+side\+\_\+ to retrieve matrix) 
+
+Returns a matrix with \textquotesingle{}nodes\textquotesingle{}-\/rows and \textquotesingle{}coordinate-\/directions\textquotesingle{} columns. This matrix defines the positions of the elements nodes for the finite-\/element matrix assembly. Since the number of element nodes may vary among different elements types, the number of rows in XY may also vary from element to element.
+
+
+\begin{DoxyParams}{Parameters}
+{\em XY} & is the \doxylink{classcsmp_1_1_dense_matrix}{Dense\+Matrix$<$\+DM\+\_\+\+MIN$>$} class object (value type fT) stored in \doxylink{classcsmp_1_1_finite_element}{Finite\+Element}. This matrix is dynamically resized if necessary but must have been constructed with a finite size before passing it to \doxylink{classcsmp_1_1_finite_element_policy_a8f08eac65fbebe1bf083a13e507d20d1}{Coordinate\+Matrix()}.\\
+\hline
+\end{DoxyParams}
+The node coordinates are returned into the supplied matrix.\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+Method will be called by \doxylink{classcsmp_1_1_finite_element_policy}{Finite\+Element\+Policy} to initialise XY matrix inside the finite element
+
+\begin{DoxyAttention}{Attention}
+when \doxylink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE} == MIDDLE, the node locations on either side of the interface are used to find mid-\/points. 
+\end{DoxyAttention}
+\Hypertarget{classcsmp_1_1_inter_face_ad4baf0efc8d0053b1d138a0859e2c28a}\index{csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}!NodePropertyVector@{NodePropertyVector}}
+\index{NodePropertyVector@{NodePropertyVector}!csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{NodePropertyVector()}{NodePropertyVector()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_inter_face_ad4baf0efc8d0053b1d138a0859e2c28a} 
+template$<$uint32\+\_\+t dim$>$ \\
+template$<$class Var$>$ \\
+template void \mbox{\hyperlink{classcsmp_1_1_inter_face}{csmp\+::\+Inter\+Face}}$<$ dim $>$\+::\+Node\+Property\+Vector (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&}]{}{, }\item[{std\+::vector$<$ Var $>$ \&}]{}{, }\item[{\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}}}]{}{ = {\ttfamily INSIDE}}\end{DoxyParamCaption}) const}
+
+
+
+returns a vector of the property of interest discretized on the node 
+
+returns property values at the nodes. \begin{DoxyVerb} @attention the order of the nodes corresponds to the numbering of the face of the corresponding higher dimensional element 
+ on the in- or outside. Unless the return_nodes_outside_that_match_inside == true
+\end{DoxyVerb}
+ Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_inter_face_ad4baf0efc8d0053b1d138a0859e2c28a_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_inter_face_a6c974a5838835bf58efa4c50c6be4ff9}\index{csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}!NodesBegin@{NodesBegin}}
+\index{NodesBegin@{NodesBegin}!csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{NodesBegin()}{NodesBegin()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_inter_face_a6c974a5838835bf58efa4c50c6be4ff9} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classvector}{vector}}$<$ \mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator \mbox{\hyperlink{classcsmp_1_1_inter_face}{csmp\+::\+Inter\+Face}}$<$ dim $>$\+::\+Nodes\+Begin (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+only constant iterators are provided because the user is not supposed to change the node pr neighbor connectivity (done by \doxylink{classcsmp_1_1_mesh_manager}{Mesh\+Manager}); 
+
+iterator to the element nodes \Hypertarget{classcsmp_1_1_inter_face_aaa326222e2e5ac63f3f73ffe32991fa7}\index{csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}!NodeSpacing@{NodeSpacing}}
+\index{NodeSpacing@{NodeSpacing}!csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{NodeSpacing()}{NodeSpacing()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_inter_face_aaa326222e2e5ac63f3f73ffe32991fa7} 
+template$<$uint32\+\_\+t dim$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_inter_face}{csmp\+::\+Inter\+Face}}$<$ dim $>$\+::\+Node\+Spacing (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{n}{}\end{DoxyParamCaption}) const}
+
+
+
+computes distance between corresponding pairs of nodes; 
+
+\begin{DoxyReturn}{Returns}
+false if nodes overlap, true if they are separated
+\end{DoxyReturn}
+Initialises \doxylink{classcsmp_1_1_vector_variable}{Vector\+Variable} with vector between node pair -\/ returns false if overlap, true if distant \Hypertarget{classcsmp_1_1_inter_face_ae5b10885272dc209932a687ff3c3a642}\index{csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}!operator==@{operator==}}
+\index{operator==@{operator==}!csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{operator==()}{operator==()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_inter_face_ae5b10885272dc209932a687ff3c3a642} 
+template$<$uint32\+\_\+t dim$>$ \\
+bool \mbox{\hyperlink{classcsmp_1_1_inter_face}{csmp\+::\+Inter\+Face}}$<$ dim $>$\+::operator== (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \&}]{ifc}{}\end{DoxyParamCaption})}
+
+
+
+self-\/detection in the interface construction process 
+
+WARNING\+: this operator is used specifically in the process of creation of particular \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary}. Therefore only important infromation for that process is taken into account in order to distinguish two \doxylink{classcsmp_1_1_inter_face}{Inter\+Face}\textquotesingle{}s. That must be reference to inner and outer parent Elements, inner and outer parent face ID\textquotesingle{}s \Hypertarget{classcsmp_1_1_inter_face_af0cd776b8d04e905c494fe0d34926841}\index{csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}!OuterParent@{OuterParent}}
+\index{OuterParent@{OuterParent}!csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{OuterParent()}{OuterParent()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_inter_face_af0cd776b8d04e905c494fe0d34926841} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const \mbox{\hyperlink{classcsmp_1_1_inter_face}{csmp\+::\+Inter\+Face}}$<$ dim $>$\+::\+Outer\+Parent (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+higher-\/dimensional element located on the side of the interface to which the unit normal points; 
+
+\begin{DoxyAttention}{Attention}
+does not exist on model boundary 
+\end{DoxyAttention}
+\Hypertarget{classcsmp_1_1_inter_face_afa61128ccc60bf71ff743448b7654d41}\index{csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}!Parent@{Parent}}
+\index{Parent@{Parent}!csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Parent()}{Parent()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_inter_face_afa61128ccc60bf71ff743448b7654d41} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const \mbox{\hyperlink{classcsmp_1_1_inter_face}{csmp\+::\+Inter\+Face}}$<$ dim $>$\+::\+Parent (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}}}]{side}{}\end{DoxyParamCaption}) const}
+
+
+
+access the higher dimensional elements on either side of interface; 
+
+\begin{DoxyAttention}{Attention}
+returns nullptr if outside is not present 
+\end{DoxyAttention}
+\Hypertarget{classcsmp_1_1_inter_face_a1851c7a90800c95e7072cce0df889f8f}\index{csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}!ParentFaceID@{ParentFaceID}}
+\index{ParentFaceID@{ParentFaceID}!csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{ParentFaceID()}{ParentFaceID()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_inter_face_a1851c7a90800c95e7072cce0df889f8f} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_inter_face}{csmp\+::\+Inter\+Face}}$<$ dim $>$\+::\+Parent\+Face\+ID (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}}}]{side}{, }\item[{uint32\+\_\+t}]{idx}{}\end{DoxyParamCaption})}
+
+
+
+local number of the face in the inner parent element, which borders against the interface 
+
+assign face ID of inner or outer parent element depending on their local face numbering \Hypertarget{classcsmp_1_1_inter_face_af785645e02c15c42a6e8ae31c9c77926}\index{csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}!ParentNodeNumber@{ParentNodeNumber}}
+\index{ParentNodeNumber@{ParentNodeNumber}!csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{ParentNodeNumber()}{ParentNodeNumber()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_inter_face_af785645e02c15c42a6e8ae31c9c77926} 
+template$<$uint32\+\_\+t dim$>$ \\
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_inter_face}{csmp\+::\+Inter\+Face}}$<$ dim $>$\+::\+Parent\+Node\+Number (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{n}{, }\item[{\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}}}]{side}{}\end{DoxyParamCaption}) const}
+
+
+
+Local node numbers in higher-\/dimensional adjacent elements; costly to compute. 
+
+Returns which local node number the current node corresponds to in the given parent element.
+
+\begin{DoxyNote}{Note}
+costly method, use judiciously. 
+\end{DoxyNote}
+\Hypertarget{classcsmp_1_1_inter_face_a4118fc6ea88b72124408f8c88fabf91e}\index{csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}!SharedElementFacesAndFaceIDs@{SharedElementFacesAndFaceIDs}}
+\index{SharedElementFacesAndFaceIDs@{SharedElementFacesAndFaceIDs}!csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{SharedElementFacesAndFaceIDs()}{SharedElementFacesAndFaceIDs()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_inter_face_a4118fc6ea88b72124408f8c88fabf91e} 
+template$<$uint32\+\_\+t dim$>$ \\
+pair$<$ uint32\+\_\+t, uint32\+\_\+t $>$ \mbox{\hyperlink{classcsmp_1_1_inter_face}{csmp\+::\+Inter\+Face}}$<$ dim $>$\+::\+Shared\+Element\+Faces\+And\+Face\+IDs (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+finds the local numbers of the faces of the higher-\/dimensional element that will be connected by the interface; uses point coordinates that must be matched 
+
+Finds the local numbers of the faces of the higher-\/dimensional element that will be connected by this interface;
+
+uses point coordinates that must be matched across the interface to find the nodes. \Hypertarget{classcsmp_1_1_inter_face_a91fc9761553034d8df290d13b8845f13}\index{csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}!Unassign@{Unassign}}
+\index{Unassign@{Unassign}!csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Unassign()}{Unassign()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_inter_face_a91fc9761553034d8df290d13b8845f13} 
+template$<$uint32\+\_\+t dim$>$ \\
+bool \mbox{\hyperlink{classcsmp_1_1_inter_face}{csmp\+::\+Inter\+Face}}$<$ dim $>$\+::\+Unassign (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{if\+\_\+ptr}{}\end{DoxyParamCaption})}
+
+
+
+sets neighbor pointer that was pointing to the argument object to \textquotesingle{}nullptr\textquotesingle{} 
+
+Unassigns the neighbor face, setting the pointer in the \textquotesingle{}face\+\_\+connector\textquotesingle{} vector to null \begin{DoxyReturn}{Returns}
+whether removal was successful 
+\end{DoxyReturn}
+\Hypertarget{classcsmp_1_1_inter_face_a48cc96462e33fb5d736df8a61192b8a2}\index{csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}!UnitNormal@{UnitNormal}}
+\index{UnitNormal@{UnitNormal}!csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{UnitNormal()}{UnitNormal()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_inter_face_a48cc96462e33fb5d736df8a61192b8a2} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ dim $>$ \mbox{\hyperlink{classcsmp_1_1_inter_face}{csmp\+::\+Inter\+Face}}$<$ dim $>$\+::\+Unit\+Normal (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+returns the outward-\/pointing unit normal (from INSIDE to OUTSIDE) using the middle element (if any) or bisector node coordinates to construct face 
+
+Returns the outward-\/pointing unit normal to the \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} pointing in the direction of the OUTSIDE. Per default, the normal is sourced from the MIDDLE element. If it is not there, the coordinate matrix is initalized with the averages of inside and outside node coordinates. \Hypertarget{classcsmp_1_1_inter_face_a5426cc263a39d5e18c78ac5449233c67}\index{csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}!UnitNormal@{UnitNormal}}
+\index{UnitNormal@{UnitNormal}!csmp::InterFace$<$ dim $>$@{csmp::InterFace$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{UnitNormal()}{UnitNormal()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_inter_face_a5426cc263a39d5e18c78ac5449233c67} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ dim $>$ \mbox{\hyperlink{classcsmp_1_1_inter_face}{csmp\+::\+Inter\+Face}}$<$ dim $>$\+::\+Unit\+Normal (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}}}]{side}{}\end{DoxyParamCaption}) const}
+
+
+
+returns the outward-\/pointing unit normal (from INSIDE to OUTSIDE) using the middle element (if any) or inside node coordinates to construct face 
+
+returns the normal pointing from the inside to the outside higher-\/dimensional \doxylink{classcsmp_1_1_element}{Element} of the \doxylink{classcsmp_1_1_inter_face}{Inter\+Face}, calculated for bisector plane. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/model/Model.\+h\item 
+source/includes/model/Inter\+Face.\+h\item 
+source/modules/model/Inter\+Face.\+cpp\end{DoxyCompactItemize}

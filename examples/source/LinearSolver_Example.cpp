@@ -24,29 +24,29 @@ void LinearSolver_Example
     const int BW2=31, N=BW2*BW2;
     const double factor( static_cast<double>(4+(BlockSize-1)) );
     A.Resize(N);
-    for (int r = 0; r < N; r+=BlockSize )
+    for (size_t r = 0; r < N; r+=BlockSize )
     {
         // diagonal element
-        for (int i=0; i<BlockSize; ++i)
-            for (int j=0; j<BlockSize; ++j)
+        for (size_t i=0; i<BlockSize; ++i)
+            for (size_t j=0; j<BlockSize; ++j)
                 if ( i == j )
                     A.Assign(r+i,r+j, factor );
                 else
                     A.Assign(r+i,r+j,-1.0);
         //off-diagonal elements
-        int row=r/BW2;
-        int col=r%BW2;
+        auto row=r/BW2;
+        auto col=r%BW2;
         if (col-1>=0)
-            for (int i=0; i<BlockSize; i++)
+            for (size_t i=0; i<BlockSize; i++)
                 A.Assign(r+i,r+i-1,-1.0);
         if (col+1<BW2)
-            for (int i=0; i<BlockSize; i++)
+            for (size_t i=0; i<BlockSize; i++)
                 A.Assign(r+i,r+i+1,-1.0);
         if (row-1>=0)
-            for (int i=0; i<BlockSize; i++)
+            for (size_t i=0; i<BlockSize; i++)
                 A.Assign(r+i,r+i-BW2,-1.0);
         if (row+1<BW2)
-            for (int i=0; i<BlockSize; i++)
+            for (size_t i=0; i<BlockSize; i++)
                 A.Assign(r+i,r+i+BW2,-1.0);
     }
 
@@ -57,7 +57,7 @@ void LinearSolver_Example
     //cout<<"\nmatrix:\n";
     //A.Out();
     cout<<"\nsolution:\n";
-    for (int i=0; i<N; i++)
+    for (size_t i=0; i<N; i++)
         cout<< "x[ "<< i <<"] = "<< x[i] <<"\n";
     cout<<"\n";
 }
@@ -81,11 +81,11 @@ void LinearSolver_Example
 
     // initial guess
     fill( x.begin(),x.end(), 1.0 ) ;
-    for (int i=0; i<N; i++)
+    for (size_t i=0; i<N; i++)
       x[i] = static_cast<double>(i)*0.1;
 
     cout<<"\nrhs:\n";
-    for (int i=0; i<N; i++)
+    for (size_t i=0; i<N; i++)
         cout<< "b[ "<< i <<"] = "<< b[i] <<"\n";
     cout<<"\n";
 }
@@ -345,7 +345,7 @@ void LinearSolver_Example::Run()
 
     cout<<"\nnumerical solution:\n";
     const size_t N = b.size();
-    for (int i=0; i<N; i++)
+    for (size_t i=0; i<N; i++)
         cout<< "r[ "<< i <<"] = "<< x[i]<< "\n";
     cout<<"\n";
     

@@ -1,0 +1,9 @@
+<map id="csmp::PropertyHandle::Atan" name="csmp::PropertyHandle::Atan">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,71,157,111"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_property_handle.html#a2eda2263970fa36bcfc1ad6a03949469" title=" " alt="" coords="205,5,356,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="144,68,201,49,203,54,146,73"/>
+<area shape="rect" id="Node000003" href="$classcsmp_1_1_scalar_variable.html#a7f0ab5431406d975d6e1de988f369176" title="assignment as an lvalue" alt="" coords="208,71,352,111"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="157,88,192,88,192,94,157,94"/>
+<area shape="rect" id="Node000004" href="$classcsmp_1_1_property_handle.html#a01ea8480651da5462789dce112d34fb6" title=" " alt="" coords="205,136,356,177"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="146,109,203,128,201,133,144,114"/>
+</map>

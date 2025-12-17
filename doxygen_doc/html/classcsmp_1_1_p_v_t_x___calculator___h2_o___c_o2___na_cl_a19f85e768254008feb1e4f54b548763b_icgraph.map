@@ -1,0 +1,5 @@
+<map id="csmp::PVTX_Calculator_H2O_CO2_NaCl::HaliteVolumeFraction" name="csmp::PVTX_Calculator_H2O_CO2_NaCl::HaliteVolumeFraction">
+<area shape="rect" id="Node000001" title="saturation of halite in the presence of water and carbonic phase else NaN is returned" alt="" coords="249,5,461,61"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_p_v_t_x___calculator___h2_o___c_o2___na_cl.html#adf3ad54f6c8ae13a6c03e0de7b751eb7" title=" " alt="" coords="5,13,201,54"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="233,36,201,36,201,30,233,30"/>
+</map>

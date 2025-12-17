@@ -1,0 +1,118 @@
+\doxysection{csmp\+::Finite\+Element\+Manager\+\_\+\+Test Class Reference}
+\hypertarget{classcsmp_1_1_finite_element_manager___test}{}\label{classcsmp_1_1_finite_element_manager___test}\index{csmp::FiniteElementManager\_Test@{csmp::FiniteElementManager\_Test}}
+
+
+{\ttfamily \#include $<$Finite\+Element\+Manager\+\_\+\+Test.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Finite\+Element\+Manager\+\_\+\+Test\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=240pt]{classcsmp_1_1_finite_element_manager___test__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Finite\+Element\+Manager\+\_\+\+Test\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=240pt]{classcsmp_1_1_finite_element_manager___test__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_manager___test_a20bc6da8a12cf688e2b16e7cf8dfae1c}{run}} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_finite_element_manager___test_a8579362075e9ae27714ba148aea3a749}{Test\+Basic\+Functionality}} ()
+\begin{DoxyCompactList}\small\item\em builds different managers and demonstrates that they contain the correct element types \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_finite_element_manager___test_a94f1a2bc2f000d6bab0f05f108d18fc2}{Test\+Basic\+Functionality\+\_\+\+Finite\+Element\+Manager1}} ()
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_manager___test_a1e1d038daf365d59e39e084f67b6a962}\label{classcsmp_1_1_finite_element_manager___test_a1e1d038daf365d59e39e084f67b6a962} 
+void {\bfseries Test\+Accumulation\+Speed} ()
+\begin{DoxyCompactList}\small\item\em uses a transient pressure diffusion calculation with tetra-\/triangle model to measure the speed of the accumulation \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Test} (std\+::ostream \texorpdfstring{$\ast$}{*}osptr=0)
+\item 
+long {\bfseries get\+Num\+Passed} () const
+\item 
+long {\bfseries get\+Num\+Failed} () const
+\item 
+const std\+::ostream \texorpdfstring{$\ast$}{*} {\bfseries get\+Stream} () const
+\item 
+void {\bfseries set\+Stream} (std\+::ostream \texorpdfstring{$\ast$}{*}osptr)
+\item 
+void {\bfseries set\+Name} (std\+::string test\+Name)
+\item 
+std\+::string {\bfseries get\+Name} () const
+\item 
+bool {\bfseries has\+Name} () const
+\item 
+void {\bfseries do\+\_\+succeed} ()
+\item 
+long {\bfseries report} () const
+\item 
+virtual void {\bfseries reset} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}}
+\begin{DoxyCompactItemize}
+\item 
+void {\bfseries do\+\_\+equal} (double expr, double value, double tol, const std\+::string \&lbl, const char \texorpdfstring{$\ast$}{*}fname, long lineno)
+\item 
+void {\bfseries do\+\_\+test} (bool cond, const std\+::string \&lbl, const char \texorpdfstring{$\ast$}{*}fname, long lineno)
+\item 
+void {\bfseries do\+\_\+fail} (const std\+::string \&lbl, const char \texorpdfstring{$\ast$}{*}fname, long lineno)
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}}
+\begin{DoxyCompactItemize}
+\item 
+const char \texorpdfstring{$\ast$}{*} {\bfseries prefix\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Verifies functionality of \doxylink{classcsmp_1_1_finite_element}{Finite\+Element} manager and then tests its performance with a pressure diffusion model based on prism\+\_\+test 
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_finite_element_manager___test_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_finite_element_manager___test_a20bc6da8a12cf688e2b16e7cf8dfae1c}\index{csmp::FiniteElementManager\_Test@{csmp::FiniteElementManager\_Test}!run@{run}}
+\index{run@{run}!csmp::FiniteElementManager\_Test@{csmp::FiniteElementManager\_Test}}
+\doxysubsubsection{\texorpdfstring{run()}{run()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_manager___test_a20bc6da8a12cf688e2b16e7cf8dfae1c} 
+void csmp\+::\+Finite\+Element\+Manager\+\_\+\+Test\+::run (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}.
+
+\Hypertarget{classcsmp_1_1_finite_element_manager___test_a8579362075e9ae27714ba148aea3a749}\index{csmp::FiniteElementManager\_Test@{csmp::FiniteElementManager\_Test}!TestBasicFunctionality@{TestBasicFunctionality}}
+\index{TestBasicFunctionality@{TestBasicFunctionality}!csmp::FiniteElementManager\_Test@{csmp::FiniteElementManager\_Test}}
+\doxysubsubsection{\texorpdfstring{TestBasicFunctionality()}{TestBasicFunctionality()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_manager___test_a8579362075e9ae27714ba148aea3a749} 
+void csmp\+::\+Finite\+Element\+Manager\+\_\+\+Test\+::\+Test\+Basic\+Functionality (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+builds different managers and demonstrates that they contain the correct element types 
+
+Tests methods of public interface of \doxylink{classcsmp_1_1_finite_element_manager}{Finite\+Element\+Manager}, demonstrating that it generates the correct element types and that they are accessible \Hypertarget{classcsmp_1_1_finite_element_manager___test_a94f1a2bc2f000d6bab0f05f108d18fc2}\index{csmp::FiniteElementManager\_Test@{csmp::FiniteElementManager\_Test}!TestBasicFunctionality\_FiniteElementManager1@{TestBasicFunctionality\_FiniteElementManager1}}
+\index{TestBasicFunctionality\_FiniteElementManager1@{TestBasicFunctionality\_FiniteElementManager1}!csmp::FiniteElementManager\_Test@{csmp::FiniteElementManager\_Test}}
+\doxysubsubsection{\texorpdfstring{TestBasicFunctionality\_FiniteElementManager1()}{TestBasicFunctionality\_FiniteElementManager1()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_manager___test_a94f1a2bc2f000d6bab0f05f108d18fc2} 
+void csmp\+::\+Finite\+Element\+Manager\+\_\+\+Test\+::\+Test\+Basic\+Functionality\+\_\+\+Finite\+Element\+Manager1 (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+Builds templatiised version of finite element manager (\doxylink{classcsmp_1_1_finite_element_manager1}{Finite\+Element\+Manager1}) and demonstrates that it contains the correct element types 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+tests/unit/Finite\+Element\+Manager\+\_\+\+Test.\+h\item 
+tests/unit/Finite\+Element\+Manager\+\_\+\+Test.\+cpp\end{DoxyCompactItemize}

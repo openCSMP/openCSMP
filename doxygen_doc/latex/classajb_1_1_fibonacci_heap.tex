@@ -1,0 +1,93 @@
+\doxysection{ajb\+::Fibonacci\+Heap\texorpdfstring{$<$}{<} K, V \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classajb_1_1_fibonacci_heap}{}\label{classajb_1_1_fibonacci_heap}\index{ajb::FibonacciHeap$<$ K, V $>$@{ajb::FibonacciHeap$<$ K, V $>$}}
+
+
+A Fibonacci min-\/heap.  
+
+
+
+
+{\ttfamily \#include $<$Fibonacci\+Heap.\+h$>$}
+
+
+
+Inheritance diagram for ajb\+::Fibonacci\+Heap\texorpdfstring{$<$}{<} K, V \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=215pt]{classajb_1_1_fibonacci_heap__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for ajb\+::Fibonacci\+Heap\texorpdfstring{$<$}{<} K, V \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=181pt]{classajb_1_1_fibonacci_heap__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classajb_1_1_fibonacci_heap_a1e38fe14cc687a0b04b223878f730f4c}\label{classajb_1_1_fibonacci_heap_a1e38fe14cc687a0b04b223878f730f4c} 
+typedef \mbox{\hyperlink{structajb_1_1detail_1_1_fibonacci_heap___node}{node\+\_\+ptr}} {\bfseries finger}
+\item 
+\Hypertarget{classajb_1_1_fibonacci_heap_a87ff603dd2afac20d91059aa23799079}\label{classajb_1_1_fibonacci_heap_a87ff603dd2afac20d91059aa23799079} 
+typedef \mbox{\hyperlink{structajb_1_1detail_1_1_fibonacci_heap___node}{const\+\_\+node\+\_\+ptr}} {\bfseries const\+\_\+finger}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classajb_1_1_fibonacci_heap_a723b86974a77cd8465e6b1bdc92c6264}\label{classajb_1_1_fibonacci_heap_a723b86974a77cd8465e6b1bdc92c6264} 
+{\bfseries Fibonacci\+Heap} ()
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
+\Hypertarget{classajb_1_1_fibonacci_heap_aee871d2f5dc14522c9c9fe6445f79d3f}\label{classajb_1_1_fibonacci_heap_aee871d2f5dc14522c9c9fe6445f79d3f} 
+void {\bfseries clear} ()
+\begin{DoxyCompactList}\small\item\em Remove all elements from the heap. \end{DoxyCompactList}\item 
+\Hypertarget{classajb_1_1_fibonacci_heap_adcd0bdaa76476a8f90436972899e4ca3}\label{classajb_1_1_fibonacci_heap_adcd0bdaa76476a8f90436972899e4ca3} 
+{\bfseries \texorpdfstring{$\sim$}{\string~}\+Fibonacci\+Heap} ()
+\begin{DoxyCompactList}\small\item\em Destructor. \end{DoxyCompactList}\item 
+\Hypertarget{classajb_1_1_fibonacci_heap_af34745d53a6820f8230fdba5fa464c9c}\label{classajb_1_1_fibonacci_heap_af34745d53a6820f8230fdba5fa464c9c} 
+uint64\+\_\+t {\bfseries size} () const
+\begin{DoxyCompactList}\small\item\em Number of elements in the heap. \end{DoxyCompactList}\item 
+\Hypertarget{classajb_1_1_fibonacci_heap_ad48fb2bee1cc0630b0f8d0a1017d15cd}\label{classajb_1_1_fibonacci_heap_ad48fb2bee1cc0630b0f8d0a1017d15cd} 
+bool {\bfseries empty} () const
+\begin{DoxyCompactList}\small\item\em Is the heap empty. \end{DoxyCompactList}\item 
+\Hypertarget{classajb_1_1_fibonacci_heap_a2c544a843ee9afe6d648289c017dbab6}\label{classajb_1_1_fibonacci_heap_a2c544a843ee9afe6d648289c017dbab6} 
+\mbox{\hyperlink{structajb_1_1detail_1_1_fibonacci_heap___node}{finger}} {\bfseries insert} (K key, V value)
+\begin{DoxyCompactList}\small\item\em Insert an element in the heap (move semantics) \end{DoxyCompactList}\item 
+\Hypertarget{classajb_1_1_fibonacci_heap_a19a59f74679507d84f5308142cf3644e}\label{classajb_1_1_fibonacci_heap_a19a59f74679507d84f5308142cf3644e} 
+\mbox{\hyperlink{structajb_1_1detail_1_1_fibonacci_heap___node}{finger}} {\bfseries insert} (\mbox{\hyperlink{structajb_1_1detail_1_1_fibonacci_heap___node}{node\+\_\+ptr}} new\+\_\+node)
+\item 
+\Hypertarget{classajb_1_1_fibonacci_heap_a1a7aa7fd7de30f0d1873b9df407bb887}\label{classajb_1_1_fibonacci_heap_a1a7aa7fd7de30f0d1873b9df407bb887} 
+\mbox{\hyperlink{structajb_1_1detail_1_1_fibonacci_heap___node}{finger}} {\bfseries minimum} ()
+\begin{DoxyCompactList}\small\item\em Get the minimum element in the heap. \end{DoxyCompactList}\item 
+\Hypertarget{classajb_1_1_fibonacci_heap_a2aa3165f51d2d96444fbee5d9d9c9f42}\label{classajb_1_1_fibonacci_heap_a2aa3165f51d2d96444fbee5d9d9c9f42} 
+\mbox{\hyperlink{structajb_1_1detail_1_1_fibonacci_heap___node}{const\+\_\+finger}} {\bfseries minimum} () const
+\begin{DoxyCompactList}\small\item\em Get the minimum element in the heap. \end{DoxyCompactList}\item 
+\Hypertarget{classajb_1_1_fibonacci_heap_a77acaacabe9e7a9d7c4863a3c21e33d5}\label{classajb_1_1_fibonacci_heap_a77acaacabe9e7a9d7c4863a3c21e33d5} 
+void {\bfseries remove\+\_\+minimum} ()
+\begin{DoxyCompactList}\small\item\em Remove the minimum element in the heap. \end{DoxyCompactList}\item 
+\Hypertarget{classajb_1_1_fibonacci_heap_ac552b0d580138c6107b206375a345dc1}\label{classajb_1_1_fibonacci_heap_ac552b0d580138c6107b206375a345dc1} 
+void {\bfseries decrease\+\_\+key} (\mbox{\hyperlink{structajb_1_1detail_1_1_fibonacci_heap___node}{finger}} node, K new\+\_\+key)
+\begin{DoxyCompactList}\small\item\em Decrease the key of an element in the heap. \end{DoxyCompactList}\item 
+\Hypertarget{classajb_1_1_fibonacci_heap_a9048e8e17d225328a7c0126deabf34a3}\label{classajb_1_1_fibonacci_heap_a9048e8e17d225328a7c0126deabf34a3} 
+void {\bfseries remove} (\mbox{\hyperlink{structajb_1_1detail_1_1_fibonacci_heap___node}{node\+\_\+ptr}} node)
+\begin{DoxyCompactList}\small\item\em Remove an element from the heap. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename K, typename V$>$\newline
+class ajb\+::\+Fibonacci\+Heap$<$ K, V $>$}
+A Fibonacci min-\/heap. 
+
+See\+: Fredman \& Tarjan, "{}\+Fibonacci heaps and their uses in improved network   optimization algorithms"{}, JACM 34 (3)\+: 596–615, Jul 1987.
+
+doi\+:10.\+1145/28869.28874 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/utilities/Fibonacci\+Heap.\+h\end{DoxyCompactItemize}

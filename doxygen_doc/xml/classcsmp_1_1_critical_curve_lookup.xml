@@ -1,0 +1,528 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_critical_curve_lookup" kind="class" language="C++" prot="public">
+    <compoundname>csmp::CriticalCurveLookup</compoundname>
+    <includes refid="_critical_curve_lookup_8h" local="yes">eos/h2o_nacl/CriticalCurveLookup.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_lookup_1a71cf159c0b69bd281b9c4ce7a0c66e73" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::CriticalCurveLookup::temperature</definition>
+        <argsstring></argsstring>
+        <name>temperature</name>
+        <qualifiedname>csmp::CriticalCurveLookup::temperature</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurveLookup.h" line="44" column="26" bodyfile="source/includes/eos/CriticalCurveLookup.h" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_lookup_1a0ef0377b6af699783b31aafaff420a22" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::CriticalCurveLookup::tcurrent</definition>
+        <argsstring></argsstring>
+        <name>tcurrent</name>
+        <qualifiedname>csmp::CriticalCurveLookup::tcurrent</qualifiedname>
+        <briefdescription>
+<para>temperature [C] for internal use </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurveLookup.h" line="46" column="27" bodyfile="source/includes/eos/CriticalCurveLookup.h" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_lookup_1a58d4d921181d7e78cfb5989b36dd0188" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::CriticalCurveLookup::pcurrent</definition>
+        <argsstring></argsstring>
+        <name>pcurrent</name>
+        <qualifiedname>csmp::CriticalCurveLookup::pcurrent</qualifiedname>
+        <briefdescription>
+<para>pressure [Pa] for internal use </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurveLookup.h" line="47" column="27" bodyfile="source/includes/eos/CriticalCurveLookup.h" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_lookup_1ac72219b4cf3208afc928a05184759571" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::CriticalCurveLookup::t_res</definition>
+        <argsstring></argsstring>
+        <name>t_res</name>
+        <qualifiedname>csmp::CriticalCurveLookup::t_res</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurveLookup.h" line="48" column="27" bodyfile="source/includes/eos/CriticalCurveLookup.h" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_lookup_1a803fda0b22b8aa1c5d4d7eed12ce4412" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::CriticalCurveLookup::tnorm</definition>
+        <argsstring></argsstring>
+        <name>tnorm</name>
+        <qualifiedname>csmp::CriticalCurveLookup::tnorm</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurveLookup.h" line="49" column="27" bodyfile="source/includes/eos/CriticalCurveLookup.h" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_lookup_1a87e7738baee56adf96abadf50a9776e3" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::CriticalCurveLookup::pnorm</definition>
+        <argsstring></argsstring>
+        <name>pnorm</name>
+        <qualifiedname>csmp::CriticalCurveLookup::pnorm</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurveLookup.h" line="50" column="27" bodyfile="source/includes/eos/CriticalCurveLookup.h" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_lookup_1a1baada04c64f519f6ba172d04ddfbf21" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::CriticalCurveLookup::it</definition>
+        <argsstring></argsstring>
+        <name>it</name>
+        <qualifiedname>csmp::CriticalCurveLookup::it</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurveLookup.h" line="52" column="29" bodyfile="source/includes/eos/CriticalCurveLookup.h" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_lookup_1a16bfda98ce7330a265d281da24e956e8" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::CriticalCurveLookup::it_min</definition>
+        <argsstring></argsstring>
+        <name>it_min</name>
+        <qualifiedname>csmp::CriticalCurveLookup::it_min</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurveLookup.h" line="53" column="29" bodyfile="source/includes/eos/CriticalCurveLookup.h" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_lookup_1a2f05962848f0fd8fdbeb6f26a8c7d54b" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::CriticalCurveLookup::it_max</definition>
+        <argsstring></argsstring>
+        <name>it_max</name>
+        <qualifiedname>csmp::CriticalCurveLookup::it_max</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurveLookup.h" line="54" column="29" bodyfile="source/includes/eos/CriticalCurveLookup.h" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_lookup_1aae7e2b35e1a34bb9d54fbba002406fd0" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::CriticalCurveLookup::t_dim</definition>
+        <argsstring></argsstring>
+        <name>t_dim</name>
+        <qualifiedname>csmp::CriticalCurveLookup::t_dim</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurveLookup.h" line="55" column="29" bodyfile="source/includes/eos/CriticalCurveLookup.h" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_lookup_1ac1d18314049c553be46797f14e141322" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::CriticalCurveLookup::i_guess</definition>
+        <argsstring></argsstring>
+        <name>i_guess</name>
+        <qualifiedname>csmp::CriticalCurveLookup::i_guess</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurveLookup.h" line="56" column="29" bodyfile="source/includes/eos/CriticalCurveLookup.h" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_lookup_1a37cf4b2febc2dcd61a9784938f21da16" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::CriticalCurveLookup::i_max</definition>
+        <argsstring></argsstring>
+        <name>i_max</name>
+        <qualifiedname>csmp::CriticalCurveLookup::i_max</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurveLookup.h" line="57" column="29" bodyfile="source/includes/eos/CriticalCurveLookup.h" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_lookup_1ad296416557e3d1c05c6faae0543b5d85" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::CriticalCurveLookup::i_min</definition>
+        <argsstring></argsstring>
+        <name>i_min</name>
+        <qualifiedname>csmp::CriticalCurveLookup::i_min</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurveLookup.h" line="58" column="29" bodyfile="source/includes/eos/CriticalCurveLookup.h" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_lookup_1af129b22854ee0285bd74751864e1fac6" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::CriticalCurveLookup::storage_vector</definition>
+        <argsstring></argsstring>
+        <name>storage_vector</name>
+        <qualifiedname>csmp::CriticalCurveLookup::storage_vector</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurveLookup.h" line="60" column="19" bodyfile="source/includes/eos/CriticalCurveLookup.h" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_lookup_1a48099473314679ec7d0e4b5a93e339ba" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_critical_point_h2_o" kindref="compound">CriticalPointH2O</ref></type>
+        <definition>CriticalPointH2O csmp::CriticalCurveLookup::cp_h2o</definition>
+        <argsstring></argsstring>
+        <name>cp_h2o</name>
+        <qualifiedname>csmp::CriticalCurveLookup::cp_h2o</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurveLookup.h" line="62" column="29" bodyfile="source/includes/eos/CriticalCurveLookup.h" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_critical_curve_lookup_1a33d7cfe8c08635092c4e5804900c0c95" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_error_handler" kindref="compound">ErrorHandler</ref> &amp;</type>
+        <definition>ErrorHandler&amp; csmp::CriticalCurveLookup::csmp_error</definition>
+        <argsstring></argsstring>
+        <name>csmp_error</name>
+        <qualifiedname>csmp::CriticalCurveLookup::csmp_error</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurveLookup.h" line="65" column="28" bodyfile="source/includes/eos/CriticalCurveLookup.h" bodystart="65" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_critical_curve_lookup_1ae1e0dd1378a70547c127e22530188629" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::CriticalCurveLookup::CriticalCurveLookup</definition>
+        <argsstring>(const double &amp;externaltemperature)</argsstring>
+        <name>CriticalCurveLookup</name>
+        <qualifiedname>csmp::CriticalCurveLookup::CriticalCurveLookup</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>externaltemperature</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurveLookup.h" line="25" column="5" bodyfile="source/modules/eos/h2o_nacl_lookup/CriticalCurveLookup.cpp" bodystart="17" bodyend="128"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_critical_curve_lookup_1a155af6923871c3e70c2040015f54449d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::CriticalCurveLookup::~CriticalCurveLookup</definition>
+        <argsstring>()</argsstring>
+        <name>~CriticalCurveLookup</name>
+        <qualifiedname>csmp::CriticalCurveLookup::~CriticalCurveLookup</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurveLookup.h" line="26" column="5" bodyfile="source/modules/eos/h2o_nacl_lookup/CriticalCurveLookup.cpp" bodystart="131" bodyend="133"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_critical_curve_lookup_1a26cb75733c0e5b108f3f80a35475e628" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::CriticalCurveLookup::Temperature</definition>
+        <argsstring>()</argsstring>
+        <name>Temperature</name>
+        <qualifiedname>csmp::CriticalCurveLookup::Temperature</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurveLookup.h" line="28" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/CriticalCurveLookup.cpp" bodystart="137" bodyend="137"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_critical_curve_lookup_1a97ce579649d9349dc33bbff12d0b610f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::CriticalCurveLookup::Pressure</definition>
+        <argsstring>()</argsstring>
+        <name>Pressure</name>
+        <qualifiedname>csmp::CriticalCurveLookup::Pressure</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurveLookup.h" line="29" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/CriticalCurveLookup.cpp" bodystart="138" bodyend="138"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_critical_curve_lookup_1ac3ad13b48c12b705a74a3d643c7e506d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::CriticalCurveLookup::MassFractionNaCl</definition>
+        <argsstring>()</argsstring>
+        <name>MassFractionNaCl</name>
+        <qualifiedname>csmp::CriticalCurveLookup::MassFractionNaCl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurveLookup.h" line="30" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/CriticalCurveLookup.cpp" bodystart="139" bodyend="139"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_critical_curve_lookup_1addfa647dbe4d631a4d4d8cd5dd5f262b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::CriticalCurveLookup::TfromP</definition>
+        <argsstring>(const double &amp;press)</argsstring>
+        <name>TfromP</name>
+        <qualifiedname>csmp::CriticalCurveLookup::TfromP</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>press</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurveLookup.h" line="31" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/CriticalCurveLookup.cpp" bodystart="206" bodyend="237"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_critical_curve_lookup_1a39d3753ef63d8447fca064db1348adf8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::CriticalCurveLookup::Density</definition>
+        <argsstring>()</argsstring>
+        <name>Density</name>
+        <qualifiedname>csmp::CriticalCurveLookup::Density</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurveLookup.h" line="35" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/CriticalCurveLookup.cpp" bodystart="141" bodyend="141"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_critical_curve_lookup_1aaf37be3040f0fe096b04a592841ec319" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::CriticalCurveLookup::Enthalpy</definition>
+        <argsstring>()</argsstring>
+        <name>Enthalpy</name>
+        <qualifiedname>csmp::CriticalCurveLookup::Enthalpy</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurveLookup.h" line="36" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/CriticalCurveLookup.cpp" bodystart="142" bodyend="142"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_critical_curve_lookup_1a2c966003a80b35599b16d1a4c88aaa99" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::CriticalCurveLookup::HeatCapacity</definition>
+        <argsstring>()</argsstring>
+        <name>HeatCapacity</name>
+        <qualifiedname>csmp::CriticalCurveLookup::HeatCapacity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurveLookup.h" line="37" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/CriticalCurveLookup.cpp" bodystart="143" bodyend="143"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_critical_curve_lookup_1a6895b81c57bcd3a50310c3357018ac25" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::CriticalCurveLookup::Compressibility</definition>
+        <argsstring>()</argsstring>
+        <name>Compressibility</name>
+        <qualifiedname>csmp::CriticalCurveLookup::Compressibility</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurveLookup.h" line="38" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/CriticalCurveLookup.cpp" bodystart="144" bodyend="144"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_critical_curve_lookup_1a0967f18c886c1e543350fc281dfb8eb6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::CriticalCurveLookup::Viscosity</definition>
+        <argsstring>()</argsstring>
+        <name>Viscosity</name>
+        <qualifiedname>csmp::CriticalCurveLookup::Viscosity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurveLookup.h" line="39" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/CriticalCurveLookup.cpp" bodystart="145" bodyend="145"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_critical_curve_lookup_1a3337c5790f9d20d903b438c01e1b83ba" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::CriticalCurveLookup::ValueOf</definition>
+        <argsstring>(const int &amp;property_index)</argsstring>
+        <name>ValueOf</name>
+        <qualifiedname>csmp::CriticalCurveLookup::ValueOf</qualifiedname>
+        <param>
+          <type>const int &amp;</type>
+          <declname>property_index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurveLookup.h" line="40" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/CriticalCurveLookup.cpp" bodystart="148" bodyend="155"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_critical_curve_lookup_1a19e5e000cbe55f9b64a22767db3ec8c7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CriticalCurveLookup::GetTemperatureIndex</definition>
+        <argsstring>(const double &amp;t)</argsstring>
+        <name>GetTemperatureIndex</name>
+        <qualifiedname>csmp::CriticalCurveLookup::GetTemperatureIndex</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>t</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurveLookup.h" line="63" column="29" bodyfile="source/modules/eos/h2o_nacl_lookup/CriticalCurveLookup.cpp" bodystart="158" bodyend="175"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_critical_curve_lookup_1ab9ce04916e71fed60cdc7885276aada4" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CriticalCurveLookup::GetTemperatureIndexCriticalCurve</definition>
+        <argsstring>(const double &amp;t)</argsstring>
+        <name>GetTemperatureIndexCriticalCurve</name>
+        <qualifiedname>csmp::CriticalCurveLookup::GetTemperatureIndexCriticalCurve</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>t</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalCurveLookup.h" line="64" column="29" bodyfile="source/modules/eos/h2o_nacl_lookup/CriticalCurveLookup.cpp" bodystart="177" bodyend="204"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Creation of lookup tables temperature-pressure-compsition relations for the critical curve of the system H2O-NaCl, based on class <ref refid="classcsmp_1_1_critical_curve" kindref="compound">CriticalCurve</ref>. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>Thomas Driesner, ETH Zuerich </para>
+</simplesect>
+</para>
+<sect1 id="compare_floats_8h_1contact">
+<title>Contact</title><para><ulink url="mailto:thomas.driesner@erdw.ethz.ch">thomas.driesner@erdw.ethz.ch</ulink></para>
+</sect1>
+<sect1 id="compare_floats_8h_1motivation">
+<title>Motivation</title><para><ref refid="classcsmp_1_1_critical_curve_lookup" kindref="compound">CriticalCurveLookup</ref> generates and queries a lookup table that stores the temperature-pressure-composition [Celsius, bar, mole fraction NaCl] coordinates of the critical curve of the system H2O-NaCl, according to the paper</para>
+<para>Driesner T. and Heinrich C.A. (2007): The system H2O-NaCl. Part I: Correlation formulae for phase relations in temperature-pressure-composition space from 0 to 1000oC, 0 to 5000 bar, and 0 to 1 XNaCl. Geochimica et Cosmochimica Acta 71, 4880-4901.</para>
+<para>In addition, mass density [kg/m3], specific enthalpy [J/kg], specific isobaric heat capacity [J/kg/C], isothermal compressibility [Pa^-1], dynamic viscosity [Pa s] on the critical curve are available, and are computed by applying the formulations from the paper</para>
+<para>Driesner T. (2007): The system H2O-NaCl. Part II: Correlations for molar volume, enthalpy, and isobaric heat capacity from 0 to 1000oC, 1 to 5000 bar, and 0 to 1 XNaCl. Geochimica et Cosmochimica Acta 71, 4902-4919.</para>
+<para>at the temperature-pressure-composition coordinates of the critical curve.</para>
+<para>The lookup table &quot;CriticalCurveLookupTable.bin&quot; is written as a binary file, and stores the properties listed above in a single, 1-dimensional std::vector&lt;double&gt;, named storage_vector. storage_vector comprises subsequent blocks in each of which the values for the one property are stored in sequence of ascending temperature from the critical temperature of water (see file CriticalPointH2O.cpp) to 1000.0e0 degrees Celsius. Each block is of size t_dim (the number of entries, the first thing that is computed in the constructor), the sequence is defined in the file &quot;LookupPropertyIndex.h&quot;. The temperature spacing is variable (see member GetTemperatureIndex for details), being densest near the critical temperature of water and largest at the highest temperatures.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_critical_curve_lookup_1autotoc_md8">
+<title>autotoc_md8</title></sect1>
+<sect1 id="compare_floats_8h_1testing">
+<title>Testing</title><para>The lookup version was tested against the original non-lookup code (May 26, 2008). Max deviations are:</para>
+<para><itemizedlist>
+<listitem><para>Composition: -0.5% at 374.03 C, above 374.3 C, deviations are &lt;0.1% and decay rapidly to negligible values.</para>
+</listitem><listitem><para>Pressure: deviations are negligible over the whole temperature range (.00x % or less)</para>
+</listitem><listitem><para>Density: (nota bene: this is NOT used in fluid flow simulations in the original ETH scheme as programmed by Thomas Driesner et al.) up to 10% at 374.04, rapidly decaying via 3% at 374.6 to less than 1% above 375.5. Notice that the uncertainties are always maximum between lookup grid point and are &quot;exact&quot; at the grid points. (Oct 2010, Thomas Driesner: as far as I can see, these deviations have been reduced after some debugging; fruther testing required)</para>
+</listitem><listitem><para>Enthalpy: (again: not used in fluid flow simulations). 2% at 374.04, rapidly decaying, &lt; 0.05% at t &gt; 380 C</para>
+</listitem><listitem><para>HeatCapacity: (again: not used in fluid flow simulations): large deviations at t &lt; 375.5, which are solely due to the &quot;hard-wired&quot; value assigned at tcrit_h20 (1e10, this happens in <ref refid="classcsmp_1_1_h2_o_lookup" kindref="compound">H2OLookup</ref>). From 424 C: &lt; 0.1%</para>
+</listitem><listitem><para>Compressibility: (again: not used ...) Near tcrit_h2o suffers from the same problem as HeatCapacity, &lt;1% is reached at about 385 C.</para>
+</listitem><listitem><para>Viscosity: (again ...) 7% at 374.04, &lt; 1% at t&gt; 374.5 </para>
+</listitem></itemizedlist>
+</para>
+</sect1>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::CriticalCurveLookup</label>
+        <link refid="classcsmp_1_1_critical_curve_lookup"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/eos/CriticalCurveLookup.h" line="21" column="3" bodyfile="source/includes/eos/CriticalCurveLookup.h" bodystart="22" bodyend="66"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_critical_curve_lookup_1a6895b81c57bcd3a50310c3357018ac25" prot="public" virt="non-virtual"><scope>csmp::CriticalCurveLookup</scope><name>Compressibility</name></member>
+      <member refid="classcsmp_1_1_critical_curve_lookup_1a48099473314679ec7d0e4b5a93e339ba" prot="private" virt="non-virtual"><scope>csmp::CriticalCurveLookup</scope><name>cp_h2o</name></member>
+      <member refid="classcsmp_1_1_critical_curve_lookup_1ae1e0dd1378a70547c127e22530188629" prot="public" virt="non-virtual"><scope>csmp::CriticalCurveLookup</scope><name>CriticalCurveLookup</name></member>
+      <member refid="classcsmp_1_1_critical_curve_lookup_1a33d7cfe8c08635092c4e5804900c0c95" prot="private" virt="non-virtual"><scope>csmp::CriticalCurveLookup</scope><name>csmp_error</name></member>
+      <member refid="classcsmp_1_1_critical_curve_lookup_1a39d3753ef63d8447fca064db1348adf8" prot="public" virt="non-virtual"><scope>csmp::CriticalCurveLookup</scope><name>Density</name></member>
+      <member refid="classcsmp_1_1_critical_curve_lookup_1aaf37be3040f0fe096b04a592841ec319" prot="public" virt="non-virtual"><scope>csmp::CriticalCurveLookup</scope><name>Enthalpy</name></member>
+      <member refid="classcsmp_1_1_critical_curve_lookup_1a19e5e000cbe55f9b64a22767db3ec8c7" prot="private" virt="non-virtual"><scope>csmp::CriticalCurveLookup</scope><name>GetTemperatureIndex</name></member>
+      <member refid="classcsmp_1_1_critical_curve_lookup_1ab9ce04916e71fed60cdc7885276aada4" prot="private" virt="non-virtual"><scope>csmp::CriticalCurveLookup</scope><name>GetTemperatureIndexCriticalCurve</name></member>
+      <member refid="classcsmp_1_1_critical_curve_lookup_1a2c966003a80b35599b16d1a4c88aaa99" prot="public" virt="non-virtual"><scope>csmp::CriticalCurveLookup</scope><name>HeatCapacity</name></member>
+      <member refid="classcsmp_1_1_critical_curve_lookup_1ac1d18314049c553be46797f14e141322" prot="private" virt="non-virtual"><scope>csmp::CriticalCurveLookup</scope><name>i_guess</name></member>
+      <member refid="classcsmp_1_1_critical_curve_lookup_1a37cf4b2febc2dcd61a9784938f21da16" prot="private" virt="non-virtual"><scope>csmp::CriticalCurveLookup</scope><name>i_max</name></member>
+      <member refid="classcsmp_1_1_critical_curve_lookup_1ad296416557e3d1c05c6faae0543b5d85" prot="private" virt="non-virtual"><scope>csmp::CriticalCurveLookup</scope><name>i_min</name></member>
+      <member refid="classcsmp_1_1_critical_curve_lookup_1a1baada04c64f519f6ba172d04ddfbf21" prot="private" virt="non-virtual"><scope>csmp::CriticalCurveLookup</scope><name>it</name></member>
+      <member refid="classcsmp_1_1_critical_curve_lookup_1a2f05962848f0fd8fdbeb6f26a8c7d54b" prot="private" virt="non-virtual"><scope>csmp::CriticalCurveLookup</scope><name>it_max</name></member>
+      <member refid="classcsmp_1_1_critical_curve_lookup_1a16bfda98ce7330a265d281da24e956e8" prot="private" virt="non-virtual"><scope>csmp::CriticalCurveLookup</scope><name>it_min</name></member>
+      <member refid="classcsmp_1_1_critical_curve_lookup_1ac3ad13b48c12b705a74a3d643c7e506d" prot="public" virt="non-virtual"><scope>csmp::CriticalCurveLookup</scope><name>MassFractionNaCl</name></member>
+      <member refid="classcsmp_1_1_critical_curve_lookup_1a58d4d921181d7e78cfb5989b36dd0188" prot="private" virt="non-virtual"><scope>csmp::CriticalCurveLookup</scope><name>pcurrent</name></member>
+      <member refid="classcsmp_1_1_critical_curve_lookup_1a87e7738baee56adf96abadf50a9776e3" prot="private" virt="non-virtual"><scope>csmp::CriticalCurveLookup</scope><name>pnorm</name></member>
+      <member refid="classcsmp_1_1_critical_curve_lookup_1a97ce579649d9349dc33bbff12d0b610f" prot="public" virt="non-virtual"><scope>csmp::CriticalCurveLookup</scope><name>Pressure</name></member>
+      <member refid="classcsmp_1_1_critical_curve_lookup_1af129b22854ee0285bd74751864e1fac6" prot="private" virt="non-virtual"><scope>csmp::CriticalCurveLookup</scope><name>storage_vector</name></member>
+      <member refid="classcsmp_1_1_critical_curve_lookup_1aae7e2b35e1a34bb9d54fbba002406fd0" prot="private" virt="non-virtual"><scope>csmp::CriticalCurveLookup</scope><name>t_dim</name></member>
+      <member refid="classcsmp_1_1_critical_curve_lookup_1ac72219b4cf3208afc928a05184759571" prot="private" virt="non-virtual"><scope>csmp::CriticalCurveLookup</scope><name>t_res</name></member>
+      <member refid="classcsmp_1_1_critical_curve_lookup_1a0ef0377b6af699783b31aafaff420a22" prot="private" virt="non-virtual"><scope>csmp::CriticalCurveLookup</scope><name>tcurrent</name></member>
+      <member refid="classcsmp_1_1_critical_curve_lookup_1a26cb75733c0e5b108f3f80a35475e628" prot="public" virt="non-virtual"><scope>csmp::CriticalCurveLookup</scope><name>Temperature</name></member>
+      <member refid="classcsmp_1_1_critical_curve_lookup_1a71cf159c0b69bd281b9c4ce7a0c66e73" prot="private" virt="non-virtual"><scope>csmp::CriticalCurveLookup</scope><name>temperature</name></member>
+      <member refid="classcsmp_1_1_critical_curve_lookup_1addfa647dbe4d631a4d4d8cd5dd5f262b" prot="public" virt="non-virtual"><scope>csmp::CriticalCurveLookup</scope><name>TfromP</name></member>
+      <member refid="classcsmp_1_1_critical_curve_lookup_1a803fda0b22b8aa1c5d4d7eed12ce4412" prot="private" virt="non-virtual"><scope>csmp::CriticalCurveLookup</scope><name>tnorm</name></member>
+      <member refid="classcsmp_1_1_critical_curve_lookup_1a3337c5790f9d20d903b438c01e1b83ba" prot="public" virt="non-virtual"><scope>csmp::CriticalCurveLookup</scope><name>ValueOf</name></member>
+      <member refid="classcsmp_1_1_critical_curve_lookup_1a0967f18c886c1e543350fc281dfb8eb6" prot="public" virt="non-virtual"><scope>csmp::CriticalCurveLookup</scope><name>Viscosity</name></member>
+      <member refid="classcsmp_1_1_critical_curve_lookup_1a155af6923871c3e70c2040015f54449d" prot="public" virt="non-virtual"><scope>csmp::CriticalCurveLookup</scope><name>~CriticalCurveLookup</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

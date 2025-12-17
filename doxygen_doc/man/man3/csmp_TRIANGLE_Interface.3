@@ -1,0 +1,145 @@
+.TH "csmp::TRIANGLE_Interface" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::TRIANGLE_Interface \- interface to J\&. Setchuk's (UC Berkeley's) Triangle mesh generator  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <TRIANGLE_Interface\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "template<uint32_t dim> void \fBReadTriangle2DMesh\fP (const char *fname, \fBVSet\fP< dim > &, bool isoparametric=false, bool perform_extra_checks=false)"
+.br
+.ti -1c
+.RI "template<uint32_t dim> void \fBReadTriangle2DMeshAndCreateDiscreteFractures\fP (const char *fname, \fBVSet\fP< dim > &vset, double kfrac, bool perform_extra_checks=false)"
+.br
+.RI "not ported to new numbering of elements and nodes yet "
+.ti -1c
+.RI "void \fBCheckTriangleOutput\fP (const char *file, size_t &nodes_per_element, size_t &nodes, size_t &elements, int &node_attributes, int &elmt_attributes)"
+.br
+.ti -1c
+.RI "void \fBReadNodeDataFile\fP (const char *file, std::deque< double > &x, std::deque< double > &y, std::deque< double > &z, std::map< size_t, int8_t > &bflags, std::map< size_t, double > &bvalues)"
+.br
+.ti -1c
+.RI "void \fBReadElementDataFile\fP (const char *file, std::map< size_t, std::vector< size_t > > &plist, std::vector< double > &evalues)"
+.br
+.ti -1c
+.RI "void \fBReadPolyDataFile\fP (const char *file, std::map< size_t, std::vector< size_t > > &plist)"
+.br
+.ti -1c
+.RI "void \fBReadNeighborDataFile\fP (const char *file, std::map< size_t, std::vector< int64_t > > &pfverts)"
+.br
+.ti -1c
+.RI "void \fBFindNeighborsForFractureElements\fP (std::map< size_t, std::vector< size_t > > &plist, std::map< size_t, std::vector< int64_t > > &pfverts)"
+.br
+.ti -1c
+.RI "void \fBFlagBoundaryElements\fP (std::map< size_t, std::vector< int64_t > > &pfverts, std::map< size_t, std::vector< size_t > > &plist, std::deque< double > &x, std::deque< double > &y)"
+.br
+.ti -1c
+.RI "void \fBFlagBoundaryNodes\fP (std::map< size_t, std::vector< int64_t > > &pfverts, std::map< size_t, std::vector< size_t > > &plist, std::map< size_t, int8_t > &bflags)"
+.br
+.ti -1c
+.RI "void \fBSplitSingleCornerElements\fP (std::map< size_t, std::vector< size_t > > &plist, std::map< size_t, std::vector< int64_t > > &pfverts, std::vector< double > &evalues)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+interface to J\&. Setchuk's (UC Berkeley's) Triangle mesh generator 
+.SH "Member Function Documentation"
+.PP 
+.SS "void csmp::TRIANGLE_Interface::FlagBoundaryElements (std::map< size_t, std::vector< int64_t > > & pfverts, std::map< size_t, std::vector< size_t > > & plist, std::deque< double > & x, std::deque< double > & y)"
+Private method used by \fBReadTriangle2DMesh()\fP\&. This function flags the boundaries of the Mesh using the enum \fBBOX_BOUNDARY\fP\&. For this purpose, missing neighbor elements which are flagged -1 in the '\&.neigh' file are used as indicator for elements which lie at the model boundary\&. 
+.br
+
+.PP
+Is used when a 2D mesh created with the Triangle mesher is read from file\&. 
+.SS "void csmp::TRIANGLE_Interface::FlagBoundaryNodes (std::map< size_t, std::vector< int64_t > > & pfverts, std::map< size_t, std::vector< size_t > > & plist, std::map< size_t, int8_t > & bflags)"
+Private method used by \fBReadTriangle2DMesh()\fP\&.
+
+.PP
+Nodes are flagged according to their parent faces across which the face- vert vectors point\&. Thus, nodes 2,3 correspond to facevert 1, nodes 3,1 to facevert 2, and nodes 1,2 to facevert 3\&. The method does not identify corner points of the model\&. This task is left to FlagCornerNodes()\&. 
+.SS "template<uint32_t dim> template void csmp::TRIANGLE_Interface::ReadTriangle2DMesh< 2U > (const char * fname, \fBVSet\fP< dim > & , bool isoparametric = \fRfalse\fP, bool perform_extra_checks = \fRfalse\fP)"
+Reads the series of mesh output files from Setchuk's triangle mesher\&. The data from the text files are used to build a \fBVSet\fP which holds all the necessary information to initialize a CSMP mesh, including property data and boundary flags\&.
+
+.PP
+However, Setchuk's mesher numbers nodes and elements from 1\&.\&.n and CSMP wants them numbered 0\&.\&.n-1\&. Therefore a conversion is performed to adjust this numbering before the \fBVSet\fP is returned\&.
+
+.PP
+The methods expects x files with the extensions '\&.edge', 'ele', '\&.neigh', '\&.node' and '\&.poly'\&. The neighbor element file ('\&.neigh') is not generated automatically by triangle, but must be prompted for by using the '-n' command line option\&. It contains a list of neighboring elements for each triangle\&.
+.SH "Input Arguments"
+.PP
+The name of the file series without extension, and a \fBVSet\fP into which the data shall be stored\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIvset\fP The file data are returned into the second method argument\&.
+.RE
+.PP
+.SH "Application Examples"
+.PP
+To read set of input files (\&.poly, \&.node, \&.ele, \&.neigh) from J\&. Setchuk's 2D meshing programm 'Triangle' and puts the results into the supplied \fBVSet\fP\&.
+.SH "Messages"
+.PP
+If one of the files cannot be found the method will report this as error and terminate\&. 
+.SS "void csmp::TRIANGLE_Interface::SplitSingleCornerElements (std::map< size_t, std::vector< size_t > > & plist, std::map< size_t, std::vector< int64_t > > & pfverts, std::vector< double > & evalues)"
+If a 2D triangular finite element has two of its sides on the boundary of the model, this poses problems when boundary conditions are assigned because one always first has to identify the correct model side and secondly because elements rarely are compliant enough to satisfactorily handle the different conditions\&. 
+.br
+
+.PP
+The remedy used here, is to find the elements element neighbor and to create a segment from the corner node and the node diametrically opposite\&. This segment then separates two new elements which are created by flipping the two adjacent elements, example lower left corner: 
+.br
+
+.PP
+o-----o o-----o element 2 also becomes a corner element | \\ 2 | | 1 / | | \\ | --> | / | | 1 \\ | | / 2 | o-----o o-----o
+
+.PP
+If element properties were assigned before, these are averaged between the two flipped elements and then re-assigned\&. 
+.br
+.SH "Input Arguments"
+.PP
+The method uses the 'plist', 'pfverts', and potential element property values in the process of flipping the nodes\&. 
+.br
+.SH "Implementation"
+.PP
+.IP "1." 4
+In the pfverts array those elements are singled out which have only one neighbor\&. These elements must lie at the mesh corners\&.
+.IP "2." 4
+If such an element is found, its neighbor is found as well in the plist\&. The element ID's are remembered\&.
+.IP "3." 4
+A segment (MJL_Edge) is constructed from the corner node to the node diametrically opposite in the triangle\&.
+.IP "4." 4
+Depending which mesh corner we are in, the two remaining nodes left and right of the new segment form corner nodes of the new triangles (MJL_Triangle)\&.
+.IP "5." 4
+The new triangles are reassigned to the plist and the properties, if present are averaged and mapped back onto the elements\&. If both property values were the same, nothing is done\&.
+.IP "6." 4
+The elements pfverts are re-assigned according to the new connectivity\&.
+.IP "7." 4
+The elements adjacent to the flipped elements must be updated with regard to their neighbor lists\&.
+.PP
+.SH "Application Examples"
+.PP
+The method is applied before the \fBVSet\fP is output from the 2D mesh reading method above\&. 
+.br
+.SH "Messages"
+.PP
+The method reports how many edge flips were performed and whether and which property values were averaged at which mesh corner\&. 
+.br
+ 
+.PP
+.nf
+    @todo (3) Messes up neighbor connectivity SKM12/5/02
+    O\&.K\&. for trianglePatch8 retested by SKM 27/11/02 (previously reported error must be in Triangle mesher)
+
+.fi
+.PP
+ 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

@@ -1,0 +1,955 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_experimental_saturation_functions" kind="class" language="C++" prot="public">
+    <compoundname>csmp::ExperimentalSaturationFunctions</compoundname>
+    <includes refid="_experimental_saturation_functions_8h" local="no">ExperimentalSaturationFunctions.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+      <param>
+        <type>template&lt; uint32_t &gt; class</type>
+        <declname>USER</declname>
+        <defname>USER</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_experimental_saturation_functions_1ad7a526e27b42b676e91ce86f5a190583" prot="private" static="no" mutable="no">
+        <type>std::map&lt; size_t, <ref refid="classcsmp_1_1_cubic_spline" kindref="compound">csmp::CubicSpline</ref> &gt;</type>
+        <definition>std::map&lt;size_t, csmp::CubicSpline&gt; csmp::ExperimentalSaturationFunctions&lt; dim, USER &gt;::kr1_</definition>
+        <argsstring></argsstring>
+        <name>kr1_</name>
+        <qualifiedname>csmp::ExperimentalSaturationFunctions::kr1_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" line="150" column="14" bodyfile="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" bodystart="150" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_experimental_saturation_functions_1ad967a0b28cda59bde4bf8af42476de5a" prot="private" static="no" mutable="no">
+        <type>std::map&lt; size_t, <ref refid="classcsmp_1_1_cubic_spline" kindref="compound">csmp::CubicSpline</ref> &gt;</type>
+        <definition>std::map&lt;size_t, csmp::CubicSpline&gt; csmp::ExperimentalSaturationFunctions&lt; dim, USER &gt;::kr2_</definition>
+        <argsstring></argsstring>
+        <name>kr2_</name>
+        <qualifiedname>csmp::ExperimentalSaturationFunctions::kr2_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" line="150" column="19" bodyfile="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" bodystart="150" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_experimental_saturation_functions_1aae51b51c81e4958b9778a80be224db5b" prot="private" static="no" mutable="no">
+        <type>std::map&lt; size_t, <ref refid="classcsmp_1_1_cubic_spline" kindref="compound">csmp::CubicSpline</ref> &gt;</type>
+        <definition>std::map&lt;size_t, csmp::CubicSpline&gt; csmp::ExperimentalSaturationFunctions&lt; dim, USER &gt;::pc_</definition>
+        <argsstring></argsstring>
+        <name>pc_</name>
+        <qualifiedname>csmp::ExperimentalSaturationFunctions::pc_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" line="150" column="24" bodyfile="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" bodystart="150" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_experimental_saturation_functions_1ac19a1f7a8366b936d81c7357ad4d29cc" prot="private" static="no" mutable="no">
+        <type>std::map&lt; size_t, double &gt;</type>
+        <definition>std::map&lt;size_t, double&gt; csmp::ExperimentalSaturationFunctions&lt; dim, USER &gt;::swr_</definition>
+        <argsstring></argsstring>
+        <name>swr_</name>
+        <qualifiedname>csmp::ExperimentalSaturationFunctions::swr_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" line="151" column="14" bodyfile="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" bodystart="151" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_experimental_saturation_functions_1ace5c2f16f8db3e6299cd06d72ce6559b" prot="private" static="no" mutable="no">
+        <type>std::map&lt; size_t, double &gt;</type>
+        <definition>std::map&lt;size_t, double&gt; csmp::ExperimentalSaturationFunctions&lt; dim, USER &gt;::snr_</definition>
+        <argsstring></argsstring>
+        <name>snr_</name>
+        <qualifiedname>csmp::ExperimentalSaturationFunctions::snr_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" line="151" column="19" bodyfile="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" bodystart="151" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_experimental_saturation_functions_1a51a24af7b966694cd2050d1331e06fea" prot="private" static="no" mutable="no">
+        <type>std::map&lt; size_t, std::vector&lt; double &gt; &gt;</type>
+        <definition>std::map&lt;size_t, std::vector&lt;double&gt; &gt; csmp::ExperimentalSaturationFunctions&lt; dim, USER &gt;::input_sw_</definition>
+        <argsstring></argsstring>
+        <name>input_sw_</name>
+        <qualifiedname>csmp::ExperimentalSaturationFunctions::input_sw_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" line="152" column="14" bodyfile="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" bodystart="152" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_experimental_saturation_functions_1abc4991b90c8fa98e2d3d38c3c882c7fb" prot="private" static="no" mutable="no">
+        <type>std::map&lt; size_t, std::vector&lt; double &gt; &gt;</type>
+        <definition>std::map&lt;size_t, std::vector&lt;double&gt; &gt; csmp::ExperimentalSaturationFunctions&lt; dim, USER &gt;::input_pc_</definition>
+        <argsstring></argsstring>
+        <name>input_pc_</name>
+        <qualifiedname>csmp::ExperimentalSaturationFunctions::input_pc_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" line="152" column="24" bodyfile="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" bodystart="152" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_experimental_saturation_functions_1a6d68d31ca84b60988af7d64dd28022b0" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ExperimentalSaturationFunctions&lt; dim, USER &gt;::max_derivative_</definition>
+        <argsstring></argsstring>
+        <name>max_derivative_</name>
+        <qualifiedname>csmp::ExperimentalSaturationFunctions::max_derivative_</qualifiedname>
+        <initializer>= 1.0e+9</initializer>
+        <briefdescription>
+<para>the absolute value of any derivative calculated herein must be less than this value </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" line="154" column="18" bodyfile="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" bodystart="154" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_experimental_saturation_functions_1a959d24ee33d3b212fd4a6b386854d7b3" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ExperimentalSaturationFunctions&lt; dim, USER &gt;::max_capillary_pressure_</definition>
+        <argsstring></argsstring>
+        <name>max_capillary_pressure_</name>
+        <qualifiedname>csmp::ExperimentalSaturationFunctions::max_capillary_pressure_</qualifiedname>
+        <initializer>= 3.0e+7</initializer>
+        <briefdescription>
+<para>tensile strength of the rock </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" line="155" column="18" bodyfile="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" bodystart="155" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_experimental_saturation_functions_1a32a3ef3b21379fcc16f7b6d762818dcf" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::ExperimentalSaturationFunctions&lt; dim, USER &gt;::ExperimentalSaturationFunctions</definition>
+        <argsstring>(const char *filename)</argsstring>
+        <name>ExperimentalSaturationFunctions</name>
+        <qualifiedname>csmp::ExperimentalSaturationFunctions::ExperimentalSaturationFunctions</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>filename</declname>
+        </param>
+        <briefdescription>
+<para>reads capillary preessure and saturation functions from &quot;rocktype&quot; file </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The default constructor of Exoperimental Saturation Functions With Hysteresis class </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" line="78" column="14" bodyfile="source/modules/thmc/two_phase_flow/ExperimentalSaturationFunctions.cpp" bodystart="19" bodyend="22"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_experimental_saturation_functions_1a6b96bce5cf5e3060fbc27b0431c8ac28" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ExperimentalSaturationFunctions&lt; dim, USER &gt;::EffectiveSaturation</definition>
+        <argsstring>(Element&lt; dim &gt; *const) const</argsstring>
+        <name>EffectiveSaturation</name>
+        <qualifiedname>csmp::ExperimentalSaturationFunctions::EffectiveSaturation</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+<para>TODO: revise to extract this from the curves in a consistent fashion: (sw-swr) / (1-swr-snr); use only in 2-phase flow simulations. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>(sw-swr) / (1-swr-snr); use only in 2-phase flow simulations</para>
+<para>TODO: this needs to be computed from the curves in the input file </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" line="81" column="12" bodyfile="source/modules/thmc/two_phase_flow/ExperimentalSaturationFunctions.cpp" bodystart="175" bodyend="183"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_experimental_saturation_functions_1a2abcd769a16f6f7fd09b65327d7e4aeb" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ExperimentalSaturationFunctions&lt; dim, USER &gt;::EffectiveSaturation_at</definition>
+        <argsstring>(Element&lt; dim &gt; *const, double sw) const</argsstring>
+        <name>EffectiveSaturation_at</name>
+        <qualifiedname>csmp::ExperimentalSaturationFunctions::EffectiveSaturation_at</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>sw</declname>
+        </param>
+        <briefdescription>
+<para>TODO: revise to extract this from the curves in a consistent fashion: (sw-swr) / (1-swr-snr); use only in 2-phase flow simulations. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>(sw-swr) / (1-swr-snr); use only in 2-phase flow simulations </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" line="84" column="12" bodyfile="source/modules/thmc/two_phase_flow/ExperimentalSaturationFunctions.cpp" bodystart="190" bodyend="198"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_experimental_saturation_functions_1a197ee96e8bdb3984fa25c0a3da838549" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ExperimentalSaturationFunctions&lt; dim, USER &gt;::pc_at</definition>
+        <argsstring>(Element&lt; dim &gt; *const, double sw) const</argsstring>
+        <name>pc_at</name>
+        <qualifiedname>csmp::ExperimentalSaturationFunctions::pc_at</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>sw</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" line="88" column="12" bodyfile="source/modules/thmc/two_phase_flow/ExperimentalSaturationFunctions.cpp" bodystart="225" bodyend="232"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_experimental_saturation_functions_1abffd14ec94d319c0721e5027f746a629" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ExperimentalSaturationFunctions&lt; dim, USER &gt;::dpcds_at</definition>
+        <argsstring>(Element&lt; dim &gt; *const, double sw) const</argsstring>
+        <name>dpcds_at</name>
+        <qualifiedname>csmp::ExperimentalSaturationFunctions::dpcds_at</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>sw</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" line="90" column="12" bodyfile="source/modules/thmc/two_phase_flow/ExperimentalSaturationFunctions.cpp" bodystart="255" bodyend="262"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_experimental_saturation_functions_1a0cf95ffc73167c7a46e6e91967334aa9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ExperimentalSaturationFunctions&lt; dim, USER &gt;::krw_at</definition>
+        <argsstring>(Element&lt; dim &gt; *const, double sw) const</argsstring>
+        <name>krw_at</name>
+        <qualifiedname>csmp::ExperimentalSaturationFunctions::krw_at</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>sw</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" line="92" column="12" bodyfile="source/modules/thmc/two_phase_flow/ExperimentalSaturationFunctions.cpp" bodystart="282" bodyend="289"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_experimental_saturation_functions_1a58c81c37c1ec62809e168c503dc18e8d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ExperimentalSaturationFunctions&lt; dim, USER &gt;::krn_at</definition>
+        <argsstring>(Element&lt; dim &gt; *const, double sw) const</argsstring>
+        <name>krn_at</name>
+        <qualifiedname>csmp::ExperimentalSaturationFunctions::krn_at</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>sw</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" line="94" column="12" bodyfile="source/modules/thmc/two_phase_flow/ExperimentalSaturationFunctions.cpp" bodystart="309" bodyend="316"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_experimental_saturation_functions_1a638728e5f6d5623d721297d9997d8092" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ExperimentalSaturationFunctions&lt; dim, USER &gt;::dkrwds_at</definition>
+        <argsstring>(Element&lt; dim &gt; *const, double sw) const</argsstring>
+        <name>dkrwds_at</name>
+        <qualifiedname>csmp::ExperimentalSaturationFunctions::dkrwds_at</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>sw</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" line="96" column="12" bodyfile="source/modules/thmc/two_phase_flow/ExperimentalSaturationFunctions.cpp" bodystart="340" bodyend="346"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_experimental_saturation_functions_1a77c0a31bc9293ac3855522f2ea327d5b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ExperimentalSaturationFunctions&lt; dim, USER &gt;::dkrnds_at</definition>
+        <argsstring>(Element&lt; dim &gt; *const, double sw) const</argsstring>
+        <name>dkrnds_at</name>
+        <qualifiedname>csmp::ExperimentalSaturationFunctions::dkrnds_at</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>sw</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>1st derivative of non-wetting phase relative permeability as a function of saturation. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" line="98" column="12" bodyfile="source/modules/thmc/two_phase_flow/ExperimentalSaturationFunctions.cpp" bodystart="370" bodyend="376"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_experimental_saturation_functions_1ab0d58a9fef813d7ecbc649868870d1db" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ExperimentalSaturationFunctions&lt; dim, USER &gt;::dpcdsw_at_Numerical</definition>
+        <argsstring>(Element&lt; dim &gt; *const p, double sw, double h) const</argsstring>
+        <name>dpcdsw_at_Numerical</name>
+        <qualifiedname>csmp::ExperimentalSaturationFunctions::dpcdsw_at_Numerical</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; *const</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>sw</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>h</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" line="100" column="12" bodyfile="source/modules/thmc/two_phase_flow/ExperimentalSaturationFunctions.cpp" bodystart="405" bodyend="420"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_experimental_saturation_functions_1a767104d73c3f141da695cc3800ecbd0f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ExperimentalSaturationFunctions&lt; dim, USER &gt;::dkrwds_at_Numerical</definition>
+        <argsstring>(Element&lt; dim &gt; *const p, double sw, double h) const</argsstring>
+        <name>dkrwds_at_Numerical</name>
+        <qualifiedname>csmp::ExperimentalSaturationFunctions::dkrwds_at_Numerical</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; *const</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>sw</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>h</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" line="102" column="12" bodyfile="source/modules/thmc/two_phase_flow/ExperimentalSaturationFunctions.cpp" bodystart="457" bodyend="474"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_experimental_saturation_functions_1a82e730f4da9322c612b23ec6f1a14397" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ExperimentalSaturationFunctions&lt; dim, USER &gt;::dkrnds_at_Numerical</definition>
+        <argsstring>(Element&lt; dim &gt; *const p, double sw, double h) const</argsstring>
+        <name>dkrnds_at_Numerical</name>
+        <qualifiedname>csmp::ExperimentalSaturationFunctions::dkrnds_at_Numerical</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; *const</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>sw</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>h</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" line="104" column="12" bodyfile="source/modules/thmc/two_phase_flow/ExperimentalSaturationFunctions.cpp" bodystart="515" bodyend="533"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_experimental_saturation_functions_1a048a5e101c1a11e96cc9e0e1d34ca0a7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ExperimentalSaturationFunctions&lt; dim, USER &gt;::pc</definition>
+        <argsstring>(Element&lt; dim &gt; *const) const</argsstring>
+        <name>pc</name>
+        <qualifiedname>csmp::ExperimentalSaturationFunctions::pc</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="note"><para>Note that capillary pressure also exists outside of the effective saturation range </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" line="109" column="12" bodyfile="source/modules/thmc/two_phase_flow/ExperimentalSaturationFunctions.cpp" bodystart="210" bodyend="218"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_experimental_saturation_functions_1acdd4f1b02a9874c44d194a9e3d60d20d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ExperimentalSaturationFunctions&lt; dim, USER &gt;::dpcds</definition>
+        <argsstring>(Element&lt; dim &gt; *const) const</argsstring>
+        <name>dpcds</name>
+        <qualifiedname>csmp::ExperimentalSaturationFunctions::dpcds</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="attention"><para>this treatment assumes that the capillary pressure derivative with regard to the wetting phase saturation is always negative. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" line="111" column="12" bodyfile="source/modules/thmc/two_phase_flow/ExperimentalSaturationFunctions.cpp" bodystart="241" bodyend="249"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_experimental_saturation_functions_1a97ccb97056db13e1e9fbaed2f99e9047" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ExperimentalSaturationFunctions&lt; dim, USER &gt;::krw</definition>
+        <argsstring>(Element&lt; dim &gt; *const) const</argsstring>
+        <name>krw</name>
+        <qualifiedname>csmp::ExperimentalSaturationFunctions::krw</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" line="113" column="12" bodyfile="source/modules/thmc/two_phase_flow/ExperimentalSaturationFunctions.cpp" bodystart="269" bodyend="277"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_experimental_saturation_functions_1a073b232c7ff4e806d5b259407af89d57" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ExperimentalSaturationFunctions&lt; dim, USER &gt;::krn</definition>
+        <argsstring>(Element&lt; dim &gt; *const) const</argsstring>
+        <name>krn</name>
+        <qualifiedname>csmp::ExperimentalSaturationFunctions::krn</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" line="115" column="12" bodyfile="source/modules/thmc/two_phase_flow/ExperimentalSaturationFunctions.cpp" bodystart="295" bodyend="303"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_experimental_saturation_functions_1a67e07d1300648e7e8bb47a3ff561e862" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ExperimentalSaturationFunctions&lt; dim, USER &gt;::dkrwds</definition>
+        <argsstring>(Element&lt; dim &gt; *const) const</argsstring>
+        <name>dkrwds</name>
+        <qualifiedname>csmp::ExperimentalSaturationFunctions::dkrwds</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>calculating the 1st derivative of water relative permeability at the element barycentre. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" line="117" column="12" bodyfile="source/modules/thmc/two_phase_flow/ExperimentalSaturationFunctions.cpp" bodystart="326" bodyend="333"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_experimental_saturation_functions_1a790f0dd9d431cfa397b73df9539c8430" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ExperimentalSaturationFunctions&lt; dim, USER &gt;::dkrnds</definition>
+        <argsstring>(Element&lt; dim &gt; *const) const</argsstring>
+        <name>dkrnds</name>
+        <qualifiedname>csmp::ExperimentalSaturationFunctions::dkrnds</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="note"><para>by contrast with the wetting phase relative permeability, the non-wetting phase kri is expected to have a negative slope w.r.t. water saturation. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" line="119" column="12" bodyfile="source/modules/thmc/two_phase_flow/ExperimentalSaturationFunctions.cpp" bodystart="356" bodyend="361"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_experimental_saturation_functions_1a0dd06c4b3ecedfc005c99f604385cbe2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ExperimentalSaturationFunctions&lt; dim, USER &gt;::dpcdsw_Numerical</definition>
+        <argsstring>(Element&lt; dim &gt; *const p, double h) const</argsstring>
+        <name>dpcdsw_Numerical</name>
+        <qualifiedname>csmp::ExperimentalSaturationFunctions::dpcdsw_Numerical</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; *const</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>h</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" line="121" column="12" bodyfile="source/modules/thmc/two_phase_flow/ExperimentalSaturationFunctions.cpp" bodystart="384" bodyend="398"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_experimental_saturation_functions_1a24d5c57a9286fca6d7827b28e514e983" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ExperimentalSaturationFunctions&lt; dim, USER &gt;::dkrwds_Numerical</definition>
+        <argsstring>(Element&lt; dim &gt; *const p, double h) const</argsstring>
+        <name>dkrwds_Numerical</name>
+        <qualifiedname>csmp::ExperimentalSaturationFunctions::dkrwds_Numerical</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; *const</type>
+          <declname>p</declname>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>h</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Computes derivative of the wetting phase relative permeability using central finite difference method. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" line="123" column="12" bodyfile="source/modules/thmc/two_phase_flow/ExperimentalSaturationFunctions.cpp" bodystart="430" bodyend="447"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_experimental_saturation_functions_1a5b268ca25a451efae8e63f95358fec0b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ExperimentalSaturationFunctions&lt; dim, USER &gt;::dkrnds_Numerical</definition>
+        <argsstring>(Element&lt; dim &gt; *const p, double h) const</argsstring>
+        <name>dkrnds_Numerical</name>
+        <qualifiedname>csmp::ExperimentalSaturationFunctions::dkrnds_Numerical</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; *const</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>h</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" line="125" column="12" bodyfile="source/modules/thmc/two_phase_flow/ExperimentalSaturationFunctions.cpp" bodystart="486" bodyend="504"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_experimental_saturation_functions_1aea5e94a43634a350ef2fd890f02074ee" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::ExperimentalSaturationFunctions&lt; dim, USER &gt;::RockTypes</definition>
+        <argsstring>() const</argsstring>
+        <name>RockTypes</name>
+        <qualifiedname>csmp::ExperimentalSaturationFunctions::RockTypes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>number of RRTs (reservoir rock types) for which saturation function values are stored</para>
+</simplesect>
+returns for how many rocktypes information is stored in the underlying data arrays. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" line="128" column="12" bodyfile="source/modules/thmc/two_phase_flow/ExperimentalSaturationFunctions.cpp" bodystart="147" bodyend="148"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_experimental_saturation_functions_1a921436a96a443386ab1773ce422a5977" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ExperimentalSaturationFunctions&lt; dim, USER &gt;::Out</definition>
+        <argsstring>() const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::ExperimentalSaturationFunctions::Out</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" line="130" column="10" bodyfile="source/modules/thmc/two_phase_flow/ExperimentalSaturationFunctions.cpp" bodystart="544" bodyend="567"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_experimental_saturation_functions_1ab2bfa2d9127fc8b42631db4f7067181f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ExperimentalSaturationFunctions&lt; dim, USER &gt;::initialiseResidualSaturations</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;model)</argsstring>
+        <name>initialiseResidualSaturations</name>
+        <qualifiedname>csmp::ExperimentalSaturationFunctions::initialiseResidualSaturations</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <declname>model</declname>
+        </param>
+        <briefdescription>
+<para>initialise swr and snr from input table data </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" line="132" column="10" bodyfile="source/modules/thmc/two_phase_flow/ExperimentalSaturationFunctions.cpp" bodystart="613" bodyend="625"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_experimental_saturation_functions_1a13cc8a97ae251dd04504d8a94c27f8c3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ExperimentalSaturationFunctions&lt; dim, USER &gt;::seff_to_sw</definition>
+        <argsstring>(Element&lt; dim &gt; *const e, double seff) const</argsstring>
+        <name>seff_to_sw</name>
+        <qualifiedname>csmp::ExperimentalSaturationFunctions::seff_to_sw</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; *const</type>
+          <declname>e</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>seff</declname>
+        </param>
+        <briefdescription>
+<para>return wetting-phase saturation based on effective saturation </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" line="134" column="12" bodyfile="source/modules/thmc/two_phase_flow/ExperimentalSaturationFunctions.cpp" bodystart="574" bodyend="580"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_experimental_saturation_functions_1acb50fd5b105ac0039d8adc3acfb346a4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ExperimentalSaturationFunctions&lt; dim, USER &gt;::sw_from_pc_at</definition>
+        <argsstring>(Element&lt; dim &gt; *const e, double pc, double sw) const</argsstring>
+        <name>sw_from_pc_at</name>
+        <qualifiedname>csmp::ExperimentalSaturationFunctions::sw_from_pc_at</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; *const</type>
+          <declname>e</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>pc</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>sw</declname>
+        </param>
+        <briefdescription>
+<para>inverse capillary pressure function </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" line="136" column="12" bodyfile="source/modules/thmc/two_phase_flow/ExperimentalSaturationFunctions.cpp" bodystart="586" bodyend="607"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_experimental_saturation_functions_1af39ada10ce1f48b6c81165d9f1ff04e0" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>USER&lt; dim &gt; *</type>
+        <definition>USER&lt; dim &gt; * csmp::ExperimentalSaturationFunctions&lt; dim, USER &gt;::User</definition>
+        <argsstring>()</argsstring>
+        <name>User</name>
+        <qualifiedname>csmp::ExperimentalSaturationFunctions::User</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" line="139" column="10" bodyfile="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" bodystart="139" bodyend="139"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_experimental_saturation_functions_1a9e755d542122f6f69656922226eb1248" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>USER&lt; dim &gt; const *</type>
+        <definition>USER&lt; dim &gt; const  * csmp::ExperimentalSaturationFunctions&lt; dim, USER &gt;::User</definition>
+        <argsstring>() const</argsstring>
+        <name>User</name>
+        <qualifiedname>csmp::ExperimentalSaturationFunctions::User</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" line="140" column="16" bodyfile="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" bodystart="140" bodyend="140"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_experimental_saturation_functions_1a98667d314c3f466df26b42bc59576752" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::ExperimentalSaturationFunctions&lt; dim, USER &gt;::InitialiseReservoirRockTypes</definition>
+        <argsstring>(const char *rt_file_name)</argsstring>
+        <name>InitialiseReservoirRockTypes</name>
+        <qualifiedname>csmp::ExperimentalSaturationFunctions::InitialiseReservoirRockTypes</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>rt_file_name</declname>
+        </param>
+        <briefdescription>
+<para>reads rock types from file, establishing how many there are and returning this value </para>
+        </briefdescription>
+        <detaileddescription>
+<para>reading the rocktype file </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" line="143" column="12" bodyfile="source/modules/thmc/two_phase_flow/ExperimentalSaturationFunctions.cpp" bodystart="32" bodyend="138"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_experimental_saturation_functions_1ae401e26d9607599c105aee4c35620a91" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::ExperimentalSaturationFunctions&lt; dim, USER &gt;::RockType</definition>
+        <argsstring>(Element&lt; dim &gt; *const) const</argsstring>
+        <name>RockType</name>
+        <qualifiedname>csmp::ExperimentalSaturationFunctions::RockType</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+<para>converts the floating-point rocktype identifier into a positive integer 0..254 </para>
+        </briefdescription>
+        <detaileddescription>
+<para>returns the rocktype associated with the current <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" line="146" column="12" bodyfile="source/modules/thmc/two_phase_flow/ExperimentalSaturationFunctions.cpp" bodystart="157" bodyend="161"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_experimental_saturation_functions_1afe7c38bfc0e96028a2b5e6aba5102fe1" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ExperimentalSaturationFunctions&lt; dim, USER &gt;::MaxCapillaryPressure</definition>
+        <argsstring>() const</argsstring>
+        <name>MaxCapillaryPressure</name>
+        <qualifiedname>csmp::ExperimentalSaturationFunctions::MaxCapillaryPressure</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" line="148" column="12" bodyfile="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" bodystart="148" bodyend="148"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Saturation functions parameterised with experimental data, including relperm- and pc-s relations read from user-specified data (ASCII-text) files are interpolated with cubic splines.</para>
+<para>Each curve is indentified by a unique integer code that represents the rocktype of interest.</para>
+<para>Input file format:</para>
+<para><programlisting><codeline><highlight class="normal"><sp/>To<sp/>use<sp/>experimental<sp/>data<sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>rock<sp/>types<sp/>you<sp/>need<sp/>to<sp/>define</highlight></codeline>
+<codeline><highlight class="normal"><sp/>RELPERM_MODEL<sp/>in<sp/>Numerical.txt<sp/>file<sp/>as<sp/>EXPERIMENTAL</highlight></codeline>
+<codeline><highlight class="normal"><sp/>Input<sp/>file<sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>rock<sp/>types<sp/>should<sp/>be<sp/>put<sp/>in<sp/>the<sp/>execution<sp/>folder</highlight></codeline>
+<codeline><highlight class="normal"><sp/>and<sp/>the<sp/>file<sp/>name<sp/>that<sp/>contains<sp/>relative<sp/>permeability<sp/>data<sp/>and</highlight></codeline>
+<codeline><highlight class="normal"><sp/>capillary<sp/>values<sp/>should<sp/>be<sp/></highlight><highlight class="stringliteral">&apos;rock<sp/>type.txt&apos;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/>File<sp/>structure<sp/>is<sp/>as<sp/>follow:</highlight></codeline>
+<codeline><highlight class="normal">2<sp/>-&gt;number<sp/>of<sp/>tables</highlight></codeline>
+<codeline><highlight class="normal">1<sp/>-&gt;rocktype</highlight></codeline>
+<codeline><highlight class="normal">21<sp/>-&gt;number<sp/>of<sp/>entries<sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>table<sp/>0<sp/>(first<sp/>table)<sp/>excluding<sp/>the<sp/>first<sp/>row</highlight></codeline>
+<codeline><highlight class="normal">-1.99513<sp/>-0.00488<sp/><sp/><sp/><sp/>0.000125<sp/><sp/><sp/><sp/>3.709875<sp/><sp/><sp/><sp/>-10557.3<sp/><sp/><sp/><sp/>-519.567<sp/>-&gt;derivatives<sp/>at<sp/>start<sp/>and<sp/>end<sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>kro,<sp/>krw<sp/>and<sp/><ref refid="classcsmp_1_1_experimental_saturation_functions_1a048a5e101c1a11e96cc9e0e1d34ca0a7" kindref="member">pc</ref></highlight></codeline>
+<codeline><highlight class="normal">0<sp/><sp/><sp/><sp/>1<sp/><sp/><sp/>0<sp/><sp/><sp/>5000<sp/>-&gt;<sp/>data<sp/>(sw<sp/><sp/>kro<sp/>krw<sp/><ref refid="classcsmp_1_1_experimental_saturation_functions_1a048a5e101c1a11e96cc9e0e1d34ca0a7" kindref="member">pc</ref>)</highlight></codeline>
+<codeline><highlight class="normal">0.05<sp/>0.90024375<sp/><sp/>0.00000625<sp/><sp/>4472.135955</highlight></codeline>
+<codeline><highlight class="normal">0.1<sp/><sp/>0.8019<sp/><sp/>0.0001<sp/><sp/>3162.27766</highlight></codeline>
+<codeline><highlight class="normal">0.15<sp/>0.70624375<sp/><sp/>0.00050625<sp/><sp/>2581.988897</highlight></codeline>
+<codeline><highlight class="normal">0.2<sp/><sp/>0.6144<sp/><sp/>0.0016<sp/><sp/>2236.067977</highlight></codeline>
+<codeline><highlight class="normal">0.25<sp/>0.52734375<sp/><sp/>0.00390625<sp/><sp/>2000</highlight></codeline>
+<codeline><highlight class="normal">0.3<sp/><sp/>0.4459<sp/><sp/>0.0081<sp/><sp/>1825.741858</highlight></codeline>
+<codeline><highlight class="normal">0.35<sp/>0.37074375<sp/><sp/>0.01500625<sp/><sp/>1690.308509</highlight></codeline>
+<codeline><highlight class="normal">0.4<sp/><sp/>0.3024<sp/><sp/>0.0256<sp/><sp/>1581.13883</highlight></codeline>
+<codeline><highlight class="normal">0.45<sp/>0.24124375<sp/><sp/>0.04100625<sp/><sp/>1490.711985</highlight></codeline>
+<codeline><highlight class="normal">0.5<sp/><sp/>0.1875<sp/><sp/>0.0625<sp/><sp/>1414.213562</highlight></codeline>
+<codeline><highlight class="normal">0.55<sp/>0.14124375<sp/><sp/>0.09150625<sp/><sp/>1348.399725</highlight></codeline>
+<codeline><highlight class="normal">0.6<sp/><sp/>0.1024<sp/><sp/>0.1296<sp/><sp/>1290.994449</highlight></codeline>
+<codeline><highlight class="normal">0.65<sp/>0.07074375<sp/><sp/>0.17850625<sp/><sp/>1240.347346</highlight></codeline>
+<codeline><highlight class="normal">0.7<sp/><sp/>0.0459<sp/><sp/>0.2401<sp/><sp/>1195.228609</highlight></codeline>
+<codeline><highlight class="normal">0.75<sp/>0.02734375<sp/><sp/>0.31640625<sp/><sp/>1154.700538</highlight></codeline>
+<codeline><highlight class="normal">0.8<sp/><sp/>0.0144<sp/><sp/>0.4096<sp/><sp/>1118.033989</highlight></codeline>
+<codeline><highlight class="normal">0.85<sp/>0.00624375<sp/><sp/>0.52200625<sp/><sp/>1084.652289</highlight></codeline>
+<codeline><highlight class="normal">0.9<sp/><sp/>0.0019<sp/><sp/>0.6561<sp/><sp/>1054.092553</highlight></codeline>
+<codeline><highlight class="normal">0.95<sp/>0.00024375<sp/><sp/>0.81450625<sp/><sp/>1025.978352</highlight></codeline>
+<codeline><highlight class="normal">1<sp/><sp/><sp/><sp/>0<sp/><sp/><sp/>1<sp/><sp/><sp/>1000</highlight></codeline>
+<codeline><highlight class="normal">2<sp/>-&gt;rocktype</highlight></codeline>
+<codeline><highlight class="normal">6<sp/>-&gt;number<sp/>of<sp/>entries<sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>table<sp/>1<sp/>(second<sp/>table)<sp/>excluding<sp/>the<sp/>first<sp/>row</highlight></codeline>
+<codeline><highlight class="normal">-1<sp/><sp/><sp/>-1<sp/><sp/>1<sp/><sp/><sp/>1<sp/><sp/><sp/>0<sp/><sp/><sp/>0<sp/>-&gt;derivatives</highlight></codeline>
+<codeline><highlight class="normal">0<sp/><sp/><sp/><sp/>1<sp/><sp/><sp/>0<sp/><sp/><sp/>0<sp/>-&gt;data</highlight></codeline>
+<codeline><highlight class="normal">0.2<sp/><sp/>0.8<sp/>0.2<sp/>0</highlight></codeline>
+<codeline><highlight class="normal">0.4<sp/><sp/>0.6<sp/>0.4<sp/>0</highlight></codeline>
+<codeline><highlight class="normal">0.6<sp/><sp/>0.4<sp/>0.6<sp/>0</highlight></codeline>
+<codeline><highlight class="normal">0.8<sp/><sp/>0.2<sp/>0.8<sp/>0</highlight></codeline>
+<codeline><highlight class="normal">1<sp/><sp/><sp/><sp/>0<sp/><sp/><sp/>1<sp/><sp/><sp/>0</highlight></codeline>
+</programlisting></para>
+<para><simplesect kind="attention"><para>DO NOT SET ANY SATURATION ENDPOINTS (swr or snr) when using experimentally determined saturation functions as these will naturally emerge from the curves.</para>
+</simplesect>
+<simplesect kind="attention"><para>consequently, effective saturation also is already accounted for in terms of the spline values negative values are avoided by returning 0 or 1 at saturations below and above the end-point saturations.</para>
+</simplesect>
+<simplesect kind="author"><para>SKM </para>
+</simplesect>
+<simplesect kind="date"><para>14/1/2007 @update 9/2/2019 </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>csmp::ExperimentalSaturationFunctions&lt; dim, FlowFunctionsModule3 &gt;</label>
+        <link refid="classcsmp_1_1_experimental_saturation_functions"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; dim, FlowFunctionsModule3 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>csmp::ExperimentalSaturationFunctions&lt; dim, FlowFunctionsModule6 &gt;</label>
+        <link refid="classcsmp_1_1_experimental_saturation_functions"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; dim, FlowFunctionsModule6 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::ExperimentalSaturationFunctions&lt; dim, USER &gt;</label>
+        <link refid="classcsmp_1_1_experimental_saturation_functions"/>
+      </node>
+      <node id="4">
+        <label>csmp::FlowFunctionsModule3&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_flow_functions_module3"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::FlowFunctionsModule3&lt; 3U &gt;</label>
+        <link refid="classcsmp_1_1_flow_functions_module3"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; 3U &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>csmp::FlowFunctionsModule6&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_flow_functions_module6"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>csmp::FlowFunctionsModule6&lt; 3U &gt;</label>
+        <link refid="classcsmp_1_1_flow_functions_module6"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; 3U &gt;</edgelabel>
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::ExperimentalSaturationFunctions&lt; dim, USER &gt;</label>
+        <link refid="classcsmp_1_1_experimental_saturation_functions"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" line="75" column="1" bodyfile="source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h" bodystart="75" bodyend="156"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_experimental_saturation_functions_1a790f0dd9d431cfa397b73df9539c8430" prot="public" virt="non-virtual"><scope>csmp::ExperimentalSaturationFunctions</scope><name>dkrnds</name></member>
+      <member refid="classcsmp_1_1_experimental_saturation_functions_1a77c0a31bc9293ac3855522f2ea327d5b" prot="public" virt="non-virtual"><scope>csmp::ExperimentalSaturationFunctions</scope><name>dkrnds_at</name></member>
+      <member refid="classcsmp_1_1_experimental_saturation_functions_1a82e730f4da9322c612b23ec6f1a14397" prot="public" virt="non-virtual"><scope>csmp::ExperimentalSaturationFunctions</scope><name>dkrnds_at_Numerical</name></member>
+      <member refid="classcsmp_1_1_experimental_saturation_functions_1a5b268ca25a451efae8e63f95358fec0b" prot="public" virt="non-virtual"><scope>csmp::ExperimentalSaturationFunctions</scope><name>dkrnds_Numerical</name></member>
+      <member refid="classcsmp_1_1_experimental_saturation_functions_1a67e07d1300648e7e8bb47a3ff561e862" prot="public" virt="non-virtual"><scope>csmp::ExperimentalSaturationFunctions</scope><name>dkrwds</name></member>
+      <member refid="classcsmp_1_1_experimental_saturation_functions_1a638728e5f6d5623d721297d9997d8092" prot="public" virt="non-virtual"><scope>csmp::ExperimentalSaturationFunctions</scope><name>dkrwds_at</name></member>
+      <member refid="classcsmp_1_1_experimental_saturation_functions_1a767104d73c3f141da695cc3800ecbd0f" prot="public" virt="non-virtual"><scope>csmp::ExperimentalSaturationFunctions</scope><name>dkrwds_at_Numerical</name></member>
+      <member refid="classcsmp_1_1_experimental_saturation_functions_1a24d5c57a9286fca6d7827b28e514e983" prot="public" virt="non-virtual"><scope>csmp::ExperimentalSaturationFunctions</scope><name>dkrwds_Numerical</name></member>
+      <member refid="classcsmp_1_1_experimental_saturation_functions_1acdd4f1b02a9874c44d194a9e3d60d20d" prot="public" virt="non-virtual"><scope>csmp::ExperimentalSaturationFunctions</scope><name>dpcds</name></member>
+      <member refid="classcsmp_1_1_experimental_saturation_functions_1abffd14ec94d319c0721e5027f746a629" prot="public" virt="non-virtual"><scope>csmp::ExperimentalSaturationFunctions</scope><name>dpcds_at</name></member>
+      <member refid="classcsmp_1_1_experimental_saturation_functions_1ab0d58a9fef813d7ecbc649868870d1db" prot="public" virt="non-virtual"><scope>csmp::ExperimentalSaturationFunctions</scope><name>dpcdsw_at_Numerical</name></member>
+      <member refid="classcsmp_1_1_experimental_saturation_functions_1a0dd06c4b3ecedfc005c99f604385cbe2" prot="public" virt="non-virtual"><scope>csmp::ExperimentalSaturationFunctions</scope><name>dpcdsw_Numerical</name></member>
+      <member refid="classcsmp_1_1_experimental_saturation_functions_1a6b96bce5cf5e3060fbc27b0431c8ac28" prot="public" virt="non-virtual"><scope>csmp::ExperimentalSaturationFunctions</scope><name>EffectiveSaturation</name></member>
+      <member refid="classcsmp_1_1_experimental_saturation_functions_1a2abcd769a16f6f7fd09b65327d7e4aeb" prot="public" virt="non-virtual"><scope>csmp::ExperimentalSaturationFunctions</scope><name>EffectiveSaturation_at</name></member>
+      <member refid="classcsmp_1_1_experimental_saturation_functions_1a32a3ef3b21379fcc16f7b6d762818dcf" prot="public" virt="non-virtual"><scope>csmp::ExperimentalSaturationFunctions</scope><name>ExperimentalSaturationFunctions</name></member>
+      <member refid="classcsmp_1_1_experimental_saturation_functions_1a98667d314c3f466df26b42bc59576752" prot="private" virt="non-virtual"><scope>csmp::ExperimentalSaturationFunctions</scope><name>InitialiseReservoirRockTypes</name></member>
+      <member refid="classcsmp_1_1_experimental_saturation_functions_1ab2bfa2d9127fc8b42631db4f7067181f" prot="public" virt="non-virtual"><scope>csmp::ExperimentalSaturationFunctions</scope><name>initialiseResidualSaturations</name></member>
+      <member refid="classcsmp_1_1_experimental_saturation_functions_1abc4991b90c8fa98e2d3d38c3c882c7fb" prot="private" virt="non-virtual"><scope>csmp::ExperimentalSaturationFunctions</scope><name>input_pc_</name></member>
+      <member refid="classcsmp_1_1_experimental_saturation_functions_1a51a24af7b966694cd2050d1331e06fea" prot="private" virt="non-virtual"><scope>csmp::ExperimentalSaturationFunctions</scope><name>input_sw_</name></member>
+      <member refid="classcsmp_1_1_experimental_saturation_functions_1ad7a526e27b42b676e91ce86f5a190583" prot="private" virt="non-virtual"><scope>csmp::ExperimentalSaturationFunctions</scope><name>kr1_</name></member>
+      <member refid="classcsmp_1_1_experimental_saturation_functions_1ad967a0b28cda59bde4bf8af42476de5a" prot="private" virt="non-virtual"><scope>csmp::ExperimentalSaturationFunctions</scope><name>kr2_</name></member>
+      <member refid="classcsmp_1_1_experimental_saturation_functions_1a073b232c7ff4e806d5b259407af89d57" prot="public" virt="non-virtual"><scope>csmp::ExperimentalSaturationFunctions</scope><name>krn</name></member>
+      <member refid="classcsmp_1_1_experimental_saturation_functions_1a58c81c37c1ec62809e168c503dc18e8d" prot="public" virt="non-virtual"><scope>csmp::ExperimentalSaturationFunctions</scope><name>krn_at</name></member>
+      <member refid="classcsmp_1_1_experimental_saturation_functions_1a97ccb97056db13e1e9fbaed2f99e9047" prot="public" virt="non-virtual"><scope>csmp::ExperimentalSaturationFunctions</scope><name>krw</name></member>
+      <member refid="classcsmp_1_1_experimental_saturation_functions_1a0cf95ffc73167c7a46e6e91967334aa9" prot="public" virt="non-virtual"><scope>csmp::ExperimentalSaturationFunctions</scope><name>krw_at</name></member>
+      <member refid="classcsmp_1_1_experimental_saturation_functions_1a959d24ee33d3b212fd4a6b386854d7b3" prot="private" virt="non-virtual"><scope>csmp::ExperimentalSaturationFunctions</scope><name>max_capillary_pressure_</name></member>
+      <member refid="classcsmp_1_1_experimental_saturation_functions_1a6d68d31ca84b60988af7d64dd28022b0" prot="private" virt="non-virtual"><scope>csmp::ExperimentalSaturationFunctions</scope><name>max_derivative_</name></member>
+      <member refid="classcsmp_1_1_experimental_saturation_functions_1afe7c38bfc0e96028a2b5e6aba5102fe1" prot="private" virt="non-virtual"><scope>csmp::ExperimentalSaturationFunctions</scope><name>MaxCapillaryPressure</name></member>
+      <member refid="classcsmp_1_1_experimental_saturation_functions_1a921436a96a443386ab1773ce422a5977" prot="public" virt="non-virtual"><scope>csmp::ExperimentalSaturationFunctions</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_experimental_saturation_functions_1a048a5e101c1a11e96cc9e0e1d34ca0a7" prot="public" virt="non-virtual"><scope>csmp::ExperimentalSaturationFunctions</scope><name>pc</name></member>
+      <member refid="classcsmp_1_1_experimental_saturation_functions_1aae51b51c81e4958b9778a80be224db5b" prot="private" virt="non-virtual"><scope>csmp::ExperimentalSaturationFunctions</scope><name>pc_</name></member>
+      <member refid="classcsmp_1_1_experimental_saturation_functions_1a197ee96e8bdb3984fa25c0a3da838549" prot="public" virt="non-virtual"><scope>csmp::ExperimentalSaturationFunctions</scope><name>pc_at</name></member>
+      <member refid="classcsmp_1_1_experimental_saturation_functions_1ae401e26d9607599c105aee4c35620a91" prot="private" virt="non-virtual"><scope>csmp::ExperimentalSaturationFunctions</scope><name>RockType</name></member>
+      <member refid="classcsmp_1_1_experimental_saturation_functions_1aea5e94a43634a350ef2fd890f02074ee" prot="public" virt="non-virtual"><scope>csmp::ExperimentalSaturationFunctions</scope><name>RockTypes</name></member>
+      <member refid="classcsmp_1_1_experimental_saturation_functions_1a13cc8a97ae251dd04504d8a94c27f8c3" prot="public" virt="non-virtual"><scope>csmp::ExperimentalSaturationFunctions</scope><name>seff_to_sw</name></member>
+      <member refid="classcsmp_1_1_experimental_saturation_functions_1ace5c2f16f8db3e6299cd06d72ce6559b" prot="private" virt="non-virtual"><scope>csmp::ExperimentalSaturationFunctions</scope><name>snr_</name></member>
+      <member refid="classcsmp_1_1_experimental_saturation_functions_1acb50fd5b105ac0039d8adc3acfb346a4" prot="public" virt="non-virtual"><scope>csmp::ExperimentalSaturationFunctions</scope><name>sw_from_pc_at</name></member>
+      <member refid="classcsmp_1_1_experimental_saturation_functions_1ac19a1f7a8366b936d81c7357ad4d29cc" prot="private" virt="non-virtual"><scope>csmp::ExperimentalSaturationFunctions</scope><name>swr_</name></member>
+      <member refid="classcsmp_1_1_experimental_saturation_functions_1af39ada10ce1f48b6c81165d9f1ff04e0" prot="private" virt="non-virtual"><scope>csmp::ExperimentalSaturationFunctions</scope><name>User</name></member>
+      <member refid="classcsmp_1_1_experimental_saturation_functions_1a9e755d542122f6f69656922226eb1248" prot="private" virt="non-virtual"><scope>csmp::ExperimentalSaturationFunctions</scope><name>User</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

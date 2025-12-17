@@ -58,7 +58,7 @@ class CVFEM_MathOperatorRHS : public MathOperatorRHS<dim,CELL> {
     
     virtual std::vector<double> GetContribution();
 
-    virtual CVFEM_MathOperatorRHS<dim,CELL>* clone() const { return new CVFEM_MathOperatorRHS<dim,CELL>(*this); }
+    virtual CVFEM_MathOperatorRHS<dim,CELL>* clone() const override { return new CVFEM_MathOperatorRHS<dim,CELL>(*this); }
 };
 
 } // csmp

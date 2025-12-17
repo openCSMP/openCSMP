@@ -1,0 +1,390 @@
+.TH "csmp::FiniteVolumePolicy_Test" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::FiniteVolumePolicy_Test
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <FiniteVolumePolicy_Test\&.h>\fP
+.PP
+Inherits \fBcsmp::Test\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBFiniteVolumePolicy_Test\fP ()"
+.br
+.ti -1c
+.RI "\fB~FiniteVolumePolicy_Test\fP ()"
+.br
+.ti -1c
+.RI "void \fBrun\fP ()"
+.br
+.ti -1c
+.RI "void \fBIsoparametricLinearLineElement_Test\fP (double fTolerance, double fToleranceInternal)"
+.br
+.ti -1c
+.RI "template<uint32_t dim> void \fBIsoparametricLinearTriangle_Test\fP (double fTolerance, double fToleranceInternal)"
+.br
+.ti -1c
+.RI "template<uint32_t dim> void \fBIsoparametricLinearQuadrilateral_Test\fP (double fTolerance, double fToleranceInternal)"
+.br
+.ti -1c
+.RI "void \fBIsoparametricLinearTetrahedron_Test\fP (double fTolerance, double fToleranceInternal)"
+.br
+.ti -1c
+.RI "void \fBIsoparametricLinearPyramid_Test\fP (double fTolerance, double fToleranceInternal)"
+.br
+.ti -1c
+.RI "void \fBIsoparametricLinearPrism_Test\fP (double fTolerance, double fToleranceInternal)"
+.br
+.ti -1c
+.RI "void \fBTest_UnitaryIsoparametricLinearHexahedron\fP (double fTolerance, double fToleranceInternal)"
+.br
+.ti -1c
+.RI "void \fBTest_IsoparametricLinearHexahedron1\fP (double fTolerance, double fToleranceInternal)"
+.br
+.ti -1c
+.RI "void \fBTest_IsoparametricLinearHexahedron2\fP (double fTolerance, double fToleranceInternal)"
+.br
+.ti -1c
+.RI "void \fBTest_CreateVSet\fP ()"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::Test\fP
+.in +1c
+.ti -1c
+.RI "\fBTest\fP (std::ostream *osptr=0)"
+.br
+.ti -1c
+.RI "long \fBgetNumPassed\fP () const"
+.br
+.ti -1c
+.RI "long \fBgetNumFailed\fP () const"
+.br
+.ti -1c
+.RI "const std::ostream * \fBgetStream\fP () const"
+.br
+.ti -1c
+.RI "void \fBsetStream\fP (std::ostream *osptr)"
+.br
+.ti -1c
+.RI "void \fBsetName\fP (std::string testName)"
+.br
+.ti -1c
+.RI "std::string \fBgetName\fP () const"
+.br
+.ti -1c
+.RI "bool \fBhasName\fP () const"
+.br
+.ti -1c
+.RI "void \fBdo_succeed\fP ()"
+.br
+.ti -1c
+.RI "long \fBreport\fP () const"
+.br
+.ti -1c
+.RI "virtual void \fBreset\fP ()"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Member Functions inherited from \fBcsmp::Test\fP
+.in +1c
+.ti -1c
+.RI "void \fBdo_equal\fP (double expr, double value, double tol, const std::string &lbl, const char *fname, long lineno)"
+.br
+.ti -1c
+.RI "void \fBdo_test\fP (bool cond, const std::string &lbl, const char *fname, long lineno)"
+.br
+.ti -1c
+.RI "void \fBdo_fail\fP (const std::string &lbl, const char *fname, long lineno)"
+.br
+.in -1c
+
+Protected Attributes inherited from \fBcsmp::Test\fP
+.in +1c
+.ti -1c
+.RI "const char * \fBprefix_\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+extension of \fBElement\fP interface for FV computations for all elements we need to test:
+
+.PP
+.IP "\(bu" 2
+*build the element by applying the following transformation to the orginal reference element:
+.IP "  \(bu" 4
+Translate(-3,0,0)
+.IP "  \(bu" 4
+Rotate(N0, 40degrees)
+.IP "  \(bu" 4
+Shear(N0, N1, 35degrees)
+.PP
+
+.IP "\(bu" 2
+*facet and sector weights are as calculated in Rhino
+.IP "  \(bu" 4
+*normals are correct
+.IP "  \(bu" 4
+*FacetArea() and SectorVolume() give correct results
+.IP "  \(bu" 4
+*Sector volumes add to volume of element
+.IP "  \(bu" 4
+*projection of vector variable in physical space gives the same result as the more efficient projection (ParametricProjection)
+.IP "  \(bu" 4
+(checked)interpolation functions at sector and facet integration points are correct
+.IP "  \(bu" 4
+(checked)PropertyValues are interpolated to the correct integration points
+.IP "  \(bu" 4
+(used in reimpl of FacetArea heavily)rst to xyz conversion is correct 
+.PP
+
+.PP
+
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "csmp::FiniteVolumePolicy_Test::FiniteVolumePolicy_Test ()"
+Method:
+
+.PP
+\fBFiniteVolumePolicy_Test<dim>::FiniteVolumePolicy_Test()\fP
+
+.PP
+Description: Constructor\&. This function specifies which specific modalities of the test are on\&. 
+.SH "Input Arguments"
+.PP
+.SH "Application Examples"
+.PP
+The idea of this function is to control the test functionality in one place, in an easy, fast way\&.
+
+.PP
+tested: is a test function 
+.SS "csmp::FiniteVolumePolicy_Test::~FiniteVolumePolicy_Test ()"
+Method:
+
+.PP
+\fBFiniteVolumePolicy_Test<dim>::~FiniteVolumePolicy_Test()\fP
+
+.PP
+Description: Destructor\&. 
+.SH "Input Arguments"
+.PP
+None\&. 
+.SH "Application Examples"
+.PP
+Nothing to destroy\&.
+
+.PP
+tested: is a test function 
+.SH "Member Function Documentation"
+.PP 
+.SS "void csmp::FiniteVolumePolicy_Test::IsoparametricLinearLineElement_Test (double fTolerance, double fToleranceInternal)"
+Method:
+
+.PP
+void \fBFiniteVolumePolicy_Test<dim>::IsoparametricLinearLineElement_Test(double fTolerance, double fToleranceInternal)\fP
+
+.PP
+Description: Specifies the procedure of the test\&.
+
+.PP
+The tested element is supposed to be a uniform transformation of the original object by: Translate(-3,0,0) Rotate(N0, 40degrees) -2D Shear(N0, N1, 35degrees)
+
+.PP
+This test does the following: -construct the element\&. -test the facet area, to the one measured in rhino -test the parametric facet area -test the volume of the sector, and check if it corresponds to the measured one -test the sum of the volumes -test the projection on the facet normal of a given property -convert the facet integration points to physical space and check if they correspond to the measured values -convert the sector integration points to physical space and check if they correspond to the measured values
+.SH "Input Arguments"
+.PP
+double fTolerance - specifies the tolerance of the test 
+.SH "Application Examples"
+.PP
+Runs the test for the Isoparametric Linear Bar element, for all dimensions\&.
+
+.PP
+tested: is a test function 
+.SS "void csmp::FiniteVolumePolicy_Test::IsoparametricLinearPrism_Test (double fTolerance, double fToleranceInternal)"
+Method:
+
+.PP
+void FiniteVolumePolicy_Test<3>::IsoparametricLinearPrism_Test(double fTolerance)
+
+.PP
+Description: Specifies the procedure of the test\&.
+
+.PP
+The tested element is supposed to be a uniform transformation of the original object by: Translate(-3,0,0) Rotate(N0, 40degrees) -3D Shear(N0, N1, 35degrees)
+
+.PP
+This test does the following: -construct the element\&. -test the facet area, to the one measured in rhino -test the facet normals -test the parametric facet area -test the volume of the sector, and check if it corresponds to the measured one -test the sum of the volumes -test the projection on the facet normal of a given property -convert the facet integration points to physical space and check if they correspond to the measured values -convert the sector integration points to physical space and check if they correspond to the measured values
+.SH "Input Arguments"
+.PP
+double fTolerance - specifies the tolerance of the test 
+.SH "Application Examples"
+.PP
+Runs the test for the Isoparametric Linear Prism element, for 3D\&.
+
+.PP
+tested: is a test function 
+.SS "void csmp::FiniteVolumePolicy_Test::IsoparametricLinearPyramid_Test (double fTolerance, double fToleranceInternal)"
+Method:
+
+.PP
+void \fBFiniteVolumePolicy_Test<3>::IsoparametricLinearPyramid_Test(double fTolerance, double fToleranceInternal)\fP
+
+.PP
+Description: Specifies the procedure of the test\&.
+
+.PP
+The tested element is supposed to be a uniform transformation of the original object by: Translate(-3,0,0) Rotate(N0, 40degrees) -3D Shear(N0, N1, 35degrees)
+
+.PP
+This test does the following: -construct the element\&. -test the facet area, to the one measured in rhino -test the facet normals -test the parametric facet area -test the volume of the sector, and check if it corresponds to the measured one -test the sum of the volumes -test the projection on the facet normal of a given property -convert the facet integration points to physical space and check if they correspond to the measured values -convert the sector integration points to physical space and check if they correspond to the measured values
+.SH "Input Arguments"
+.PP
+double fTolerance - specifies the tolerance of the test 
+.SH "Application Examples"
+.PP
+Runs the test for the Isoparametric Linear Pyramid element, for 3D\&.
+
+.PP
+tested: is a test function 
+.SS "template<uint32_t dim> void csmp::FiniteVolumePolicy_Test::IsoparametricLinearQuadrilateral_Test (double fTolerance, double fToleranceInternal)"
+Method:
+
+.PP
+void \fBFiniteVolumePolicy_Test<dim>::IsoparametricLinearQuadrilateral_Test(double fTolerance, double fToleranceInternal)\fP
+
+.PP
+Description: Specifies the procedure of the test\&.
+
+.PP
+The tested element is supposed to be a uniform transformation of the original object by: Translate(-3,0,0) Rotate(N0, 40degrees) -2D Shear(N0, N1, 35degrees)
+
+.PP
+This test does the following: -construct the element\&. -test the facet area, to the one measured in rhino -test the facet normals -test the parametric facet area -test the volume of the sector, and check if it corresponds to the measured one -test the sum of the volumes -test the projection on the facet normal of a given property -convert the facet integration points to physical space and check if they correspond to the measured values -convert the sector integration points to physical space and check if they correspond to the measured values
+.SH "Input Arguments"
+.PP
+double fTolerance - specifies the tolerance of the test 
+.SH "Application Examples"
+.PP
+Runs the test for the Isoparametric Linear Quadrilateral element, for all dimensions != 1\&.
+
+.PP
+tested: is a test function 
+.SS "void csmp::FiniteVolumePolicy_Test::IsoparametricLinearTetrahedron_Test (double fTolerance, double fToleranceInternal)"
+Method:
+
+.PP
+void \fBFiniteVolumePolicy_Test<3>::IsoparametricLinearTetrahedron_Test(double fTolerance, double fToleranceInternal)\fP
+
+.PP
+Description: Specifies the procedure of the test\&.
+
+.PP
+The tested element is supposed to be a uniform transformation of the original object by: Translate(-3,0,0) Rotate(N0, 40degrees) -3D Shear(N0, N1, 35degrees)
+
+.PP
+This test does the following: -construct the element\&. -test the facet area, to the one measured in rhino -test the facet normals -test the parametric facet area -test the volume of the sector, and check if it corresponds to the measured one -test the sum of the volumes -test the projection on the facet normal of a given property -convert the facet integration points to physical space and check if they correspond to the measured values -convert the sector integration points to physical space and check if they correspond to the measured values
+.SH "Input Arguments"
+.PP
+double fTolerance - specifies the tolerance of the test 
+.SH "Application Examples"
+.PP
+Runs the test for the Isoparametric Linear Tetrahedron element, for 3D\&.
+
+.PP
+tested: is a test function 
+.SS "template<uint32_t dim> void csmp::FiniteVolumePolicy_Test::IsoparametricLinearTriangle_Test (double fTolerance, double fToleranceInternal)"
+Method:
+
+.PP
+void \fBFiniteVolumePolicy_Test<dim>::IsoparametricLinearTriangle_Test(
+                     double fTolerance, double fToleranceInternal)\fP
+
+.PP
+Description:
+
+.PP
+Specifies the procedure of the test\&.
+
+.PP
+The tested element is supposed to be a uniform transformation of the original object by: Translate(-3,0,0) Rotate(N0, 40degrees) -2D Shear(N0, N1, 35degrees)
+
+.PP
+This test does the following: -construct the element\&. -test the facet area, to the one measured in rhino -test the facet normals -test the parametric facet area -test the volume of the sector, and check if it corresponds to the measured one -test the sum of the volumes -test the projection on the facet normal of a given property -convert the facet integration points to physical space and check if they correspond to the measured values -convert the sector integration points to physical space and check if they correspond to the measured values
+.SH "Input Arguments"
+.PP
+double fTolerance - specifies the tolerance of the test
+.SH "Application Examples"
+.PP
+Runs the test for the Isoparametric Linear Triangle element, for all dimensions != 1\&.
+
+.PP
+tested: is a test function 
+.SS "void csmp::FiniteVolumePolicy_Test::run ()\fR [virtual]\fP"
+Method:
+
+.PP
+void \fBFiniteVolumePolicy_Test<dim>::run()\fP
+
+.PP
+Description: Specifies the procedure of the test\&. 
+.SH "Input Arguments"
+.PP
+None\&. 
+.SH "Application Examples"
+.PP
+Runs the tests\&.
+
+.PP
+tested: is a test function 
+.PP
+Implements \fBcsmp::Test\fP\&.
+.SS "void csmp::FiniteVolumePolicy_Test::Test_CreateVSet ()"
+Method:
+
+.PP
+void \fBFiniteVolumePolicy_Test<dim>::Test_CreateVSet()\fP
+
+.PP
+Description: This function tests the creation of a \fBVSet\fP (not related to the class)\&.
+.SH "Input Arguments"
+.PP
+tested: is a test function 
+.SS "void csmp::FiniteVolumePolicy_Test::Test_UnitaryIsoparametricLinearHexahedron (double fTolerance, double fToleranceInternal)"
+Method:
+
+.PP
+void FiniteVolumePolicy_Test<3>::IsoparametricLinearHexahedron_Test(double fTolerance, double fToleranceInternal)
+
+.PP
+Description: Specifies the procedure of the test\&.
+
+.PP
+The tested element is supposed to be a uniform transformation of the original object by: Translate(-3,0,0) Rotate(N0, 40degrees) -3D Shear(N0, N1, 35degrees)
+
+.PP
+This test does the following: -construct the element\&. -test the facet area, to the one measured in rhino -test the facet normals -test the parametric facet area -test the volume of the sector, and check if it corresponds to the measured one -test the sum of the volumes -test the projection on the facet normal of a given property -convert the facet integration points to physical space and check if they correspond to the measured values -convert the sector integration points to physical space and check if they correspond to the measured values
+.SH "Input Arguments"
+.PP
+double fTolerance - specifies the tolerance of the test 
+.SH "Application Examples"
+.PP
+Runs the test for the Isoparametric Linear Hexahedron element, for 3D\&.
+
+.PP
+\fBNote\fP
+.RS 4
+This set of tests uses a unit iso parametric hexahedron\&. That means that it is a Hexahedron with sides 2a*2b*2c where a,b, and c are the sides in each coordinate direction\&. The volumetric center of this hexahedron is the origin 0,0,0\&. 
+.RE
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

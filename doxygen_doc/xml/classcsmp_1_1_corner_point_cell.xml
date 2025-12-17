@@ -1,0 +1,2122 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_corner_point_cell" kind="class" language="C++" prot="public">
+    <compoundname>csmp::CornerPointCell</compoundname>
+    <basecompoundref refid="classcsmp_1_1_polygon_cell" prot="public" virt="non-virtual">csmp::PolygonCell</basecompoundref>
+    <includes refid="_corner_point_cell_8h" local="no">CornerPointCell.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_corner_point_cell_1a7fcb964d9dcaece7d8b520c3c293021b" prot="private" static="no" mutable="no">
+        <type><ref refid="namespacecsmp_1a869a59957cb7dba7baacd008b7ca46f6" kindref="member">CORNER_POINT_CELL_TYPE</ref></type>
+        <definition>CORNER_POINT_CELL_TYPE csmp::CornerPointCell::cell_type_</definition>
+        <argsstring></argsstring>
+        <name>cell_type_</name>
+        <qualifiedname>csmp::CornerPointCell::cell_type_</qualifiedname>
+        <briefdescription>
+<para>cell specs </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="240" column="38" bodyfile="source/includes/regular_grids/CornerPointCell.h" bodystart="240" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_corner_point_cell_1a6e00b76c69112101a3f41e149dc6a084" prot="private" static="no" mutable="no">
+        <type>CORNER_POINT_CELL_CATEGORY</type>
+        <definition>CORNER_POINT_CELL_CATEGORY csmp::CornerPointCell::cell_category_</definition>
+        <argsstring></argsstring>
+        <name>cell_category_</name>
+        <qualifiedname>csmp::CornerPointCell::cell_category_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="241" column="38" bodyfile="source/includes/regular_grids/CornerPointCell.h" bodystart="241" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_corner_point_cell_1a8f46851cfec2fbe9e1ee3522669f9267" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::CornerPointCell::num_quad_faces_</definition>
+        <argsstring></argsstring>
+        <name>num_quad_faces_</name>
+        <qualifiedname>csmp::CornerPointCell::num_quad_faces_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="242" column="38" bodyfile="source/includes/regular_grids/CornerPointCell.h" bodystart="242" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_corner_point_cell_1af93b863f197031cedf6ff56f308dd18b" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::CornerPointCell::num_tri_faces_</definition>
+        <argsstring></argsstring>
+        <name>num_tri_faces_</name>
+        <qualifiedname>csmp::CornerPointCell::num_tri_faces_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="243" column="38" bodyfile="source/includes/regular_grids/CornerPointCell.h" bodystart="243" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_corner_point_cell_1a4291ab783cf9233e7ce715c4e1a1be67" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int csmp::CornerPointCell::meshing_cycle_</definition>
+        <argsstring></argsstring>
+        <name>meshing_cycle_</name>
+        <qualifiedname>csmp::CornerPointCell::meshing_cycle_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="244" column="38" bodyfile="source/includes/regular_grids/CornerPointCell.h" bodystart="244" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_corner_point_cell_1ae9b066f76f58ec7accd44ba0d8ee43f3" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref> * &gt;</type>
+        <definition>std::vector&lt;GridNode*&gt; csmp::CornerPointCell::pillar_nodes_</definition>
+        <argsstring></argsstring>
+        <name>pillar_nodes_</name>
+        <qualifiedname>csmp::CornerPointCell::pillar_nodes_</qualifiedname>
+        <briefdescription>
+<para>pillar nodes data </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="246" column="21" bodyfile="source/includes/regular_grids/CornerPointCell.h" bodystart="246" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_corner_point_cell_1a736c02cf5ea1f76da4390d809221a84e" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; size_t &gt;</type>
+        <definition>std::vector&lt;size_t&gt; csmp::CornerPointCell::pillar_nodes_order_</definition>
+        <argsstring></argsstring>
+        <name>pillar_nodes_order_</name>
+        <qualifiedname>csmp::CornerPointCell::pillar_nodes_order_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="247" column="30" bodyfile="source/includes/regular_grids/CornerPointCell.h" bodystart="247" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_corner_point_cell_1a85d57346d401644a4a949b6782cfd072" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::CornerPointCell::well_face_org_</definition>
+        <argsstring></argsstring>
+        <name>well_face_org_</name>
+        <qualifiedname>csmp::CornerPointCell::well_face_org_</qualifiedname>
+        <briefdescription>
+<para>wells </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="249" column="38" bodyfile="source/includes/regular_grids/CornerPointCell.h" bodystart="249" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_corner_point_cell_1a0849a0f94381d42cfbb6f62b5374b4b6" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::CornerPointCell::well_face_dst_</definition>
+        <argsstring></argsstring>
+        <name>well_face_dst_</name>
+        <qualifiedname>csmp::CornerPointCell::well_face_dst_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="250" column="38" bodyfile="source/includes/regular_grids/CornerPointCell.h" bodystart="250" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_corner_point_cell_1af5f312bad45b02ce259bda4b046dcf22" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::pair&lt; <ref refid="group___c_s_m_pglobal_enums_1ga182d1fe97a0151d464d8170c0fafa872" kindref="member">csmp::CSMP_FEM_TYPE</ref>, std::vector&lt; <ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref> * &gt; &gt; &gt;</type>
+        <definition>std::vector&lt;std::pair&lt;csmp::CSMP_FEM_TYPE,std::vector&lt;GridNode*&gt; &gt; &gt; csmp::CornerPointCell::wells_</definition>
+        <argsstring></argsstring>
+        <name>wells_</name>
+        <qualifiedname>csmp::CornerPointCell::wells_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="251" column="20" bodyfile="source/includes/regular_grids/CornerPointCell.h" bodystart="251" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1aac0c3734333a7a85f2557d35321bcb0f" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::CornerPointCell::CornerPointCell</definition>
+        <argsstring>(PolygonGridManager &amp;)</argsstring>
+        <name>CornerPointCell</name>
+        <qualifiedname>csmp::CornerPointCell::CornerPointCell</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_polygon_grid_manager" kindref="compound">PolygonGridManager</ref> &amp;</type>
+          <defname>pgm</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="94" column="14" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="9" bodyend="17"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1aff1bbf983f624f35357401db900a7079" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::CornerPointCell::CornerPointCell</definition>
+        <argsstring>(const CornerPointCell &amp;poly)</argsstring>
+        <name>CornerPointCell</name>
+        <qualifiedname>csmp::CornerPointCell::CornerPointCell</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_corner_point_cell" kindref="compound">CornerPointCell</ref> &amp;</type>
+          <declname>poly</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="95" column="5" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="22" bodyend="35"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1a38f2ac0a0143acb2389b63b60cc5954d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_corner_point_cell" kindref="compound">CornerPointCell</ref> &amp;</type>
+        <definition>CornerPointCell &amp; csmp::CornerPointCell::operator=</definition>
+        <argsstring>(const CornerPointCell &amp;poly)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::CornerPointCell::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_corner_point_cell" kindref="compound">CornerPointCell</ref> &amp;</type>
+          <declname>poly</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="96" column="21" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="40" bodyend="60"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1a7a66899cf27ab55536170feb9fb57be1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::CornerPointCell::~CornerPointCell</definition>
+        <argsstring>()</argsstring>
+        <name>~CornerPointCell</name>
+        <qualifiedname>csmp::CornerPointCell::~CornerPointCell</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="97" column="5" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="63" bodyend="65"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1ae1836980921183105a28d5524abba0fd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointCell::AssignNode</definition>
+        <argsstring>(size_t local_nid, const csmp::Point&lt; 3U &gt; &amp;pt)</argsstring>
+        <name>AssignNode</name>
+        <qualifiedname>csmp::CornerPointCell::AssignNode</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>local_nid</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt; &amp;</type>
+          <declname>pt</declname>
+        </param>
+        <briefdescription>
+<para>initialization of cell ( assign nodes, define topology ) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="100" column="12" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="187" bodyend="192"/>
+        <references refid="classcsmp_1_1_polygon_cell_1a4fc085391a89d8d94f9d9fec2fc828fa" compoundref="_polygon_cell_8h" startline="118">csmp::PolygonCell::grid_</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1a1c743626a0fdacd3da588bd2699b6262" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointCell::InitializeCornerPointCell</definition>
+        <argsstring>()</argsstring>
+        <name>InitializeCornerPointCell</name>
+        <qualifiedname>csmp::CornerPointCell::InitializeCornerPointCell</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para>treat degenerate cells</para>
+<para>faces</para>
+<para>edges</para>
+<para>unique edges and faces</para>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="101" column="12" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="225" bodyend="300"/>
+        <references refid="classcsmp_1_1_corner_point_cell_1a36f8b016b2bf572e190937752ee1f7bc" compoundref="_corner_point_cell_8cpp" startline="521" endline="535">InitializeFaces</references>
+        <references refid="classcsmp_1_1_corner_point_cell_1afa428004f3b22c7f8ebc744bf4b6732a" compoundref="_corner_point_cell_8cpp" startline="2126" endline="2133">InitializePoly1Element</references>
+        <references refid="classcsmp_1_1_corner_point_cell_1a05f3c1882d7637b48969b8c06306c122" compoundref="_corner_point_cell_8cpp" startline="2068" endline="2085">InitializePoly2Element</references>
+        <references refid="classcsmp_1_1_corner_point_cell_1ae5d91554e85bd127b0d37cde5d20079f" compoundref="_corner_point_cell_8cpp" startline="2008" endline="2027">InitializePoly3Element</references>
+        <references refid="classcsmp_1_1_corner_point_cell_1ae49b96dca94a709f689ae0ed6ca18cf5" compoundref="_corner_point_cell_8cpp" startline="1086" endline="1149">InitializePoly8Element</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1a41535d383e884e5199ad326175e86480" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointCell::AddCornerPointWellCell</definition>
+        <argsstring>(size_t face_id_org, size_t face_id_dst)</argsstring>
+        <name>AddCornerPointWellCell</name>
+        <qualifiedname>csmp::CornerPointCell::AddCornerPointWellCell</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>face_id_org</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>face_id_dst</declname>
+        </param>
+        <briefdescription>
+<para>define cell which contains well </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="104" column="12" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="217" bodyend="221"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1a96d024d38eb32043cfec39ef99b0c2cf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointCell::ResolveCornerPointCellConflicts</definition>
+        <argsstring>(std::map&lt; std::set&lt; size_t &gt;, GridNode * &gt; &amp;additional_points, std::set&lt; std::set&lt; size_t &gt; &gt; &amp;additional_edges)</argsstring>
+        <name>ResolveCornerPointCellConflicts</name>
+        <qualifiedname>csmp::CornerPointCell::ResolveCornerPointCellConflicts</qualifiedname>
+        <param>
+          <type>std::map&lt; std::set&lt; size_t &gt;, <ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref> * &gt; &amp;</type>
+          <declname>additional_points</declname>
+        </param>
+        <param>
+          <type>std::set&lt; std::set&lt; size_t &gt; &gt; &amp;</type>
+          <declname>additional_edges</declname>
+        </param>
+        <briefdescription>
+<para>resolve mesh conflicts for cells </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="107" column="12" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="308" bodyend="313"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1a5079e745f3c187d55aea82bce55b7a5c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointCell::ProcessCornerPointCell</definition>
+        <argsstring>(std::map&lt; std::set&lt; size_t &gt;, GridNode * &gt; &amp;additional_points, std::set&lt; std::set&lt; size_t &gt; &gt; &amp;additional_edges, bool well_element=false, bool tetra_mesh=false)</argsstring>
+        <name>ProcessCornerPointCell</name>
+        <qualifiedname>csmp::CornerPointCell::ProcessCornerPointCell</qualifiedname>
+        <param>
+          <type>std::map&lt; std::set&lt; size_t &gt;, <ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref> * &gt; &amp;</type>
+          <declname>additional_points</declname>
+        </param>
+        <param>
+          <type>std::set&lt; std::set&lt; size_t &gt; &gt; &amp;</type>
+          <declname>additional_edges</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>well_element</declname>
+          <defval>false</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>tetra_mesh</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>process cells </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="110" column="12" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="319" bodyend="350"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1a4a26122ef3dff44ade54f2ea16f74aec" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointCell::ProcessCornerPointRegularCell</definition>
+        <argsstring>(std::map&lt; std::set&lt; size_t &gt;, GridNode * &gt; &amp;additional_points, std::set&lt; std::set&lt; size_t &gt; &gt; &amp;additional_edges, bool well_element=false, bool tetra_mesh=false)</argsstring>
+        <name>ProcessCornerPointRegularCell</name>
+        <qualifiedname>csmp::CornerPointCell::ProcessCornerPointRegularCell</qualifiedname>
+        <param>
+          <type>std::map&lt; std::set&lt; size_t &gt;, <ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref> * &gt; &amp;</type>
+          <declname>additional_points</declname>
+        </param>
+        <param>
+          <type>std::set&lt; std::set&lt; size_t &gt; &gt; &amp;</type>
+          <declname>additional_edges</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>well_element</declname>
+          <defval>false</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>tetra_mesh</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="112" column="12" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="353" bodyend="358"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1a85a35efc24cb2b8d8828ba0b5e5adee8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointCell::ProcessCornerPointDegenerateCell</definition>
+        <argsstring>(std::map&lt; std::set&lt; size_t &gt;, GridNode * &gt; &amp;additional_points, std::set&lt; std::set&lt; size_t &gt; &gt; &amp;additional_edges, bool well_element=false, bool tetra_mesh=false)</argsstring>
+        <name>ProcessCornerPointDegenerateCell</name>
+        <qualifiedname>csmp::CornerPointCell::ProcessCornerPointDegenerateCell</qualifiedname>
+        <param>
+          <type>std::map&lt; std::set&lt; size_t &gt;, <ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref> * &gt; &amp;</type>
+          <declname>additional_points</declname>
+        </param>
+        <param>
+          <type>std::set&lt; std::set&lt; size_t &gt; &gt; &amp;</type>
+          <declname>additional_edges</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>well_element</declname>
+          <defval>false</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>tetra_mesh</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="114" column="12" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="361" bodyend="390"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1acfee757dd05b03084b17e1a6a18096e2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointCell::ProcessCornerPointDegenerateVolumetricCell</definition>
+        <argsstring>(std::map&lt; std::set&lt; size_t &gt;, GridNode * &gt; &amp;additional_points, std::set&lt; std::set&lt; size_t &gt; &gt; &amp;additional_edges, bool well_element=false, bool tetra_mesh=false)</argsstring>
+        <name>ProcessCornerPointDegenerateVolumetricCell</name>
+        <qualifiedname>csmp::CornerPointCell::ProcessCornerPointDegenerateVolumetricCell</qualifiedname>
+        <param>
+          <type>std::map&lt; std::set&lt; size_t &gt;, <ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref> * &gt; &amp;</type>
+          <declname>additional_points</declname>
+        </param>
+        <param>
+          <type>std::set&lt; std::set&lt; size_t &gt; &gt; &amp;</type>
+          <declname>additional_edges</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>well_element</declname>
+          <defval>false</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>tetra_mesh</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="116" column="12" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="394" bodyend="416"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1a8c79214bb52b608e2a773c1adfeea6d5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointCell::ProcessCornerPointDegenerateVolumetricNonOverlappingCell</definition>
+        <argsstring>(std::map&lt; std::set&lt; size_t &gt;, GridNode * &gt; &amp;additional_points, std::set&lt; std::set&lt; size_t &gt; &gt; &amp;additional_edges, bool well_element=false, bool tetra_mesh=false)</argsstring>
+        <name>ProcessCornerPointDegenerateVolumetricNonOverlappingCell</name>
+        <qualifiedname>csmp::CornerPointCell::ProcessCornerPointDegenerateVolumetricNonOverlappingCell</qualifiedname>
+        <param>
+          <type>std::map&lt; std::set&lt; size_t &gt;, <ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref> * &gt; &amp;</type>
+          <declname>additional_points</declname>
+        </param>
+        <param>
+          <type>std::set&lt; std::set&lt; size_t &gt; &gt; &amp;</type>
+          <declname>additional_edges</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>well_element</declname>
+          <defval>false</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>tetra_mesh</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="118" column="12" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="420" bodyend="443"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1a59022322329c003d71df641ed279e965" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointCell::ProcessCornerPointDegenerateVolumetricOverlappingCell</definition>
+        <argsstring>(std::map&lt; std::set&lt; size_t &gt;, GridNode * &gt; &amp;additional_points, std::set&lt; std::set&lt; size_t &gt; &gt; &amp;additional_edges, bool well_element=false, bool tetra_mesh=false)</argsstring>
+        <name>ProcessCornerPointDegenerateVolumetricOverlappingCell</name>
+        <qualifiedname>csmp::CornerPointCell::ProcessCornerPointDegenerateVolumetricOverlappingCell</qualifiedname>
+        <param>
+          <type>std::map&lt; std::set&lt; size_t &gt;, <ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref> * &gt; &amp;</type>
+          <declname>additional_points</declname>
+        </param>
+        <param>
+          <type>std::set&lt; std::set&lt; size_t &gt; &gt; &amp;</type>
+          <declname>additional_edges</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>well_element</declname>
+          <defval>false</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>tetra_mesh</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="120" column="12" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="445" bodyend="462"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1ad4d9054068df5f6f238841cfbcf3adad" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointCell::ProcessCornerPointDegenerateLowDimensionalCell</definition>
+        <argsstring>(std::map&lt; std::set&lt; size_t &gt;, GridNode * &gt; &amp;additional_points, std::set&lt; std::set&lt; size_t &gt; &gt; &amp;additional_edges, bool well_element=false, bool tetra_mesh=false)</argsstring>
+        <name>ProcessCornerPointDegenerateLowDimensionalCell</name>
+        <qualifiedname>csmp::CornerPointCell::ProcessCornerPointDegenerateLowDimensionalCell</qualifiedname>
+        <param>
+          <type>std::map&lt; std::set&lt; size_t &gt;, <ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref> * &gt; &amp;</type>
+          <declname>additional_points</declname>
+        </param>
+        <param>
+          <type>std::set&lt; std::set&lt; size_t &gt; &gt; &amp;</type>
+          <declname>additional_edges</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>well_element</declname>
+          <defval>false</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>tetra_mesh</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="122" column="12" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="465" bodyend="487"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1af0c954ea7217eade34eeb490b6e8dd84" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::CornerPointCell::GetNumFaces</definition>
+        <argsstring>(size_t fid) const</argsstring>
+        <name>GetNumFaces</name>
+        <qualifiedname>csmp::CornerPointCell::GetNumFaces</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>fid</declname>
+        </param>
+        <briefdescription>
+<para>returns the number of faces that make up the corner-point cell (only in degenerate cells can this be less than 6!) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>function replaces method in base class</para>
+<para><xrefsect id="todo_1_todo000196"><xreftitle>Todo</xreftitle><xrefdescription><para>remove argument because it has no impact on number of faces returned. </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="125" column="12" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="72" bodyend="75"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1aae70629c88d2a931d814823d80378597" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::CornerPointCell::IsVolume</definition>
+        <argsstring>() const</argsstring>
+        <name>IsVolume</name>
+        <qualifiedname>csmp::CornerPointCell::IsVolume</qualifiedname>
+        <briefdescription>
+<para>type of element ( dimension ) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="128" column="12" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="80" bodyend="83"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1a294da5c01d25df17547e3feca4d0591f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::CornerPointCell::IsSurface</definition>
+        <argsstring>() const</argsstring>
+        <name>IsSurface</name>
+        <qualifiedname>csmp::CornerPointCell::IsSurface</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="129" column="12" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="85" bodyend="88"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1aea468a693d353fcd5eb8159aaabf1bc5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::CornerPointCell::IsLine</definition>
+        <argsstring>() const</argsstring>
+        <name>IsLine</name>
+        <qualifiedname>csmp::CornerPointCell::IsLine</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="130" column="12" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="90" bodyend="93"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1a109bc8bcd3abf380750de809f8f44e89" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::CornerPointCell::IsPointElement</definition>
+        <argsstring>() const</argsstring>
+        <name>IsPointElement</name>
+        <qualifiedname>csmp::CornerPointCell::IsPointElement</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="131" column="12" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="95" bodyend="98"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1a3728d88c5910661153e6ae9ed58d3894" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::CornerPointCell::IsVolumetricNonOverlapingElement</definition>
+        <argsstring>() const</argsstring>
+        <name>IsVolumetricNonOverlapingElement</name>
+        <qualifiedname>csmp::CornerPointCell::IsVolumetricNonOverlapingElement</qualifiedname>
+        <briefdescription>
+<para>type of element ( topology ) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="134" column="12" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="102" bodyend="105"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1af66295b2157888a2024fdc801516b036" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::CornerPointCell::IsVolumetricOverlapingElement</definition>
+        <argsstring>() const</argsstring>
+        <name>IsVolumetricOverlapingElement</name>
+        <qualifiedname>csmp::CornerPointCell::IsVolumetricOverlapingElement</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="135" column="12" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="107" bodyend="110"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1adc903cd63752a2112a0fad73c25501e7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::CornerPointCell::IsLowDimensionalElement</definition>
+        <argsstring>() const</argsstring>
+        <name>IsLowDimensionalElement</name>
+        <qualifiedname>csmp::CornerPointCell::IsLowDimensionalElement</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="136" column="12" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="112" bodyend="115"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1a440fd386bc3391575420a409dd8e5e23" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::CornerPointCell::GetNumWellSections</definition>
+        <argsstring>() const</argsstring>
+        <name>GetNumWellSections</name>
+        <qualifiedname>csmp::CornerPointCell::GetNumWellSections</qualifiedname>
+        <briefdescription>
+<para>wells info </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="139" column="12" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="119" bodyend="122"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1ab8c118f40bf901ebd056f0e96b15b446" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::CornerPointCell::GetNumWellSectionNodes</definition>
+        <argsstring>(size_t eid) const</argsstring>
+        <name>GetNumWellSectionNodes</name>
+        <qualifiedname>csmp::CornerPointCell::GetNumWellSectionNodes</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>eid</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="140" column="12" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="124" bodyend="127"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1ab8478f86221da0b42ba8c2426145cb64" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>const <ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt; &amp;</type>
+        <definition>const csmp::Point&lt; 3U &gt; &amp; csmp::CornerPointCell::GetWellSectionNode</definition>
+        <argsstring>(size_t eid, size_t nid) const</argsstring>
+        <name>GetWellSectionNode</name>
+        <qualifiedname>csmp::CornerPointCell::GetWellSectionNode</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>eid</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>nid</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="141" column="23" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="129" bodyend="132"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1a2df4f31e77bec3a7a7e68362d7d3df7f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::CornerPointCell::GetWellSectionNodeGlobalId</definition>
+        <argsstring>(size_t eid, size_t nid) const</argsstring>
+        <name>GetWellSectionNodeGlobalId</name>
+        <qualifiedname>csmp::CornerPointCell::GetWellSectionNodeGlobalId</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>eid</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>nid</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="142" column="12" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="134" bodyend="137"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1a8bb32630df62cf158f69e58d6821de03" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::CornerPointCell::GetPillarNodeGlobalIdOriginalOrder</definition>
+        <argsstring>(size_t nid) const</argsstring>
+        <name>GetPillarNodeGlobalIdOriginalOrder</name>
+        <qualifiedname>csmp::CornerPointCell::GetPillarNodeGlobalIdOriginalOrder</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>nid</declname>
+        </param>
+        <briefdescription>
+<para>pillar nodes </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="145" column="12" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="141" bodyend="144"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1a7c966773950134a3401787458a043df5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::CornerPointCell::GetPillarNodeGlobalIdCustomOrder</definition>
+        <argsstring>(size_t nid) const</argsstring>
+        <name>GetPillarNodeGlobalIdCustomOrder</name>
+        <qualifiedname>csmp::CornerPointCell::GetPillarNodeGlobalIdCustomOrder</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>nid</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="146" column="12" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="146" bodyend="149"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1a039589fcce4d9a1f9e742682fa1d600a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>const <ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt; &amp;</type>
+        <definition>const csmp::Point&lt; 3U &gt; &amp; csmp::CornerPointCell::GetPillarPointOriginalOrder</definition>
+        <argsstring>(size_t nid) const</argsstring>
+        <name>GetPillarPointOriginalOrder</name>
+        <qualifiedname>csmp::CornerPointCell::GetPillarPointOriginalOrder</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>nid</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="147" column="23" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="151" bodyend="154"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1a130d5080ed38c7fb5d97322bc2ca4d74" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>const <ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt; &amp;</type>
+        <definition>const csmp::Point&lt; 3U &gt; &amp; csmp::CornerPointCell::GetPillarPointCustomOrder</definition>
+        <argsstring>(size_t nid) const</argsstring>
+        <name>GetPillarPointCustomOrder</name>
+        <qualifiedname>csmp::CornerPointCell::GetPillarPointCustomOrder</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>nid</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="148" column="23" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="156" bodyend="159"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1a1d04953e8a9cfb37c886f4eba7e4c3f1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref> *</type>
+        <definition>GridNode * csmp::CornerPointCell::GetPillarNodeOriginalOrder</definition>
+        <argsstring>(size_t nid)</argsstring>
+        <name>GetPillarNodeOriginalOrder</name>
+        <qualifiedname>csmp::CornerPointCell::GetPillarNodeOriginalOrder</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>nid</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="149" column="14" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="161" bodyend="164"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1aaf95f9254eb8efa5533f9b2d10b78e50" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref> *</type>
+        <definition>GridNode * csmp::CornerPointCell::GetPillarNodeCustomOrder</definition>
+        <argsstring>(size_t nid)</argsstring>
+        <name>GetPillarNodeCustomOrder</name>
+        <qualifiedname>csmp::CornerPointCell::GetPillarNodeCustomOrder</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>nid</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="150" column="14" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="166" bodyend="169"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1a6573f607d02b0782efeef107cbccfb75" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointCell::Out</definition>
+        <argsstring>() const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::CornerPointCell::Out</qualifiedname>
+        <briefdescription>
+<para>prints object state to screen </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Prints object state to screen. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="153" column="10" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="2204" bodyend="2229"/>
+        <references refid="classcsmp_1_1_polygon_cell_1ad260ad8304797694c5492378b9fa8cae" compoundref="_polygon_cell_8cpp" startline="582" endline="651">csmp::PolygonCell::Out</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-func">
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1a3d087e0b8298632694f2b92e03288689" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointCell::AddWell</definition>
+        <argsstring>(std::map&lt; std::set&lt; size_t &gt;, GridNode * &gt; &amp;additional_points)</argsstring>
+        <name>AddWell</name>
+        <qualifiedname>csmp::CornerPointCell::AddWell</qualifiedname>
+        <param>
+          <type>std::map&lt; std::set&lt; size_t &gt;, <ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref> * &gt; &amp;</type>
+          <declname>additional_points</declname>
+        </param>
+        <briefdescription>
+<para>add new well </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="158" column="10" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="896" bodyend="960"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1aa883309e76d7cb1e44a7e4b322710dbf" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointCell::AddWell</definition>
+        <argsstring>(GridNode *n0, GridNode *n1)</argsstring>
+        <name>AddWell</name>
+        <qualifiedname>csmp::CornerPointCell::AddWell</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref> *</type>
+          <declname>n0</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref> *</type>
+          <declname>n1</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="159" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1a186dd309bb9ce5c98557707bc37e5d7c" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointCell::AssignPillarNodesOrder</definition>
+        <argsstring>()</argsstring>
+        <name>AssignPillarNodesOrder</name>
+        <qualifiedname>csmp::CornerPointCell::AssignPillarNodesOrder</qualifiedname>
+        <briefdescription>
+<para>initialize elements ( renumber node and eliminate duplicates ) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para>reorder nodes</para>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="163" column="10" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="172" bodyend="185"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1a6ea2c8a3d7206da48aacf41ac7bd432a" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointCell::InitializeNodes</definition>
+        <argsstring>(std::map&lt; csmp::Point&lt; 3U &gt;, size_t &gt; &amp;cell_nodes)</argsstring>
+        <name>InitializeNodes</name>
+        <qualifiedname>csmp::CornerPointCell::InitializeNodes</qualifiedname>
+        <param>
+          <type>std::map&lt; <ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt;, size_t &gt; &amp;</type>
+          <declname>cell_nodes</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para>general hexa fem info</para>
+<para>assign pillar nodes order</para>
+<para>initial numbering of nodes</para>
+<para>reorder nodes</para>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="165" column="10" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="493" bodyend="517"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1a51f9b56ebe4cc933f99cd3b6b61aa965" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointCell::CheckNodeOrder</definition>
+        <argsstring>()</argsstring>
+        <name>CheckNodeOrder</name>
+        <qualifiedname>csmp::CornerPointCell::CheckNodeOrder</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="166" column="10" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="206" bodyend="215"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1a36f8b016b2bf572e190937752ee1f7bc" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointCell::InitializeFaces</definition>
+        <argsstring>()</argsstring>
+        <name>InitializeFaces</name>
+        <qualifiedname>csmp::CornerPointCell::InitializeFaces</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para>reorder nodes</para>
+<para>check correspondance of corner point cell enums to original face order</para>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="168" column="10" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="521" bodyend="535"/>
+        <referencedby refid="classcsmp_1_1_corner_point_cell_1a1c743626a0fdacd3da588bd2699b6262" compoundref="_corner_point_cell_8cpp" startline="225" endline="300">InitializeCornerPointCell</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1a1ba6a6b2915edacbe953d3f6d0338d56" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointCell::CheckFaceOrder</definition>
+        <argsstring>()</argsstring>
+        <name>CheckFaceOrder</name>
+        <qualifiedname>csmp::CornerPointCell::CheckFaceOrder</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="169" column="10" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="194" bodyend="204"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1ae49b96dca94a709f689ae0ed6ca18cf5" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointCell::InitializePoly8Element</definition>
+        <argsstring>()</argsstring>
+        <name>InitializePoly8Element</name>
+        <qualifiedname>csmp::CornerPointCell::InitializePoly8Element</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><ref refid="classcsmp_1_1_corner_point_cell_1ae49b96dca94a709f689ae0ed6ca18cf5" kindref="member">InitializePoly8Element()</ref>: Poly8: sketch</para>
+<para>______ X |\ | \ Y | Z</para>
+<para>hexahedron:</para>
+<para><table rows="3" cols="1"><row>
+<entry thead="yes"><para></para>
+</entry></row>
+<row>
+<entry thead="no"><para></para>
+</entry></row>
+<row>
+<entry thead="no"><para></para>
+</entry></row>
+</table>
+7 x____|_________x 6 | |\ | |\ | | \ | | \ | | \ | | \ | | 4x_________|___\x 5 | | | | x____|_________x | 3 |\ | 2|\ | | \ | | \ | | \ | | \ | | \x_________|___\x | 0 | | | 1 <table rows="3" cols="1"><row>
+<entry thead="yes"><para></para>
+</entry></row>
+<row>
+<entry thead="no"><para></para>
+</entry></row>
+<row>
+<entry thead="no"><para></para>
+</entry></row>
+</table>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+<para>hexa cell info</para>
+<para>(1) 5 or 6 tetrahedrons observed and tested</para>
+<para>initialize faces</para>
+<para>bottom face0 ( 0321 )</para>
+<para>left face1 ( 3047 )</para>
+<para>front face2 ( 0154 )</para>
+<para>right face3 ( 1265 )</para>
+<para>back face4 ( 2376 )</para>
+<para>top face5 ( 4567 )</para>
+<para>add faces</para>
+<para>node order</para>
+<para>face order</para>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="171" column="10" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="1086" bodyend="1149"/>
+        <referencedby refid="classcsmp_1_1_corner_point_cell_1a1c743626a0fdacd3da588bd2699b6262" compoundref="_corner_point_cell_8cpp" startline="225" endline="300">InitializeCornerPointCell</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1acdba5ac52a5d4100d6fe256dc3bfc90e" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointCell::InitializePoly7Element</definition>
+        <argsstring>(const std::map&lt; csmp::Point&lt; 3U &gt;, size_t &gt; &amp;cell_nodes, const std::vector&lt; std::vector&lt; csmp::Point&lt; 3U &gt; &gt; &gt; &amp;face_ordered_points, const std::vector&lt; size_t &gt; &amp;tri_faces, const std::vector&lt; size_t &gt; &amp;quad_faces, const std::map&lt; csmp::Point&lt; 3U &gt;, std::vector&lt; size_t &gt; &gt; &amp;point_tri_faces, const std::map&lt; csmp::Point&lt; 3U &gt;, std::vector&lt; size_t &gt; &gt; &amp;point_quad_faces, const std::vector&lt; std::vector&lt; csmp::Point&lt; 3U &gt; &gt; &gt; &amp;edge_ordered_points, const std::map&lt; csmp::Point&lt; 3U &gt;, std::vector&lt; size_t &gt; &gt; &amp;point_edges)</argsstring>
+        <name>InitializePoly7Element</name>
+        <qualifiedname>csmp::CornerPointCell::InitializePoly7Element</qualifiedname>
+        <param>
+          <type>const std::map&lt; <ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt;, size_t &gt; &amp;</type>
+          <declname>cell_nodes</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt; &gt; &gt; &amp;</type>
+          <declname>face_ordered_points</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; size_t &gt; &amp;</type>
+          <declname>tri_faces</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; size_t &gt; &amp;</type>
+          <declname>quad_faces</declname>
+        </param>
+        <param>
+          <type>const std::map&lt; <ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt;, std::vector&lt; size_t &gt; &gt; &amp;</type>
+          <declname>point_tri_faces</declname>
+        </param>
+        <param>
+          <type>const std::map&lt; <ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt;, std::vector&lt; size_t &gt; &gt; &amp;</type>
+          <declname>point_quad_faces</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt; &gt; &gt; &amp;</type>
+          <declname>edge_ordered_points</declname>
+        </param>
+        <param>
+          <type>const std::map&lt; <ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt;, std::vector&lt; size_t &gt; &gt; &amp;</type>
+          <declname>point_edges</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><ref refid="classcsmp_1_1_corner_point_cell_1acdba5ac52a5d4100d6fe256dc3bfc90e" kindref="member">InitializePoly7Element()</ref>: Poly7: sketch</para>
+<para>______ X |\ | \ Y | Z</para>
+<para>augmented prism:</para>
+<para><table rows="3" cols="1"><row>
+<entry thead="yes"><para></para>
+</entry></row>
+<row>
+<entry thead="no"><para></para>
+</entry></row>
+<row>
+<entry thead="no"><para></para>
+</entry></row>
+</table>
+5 x____|_________x 4 | |\ | | | | \ | | | | \ | | | | 6 x | | | | | | x____|_________x | 2 |\ | 1|\ | | \ | | \ | | \ | | \ | | \x_________|___\x | 3 | | | 0 <table rows="3" cols="1"><row>
+<entry thead="yes"><para></para>
+</entry></row>
+<row>
+<entry thead="no"><para></para>
+</entry></row>
+<row>
+<entry thead="no"><para></para>
+</entry></row>
+</table>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+<para>point sets</para>
+<para>node id</para>
+<para>hexa cell info</para>
+<para>(1) 4 or 5 tetrahedrons</para>
+<para>observed and tested</para>
+<para>renumbering nodes 0 - point where 2 triangles meet</para>
+<para>1,2,3 - bottom quad</para>
+<para>4,5,6 - top quad</para>
+<para>reorder faces bottom quad face ( 0123 )</para>
+<para>left quad face ( 1452 )</para>
+<para>right quad face ( 2563 )</para>
+<para>top quud face ( 0654 )</para>
+<para>left tri face ( 014 )</para>
+<para>right tri face ( 036 )</para>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="173" column="10" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="1210" bodyend="1315"/>
+        <references refid="namespacecsmp_1a869a59957cb7dba7baacd008b7ca46f6a86b18901d1dd2346c8257cfcd112a789" compoundref="_corner_point_cell_8h" startline="15">csmp::CORNER_POINT_CELL_7_AUGMENTED_PRISM</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1a1f077cd786e18077af5cc396ff6bd674" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointCell::InitializePoly6Element</definition>
+        <argsstring>(const std::map&lt; csmp::Point&lt; 3U &gt;, size_t &gt; &amp;cell_nodes, const std::vector&lt; std::vector&lt; csmp::Point&lt; 3U &gt; &gt; &gt; &amp;face_ordered_points, const std::vector&lt; size_t &gt; &amp;tri_faces, const std::vector&lt; size_t &gt; &amp;quad_faces, const std::map&lt; csmp::Point&lt; 3U &gt;, std::vector&lt; size_t &gt; &gt; &amp;point_tri_faces, const std::map&lt; csmp::Point&lt; 3U &gt;, std::vector&lt; size_t &gt; &gt; &amp;point_quad_faces, const std::vector&lt; std::vector&lt; csmp::Point&lt; 3U &gt; &gt; &gt; &amp;edge_ordered_points, const std::map&lt; csmp::Point&lt; 3U &gt;, std::vector&lt; size_t &gt; &gt; &amp;point_edges)</argsstring>
+        <name>InitializePoly6Element</name>
+        <qualifiedname>csmp::CornerPointCell::InitializePoly6Element</qualifiedname>
+        <param>
+          <type>const std::map&lt; <ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt;, size_t &gt; &amp;</type>
+          <declname>cell_nodes</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt; &gt; &gt; &amp;</type>
+          <declname>face_ordered_points</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; size_t &gt; &amp;</type>
+          <declname>tri_faces</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; size_t &gt; &amp;</type>
+          <declname>quad_faces</declname>
+        </param>
+        <param>
+          <type>const std::map&lt; <ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt;, std::vector&lt; size_t &gt; &gt; &amp;</type>
+          <declname>point_tri_faces</declname>
+        </param>
+        <param>
+          <type>const std::map&lt; <ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt;, std::vector&lt; size_t &gt; &gt; &amp;</type>
+          <declname>point_quad_faces</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt; &gt; &gt; &amp;</type>
+          <declname>edge_ordered_points</declname>
+        </param>
+        <param>
+          <type>const std::map&lt; <ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt;, std::vector&lt; size_t &gt; &gt; &amp;</type>
+          <declname>point_edges</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><ref refid="classcsmp_1_1_corner_point_cell_1a1f077cd786e18077af5cc396ff6bd674" kindref="member">InitializePoly6Element()</ref>: Poly6: sketch</para>
+<para>______ X |\ | \ Y | Z</para>
+<para>wedge:</para>
+<para>| | | | | | 5 | x | | /|\ | | | / | \ | | | / | \ | | | / | \x 2 | | / | / | | |/ | / | | | |/ | | /| / | | / | /| | |/ | / | | 3 x___|___/__x 4 | |\ | / \ | | \ | / \ | | |/ \ | | x__________x| 0 | | 1 | | | |</para>
+<para>octahedron:</para>
+<para>| | 5 x | | | <table rows="2" cols="3"><row>
+<entry thead="yes"><para></para>
+</entry><entry thead="yes"><para></para>
+</entry><entry thead="yes"><para></para>
+</entry></row>
+<row>
+<entry thead="no"><para></para>
+</entry><entry thead="no"><para></para>
+</entry><entry thead="no"><para>x 4  </para>
+</entry></row>
+</table>
+x____|_________x | 3 |\ | 2|\ | | \ | | \ | | \ | | \ | | \x_________|___\x | 0 | | | 1 <table rows="2" cols="1"><row>
+<entry thead="yes"><para></para>
+</entry></row>
+<row>
+<entry thead="no"><para></para>
+</entry></row>
+</table>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+<para>point sets</para>
+<para>node id</para>
+<para>hexa cell info</para>
+<para>(1) wedge ( 3 tetrahedrons ) (2) octahedron ( 2 tetrahedrons )</para>
+<para>1st case: wedge</para>
+<para>observed and tested</para>
+<para>renumbering nodes 0,1,2 - front triangle</para>
+<para>3,4,5 - back triangle</para>
+<para>reorder faces</para>
+<para>bottom quad face ( 0253 )</para>
+<para>front quad face ( 0143 )</para>
+<para>back quad face ( 1452 )</para>
+<para>left tri face ( 012 )</para>
+<para>right tri face ( 354 )</para>
+<para>edge face ( 03 )</para>
+<para>2nd case: octahedron( 4 or 2 tetrahedrons )</para>
+<para>observed and tested</para>
+<para>renumbering nodes 0 - node where quad&apos;s collapse</para>
+<para>1,2,3 - bottom quad</para>
+<para>4,5 - top quad nodes</para>
+<para>reorder faces bottom quad face ( 0321 )</para>
+<para>top quad face ( 0425 )</para>
+<para>tri face ( 014 )</para>
+<para>tri face ( 124 )</para>
+<para>tri face ( 235 )</para>
+<para>tri face ( 305 )</para>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="182" column="10" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="1393" bodyend="1566"/>
+        <references refid="namespacecsmp_1a869a59957cb7dba7baacd008b7ca46f6aefcd7566436ca5157a03233feddd83de" compoundref="_corner_point_cell_8h" startline="17">csmp::CORNER_POINT_CELL_6_OCTAHEDRON</references>
+        <references refid="namespacecsmp_1a869a59957cb7dba7baacd008b7ca46f6a855aa994d8b3cdd6285e41241d41cead" compoundref="_corner_point_cell_8h" startline="16">csmp::CORNER_POINT_CELL_6_WEDGE</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1a066acea52bd4d2390e1bc3fb53d1f0be" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointCell::InitializePoly5Element</definition>
+        <argsstring>(const std::map&lt; csmp::Point&lt; 3U &gt;, size_t &gt; &amp;cell_nodes, const std::vector&lt; std::vector&lt; csmp::Point&lt; 3U &gt; &gt; &gt; &amp;face_ordered_points, const std::vector&lt; size_t &gt; &amp;tri_faces, const std::vector&lt; size_t &gt; &amp;quad_faces, const std::map&lt; csmp::Point&lt; 3U &gt;, std::vector&lt; size_t &gt; &gt; &amp;point_tri_faces, const std::map&lt; csmp::Point&lt; 3U &gt;, std::vector&lt; size_t &gt; &gt; &amp;point_quad_faces, const std::vector&lt; std::vector&lt; csmp::Point&lt; 3U &gt; &gt; &gt; &amp;edge_ordered_points, const std::map&lt; csmp::Point&lt; 3U &gt;, std::vector&lt; size_t &gt; &gt; &amp;point_edges)</argsstring>
+        <name>InitializePoly5Element</name>
+        <qualifiedname>csmp::CornerPointCell::InitializePoly5Element</qualifiedname>
+        <param>
+          <type>const std::map&lt; <ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt;, size_t &gt; &amp;</type>
+          <declname>cell_nodes</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt; &gt; &gt; &amp;</type>
+          <declname>face_ordered_points</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; size_t &gt; &amp;</type>
+          <declname>tri_faces</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; size_t &gt; &amp;</type>
+          <declname>quad_faces</declname>
+        </param>
+        <param>
+          <type>const std::map&lt; <ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt;, std::vector&lt; size_t &gt; &gt; &amp;</type>
+          <declname>point_tri_faces</declname>
+        </param>
+        <param>
+          <type>const std::map&lt; <ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt;, std::vector&lt; size_t &gt; &gt; &amp;</type>
+          <declname>point_quad_faces</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt; &gt; &gt; &amp;</type>
+          <declname>edge_ordered_points</declname>
+        </param>
+        <param>
+          <type>const std::map&lt; <ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt;, std::vector&lt; size_t &gt; &gt; &amp;</type>
+          <declname>point_edges</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><ref refid="classcsmp_1_1_corner_point_cell_1a066acea52bd4d2390e1bc3fb53d1f0be" kindref="member">InitializePoly5Element()</ref>: Poly5: sketch</para>
+<para>augmented tetrahedron:</para>
+<para><verbatim>  |              |
+  |              |
+4 x              |
+  |              |
+  |    |         |    |
+  |    |         |    |
+  x____|_________x    |
+2 |\   |        1|\   |
+  | \  |         | \  |
+  |  \ |         |  \ |
+  |   \x_________|___\x
+  |  3 |         |    | 0
+       |              |
+       |              |
+       |              |
+</verbatim></para>
+<para>pyramid: ( shouldn&apos;t be observed ) <verbatim>             pillars(0,1,2,3)
+
+              \\  //
+               \\//
+                 x
+               / | \
+              / / \ \
+             /  / \  \
+            /  /   \  \
+           /   /    \  \
+          /   /     \  \
+         /   /       \  \
+        /    /       \   \
+       /    /         \  \
+      x____ /_________x   \
+   2 / \   /        1 \\   \
+    /   \  /          \ \  \
+</verbatim> pillar(2) \ / pillar(1) \ \ \x______________\x 3 / \ 0 / \ pillar(3) / \ pillar(0) </para>
+        </detaileddescription>
+        <inbodydescription>
+<para>point sets</para>
+<para>node id</para>
+<para>hexa cell info</para>
+<para>(1) 2 tetrahedrons or tetrahedron + triangle (2) pyramid ( 2 tetrahedrons ) ( shouldn&apos;t be observed )</para>
+<para>1st case: tetrahedron + triangle</para>
+<para>observed and tested</para>
+<para>renumbering nodes 0 - side node</para>
+<para>1,2,3 - bottom quad nodes</para>
+<para>4 - top quad node</para>
+<para>reorder faces</para>
+<para>bottom quad face ( 0321 )</para>
+<para>top quad face ( 0143 )</para>
+<para>tri face ( 124 )</para>
+<para>tri face ( 234 )</para>
+<para>edge faces( 01 and 03 )</para>
+<para>2nd case: pyramid</para>
+<para>SHOULDN&apos;T BE OBSERVED ( only if pillars intersect )</para>
+<para>renumbering nodes 0,1,2,3 - quad face</para>
+<para>4 - apex</para>
+<para>reorder faces</para>
+<para>bottom quad face ( 0321 )</para>
+<para>tri face ( 014 )</para>
+<para>tri face ( 124 )</para>
+<para>tri face ( 234 )</para>
+<para>tri face ( 304 )</para>
+<para>point faces ( 4 )</para>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="191" column="10" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="1648" bodyend="1795"/>
+        <references refid="namespacecsmp_1a869a59957cb7dba7baacd008b7ca46f6a60621dabdfe381d6b125eb67a0b12f5e" compoundref="_corner_point_cell_8h" startline="18">csmp::CORNER_POINT_CELL_5_AUGMENTED_TETRA</references>
+        <references refid="namespacecsmp_1a869a59957cb7dba7baacd008b7ca46f6ac2de4a04f1f444ff7260f5e4b8cc6136" compoundref="_corner_point_cell_8h" startline="19">csmp::CORNER_POINT_CELL_5_PYRAMID</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1abce58bc3cd6b6d75795bf7f402e6569d" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointCell::InitializePoly4Element</definition>
+        <argsstring>(const std::vector&lt; size_t &gt; &amp;tri_faces, const std::vector&lt; size_t &gt; &amp;quad_faces)</argsstring>
+        <name>InitializePoly4Element</name>
+        <qualifiedname>csmp::CornerPointCell::InitializePoly4Element</qualifiedname>
+        <param>
+          <type>const std::vector&lt; size_t &gt; &amp;</type>
+          <declname>tri_faces</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; size_t &gt; &amp;</type>
+          <declname>quad_faces</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><ref refid="classcsmp_1_1_corner_point_cell_1abce58bc3cd6b6d75795bf7f402e6569d" kindref="member">InitializePoly4Element()</ref>: Poly4: sketch</para>
+<para>quadrilateral: <verbatim>  |            |
+  |            |
+  |            |
+  |            |
+2 x____________x 3
+  |\            \
+  | \   |        \   |
+  |  \  |         \  |
+      \ |          \ |
+       \|           \|
+      1 x____________x 0
+        |            |
+        |            |
+        |            |
+</verbatim></para>
+<para>tetrahedron: ( shouldn&apos;t be observed ) <verbatim>      \\ pillars (1,4)
+       \\
+        \\3
+          x
+          |\
+          |\ \
+          | \  \
+</verbatim> pillar(0) | \ \ \ | \ \ | \ \ pillar(2)__1_x__________x_2___pillars (2,4) \ \ /\ \ \ / \ \ \ / \ \ \ / \ \/ 0 \x \ \ pillars (0,1) </para>
+        </detaileddescription>
+        <inbodydescription>
+<para>(1) quadrilateral ( 2 triangles ) (2) tetrahedron ( shouldn&apos;t be observed )</para>
+<para>1st case: quadrilateral</para>
+<para>observed and tested</para>
+<para>2nd case: tetrahedron</para>
+<para>SHOULDN&apos;T BE OBSERVED ( only if pillars intersect )</para>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="200" column="10" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="1888" bodyend="1939"/>
+        <references refid="namespacecsmp_1a869a59957cb7dba7baacd008b7ca46f6a3e9b98e072d45c4dc2fe25c5029de8ec" compoundref="_corner_point_cell_8h" startline="21">csmp::CORNER_POINT_CELL_4_QUADRILATERAL</references>
+        <references refid="namespacecsmp_1a869a59957cb7dba7baacd008b7ca46f6a4e0dadc3f5c6cfaf38d2b607a0fe0d20" compoundref="_corner_point_cell_8h" startline="20">csmp::CORNER_POINT_CELL_4_TETRAHEDRON</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1ae5d91554e85bd127b0d37cde5d20079f" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointCell::InitializePoly3Element</definition>
+        <argsstring>()</argsstring>
+        <name>InitializePoly3Element</name>
+        <qualifiedname>csmp::CornerPointCell::InitializePoly3Element</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><ref refid="classcsmp_1_1_corner_point_cell_1ae5d91554e85bd127b0d37cde5d20079f" kindref="member">InitializePoly3Element()</ref>: Poly3: sketch</para>
+<para>triangle ( shouldn&apos;t be observed ): <verbatim>   |            |
+   |            |
+   |            |
+0  x____________x 1
+   |\          /|
+   | \        / |
+   |  \      /  |
+   |   \    /   |
+   |    \  /    |
+</verbatim> pillar(0) \/ pillar(1) x2 / \ / \ pillars(2,3) </para>
+        </detaileddescription>
+        <inbodydescription>
+<para>triangle ( shouldn&apos;t be observed)</para>
+<para>SHOULDN&apos;T BE OBSERVED ( only if pillars intersect )</para>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="203" column="10" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="2008" bodyend="2027"/>
+        <references refid="namespacecsmp_1a869a59957cb7dba7baacd008b7ca46f6ae2fc5d1fc8f936e790b2b3de1dccc9e5" compoundref="_corner_point_cell_8h" startline="22">csmp::CORNER_POINT_CELL_3_TRIANGLE</references>
+        <referencedby refid="classcsmp_1_1_corner_point_cell_1a1c743626a0fdacd3da588bd2699b6262" compoundref="_corner_point_cell_8cpp" startline="225" endline="300">InitializeCornerPointCell</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1a05f3c1882d7637b48969b8c06306c122" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointCell::InitializePoly2Element</definition>
+        <argsstring>()</argsstring>
+        <name>InitializePoly2Element</name>
+        <qualifiedname>csmp::CornerPointCell::InitializePoly2Element</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><ref refid="classcsmp_1_1_corner_point_cell_1a05f3c1882d7637b48969b8c06306c122" kindref="member">InitializePoly2Element()</ref>: Poly2: sketch</para>
+<para>bar ( shouldn&apos;t be observed ): <verbatim> \   /        \   /
+  \ /          \ /
+0  x____________x 1
+  / \          / \
+ /   \        /   \
+</verbatim> pillars(0,2) pillars(1,3) </para>
+        </detaileddescription>
+        <inbodydescription>
+<para>bar ( shouldn&apos;t be observed)</para>
+<para>SHOULDN&apos;T BE OBSERVED ( only if pillars intersect )</para>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="205" column="10" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="2068" bodyend="2085"/>
+        <references refid="namespacecsmp_1a869a59957cb7dba7baacd008b7ca46f6aca3887e4bc8c1a238c4848587113eda3" compoundref="_corner_point_cell_8h" startline="23">csmp::CORNER_POINT_CELL_2_BAR</references>
+        <referencedby refid="classcsmp_1_1_corner_point_cell_1a1c743626a0fdacd3da588bd2699b6262" compoundref="_corner_point_cell_8cpp" startline="225" endline="300">InitializeCornerPointCell</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1afa428004f3b22c7f8ebc744bf4b6732a" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointCell::InitializePoly1Element</definition>
+        <argsstring>()</argsstring>
+        <name>InitializePoly1Element</name>
+        <qualifiedname>csmp::CornerPointCell::InitializePoly1Element</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><ref refid="classcsmp_1_1_corner_point_cell_1afa428004f3b22c7f8ebc744bf4b6732a" kindref="member">InitializePoly1Element()</ref>: Poly1: sketch</para>
+<para>point ( shouldn&apos;t be observed ): <verbatim>pillars(0,1,2,3)
+
+ \\  //
+  \\//
+    x
+  / | \
+ / / \ \
+/  / \  \
+</verbatim> </para>
+        </detaileddescription>
+        <inbodydescription>
+<para>points ( shouldn&apos;t be observed)</para>
+<para>SHOULDN&apos;T BE OBSERVED ( only if pillars intersect )</para>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="207" column="10" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="2126" bodyend="2133"/>
+        <references refid="namespacecsmp_1a869a59957cb7dba7baacd008b7ca46f6a6768cf591f9cd0b2b0002a9d3550059a" compoundref="_corner_point_cell_8h" startline="24">csmp::CORNER_POINT_CELL_1_POINT</references>
+        <referencedby refid="classcsmp_1_1_corner_point_cell_1a1c743626a0fdacd3da588bd2699b6262" compoundref="_corner_point_cell_8cpp" startline="225" endline="300">InitializeCornerPointCell</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1a2962d977fbd3b96f0321a51954102c53" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointCell::GetTopologycalInfo</definition>
+        <argsstring>(std::map&lt; csmp::Point&lt; 3U &gt;, size_t &gt; &amp;cell_nodes, std::set&lt; std::set&lt; csmp::Point&lt; 3U &gt; &gt; &gt; &amp;unique_faces, std::vector&lt; std::vector&lt; csmp::Point&lt; 3U &gt; &gt; &gt; &amp;face_ordered_points, std::vector&lt; std::set&lt; csmp::Point&lt; 3U &gt; &gt; &gt; &amp;face_unique_points, std::vector&lt; size_t &gt; &amp;tri_faces, std::vector&lt; size_t &gt; &amp;quad_faces, std::map&lt; csmp::Point&lt; 3U &gt;, std::vector&lt; size_t &gt; &gt; &amp;point_tri_faces, std::map&lt; csmp::Point&lt; 3U &gt;, std::vector&lt; size_t &gt; &gt; &amp;point_quad_faces, std::set&lt; std::set&lt; csmp::Point&lt; 3U &gt; &gt; &gt; &amp;unique_edges, std::vector&lt; std::vector&lt; csmp::Point&lt; 3U &gt; &gt; &gt; &amp;edge_ordered_points, std::vector&lt; std::set&lt; csmp::Point&lt; 3U &gt; &gt; &gt; &amp;edge_unique_points, std::map&lt; csmp::Point&lt; 3U &gt;, std::vector&lt; size_t &gt; &gt; &amp;point_edges)</argsstring>
+        <name>GetTopologycalInfo</name>
+        <qualifiedname>csmp::CornerPointCell::GetTopologycalInfo</qualifiedname>
+        <param>
+          <type>std::map&lt; <ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt;, size_t &gt; &amp;</type>
+          <declname>cell_nodes</declname>
+        </param>
+        <param>
+          <type>std::set&lt; std::set&lt; <ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt; &gt; &gt; &amp;</type>
+          <declname>unique_faces</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt; &gt; &gt; &amp;</type>
+          <declname>face_ordered_points</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; std::set&lt; <ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt; &gt; &gt; &amp;</type>
+          <declname>face_unique_points</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; size_t &gt; &amp;</type>
+          <declname>tri_faces</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; size_t &gt; &amp;</type>
+          <declname>quad_faces</declname>
+        </param>
+        <param>
+          <type>std::map&lt; <ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt;, std::vector&lt; size_t &gt; &gt; &amp;</type>
+          <declname>point_tri_faces</declname>
+        </param>
+        <param>
+          <type>std::map&lt; <ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt;, std::vector&lt; size_t &gt; &gt; &amp;</type>
+          <declname>point_quad_faces</declname>
+        </param>
+        <param>
+          <type>std::set&lt; std::set&lt; <ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt; &gt; &gt; &amp;</type>
+          <declname>unique_edges</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt; &gt; &gt; &amp;</type>
+          <declname>edge_ordered_points</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; std::set&lt; <ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt; &gt; &gt; &amp;</type>
+          <declname>edge_unique_points</declname>
+        </param>
+        <param>
+          <type>std::map&lt; <ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt;, std::vector&lt; size_t &gt; &gt; &amp;</type>
+          <declname>point_edges</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para>hexa cell info</para>
+<para>topological info faces</para>
+<para>edges</para>
+<para>unique edges and faces</para>
+<para>point sets</para>
+<para>initialize faces</para>
+<para>bottom face</para>
+<para>lateral faces</para>
+<para>top face (4,5,6,7)</para>
+<para>edges</para>
+<para>bottom edge</para>
+<para>top edge</para>
+<para>lateral edge</para>
+<para>assign number of unique faces</para>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="209" column="10" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="541" bodyend="852"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1ab7cb0c8b6c938e3e26e534e6231e69b8" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointCell::AddQuadFaceCentroids</definition>
+        <argsstring>(std::map&lt; std::set&lt; size_t &gt;, GridNode * &gt; &amp;additional_points, std::set&lt; std::set&lt; size_t &gt; &gt; &amp;additional_edges)</argsstring>
+        <name>AddQuadFaceCentroids</name>
+        <qualifiedname>csmp::CornerPointCell::AddQuadFaceCentroids</qualifiedname>
+        <param>
+          <type>std::map&lt; std::set&lt; size_t &gt;, <ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref> * &gt; &amp;</type>
+          <declname>additional_points</declname>
+        </param>
+        <param>
+          <type>std::set&lt; std::set&lt; size_t &gt; &gt; &amp;</type>
+          <declname>additional_edges</declname>
+        </param>
+        <briefdescription>
+<para>process cells </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="223" column="10" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="856" bodyend="879"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1ab53427334a564b151638248a10b72ccc" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointCell::ProcessPolyElement</definition>
+        <argsstring>(std::map&lt; std::set&lt; size_t &gt;, GridNode * &gt; &amp;additional_points, std::set&lt; std::set&lt; size_t &gt; &gt; &amp;additional_edges, bool well_element)</argsstring>
+        <name>ProcessPolyElement</name>
+        <qualifiedname>csmp::CornerPointCell::ProcessPolyElement</qualifiedname>
+        <param>
+          <type>std::map&lt; std::set&lt; size_t &gt;, <ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref> * &gt; &amp;</type>
+          <declname>additional_points</declname>
+        </param>
+        <param>
+          <type>std::set&lt; std::set&lt; size_t &gt; &gt; &amp;</type>
+          <declname>additional_edges</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>well_element</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para>cell with well</para>
+<para>cell with meshed edges</para>
+<para>cell with meshed faces</para>
+<para>edges and faces are not meshed</para>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="224" column="10" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="995" bodyend="1048"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1ab17a9bdc2adc6eacd7dc487503fec077" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointCell::ProcessPolyNonWellElement</definition>
+        <argsstring>(std::map&lt; std::set&lt; size_t &gt;, GridNode * &gt; &amp;additional_points, std::set&lt; std::set&lt; size_t &gt; &gt; &amp;additional_edges, bool add_edge_centroids, bool add_face_centroids, bool add_cell_centroids)</argsstring>
+        <name>ProcessPolyNonWellElement</name>
+        <qualifiedname>csmp::CornerPointCell::ProcessPolyNonWellElement</qualifiedname>
+        <param>
+          <type>std::map&lt; std::set&lt; size_t &gt;, <ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref> * &gt; &amp;</type>
+          <declname>additional_points</declname>
+        </param>
+        <param>
+          <type>std::set&lt; std::set&lt; size_t &gt; &gt; &amp;</type>
+          <declname>additional_edges</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>add_edge_centroids</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>add_face_centroids</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>add_cell_centroids</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="225" column="10" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="977" bodyend="993"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1a4adfaac6e25e24942168c30bdc035cf9" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointCell::ProcessPolyWellElement</definition>
+        <argsstring>(std::map&lt; std::set&lt; size_t &gt;, GridNode * &gt; &amp;additional_points, std::set&lt; std::set&lt; size_t &gt; &gt; &amp;additional_edges)</argsstring>
+        <name>ProcessPolyWellElement</name>
+        <qualifiedname>csmp::CornerPointCell::ProcessPolyWellElement</qualifiedname>
+        <param>
+          <type>std::map&lt; std::set&lt; size_t &gt;, <ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref> * &gt; &amp;</type>
+          <declname>additional_points</declname>
+        </param>
+        <param>
+          <type>std::set&lt; std::set&lt; size_t &gt; &gt; &amp;</type>
+          <declname>additional_edges</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para>add well elements</para>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="226" column="10" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="962" bodyend="975"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1a7787a7136651f59c869928ecb5189c4c" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointCell::ProcessPoly8Element</definition>
+        <argsstring>(std::map&lt; std::set&lt; size_t &gt;, GridNode * &gt; &amp;additional_points, std::set&lt; std::set&lt; size_t &gt; &gt; &amp;additional_edges, bool well_element, bool tetra_mesh)</argsstring>
+        <name>ProcessPoly8Element</name>
+        <qualifiedname>csmp::CornerPointCell::ProcessPoly8Element</qualifiedname>
+        <param>
+          <type>std::map&lt; std::set&lt; size_t &gt;, <ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref> * &gt; &amp;</type>
+          <declname>additional_points</declname>
+        </param>
+        <param>
+          <type>std::set&lt; std::set&lt; size_t &gt; &gt; &amp;</type>
+          <declname>additional_edges</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>well_element</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>tetra_mesh</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para>(1) 5 or 6 tetrahedrons</para>
+<para>edges and faces are not meshed</para>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="227" column="10" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="1153" bodyend="1172"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1acfef7b233b2dd310c4dba603f4790402" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointCell::ProcessPoly7Element</definition>
+        <argsstring>(std::map&lt; std::set&lt; size_t &gt;, GridNode * &gt; &amp;additional_points, std::set&lt; std::set&lt; size_t &gt; &gt; &amp;additional_edges, bool well_element, bool tetra_mesh)</argsstring>
+        <name>ProcessPoly7Element</name>
+        <qualifiedname>csmp::CornerPointCell::ProcessPoly7Element</qualifiedname>
+        <param>
+          <type>std::map&lt; std::set&lt; size_t &gt;, <ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref> * &gt; &amp;</type>
+          <declname>additional_points</declname>
+        </param>
+        <param>
+          <type>std::set&lt; std::set&lt; size_t &gt; &gt; &amp;</type>
+          <declname>additional_edges</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>well_element</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>tetra_mesh</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para>(1) 4 or 5 tetrahedrons</para>
+<para>edges and faces are not meshed</para>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="228" column="10" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="1317" bodyend="1335"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1a0c632bbe50ffa44641d75f9e741226d0" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointCell::ProcessPoly6Element</definition>
+        <argsstring>(std::map&lt; std::set&lt; size_t &gt;, GridNode * &gt; &amp;additional_points, std::set&lt; std::set&lt; size_t &gt; &gt; &amp;additional_edges, bool well_element, bool tetra_mesh)</argsstring>
+        <name>ProcessPoly6Element</name>
+        <qualifiedname>csmp::CornerPointCell::ProcessPoly6Element</qualifiedname>
+        <param>
+          <type>std::map&lt; std::set&lt; size_t &gt;, <ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref> * &gt; &amp;</type>
+          <declname>additional_points</declname>
+        </param>
+        <param>
+          <type>std::set&lt; std::set&lt; size_t &gt; &gt; &amp;</type>
+          <declname>additional_edges</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>well_element</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>tetra_mesh</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para>(1) wedge ( 3 tetrahedrons ) (2) octahedron ( 2 tetrahedrons )</para>
+<para>edges and faces are not meshed</para>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="229" column="10" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="1570" bodyend="1594"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1a553bcf9a24a54f01bd069b2a5f0b94ec" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointCell::ProcessPoly5Element</definition>
+        <argsstring>(std::map&lt; std::set&lt; size_t &gt;, GridNode * &gt; &amp;additional_points, std::set&lt; std::set&lt; size_t &gt; &gt; &amp;additional_edges, bool well_element, bool tetra_mesh)</argsstring>
+        <name>ProcessPoly5Element</name>
+        <qualifiedname>csmp::CornerPointCell::ProcessPoly5Element</qualifiedname>
+        <param>
+          <type>std::map&lt; std::set&lt; size_t &gt;, <ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref> * &gt; &amp;</type>
+          <declname>additional_points</declname>
+        </param>
+        <param>
+          <type>std::set&lt; std::set&lt; size_t &gt; &gt; &amp;</type>
+          <declname>additional_edges</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>well_element</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>tetra_mesh</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para>diagonal nodes</para>
+<para>(1) 2 tetrahedrons or tetrahedron + triangle (2) pyramid ( 2 tetrahedrons ) ( shouldn&apos;t be observed )</para>
+<para>edges and faces are not meshed</para>
+<para>SHOULDN&apos;T BE OBSERVED ( only if pillars intersect )</para>
+<para>edges and faces are not meshed</para>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="230" column="10" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="1801" bodyend="1838"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1a43ca3b2056c666fd0ba08a75c982331b" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointCell::ProcessPoly4Element</definition>
+        <argsstring>(std::map&lt; std::set&lt; size_t &gt;, GridNode * &gt; &amp;additional_points, std::set&lt; std::set&lt; size_t &gt; &gt; &amp;additional_edges, bool well_element, bool tetra_mesh)</argsstring>
+        <name>ProcessPoly4Element</name>
+        <qualifiedname>csmp::CornerPointCell::ProcessPoly4Element</qualifiedname>
+        <param>
+          <type>std::map&lt; std::set&lt; size_t &gt;, <ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref> * &gt; &amp;</type>
+          <declname>additional_points</declname>
+        </param>
+        <param>
+          <type>std::set&lt; std::set&lt; size_t &gt; &gt; &amp;</type>
+          <declname>additional_edges</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>well_element</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>tetra_mesh</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para>(1) quadrilateral ( 2 triangles ) (2) tetrahedron ( shouldn&apos;t be observed )</para>
+<para>edges and faces are not meshed</para>
+<para>SHOULDN&apos;T BE OBSERVED ( only if pillars intersect multiple times )</para>
+<para>edges and faces are not meshed</para>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="231" column="10" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="1943" bodyend="1978"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1a5596efbd76a584ae7617e87c02ad9a91" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointCell::ProcessPoly3Element</definition>
+        <argsstring>(std::map&lt; std::set&lt; size_t &gt;, GridNode * &gt; &amp;additional_points, std::set&lt; std::set&lt; size_t &gt; &gt; &amp;additional_edges, bool well_element, bool tetra_mesh)</argsstring>
+        <name>ProcessPoly3Element</name>
+        <qualifiedname>csmp::CornerPointCell::ProcessPoly3Element</qualifiedname>
+        <param>
+          <type>std::map&lt; std::set&lt; size_t &gt;, <ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref> * &gt; &amp;</type>
+          <declname>additional_points</declname>
+        </param>
+        <param>
+          <type>std::set&lt; std::set&lt; size_t &gt; &gt; &amp;</type>
+          <declname>additional_edges</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>well_element</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>tetra_mesh</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para>SHOULDN&apos;T BE OBSERVED ( only if pillars intersect )</para>
+<para>edges and faces are not meshed</para>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="232" column="10" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="2033" bodyend="2050"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1a39a5a3b329c5e46c6f27a0004dfbd92c" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointCell::ProcessPoly2Element</definition>
+        <argsstring>(std::map&lt; std::set&lt; size_t &gt;, GridNode * &gt; &amp;additional_points, std::set&lt; std::set&lt; size_t &gt; &gt; &amp;additional_edges, bool well_element, bool tetra_mesh)</argsstring>
+        <name>ProcessPoly2Element</name>
+        <qualifiedname>csmp::CornerPointCell::ProcessPoly2Element</qualifiedname>
+        <param>
+          <type>std::map&lt; std::set&lt; size_t &gt;, <ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref> * &gt; &amp;</type>
+          <declname>additional_points</declname>
+        </param>
+        <param>
+          <type>std::set&lt; std::set&lt; size_t &gt; &gt; &amp;</type>
+          <declname>additional_edges</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>well_element</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>tetra_mesh</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para>SHOULDN&apos;T BE OBSERVED ( only if pillars intersect )</para>
+<para>edges and faces are not meshed</para>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="233" column="10" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="2089" bodyend="2107"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1a5e91a036b98617f6baf5dcd34193fa9d" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointCell::ProcessPoly1Element</definition>
+        <argsstring>(std::map&lt; std::set&lt; size_t &gt;, GridNode * &gt; &amp;additional_points, std::set&lt; std::set&lt; size_t &gt; &gt; &amp;additional_edges, bool well_element, bool tetra_mesh)</argsstring>
+        <name>ProcessPoly1Element</name>
+        <qualifiedname>csmp::CornerPointCell::ProcessPoly1Element</qualifiedname>
+        <param>
+          <type>std::map&lt; std::set&lt; size_t &gt;, <ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref> * &gt; &amp;</type>
+          <declname>additional_points</declname>
+        </param>
+        <param>
+          <type>std::set&lt; std::set&lt; size_t &gt; &gt; &amp;</type>
+          <declname>additional_edges</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>well_element</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>tetra_mesh</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para>SHOULDN&apos;T BE OBSERVED ( only if pillars intersect )</para>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="234" column="10" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="2137" bodyend="2150"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_cell_1a02917414572b3cbe9d80acd59de3098a" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointCell::FinishMeshing</definition>
+        <argsstring>()</argsstring>
+        <name>FinishMeshing</name>
+        <qualifiedname>csmp::CornerPointCell::FinishMeshing</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointCell.h" line="235" column="10" bodyfile="source/modules/regular_grids/CornerPointCell.cpp" bodystart="881" bodyend="893"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para><ref refid="classcsmp_1_1_corner_point_cell" kindref="compound">CornerPointCell</ref> provides the necessary functionality to construct valid Finite Elements out of distorted hexahedrons. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="attention"><para>the CornerPoint cell is inherited from the <ref refid="classcsmp_1_1_polygon_cell" kindref="compound">PolygonCell</ref> !</para>
+</simplesect>
+<simplesect kind="author"><para>R. Manasipov </para>
+</simplesect>
+<simplesect kind="date"><para>2015 </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::CornerPointCell</label>
+        <link refid="classcsmp_1_1_corner_point_cell"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::PolygonCell</label>
+        <link refid="classcsmp_1_1_polygon_cell"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::CornerPointCell</label>
+        <link refid="classcsmp_1_1_corner_point_cell"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::PolygonCell</label>
+        <link refid="classcsmp_1_1_polygon_cell"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>#grid_</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::PolygonGridManager</label>
+        <link refid="classcsmp_1_1_polygon_grid_manager"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/regular_grids/CornerPointCell.h" line="91" column="1" bodyfile="source/includes/regular_grids/CornerPointCell.h" bodystart="92" bodyend="252"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_polygon_cell_1a2de697d7a8636a59f88cae336d879f89" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>AddCell</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a41535d383e884e5199ad326175e86480" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>AddCornerPointWellCell</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1aa7d109bfcc10ccfd9f3c0fb4921cb0fa" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>AddExtraNode</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1a8e211e9ab07d0cfc787e728363c1b0a2" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>AddFace</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1a662c467b06cb6068e5e60180dc5c1d99" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>AddPolygonFaceNode</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1ab7cb0c8b6c938e3e26e534e6231e69b8" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>AddQuadFaceCentroids</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a3d087e0b8298632694f2b92e03288689" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>AddWell</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1aa883309e76d7cb1e44a7e4b322710dbf" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>AddWell</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1a508e0753d89da4e2dbe95ef98ab42b39" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>AssignFaceOrder</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1ae1836980921183105a28d5524abba0fd" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>AssignNode</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1aef780d21c61649fee1bcde358e740631" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>AssignNodeOrder</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a186dd309bb9ce5c98557707bc37e5d7c" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>AssignPillarNodesOrder</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1aaffd1215a6518891142e41adf965e17d" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>AssignPolygonFaceNode</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a6e00b76c69112101a3f41e149dc6a084" prot="private" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>cell_category_</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a7fcb964d9dcaece7d8b520c3c293021b" prot="private" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>cell_type_</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a1ba6a6b2915edacbe953d3f6d0338d56" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>CheckFaceOrder</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a51f9b56ebe4cc933f99cd3b6b61aa965" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>CheckNodeOrder</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1a7d103a6394488fe7c4664b6d1d427a38" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>ClearCells</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1a19877301806475d82aede7d2f3b91817" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>ClearFaces</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1ae03bdab1b89759f3db72afa2410a1b73" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>ClearFaces</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1a146cf4d3cdb4cad7c9b3b266ffc7bf4e" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>ClearPolygonFaceNodes</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1aac0c3734333a7a85f2557d35321bcb0f" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>CornerPointCell</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1aff1bbf983f624f35357401db900a7079" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>CornerPointCell</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1a045f72b77610ce7fcaeab20a1b5b6105" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>custom_face_order_</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1acb98b5b38ddd76731efe4cf83633793a" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>custom_node_order_</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1a92399b1cf0f0e709296fb2ae2fec25fd" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>elements_</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1a41c9cde8d663848b3ca126610e1ae129" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>EraseCell</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1a9b02fdcf55db00883fdb6619114dc228" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>EraseFace</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1af72ddc34445323a2f33bb411aca9ea7d" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>EraseFace</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1a3f1c07c907f8df8cc5c689068a6974c0" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>extra_nodes_</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1a1311b2a05fc2e434ee54616b993b34ed" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>face_nodes_</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1a98ce340d36adc578dbd54b0a8da484b7" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>face_nodes_in_custom_order_</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1a6d77887252cdae6eb6d777859a5906c5" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>faces_</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a02917414572b3cbe9d80acd59de3098a" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>FinishMeshing</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1a04c4e357113dd7ef6ddc267615d0e33c" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetCellCentroidGlobalId</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1ae24718f02e23b89dad8e30a3f860acaa" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetCellCentroidNode</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1a1c7b02e980bc82bdb88d7dc5ebd78065" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetCellCentroidPoint</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1ad427abdd577b9695e19275683af1db89" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetCustomFaceId</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1a8a6c5fb898176bcbad1d17559871f7f6" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetCustomNodeId</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1a411516bfd464880a23f0f8fa4c80c4bb" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetElementDim</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1a583e4c8f8bc78dc8b79e173f59c0bf70" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetElementDim</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1a6eca784ad8a19e37ef5928a74b5075b9" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetElementNode</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1a5916e730bb0b620b3d321b75b6d743fe" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetElementNodeGlobalId</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1a4d92def429cc2b41dc602086b06f3a79" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetElementPoint</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1ad4200af37d5255fe3acd7fe75878310c" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetElementType</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1ad163f6008885212702bd57396f3d01ef" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetExtraNode</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1ac678a1c1d9f43f0b1cf02a653a74229a" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetExtraPoint</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1aefd052257ef18f60cb3762e376b5ecb8" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetFaceDim</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1a00507c0e0fe7a4c659bc8558a23420ba" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetFaceNode</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1ac148a52010a04bb4ae5b728c210ba1e0" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetFaceNodeGlobalId</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1a7f968b2ac87dd116c1d166d6521804e7" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetFacePoint</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1ac38531c5599689070736790dd4019ea8" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetFaceType</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1a70ec2743eb42732c1c123c049c1be8d5" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetNodeCustomOrder</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1a46258a2ae1493744a83840745c10d557" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetNodeGlobalIdCustomOrder</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1ad743cea2221b54f621c3af4634a49a93" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetNodeGlobalIdOriginalOrder</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1a9e4023a2afff79023b0b9925936d7728" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetNodeOriginalOrder</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1a64e82a187c547a9fbea811331ed9ac4e" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetNumElementNodes</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1ad744641a66c59c617afcd03f85204fbd" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetNumElements</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1a09d064634dc9dc259c5b3a1c60867133" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetNumExtraNodes</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1a43386b5c6232e841d84e03a0e2cd6d94" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetNumFaceNodes</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1af0c954ea7217eade34eeb490b6e8dd84" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetNumFaces</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1acc3b3f082a6e09b8f277fe4b72cf2029" prot="public" virt="non-virtual" ambiguityscope="csmp::PolygonCell::"><scope>csmp::CornerPointCell</scope><name>GetNumFaces</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1abb53e3c5b855a40d3df9a14764b3c525" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetNumNodes</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1ab655dd078ee57273e321b900b79a8aff" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetNumPolygonFaceNodes</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1a940562555f4a003114960227842c24e8" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetNumSubFaces</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1ab8c118f40bf901ebd056f0e96b15b446" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetNumWellSectionNodes</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a440fd386bc3391575420a409dd8e5e23" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetNumWellSections</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1aa2c715d33baad7b27ee6611567bbbd21" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetOriginalFaceId</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1adab31b02a5232d4e428d84bec48031a1" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetOriginalNodeId</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1aaf95f9254eb8efa5533f9b2d10b78e50" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetPillarNodeCustomOrder</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a7c966773950134a3401787458a043df5" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetPillarNodeGlobalIdCustomOrder</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a8bb32630df62cf158f69e58d6821de03" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetPillarNodeGlobalIdOriginalOrder</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a1d04953e8a9cfb37c886f4eba7e4c3f1" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetPillarNodeOriginalOrder</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a130d5080ed38c7fb5d97322bc2ca4d74" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetPillarPointCustomOrder</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a039589fcce4d9a1f9e742682fa1d600a" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetPillarPointOriginalOrder</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1a74e65dd552531b3b13fcbd464d525b72" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetPointCustomOrder</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1aef57235da40a3751217f022f5ca195db" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetPointOriginalOrder</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1afe54a76a6d4e11708e186d125bc952ce" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetPolygonFaceNode</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1ae403806d27ca5c60e3f4321f3d9a537a" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetPolygonFaceNodeGlobalId</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1abf7616979833b2083b2949f7fd43b6db" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetPolygonFaceNodeLocalId</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1a93087888b1fc2f60f64638dffbc2a727" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetPolygonFacePoint</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a2962d977fbd3b96f0321a51954102c53" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetTopologycalInfo</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1ab8478f86221da0b42ba8c2426145cb64" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetWellSectionNode</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a2df4f31e77bec3a7a7e68362d7d3df7f" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>GetWellSectionNodeGlobalId</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1a4fc085391a89d8d94f9d9fec2fc828fa" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>grid_</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a1c743626a0fdacd3da588bd2699b6262" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>InitializeCornerPointCell</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1aebaf4bb415f9dca60b58dcd19c524ce1" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>InitializeFaceOrder</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a36f8b016b2bf572e190937752ee1f7bc" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>InitializeFaces</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1a5393e54ecc9619be4a541b748d0b0168" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>InitializeNodeOrder</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a6ea2c8a3d7206da48aacf41ac7bd432a" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>InitializeNodes</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1afa428004f3b22c7f8ebc744bf4b6732a" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>InitializePoly1Element</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a05f3c1882d7637b48969b8c06306c122" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>InitializePoly2Element</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1ae5d91554e85bd127b0d37cde5d20079f" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>InitializePoly3Element</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1abce58bc3cd6b6d75795bf7f402e6569d" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>InitializePoly4Element</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a066acea52bd4d2390e1bc3fb53d1f0be" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>InitializePoly5Element</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a1f077cd786e18077af5cc396ff6bd674" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>InitializePoly6Element</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1acdba5ac52a5d4100d6fe256dc3bfc90e" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>InitializePoly7Element</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1ae49b96dca94a709f689ae0ed6ca18cf5" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>InitializePoly8Element</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1aea468a693d353fcd5eb8159aaabf1bc5" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>IsLine</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1adc903cd63752a2112a0fad73c25501e7" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>IsLowDimensionalElement</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a109bc8bcd3abf380750de809f8f44e89" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>IsPointElement</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a294da5c01d25df17547e3feca4d0591f" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>IsSurface</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1aae70629c88d2a931d814823d80378597" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>IsVolume</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a3728d88c5910661153e6ae9ed58d3894" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>IsVolumetricNonOverlapingElement</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1af66295b2157888a2024fdc801516b036" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>IsVolumetricOverlapingElement</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a4291ab783cf9233e7ce715c4e1a1be67" prot="private" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>meshing_cycle_</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1a9c2256448763c288ff0596b579782d23" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>nodes_</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1ae0d357d9c7727dadae3aac834213cdbc" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>nodes_in_custom_order_</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1ab5d170e35a7517c06bc24d5b815b39cf" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>num_faces_</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1ac6bef48480192941a37c7bc475560373" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>num_nodes_</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a8f46851cfec2fbe9e1ee3522669f9267" prot="private" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>num_quad_faces_</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1af93b863f197031cedf6ff56f308dd18b" prot="private" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>num_tri_faces_</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a38f2ac0a0143acb2389b63b60cc5954d" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1aa1d24fe135d4f05d11fab61fde804972" prot="public" virt="non-virtual" ambiguityscope="csmp::PolygonCell::"><scope>csmp::CornerPointCell</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a6573f607d02b0782efeef107cbccfb75" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1ae9b066f76f58ec7accd44ba0d8ee43f3" prot="private" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>pillar_nodes_</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a736c02cf5ea1f76da4390d809221a84e" prot="private" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>pillar_nodes_order_</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1a26d4e9b41ba6b3ea173ad3082f4f7abe" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>PolygonCell</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1abd795a38c75a1979fdc1095f3fefa6e3" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>PolygonCell</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1a55849af827efcbf58d0eef83045b2ab2" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>PolygonCell</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a5079e745f3c187d55aea82bce55b7a5c" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>ProcessCornerPointCell</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a85a35efc24cb2b8d8828ba0b5e5adee8" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>ProcessCornerPointDegenerateCell</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1ad4d9054068df5f6f238841cfbcf3adad" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>ProcessCornerPointDegenerateLowDimensionalCell</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1acfee757dd05b03084b17e1a6a18096e2" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>ProcessCornerPointDegenerateVolumetricCell</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a8c79214bb52b608e2a773c1adfeea6d5" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>ProcessCornerPointDegenerateVolumetricNonOverlappingCell</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a59022322329c003d71df641ed279e965" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>ProcessCornerPointDegenerateVolumetricOverlappingCell</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a4a26122ef3dff44ade54f2ea16f74aec" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>ProcessCornerPointRegularCell</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a5e91a036b98617f6baf5dcd34193fa9d" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>ProcessPoly1Element</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a39a5a3b329c5e46c6f27a0004dfbd92c" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>ProcessPoly2Element</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a5596efbd76a584ae7617e87c02ad9a91" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>ProcessPoly3Element</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a43ca3b2056c666fd0ba08a75c982331b" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>ProcessPoly4Element</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a553bcf9a24a54f01bd069b2a5f0b94ec" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>ProcessPoly5Element</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a0c632bbe50ffa44641d75f9e741226d0" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>ProcessPoly6Element</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1acfef7b233b2dd310c4dba603f4790402" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>ProcessPoly7Element</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a7787a7136651f59c869928ecb5189c4c" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>ProcessPoly8Element</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1ab53427334a564b151638248a10b72ccc" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>ProcessPolyElement</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1ab17a9bdc2adc6eacd7dc487503fec077" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>ProcessPolyNonWellElement</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a4adfaac6e25e24942168c30bdc035cf9" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>ProcessPolyWellElement</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1a0510ef81ac8b5fa2eb3a1af262c2e826" prot="protected" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>ResizePolygonFaceNodes</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a96d024d38eb32043cfec39ef99b0c2cf" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>ResolveCornerPointCellConflicts</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a0849a0f94381d42cfbb6f62b5374b4b6" prot="private" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>well_face_dst_</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a85d57346d401644a4a949b6782cfd072" prot="private" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>well_face_org_</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1af5f312bad45b02ce259bda4b046dcf22" prot="private" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>wells_</name></member>
+      <member refid="classcsmp_1_1_corner_point_cell_1a7a66899cf27ab55536170feb9fb57be1" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>~CornerPointCell</name></member>
+      <member refid="classcsmp_1_1_polygon_cell_1a20dbbbf8b62698e711e0e4329f37965c" prot="public" virt="non-virtual"><scope>csmp::CornerPointCell</scope><name>~PolygonCell</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,85 @@
+\doxysection{Na\+Cl\+Melting\+Curve.\+h}
+\hypertarget{_na_cl_melting_curve_8h_source}{}\label{_na_cl_melting_curve_8h_source}\index{source/includes/eos/NaClMeltingCurve.h@{source/includes/eos/NaClMeltingCurve.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{NACL\_MELTING\_CURVE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{NACL\_MELTING\_CURVE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{comment}{/*\ \ \ Changelog}}
+\DoxyCodeLine{00005\ \textcolor{comment}{\ \ \ \ \ September\ 9,\ 2014,\ Thomas\ Driesner:\ re-\/ported\ to\ CSMP++\ and\ simplified\ class\ (removed\ unnecessary\ functions\ etc.)}}
+\DoxyCodeLine{00006\ \textcolor{comment}{\ \ \ \ \ September\ 25,\ 2014,\ Thomas\ Driesner:\ minor\ revisions,\ tested\ agains\ CSP\ version\ -\/\ OK}}
+\DoxyCodeLine{00007\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_convert_concentration_units_na_cl_8h}{"{}ConvertConcentrationUnitsNaCl.h"{}}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_triple_point_na_cl_8h}{"{}TriplePointNaCl.h"{}}}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}}
+\DoxyCodeLine{00015\ \{}
+\DoxyCodeLine{00016\ \ \ \textcolor{comment}{///\ Temperature\ and\ pressure\ coordinates\ of\ dry\ halite\ melting\ curve}}
+\DoxyCodeLine{00017\ \ \ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_na_cl_melting_curve}{NaClMeltingCurve}}}
+\DoxyCodeLine{00018\ \ \ \{}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00021\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_na_cl_melting_curve_a44d9ef6290803fc1159da7ca458b97ee}{NaClMeltingCurve}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ externaltemperature,}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ externalpressure\ );}
+\DoxyCodeLine{00023\ \ \ \ \ \string~\mbox{\hyperlink{classcsmp_1_1_na_cl_melting_curve_a39c3ba69887bff9eef6485765a1a4860}{NaClMeltingCurve}}();}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_na_cl_melting_curve_ae563e739088b850cdd8ef04d24ce0601}{TmeltFromP}}();\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ returns\ melting\ temperature\ [C]\ for\ given\ p\ [Pa]}}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_na_cl_melting_curve_a8035debd234cfc73b89e30a20621124a}{PmeltFromT}}();\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ returns\ melting\ pressure\ [Pa]\ for\ given\ T\ [C]}}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00029\ \ \ \ \ NaClMeltingCurve();\ \textcolor{comment}{//\ disable\ default\ construction}}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ temperature\_;\ \ \ \textcolor{comment}{///<\ reference\ to\ temperature\ [C]\ in\ flow\ code}}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ pressure\_;\ \ \ \ \ \ \textcolor{comment}{///<\ reference\ to\ fluid\ pressure\ [Pa]\ in\ flow\ code}}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ tcurrent\_;\ \ \ \ \ \ \textcolor{comment}{///<\ temperature\ [C]\ for\ internal\ use}}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ pcurrent\_;\ \ \ \ \ \ \textcolor{comment}{///<\ fluid\ pressure\ [bar]\ for\ internal\ use}}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_triple_point_na_cl}{TriplePointNaCl}}\ tp\_nacl;}
+\DoxyCodeLine{00038\ \ \ \};}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00042\ \textcolor{comment}{\ \ \ \ \ @class\ NaClMeltingCurve\ NaClMeltingCurve.h\ "{}eos/h2o\_nacl/NaClMeltingCurve.h"{}}}
+\DoxyCodeLine{00043\ \textcolor{comment}{}}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ \ \ \ \ @author\ Thomas\ Driesner,\ ETH\ Zuerich,\ thomas.driesner@erdw.ethz.ch}}
+\DoxyCodeLine{00045\ \textcolor{comment}{}}
+\DoxyCodeLine{00046\ \textcolor{comment}{\ \ \ \ \ @section\ motivation\ Motivation}}
+\DoxyCodeLine{00047\ \textcolor{comment}{}}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ \ \ \ \ "{}NaClMeltingCurve"{}\ is\ legacy\ code\ from\ Thomas\ Driesner's\ developments\ for\ the\ H2O-\/NaCl\ system,\ and\ computes\ the\ temperature-\/pressure\ coordinates\ of\ dry\ halite\ melting\ curve.\ It\ can\ be\ used\ standalone\ if\ only\ this\ information\ is\ needed.\ Otherwise,\ it\ is\ only\ used\ in\ the\ CSMP++\ context\ for\ building\ accurate\ lookup\ tables\ for\ the\ H2O-\/NaCl\ system,\ which\ are\ significantly\ faster\ if\ the\ full\ system\ properties\ are\ needed.\ }}
+\DoxyCodeLine{00049\ \textcolor{comment}{}}
+\DoxyCodeLine{00050\ \textcolor{comment}{\ \ \ \ \ Details\ of\ the\ underlying\ formulation\ can\ be\ found\ in}}
+\DoxyCodeLine{00051\ \textcolor{comment}{}}
+\DoxyCodeLine{00052\ \textcolor{comment}{\ \ \ \ \ Driesner\ T.\ and\ Heinrich\ C.A.\ (2007):\ The\ system\ H2O-\/NaCl.\ Part\ I:\ Correlation\ formulae\ for\ phase\ relations\ in\ temperature-\/pressure-\/molefraction\ space\ from\ 0\ to\ 1000oC,\ 0\ to\ 5000\ bar,\ and\ 0\ to\ 1\ XNaCl.\ Geochimica\ et\ Cosmochimica\ Acta\ 71,\ 4880-\/4901.}}
+\DoxyCodeLine{00053\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ \ \ \ \ @section\ usage\ Usage}}
+\DoxyCodeLine{00055\ \textcolor{comment}{\ \ \ \ \ Construct\ an\ instance\ of\ "{}NaClMeltingCurve"{}\ with\ the\ temperature\ (in\ C)\ and\ pressure\ (in\ Pa)\ as\ constructor\ arguments.\ "{}NaClMeltingCurve"{}\ has\ an\ internal\ mechanism\ to\ make\ sure\ that\ it\ always\ uses\ the\ current\ value\ of\ that\ temperature\ and\ pressure\ as\ they\ exist\ in\ your\ code.\ Public\ member\ names\ should\ be\ self-\/explanatory,\ I\ hope.}}
+\DoxyCodeLine{00056\ \textcolor{comment}{}}
+\DoxyCodeLine{00057\ \textcolor{comment}{\ \ \ \ \ @code}}
+\DoxyCodeLine{00058\ \textcolor{comment}{}}
+\DoxyCodeLine{00059\ \textcolor{comment}{\ \ \ \ \ double\ t(somevalue),\ p(anothervalue);\ //\ temperature\ [C]\ and\ pressure\ [in\ Pa]\ in\ user's\ application}}
+\DoxyCodeLine{00060\ \textcolor{comment}{\ \ \ \ \ ...}}
+\DoxyCodeLine{00061\ \textcolor{comment}{\ \ \ \ \ NaClMeltingCurve\ naclmelt(t,p);\ }}
+\DoxyCodeLine{00062\ \textcolor{comment}{\ \ \ \ \ ...}}
+\DoxyCodeLine{00063\ \textcolor{comment}{\ \ \ \ \ //\ here,\ t\ may\ be\ updated}}
+\DoxyCodeLine{00064\ \textcolor{comment}{\ \ \ \ \ ...}}
+\DoxyCodeLine{00065\ \textcolor{comment}{\ \ \ \ \ cout\ <<\ "{}new\ halite\ melting\ pressure:\ "{}\ <<\ naclmelt.PmeltFromT()\ <<\ "{}Pa\(\backslash\)n"{};\ //\ compute\ and\ output\ melting\ pressure\ for\ new\ temperature}}
+\DoxyCodeLine{00066\ \textcolor{comment}{}}
+\DoxyCodeLine{00067\ \textcolor{comment}{\ \ \ \ \ @endcode}}
+\DoxyCodeLine{00068\ \textcolor{comment}{}}
+\DoxyCodeLine{00069\ \textcolor{comment}{\ \ \ \ \ @section\ issues\ Known\ issues}}
+\DoxyCodeLine{00070\ \textcolor{comment}{}}
+\DoxyCodeLine{00071\ \textcolor{comment}{\ \ \ \ \ The\ underlying\ equations\ are\ valid\ only\ in\ a\ restricted\ temperature-\/pressure\ range;\ range\ checking\ and\ error\ handling\ has\ not\ yet\ been\ implemented,\ see\ documentation\ notes\ for\ NaClMeltingCurve::TmeltFromP()\ and\ NaClMeltingCurve::PmeltFromT()}}
+\DoxyCodeLine{00072\ \textcolor{comment}{}}
+\DoxyCodeLine{00073\ \textcolor{comment}{\ \ \ \ \ @section\ testing\ Testing}}
+\DoxyCodeLine{00074\ \textcolor{comment}{}}
+\DoxyCodeLine{00075\ \textcolor{comment}{\ \ \ \ \ testing\ was\ done\ in\ the\ period\ before\ publication\ in\ 2007,\ prior\ to\ writing\ this\ documentation,\ no\ details\ are\ available\ anymore}}
+\DoxyCodeLine{00076\ \textcolor{comment}{\ \ */}}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \}\textcolor{comment}{//csmp}}
+\DoxyCodeLine{00079\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

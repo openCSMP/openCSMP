@@ -1,0 +1,123 @@
+.TH "csmp::H2ONaClFluidProperties" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::H2ONaClFluidProperties
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <H2ONaClFluidProperties\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBH2ONaClFluidProperties\fP (const double &externaltemperature_in_C, const double &externalpressure_in_Pa, const double &externalcomposition_in_mole_fraction, const double &external_fluid_enthalpy, const double &external_cp_rock, const double &external_rho_rock, const double &external_phi, const bool &verbose)"
+.br
+.ti -1c
+.RI "double \fBBulkEnthalpy\fP ()"
+.br
+.ti -1c
+.RI "\fBFluidproperties\fP \fBLiquidProperties\fP ()"
+.br
+.ti -1c
+.RI "\fBFluidproperties\fP \fBVaporProperties\fP ()"
+.br
+.ti -1c
+.RI "\fBFluidproperties\fP \fBSaltProperties\fP ()"
+.br
+.ti -1c
+.RI "\fBFluidproperties\fP \fBBulkProperties\fP ()"
+.br
+.ti -1c
+.RI "\fBFluidproperties\fP \fBReportLiquidProperties\fP ()"
+.br
+.ti -1c
+.RI "\fBFluidproperties\fP \fBReportVaporProperties\fP ()"
+.br
+.ti -1c
+.RI "\fBFluidproperties\fP \fBReportSaltProperties\fP ()"
+.br
+.ti -1c
+.RI "\fBFluidproperties\fP \fBReportBulkProperties\fP ()"
+.br
+.ti -1c
+.RI "States \fBState\fP ()"
+.br
+.ti -1c
+.RI "bool \fBEquilibrated\fP ()"
+.br
+.ti -1c
+.RI "bool \fBFatal\fP ()"
+.br
+.ti -1c
+.RI "void \fBPrintProperties\fP ()"
+.br
+.ti -1c
+.RI "void \fBReportAllProperties\fP ()"
+.br
+.ti -1c
+.RI "void \fBInitializeToBogus\fP ()"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.PP
+\fBAuthor\fP
+.RS 4
+Thomas Driesner, ETH Zuerich 
+.RE
+.PP
+.SH "Contact"
+.PP
+thomas.driesner@erdw.ethz.ch
+.SH "Motivation"
+.PP
+\fBH2ONaClFluidProperties\fP is an single interface to H2O single-, two-, and three-phase properties in a porous medium via an equation of state\&. This information might also be obtained from the individual LookupTables for the H2O_naCl system but would require a detailed knowledge of the phase relations and thermodynamics involved and would be incomplete because some properties vary with the exact properties of the rock matrix (e\&.g\&., the compressibility of a twophase liquid+vapor mixture is a function of the rock's heat capacity and porosity, see Grant&Sorey (1979), The Compressibility and Hydraulic Diffusivity of a Water-Steam Flow, \fBWater\fP Resources Research, 15, 3, 684-686)\&.
+
+.PP
+\fBH2ONaClFluidProperties\fP eliminates the need of such a detailed implementation in terms of the interface of the various H2O-NaCl lookup tables (the list of which is apparent from the #include statements in this file) by the user\&.
+.SH "Usage"
+.PP
+A \fBH2ONaClFluidProperties\fP is instantiated with seven constrcutor arguments\&. These are temperature in Celsius, pressure in bar, NaCl content in mole fraction, specific fluid enthalpy (in J/kg), the rock's heat capacity in J/kg/K, the rock's density in kg/m3, and the porosity (dimensionless)\&. These are passed as const references to the respective existing objects in the user's code\&. \fBH2ONaClFluidProperties\fP has an internal mechanism that makes sure that whenever it is queried (except for the Report\&.\&.\&. functions, see below) it checks and updates its internal placeholders to the current values of these variables, i\&.e\&., the user does NOT have to trigger an update\&. Although \fBH2ONaClFluidProperties\fP can be used standalone, it is most often applied as a member of NaClH2OPropertiesVisitor\&.
+
+.PP
+For accurate computation in the pure H2O limit, \fBH2ONaClFluidProperties\fP has an instance of \fBH2OFluidProperties\fP as a member\&.
+
+.PP
+The most important interfaces return objects of type \fBFluidproperties\fP\&. These are:
+
+.PP
+(1) LiquidProperties(), VaporProperties(), SaltProperties(), and BulkProperties()\&. These determine the fluid state and properties primarily at the given temperature, pressure, and composition\&. Specific fluid enthalpy comes into play if the three-phase (vapor-liquid-halite) case or the pure H2O two-phase (vapor-liquid) or pure NaCl twophase (Halite+melt) case is encountered\&. Very low pressure cases along the respective sublimation curves are outside the range of validity as is the low-temperature cases involving ice or hydrohalite\&. Those conditions where enthalpy is required become active when temperature is identical to the temperature at the phase boundary within 5 x the available numerical precision of double on the given platform\&.
+
+.PP
+If one of these member functions is invoked, all properties are computed\&. To avoid re-computation(*), properties of the other two may the also be extracted via the respective Report\&.\&.\&. functions described below\&. This has changed from previous versions: the functions used to have an internal check that avoided re-computation in case that t,p,h,x,cp_rock,rho_rock and phi didn't change\&. This has currently been disabled and may be re-activated after intense testing of this new version has been done\&.
+
+.PP
+(2) ReportLiquidProperties(), ReportVaporProperties(), ReportSaltProperties(), ReportBulkProperties()\&. These should be used with care\&. These functions bypass the internal automatic update of temperature etc\&. and will hence return the fluid properties as they were computed after the last internal update\&. This is likely to disagree with the current values of temperature, pressure etc\&. in the user's code\&. However, if one of the above LiquidProperties(), VaporProperties(), SaltProperties(), or BulkProperties() functions has been called, properties for the other two calls have already been computed and might equally well be extracted via the respective Report\&.\&.\&. functions (e\&.g\&.: if you called BulkProperties(), you can safely extract vapor, liquid, and salt properties by immediately afterwards calling ReportVaporProperties(), ReportLiquidProperties(), and ReportSaltProperties()\&.
+.SH "Dependencies"
+.PP
+.SH "Known issues"
+.PP
+.IP "\(bu" 2
+Rather than cp_rock etc\&. provide reference to a rock class or struct or function to allow for simple handling of t-dependent heat capacity etc\&.?
+.IP "\(bu" 2
+implement a true FromHP formulation once requests emerge
+.IP "\(bu" 2
+avoid re-computation in FromTHP and FromTP functions
+.PP
+.SH "Testing"
+.PP
+Testing is in progress\&.
+.SH "Changes"
+.PP
+\fBH2ONaClFluidProperties\fP is an essentially completely changed and re-written version of what used to be FluidLookup\&. Thomas Driesner, Jan-Feb 2011 
+.SH "Member Function Documentation"
+.PP 
+.SS "double csmp::H2ONaClFluidProperties::BulkEnthalpy ()"
+(definitelyGreaterThan( twophase_v\&.MassFractionNaCl(), 0\&.0 ) &&
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

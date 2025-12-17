@@ -1,0 +1,232 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_na_cl_melting_curve" kind="class" language="C++" prot="public">
+    <compoundname>csmp::NaClMeltingCurve</compoundname>
+    <includes refid="_na_cl_melting_curve_8h" local="yes">eos/h2o_nacl/NaClMeltingCurve.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_melting_curve_1aa2eda9ee4457e3291630764507d9b4dc" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::NaClMeltingCurve::temperature_</definition>
+        <argsstring></argsstring>
+        <name>temperature_</name>
+        <qualifiedname>csmp::NaClMeltingCurve::temperature_</qualifiedname>
+        <briefdescription>
+<para>reference to temperature [C] in flow code </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurve.h" line="31" column="18" bodyfile="source/includes/eos/NaClMeltingCurve.h" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_melting_curve_1ab40cfc87095f469c819739639051724f" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::NaClMeltingCurve::pressure_</definition>
+        <argsstring></argsstring>
+        <name>pressure_</name>
+        <qualifiedname>csmp::NaClMeltingCurve::pressure_</qualifiedname>
+        <briefdescription>
+<para>reference to fluid pressure [Pa] in flow code </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurve.h" line="32" column="18" bodyfile="source/includes/eos/NaClMeltingCurve.h" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_melting_curve_1af47ea3359e5e1d572c9956cca920b27f" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClMeltingCurve::tcurrent_</definition>
+        <argsstring></argsstring>
+        <name>tcurrent_</name>
+        <qualifiedname>csmp::NaClMeltingCurve::tcurrent_</qualifiedname>
+        <briefdescription>
+<para>temperature [C] for internal use </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurve.h" line="34" column="19" bodyfile="source/includes/eos/NaClMeltingCurve.h" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_melting_curve_1ad4be426a84b3c128185543257860a087" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClMeltingCurve::pcurrent_</definition>
+        <argsstring></argsstring>
+        <name>pcurrent_</name>
+        <qualifiedname>csmp::NaClMeltingCurve::pcurrent_</qualifiedname>
+        <briefdescription>
+<para>fluid pressure [bar] for internal use </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurve.h" line="35" column="19" bodyfile="source/includes/eos/NaClMeltingCurve.h" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_melting_curve_1aebaa582320e5f60d3a1394a2767ca7ff" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_triple_point_na_cl" kindref="compound">TriplePointNaCl</ref></type>
+        <definition>TriplePointNaCl csmp::NaClMeltingCurve::tp_nacl</definition>
+        <argsstring></argsstring>
+        <name>tp_nacl</name>
+        <qualifiedname>csmp::NaClMeltingCurve::tp_nacl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurve.h" line="37" column="21" bodyfile="source/includes/eos/NaClMeltingCurve.h" bodystart="37" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_melting_curve_1a44d9ef6290803fc1159da7ca458b97ee" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::NaClMeltingCurve::NaClMeltingCurve</definition>
+        <argsstring>(const double &amp;externaltemperature, const double &amp;externalpressure)</argsstring>
+        <name>NaClMeltingCurve</name>
+        <qualifiedname>csmp::NaClMeltingCurve::NaClMeltingCurve</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>externaltemperature</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>externalpressure</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>custom constructor</para>
+<para><simplesect kind="attention"><para>Use only this conctructor. <ref refid="classcsmp_1_1_na_cl_melting_curve" kindref="compound">NaClMeltingCurve</ref> computes temperature or pressure of halite melting as a function of pressure or temperature, respectively. These are typically computed somewhere outside this class. By using const refs to those external variables as constructor argument, <ref refid="classcsmp_1_1_na_cl_melting_curve" kindref="compound">NaClMeltingCurve</ref> is able to decipher their current values when being queried for the values. Only this constructor is allowed to ensure that functionality, default constructor has been made private. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurve.h" line="21" column="5" bodyfile="source/modules/eos/h2o_nacl/NaClMeltingCurve.cpp" bodystart="11" bodyend="19"/>
+        <referencedby refid="classcsmp_1_1_halite_liquidus_1aeaca336da1757689f6665244539fb82d" compoundref="_halite_liquidus_8cpp" startline="14" endline="31">csmp::HaliteLiquidus::HaliteLiquidus</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_melting_curve_1a39c3ba69887bff9eef6485765a1a4860" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::NaClMeltingCurve::~NaClMeltingCurve</definition>
+        <argsstring>()</argsstring>
+        <name>~NaClMeltingCurve</name>
+        <qualifiedname>csmp::NaClMeltingCurve::~NaClMeltingCurve</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>destructor </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurve.h" line="23" column="5" bodyfile="source/modules/eos/h2o_nacl/NaClMeltingCurve.cpp" bodystart="24" bodyend="26"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_melting_curve_1ae563e739088b850cdd8ef04d24ce0601" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NaClMeltingCurve::TmeltFromP</definition>
+        <argsstring>()</argsstring>
+        <name>TmeltFromP</name>
+        <qualifiedname>csmp::NaClMeltingCurve::TmeltFromP</qualifiedname>
+        <briefdescription>
+<para>returns melting temperature [C] for given p [Pa] </para>
+        </briefdescription>
+        <detaileddescription>
+<para>melting temperature for given pressure (eqn. 1 of Driesner &amp; Heinrich (2007))</para>
+<para><simplesect kind="attention"><para>No range check is performed, current pressure may be out of valid range if higher than 500 MPa and less than NaCl triple point pressure. </para>
+</simplesect>
+<xrefsect id="todo_1_todo000058"><xreftitle>Todo</xreftitle><xrefdescription><para>Implement range checking and error handling </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurve.h" line="25" column="12" bodyfile="source/modules/eos/h2o_nacl/NaClMeltingCurve.cpp" bodystart="34" bodyend="38"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_melting_curve_1a8035debd234cfc73b89e30a20621124a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NaClMeltingCurve::PmeltFromT</definition>
+        <argsstring>()</argsstring>
+        <name>PmeltFromT</name>
+        <qualifiedname>csmp::NaClMeltingCurve::PmeltFromT</qualifiedname>
+        <briefdescription>
+<para>returns melting pressure [Pa] for given T [C] </para>
+        </briefdescription>
+        <detaileddescription>
+<para>melting pressure for given temperature (eqn. 1 of Driesner &amp; Heinrich (2007))</para>
+<para><simplesect kind="attention"><para>No range check is performed, current temperature may be out of valid range if higher than ca. 925C and less than NaCl triple point temperature (800.7 C). </para>
+</simplesect>
+<xrefsect id="todo_1_todo000059"><xreftitle>Todo</xreftitle><xrefdescription><para>Implement range checking and error handling </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurve.h" line="26" column="12" bodyfile="source/modules/eos/h2o_nacl/NaClMeltingCurve.cpp" bodystart="46" bodyend="50"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_melting_curve_1adb7151cf95ad2393c7fd1e3acc055624" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::NaClMeltingCurve::NaClMeltingCurve</definition>
+        <argsstring>()</argsstring>
+        <name>NaClMeltingCurve</name>
+        <qualifiedname>csmp::NaClMeltingCurve::NaClMeltingCurve</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClMeltingCurve.h" line="29" column="5"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Temperature and pressure coordinates of dry halite melting curve. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>Thomas Driesner, ETH Zuerich, <ulink url="mailto:thomas.driesner@erdw.ethz.ch">thomas.driesner@erdw.ethz.ch</ulink></para>
+</simplesect>
+</para>
+<sect1 id="compare_floats_8h_1motivation">
+<title>Motivation</title><para>&quot;NaClMeltingCurve&quot; is legacy code from Thomas Driesner&apos;s developments for the H2O-NaCl system, and computes the temperature-pressure coordinates of dry halite melting curve. It can be used standalone if only this information is needed. Otherwise, it is only used in the CSMP++ context for building accurate lookup tables for the H2O-NaCl system, which are significantly faster if the full system properties are needed.</para>
+<para>Details of the underlying formulation can be found in</para>
+<para>Driesner T. and Heinrich C.A. (2007): The system H2O-NaCl. Part I: Correlation formulae for phase relations in temperature-pressure-molefraction space from 0 to 1000oC, 0 to 5000 bar, and 0 to 1 XNaCl. Geochimica et Cosmochimica Acta 71, 4880-4901.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_upwind_control_visitor_1usage">
+<title>Usage</title><para>Construct an instance of &quot;NaClMeltingCurve&quot; with the temperature (in C) and pressure (in Pa) as constructor arguments. &quot;NaClMeltingCurve&quot; has an internal mechanism to make sure that it always uses the current value of that temperature and pressure as they exist in your code. Public member names should be self-explanatory, I hope.</para>
+<para><programlisting><codeline><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>t(somevalue),<sp/>p(anothervalue);<sp/></highlight><highlight class="comment">//<sp/>temperature<sp/>[C]<sp/>and<sp/>pressure<sp/>[in<sp/>Pa]<sp/>in<sp/>user&apos;s<sp/>application</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">...</highlight></codeline>
+<codeline><highlight class="normal">NaClMeltingCurve<sp/>naclmelt(t,p);<sp/></highlight></codeline>
+<codeline><highlight class="normal">...</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>here,<sp/>t<sp/>may<sp/>be<sp/>updated</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">...</highlight></codeline>
+<codeline><highlight class="normal">cout<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;new<sp/>halite<sp/>melting<sp/>pressure:<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/>naclmelt.PmeltFromT()<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;Pa\n&quot;</highlight><highlight class="normal">;<sp/></highlight><highlight class="comment">//<sp/>compute<sp/>and<sp/>output<sp/>melting<sp/>pressure<sp/>for<sp/>new<sp/>temperature</highlight></codeline>
+</programlisting></para>
+</sect1>
+<sect1 id="classcsmp_1_1_upwind_control_visitor_1issues">
+<title>Known issues</title><para>The underlying equations are valid only in a restricted temperature-pressure range; range checking and error handling has not yet been implemented, see documentation notes for <ref refid="classcsmp_1_1_na_cl_melting_curve_1ae563e739088b850cdd8ef04d24ce0601" kindref="member">NaClMeltingCurve::TmeltFromP()</ref> and <ref refid="classcsmp_1_1_na_cl_melting_curve_1a8035debd234cfc73b89e30a20621124a" kindref="member">NaClMeltingCurve::PmeltFromT()</ref></para>
+</sect1>
+<sect1 id="compare_floats_8h_1testing">
+<title>Testing</title><para>testing was done in the period before publication in 2007, prior to writing this documentation, no details are available anymore </para>
+</sect1>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::NaClMeltingCurve</label>
+        <link refid="classcsmp_1_1_na_cl_melting_curve"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/eos/NaClMeltingCurve.h" line="17" column="3" bodyfile="source/includes/eos/NaClMeltingCurve.h" bodystart="18" bodyend="38"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_1a44d9ef6290803fc1159da7ca458b97ee" prot="public" virt="non-virtual"><scope>csmp::NaClMeltingCurve</scope><name>NaClMeltingCurve</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_1adb7151cf95ad2393c7fd1e3acc055624" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurve</scope><name>NaClMeltingCurve</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_1ad4be426a84b3c128185543257860a087" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurve</scope><name>pcurrent_</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_1a8035debd234cfc73b89e30a20621124a" prot="public" virt="non-virtual"><scope>csmp::NaClMeltingCurve</scope><name>PmeltFromT</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_1ab40cfc87095f469c819739639051724f" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurve</scope><name>pressure_</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_1af47ea3359e5e1d572c9956cca920b27f" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurve</scope><name>tcurrent_</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_1aa2eda9ee4457e3291630764507d9b4dc" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurve</scope><name>temperature_</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_1ae563e739088b850cdd8ef04d24ce0601" prot="public" virt="non-virtual"><scope>csmp::NaClMeltingCurve</scope><name>TmeltFromP</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_1aebaa582320e5f60d3a1394a2767ca7ff" prot="private" virt="non-virtual"><scope>csmp::NaClMeltingCurve</scope><name>tp_nacl</name></member>
+      <member refid="classcsmp_1_1_na_cl_melting_curve_1a39c3ba69887bff9eef6485765a1a4860" prot="public" virt="non-virtual"><scope>csmp::NaClMeltingCurve</scope><name>~NaClMeltingCurve</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

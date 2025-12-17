@@ -1,0 +1,211 @@
+\doxysection{csmp\+::Brine Class Reference}
+\hypertarget{classcsmp_1_1_brine}{}\label{classcsmp_1_1_brine}\index{csmp::Brine@{csmp::Brine}}
+
+
+Thermodynamic properties of H2\+O-\/\+Na\+Cl solutions.  
+
+
+
+
+{\ttfamily \#include "{}eos/h2o\+\_\+nacl/\+Brine.\+h"{}}
+
+
+
+Collaboration diagram for csmp\+::Brine\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=187pt]{classcsmp_1_1_brine__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_brine_a3ab834697c85d10e2dd3dab232ba3171}{Brine}} (const double \&externaltemperature, const double \&externalpressure, const double \&externalcomposition)
+\item 
+\mbox{\hyperlink{classcsmp_1_1_brine_a4399c2af9f96f9fcf7f8148fb394422b}{\texorpdfstring{$\sim$}{\string~}\+Brine}} ()
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_brine_a66a94a888d081877be3aecdea9e2d22d}{Molar\+Volume}} ()
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_brine_a4b3982d04820f3c3ee06fc022c321ef8}{DMolar\+Volume\+DT}} ()
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_brine_a405bcfaf2650940ec005971d4fe515ca}{Density}} ()
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_brine_af0802fe086365798d8392259d70467b5}{Compressibility\+Bar}} ()
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_brine_a67d22b158c1a560d3c64278d24e22d06}{Compressibility}} ()
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_brine_a8d3e22cdd2dd23b77ee668693fa34f49}{Expansivity}} ()
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_brine_aad9f6fbcdd61f9d8e9de4bca9b1f97d6}{Isochore\+Slope}} ()
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_brine_a0d2d8f016b24ee0e4328993a133dda94}{Enthalpy}} ()
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_brine_acffa26e700b8822e073678c249c6228d}{Heat\+Capacity}} ()
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_brine_aae5ab76535748b4eb3929b11ad1fc385}{Viscosity}} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Thermodynamic properties of H2\+O-\/\+Na\+Cl solutions. 
+
+\begin{DoxyAuthor}{Author}
+Thomas Driesner, ETH Zuerich 
+\end{DoxyAuthor}
+\hypertarget{compare_floats_8h_contact}{}\doxysubsection{\texorpdfstring{Contact}{Contact}}\label{compare_floats_8h_contact}
+\href{mailto:thomas.driesner@erdw.ethz.ch}{\texttt{thomas.\+driesner@erdw.\+ethz.\+ch}}
+
+@changes changes Latest Changes ~\newline
+\hypertarget{compare_floats_8h_motivation}{}\doxysubsection{\texorpdfstring{Motivation}{Motivation}}\label{compare_floats_8h_motivation}
+\doxylink{classcsmp_1_1_brine}{Brine} is legacy code from Thomas Driesner\textquotesingle{}s developments for the H2\+O-\/\+Na\+Cl system, but it is REQUIRED in the CSMP context. There, it is essential to build accurate lookup tables for the H2\+O-\/\+Na\+Cl system, which are then actually used by CSMP. As long as we don\textquotesingle{}t distribute the lookup tables per se for the various platforms, the \doxylink{classcsmp_1_1_brine}{Brine} legacy will remain in CSMP.
+
+\doxylink{classcsmp_1_1_brine}{Brine} computes the properties of H\textsubscript{2}O-\/\+Na\+Cl fluids as a function of temperature-\/pressure-\/composition \mbox{[}Celsius, bar, mole fraction Na\+Cl\mbox{]} , according to the paper
+
+Driesner T. (2007)\+: The system H2\+O-\/\+Na\+Cl. Part II\+: Correlations for molar volume, enthalpy, and isobaric heat capacity from 0 to 1000oC, 1 to 5000 bar, and 0 to 1 XNa\+Cl. Geochimica et Cosmochimica Acta 71, 4902-\/4919.\hypertarget{classcsmp_1_1_upwind_control_visitor_usage}{}\doxysubsection{\texorpdfstring{Usage}{Usage}}\label{classcsmp_1_1_upwind_control_visitor_usage}
+Construct an instance of "{}\+Brine"{} with the temperature (in C), Pressure (Pa) and Na\+Cl Concentration (mass fraction) that live in your code part as constructor arguments. "{}\+Brine"{} has an internal mechanism (via const\&) to make sure that it always uses the current values of temperature, pressure, and composition that you have calculated externally. Public member names should be self-\/explanatory. Don\textquotesingle{}t experiment with making private memebrs public as that will almost inevitably lead to wrong results!
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{double}\ temperature(100.0);\ \ \ \ \ \ \ \textcolor{comment}{//\ temperature\ in\ your\ code}}
+\DoxyCodeLine{\textcolor{keywordtype}{double}\ fluid\_pressure(10.0e6);\ \ \ \textcolor{comment}{//\ fluid\ pressure\ in\ your\ code}}
+\DoxyCodeLine{\textcolor{keywordtype}{double}\ massfraction\_nacl(0.1);\ \ \ \textcolor{comment}{//\ mass\ fraction\ NaCl\ in\ fluid,\ in\ your\ code}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\mbox{\hyperlink{classcsmp_1_1_brine_a3ab834697c85d10e2dd3dab232ba3171}{Brine}}\ \ \ \ brine(temperature,\ fluid\_pressure,\ massfraction\_nacl);\ \textcolor{comment}{//\ instantiate\ a\ Brine\ object}}
+\DoxyCodeLine{}
+\DoxyCodeLine{...\ \textcolor{comment}{//\ simulation\ goes\ on}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{comment}{//\ new\ values\ for\ temperature,\ fluid\ pressure,\ and\ composition\ have\ been\ computed:}}
+\DoxyCodeLine{temperature\ \ \ \ \ \ =\ newtemperature;}
+\DoxyCodeLine{fluid\_pressure\ \ \ =\ new\_fluid\_pressure;}
+\DoxyCodeLine{massfractionnacl\ =\ new\_massfraction\_nacl;}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{comment}{//\ retrieve\ and\ assign\ new\ fluid\ properties,\ no\ need\ to\ new\ communicate\ he\ new\ temperature,\ fluid\ pressure,\ and\ composition,\ they\ are\ "{}known"{}\ automatically\ by\ Brine}}
+\DoxyCodeLine{rho\ =\ brine.Density();}
+\DoxyCodeLine{mu\ \ =\ brine.Viscosity();}
+\DoxyCodeLine{cp\ \ =\ brine.HeatCapacity();}
+\DoxyCodeLine{}
+\DoxyCodeLine{...\ \textcolor{comment}{//\ move\ on}}
+
+\end{DoxyCode}
+\hypertarget{classcsmp_1_1_upwind_control_visitor_dependencies}{}\doxysubsection{\texorpdfstring{Dependencies}{Dependencies}}\label{classcsmp_1_1_upwind_control_visitor_dependencies}
+\hypertarget{classcsmp_1_1_upwind_control_visitor_issues}{}\doxysubsection{\texorpdfstring{Known issues}{Known issues}}\label{classcsmp_1_1_upwind_control_visitor_issues}
+Performance is not optimized. Whenever one of the public members is invoked ALL properties are being computed. There is currently no intention to improve this as \doxylink{classcsmp_1_1_brine}{Brine} should only be used to compute the lookup tables. Pressure() still returns values in bars, a legacy from the So\+Wat development. Composition() is in mole fraction Na\+Cl, to convert to other units, the functions in "{}\+Convert\+Concentration\+Units\+Na\+Cl.\+h"{} may be useful\hypertarget{compare_floats_8h_testing}{}\doxysubsection{\texorpdfstring{Testing}{Testing}}\label{compare_floats_8h_testing}
+testing was done in the period before publication in 2007, prior to writing this documentation, no details are available anymore 
+
+\label{doc-constructors}
+\Hypertarget{classcsmp_1_1_brine_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcsmp_1_1_brine_a3ab834697c85d10e2dd3dab232ba3171}\index{csmp::Brine@{csmp::Brine}!Brine@{Brine}}
+\index{Brine@{Brine}!csmp::Brine@{csmp::Brine}}
+\doxysubsubsection{\texorpdfstring{Brine()}{Brine()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_brine_a3ab834697c85d10e2dd3dab232ba3171} 
+csmp\+::\+Brine\+::\+Brine (\begin{DoxyParamCaption}\item[{const double \&}]{externaltemperature}{, }\item[{const double \&}]{externalpressure}{, }\item[{const double \&}]{externalcomposition}{}\end{DoxyParamCaption})}
+
+custom constructor
+
+\begin{DoxyAttention}{Attention}
+Use only this conctructor. \doxylink{classcsmp_1_1_brine}{Brine} computes thermodynamic properties of H2\+O-\/\+Na\+Cl solutions as a function of temperature, pressure, and composition. These governing parameters are typically computed somewhere outside this class. By using const refs to those external variables as constructor argument, \doxylink{classcsmp_1_1_brine}{Brine} is able to decipher their current values when being queried for fluid properties. Only this constructor is allowed to ensure that functionality, default constructor has been made private. 
+\end{DoxyAttention}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=329pt]{classcsmp_1_1_brine_a3ab834697c85d10e2dd3dab232ba3171_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_brine_a3ab834697c85d10e2dd3dab232ba3171_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_brine_a4399c2af9f96f9fcf7f8148fb394422b}\index{csmp::Brine@{csmp::Brine}!````~Brine@{\texorpdfstring{$\sim$}{\string~}Brine}}
+\index{````~Brine@{\texorpdfstring{$\sim$}{\string~}Brine}!csmp::Brine@{csmp::Brine}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}Brine()}{\string~Brine()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_brine_a4399c2af9f96f9fcf7f8148fb394422b} 
+csmp\+::\+Brine\+::\texorpdfstring{$\sim$}{\string~}\+Brine (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+destructor 
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_brine_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_brine_a67d22b158c1a560d3c64278d24e22d06}\index{csmp::Brine@{csmp::Brine}!Compressibility@{Compressibility}}
+\index{Compressibility@{Compressibility}!csmp::Brine@{csmp::Brine}}
+\doxysubsubsection{\texorpdfstring{Compressibility()}{Compressibility()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_brine_a67d22b158c1a560d3c64278d24e22d06} 
+double csmp\+::\+Brine\+::\+Compressibility (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+Isothermal compressibility of H2\+O-\/\+Na\+Cl solution in \mbox{[}Pa-\/1\mbox{]} \Hypertarget{classcsmp_1_1_brine_af0802fe086365798d8392259d70467b5}\index{csmp::Brine@{csmp::Brine}!CompressibilityBar@{CompressibilityBar}}
+\index{CompressibilityBar@{CompressibilityBar}!csmp::Brine@{csmp::Brine}}
+\doxysubsubsection{\texorpdfstring{CompressibilityBar()}{CompressibilityBar()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_brine_af0802fe086365798d8392259d70467b5} 
+double csmp\+::\+Brine\+::\+Compressibility\+Bar (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+Isothermal compressibility of H2\+O-\/\+Na\+Cl solution in \mbox{[}bar-\/1\mbox{]} \Hypertarget{classcsmp_1_1_brine_a405bcfaf2650940ec005971d4fe515ca}\index{csmp::Brine@{csmp::Brine}!Density@{Density}}
+\index{Density@{Density}!csmp::Brine@{csmp::Brine}}
+\doxysubsubsection{\texorpdfstring{Density()}{Density()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_brine_a405bcfaf2650940ec005971d4fe515ca} 
+double csmp\+::\+Brine\+::\+Density (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+Density of H2\+O-\/\+Na\+Cl solution in \mbox{[}kg m-\/3\mbox{]} \Hypertarget{classcsmp_1_1_brine_a4b3982d04820f3c3ee06fc022c321ef8}\index{csmp::Brine@{csmp::Brine}!DMolarVolumeDT@{DMolarVolumeDT}}
+\index{DMolarVolumeDT@{DMolarVolumeDT}!csmp::Brine@{csmp::Brine}}
+\doxysubsubsection{\texorpdfstring{DMolarVolumeDT()}{DMolarVolumeDT()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_brine_a4b3982d04820f3c3ee06fc022c321ef8} 
+double csmp\+::\+Brine\+::\+DMolar\+Volume\+DT (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+Temperature derivative of molar volume of H2\+O-\/\+Na\+Cl solution in \mbox{[}cm3 mol-\/1 C-\/1\mbox{]} \Hypertarget{classcsmp_1_1_brine_a0d2d8f016b24ee0e4328993a133dda94}\index{csmp::Brine@{csmp::Brine}!Enthalpy@{Enthalpy}}
+\index{Enthalpy@{Enthalpy}!csmp::Brine@{csmp::Brine}}
+\doxysubsubsection{\texorpdfstring{Enthalpy()}{Enthalpy()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_brine_a0d2d8f016b24ee0e4328993a133dda94} 
+double csmp\+::\+Brine\+::\+Enthalpy (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+Specific enthalpy of H2\+O-\/\+Na\+Cl solution in \mbox{[}J kg-\/1\mbox{]} Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_brine_a0d2d8f016b24ee0e4328993a133dda94_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_brine_a8d3e22cdd2dd23b77ee668693fa34f49}\index{csmp::Brine@{csmp::Brine}!Expansivity@{Expansivity}}
+\index{Expansivity@{Expansivity}!csmp::Brine@{csmp::Brine}}
+\doxysubsubsection{\texorpdfstring{Expansivity()}{Expansivity()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_brine_a8d3e22cdd2dd23b77ee668693fa34f49} 
+double csmp\+::\+Brine\+::\+Expansivity (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+Thermal expansivity of H2\+O-\/\+Na\+Cl solution in \mbox{[}C-\/1\mbox{]} \Hypertarget{classcsmp_1_1_brine_acffa26e700b8822e073678c249c6228d}\index{csmp::Brine@{csmp::Brine}!HeatCapacity@{HeatCapacity}}
+\index{HeatCapacity@{HeatCapacity}!csmp::Brine@{csmp::Brine}}
+\doxysubsubsection{\texorpdfstring{HeatCapacity()}{HeatCapacity()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_brine_acffa26e700b8822e073678c249c6228d} 
+double csmp\+::\+Brine\+::\+Heat\+Capacity (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+Specific heat capacity of H2\+O-\/\+Na\+Cl solution in \mbox{[}J kg-\/1 C-\/1\mbox{]} \Hypertarget{classcsmp_1_1_brine_aad9f6fbcdd61f9d8e9de4bca9b1f97d6}\index{csmp::Brine@{csmp::Brine}!IsochoreSlope@{IsochoreSlope}}
+\index{IsochoreSlope@{IsochoreSlope}!csmp::Brine@{csmp::Brine}}
+\doxysubsubsection{\texorpdfstring{IsochoreSlope()}{IsochoreSlope()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_brine_aad9f6fbcdd61f9d8e9de4bca9b1f97d6} 
+double csmp\+::\+Brine\+::\+Isochore\+Slope (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+Isochore slope (d\+P/dT)\+\_\+V of H2\+O-\/\+Na\+Cl solution in \mbox{[}Pa C-\/1\mbox{]} \Hypertarget{classcsmp_1_1_brine_a66a94a888d081877be3aecdea9e2d22d}\index{csmp::Brine@{csmp::Brine}!MolarVolume@{MolarVolume}}
+\index{MolarVolume@{MolarVolume}!csmp::Brine@{csmp::Brine}}
+\doxysubsubsection{\texorpdfstring{MolarVolume()}{MolarVolume()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_brine_a66a94a888d081877be3aecdea9e2d22d} 
+double csmp\+::\+Brine\+::\+Molar\+Volume (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+Molar volume of H2\+O-\/\+Na\+Cl solution in \mbox{[}cm3 mol-\/1\mbox{]} \Hypertarget{classcsmp_1_1_brine_aae5ab76535748b4eb3929b11ad1fc385}\index{csmp::Brine@{csmp::Brine}!Viscosity@{Viscosity}}
+\index{Viscosity@{Viscosity}!csmp::Brine@{csmp::Brine}}
+\doxysubsubsection{\texorpdfstring{Viscosity()}{Viscosity()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_brine_aae5ab76535748b4eb3929b11ad1fc385} 
+double csmp\+::\+Brine\+::\+Viscosity (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+Dynamic viscosity of H2\+O-\/\+Na\+Cl solution in \mbox{[}Pa s\mbox{]} 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/eos/Brine.\+h\item 
+source/modules/eos/h2o\+\_\+nacl/Brine.\+cpp\end{DoxyCompactItemize}

@@ -34,13 +34,13 @@ class NumIntegral_NT_op_dNi_dV : public MathOperatorRHS<dim,CELL> {
                               const char* test,    // e.g., fluid pressure
                               double acc_gravity=9.8601 );
     
-    virtual void GetOperands( const CELL<dim>& );
+    void GetOperands( const CELL<dim>& ) override final;
 
-    virtual void ComputeContribution( const CELL<dim>& );
+    void ComputeContribution( const CELL<dim>& ) override final;
     
     void SpatialDerivative( uint32_t xyz );
     
-    virtual NumIntegral_NT_op_dNi_dV<dim,CELL>* clone() const { return new NumIntegral_NT_op_dNi_dV<dim,CELL> (*this); }
+    NumIntegral_NT_op_dNi_dV<dim,CELL>* clone() const override final { return new NumIntegral_NT_op_dNi_dV<dim,CELL> (*this); }
   
   private:
     std::vector<double>           IPOL;

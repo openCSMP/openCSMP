@@ -12,8 +12,14 @@ class FiniteElement_Test : public Test
 {
   public:
     FiniteElement_Test( FiniteElement* testee, const char* results_file, bool verbose );
+    
     virtual void run();
+    
     ~FiniteElement_Test();
+    
+    /// testing declerative programming extensions
+    void TestLocalCoordinateFunctionsReturnedAs_vector( int interpolation_order );
+    
   private:
     std::string fileName_;
     FiniteElement* femPtr_ = nullptr;

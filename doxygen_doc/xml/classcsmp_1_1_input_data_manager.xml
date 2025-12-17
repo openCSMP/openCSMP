@@ -1,0 +1,803 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_input_data_manager" kind="class" language="C++" prot="public">
+    <compoundname>csmp::InputDataManager</compoundname>
+    <includes refid="_input_data_manager_8h" local="no">InputDataManager.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_input_data_manager_1abe686b441e6ca5d0b8107c58c0432519" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::InputDataManager&lt; dim &gt;::Help</definition>
+        <argsstring>() const</argsstring>
+        <name>Help</name>
+        <qualifiedname>csmp::InputDataManager::Help</qualifiedname>
+        <briefdescription>
+<para>writes configuration options to screen </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Constructs the data input manager.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>The method reports on the requirements that the input must meet to be parsed correctly. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/InputDataManager.h" line="207" column="10" bodyfile="source/modules/model/InputDataManager.cpp" bodystart="26" bodyend="48"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_input_data_manager_1aad889f893c47a359162fb89cedfba606" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::InputDataManager&lt; dim &gt;::ConfigureFromFile</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;, const char *fname)</argsstring>
+        <name>ConfigureFromFile</name>
+        <qualifiedname>csmp::InputDataManager::ConfigureFromFile</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <defname>model</defname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>fname</declname>
+        </param>
+        <briefdescription>
+<para>reads data for blocks 1-5, assigning them to box-shaped models </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Reads the input data blocks 1-5 (see class documentation) from the user specified &apos;*-configuaration.txt&apos; input file. The method gives the user the possibility to generate regions of elements with certain variable data range and to assign values and essential conditions to them.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The method takes a reference to the model which shall be initialized with the input data and the name of the file from which the data shall be read. The file name has to be specified without extension. The model will automatically append &apos;-configuration.txt&apos; to it.</para>
+<para><simplesect kind="return"><para>The data will be assigned to the input <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> object.</para>
+</simplesect>
+</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para><ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> conditions can only be assigned to scalar and vector variables, see the documentation of ReadPropertyValue() to learn how CSP variable values are specified in the input.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Because the method attempts to assign essential conditions to model boundaries identified by the enumeration <ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref>, it should only be for rectangular or box-shaped models which may however contain boundaries that are flagged as IRREGULAR as well. This is the case for box-shaped models with a top surface that represents a topography.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>The reading process is verbose. The title of the input file and potential parsing errors are reported. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/InputDataManager.h" line="210" column="10" bodyfile="source/modules/model/InputDataManager.cpp" bodystart="460" bodyend="502"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_input_data_manager_1a2914ac9569898821f69f06763a61c3c5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::InputDataManager&lt; dim &gt;::ConfigureFromFile</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;, const char *fname, bool block1, bool block2, bool block3, bool block4, bool block5, bool block6, ComputationalSettings &amp;settings)</argsstring>
+        <name>ConfigureFromFile</name>
+        <qualifiedname>csmp::InputDataManager::ConfigureFromFile</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <defname>model</defname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>fname</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>block1</declname>
+          <defname>region_specifications</defname>
+          <briefdescription><para>region name from parameter range </para>
+</briefdescription>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>block2</declname>
+          <defname>default_property_values</defname>
+          <briefdescription><para>default property values </para>
+</briefdescription>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>block3</declname>
+          <defname>region_property_values</defname>
+          <briefdescription><para>regional property values </para>
+</briefdescription>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>block4</declname>
+          <defname>box_boundary_conditions</defname>
+          <briefdescription><para>boundary conditions for box-shaped model </para>
+</briefdescription>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>block5</declname>
+          <defname>region_property_conditions</defname>
+          <briefdescription><para>essential conditions for regions </para>
+</briefdescription>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>block6</declname>
+          <defname>boundary_conditions</defname>
+          <briefdescription><para>boundary conditions for arbitrary-shaped model </para>
+</briefdescription>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_computational_settings" kindref="compound">ComputationalSettings</ref> &amp;</type>
+          <declname>settings</declname>
+        </param>
+        <briefdescription>
+<para>key generic configuration method for time-dependent models that can contain <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> objects </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Allows for the costumized configuration of CSMP models including <ref refid="classcsmp_1_1_boundary" kindref="compound">csmp::Boundary</ref></para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The method takes a reference to model which shall be initialized with the property values from the input file and the name of the file without the extension &apos;-configuration.txt&apos; which will be appended to the file name automatically.</para>
+<para>The boolean variables block1 to block5 enable the user to costumize the reading process. Thus, the desired data blocks can be switched on with their boolean variable values set to true. The role of the different input blocks is to read and create:</para>
+<para><programlisting><codeline><highlight class="normal">block1<sp/>-<sp/>regionname<sp/>from<sp/>parameter<sp/>range.</highlight></codeline>
+<codeline><highlight class="normal">block2<sp/>-<sp/>assign<sp/></highlight><highlight class="keywordflow">default</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">property</highlight><highlight class="normal"><sp/>values.</highlight></codeline>
+<codeline><highlight class="normal">block3<sp/>-<sp/>assign<sp/>regional<sp/></highlight><highlight class="keyword">property</highlight><highlight class="normal"><sp/>values<sp/>(i.e.<sp/>values<sp/>to<sp/>existing<sp/>regions),</highlight></codeline>
+<codeline><highlight class="normal">block4<sp/>-<sp/>assign<sp/>standard<sp/>boundary<sp/>conditions<sp/>to<sp/>box-shaped<sp/>model.</highlight></codeline>
+<codeline><highlight class="normal">block5<sp/>-<sp/>assign<sp/>essential<sp/>conditions<sp/>via<sp/><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref><sp/>flags<sp/>to<sp/>regions.</highlight></codeline>
+<codeline><highlight class="normal">block6<sp/>-<sp/>assign<sp/>properties<sp/>incl<sp/>flag<sp/>to<sp/>csmp::Boundary<sp/>objects</highlight></codeline>
+</programlisting></para>
+<para><simplesect kind="return"><para>The property values and flags are assigned to the model specified by the first method argument.</para>
+</simplesect>
+The methood also initializes a <ref refid="classcsmp_1_1_computational_settings" kindref="compound">ComputationalSettings</ref> object which allows the user to specify the duration of the run, the time stepping strategy, and the output times.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>The method is verbose. Errors and monitors on the reading process are reported to stdout.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">model</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The <ref refid="classcsmp_1_1_model" kindref="compound">csmp::Model</ref> to set up </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">fname</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The file name (extension &apos;-configuration.txt&apos; appended automatically) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">region_specifications</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>block1 <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref> from parameter range </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">default_property_values</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>block2 Default property values </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">region_property_values</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>block3 <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref> property values </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">box_boundary_conditions</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>block4 <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> conditions for box-shaped model </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">region_property_conditions</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>block5 Essential conditions for Regions </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">boundary_conditions</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>block6 Properties &amp; Essential conditions for <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">settings</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Computational settings </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/InputDataManager.h" line="213" column="10" bodyfile="source/modules/model/InputDataManager.cpp" bodystart="639" bodyend="681"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_input_data_manager_1ac9941220158ddc98a927ae6551c34471" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::InputDataManager&lt; dim &gt;::ConfigureFromSpecificFile</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;, const char *configuration_fname, bool block1, bool block2, bool block3, bool block4, bool block5, bool block6, ComputationalSettings &amp;settings)</argsstring>
+        <name>ConfigureFromSpecificFile</name>
+        <qualifiedname>csmp::InputDataManager::ConfigureFromSpecificFile</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <defname>model</defname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>configuration_fname</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>block1</declname>
+          <defname>region_specifications</defname>
+          <briefdescription><para>region name from parameter range </para>
+</briefdescription>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>block2</declname>
+          <defname>default_property_values</defname>
+          <briefdescription><para>default property values </para>
+</briefdescription>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>block3</declname>
+          <defname>region_property_values</defname>
+          <briefdescription><para>regional property values </para>
+</briefdescription>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>block4</declname>
+          <defname>box_boundary_conditions</defname>
+          <briefdescription><para>boundary conditions for box-shaped model </para>
+</briefdescription>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>block5</declname>
+          <defname>region_property_conditions</defname>
+          <briefdescription><para>essential conditions for regions </para>
+</briefdescription>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>block6</declname>
+          <defname>boundary_conditions</defname>
+          <briefdescription><para>boundary conditions for arbitrary-shaped model </para>
+</briefdescription>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_computational_settings" kindref="compound">ComputationalSettings</ref> &amp;</type>
+          <declname>settings</declname>
+        </param>
+        <briefdescription>
+<para>customized configuration of CSMP models including a particular configuration file </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Allows for the costumized configuration of CSMP models including a particualr configuration file Here we do not use the extension &apos;-configuration.txt&apos; which will be appended to the model name automatically. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/InputDataManager.h" line="223" column="10" bodyfile="source/modules/model/InputDataManager.cpp" bodystart="689" bodyend="730"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_input_data_manager_1a66184183e0945a8e4da070f5a17a7dcc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::InputDataManager&lt; dim &gt;::ConfigureFromFile</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;, const char *fname, bool block1, bool block2, bool block3, bool block4, bool block5, bool block6=false)</argsstring>
+        <name>ConfigureFromFile</name>
+        <qualifiedname>csmp::InputDataManager::ConfigureFromFile</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <defname>model</defname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>fname</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>block1</declname>
+          <defname>region_specifications</defname>
+          <briefdescription><para>region name from parameter range </para>
+</briefdescription>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>block2</declname>
+          <defname>default_property_values</defname>
+          <briefdescription><para>default property values </para>
+</briefdescription>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>block3</declname>
+          <defname>region_property_values</defname>
+          <briefdescription><para>regional property values </para>
+</briefdescription>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>block4</declname>
+          <defname>box_boundary_conditions</defname>
+          <briefdescription><para>boundary conditions for box-shaped model </para>
+</briefdescription>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>block5</declname>
+          <defname>region_property_conditions</defname>
+          <briefdescription><para>essential conditions for regions </para>
+</briefdescription>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>block6</declname>
+          <defname>boundary_conditions</defname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>as above but without runtime information </para>
+        </briefdescription>
+        <detaileddescription>
+<para>boundary conditions for arbitrary-shaped model</para>
+<para>Allows for configuration of CSMP models.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The method takes a reference to model which shall be initialized with the property values from the input file and the name of the file without the extension &apos;-configuration.txt&apos; which will be appended to the file name automatically.</para>
+<para>The boolean variables block1 to block5 enable the user to costumize the reading process. Thus, the desired data blocks can be switched on with their boolean variable values set to true. The role of the different input blocks is to read and create:</para>
+<para><programlisting><codeline><highlight class="normal">block1<sp/>-<sp/>regionname<sp/>from<sp/>parameter<sp/>range.</highlight></codeline>
+<codeline><highlight class="normal">block2<sp/>-<sp/>assign<sp/></highlight><highlight class="keywordflow">default</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">property</highlight><highlight class="normal"><sp/>values.</highlight></codeline>
+<codeline><highlight class="normal">block3<sp/>-<sp/>assign<sp/>regional<sp/></highlight><highlight class="keyword">property</highlight><highlight class="normal"><sp/>values<sp/>(i.e.<sp/>values<sp/>to<sp/>existing<sp/>regions),</highlight></codeline>
+<codeline><highlight class="normal">block4<sp/>-<sp/>ONLY<sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>box-shaped<sp/>models:<sp/>assign<sp/>boundary<sp/>conditions<sp/>to<sp/>LEFT,<sp/>RIGHT<sp/>etc.</highlight></codeline>
+<codeline><highlight class="normal">block5<sp/>-<sp/>assign<sp/>essential<sp/>conditions<sp/>via<sp/><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref><sp/>flags<sp/>to<sp/>regions.</highlight></codeline>
+<codeline><highlight class="normal">block6<sp/>-<sp/>properties<sp/>/<sp/>conditions<sp/>assigned<sp/>to<sp/>CSMP<sp/>Boundary<sp/>objects</highlight></codeline>
+</programlisting></para>
+<para><simplesect kind="return"><para>The property values and flags are assigned to the model specified by the first method argument.</para>
+</simplesect>
+</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>The method is verbose. Errors and monitors on the reading process are reported to stdout. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/InputDataManager.h" line="233" column="10" bodyfile="source/modules/model/InputDataManager.cpp" bodystart="540" bodyend="585"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_input_data_manager_1a3be2d7602eccff3d613576fceedb9581" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::InputDataManager&lt; dim &gt;::ConfigureRegionsFromFile</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;, const char *fname, std::set&lt; std::string &gt; &amp;regions)</argsstring>
+        <name>ConfigureRegionsFromFile</name>
+        <qualifiedname>csmp::InputDataManager::ConfigureRegionsFromFile</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>fname</declname>
+        </param>
+        <param>
+          <type>std::set&lt; std::string &gt; &amp;</type>
+          <declname>regions</declname>
+        </param>
+        <briefdescription>
+<para>configuration restricted to unique regions in the input model </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The method reads the data block3 (see description of the class below), assigning material property values and initial conditions to the set of regions specified in the file. The names of these are inserted into a supplied set container class.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The method takes a reference to the model to which the region properties shall be applied, an empty set that will contain the region names and the file name to which the extension &apos;-configuration.txt&apos; is appended automatically before the file is opened.</para>
+<para><simplesect kind="return"><para>The method returns true if the assigment process was successful.</para>
+</simplesect>
+</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>The reading process is verbose, potential errors are reported to screen. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/InputDataManager.h" line="242" column="10" bodyfile="source/modules/model/InputDataManager.cpp" bodystart="375" bodyend="418"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_input_data_manager_1a3c52d3619ab7514b32a30a47049842d9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::InputDataManager&lt; dim &gt;::ConfigureFRED_ModelFromFile</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;, const char *fname, std::map&lt; std::string, std::vector&lt; double &gt; &gt; &amp;well_data, ComputationalSettings &amp;settings)</argsstring>
+        <name>ConfigureFRED_ModelFromFile</name>
+        <qualifiedname>csmp::InputDataManager::ConfigureFRED_ModelFromFile</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>fname</declname>
+        </param>
+        <param>
+          <type>std::map&lt; std::string, std::vector&lt; double &gt; &gt; &amp;</type>
+          <declname>well_data</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_computational_settings" kindref="compound">ComputationalSettings</ref> &amp;</type>
+          <declname>settings</declname>
+        </param>
+        <briefdescription>
+<para>FRED was a FRACMAN consortium of Golder Associates, this interface is used in the Fracman GUI. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The agreed file structure for FRED-based CSMP models combines the assigment of material properties with that of boundary conditions and computational settings such as the run duration, time-stepping strategy, and output times.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The method takes a reference to the model that will be configured and the name of the input file to which the extension &apos;-FRED-input.txt&apos; will be appended.</para>
+<para><simplesect kind="return"><para>The method returns node point locations which represent the intersection of lines representing wells with fracture surfaces. The last method argument is the object into which the computational settings will be stored.</para>
+</simplesect>
+</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>A typical FRED input file may look as follows:</para>
+<para><programlisting><codeline><highlight class="stringliteral">&apos;eight_binary-FRED-input.txt&apos;</highlight><highlight class="normal"><sp/>simple<sp/>model<sp/>generated<sp/>by<sp/>SKM<sp/>10/7/2003</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/>(1)<sp/>global<sp/>material<sp/>properties</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">porosity<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>1.0</highlight></codeline>
+<codeline><highlight class="normal">nodal<sp/>fluid<sp/>volume<sp/>source<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0.0</highlight></codeline>
+<codeline><highlight class="normal">fluid<sp/>volume<sp/>source<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0.0</highlight></codeline>
+<codeline><highlight class="normal">density<sp/>oil<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>1000.0</highlight></codeline>
+<codeline><highlight class="normal">density<sp/>water<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>1000.0</highlight></codeline>
+<codeline><highlight class="normal">viscosity<sp/>oil<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>1.0e-3</highlight></codeline>
+<codeline><highlight class="normal">viscosity<sp/>water<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>1.0e-3</highlight></codeline>
+<codeline><highlight class="normal">saturation<sp/>oil<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0.95</highlight></codeline>
+<codeline><highlight class="normal">saturation<sp/>water<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0.05</highlight></codeline>
+<codeline><highlight class="normal">residual<sp/>saturation<sp/>wetting<sp/>phase<sp/><sp/><sp/><sp/><sp/><sp/><sp/>0.03</highlight></codeline>
+<codeline><highlight class="normal">residual<sp/>saturation<sp/>non-wetting<sp/>phase<sp/><sp/><sp/>0.14</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/>relative<sp/>permeability<sp/>model<sp/>options:<sp/>1.=linear,<sp/>2.=Brooks-Corey,<sp/>3.=van-Genuchten</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">relative<sp/>permeability<sp/>model<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>2.0</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/>relative-permeability<sp/>model<sp/>parameters</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">brooks<sp/>corey<sp/>parameter<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>2.0</highlight></codeline>
+<codeline><highlight class="normal">van<sp/>genuchten<sp/>parameter<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>4.37</highlight></codeline>
+<codeline><highlight class="normal">entry<sp/>pressure<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>1.0e+1</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/>(2)<sp/>local<sp/>material<sp/>properties<sp/>(of<sp/>the<sp/>fractures)</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">FRACTURE<sp/><sp/><sp/><sp/>complete<sp/><sp/><sp/><sp/>aperture<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>3.0e-3</highlight></codeline>
+<codeline><highlight class="normal">FRACTURE<sp/><sp/><sp/><sp/>complete<sp/><sp/><sp/><sp/>compressibility<sp/>1.0e-7</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/>(3)<sp/>well<sp/>intersections<sp/>(well<sp/>name,<sp/>intersection<sp/>point<sp/>(x,y,z),</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/><sp/>injection<sp/>rate<sp/>(m^3<sp/>s-1),<sp/>saturation<sp/>oil)</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">WELL1<sp/><sp/><sp/>20.0508<sp/>0.<sp/><sp/>21.3699<sp/><sp/><sp/><sp/><sp/>1.1574e-4<sp/><sp/><sp/>0.</highlight></codeline>
+<codeline><highlight class="normal">WELL2<sp/><sp/><sp/>87.8615<sp/>0.<sp/><sp/>23.359<sp/><sp/><sp/><sp/><sp/><sp/>-1.1574e-4<sp/><sp/>0.</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/>(4)<sp/>computational<sp/>settings</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">time<sp/>stepping<sp/><sp/><sp/>pedantic</highlight></codeline>
+<codeline><highlight class="normal">duration<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>86400.</highlight></codeline>
+<codeline><highlight class="normal">output<sp/>time<sp/><sp/><sp/><sp/><sp/>10000.</highlight></codeline>
+<codeline><highlight class="normal">output<sp/>time<sp/><sp/><sp/><sp/><sp/>43200.</highlight></codeline>
+</programlisting></para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>The assignment process is verbose. The progress of the reading process is echoed to screen so that the last line which appears before a problem is reported contains the offending characters. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/InputDataManager.h" line="245" column="10" bodyfile="source/modules/model/InputDataManager.cpp" bodystart="119" bodyend="162"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_input_data_manager_1a9c3639830a99bdefca38612cf43d667d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::InputDataManager&lt; dim &gt;::Configure_ANSYS_ModelFromFile</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;, const char *fname)</argsstring>
+        <name>Configure_ANSYS_ModelFromFile</name>
+        <qualifiedname>csmp::InputDataManager::Configure_ANSYS_ModelFromFile</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <defname>model</defname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>fname</declname>
+        </param>
+        <briefdescription>
+<para>configures box-shaped ANSYS models output using ANSYS&apos; csmp input interface </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The method is similar to <ref refid="classcsmp_1_1_input_data_manager_1aad889f893c47a359162fb89cedfba606" kindref="member">ConfigureFromFile()</ref>, version 1, but should be applied only to box-shaped models which already contain the target regions.</para>
+<para>These are the characteristics of models generated through the <ref refid="classcsmp_1_1_a_n_s_y_s___interface" kindref="compound">ANSYS_Interface</ref> object.</para>
+<para>Reading is restricted to blocks 2 to 4.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The method takes a reference to the model which shall be initialized with the input data and the name of the file from which the data shall be read. The file name has to be specified without extension. The model will automatically append &apos;-configuration.txt&apos; to it.</para>
+<para><simplesect kind="return"><para>The data will be assigned to the input <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> object.</para>
+</simplesect>
+</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para><ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> conditions can only be assigned to scalar and vector variables, see the documentation of ReadPropertyValue() to learn how CSMP variable values are specified in the input.</para>
+<para><simplesect kind="attention"><para>The internal settings that determine which input file blocks are read are as follows:</para>
+</simplesect>
+<programlisting><codeline><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>region_specifications<sp/><sp/><sp/><sp/><sp/><sp/>(<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal"><sp/>);<sp/><sp/></highlight><highlight class="comment">//<sp/>regionname<sp/>from<sp/>parameter<sp/>range</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>default_property_values<sp/><sp/><sp/><sp/>(<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal"><sp/><sp/>);<sp/><sp/></highlight><highlight class="comment">//<sp/>default<sp/>property<sp/>values</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>region_property_values<sp/><sp/><sp/><sp/><sp/>(<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal"><sp/><sp/>);<sp/><sp/></highlight><highlight class="comment">//<sp/>regional<sp/>property<sp/>values</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>box_boundary_conditions<sp/><sp/><sp/><sp/>(<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal"><sp/><sp/>);<sp/><sp/></highlight><highlight class="comment">//<sp/>boundary<sp/>conditions<sp/>for<sp/>box-shaped<sp/>model</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>region_property_conditions<sp/>(<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal"><sp/><sp/>);<sp/><sp/></highlight><highlight class="comment">//<sp/>essential<sp/>conditions<sp/>for<sp/>regions</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>boundary_conditions<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>(<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal"><sp/>);<sp/><sp/></highlight><highlight class="comment">//<sp/>boundary<sp/>conditions<sp/>for<sp/>arbitrary-shaped<sp/>model</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>well_settings<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>(<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal"><sp/>);<sp/><sp/></highlight><highlight class="comment">//<sp/>well<sp/>names,<sp/>locations,<sp/>rates,<sp/>ratios</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>computational_settings<sp/><sp/><sp/><sp/><sp/>(<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal"><sp/>);<sp/><sp/></highlight><highlight class="comment">//<sp/>computational<sp/>settings</highlight></codeline>
+</programlisting></para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Use this method to configure models for which the meshes were created with the ANSYS suite of simulation tools.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>The reading process is verbose. The method keeps the user informed about the progress and assigned property values are echoed to screen. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/InputDataManager.h" line="250" column="10" bodyfile="source/modules/model/InputDataManager.cpp" bodystart="220" bodyend="262"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_input_data_manager_1a335bfcc10810a0325e81ba1395050376" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::InputDataManager&lt; dim &gt;::ConfigureIrregular_ANSYS_ModelFromFile</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;, const char *fname)</argsstring>
+        <name>ConfigureIrregular_ANSYS_ModelFromFile</name>
+        <qualifiedname>csmp::InputDataManager::ConfigureIrregular_ANSYS_ModelFromFile</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <defname>model</defname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>fname</declname>
+        </param>
+        <briefdescription>
+<para>configures arbitrarily shaped ANSYS models output to CSMP, recognising boundaries if their name contains BOUNDARY </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The method is similar to <ref refid="classcsmp_1_1_input_data_manager_1aad889f893c47a359162fb89cedfba606" kindref="member">ConfigureFromFile()</ref>, version 1, but should be applied only to freeform models which already contain the target regions.</para>
+<para>These are the characteristics of models generated through the <ref refid="classcsmp_1_1_a_n_s_y_s___interface" kindref="compound">ANSYS_Interface</ref> object.</para>
+<para>Reading is restricted to blocks 2 to 4.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The method takes a reference to the model which shall be initialized with the input data and the name of the file from which the data shall be read. The file name has to be specified without extension. The model will automatically append &apos;-configuration.txt&apos; to it.</para>
+<para><simplesect kind="return"><para>The data will be assigned to the input <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> object.</para>
+</simplesect>
+</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>The method is essentially the same as the previous one but for freeform ANSYS models for which boundary conditions can be assigned only to regions.</para>
+<para><ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> conditions can only be assigned to scalar and vector variables, see the documentation of ReadPropertyValue() to learn how CSMP variable values are specified in the input.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Use this method to configure models for which the meshes were created with the ANSYS suite of simulation tools.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>The reading process is verbose. The method keeps the user informed about the progress and assigned property values are echoed to screen. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/InputDataManager.h" line="253" column="10" bodyfile="source/modules/model/InputDataManager.cpp" bodystart="306" bodyend="348"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_input_data_manager_1a5d6efda46ce4c20775872cea105efdc9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::InputDataManager&lt; dim &gt;::ReadBlocks</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;, std::ifstream &amp;, std::set&lt; std::string &gt; &amp;regions, std::map&lt; std::string, std::vector&lt; double &gt; &gt; &amp;well_data, ComputationalSettings &amp;settings, bool region_specifications, bool default_property_values, bool region_property_values, bool region_property_conditions, bool box_boundary_conditions, bool boundary_conditions, bool well_settings, bool computational_settings)</argsstring>
+        <name>ReadBlocks</name>
+        <qualifiedname>csmp::InputDataManager::ReadBlocks</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <defname>model</defname>
+        </param>
+        <param>
+          <type>std::ifstream &amp;</type>
+          <defname>ifs</defname>
+        </param>
+        <param>
+          <type>std::set&lt; std::string &gt; &amp;</type>
+          <declname>regions</declname>
+          <defname>groups</defname>
+        </param>
+        <param>
+          <type>std::map&lt; std::string, std::vector&lt; double &gt; &gt; &amp;</type>
+          <declname>well_data</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_computational_settings" kindref="compound">ComputationalSettings</ref> &amp;</type>
+          <declname>settings</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>region_specifications</declname>
+          <briefdescription><para>groupname from parameter range </para>
+</briefdescription>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>default_property_values</declname>
+          <briefdescription><para>default property values </para>
+</briefdescription>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>region_property_values</declname>
+          <briefdescription><para>regional property values </para>
+</briefdescription>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>region_property_conditions</declname>
+          <briefdescription><para>regional property conditions </para>
+</briefdescription>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>box_boundary_conditions</declname>
+          <briefdescription><para>boundary conditions for box-shaped model </para>
+</briefdescription>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>boundary_conditions</declname>
+          <briefdescription><para>boundary conditions for arbitrary-shaped model </para>
+</briefdescription>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>well_settings</declname>
+          <briefdescription><para>well names, locations, rates, ratios </para>
+</briefdescription>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>computational_settings</declname>
+          <briefdescription><para>computational settings </para>
+</briefdescription>
+        </param>
+        <briefdescription>
+<para>using the &apos;read..." functions specified in &apos;TextFileIO.cpp&apos; reads the different sections inside the configuration file </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Generic function which reads blocks of data marked by flags</para>
+<para><simplesect kind="author"><para>Roman, 2014, cleaned up by SKM 28/3/2016. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/InputDataManager.h" line="258" column="10" bodyfile="source/modules/model/InputDataManager.cpp" bodystart="743" bodyend="911"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>input of parameter values from block-structured text file. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>S.K. Matthai </para>
+</simplesect>
+<simplesect kind="author"><para>S. Geiger </para>
+</simplesect>
+<simplesect kind="author"><para>S.G. Roberts </para>
+</simplesect>
+<simplesect kind="date"><para>2001</para>
+</simplesect>
+</para>
+<sect1 id="compare_floats_8h_1motivation">
+<title>Motivation</title><para>To have an ASCII-file based interface to CSMP which allows to assign material properties and initial conditions to models and their subregions as identified by unique names (of groups). <linebreak/>
+</para>
+<para><ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> and essential conditions should also be assignable via condition flags and this approach needs to work in 1-3D and both for box- and for freeform models. <linebreak/>
+</para>
+<para>Since many meshing tools do not allow to assign names to subregions of models / meshes, but subregions and model internal and external boundaries are identified by integer or floating point (material property) values, this interface should also provide the possibility to create named model subregions from property values and ranges. The only possible properties for this purpose inside of CSMP are element properties. This is because each subregion must at least consist of one finite element.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_1design">
+<title>Design Intent</title><para>A simple design is achieved by dividing the input data into five different data blocks. The user decides which blocks to read, by setting boolean flag arguments to <ref refid="classcsmp_1_1_input_data_manager_1aad889f893c47a359162fb89cedfba606" kindref="member">ConfigureFromFile()</ref>:</para>
+<para>Block 1 - to define named regions of elements with characteristic values of element properties. <linebreak/>
+</para>
+<para>Block 2 - to set default property values for the entire model. These can get overwritten in individual subregions by the values and flags supplied in the data blocks 3-5.</para>
+<para>Block 3 - property values for model subregions. The user can determine whether these values are applied to the entire subregion (option=COMPLETE), its boundary (option=PERIMETER), or only the interior of the region (option=INTERIOR). The CSMP user&apos;s guide explains how these parts of a region are defined and how <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref> objects work in general. The perimeter elements of regions are only those which have at least one of their faces on the region boundary.</para>
+<para><simplesect kind="attention"><para>Since perimeter nodes are shared between adjacent regions the last value assignment instruction will determine the values that the target variables at these boundary nodes will have after initialisation is complete. This is not the case for other property placements.</para>
+</simplesect>
+Block 4 - (box-shaped models only): assigns boundary conditions using the boundary identifiers defined by the enumeration <ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref> in &apos;<ref refid="_box_8h" kindref="compound">Box.h</ref>&apos;. Box-shaped models offer a few extra configuration possibilities. For instance, linear boundary property variations can be assigned, which is not possible for free-form models for which only uniform boundary values can be assigned. For the latter, computations performed on the boundaries can achieve this goal.</para>
+<para>Block 5 - Essential conditions that are assigned by setting property condition flags for specifc regions. Again the discriminators &apos;complete, interior, perimeter&apos; can be used. To assign boundary condition values to irregular models, one first sets the desired property value in the target region and then assigns the intended condition flag to it, i.e. DIRICH or NEUMANN etc. in Block 5.</para>
+<para>Any of the data blocks are started and terminated by an empty line. <linebreak/>
+</para>
+<para>Apart from the block-structured approach to the configuration file the <ref refid="classcsmp_1_1_input_data_manager" kindref="compound">InputDataManager</ref> provides several methods to initialize models created with specific meshing tools, such as Shewchuk&apos;s triangle mesher and ICEM&apos;s suite of meshing tools.</para>
+<para>Computational Settings - is an additional block that can be appended, allowing the user to define the time stepping strategy, duration and times when simulation results shall be output to file.</para>
+<para>Again, a blank line indicates the end of this block and users can write any comments, references, and observations made on models as kind of a documentation, following the configuration.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_visitor_1applicability">
+<title>Applicability</title><para>The <ref refid="classcsmp_1_1_input_data_manager" kindref="compound">InputDataManager</ref> can be used to configure any CSMP model, but its functionality is restricted to that of public interfaces of the <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_solver_1participants">
+<title>Participants</title><para>The data input manager requires a <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> to act on- and interacts with the <ref refid="classcsmp_1_1_computational_settings" kindref="compound">ComputationalSettings</ref> object that is used to store runtime information.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_1consequences">
+<title>Consequences</title><para>The decision that CSMP variable names may contain white space forced us to restrict the use of token (string item) separators to the tab keys. Thus every item in any configuration line must be separated by a tab key and any other white space must be avoided (also at the end of lines). Comments can be inserted anywhere into configuration files. To write a comment, start the line with a # sign.</para>
+<para>The data input manager allows the user to configure CSMP models without the need for compilation of a program.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_visitor_1examples">
+<title>Application Examples</title><para>An example configuration file as would be used to configure a model created with the Triangle mesher and including comments is shown in the following (the CSMP <ref refid="classcsmp_1_1_example" kindref="compound">Example</ref> suite contains many others):</para>
+<para><programlisting><codeline><highlight class="stringliteral">&apos;mymodel-configuration.txt&apos;</highlight><highlight class="normal"><sp/>file<sp/>created<sp/>X/X/X<sp/>-<sp/></highlight><highlight class="keyword">this</highlight><highlight class="normal"><sp/>is<sp/>its<sp/>title</highlight></codeline>
+</programlisting></para>
+<para>blank line (thereafter region identifications in terms of their permeability and in alphabetical order)</para>
+<para><programlisting><codeline><highlight class="preprocessor">#<sp/>Block<sp/>1:<sp/>creating<sp/>a<sp/>region<sp/>called<sp/>joint<sp/>containing<sp/>all<sp/>finite<sp/>elements<sp/>whose</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/>permeability<sp/>ranges<sp/>between<sp/>1.0e-8<sp/>and<sp/>1.0e-8<sp/>m2.</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">joint<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>tab<sp/><sp/><sp/><sp/><sp/>permeability<sp/><sp/><sp/><sp/>tab<sp/><sp/><sp/><sp/><sp/>1.0e-8<sp/>1.0e-8</highlight></codeline>
+<codeline><highlight class="normal">left<sp/>fault<sp/>zone<sp/><sp/><sp/><sp/><sp/>tab<sp/><sp/><sp/><sp/><sp/>permeability<sp/><sp/><sp/><sp/>tab<sp/><sp/><sp/><sp/><sp/>1.0e-12<sp/>1.0e-11</highlight></codeline>
+</programlisting></para>
+<para>blank line (thereafter default properties and initial conditions assigned to whole model)</para>
+<para><programlisting><codeline><highlight class="preprocessor">#<sp/>Block<sp/>2:<sp/>default<sp/>properties<sp/>for<sp/>the<sp/>entire<sp/>model</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">permeability<sp/><sp/><sp/><sp/>tab<sp/><sp/><sp/>1.0e-13</highlight></codeline>
+<codeline><highlight class="normal">storativity<sp/><sp/><sp/><sp/><sp/>tab<sp/><sp/><sp/>1.0e-9</highlight></codeline>
+</programlisting></para>
+<para>blank line (thereafter region descriptions and assigned properties) discriminators here are: &apos;complete&apos;, &apos;interior&apos;, or &apos;boundary&apos;</para>
+<para><programlisting><codeline><highlight class="preprocessor">#<sp/>Block<sp/>3:<sp/>specific<sp/>properties<sp/>of<sp/>certain<sp/>model<sp/>subregions</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">left<sp/>fault<sp/>zone<sp/><sp/><sp/><sp/><sp/>tab<sp/><sp/><sp/><sp/><sp/>interior<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>tab<sp/><sp/><sp/><sp/><sp/>porosity<sp/><sp/><sp/><sp/>tab<sp/><sp/><sp/>0.25</highlight></codeline>
+<codeline><highlight class="normal">left<sp/>fault<sp/>zone<sp/><sp/><sp/><sp/><sp/>tab<sp/><sp/><sp/><sp/><sp/>boundary<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>tab<sp/><sp/><sp/><sp/><sp/>porosity<sp/><sp/><sp/><sp/>tab<sp/><sp/><sp/>0.25</highlight></codeline>
+</programlisting></para>
+<para>blank line (thereafter essential conditions, &apos;TOP&apos; or &apos;top&apos; will both work, so will &apos;Dirichlet&apos; or &apos;DIRICH&apos;, or &apos;DIRICHLET&apos;). Conditions only apply to boundaries flagged using the mechanism for box-shaped models</para>
+<para><programlisting><codeline><highlight class="preprocessor">#<sp/>Block<sp/>4:<sp/>Dirichlet<sp/>boundary<sp/>conditions<sp/>assigned<sp/>to<sp/>box-shaped<sp/>models<sp/>via<sp/>BOX_BOUNDARY<sp/>flags</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">top<sp/><sp/><sp/><sp/><sp/>tab<sp/><sp/><sp/><sp/><sp/>Dirichlet<sp/><sp/><sp/>tab<sp/><sp/><sp/><sp/><sp/>fluid<sp/>pressure<sp/><sp/><sp/><sp/><sp/><sp/>tab<sp/><sp/><sp/><sp/><sp/>1.0<sp/>1.0<sp/>4.3<sp/>4.7</highlight></codeline>
+<codeline><highlight class="normal">bottom<sp/><sp/>tab<sp/><sp/><sp/><sp/><sp/>Dirichlet<sp/><sp/><sp/>tab<sp/><sp/><sp/><sp/><sp/>fluid<sp/>pressure<sp/><sp/><sp/><sp/><sp/><sp/>tab<sp/><sp/><sp/><sp/><sp/>1.0<sp/>1.0<sp/>1.0<sp/>1.0</highlight></codeline>
+<codeline><highlight class="normal">bottom<sp/><sp/>tab<sp/><sp/><sp/><sp/><sp/>Dirichlet<sp/><sp/><sp/>tab<sp/><sp/><sp/><sp/><sp/>displacement<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>tab<sp/><sp/><sp/><sp/><sp/>1.0<sp/>1.0<sp/>1.0<sp/>1.0<sp/>1.0<sp/>1.0<sp/>1.0<sp/>1.0<sp/><ref refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9a2d373b048f997a96c661862c40f2fcae" kindref="member">DIRICH</ref><sp/><ref refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6" kindref="member">PLAIN</ref></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/>(here<sp/>the<sp/>model<sp/>will<sp/>know<sp/>whether<sp/>to<sp/>read<sp/>either<sp/>2(2D)<sp/>or<sp/>4(3D)<sp/>values</highlight></codeline>
+</programlisting></para>
+<para>blank line (thereafter regional condition flags: &apos;Dirichlet&apos; or &apos;Neumann&apos;)</para>
+<para><programlisting><codeline><highlight class="preprocessor">#<sp/>Block<sp/>5:<sp/>essential<sp/>conditions<sp/>assigned<sp/>to<sp/>regions</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">well<sp/><sp/><sp/><sp/>tab<sp/><sp/><sp/><sp/><sp/>interior<sp/><sp/><sp/><sp/>tab<sp/><sp/><sp/><sp/><sp/>fluid<sp/>pressure<sp/><sp/>tab<sp/><sp/><sp/><sp/><sp/>Dirichlet</highlight></codeline>
+</programlisting></para>
+<para>blank line (thereafter boundary condition flags for free-form boundaries)</para>
+<para><programlisting><codeline><highlight class="preprocessor">#<sp/>Block<sp/>6:<sp/>boundary<sp/>conditions<sp/>applied<sp/>to<sp/>CSMP<sp/>Boundary<sp/>objects<sp/>(that<sp/>can<sp/>have<sp/>arbitrary<sp/>shape)</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/>Boundary<sp/>name<sp/><sp/><sp/><sp/><sp/><sp/><sp/>part<sp/>of<sp/><sp/><sp/><sp/><sp/><sp/><sp/>flag<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>variable<sp/>name<sp/><sp/><sp/><sp/><sp/><sp/>uniform<sp/>value<sp/>on<sp/>boundary</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">BOUNDARY_TOP<sp/><sp/><sp/><sp/><sp/>tab<sp/><sp/>complete<sp/>tab<sp/><sp/>Dirichlet<sp/><sp/>tab<sp/>fluid<sp/>pressure<sp/>tab<sp/>16495146.</highlight></codeline>
+</programlisting></para>
+<para>The configuration file could be read configuring a <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> object either with the specific method: <linebreak/>
+</para>
+<para><programlisting><codeline><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_input_data_manager_1aad889f893c47a359162fb89cedfba606" kindref="member">ConfigureFromFile</ref>(<sp/>Model&lt;dim&gt;&amp;<sp/>sg,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>fname<sp/>);</highlight></codeline>
+</programlisting></para>
+<para>Or with the generic method, but the specific settings:</para>
+<para><programlisting><codeline><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_input_data_manager_1aad889f893c47a359162fb89cedfba606" kindref="member">ConfigureFromFile</ref>(<sp/>Model&lt;dim&gt;&amp;<sp/>sg,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>fname,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>block1,<sp/></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>block2,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>block3,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>block4,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>block5,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>block6<sp/>);</highlight></codeline>
+</programlisting> </para>
+</sect1>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::InputDataManager&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_input_data_manager"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/model/InputDataManager.h" line="204" column="1" bodyfile="source/includes/model/InputDataManager.h" bodystart="204" bodyend="272"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_input_data_manager_1a9c3639830a99bdefca38612cf43d667d" prot="public" virt="non-virtual"><scope>csmp::InputDataManager</scope><name>Configure_ANSYS_ModelFromFile</name></member>
+      <member refid="classcsmp_1_1_input_data_manager_1a3c52d3619ab7514b32a30a47049842d9" prot="public" virt="non-virtual"><scope>csmp::InputDataManager</scope><name>ConfigureFRED_ModelFromFile</name></member>
+      <member refid="classcsmp_1_1_input_data_manager_1aad889f893c47a359162fb89cedfba606" prot="public" virt="non-virtual"><scope>csmp::InputDataManager</scope><name>ConfigureFromFile</name></member>
+      <member refid="classcsmp_1_1_input_data_manager_1a2914ac9569898821f69f06763a61c3c5" prot="public" virt="non-virtual"><scope>csmp::InputDataManager</scope><name>ConfigureFromFile</name></member>
+      <member refid="classcsmp_1_1_input_data_manager_1a66184183e0945a8e4da070f5a17a7dcc" prot="public" virt="non-virtual"><scope>csmp::InputDataManager</scope><name>ConfigureFromFile</name></member>
+      <member refid="classcsmp_1_1_input_data_manager_1ac9941220158ddc98a927ae6551c34471" prot="public" virt="non-virtual"><scope>csmp::InputDataManager</scope><name>ConfigureFromSpecificFile</name></member>
+      <member refid="classcsmp_1_1_input_data_manager_1a335bfcc10810a0325e81ba1395050376" prot="public" virt="non-virtual"><scope>csmp::InputDataManager</scope><name>ConfigureIrregular_ANSYS_ModelFromFile</name></member>
+      <member refid="classcsmp_1_1_input_data_manager_1a3be2d7602eccff3d613576fceedb9581" prot="public" virt="non-virtual"><scope>csmp::InputDataManager</scope><name>ConfigureRegionsFromFile</name></member>
+      <member refid="classcsmp_1_1_input_data_manager_1abe686b441e6ca5d0b8107c58c0432519" prot="public" virt="non-virtual"><scope>csmp::InputDataManager</scope><name>Help</name></member>
+      <member refid="classcsmp_1_1_input_data_manager_1a5d6efda46ce4c20775872cea105efdc9" prot="private" virt="non-virtual"><scope>csmp::InputDataManager</scope><name>ReadBlocks</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

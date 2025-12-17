@@ -170,7 +170,7 @@ class PropertyHandle {
     PropertyHandle( Model<dim>& sg, const char* var_name,
                     VARIABLE_TYPE type=SCALAR, PLACEMENT place=NODE, uint32_t vsize=1U );
 
-    PropertyHandle( Model<dim>& sg, const char* target_group, 
+    PropertyHandle( Model<dim>& sg, const char* target_region, 
                     const char* var_name,
                     VARIABLE_TYPE type=SCALAR, PLACEMENT place=NODE, uint32_t vsize=1U );
 

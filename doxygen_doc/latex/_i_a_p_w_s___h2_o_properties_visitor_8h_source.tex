@@ -1,0 +1,125 @@
+\doxysection{IAPWS\+\_\+\+H2\+OProperties\+Visitor.\+h}
+\hypertarget{_i_a_p_w_s___h2_o_properties_visitor_8h_source}{}\label{_i_a_p_w_s___h2_o_properties_visitor_8h_source}\index{source/includes/eos/IAPWS\_H2OPropertiesVisitor.h@{source/includes/eos/IAPWS\_H2OPropertiesVisitor.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{IAPWS\_H20\_PROPERTIES\_VISITOR\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{IAPWS\_H20\_PROPERTIES\_VISITOR\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_visitor_8h}{"{}Visitor.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_scalar_variable_8h}{"{}ScalarVariable.h"{}}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_dynamic_viscosity_8h}{"{}DynamicViscosity.h"{}}}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//\ watch\ out:\ this\ file\ defined\ global\ constants\ ONE,\ TWO\ etc.}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}steam4.h"{}}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_model}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}};}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00015\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor}{IAPWS\_H2OPropertiesVisitor}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_visitor}{Visitor}}<dim>\ \{}
+\DoxyCodeLine{00016\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{comment}{///\ custom\ constructor\ using\ internally\ predefined\ variable\ names\ for,\ H,\ cp,\ alpha,\ and\ beta}}
+\DoxyCodeLine{00018\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_a2e10f88f3a3364f39bfcc2d55b567384}{IAPWS\_H2OPropertiesVisitor}}(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ sg,}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fluidPressure,}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fluidDensity,}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fluidViscosity,}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ with\_steam=\textcolor{keyword}{false},}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ verbose=\textcolor{keyword}{false}\ );}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{comment}{///\ custom\ constructor\ allowing\ the\ user\ to\ choose\ names\ for,\ H,\ cp,\ alpha,\ and\ beta}}
+\DoxyCodeLine{00026\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_ae98156fee7af98190643c0cac7689c17}{IAPWS\_H2OPropertiesVisitor}}(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ sg,}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_index}{Index}}\&\ fluidPressure,}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_index}{Index}}\&\ fluidTemperature,}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_index}{Index}}\&\ fluidDensity,}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_index}{Index}}\&\ fluidViscosity,}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_index}{Index}}\&\ fluidEnthalpy,}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_index}{Index}}\&\ fluidHeatCapacity,}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_index}{Index}}\&\ fluidExpansivity,}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_index}{Index}}\&\ fluidCompressibility,}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ with\_steam=\textcolor{keyword}{false},}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ verbose=\textcolor{keyword}{false}\ );}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ IAPWS\_H2OPropertiesVisitor(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ sg,}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fluidPressure,}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fluidTemperature,}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fluidDensity,}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fluidViscosity,}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fluidEnthalpy,}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fluidHeatCapacity,}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fluidExpansivity,}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fluidCompressibility,}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ with\_steam=\textcolor{keyword}{false},}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ verbose=\textcolor{keyword}{false}\ );}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{comment}{///\ constructor\ when\ only\ the\ fluid\ density\ and\ viscosity\ are\ required}}
+\DoxyCodeLine{00051\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_af6777d096cbbb646fc6da8bd757f494f}{IAPWS\_H2OPropertiesVisitor}}(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ sg,}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ temperature,}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fluidPressure,}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fluidDensity,}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fluidViscosity,}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ with\_steam=\textcolor{keyword}{false}\ );}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~IAPWS\_H2OPropertiesVisitor();}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{comment}{///\ checks\ whether\ the\ user\ specified\ variables\ have\ a\ placement\ that\ is\ compatible\ with\ this\ visitor}}
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_a67d0296c394f5a31aad875e687d6fbeb}{PlacementChecks}}();}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{comment}{///\ when\ all\ properties\ are\ calculated\ as\ Node\ properties}}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_ab373a37dae4d5ebdf412f466e4265548}{Visit}}(\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>*\ );}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{comment}{///\ when\ density\ and\ viscosity\ are\ calculated\ at\ the\ element\ integration\ points}}
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_a7f134fc4a8eb13463bb5d2129f96552f}{Visit}}(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ );}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{comment}{///\ to\ ascertain\ that\ nothing\ gets\ done\ at\ the\ level\ of\ the\ model}}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_a06e8e74a5425ff2f0a337a3e76946ab0}{Visit}}(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>*\ )\ \{\}}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{comment}{///\ optional\ screen\ output\ of\ calculation\ results}}
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_aff217dd398e3462e76f2252ead897cdb}{Verbose}}();}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_dynamic_viscosity}{DynamicViscosity}}\ \ \ viscosity;}
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ verbose,\ with\_steam,\ failed;}
+\DoxyCodeLine{00078\ \ \ \ \ Prop\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *props,\ *lprops,\ *sprops;\ \ \ \textcolor{comment}{///<\ PROST\ output\ structures}}
+\DoxyCodeLine{00079\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ \ Tf,\ Pf,\ rho,\ cp,\ h,\ x,\ mu,\ alpha,\ beta;}
+\DoxyCodeLine{00080\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ P\_key,\ \ \ \ \ \textcolor{comment}{///<\ fluid\ pressure}}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ T\_key,\ \ \ \ \ \textcolor{comment}{///<\ temperature}}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cp\_key,\ \ \ \ \textcolor{comment}{///<\ fluid\ heat\ capacity}}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ h\_key,\ \ \ \ \ \textcolor{comment}{///<\ fluid\ enthalpy}}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ s\_key,\ \ \ \ \ \textcolor{comment}{///<\ saturation\ steam}}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mu\_key,\ \ \ \ \textcolor{comment}{///<\ fluid\ viscosity}}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ alpha\_key,\ \textcolor{comment}{///<\ fluid\ expansivity}}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ beta\_key,\ \ \textcolor{comment}{///<\ fluid\ compressibility}}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rho\_key;\ \ \ \textcolor{comment}{///<\ fluid\ density}}
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ temk,\ dens;}
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \ \ \ \ \ dp,\ dt,\ kelvin,\ bar;\ \textcolor{comment}{///<\ convergence\ for\ PROST\ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00091\ \};}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00095\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00096\ \textcolor{comment}{@class\ \ \ IAPWS\_H2OPropertiesVisitor\ IAPWS\_H2OPropertiesVisitor\ "{}eos\(\backslash\)IAPWS\_H2OPropertiesVisitor.h"{}}}
+\DoxyCodeLine{00097\ \textcolor{comment}{}}
+\DoxyCodeLine{00098\ \textcolor{comment}{@author\ Stephan\ K.\ Matthaei}}
+\DoxyCodeLine{00099\ \textcolor{comment}{@date\ 1999}}
+\DoxyCodeLine{00100\ \textcolor{comment}{}}
+\DoxyCodeLine{00101\ \textcolor{comment}{@section\ motivation\ Motivation}}
+\DoxyCodeLine{00102\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00103\ \textcolor{comment}{Calculates\ the\ PVT\ properties\ of\ pure\ H2O\ at\ the\ Nodes\ of\ a\ mesh,\ because\ this}}
+\DoxyCodeLine{00104\ \textcolor{comment}{is\ also\ where\ the\ dependent\ variables\ P,T\ are\ located.}}
+\DoxyCodeLine{00105\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00106\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00107\ \textcolor{comment}{@section\ applicability\ Applicability}}
+\DoxyCodeLine{00108\ \textcolor{comment}{}}
+\DoxyCodeLine{00109\ \textcolor{comment}{The\ visitor\ calculates\ the\ physical\ variables\ "{}nodal\ fluid\ density"{}\ [kg\ m-\/3],\ }}
+\DoxyCodeLine{00110\ \textcolor{comment}{"{}nodal\ relative\ fluid\ density"{}\ [kg\ m-\/3]\ for\ a\ reference\ pressure,\ }}
+\DoxyCodeLine{00111\ \textcolor{comment}{"{}nodal\ heat\ capacity\ liquid"{}\ [J\ kg\ K-\/1],\ "{}nodal\ enthalpy\ liquid"{}\ [J\ kg],}}
+\DoxyCodeLine{00112\ \textcolor{comment}{"{}nodal\ fluid\ viscosity"{}\ [Pa\ s-\/1]\ and,\ optionally,\ also\ the\ same\ properties\ }}
+\DoxyCodeLine{00113\ \textcolor{comment}{of\ the\ gas\ phase\ with\ the\ names\ "{}nodal\ heat\ capacity\ steam"{},\ }}
+\DoxyCodeLine{00114\ \textcolor{comment}{"{}nodal\ enthalpy\ steam"{},\ as\ well\ as\ the\ "{}nodal\ saturation"{}.}}
+\DoxyCodeLine{00115\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00117\ \}\ \textcolor{comment}{//\ end\ csmp}}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

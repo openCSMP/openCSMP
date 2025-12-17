@@ -1,0 +1,1025 @@
+\doxysection{csmp\+::Corner\+Point\+Cell Class Reference}
+\hypertarget{classcsmp_1_1_corner_point_cell}{}\label{classcsmp_1_1_corner_point_cell}\index{csmp::CornerPointCell@{csmp::CornerPointCell}}
+
+
+\doxylink{classcsmp_1_1_corner_point_cell}{Corner\+Point\+Cell} provides the necessary functionality to construct valid Finite Elements out of distorted hexahedrons.  
+
+
+
+
+{\ttfamily \#include $<$Corner\+Point\+Cell.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Corner\+Point\+Cell\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_corner_point_cell__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Corner\+Point\+Cell\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_corner_point_cell__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_corner_point_cell_aac0c3734333a7a85f2557d35321bcb0f}\label{classcsmp_1_1_corner_point_cell_aac0c3734333a7a85f2557d35321bcb0f} 
+{\bfseries Corner\+Point\+Cell} (\mbox{\hyperlink{classcsmp_1_1_polygon_grid_manager}{Polygon\+Grid\+Manager}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_corner_point_cell_aff1bbf983f624f35357401db900a7079}\label{classcsmp_1_1_corner_point_cell_aff1bbf983f624f35357401db900a7079} 
+{\bfseries Corner\+Point\+Cell} (const \mbox{\hyperlink{classcsmp_1_1_corner_point_cell}{Corner\+Point\+Cell}} \&poly)
+\item 
+\Hypertarget{classcsmp_1_1_corner_point_cell_a38f2ac0a0143acb2389b63b60cc5954d}\label{classcsmp_1_1_corner_point_cell_a38f2ac0a0143acb2389b63b60cc5954d} 
+\mbox{\hyperlink{classcsmp_1_1_corner_point_cell}{Corner\+Point\+Cell}} \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_corner_point_cell}{Corner\+Point\+Cell}} \&poly)
+\item 
+\Hypertarget{classcsmp_1_1_corner_point_cell_ae1836980921183105a28d5524abba0fd}\label{classcsmp_1_1_corner_point_cell_ae1836980921183105a28d5524abba0fd} 
+void {\bfseries Assign\+Node} (size\+\_\+t local\+\_\+nid, const \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ \&pt)
+\begin{DoxyCompactList}\small\item\em initialization of cell ( assign nodes, define topology ) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_corner_point_cell_a1c743626a0fdacd3da588bd2699b6262}{Initialize\+Corner\+Point\+Cell}} ()
+\item 
+\Hypertarget{classcsmp_1_1_corner_point_cell_a41535d383e884e5199ad326175e86480}\label{classcsmp_1_1_corner_point_cell_a41535d383e884e5199ad326175e86480} 
+void {\bfseries Add\+Corner\+Point\+Well\+Cell} (size\+\_\+t face\+\_\+id\+\_\+org, size\+\_\+t face\+\_\+id\+\_\+dst)
+\begin{DoxyCompactList}\small\item\em define cell which contains well \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_corner_point_cell_a96d024d38eb32043cfec39ef99b0c2cf}\label{classcsmp_1_1_corner_point_cell_a96d024d38eb32043cfec39ef99b0c2cf} 
+void {\bfseries Resolve\+Corner\+Point\+Cell\+Conflicts} (std\+::map$<$ std\+::set$<$ size\+\_\+t $>$, \mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} $>$ \&additional\+\_\+points, std\+::set$<$ std\+::set$<$ size\+\_\+t $>$ $>$ \&additional\+\_\+edges)
+\begin{DoxyCompactList}\small\item\em resolve mesh conflicts for cells \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_corner_point_cell_a5079e745f3c187d55aea82bce55b7a5c}\label{classcsmp_1_1_corner_point_cell_a5079e745f3c187d55aea82bce55b7a5c} 
+void {\bfseries Process\+Corner\+Point\+Cell} (std\+::map$<$ std\+::set$<$ size\+\_\+t $>$, \mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} $>$ \&additional\+\_\+points, std\+::set$<$ std\+::set$<$ size\+\_\+t $>$ $>$ \&additional\+\_\+edges, bool well\+\_\+element=false, bool tetra\+\_\+mesh=false)
+\begin{DoxyCompactList}\small\item\em process cells \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_corner_point_cell_a4a26122ef3dff44ade54f2ea16f74aec}\label{classcsmp_1_1_corner_point_cell_a4a26122ef3dff44ade54f2ea16f74aec} 
+void {\bfseries Process\+Corner\+Point\+Regular\+Cell} (std\+::map$<$ std\+::set$<$ size\+\_\+t $>$, \mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} $>$ \&additional\+\_\+points, std\+::set$<$ std\+::set$<$ size\+\_\+t $>$ $>$ \&additional\+\_\+edges, bool well\+\_\+element=false, bool tetra\+\_\+mesh=false)
+\item 
+\Hypertarget{classcsmp_1_1_corner_point_cell_a85a35efc24cb2b8d8828ba0b5e5adee8}\label{classcsmp_1_1_corner_point_cell_a85a35efc24cb2b8d8828ba0b5e5adee8} 
+void {\bfseries Process\+Corner\+Point\+Degenerate\+Cell} (std\+::map$<$ std\+::set$<$ size\+\_\+t $>$, \mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} $>$ \&additional\+\_\+points, std\+::set$<$ std\+::set$<$ size\+\_\+t $>$ $>$ \&additional\+\_\+edges, bool well\+\_\+element=false, bool tetra\+\_\+mesh=false)
+\item 
+\Hypertarget{classcsmp_1_1_corner_point_cell_acfee757dd05b03084b17e1a6a18096e2}\label{classcsmp_1_1_corner_point_cell_acfee757dd05b03084b17e1a6a18096e2} 
+void {\bfseries Process\+Corner\+Point\+Degenerate\+Volumetric\+Cell} (std\+::map$<$ std\+::set$<$ size\+\_\+t $>$, \mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} $>$ \&additional\+\_\+points, std\+::set$<$ std\+::set$<$ size\+\_\+t $>$ $>$ \&additional\+\_\+edges, bool well\+\_\+element=false, bool tetra\+\_\+mesh=false)
+\item 
+\Hypertarget{classcsmp_1_1_corner_point_cell_a8c79214bb52b608e2a773c1adfeea6d5}\label{classcsmp_1_1_corner_point_cell_a8c79214bb52b608e2a773c1adfeea6d5} 
+void {\bfseries Process\+Corner\+Point\+Degenerate\+Volumetric\+Non\+Overlapping\+Cell} (std\+::map$<$ std\+::set$<$ size\+\_\+t $>$, \mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} $>$ \&additional\+\_\+points, std\+::set$<$ std\+::set$<$ size\+\_\+t $>$ $>$ \&additional\+\_\+edges, bool well\+\_\+element=false, bool tetra\+\_\+mesh=false)
+\item 
+\Hypertarget{classcsmp_1_1_corner_point_cell_a59022322329c003d71df641ed279e965}\label{classcsmp_1_1_corner_point_cell_a59022322329c003d71df641ed279e965} 
+void {\bfseries Process\+Corner\+Point\+Degenerate\+Volumetric\+Overlapping\+Cell} (std\+::map$<$ std\+::set$<$ size\+\_\+t $>$, \mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} $>$ \&additional\+\_\+points, std\+::set$<$ std\+::set$<$ size\+\_\+t $>$ $>$ \&additional\+\_\+edges, bool well\+\_\+element=false, bool tetra\+\_\+mesh=false)
+\item 
+\Hypertarget{classcsmp_1_1_corner_point_cell_ad4d9054068df5f6f238841cfbcf3adad}\label{classcsmp_1_1_corner_point_cell_ad4d9054068df5f6f238841cfbcf3adad} 
+void {\bfseries Process\+Corner\+Point\+Degenerate\+Low\+Dimensional\+Cell} (std\+::map$<$ std\+::set$<$ size\+\_\+t $>$, \mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} $>$ \&additional\+\_\+points, std\+::set$<$ std\+::set$<$ size\+\_\+t $>$ $>$ \&additional\+\_\+edges, bool well\+\_\+element=false, bool tetra\+\_\+mesh=false)
+\item 
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_corner_point_cell_af0c954ea7217eade34eeb490b6e8dd84}{Get\+Num\+Faces}} (size\+\_\+t fid) const
+\begin{DoxyCompactList}\small\item\em returns the number of faces that make up the corner-\/point cell (only in degenerate cells can this be less than 6!) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_corner_point_cell_aae70629c88d2a931d814823d80378597}\label{classcsmp_1_1_corner_point_cell_aae70629c88d2a931d814823d80378597} 
+bool {\bfseries Is\+Volume} () const
+\begin{DoxyCompactList}\small\item\em type of element ( dimension ) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_corner_point_cell_a294da5c01d25df17547e3feca4d0591f}\label{classcsmp_1_1_corner_point_cell_a294da5c01d25df17547e3feca4d0591f} 
+bool {\bfseries Is\+Surface} () const
+\item 
+\Hypertarget{classcsmp_1_1_corner_point_cell_aea468a693d353fcd5eb8159aaabf1bc5}\label{classcsmp_1_1_corner_point_cell_aea468a693d353fcd5eb8159aaabf1bc5} 
+bool {\bfseries Is\+Line} () const
+\item 
+\Hypertarget{classcsmp_1_1_corner_point_cell_a109bc8bcd3abf380750de809f8f44e89}\label{classcsmp_1_1_corner_point_cell_a109bc8bcd3abf380750de809f8f44e89} 
+bool {\bfseries Is\+Point\+Element} () const
+\item 
+\Hypertarget{classcsmp_1_1_corner_point_cell_a3728d88c5910661153e6ae9ed58d3894}\label{classcsmp_1_1_corner_point_cell_a3728d88c5910661153e6ae9ed58d3894} 
+bool {\bfseries Is\+Volumetric\+Non\+Overlaping\+Element} () const
+\begin{DoxyCompactList}\small\item\em type of element ( topology ) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_corner_point_cell_af66295b2157888a2024fdc801516b036}\label{classcsmp_1_1_corner_point_cell_af66295b2157888a2024fdc801516b036} 
+bool {\bfseries Is\+Volumetric\+Overlaping\+Element} () const
+\item 
+\Hypertarget{classcsmp_1_1_corner_point_cell_adc903cd63752a2112a0fad73c25501e7}\label{classcsmp_1_1_corner_point_cell_adc903cd63752a2112a0fad73c25501e7} 
+bool {\bfseries Is\+Low\+Dimensional\+Element} () const
+\item 
+\Hypertarget{classcsmp_1_1_corner_point_cell_a440fd386bc3391575420a409dd8e5e23}\label{classcsmp_1_1_corner_point_cell_a440fd386bc3391575420a409dd8e5e23} 
+size\+\_\+t {\bfseries Get\+Num\+Well\+Sections} () const
+\begin{DoxyCompactList}\small\item\em wells info \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_corner_point_cell_ab8c118f40bf901ebd056f0e96b15b446}\label{classcsmp_1_1_corner_point_cell_ab8c118f40bf901ebd056f0e96b15b446} 
+size\+\_\+t {\bfseries Get\+Num\+Well\+Section\+Nodes} (size\+\_\+t eid) const
+\item 
+\Hypertarget{classcsmp_1_1_corner_point_cell_ab8478f86221da0b42ba8c2426145cb64}\label{classcsmp_1_1_corner_point_cell_ab8478f86221da0b42ba8c2426145cb64} 
+const \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ \& {\bfseries Get\+Well\+Section\+Node} (size\+\_\+t eid, size\+\_\+t nid) const
+\item 
+\Hypertarget{classcsmp_1_1_corner_point_cell_a2df4f31e77bec3a7a7e68362d7d3df7f}\label{classcsmp_1_1_corner_point_cell_a2df4f31e77bec3a7a7e68362d7d3df7f} 
+size\+\_\+t {\bfseries Get\+Well\+Section\+Node\+Global\+Id} (size\+\_\+t eid, size\+\_\+t nid) const
+\item 
+\Hypertarget{classcsmp_1_1_corner_point_cell_a8bb32630df62cf158f69e58d6821de03}\label{classcsmp_1_1_corner_point_cell_a8bb32630df62cf158f69e58d6821de03} 
+size\+\_\+t {\bfseries Get\+Pillar\+Node\+Global\+Id\+Original\+Order} (size\+\_\+t nid) const
+\begin{DoxyCompactList}\small\item\em pillar nodes \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_corner_point_cell_a7c966773950134a3401787458a043df5}\label{classcsmp_1_1_corner_point_cell_a7c966773950134a3401787458a043df5} 
+size\+\_\+t {\bfseries Get\+Pillar\+Node\+Global\+Id\+Custom\+Order} (size\+\_\+t nid) const
+\item 
+\Hypertarget{classcsmp_1_1_corner_point_cell_a039589fcce4d9a1f9e742682fa1d600a}\label{classcsmp_1_1_corner_point_cell_a039589fcce4d9a1f9e742682fa1d600a} 
+const \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ \& {\bfseries Get\+Pillar\+Point\+Original\+Order} (size\+\_\+t nid) const
+\item 
+\Hypertarget{classcsmp_1_1_corner_point_cell_a130d5080ed38c7fb5d97322bc2ca4d74}\label{classcsmp_1_1_corner_point_cell_a130d5080ed38c7fb5d97322bc2ca4d74} 
+const \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ \& {\bfseries Get\+Pillar\+Point\+Custom\+Order} (size\+\_\+t nid) const
+\item 
+\Hypertarget{classcsmp_1_1_corner_point_cell_a1d04953e8a9cfb37c886f4eba7e4c3f1}\label{classcsmp_1_1_corner_point_cell_a1d04953e8a9cfb37c886f4eba7e4c3f1} 
+\mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+Pillar\+Node\+Original\+Order} (size\+\_\+t nid)
+\item 
+\Hypertarget{classcsmp_1_1_corner_point_cell_aaf95f9254eb8efa5533f9b2d10b78e50}\label{classcsmp_1_1_corner_point_cell_aaf95f9254eb8efa5533f9b2d10b78e50} 
+\mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+Pillar\+Node\+Custom\+Order} (size\+\_\+t nid)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_corner_point_cell_a6573f607d02b0782efeef107cbccfb75}{Out}} () const
+\begin{DoxyCompactList}\small\item\em prints object state to screen \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_polygon_cell}{csmp\+::\+Polygon\+Cell}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Polygon\+Cell} (\mbox{\hyperlink{classcsmp_1_1_polygon_grid_manager}{Polygon\+Grid\+Manager}} \&pgm)
+\begin{DoxyCompactList}\small\item\em custom constructor \end{DoxyCompactList}\item 
+{\bfseries Polygon\+Cell} (const \mbox{\hyperlink{classcsmp_1_1_polygon_cell}{Polygon\+Cell}} \&cell)
+\item 
+\mbox{\hyperlink{classcsmp_1_1_polygon_cell}{Polygon\+Cell}} \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_polygon_cell}{Polygon\+Cell}} \&cell)
+\item 
+size\+\_\+t {\bfseries Get\+Element\+Dim} () const
+\begin{DoxyCompactList}\small\item\em cell dim \end{DoxyCompactList}\item 
+size\+\_\+t {\bfseries Get\+Num\+Elements} () const
+\begin{DoxyCompactList}\small\item\em elements info \end{DoxyCompactList}\item 
+size\+\_\+t {\bfseries Get\+Num\+Element\+Nodes} (size\+\_\+t eid) const
+\item 
+const \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ \& {\bfseries Get\+Element\+Point} (size\+\_\+t eid, size\+\_\+t nid) const
+\item 
+\mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+Element\+Node} (size\+\_\+t eid, size\+\_\+t nid)
+\item 
+size\+\_\+t {\bfseries Get\+Element\+Node\+Global\+Id} (size\+\_\+t eid, size\+\_\+t nid) const
+\item 
+const \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{csmp\+::\+CSMP\+\_\+\+FEM\+\_\+\+TYPE}} \& {\bfseries Get\+Element\+Type} (size\+\_\+t eid) const
+\item 
+size\+\_\+t {\bfseries Get\+Element\+Dim} (size\+\_\+t eid) const
+\item 
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_polygon_cell_acc3b3f082a6e09b8f277fe4b72cf2029}{Get\+Num\+Faces}} () const
+\begin{DoxyCompactList}\small\item\em faces info \end{DoxyCompactList}\item 
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_polygon_cell_a940562555f4a003114960227842c24e8}{Get\+Num\+Sub\+Faces}} (size\+\_\+t fid) const
+\begin{DoxyCompactList}\small\item\em returns into how many faces a particular face is split? \end{DoxyCompactList}\item 
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_polygon_cell_a43386b5c6232e841d84e03a0e2cd6d94}{Get\+Num\+Face\+Nodes}} (size\+\_\+t fid, size\+\_\+t sfid) const
+\begin{DoxyCompactList}\small\item\em should this be Get\+Num\+Sub\+Face\+Nodes() where subfaces only exist when a quadrilateral faces is split into triangles? \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ \& {\bfseries Get\+Face\+Point} (size\+\_\+t fid, size\+\_\+t sfid, size\+\_\+t nid) const
+\item 
+\mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+Face\+Node} (size\+\_\+t fid, size\+\_\+t sfid, size\+\_\+t nid)
+\item 
+size\+\_\+t {\bfseries Get\+Face\+Node\+Global\+Id} (size\+\_\+t fid, size\+\_\+t sfid, size\+\_\+t nid) const
+\item 
+const \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{csmp\+::\+CSMP\+\_\+\+FEM\+\_\+\+TYPE}} \& {\bfseries Get\+Face\+Type} (size\+\_\+t fid, size\+\_\+t sfid) const
+\item 
+size\+\_\+t {\bfseries Get\+Face\+Dim} (size\+\_\+t fid, size\+\_\+t sfid) const
+\item 
+size\+\_\+t {\bfseries Get\+Num\+Nodes} () const
+\begin{DoxyCompactList}\small\item\em nodes info \end{DoxyCompactList}\item 
+size\+\_\+t {\bfseries Get\+Node\+Global\+Id\+Original\+Order} (size\+\_\+t nid) const
+\item 
+size\+\_\+t {\bfseries Get\+Node\+Global\+Id\+Custom\+Order} (size\+\_\+t nid) const
+\item 
+const \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ \& {\bfseries Get\+Point\+Original\+Order} (size\+\_\+t nid) const
+\item 
+const \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ \& {\bfseries Get\+Point\+Custom\+Order} (size\+\_\+t nid) const
+\item 
+\mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+Node\+Original\+Order} (size\+\_\+t nid)
+\item 
+\mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+Node\+Custom\+Order} (size\+\_\+t nid)
+\item 
+size\+\_\+t {\bfseries Get\+Num\+Extra\+Nodes} () const
+\begin{DoxyCompactList}\small\item\em extra nodes info \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ \& {\bfseries Get\+Extra\+Point} (size\+\_\+t nid) const
+\item 
+\mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+Extra\+Node} (size\+\_\+t nid)
+\item 
+void {\bfseries Add\+Extra\+Node} (const \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ \&pt)
+\item 
+size\+\_\+t {\bfseries Get\+Cell\+Centroid\+Global\+Id} () const
+\begin{DoxyCompactList}\small\item\em cell centroid ( if exist\+: by convention it\textquotesingle{}s a first node of extra nodes arrays ) \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ \& {\bfseries Get\+Cell\+Centroid\+Point} () const
+\item 
+\mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+Cell\+Centroid\+Node} ()
+\item 
+size\+\_\+t {\bfseries Get\+Original\+Node\+Id} (size\+\_\+t custom\+\_\+nid) const
+\begin{DoxyCompactList}\small\item\em face and node id\textquotesingle{}s \end{DoxyCompactList}\item 
+size\+\_\+t {\bfseries Get\+Custom\+Node\+Id} (size\+\_\+t custom\+\_\+nid) const
+\item 
+size\+\_\+t {\bfseries Get\+Original\+Face\+Id} (size\+\_\+t custom\+\_\+fid) const
+\item 
+size\+\_\+t {\bfseries Get\+Custom\+Face\+Id} (size\+\_\+t custom\+\_\+fid) const
+\item 
+size\+\_\+t {\bfseries Get\+Num\+Polygon\+Face\+Nodes} (size\+\_\+t fid) const
+\begin{DoxyCompactList}\small\item\em polygon faces info \end{DoxyCompactList}\item 
+size\+\_\+t {\bfseries Get\+Polygon\+Face\+Node\+Local\+Id} (size\+\_\+t fid, size\+\_\+t nid) const
+\item 
+size\+\_\+t {\bfseries Get\+Polygon\+Face\+Node\+Global\+Id} (size\+\_\+t fid, size\+\_\+t nid) const
+\item 
+const \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ \& {\bfseries Get\+Polygon\+Face\+Point} (size\+\_\+t fid, size\+\_\+t nid) const
+\item 
+\mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*}const {\bfseries Get\+Polygon\+Face\+Node} (size\+\_\+t fid, size\+\_\+t nid) const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_polygon_cell_ad260ad8304797694c5492378b9fa8cae}{Out}} () const
+\begin{DoxyCompactList}\small\item\em print object state to screen \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_corner_point_cell_a3d087e0b8298632694f2b92e03288689}\label{classcsmp_1_1_corner_point_cell_a3d087e0b8298632694f2b92e03288689} 
+void {\bfseries Add\+Well} (std\+::map$<$ std\+::set$<$ size\+\_\+t $>$, \mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} $>$ \&additional\+\_\+points)
+\begin{DoxyCompactList}\small\item\em add new well \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_corner_point_cell_aa883309e76d7cb1e44a7e4b322710dbf}\label{classcsmp_1_1_corner_point_cell_aa883309e76d7cb1e44a7e4b322710dbf} 
+void {\bfseries Add\+Well} (\mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*}n0, \mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*}n1)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_corner_point_cell_a186dd309bb9ce5c98557707bc37e5d7c}{Assign\+Pillar\+Nodes\+Order}} ()
+\begin{DoxyCompactList}\small\item\em initialize elements ( renumber node and eliminate duplicates ) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_corner_point_cell_a6ea2c8a3d7206da48aacf41ac7bd432a}{Initialize\+Nodes}} (std\+::map$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$, size\+\_\+t $>$ \&cell\+\_\+nodes)
+\item 
+\Hypertarget{classcsmp_1_1_corner_point_cell_a51f9b56ebe4cc933f99cd3b6b61aa965}\label{classcsmp_1_1_corner_point_cell_a51f9b56ebe4cc933f99cd3b6b61aa965} 
+void {\bfseries Check\+Node\+Order} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_corner_point_cell_a36f8b016b2bf572e190937752ee1f7bc}{Initialize\+Faces}} ()
+\item 
+\Hypertarget{classcsmp_1_1_corner_point_cell_a1ba6a6b2915edacbe953d3f6d0338d56}\label{classcsmp_1_1_corner_point_cell_a1ba6a6b2915edacbe953d3f6d0338d56} 
+void {\bfseries Check\+Face\+Order} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_corner_point_cell_ae49b96dca94a709f689ae0ed6ca18cf5}{Initialize\+Poly8\+Element}} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_corner_point_cell_acdba5ac52a5d4100d6fe256dc3bfc90e}{Initialize\+Poly7\+Element}} (const std\+::map$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$, size\+\_\+t $>$ \&cell\+\_\+nodes, const std\+::vector$<$ std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ $>$ $>$ \&face\+\_\+ordered\+\_\+points, const std\+::vector$<$ size\+\_\+t $>$ \&tri\+\_\+faces, const std\+::vector$<$ size\+\_\+t $>$ \&quad\+\_\+faces, const std\+::map$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$, std\+::vector$<$ size\+\_\+t $>$ $>$ \&point\+\_\+tri\+\_\+faces, const std\+::map$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$, std\+::vector$<$ size\+\_\+t $>$ $>$ \&point\+\_\+quad\+\_\+faces, const std\+::vector$<$ std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ $>$ $>$ \&edge\+\_\+ordered\+\_\+points, const std\+::map$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$, std\+::vector$<$ size\+\_\+t $>$ $>$ \&point\+\_\+edges)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_corner_point_cell_a1f077cd786e18077af5cc396ff6bd674}{Initialize\+Poly6\+Element}} (const std\+::map$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$, size\+\_\+t $>$ \&cell\+\_\+nodes, const std\+::vector$<$ std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ $>$ $>$ \&face\+\_\+ordered\+\_\+points, const std\+::vector$<$ size\+\_\+t $>$ \&tri\+\_\+faces, const std\+::vector$<$ size\+\_\+t $>$ \&quad\+\_\+faces, const std\+::map$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$, std\+::vector$<$ size\+\_\+t $>$ $>$ \&point\+\_\+tri\+\_\+faces, const std\+::map$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$, std\+::vector$<$ size\+\_\+t $>$ $>$ \&point\+\_\+quad\+\_\+faces, const std\+::vector$<$ std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ $>$ $>$ \&edge\+\_\+ordered\+\_\+points, const std\+::map$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$, std\+::vector$<$ size\+\_\+t $>$ $>$ \&point\+\_\+edges)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_corner_point_cell_a066acea52bd4d2390e1bc3fb53d1f0be}{Initialize\+Poly5\+Element}} (const std\+::map$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$, size\+\_\+t $>$ \&cell\+\_\+nodes, const std\+::vector$<$ std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ $>$ $>$ \&face\+\_\+ordered\+\_\+points, const std\+::vector$<$ size\+\_\+t $>$ \&tri\+\_\+faces, const std\+::vector$<$ size\+\_\+t $>$ \&quad\+\_\+faces, const std\+::map$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$, std\+::vector$<$ size\+\_\+t $>$ $>$ \&point\+\_\+tri\+\_\+faces, const std\+::map$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$, std\+::vector$<$ size\+\_\+t $>$ $>$ \&point\+\_\+quad\+\_\+faces, const std\+::vector$<$ std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ $>$ $>$ \&edge\+\_\+ordered\+\_\+points, const std\+::map$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$, std\+::vector$<$ size\+\_\+t $>$ $>$ \&point\+\_\+edges)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_corner_point_cell_abce58bc3cd6b6d75795bf7f402e6569d}{Initialize\+Poly4\+Element}} (const std\+::vector$<$ size\+\_\+t $>$ \&tri\+\_\+faces, const std\+::vector$<$ size\+\_\+t $>$ \&quad\+\_\+faces)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_corner_point_cell_ae5d91554e85bd127b0d37cde5d20079f}{Initialize\+Poly3\+Element}} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_corner_point_cell_a05f3c1882d7637b48969b8c06306c122}{Initialize\+Poly2\+Element}} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_corner_point_cell_afa428004f3b22c7f8ebc744bf4b6732a}{Initialize\+Poly1\+Element}} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_corner_point_cell_a2962d977fbd3b96f0321a51954102c53}{Get\+Topologycal\+Info}} (std\+::map$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$, size\+\_\+t $>$ \&cell\+\_\+nodes, std\+::set$<$ std\+::set$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ $>$ $>$ \&unique\+\_\+faces, std\+::vector$<$ std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ $>$ $>$ \&face\+\_\+ordered\+\_\+points, std\+::vector$<$ std\+::set$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ $>$ $>$ \&face\+\_\+unique\+\_\+points, std\+::vector$<$ size\+\_\+t $>$ \&tri\+\_\+faces, std\+::vector$<$ size\+\_\+t $>$ \&quad\+\_\+faces, std\+::map$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$, std\+::vector$<$ size\+\_\+t $>$ $>$ \&point\+\_\+tri\+\_\+faces, std\+::map$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$, std\+::vector$<$ size\+\_\+t $>$ $>$ \&point\+\_\+quad\+\_\+faces, std\+::set$<$ std\+::set$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ $>$ $>$ \&unique\+\_\+edges, std\+::vector$<$ std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ $>$ $>$ \&edge\+\_\+ordered\+\_\+points, std\+::vector$<$ std\+::set$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ $>$ $>$ \&edge\+\_\+unique\+\_\+points, std\+::map$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$, std\+::vector$<$ size\+\_\+t $>$ $>$ \&point\+\_\+edges)
+\item 
+\Hypertarget{classcsmp_1_1_corner_point_cell_ab7cb0c8b6c938e3e26e534e6231e69b8}\label{classcsmp_1_1_corner_point_cell_ab7cb0c8b6c938e3e26e534e6231e69b8} 
+void {\bfseries Add\+Quad\+Face\+Centroids} (std\+::map$<$ std\+::set$<$ size\+\_\+t $>$, \mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} $>$ \&additional\+\_\+points, std\+::set$<$ std\+::set$<$ size\+\_\+t $>$ $>$ \&additional\+\_\+edges)
+\begin{DoxyCompactList}\small\item\em process cells \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_corner_point_cell_ab53427334a564b151638248a10b72ccc}{Process\+Poly\+Element}} (std\+::map$<$ std\+::set$<$ size\+\_\+t $>$, \mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} $>$ \&additional\+\_\+points, std\+::set$<$ std\+::set$<$ size\+\_\+t $>$ $>$ \&additional\+\_\+edges, bool well\+\_\+element)
+\item 
+\Hypertarget{classcsmp_1_1_corner_point_cell_ab17a9bdc2adc6eacd7dc487503fec077}\label{classcsmp_1_1_corner_point_cell_ab17a9bdc2adc6eacd7dc487503fec077} 
+void {\bfseries Process\+Poly\+Non\+Well\+Element} (std\+::map$<$ std\+::set$<$ size\+\_\+t $>$, \mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} $>$ \&additional\+\_\+points, std\+::set$<$ std\+::set$<$ size\+\_\+t $>$ $>$ \&additional\+\_\+edges, bool add\+\_\+edge\+\_\+centroids, bool add\+\_\+face\+\_\+centroids, bool add\+\_\+cell\+\_\+centroids)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_corner_point_cell_a4adfaac6e25e24942168c30bdc035cf9}{Process\+Poly\+Well\+Element}} (std\+::map$<$ std\+::set$<$ size\+\_\+t $>$, \mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} $>$ \&additional\+\_\+points, std\+::set$<$ std\+::set$<$ size\+\_\+t $>$ $>$ \&additional\+\_\+edges)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_corner_point_cell_a7787a7136651f59c869928ecb5189c4c}{Process\+Poly8\+Element}} (std\+::map$<$ std\+::set$<$ size\+\_\+t $>$, \mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} $>$ \&additional\+\_\+points, std\+::set$<$ std\+::set$<$ size\+\_\+t $>$ $>$ \&additional\+\_\+edges, bool well\+\_\+element, bool tetra\+\_\+mesh)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_corner_point_cell_acfef7b233b2dd310c4dba603f4790402}{Process\+Poly7\+Element}} (std\+::map$<$ std\+::set$<$ size\+\_\+t $>$, \mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} $>$ \&additional\+\_\+points, std\+::set$<$ std\+::set$<$ size\+\_\+t $>$ $>$ \&additional\+\_\+edges, bool well\+\_\+element, bool tetra\+\_\+mesh)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_corner_point_cell_a0c632bbe50ffa44641d75f9e741226d0}{Process\+Poly6\+Element}} (std\+::map$<$ std\+::set$<$ size\+\_\+t $>$, \mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} $>$ \&additional\+\_\+points, std\+::set$<$ std\+::set$<$ size\+\_\+t $>$ $>$ \&additional\+\_\+edges, bool well\+\_\+element, bool tetra\+\_\+mesh)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_corner_point_cell_a553bcf9a24a54f01bd069b2a5f0b94ec}{Process\+Poly5\+Element}} (std\+::map$<$ std\+::set$<$ size\+\_\+t $>$, \mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} $>$ \&additional\+\_\+points, std\+::set$<$ std\+::set$<$ size\+\_\+t $>$ $>$ \&additional\+\_\+edges, bool well\+\_\+element, bool tetra\+\_\+mesh)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_corner_point_cell_a43ca3b2056c666fd0ba08a75c982331b}{Process\+Poly4\+Element}} (std\+::map$<$ std\+::set$<$ size\+\_\+t $>$, \mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} $>$ \&additional\+\_\+points, std\+::set$<$ std\+::set$<$ size\+\_\+t $>$ $>$ \&additional\+\_\+edges, bool well\+\_\+element, bool tetra\+\_\+mesh)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_corner_point_cell_a5596efbd76a584ae7617e87c02ad9a91}{Process\+Poly3\+Element}} (std\+::map$<$ std\+::set$<$ size\+\_\+t $>$, \mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} $>$ \&additional\+\_\+points, std\+::set$<$ std\+::set$<$ size\+\_\+t $>$ $>$ \&additional\+\_\+edges, bool well\+\_\+element, bool tetra\+\_\+mesh)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_corner_point_cell_a39a5a3b329c5e46c6f27a0004dfbd92c}{Process\+Poly2\+Element}} (std\+::map$<$ std\+::set$<$ size\+\_\+t $>$, \mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} $>$ \&additional\+\_\+points, std\+::set$<$ std\+::set$<$ size\+\_\+t $>$ $>$ \&additional\+\_\+edges, bool well\+\_\+element, bool tetra\+\_\+mesh)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_corner_point_cell_a5e91a036b98617f6baf5dcd34193fa9d}{Process\+Poly1\+Element}} (std\+::map$<$ std\+::set$<$ size\+\_\+t $>$, \mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} $>$ \&additional\+\_\+points, std\+::set$<$ std\+::set$<$ size\+\_\+t $>$ $>$ \&additional\+\_\+edges, bool well\+\_\+element, bool tetra\+\_\+mesh)
+\item 
+\Hypertarget{classcsmp_1_1_corner_point_cell_a02917414572b3cbe9d80acd59de3098a}\label{classcsmp_1_1_corner_point_cell_a02917414572b3cbe9d80acd59de3098a} 
+void {\bfseries Finish\+Meshing} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_polygon_cell}{csmp\+::\+Polygon\+Cell}}}
+\begin{DoxyCompactItemize}
+\item 
+void {\bfseries Assign\+Polygon\+Face\+Node} (size\+\_\+t fid, size\+\_\+t lnid, size\+\_\+t cell\+\_\+nid)
+\begin{DoxyCompactList}\small\item\em polygon faces info \end{DoxyCompactList}\item 
+void {\bfseries Add\+Polygon\+Face\+Node} (size\+\_\+t fid, size\+\_\+t cell\+\_\+nid)
+\item 
+void {\bfseries Clear\+Polygon\+Face\+Nodes} (size\+\_\+t fid)
+\item 
+void {\bfseries Resize\+Polygon\+Face\+Nodes} (size\+\_\+t fid, size\+\_\+t size)
+\item 
+void {\bfseries Initialize\+Node\+Order} (size\+\_\+t num\+\_\+nodes)
+\begin{DoxyCompactList}\small\item\em nodes \end{DoxyCompactList}\item 
+void {\bfseries Assign\+Node\+Order} (size\+\_\+t cnid, size\+\_\+t onid)
+\item 
+void {\bfseries Add\+Cell} (const std\+::pair$<$ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{csmp\+::\+CSMP\+\_\+\+FEM\+\_\+\+TYPE}}, std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} $>$ $>$ \&cell)
+\begin{DoxyCompactList}\small\item\em elements \end{DoxyCompactList}\item 
+void {\bfseries Erase\+Cell} (size\+\_\+t position)
+\item 
+void {\bfseries Clear\+Cells} ()
+\item 
+void {\bfseries Initialize\+Face\+Order} (size\+\_\+t num\+\_\+faces)
+\begin{DoxyCompactList}\small\item\em faces \end{DoxyCompactList}\item 
+void {\bfseries Assign\+Face\+Order} (size\+\_\+t cfid, size\+\_\+t ofid)
+\item 
+void {\bfseries Add\+Face} (size\+\_\+t fid, const std\+::pair$<$ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{csmp\+::\+CSMP\+\_\+\+FEM\+\_\+\+TYPE}}, std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} $>$ $>$ \&face)
+\item 
+void {\bfseries Erase\+Face} (size\+\_\+t fid)
+\item 
+void {\bfseries Erase\+Face} (size\+\_\+t fid, size\+\_\+t position)
+\item 
+void {\bfseries Clear\+Faces} (size\+\_\+t fid)
+\item 
+void {\bfseries Clear\+Faces} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_polygon_cell}{csmp\+::\+Polygon\+Cell}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_polygon_grid_manager}{Polygon\+Grid\+Manager}} \texorpdfstring{$\ast$}{*} {\bfseries grid\+\_\+}
+\begin{DoxyCompactList}\small\item\em grid manager TODO\+: this class is only used by Add\+Extra\+Node(), not clear why a pointer to it is needed \end{DoxyCompactList}\item 
+size\+\_\+t {\bfseries num\+\_\+nodes\+\_\+}
+\begin{DoxyCompactList}\small\item\em cell nodes data \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} $>$ {\bfseries extra\+\_\+nodes\+\_\+}
+\item 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} $>$ {\bfseries nodes\+\_\+}
+\item 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} $>$ {\bfseries nodes\+\_\+in\+\_\+custom\+\_\+order\+\_\+}
+\item 
+std\+::vector$<$ size\+\_\+t $>$ {\bfseries custom\+\_\+node\+\_\+order\+\_\+}
+\item 
+std\+::vector$<$ std\+::pair$<$ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{csmp\+::\+CSMP\+\_\+\+FEM\+\_\+\+TYPE}}, std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} $>$ $>$ $>$ {\bfseries elements\+\_\+}
+\begin{DoxyCompactList}\small\item\em cells TODO\+: what is the physical meaning of this data structure? \end{DoxyCompactList}\item 
+size\+\_\+t {\bfseries num\+\_\+faces\+\_\+}
+\begin{DoxyCompactList}\small\item\em faces \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::vector$<$ size\+\_\+t $>$ $>$ {\bfseries face\+\_\+nodes\+\_\+}
+\item 
+std\+::vector$<$ std\+::vector$<$ size\+\_\+t $>$ $>$ {\bfseries face\+\_\+nodes\+\_\+in\+\_\+custom\+\_\+order\+\_\+}
+\item 
+std\+::vector$<$ size\+\_\+t $>$ {\bfseries custom\+\_\+face\+\_\+order\+\_\+}
+\item 
+std\+::vector$<$ std\+::vector$<$ std\+::pair$<$ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{csmp\+::\+CSMP\+\_\+\+FEM\+\_\+\+TYPE}}, std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} $>$ $>$ $>$ $>$ {\bfseries faces\+\_\+}
+\begin{DoxyCompactList}\small\item\em faces\mbox{[}i\mbox{]}\mbox{[}j\mbox{]} is a 6 x 5 matrix of faces defined by face-\/type and corresponding node pointers as entries (type-\/value pairs) \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\doxylink{classcsmp_1_1_corner_point_cell}{Corner\+Point\+Cell} provides the necessary functionality to construct valid Finite Elements out of distorted hexahedrons. 
+
+\begin{DoxyAttention}{Attention}
+the Corner\+Point cell is inherited from the \doxylink{classcsmp_1_1_polygon_cell}{Polygon\+Cell} !
+\end{DoxyAttention}
+\begin{DoxyAuthor}{Author}
+R. Manasipov 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2015 
+\end{DoxyDate}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_corner_point_cell_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_corner_point_cell_a186dd309bb9ce5c98557707bc37e5d7c}\index{csmp::CornerPointCell@{csmp::CornerPointCell}!AssignPillarNodesOrder@{AssignPillarNodesOrder}}
+\index{AssignPillarNodesOrder@{AssignPillarNodesOrder}!csmp::CornerPointCell@{csmp::CornerPointCell}}
+\doxysubsubsection{\texorpdfstring{AssignPillarNodesOrder()}{AssignPillarNodesOrder()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_corner_point_cell_a186dd309bb9ce5c98557707bc37e5d7c} 
+void csmp\+::\+Corner\+Point\+Cell\+::\+Assign\+Pillar\+Nodes\+Order (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+initialize elements ( renumber node and eliminate duplicates ) 
+
+reorder nodes\Hypertarget{classcsmp_1_1_corner_point_cell_af0c954ea7217eade34eeb490b6e8dd84}\index{csmp::CornerPointCell@{csmp::CornerPointCell}!GetNumFaces@{GetNumFaces}}
+\index{GetNumFaces@{GetNumFaces}!csmp::CornerPointCell@{csmp::CornerPointCell}}
+\doxysubsubsection{\texorpdfstring{GetNumFaces()}{GetNumFaces()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_corner_point_cell_af0c954ea7217eade34eeb490b6e8dd84} 
+size\+\_\+t csmp\+::\+Corner\+Point\+Cell\+::\+Get\+Num\+Faces (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{fid}{}\end{DoxyParamCaption}) const}
+
+
+
+returns the number of faces that make up the corner-\/point cell (only in degenerate cells can this be less than 6!) 
+
+function replaces method in base class
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000196}{Todo}}]remove argument because it has no impact on number of faces returned. \end{DoxyRefDesc}
+\Hypertarget{classcsmp_1_1_corner_point_cell_a2962d977fbd3b96f0321a51954102c53}\index{csmp::CornerPointCell@{csmp::CornerPointCell}!GetTopologycalInfo@{GetTopologycalInfo}}
+\index{GetTopologycalInfo@{GetTopologycalInfo}!csmp::CornerPointCell@{csmp::CornerPointCell}}
+\doxysubsubsection{\texorpdfstring{GetTopologycalInfo()}{GetTopologycalInfo()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_corner_point_cell_a2962d977fbd3b96f0321a51954102c53} 
+void csmp\+::\+Corner\+Point\+Cell\+::\+Get\+Topologycal\+Info (\begin{DoxyParamCaption}\item[{std\+::map$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$, size\+\_\+t $>$ \&}]{cell\+\_\+nodes}{, }\item[{std\+::set$<$ std\+::set$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ $>$ $>$ \&}]{unique\+\_\+faces}{, }\item[{std\+::vector$<$ std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ $>$ $>$ \&}]{face\+\_\+ordered\+\_\+points}{, }\item[{std\+::vector$<$ std\+::set$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ $>$ $>$ \&}]{face\+\_\+unique\+\_\+points}{, }\item[{std\+::vector$<$ size\+\_\+t $>$ \&}]{tri\+\_\+faces}{, }\item[{std\+::vector$<$ size\+\_\+t $>$ \&}]{quad\+\_\+faces}{, }\item[{std\+::map$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$, std\+::vector$<$ size\+\_\+t $>$ $>$ \&}]{point\+\_\+tri\+\_\+faces}{, }\item[{std\+::map$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$, std\+::vector$<$ size\+\_\+t $>$ $>$ \&}]{point\+\_\+quad\+\_\+faces}{, }\item[{std\+::set$<$ std\+::set$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ $>$ $>$ \&}]{unique\+\_\+edges}{, }\item[{std\+::vector$<$ std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ $>$ $>$ \&}]{edge\+\_\+ordered\+\_\+points}{, }\item[{std\+::vector$<$ std\+::set$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ $>$ $>$ \&}]{edge\+\_\+unique\+\_\+points}{, }\item[{std\+::map$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$, std\+::vector$<$ size\+\_\+t $>$ $>$ \&}]{point\+\_\+edges}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+hexa cell info
+
+topological info faces
+
+edges
+
+unique edges and faces
+
+point sets
+
+initialize faces
+
+bottom face
+
+lateral faces
+
+top face (4,5,6,7)
+
+edges
+
+bottom edge
+
+top edge
+
+lateral edge
+
+assign number of unique faces\Hypertarget{classcsmp_1_1_corner_point_cell_a1c743626a0fdacd3da588bd2699b6262}\index{csmp::CornerPointCell@{csmp::CornerPointCell}!InitializeCornerPointCell@{InitializeCornerPointCell}}
+\index{InitializeCornerPointCell@{InitializeCornerPointCell}!csmp::CornerPointCell@{csmp::CornerPointCell}}
+\doxysubsubsection{\texorpdfstring{InitializeCornerPointCell()}{InitializeCornerPointCell()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_corner_point_cell_a1c743626a0fdacd3da588bd2699b6262} 
+void csmp\+::\+Corner\+Point\+Cell\+::\+Initialize\+Corner\+Point\+Cell (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+treat degenerate cells
+
+faces
+
+edges
+
+unique edges and facesHere is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_corner_point_cell_a1c743626a0fdacd3da588bd2699b6262_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_corner_point_cell_a36f8b016b2bf572e190937752ee1f7bc}\index{csmp::CornerPointCell@{csmp::CornerPointCell}!InitializeFaces@{InitializeFaces}}
+\index{InitializeFaces@{InitializeFaces}!csmp::CornerPointCell@{csmp::CornerPointCell}}
+\doxysubsubsection{\texorpdfstring{InitializeFaces()}{InitializeFaces()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_corner_point_cell_a36f8b016b2bf572e190937752ee1f7bc} 
+void csmp\+::\+Corner\+Point\+Cell\+::\+Initialize\+Faces (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+reorder nodes
+
+check correspondance of corner point cell enums to original face orderHere is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_corner_point_cell_a36f8b016b2bf572e190937752ee1f7bc_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_corner_point_cell_a6ea2c8a3d7206da48aacf41ac7bd432a}\index{csmp::CornerPointCell@{csmp::CornerPointCell}!InitializeNodes@{InitializeNodes}}
+\index{InitializeNodes@{InitializeNodes}!csmp::CornerPointCell@{csmp::CornerPointCell}}
+\doxysubsubsection{\texorpdfstring{InitializeNodes()}{InitializeNodes()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_corner_point_cell_a6ea2c8a3d7206da48aacf41ac7bd432a} 
+void csmp\+::\+Corner\+Point\+Cell\+::\+Initialize\+Nodes (\begin{DoxyParamCaption}\item[{std\+::map$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$, size\+\_\+t $>$ \&}]{cell\+\_\+nodes}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+general hexa fem info
+
+assign pillar nodes order
+
+initial numbering of nodes
+
+reorder nodes\Hypertarget{classcsmp_1_1_corner_point_cell_afa428004f3b22c7f8ebc744bf4b6732a}\index{csmp::CornerPointCell@{csmp::CornerPointCell}!InitializePoly1Element@{InitializePoly1Element}}
+\index{InitializePoly1Element@{InitializePoly1Element}!csmp::CornerPointCell@{csmp::CornerPointCell}}
+\doxysubsubsection{\texorpdfstring{InitializePoly1Element()}{InitializePoly1Element()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_corner_point_cell_afa428004f3b22c7f8ebc744bf4b6732a} 
+void csmp\+::\+Corner\+Point\+Cell\+::\+Initialize\+Poly1\+Element (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\doxylink{classcsmp_1_1_corner_point_cell_afa428004f3b22c7f8ebc744bf4b6732a}{Initialize\+Poly1\+Element()}\+: Poly1\+: sketch
+
+point ( shouldn\textquotesingle{}t be observed )\+: \begin{DoxyVerb}pillars(0,1,2,3)
+
+ \\  //
+  \\//
+    x
+  / | \
+ / / \ \
+/  / \  \
+\end{DoxyVerb}
+ points ( shouldn\textquotesingle{}t be observed)
+
+SHOULDN\textquotesingle{}T BE OBSERVED ( only if pillars intersect )Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_corner_point_cell_afa428004f3b22c7f8ebc744bf4b6732a_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_corner_point_cell_a05f3c1882d7637b48969b8c06306c122}\index{csmp::CornerPointCell@{csmp::CornerPointCell}!InitializePoly2Element@{InitializePoly2Element}}
+\index{InitializePoly2Element@{InitializePoly2Element}!csmp::CornerPointCell@{csmp::CornerPointCell}}
+\doxysubsubsection{\texorpdfstring{InitializePoly2Element()}{InitializePoly2Element()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_corner_point_cell_a05f3c1882d7637b48969b8c06306c122} 
+void csmp\+::\+Corner\+Point\+Cell\+::\+Initialize\+Poly2\+Element (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\doxylink{classcsmp_1_1_corner_point_cell_a05f3c1882d7637b48969b8c06306c122}{Initialize\+Poly2\+Element()}\+: Poly2\+: sketch
+
+bar ( shouldn\textquotesingle{}t be observed )\+: \begin{DoxyVerb} \   /        \   /
+  \ /          \ /
+0  x____________x 1
+  / \          / \
+ /   \        /   \
+\end{DoxyVerb}
+ pillars(0,2) pillars(1,3) bar ( shouldn\textquotesingle{}t be observed)
+
+SHOULDN\textquotesingle{}T BE OBSERVED ( only if pillars intersect )Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_corner_point_cell_a05f3c1882d7637b48969b8c06306c122_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_corner_point_cell_ae5d91554e85bd127b0d37cde5d20079f}\index{csmp::CornerPointCell@{csmp::CornerPointCell}!InitializePoly3Element@{InitializePoly3Element}}
+\index{InitializePoly3Element@{InitializePoly3Element}!csmp::CornerPointCell@{csmp::CornerPointCell}}
+\doxysubsubsection{\texorpdfstring{InitializePoly3Element()}{InitializePoly3Element()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_corner_point_cell_ae5d91554e85bd127b0d37cde5d20079f} 
+void csmp\+::\+Corner\+Point\+Cell\+::\+Initialize\+Poly3\+Element (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\doxylink{classcsmp_1_1_corner_point_cell_ae5d91554e85bd127b0d37cde5d20079f}{Initialize\+Poly3\+Element()}\+: Poly3\+: sketch
+
+triangle ( shouldn\textquotesingle{}t be observed )\+: \begin{DoxyVerb}   |            |
+   |            |
+   |            |
+0  x____________x 1
+   |\          /|
+   | \        / |
+   |  \      /  |
+   |   \    /   |
+   |    \  /    |
+\end{DoxyVerb}
+ pillar(0) \textbackslash{}/ pillar(1) x2 / \textbackslash{} / \textbackslash{} pillars(2,3) triangle ( shouldn\textquotesingle{}t be observed)
+
+SHOULDN\textquotesingle{}T BE OBSERVED ( only if pillars intersect )Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_corner_point_cell_ae5d91554e85bd127b0d37cde5d20079f_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_corner_point_cell_abce58bc3cd6b6d75795bf7f402e6569d}\index{csmp::CornerPointCell@{csmp::CornerPointCell}!InitializePoly4Element@{InitializePoly4Element}}
+\index{InitializePoly4Element@{InitializePoly4Element}!csmp::CornerPointCell@{csmp::CornerPointCell}}
+\doxysubsubsection{\texorpdfstring{InitializePoly4Element()}{InitializePoly4Element()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_corner_point_cell_abce58bc3cd6b6d75795bf7f402e6569d} 
+void csmp\+::\+Corner\+Point\+Cell\+::\+Initialize\+Poly4\+Element (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ size\+\_\+t $>$ \&}]{tri\+\_\+faces}{, }\item[{const std\+::vector$<$ size\+\_\+t $>$ \&}]{quad\+\_\+faces}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\doxylink{classcsmp_1_1_corner_point_cell_abce58bc3cd6b6d75795bf7f402e6569d}{Initialize\+Poly4\+Element()}\+: Poly4\+: sketch
+
+quadrilateral\+: \begin{DoxyVerb}  |            |
+  |            |
+  |            |
+  |            |
+2 x____________x 3
+  |\            \
+  | \   |        \   |
+  |  \  |         \  |
+      \ |          \ |
+       \|           \|
+      1 x____________x 0
+        |            |
+        |            |
+        |            |
+\end{DoxyVerb}
+
+
+tetrahedron\+: ( shouldn\textquotesingle{}t be observed ) \begin{DoxyVerb}      \\ pillars (1,4)
+       \\
+        \\3
+          x
+          |\
+          |\ \
+          | \  \
+\end{DoxyVerb}
+ pillar(0) \texorpdfstring{$\vert$}{|} \textbackslash{} \textbackslash{} \textbackslash{} \texorpdfstring{$\vert$}{|} \textbackslash{} \textbackslash{} $|$ \textbackslash{} \textbackslash{} pillar(2)\+\_\+\+\_\+1\+\_\+x\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+x\+\_\+2\+\_\+\+\_\+\+\_\+pillars (2,4) \textbackslash{} \textbackslash{} /\textbackslash{} \textbackslash{} \textbackslash{} / \textbackslash{} \textbackslash{} \textbackslash{} / \textbackslash{} \textbackslash{} \textbackslash{} / \textbackslash{} \textbackslash{}/ 0 \textbackslash{}x \textbackslash{} \textbackslash{} pillars (0,1) (1) quadrilateral ( 2 triangles ) (2) tetrahedron ( shouldn\textquotesingle{}t be observed )
+
+1st case\+: quadrilateral
+
+observed and tested
+
+2nd case\+: tetrahedron
+
+SHOULDN\textquotesingle{}T BE OBSERVED ( only if pillars intersect )\Hypertarget{classcsmp_1_1_corner_point_cell_a066acea52bd4d2390e1bc3fb53d1f0be}\index{csmp::CornerPointCell@{csmp::CornerPointCell}!InitializePoly5Element@{InitializePoly5Element}}
+\index{InitializePoly5Element@{InitializePoly5Element}!csmp::CornerPointCell@{csmp::CornerPointCell}}
+\doxysubsubsection{\texorpdfstring{InitializePoly5Element()}{InitializePoly5Element()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_corner_point_cell_a066acea52bd4d2390e1bc3fb53d1f0be} 
+void csmp\+::\+Corner\+Point\+Cell\+::\+Initialize\+Poly5\+Element (\begin{DoxyParamCaption}\item[{const std\+::map$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$, size\+\_\+t $>$ \&}]{cell\+\_\+nodes}{, }\item[{const std\+::vector$<$ std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ $>$ $>$ \&}]{face\+\_\+ordered\+\_\+points}{, }\item[{const std\+::vector$<$ size\+\_\+t $>$ \&}]{tri\+\_\+faces}{, }\item[{const std\+::vector$<$ size\+\_\+t $>$ \&}]{quad\+\_\+faces}{, }\item[{const std\+::map$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$, std\+::vector$<$ size\+\_\+t $>$ $>$ \&}]{point\+\_\+tri\+\_\+faces}{, }\item[{const std\+::map$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$, std\+::vector$<$ size\+\_\+t $>$ $>$ \&}]{point\+\_\+quad\+\_\+faces}{, }\item[{const std\+::vector$<$ std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ $>$ $>$ \&}]{edge\+\_\+ordered\+\_\+points}{, }\item[{const std\+::map$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$, std\+::vector$<$ size\+\_\+t $>$ $>$ \&}]{point\+\_\+edges}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\doxylink{classcsmp_1_1_corner_point_cell_a066acea52bd4d2390e1bc3fb53d1f0be}{Initialize\+Poly5\+Element()}\+: Poly5\+: sketch
+
+augmented tetrahedron\+:
+
+\begin{DoxyVerb}  |              |
+  |              |
+4 x              |
+  |              |
+  |    |         |    |
+  |    |         |    |
+  x____|_________x    |
+2 |\   |        1|\   |
+  | \  |         | \  |
+  |  \ |         |  \ |
+  |   \x_________|___\x
+  |  3 |         |    | 0
+       |              |
+       |              |
+       |              |
+\end{DoxyVerb}
+
+
+pyramid\+: ( shouldn\textquotesingle{}t be observed ) \begin{DoxyVerb}             pillars(0,1,2,3)
+
+              \\  //
+               \\//
+                 x
+               / | \
+              / / \ \
+             /  / \  \
+            /  /   \  \
+           /   /    \  \
+          /   /     \  \
+         /   /       \  \
+        /    /       \   \
+       /    /         \  \
+      x____ /_________x   \
+   2 / \   /        1 \\   \
+    /   \  /          \ \  \
+\end{DoxyVerb}
+ pillar(2) \textbackslash{} / pillar(1) \textbackslash{} \textbackslash{} \textbackslash{}x\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\textbackslash{}x 3 / \textbackslash{} 0 / \textbackslash{} pillar(3) / \textbackslash{} pillar(0) point sets
+
+node id
+
+hexa cell info
+
+(1) 2 tetrahedrons or tetrahedron + triangle (2) pyramid ( 2 tetrahedrons ) ( shouldn\textquotesingle{}t be observed )
+
+1st case\+: tetrahedron + triangle
+
+observed and tested
+
+renumbering nodes 0 -\/ side node
+
+1,2,3 -\/ bottom quad nodes
+
+4 -\/ top quad node
+
+reorder faces
+
+bottom quad face ( 0321 )
+
+top quad face ( 0143 )
+
+tri face ( 124 )
+
+tri face ( 234 )
+
+edge faces( 01 and 03 )
+
+2nd case\+: pyramid
+
+SHOULDN\textquotesingle{}T BE OBSERVED ( only if pillars intersect )
+
+renumbering nodes 0,1,2,3 -\/ quad face
+
+4 -\/ apex
+
+reorder faces
+
+bottom quad face ( 0321 )
+
+tri face ( 014 )
+
+tri face ( 124 )
+
+tri face ( 234 )
+
+tri face ( 304 )
+
+point faces ( 4 )\Hypertarget{classcsmp_1_1_corner_point_cell_a1f077cd786e18077af5cc396ff6bd674}\index{csmp::CornerPointCell@{csmp::CornerPointCell}!InitializePoly6Element@{InitializePoly6Element}}
+\index{InitializePoly6Element@{InitializePoly6Element}!csmp::CornerPointCell@{csmp::CornerPointCell}}
+\doxysubsubsection{\texorpdfstring{InitializePoly6Element()}{InitializePoly6Element()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_corner_point_cell_a1f077cd786e18077af5cc396ff6bd674} 
+void csmp\+::\+Corner\+Point\+Cell\+::\+Initialize\+Poly6\+Element (\begin{DoxyParamCaption}\item[{const std\+::map$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$, size\+\_\+t $>$ \&}]{cell\+\_\+nodes}{, }\item[{const std\+::vector$<$ std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ $>$ $>$ \&}]{face\+\_\+ordered\+\_\+points}{, }\item[{const std\+::vector$<$ size\+\_\+t $>$ \&}]{tri\+\_\+faces}{, }\item[{const std\+::vector$<$ size\+\_\+t $>$ \&}]{quad\+\_\+faces}{, }\item[{const std\+::map$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$, std\+::vector$<$ size\+\_\+t $>$ $>$ \&}]{point\+\_\+tri\+\_\+faces}{, }\item[{const std\+::map$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$, std\+::vector$<$ size\+\_\+t $>$ $>$ \&}]{point\+\_\+quad\+\_\+faces}{, }\item[{const std\+::vector$<$ std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ $>$ $>$ \&}]{edge\+\_\+ordered\+\_\+points}{, }\item[{const std\+::map$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$, std\+::vector$<$ size\+\_\+t $>$ $>$ \&}]{point\+\_\+edges}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\doxylink{classcsmp_1_1_corner_point_cell_a1f077cd786e18077af5cc396ff6bd674}{Initialize\+Poly6\+Element()}\+: Poly6\+: sketch
+
+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+ X \texorpdfstring{$\vert$}{|}\textbackslash{} \texorpdfstring{$\vert$}{|} \textbackslash{} Y \texorpdfstring{$\vert$}{|} Z
+
+wedge\+:
+
+\texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} 5 \texorpdfstring{$\vert$}{|} x \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} /\texorpdfstring{$\vert$}{|}\textbackslash{} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} / \texorpdfstring{$\vert$}{|} \textbackslash{} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} / \texorpdfstring{$\vert$}{|} \textbackslash{} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} / \texorpdfstring{$\vert$}{|} \textbackslash{}x 2 \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} / \texorpdfstring{$\vert$}{|} / \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|}/ \texorpdfstring{$\vert$}{|} / \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|}/ \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} /\texorpdfstring{$\vert$}{|} / \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} / \texorpdfstring{$\vert$}{|} /\texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|}/ \texorpdfstring{$\vert$}{|} / \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} 3 x\+\_\+\+\_\+\+\_\+\texorpdfstring{$\vert$}{|}\+\_\+\+\_\+\+\_\+/\+\_\+\+\_\+x 4 \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|}\textbackslash{} \texorpdfstring{$\vert$}{|} / \textbackslash{} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \textbackslash{} \texorpdfstring{$\vert$}{|} / \textbackslash{} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} $|$/ \textbackslash{} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} x\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+x\texorpdfstring{$\vert$}{|} 0 \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} 1 \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|}
+
+octahedron\+:
+
+\texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} 5 x \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{3}{|X[-1]}|}
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ }\\\cline{1-3}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ }\\\cline{1-3}
+\endhead
+&&x 4  \\\cline{1-3}
+\end{longtabu}
+x\+\_\+\+\_\+\+\_\+\+\_\+\texorpdfstring{$\vert$}{|}\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+x \texorpdfstring{$\vert$}{|} 3 \texorpdfstring{$\vert$}{|}\textbackslash{} \texorpdfstring{$\vert$}{|} 2\texorpdfstring{$\vert$}{|}\textbackslash{} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \textbackslash{} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \textbackslash{} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \textbackslash{} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \textbackslash{} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \textbackslash{}x\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\texorpdfstring{$\vert$}{|}\+\_\+\+\_\+\+\_\+\textbackslash{}x \texorpdfstring{$\vert$}{|} 0 \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} 1 \tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{1}{|X[-1]}|}
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ }\\\cline{1-1}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ }\\\cline{1-1}
+\endhead
+\\\cline{1-1}
+\end{longtabu}
+point sets
+
+node id
+
+hexa cell info
+
+(1) wedge ( 3 tetrahedrons ) (2) octahedron ( 2 tetrahedrons )
+
+1st case\+: wedge
+
+observed and tested
+
+renumbering nodes 0,1,2 -\/ front triangle
+
+3,4,5 -\/ back triangle
+
+reorder faces
+
+bottom quad face ( 0253 )
+
+front quad face ( 0143 )
+
+back quad face ( 1452 )
+
+left tri face ( 012 )
+
+right tri face ( 354 )
+
+edge face ( 03 )
+
+2nd case\+: octahedron( 4 or 2 tetrahedrons )
+
+observed and tested
+
+renumbering nodes 0 -\/ node where quad\textquotesingle{}s collapse
+
+1,2,3 -\/ bottom quad
+
+4,5 -\/ top quad nodes
+
+reorder faces bottom quad face ( 0321 )
+
+top quad face ( 0425 )
+
+tri face ( 014 )
+
+tri face ( 124 )
+
+tri face ( 235 )
+
+tri face ( 305 )\Hypertarget{classcsmp_1_1_corner_point_cell_acdba5ac52a5d4100d6fe256dc3bfc90e}\index{csmp::CornerPointCell@{csmp::CornerPointCell}!InitializePoly7Element@{InitializePoly7Element}}
+\index{InitializePoly7Element@{InitializePoly7Element}!csmp::CornerPointCell@{csmp::CornerPointCell}}
+\doxysubsubsection{\texorpdfstring{InitializePoly7Element()}{InitializePoly7Element()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_corner_point_cell_acdba5ac52a5d4100d6fe256dc3bfc90e} 
+void csmp\+::\+Corner\+Point\+Cell\+::\+Initialize\+Poly7\+Element (\begin{DoxyParamCaption}\item[{const std\+::map$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$, size\+\_\+t $>$ \&}]{cell\+\_\+nodes}{, }\item[{const std\+::vector$<$ std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ $>$ $>$ \&}]{face\+\_\+ordered\+\_\+points}{, }\item[{const std\+::vector$<$ size\+\_\+t $>$ \&}]{tri\+\_\+faces}{, }\item[{const std\+::vector$<$ size\+\_\+t $>$ \&}]{quad\+\_\+faces}{, }\item[{const std\+::map$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$, std\+::vector$<$ size\+\_\+t $>$ $>$ \&}]{point\+\_\+tri\+\_\+faces}{, }\item[{const std\+::map$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$, std\+::vector$<$ size\+\_\+t $>$ $>$ \&}]{point\+\_\+quad\+\_\+faces}{, }\item[{const std\+::vector$<$ std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ $>$ $>$ \&}]{edge\+\_\+ordered\+\_\+points}{, }\item[{const std\+::map$<$ \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$, std\+::vector$<$ size\+\_\+t $>$ $>$ \&}]{point\+\_\+edges}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\doxylink{classcsmp_1_1_corner_point_cell_acdba5ac52a5d4100d6fe256dc3bfc90e}{Initialize\+Poly7\+Element()}\+: Poly7\+: sketch
+
+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+ X \texorpdfstring{$\vert$}{|}\textbackslash{} \texorpdfstring{$\vert$}{|} \textbackslash{} Y \texorpdfstring{$\vert$}{|} Z
+
+augmented prism\+:
+
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{1}{|X[-1]}|}
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ }\\\cline{1-1}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ }\\\cline{1-1}
+\endhead
+\\\cline{1-1}
+\\\cline{1-1}
+\end{longtabu}
+5 x\+\_\+\+\_\+\+\_\+\+\_\+\texorpdfstring{$\vert$}{|}\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+x 4 \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|}\textbackslash{} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \textbackslash{} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \textbackslash{} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} 6 x \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} x\+\_\+\+\_\+\+\_\+\+\_\+\texorpdfstring{$\vert$}{|}\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+x \texorpdfstring{$\vert$}{|} 2 \texorpdfstring{$\vert$}{|}\textbackslash{} \texorpdfstring{$\vert$}{|} 1\texorpdfstring{$\vert$}{|}\textbackslash{} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \textbackslash{} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \textbackslash{} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \textbackslash{} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \textbackslash{} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \textbackslash{}x\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\texorpdfstring{$\vert$}{|}\+\_\+\+\_\+\+\_\+\textbackslash{}x \texorpdfstring{$\vert$}{|} 3 \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} 0 \tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{1}{|X[-1]}|}
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ }\\\cline{1-1}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ }\\\cline{1-1}
+\endhead
+\\\cline{1-1}
+\\\cline{1-1}
+\end{longtabu}
+point sets
+
+node id
+
+hexa cell info
+
+(1) 4 or 5 tetrahedrons
+
+observed and tested
+
+renumbering nodes 0 -\/ point where 2 triangles meet
+
+1,2,3 -\/ bottom quad
+
+4,5,6 -\/ top quad
+
+reorder faces bottom quad face ( 0123 )
+
+left quad face ( 1452 )
+
+right quad face ( 2563 )
+
+top quud face ( 0654 )
+
+left tri face ( 014 )
+
+right tri face ( 036 )\Hypertarget{classcsmp_1_1_corner_point_cell_ae49b96dca94a709f689ae0ed6ca18cf5}\index{csmp::CornerPointCell@{csmp::CornerPointCell}!InitializePoly8Element@{InitializePoly8Element}}
+\index{InitializePoly8Element@{InitializePoly8Element}!csmp::CornerPointCell@{csmp::CornerPointCell}}
+\doxysubsubsection{\texorpdfstring{InitializePoly8Element()}{InitializePoly8Element()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_corner_point_cell_ae49b96dca94a709f689ae0ed6ca18cf5} 
+void csmp\+::\+Corner\+Point\+Cell\+::\+Initialize\+Poly8\+Element (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\doxylink{classcsmp_1_1_corner_point_cell_ae49b96dca94a709f689ae0ed6ca18cf5}{Initialize\+Poly8\+Element()}\+: Poly8\+: sketch
+
+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+ X \texorpdfstring{$\vert$}{|}\textbackslash{} \texorpdfstring{$\vert$}{|} \textbackslash{} Y \texorpdfstring{$\vert$}{|} Z
+
+hexahedron\+:
+
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{1}{|X[-1]}|}
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ }\\\cline{1-1}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ }\\\cline{1-1}
+\endhead
+\\\cline{1-1}
+\\\cline{1-1}
+\end{longtabu}
+7 x\+\_\+\+\_\+\+\_\+\+\_\+\texorpdfstring{$\vert$}{|}\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+x 6 \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|}\textbackslash{} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|}\textbackslash{} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \textbackslash{} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \textbackslash{} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \textbackslash{} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \textbackslash{} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} 4x\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\texorpdfstring{$\vert$}{|}\+\_\+\+\_\+\+\_\+\textbackslash{}x 5 \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} x\+\_\+\+\_\+\+\_\+\+\_\+\texorpdfstring{$\vert$}{|}\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+x \texorpdfstring{$\vert$}{|} 3 \texorpdfstring{$\vert$}{|}\textbackslash{} \texorpdfstring{$\vert$}{|} 2\texorpdfstring{$\vert$}{|}\textbackslash{} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \textbackslash{} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \textbackslash{} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \textbackslash{} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \textbackslash{} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \textbackslash{}x\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\texorpdfstring{$\vert$}{|}\+\_\+\+\_\+\+\_\+\textbackslash{}x \texorpdfstring{$\vert$}{|} 0 \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} 1 \tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{1}{|X[-1]}|}
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ }\\\cline{1-1}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ }\\\cline{1-1}
+\endhead
+\\\cline{1-1}
+\\\cline{1-1}
+\end{longtabu}
+hexa cell info
+
+(1) 5 or 6 tetrahedrons observed and tested
+
+initialize faces
+
+bottom face0 ( 0321 )
+
+left face1 ( 3047 )
+
+front face2 ( 0154 )
+
+right face3 ( 1265 )
+
+back face4 ( 2376 )
+
+top face5 ( 4567 )
+
+add faces
+
+node order
+
+face orderHere is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_corner_point_cell_ae49b96dca94a709f689ae0ed6ca18cf5_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_corner_point_cell_a6573f607d02b0782efeef107cbccfb75}\index{csmp::CornerPointCell@{csmp::CornerPointCell}!Out@{Out}}
+\index{Out@{Out}!csmp::CornerPointCell@{csmp::CornerPointCell}}
+\doxysubsubsection{\texorpdfstring{Out()}{Out()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_corner_point_cell_a6573f607d02b0782efeef107cbccfb75} 
+void csmp\+::\+Corner\+Point\+Cell\+::\+Out (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+prints object state to screen 
+
+Prints object state to screen. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_corner_point_cell_a6573f607d02b0782efeef107cbccfb75_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_corner_point_cell_a5e91a036b98617f6baf5dcd34193fa9d}\index{csmp::CornerPointCell@{csmp::CornerPointCell}!ProcessPoly1Element@{ProcessPoly1Element}}
+\index{ProcessPoly1Element@{ProcessPoly1Element}!csmp::CornerPointCell@{csmp::CornerPointCell}}
+\doxysubsubsection{\texorpdfstring{ProcessPoly1Element()}{ProcessPoly1Element()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_corner_point_cell_a5e91a036b98617f6baf5dcd34193fa9d} 
+void csmp\+::\+Corner\+Point\+Cell\+::\+Process\+Poly1\+Element (\begin{DoxyParamCaption}\item[{std\+::map$<$ std\+::set$<$ size\+\_\+t $>$, \mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} $>$ \&}]{additional\+\_\+points}{, }\item[{std\+::set$<$ std\+::set$<$ size\+\_\+t $>$ $>$ \&}]{additional\+\_\+edges}{, }\item[{bool}]{well\+\_\+element}{, }\item[{bool}]{tetra\+\_\+mesh}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+SHOULDN\textquotesingle{}T BE OBSERVED ( only if pillars intersect )\Hypertarget{classcsmp_1_1_corner_point_cell_a39a5a3b329c5e46c6f27a0004dfbd92c}\index{csmp::CornerPointCell@{csmp::CornerPointCell}!ProcessPoly2Element@{ProcessPoly2Element}}
+\index{ProcessPoly2Element@{ProcessPoly2Element}!csmp::CornerPointCell@{csmp::CornerPointCell}}
+\doxysubsubsection{\texorpdfstring{ProcessPoly2Element()}{ProcessPoly2Element()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_corner_point_cell_a39a5a3b329c5e46c6f27a0004dfbd92c} 
+void csmp\+::\+Corner\+Point\+Cell\+::\+Process\+Poly2\+Element (\begin{DoxyParamCaption}\item[{std\+::map$<$ std\+::set$<$ size\+\_\+t $>$, \mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} $>$ \&}]{additional\+\_\+points}{, }\item[{std\+::set$<$ std\+::set$<$ size\+\_\+t $>$ $>$ \&}]{additional\+\_\+edges}{, }\item[{bool}]{well\+\_\+element}{, }\item[{bool}]{tetra\+\_\+mesh}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+SHOULDN\textquotesingle{}T BE OBSERVED ( only if pillars intersect )
+
+edges and faces are not meshed\Hypertarget{classcsmp_1_1_corner_point_cell_a5596efbd76a584ae7617e87c02ad9a91}\index{csmp::CornerPointCell@{csmp::CornerPointCell}!ProcessPoly3Element@{ProcessPoly3Element}}
+\index{ProcessPoly3Element@{ProcessPoly3Element}!csmp::CornerPointCell@{csmp::CornerPointCell}}
+\doxysubsubsection{\texorpdfstring{ProcessPoly3Element()}{ProcessPoly3Element()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_corner_point_cell_a5596efbd76a584ae7617e87c02ad9a91} 
+void csmp\+::\+Corner\+Point\+Cell\+::\+Process\+Poly3\+Element (\begin{DoxyParamCaption}\item[{std\+::map$<$ std\+::set$<$ size\+\_\+t $>$, \mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} $>$ \&}]{additional\+\_\+points}{, }\item[{std\+::set$<$ std\+::set$<$ size\+\_\+t $>$ $>$ \&}]{additional\+\_\+edges}{, }\item[{bool}]{well\+\_\+element}{, }\item[{bool}]{tetra\+\_\+mesh}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+SHOULDN\textquotesingle{}T BE OBSERVED ( only if pillars intersect )
+
+edges and faces are not meshed\Hypertarget{classcsmp_1_1_corner_point_cell_a43ca3b2056c666fd0ba08a75c982331b}\index{csmp::CornerPointCell@{csmp::CornerPointCell}!ProcessPoly4Element@{ProcessPoly4Element}}
+\index{ProcessPoly4Element@{ProcessPoly4Element}!csmp::CornerPointCell@{csmp::CornerPointCell}}
+\doxysubsubsection{\texorpdfstring{ProcessPoly4Element()}{ProcessPoly4Element()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_corner_point_cell_a43ca3b2056c666fd0ba08a75c982331b} 
+void csmp\+::\+Corner\+Point\+Cell\+::\+Process\+Poly4\+Element (\begin{DoxyParamCaption}\item[{std\+::map$<$ std\+::set$<$ size\+\_\+t $>$, \mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} $>$ \&}]{additional\+\_\+points}{, }\item[{std\+::set$<$ std\+::set$<$ size\+\_\+t $>$ $>$ \&}]{additional\+\_\+edges}{, }\item[{bool}]{well\+\_\+element}{, }\item[{bool}]{tetra\+\_\+mesh}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+(1) quadrilateral ( 2 triangles ) (2) tetrahedron ( shouldn\textquotesingle{}t be observed )
+
+edges and faces are not meshed
+
+SHOULDN\textquotesingle{}T BE OBSERVED ( only if pillars intersect multiple times )
+
+edges and faces are not meshed\Hypertarget{classcsmp_1_1_corner_point_cell_a553bcf9a24a54f01bd069b2a5f0b94ec}\index{csmp::CornerPointCell@{csmp::CornerPointCell}!ProcessPoly5Element@{ProcessPoly5Element}}
+\index{ProcessPoly5Element@{ProcessPoly5Element}!csmp::CornerPointCell@{csmp::CornerPointCell}}
+\doxysubsubsection{\texorpdfstring{ProcessPoly5Element()}{ProcessPoly5Element()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_corner_point_cell_a553bcf9a24a54f01bd069b2a5f0b94ec} 
+void csmp\+::\+Corner\+Point\+Cell\+::\+Process\+Poly5\+Element (\begin{DoxyParamCaption}\item[{std\+::map$<$ std\+::set$<$ size\+\_\+t $>$, \mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} $>$ \&}]{additional\+\_\+points}{, }\item[{std\+::set$<$ std\+::set$<$ size\+\_\+t $>$ $>$ \&}]{additional\+\_\+edges}{, }\item[{bool}]{well\+\_\+element}{, }\item[{bool}]{tetra\+\_\+mesh}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+diagonal nodes
+
+(1) 2 tetrahedrons or tetrahedron + triangle (2) pyramid ( 2 tetrahedrons ) ( shouldn\textquotesingle{}t be observed )
+
+edges and faces are not meshed
+
+SHOULDN\textquotesingle{}T BE OBSERVED ( only if pillars intersect )
+
+edges and faces are not meshed\Hypertarget{classcsmp_1_1_corner_point_cell_a0c632bbe50ffa44641d75f9e741226d0}\index{csmp::CornerPointCell@{csmp::CornerPointCell}!ProcessPoly6Element@{ProcessPoly6Element}}
+\index{ProcessPoly6Element@{ProcessPoly6Element}!csmp::CornerPointCell@{csmp::CornerPointCell}}
+\doxysubsubsection{\texorpdfstring{ProcessPoly6Element()}{ProcessPoly6Element()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_corner_point_cell_a0c632bbe50ffa44641d75f9e741226d0} 
+void csmp\+::\+Corner\+Point\+Cell\+::\+Process\+Poly6\+Element (\begin{DoxyParamCaption}\item[{std\+::map$<$ std\+::set$<$ size\+\_\+t $>$, \mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} $>$ \&}]{additional\+\_\+points}{, }\item[{std\+::set$<$ std\+::set$<$ size\+\_\+t $>$ $>$ \&}]{additional\+\_\+edges}{, }\item[{bool}]{well\+\_\+element}{, }\item[{bool}]{tetra\+\_\+mesh}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+(1) wedge ( 3 tetrahedrons ) (2) octahedron ( 2 tetrahedrons )
+
+edges and faces are not meshed\Hypertarget{classcsmp_1_1_corner_point_cell_acfef7b233b2dd310c4dba603f4790402}\index{csmp::CornerPointCell@{csmp::CornerPointCell}!ProcessPoly7Element@{ProcessPoly7Element}}
+\index{ProcessPoly7Element@{ProcessPoly7Element}!csmp::CornerPointCell@{csmp::CornerPointCell}}
+\doxysubsubsection{\texorpdfstring{ProcessPoly7Element()}{ProcessPoly7Element()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_corner_point_cell_acfef7b233b2dd310c4dba603f4790402} 
+void csmp\+::\+Corner\+Point\+Cell\+::\+Process\+Poly7\+Element (\begin{DoxyParamCaption}\item[{std\+::map$<$ std\+::set$<$ size\+\_\+t $>$, \mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} $>$ \&}]{additional\+\_\+points}{, }\item[{std\+::set$<$ std\+::set$<$ size\+\_\+t $>$ $>$ \&}]{additional\+\_\+edges}{, }\item[{bool}]{well\+\_\+element}{, }\item[{bool}]{tetra\+\_\+mesh}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+(1) 4 or 5 tetrahedrons
+
+edges and faces are not meshed\Hypertarget{classcsmp_1_1_corner_point_cell_a7787a7136651f59c869928ecb5189c4c}\index{csmp::CornerPointCell@{csmp::CornerPointCell}!ProcessPoly8Element@{ProcessPoly8Element}}
+\index{ProcessPoly8Element@{ProcessPoly8Element}!csmp::CornerPointCell@{csmp::CornerPointCell}}
+\doxysubsubsection{\texorpdfstring{ProcessPoly8Element()}{ProcessPoly8Element()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_corner_point_cell_a7787a7136651f59c869928ecb5189c4c} 
+void csmp\+::\+Corner\+Point\+Cell\+::\+Process\+Poly8\+Element (\begin{DoxyParamCaption}\item[{std\+::map$<$ std\+::set$<$ size\+\_\+t $>$, \mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} $>$ \&}]{additional\+\_\+points}{, }\item[{std\+::set$<$ std\+::set$<$ size\+\_\+t $>$ $>$ \&}]{additional\+\_\+edges}{, }\item[{bool}]{well\+\_\+element}{, }\item[{bool}]{tetra\+\_\+mesh}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+(1) 5 or 6 tetrahedrons
+
+edges and faces are not meshed\Hypertarget{classcsmp_1_1_corner_point_cell_ab53427334a564b151638248a10b72ccc}\index{csmp::CornerPointCell@{csmp::CornerPointCell}!ProcessPolyElement@{ProcessPolyElement}}
+\index{ProcessPolyElement@{ProcessPolyElement}!csmp::CornerPointCell@{csmp::CornerPointCell}}
+\doxysubsubsection{\texorpdfstring{ProcessPolyElement()}{ProcessPolyElement()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_corner_point_cell_ab53427334a564b151638248a10b72ccc} 
+void csmp\+::\+Corner\+Point\+Cell\+::\+Process\+Poly\+Element (\begin{DoxyParamCaption}\item[{std\+::map$<$ std\+::set$<$ size\+\_\+t $>$, \mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} $>$ \&}]{additional\+\_\+points}{, }\item[{std\+::set$<$ std\+::set$<$ size\+\_\+t $>$ $>$ \&}]{additional\+\_\+edges}{, }\item[{bool}]{well\+\_\+element}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+cell with well
+
+cell with meshed edges
+
+cell with meshed faces
+
+edges and faces are not meshed\Hypertarget{classcsmp_1_1_corner_point_cell_a4adfaac6e25e24942168c30bdc035cf9}\index{csmp::CornerPointCell@{csmp::CornerPointCell}!ProcessPolyWellElement@{ProcessPolyWellElement}}
+\index{ProcessPolyWellElement@{ProcessPolyWellElement}!csmp::CornerPointCell@{csmp::CornerPointCell}}
+\doxysubsubsection{\texorpdfstring{ProcessPolyWellElement()}{ProcessPolyWellElement()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_corner_point_cell_a4adfaac6e25e24942168c30bdc035cf9} 
+void csmp\+::\+Corner\+Point\+Cell\+::\+Process\+Poly\+Well\+Element (\begin{DoxyParamCaption}\item[{std\+::map$<$ std\+::set$<$ size\+\_\+t $>$, \mbox{\hyperlink{classcsmp_1_1_grid_node}{Grid\+Node}} \texorpdfstring{$\ast$}{*} $>$ \&}]{additional\+\_\+points}{, }\item[{std\+::set$<$ std\+::set$<$ size\+\_\+t $>$ $>$ \&}]{additional\+\_\+edges}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+add well elements
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/regular\+\_\+grids/Corner\+Point\+Cell.\+h\item 
+source/modules/regular\+\_\+grids/Corner\+Point\+Cell.\+cpp\end{DoxyCompactItemize}

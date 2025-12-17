@@ -1,0 +1,155 @@
+.TH "csmp::EclipseInterface" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::EclipseInterface
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <EclipseInterface\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "bool \fBReadFile\fP (\fBVSet\fP< 3U > &vset, \fBModelTopology\fP &model_topology, const std::string &fname, bool exclude_inactive_cells, bool tetra_mesh)"
+.br
+.RI "MASTER METHOD not only reads the Eclipse input files, but also creates grid objects and converts them into CSMP cells / mesh\&. "
+.ti -1c
+.RI "bool \fBReadFile\fP (std::ifstream &ifs, size_t line_length)"
+.br
+.RI "configures reader for the case where INCLUDE is set so that instructions are spread across multiple files "
+.ti -1c
+.RI "void \fBSetProperties\fP (const std::map< int, \fBcsmp::Parameter\fP > &)"
+.br
+.RI "assigns CSMP parameter specifications to the interface so that corresponding variables can be read "
+.ti -1c
+.RI "void \fBAddWell\fP ()"
+.br
+.RI "inserts wells in the Eclipse data "
+.ti -1c
+.RI "void \fBAddWell\fP (const std::string &well_name, const \fBPoint\fP< 3U > &well_start_point, const \fBPoint\fP< 3U > &well_end_point)"
+.br
+.RI "inserts a well from its start and end points "
+.ti -1c
+.RI "template<class Container> void \fBGetRegions\fP (Container &data)"
+.br
+.ti -1c
+.RI "template<class Container> void \fBGetFaults\fP (Container &data)"
+.br
+.ti -1c
+.RI "template<class Container> void \fBGetWells\fP (Container &wells)"
+.br
+.ti -1c
+.RI "bool \fBRead_COORD\fP (std::ifstream &ifs, char *text_line, size_t line_length)"
+.br
+.RI "ReadPillarCoordinates -> Read_COORD\&. "
+.ti -1c
+.RI "bool \fBRead_ZCORN\fP (std::ifstream &ifs, char *text_line, size_t line_length)"
+.br
+.RI "ReadCornerDepths -> Read_ZCORN\&. "
+.ti -1c
+.RI "std::multimap< \fBijk\fP, size_t > & \fBIJKMap\fP ()"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Contains the \fBCornerPointGrid\fP\&. 
+.SH "Member Function Documentation"
+.PP 
+.SS "bool csmp::EclipseInterface::Read_COORD (std::ifstream & ifs, char * text_line, size_t line_length)"
+
+.PP
+ReadPillarCoordinates -> Read_COORD\&. ReadPillarCoordinates -> Read_COORD
+
+.PP
+COORD = vertical grid top->bottom coordinate lines, where x,y,z\&.\&.\&. x pointing east, y south, and z down\&. These lines become the grid pillars, extending all the way from the top to the bottom of the grid\&. Subsequently, the pillars are subdivided by cell corners stored in ZCORN, for which x,y is found by interpolation\&.
+
+.PP
+The ordering of the pillars and z-cordinates is in “book order”, line after line until a page has been read, then the next page until all data has been read\&. i\&.e\&. first the top layer (K=1) is read, line by line (begin with J=1, read I=1,\&.\&.\&.,NX, then J=2, etc\&.) Then repeat for K=2,\&.\&.\&.,NZ\&.
+
+.PP
+NX number of cells in x-direction (E) NY number of cells in y-direction (S)
+
+.PP
+pillar grid is y-first (rows), then x (columns) then z (3rd dim= downwards)
+
+.PP
+called by ReadBlock(s) after ReadGridSpecs() so dimensions of grid are already known
+
+.PP
+\fBTodo\fP
+.RS 4
+SKM write Out() const function for \fBCornerPointGrid\fP testing 
+.RE
+.PP
+
+.SS "bool csmp::EclipseInterface::Read_ZCORN (std::ifstream & ifs, char * text_line, size_t line_length)"
+
+.PP
+ReadCornerDepths -> Read_ZCORN\&. ReadCornerDepths -> Read_ZCORN, i\&.e\&. puts the beads on the pillars, dividing them by the cell corners\&.
+
+.PP
+The cell coorners are stored in grid, an i,j-array of beads\&. However, here the \fBCornerPointGrid\fP class is used for this purpose\&.
+
+.PP
+Each row contains NX + 1 coordinate entries, but for adjacent cells the values are duplicated\&. Inside the \fBPillar\fP grids the rows are duplicated as well to create a 1:1 mapping of cell corners to entries\&.
+
+.PP
+For each pillar point only the Z coordinate is read the others are deduced from the the direction of the \fBPillar\fP\&. This assumes that the pillar is a straight line\&.
+
+.PP
+Corner depths are defined by the keyword ZCORN\&. The intersection between a (non-horizontal) coordinate line and a depth value is unique, such that from coordinate lines and corner depths, all coordinates can be calculated\&. It would perhaps seem natural to define corners cell by cell, but Eclipse sticks strictly to the book page format, so (with x pointing east, y south) first the top northern edge of all cells are read from west to east, then the southern edge, then advancing to next row of cells\&. When the top of a layer has been read, the bottom is read in a similar fashion, and then we are ready for the next layer\&. Recall that corners associated with the same coordinate line may have different depths, but are equal in continuous areas, such that all corners must be defined – nothing is “implicitly assumed”\&. When explaining the syntax we will use indices NW, NE, SW, SE to denote the corners (assuming a standard orientation of the grid), and T, B for Top, Bottom\&.
+
+.PP
+ZCORN z(1,1,1)T,NW z(1,1,1)T,NE z(2,1,1)T,NW z(2,1,1)T,NE \&.\&.\&. z(NX,1,1)T,NE z(1,1,1)T,SW z(1,1,1)T,SE z(2,1,1)T,SW z(2,1,1)T,SE \&.\&.\&. z(NX,1,1)T,SE z(1,2,1)T,NW z(1,2,1)T,NE z(2,2,1)T,NW z(2,2,1)T,NE \&.\&.\&. z(NX,2,1)T,NE z(1,2,1)T,SW z(1,2,1)T,SE z(2,2,1)T,SW z(2,1,1)T,SE \&.\&.\&. z(NX,2,1)T,SE \&.z(1,NY,1)T,SW z(1,NY,1)T,SE z(2,NY,1)T,SW z(2,NY,1)T,SE \&.\&.\&. z(NX,NY,1)T,SE z(1,1,1)B,NW z(1,1,1)B,NE z(2,1,1)B,NW z(2,1,1)B,NE \&.\&.\&. z(NX,1,1)B,NEz(1,NY,1)B,SW z(1,NY,1)B,SE z(2,NY,1)B,SW z(2,NY,1)B,SE \&.\&.\&. z(NX,NY,1)B,SE z(1,1,2)T,NW z(1,1,2)T,NE z(2,1,2)T,NW z(2,1,2)T,NE \&.\&.\&. z(NX,1,2)T,NEz(1,NY,NZ)T,SW z(1,NY,NZ)T,SE z(2,NY,NZ)T,SW z(2,NY,NZ)T,SE \&.\&.\&. z(NX,NY,NZ)T,SE 
+.SS "bool csmp::EclipseInterface::ReadFile (std::ifstream & ifs, size_t line_length)"
+
+.PP
+configures reader for the case where INCLUDE is set so that instructions are spread across multiple files Configures the interface for the case where everything is supplied as separated files section
+
+.PP
+grid
+
+.PP
+regions
+
+.PP
+cell properties
+
+.PP
+well properties
+
+.PP
+advanced well data assignment ( explicit path through faces )
+
+.PP
+advanced well data assignment ( explicit path through nodes )
+.SS "bool csmp::EclipseInterface::ReadFile (\fBcsmp::VSet\fP< 3U > & vset, \fBcsmp::ModelTopology\fP & model_topology, const std::string & fname, bool exclude_inactive_cells, bool tetra_mesh)"
+
+.PP
+MASTER METHOD not only reads the Eclipse input files, but also creates grid objects and converts them into CSMP cells / mesh\&. MASTER METHOD of \fBEclipseInterface\fP which does everything:
+
+.PP
+.IP "1." 4
+Reads sequence of files which all have the \&.grdecl extension 
+.PP
+
+.IP "0." 4
+Open fname\&.grdecl file
+.PP
+
+.PP
+.IP "1." 4
+Assign object members and reader settings
+.PP
+
+.PP
+.IP "4." 4
+Write properties to \fBVSet\fP
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

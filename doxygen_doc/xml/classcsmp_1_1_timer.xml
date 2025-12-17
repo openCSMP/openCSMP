@@ -1,0 +1,153 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_timer" kind="class" language="C++" prot="public">
+    <compoundname>csmp::Timer</compoundname>
+    <includes refid="_timer_8hpp" local="no">Timer.hpp</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_timer_1affef675ec494efc08270adb77f198e9a" prot="private" static="no" mutable="no">
+        <type>clock_t</type>
+        <definition>clock_t csmp::Timer::ticks_</definition>
+        <argsstring></argsstring>
+        <name>ticks_</name>
+        <qualifiedname>csmp::Timer::ticks_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/utilities/Timer.hpp" line="25" column="15" bodyfile="source/modules/utilities/Timer.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_timer_1a4a5ddf54388f417402eddbe19b901656" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Timer::Timer</definition>
+        <argsstring>()</argsstring>
+        <name>Timer</name>
+        <qualifiedname>csmp::Timer::Timer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/utilities/Timer.hpp" line="13" column="7" bodyfile="source/modules/utilities/Timer.hpp" bodystart="13" bodyend="13"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_timer_1a53132d843cc2de57e3bab60be33bc2da" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Timer::~Timer</definition>
+        <argsstring>()</argsstring>
+        <name>~Timer</name>
+        <qualifiedname>csmp::Timer::~Timer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/utilities/Timer.hpp" line="14" column="7" bodyfile="source/modules/utilities/Timer.hpp" bodystart="14" bodyend="14"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_timer_1ad89b5e1f40aaa4dcfaee04386f2333b2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Timer::Start</definition>
+        <argsstring>()</argsstring>
+        <name>Start</name>
+        <qualifiedname>csmp::Timer::Start</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/utilities/Timer.hpp" line="16" column="12" bodyfile="source/modules/utilities/Timer.hpp" bodystart="16" bodyend="16"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_timer_1aacc4a877b70cde035ed87d84f2a48c5a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Timer::StopClock</definition>
+        <argsstring>()</argsstring>
+        <name>StopClock</name>
+        <qualifiedname>csmp::Timer::StopClock</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/utilities/Timer.hpp" line="17" column="14" bodyfile="source/modules/utilities/Timer.hpp" bodystart="17" bodyend="17"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_timer_1a433fac272a7980941c71ba1f4e10efd1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Timer::Stop</definition>
+        <argsstring>()</argsstring>
+        <name>Stop</name>
+        <qualifiedname>csmp::Timer::Stop</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/utilities/Timer.hpp" line="18" column="14" bodyfile="source/modules/utilities/Timer.hpp" bodystart="18" bodyend="18"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_timer_1a30454c77175af09fb457063cc7e70ac2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Timer::Timer</definition>
+        <argsstring>(const Timer &amp;)</argsstring>
+        <name>Timer</name>
+        <qualifiedname>csmp::Timer::Timer</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_timer" kindref="compound">Timer</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/utilities/Timer.hpp" line="21" column="7"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_timer_1a13c2b06b634c4ae1e02d72e366bff35c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_timer" kindref="compound">Timer</ref> &amp;</type>
+        <definition>Timer &amp; csmp::Timer::operator=</definition>
+        <argsstring>(const Timer &amp;)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::Timer::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_timer" kindref="compound">Timer</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/utilities/Timer.hpp" line="22" column="13"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Trivial timer class, returns in ~seconds (PL 2011) </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::Timer</label>
+        <link refid="classcsmp_1_1_timer"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/modules/utilities/Timer.hpp" line="10" column="3" bodyfile="source/modules/utilities/Timer.hpp" bodystart="11" bodyend="26"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_timer_1a13c2b06b634c4ae1e02d72e366bff35c" prot="private" virt="non-virtual"><scope>csmp::Timer</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_timer_1ad89b5e1f40aaa4dcfaee04386f2333b2" prot="public" virt="non-virtual"><scope>csmp::Timer</scope><name>Start</name></member>
+      <member refid="classcsmp_1_1_timer_1a433fac272a7980941c71ba1f4e10efd1" prot="public" virt="non-virtual"><scope>csmp::Timer</scope><name>Stop</name></member>
+      <member refid="classcsmp_1_1_timer_1aacc4a877b70cde035ed87d84f2a48c5a" prot="public" virt="non-virtual"><scope>csmp::Timer</scope><name>StopClock</name></member>
+      <member refid="classcsmp_1_1_timer_1affef675ec494efc08270adb77f198e9a" prot="private" virt="non-virtual"><scope>csmp::Timer</scope><name>ticks_</name></member>
+      <member refid="classcsmp_1_1_timer_1a4a5ddf54388f417402eddbe19b901656" prot="public" virt="non-virtual"><scope>csmp::Timer</scope><name>Timer</name></member>
+      <member refid="classcsmp_1_1_timer_1a30454c77175af09fb457063cc7e70ac2" prot="private" virt="non-virtual"><scope>csmp::Timer</scope><name>Timer</name></member>
+      <member refid="classcsmp_1_1_timer_1a53132d843cc2de57e3bab60be33bc2da" prot="public" virt="non-virtual"><scope>csmp::Timer</scope><name>~Timer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

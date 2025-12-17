@@ -1,0 +1,191 @@
+.TH "csmp::ColorPalette" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::ColorPalette \- Implementation of an RGB color table that is used in the creation of JPG output files\&. Used either to manage an array of RGBA values or as a runtime calculater of RGB colors\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <ColorPalette\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBColorPalette\fP (float low, float max)"
+.br
+.RI "for autoscaling "
+.ti -1c
+.RI "\fBColorPalette\fP (const \fBColorPalette\fP &a)"
+.br
+.ti -1c
+.RI "\fBColorPalette\fP & \fBoperator=\fP (const \fBColorPalette\fP &a)"
+.br
+.ti -1c
+.RI "void \fBGiveRgb\fP (float val, float *vessel)"
+.br
+.ti -1c
+.RI "void \fBGiveHsv\fP (float val, float *vessel)"
+.br
+.ti -1c
+.RI "void \fBSaturation\fP (float sat)"
+.br
+.ti -1c
+.RI "float \fBSaturation\fP () const"
+.br
+.ti -1c
+.RI "void \fBLightness\fP (float light)"
+.br
+.ti -1c
+.RI "float \fBLightness\fP () const"
+.br
+.ti -1c
+.RI "void \fBBlend\fP (float alpha)"
+.br
+.ti -1c
+.RI "float \fBBlend\fP () const"
+.br
+.ti -1c
+.RI "void \fBPaletteSize\fP (size_t size)"
+.br
+.ti -1c
+.RI "size_t \fBPaletteSize\fP () const"
+.br
+.ti -1c
+.RI "void \fBMakeRainbowPalette\fP ()"
+.br
+.ti -1c
+.RI "void \fBMakeGreyPalette\fP ()"
+.br
+.ti -1c
+.RI "bool \fBReadColorPaletteFile\fP (const char *file, const std::string &what)"
+.br
+.ti -1c
+.RI "bool \fBReadRgbColorPaletteFile\fP (const char *file)"
+.br
+.ti -1c
+.RI "bool \fBReadHsvColorPaletteFile\fP (const char *file)"
+.br
+.ti -1c
+.RI "bool \fBWriteColorPaletteFile\fP (const char *file, const std::string &what)"
+.br
+.ti -1c
+.RI "bool \fBWriteRgbColorPaletteFile\fP (const char *file)"
+.br
+.ti -1c
+.RI "bool \fBWriteRgbColorPaletteFile\fP ()"
+.br
+.ti -1c
+.RI "void \fBWriteRgbColorPaletteToStdout\fP ()"
+.br
+.ti -1c
+.RI "void \fBWriteRgbColorPaletteToStdoutWithLineNumbers\fP ()"
+.br
+.ti -1c
+.RI "bool \fBWriteHsvColorPaletteFile\fP ()"
+.br
+.ti -1c
+.RI "bool \fBWriteHsvColorPaletteFile\fP (const char *file)"
+.br
+.ti -1c
+.RI "void \fBWriteHsvColorPaletteToStdout\fP ()"
+.br
+.ti -1c
+.RI "void \fBWriteHsvColorPaletteToStdoutWithLineNumbers\fP ()"
+.br
+.ti -1c
+.RI "void \fBRgbToHsv\fP (const std::vector< float > &rgb, std::vector< float > &hsv)"
+.br
+.ti -1c
+.RI "void \fBHsvToRgb\fP (const std::vector< float > &hsv, std::vector< float > &rgb)"
+.br
+.ti -1c
+.RI "void \fBRgbToHsv\fP ()"
+.br
+.ti -1c
+.RI "void \fBHsvToRgb\fP ()"
+.br
+.ti -1c
+.RI "void \fBInverseRgb\fP (std::vector< float > &rgb)"
+.br
+.ti -1c
+.RI "void \fBInversePalette\fP (std::vector< std::vector< float > > &rgb)"
+.br
+.ti -1c
+.RI "void \fBAdjustPaletteSize\fP ()"
+.br
+.ti -1c
+.RI "void \fBScaleColorRangeTo\fP (float new_min, float new_max)"
+.br
+.ti -1c
+.RI "void \fBColorRangeRGB\fP () const"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Implementation of an RGB color table that is used in the creation of JPG output files\&. Used either to manage an array of RGBA values or as a runtime calculater of RGB colors\&. 
+
+16777216 (256^3) colors\&. This class should hold 256 RGB values of the template type // WHY 256????? It can take and give these values from the program or a file The palette can be composed with different saturations in different ranges of the spectrum\&. There is nothing it cannot do\&.
+.SH "Goal"
+.PP
+To serve OpenGL command: glColor4fv( array ); // or glColor4dv(a);
+.SH "Main variables"
+.PP
+.IP "\(bu" 2
+2D vector 256x4: 256 colors 3 RGB and one for alpha blending muss ev array sein statt vector damit es direct an OpenGL uebergeben werden kann\&. Or one may be able to give an iterator?
+.IP "\(bu" 2
+file name for color palette file
+.IP "\(bu" 2
+saturation, default 1
+.IP "\(bu" 2
+spectrum range, default all
+.IP "\(bu" 2
+selected color
+.IP "\(bu" 2
+number of colors in palette
+.PP
+.SH "Main methods"
+.PP
+.IP "\(bu" 2
+Constructor creates standard rainbow with alpha 1
+.IP "\(bu" 2
+Calculate palette: default rainbow spectrum with full saturation
+.IP "\(bu" 2
+Read in color palette from file
+.IP "\(bu" 2
+Read in color palette from program
+.IP "\(bu" 2
+Give a pointer to the the palette array
+.IP "\(bu" 2
+Give a pointer or iterator to the xxx\&. color
+.IP "\(bu" 2
+Give a pointer to the the closest color to a value between 0\&.\&.255
+.IP "\(bu" 2
+Set or read artificial range instead of 0\&.\&.255 (e\&.g\&. -200\&.\&.+50000)
+.IP "\(bu" 2
+Give a pointer to closest color in artifical range
+.IP "\(bu" 2
+Set or read saturation
+.IP "\(bu" 2
+Set or read spectrum range
+.IP "\(bu" 2
+Set or read every x color y number of colors = black
+.IP "\(bu" 2
+Reverse the palette
+.IP "\(bu" 2
+Graphically select a color and what belongs to it\&.\&.\&.
+.IP "\(bu" 2
+Graphically select a color range
+.IP "\(bu" 2
+Change number of colors of palette
+.IP "\(bu" 2
+Transform color models: RgbToHsv(); HsvToRgb();
+.IP "\(bu" 2
+Inverse an RGB color 
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

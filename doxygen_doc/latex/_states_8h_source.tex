@@ -1,0 +1,30 @@
+\doxysection{States.\+h}
+\hypertarget{_states_8h_source}{}\label{_states_8h_source}\index{source/includes/eos/States.h@{source/includes/eos/States.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{STATES\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{STATES\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{comment}{///\ enum\ to\ characterize\ possible\ phase\ states\ in\ the\ H2O-\/NaCl\ phase\ diagram}}
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}}
+\DoxyCodeLine{00008\ \{}
+\DoxyCodeLine{00009\ \ \ \textcolor{keyword}{enum}\ States\ :\ std::int8\_t}
+\DoxyCodeLine{00010\ \ \ \{}
+\DoxyCodeLine{00011\ \ \ \ \ none,\ \ \ \ \textcolor{comment}{//\ 0\ i.e.\ state\ undefined!}}
+\DoxyCodeLine{00012\ \ \ \ \ L,\ \ \ \ \ \ \ \textcolor{comment}{//\ 1\ liquid,\ for\ convenience\ only,\ use\ rather\ 'F'}}
+\DoxyCodeLine{00013\ \ \ \ \ V,\ \ \ \ \ \ \ \textcolor{comment}{//\ 2\ vapor,\ for\ convenience\ only,\ use\ rather\ 'F'}}
+\DoxyCodeLine{00014\ \ \ \ \ F,\ \ \ \ \ \ \ \textcolor{comment}{//\ 3\ single\ phase\ fluid}}
+\DoxyCodeLine{00015\ \ \ \ \ VL,\ \ \ \ \ \ \textcolor{comment}{//\ 4\ vapor+liquid\ twophase\ }}
+\DoxyCodeLine{00016\ \ \ \ \ VH,\ \ \ \ \ \ \textcolor{comment}{//\ 5\ vapor+halite\ twophase}}
+\DoxyCodeLine{00017\ \ \ \ \ LH,\ \ \ \ \ \ \textcolor{comment}{//\ 6\ liquid+halite\ twophase}}
+\DoxyCodeLine{00018\ \ \ \ \ VLH,\ \ \ \ \ \textcolor{comment}{//\ 7\ vapor+liquid+halite\ twophase}}
+\DoxyCodeLine{00019\ \ \ \ \ H,\ \ \ \ \ \ \ \textcolor{comment}{//\ 8\ halite}}
+\DoxyCodeLine{00020\ \ \ \ \ M,\ \ \ \ \ \ \ \textcolor{comment}{//\ 9\ NaCl\ melt}}
+\DoxyCodeLine{00021\ \ \ \ \ HM\ \ \ \ \ \ \ \textcolor{comment}{//\ 10\ Halite+NaCl\ melt}}
+\DoxyCodeLine{00022\ \ \ \};}
+\DoxyCodeLine{00023\ \}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

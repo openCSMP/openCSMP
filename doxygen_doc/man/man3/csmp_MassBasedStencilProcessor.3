@@ -1,0 +1,164 @@
+.TH "csmp::MassBasedStencilProcessor< dim >" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::MassBasedStencilProcessor< dim >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+Inherits \fBcsmp::ExplicitStencilProcessor< dim >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBMassBasedStencilProcessor\fP (const \fBcsmp::Index\fP &adv_lhs_key, const \fBcsmp::Index\fP &adv_rhs_key, const \fBcsmp::Index\fP &velo_key)"
+.br
+.ti -1c
+.RI "virtual void \fBInitializeFirstOrder\fP (const \fBFV_Parameter\fP &param, const \fBElement\fP< dim > &e, const \fBVARIABLE_TYPE\fP &vt=SCALAR, uint32_t var_comp_nr=0)"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::ExplicitStencilProcessor< dim >\fP
+.in +1c
+.ti -1c
+.RI "\fBExplicitStencilProcessor\fP (const \fBcsmp::Index\fP &adv_key, const \fBcsmp::Index\fP &velo_key)"
+.br
+.RI "for advection only "
+.ti -1c
+.RI "\fBExplicitStencilProcessor\fP (const \fBcsmp::Index\fP &adv_key, const \fBcsmp::Index\fP &velo_key, const \fBcsmp::Index\fP &diffusivity_key)"
+.br
+.RI "for advection diffusion "
+.ti -1c
+.RI "virtual \fB~ExplicitStencilProcessor\fP ()"
+.br
+.RI "standard assignment operator "
+.ti -1c
+.RI "void \fBAccumulateExplicitAdvectionSolution2\fP (const std::vector< std::pair< double, double > > &SMINMAX, const \fBFV_Parameter\fP &param, const \fBElement\fP< dim > &e, std::vector< double > &res)"
+.br
+.RI "limited second-order explicit advection equation ( standart limiter, without diffusion ) "
+.ti -1c
+.RI "void \fBAccumulateExplicitAdvectionSolution2\fP (const std::vector< std::pair< double, double > > &SMINMAX, const \fBFV_Parameter\fP &param, const \fBElement\fP< dim > &e, std::vector< double > &res, const \fBcsmp::Index\fP &mass_center_key, const \fBcsmp::Index\fP &grad_psi_key, const \fBcsmp::Index\fP &grad_psi_limiter_key)"
+.br
+.RI "limited second-order explicit advection equation ( lsm gradient limiter, without diffusion ) "
+.ti -1c
+.RI "void \fBAccumulateExplicitAdvectionDiffusionSolution1\fP (const \fBFV_Parameter\fP &param, const \fBElement\fP< dim > &e, std::vector< double > &res, const \fBVARIABLE_TYPE\fP &vt=SCALAR, uint32_t var_comp_nr=0)"
+.br
+.RI "limited second-order explicit advection-diffusion equation ( standart limiter ) "
+.ti -1c
+.RI "void \fBAccumulateExplicitAdvectionDiffusionSolution2\fP (const std::vector< std::pair< double, double > > &SMINMAX, const \fBFV_Parameter\fP &param, const \fBElement\fP< dim > &e, std::vector< double > &res)"
+.br
+.RI "limited second-order explicit advection-diffusion equation ( standart limiter ) "
+.ti -1c
+.RI "void \fBAccumulateExplicitAdvectionDiffusionSolution2\fP (const std::vector< std::pair< double, double > > &SMINMAX, const \fBFV_Parameter\fP &param, const \fBElement\fP< dim > &e, std::vector< double > &res, const \fBcsmp::Index\fP &mass_center_key, const \fBcsmp::Index\fP &grad_psi_key, const \fBcsmp::Index\fP &grad_psi_limiter_key)"
+.br
+.RI "limited second-order explicit advection-diffusion equation ( lsm gradient limiter ) "
+.ti -1c
+.RI "void \fBAccumulateExplicitTwoPhaseSolution1_Visc\fP (const \fBFV_Parameter\fP &param, const \fBElement\fP< dim > &e, \fBTwoPhaseModel\fP< dim > &relperm, std::vector< double > &res)"
+.br
+.RI "Incompressible Two Phase Flow Equation\&. "
+.ti -1c
+.RI "void \fBAccumulateExplicitTwoPhaseSolution2_Visc\fP (const std::vector< std::pair< double, double > > &SMINMAX, const \fBFV_Parameter\fP &param, const \fBElement\fP< dim > &e, \fBTwoPhaseModel\fP< dim > &relperm, std::vector< double > &res)"
+.br
+.RI "second-order accurate solution for two phase flow ( standart limiter, only viscous flow ) "
+.ti -1c
+.RI "void \fBAccumulateExplicitTwoPhaseSolution2_Visc\fP (const std::vector< std::pair< double, double > > &SMINMAX, const \fBFV_Parameter\fP &param, const \fBElement\fP< dim > &e, \fBTwoPhaseModel\fP< dim > &relperm, std::vector< double > &res, const \fBcsmp::Index\fP &mass_center_key, const \fBcsmp::Index\fP &grad_sn_key, const \fBcsmp::Index\fP &grad_sn_limiter_key)"
+.br
+.RI "second-order accurate solution for two phase flow ( lsm gradient limiter, only viscous flow ) "
+.ti -1c
+.RI "void \fBAccumulateExplicitTwoPhaseSolution1\fP (const \fBFV_Parameter\fP &param, const \fBElement\fP< dim > &e, \fBTwoPhaseModel\fP< dim > &relperm, std::vector< double > &res, bool with_gravity_forces, bool with_capillary_spreading)"
+.br
+.RI "first-order accurate solution for two-phase flow with gravitational and capillary effects "
+.ti -1c
+.RI "void \fBAccumulateExplicitTwoPhaseSolution2\fP (const std::vector< std::pair< double, double > > &SMINMAX, const \fBFV_Parameter\fP &param, const \fBElement\fP< dim > &e, \fBTwoPhaseModel\fP< dim > &relperm, std::vector< double > &res)"
+.br
+.RI "second-order accurate solution for two phase flow ( standart limiter ) "
+.ti -1c
+.RI "void \fBAccumulateExplicitTwoPhaseSolution2\fP (const std::vector< std::pair< double, double > > &SMINMAX, const \fBFV_Parameter\fP &param, const \fBElement\fP< dim > &e, \fBTwoPhaseModel\fP< dim > &relperm, std::vector< double > &res, const \fBcsmp::Index\fP &mass_center_key, const \fBcsmp::Index\fP &grad_sn_key, const \fBcsmp::Index\fP &grad_sn_limiter_key)"
+.br
+.RI "second-order accurate solution for two phase flow ( lsm gradient limiter ) "
+.ti -1c
+.RI "void \fBAccumulateExplicitTwoPhaseSolution2\fP (const std::vector< std::pair< double, double > > &SMINMAX, const \fBFV_Parameter\fP &param, const \fBElement\fP< dim > &e, \fBTwoPhaseModel\fP< dim > &relperm, std::vector< double > &res, bool with_gravity_forces, bool with_capillary_spreading)"
+.br
+.RI "second-order accurate solution for two phase flow with standart limiter ( with gravity forces ) "
+.ti -1c
+.RI "void \fBAccumulateExplicitTwoPhaseSolution2\fP (const std::vector< std::pair< double, double > > &SMINMAX, const \fBFV_Parameter\fP &param, const \fBElement\fP< dim > &e, \fBTwoPhaseModel\fP< dim > &relperm, std::vector< double > &res, bool with_gravity_forces, bool with_capillary_spreading, const \fBcsmp::Index\fP &mass_center_key, const \fBcsmp::Index\fP &grad_sn_key, const \fBcsmp::Index\fP &grad_sn_limiter_key)"
+.br
+.RI "second-order accurate solution for two phase flow with lsm gradient limiter ( with gravity forces ) "
+.ti -1c
+.RI "void \fBAccumulateExplicitTwoPhaseSolutionAtBoundary\fP (const \fBFV_Parameter\fP &param, const \fBElement\fP< dim > &e, \fBTwoPhaseModel\fP< dim > &relperm, uint32_t pnid, double &flux, bool with_gravity_forces, bool with_capillary_spreading)"
+.br
+.RI "inflow & outflow boundary correction for two phase flow "
+.ti -1c
+.RI "void \fBOut\fP () const"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBadv_rhs_key_\fP"
+.br
+.ti -1c
+.RI "std::vector< double > \fBpsi2_\fP"
+.br
+.in -1c
+
+Public Attributes inherited from \fBcsmp::ExplicitStencilProcessor< dim >\fP
+.in +1c
+.ti -1c
+.RI "size_t \fBeidx_\fP"
+.br
+.ti -1c
+.RI "std::vector< double > \fBsector_pore_volume_\fP"
+.br
+.ti -1c
+.RI "std::vector< double > \fBfacet_flux_\fP"
+.br
+.ti -1c
+.RI "std::vector< double > \fBpsi1_\fP"
+.br
+.ti -1c
+.RI "std::vector< double > \fBsrc_\fP"
+.br
+.ti -1c
+.RI "std::vector< double > \fBpc_\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBinside_node_\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBoutside_node_\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBadv1_key_\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBvel_key_\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBdiff_key_\fP"
+.br
+.ti -1c
+.RI "std::vector< double > \fBgrad_\fP"
+.br
+.ti -1c
+.RI "std::vector< double > \fBpc_grad_\fP"
+.br
+.ti -1c
+.RI "std::vector< double > \fBdsdn_\fP"
+.br
+.ti -1c
+.RI "\fBDenseMatrix\fP< DM_MIN > \fBDN_\fP"
+.br
+.in -1c
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim> void \fBcsmp::MassBasedStencilProcessor\fP< dim >::InitializeFirstOrder (const \fBFV_Parameter\fP & param, const \fBElement\fP< dim > & e, const \fBVARIABLE_TYPE\fP & vt = \fRSCALAR\fP, uint32_t var_comp_nr = \fR0\fP)\fR [virtual]\fP"
+Initializes sector pore volume and facet flux vectors for current finite element = finite volume stencil\&. 
+.PP
+Reimplemented from \fBcsmp::ExplicitStencilProcessor< dim >\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

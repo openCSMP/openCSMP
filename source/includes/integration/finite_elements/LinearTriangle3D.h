@@ -172,9 +172,9 @@ class LinearTriangle3D : public FiniteElement {
     virtual std::vector<uint32_t>  NodesConnectedTo( uint32_t node_id ) const;
     virtual uint32_t         CornerNodes() const  { return 3; }
     virtual void           CornerNodes( std::vector<uint32_t>& ids ) const;
-    virtual void           UnitNormal( std::vector<double>& unrml ) const;
+    virtual std::vector<double> UnitNormal() const;
     virtual void           UnitNormalToFace( uint32_t face, std::vector<double>& unrml ) const;
-    virtual CSMP_FEM_TYPE  ElementTypeOfFace( uint32_t face ) const;
+    virtual CSMP_FEM_TYPE  ElementTypeOfFace( uint32_t ) const;
     virtual CSMP_FEM_TYPE  ElementTypeOfSegment( uint32_t /* segment */ ) const { return LINEAR_BAR; };
 
     /// element interpolation functions at the point xzy

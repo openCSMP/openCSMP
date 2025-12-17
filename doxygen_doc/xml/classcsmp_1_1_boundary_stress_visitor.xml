@@ -1,0 +1,734 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_boundary_stress_visitor" kind="class" language="C++" prot="public">
+    <compoundname>csmp::BoundaryStressVisitor</compoundname>
+    <basecompoundref refid="classcsmp_1_1_visitor" prot="public" virt="non-virtual">csmp::Visitor&lt; dim &gt;</basecompoundref>
+    <basecompoundref refid="classcsmp_1_1_visitor" prot="public" virt="non-virtual">csmp::Visitor&lt; dim &gt;</basecompoundref>
+    <includes refid="modules_2thmc_2mechanics_2_boundary_stress_visitor_8h" local="no">BoundaryStressVisitor.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_boundary_stress_visitor_1a8feaa659dae0d3cbb57994c774b9e089" prot="private" static="no" mutable="no">
+        <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>const csmp::Index csmp::BoundaryStressVisitor&lt; dim &gt;::Sv_key_</definition>
+        <argsstring></argsstring>
+        <name>Sv_key_</name>
+        <qualifiedname>csmp::BoundaryStressVisitor::Sv_key_</qualifiedname>
+        <briefdescription>
+<para>vertical (overburden) stress (a scalar) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/thmc/mechanics/BoundaryStressVisitor.h" line="86" column="24" bodyfile="source/modules/thmc/mechanics/BoundaryStressVisitor.h" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_boundary_stress_visitor_1aea54a0ceec872a04be3fabafa0957afc" prot="private" static="no" mutable="no">
+        <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>const csmp::Index csmp::BoundaryStressVisitor&lt; dim &gt;::SH_max_key_</definition>
+        <argsstring></argsstring>
+        <name>SH_max_key_</name>
+        <qualifiedname>csmp::BoundaryStressVisitor::SH_max_key_</qualifiedname>
+        <briefdescription>
+<para>maximum horizontal stress expressed in terms of SV </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/thmc/mechanics/BoundaryStressVisitor.h" line="87" column="26" bodyfile="source/modules/thmc/mechanics/BoundaryStressVisitor.h" bodystart="87" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_boundary_stress_visitor_1aa213f7b4e2796f6609a9a83ab3420bcc" prot="private" static="no" mutable="no">
+        <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>const csmp::Index csmp::BoundaryStressVisitor&lt; dim &gt;::Sh_min_key_</definition>
+        <argsstring></argsstring>
+        <name>Sh_min_key_</name>
+        <qualifiedname>csmp::BoundaryStressVisitor::Sh_min_key_</qualifiedname>
+        <briefdescription>
+<para>minimum horizontal stress Sh_min/SV </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/thmc/mechanics/BoundaryStressVisitor.h" line="88" column="26" bodyfile="source/modules/thmc/mechanics/BoundaryStressVisitor.h" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_boundary_stress_visitor_1ab3ec97ba6265418be7f2dbc3299f040a" prot="private" static="no" mutable="no">
+        <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>const csmp::Index csmp::BoundaryStressVisitor&lt; dim &gt;::bstress_key_</definition>
+        <argsstring></argsstring>
+        <name>bstress_key_</name>
+        <qualifiedname>csmp::BoundaryStressVisitor::bstress_key_</qualifiedname>
+        <briefdescription>
+<para>stress acting on the boundary face (one value per boundary) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/thmc/mechanics/BoundaryStressVisitor.h" line="89" column="26" bodyfile="source/modules/thmc/mechanics/BoundaryStressVisitor.h" bodystart="89" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_boundary_stress_visitor_1ae776141a750b130cfa5093ae26f94a3e" prot="private" static="no" mutable="no">
+        <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>const csmp::Index csmp::BoundaryStressVisitor&lt; dim &gt;::F_key_</definition>
+        <argsstring></argsstring>
+        <name>F_key_</name>
+        <qualifiedname>csmp::BoundaryStressVisitor::F_key_</qualifiedname>
+        <briefdescription>
+<para>(nodal) &apos;force&apos; (N) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/thmc/mechanics/BoundaryStressVisitor.h" line="90" column="24" bodyfile="source/modules/thmc/mechanics/BoundaryStressVisitor.h" bodystart="90" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_boundary_stress_visitor_1aa637fb9b93f304a5dbac6abbd646c54c" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; dim &gt;</type>
+        <definition>VectorVariable&lt; dim &gt; csmp::BoundaryStressVisitor&lt; dim &gt;::vc_</definition>
+        <argsstring></argsstring>
+        <name>vc_</name>
+        <qualifiedname>csmp::BoundaryStressVisitor::vc_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/thmc/mechanics/BoundaryStressVisitor.h" line="91" column="19" bodyfile="source/modules/thmc/mechanics/BoundaryStressVisitor.h" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_boundary_stress_visitor_1a6c5d2e6d31706aa45c116dfc1c09a903" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; dim &gt;</type>
+        <definition>VectorVariable&lt; dim &gt; csmp::BoundaryStressVisitor&lt; dim &gt;::force_</definition>
+        <argsstring></argsstring>
+        <name>force_</name>
+        <qualifiedname>csmp::BoundaryStressVisitor::force_</qualifiedname>
+        <briefdescription>
+<para>forces read from the nodes </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/thmc/mechanics/BoundaryStressVisitor.h" line="91" column="23" bodyfile="source/modules/thmc/mechanics/BoundaryStressVisitor.h" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_boundary_stress_visitor_1ab5897aa3d4059cf9f6b84ab674d6d845" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; dim &gt;</type>
+        <definition>VectorVariable&lt; dim &gt; csmp::BoundaryStressVisitor&lt; dim &gt;::nrml_</definition>
+        <argsstring></argsstring>
+        <name>nrml_</name>
+        <qualifiedname>csmp::BoundaryStressVisitor::nrml_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/thmc/mechanics/BoundaryStressVisitor.h" line="92" column="19" bodyfile="source/modules/thmc/mechanics/BoundaryStressVisitor.h" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_boundary_stress_visitor_1a0a9d7324dd45932ce34ad476d362d0ef" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; dim &gt;</type>
+        <definition>VectorVariable&lt; dim &gt; csmp::BoundaryStressVisitor&lt; dim &gt;::bstress_</definition>
+        <argsstring></argsstring>
+        <name>bstress_</name>
+        <qualifiedname>csmp::BoundaryStressVisitor::bstress_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/thmc/mechanics/BoundaryStressVisitor.h" line="92" column="25" bodyfile="source/modules/thmc/mechanics/BoundaryStressVisitor.h" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_boundary_stress_visitor_1a80630c578c8ec6ed92633d051f2e570f" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref>&lt; dim &gt;</type>
+        <definition>TensorVariable&lt; dim &gt; csmp::BoundaryStressVisitor&lt; dim &gt;::stressTensor_</definition>
+        <argsstring></argsstring>
+        <name>stressTensor_</name>
+        <qualifiedname>csmp::BoundaryStressVisitor::stressTensor_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/thmc/mechanics/BoundaryStressVisitor.h" line="93" column="19" bodyfile="source/modules/thmc/mechanics/BoundaryStressVisitor.h" bodystart="93" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_boundary_stress_visitor_1a37439523c0bb99bf0a64bccb1a86130e" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::BoundaryStressVisitor&lt; dim &gt;::SHmax_</definition>
+        <argsstring></argsstring>
+        <name>SHmax_</name>
+        <qualifiedname>csmp::BoundaryStressVisitor::SHmax_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/thmc/mechanics/BoundaryStressVisitor.h" line="94" column="26" bodyfile="source/modules/thmc/mechanics/BoundaryStressVisitor.h" bodystart="94" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_boundary_stress_visitor_1a8742b931164222753c2e72f3120376e2" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::BoundaryStressVisitor&lt; dim &gt;::Shmin_</definition>
+        <argsstring></argsstring>
+        <name>Shmin_</name>
+        <qualifiedname>csmp::BoundaryStressVisitor::Shmin_</qualifiedname>
+        <briefdescription>
+<para>stress ratios read from the boundary </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/thmc/mechanics/BoundaryStressVisitor.h" line="94" column="33" bodyfile="source/modules/thmc/mechanics/BoundaryStressVisitor.h" bodystart="94" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_boundary_stress_visitor_1ae2a729e3750f5911a2e0a6954a2678db" prot="private" static="no" mutable="no">
+        <type>BOUNDARY_STRESS</type>
+        <definition>BOUNDARY_STRESS csmp::BoundaryStressVisitor&lt; dim &gt;::stress_computation_</definition>
+        <argsstring></argsstring>
+        <name>stress_computation_</name>
+        <qualifiedname>csmp::BoundaryStressVisitor::stress_computation_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/thmc/mechanics/BoundaryStressVisitor.h" line="95" column="26" bodyfile="source/modules/thmc/mechanics/BoundaryStressVisitor.h" bodystart="95" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_boundary_stress_visitor_1a3f05a14082b572ef3136373b12d466ac" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::BoundaryStressVisitor&lt; dim &gt;::overwrite_previous_forces_</definition>
+        <argsstring></argsstring>
+        <name>overwrite_previous_forces_</name>
+        <qualifiedname>csmp::BoundaryStressVisitor::overwrite_previous_forces_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/thmc/mechanics/BoundaryStressVisitor.h" line="96" column="24" bodyfile="source/modules/thmc/mechanics/BoundaryStressVisitor.h" bodystart="96" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_boundary_stress_visitor_1a36a390e3761a446cb45f2d9002b6e3fd" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::BoundaryStressVisitor&lt; dim &gt;::SHmax_</definition>
+        <argsstring></argsstring>
+        <name>SHmax_</name>
+        <qualifiedname>csmp::BoundaryStressVisitor::SHmax_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/BoundaryStressVisitor.h" line="94" column="24" bodyfile="source/includes/thmc/mechanics/BoundaryStressVisitor.h" bodystart="94" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_boundary_stress_visitor_1a4ee0310f3991dd2705f4a56e6be6bc21" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::BoundaryStressVisitor&lt; dim &gt;::Shmin_</definition>
+        <argsstring></argsstring>
+        <name>Shmin_</name>
+        <qualifiedname>csmp::BoundaryStressVisitor::Shmin_</qualifiedname>
+        <briefdescription>
+<para>stress ratios read from the boundary </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/BoundaryStressVisitor.h" line="94" column="31" bodyfile="source/includes/thmc/mechanics/BoundaryStressVisitor.h" bodystart="94" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_boundary_stress_visitor_1ae2dab2f1731e26e436878c4640ac292e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::BoundaryStressVisitor&lt; dim &gt;::BoundaryStressVisitor</definition>
+        <argsstring>(const Model&lt; dim &gt; &amp;, const char *SV_variable, bool overwrite_force_vector=true)</argsstring>
+        <name>BoundaryStressVisitor</name>
+        <qualifiedname>csmp::BoundaryStressVisitor::BoundaryStressVisitor</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <defname>model</defname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>SV_variable</declname>
+          <briefdescription><para>should vary with depth </para>
+</briefdescription>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>overwrite_force_vector</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+<para>by default, any entries into the RHS force vectors will get overwritten </para>
+        </briefdescription>
+        <detaileddescription>
+<para>For the computation of the nodal &apos;gravity force&apos;</para>
+<para>Application level is model so that all boundaries are visited followed by a visitation of their faces.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>model</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>computation domain.</para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>SV_variable</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>denotes overburden = vertical stress calculated by integration of the sediment column dry density up to the earth&apos; surface. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/thmc/mechanics/BoundaryStressVisitor.h" line="57" column="5" bodyfile="source/modules/thmc/mechanics/BoundaryStressVisitor.cpp" bodystart="36" bodyend="62"/>
+        <references refid="classcsmp_1_1_boundary_stress_visitor_1ae2dab2f1731e26e436878c4640ac292e" compoundref="_boundary_stress_visitor_8cpp" startline="36" endline="62">csmp::BoundaryStressVisitor&lt; dim &gt;::BoundaryStressVisitor</references>
+        <referencedby refid="classcsmp_1_1_boundary_stress_visitor_1ae2dab2f1731e26e436878c4640ac292e" compoundref="_boundary_stress_visitor_8cpp" startline="36" endline="62">csmp::BoundaryStressVisitor&lt; dim &gt;::BoundaryStressVisitor</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_stress_visitor_1a726cfbf7d6ab33bca80a016486926820" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::BoundaryStressVisitor&lt; dim &gt;::BoundaryStressVisitor</definition>
+        <argsstring>(const Model&lt; dim &gt; &amp;, BOUNDARY_STRESS=BOUNDARY_STRESS::SINGLE_VALUED, bool overwrite_force_vector=true)</argsstring>
+        <name>BoundaryStressVisitor</name>
+        <qualifiedname>csmp::BoundaryStressVisitor::BoundaryStressVisitor</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <defname>model</defname>
+        </param>
+        <param>
+          <type>BOUNDARY_STRESS</type>
+          <defname>stress_computation</defname>
+          <defval>BOUNDARY_STRESS::SINGLE_VALUED</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>overwrite_force_vector</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+<para>computations using absolute stress values on the boundary </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/thmc/mechanics/BoundaryStressVisitor.h" line="62" column="5" bodyfile="source/modules/thmc/mechanics/BoundaryStressVisitor.cpp" bodystart="67" bodyend="85"/>
+        <references refid="classcsmp_1_1_boundary_stress_visitor_1a726cfbf7d6ab33bca80a016486926820" compoundref="_boundary_stress_visitor_8cpp" startline="67" endline="85">csmp::BoundaryStressVisitor&lt; dim &gt;::BoundaryStressVisitor</references>
+        <referencedby refid="classcsmp_1_1_boundary_stress_visitor_1a726cfbf7d6ab33bca80a016486926820" compoundref="_boundary_stress_visitor_8cpp" startline="67" endline="85">csmp::BoundaryStressVisitor&lt; dim &gt;::BoundaryStressVisitor</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_stress_visitor_1a92d97d4ca8b2e1cb35ffb4e056217e94" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>csmp::BoundaryStressVisitor&lt; dim &gt;::~BoundaryStressVisitor</definition>
+        <argsstring>()</argsstring>
+        <name>~BoundaryStressVisitor</name>
+        <qualifiedname>csmp::BoundaryStressVisitor::~BoundaryStressVisitor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/thmc/mechanics/BoundaryStressVisitor.h" line="66" column="13" bodyfile="source/modules/thmc/mechanics/BoundaryStressVisitor.cpp" bodystart="91" bodyend="93"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_stress_visitor_1a4ac8dc8426ad7ef7fd1bc52adef02c9d" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::BoundaryStressVisitor&lt; dim &gt;::Visit</definition>
+        <argsstring>(Boundary&lt; dim &gt; *)</argsstring>
+        <name>Visit</name>
+        <qualifiedname>csmp::BoundaryStressVisitor::Visit</qualifiedname>
+        <reimplements refid="classcsmp_1_1_visitor_1ac735e758870331b6639ea969504c47bf">Visit</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref>&lt; dim &gt; *</type>
+          <defname>b</defname>
+        </param>
+        <briefdescription>
+<para>to zero out force vector, prior to accumulation of forces. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Collects the stress value placed on the boudary and (optionally) zeros out the initial force values assigned to this boundary. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/thmc/mechanics/BoundaryStressVisitor.h" line="69" column="18" bodyfile="source/modules/thmc/mechanics/BoundaryStressVisitor.cpp" bodystart="104" bodyend="120"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_stress_visitor_1aacb2895678c4b568b478fdc619272e42" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::BoundaryStressVisitor&lt; dim &gt;::Visit</definition>
+        <argsstring>(Face&lt; dim &gt; *)</argsstring>
+        <name>Visit</name>
+        <qualifiedname>csmp::BoundaryStressVisitor::Visit</qualifiedname>
+        <reimplements refid="classcsmp_1_1_visitor_1abdca6daa1802e3727868d2d614c65015">Visit</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>&lt; dim &gt; *</type>
+          <defname>f</defname>
+        </param>
+        <briefdescription>
+<para>computes nodal forces weighted by node </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Interpolates the applied element-centric forces to the nodes.</para>
+<para>An approach is used where the nodal contribution is weighted on the basis of the distance of the barycenter to the node.</para>
+<para><simplesect kind="attention"><para>this is an integration (for uniform nodal forces, see option, we get non-uniform stresses) </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/thmc/mechanics/BoundaryStressVisitor.h" line="72" column="18" bodyfile="source/modules/thmc/mechanics/BoundaryStressVisitor.cpp" bodystart="139" bodyend="171"/>
+        <references refid="classcsmp_1_1_scalar_variable_1ad41aa96d231c5754a999f38a5bc012a9" compoundref="_scalar_variable_8cpp" startline="9" endline="9">csmp::ScalarVariable::Flag</references>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9a024f07cd6361eadc6efee518fce8cdbc" compoundref="_c_s_m_p__global__enumerations_8h" startline="65">csmp::NEUMANN</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_stress_visitor_1ae2dab2f1731e26e436878c4640ac292e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::BoundaryStressVisitor&lt; dim &gt;::BoundaryStressVisitor</definition>
+        <argsstring>(const Model&lt; dim &gt; &amp;, const char *SV_variable, bool overwrite_force_vector=true)</argsstring>
+        <name>BoundaryStressVisitor</name>
+        <qualifiedname>csmp::BoundaryStressVisitor::BoundaryStressVisitor</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>SV_variable</declname>
+          <briefdescription><para>should vary with depth </para>
+</briefdescription>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>overwrite_force_vector</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+<para>by default, any entries into the RHS force vectors will get overwritten </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/BoundaryStressVisitor.h" line="57" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_stress_visitor_1a726cfbf7d6ab33bca80a016486926820" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::BoundaryStressVisitor&lt; dim &gt;::BoundaryStressVisitor</definition>
+        <argsstring>(const Model&lt; dim &gt; &amp;, BOUNDARY_STRESS=BOUNDARY_STRESS::SINGLE_VALUED, bool overwrite_force_vector=true)</argsstring>
+        <name>BoundaryStressVisitor</name>
+        <qualifiedname>csmp::BoundaryStressVisitor::BoundaryStressVisitor</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+        </param>
+        <param>
+          <type>BOUNDARY_STRESS</type>
+          <defval>BOUNDARY_STRESS::SINGLE_VALUED</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>overwrite_force_vector</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+<para>computations using absolute stress values on the boundary </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/BoundaryStressVisitor.h" line="62" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_stress_visitor_1afcee48548bee288bd9bf39ff542b1bf7" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>virtual csmp::BoundaryStressVisitor&lt; dim &gt;::~BoundaryStressVisitor</definition>
+        <argsstring>()</argsstring>
+        <name>~BoundaryStressVisitor</name>
+        <qualifiedname>csmp::BoundaryStressVisitor::~BoundaryStressVisitor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/BoundaryStressVisitor.h" line="66" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_stress_visitor_1abdad4e41ba17176143c7a3b36b04756e" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>virtual void csmp::BoundaryStressVisitor&lt; dim &gt;::Visit</definition>
+        <argsstring>(Boundary&lt; dim &gt; *)</argsstring>
+        <name>Visit</name>
+        <qualifiedname>csmp::BoundaryStressVisitor::Visit</qualifiedname>
+        <reimplements refid="classcsmp_1_1_visitor_1ac735e758870331b6639ea969504c47bf">Visit</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref>&lt; dim &gt; *</type>
+        </param>
+        <briefdescription>
+<para>to zero out force vector, prior to accumulation of forces. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/BoundaryStressVisitor.h" line="69" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_stress_visitor_1a11abcc3f6b424d955ab388b6727c30dd" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>virtual void csmp::BoundaryStressVisitor&lt; dim &gt;::Visit</definition>
+        <argsstring>(Face&lt; dim &gt; *)</argsstring>
+        <name>Visit</name>
+        <qualifiedname>csmp::BoundaryStressVisitor::Visit</qualifiedname>
+        <reimplements refid="classcsmp_1_1_visitor_1abdca6daa1802e3727868d2d614c65015">Visit</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>&lt; dim &gt; *</type>
+        </param>
+        <briefdescription>
+<para>computes nodal forces weighted by node </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/BoundaryStressVisitor.h" line="72" column="18"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_boundary_stress_visitor_1a785e3f6f9d8db6b8dd9ae561324ecd66" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::BoundaryStressVisitor&lt; dim &gt;::RetrieveNormalWithCorrectDirection</definition>
+        <argsstring>(Face&lt; dim &gt; *, VectorVariable&lt; dim &gt; &amp;nrml)</argsstring>
+        <name>RetrieveNormalWithCorrectDirection</name>
+        <qualifiedname>csmp::BoundaryStressVisitor::RetrieveNormalWithCorrectDirection</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>&lt; dim &gt; *</type>
+          <defname>f</defname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; dim &gt; &amp;</type>
+          <declname>nrml</declname>
+        </param>
+        <briefdescription>
+<para>normals at the boundaries are not correct; this is a workaround </para>
+        </briefdescription>
+        <detaileddescription>
+<para>when normals at a boundary are not correct; this is a workaround.</para>
+<para>Idea: normal must be pointing from face-parent1 to face-parent2. This is established by comparisons of barycentre differences.</para>
+<para><simplesect kind="attention"><para>assumption is made that when a face is at the model boundary only the first parent is assigned. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/thmc/mechanics/BoundaryStressVisitor.h" line="76" column="10" bodyfile="source/modules/thmc/mechanics/BoundaryStressVisitor.cpp" bodystart="281" bodyend="306"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_stress_visitor_1a29fe29b1065f86a2d3617832847b3532" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::BoundaryStressVisitor&lt; dim &gt;::ApplyConstantStressBoundaryConditions</definition>
+        <argsstring>(Face&lt; dim &gt; *)</argsstring>
+        <name>ApplyConstantStressBoundaryConditions</name>
+        <qualifiedname>csmp::BoundaryStressVisitor::ApplyConstantStressBoundaryConditions</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>&lt; dim &gt; *</type>
+          <defname>f</defname>
+        </param>
+        <briefdescription>
+<para>no vertical variation </para>
+        </briefdescription>
+        <detaileddescription>
+<para>no vertical variation </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/thmc/mechanics/BoundaryStressVisitor.h" line="79" column="10" bodyfile="source/modules/thmc/mechanics/BoundaryStressVisitor.cpp" bodystart="180" bodyend="201"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_stress_visitor_1a7990feab7871836d0031ddcd2a9bf155" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::BoundaryStressVisitor&lt; dim &gt;::ApplyDepthDependentBoundaryConditions</definition>
+        <argsstring>(Face&lt; dim &gt; *)</argsstring>
+        <name>ApplyDepthDependentBoundaryConditions</name>
+        <qualifiedname>csmp::BoundaryStressVisitor::ApplyDepthDependentBoundaryConditions</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>&lt; dim &gt; *</type>
+          <defname>f</defname>
+        </param>
+        <briefdescription>
+<para>variation with depth due to the action of body force = gravity </para>
+        </briefdescription>
+        <detaileddescription>
+<para>variation with depth due to the action of body force = gravity </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/thmc/mechanics/BoundaryStressVisitor.h" line="82" column="10" bodyfile="source/modules/thmc/mechanics/BoundaryStressVisitor.cpp" bodystart="209" bodyend="259"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_stress_visitor_1a785e3f6f9d8db6b8dd9ae561324ecd66" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::BoundaryStressVisitor&lt; dim &gt;::RetrieveNormalWithCorrectDirection</definition>
+        <argsstring>(Face&lt; dim &gt; *, VectorVariable&lt; dim &gt; &amp;nrml)</argsstring>
+        <name>RetrieveNormalWithCorrectDirection</name>
+        <qualifiedname>csmp::BoundaryStressVisitor::RetrieveNormalWithCorrectDirection</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>&lt; dim &gt; *</type>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; dim &gt; &amp;</type>
+          <declname>nrml</declname>
+        </param>
+        <briefdescription>
+<para>normals at the boundaries are not correct; this is a workaround </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/BoundaryStressVisitor.h" line="76" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_stress_visitor_1a29fe29b1065f86a2d3617832847b3532" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::BoundaryStressVisitor&lt; dim &gt;::ApplyConstantStressBoundaryConditions</definition>
+        <argsstring>(Face&lt; dim &gt; *)</argsstring>
+        <name>ApplyConstantStressBoundaryConditions</name>
+        <qualifiedname>csmp::BoundaryStressVisitor::ApplyConstantStressBoundaryConditions</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>&lt; dim &gt; *</type>
+        </param>
+        <briefdescription>
+<para>no vertical variation </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/BoundaryStressVisitor.h" line="79" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_boundary_stress_visitor_1a7990feab7871836d0031ddcd2a9bf155" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::BoundaryStressVisitor&lt; dim &gt;::ApplyDepthDependentBoundaryConditions</definition>
+        <argsstring>(Face&lt; dim &gt; *)</argsstring>
+        <name>ApplyDepthDependentBoundaryConditions</name>
+        <qualifiedname>csmp::BoundaryStressVisitor::ApplyDepthDependentBoundaryConditions</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>&lt; dim &gt; *</type>
+        </param>
+        <briefdescription>
+<para>variation with depth due to the action of body force = gravity </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/BoundaryStressVisitor.h" line="82" column="10"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para><ref refid="classcsmp_1_1_boundary_stress_visitor" kindref="compound">BoundaryStressVisitor</ref> accesses a <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> object that must be a surface, computing nodal forces based on the normal and shear stresses applied to that <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> element. If the boundary is inclined or vertical and body forces are enabled, the visitor takes the vertical variation in the boundary normal stress into account. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="attention"><para>this visitor assumes that the driving stresses are Andersonian, i.e. that one of the principal stress axes is aligned with the vertical (Y)-axis of the model.</para>
+</simplesect>
+<simplesect kind="note"><para>This visitor allows for a workaround for applying stress boundary conditions if one does not want to use the Neumann condition functionality of the <ref refid="classcsmp_1_1_p_d_e___integrator" kindref="compound">PDE_Integrator</ref>.</para>
+</simplesect>
+Input are the <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> variables &apos;normal stress&apos; and &apos;shear stress.&apos; The nodal forces are computed from these.</para>
+<para>Use this, for instance to compute and apply overburden stresses.</para>
+<para><simplesect kind="attention"><para>by default all forces that were previously assigned are zeroed first.</para>
+</simplesect>
+<simplesect kind="attention"><para>compressive (inward pointing) stresses are positive.</para>
+</simplesect>
+<simplesect kind="attention"><para>this visitor assumes that the far-field stress regime is Andersonian, i.e. one of the principal stresses is oriented perpendicular to the earth surface.</para>
+</simplesect>
+<simplesect kind="author"><para>SKM 29/9/2014 </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::BoundaryStressVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_boundary_stress_visitor"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Visitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_visitor"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::BoundaryStressVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_boundary_stress_visitor"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Visitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_visitor"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/modules/thmc/mechanics/BoundaryStressVisitor.h" line="54" column="1" bodyfile="source/modules/thmc/mechanics/BoundaryStressVisitor.h" bodystart="54" bodyend="97"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_visitor_1af785c6c9fdbe53d3edcb37e5eebf13ae" prot="protected" virt="non-virtual"><scope>csmp::BoundaryStressVisitor</scope><name>application_level_</name></member>
+      <member refid="classcsmp_1_1_visitor_1a4ba2f25168d6531e7a850f5f2d0dc9bb" prot="protected" virt="non-virtual"><scope>csmp::BoundaryStressVisitor</scope><name>application_target_</name></member>
+      <member refid="classcsmp_1_1_visitor_1a04cef3d343b9721c4d636f5496ccfa42" prot="public" virt="non-virtual"><scope>csmp::BoundaryStressVisitor</scope><name>ApplicationLevel</name></member>
+      <member refid="classcsmp_1_1_visitor_1a221f8440bf8d6aa7ad970d60383f8b0c" prot="public" virt="non-virtual"><scope>csmp::BoundaryStressVisitor</scope><name>ApplicationLevel</name></member>
+      <member refid="classcsmp_1_1_visitor_1a05b9c8127e47ce0ca524e2804c14251a" prot="public" virt="non-virtual"><scope>csmp::BoundaryStressVisitor</scope><name>ApplicationTarget</name></member>
+      <member refid="classcsmp_1_1_visitor_1ac7084587d6daea17badc51e2a0caddf8" prot="public" virt="non-virtual"><scope>csmp::BoundaryStressVisitor</scope><name>ApplicationTarget</name></member>
+      <member refid="classcsmp_1_1_boundary_stress_visitor_1a29fe29b1065f86a2d3617832847b3532" prot="private" virt="non-virtual"><scope>csmp::BoundaryStressVisitor</scope><name>ApplyConstantStressBoundaryConditions</name></member>
+      <member refid="classcsmp_1_1_boundary_stress_visitor_1a29fe29b1065f86a2d3617832847b3532" prot="private" virt="non-virtual"><scope>csmp::BoundaryStressVisitor</scope><name>ApplyConstantStressBoundaryConditions</name></member>
+      <member refid="classcsmp_1_1_boundary_stress_visitor_1a7990feab7871836d0031ddcd2a9bf155" prot="private" virt="non-virtual"><scope>csmp::BoundaryStressVisitor</scope><name>ApplyDepthDependentBoundaryConditions</name></member>
+      <member refid="classcsmp_1_1_boundary_stress_visitor_1a7990feab7871836d0031ddcd2a9bf155" prot="private" virt="non-virtual"><scope>csmp::BoundaryStressVisitor</scope><name>ApplyDepthDependentBoundaryConditions</name></member>
+      <member refid="classcsmp_1_1_boundary_stress_visitor_1ae2dab2f1731e26e436878c4640ac292e" prot="public" virt="non-virtual"><scope>csmp::BoundaryStressVisitor</scope><name>BoundaryStressVisitor</name></member>
+      <member refid="classcsmp_1_1_boundary_stress_visitor_1a726cfbf7d6ab33bca80a016486926820" prot="public" virt="non-virtual"><scope>csmp::BoundaryStressVisitor</scope><name>BoundaryStressVisitor</name></member>
+      <member refid="classcsmp_1_1_boundary_stress_visitor_1ae2dab2f1731e26e436878c4640ac292e" prot="public" virt="non-virtual"><scope>csmp::BoundaryStressVisitor</scope><name>BoundaryStressVisitor</name></member>
+      <member refid="classcsmp_1_1_boundary_stress_visitor_1a726cfbf7d6ab33bca80a016486926820" prot="public" virt="non-virtual"><scope>csmp::BoundaryStressVisitor</scope><name>BoundaryStressVisitor</name></member>
+      <member refid="classcsmp_1_1_boundary_stress_visitor_1a0a9d7324dd45932ce34ad476d362d0ef" prot="private" virt="non-virtual"><scope>csmp::BoundaryStressVisitor</scope><name>bstress_</name></member>
+      <member refid="classcsmp_1_1_boundary_stress_visitor_1ab3ec97ba6265418be7f2dbc3299f040a" prot="private" virt="non-virtual"><scope>csmp::BoundaryStressVisitor</scope><name>bstress_key_</name></member>
+      <member refid="classcsmp_1_1_boundary_stress_visitor_1ae776141a750b130cfa5093ae26f94a3e" prot="private" virt="non-virtual"><scope>csmp::BoundaryStressVisitor</scope><name>F_key_</name></member>
+      <member refid="classcsmp_1_1_boundary_stress_visitor_1a6c5d2e6d31706aa45c116dfc1c09a903" prot="private" virt="non-virtual"><scope>csmp::BoundaryStressVisitor</scope><name>force_</name></member>
+      <member refid="classcsmp_1_1_boundary_stress_visitor_1ab5897aa3d4059cf9f6b84ab674d6d845" prot="private" virt="non-virtual"><scope>csmp::BoundaryStressVisitor</scope><name>nrml_</name></member>
+      <member refid="classcsmp_1_1_boundary_stress_visitor_1a3f05a14082b572ef3136373b12d466ac" prot="private" virt="non-virtual"><scope>csmp::BoundaryStressVisitor</scope><name>overwrite_previous_forces_</name></member>
+      <member refid="classcsmp_1_1_boundary_stress_visitor_1a785e3f6f9d8db6b8dd9ae561324ecd66" prot="private" virt="non-virtual"><scope>csmp::BoundaryStressVisitor</scope><name>RetrieveNormalWithCorrectDirection</name></member>
+      <member refid="classcsmp_1_1_boundary_stress_visitor_1a785e3f6f9d8db6b8dd9ae561324ecd66" prot="private" virt="non-virtual"><scope>csmp::BoundaryStressVisitor</scope><name>RetrieveNormalWithCorrectDirection</name></member>
+      <member refid="classcsmp_1_1_visitor_1a005bb17978ed03376bc3f7c1c329c936" prot="public" virt="virtual"><scope>csmp::BoundaryStressVisitor</scope><name>SetInitialProperties</name></member>
+      <member refid="classcsmp_1_1_boundary_stress_visitor_1aea54a0ceec872a04be3fabafa0957afc" prot="private" virt="non-virtual"><scope>csmp::BoundaryStressVisitor</scope><name>SH_max_key_</name></member>
+      <member refid="classcsmp_1_1_boundary_stress_visitor_1aa213f7b4e2796f6609a9a83ab3420bcc" prot="private" virt="non-virtual"><scope>csmp::BoundaryStressVisitor</scope><name>Sh_min_key_</name></member>
+      <member refid="classcsmp_1_1_boundary_stress_visitor_1a37439523c0bb99bf0a64bccb1a86130e" prot="private" virt="non-virtual"><scope>csmp::BoundaryStressVisitor</scope><name>SHmax_</name></member>
+      <member refid="classcsmp_1_1_boundary_stress_visitor_1a36a390e3761a446cb45f2d9002b6e3fd" prot="private" virt="non-virtual"><scope>csmp::BoundaryStressVisitor</scope><name>SHmax_</name></member>
+      <member refid="classcsmp_1_1_boundary_stress_visitor_1a8742b931164222753c2e72f3120376e2" prot="private" virt="non-virtual"><scope>csmp::BoundaryStressVisitor</scope><name>Shmin_</name></member>
+      <member refid="classcsmp_1_1_boundary_stress_visitor_1a4ee0310f3991dd2705f4a56e6be6bc21" prot="private" virt="non-virtual"><scope>csmp::BoundaryStressVisitor</scope><name>Shmin_</name></member>
+      <member refid="classcsmp_1_1_boundary_stress_visitor_1ae2a729e3750f5911a2e0a6954a2678db" prot="private" virt="non-virtual"><scope>csmp::BoundaryStressVisitor</scope><name>stress_computation_</name></member>
+      <member refid="classcsmp_1_1_boundary_stress_visitor_1a80630c578c8ec6ed92633d051f2e570f" prot="private" virt="non-virtual"><scope>csmp::BoundaryStressVisitor</scope><name>stressTensor_</name></member>
+      <member refid="classcsmp_1_1_boundary_stress_visitor_1a8feaa659dae0d3cbb57994c774b9e089" prot="private" virt="non-virtual"><scope>csmp::BoundaryStressVisitor</scope><name>Sv_key_</name></member>
+      <member refid="classcsmp_1_1_boundary_stress_visitor_1aa637fb9b93f304a5dbac6abbd646c54c" prot="private" virt="non-virtual"><scope>csmp::BoundaryStressVisitor</scope><name>vc_</name></member>
+      <member refid="classcsmp_1_1_visitor_1a5dc481fceb0110431c4d1d6cbcc9ceff" prot="public" virt="non-virtual"><scope>csmp::BoundaryStressVisitor</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_visitor_1a9361155291d48571710c2a67406ce730" prot="public" virt="non-virtual"><scope>csmp::BoundaryStressVisitor</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_boundary_stress_visitor_1a4ac8dc8426ad7ef7fd1bc52adef02c9d" prot="public" virt="virtual"><scope>csmp::BoundaryStressVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_boundary_stress_visitor_1aacb2895678c4b568b478fdc619272e42" prot="public" virt="virtual"><scope>csmp::BoundaryStressVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_boundary_stress_visitor_1abdad4e41ba17176143c7a3b36b04756e" prot="public" virt="virtual"><scope>csmp::BoundaryStressVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_boundary_stress_visitor_1a11abcc3f6b424d955ab388b6727c30dd" prot="public" virt="virtual"><scope>csmp::BoundaryStressVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a07433f464353062d91f21684b9378dec" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::BoundaryStressVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1ac71cf14aab11139d8b03b39d4e4709bc" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::BoundaryStressVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1af861179da1638c602df6c753cb3026f6" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::BoundaryStressVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a1a3ed57d253eef9a0097232c7359627c" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::BoundaryStressVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a0f21f0cfcf5328584883eb38effb58d4" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::BoundaryStressVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a8f1e9b73d04a90ad49171151bc233dbe" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::BoundaryStressVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a46449d8a657dbe4a2db5f1126e08323d" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::BoundaryStressVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a1097abaa59d3a35d65c0cb6335e2719c" prot="public" virt="non-virtual"><scope>csmp::BoundaryStressVisitor</scope><name>Visitor</name></member>
+      <member refid="classcsmp_1_1_boundary_stress_visitor_1a92d97d4ca8b2e1cb35ffb4e056217e94" prot="public" virt="virtual"><scope>csmp::BoundaryStressVisitor</scope><name>~BoundaryStressVisitor</name></member>
+      <member refid="classcsmp_1_1_boundary_stress_visitor_1afcee48548bee288bd9bf39ff542b1bf7" prot="public" virt="virtual"><scope>csmp::BoundaryStressVisitor</scope><name>~BoundaryStressVisitor</name></member>
+      <member refid="classcsmp_1_1_visitor_1ab83b6d2b06153f5b7b1050bfffdb2707" prot="public" virt="virtual"><scope>csmp::BoundaryStressVisitor</scope><name>~Visitor</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

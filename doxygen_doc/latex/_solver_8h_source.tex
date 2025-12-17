@@ -1,0 +1,131 @@
+\doxysection{Solver.\+h}
+\hypertarget{_solver_8h_source}{}\label{_solver_8h_source}\index{source/includes/integration/solver/Solver.h@{source/includes/integration/solver/Solver.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_SOLVER\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_SOLVER\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_solver_settings_8h}{"{}SolverSettings.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{SparseMatrix}};}
+\DoxyCodeLine{00010\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_compressed_row_matrix}{CompressedRowMatrix}};}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00013\ \textcolor{comment}{}}
+\DoxyCodeLine{00014\ \textcolor{comment}{@brief\ Inverts\ global\ solution\ matrices\ matrices\ of\ the\ finite-\/element}}
+\DoxyCodeLine{00015\ \textcolor{comment}{computations\ using\ a\ variety\ of\ solution\ procedures\ sparse\ matrices\ (class\ SparseMatrix).}}
+\DoxyCodeLine{00016\ \textcolor{comment}{Solver\ base\ class\ in\ strategy\ pattern.}}
+\DoxyCodeLine{00017\ \textcolor{comment}{}}
+\DoxyCodeLine{00018\ \textcolor{comment}{@author\ S.K.\ Matthaei}}
+\DoxyCodeLine{00019\ \textcolor{comment}{@author\ Stephen\ G.\ Roberts}}
+\DoxyCodeLine{00020\ \textcolor{comment}{@date\ 1999}}
+\DoxyCodeLine{00021\ \textcolor{comment}{}}
+\DoxyCodeLine{00022\ \textcolor{comment}{@section\ design\ Design\ Intent}}
+\DoxyCodeLine{00023\ \textcolor{comment}{}}
+\DoxyCodeLine{00024\ \textcolor{comment}{To\ encapsulate\ numerical\ algebraic\ methods\ in\ an\ object\ which\ services}}
+\DoxyCodeLine{00025\ \textcolor{comment}{the\ PDE\_Integrator\ and\ other\ class\ objects.}}
+\DoxyCodeLine{00026\ \textcolor{comment}{}}
+\DoxyCodeLine{00027\ \textcolor{comment}{@section\ applicability\ Applicability}}
+\DoxyCodeLine{00028\ \textcolor{comment}{}}
+\DoxyCodeLine{00029\ \textcolor{comment}{Currently\ the\ solver\ offers\ an\ algebraic\ multigrid\ method\ (AMG),\ a}}
+\DoxyCodeLine{00030\ \textcolor{comment}{conjugate\ gradient\ method\ (CG),\ and\ a\ Gaussian\ elimination\ method\ (GE)}}
+\DoxyCodeLine{00031\ \textcolor{comment}{as\ solution\ schemes.\ Gaussian\ elimination\ can\ be\ applied\ to\ non-\/symmetric}}
+\DoxyCodeLine{00032\ \textcolor{comment}{matrices\ as\ they\ arise\ if\ advection-\/dispersion\ matrices\ are\ accumulated}}
+\DoxyCodeLine{00033\ \textcolor{comment}{into\ the\ global\ solution\ matrix.\ The\ algebraic\ multigrid\ and\ conjugate}}
+\DoxyCodeLine{00034\ \textcolor{comment}{gradient\ methods\ require\ symmetric\ positive-\/definite\ (no\ negative}}
+\DoxyCodeLine{00035\ \textcolor{comment}{elements\ in\ the\ diagonal)\ solution\ matrices\ in\ order\ to\ be\ applicable.}}
+\DoxyCodeLine{00036\ \textcolor{comment}{}}
+\DoxyCodeLine{00037\ \textcolor{comment}{Dependent\ on\ the\ size\ of\ the\ computation\ different\ solution\ methods\ are}}
+\DoxyCodeLine{00038\ \textcolor{comment}{appropriate:\ If\ you\ have\ a\ very\ small\ test\ problem,\ like\ a\ 30\ x\ 30}}
+\DoxyCodeLine{00039\ \textcolor{comment}{matrix,\ CG\ ist\ as\ fast\ or\ faster\ than\ AMG\ and\ it\ will\ require\ less}}
+\DoxyCodeLine{00040\ \textcolor{comment}{storage.\ Above\ a\ size\ of\ 50\ x\ 50,\ AMG\ becomes\ much\ faster\ than\ the}}
+\DoxyCodeLine{00041\ \textcolor{comment}{other\ methods.}}
+\DoxyCodeLine{00042\ \textcolor{comment}{}}
+\DoxyCodeLine{00043\ \textcolor{comment}{}}
+\DoxyCodeLine{00044\ \textcolor{comment}{@section\ participants\ Participants}}
+\DoxyCodeLine{00045\ \textcolor{comment}{}}
+\DoxyCodeLine{00046\ \textcolor{comment}{Each\ inversion\ involves\ a\ sparse\ global\ solution\ matrix\ of\ type\ SpMat,}}
+\DoxyCodeLine{00047\ \textcolor{comment}{a\ righthand,\ and\ a\ solution\ vector\ of\ type\ vector<double>.}}
+\DoxyCodeLine{00048\ \textcolor{comment}{}}
+\DoxyCodeLine{00049\ \textcolor{comment}{}}
+\DoxyCodeLine{00050\ \textcolor{comment}{@section\ implementation\ Implementation}}
+\DoxyCodeLine{00051\ \textcolor{comment}{}}
+\DoxyCodeLine{00052\ \textcolor{comment}{The\ Solver\ uses\ the\ Meschach++\ and\ the\ AMG\ libraries\ to\ carry\ out\ the}}
+\DoxyCodeLine{00053\ \textcolor{comment}{matrix\ operations.\ The\ user\ sets\ the\ private\ variable\ solution\ method,}}
+\DoxyCodeLine{00054\ \textcolor{comment}{whose\ default\ is\ algebraic\ multigrid.}}
+\DoxyCodeLine{00055\ \textcolor{comment}{}}
+\DoxyCodeLine{00056\ \textcolor{comment}{}}
+\DoxyCodeLine{00057\ \textcolor{comment}{@section\ examples\ Application\ Examples}}
+\DoxyCodeLine{00058\ \textcolor{comment}{}}
+\DoxyCodeLine{00059\ \textcolor{comment}{The\ Solver\ is\ called\ by\ the\ Algorithm\ and\ Algorithm\ objects,\ when}}
+\DoxyCodeLine{00060\ \textcolor{comment}{they\ are\ submitted\ to\ the\ Model\ through\ its\ Apply()\ interfaces.}}
+\DoxyCodeLine{00061\ \textcolor{comment}{In\ this\ process\ the\ Algorithm\ hands\ the\ solver\ the\ global\ solution}}
+\DoxyCodeLine{00062\ \textcolor{comment}{matrix\ 'G',\ the\ solution\ vector\ 'x'\ and\ the\ righthand\ vector\ 'rh'.:}}
+\DoxyCodeLine{00063\ \textcolor{comment}{}}
+\DoxyCodeLine{00064\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00065\ \textcolor{comment}{SolveMatrixEquation(\ G,\ rh,\ x\ );}}
+\DoxyCodeLine{00066\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00067\ \textcolor{comment}{}}
+\DoxyCodeLine{00068\ \textcolor{comment}{The\ Solver\ then\ returns\ the\ solution\ into\ 'x'\ and\ it\ is\ tested\ further\ by}}
+\DoxyCodeLine{00069\ \textcolor{comment}{the\ Algorithm\ before\ it\ is\ mapped\ back\ to\ the\ Model\ variable}}
+\DoxyCodeLine{00070\ \textcolor{comment}{storage.}}
+\DoxyCodeLine{00071\ \textcolor{comment}{}}
+\DoxyCodeLine{00072\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00073\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_solver}{Solver}}\ \{}
+\DoxyCodeLine{00074\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00075\ \ \ \mbox{\hyperlink{classcsmp_1_1_solver_a331d12fc9b8cb28b1d9614fdd1059a48}{Solver}}();}
+\DoxyCodeLine{00076\ \ \ Solver(\ \mbox{\hyperlink{classcsmp_1_1_solver_settings}{SolverSettings}}*\ settings\ );}
+\DoxyCodeLine{00077\ \ \ \textcolor{keyword}{virtual}\ \string~Solver();}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{classcsmp_1_1_solver_a7707a8bf03e9dde6396aecc144730c68}{Verbose}}(\ \textcolor{keywordtype}{bool}\ verb\ );}
+\DoxyCodeLine{00080\ \ \ \textcolor{keywordtype}{bool}\ \ Verbose()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{classcsmp_1_1_solver_a00f2d834fa620f56e50a8cf37808c466}{Solve}}(\ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{SparseMatrix}}\&\ G,}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\&\ rh,}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\&\ x,}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ size\_t\ no\_unknowns\ =\ 1U\ );}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \ \ \textcolor{keywordtype}{void}\ \ Solve(\ \mbox{\hyperlink{classcsmp_1_1_compressed_row_matrix}{CompressedRowMatrix}}\&\ G,}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\&\ rh,}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\&\ x,}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ size\_t\ no\_unknowns\ =\ 1U\ );}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \ \ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{classcsmp_1_1_solver_afb9380e536b4d7080c89cf143421c6f2}{Out}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{SparseMatrix}}\&\ mat,}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fname\ =\ \textcolor{stringliteral}{"{}SparseMatrix"{}}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \ \ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{classcsmp_1_1_solver_a38054ec4ca8ea1fca61e4e32abf82c0e}{Out}}(\ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ vec,}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fname\ =\ \textcolor{stringliteral}{"{}CSP\_Vec"{}}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_solver_a352359e5ec450c03b8cf8b4fa2d06c2a}{CalculateResidual}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{SparseMatrix}}\&\ A,}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ b,}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ x\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ InputSolverSettings(\ \mbox{\hyperlink{classcsmp_1_1_solver_settings}{SolverSettings}}\&\ settings\ );}
+\DoxyCodeLine{00103\ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classcsmp_1_1_solver_settings}{SolverSettings}}*\ GetSolverSettings();}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00106\ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ SolveMatrixEquation(\ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{SparseMatrix}}\&\ A,}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\&\ b,}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\&\ x,}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ size\_t\ no\_unknowns\ )\ =\ 0;}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ SolveMatrixEquation(\ \mbox{\hyperlink{classcsmp_1_1_compressed_row_matrix}{CompressedRowMatrix}}\&\ A,}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\&\ b,}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\&\ x,}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ size\_t\ no\_unknowns\ )\ =\ 0;}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \ \ \textcolor{comment}{//\ TODO:\ add\ other\ options\ to\ interface\ with\ MTL,\ Eigen\ etc.}}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ \ \ \mbox{\hyperlink{classcsmp_1_1_solver_settings}{SolverSettings}}*\ solver\_settings\_\ =\ \textcolor{keywordtype}{nullptr};}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00120\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00121\ \ \ \textcolor{keywordtype}{bool}\ \ verbose\_;}
+\DoxyCodeLine{00122\ \};}
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00125\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

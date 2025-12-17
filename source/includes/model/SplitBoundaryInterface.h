@@ -68,7 +68,7 @@ class SplitBoundaryInterface {
     std::set<std::string>  InsertLowerDimensionalRegionsIntoSplitBoundaries( int32_t material_id_for_new_elements );
 
     /// Creates a single lower-dimensional mesh region taking into account all split boundaries objects; returning its name and whether this operation was successful
-    //bool  SingleRegionFromAllSplitBoundaries( const char* name_of_new_region );
+    bool  CreateSplitBoundaryFromInterfaces( const char* name_of_new_splitboundary );
 
     /// Removes splitboundary including interfaces, but does not fuse the mesh back together again
     void RemoveSplitBoundary( const char* split_boundary, bool erase_interfaces );
@@ -76,7 +76,7 @@ class SplitBoundaryInterface {
     /// Removes splitboundary including interfaces, but does not fuse the mesh back together again
     void RemoveSplitBoundary( csmp::SplitBoundary<dim>&, bool erase_interfaces );
 
-    std::string MergeSplitBoundaries( const char* new_sb_name, std::set<std::string> splitboundaries);
+    std::string MergeSplitBoundaries( const char* new_sb_name, const std::set<std::string> &splitboundaries);
 
     // -----------------------------------------------------------
     // Input/output
@@ -84,7 +84,7 @@ class SplitBoundaryInterface {
     // -----------------------------------------------------------
     
     /// prints current split boundaries to screen and returns how many there are
-    size_t SplitBoundariesOut() const;
+    long SplitBoundariesOut() const;
     
     bool OutputSplitBoundariesToBinary( const char* fileName ) const;
     bool InputSplitBoundariesFromBinary( const char* fileName, const std::set<std::string>& subset_variables );
@@ -105,8 +105,7 @@ class SplitBoundaryInterface {
      /// creates split boundary from already interconnected faces that also know their parent elements
     bool AddSplitBoundary( const char* name,
                            typename std::vector<InterFace<dim>*>::iterator first,
-                           typename std::vector<InterFace<dim>*>::iterator last,
-                           BOX_BOUNDARY );
+                           typename std::vector<InterFace<dim>*>::iterator last );
  protected:
     std::map<std::string,csmp::SplitBoundary<dim> >  splitBoundaryMap_; ///< boundary name & boundary container of key-value pairs
 };

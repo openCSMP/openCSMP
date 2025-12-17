@@ -1,0 +1,88 @@
+.TH "csmp::PointPropertyToCellMapper2D" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::PointPropertyToCellMapper2D
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <PointPropertyToCellMapper2D\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPointPropertyToCellMapper2D\fP (std::string point_property_csv_file)"
+.br
+.RI "reads property data from CSV text file "
+.ti -1c
+.RI "bool \fBMapPointsToCells\fP (\fBModel\fP< 2 > &, std::string target_region, std::vector< \fBElement\fP< 2 > * > &)"
+.br
+.RI "initialises vector determining point containment for cells of the target region; points not found become null cells; returns whether all region cells have points "
+.ti -1c
+.RI "void \fBMapPointDataToElements\fP (\fBModel\fP< 2 > &, std::string target_region, std::string target_variable)"
+.br
+.RI "Assigns property data to the elements of the target region, and interpolates them across it if some points do not have corresponding cells\&. "
+.ti -1c
+.RI "void \fBMapNodeToPointData\fP (\fBModel\fP< 2 > &, std::string target_variable)"
+.br
+.RI "Interpolates the values of the target variable, to the points stored in the \fBDataTable\fP, storing them in there provided that the target variable is defined in the table\&. "
+.ti -1c
+.RI "void \fBOutputPointDataToCSV_File\fP (std::string file_name, std::string target_variable) const"
+.br
+.RI "writes point dataset to a CSV file "
+.ti -1c
+.RI "size_t \fBTotalPoints\fP () const"
+.br
+.RI "all points stored in the Mapper irrespective of their association with regions "
+.ti -1c
+.RI "size_t \fBCellsWithPoints\fP () const"
+.br
+.RI "current count of cells which contain one or more of the points stored by the Mapper "
+.ti -1c
+.RI "void \fBOut\fP () const"
+.br
+.RI "prints datatable indicating for which points mesh cells were identfied "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Using the point data in the supplied spreadsheet, \fBPointPropertyToCellMapper2D\fP creates a vector of cell pointers that are non-null if they contain points are are part of the target region\&. This set is then used for the mapping of values to the mesh or back to the point set\&.
+
+.PP
+\fBAuthor\fP
+.RS 4
+SKM 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+5/1/2022 
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "void csmp::PointPropertyToCellMapper2D::MapNodeToPointData (\fBModel\fP< 2 > & , std::string target_variable)"
+
+.PP
+Interpolates the values of the target variable, to the points stored in the \fBDataTable\fP, storing them in there provided that the target variable is defined in the table\&. Interpolates the values of the target node variable, to the points specified in the CSV file, writing another CSV file with these values 
+.SS "void csmp::PointPropertyToCellMapper2D::MapPointDataToElements (\fBModel\fP< 2 > & , std::string target_region, std::string target_variable)"
+
+.PP
+Assigns property data to the elements of the target region, and interpolates them across it if some points do not have corresponding cells\&. Attempts to assign the property data as element properties of the target region, in the process 'cells_with_points_' gets initialised 
+.SS "bool csmp::PointPropertyToCellMapper2D::MapPointsToCells (\fBModel\fP< 2 > & , std::string target_region, std::vector< \fBElement\fP< 2 > * > & )"
+
+.PP
+initialises vector determining point containment for cells of the target region; points not found become null cells; returns whether all region cells have points Initialises cell-pointer vector determining point containment for cells of the target region; points not found become null cells;
+
+.PP
+\fBReturns\fP
+.RS 4
+returns true when all cells of the target region contain points\&. 
+.RE
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

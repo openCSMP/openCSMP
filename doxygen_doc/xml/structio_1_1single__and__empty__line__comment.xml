@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="structio_1_1single__and__empty__line__comment" kind="struct" language="C++" prot="public">
+    <compoundname>io::single_and_empty_line_comment</compoundname>
+    <templateparamlist>
+      <param>
+        <type>char ...</type>
+        <declname>comment_start_char_list</declname>
+        <defname>comment_start_char_list</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="structio_1_1single__and__empty__line__comment_1a93a1556dfe4d7e6e3a674d576c4b30f4" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>static bool io::single_and_empty_line_comment&lt; comment_start_char_list &gt;::is_comment</definition>
+        <argsstring>(const char *line)</argsstring>
+        <name>is_comment</name>
+        <qualifiedname>io::single_and_empty_line_comment::is_comment</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>line</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/csv.h" line="526" column="29" bodyfile="source/csv.h" bodystart="526" bodyend="528"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>io::single_and_empty_line_comment&lt; comment_start_char_list &gt;</label>
+        <link refid="structio_1_1single__and__empty__line__comment"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/csv.h" line="525" column="9" bodyfile="source/csv.h" bodystart="525" bodyend="529"/>
+    <listofallmembers>
+      <member refid="structio_1_1single__and__empty__line__comment_1a93a1556dfe4d7e6e3a674d576c4b30f4" prot="public" virt="non-virtual"><scope>io::single_and_empty_line_comment</scope><name>is_comment</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

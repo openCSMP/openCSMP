@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_a2de473a09022398ce1251396e1784ac" kind="dir">
+    <compoundname>source/includes/property_manipulation</compoundname>
+    <innerfile refid="_arithmetic_mean_8h">ArithmeticMean.h</innerfile>
+    <innerfile refid="_concatenate_8h">Concatenate.h</innerfile>
+    <innerfile refid="_constant_factor_8h">ConstantFactor.h</innerfile>
+    <innerfile refid="_extract_tensor_variable_component_8h">ExtractTensorVariableComponent.h</innerfile>
+    <innerfile refid="_extract_tensor_variable_eigenvalue_8h">ExtractTensorVariableEigenvalue.h</innerfile>
+    <innerfile refid="_extract_tensor_variable_row_8h">ExtractTensorVariableRow.h</innerfile>
+    <innerfile refid="_extract_vector_variable_component_8h">ExtractVectorVariableComponent.h</innerfile>
+    <innerfile refid="_extract_vector_variable_length_8h">ExtractVectorVariableLength.h</innerfile>
+    <innerfile refid="property__manipulation_2_field_variable_8h">FieldVariable.h</innerfile>
+    <innerfile refid="source_2includes_2property__manipulation_2_groundwater_darcy_velocity_8h">GroundwaterDarcyVelocity.h</innerfile>
+    <innerfile refid="_material_8h">Material.h</innerfile>
+    <innerfile refid="_maximum_difference_8h">MaximumDifference.h</innerfile>
+    <innerfile refid="_modify_property_where_8h">ModifyPropertyWhere.h</innerfile>
+    <innerfile refid="named_property_values_to_regions_8h">namedPropertyValuesToRegions.h</innerfile>
+    <innerfile refid="nearest_neighbor_fill_8h">nearestNeighborFill.h</innerfile>
+    <innerfile refid="point_property_mapping_8h">pointPropertyMapping.h</innerfile>
+    <innerfile refid="_point_property_to_cell_mapper2_d_8h">PointPropertyToCellMapper2D.h</innerfile>
+    <innerfile refid="_property_handle_8h">PropertyHandle.h</innerfile>
+    <innerfile refid="smooth_element_data_8h">smoothElementData.h</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="source/includes/property_manipulation/"/>
+  </compounddef>
+</doxygen>

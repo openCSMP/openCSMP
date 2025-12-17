@@ -1,0 +1,587 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_region_monitor" kind="class" language="C++" prot="public">
+    <compoundname>csmp::RegionMonitor</compoundname>
+    <includes refid="_region_monitor_8h" local="no">RegionMonitor.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_region_monitor_1acf5e98a8940cc7363a0c87e0667cbd87" prot="private" static="no" mutable="no">
+        <type>std::map&lt; std::string, std::pair&lt; double, double &gt; &gt;</type>
+        <definition>std::map&lt;std::string,std::pair&lt;double,double&gt; &gt; csmp::RegionMonitor&lt; dim &gt;::group_specs_</definition>
+        <argsstring></argsstring>
+        <name>group_specs_</name>
+        <qualifiedname>csmp::RegionMonitor::group_specs_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/RegionMonitor.h" line="87" column="15" bodyfile="source/includes/analysis/RegionMonitor.h" bodystart="87" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_region_monitor_1a7ed432186e77fa23660a02105ac0f35b" prot="private" static="no" mutable="no">
+        <type>std::list&lt; std::string &gt;</type>
+        <definition>std::list&lt;std::string&gt; csmp::RegionMonitor&lt; dim &gt;::integral_properties_</definition>
+        <argsstring></argsstring>
+        <name>integral_properties_</name>
+        <qualifiedname>csmp::RegionMonitor::integral_properties_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/RegionMonitor.h" line="89" column="16" bodyfile="source/includes/analysis/RegionMonitor.h" bodystart="89" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_region_monitor_1a32bb056f3aa36a34ca3b5c8dc3d7a6d6" prot="private" static="no" mutable="no">
+        <type>std::list&lt; std::string &gt;</type>
+        <definition>std::list&lt;std::string&gt; csmp::RegionMonitor&lt; dim &gt;::range_properties_</definition>
+        <argsstring></argsstring>
+        <name>range_properties_</name>
+        <qualifiedname>csmp::RegionMonitor::range_properties_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/RegionMonitor.h" line="90" column="16" bodyfile="source/includes/analysis/RegionMonitor.h" bodystart="90" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_region_monitor_1a1027fcd8d589be698b844cd96764b4f5" prot="private" static="no" mutable="no">
+        <type>std::map&lt; double, std::map&lt; std::string, std::map&lt; std::string, double &gt; &gt; &gt;</type>
+        <definition>std::map&lt;double,std::map&lt;std::string,std::map&lt;std::string,double&gt; &gt; &gt; csmp::RegionMonitor&lt; dim &gt;::integrals_</definition>
+        <argsstring></argsstring>
+        <name>integrals_</name>
+        <qualifiedname>csmp::RegionMonitor::integrals_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/RegionMonitor.h" line="92" column="15" bodyfile="source/includes/analysis/RegionMonitor.h" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_region_monitor_1ac9305c8d6aa788731df96d7b4d87bf7c" prot="private" static="no" mutable="no">
+        <type>std::map&lt; double, std::map&lt; std::string, std::map&lt; std::string, std::pair&lt; double, double &gt; &gt; &gt; &gt;</type>
+        <definition>std::map&lt;double,std::map&lt;std::string,std::map&lt;std::string,std::pair&lt;double,double&gt; &gt; &gt; &gt; csmp::RegionMonitor&lt; dim &gt;::ranges_</definition>
+        <argsstring></argsstring>
+        <name>ranges_</name>
+        <qualifiedname>csmp::RegionMonitor::ranges_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/RegionMonitor.h" line="95" column="15" bodyfile="source/includes/analysis/RegionMonitor.h" bodystart="95" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_region_monitor_1a5bbe86d649f74c3438169fecbcb00dae" prot="private" static="no" mutable="no">
+        <type>std::set&lt; std::string &gt;</type>
+        <definition>std::set&lt;std::string&gt; csmp::RegionMonitor&lt; dim &gt;::ext_calc_properties_column_headers_</definition>
+        <argsstring></argsstring>
+        <name>ext_calc_properties_column_headers_</name>
+        <qualifiedname>csmp::RegionMonitor::ext_calc_properties_column_headers_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/RegionMonitor.h" line="98" column="15" bodyfile="source/includes/analysis/RegionMonitor.h" bodystart="98" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_region_monitor_1a0c40ed549ee89cc7e1e35694c782ceb1" prot="private" static="no" mutable="no">
+        <type>std::map&lt; double, std::map&lt; std::string, double &gt; &gt;</type>
+        <definition>std::map&lt;double,std::map&lt;std::string,double&gt; &gt; csmp::RegionMonitor&lt; dim &gt;::ext_properties_</definition>
+        <argsstring></argsstring>
+        <name>ext_properties_</name>
+        <qualifiedname>csmp::RegionMonitor::ext_properties_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/RegionMonitor.h" line="101" column="15" bodyfile="source/includes/analysis/RegionMonitor.h" bodystart="101" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_region_monitor_1aa27fe34c2cdf737236498134776e7d80" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::RegionMonitor&lt; dim &gt;::divide_by_volume_</definition>
+        <argsstring></argsstring>
+        <name>divide_by_volume_</name>
+        <qualifiedname>csmp::RegionMonitor::divide_by_volume_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/RegionMonitor.h" line="103" column="10" bodyfile="source/includes/analysis/RegionMonitor.h" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_region_monitor_1aa133084617d434e8b09000b674ea2d04" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::RegionMonitor&lt; dim &gt;::pore_volume_integral_</definition>
+        <argsstring></argsstring>
+        <name>pore_volume_integral_</name>
+        <qualifiedname>csmp::RegionMonitor::pore_volume_integral_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/RegionMonitor.h" line="104" column="10" bodyfile="source/includes/analysis/RegionMonitor.h" bodystart="104" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_region_monitor_1a00f1128347b7ca1076e4c3c55eec12b3" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::RegionMonitor&lt; dim &gt;::include_thickness_attribute_</definition>
+        <argsstring></argsstring>
+        <name>include_thickness_attribute_</name>
+        <qualifiedname>csmp::RegionMonitor::include_thickness_attribute_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/RegionMonitor.h" line="105" column="10" bodyfile="source/includes/analysis/RegionMonitor.h" bodystart="105" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_region_monitor_1a447095e1c3820312ccbb7709c912dac1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::RegionMonitor&lt; dim &gt;::RegionMonitor</definition>
+        <argsstring>()</argsstring>
+        <name>RegionMonitor</name>
+        <qualifiedname>csmp::RegionMonitor::RegionMonitor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/RegionMonitor.h" line="27" column="5" bodyfile="source/modules/analysis/RegionMonitor.cpp" bodystart="14" bodyend="21"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_region_monitor_1a5a66e3bc501aad67adaf1e626e07920b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::RegionMonitor&lt; dim &gt;::RegionMonitor</definition>
+        <argsstring>(const Model&lt; dim &gt; &amp;, const std::string &amp;first_integral_property, const std::string &amp;first_range_property, bool integrate_pore_volume_only=true)</argsstring>
+        <name>RegionMonitor</name>
+        <qualifiedname>csmp::RegionMonitor::RegionMonitor</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>first_integral_property</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>first_range_property</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>integrate_pore_volume_only</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+<para>construct with 2 properties to monitor </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/RegionMonitor.h" line="30" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_region_monitor_1a203447f3fe2a1ce0d942c2b28d6b676b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::RegionMonitor&lt; dim &gt;::RegionMonitor</definition>
+        <argsstring>(const Model&lt; dim &gt; &amp;, const std::list&lt; std::string &gt; &amp;to_integrate_over_groups, const std::list&lt; std::string &gt; &amp;to_find_ranges_in_groups, bool integrate_pore_volume_only=true)</argsstring>
+        <name>RegionMonitor</name>
+        <qualifiedname>csmp::RegionMonitor::RegionMonitor</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const std::list&lt; std::string &gt; &amp;</type>
+          <declname>to_integrate_over_groups</declname>
+        </param>
+        <param>
+          <type>const std::list&lt; std::string &gt; &amp;</type>
+          <declname>to_find_ranges_in_groups</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>integrate_pore_volume_only</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+<para>construct with lists of multiple range and/or integral properties </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/RegionMonitor.h" line="36" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_region_monitor_1aa503463ab90e2b2ce32d22e58706d387" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::RegionMonitor&lt; dim &gt;::~RegionMonitor</definition>
+        <argsstring>()</argsstring>
+        <name>~RegionMonitor</name>
+        <qualifiedname>csmp::RegionMonitor::~RegionMonitor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/RegionMonitor.h" line="41" column="5" bodyfile="source/modules/analysis/RegionMonitor.cpp" bodystart="197" bodyend="199"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_region_monitor_1a6d9a525c4d086c9236c39ca666f0bd0f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::RegionMonitor&lt; dim &gt;::DefineProperties</definition>
+        <argsstring>(const Model&lt; dim &gt; &amp;, const std::list&lt; std::string &gt; &amp;to_integrate_over_groups, const std::list&lt; std::string &gt; &amp;to_find_ranges_in_groups, bool integrate_pore_volume_only=true)</argsstring>
+        <name>DefineProperties</name>
+        <qualifiedname>csmp::RegionMonitor::DefineProperties</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const std::list&lt; std::string &gt; &amp;</type>
+          <declname>to_integrate_over_groups</declname>
+        </param>
+        <param>
+          <type>const std::list&lt; std::string &gt; &amp;</type>
+          <declname>to_find_ranges_in_groups</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>integrate_pore_volume_only</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+<para>tell <ref refid="classcsmp_1_1_region_monitor" kindref="compound">RegionMonitor</ref> which properties it should track </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/RegionMonitor.h" line="44" column="11" bodyfile="source/modules/analysis/RegionMonitor.cpp" bodystart="126" bodyend="189"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_region_monitor_1aa0bab746a56979294516331a287d08ed" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::RegionMonitor&lt; dim &gt;::DivideIntegralPropertiesByRegionVolumes</definition>
+        <argsstring>(bool divide)</argsstring>
+        <name>DivideIntegralPropertiesByRegionVolumes</name>
+        <qualifiedname>csmp::RegionMonitor::DivideIntegralPropertiesByRegionVolumes</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>divide</declname>
+        </param>
+        <briefdescription>
+<para>switches on normalisation by volume for all property value integrations </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/RegionMonitor.h" line="50" column="11" bodyfile="source/modules/analysis/RegionMonitor.cpp" bodystart="206" bodyend="210"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_region_monitor_1aed5f0feb4951220654920a9cf71d89ac" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::RegionMonitor&lt; dim &gt;::DataExists</definition>
+        <argsstring>() const</argsstring>
+        <name>DataExists</name>
+        <qualifiedname>csmp::RegionMonitor::DataExists</qualifiedname>
+        <briefdescription>
+<para>returns true when there are already monitoring data stored in respective containers </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/RegionMonitor.h" line="53" column="11" bodyfile="source/includes/analysis/RegionMonitor.h" bodystart="53" bodyend="53"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_region_monitor_1a4c0f6f66e3e8a5d372745702acb059cf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::RegionMonitor&lt; dim &gt;::ScalarPropertyIntegrals</definition>
+        <argsstring>(const Model&lt; dim &gt; &amp;, double current_time=0.)</argsstring>
+        <name>ScalarPropertyIntegrals</name>
+        <qualifiedname>csmp::RegionMonitor::ScalarPropertyIntegrals</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <defname>sg</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>current_time</declname>
+          <defname>time</defname>
+          <defval>0.</defval>
+        </param>
+        <briefdescription>
+<para>calculates integrals over current property values and stores these for the current time-step and property name </para>
+        </briefdescription>
+        <detaileddescription>
+<para>calculates property integrals and stores these for the current time-step and property name if the variable &apos;thickness&apos; is defined in the <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>, it is used to scale the element by element integrals.</para>
+<para><simplesect kind="attention"><para>non-unique regions that bear the name of model boundaries are ignored. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/RegionMonitor.h" line="56" column="11" bodyfile="source/modules/analysis/RegionMonitor.cpp" bodystart="304" bodyend="372"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_region_monitor_1ab19a4bda6f9ace0a4ee64f28d0864bc5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::RegionMonitor&lt; dim &gt;::ScalarPropertyRanges</definition>
+        <argsstring>(const Model&lt; dim &gt; &amp;, double current_time=0.)</argsstring>
+        <name>ScalarPropertyRanges</name>
+        <qualifiedname>csmp::RegionMonitor::ScalarPropertyRanges</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <defname>sg</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>current_time</declname>
+          <defname>time</defname>
+          <defval>0.</defval>
+        </param>
+        <briefdescription>
+<para>monitors current ranges of the the scalar values </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Records the ranges of the target variables in each region.</para>
+<para><simplesect kind="attention"><para>non-unique regions that bear the name of model boundaries are ignored. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/RegionMonitor.h" line="59" column="11" bodyfile="source/modules/analysis/RegionMonitor.cpp" bodystart="383" bodyend="407"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_region_monitor_1aa3bae5ced5a8ced7c7c85ec69cc34106" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::RegionMonitor&lt; dim &gt;::InsertExternallyCalculatedProperty</definition>
+        <argsstring>(std::string property, std::string regionname)</argsstring>
+        <name>InsertExternallyCalculatedProperty</name>
+        <qualifiedname>csmp::RegionMonitor::InsertExternallyCalculatedProperty</qualifiedname>
+        <param>
+          <type>std::string</type>
+          <declname>property</declname>
+        </param>
+        <param>
+          <type>std::string</type>
+          <declname>regionname</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>adds in values in a separate container, to be output to a separate file with the same prefix name as the other monitoring file, except with the &quot;_ext&quot; added to its name. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/RegionMonitor.h" line="64" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_region_monitor_1a9ebf1b1b2722f4a0acfa77da6d324f77" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::RegionMonitor&lt; dim &gt;::InsertExternallyCalculatedProperty</definition>
+        <argsstring>(std::string property_regionname)</argsstring>
+        <name>InsertExternallyCalculatedProperty</name>
+        <qualifiedname>csmp::RegionMonitor::InsertExternallyCalculatedProperty</qualifiedname>
+        <param>
+          <type>std::string</type>
+          <declname>property_regionname</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/RegionMonitor.h" line="65" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_region_monitor_1a28f0432fc92a7f511c16ece5ed2823d7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::RegionMonitor&lt; dim &gt;::InsertPreCalculatedPropertyValue</definition>
+        <argsstring>(double time, std::string property, std::string regionname, double value)</argsstring>
+        <name>InsertPreCalculatedPropertyValue</name>
+        <qualifiedname>csmp::RegionMonitor::InsertPreCalculatedPropertyValue</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>time</declname>
+        </param>
+        <param>
+          <type>std::string</type>
+          <declname>property</declname>
+        </param>
+        <param>
+          <type>std::string</type>
+          <declname>regionname</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/RegionMonitor.h" line="67" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_region_monitor_1ae5806e1032d997bb95a4152031e3697c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::RegionMonitor&lt; dim &gt;::InsertPreCalculatedPropertyValue</definition>
+        <argsstring>(double time, std::string property_regionname, double value)</argsstring>
+        <name>InsertPreCalculatedPropertyValue</name>
+        <qualifiedname>csmp::RegionMonitor::InsertPreCalculatedPropertyValue</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>time</declname>
+        </param>
+        <param>
+          <type>std::string</type>
+          <declname>property_regionname</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/RegionMonitor.h" line="72" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_region_monitor_1ad3e12040d6ebf263edba97db9f7d0493" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::RegionMonitor&lt; dim &gt;::Reset</definition>
+        <argsstring>()</argsstring>
+        <name>Reset</name>
+        <qualifiedname>csmp::RegionMonitor::Reset</qualifiedname>
+        <briefdescription>
+<para>zap all recorded values and property names </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/RegionMonitor.h" line="76" column="11" bodyfile="source/modules/analysis/RegionMonitor.cpp" bodystart="413" bodyend="421"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_region_monitor_1a5757ba47fae09aa44d1ddf5e65e62898" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::RegionMonitor&lt; dim &gt;::EraseData</definition>
+        <argsstring>()</argsstring>
+        <name>EraseData</name>
+        <qualifiedname>csmp::RegionMonitor::EraseData</qualifiedname>
+        <briefdescription>
+<para>zap all recorded values </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/RegionMonitor.h" line="77" column="11" bodyfile="source/modules/analysis/RegionMonitor.cpp" bodystart="426" bodyend="433"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_region_monitor_1ae21d32e533bf63b985e80104f45a78fd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::RegionMonitor&lt; dim &gt;::Out</definition>
+        <argsstring>(const char *text_file) const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::RegionMonitor::Out</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>text_file</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/RegionMonitor.h" line="79" column="11" bodyfile="source/modules/analysis/RegionMonitor.cpp" bodystart="440" bodyend="571"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_region_monitor_1a8e228c09d04a7d73e98e983d73394a2b" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::RegionMonitor&lt; dim &gt;::HasVolumeElements</definition>
+        <argsstring>(const Model&lt; dim &gt; &amp;) const</argsstring>
+        <name>HasVolumeElements</name>
+        <qualifiedname>csmp::RegionMonitor::HasVolumeElements</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <defname>mref</defname>
+        </param>
+        <briefdescription>
+<para>internal helper for calculations on models with involve surface elements </para>
+        </briefdescription>
+        <detaileddescription>
+<para>P. Lang: loops over all elements of all regions of model and returns true if IsVolume() </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/analysis/RegionMonitor.h" line="83" column="11" bodyfile="source/modules/analysis/RegionMonitor.cpp" bodystart="577" bodyend="589"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Monitors value ranges and integrated property values in all regions of a model. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Among the non-unique (potentially overlapping) regions those with names identical to <ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref> flags and the &quot;All Element&quot; region are ignored.</para>
+<para><simplesect kind="attention"><para>if the model contains lower-dimensional regions, a thickness attribute called &quot;thickness&quot; must be specified for these in order to get their volume right. For the regions with the same dimension as the model, the thickness attribute should have a value of 1.</para>
+</simplesect>
+<simplesect kind="author"><para>Stephan Matthai </para>
+</simplesect>
+<simplesect kind="date"><para>1999 </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::RegionMonitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_region_monitor"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/analysis/RegionMonitor.h" line="25" column="1" bodyfile="source/includes/analysis/RegionMonitor.h" bodystart="25" bodyend="106"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_region_monitor_1aed5f0feb4951220654920a9cf71d89ac" prot="public" virt="non-virtual"><scope>csmp::RegionMonitor</scope><name>DataExists</name></member>
+      <member refid="classcsmp_1_1_region_monitor_1a6d9a525c4d086c9236c39ca666f0bd0f" prot="public" virt="non-virtual"><scope>csmp::RegionMonitor</scope><name>DefineProperties</name></member>
+      <member refid="classcsmp_1_1_region_monitor_1aa27fe34c2cdf737236498134776e7d80" prot="private" virt="non-virtual"><scope>csmp::RegionMonitor</scope><name>divide_by_volume_</name></member>
+      <member refid="classcsmp_1_1_region_monitor_1aa0bab746a56979294516331a287d08ed" prot="public" virt="non-virtual"><scope>csmp::RegionMonitor</scope><name>DivideIntegralPropertiesByRegionVolumes</name></member>
+      <member refid="classcsmp_1_1_region_monitor_1a5757ba47fae09aa44d1ddf5e65e62898" prot="public" virt="non-virtual"><scope>csmp::RegionMonitor</scope><name>EraseData</name></member>
+      <member refid="classcsmp_1_1_region_monitor_1a5bbe86d649f74c3438169fecbcb00dae" prot="private" virt="non-virtual"><scope>csmp::RegionMonitor</scope><name>ext_calc_properties_column_headers_</name></member>
+      <member refid="classcsmp_1_1_region_monitor_1a0c40ed549ee89cc7e1e35694c782ceb1" prot="private" virt="non-virtual"><scope>csmp::RegionMonitor</scope><name>ext_properties_</name></member>
+      <member refid="classcsmp_1_1_region_monitor_1acf5e98a8940cc7363a0c87e0667cbd87" prot="private" virt="non-virtual"><scope>csmp::RegionMonitor</scope><name>group_specs_</name></member>
+      <member refid="classcsmp_1_1_region_monitor_1a8e228c09d04a7d73e98e983d73394a2b" prot="private" virt="non-virtual"><scope>csmp::RegionMonitor</scope><name>HasVolumeElements</name></member>
+      <member refid="classcsmp_1_1_region_monitor_1a00f1128347b7ca1076e4c3c55eec12b3" prot="private" virt="non-virtual"><scope>csmp::RegionMonitor</scope><name>include_thickness_attribute_</name></member>
+      <member refid="classcsmp_1_1_region_monitor_1aa3bae5ced5a8ced7c7c85ec69cc34106" prot="public" virt="non-virtual"><scope>csmp::RegionMonitor</scope><name>InsertExternallyCalculatedProperty</name></member>
+      <member refid="classcsmp_1_1_region_monitor_1a9ebf1b1b2722f4a0acfa77da6d324f77" prot="public" virt="non-virtual"><scope>csmp::RegionMonitor</scope><name>InsertExternallyCalculatedProperty</name></member>
+      <member refid="classcsmp_1_1_region_monitor_1a28f0432fc92a7f511c16ece5ed2823d7" prot="public" virt="non-virtual"><scope>csmp::RegionMonitor</scope><name>InsertPreCalculatedPropertyValue</name></member>
+      <member refid="classcsmp_1_1_region_monitor_1ae5806e1032d997bb95a4152031e3697c" prot="public" virt="non-virtual"><scope>csmp::RegionMonitor</scope><name>InsertPreCalculatedPropertyValue</name></member>
+      <member refid="classcsmp_1_1_region_monitor_1a7ed432186e77fa23660a02105ac0f35b" prot="private" virt="non-virtual"><scope>csmp::RegionMonitor</scope><name>integral_properties_</name></member>
+      <member refid="classcsmp_1_1_region_monitor_1a1027fcd8d589be698b844cd96764b4f5" prot="private" virt="non-virtual"><scope>csmp::RegionMonitor</scope><name>integrals_</name></member>
+      <member refid="classcsmp_1_1_region_monitor_1ae21d32e533bf63b985e80104f45a78fd" prot="public" virt="non-virtual"><scope>csmp::RegionMonitor</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_region_monitor_1aa133084617d434e8b09000b674ea2d04" prot="private" virt="non-virtual"><scope>csmp::RegionMonitor</scope><name>pore_volume_integral_</name></member>
+      <member refid="classcsmp_1_1_region_monitor_1a32bb056f3aa36a34ca3b5c8dc3d7a6d6" prot="private" virt="non-virtual"><scope>csmp::RegionMonitor</scope><name>range_properties_</name></member>
+      <member refid="classcsmp_1_1_region_monitor_1ac9305c8d6aa788731df96d7b4d87bf7c" prot="private" virt="non-virtual"><scope>csmp::RegionMonitor</scope><name>ranges_</name></member>
+      <member refid="classcsmp_1_1_region_monitor_1a447095e1c3820312ccbb7709c912dac1" prot="public" virt="non-virtual"><scope>csmp::RegionMonitor</scope><name>RegionMonitor</name></member>
+      <member refid="classcsmp_1_1_region_monitor_1a5a66e3bc501aad67adaf1e626e07920b" prot="public" virt="non-virtual"><scope>csmp::RegionMonitor</scope><name>RegionMonitor</name></member>
+      <member refid="classcsmp_1_1_region_monitor_1a203447f3fe2a1ce0d942c2b28d6b676b" prot="public" virt="non-virtual"><scope>csmp::RegionMonitor</scope><name>RegionMonitor</name></member>
+      <member refid="classcsmp_1_1_region_monitor_1ad3e12040d6ebf263edba97db9f7d0493" prot="public" virt="non-virtual"><scope>csmp::RegionMonitor</scope><name>Reset</name></member>
+      <member refid="classcsmp_1_1_region_monitor_1a4c0f6f66e3e8a5d372745702acb059cf" prot="public" virt="non-virtual"><scope>csmp::RegionMonitor</scope><name>ScalarPropertyIntegrals</name></member>
+      <member refid="classcsmp_1_1_region_monitor_1ab19a4bda6f9ace0a4ee64f28d0864bc5" prot="public" virt="non-virtual"><scope>csmp::RegionMonitor</scope><name>ScalarPropertyRanges</name></member>
+      <member refid="classcsmp_1_1_region_monitor_1aa503463ab90e2b2ce32d22e58706d387" prot="public" virt="non-virtual"><scope>csmp::RegionMonitor</scope><name>~RegionMonitor</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

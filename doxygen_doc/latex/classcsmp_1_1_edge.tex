@@ -1,0 +1,323 @@
+\doxysection{csmp\+::Edge\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_edge}{}\label{classcsmp_1_1_edge}\index{csmp::Edge$<$ dim $>$@{csmp::Edge$<$ dim $>$}}
+
+
+{\ttfamily \#include $<$Edge.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Edge\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_edge__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Edge\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_edge__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_edge_a4ac7410e8588cb9fd9639536247a2e7b}{Edge}} (\mbox{\hyperlink{classcsmp_1_1_finite_element}{Finite\+Element}} \texorpdfstring{$\ast$}{*}, const \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{Finite\+Volume\+Stencil}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}, \mbox{\hyperlink{classcsmp_1_1_face}{Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const inner\+\_\+parent, \mbox{\hyperlink{classcsmp_1_1_face}{Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const outer\+\_\+parent, const \mbox{\hyperlink{structcsmp_1_1_local_variables}{Local\+Variables}} \&, const \mbox{\hyperlink{structcsmp_1_1_integration_point_variables}{Integration\+Point\+Variables}} \&)
+\begin{DoxyCompactList}\small\item\em custom constructor, finds face ids and assigns nodes automatically \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_edge_a9a9ece1f71df460ae569528a19f23209}\label{classcsmp_1_1_edge_a9a9ece1f71df460ae569528a19f23209} 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Placement} () const
+\begin{DoxyCompactList}\small\item\em Local variable storage interface. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_edge_a75b6120346c6599212491eb62ed6e7c3}\label{classcsmp_1_1_edge_a75b6120346c6599212491eb62ed6e7c3} 
+uint32\+\_\+t {\bfseries Nodes} () const
+\item 
+\Hypertarget{classcsmp_1_1_edge_a713d771988b65fa3b3f083b71cce486b}\label{classcsmp_1_1_edge_a713d771988b65fa3b3f083b71cce486b} 
+uint32\+\_\+t {\bfseries Neighbors} () const
+\item 
+\Hypertarget{classcsmp_1_1_edge_a7e3fb176144a1b90ab1ebd476a96aaf8}\label{classcsmp_1_1_edge_a7e3fb176144a1b90ab1ebd476a96aaf8} 
+uint32\+\_\+t {\bfseries Connected\+Neighbors} () const
+\item 
+\Hypertarget{classcsmp_1_1_edge_aaa007ebe66b285cefef42c7ced30b7d9}\label{classcsmp_1_1_edge_aaa007ebe66b285cefef42c7ced30b7d9} 
+uint32\+\_\+t {\bfseries Faces} () const
+\begin{DoxyCompactList}\small\item\em sides of \doxylink{classcsmp_1_1_face}{Face} object by analogy with \doxylink{classcsmp_1_1_element}{Element} \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_edge_a6e1650e9a4b204222c6267e5f8bb5233}\label{classcsmp_1_1_edge_a6e1650e9a4b204222c6267e5f8bb5233} 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator {\bfseries Nodes\+Begin} () const
+\begin{DoxyCompactList}\small\item\em only constant iterators are provided because the user is not supposed to change the node pr neighbor connectivity (done by \doxylink{classcsmp_1_1_mesh_manager}{Mesh\+Manager}) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_edge_ad45a4bec5f2b7e7a4af8a4272805dd33}\label{classcsmp_1_1_edge_ad45a4bec5f2b7e7a4af8a4272805dd33} 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator {\bfseries Nodes\+End} () const
+\item 
+\Hypertarget{classcsmp_1_1_edge_af19d103c97a0e160b7312f9bf31f444c}\label{classcsmp_1_1_edge_af19d103c97a0e160b7312f9bf31f444c} 
+void {\bfseries Accept} (\mbox{\hyperlink{classcsmp_1_1_visitor}{Visitor}}$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em to apply visitors whose application level is \doxylink{classcsmp_1_1_boundary}{Boundary} and target is \doxylink{classcsmp_1_1_edge}{Edge} \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_edge_a9d56fa14fea862bcbd4663cfaf3c8d3d}\label{classcsmp_1_1_edge_a9d56fa14fea862bcbd4663cfaf3c8d3d} 
+\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const {\bfseries N} (uint32\+\_\+t n\+\_\+local) const
+\begin{DoxyCompactList}\small\item\em access the nodes that are connected to the \doxylink{classcsmp_1_1_edge}{Edge} \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_edge_ab1d441bdc7a4fd020c87f46bc9542265}\label{classcsmp_1_1_edge_ab1d441bdc7a4fd020c87f46bc9542265} 
+\mbox{\hyperlink{classcsmp_1_1_edge}{Edge}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const {\bfseries Neighbor} (uint32\+\_\+t) const
+\begin{DoxyCompactList}\small\item\em access the neighbor faces of this face \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_edge_afd35568c2036e13985b8320717a2eca0}\label{classcsmp_1_1_edge_afd35568c2036e13985b8320717a2eca0} 
+void {\bfseries Node\+Coordinate\+Matrix} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&) const
+\begin{DoxyCompactList}\small\item\em initialisation of nodes x dim matrix with the coordinates of the \doxylink{classcsmp_1_1_edge}{Edge}\textquotesingle{}s nodes \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_edge_a82a4804920748319c272292bdd7f975c}\label{classcsmp_1_1_edge_a82a4804920748319c272292bdd7f975c} 
+void {\bfseries Idx} (size\+\_\+t) const
+\begin{DoxyCompactList}\small\item\em on-\/the-\/fly 0..n-\/1 numbering stored in a mutable local variable (therefore const) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_edge_acb8cfefd9a9108b4989992bbd813531d}\label{classcsmp_1_1_edge_acb8cfefd9a9108b4989992bbd813531d} 
+size\+\_\+t {\bfseries Idx} () const
+\item 
+\mbox{\hyperlink{classcsmp_1_1_face}{Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const \mbox{\hyperlink{classcsmp_1_1_edge_ac731bd41ebb8630187984fa01b5b0e09}{Inner\+Parent}} () const
+\begin{DoxyCompactList}\small\item\em higher-\/dimensional \doxylink{classcsmp_1_1_face}{Face} located on side opposite to where the unit normal points; will always be present \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_face}{Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const \mbox{\hyperlink{classcsmp_1_1_edge_a98d05221893aa36c73fc1bcff6747f71}{Outer\+Parent}} () const
+\begin{DoxyCompactList}\small\item\em higher-\/dimensional \doxylink{classcsmp_1_1_face}{Face} located on the side of the face to which the unit normal points; \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_face}{Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const \mbox{\hyperlink{classcsmp_1_1_edge_ae6f11113d75c349f108b99c9b02967fd}{Parent}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}}) const
+\begin{DoxyCompactList}\small\item\em access the higher dimensional elements on either side of face; \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_edge_adb6d9273e5d15b9eb3b02e03bca95e53}\label{classcsmp_1_1_edge_adb6d9273e5d15b9eb3b02e03bca95e53} 
+uint32\+\_\+t {\bfseries Inner\+Parent\+Face\+ID} () const
+\begin{DoxyCompactList}\small\item\em returns which \doxylink{classcsmp_1_1_face}{Face} of the higher dimensional inner neighbor \doxylink{classcsmp_1_1_face}{Face} this \doxylink{classcsmp_1_1_edge}{Edge} shares its nodes with \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_edge_abb5118e1a670f4131c8c8a77e378a88a}\label{classcsmp_1_1_edge_abb5118e1a670f4131c8c8a77e378a88a} 
+uint32\+\_\+t {\bfseries Outer\+Parent\+Face\+ID} () const
+\item 
+\Hypertarget{classcsmp_1_1_edge_abd8794f3384513027c30bfe7e306d15e}\label{classcsmp_1_1_edge_abd8794f3384513027c30bfe7e306d15e} 
+double {\bfseries Length} () const
+\begin{DoxyCompactList}\small\item\em returns length of the \doxylink{classcsmp_1_1_edge}{Edge}; method assumes same role as \doxylink{classcsmp_1_1_finite_element_policy_ad8f1ad92fc4e66b0ccb44191228b0b45}{Volume()} for the element \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \mbox{\hyperlink{classcsmp_1_1_edge_a7c1598b22f1ae18cc430881cd7a42c34}{Bary\+Center}} () const
+\begin{DoxyCompactList}\small\item\em the centre of gravity of the element \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_edge_a3dcd25c8a1ebebfd04e6efd83ad327be}\label{classcsmp_1_1_edge_a3dcd25c8a1ebebfd04e6efd83ad327be} 
+void {\bfseries Out} () const
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_finite_element_policy}{csmp\+::\+Finite\+Element\+Policy$<$ dim, Edge $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Finite\+Element\+Policy} (const \mbox{\hyperlink{classcsmp_1_1_edge}{Edge}}$<$ dim $>$ \&) noexcept
+\item 
+\mbox{\hyperlink{classcsmp_1_1_finite_element_policy}{Finite\+Element\+Policy}} \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_finite_element_policy}{Finite\+Element\+Policy}} \&p) noexcept
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a8a6b224d1d3482c35e577ffc3b9a1230}{Assign}} (\mbox{\hyperlink{classcsmp_1_1_finite_element}{Finite\+Element}} \texorpdfstring{$\ast$}{*}fe\+\_\+ptr)
+\begin{DoxyCompactList}\small\item\em for deferred assignment or changing the element at runtime \end{DoxyCompactList}\item 
+void {\bfseries Assign\+Finite\+Element\+Null\+Ptr} () noexcept
+\item 
+\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}} {\bfseries FE\+\_\+\+Type} () const noexcept
+\begin{DoxyCompactList}\small\item\em the type is an enumeration that is used in the generation of finite elements \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_finite_element}{Finite\+Element}} \texorpdfstring{$\ast$}{*} {\bfseries FE} () const noexcept
+\begin{DoxyCompactList}\small\item\em you are allowed to switch the element at runtime and modifies the volatile data it stores \end{DoxyCompactList}\item 
+bool {\bfseries Is\+Equidimensional} () const
+\begin{DoxyCompactList}\small\item\em true for volumes in 3D, surfaces in 2D, and line elements in 1D, else this is a lower dimensional element \end{DoxyCompactList}\item 
+bool {\bfseries Is\+Line} () const
+\item 
+bool {\bfseries Is\+Surface} () const
+\item 
+bool {\bfseries Is\+Volume} () const
+\item 
+uint32\+\_\+t {\bfseries Interpolation} () const
+\item 
+bool {\bfseries Uses\+Local\+Coordinates} () const
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_ac5f3d16eb6043c3009d924142f10dc43}{Integration\+Points}} () const
+\begin{DoxyCompactList}\small\item\em number of element integration points for current quadrature scheme \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_ab081bcacc1a48b61826173e6457d2de1}{Integration\+Point}} (uint32\+\_\+t ip) const
+\begin{DoxyCompactList}\small\item\em returns the location of the integration point in global coordinates \end{DoxyCompactList}\item 
+double {\bfseries Weight\+At\+Integration\+Point} (uint32\+\_\+t i) const
+\item 
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a77e05282a77bb85927eb55bdaaa68d2a}{Rst\+To\+XYZ}} (\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ rst) const
+\begin{DoxyCompactList}\small\item\em mapping of local points from local to global coordinates \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a59be5ecef2c9588aee1dd0948b81b471}{N\+\_\+\+At}} (const \mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \&rst) const
+\begin{DoxyCompactList}\small\item\em interpolation function values at local points \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a6a65623b4219d8f3da0aa5a33272ebea}{N\+\_\+\+At\+Global\+Point}} (std\+::vector$<$ double $>$ \&N, const std\+::vector$<$ double $>$ \&xyz) const
+\begin{DoxyCompactList}\small\item\em for elements with local coordinates, this method uses an iterative approach to find the correspoding location in parametric space \end{DoxyCompactList}\item 
+void {\bfseries N\+\_\+\+At\+Bary\+Center} (std\+::vector$<$ double $>$ \&N) const
+\item 
+void {\bfseries N\+\_\+\+At\+Integration\+Point} (uint32\+\_\+t ipoint, std\+::vector$<$ double $>$ \&N) const
+\item 
+void {\bfseries Integral\+\_\+d\+NT\+\_\+\+K\+\_\+dN} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&M, \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&K) const
+\begin{DoxyCompactList}\small\item\em first (constant) derivatives of linear interpolation functions of analytically integrated simplex \end{DoxyCompactList}\item 
+void {\bfseries dN} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&) const
+\item 
+double {\bfseries d\+N\+\_\+\+At\+Node} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&, uint32\+\_\+t nd, uint32\+\_\+t dof=1) const
+\begin{DoxyCompactList}\small\item\em first derivatives of interpolation functions at the given node (returned is determinant of Jacobian matrix at i,j) \end{DoxyCompactList}\item 
+double {\bfseries d\+N\+\_\+\+At\+Bary\+Center} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&, uint32\+\_\+t dof=1) const
+\begin{DoxyCompactList}\small\item\em first derivatives of interpolation functions at the (returned is determinant of Jacobian matrix at i,j) \end{DoxyCompactList}\item 
+double {\bfseries d\+N\+\_\+\+At\+Integration\+Point} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&, uint32\+\_\+t gp, uint32\+\_\+t dof=1) const
+\begin{DoxyCompactList}\small\item\em first derivatives of interpolation functions at Gauss point gp (returned is determinant of Jacobian matrix at i,j) \end{DoxyCompactList}\item 
+double {\bfseries det\+\_\+\+JINV\+\_\+\+At\+Integration\+Point} (uint32\+\_\+t ipoint) const
+\begin{DoxyCompactList}\small\item\em returned is determinant of Jacobian matrix at given Gauss point \end{DoxyCompactList}\item 
+void {\bfseries Integral\+NN} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&M) const
+\begin{DoxyCompactList}\small\item\em interpolation function products matrix for analytically integrated element \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a8f08eac65fbebe1bf083a13e507d20d1}{Coordinate\+Matrix}} () const
+\begin{DoxyCompactList}\small\item\em initialises the nodes x dim matrix XY stored in the connected finite element class \end{DoxyCompactList}\item 
+double {\bfseries Property\+Integral} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&scalar\+\_\+property) const
+\begin{DoxyCompactList}\small\item\em integrates a scalar property over the element and returns this value \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a97425cbfdb7e21eaa48d9fc455c73cb5}{Property\+Value\+At}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, const std\+::vector$<$ double $>$ \&xyz, Var \&) const
+\begin{DoxyCompactList}\small\item\em interpolates node property values to the point of interest (in global coordinates); \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a765acd90b4a49d2f309b31451f347bd2}{Property\+Value\+At\+Bary\+Center}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, Var \&) const
+\begin{DoxyCompactList}\small\item\em returns the value of any property interpolated to the element\textquotesingle{}s center of gravity \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a9bb80abd0181bcc607f9fe6f76207b10}{Property\+Value\+At\+Integration\+Point}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&node\+\_\+prop, uint32\+\_\+t integration\+\_\+point, Var \&) const
+\begin{DoxyCompactList}\small\item\em returns the value of any property interpolated to the integration point of interest \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a4e01522e7321abe783521bb9720134ee}{Integration\+Point\+Property\+Vector}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, std\+::vector$<$ Var $>$ \&) const
+\begin{DoxyCompactList}\small\item\em returns property values at the integration points \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a1499c9885a547d55b3749ccf3321195f}{Extrapolate\+Integration\+Point\+Variable\+To\+Nodes}} (uint32\+\_\+t nvars, const std\+::vector$<$ double $>$ \&integration\+\_\+point\+\_\+var, std\+::vector$<$ double $>$ \&node\+\_\+variable) const
+\begin{DoxyCompactList}\small\item\em uses linear extrapolation of property values from the integration points to the nodes \end{DoxyCompactList}\item 
+double {\bfseries Volume} () const
+\begin{DoxyCompactList}\small\item\em reports volume, area\texorpdfstring{$\ast$}{*}1, and length\texorpdfstring{$\ast$}{*}1\texorpdfstring{$\ast$}{*}1 products for volumetric, surfacic and line elements respectively \end{DoxyCompactList}\item 
+double {\bfseries Aspect\+Ratio} () const
+\begin{DoxyCompactList}\small\item\em ratio of longest to shortest edge=segment \end{DoxyCompactList}\item 
+double {\bfseries Inner\+Radius} () const
+\begin{DoxyCompactList}\small\item\em the radius of an inscribed circle / sphere \end{DoxyCompactList}\item 
+uint32\+\_\+t {\bfseries Segments} () const
+\begin{DoxyCompactList}\small\item\em number of edges = segments in the finite element of interest \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a043f97fcd42926600cb944592e40f075}{Segment\+Mid\+Point}} (uint32\+\_\+t segm) const
+\begin{DoxyCompactList}\small\item\em retrieve position of the segment (element edge) mid-\/points \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a20aa7fe21942056f9ef670b28bfadfa8}{Segment\+Length}} (uint32\+\_\+t segm) const
+\begin{DoxyCompactList}\small\item\em returns the length of the nth segment=edge of the finite element \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a39e2379c97598a8e6f33be8a6bfcf035}{Segment\+Lengths}} (std\+::vector$<$ double $>$ \&) const
+\begin{DoxyCompactList}\small\item\em returns a vector with the lengths of all finite element segments = edges \end{DoxyCompactList}\item 
+std\+::set$<$ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a060eafe8a4ad9ba2317bed9340c68b3a}{Corner\+Nodes\+Of\+Face}} (uint32\+\_\+t face\+\_\+id) const
+\begin{DoxyCompactList}\small\item\em returns search key to match element faces; pointers in order so that they can be searched \end{DoxyCompactList}\item 
+std\+::set$<$ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_acdaccbd7a5d2c7414b7313e73f29dd78}{Corner\+Nodes\+Connected\+To}} (uint32\+\_\+t node\+\_\+id) const
+\begin{DoxyCompactList}\small\item\em returns set of nodes that are neighbors of the target node in this element \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_af6c030a937fbfecd002756d67353271e}{Face\+Bary\+Center}} (uint32\+\_\+t face) const
+\begin{DoxyCompactList}\small\item\em retrieve barycenter of element face \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a202387b7bb52a9ff75f00ae354ba8ef2}{Unit\+Normal\+To\+Face}} (uint32\+\_\+t face) const
+\begin{DoxyCompactList}\small\item\em returns unit normal to face of element i \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ {\bfseries Unit\+Normal} () const
+\begin{DoxyCompactList}\small\item\em computes unit normal to element if it is planar (3D) or linear (2D); vector components are returned into point \end{DoxyCompactList}\item 
+void {\bfseries Output\+Property\+To\+VTK} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, const char \texorpdfstring{$\ast$}{*}file\+\_\+name, const char \texorpdfstring{$\ast$}{*}var\+\_\+name) const
+\begin{DoxyCompactList}\small\item\em outputs finite element and discretised variable to VTK file \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_local_variable_storage}{csmp\+::\+Local\+Variable\+Storage$<$ dim, Edge $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+bool {\bfseries operator==} (const \mbox{\hyperlink{classcsmp_1_1_local_variable_storage}{Local\+Variable\+Storage}}$<$ dim, \mbox{\hyperlink{classcsmp_1_1_edge}{Edge}} $>$ \&) const
+\begin{DoxyCompactList}\small\item\em Goto overload for storees without \doxylink{structcsmp_1_1_integration_point_variables}{Integration\+Point\+Variables}. \end{DoxyCompactList}\item 
+void {\bfseries Resize\+Property\+Storage} (const \mbox{\hyperlink{structcsmp_1_1_local_variables}{Local\+Variables}} \&)
+\begin{DoxyCompactList}\small\item\em Goto overload for storees without \doxylink{structcsmp_1_1_integration_point_variables}{Integration\+Point\+Variables}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_local_variable_storage_ae81c2b297f4166821bc3de2856e055ae}{Add\+Property}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&)
+\begin{DoxyCompactList}\small\item\em Creates an empty space in the storage preserving the original variable values. \doxylink{structcsmp_1_1_local_variables}{Local\+Variables} in \doxylink{structcsmp_1_1_index}{Index} have to reflect NEW state (incl added) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_local_variable_storage_a3b56bab7bc4a1db37bfc4d4176457349}{Delete\+Property}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&)
+\begin{DoxyCompactList}\small\item\em Deletes data and flags of property \doxylink{structcsmp_1_1_local_variables}{Local\+Variables} in \doxylink{structcsmp_1_1_index}{Index} have to reflect CURRENT state (incl property to be removed) \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_local_variable_storage_aa8f995011429356bfd7e7744794c9b9b}{Is\+Within\+Range}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, double, double) const
+\item 
+double {\bfseries Read} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\begin{DoxyCompactList}\small\item\em Scalar variable value. \end{DoxyCompactList}\item 
+void {\bfseries Store} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, const \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&)
+\begin{DoxyCompactList}\small\item\em Scalar variable. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} {\bfseries Status} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\begin{DoxyCompactList}\small\item\em Scalar \& Array variable flag. \end{DoxyCompactList}\item 
+void {\bfseries Store\+Array\+Entry} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, double array\+\_\+elmt\+\_\+value, int\+\_\+type)
+\item 
+double {\bfseries Read\+Array\+Entry} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, int\+\_\+type array\+\_\+elmt) const
+\begin{DoxyCompactList}\small\item\em reads single double element inside of the target array \end{DoxyCompactList}\item 
+bool {\bfseries Empty\+LVS} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_local_variable_storage_ade5ec5a8e9afb482c1619924cf8259b2}{Out\+LVS}} () const
+\item 
+void {\bfseries Assert\+Placement} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\begin{DoxyCompactList}\small\item\em We check in debug only. \end{DoxyCompactList}\item 
+void {\bfseries Assert\+Integration\+Point\+Placement} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\begin{DoxyCompactList}\small\item\em We check in debug only. \end{DoxyCompactList}\item 
+void {\bfseries Assert\+Finite\+Volume\+Integration\+Point\+Placement} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\begin{DoxyCompactList}\small\item\em We check in debug only. \end{DoxyCompactList}\item 
+void {\bfseries Store\+Local\+State} (const \mbox{\hyperlink{structcsmp_1_1_local_variables}{Local\+Variables}} \&lv)
+\begin{DoxyCompactList}\small\item\em We store in debug only. \end{DoxyCompactList}\item 
+void {\bfseries LVS} (const Data \&data)
+\begin{DoxyCompactList}\small\item\em copy or move supplied data into storage \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim$>$\newline
+class csmp\+::\+Edge$<$ dim $>$}
+Line "{}face"{} that knows its surface \doxylink{classcsmp_1_1_face}{Face} neighbors. Supports computations on the boundaries of 3D models. Variable placement is FACE. Can be a manifold.
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000071}{Todo}}]design issue\+: edges should only exist only in 3D models because, only there, they can have \doxylink{classcsmp_1_1_face}{Face} neighbors. 
+
+remove templatisation, making this a 3D only entity \end{DoxyRefDesc}
+
+
+\label{doc-constructors}
+\Hypertarget{classcsmp_1_1_edge_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcsmp_1_1_edge_a4ac7410e8588cb9fd9639536247a2e7b}\index{csmp::Edge$<$ dim $>$@{csmp::Edge$<$ dim $>$}!Edge@{Edge}}
+\index{Edge@{Edge}!csmp::Edge$<$ dim $>$@{csmp::Edge$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Edge()}{Edge()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_edge_a4ac7410e8588cb9fd9639536247a2e7b} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_edge}{csmp\+::\+Edge}}$<$ dim $>$\+::\+Edge (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_finite_element}{Finite\+Element}} \texorpdfstring{$\ast$}{*}}]{}{, }\item[{const \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{Finite\+Volume\+Stencil}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}}]{}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_face}{Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const}]{inner\+\_\+parent}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_face}{Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const}]{outer\+\_\+parent}{, }\item[{const \mbox{\hyperlink{structcsmp_1_1_local_variables}{Local\+Variables}} \&}]{}{, }\item[{const \mbox{\hyperlink{structcsmp_1_1_integration_point_variables}{Integration\+Point\+Variables}} \&}]{}{}\end{DoxyParamCaption})}
+
+
+
+custom constructor, finds face ids and assigns nodes automatically 
+
+
+\begin{DoxyParams}{Parameters}
+{\em outer\+\_\+parent} & if any \\
+\hline
+\end{DoxyParams}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_edge_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_edge_a7c1598b22f1ae18cc430881cd7a42c34}\index{csmp::Edge$<$ dim $>$@{csmp::Edge$<$ dim $>$}!BaryCenter@{BaryCenter}}
+\index{BaryCenter@{BaryCenter}!csmp::Edge$<$ dim $>$@{csmp::Edge$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{BaryCenter()}{BaryCenter()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_edge_a7c1598b22f1ae18cc430881cd7a42c34} 
+template$<$uint32\+\_\+t DIM$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ DIM $>$ \mbox{\hyperlink{classcsmp_1_1_edge}{csmp\+::\+Edge}}$<$ DIM $>$\+::\+Bary\+Center (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+the centre of gravity of the element 
+
+the centre of gravity of the element as determined from the corner nodes \Hypertarget{classcsmp_1_1_edge_ac731bd41ebb8630187984fa01b5b0e09}\index{csmp::Edge$<$ dim $>$@{csmp::Edge$<$ dim $>$}!InnerParent@{InnerParent}}
+\index{InnerParent@{InnerParent}!csmp::Edge$<$ dim $>$@{csmp::Edge$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{InnerParent()}{InnerParent()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_edge_ac731bd41ebb8630187984fa01b5b0e09} 
+template$<$uint32\+\_\+t DIM$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_face}{Face}}$<$ DIM $>$ \texorpdfstring{$\ast$}{*}const \mbox{\hyperlink{classcsmp_1_1_edge}{csmp\+::\+Edge}}$<$ DIM $>$\+::\+Inner\+Parent (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+higher-\/dimensional \doxylink{classcsmp_1_1_face}{Face} located on side opposite to where the unit normal points; will always be present 
+
+higher-\/dimensional element located on the side of the face to which the unit normal points;
+
+\begin{DoxyAttention}{Attention}
+does not exist on model boundary 
+\end{DoxyAttention}
+\Hypertarget{classcsmp_1_1_edge_a98d05221893aa36c73fc1bcff6747f71}\index{csmp::Edge$<$ dim $>$@{csmp::Edge$<$ dim $>$}!OuterParent@{OuterParent}}
+\index{OuterParent@{OuterParent}!csmp::Edge$<$ dim $>$@{csmp::Edge$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{OuterParent()}{OuterParent()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_edge_a98d05221893aa36c73fc1bcff6747f71} 
+template$<$uint32\+\_\+t DIM$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_face}{Face}}$<$ DIM $>$ \texorpdfstring{$\ast$}{*}const \mbox{\hyperlink{classcsmp_1_1_edge}{csmp\+::\+Edge}}$<$ DIM $>$\+::\+Outer\+Parent (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+higher-\/dimensional \doxylink{classcsmp_1_1_face}{Face} located on the side of the face to which the unit normal points; 
+
+\begin{DoxyAttention}{Attention}
+does not exist on model boundary 
+\end{DoxyAttention}
+\Hypertarget{classcsmp_1_1_edge_ae6f11113d75c349f108b99c9b02967fd}\index{csmp::Edge$<$ dim $>$@{csmp::Edge$<$ dim $>$}!Parent@{Parent}}
+\index{Parent@{Parent}!csmp::Edge$<$ dim $>$@{csmp::Edge$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Parent()}{Parent()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_edge_ae6f11113d75c349f108b99c9b02967fd} 
+template$<$uint32\+\_\+t DIM$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_face}{Face}}$<$ DIM $>$ \texorpdfstring{$\ast$}{*}const \mbox{\hyperlink{classcsmp_1_1_edge}{csmp\+::\+Edge}}$<$ DIM $>$\+::\+Parent (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}}}]{side}{}\end{DoxyParamCaption}) const}
+
+
+
+access the higher dimensional elements on either side of face; 
+
+\begin{DoxyAttention}{Attention}
+returns nullptr if outside is not present 
+\end{DoxyAttention}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/model/Visitor.\+h\item 
+source/includes/model/Edge.\+h\item 
+source/modules/model/Edge.\+cpp\end{DoxyCompactItemize}

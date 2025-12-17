@@ -1,0 +1,420 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_halite_liquidus" kind="class" language="C++" prot="public">
+    <compoundname>csmp::HaliteLiquidus</compoundname>
+    <includes refid="_halite_liquidus_8h" local="yes">eos/h2o_nacl/HaliteLiquidus.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_1a65acbc9a17eee50ba6c6aa1fa97cdf66" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::HaliteLiquidus::temperature_</definition>
+        <argsstring></argsstring>
+        <name>temperature_</name>
+        <qualifiedname>csmp::HaliteLiquidus::temperature_</qualifiedname>
+        <briefdescription>
+<para>reference to temperature [C] in flow code </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidus.h" line="31" column="21" bodyfile="source/includes/eos/HaliteLiquidus.h" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_1a27a566cab5ae42a1c3a37e414d0b313b" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::HaliteLiquidus::pressure_</definition>
+        <argsstring></argsstring>
+        <name>pressure_</name>
+        <qualifiedname>csmp::HaliteLiquidus::pressure_</qualifiedname>
+        <briefdescription>
+<para>reference to fluid pressure [Pa] in flow code </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidus.h" line="32" column="21" bodyfile="source/includes/eos/HaliteLiquidus.h" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_1aa9c77bccd88c8abcb1a233064a196d88" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidus::tcurrent_</definition>
+        <argsstring></argsstring>
+        <name>tcurrent_</name>
+        <qualifiedname>csmp::HaliteLiquidus::tcurrent_</qualifiedname>
+        <briefdescription>
+<para>temperature [C] for internal use </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidus.h" line="34" column="22" bodyfile="source/includes/eos/HaliteLiquidus.h" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_1ab64313c49b46fc47c4096987ecda1707" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidus::pcurrent_</definition>
+        <argsstring></argsstring>
+        <name>pcurrent_</name>
+        <qualifiedname>csmp::HaliteLiquidus::pcurrent_</qualifiedname>
+        <briefdescription>
+<para>fluid pressure [bar] for internal use </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidus.h" line="35" column="22" bodyfile="source/includes/eos/HaliteLiquidus.h" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_1a6b5844ed7f8c6d7a247db4b1fc0ae2bb" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidus::molefraction_nacl_</definition>
+        <argsstring></argsstring>
+        <name>molefraction_nacl_</name>
+        <qualifiedname>csmp::HaliteLiquidus::molefraction_nacl_</qualifiedname>
+        <briefdescription>
+<para>mole fraction NaCl, based on molar mass in <ref refid="_convert_concentration_units_na_cl_8h_source" kindref="compound">ConvertConcentrationUnitsNaCl.h</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidus.h" line="36" column="22" bodyfile="source/includes/eos/HaliteLiquidus.h" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_1aa0a9be8ba4e423d362c150aae1297d10" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidus::tmelt_</definition>
+        <argsstring></argsstring>
+        <name>tmelt_</name>
+        <qualifiedname>csmp::HaliteLiquidus::tmelt_</qualifiedname>
+        <briefdescription>
+<para>halite melting temperature for given pressure </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidus.h" line="38" column="22" bodyfile="source/includes/eos/HaliteLiquidus.h" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_1aa3171e5106735e20a60902395dc47f95" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidus::myt_</definition>
+        <argsstring></argsstring>
+        <name>myt_</name>
+        <qualifiedname>csmp::HaliteLiquidus::myt_</qualifiedname>
+        <briefdescription>
+<para>nomalized temperature for internal use </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidus.h" line="39" column="22" bodyfile="source/includes/eos/HaliteLiquidus.h" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_1a6d80e2aef318a365f40d35ab02f27c0f" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidus::e0_</definition>
+        <argsstring></argsstring>
+        <name>e0_</name>
+        <qualifiedname>csmp::HaliteLiquidus::e0_</qualifiedname>
+        <briefdescription>
+<para>parameter e0 for eq. 8 in Driesner&amp;Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidus.h" line="40" column="22" bodyfile="source/includes/eos/HaliteLiquidus.h" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_1a7af1b8d00e149b3ac81e5ac77fa200f7" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidus::e1_</definition>
+        <argsstring></argsstring>
+        <name>e1_</name>
+        <qualifiedname>csmp::HaliteLiquidus::e1_</qualifiedname>
+        <briefdescription>
+<para>parameter e1 for eq. 8 in Driesner&amp;Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidus.h" line="41" column="22" bodyfile="source/includes/eos/HaliteLiquidus.h" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_1add5153ac9d4a5d5c67a6f22f697a9451" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidus::e2_</definition>
+        <argsstring></argsstring>
+        <name>e2_</name>
+        <qualifiedname>csmp::HaliteLiquidus::e2_</qualifiedname>
+        <briefdescription>
+<para>parameter e2 for eq. 8 in Driesner&amp;Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidus.h" line="42" column="22" bodyfile="source/includes/eos/HaliteLiquidus.h" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_1a8d5b63cb2075cf7ca78adcf092a5948b" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidus::e3_</definition>
+        <argsstring></argsstring>
+        <name>e3_</name>
+        <qualifiedname>csmp::HaliteLiquidus::e3_</qualifiedname>
+        <briefdescription>
+<para>parameter e3 for eq. 8 in Driesner&amp;Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidus.h" line="43" column="22" bodyfile="source/includes/eos/HaliteLiquidus.h" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_1af4e05deb0854689cff8dfaff701d8609" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidus::e4_</definition>
+        <argsstring></argsstring>
+        <name>e4_</name>
+        <qualifiedname>csmp::HaliteLiquidus::e4_</qualifiedname>
+        <briefdescription>
+<para>parameter e4 for eq. 8 in Driesner&amp;Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidus.h" line="44" column="22" bodyfile="source/includes/eos/HaliteLiquidus.h" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_1ab9792815023deab65d14c20069228695" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidus::e5_</definition>
+        <argsstring></argsstring>
+        <name>e5_</name>
+        <qualifiedname>csmp::HaliteLiquidus::e5_</qualifiedname>
+        <briefdescription>
+<para>parameter e5 for eq. 8 in Driesner&amp;Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidus.h" line="45" column="22" bodyfile="source/includes/eos/HaliteLiquidus.h" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_1afad32d928d51eebbb15026b29d1fc039" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_na_cl_melting_curve" kindref="compound">NaClMeltingCurve</ref></type>
+        <definition>NaClMeltingCurve csmp::HaliteLiquidus::naclmelting</definition>
+        <argsstring></argsstring>
+        <name>naclmelting</name>
+        <qualifiedname>csmp::HaliteLiquidus::naclmelting</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidus.h" line="47" column="24" bodyfile="source/includes/eos/HaliteLiquidus.h" bodystart="47" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_halite_liquidus_1aeaca336da1757689f6665244539fb82d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::HaliteLiquidus::HaliteLiquidus</definition>
+        <argsstring>(const double &amp;externaltemperature, const double &amp;externalpressure)</argsstring>
+        <name>HaliteLiquidus</name>
+        <qualifiedname>csmp::HaliteLiquidus::HaliteLiquidus</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>externaltemperature</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>externalpressure</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>custom constructor</para>
+<para><simplesect kind="attention"><para>Use only this conctructor. <ref refid="classcsmp_1_1_halite_liquidus" kindref="compound">HaliteLiquidus</ref> computes the NaCl concentration of halite-saturated brine as a function of temperature and pressure. These are typically computed somewhere outside this class. By using const refs to those external variables as constructor argument, <ref refid="classcsmp_1_1_halite_liquidus" kindref="compound">HaliteLiquidus</ref> is able to decipher their current values when being queried for the NaCl concentration. Only this constructor is allowed to ensure that functionality, default constructor has been made private. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidus.h" line="21" column="7" bodyfile="source/modules/eos/h2o_nacl/HaliteLiquidus.cpp" bodystart="14" bodyend="31"/>
+        <references refid="classcsmp_1_1_na_cl_melting_curve_1a44d9ef6290803fc1159da7ca458b97ee" compoundref="_na_cl_melting_curve_8cpp" startline="11" endline="19">csmp::NaClMeltingCurve::NaClMeltingCurve</references>
+        <referencedby refid="classcsmp_1_1_na_cl_saturated_vapor_1abd993e8f13b163d4832a507285effdfa" compoundref="_na_cl_saturated_vapor_8cpp" startline="14" endline="56">csmp::NaClSaturatedVapor::NaClSaturatedVapor</referencedby>
+        <referencedby refid="classcsmp_1_1_twophase_liquid_1acbc78de0d42d3c379186195beb7672a2" compoundref="_twophase_liquid_8cpp" startline="15" endline="54">csmp::TwophaseLiquid::TwophaseLiquid</referencedby>
+        <referencedby refid="classcsmp_1_1_twophase_vapor_1a106ce9bbb086b6e21f6bb8056b718fd8" compoundref="_twophase_vapor_8cpp" startline="16" endline="30">csmp::TwophaseVapor::TwophaseVapor</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_halite_liquidus_1a24c991231cafb274f08f04c6bdc6b839" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::HaliteLiquidus::~HaliteLiquidus</definition>
+        <argsstring>()</argsstring>
+        <name>~HaliteLiquidus</name>
+        <qualifiedname>csmp::HaliteLiquidus::~HaliteLiquidus</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>destructor </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidus.h" line="23" column="1" bodyfile="source/modules/eos/h2o_nacl/HaliteLiquidus.cpp" bodystart="36" bodyend="38"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_halite_liquidus_1a081f656f2584fafb051c1ecb043a16e0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidus::MassFractionNaCl</definition>
+        <argsstring>()</argsstring>
+        <name>MassFractionNaCl</name>
+        <qualifiedname>csmp::HaliteLiquidus::MassFractionNaCl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Value of mass fraction of dissolved NaCl in halite-saturated brine <simplesect kind="attention"><para>The value is based on converting the mole fraction computed from equation 8 in Driesner &amp; Heinrich (2007). Conversion is based on <ref refid="_convert_concentration_units_na_cl_8h_source" kindref="compound">ConvertConcentrationUnitsNaCl.h</ref>; to stay consistent, use values and functions provide therein for further computations </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidus.h" line="25" column="22" bodyfile="source/modules/eos/h2o_nacl/HaliteLiquidus.cpp" bodystart="44" bodyend="48"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_halite_liquidus_1ae881c36dcb1678995513a42fc8d79944" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidus::MoleFractionNaCl</definition>
+        <argsstring>()</argsstring>
+        <name>MoleFractionNaCl</name>
+        <qualifiedname>csmp::HaliteLiquidus::MoleFractionNaCl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidus.h" line="26" column="22" bodyfile="source/modules/eos/h2o_nacl/HaliteLiquidus.cpp" bodystart="52" bodyend="56"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_halite_liquidus_1a60717c9b83931f94a37242297e079762" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::HaliteLiquidus::HaliteLiquidus</definition>
+        <argsstring>()</argsstring>
+        <name>HaliteLiquidus</name>
+        <qualifiedname>csmp::HaliteLiquidus::HaliteLiquidus</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidus.h" line="29" column="7"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_halite_liquidus_1a56debf985e374037ac0821612bbfcd64" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::HaliteLiquidus::CheckState</definition>
+        <argsstring>()</argsstring>
+        <name>CheckState</name>
+        <qualifiedname>csmp::HaliteLiquidus::CheckState</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Update internal variables for current temperature and pressure </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidus.h" line="49" column="24" bodyfile="source/modules/eos/h2o_nacl/HaliteLiquidus.cpp" bodystart="61" bodyend="70"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_halite_liquidus_1ab2d5e3ebc7fa55370e2175f373a53e74" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::HaliteLiquidus::UpdateParameters</definition>
+        <argsstring>()</argsstring>
+        <name>UpdateParameters</name>
+        <qualifiedname>csmp::HaliteLiquidus::UpdateParameters</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Update parameters for MoleFractionNaCl( const double&amp; myt_ ) </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidus.h" line="50" column="24" bodyfile="source/modules/eos/h2o_nacl/HaliteLiquidus.cpp" bodystart="83" bodyend="96"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_halite_liquidus_1a576c83004abf5a21df46d0738e9fde08" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidus::MolefractionNaCl</definition>
+        <argsstring>(const double &amp;myt_)</argsstring>
+        <name>MolefractionNaCl</name>
+        <qualifiedname>csmp::HaliteLiquidus::MolefractionNaCl</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>myt_</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Equation 8 of Driesner and Heinrich (2007) </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidus.h" line="52" column="22" bodyfile="source/modules/eos/h2o_nacl/HaliteLiquidus.cpp" bodystart="75" bodyend="78"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>NaCl concentration of brine on halite saturation surface as function of temperature and pressure. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>Thomas Driesner, ETH Zuerich, <ulink url="mailto:thomas.driesner@erdw.ethz.ch">thomas.driesner@erdw.ethz.ch</ulink></para>
+</simplesect>
+</para>
+<sect1 id="compare_floats_8h_1motivation">
+<title>Motivation</title><para>&quot;HaliteLiquidus&quot; is legacy code from Thomas Driesner&apos;s developments for the H2O-NaCl system, and computes the composition of halite-saturated brine as a function of temperature and pressure. It can be used standalone if only this information is needed. Otherwise, it is only used in the CSMP++ context for building accurate lookup tables for the H2O-NaCl system, which are significantly faster if the full system properties are needed.</para>
+<para>Details of the underlying formulation can be found in</para>
+<para>Driesner T. and Heinrich C.A. (2007): The system H2O-NaCl. Part I: Correlation formulae for phase relations in temperature-pressure-molefraction space from 0 to 1000oC, 0 to 5000 bar, and 0 to 1 XNaCl. Geochimica et Cosmochimica Acta 71, 4880-4901.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_upwind_control_visitor_1usage">
+<title>Usage</title><para>Construct an instance of &quot;HaliteLiquidus&quot; with the temperature (in C) and pressure (in Pa) as constructor arguments. &quot;HaliteLiquidus&quot; has an internal mechanism to make sure that it always uses the current value of that temperature and pressure as they exist in your code. Public member names should be self-explanatory, I hope.</para>
+<para>The NaCl concentration can be retrieved in units of mass fraction. If you want to convert these or need values for molar masses of NaCl and H2O, please use <ref refid="_convert_concentration_units_na_cl_8h_source" kindref="compound">ConvertConcentrationUnitsNaCl.h</ref> to stay consistent.</para>
+<para><programlisting><codeline><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>t(somevalue),<sp/>p(anothervalue);<sp/></highlight><highlight class="comment">//<sp/>temperature<sp/>[C]<sp/>and<sp/>pressure<sp/>[in<sp/>Pa]<sp/>in<sp/>user&apos;s<sp/>application</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">...</highlight></codeline>
+<codeline><highlight class="normal">HaliteLiquidus<sp/>liquidus(t,p);<sp/></highlight></codeline>
+<codeline><highlight class="normal">...</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>here,<sp/>t<sp/>and<sp/>p<sp/>may<sp/>be<sp/>updated</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">...</highlight></codeline>
+<codeline><highlight class="normal">x<sp/>=<sp/>liquidus.MassFractionNaCl();<sp/></highlight><highlight class="comment">//<sp/>compute<sp/>and<sp/>assign<sp/>to<sp/>x<sp/>the<sp/>mass<sp/>fraction<sp/>of<sp/>NaCl<sp/>in<sp/>halite-saturated<sp/>brine<sp/>for<sp/>current<sp/>t<sp/>and<sp/>p</highlight></codeline>
+</programlisting></para>
+</sect1>
+<sect1 id="compare_floats_8h_1testing">
+<title>Testing</title><para>testing was done in the period before publication in 2007, prior to writing this documentation, no details are available anymore </para>
+</sect1>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::HaliteLiquidus</label>
+        <link refid="classcsmp_1_1_halite_liquidus"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/eos/HaliteLiquidus.h" line="18" column="3" bodyfile="source/includes/eos/HaliteLiquidus.h" bodystart="19" bodyend="53"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_halite_liquidus_1a56debf985e374037ac0821612bbfcd64" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidus</scope><name>CheckState</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_1a6d80e2aef318a365f40d35ab02f27c0f" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidus</scope><name>e0_</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_1a7af1b8d00e149b3ac81e5ac77fa200f7" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidus</scope><name>e1_</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_1add5153ac9d4a5d5c67a6f22f697a9451" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidus</scope><name>e2_</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_1a8d5b63cb2075cf7ca78adcf092a5948b" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidus</scope><name>e3_</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_1af4e05deb0854689cff8dfaff701d8609" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidus</scope><name>e4_</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_1ab9792815023deab65d14c20069228695" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidus</scope><name>e5_</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_1aeaca336da1757689f6665244539fb82d" prot="public" virt="non-virtual"><scope>csmp::HaliteLiquidus</scope><name>HaliteLiquidus</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_1a60717c9b83931f94a37242297e079762" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidus</scope><name>HaliteLiquidus</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_1a081f656f2584fafb051c1ecb043a16e0" prot="public" virt="non-virtual"><scope>csmp::HaliteLiquidus</scope><name>MassFractionNaCl</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_1a6b5844ed7f8c6d7a247db4b1fc0ae2bb" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidus</scope><name>molefraction_nacl_</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_1ae881c36dcb1678995513a42fc8d79944" prot="public" virt="non-virtual"><scope>csmp::HaliteLiquidus</scope><name>MoleFractionNaCl</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_1a576c83004abf5a21df46d0738e9fde08" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidus</scope><name>MolefractionNaCl</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_1aa3171e5106735e20a60902395dc47f95" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidus</scope><name>myt_</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_1afad32d928d51eebbb15026b29d1fc039" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidus</scope><name>naclmelting</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_1ab64313c49b46fc47c4096987ecda1707" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidus</scope><name>pcurrent_</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_1a27a566cab5ae42a1c3a37e414d0b313b" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidus</scope><name>pressure_</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_1aa9c77bccd88c8abcb1a233064a196d88" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidus</scope><name>tcurrent_</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_1a65acbc9a17eee50ba6c6aa1fa97cdf66" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidus</scope><name>temperature_</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_1aa0a9be8ba4e423d362c150aae1297d10" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidus</scope><name>tmelt_</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_1ab2d5e3ebc7fa55370e2175f373a53e74" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidus</scope><name>UpdateParameters</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_1a24c991231cafb274f08f04c6bdc6b839" prot="public" virt="non-virtual"><scope>csmp::HaliteLiquidus</scope><name>~HaliteLiquidus</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

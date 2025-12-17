@@ -1,0 +1,209 @@
+\doxysection{Linear\+Triangle3\+D.\+h}
+\hypertarget{_linear_triangle3_d_8h_source}{}\label{_linear_triangle3_d_8h_source}\index{source/includes/integration/finite\_elements/LinearTriangle3D.h@{source/includes/integration/finite\_elements/LinearTriangle3D.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{LINEAR\_TRIANGLE\_3D\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{LINEAR\_TRIANGLE\_3D\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_finite_element_8h}{"{}FiniteElement.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00009\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00010\ \textcolor{comment}{@brief\ Straight-\/sided,\ analytically\ integrated\ triangular\ finite\ element\ }}
+\DoxyCodeLine{00011\ \textcolor{comment}{suspended\ in\ 3D\ space;\ linear\ element\ interpolation\ functions.}}
+\DoxyCodeLine{00012\ \textcolor{comment}{}}
+\DoxyCodeLine{00013\ \textcolor{comment}{@date\ 2000}}
+\DoxyCodeLine{00014\ \textcolor{comment}{@author\ S.K.\ Matthaei}}
+\DoxyCodeLine{00015\ \textcolor{comment}{@author\ Stephen\ G.\ Roberts}}
+\DoxyCodeLine{00016\ \textcolor{comment}{@author\ S.\ Geiger}}
+\DoxyCodeLine{00017\ \textcolor{comment}{}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00019\ \textcolor{comment}{@section\ motivation\ Motivation}}
+\DoxyCodeLine{00020\ \textcolor{comment}{}}
+\DoxyCodeLine{00021\ \textcolor{comment}{To\ carry\ out\ computations\ using\ linear\ triangular\ and\ tetrahedral\ }}
+\DoxyCodeLine{00022\ \textcolor{comment}{elements\ with\ exact\ integration\ in\ which\ surfaces\ inside\ the\ tetrahedral}}
+\DoxyCodeLine{00023\ \textcolor{comment}{mesh\ are\ represented\ by\ triangles\ oriented\ freely\ in\ space.\ This\ triangle}}
+\DoxyCodeLine{00024\ \textcolor{comment}{has\ to\ be\ put\ into\ the\ FiniteElementManager\ in}}
+\DoxyCodeLine{00025\ \textcolor{comment}{order\ to\ be\ accessible\ for\ computations.\ \ }}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00027\ \textcolor{comment}{}}
+\DoxyCodeLine{00028\ \textcolor{comment}{@section\ collaboration\ Collaboration}}
+\DoxyCodeLine{00029\ \textcolor{comment}{}}
+\DoxyCodeLine{00030\ \textcolor{comment}{The\ LinearTriangle3D\ collaborates\ with\ the\ 'Element'\ class\ within\ }}
+\DoxyCodeLine{00031\ \textcolor{comment}{a\ bridge\ pattern\ proving\ polymorphic\ behaviour\ of\ the\ 'Element'.}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00033\ \textcolor{comment}{}}
+\DoxyCodeLine{00034\ \textcolor{comment}{@section\ implementation\ Implementation}}
+\DoxyCodeLine{00035\ \textcolor{comment}{}}
+\DoxyCodeLine{00036\ \textcolor{comment}{See\ CSMP\ User's\ guide\ for\ a\ full\ listing\ of\ shape\ functions\ and\ their}}
+\DoxyCodeLine{00037\ \textcolor{comment}{derivatives.\ \ }}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00040\ \textcolor{comment}{@section\ examples\ Application\ Examples}}
+\DoxyCodeLine{00041\ \textcolor{comment}{}}
+\DoxyCodeLine{00042\ \textcolor{comment}{The\ shape\ function\ values\ and\ their\ derivatives\ can\ be\ output\ to\ VTK}}
+\DoxyCodeLine{00043\ \textcolor{comment}{by\ the\ public\ method\ 'OutputToVTK()'.\ This\ result\ can\ be\ visualized}}
+\DoxyCodeLine{00044\ \textcolor{comment}{with\ the\ following\ VTK\ tcl\ script.\ \ }}
+\DoxyCodeLine{00045\ \textcolor{comment}{}}
+\DoxyCodeLine{00046\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00047\ \textcolor{comment}{catch\ \{load\ vtktcl\}}}
+\DoxyCodeLine{00048\ \textcolor{comment}{source\ vtkInt.tcl}}
+\DoxyCodeLine{00049\ \textcolor{comment}{}}
+\DoxyCodeLine{00050\ \textcolor{comment}{vtkUnstructuredGridReader\ reader}}
+\DoxyCodeLine{00051\ \textcolor{comment}{\ \ \ \ reader\ SetFileName\ \ \ \ "{}etest1.vtk"{}}}
+\DoxyCodeLine{00052\ \textcolor{comment}{\ \ \ \ reader\ SetScalarsName\ "{}sum\_N"{}}}
+\DoxyCodeLine{00053\ \textcolor{comment}{\ \ \ \ reader\ SetVectorsName\ "{}derivative\_N"{}}}
+\DoxyCodeLine{00054\ \textcolor{comment}{}}
+\DoxyCodeLine{00055\ \textcolor{comment}{vtkDataSetMapper\ gridMapper}}
+\DoxyCodeLine{00056\ \textcolor{comment}{\ \ \ \ gridMapper\ SetInput\ [reader\ GetOutput]}}
+\DoxyCodeLine{00057\ \textcolor{comment}{\ \ \ \ gridMapper\ ScalarVisibilityOff}}
+\DoxyCodeLine{00058\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00059\ \textcolor{comment}{vtkActor\ gridActor}}
+\DoxyCodeLine{00060\ \textcolor{comment}{\ \ \ \ gridActor\ SetMapper\ gridMapper}}
+\DoxyCodeLine{00061\ \textcolor{comment}{\ \ \ \ [gridActor\ GetProperty]\ SetColor\ 0.1\ 0.1\ 0.1}}
+\DoxyCodeLine{00062\ \textcolor{comment}{\ \ \ \ [gridActor\ GetProperty]\ SetRepresentationToWireframe}}
+\DoxyCodeLine{00063\ \textcolor{comment}{}}
+\DoxyCodeLine{00064\ \textcolor{comment}{vtkDataSetMapper\ modelMapper}}
+\DoxyCodeLine{00065\ \textcolor{comment}{\ \ \ \ modelMapper\ SetInput\ [reader\ GetOutput]}}
+\DoxyCodeLine{00066\ \textcolor{comment}{\ \ \ \ modelMapper\ ScalarVisibilityOn}}
+\DoxyCodeLine{00067\ \textcolor{comment}{\ \ \ \ reader\ Update;\ \#force\ update\ for\ scalar\ range}}
+\DoxyCodeLine{00068\ \textcolor{comment}{\ \ \ \ eval\ modelMapper\ SetScalarRange\ [[reader\ GetOutput]\ GetScalarRange]}}
+\DoxyCodeLine{00069\ \textcolor{comment}{\ \ \ \ \#\ red=high,\ blue=low}}
+\DoxyCodeLine{00070\ \textcolor{comment}{\ \ \ \ [modelMapper\ GetLookupTable]\ SetHueRange\ .667\ 0.}}
+\DoxyCodeLine{00071\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00072\ \textcolor{comment}{vtkActor\ modelActor}}
+\DoxyCodeLine{00073\ \textcolor{comment}{\ \ \ \ modelActor\ SetMapper\ modelMapper}}
+\DoxyCodeLine{00074\ \textcolor{comment}{\ \ \ \ [modelActor\ GetProperty]\ SetColor\ .2\ .2\ .2}}
+\DoxyCodeLine{00075\ \textcolor{comment}{\ \ \ \ [modelActor\ GetProperty]\ SetOpacity\ 0.7}}
+\DoxyCodeLine{00076\ \textcolor{comment}{}}
+\DoxyCodeLine{00077\ \textcolor{comment}{\ vtkHedgeHog\ hhog1}}
+\DoxyCodeLine{00078\ \textcolor{comment}{\ \ \ \ hhog1\ SetInput\ [reader\ GetOutput]}}
+\DoxyCodeLine{00079\ \textcolor{comment}{\ \ \ \ hhog1\ SetScaleFactor\ 2.0\ }}
+\DoxyCodeLine{00080\ \textcolor{comment}{}}
+\DoxyCodeLine{00081\ \textcolor{comment}{\ vtkPolyDataMapper\ uvMapper}}
+\DoxyCodeLine{00082\ \textcolor{comment}{\ \ \ \ uvMapper\ SetInput\ [hhog1\ GetOutput]}}
+\DoxyCodeLine{00083\ \textcolor{comment}{\ vtkActor\ uvActor}}
+\DoxyCodeLine{00084\ \textcolor{comment}{\ \ \ \ uvActor\ SetMapper\ uvMapper}}
+\DoxyCodeLine{00085\ \textcolor{comment}{\ \ \ \ [uvActor\ GetProperty]\ SetColor\ 0.\ 0.\ 0.}}
+\DoxyCodeLine{00086\ \textcolor{comment}{}}
+\DoxyCodeLine{00087\ \textcolor{comment}{vtkAxes\ axes}}
+\DoxyCodeLine{00088\ \textcolor{comment}{\ \ \ \ axes\ SetOrigin\ 0.\ 0.\ 0.}}
+\DoxyCodeLine{00089\ \textcolor{comment}{\ \ \ \ axes\ SetScaleFactor\ 10.}}
+\DoxyCodeLine{00090\ \textcolor{comment}{vtkPolyDataMapper\ axesMapper}}
+\DoxyCodeLine{00091\ \textcolor{comment}{\ \ \ \ axesMapper\ SetInput\ [axes\ GetOutput]}}
+\DoxyCodeLine{00092\ \textcolor{comment}{\ \ \ \ axesMapper\ ScalarVisibilityOff}}
+\DoxyCodeLine{00093\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00094\ \textcolor{comment}{vtkActor\ axesActor}}
+\DoxyCodeLine{00095\ \textcolor{comment}{\ \ \ \ axesActor\ SetMapper\ axesMapper}}
+\DoxyCodeLine{00096\ \textcolor{comment}{\ \ \ \ [axesActor\ GetProperty]\ SetDiffuseColor\ 0.1\ 0.1\ 0.1}}
+\DoxyCodeLine{00097\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00098\ \textcolor{comment}{vtkVectorText\ textX}}
+\DoxyCodeLine{00099\ \textcolor{comment}{\ \ \ \ textX\ SetText\ "{}X"{}}}
+\DoxyCodeLine{00100\ \textcolor{comment}{vtkPolyDataMapper\ textMapperX}}
+\DoxyCodeLine{00101\ \textcolor{comment}{\ \ \ \ textMapperX\ SetInput\ [textX\ GetOutput]}}
+\DoxyCodeLine{00102\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00103\ \textcolor{comment}{vtkFollower\ textActorX}}
+\DoxyCodeLine{00104\ \textcolor{comment}{\ \ \ \ textActorX\ SetMapper\ textMapperX}}
+\DoxyCodeLine{00105\ \textcolor{comment}{\ \ \ \ textActorX\ SetScale\ .5\ .5\ .5}}
+\DoxyCodeLine{00106\ \textcolor{comment}{\ \ \ \ textActorX\ AddPosition\ 11.\ 0.\ 0.}}
+\DoxyCodeLine{00107\ \textcolor{comment}{\ \ \ \ [textActorX\ GetProperty]\ SetDiffuseColor\ 0.1\ 0.1\ 0.1}}
+\DoxyCodeLine{00108\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00109\ \textcolor{comment}{vtkVectorText\ textY}}
+\DoxyCodeLine{00110\ \textcolor{comment}{\ \ \ \ textY\ SetText\ "{}Y"{}}}
+\DoxyCodeLine{00111\ \textcolor{comment}{vtkPolyDataMapper\ textMapperY}}
+\DoxyCodeLine{00112\ \textcolor{comment}{\ \ \ \ textMapperY\ SetInput\ [textY\ GetOutput]}}
+\DoxyCodeLine{00113\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00114\ \textcolor{comment}{vtkFollower\ textActorY}}
+\DoxyCodeLine{00115\ \textcolor{comment}{\ \ \ \ textActorY\ SetMapper\ textMapperY}}
+\DoxyCodeLine{00116\ \textcolor{comment}{\ \ \ \ textActorY\ SetScale\ .5\ .5\ .5\ }}
+\DoxyCodeLine{00117\ \textcolor{comment}{\ \ \ \ textActorY\ AddPosition\ 0.\ 11.\ 0}}
+\DoxyCodeLine{00118\ \textcolor{comment}{\ \ \ \ [textActorY\ GetProperty]\ SetDiffuseColor\ 0.1\ 0.1\ 0.1}}
+\DoxyCodeLine{00119\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00120\ \textcolor{comment}{vtkVectorText\ textZ}}
+\DoxyCodeLine{00121\ \textcolor{comment}{\ \ \ \ textZ\ SetText\ "{}Z"{}}}
+\DoxyCodeLine{00122\ \textcolor{comment}{vtkPolyDataMapper\ textMapperZ}}
+\DoxyCodeLine{00123\ \textcolor{comment}{\ \ \ \ textMapperZ\ SetInput\ [textZ\ GetOutput]}}
+\DoxyCodeLine{00124\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00125\ \textcolor{comment}{vtkFollower\ textActorZ}}
+\DoxyCodeLine{00126\ \textcolor{comment}{\ \ \ \ textActorZ\ SetMapper\ textMapperZ}}
+\DoxyCodeLine{00127\ \textcolor{comment}{\ \ \ \ textActorZ\ SetScale\ .5\ .5\ .5\ }}
+\DoxyCodeLine{00128\ \textcolor{comment}{\ \ \ \ textActorZ\ AddPosition\ 0.\ 0.\ 11.}}
+\DoxyCodeLine{00129\ \textcolor{comment}{\ \ \ \ [textActorZ\ GetProperty]\ SetDiffuseColor\ 0.1\ 0.1\ 0.1}}
+\DoxyCodeLine{00130\ \textcolor{comment}{}}
+\DoxyCodeLine{00131\ \textcolor{comment}{vtkRenderer\ ren1}}
+\DoxyCodeLine{00132\ \textcolor{comment}{vtkRenderWindow\ renWin}}
+\DoxyCodeLine{00133\ \textcolor{comment}{\ \ \ \ renWin\ AddRenderer\ ren1}}
+\DoxyCodeLine{00134\ \textcolor{comment}{vtkRenderWindowInteractor\ iren}}
+\DoxyCodeLine{00135\ \textcolor{comment}{\ \ \ \ iren\ SetRenderWindow\ renWin}}
+\DoxyCodeLine{00136\ \textcolor{comment}{}}
+\DoxyCodeLine{00137\ \textcolor{comment}{ren1\ AddActor\ modelActor}}
+\DoxyCodeLine{00138\ \textcolor{comment}{ren1\ AddActor\ gridActor}}
+\DoxyCodeLine{00139\ \textcolor{comment}{ren1\ AddActor\ uvActor}}
+\DoxyCodeLine{00140\ \textcolor{comment}{}}
+\DoxyCodeLine{00141\ \textcolor{comment}{ren1\ AddActor\ axesActor}}
+\DoxyCodeLine{00142\ \textcolor{comment}{ren1\ AddActor\ textActorX}}
+\DoxyCodeLine{00143\ \textcolor{comment}{ren1\ AddActor\ textActorY}}
+\DoxyCodeLine{00144\ \textcolor{comment}{ren1\ AddActor\ textActorZ}}
+\DoxyCodeLine{00145\ \textcolor{comment}{}}
+\DoxyCodeLine{00146\ \textcolor{comment}{ren1\ SetBackground\ 1\ 1\ 1}}
+\DoxyCodeLine{00147\ \textcolor{comment}{renWin\ SetSize\ 900\ 700}}
+\DoxyCodeLine{00148\ \textcolor{comment}{}}
+\DoxyCodeLine{00149\ \textcolor{comment}{iren\ Initialize}}
+\DoxyCodeLine{00150\ \textcolor{comment}{iren\ SetUserMethod\ \{wm\ deiconify\ .vtkInteract\}}}
+\DoxyCodeLine{00151\ \textcolor{comment}{}}
+\DoxyCodeLine{00152\ \textcolor{comment}{renWin\ SetFileName\ "{}element.ppm"{}}}
+\DoxyCodeLine{00153\ \textcolor{comment}{renWin\ SaveImageAsPPM}}
+\DoxyCodeLine{00154\ \textcolor{comment}{}}
+\DoxyCodeLine{00155\ \textcolor{comment}{\#\ prevent\ the\ tk\ window\ from\ showing\ up\ then\ start\ the\ event\ loop}}
+\DoxyCodeLine{00156\ \textcolor{comment}{wm\ withdraw\ .}}
+\DoxyCodeLine{00157\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00158\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00159\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00160\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d}{LinearTriangle3D}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_finite_element}{FiniteElement}}\ \{}
+\DoxyCodeLine{00161\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00162\ \ \ \ \ LinearTriangle3D();}
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00164\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_aedb176275d71119ec5253b625321608b}{Volume}}();}
+\DoxyCodeLine{00165\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a743e4220e8a43b2ecc61c42ad14d5791}{AspectRatio}}();}
+\DoxyCodeLine{00166\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a442a3b96f8359b42ed7d9351deb4d4e0}{InnerRadius}}();}
+\DoxyCodeLine{00167\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a1870dcbde8f7ef115956240be3632e51}{EdgeLengths}}(\ std::vector<\textcolor{keywordtype}{double}>\&\ vec\ );}
+\DoxyCodeLine{00168\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a6b419c20f544a1ff1d1a7943ad6f8396}{NodesOfSegment}}(\ uint32\_t\ segm\_id,\ std::vector<uint32\_t>\&\ snids\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00169\ }
+\DoxyCodeLine{00170\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a944a1435b382f7dd44fc6b8122015610}{std}}::\mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a944a1435b382f7dd44fc6b8122015610}{vector}}<\mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a944a1435b382f7dd44fc6b8122015610}{uint32\_t}}>\ \ \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a944a1435b382f7dd44fc6b8122015610}{NodesOfFace}}(\ uint32\_t\ face\_id\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00171\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_af3f7227da1d6868fb0b6d0908e4407b8}{std}}::\mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_af3f7227da1d6868fb0b6d0908e4407b8}{vector}}<\mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_af3f7227da1d6868fb0b6d0908e4407b8}{uint32\_t}}>\ \ \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_af3f7227da1d6868fb0b6d0908e4407b8}{CornerNodesOfFace}}(\ uint32\_t\ face\_id\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00172\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a018d54edd6dc5a40eca57ebc20bb25d7}{std}}::\mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a018d54edd6dc5a40eca57ebc20bb25d7}{vector}}<\mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a018d54edd6dc5a40eca57ebc20bb25d7}{uint32\_t}}>\ \ \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a018d54edd6dc5a40eca57ebc20bb25d7}{NodesConnectedTo}}(\ uint32\_t\ node\_id\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00173\ \ \ \ \ \textcolor{keyword}{virtual}\ uint32\_t\ \ \ \ \ \ \ \ \ CornerNodes()\ \textcolor{keyword}{const}\ \ \{\ \textcolor{keywordflow}{return}\ 3;\ \}}
+\DoxyCodeLine{00174\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a7fa2dcc2e063a32b175037721adeaa38}{CornerNodes}}(\ std::vector<uint32\_t>\&\ ids\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00175\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ UnitNormal(\ std::vector<\textcolor{keywordtype}{double}>\&\ unrml\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00176\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_ae392eaa6606fa4becb4bccb113940f44}{UnitNormalToFace}}(\ uint32\_t\ face,\ std::vector<\textcolor{keywordtype}{double}>\&\ unrml\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00177\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\_FEM\_TYPE}}\ \ \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a8306fafab98fe11af16795dd673d86aa}{ElementTypeOfFace}}(\ uint32\_t\ face\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00178\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\_FEM\_TYPE}}\ \ \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_ad6d380b38427648167de15f05a88b685}{ElementTypeOfSegment}}(\ \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_ad6d380b38427648167de15f05a88b685}{uint32\_t}}\ \textcolor{comment}{/*\ segment\ */}\ )\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ LINEAR\_BAR;\ \};}
+\DoxyCodeLine{00179\ }
+\DoxyCodeLine{00180\ \ \ \ \ \textcolor{comment}{///\ element\ interpolation\ functions\ at\ the\ point\ xzy}}
+\DoxyCodeLine{00181\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_ac3a06318940bff7b325843665eebec8b}{N}}(\ std::vector<\textcolor{keywordtype}{double}>\&\ N,\ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ xyz\ );}
+\DoxyCodeLine{00182\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a9dcc5734869993fdd19f8839da1cd745}{N\_AtBaryCenter}}(\ std::vector<\textcolor{keywordtype}{double}>\&\ N\ );}
+\DoxyCodeLine{00183\ }
+\DoxyCodeLine{00184\ \ \ \ \ \textcolor{comment}{///\ first\ derivatives\ of\ element\ interpolation\ functions}}
+\DoxyCodeLine{00185\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a4a3028362fc43fbdefc57a1892391f28}{dN}}(\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ );}
+\DoxyCodeLine{00186\ \ \ \ \ \textcolor{comment}{///\ note\ that\ the\ derivative\ is\ constant\ so\ that\ the\ point\ location\ will\ not\ be\ considerd}}
+\DoxyCodeLine{00187\ \ \ \ \ \textcolor{keyword}{virtual}\ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a46b917869e349473f991b0584bcf7d7f}{dN\_At}}(\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&,\ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ xyz\ );}
+\DoxyCodeLine{00188\ \ \ \ \ \textcolor{keyword}{virtual}\ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a11ee66bbf4277701f3702ee2a9e2f5c0}{dN\_AtBarycenter}}(\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ );}
+\DoxyCodeLine{00189\ }
+\DoxyCodeLine{00190\ \ \ \ \ \textcolor{comment}{///\ integral\ over\ interpolation\ functions}}
+\DoxyCodeLine{00191\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a71dcc8b7baf243235d8fea2da93a4e63}{IntegralNN}}(\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ M\ );}
+\DoxyCodeLine{00192\ }
+\DoxyCodeLine{00193\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a0b487e8ed898104b91cda9dc97ace3cb}{OutputNodeDataToVTK}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file\_name,}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ var\_name,}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ DATA\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00196\ }
+\DoxyCodeLine{00197\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_aac44d2564ecbf607adba60f6d029b4cf}{OutputToVTK}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file\_name\ );}
+\DoxyCodeLine{00198\ \};}
+\DoxyCodeLine{00199\ }
+\DoxyCodeLine{00200\ }
+\DoxyCodeLine{00201\ \}\ \textcolor{comment}{//\ end\ namespace\ csmp}}
+\DoxyCodeLine{00202\ }
+\DoxyCodeLine{00203\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

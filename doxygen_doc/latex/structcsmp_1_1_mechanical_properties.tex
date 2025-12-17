@@ -1,0 +1,91 @@
+\doxysection{csmp\+::Mechanical\+Properties Struct Reference}
+\hypertarget{structcsmp_1_1_mechanical_properties}{}\label{structcsmp_1_1_mechanical_properties}\index{csmp::MechanicalProperties@{csmp::MechanicalProperties}}
+
+
+{\ttfamily \#include $<$Mechanical\+Properties.\+h$>$}
+
+
+
+Collaboration diagram for csmp\+::Mechanical\+Properties\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=212pt]{structcsmp_1_1_mechanical_properties__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structcsmp_1_1_mechanical_properties_a2c51e4fa685aac81bc22ef81bbb68405}{Mechanical\+Properties}} ()
+\begin{DoxyCompactList}\small\item\em granite properties as default \end{DoxyCompactList}\item 
+\Hypertarget{structcsmp_1_1_mechanical_properties_a7d527a166ec61ea5dfddae38221b9546}\label{structcsmp_1_1_mechanical_properties_a7d527a166ec61ea5dfddae38221b9546} 
+{\bfseries Mechanical\+Properties} (const std\+::vector$<$ double $>$ \&properties)
+\begin{DoxyCompactList}\small\item\em from property values supplied as a vector \end{DoxyCompactList}\item 
+\Hypertarget{structcsmp_1_1_mechanical_properties_ad83bcdbde0525000da56225c7131c7da}\label{structcsmp_1_1_mechanical_properties_ad83bcdbde0525000da56225c7131c7da} 
+{\bfseries Mechanical\+Properties} (double E, double K, double nu, double tensile\+\_\+strength, double fric\+\_\+coeff)
+\begin{DoxyCompactList}\small\item\em partial initialisation \end{DoxyCompactList}\item 
+\Hypertarget{structcsmp_1_1_mechanical_properties_a244d325364a2696fa47a4cf181dece31}\label{structcsmp_1_1_mechanical_properties_a244d325364a2696fa47a4cf181dece31} 
+void {\bfseries Out} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structcsmp_1_1_mechanical_properties_a8d60095b812751fede002c973ebc9a86}\label{structcsmp_1_1_mechanical_properties_a8d60095b812751fede002c973ebc9a86} 
+double {\bfseries E\+\_\+}
+\begin{DoxyCompactList}\small\item\em Young\textquotesingle{}s modulus. \end{DoxyCompactList}\item 
+\Hypertarget{structcsmp_1_1_mechanical_properties_a6ce7e084d293502c647530c81758c5d3}\label{structcsmp_1_1_mechanical_properties_a6ce7e084d293502c647530c81758c5d3} 
+double {\bfseries B\+\_\+}
+\begin{DoxyCompactList}\small\item\em bulk modulus = compressibility of rock skeleton = K\+\_\+dry \end{DoxyCompactList}\item 
+\Hypertarget{structcsmp_1_1_mechanical_properties_aa6b07b53f262a9a01f29fc93b84ca8f3}\label{structcsmp_1_1_mechanical_properties_aa6b07b53f262a9a01f29fc93b84ca8f3} 
+double {\bfseries G\+\_\+}
+\begin{DoxyCompactList}\small\item\em shear modulus = modulus of rigidity \end{DoxyCompactList}\item 
+\Hypertarget{structcsmp_1_1_mechanical_properties_a18979820fa9278cb7eac7706704e250f}\label{structcsmp_1_1_mechanical_properties_a18979820fa9278cb7eac7706704e250f} 
+double {\bfseries alpha\+\_\+}
+\begin{DoxyCompactList}\small\item\em Biot coefficient alpha = 1 -\/ K\+\_\+dry/\+K\+\_\+grain. \end{DoxyCompactList}\item 
+\Hypertarget{structcsmp_1_1_mechanical_properties_a43985b8aa00f82d516409adbf189b5d9}\label{structcsmp_1_1_mechanical_properties_a43985b8aa00f82d516409adbf189b5d9} 
+double {\bfseries TS\+\_\+}
+\begin{DoxyCompactList}\small\item\em tensile strength \end{DoxyCompactList}\item 
+\Hypertarget{structcsmp_1_1_mechanical_properties_a68734fb2b8efaf757ac9ffc1ed53d3f5}\label{structcsmp_1_1_mechanical_properties_a68734fb2b8efaf757ac9ffc1ed53d3f5} 
+double {\bfseries UCS\+\_\+}
+\begin{DoxyCompactList}\small\item\em unconfined compressive strength \end{DoxyCompactList}\item 
+\Hypertarget{structcsmp_1_1_mechanical_properties_a6dfd02a87a6d575b35affdc3066a5926}\label{structcsmp_1_1_mechanical_properties_a6dfd02a87a6d575b35affdc3066a5926} 
+double {\bfseries pstar\+\_\+}
+\begin{DoxyCompactList}\small\item\em crushing pressure of the rock, see Fjaer et al. 08\textquotesingle{}, p. 68 \end{DoxyCompactList}\item 
+\Hypertarget{structcsmp_1_1_mechanical_properties_a02466d663d4b98028e2dfe5e57694a4d}\label{structcsmp_1_1_mechanical_properties_a02466d663d4b98028e2dfe5e57694a4d} 
+double {\bfseries mu\+\_\+}
+\begin{DoxyCompactList}\small\item\em friction coefficient \end{DoxyCompactList}\item 
+\Hypertarget{structcsmp_1_1_mechanical_properties_a0e16ee565eb7917500eebf223c38597b}\label{structcsmp_1_1_mechanical_properties_a0e16ee565eb7917500eebf223c38597b} 
+double {\bfseries nu\+\_\+}
+\begin{DoxyCompactList}\small\item\em Poisson\textquotesingle{}s ratio. \end{DoxyCompactList}\item 
+\Hypertarget{structcsmp_1_1_mechanical_properties_a23f0425b75a0dc654b1a229abca80cbe}\label{structcsmp_1_1_mechanical_properties_a23f0425b75a0dc654b1a229abca80cbe} 
+double {\bfseries C\+\_\+}
+\begin{DoxyCompactList}\small\item\em cohesive strength = inherent shear strength \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Regional properties shared by multiple elements, but have variations that can be calculated knowing other local properties discretized on the elements.
+
+\doxylink{classcsmp_1_1_example}{Example}\+: Young\textquotesingle{}s modulus can be calculated from the value stored here with corrections based on the deviation of the local porosity from that for which E was determined.
+
+Such calculations must be informed by petrophysical correlations and the results might have to be perturbed by some randon variable to reflect natural variations. 
+
+\label{doc-constructors}
+\Hypertarget{structcsmp_1_1_mechanical_properties_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{structcsmp_1_1_mechanical_properties_a2c51e4fa685aac81bc22ef81bbb68405}\index{csmp::MechanicalProperties@{csmp::MechanicalProperties}!MechanicalProperties@{MechanicalProperties}}
+\index{MechanicalProperties@{MechanicalProperties}!csmp::MechanicalProperties@{csmp::MechanicalProperties}}
+\doxysubsubsection{\texorpdfstring{MechanicalProperties()}{MechanicalProperties()}}
+{\footnotesize\ttfamily \label{structcsmp_1_1_mechanical_properties_a2c51e4fa685aac81bc22ef81bbb68405} 
+csmp\+::\+Mechanical\+Properties\+::\+Mechanical\+Properties (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+granite properties as default 
+
+granite 
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/thmc/mechanics/Mechanical\+Properties.\+h\item 
+source/modules/thmc/mechanics/Mechanical\+Properties.\+cpp\end{DoxyCompactItemize}

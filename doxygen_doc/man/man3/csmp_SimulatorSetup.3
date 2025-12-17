@@ -1,0 +1,310 @@
+.TH "csmp::SimulatorSetup< dim >" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::SimulatorSetup< dim >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <SimulatorSetup\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBSimulatorSetup\fP (std::string geometry_prefix, std::string project_name, std::vector< bool > options, bool verbose=false)"
+.br
+.ti -1c
+.RI "virtual \fB~SimulatorSetup\fP ()"
+.br
+.ti -1c
+.RI "void \fBLoadModel\fP ()"
+.br
+.ti -1c
+.RI "void \fBInitialize\fP (bool verbose=false)"
+.br
+.ti -1c
+.RI "virtual void \fBCreateParameterList\fP ()=0"
+.br
+.ti -1c
+.RI "virtual void \fBCheckOptions\fP ()=0"
+.br
+.ti -1c
+.RI "void \fBAddPreExistingModelVariables\fP ()"
+.br
+.RI "\fBSimulatorSetup<dim>::AddPreExistingModelVariables\fP this method adds pre-existing model variables to the parameter list of the \fBSimulatorSetup\fP\&. Typically, these "pre-existing" variables are loaded from the variables file when creating the model\&. The parameter list is sorted following this addition\&. Loading pre-existing variables will replace any existing parameters with the same name in the parameter list\&. "
+.ti -1c
+.RI "std::vector< bool > & \fBGetOptions\fP ()"
+.br
+.ti -1c
+.RI "virtual std::vector< bool > \fBLoadDefaultOptions\fP ()"
+.br
+.ti -1c
+.RI "bool \fBCheckVariables\fP ()"
+.br
+.ti -1c
+.RI "void \fBCreateAllProperties\fP ()"
+.br
+.ti -1c
+.RI "void \fBCreatePreviousProperties\fP ()"
+.br
+.ti -1c
+.RI "bool \fBCheckProperties\fP ()"
+.br
+.ti -1c
+.RI "void \fBCheckInputRanges\fP ()"
+.br
+.ti -1c
+.RI "void \fBCheckModel\fP ()"
+.br
+.ti -1c
+.RI "void \fBCheckModelMinMaxCoordinates\fP ()"
+.br
+.ti -1c
+.RI "void \fBOutputSampleVariablesFile\fP (std::string filename='SimulatorSetupSampleVariables\&.txt')"
+.br
+.ti -1c
+.RI "void \fBOutputSampleConfigurationFile\fP ()"
+.br
+.ti -1c
+.RI "void \fBOutputSampleRegionsFile\fP ()"
+.br
+.ti -1c
+.RI "void \fBOutputParameterListCode\fP ()"
+.br
+.ti -1c
+.RI "bool \fBReadOptionsFromRegionsFile\fP ()"
+.br
+.ti -1c
+.RI "void \fBLoadBoundaryAndWellNames\fP ()"
+.br
+.ti -1c
+.RI "void \fBLoadWells\fP ()"
+.br
+.ti -1c
+.RI "void \fBLoadMonitor\fP ()"
+.br
+.ti -1c
+.RI "void \fBLoadControlSimulatorSetupParameters\fP ()"
+.br
+.ti -1c
+.RI "void \fBModelSetupFromConfigFile\fP ()"
+.br
+.ti -1c
+.RI "\fBComputationalSettings\fP & \fBRunSettings\fP ()"
+.br
+.ti -1c
+.RI "void \fBOutputParameterListToScreen\fP ()"
+.br
+.ti -1c
+.RI "void \fBSetupWellRatesBasedOnRateVariables\fP ()"
+.br
+.ti -1c
+.RI "void \fBTriggerRestart\fP ()"
+.br
+.ti -1c
+.RI "bool \fBYesOrNo\fP ()"
+.br
+.ti -1c
+.RI "bool \fBInteractive\fP ()"
+.br
+.ti -1c
+.RI "bool \fBRestart\fP ()"
+.br
+.ti -1c
+.RI "void \fBRestart\fP (bool restart)"
+.br
+.ti -1c
+.RI "\fBModel\fP< dim > * \fBGetModel\fP ()"
+.br
+.ti -1c
+.RI "bool \fBVerbose\fP ()"
+.br
+.ti -1c
+.RI "void \fBVerbose\fP (bool choice)"
+.br
+.ti -1c
+.RI "std::string \fBGetGeometryPrefix\fP ()"
+.br
+.ti -1c
+.RI "std::string \fBGetProjectName\fP ()"
+.br
+.ti -1c
+.RI "\fBComputationalSettings\fP & \fBGetRunSettings\fP ()"
+.br
+.ti -1c
+.RI "std::vector< std::string > & \fBGetWells\fP ()"
+.br
+.ti -1c
+.RI "std::map< std::string, std::pair< std::string, std::string > > & \fBGetWellRateVars\fP ()"
+.br
+.ti -1c
+.RI "std::vector< std::string > & \fBGetTopBoundaries\fP ()"
+.br
+.ti -1c
+.RI "std::vector< std::string > & \fBGetLateralBoundaries\fP ()"
+.br
+.ti -1c
+.RI "std::vector< std::string > & \fBGetBottomBoundaries\fP ()"
+.br
+.ti -1c
+.RI "std::list< std::string > & \fBGetVTUPropList\fP ()"
+.br
+.ti -1c
+.RI "std::list< std::string > & \fBGetRegOutList\fP ()"
+.br
+.ti -1c
+.RI "std::list< std::string > & \fBGetMonitoredPropList\fP ()"
+.br
+.ti -1c
+.RI "std::list< std::string > & \fBGetMonitoredRegionsList\fP ()"
+.br
+.ti -1c
+.RI "std::list< std::string > & \fBGetMonitoredRangePropList\fP ()"
+.br
+.ti -1c
+.RI "std::list< std::string > & \fBGetMonitoredIntegralPropList\fP ()"
+.br
+.ti -1c
+.RI "std::list< std::string > & \fBGetMonitoredValuePropList\fP ()"
+.br
+.ti -1c
+.RI "std::list< std::string > & \fBGetMonitoredRegionIntegralList\fP ()"
+.br
+.ti -1c
+.RI "std::list< std::string > & \fBGetMonitoredRegionRangeList\fP ()"
+.br
+.ti -1c
+.RI "std::list< std::string > & \fBGetMonitoredRegionDimensionList\fP ()"
+.br
+.ti -1c
+.RI "std::list< std::string > & \fBGetMonitoredRegionPerimeterList\fP ()"
+.br
+.ti -1c
+.RI "std::list< \fBSimulatorSetupParameter\fP > & \fBGetParameterList\fP ()"
+.br
+.ti -1c
+.RI "\fBSimulatorMonitor\fP< dim > * \fBGetSimulatorMonitor\fP ()"
+.br
+.ti -1c
+.RI "void \fBInsertNewMonitorDataValues\fP (double time)"
+.br
+.ti -1c
+.RI "void \fBAdd_DESCompatible_Integrator\fP (std::string name)"
+.br
+.ti -1c
+.RI "void \fBAddLegacy_FE_Integrator\fP (std::string name)"
+.br
+.ti -1c
+.RI "void \fBDeleteLegacy_FE_Integrator\fP (std::string name)"
+.br
+.ti -1c
+.RI "void \fBAddLegacy_FEFV_Integrator\fP (std::string name, std::vector< std::string > variables)"
+.br
+.RI "J\&.E\&.M\&. Added because we need to remove Legacy FE integrators if we switch variable flags to PLAIN\&. "
+.ti -1c
+.RI "\fBPropertyDatabase\fP< dim > & \fBDatabase\fP ()"
+.br
+.ti -1c
+.RI "std::set< std::string > & \fBGetInternalVars\fP ()"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::list< \fBSimulatorSetupParameter\fP > \fBparameter_list_\fP"
+.br
+.RI "add extra functionality for laternative solve "
+.ti -1c
+.RI "bool \fBcreated_lists_\fP"
+.br
+.ti -1c
+.RI "bool \fBinteractive_\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim>
+.br
+class csmp::SimulatorSetup< dim >"Relates to the geothermal simulator application
+
+.PP
+\fBTodo\fP
+.RS 4
+documentation is needed (probably Julian Mindel)
+.RE
+.PP
+
+.PP
+\fBTodo\fP
+.RS 4
+SKM move to applications, geothermal energy storage simulator
+.RE
+.PP
+
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<uint32_t dim> \fBcsmp::SimulatorSetup\fP< dim >::~\fBSimulatorSetup\fP ()\fR [virtual]\fP"
+add extra functionality for alternative solver if needed
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim> void \fBcsmp::SimulatorSetup\fP< dim >::Add_DESCompatible_Integrator (std::string name)"
+
+.PP
+\fBTodo\fP
+.RS 4
+in principle, integrators will be executed in the sequence they were created\&. This could be done by checking the order of the SAMG_Solvers, to avoid creating wrappers for \fBPDE_Integrator\fP and NCFVT classes\&. This seems easier said than done, as many things need to happen between solver calls\&. Perhaps it is better to allow the usage of names are keys and call the correct one when desired\&. This is left to the user\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim> void \fBcsmp::SimulatorSetup\fP< dim >::LoadMonitor ()"
+not active for now\&. Until I get time for testing and implementing control file option\&. Julian 22-08-2014
+
+.PP
+not active for now\&. Until I get time for testing and implementing control file option\&. Julian 22-08-2014
+.SS "template<uint32_t dim> void \fBcsmp::SimulatorSetup\fP< dim >::OutputParameterListCode ()"
+Note: if properties in model match those in parameter list, then keep the original list version\&. (Julian 1-07-2014)
+.SS "template<uint32_t dim> void \fBcsmp::SimulatorSetup\fP< dim >::OutputSampleVariablesFile (std::string filename = \fR'SimulatorSetupSampleVariables\&.txt'\fP)"
+Note: if properties in model match those in parameter list, then keep the original list version\&. (Julian 1-07-2014)
+.SS "template<uint32_t dim> bool \fBcsmp::SimulatorSetup\fP< dim >::ReadOptionsFromRegionsFile ()"
+
+.PP
+\fBTodo\fP
+.RS 4
+flag if eof is reached\&. Perhaps throw an exception\&. Some region should be in there! 
+.RE
+.PP
+
+.SS "template<uint32_t dim> void \fBcsmp::SimulatorSetup\fP< dim >::SetupWellRatesBasedOnRateVariables ()"
+
+.PP
+\fBTodo\fP
+.RS 4
+This should probably use a map of well names vs which field is supposed to be used to read in the rates, as well as which phase, if other than single phase flow is intended\&. 
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+first thing to do is check that all input information froms from fields defined on the region\&. 
+.RE
+.PP
+
+.PP
+\fBTodo\fP
+.RS 4
+this needs to be constructed better\&. Better logic for other users to create their own simulators\&. 
+.RE
+.PP
+
+.PP
+Special Note: Here, we do not divide by the thickness (to get [m^3/(m^3*s)]) because the \fBPDE_Integrator\fP does not multiply by any thickness when performing integrals over line elements\&. If it did, then we would be cancelling our division by thickness here, with the multiplication by thickness when we integrate the fluid volume source with FEM at the \fBPDE_Integrator\fP\&. As a result, we do not need to divide by thickness\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

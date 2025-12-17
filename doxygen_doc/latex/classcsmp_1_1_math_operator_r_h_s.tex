@@ -1,0 +1,406 @@
+\doxysection{csmp\+::Math\+Operator\+RHS\texorpdfstring{$<$}{<} dim, CELL \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_math_operator_r_h_s}{}\label{classcsmp_1_1_math_operator_r_h_s}\index{csmp::MathOperatorRHS$<$ dim, CELL $>$@{csmp::MathOperatorRHS$<$ dim, CELL $>$}}
+
+
+\doxylink{classcsmp_1_1_base}{Base} class for FE or FV integrals accumulated into righthand vector.  
+
+
+
+
+{\ttfamily \#include $<$Math\+Operator\+RHS.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Math\+Operator\+RHS\texorpdfstring{$<$}{<} dim, CELL \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_math_operator_r_h_s__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Math\+Operator\+RHS\texorpdfstring{$<$}{<} dim, CELL \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_math_operator_r_h_s__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_a2524c3fe7d10e3162916975c7f94bd58}\label{classcsmp_1_1_math_operator_r_h_s_a2524c3fe7d10e3162916975c7f94bd58} 
+{\bfseries Math\+Operator\+RHS} (const \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s}{Math\+Operator\+RHS}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_a6fc668671f2620196f7cb8305c004958}\label{classcsmp_1_1_math_operator_r_h_s_a6fc668671f2620196f7cb8305c004958} 
+{\bfseries Math\+Operator\+RHS} (const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&, const char \texorpdfstring{$\ast$}{*}test)
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_ad48adc062ee577ba556622e12dce7c50}\label{classcsmp_1_1_math_operator_r_h_s_ad48adc062ee577ba556622e12dce7c50} 
+{\bfseries Math\+Operator\+RHS} (const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&, const char \texorpdfstring{$\ast$}{*}oper, const char \texorpdfstring{$\ast$}{*}test)
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_a8daf2f4ba7583b116d5c496d81e4cbc0}\label{classcsmp_1_1_math_operator_r_h_s_a8daf2f4ba7583b116d5c496d81e4cbc0} 
+\mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s}{Math\+Operator\+RHS}} \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s}{Math\+Operator\+RHS}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_aa700d71b384204010a5514f046b30daf}\label{classcsmp_1_1_math_operator_r_h_s_aa700d71b384204010a5514f046b30daf} 
+std\+::string {\bfseries Name} () const
+\begin{DoxyCompactList}\small\item\em \doxylink{classcsmp_1_1_operand}{Operand} Functions. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_aca9186dd58d5960a3bc5366f79e0e7ad}\label{classcsmp_1_1_math_operator_r_h_s_aca9186dd58d5960a3bc5366f79e0e7ad} 
+void {\bfseries Name} (const char \texorpdfstring{$\ast$}{*}, const char \texorpdfstring{$\ast$}{*}topname)
+\begin{DoxyCompactList}\small\item\em =================================== \doxylink{classcsmp_1_1_operand}{Operand} Functions ======================================================================== \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_a63376acd0d0272f0b9148654325e5fb0}\label{classcsmp_1_1_math_operator_r_h_s_a63376acd0d0272f0b9148654325e5fb0} 
+void {\bfseries Name} (const char \texorpdfstring{$\ast$}{*}, const char \texorpdfstring{$\ast$}{*}opname, const char \texorpdfstring{$\ast$}{*}topname)
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_a7b331a8a17ea8dee88ebb05f50233649}\label{classcsmp_1_1_math_operator_r_h_s_a7b331a8a17ea8dee88ebb05f50233649} 
+virtual void {\bfseries Out} () const
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_ac839f56b47b3732ae505b79843841401}\label{classcsmp_1_1_math_operator_r_h_s_ac839f56b47b3732ae505b79843841401} 
+const \mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}} \& {\bfseries Material\+Operand} () const
+\begin{DoxyCompactList}\small\item\em op \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_a52d354d9bbfc6fd037f70b401cfc2289}\label{classcsmp_1_1_math_operator_r_h_s_a52d354d9bbfc6fd037f70b401cfc2289} 
+const \mbox{\hyperlink{structcsmp_1_1_index}{Index}} \& {\bfseries Material\+Operand\+Key} () const
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_ad9193c44bf7efa489009fce52afd3d0d}\label{classcsmp_1_1_math_operator_r_h_s_ad9193c44bf7efa489009fce52afd3d0d} 
+std\+::string {\bfseries Material\+Operand\+Name} () const
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_af230ea6195bab299ee9e77f217f0d0bc}\label{classcsmp_1_1_math_operator_r_h_s_af230ea6195bab299ee9e77f217f0d0bc} 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}} {\bfseries Material\+Operand\+Type} () const
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_a706cf0840efb0d27a828c5d018335ba9}\label{classcsmp_1_1_math_operator_r_h_s_a706cf0840efb0d27a828c5d018335ba9} 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Material\+Operand\+Placement} () const
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_a00b31b95962f4495178242201c92cfcd}\label{classcsmp_1_1_math_operator_r_h_s_a00b31b95962f4495178242201c92cfcd} 
+uint32\+\_\+t {\bfseries Material\+Operand\+Data\+Depth} () const
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_ac571c4c7d3f98ecd2c34d1cd6d75fa36}\label{classcsmp_1_1_math_operator_r_h_s_ac571c4c7d3f98ecd2c34d1cd6d75fa36} 
+const \mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}} \& {\bfseries Basic\+Operand} () const
+\begin{DoxyCompactList}\small\item\em bop \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_aee095a41b5ac8a32ee6dc703a4314b50}\label{classcsmp_1_1_math_operator_r_h_s_aee095a41b5ac8a32ee6dc703a4314b50} 
+const \mbox{\hyperlink{structcsmp_1_1_index}{Index}} \& {\bfseries Basic\+Operand\+Key} () const
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_a41c990f110ad162091910ee8bcbda6cf}\label{classcsmp_1_1_math_operator_r_h_s_a41c990f110ad162091910ee8bcbda6cf} 
+std\+::string {\bfseries Basic\+Operand\+Name} () const
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_a22231a19221e8cd8651167a4e2f0f483}\label{classcsmp_1_1_math_operator_r_h_s_a22231a19221e8cd8651167a4e2f0f483} 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}} {\bfseries Basic\+Operand\+Type} () const
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_ab7c8384f6e49d9d81fe4f7ff41a18e41}\label{classcsmp_1_1_math_operator_r_h_s_ab7c8384f6e49d9d81fe4f7ff41a18e41} 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Basic\+Operand\+Placement} () const
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_a4d75aa984bee30ef4b78b59f9892bb15}\label{classcsmp_1_1_math_operator_r_h_s_a4d75aa984bee30ef4b78b59f9892bb15} 
+uint32\+\_\+t {\bfseries Basic\+Operand\+Data\+Depth} () const
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_a6c0a7d5e5796aa4e028f4479a808cfb0}\label{classcsmp_1_1_math_operator_r_h_s_a6c0a7d5e5796aa4e028f4479a808cfb0} 
+size\+\_\+t {\bfseries Basic\+Operand\+Offset} () const
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_ac7f075729b547f586546be54d1df5a04}\label{classcsmp_1_1_math_operator_r_h_s_ac7f075729b547f586546be54d1df5a04} 
+void {\bfseries Basic\+Operand\+Offset} (size\+\_\+t)
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_a22dc4521ebc649242eacb41f1ab8e260}\label{classcsmp_1_1_math_operator_r_h_s_a22dc4521ebc649242eacb41f1ab8e260} 
+const \mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}} \& {\bfseries Test\+Operand} () const
+\begin{DoxyCompactList}\small\item\em top \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_a8e21ef3752c7956c83dd55a033d66353}\label{classcsmp_1_1_math_operator_r_h_s_a8e21ef3752c7956c83dd55a033d66353} 
+const \mbox{\hyperlink{structcsmp_1_1_index}{Index}} \& {\bfseries Test\+Operand\+Key} () const
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_af7842dfe6f55c020253018e1371450f0}\label{classcsmp_1_1_math_operator_r_h_s_af7842dfe6f55c020253018e1371450f0} 
+std\+::string {\bfseries Test\+Operand\+Name} () const
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_a9ab51c99368137c5cb79bcf6e7e01296}\label{classcsmp_1_1_math_operator_r_h_s_a9ab51c99368137c5cb79bcf6e7e01296} 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}} {\bfseries Test\+Operand\+Type} () const
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_a73fb944e6a4f1aeb6566867eb4894b7b}\label{classcsmp_1_1_math_operator_r_h_s_a73fb944e6a4f1aeb6566867eb4894b7b} 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Test\+Operand\+Placement} () const
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_af4c6867b7a59a8dbd0db7bad48cd2c3d}\label{classcsmp_1_1_math_operator_r_h_s_af4c6867b7a59a8dbd0db7bad48cd2c3d} 
+uint32\+\_\+t {\bfseries Test\+Operand\+Data\+Depth} () const
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_ae6df026b0ecf14dd9a4cfa9a08e792b2}\label{classcsmp_1_1_math_operator_r_h_s_ae6df026b0ecf14dd9a4cfa9a08e792b2} 
+size\+\_\+t {\bfseries Test\+Operand\+Offset} () const
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_a58f5927e3903755bd5f520257bc79632}\label{classcsmp_1_1_math_operator_r_h_s_a58f5927e3903755bd5f520257bc79632} 
+void {\bfseries Test\+Operand\+Offset} (size\+\_\+t)
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s_af950a8b9a3d4ea2229f60d27ab6a69c2}{Add}} () const
+\begin{DoxyCompactList}\small\item\em Accumulation Process Settings. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_a23b92f3ebeee4a6e1673706f740566b4}\label{classcsmp_1_1_math_operator_r_h_s_a23b92f3ebeee4a6e1673706f740566b4} 
+bool {\bfseries Subtract} () const
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_abdc618c15c875eef18858655fb345090}\label{classcsmp_1_1_math_operator_r_h_s_abdc618c15c875eef18858655fb345090} 
+bool {\bfseries Add\+Later} () const
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_a04a0443ea4ccd22e563baa9b49a2a813}\label{classcsmp_1_1_math_operator_r_h_s_a04a0443ea4ccd22e563baa9b49a2a813} 
+bool {\bfseries Subtract\+Later} () const
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_a4ce7b610b2ed3470e4d159846d03ddeb}\label{classcsmp_1_1_math_operator_r_h_s_a4ce7b610b2ed3470e4d159846d03ddeb} 
+bool {\bfseries Multiply} () const
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_a91445273130ae00f5188a9991dbffaa6}\label{classcsmp_1_1_math_operator_r_h_s_a91445273130ae00f5188a9991dbffaa6} 
+bool {\bfseries Lumped\+Formulation} () const
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_a51d50bbbd4f27aca48243f24f7fb92e0}\label{classcsmp_1_1_math_operator_r_h_s_a51d50bbbd4f27aca48243f24f7fb92e0} 
+uint32\+\_\+t {\bfseries Application\+Cycle} () const
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_a14fff508439c520f875dfd77d117489f}\label{classcsmp_1_1_math_operator_r_h_s_a14fff508439c520f875dfd77d117489f} 
+uint32\+\_\+t {\bfseries Application\+Cycles} () const
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_a5cb6c0bce5427dbb968492b49021b138}\label{classcsmp_1_1_math_operator_r_h_s_a5cb6c0bce5427dbb968492b49021b138} 
+double {\bfseries Multiply\+By} () const
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_a2fae8dab461a98afdd5bb376ffab59d0}\label{classcsmp_1_1_math_operator_r_h_s_a2fae8dab461a98afdd5bb376ffab59d0} 
+bool {\bfseries Multiply\+With\+Time\+Increment} () const
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_aa6bb4a6c6a96c3e3951433004d0de15b}\label{classcsmp_1_1_math_operator_r_h_s_aa6bb4a6c6a96c3e3951433004d0de15b} 
+bool {\bfseries Divide\+By\+Time\+Increment} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s_a95426d12ae7f3a6eb1bf10c036505e7b}{Add\+Accumulate}} ()
+\begin{DoxyCompactList}\small\item\em Set Flags and Properties. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_a44292090da69cef35e58f612bf9a82e9}\label{classcsmp_1_1_math_operator_r_h_s_a44292090da69cef35e58f612bf9a82e9} 
+void {\bfseries Subtract\+Accumulate} ()
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_a7d3039e3ef140aabc09b14fd9c0f52a6}\label{classcsmp_1_1_math_operator_r_h_s_a7d3039e3ef140aabc09b14fd9c0f52a6} 
+void {\bfseries Add\+Accumulate\+Later} ()
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_aab0a4b47807bdafb917c4683aac6d270}\label{classcsmp_1_1_math_operator_r_h_s_aab0a4b47807bdafb917c4683aac6d270} 
+void {\bfseries Subtract\+Accumulate\+Later} ()
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_aae6e621f2b1ad8b8189282007a87ad58}\label{classcsmp_1_1_math_operator_r_h_s_aae6e621f2b1ad8b8189282007a87ad58} 
+void {\bfseries Multiply\+Accumulate} ()
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_a9d60e14ce439c974150a57c3cfe13ce8}\label{classcsmp_1_1_math_operator_r_h_s_a9d60e14ce439c974150a57c3cfe13ce8} 
+void {\bfseries Lumped\+Formulation} (bool)
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_adbfd8b054a999e664e5dff2fdb1e7670}\label{classcsmp_1_1_math_operator_r_h_s_adbfd8b054a999e664e5dff2fdb1e7670} 
+void {\bfseries Application\+Cycle} (uint32\+\_\+t)
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_aba8162a585bc19b9ff4d83ebf250a4a2}\label{classcsmp_1_1_math_operator_r_h_s_aba8162a585bc19b9ff4d83ebf250a4a2} 
+void {\bfseries Application\+Cycles} (uint32\+\_\+t)
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_ae92ff4dc9bc35dfffbff8eb202901e87}\label{classcsmp_1_1_math_operator_r_h_s_ae92ff4dc9bc35dfffbff8eb202901e87} 
+void {\bfseries Multiply\+By} (double integral\+\_\+mult\+\_\+factor)
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_abb6e3bad228a21bd49c0c00b2a158d94}\label{classcsmp_1_1_math_operator_r_h_s_abb6e3bad228a21bd49c0c00b2a158d94} 
+void {\bfseries Multiply\+With\+Time\+Increment} (bool multiply)
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_a27f61912ffda5dac4c386a3d3fc27b2e}\label{classcsmp_1_1_math_operator_r_h_s_a27f61912ffda5dac4c386a3d3fc27b2e} 
+void {\bfseries Divide\+By\+Time\+Increment} (bool divide)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s_a4ac9c3b2f60149cd6cc4a35681b29e0d}{Property\+At\+Integration\+Point}} (const CELL$<$ dim $>$ \&, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, uint32\+\_\+t ip, \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&)
+\begin{DoxyCompactList}\small\item\em interpolation of property if isoparametric elements are used \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s_ad5614fa4de569146a684d28635eb9ff7}{Get\+Operands}} (const CELL$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em getting data from the \doxylink{classcsmp_1_1_element}{Element}, \doxylink{classcsmp_1_1_face}{Face}, \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s_ab77b3c1f4f078290ec9330a916482ed7}{Compute\+Contribution}} (const CELL$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em integration performed on \doxylink{classcsmp_1_1_element}{Element}, \doxylink{classcsmp_1_1_face}{Face}, \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_ad1c90df52dbb10f0c9eefd445758fc02}\label{classcsmp_1_1_math_operator_r_h_s_ad1c90df52dbb10f0c9eefd445758fc02} 
+virtual void {\bfseries Write\+Operands} (CELL$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em writing data to the \doxylink{classcsmp_1_1_element}{Element}, \doxylink{classcsmp_1_1_face}{Face}, \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s_a5a6138f5b4e123f88a9115e1d9315871}{Multiply\+With\+Time\+Factor}} (double dt)
+\begin{DoxyCompactList}\small\item\em if so specified multiply with time increment \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s_ad9c03f1d3138a22e0bc40778d0032f6a}{Assign\+To\+Global}} (const CELL$<$ dim $>$ \&, std\+::vector$<$ double $>$ \&rhs)
+\begin{DoxyCompactList}\small\item\em assigment to the right hand side global vector (after everything was calculated ) \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s_a9470acdb9a64217b4ae019cc7cd5b66f}{Assign\+To\+Global}} (const CELL$<$ dim $>$ \&, std\+::vector$<$ double $>$ \&rhs, const std\+::vector$<$ size\+\_\+t $>$ \&)
+\begin{DoxyCompactList}\small\item\em used by PDE\+\_\+\+Integrator\+UoM for assembly of a pre-\/eliminated solution matrix and RH vector (scalar versions, Luat Khoa Tran) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_ae5355392c670d7c81d9822a0efbf767e}\label{classcsmp_1_1_math_operator_r_h_s_ae5355392c670d7c81d9822a0efbf767e} 
+virtual \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s}{Math\+Operator\+RHS}}$<$ dim, CELL $>$ \texorpdfstring{$\ast$}{*} {\bfseries clone} () const =0
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_a0bf5eca393d0470696ddc1f68c49c33a}\label{classcsmp_1_1_math_operator_r_h_s_a0bf5eca393d0470696ddc1f68c49c33a} 
+std\+::string {\bfseries name\+\_\+}
+\begin{DoxyCompactList}\small\item\em name of operator \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_aeebb771d18fad508b89bab6ba3fdc9e8}\label{classcsmp_1_1_math_operator_r_h_s_aeebb771d18fad508b89bab6ba3fdc9e8} 
+\mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}} {\bfseries op}
+\begin{DoxyCompactList}\small\item\em material property operand \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_aea6bcf22aa25daa01f53b49cd16bca24}\label{classcsmp_1_1_math_operator_r_h_s_aea6bcf22aa25daa01f53b49cd16bca24} 
+std\+::pair$<$ \mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}}, size\+\_\+t $>$ {\bfseries top}
+\begin{DoxyCompactList}\small\item\em test function operand \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_a4075835995bb9932c4d7c257547e66de}\label{classcsmp_1_1_math_operator_r_h_s_a4075835995bb9932c4d7c257547e66de} 
+std\+::vector$<$ double $>$ {\bfseries RHS}
+\begin{DoxyCompactList}\small\item\em solution \doxylink{classvector}{vector$<$double$>$} to be accumulated \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_aad7e46e90d59322926ae92e98198a706}\label{classcsmp_1_1_math_operator_r_h_s_aad7e46e90d59322926ae92e98198a706} 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ $>$ {\bfseries MTRL}
+\begin{DoxyCompactList}\small\item\em material property matrix(es) needed for PDE operand \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_ab1b5fad18c56f4849f9ded0940711ad2}\label{classcsmp_1_1_math_operator_r_h_s_ab1b5fad18c56f4849f9ded0940711ad2} 
+\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ {\bfseries DERIV}
+\begin{DoxyCompactList}\small\item\em shape function derivative matrix \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_ad789282bfcaf0300e8912174871f5e6f}\label{classcsmp_1_1_math_operator_r_h_s_ad789282bfcaf0300e8912174871f5e6f} 
+std\+::vector$<$ double $>$ {\bfseries IPOL}
+\begin{DoxyCompactList}\small\item\em shape function vector \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_a7b85528afe467c2ef91668ff0dcab968}\label{classcsmp_1_1_math_operator_r_h_s_a7b85528afe467c2ef91668ff0dcab968} 
+double {\bfseries factor\+\_\+}
+\begin{DoxyCompactList}\small\item\em constant factor \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_abeae2ec15ba22135c4c5b3098b6b3537}\label{classcsmp_1_1_math_operator_r_h_s_abeae2ec15ba22135c4c5b3098b6b3537} 
+bool {\bfseries add\+\_\+accumulate\+\_\+}
+\begin{DoxyCompactList}\small\item\em specifies accumulation procedure \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_af76a808d235d684bcc507ea0a9bdac18}\label{classcsmp_1_1_math_operator_r_h_s_af76a808d235d684bcc507ea0a9bdac18} 
+bool {\bfseries subtract\+\_\+accumulate\+\_\+}
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_a0ca505f93c401b561990e652ddeba037}\label{classcsmp_1_1_math_operator_r_h_s_a0ca505f93c401b561990e652ddeba037} 
+bool {\bfseries add\+\_\+accumulate\+\_\+later\+\_\+}
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_ae05aed4df946d473651b5ad4873e7786}\label{classcsmp_1_1_math_operator_r_h_s_ae05aed4df946d473651b5ad4873e7786} 
+bool {\bfseries subtract\+\_\+accumulate\+\_\+later\+\_\+}
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_a2cf305524d12d1bf73302bc00cab0503}\label{classcsmp_1_1_math_operator_r_h_s_a2cf305524d12d1bf73302bc00cab0503} 
+bool {\bfseries multiply\+\_\+accumulate\+\_\+}
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_a3d1907ed1b36a73c7591653b0965323e}\label{classcsmp_1_1_math_operator_r_h_s_a3d1907ed1b36a73c7591653b0965323e} 
+bool {\bfseries lump\+\_\+matrices\+\_\+}
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_a8158abc37b41cdd02469b9d18fb83337}\label{classcsmp_1_1_math_operator_r_h_s_a8158abc37b41cdd02469b9d18fb83337} 
+uint32\+\_\+t {\bfseries application\+\_\+cycles\+\_\+}
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_a5b96da9a81a4d11ac04946c44c89e72a}\label{classcsmp_1_1_math_operator_r_h_s_a5b96da9a81a4d11ac04946c44c89e72a} 
+uint32\+\_\+t {\bfseries application\+\_\+cycle\+\_\+}
+\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_a4bc59dd56b98bb076deada3e1b222627}\label{classcsmp_1_1_math_operator_r_h_s_a4bc59dd56b98bb076deada3e1b222627} 
+bool {\bfseries time\+\_\+multiply\+\_\+}
+\begin{DoxyCompactList}\small\item\em time-\/dependent multipliers \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_a666bb360540f0ed1fad82c821109fc91}\label{classcsmp_1_1_math_operator_r_h_s_a666bb360540f0ed1fad82c821109fc91} 
+bool {\bfseries time\+\_\+divide\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL = Element$>$\newline
+class csmp\+::\+Math\+Operator\+RHS$<$ dim, CELL $>$}
+\doxylink{classcsmp_1_1_base}{Base} class for FE or FV integrals accumulated into righthand vector. 
+
+\begin{DoxyAuthor}{Author}
+S.\+K. Matthai 
+
+Stephen G. Roberts 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+1999
+\end{DoxyDate}
+\hypertarget{compare_floats_8h_motivation}{}\doxysubsection{\texorpdfstring{Motivation}{Motivation}}\label{compare_floats_8h_motivation}
+To be able to write PDE equations in finite element form, using the CSMP Algorithm class.
+
+RULES for using righthand Mathoperators
+
+
+\begin{DoxyEnumerate}
+\item supplied data\+:
+\begin{DoxyItemize}
+\item Property vectors contain data from\+: nodes, integration points, or elements
+\item node and integration point data are supplied together in a numbering as specified for the particular element type.
+\item if a node or a integration point has multiple degrees of freedom, then the node property \doxylink{classvector}{vector$<$double$>$} will be of dimension (nds+ips) \texorpdfstring{$\ast$}{*} dof in this case, the entries will be \textquotesingle{}dof\textquotesingle{} per node or constraint point in the order as given above. 
+\end{DoxyItemize}
+\end{DoxyEnumerate}
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_af950a8b9a3d4ea2229f60d27ab6a69c2}\index{csmp::MathOperatorRHS$<$ dim, CELL $>$@{csmp::MathOperatorRHS$<$ dim, CELL $>$}!Add@{Add}}
+\index{Add@{Add}!csmp::MathOperatorRHS$<$ dim, CELL $>$@{csmp::MathOperatorRHS$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{Add()}{Add()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_math_operator_r_h_s_af950a8b9a3d4ea2229f60d27ab6a69c2} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+bool \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s}{csmp\+::\+Math\+Operator\+RHS}}$<$ dim, CELL $>$\+::\+Add (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Accumulation Process Settings. 
+
+Get Flags and Properties \Hypertarget{classcsmp_1_1_math_operator_r_h_s_a95426d12ae7f3a6eb1bf10c036505e7b}\index{csmp::MathOperatorRHS$<$ dim, CELL $>$@{csmp::MathOperatorRHS$<$ dim, CELL $>$}!AddAccumulate@{AddAccumulate}}
+\index{AddAccumulate@{AddAccumulate}!csmp::MathOperatorRHS$<$ dim, CELL $>$@{csmp::MathOperatorRHS$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{AddAccumulate()}{AddAccumulate()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_math_operator_r_h_s_a95426d12ae7f3a6eb1bf10c036505e7b} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s}{csmp\+::\+Math\+Operator\+RHS}}$<$ dim, CELL $>$\+::\+Add\+Accumulate (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Set Flags and Properties. 
+
+=================================== Accumulation Process Settings ======================================================================== \Hypertarget{classcsmp_1_1_math_operator_r_h_s_ad9c03f1d3138a22e0bc40778d0032f6a}\index{csmp::MathOperatorRHS$<$ dim, CELL $>$@{csmp::MathOperatorRHS$<$ dim, CELL $>$}!AssignToGlobal@{AssignToGlobal}}
+\index{AssignToGlobal@{AssignToGlobal}!csmp::MathOperatorRHS$<$ dim, CELL $>$@{csmp::MathOperatorRHS$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{AssignToGlobal()}{AssignToGlobal()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_math_operator_r_h_s_ad9c03f1d3138a22e0bc40778d0032f6a} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s}{csmp\+::\+Math\+Operator\+RHS}}$<$ dim, CELL $>$\+::\+Assign\+To\+Global (\begin{DoxyParamCaption}\item[{const CELL$<$ dim $>$ \&}]{e}{, }\item[{std\+::vector$<$ double $>$ \&}]{rhs}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+assigment to the right hand side global vector (after everything was calculated ) 
+
+Assign\+To\+Global matrix functions. \Hypertarget{classcsmp_1_1_math_operator_r_h_s_a9470acdb9a64217b4ae019cc7cd5b66f}\index{csmp::MathOperatorRHS$<$ dim, CELL $>$@{csmp::MathOperatorRHS$<$ dim, CELL $>$}!AssignToGlobal@{AssignToGlobal}}
+\index{AssignToGlobal@{AssignToGlobal}!csmp::MathOperatorRHS$<$ dim, CELL $>$@{csmp::MathOperatorRHS$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{AssignToGlobal()}{AssignToGlobal()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_math_operator_r_h_s_a9470acdb9a64217b4ae019cc7cd5b66f} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s}{csmp\+::\+Math\+Operator\+RHS}}$<$ dim, CELL $>$\+::\+Assign\+To\+Global (\begin{DoxyParamCaption}\item[{const CELL$<$ dim $>$ \&}]{e}{, }\item[{std\+::vector$<$ double $>$ \&}]{rhs}{, }\item[{const std\+::vector$<$ size\+\_\+t $>$ \&}]{DOF\+\_\+indexes}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+used by PDE\+\_\+\+Integrator\+UoM for assembly of a pre-\/eliminated solution matrix and RH vector (scalar versions, Luat Khoa Tran) 
+
+Transform \doxylink{classcsmp_1_1_node}{Node} \doxylink{structcsmp_1_1_index}{Index} Vector.
+
+Roman, 2013\+: Added Array Variable and Falgged Array Variable \doxylink{structcsmp_1_1_index}{Index} Accessor \Hypertarget{classcsmp_1_1_math_operator_r_h_s_ab77b3c1f4f078290ec9330a916482ed7}\index{csmp::MathOperatorRHS$<$ dim, CELL $>$@{csmp::MathOperatorRHS$<$ dim, CELL $>$}!ComputeContribution@{ComputeContribution}}
+\index{ComputeContribution@{ComputeContribution}!csmp::MathOperatorRHS$<$ dim, CELL $>$@{csmp::MathOperatorRHS$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{ComputeContribution()}{ComputeContribution()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_math_operator_r_h_s_ab77b3c1f4f078290ec9330a916482ed7} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s}{csmp\+::\+Math\+Operator\+RHS}}$<$ dim, CELL $>$\+::\+Compute\+Contribution (\begin{DoxyParamCaption}\item[{const CELL$<$ dim $>$ \&}]{e}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+integration performed on \doxylink{classcsmp_1_1_element}{Element}, \doxylink{classcsmp_1_1_face}{Face}, \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} 
+
+
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___point_source__rhsop_ae3cde35d6c0e009ed91d6c25dd00fac1}{csmp\+::\+CVFEM\+\_\+\+Point\+Source\+\_\+rhsop$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_a2b39c82936c676cb4944dd98fe047263}{csmp\+::\+CVFEM\+\_\+\+Upwind\+\_\+\+Num\+Integral\+\_\+d\+NT\+\_\+rhsop\+\_\+g\+\_\+d\+V$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_integral__d_n_t__d_n__d_v_a019b13c2e6d1c0749d28dfa57981cb67}{csmp\+::\+Integral\+\_\+d\+NT\+\_\+d\+N\+\_\+d\+V$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_integral__d_n_t__rhsop__d_n__d_v_a95279718ef95db29ad1768d0b09b4861}{csmp\+::\+Integral\+\_\+d\+NT\+\_\+rhsop\+\_\+d\+N\+\_\+d\+V$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_integral___n_t___m__d_v___triangle_a3b519d73d33a390cc0051efcdb1a803c}{csmp\+::\+Integral\+\_\+\+NT\+\_\+\+M\+\_\+d\+V\+\_\+\+Triangle$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_integral___n_t__op__d_ni__d_v_ae2a59f1bd6a75988a23b42941b70ecee}{csmp\+::\+Integral\+\_\+\+NT\+\_\+op\+\_\+d\+Ni\+\_\+d\+V$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_integral___n_t__op__d_s_ad9fab8181ccf0eb543b19b01fd61edad}{csmp\+::\+Integral\+\_\+\+NT\+\_\+op\+\_\+d\+S$<$ dim $>$}}, \mbox{\hyperlink{classcsmp_1_1_integral___n_t__op___n__d_v_a654d25ff1eebed860043299e422d8325}{csmp\+::\+Integral\+\_\+\+NT\+\_\+op\+\_\+\+N\+\_\+d\+V$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_integral___n_t__rhsop___n__d_v_aa36237d73a72957e5ba790ca93eb452f}{csmp\+::\+Integral\+\_\+\+NT\+\_\+rhsop\+\_\+\+N\+\_\+d\+V$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_integral__op___n_t__d_n__orthogonal__d_v_a73743f0832bb230c9ce2d53746583f18}{csmp\+::\+Integral\+\_\+op\+\_\+\+NT\+\_\+d\+N\+\_\+orthogonal\+\_\+d\+V$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_integral__rhsop__d_n_t__d_n__d_v_a88fcf57c54ea4313714851b8ff3fca19}{csmp\+::\+Integral\+\_\+rhsop\+\_\+d\+NT\+\_\+d\+N\+\_\+d\+V$<$ dim, CELL, var $>$}}, \mbox{\hyperlink{classcsmp_1_1_integral__var___n_t__rhsop___n__d_v_a8e6cc69640cc73c939a5d9cb5373e245}{csmp\+::\+Integral\+\_\+var\+\_\+\+NT\+\_\+rhsop\+\_\+\+N\+\_\+d\+V$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_n_t__op_a00dd2359d7e8f608405dcfc66accd6a0}{csmp\+::\+NT\+\_\+op$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_num_integral___b_t___d__op__d_v_a84b1d603d45d6990cfad765e8b27382b}{csmp\+::\+Num\+Integral\+\_\+\+BT\+\_\+\+D\+\_\+op\+\_\+d\+V$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_num_integral___b_t__op__d_v_a6826f13230457cf6714a050dfc107dc2}{csmp\+::\+Num\+Integral\+\_\+\+BT\+\_\+op\+\_\+d\+V$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_num_integral___d_ni__rhsop__d_v_a49646c96a9f9a4a65d86d4b1c7a35b52}{csmp\+::\+Num\+Integral\+\_\+\+DNi\+\_\+rhsop\+\_\+d\+V$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_num_integral__d_n_t__op__d_v_ac59f1f93c380208ecdae5de60eefe308}{csmp\+::\+Num\+Integral\+\_\+d\+NT\+\_\+op\+\_\+d\+V$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_num_integral__d_n_t__op__d_v_ac59f1f93c380208ecdae5de60eefe308}{csmp\+::\+Num\+Integral\+\_\+d\+NT\+\_\+op\+\_\+d\+V$<$ dim, csmp\+::\+Element $>$}}, \mbox{\hyperlink{classcsmp_1_1_num_integral__d_n_t__op__d_v_ac59f1f93c380208ecdae5de60eefe308}{csmp\+::\+Num\+Integral\+\_\+d\+NT\+\_\+op\+\_\+d\+V$<$ dim, Element $>$}}, \mbox{\hyperlink{classcsmp_1_1_num_integral___d_n_t__rhsop___d_n__d_v_aa55a93fc84c6cd408746967904b18e8c}{csmp\+::\+Num\+Integral\+\_\+\+DNT\+\_\+rhsop\+\_\+\+DN\+\_\+d\+V$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_num_integral___d_n_t__v__d_v_ae6c2dbfd939acc5c88246605ded45d6d}{csmp\+::\+Num\+Integral\+\_\+\+DNT\+\_\+v\+\_\+d\+V$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_num_integral___n_t__mixed__op__d_ni__d_v_ade00165e4c1f5c1e5f5797b5b0c7c07f}{csmp\+::\+Num\+Integral\+\_\+\+NT\+\_\+mixed\+\_\+op\+\_\+d\+Ni\+\_\+d\+V$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_num_integral___n_t__op1__op2__d_ni__d_v_a97d3307eebf44c0801ae48c42a053e52}{csmp\+::\+Num\+Integral\+\_\+\+NT\+\_\+op1\+\_\+op2\+\_\+d\+Ni\+\_\+d\+V$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_num_integral___n_t__op__d_ni__d_v_a0320b14bcdff5cf522db4bbf2b5614f8}{csmp\+::\+Num\+Integral\+\_\+\+NT\+\_\+op\+\_\+d\+Ni\+\_\+d\+V$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_num_integral___n_t__op___n__d_s_a2a0bd71934b0072903e54b8d0ad84b05}{csmp\+::\+Num\+Integral\+\_\+\+NT\+\_\+op\+\_\+\+N\+\_\+d\+S$<$ dim $>$}}, \mbox{\hyperlink{classcsmp_1_1_num_integral___n_t__op___n__d_v_a74ea426e0214732bf6fde34c2f10634e}{csmp\+::\+Num\+Integral\+\_\+\+NT\+\_\+op\+\_\+\+N\+\_\+d\+V$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_num_integral___n_t__op___n__d_v_a74ea426e0214732bf6fde34c2f10634e}{csmp\+::\+Num\+Integral\+\_\+\+NT\+\_\+op\+\_\+\+N\+\_\+d\+V$<$ dim, csmp\+::\+Element $>$}}, \mbox{\hyperlink{classcsmp_1_1_num_integral___n_t__op___n__d_v_a74ea426e0214732bf6fde34c2f10634e}{csmp\+::\+Num\+Integral\+\_\+\+NT\+\_\+op\+\_\+\+N\+\_\+d\+V$<$ dim, Element $>$}}, \mbox{\hyperlink{classcsmp_1_1_num_integral___n_t__rhs__nodal__op___n__d_v_a32daa4e6b86e6078a29470dce3ac7cc8}{csmp\+::\+Num\+Integral\+\_\+\+NT\+\_\+rhs\+\_\+nodal\+\_\+op\+\_\+\+N\+\_\+d\+V$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_num_integral__op___n_t__d_n__orthogonal__d_v_ad659fb20d2c5fcf3213ee17785372300}{csmp\+::\+Num\+Integral\+\_\+op\+\_\+\+NT\+\_\+d\+N\+\_\+orthogonal\+\_\+d\+V$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_num_integral__op___n_t___n__d_v_acdb4b1ddba237b01fcfa56edda70c664}{csmp\+::\+Num\+Integral\+\_\+op\+\_\+\+NT\+\_\+\+N\+\_\+d\+V$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_num_integral__op___p_t___p__d_v_a0eb7c1d1a451ac0587e92f8cac5ce537}{csmp\+::\+Num\+Integral\+\_\+op\+\_\+\+PT\+\_\+\+P\+\_\+d\+V$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_num_integral___p_t__op__d_s_a955e8a05bc01e8e478b36ac2f8b1b99d}{csmp\+::\+Num\+Integral\+\_\+\+PT\+\_\+op\+\_\+d\+S$<$ dim $>$}}, \mbox{\hyperlink{classcsmp_1_1_num_integral___p_t__op__d_v_a4c4addcf40291d02966a088279a6ff40}{csmp\+::\+Num\+Integral\+\_\+\+PT\+\_\+op\+\_\+d\+V$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_num_integral___p_t__op___p__d_v_a2970674f3efa421e8a25c99574281ea5}{csmp\+::\+Num\+Integral\+\_\+\+PT\+\_\+op\+\_\+\+P\+\_\+d\+V$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_num_integral___set_r_h_s__to___one_a4b74bf601b1982d01c6cb75ee0a5022e}{csmp\+::\+Num\+Integral\+\_\+\+Set\+RHS\+\_\+to\+\_\+\+One$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_num_integral___set_r_h_s__to___zero_aa5af4afd7b135068cd91b2f3c7fa4701}{csmp\+::\+Num\+Integral\+\_\+\+Set\+RHS\+\_\+to\+\_\+\+Zero$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_point_source__rhsop_a18230b62ed854df5ed5a5b6f47c50e0c}{csmp\+::\+Point\+Source\+\_\+rhsop$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_point_source__rhsop_a18230b62ed854df5ed5a5b6f47c50e0c}{csmp\+::\+Point\+Source\+\_\+rhsop$<$ dim, csmp\+::\+Element $>$}}, \mbox{\hyperlink{classcsmp_1_1_point_source__rhsop_a18230b62ed854df5ed5a5b6f47c50e0c}{csmp\+::\+Point\+Source\+\_\+rhsop$<$ dim, Element $>$}}, \mbox{\hyperlink{classcsmp_1_1_p_t__op_a93c41ad02b3c277098b04293677596b3}{csmp\+::\+PT\+\_\+op$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_upwind___integral__d_n_t__rhsop__d_n__d_v_aa18be996dc4a5370e4b89c144addde72}{csmp\+::\+Upwind\+\_\+\+Integral\+\_\+d\+NT\+\_\+rhsop\+\_\+d\+N\+\_\+d\+V$<$ dim, CELL $>$}}, and \mbox{\hyperlink{classcsmp_1_1_upwind___integral__d_n_t__rhsop__g__d_v_a69b95679a8b3d0fedee8fe70f3f06a69}{csmp\+::\+Upwind\+\_\+\+Integral\+\_\+d\+NT\+\_\+rhsop\+\_\+g\+\_\+d\+V$<$ dim, CELL $>$}}.
+
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_ad5614fa4de569146a684d28635eb9ff7}\index{csmp::MathOperatorRHS$<$ dim, CELL $>$@{csmp::MathOperatorRHS$<$ dim, CELL $>$}!GetOperands@{GetOperands}}
+\index{GetOperands@{GetOperands}!csmp::MathOperatorRHS$<$ dim, CELL $>$@{csmp::MathOperatorRHS$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{GetOperands()}{GetOperands()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_math_operator_r_h_s_ad5614fa4de569146a684d28635eb9ff7} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s}{csmp\+::\+Math\+Operator\+RHS}}$<$ dim, CELL $>$\+::\+Get\+Operands (\begin{DoxyParamCaption}\item[{const CELL$<$ dim $>$ \&}]{e\+\_\+ref}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+getting data from the \doxylink{classcsmp_1_1_element}{Element}, \doxylink{classcsmp_1_1_face}{Face}, \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} 
+
+Get\+Operands fills a vector of material property matrices with the required values for later computation. These matrices always have the dimensions spatial-\/dimension\texorpdfstring{$^\wedge$}{\string^}2 and they will hold either scalar, vector or tensor properties, depending on what kind of property the \doxylink{classcsmp_1_1_operand}{Operand} is.
+
+When the property is an element property, it will be put into the first vector entry MTRL\mbox{[}0\mbox{]}. 
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___point_source__rhsop_adca59b5304c9a5af08f424ea9f01a2ff}{csmp\+::\+CVFEM\+\_\+\+Point\+Source\+\_\+rhsop$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_a05e952d7fe8191d00ef159e94f53b6c9}{csmp\+::\+CVFEM\+\_\+\+Upwind\+\_\+\+Num\+Integral\+\_\+d\+NT\+\_\+rhsop\+\_\+g\+\_\+d\+V$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_integral__d_n_t__rhsop__d_n__d_v_a9c9a0e6b9da86d551006ed79f9748982}{csmp\+::\+Integral\+\_\+d\+NT\+\_\+rhsop\+\_\+d\+N\+\_\+d\+V$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_integral___n_t___m__d_v___triangle_adc0ba977bfd4a585c23d12658f7b3bba}{csmp\+::\+Integral\+\_\+\+NT\+\_\+\+M\+\_\+d\+V\+\_\+\+Triangle$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_integral___n_t__op__d_ni__d_v_ad50abdf5794811b3910ea6d6ed6c112e}{csmp\+::\+Integral\+\_\+\+NT\+\_\+op\+\_\+d\+Ni\+\_\+d\+V$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_integral___n_t__op__d_s_af7e5084cee39958a8a9827343d4506f1}{csmp\+::\+Integral\+\_\+\+NT\+\_\+op\+\_\+d\+S$<$ dim $>$}}, \mbox{\hyperlink{classcsmp_1_1_integral___n_t__op___n__d_v_ad52e8605eb6a085b1e1720d9b1cac377}{csmp\+::\+Integral\+\_\+\+NT\+\_\+op\+\_\+\+N\+\_\+d\+V$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_integral___n_t__rhsop___n__d_v_ac672977f841ce715c0e7c752d8464dd6}{csmp\+::\+Integral\+\_\+\+NT\+\_\+rhsop\+\_\+\+N\+\_\+d\+V$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_integral__op___n_t__d_n__orthogonal__d_v_a7c677371eec624c1ac45afa98dfa0ed5}{csmp\+::\+Integral\+\_\+op\+\_\+\+NT\+\_\+d\+N\+\_\+orthogonal\+\_\+d\+V$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_integral__rhsop__d_n_t__d_n__d_v_a0ab1b2d3431317fdaa6819ed6faeb526}{csmp\+::\+Integral\+\_\+rhsop\+\_\+d\+NT\+\_\+d\+N\+\_\+d\+V$<$ dim, CELL, var $>$}}, \mbox{\hyperlink{classcsmp_1_1_integral__var___n_t__rhsop___n__d_v_ae0468950841ea2f951a3705ad2ed37c5}{csmp\+::\+Integral\+\_\+var\+\_\+\+NT\+\_\+rhsop\+\_\+\+N\+\_\+d\+V$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_n_t__op_a0c7ea2ac820d5e3164dc641b2a6cbce9}{csmp\+::\+NT\+\_\+op$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_num_integral___b_t___d__op__d_v_a977be5172ccdbce122765a32e2f9fbf5}{csmp\+::\+Num\+Integral\+\_\+\+BT\+\_\+\+D\+\_\+op\+\_\+d\+V$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_num_integral___d_ni__rhsop__d_v_a5ac5720a0574b698ece507d11fec15f7}{csmp\+::\+Num\+Integral\+\_\+\+DNi\+\_\+rhsop\+\_\+d\+V$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_num_integral___d_n_t__rhsop___d_n__d_v_a5ec9bf3177a62c9c9b02a8ec66c4afd0}{csmp\+::\+Num\+Integral\+\_\+\+DNT\+\_\+rhsop\+\_\+\+DN\+\_\+d\+V$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_num_integral___d_n_t__v__d_v_a7ad2d8d0c90af3b2a27f9a6c4348dbf0}{csmp\+::\+Num\+Integral\+\_\+\+DNT\+\_\+v\+\_\+d\+V$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_num_integral___n_t__mixed__op__d_ni__d_v_acc4182be3a730bfd5a41a4f671c1d1c2}{csmp\+::\+Num\+Integral\+\_\+\+NT\+\_\+mixed\+\_\+op\+\_\+d\+Ni\+\_\+d\+V$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_num_integral___n_t__op1__op2__d_ni__d_v_a5d92f8cd74543cbccbe760c44d3e4a60}{csmp\+::\+Num\+Integral\+\_\+\+NT\+\_\+op1\+\_\+op2\+\_\+d\+Ni\+\_\+d\+V$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_num_integral___n_t__op__d_ni__d_v_a024f38d2445f90b586810ed15cc991a1}{csmp\+::\+Num\+Integral\+\_\+\+NT\+\_\+op\+\_\+d\+Ni\+\_\+d\+V$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_num_integral___n_t__rhs__nodal__op___n__d_v_a5d4b55a944ae148631e26b1f861a12d1}{csmp\+::\+Num\+Integral\+\_\+\+NT\+\_\+rhs\+\_\+nodal\+\_\+op\+\_\+\+N\+\_\+d\+V$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_num_integral__op___n_t__d_n__orthogonal__d_v_aead735ddfccecca21e6c1481f3674dd0}{csmp\+::\+Num\+Integral\+\_\+op\+\_\+\+NT\+\_\+d\+N\+\_\+orthogonal\+\_\+d\+V$<$ dim, CELL $>$}}, \mbox{\hyperlink{classcsmp_1_1_num_integral___p_t__op__d_s_a5135a64ddea9a05c229596496eb075eb}{csmp\+::\+Num\+Integral\+\_\+\+PT\+\_\+op\+\_\+d\+S$<$ dim $>$}}, \mbox{\hyperlink{classcsmp_1_1_num_integral___p_t__op__d_v_a00462479256630c7a2601f901149fba0}{csmp\+::\+Num\+Integral\+\_\+\+PT\+\_\+op\+\_\+d\+V$<$ dim, CELL $>$}}, and \mbox{\hyperlink{classcsmp_1_1_point_source__rhsop_aad7111cd173fc75414b49e5b07353fc2}{csmp\+::\+Point\+Source\+\_\+rhsop$<$ dim, csmp\+::\+Element $>$}}.
+
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_a5a6138f5b4e123f88a9115e1d9315871}\index{csmp::MathOperatorRHS$<$ dim, CELL $>$@{csmp::MathOperatorRHS$<$ dim, CELL $>$}!MultiplyWithTimeFactor@{MultiplyWithTimeFactor}}
+\index{MultiplyWithTimeFactor@{MultiplyWithTimeFactor}!csmp::MathOperatorRHS$<$ dim, CELL $>$@{csmp::MathOperatorRHS$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{MultiplyWithTimeFactor()}{MultiplyWithTimeFactor()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_math_operator_r_h_s_a5a6138f5b4e123f88a9115e1d9315871} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s}{csmp\+::\+Math\+Operator\+RHS}}$<$ dim, CELL $>$\+::\+Multiply\+With\+Time\+Factor (\begin{DoxyParamCaption}\item[{double}]{dt}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+if so specified multiply with time increment 
+
+
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_num_integral___n_t__op1__op2__d_ni__d_v_a921a45bedd942e0458a9d274fa54f6d2}{csmp\+::\+Num\+Integral\+\_\+\+NT\+\_\+op1\+\_\+op2\+\_\+d\+Ni\+\_\+d\+V$<$ dim, CELL $>$}}.
+
+\Hypertarget{classcsmp_1_1_math_operator_r_h_s_a4ac9c3b2f60149cd6cc4a35681b29e0d}\index{csmp::MathOperatorRHS$<$ dim, CELL $>$@{csmp::MathOperatorRHS$<$ dim, CELL $>$}!PropertyAtIntegrationPoint@{PropertyAtIntegrationPoint}}
+\index{PropertyAtIntegrationPoint@{PropertyAtIntegrationPoint}!csmp::MathOperatorRHS$<$ dim, CELL $>$@{csmp::MathOperatorRHS$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{PropertyAtIntegrationPoint()}{PropertyAtIntegrationPoint()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_math_operator_r_h_s_a4ac9c3b2f60149cd6cc4a35681b29e0d} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s}{csmp\+::\+Math\+Operator\+RHS}}$<$ dim, CELL $>$\+::\+Property\+At\+Integration\+Point (\begin{DoxyParamCaption}\item[{const CELL$<$ dim $>$ \&}]{e\+\_\+ref}{, }\item[{const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&}]{idx}{, }\item[{uint32\+\_\+t}]{ip}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&}]{M}{}\end{DoxyParamCaption})}
+
+
+
+interpolation of property if isoparametric elements are used 
+
+=================================== Main Computational Procedure Functions ======================================================================== 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/model/Math\+Operator\+RHS.\+h\item 
+source/modules/model/Math\+Operator\+RHS.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,55 @@
+\doxysection{Integration\+Point\+To\+Node\+Property\+Visitor.\+h}
+\hypertarget{_integration_point_to_node_property_visitor_8h_source}{}\label{_integration_point_to_node_property_visitor_8h_source}\index{source/includes/model/IntegrationPointToNodePropertyVisitor.h@{source/includes/model/IntegrationPointToNodePropertyVisitor.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_INTEGRATION\_POINT\_TO\_NODE\_PROPERTY\_VISITOR\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_INTEGRATION\_POINT\_TO\_NODE\_PROPERTY\_VISITOR\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_visitor_8h}{"{}Visitor.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_a_p___bool_vector_8h}{"{}AP\_BoolVector.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_property_database}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}};}
+\DoxyCodeLine{00010\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_node}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}};}
+\DoxyCodeLine{00011\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_element}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}};}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ \ \ \ Replaces\ value\ of\ FE-\/integratiion-\/point\ property\ 'a'\ with\ node\ property\ value\ 'b',}}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ \ \ \ testing\ (for\ the\ case\ where\ all\ the\ node\ values\ are\ the\ same)\ whether\ the\ FE\ interpolation\ returns\ the\ same\ value.}}
+\DoxyCodeLine{00016\ \textcolor{comment}{}}
+\DoxyCodeLine{00017\ \textcolor{comment}{@todo\ (1)\ IntegrationPointToNodePropertyVisitor\ is\ not\ extrapolating\ correctly\ (A)}}
+\DoxyCodeLine{00018\ \textcolor{comment}{@todo\ (1)\ SKM:\ consider\ using\ the\ element\ specific\ method\ ExtrapolateIntegrationPointToNodeProperty\ for\ this\ task}}
+\DoxyCodeLine{00019\ \textcolor{comment}{}}
+\DoxyCodeLine{00020\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00021\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ Var,\ uint32\_t\ dim>}
+\DoxyCodeLine{00022\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_integration_point_to_node_property_visitor}{IntegrationPointToNodePropertyVisitor}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_visitor}{Visitor}}<dim>\ \{}
+\DoxyCodeLine{00023\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00024\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_integration_point_to_node_property_visitor_acbf9823d6af17544ce9f3f38deb4d4d1}{IntegrationPointToNodePropertyVisitor}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&\ p,}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ cpoint\_prop,}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ node\_prop,}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ size\_t\ nodes\ );}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~IntegrationPointToNodePropertyVisitor();}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_integration_point_to_node_property_visitor_a69452f30e4841713dadff8b0344d36ee}{Visit}}(\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>*\ );}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_integration_point_to_node_property_visitor_a6180554ce2e177a131be352467986380}{Visit}}(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ );}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordtype}{void}\ ApplyWeightingToExtrapolatedValues();}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00037\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ cprop\_key\_,\ nprop\_key\_;}
+\DoxyCodeLine{00038\ \ \ \ \ Var\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ variable\_;}
+\DoxyCodeLine{00039\ \ \ \ \ std::vector<Var>\ \ vars\_vector\_;}
+\DoxyCodeLine{00040\ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\ \ \ cp\_vars\_,\ nd\_vars\_,}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ summed\_weights\_;}
+\DoxyCodeLine{00042\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_bool_vector}{BoolVector}}\ \ \ \ \ \ \ \ weighting\_completed\_;}
+\DoxyCodeLine{00043\ \};}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

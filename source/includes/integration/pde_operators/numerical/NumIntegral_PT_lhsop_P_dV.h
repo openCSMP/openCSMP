@@ -24,8 +24,8 @@ class NumIntegral_PT_lhsop_P_dV : public MathOperatorLHS<dim,CELL> {
                                const char* oper, const char* oper2, 
                                const char* basic, const char* test );
     
-    virtual void GetOperands( const CELL<dim>& );
-    virtual void ComputeContribution( const CELL<dim>& );
+    void GetOperands( const CELL<dim>& ) override final;
+    void ComputeContribution( const CELL<dim>& ) override final;
 
   private:
     uint32_t            nodal_degrees_of_freedom;

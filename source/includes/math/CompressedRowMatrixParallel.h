@@ -11,7 +11,7 @@ class CompressedRowMatrixParallel : public CompressedRowMatrix
 public:
     CompressedRowMatrixParallel();
 private:
-    void RemoveHalo( int32_t& ); // TODO: check whether we do need int64_t here
+    void RemoveHalo( int32_t& );
     void CreatePartitions( uint32_t n_blocks, std::vector<std::pair<std::pair<uint32_t,uint32_t>,std::vector<bool> > >&  ) const;
 
     // vector mu st be initialized with the partition ranges
@@ -29,12 +29,14 @@ private:
     void CreateIpts( int32_t, const std::vector<std::pair<std::pair<uint32_t,uint32_t>,std::vector<bool> > >&,
                      std::vector<int32_t>&, std::vector<int32_t>&, std::vector<int32_t>&  ) const;
 
-    void CreateIptr(int32_t, const std::vector<std::pair<std::pair<uint32_t,uint32_t>,std::vector<bool> > >&,
-                          std::vector<int32_t>&, std::vector<int32_t>&, std::vector<int32_t>&  ) const;
+    void CreateIptr( int32_t, const std::vector<std::pair<std::pair<uint32_t,uint32_t>,std::vector<bool> > >&,
+                     std::vector<int32_t>&, std::vector<int32_t>&, std::vector<int32_t>&  ) const;
 
 
     void Renumber( uint32_t, const std::vector<std::pair<std::pair<uint32_t,uint32_t>,std::vector<bool> > >&,
-                        std::vector<int32_t>&, std::vector<int32_t>& ) const;
+                   std::vector<int32_t>&, std::vector<int32_t>& ) const;
 };
+
 }
-#endif // COMPRESSEDROWMATRIXPARALLEL_H
+
+#endif // !COMPRESSED_ROW_MATRIX_PARALLEL_H

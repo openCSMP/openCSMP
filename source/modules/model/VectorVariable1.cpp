@@ -107,33 +107,6 @@ VectorVariable<1U>  VectorVariable<1U>::operator/( const VectorVariable<1U>& v )
 
 
 
-VectorVariable<1U>  VectorVariable<1U>::operator+( double val ) const
-{
-  return VectorVariable( flag, data + val );
-}
-
-
-
-VectorVariable<1U>  VectorVariable<1U>::operator-( double val ) const
-{
-  return VectorVariable( flag, data - val );
-}
-
-
-
-VectorVariable<1U>  VectorVariable<1U>::operator*( double val ) const
-{
-  return VectorVariable( flag, data * val );
-}
-
-
-
-VectorVariable<1U>  VectorVariable<1U>::operator/( double val ) const
-{
-  return VectorVariable( flag, data / val );
-}
-
-
 
 
 VectorVariable<1U>  VectorVariable<1U>::operator^( double val ) const

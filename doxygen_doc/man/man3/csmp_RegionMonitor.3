@@ -1,0 +1,124 @@
+.TH "csmp::RegionMonitor< dim >" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::RegionMonitor< dim > \- Monitors value ranges and integrated property values in all regions of a model\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <RegionMonitor\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBRegionMonitor\fP (const \fBModel\fP< dim > &, const std::string &first_integral_property, const std::string &first_range_property, bool integrate_pore_volume_only=true)"
+.br
+.RI "construct with 2 properties to monitor "
+.ti -1c
+.RI "\fBRegionMonitor\fP (const \fBModel\fP< dim > &, const std::list< std::string > &to_integrate_over_groups, const std::list< std::string > &to_find_ranges_in_groups, bool integrate_pore_volume_only=true)"
+.br
+.RI "construct with lists of multiple range and/or integral properties "
+.ti -1c
+.RI "void \fBDefineProperties\fP (const \fBModel\fP< dim > &, const std::list< std::string > &to_integrate_over_groups, const std::list< std::string > &to_find_ranges_in_groups, bool integrate_pore_volume_only=true)"
+.br
+.RI "tell \fBRegionMonitor\fP which properties it should track "
+.ti -1c
+.RI "void \fBDivideIntegralPropertiesByRegionVolumes\fP (bool divide)"
+.br
+.RI "switches on normalisation by volume for all property value integrations "
+.ti -1c
+.RI "bool \fBDataExists\fP () const"
+.br
+.RI "returns true when there are already monitoring data stored in respective containers "
+.ti -1c
+.RI "void \fBScalarPropertyIntegrals\fP (const \fBModel\fP< dim > &, double current_time=0\&.)"
+.br
+.RI "calculates integrals over current property values and stores these for the current time-step and property name "
+.ti -1c
+.RI "void \fBScalarPropertyRanges\fP (const \fBModel\fP< dim > &, double current_time=0\&.)"
+.br
+.RI "monitors current ranges of the the scalar values "
+.ti -1c
+.RI "void \fBInsertExternallyCalculatedProperty\fP (std::string property, std::string regionname)"
+.br
+.ti -1c
+.RI "void \fBInsertExternallyCalculatedProperty\fP (std::string property_regionname)"
+.br
+.ti -1c
+.RI "void \fBInsertPreCalculatedPropertyValue\fP (double time, std::string property, std::string regionname, double value)"
+.br
+.ti -1c
+.RI "void \fBInsertPreCalculatedPropertyValue\fP (double time, std::string property_regionname, double value)"
+.br
+.ti -1c
+.RI "void \fBReset\fP ()"
+.br
+.RI "zap all recorded values and property names "
+.ti -1c
+.RI "void \fBEraseData\fP ()"
+.br
+.RI "zap all recorded values "
+.ti -1c
+.RI "void \fBOut\fP (const char *text_file) const"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim>
+.br
+class csmp::RegionMonitor< dim >"Monitors value ranges and integrated property values in all regions of a model\&. 
+
+Among the non-unique (potentially overlapping) regions those with names identical to \fBBOX_BOUNDARY\fP flags and the "All Element" region are ignored\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+if the model contains lower-dimensional regions, a thickness attribute called "thickness" must be specified for these in order to get their volume right\&. For the regions with the same dimension as the model, the thickness attribute should have a value of 1\&.
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Stephan Matthai 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+1999 
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim> void \fBcsmp::RegionMonitor\fP< dim >::InsertExternallyCalculatedProperty (std::string property, std::string regionname)"
+adds in values in a separate container, to be output to a separate file with the same prefix name as the other monitoring file, except with the "_ext" added to its name\&. 
+.SS "template<uint32_t dim> void \fBcsmp::RegionMonitor\fP< dim >::ScalarPropertyIntegrals (const \fBModel\fP< dim > & sg, double time = \fR0\&.\fP)"
+
+.PP
+calculates integrals over current property values and stores these for the current time-step and property name calculates property integrals and stores these for the current time-step and property name if the variable 'thickness' is defined in the \fBPropertyDatabase\fP, it is used to scale the element by element integrals\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+non-unique regions that bear the name of model boundaries are ignored\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim> void \fBcsmp::RegionMonitor\fP< dim >::ScalarPropertyRanges (const \fBModel\fP< dim > & sg, double time = \fR0\&.\fP)"
+
+.PP
+monitors current ranges of the the scalar values Records the ranges of the target variables in each region\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+non-unique regions that bear the name of model boundaries are ignored\&. 
+.RE
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

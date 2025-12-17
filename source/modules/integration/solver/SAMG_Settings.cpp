@@ -1,6 +1,8 @@
 #include "SAMG_Settings.h"
 #include "Exception.h"
-#include <sstream>
+#if defined(_OPENMP )
+#include "omp.h"
+#endif
 
 using std::domain_error;
 
@@ -41,6 +43,13 @@ SAMG_Settings::SAMG_Settings() :
     iextent_(1),
     ndefault_(10),
     norm_typ_(0),
+#if defined(_OPENMP )
+    iordered_omp_(1),
+    samg_omp_num_threads_external_(0),
+    irestriction_openmp_(2),
+#else
+    iordered_omp_(0),
+#endif
     ioscratch_(0),
     // chktol switch (1)
     chktol_(-1.0),
@@ -68,6 +77,8 @@ SAMG_Settings::SAMG_Settings() :
     npcol_(0),
     // other hidden parameters (6)
     levelx_(25),
+    clsolver_finest_(0),
+    nptmax_(200),
     ioform_(102),  // equifalent ASCII definition for "f" returns formatted matrix output
     ioform_length_(1), // lenght of character of ioform by default can be only equal to 1
     filnam_dump_("level"),
@@ -82,8 +93,7 @@ SAMG_Settings::SAMG_Settings() :
     // output varibles (3)
     ncyc_done_(0),
     ncyc_best_(0),
-    mode_mess_(0), // mode_mess default from manual
-    solver_instance_(0)
+    mode_mess_(0) // mode_mess default from manual
 {
     filnam_dump_Array_[0] = 108;
     filnam_dump_Array_[1] = 101;
@@ -236,6 +246,16 @@ double SAMG_Settings::Get_w_avrge() const {
 int32_t SAMG_Settings::Get_levelx() const {
     return levelx_;
 }
+/** Returns value of clsolver_finest switch
+ */
+int32_t SAMG_Settings::Get_clsolver_finest() const {
+    return clsolver_finest_;
+}
+/** Returns value of nptmax (maximum system size supported via direct solvers)
+ */
+int32_t SAMG_Settings::Get_nptmax() const {
+    return nptmax_;
+}
 /** Returns value of optional ioform switch
  */
 int32_t SAMG_Settings::Get_ioform() const{
@@ -251,13 +271,25 @@ int32_t SAMG_Settings::Get_ioform_length() const{
  */
 int* SAMG_Settings::Get_filnam_dump()
 {
+    const char *ch = filnam_dump_.c_str();
+    for( int32_t i=0; i < filnam_dump_length_; ++i ){
+        filnam_dump_Array_[i] = int( ch[i] );
+    }
     return this->filnam_dump_Array_;
 }
+
+std::string SAMG_Settings::Get_filnam_dump_str() const
+{
+    return filnam_dump_;
+}
+
 /** Returns value of filnam_dump ASCII character length
  */
 int32_t SAMG_Settings::Get_filnam_dump_length() const{
-    if ( filnam_dump_length_ > 50 )
+    if ( filnam_dump_length_ > 50 ){
         std::cout << "SAMG_Settings::Get_filnam_dump_length 'The length of the output filename may not exceed 50 characters' \n";
+        std::cout << "SAMG_Settings::Get_filnam_dump_length 'received '"+filnam_dump_+"'\n";
+    }
 
     return filnam_dump_length_;
 }
@@ -274,6 +306,20 @@ use of the ncg switch automatically.
 int32_t SAMG_Settings::Get_ncg() const {
     return 10000 * ncgtyp_ + 1000 * nred_ + 100 * nredlev_ + 10 * nxf_clean_ + npcol_;
 }
+
+#if defined(_OPENMP )
+int32_t SAMG_Settings::Get_icolor_omp() const {
+    return icolor_omp_;
+}
+
+int32_t SAMG_Settings::Get_iordered_omp() const {
+    return iordered_omp_;
+}
+
+int32_t SAMG_Settings::Get_irestriction_openmp() const {
+    return irestriction_openmp_;
+}
+#endif
 
 /** Query to determine how many iteration cycles have been performed.
  */
@@ -306,17 +352,31 @@ false, an unknown-based approach is selected by the SAMG_Settings object.
 bool SAMG_Settings::UsePointBasedApproach() const {
     return ( napproach_ > 2 );
 }
+
 /** Query to determine which SAMG multiple instance is used. The returned number indicates the SAMG library instance used.
  */
+#if defined( LEGACY_SAMG )
 int32_t SAMG_Settings::GetSolverInstance() const{
     return solver_instance_;
 }
+#endif
 
 /** Query to determine which SAMG multiple instance is used. The returned number indicates the SAMG library instance used.
  */
 int32_t SAMG_Settings::Get_mode_mess() const{
     return mode_mess_;
 }
+
+/** Query the number of threads that samg uses in openMP context. If zero, it is
+ * whatever is given by the system in the environment variable OMP_NUM_THREADS
+ * */
+#if defined(_OPENMP )
+int32_t SAMG_Settings::Get_samg_omp_num_threads_external() const{
+    return samg_omp_num_threads_external_;
+}
+#endif
+
+
 
 
 /** Subswitch of matrix.
@@ -426,7 +486,7 @@ void SAMG_Settings::Set_napproach( int32_t napproach ) {
 */
 void SAMG_Settings::Set_nxtyp( int32_t nxtyp ) {
     nxtyp_ = nxtyp;
-    if ( nxtyp != 0 && nxtyp != 1 && nxtyp != 2 && nxtyp != 5 )
+    if ( nxtyp != 0 && nxtyp != 1 && nxtyp != 2 && nxtyp != 3 && nxtyp != 5 && nxtyp != 9 )
         throw csmp::Exception( ERROR, "SAMG_Settings::Set_nxtyp",
                                "nxtyp must have a value of 0, 1, 2 or 5" );
 }
@@ -531,13 +591,17 @@ void SAMG_Settings::Set_nint_pat( int32_t nint_pat ) {
                     2	F-cycle
                     3	W-cycle
                     4	WW-cycle (very expensive)
+                    5   Diagonally pre?conditioned Krylov method
+                    6   Classical ICCG (? Sec on 7.7.2).  This method is only applicable to
+                        symmetric matrices for which just the lower tridiagonal part is
+                        supplied (? isym in Section 5.1).
 
 */
 void SAMG_Settings::Set_igam( int32_t igam ) {
     igam_ = igam;
-    if ( igam < 1 || igam > 4 )
+    if ( igam < 1 || igam > 6 )
         throw csmp::Exception( ERROR, "SAMG_Settings::Set_igam",
-                               "igam must have an integer value between 1 and 4" );
+                               "igam must have an integer value between 1 and 6" );
 }
 
 /** Subswitch of ncyc.
@@ -664,8 +728,7 @@ void SAMG_Settings::Set_iextent( int32_t iextent ) {
 tested: */
 void SAMG_Settings::Set_ndefault( int32_t ndefault ) {
     ndefault_ = ndefault;
-    if ( !(ndefault == 0)  &&
-         !( ndefault >= 10 && ndefault <= 13 ) &&
+    if ( !( ndefault >= 10 && ndefault <= 13 ) &&
          !( ndefault >= 15 && ndefault <= 18 ) &&
          !( ndefault >= 20 && ndefault <= 23 ) &&
          !( ndefault >= 25 && ndefault <= 28 ) &&
@@ -691,6 +754,44 @@ void SAMG_Settings::Set_norm_typ( int32_t norm_typ ) {
         throw csmp::Exception( ERROR, "SAMG_Settings::Set_norm_typ",
                                "norm_typ must have an integer value between 0 and 2" );
 }
+
+#if defined(_OPENMP )
+void SAMG_Settings::Set_icolor_omp( int32_t icolor_omp ) {
+    icolor_omp_ = icolor_omp;
+    if ( icolor_omp < 0 || icolor_omp > 2 )
+        throw csmp::Exception( ERROR, "SAMG_Settings::Set_icolor_omp",
+                               "icolor_omp must have an integer value between 0 and 2" );
+}
+
+void SAMG_Settings::Set_iordered_omp( int32_t iordered_omp ) {
+    iordered_omp_ = iordered_omp;
+    if ( iordered_omp_ < 0 || iordered_omp_ > 2 )
+        throw csmp::Exception( ERROR, "SAMG_Settings::Set_iordered_omp",
+                               "iordered_omp must have an integer value between 0 and 2" );
+}
+/**
+Integer. Switch to choose between different variants to perform the
+irestriction_openmp  fine?to?coarse residual restriction in parallel.
+(samg internal default = 2)
+2  ->  Dynamic choice between 0 and ?1: For single?thread runs it selects ì0î, otherwise ì?1î.
+
+1  ->  While the actual computation of the residual is done in parallel, its restriction
+       (via the transposed interpolation) is sequential: Parallel efficiency is reasonable,
+       no additional memory required.
+0  ->  Sequential computation, no OpenMP
+
+?1 ->  The transposed interpolation matrix (for restricting the residual) is computed at the beginning of the solution phase and then kept in memory. This
+results in highest parallel efficiency at the expense of quite some extra memory.
+*/
+
+void SAMG_Settings::Set_irestriction_openmp( int32_t irestriction_openmp ) {
+    irestriction_openmp_ = irestriction_openmp;
+    if ( irestriction_openmp_ < -1 || irestriction_openmp_ > 2 )
+        throw csmp::Exception( ERROR, "SAMG_Settings::Set_irestriction_openmp",
+                               "irestriction_openmp must have an integer value between -1 and 2" );
+}
+
+#endif
 
 /** Subswitch of iswitch.
 
@@ -1053,6 +1154,20 @@ void SAMG_Settings::Set_levelx( int32_t levelx ) {
     ExplicitSecondary( true );
 }
 
+/** RTFM Samg manual.  This parameter is rarely used, unless very small problems are being solved.
+    default value is 0.
+*/
+void SAMG_Settings::Set_clsolver_finest( int32_t clsolver_finest ) {
+
+    clsolver_finest_ = clsolver_finest;
+    ExplicitSecondary( true );
+}
+
+void SAMG_Settings::Set_nptmax( int32_t nptmax ) {
+
+    nptmax_=nptmax;
+}
+
 /** Switch ioform
 
 @section arguments Hidden Input Arguments
@@ -1134,14 +1249,15 @@ void SAMG_Settings::ExplicitSecondary( bool explicit_secondary ) {
     explicit_secondary_ = explicit_secondary;
 }
 
+#if defined( LEGACY_SAMG )
 void SAMG_Settings::SetSolverInstance( int32_t instance ) {
     solver_instance_ = instance;
-
     if ( instance < 0 || instance > 5 ) {
         throw csmp::Exception( ERROR, "SAMG_Settings::SetSolverInstance",
                                "SAMG Multiple Instances settings are out of range, available instances are 0, and 1" );
     }
 }
+#endif
 
 
 void SAMG_Settings::Set_mode_mess(int32_t mode)

@@ -17,10 +17,10 @@ class NumIntegral_DNT_op_DN_NT_v_DN_dV : public MathOperatorLHS<dim,CELL> {
                                       const char* basic,            ///< e.g., fluid pressure
                                       const char* test );           ///< e.g., fluid pressure
                             
-    virtual void GetOperands( const CELL<dim>& );
-    virtual void ComputeContribution( const CELL<dim>& );
+    void GetOperands( const CELL<dim>& ) override final;
+    void ComputeContribution( const CELL<dim>& ) override final;
 
-    virtual NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>* clone() const { return new NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>(*this); }
+    NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>* clone() const override final { return new NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>(*this); }
 
   private:
     DenseMatrix<DM_MIN>  DN, DNT, VIP, NT3;

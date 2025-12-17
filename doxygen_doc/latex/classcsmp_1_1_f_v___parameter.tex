@@ -1,0 +1,85 @@
+\doxysection{csmp\+::FV\+\_\+\+Parameter Class Reference}
+\hypertarget{classcsmp_1_1_f_v___parameter}{}\label{classcsmp_1_1_f_v___parameter}\index{csmp::FV\_Parameter@{csmp::FV\_Parameter}}
+
+
+{\ttfamily \#include $<$FV\+\_\+\+Parameter.\+h$>$}
+
+
+
+Collaboration diagram for csmp\+::FV\+\_\+\+Parameter\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=196pt]{classcsmp_1_1_f_v___parameter__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_f_v___parameter_afbe34e5eb681afdfc347ac563511ccad}\label{classcsmp_1_1_f_v___parameter_afbe34e5eb681afdfc347ac563511ccad} 
+{\bfseries FV\+\_\+\+Parameter} (size\+\_\+t sectors, size\+\_\+t facets, uint32\+\_\+t dim, bool with\+\_\+normals=false)
+\item 
+\Hypertarget{classcsmp_1_1_f_v___parameter_ae4453ac0719e17fb0388cf3f7a3cd0ac}\label{classcsmp_1_1_f_v___parameter_ae4453ac0719e17fb0388cf3f7a3cd0ac} 
+void {\bfseries Resize} (size\+\_\+t sectors, size\+\_\+t facets, uint32\+\_\+t dim, bool with\+\_\+normals=false)
+\item 
+\Hypertarget{classcsmp_1_1_f_v___parameter_ac03e8b2ce38d5af854e7b0d99ec2f3cb}\label{classcsmp_1_1_f_v___parameter_ac03e8b2ce38d5af854e7b0d99ec2f3cb} 
+void {\bfseries Sector\+Volume} (size\+\_\+t sector, double vol)
+\item 
+\Hypertarget{classcsmp_1_1_f_v___parameter_a6f248a3b099ec1424b1cc637542df15b}\label{classcsmp_1_1_f_v___parameter_a6f248a3b099ec1424b1cc637542df15b} 
+void {\bfseries Facet\+Area} (size\+\_\+t facet, double area)
+\item 
+\Hypertarget{classcsmp_1_1_f_v___parameter_ae8ab6db4fb8b57df26671e3df7b27a51}\label{classcsmp_1_1_f_v___parameter_ae8ab6db4fb8b57df26671e3df7b27a51} 
+void {\bfseries Facet\+Normal} (size\+\_\+t facet, const std\+::vector$<$ double $>$ \&fnxyz)
+\item 
+\Hypertarget{classcsmp_1_1_f_v___parameter_a3473b5e5ba5bb0382c37a8aa44600c23}\label{classcsmp_1_1_f_v___parameter_a3473b5e5ba5bb0382c37a8aa44600c23} 
+void {\bfseries Facet\+Normal\+Velocity} (size\+\_\+t facet, double flux)
+\item 
+\Hypertarget{classcsmp_1_1_f_v___parameter_ad9b0abfd4eaf8035f0a6d84d108a9e98}\label{classcsmp_1_1_f_v___parameter_ad9b0abfd4eaf8035f0a6d84d108a9e98} 
+void {\bfseries Initialize} (size\+\_\+t facet, double flux, double area)
+\item 
+\Hypertarget{classcsmp_1_1_f_v___parameter_aa877b915384ad43ddcf4244451cf8beb}\label{classcsmp_1_1_f_v___parameter_aa877b915384ad43ddcf4244451cf8beb} 
+size\+\_\+t {\bfseries Sectors} () const
+\item 
+\Hypertarget{classcsmp_1_1_f_v___parameter_ac0a046176fe7f27bf60f767c2496a5cd}\label{classcsmp_1_1_f_v___parameter_ac0a046176fe7f27bf60f767c2496a5cd} 
+size\+\_\+t {\bfseries Facets} () const
+\item 
+\Hypertarget{classcsmp_1_1_f_v___parameter_af962ae5b3d96057aca4c000764f91b96}\label{classcsmp_1_1_f_v___parameter_af962ae5b3d96057aca4c000764f91b96} 
+double {\bfseries Sector\+Volume} (size\+\_\+t sector) const
+\item 
+\Hypertarget{classcsmp_1_1_f_v___parameter_a305cbb571da598b4a2e5f65608012892}\label{classcsmp_1_1_f_v___parameter_a305cbb571da598b4a2e5f65608012892} 
+double {\bfseries Facet\+Area} (size\+\_\+t facet) const
+\item 
+\Hypertarget{classcsmp_1_1_f_v___parameter_addab75921a86a51bb25e7eb0d2ed066f}\label{classcsmp_1_1_f_v___parameter_addab75921a86a51bb25e7eb0d2ed066f} 
+double {\bfseries Facet\+Normal\+Velocity} (size\+\_\+t facet) const
+\item 
+\Hypertarget{classcsmp_1_1_f_v___parameter_a04642199a9b884211316c991be905a67}\label{classcsmp_1_1_f_v___parameter_a04642199a9b884211316c991be905a67} 
+double {\bfseries Facet\+Normal\+Component} (size\+\_\+t facet, size\+\_\+t x\+\_\+or\+\_\+y\+\_\+or\+\_\+z) const
+\item 
+\Hypertarget{classcsmp_1_1_f_v___parameter_af07181c42af271541efbce2e45988e15}\label{classcsmp_1_1_f_v___parameter_af07181c42af271541efbce2e45988e15} 
+double {\bfseries Facet\+Normal\+Projection} (size\+\_\+t facet, const std\+::vector$<$ double $>$ \&cxyz) const
+\begin{DoxyCompactList}\small\item\em dot product fn . vc \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_f_v___parameter_a9c5be6ece7227e4e45b510b6cf4c5b1f}\label{classcsmp_1_1_f_v___parameter_a9c5be6ece7227e4e45b510b6cf4c5b1f} 
+double {\bfseries Facet\+Normal\+Projection} (size\+\_\+t facet, const \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ 1U $>$ \&cxyz) const
+\begin{DoxyCompactList}\small\item\em universal versions of projection functions \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_f_v___parameter_a1e912ef00d0bca64d585cce4eadc7628}\label{classcsmp_1_1_f_v___parameter_a1e912ef00d0bca64d585cce4eadc7628} 
+double {\bfseries Facet\+Normal\+Projection} (size\+\_\+t facet, const \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ 2U $>$ \&cxyz) const
+\item 
+\Hypertarget{classcsmp_1_1_f_v___parameter_a5310e0ea05b127e4a11f669f4d28fc8f}\label{classcsmp_1_1_f_v___parameter_a5310e0ea05b127e4a11f669f4d28fc8f} 
+double {\bfseries Facet\+Normal\+Projection} (size\+\_\+t facet, const \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ 3U $>$ \&cxyz) const
+\item 
+\Hypertarget{classcsmp_1_1_f_v___parameter_afe5b5392d6cb1eabc952745af9a55cfd}\label{classcsmp_1_1_f_v___parameter_afe5b5392d6cb1eabc952745af9a55cfd} 
+size\+\_\+t {\bfseries Bytes} () const
+\item 
+\Hypertarget{classcsmp_1_1_f_v___parameter_a0a4e12c44e633568fa27a8ced59f0d53}\label{classcsmp_1_1_f_v___parameter_a0a4e12c44e633568fa27a8ced59f0d53} 
+void {\bfseries Out} () const
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+storage for the sector volumes, facet area and projected velocities so that these do not have to be recompute each timecrement 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/integration/finite\+\_\+volumes/legacy\+\_\+transport\+\_\+scheme/FV\+\_\+\+Parameter.\+h\item 
+source/modules/integration/finite\+\_\+volumes/legacy\+\_\+transport\+\_\+scheme/FV\+\_\+\+Parameter.\+cpp\end{DoxyCompactItemize}

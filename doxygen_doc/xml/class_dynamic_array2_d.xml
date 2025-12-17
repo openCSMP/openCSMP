@@ -1,0 +1,761 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="class_dynamic_array2_d" kind="class" language="C++" prot="public">
+    <compoundname>DynamicArray2D</compoundname>
+    <templateparamlist>
+      <param>
+        <type>class T</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="class_dynamic_array2_d_1a59acaa597caeffdb9402e58e411f861a" prot="public" static="no">
+        <type>std::vector&lt; T &gt;</type>
+        <definition>using DynamicArray2D&lt; T &gt;::data_type =  std::vector&lt;T&gt;</definition>
+        <argsstring></argsstring>
+        <name>data_type</name>
+        <qualifiedname>DynamicArray2D::data_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/DynamicArray2D.h" line="23" column="5" bodyfile="source/includes/math/DynamicArray2D.h" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="class_dynamic_array2_d_1a5cc0a6067e7d5a7f8bc16de2b2f26b89" prot="public" static="no">
+        <type>typename std::vector&lt; T &gt;::value_type</type>
+        <definition>using DynamicArray2D&lt; T &gt;::value_type =  typename std::vector&lt;T&gt;::value_type</definition>
+        <argsstring></argsstring>
+        <name>value_type</name>
+        <qualifiedname>DynamicArray2D::value_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/DynamicArray2D.h" line="24" column="5" bodyfile="source/includes/math/DynamicArray2D.h" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="class_dynamic_array2_d_1ae9e47972a5b017047cb3608556a78497" prot="public" static="no">
+        <type>typename std::vector&lt; T &gt;::size_type</type>
+        <definition>using DynamicArray2D&lt; T &gt;::size_type =  typename std::vector&lt;T&gt;::size_type</definition>
+        <argsstring></argsstring>
+        <name>size_type</name>
+        <qualifiedname>DynamicArray2D::size_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/DynamicArray2D.h" line="25" column="5" bodyfile="source/includes/math/DynamicArray2D.h" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="class_dynamic_array2_d_1ad0d0b6dad8154d78059c8025065509a7" prot="public" static="no">
+        <type>typename std::vector&lt; T &gt;::reference</type>
+        <definition>using DynamicArray2D&lt; T &gt;::reference =  typename std::vector&lt;T&gt;::reference</definition>
+        <argsstring></argsstring>
+        <name>reference</name>
+        <qualifiedname>DynamicArray2D::reference</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/DynamicArray2D.h" line="27" column="5" bodyfile="source/includes/math/DynamicArray2D.h" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="class_dynamic_array2_d_1a37827560157870a7ed83e1654991e648" prot="public" static="no">
+        <type>typename std::vector&lt; T &gt;::const_reference</type>
+        <definition>using DynamicArray2D&lt; T &gt;::const_reference =  typename std::vector&lt;T&gt;::const_reference</definition>
+        <argsstring></argsstring>
+        <name>const_reference</name>
+        <qualifiedname>DynamicArray2D::const_reference</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/DynamicArray2D.h" line="28" column="5" bodyfile="source/includes/math/DynamicArray2D.h" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="class_dynamic_array2_d_1a7fff3fd02fb2c8de236495936f002041" prot="public" static="no">
+        <type>typename std::vector&lt; T &gt;::iterator</type>
+        <definition>using DynamicArray2D&lt; T &gt;::iterator =  typename std::vector&lt;T&gt;::iterator</definition>
+        <argsstring></argsstring>
+        <name>iterator</name>
+        <qualifiedname>DynamicArray2D::iterator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/DynamicArray2D.h" line="30" column="5" bodyfile="source/includes/math/DynamicArray2D.h" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="class_dynamic_array2_d_1a29842388c0f0d65782218667d2c76f9c" prot="public" static="no">
+        <type>typename std::vector&lt; T &gt;::const_iterator</type>
+        <definition>using DynamicArray2D&lt; T &gt;::const_iterator =  typename std::vector&lt;T&gt;::const_iterator</definition>
+        <argsstring></argsstring>
+        <name>const_iterator</name>
+        <qualifiedname>DynamicArray2D::const_iterator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/DynamicArray2D.h" line="31" column="5" bodyfile="source/includes/math/DynamicArray2D.h" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="class_dynamic_array2_d_1a42c3536472634d69d769219adb919e24" prot="public" static="no">
+        <type>typename std::vector&lt; T &gt;::reverse_iterator</type>
+        <definition>using DynamicArray2D&lt; T &gt;::reverse_iterator =  typename std::vector&lt;T&gt;::reverse_iterator</definition>
+        <argsstring></argsstring>
+        <name>reverse_iterator</name>
+        <qualifiedname>DynamicArray2D::reverse_iterator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/DynamicArray2D.h" line="33" column="5" bodyfile="source/includes/math/DynamicArray2D.h" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="class_dynamic_array2_d_1a30ddbceb64bd3fdecec57414c13c0b3f" prot="public" static="no">
+        <type>typename std::vector&lt; T &gt;::const_reverse_iterator</type>
+        <definition>using DynamicArray2D&lt; T &gt;::const_reverse_iterator =  typename std::vector&lt;T&gt;::const_reverse_iterator</definition>
+        <argsstring></argsstring>
+        <name>const_reverse_iterator</name>
+        <qualifiedname>DynamicArray2D::const_reverse_iterator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/DynamicArray2D.h" line="34" column="5" bodyfile="source/includes/math/DynamicArray2D.h" bodystart="34" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="class_dynamic_array2_d_1a5817b0e41f5e4ceaf82fd52db63a1db7" prot="private" static="no" mutable="no">
+        <type>size_type</type>
+        <definition>size_type DynamicArray2D&lt; T &gt;::m_rows</definition>
+        <argsstring></argsstring>
+        <name>m_rows</name>
+        <qualifiedname>DynamicArray2D::m_rows</qualifiedname>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/DynamicArray2D.h" line="147" column="15" bodyfile="source/includes/math/DynamicArray2D.h" bodystart="147" bodyend="147"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_dynamic_array2_d_1ac6ed53ca6bb11b4a4fa9c30a9f766c7b" prot="private" static="no" mutable="no">
+        <type>size_type</type>
+        <definition>size_type DynamicArray2D&lt; T &gt;::m_cols</definition>
+        <argsstring></argsstring>
+        <name>m_cols</name>
+        <qualifiedname>DynamicArray2D::m_cols</qualifiedname>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/DynamicArray2D.h" line="148" column="15" bodyfile="source/includes/math/DynamicArray2D.h" bodystart="148" bodyend="148"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_dynamic_array2_d_1a94ebc0b60dc5d6395ee603c519faa296" prot="private" static="no" mutable="no">
+        <type>data_type</type>
+        <definition>data_type DynamicArray2D&lt; T &gt;::m_data</definition>
+        <argsstring></argsstring>
+        <name>m_data</name>
+        <qualifiedname>DynamicArray2D::m_data</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/DynamicArray2D.h" line="149" column="15" bodyfile="source/includes/math/DynamicArray2D.h" bodystart="149" bodyend="149"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_dynamic_array2_d_1adac54d2d85c44ff3466bd69e0950a7aa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>DynamicArray2D&lt; T &gt;::DynamicArray2D</definition>
+        <argsstring>()=default</argsstring>
+        <name>DynamicArray2D</name>
+        <qualifiedname>DynamicArray2D::DynamicArray2D</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/DynamicArray2D.h" line="37" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="class_dynamic_array2_d_1a8e18d100204d49c16cfc6f8cde7d1d1c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>DynamicArray2D&lt; T &gt;::DynamicArray2D</definition>
+        <argsstring>(size_type rows, size_type cols)</argsstring>
+        <name>DynamicArray2D</name>
+        <qualifiedname>DynamicArray2D::DynamicArray2D</qualifiedname>
+        <param>
+          <type>size_type</type>
+          <declname>rows</declname>
+        </param>
+        <param>
+          <type>size_type</type>
+          <declname>cols</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/DynamicArray2D.h" line="40" column="5" bodyfile="source/includes/math/DynamicArray2D.h" bodystart="40" bodyend="42"/>
+      </memberdef>
+      <memberdef kind="function" id="class_dynamic_array2_d_1a6ab62e31c6d41ff47cfc9012f560d0fa" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>DynamicArray2D&lt; T &gt;::DynamicArray2D</definition>
+        <argsstring>(size_type rows, size_type cols, const_reference val)</argsstring>
+        <name>DynamicArray2D</name>
+        <qualifiedname>DynamicArray2D::DynamicArray2D</qualifiedname>
+        <param>
+          <type>size_type</type>
+          <declname>rows</declname>
+        </param>
+        <param>
+          <type>size_type</type>
+          <declname>cols</declname>
+        </param>
+        <param>
+          <type>const_reference</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/DynamicArray2D.h" line="45" column="5" bodyfile="source/includes/math/DynamicArray2D.h" bodystart="45" bodyend="47"/>
+      </memberdef>
+      <memberdef kind="function" id="class_dynamic_array2_d_1a6e61df99fa401c3434dc6cc323629459" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>DynamicArray2D&lt; T &gt;::DynamicArray2D</definition>
+        <argsstring>(std::initializer_list&lt; data_type &gt; vals)</argsstring>
+        <name>DynamicArray2D</name>
+        <qualifiedname>DynamicArray2D::DynamicArray2D</qualifiedname>
+        <param>
+          <type>std::initializer_list&lt; data_type &gt;</type>
+          <declname>vals</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>matrix constructor taking vector-of-vectors-style initialiser list supporting initialisation by: <ref refid="class_dynamic_array2_d" kindref="compound">DynamicArray2D&lt;double&gt;</ref> mat4{ {1., 0.}, {0., 2.} }; </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/DynamicArray2D.h" line="54" column="5" bodyfile="source/includes/math/DynamicArray2D.h" bodystart="54" bodyend="63"/>
+        <references refid="class_dynamic_array2_d_1a6e61df99fa401c3434dc6cc323629459" compoundref="_dynamic_array2_d_8h" startline="54" endline="63">DynamicArray2D&lt; T &gt;::DynamicArray2D</references>
+        <referencedby refid="class_dynamic_array2_d_1a6e61df99fa401c3434dc6cc323629459" compoundref="_dynamic_array2_d_8h" startline="54" endline="63">DynamicArray2D&lt; T &gt;::DynamicArray2D</referencedby>
+        <referencedby refid="class_dynamic_array2_d_1a79909603ce4374b2bac4607ac9e9add3" compoundref="_dynamic_array2_d_8h" startline="67" endline="71">DynamicArray2D&lt; T &gt;::DynamicArray2D</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="class_dynamic_array2_d_1a79909603ce4374b2bac4607ac9e9add3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>DynamicArray2D&lt; T &gt;::DynamicArray2D</definition>
+        <argsstring>(std::initializer_list&lt; T &gt; vals)</argsstring>
+        <name>DynamicArray2D</name>
+        <qualifiedname>DynamicArray2D::DynamicArray2D</qualifiedname>
+        <param>
+          <type>std::initializer_list&lt; T &gt;</type>
+          <declname>vals</declname>
+        </param>
+        <briefdescription>
+<para>construction of square array via vector-style initialiser list </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/DynamicArray2D.h" line="67" column="5" bodyfile="source/includes/math/DynamicArray2D.h" bodystart="67" bodyend="71"/>
+        <references refid="class_dynamic_array2_d_1a6e61df99fa401c3434dc6cc323629459" compoundref="_dynamic_array2_d_8h" startline="54" endline="63">DynamicArray2D&lt; T &gt;::DynamicArray2D</references>
+      </memberdef>
+      <memberdef kind="function" id="class_dynamic_array2_d_1aa897b05d72bf995ace640f2c9c4b40d1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>iterator</type>
+        <definition>iterator DynamicArray2D&lt; T &gt;::begin</definition>
+        <argsstring>()</argsstring>
+        <name>begin</name>
+        <qualifiedname>DynamicArray2D::begin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/DynamicArray2D.h" line="75" column="14" bodyfile="source/includes/math/DynamicArray2D.h" bodystart="75" bodyend="75"/>
+      </memberdef>
+      <memberdef kind="function" id="class_dynamic_array2_d_1a3115a07ad317907c9619d8617d49bb01" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>iterator</type>
+        <definition>iterator DynamicArray2D&lt; T &gt;::end</definition>
+        <argsstring>()</argsstring>
+        <name>end</name>
+        <qualifiedname>DynamicArray2D::end</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/DynamicArray2D.h" line="76" column="14" bodyfile="source/includes/math/DynamicArray2D.h" bodystart="76" bodyend="76"/>
+      </memberdef>
+      <memberdef kind="function" id="class_dynamic_array2_d_1aa50f274d92a4c9478f4ba36d62f240c5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>const_iterator</type>
+        <definition>const_iterator DynamicArray2D&lt; T &gt;::begin</definition>
+        <argsstring>() const</argsstring>
+        <name>begin</name>
+        <qualifiedname>DynamicArray2D::begin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/DynamicArray2D.h" line="77" column="20" bodyfile="source/includes/math/DynamicArray2D.h" bodystart="77" bodyend="77"/>
+      </memberdef>
+      <memberdef kind="function" id="class_dynamic_array2_d_1a1de9db517f7110a6b5e0692a60560b75" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>const_iterator</type>
+        <definition>const_iterator DynamicArray2D&lt; T &gt;::end</definition>
+        <argsstring>() const</argsstring>
+        <name>end</name>
+        <qualifiedname>DynamicArray2D::end</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/DynamicArray2D.h" line="78" column="20" bodyfile="source/includes/math/DynamicArray2D.h" bodystart="78" bodyend="78"/>
+      </memberdef>
+      <memberdef kind="function" id="class_dynamic_array2_d_1a0b309d666d982853aa25c38539a5017d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>const_iterator</type>
+        <definition>const_iterator DynamicArray2D&lt; T &gt;::cbegin</definition>
+        <argsstring>() const</argsstring>
+        <name>cbegin</name>
+        <qualifiedname>DynamicArray2D::cbegin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/DynamicArray2D.h" line="79" column="20" bodyfile="source/includes/math/DynamicArray2D.h" bodystart="79" bodyend="79"/>
+      </memberdef>
+      <memberdef kind="function" id="class_dynamic_array2_d_1a125026488569e06bb0299a463042654d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>const_iterator</type>
+        <definition>const_iterator DynamicArray2D&lt; T &gt;::cend</definition>
+        <argsstring>() const</argsstring>
+        <name>cend</name>
+        <qualifiedname>DynamicArray2D::cend</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/DynamicArray2D.h" line="80" column="20" bodyfile="source/includes/math/DynamicArray2D.h" bodystart="80" bodyend="80"/>
+      </memberdef>
+      <memberdef kind="function" id="class_dynamic_array2_d_1abd1eb2b90e8f81cd9a4480c30a753cae" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>reverse_iterator</type>
+        <definition>reverse_iterator DynamicArray2D&lt; T &gt;::rbegin</definition>
+        <argsstring>()</argsstring>
+        <name>rbegin</name>
+        <qualifiedname>DynamicArray2D::rbegin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/DynamicArray2D.h" line="81" column="22" bodyfile="source/includes/math/DynamicArray2D.h" bodystart="81" bodyend="81"/>
+      </memberdef>
+      <memberdef kind="function" id="class_dynamic_array2_d_1ad14d5ea13a9f30ff8d10cb06f14e5a70" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>reverse_iterator</type>
+        <definition>reverse_iterator DynamicArray2D&lt; T &gt;::rend</definition>
+        <argsstring>()</argsstring>
+        <name>rend</name>
+        <qualifiedname>DynamicArray2D::rend</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/DynamicArray2D.h" line="82" column="22" bodyfile="source/includes/math/DynamicArray2D.h" bodystart="82" bodyend="82"/>
+      </memberdef>
+      <memberdef kind="function" id="class_dynamic_array2_d_1adccdd81f0779a16a1c342cdaf2a41f24" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>const_reverse_iterator</type>
+        <definition>const_reverse_iterator DynamicArray2D&lt; T &gt;::rbegin</definition>
+        <argsstring>() const</argsstring>
+        <name>rbegin</name>
+        <qualifiedname>DynamicArray2D::rbegin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/DynamicArray2D.h" line="83" column="28" bodyfile="source/includes/math/DynamicArray2D.h" bodystart="83" bodyend="83"/>
+      </memberdef>
+      <memberdef kind="function" id="class_dynamic_array2_d_1a7164af6935094a36bbb7d7ee4ef33494" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>const_reverse_iterator</type>
+        <definition>const_reverse_iterator DynamicArray2D&lt; T &gt;::rend</definition>
+        <argsstring>() const</argsstring>
+        <name>rend</name>
+        <qualifiedname>DynamicArray2D::rend</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/DynamicArray2D.h" line="84" column="28" bodyfile="source/includes/math/DynamicArray2D.h" bodystart="84" bodyend="84"/>
+      </memberdef>
+      <memberdef kind="function" id="class_dynamic_array2_d_1a52f6f6f16bef5e8785a60ebd57f5533c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>const_reverse_iterator</type>
+        <definition>const_reverse_iterator DynamicArray2D&lt; T &gt;::crbegin</definition>
+        <argsstring>() const</argsstring>
+        <name>crbegin</name>
+        <qualifiedname>DynamicArray2D::crbegin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/DynamicArray2D.h" line="85" column="28" bodyfile="source/includes/math/DynamicArray2D.h" bodystart="85" bodyend="85"/>
+      </memberdef>
+      <memberdef kind="function" id="class_dynamic_array2_d_1aa4cc3e7fe0c8cd358667202e358a0c0d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>const_reverse_iterator</type>
+        <definition>const_reverse_iterator DynamicArray2D&lt; T &gt;::crend</definition>
+        <argsstring>() const</argsstring>
+        <name>crend</name>
+        <qualifiedname>DynamicArray2D::crend</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/DynamicArray2D.h" line="86" column="28" bodyfile="source/includes/math/DynamicArray2D.h" bodystart="86" bodyend="86"/>
+      </memberdef>
+      <memberdef kind="function" id="class_dynamic_array2_d_1a870b4ac2102c692c79aaa732df23a4dc" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>reference</type>
+        <definition>reference DynamicArray2D&lt; T &gt;::operator()</definition>
+        <argsstring>(size_type const row, size_type const column)</argsstring>
+        <name>operator()</name>
+        <qualifiedname>DynamicArray2D::operator()</qualifiedname>
+        <param>
+          <type>size_type const</type>
+          <declname>row</declname>
+        </param>
+        <param>
+          <type>size_type const</type>
+          <declname>column</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/DynamicArray2D.h" line="89" column="15" bodyfile="source/includes/math/DynamicArray2D.h" bodystart="89" bodyend="92"/>
+      </memberdef>
+      <memberdef kind="function" id="class_dynamic_array2_d_1a9aeb3d69ee66d8d874d66df1cd2e3134" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>const_reference</type>
+        <definition>const_reference DynamicArray2D&lt; T &gt;::operator()</definition>
+        <argsstring>(size_type const row, size_type const column) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>DynamicArray2D::operator()</qualifiedname>
+        <param>
+          <type>size_type const</type>
+          <declname>row</declname>
+        </param>
+        <param>
+          <type>size_type const</type>
+          <declname>column</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/DynamicArray2D.h" line="94" column="21" bodyfile="source/includes/math/DynamicArray2D.h" bodystart="94" bodyend="96"/>
+      </memberdef>
+      <memberdef kind="function" id="class_dynamic_array2_d_1abcb7f72bdc34ad94ea3eaf3c6e596cfb" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>reference</type>
+        <definition>reference DynamicArray2D&lt; T &gt;::at</definition>
+        <argsstring>(size_type const row, size_type const column)</argsstring>
+        <name>at</name>
+        <qualifiedname>DynamicArray2D::at</qualifiedname>
+        <param>
+          <type>size_type const</type>
+          <declname>row</declname>
+        </param>
+        <param>
+          <type>size_type const</type>
+          <declname>column</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/DynamicArray2D.h" line="98" column="15" bodyfile="source/includes/math/DynamicArray2D.h" bodystart="98" bodyend="100"/>
+      </memberdef>
+      <memberdef kind="function" id="class_dynamic_array2_d_1ad661df802c3223607883de5fa19cab36" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>const_reference</type>
+        <definition>const_reference DynamicArray2D&lt; T &gt;::at</definition>
+        <argsstring>(size_type const row, size_type const column) const</argsstring>
+        <name>at</name>
+        <qualifiedname>DynamicArray2D::at</qualifiedname>
+        <param>
+          <type>size_type const</type>
+          <declname>row</declname>
+        </param>
+        <param>
+          <type>size_type const</type>
+          <declname>column</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/DynamicArray2D.h" line="102" column="21" bodyfile="source/includes/math/DynamicArray2D.h" bodystart="102" bodyend="104"/>
+      </memberdef>
+      <memberdef kind="function" id="class_dynamic_array2_d_1a88fdbd9ea315549ffc806ce239ab2b2e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void DynamicArray2D&lt; T &gt;::resize</definition>
+        <argsstring>(size_type new_rows, size_type new_cols)</argsstring>
+        <name>resize</name>
+        <qualifiedname>DynamicArray2D::resize</qualifiedname>
+        <param>
+          <type>size_type</type>
+          <declname>new_rows</declname>
+        </param>
+        <param>
+          <type>size_type</type>
+          <declname>new_cols</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/DynamicArray2D.h" line="107" column="10" bodyfile="source/includes/math/DynamicArray2D.h" bodystart="107" bodyend="123"/>
+      </memberdef>
+      <memberdef kind="function" id="class_dynamic_array2_d_1a855173473371ab4e37e28d192bacde7e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_type</type>
+        <definition>size_type DynamicArray2D&lt; T &gt;::size</definition>
+        <argsstring>() const</argsstring>
+        <name>size</name>
+        <qualifiedname>DynamicArray2D::size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/DynamicArray2D.h" line="126" column="15" bodyfile="source/includes/math/DynamicArray2D.h" bodystart="126" bodyend="126"/>
+      </memberdef>
+      <memberdef kind="function" id="class_dynamic_array2_d_1a1eaffb8e76db2ee90f409b3930f17c72" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_type</type>
+        <definition>size_type DynamicArray2D&lt; T &gt;::capacity</definition>
+        <argsstring>() const</argsstring>
+        <name>capacity</name>
+        <qualifiedname>DynamicArray2D::capacity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/DynamicArray2D.h" line="127" column="15" bodyfile="source/includes/math/DynamicArray2D.h" bodystart="127" bodyend="127"/>
+      </memberdef>
+      <memberdef kind="function" id="class_dynamic_array2_d_1ad2a186f9274070eb62ada39e1eace191" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_type</type>
+        <definition>size_type DynamicArray2D&lt; T &gt;::max_size</definition>
+        <argsstring>() const</argsstring>
+        <name>max_size</name>
+        <qualifiedname>DynamicArray2D::max_size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/DynamicArray2D.h" line="128" column="15" bodyfile="source/includes/math/DynamicArray2D.h" bodystart="128" bodyend="128"/>
+      </memberdef>
+      <memberdef kind="function" id="class_dynamic_array2_d_1aa16f05209db40c9481bc10a950859261" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool DynamicArray2D&lt; T &gt;::empty</definition>
+        <argsstring>() const</argsstring>
+        <name>empty</name>
+        <qualifiedname>DynamicArray2D::empty</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/DynamicArray2D.h" line="129" column="10" bodyfile="source/includes/math/DynamicArray2D.h" bodystart="129" bodyend="129"/>
+      </memberdef>
+      <memberdef kind="function" id="class_dynamic_array2_d_1a2830408eda55230eceea84419b64dfcd" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_type</type>
+        <definition>size_type DynamicArray2D&lt; T &gt;::rows</definition>
+        <argsstring>() const</argsstring>
+        <name>rows</name>
+        <qualifiedname>DynamicArray2D::rows</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/DynamicArray2D.h" line="132" column="15" bodyfile="source/includes/math/DynamicArray2D.h" bodystart="132" bodyend="132"/>
+      </memberdef>
+      <memberdef kind="function" id="class_dynamic_array2_d_1aef41c25afc11b77cce5953c3ea976601" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_type</type>
+        <definition>size_type DynamicArray2D&lt; T &gt;::cols</definition>
+        <argsstring>() const</argsstring>
+        <name>cols</name>
+        <qualifiedname>DynamicArray2D::cols</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/DynamicArray2D.h" line="133" column="15" bodyfile="source/includes/math/DynamicArray2D.h" bodystart="133" bodyend="133"/>
+      </memberdef>
+      <memberdef kind="function" id="class_dynamic_array2_d_1ab5de14faab55c58a048e703a504aa0e0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void DynamicArray2D&lt; T &gt;::swap</definition>
+        <argsstring>(DynamicArray2D &amp;rhs)</argsstring>
+        <name>swap</name>
+        <qualifiedname>DynamicArray2D::swap</qualifiedname>
+        <param>
+          <type><ref refid="class_dynamic_array2_d" kindref="compound">DynamicArray2D</ref> &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/DynamicArray2D.h" line="136" column="10" bodyfile="source/includes/math/DynamicArray2D.h" bodystart="136" bodyend="141"/>
+      </memberdef>
+      <memberdef kind="function" id="class_dynamic_array2_d_1af2c5bd514dc71090969b43a338071573" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void DynamicArray2D&lt; T &gt;::out</definition>
+        <argsstring>() const</argsstring>
+        <name>out</name>
+        <qualifiedname>DynamicArray2D::out</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/DynamicArray2D.h" line="144" column="8" bodyfile="source/includes/math/DynamicArray2D.h" bodystart="173" bodyend="183"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>DynamicArray2D&lt; T &gt;</label>
+        <link refid="class_dynamic_array2_d"/>
+      </node>
+      <node id="2">
+        <label>DynamicArray2D&lt; double &gt;</label>
+        <link refid="class_dynamic_array2_d"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; double &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>DynamicArray2D&lt; uint32_t &gt;</label>
+        <link refid="class_dynamic_array2_d"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; uint32_t &gt;</edgelabel>
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>DynamicArray2D&lt; T &gt;</label>
+        <link refid="class_dynamic_array2_d"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/math/DynamicArray2D.h" line="19" column="1" bodyfile="source/includes/math/DynamicArray2D.h" bodystart="20" bodyend="150"/>
+    <listofallmembers>
+      <member refid="class_dynamic_array2_d_1abcb7f72bdc34ad94ea3eaf3c6e596cfb" prot="public" virt="non-virtual"><scope>DynamicArray2D</scope><name>at</name></member>
+      <member refid="class_dynamic_array2_d_1ad661df802c3223607883de5fa19cab36" prot="public" virt="non-virtual"><scope>DynamicArray2D</scope><name>at</name></member>
+      <member refid="class_dynamic_array2_d_1aa897b05d72bf995ace640f2c9c4b40d1" prot="public" virt="non-virtual"><scope>DynamicArray2D</scope><name>begin</name></member>
+      <member refid="class_dynamic_array2_d_1aa50f274d92a4c9478f4ba36d62f240c5" prot="public" virt="non-virtual"><scope>DynamicArray2D</scope><name>begin</name></member>
+      <member refid="class_dynamic_array2_d_1a1eaffb8e76db2ee90f409b3930f17c72" prot="public" virt="non-virtual"><scope>DynamicArray2D</scope><name>capacity</name></member>
+      <member refid="class_dynamic_array2_d_1a0b309d666d982853aa25c38539a5017d" prot="public" virt="non-virtual"><scope>DynamicArray2D</scope><name>cbegin</name></member>
+      <member refid="class_dynamic_array2_d_1a125026488569e06bb0299a463042654d" prot="public" virt="non-virtual"><scope>DynamicArray2D</scope><name>cend</name></member>
+      <member refid="class_dynamic_array2_d_1aef41c25afc11b77cce5953c3ea976601" prot="public" virt="non-virtual"><scope>DynamicArray2D</scope><name>cols</name></member>
+      <member refid="class_dynamic_array2_d_1a29842388c0f0d65782218667d2c76f9c" prot="public" virt="non-virtual"><scope>DynamicArray2D</scope><name>const_iterator</name></member>
+      <member refid="class_dynamic_array2_d_1a37827560157870a7ed83e1654991e648" prot="public" virt="non-virtual"><scope>DynamicArray2D</scope><name>const_reference</name></member>
+      <member refid="class_dynamic_array2_d_1a30ddbceb64bd3fdecec57414c13c0b3f" prot="public" virt="non-virtual"><scope>DynamicArray2D</scope><name>const_reverse_iterator</name></member>
+      <member refid="class_dynamic_array2_d_1a52f6f6f16bef5e8785a60ebd57f5533c" prot="public" virt="non-virtual"><scope>DynamicArray2D</scope><name>crbegin</name></member>
+      <member refid="class_dynamic_array2_d_1aa4cc3e7fe0c8cd358667202e358a0c0d" prot="public" virt="non-virtual"><scope>DynamicArray2D</scope><name>crend</name></member>
+      <member refid="class_dynamic_array2_d_1a59acaa597caeffdb9402e58e411f861a" prot="public" virt="non-virtual"><scope>DynamicArray2D</scope><name>data_type</name></member>
+      <member refid="class_dynamic_array2_d_1adac54d2d85c44ff3466bd69e0950a7aa" prot="public" virt="non-virtual"><scope>DynamicArray2D</scope><name>DynamicArray2D</name></member>
+      <member refid="class_dynamic_array2_d_1a8e18d100204d49c16cfc6f8cde7d1d1c" prot="public" virt="non-virtual"><scope>DynamicArray2D</scope><name>DynamicArray2D</name></member>
+      <member refid="class_dynamic_array2_d_1a6ab62e31c6d41ff47cfc9012f560d0fa" prot="public" virt="non-virtual"><scope>DynamicArray2D</scope><name>DynamicArray2D</name></member>
+      <member refid="class_dynamic_array2_d_1a6e61df99fa401c3434dc6cc323629459" prot="public" virt="non-virtual"><scope>DynamicArray2D</scope><name>DynamicArray2D</name></member>
+      <member refid="class_dynamic_array2_d_1a79909603ce4374b2bac4607ac9e9add3" prot="public" virt="non-virtual"><scope>DynamicArray2D</scope><name>DynamicArray2D</name></member>
+      <member refid="class_dynamic_array2_d_1aa16f05209db40c9481bc10a950859261" prot="public" virt="non-virtual"><scope>DynamicArray2D</scope><name>empty</name></member>
+      <member refid="class_dynamic_array2_d_1a3115a07ad317907c9619d8617d49bb01" prot="public" virt="non-virtual"><scope>DynamicArray2D</scope><name>end</name></member>
+      <member refid="class_dynamic_array2_d_1a1de9db517f7110a6b5e0692a60560b75" prot="public" virt="non-virtual"><scope>DynamicArray2D</scope><name>end</name></member>
+      <member refid="class_dynamic_array2_d_1a7fff3fd02fb2c8de236495936f002041" prot="public" virt="non-virtual"><scope>DynamicArray2D</scope><name>iterator</name></member>
+      <member refid="class_dynamic_array2_d_1ac6ed53ca6bb11b4a4fa9c30a9f766c7b" prot="private" virt="non-virtual"><scope>DynamicArray2D</scope><name>m_cols</name></member>
+      <member refid="class_dynamic_array2_d_1a94ebc0b60dc5d6395ee603c519faa296" prot="private" virt="non-virtual"><scope>DynamicArray2D</scope><name>m_data</name></member>
+      <member refid="class_dynamic_array2_d_1a5817b0e41f5e4ceaf82fd52db63a1db7" prot="private" virt="non-virtual"><scope>DynamicArray2D</scope><name>m_rows</name></member>
+      <member refid="class_dynamic_array2_d_1ad2a186f9274070eb62ada39e1eace191" prot="public" virt="non-virtual"><scope>DynamicArray2D</scope><name>max_size</name></member>
+      <member refid="class_dynamic_array2_d_1a870b4ac2102c692c79aaa732df23a4dc" prot="public" virt="non-virtual"><scope>DynamicArray2D</scope><name>operator()</name></member>
+      <member refid="class_dynamic_array2_d_1a9aeb3d69ee66d8d874d66df1cd2e3134" prot="public" virt="non-virtual"><scope>DynamicArray2D</scope><name>operator()</name></member>
+      <member refid="class_dynamic_array2_d_1af2c5bd514dc71090969b43a338071573" prot="public" virt="non-virtual"><scope>DynamicArray2D</scope><name>out</name></member>
+      <member refid="class_dynamic_array2_d_1abd1eb2b90e8f81cd9a4480c30a753cae" prot="public" virt="non-virtual"><scope>DynamicArray2D</scope><name>rbegin</name></member>
+      <member refid="class_dynamic_array2_d_1adccdd81f0779a16a1c342cdaf2a41f24" prot="public" virt="non-virtual"><scope>DynamicArray2D</scope><name>rbegin</name></member>
+      <member refid="class_dynamic_array2_d_1ad0d0b6dad8154d78059c8025065509a7" prot="public" virt="non-virtual"><scope>DynamicArray2D</scope><name>reference</name></member>
+      <member refid="class_dynamic_array2_d_1ad14d5ea13a9f30ff8d10cb06f14e5a70" prot="public" virt="non-virtual"><scope>DynamicArray2D</scope><name>rend</name></member>
+      <member refid="class_dynamic_array2_d_1a7164af6935094a36bbb7d7ee4ef33494" prot="public" virt="non-virtual"><scope>DynamicArray2D</scope><name>rend</name></member>
+      <member refid="class_dynamic_array2_d_1a88fdbd9ea315549ffc806ce239ab2b2e" prot="public" virt="non-virtual"><scope>DynamicArray2D</scope><name>resize</name></member>
+      <member refid="class_dynamic_array2_d_1a42c3536472634d69d769219adb919e24" prot="public" virt="non-virtual"><scope>DynamicArray2D</scope><name>reverse_iterator</name></member>
+      <member refid="class_dynamic_array2_d_1a2830408eda55230eceea84419b64dfcd" prot="public" virt="non-virtual"><scope>DynamicArray2D</scope><name>rows</name></member>
+      <member refid="class_dynamic_array2_d_1a855173473371ab4e37e28d192bacde7e" prot="public" virt="non-virtual"><scope>DynamicArray2D</scope><name>size</name></member>
+      <member refid="class_dynamic_array2_d_1ae9e47972a5b017047cb3608556a78497" prot="public" virt="non-virtual"><scope>DynamicArray2D</scope><name>size_type</name></member>
+      <member refid="class_dynamic_array2_d_1ab5de14faab55c58a048e703a504aa0e0" prot="public" virt="non-virtual"><scope>DynamicArray2D</scope><name>swap</name></member>
+      <member refid="class_dynamic_array2_d_1a5cc0a6067e7d5a7f8bc16de2b2f26b89" prot="public" virt="non-virtual"><scope>DynamicArray2D</scope><name>value_type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

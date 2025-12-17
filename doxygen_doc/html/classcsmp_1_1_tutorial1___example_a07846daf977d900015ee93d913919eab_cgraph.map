@@ -1,0 +1,5 @@
+<map id="csmp::Tutorial1_Example::Run" name="csmp::Tutorial1_Example::Run">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,207,31"/>
+<area shape="rect" id="Node000002" href="$namespacecsmp.html#a045796fbaba7d5053c66ae8e794e5f9b" title="creates scalar and returns; use for inserting scalars into functions" alt="" coords="255,5,385,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="207,16,239,16,239,21,207,21"/>
+</map>

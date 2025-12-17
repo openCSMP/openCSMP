@@ -24,16 +24,10 @@
 
 // legacy finite-volume transport scheme
 #include "StencilProcessor.h"
+#include "FiniteVolumeStencil.h"
 #include "ExplicitStencilProcessor.h"
 #include "ExplicitNodeCenteredFiniteVolumeTransport.h"
 #include "NodeCenteredFiniteVolumeTransport.h"
-
-#ifdef FV_STENCIL_TESTING
-#include "FiniteVolumeStencil_refactored.h"
-#else
-#include "FiniteVolumeStencil.h"
-#endif
-
 
 #include "MeshDiagnostics.h"
 

@@ -1,0 +1,236 @@
+\doxysection{MJL\+\_\+\+Polygon.\+h}
+\hypertarget{_m_j_l___polygon_8h_source}{}\label{_m_j_l___polygon_8h_source}\index{source/includes/discretisation/MJL\_Polygon.h@{source/includes/discretisation/MJL\_Polygon.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{MJL\_POLYGON\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{MJL\_POLYGON\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_m_j_l___vertex_8h}{"{}MJL\_Vertex.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_m_j_l___edge_8h}{"{}MJL\_Edge.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{list}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cassert}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacemjl}{mjl}}\ \{}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}\ \{}
+\DoxyCodeLine{00013\ \ \ \textcolor{keyword}{public}:\ \textcolor{comment}{//\ points\ //\ should\ be\ unique\ and\ ordered\ clockwise}}
+\DoxyCodeLine{00014\ \ \ \ \ Polygon(\ std::list<mjl::Point>::const\_iterator,}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \ \ \ \ \ std::list<mjl::Point>::const\_iterator\ );}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keyword}{explicit}\ Polygon(\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ );}
+\DoxyCodeLine{00017\ \ \ \ \ Polygon();}
+\DoxyCodeLine{00018\ \ \ \ \ Polygon(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}\&\ );}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~Polygon();}
+\DoxyCodeLine{00020\ \ \ \ \ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}\&\ \ \ \ \ \ \mbox{\hyperlink{classmjl_1_1_polygon_ab3ddc99404fe966208ed30e6167a8c25}{operator}}=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}\&\ p\ );}
+\DoxyCodeLine{00021\ \ \ \ \ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ \ SetV(\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ );}
+\DoxyCodeLine{00022\ \ \ \ \ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ \ V()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00023\ \ \ \ \ size\_t\ \ \ \ \ \ \ \ Size()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ Empty()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00025\ \ \ \ \ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\ \ \ \ Point()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00026\ \ \ \ \ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_edge}{Edge}}\ \ \ \ \ Edge()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00027\ \ \ \ \ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ \ \mbox{\hyperlink{classmjl_1_1_polygon_a60d02a09517d791ccc0252730ddc1ac5}{Cw}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00028\ \ \ \ \ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ \ \mbox{\hyperlink{classmjl_1_1_polygon_abda65416ceabdf25bdef0ac5193c714b}{Ccw}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00029\ \ \ \ \ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ \ Neighbor(\ ORIENTATION\ );}
+\DoxyCodeLine{00030\ \ \ \ \ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ \ Advance(\ ORIENTATION\ );}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ Advance(\ ORIENTATION\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00032\ \ \ \ \ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ \ Insert(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\&\ );}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ Erase();}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ Remove();}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classmjl_1_1_polygon_ae445bf250e397ccd6f4b785eef19d69d}{Revert}}();\ \textcolor{comment}{///<\ rebuilds\ itself\ in\ reverse\ order}}
+\DoxyCodeLine{00036\ \ \ \ \ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}*\ \ \ \ \ \ Split(\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ );}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ MJL,\ p.87}}
+\DoxyCodeLine{00038\ \ \ \ \ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ \ LeastVertex(\ \textcolor{keywordtype}{int}\ (*cmp\ )(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\&\ a,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\&\ b\ )\ );}
+\DoxyCodeLine{00039\ \ \ \ \ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\ \ \ \ CenterOfGravity()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ CenterOfGravity(\ \textcolor{keywordtype}{double}\&,\ \textcolor{keywordtype}{double}\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ Perimeter()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classmjl_1_1_polygon_a487220e1e6659b5e090ecaf5de2e4bc5}{CheckAngles}}(\ \textcolor{keywordtype}{double}\ tolerated\_bound\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00043\ \ \ \ \ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\ \ \ \ \mbox{\hyperlink{classmjl_1_1_polygon_a346b36cfb94c8e6906b74f7f634a57a8}{InsidePointSA}}();\ \textcolor{comment}{///<\ uses\ signed\ angle\ >\ and\ returns\ edge\ midpoint\ }}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ Scale(\ \textcolor{keywordtype}{double}\ factor\ );}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ Move(\ \textcolor{keywordtype}{double}\ dx,\ \textcolor{keywordtype}{double}\ dy\ );}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ BoundingRectangle(\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\&\ cnr\_min,\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\&\ cnr\_max\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ IsPositivelyOriented()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ OrientPositively();}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ Out()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classmjl_1_1_polygon_a827c786cfa579fcb927ee46ecf1a6e2f}{Out}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ OutputCoordinatesTo(\ std::list<mjl::Point>\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keyword}{mutable}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ v\_;}
+\DoxyCodeLine{00057\ \ \ \ \ size\_t\ \ size\_;}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordtype}{void}\ Resize();}
+\DoxyCodeLine{00060\ \};}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \textcolor{comment}{//\ nonmember\ functions}}
+\DoxyCodeLine{00063\ \textcolor{keywordtype}{int}\ leftToRightCmp(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\&\ a,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\&\ b\ );}
+\DoxyCodeLine{00064\ \textcolor{keywordtype}{int}\ rightToLeftCmp(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\&\ a,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\&\ b\ );}
+\DoxyCodeLine{00065\ \textcolor{keywordtype}{int}\ closestToPolygonCmp(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\&\ a,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\&\ b\ );}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \textcolor{comment}{//\ member\ functions}}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}::Polygon()}
+\DoxyCodeLine{00072\ \ :\ v\_(0),\ size\_(0u)}
+\DoxyCodeLine{00073\ \ \ \{}
+\DoxyCodeLine{00074\ \ \ \}}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}::Polygon(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}\&\ p\ )}
+\DoxyCodeLine{00078\ \ \{}
+\DoxyCodeLine{00079\ \ \ \ \ *\textcolor{keyword}{this}\ \mbox{\hyperlink{classmjl_1_1_polygon_ab3ddc99404fe966208ed30e6167a8c25}{=}}\ p;}
+\DoxyCodeLine{00080\ \ \}}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}::Polygon(\ \mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ v\ )}
+\DoxyCodeLine{00085\ \ :\ v\_(v)}
+\DoxyCodeLine{00086\ \ \ \{}
+\DoxyCodeLine{00087\ \ \ \ \ \ Resize();}
+\DoxyCodeLine{00088\ \ \ \}}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}::V()\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00092\ \ \{}
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{keywordflow}{return}\ v\_;}
+\DoxyCodeLine{00094\ \ \}}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \textcolor{keyword}{inline}\ size\_t\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}::Size()\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00098\ \ \{\ \textcolor{keywordflow}{return}\ size\_;\ \}}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ \ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}::Empty()\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00102\ \ \{\ \textcolor{keywordflow}{return}\ (size\_==0u);\ \}}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}::Point()\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00106\ \ \{}
+\DoxyCodeLine{00107\ \ \ \ \ \textcolor{keywordflow}{return}\ v\_-\/>Point();}
+\DoxyCodeLine{00108\ \ \}}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}\ \ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}::Edge()\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00112\ \ \{}
+\DoxyCodeLine{00113\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_edge}{Edge}}(\ Point(),\ v\_-\/>Cw()-\/>Point()\ );}
+\DoxyCodeLine{00114\ \ \}}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00117\ \textcolor{comment}{///\ @return\ vertex\ successor}}
+\DoxyCodeLine{00118\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}::\mbox{\hyperlink{classmjl_1_1_polygon_a60d02a09517d791ccc0252730ddc1ac5}{Cw}}()\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00119\ \ \{}
+\DoxyCodeLine{00120\ \ \ \ \ \textcolor{keywordflow}{return}\ v\_-\/>Cw();}
+\DoxyCodeLine{00121\ \ \}}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ \textcolor{comment}{///\ @return\ predecessor\ of\ vertex}}
+\DoxyCodeLine{00125\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}::\mbox{\hyperlink{classmjl_1_1_polygon_abda65416ceabdf25bdef0ac5193c714b}{Ccw}}()\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00126\ \ \{}
+\DoxyCodeLine{00127\ \ \ \ \ \textcolor{keywordflow}{return}\ v\_-\/>Ccw();}
+\DoxyCodeLine{00128\ \ \}}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}::Neighbor(\ ORIENTATION\ rotation\ )}
+\DoxyCodeLine{00132\ \ \{}
+\DoxyCodeLine{00133\ \ \ \ \ \textcolor{keywordflow}{return}\ v\_-\/>Neighbor(\ rotation\ );}
+\DoxyCodeLine{00134\ \ \}}
+\DoxyCodeLine{00135\ }
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00137\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}::Advance(\ ORIENTATION\ rotation\ )}
+\DoxyCodeLine{00138\ \ \{}
+\DoxyCodeLine{00139\ \ \ \ \ \textcolor{keywordflow}{return}\ v\_\ =\ v\_-\/>Neighbor(\ rotation\ );}
+\DoxyCodeLine{00140\ \ \}}
+\DoxyCodeLine{00141\ }
+\DoxyCodeLine{00142\ \textcolor{keyword}{inline}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}::Advance(\ ORIENTATION\ rotation\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00143\ \ \{}
+\DoxyCodeLine{00144\ \ \ \ \ \textcolor{keywordflow}{return}\ v\_\ =\ v\_-\/>Neighbor(\ rotation\ );}
+\DoxyCodeLine{00145\ \ \}}
+\DoxyCodeLine{00146\ }
+\DoxyCodeLine{00147\ }
+\DoxyCodeLine{00148\ }
+\DoxyCodeLine{00149\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}::SetV(\ \mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ v\ )}
+\DoxyCodeLine{00150\ \ \{}
+\DoxyCodeLine{00151\ \ \ \ \ \textcolor{keywordflow}{return}\ v\_\ =\ v;}
+\DoxyCodeLine{00152\ \ \}}
+\DoxyCodeLine{00153\ }
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00155\ }
+\DoxyCodeLine{00156\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}::Insert(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\&\ p\ )}
+\DoxyCodeLine{00157\ \ \{}
+\DoxyCodeLine{00158\ \ \ \ \ \textcolor{keywordflow}{if}\ (\ size\_++\ ==\ 0U\ )\ v\_\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}(p);}
+\DoxyCodeLine{00159\ \ \ \ \ \textcolor{keywordflow}{else}\ v\_\ =\ v\_-\/>Insert(\ \textcolor{keyword}{new}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}(p)\ );}
+\DoxyCodeLine{00160\ }
+\DoxyCodeLine{00161\ \ \ \ \ \textcolor{keywordflow}{return}\ v\_;}
+\DoxyCodeLine{00162\ \ \}}
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00164\ }
+\DoxyCodeLine{00165\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}::Remove()}
+\DoxyCodeLine{00166\ \ \{}
+\DoxyCodeLine{00167\ \ \ \ \ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ v\ =\ v\_;}
+\DoxyCodeLine{00168\ \ \ \ \ v\_\ =\ (-\/-\/size\_\ ==\ 0U)\ ?\ 0\ :\ v\_-\/>Ccw();}
+\DoxyCodeLine{00169\ \ \ \ \ \textcolor{keyword}{delete}\ v-\/>Remove();}
+\DoxyCodeLine{00170\ \ \}}
+\DoxyCodeLine{00171\ }
+\DoxyCodeLine{00172\ }
+\DoxyCodeLine{00173\ }
+\DoxyCodeLine{00174\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}*\ \ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}::Split(\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ b\ )}
+\DoxyCodeLine{00175\ \ \{}
+\DoxyCodeLine{00176\ \ \ \ \ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*\ bp\ =\ v\_-\/>Split(b);}
+\DoxyCodeLine{00177\ \ \ \ \ Resize();}
+\DoxyCodeLine{00178\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}(bp);}
+\DoxyCodeLine{00179\ \ \}}
+\DoxyCodeLine{00180\ }
+\DoxyCodeLine{00181\ }
+\DoxyCodeLine{00182\ }
+\DoxyCodeLine{00183\ }
+\DoxyCodeLine{00184\ \textcolor{comment}{//\ old\ functionality\ recaptured}}
+\DoxyCodeLine{00185\ }
+\DoxyCodeLine{00186\ }
+\DoxyCodeLine{00187\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}::CenterOfGravity()\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00188\ \ \{}
+\DoxyCodeLine{00189\ \ \ \ \ \ \textcolor{keywordtype}{double}\ x,\ y;}
+\DoxyCodeLine{00190\ \ \ \ \ \ CenterOfGravity(\ x,\ y\ );}
+\DoxyCodeLine{00191\ \ \ \ \ \ assert(\ !std::isnan(x)\ );}
+\DoxyCodeLine{00192\ \ \ \ \ \ assert(\ !std::isnan(y)\ );}
+\DoxyCodeLine{00193\ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}(\ x,\ y\ );}
+\DoxyCodeLine{00194\ \ \}}
+\DoxyCodeLine{00195\ }
+\DoxyCodeLine{00196\ }
+\DoxyCodeLine{00197\ }
+\DoxyCodeLine{00198\ }
+\DoxyCodeLine{00199\ }
+\DoxyCodeLine{00200\ \textcolor{comment}{//\ nonmember\ functions}}
+\DoxyCodeLine{00201\ }
+\DoxyCodeLine{00202\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{int}\ leftToRightCmp(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\&\ a,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\&\ b\ )}
+\DoxyCodeLine{00203\ \ \{}
+\DoxyCodeLine{00204\ \ \ \ \ \textcolor{keywordflow}{if}\ (\ a\ <\ b\ )\ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{00205\ \ \ \ \ \textcolor{keywordflow}{if}\ (\ a\ >\ b\ )\ \textcolor{keywordflow}{return}\ \ 1;}
+\DoxyCodeLine{00206\ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00207\ \ \}}
+\DoxyCodeLine{00208\ }
+\DoxyCodeLine{00209\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{int}\ rightToLeftCmp(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\&\ a,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\&\ b\ )}
+\DoxyCodeLine{00210\ \ \{}
+\DoxyCodeLine{00211\ \ \ \ \ \textcolor{keywordflow}{return}\ leftToRightCmp(\ b,\ a\ );}
+\DoxyCodeLine{00212\ \ \}}
+\DoxyCodeLine{00213\ }
+\DoxyCodeLine{00214\ }
+\DoxyCodeLine{00215\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{int}\ closestToPolygonCmp(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\&\ a,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\&\ b\ )}
+\DoxyCodeLine{00216\ \ \{}
+\DoxyCodeLine{00217\ \ \ \ \ \ \textcolor{keyword}{extern}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\ somePoint;}
+\DoxyCodeLine{00218\ \ \ \ \ \ \textcolor{keywordtype}{double}\ distA\ =\ (somePoint\ -\/\ a).Length();}
+\DoxyCodeLine{00219\ \ \ \ \ \ \textcolor{keywordtype}{double}\ distB\ =\ (somePoint\ -\/\ b).Length();}
+\DoxyCodeLine{00220\ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\ distA\ <\ distB\ )\ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{00221\ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (\ distA\ >\ distB\ )\ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{00222\ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00223\ \ \}}
+\DoxyCodeLine{00224\ }
+\DoxyCodeLine{00225\ }
+\DoxyCodeLine{00226\ }
+\DoxyCodeLine{00227\ }
+\DoxyCodeLine{00228\ \}}
+\DoxyCodeLine{00229\ }
+\DoxyCodeLine{00230\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

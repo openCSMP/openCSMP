@@ -1,0 +1,443 @@
+\doxysection{csmp\+::Split\+Boundary\+Interface\texorpdfstring{$<$}{<} dim, SPLITBOUNDARY\+\_\+\+COMPLEX \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_split_boundary_interface}{}\label{classcsmp_1_1_split_boundary_interface}\index{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$@{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$}}
+
+
+{\ttfamily \#include $<$Split\+Boundary\+Interface.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Split\+Boundary\+Interface\texorpdfstring{$<$}{<} dim, SPLITBOUNDARY\+\_\+\+COMPLEX \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_split_boundary_interface__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Split\+Boundary\+Interface\texorpdfstring{$<$}{<} dim, SPLITBOUNDARY\+\_\+\+COMPLEX \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=267pt]{classcsmp_1_1_split_boundary_interface__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_split_boundary_interface_a459a94f78fd569ddf0e2cff1a970e401}\label{classcsmp_1_1_split_boundary_interface_a459a94f78fd569ddf0e2cff1a970e401} 
+typedef std\+::map$<$ std\+::string, \mbox{\hyperlink{classcsmp_1_1_split_boundary}{csmp\+::\+Split\+Boundary}}$<$ dim $>$ $>$\+::iterator {\bfseries split\+Boundary\+Iterator}
+\item 
+\Hypertarget{classcsmp_1_1_split_boundary_interface_a3f4f82c375ed9ab373c4b3d976bd8b92}\label{classcsmp_1_1_split_boundary_interface_a3f4f82c375ed9ab373c4b3d976bd8b92} 
+typedef std\+::map$<$ std\+::string, \mbox{\hyperlink{classcsmp_1_1_split_boundary}{csmp\+::\+Split\+Boundary}}$<$ dim $>$ $>$\+::const\+\_\+iterator {\bfseries split\+Boundary\+Const\+Iterator}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_split_boundary_interface_a20748edabb55c2ee0ed069a3b62a3e63}\label{classcsmp_1_1_split_boundary_interface_a20748edabb55c2ee0ed069a3b62a3e63} 
+{\bfseries Split\+Boundary\+Interface} (const \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface}{Split\+Boundary\+Interface}} \&bd)=delete
+\item 
+\Hypertarget{classcsmp_1_1_split_boundary_interface_a5bba3cfaaf7f3ae8a1f4f29d8809e796}\label{classcsmp_1_1_split_boundary_interface_a5bba3cfaaf7f3ae8a1f4f29d8809e796} 
+\mbox{\hyperlink{classcsmp_1_1_split_boundary}{csmp\+::\+Split\+Boundary}}$<$ dim $>$ \& {\bfseries Split\+Boundary} (const std\+::string \&)
+\item 
+\Hypertarget{classcsmp_1_1_split_boundary_interface_a747742bc97068310b66e8cb299f5b29b}\label{classcsmp_1_1_split_boundary_interface_a747742bc97068310b66e8cb299f5b29b} 
+const \mbox{\hyperlink{classcsmp_1_1_split_boundary}{csmp\+::\+Split\+Boundary}}$<$ dim $>$ \& {\bfseries Split\+Boundary} (const std\+::string \&) const
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface_afb450a873c86b4ce2468d4d29920cb2d}{Contains\+Split\+Boundary}} (const std\+::string \&) const
+\item 
+\Hypertarget{classcsmp_1_1_split_boundary_interface_a6810f0a2f352d7e258c592583d4288f0}\label{classcsmp_1_1_split_boundary_interface_a6810f0a2f352d7e258c592583d4288f0} 
+split\+Boundary\+Iterator {\bfseries Split\+Boundaries\+Begin} ()
+\item 
+\Hypertarget{classcsmp_1_1_split_boundary_interface_ab4643e71e068ffcebc662ea4ee9e7403}\label{classcsmp_1_1_split_boundary_interface_ab4643e71e068ffcebc662ea4ee9e7403} 
+split\+Boundary\+Iterator {\bfseries Split\+Boundaries\+End} ()
+\item 
+\Hypertarget{classcsmp_1_1_split_boundary_interface_a666e4696fff5790a581ce3518c6a30b6}\label{classcsmp_1_1_split_boundary_interface_a666e4696fff5790a581ce3518c6a30b6} 
+split\+Boundary\+Const\+Iterator {\bfseries Split\+Boundaries\+Begin} () const
+\item 
+\Hypertarget{classcsmp_1_1_split_boundary_interface_aa21299ee0bdbf11a6cb31a1243fd10ae}\label{classcsmp_1_1_split_boundary_interface_aa21299ee0bdbf11a6cb31a1243fd10ae} 
+split\+Boundary\+Const\+Iterator {\bfseries Split\+Boundaries\+End} () const
+\item 
+\Hypertarget{classcsmp_1_1_split_boundary_interface_a3d663bc8af57097f34baa6bb0a4242d9}\label{classcsmp_1_1_split_boundary_interface_a3d663bc8af57097f34baa6bb0a4242d9} 
+size\+\_\+t {\bfseries Split\+Boundaries} () const
+\item 
+\Hypertarget{classcsmp_1_1_split_boundary_interface_a30cbaf4eabbcff716be8742b47e0c869}\label{classcsmp_1_1_split_boundary_interface_a30cbaf4eabbcff716be8742b47e0c869} 
+size\+\_\+t {\bfseries Form\+Split\+Boundaries\+From} (const \mbox{\hyperlink{classcsmp_1_1_model_topology}{Model\+Topology}} \&)
+\begin{DoxyCompactList}\small\item\em uses the \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} ids stored in the model topology object (if any) to form split boundaries with corresponding names; returns number of split boundaries formed \end{DoxyCompactList}\item 
+std\+::pair$<$ std\+::set$<$ std\+::string $>$, bool $>$ \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface_a34e5f96c416a4e88a8b189b7700515f8}{Detect\+And\+Create\+Split\+Boundaries}} ()
+\begin{DoxyCompactList}\small\item\em Creates Split\+Boundaries detecting disconnected but node-\/matched perimeter element faces in mesh (already created in meshing tool); these are grouped and named for regions. \end{DoxyCompactList}\item 
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface_a69879ca6a06d881fe3ef71251cca84ff}{Separate\+Unique\+Regions\+By\+Split\+Boundaries}} ()
+\begin{DoxyCompactList}\small\item\em creates consistently named split boundaries between all unique regions in the model \end{DoxyCompactList}\item 
+std\+::pair$<$ std\+::set$<$ std\+::string $>$, bool $>$ \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface_aabc87e8481fc15687fdb428da104a5d2}{Create\+Split\+Boundary\+From}} (const char \texorpdfstring{$\ast$}{*}dim\+\_\+1\+\_\+region, bool retain\+\_\+elmts\+\_\+as\+\_\+intervening\+\_\+elements)
+\begin{DoxyCompactList}\small\item\em creation of one or multiple Split\+Boundaries from a lower dimensional region \end{DoxyCompactList}\item 
+std\+::pair$<$ std\+::string, bool $>$ \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface_a0a4e52dd0e6018a0b751be1dfc4b13a5}{Create\+Split\+Boundary\+Between}} (const char \texorpdfstring{$\ast$}{*}region1, const char \texorpdfstring{$\ast$}{*}region2)
+\begin{DoxyCompactList}\small\item\em creates \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} between non-\/overlapping regions that share nodes at their perimeter; all shared nodes are multiplicated including perimeter nodes \end{DoxyCompactList}\item 
+std\+::pair$<$ std\+::string, bool $>$ \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface_a0f810da61d370f5942a8478c3b32ccbc}{Insert\+Region\+Into\+Split\+Boundary}} (const char \texorpdfstring{$\ast$}{*}split\+\_\+boundary, int32\+\_\+t material\+\_\+id\+\_\+for\+\_\+new\+\_\+elements)
+\begin{DoxyCompactList}\small\item\em inserts a lower-\/dimensional \doxylink{classcsmp_1_1_region}{Region} inside of the \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary}, assigning its elements to the Intervening\+Element() pointers of its interfaces; the name will be that of the \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} followed by \+\_\+\+REGION \end{DoxyCompactList}\item 
+std\+::set$<$ std\+::string $>$ \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface_a01c9167b824ee1726bd64390319bcd47}{Insert\+Lower\+Dimensional\+Regions\+Into\+Split\+Boundaries}} (int32\+\_\+t material\+\_\+id\+\_\+for\+\_\+new\+\_\+elements)
+\begin{DoxyCompactList}\small\item\em Creates isolated lower-\/dimensional mesh regions between split boundaries with unique names matching those of the \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} objects; set will be empty if none created. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface_a85db4d8207a4baec857b7352926900a2}{Remove\+Split\+Boundary}} (const char \texorpdfstring{$\ast$}{*}split\+\_\+boundary, bool erase\+\_\+interfaces)
+\begin{DoxyCompactList}\small\item\em Creates a single lower-\/dimensional mesh region taking into account all split boundaries objects; returning its name and whether this operation was successful. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface_a2cc52158fc2fe9373902219e62fb925b}{Remove\+Split\+Boundary}} (\mbox{\hyperlink{classcsmp_1_1_split_boundary}{csmp\+::\+Split\+Boundary}}$<$ dim $>$ \&, bool erase\+\_\+interfaces)
+\begin{DoxyCompactList}\small\item\em Removes splitboundary including interfaces, but does not fuse the mesh back together again. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface_a932d9bf33ebc1f1feff208c0a8a5e900}{Merge\+Split\+Boundaries}} (const char \texorpdfstring{$\ast$}{*}new\+\_\+sb\+\_\+name, std\+::set$<$ std\+::string $>$ splitboundaries)
+\item 
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface_a523aa296793f798a9aa89e3f6334a66d}{Split\+Boundaries\+Out}} () const
+\begin{DoxyCompactList}\small\item\em prints current split boundaries to screen and returns how many there are \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface_a4ddcf39d8581ca63a8b618741a5385d5}{Output\+Split\+Boundaries\+To\+Binary}} (const char \texorpdfstring{$\ast$}{*}file\+Name) const
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface_a56710d6c84622848e351e794f8e71381}{Input\+Split\+Boundaries\+From\+Binary}} (const char \texorpdfstring{$\ast$}{*}file\+Name, const std\+::set$<$ std\+::string $>$ \&subset\+\_\+variables)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface_acb2fac24571ca74f7ffae218347d80b0}{Create\+Split\+Boundary\+Name}} (const std\+::pair$<$ std\+::string, std\+::string $>$ \&juxtaposed\+\_\+regions) const
+\begin{DoxyCompactList}\small\item\em creating name for the case when the \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} was already present in the input mesh \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface_ac2f3505cd6c6368e76cc7fbbdf3a5361}{Create\+Split\+Boundary\+Name\+From}} (const \mbox{\hyperlink{classcsmp_1_1_face_construction_data}{Face\+Construction\+Data}}$<$ dim $>$ \&, const std\+::vector$<$ std\+::string $>$ \&region\+\_\+names) const
+\begin{DoxyCompactList}\small\item\em creates name for one specific patch of the new split boundary \end{DoxyCompactList}\item 
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface_a8c05e87268deed28098c8770b79fb183}{Find\+Split\+Boundary\+By\+Names}} (const std\+::set$<$ std\+::string $>$ \&intersected\+\_\+regions, std\+::set$<$ std\+::string $>$ \&region\+\_\+patches\+\_\+found) const
+\begin{DoxyCompactList}\small\item\em searches the split boundary map for split-\/boundary names that contain the names of the regions stored in the first set \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_split_boundary_interface_a0ef20e1c34990ef368737e0060a84b1c}\label{classcsmp_1_1_split_boundary_interface_a0ef20e1c34990ef368737e0060a84b1c} 
+bool {\bfseries Add\+Split\+Boundary} (const char \texorpdfstring{$\ast$}{*}name, typename std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::iterator first, typename std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::iterator last, \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\+\_\+\+BOUNDARY}})
+\begin{DoxyCompactList}\small\item\em creates split boundary from already interconnected faces that also know their parent elements \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_split_boundary_interface_a8b0e0207c170947f916a79ced2262ef7}\label{classcsmp_1_1_split_boundary_interface_a8b0e0207c170947f916a79ced2262ef7} 
+std\+::map$<$ std\+::string, \mbox{\hyperlink{classcsmp_1_1_split_boundary}{csmp\+::\+Split\+Boundary}}$<$ dim $>$ $>$ {\bfseries split\+Boundary\+Map\+\_\+}
+\begin{DoxyCompactList}\small\item\em boundary name \& boundary container of key-\/value pairs \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class SPLITBOUNDARY\+\_\+\+COMPLEX$>$\newline
+class csmp\+::\+Split\+Boundary\+Interface$<$ dim, SPLITBOUNDARY\+\_\+\+COMPLEX $>$}
+Creation, management and deletion of \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} objects.
+
+Split boundaries can be created for\+:
+\begin{DoxyEnumerate}
+\item internal model boundaries
+\item node-\/matched disconnected boundaries of the mesh 
+\end{DoxyEnumerate}
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_split_boundary_interface_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_split_boundary_interface_afb450a873c86b4ce2468d4d29920cb2d}\index{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$@{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$}!ContainsSplitBoundary@{ContainsSplitBoundary}}
+\index{ContainsSplitBoundary@{ContainsSplitBoundary}!csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$@{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$}}
+\doxysubsubsection{\texorpdfstring{ContainsSplitBoundary()}{ContainsSplitBoundary()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_split_boundary_interface_afb450a873c86b4ce2468d4d29920cb2d} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class SPLITBOUNDARY\+\_\+\+COMPLEX$>$ \\
+bool \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface}{csmp\+::\+Split\+Boundary\+Interface}}$<$ dim, SPLITBOUNDARY\+\_\+\+COMPLEX $>$\+::\+Contains\+Split\+Boundary (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{}{}\end{DoxyParamCaption}) const}
+
+Reports whether a \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} with the corresponding name exists inside the model. \Hypertarget{classcsmp_1_1_split_boundary_interface_a0a4e52dd0e6018a0b751be1dfc4b13a5}\index{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$@{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$}!CreateSplitBoundaryBetween@{CreateSplitBoundaryBetween}}
+\index{CreateSplitBoundaryBetween@{CreateSplitBoundaryBetween}!csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$@{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$}}
+\doxysubsubsection{\texorpdfstring{CreateSplitBoundaryBetween()}{CreateSplitBoundaryBetween()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_split_boundary_interface_a0a4e52dd0e6018a0b751be1dfc4b13a5} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class SPLITBOUNDARY\+\_\+\+COMPLEX$>$ \\
+pair$<$ string, bool $>$ \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface}{csmp\+::\+Split\+Boundary\+Interface}}$<$ dim, SPLITBOUNDARY\+\_\+\+COMPLEX $>$\+::\+Create\+Split\+Boundary\+Between (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{region1\+\_\+name}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{region2\+\_\+name}{}\end{DoxyParamCaption})}
+
+
+
+creates \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} between non-\/overlapping regions that share nodes at their perimeter; all shared nodes are multiplicated including perimeter nodes 
+
+Creates \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} between two unique regions that share nodes along their perimeter. The first region will be placed on the inside of the new split boundary.
+
+
+\begin{DoxyParams}{Parameters}
+{\em region1\+\_\+name} & name of the unique region that shall be on the inside of the new split boundary \\
+\hline
+{\em region2\+\_\+name} & of the unique region that touches (shares nodes with) region1 and shall become the outside region of the new split boundary\\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+Method will add new \doxylink{classcsmp_1_1_node}{Node} and \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} objects to the model
+
+method does not create a temporary \doxylink{classcsmp_1_1_boundary}{Boundary} on the way to the \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} construction
+
+method ignores Elements that are lines
+\end{DoxyNote}
+\begin{DoxyAuthor}{Author}
+SKM 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+25/1/20 
+\end{DoxyDate}
+\Hypertarget{classcsmp_1_1_split_boundary_interface_aabc87e8481fc15687fdb428da104a5d2}\index{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$@{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$}!CreateSplitBoundaryFrom@{CreateSplitBoundaryFrom}}
+\index{CreateSplitBoundaryFrom@{CreateSplitBoundaryFrom}!csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$@{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$}}
+\doxysubsubsection{\texorpdfstring{CreateSplitBoundaryFrom()}{CreateSplitBoundaryFrom()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_split_boundary_interface_aabc87e8481fc15687fdb428da104a5d2} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class SPLITBOUNDARY\+\_\+\+COMPLEX$>$ \\
+pair$<$ set$<$ string $>$, bool $>$ \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface}{csmp\+::\+Split\+Boundary\+Interface}}$<$ dim, SPLITBOUNDARY\+\_\+\+COMPLEX $>$\+::\+Create\+Split\+Boundary\+From (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{dim\+\_\+1\+\_\+region}{, }\item[{bool}]{retain\+\_\+elmts\+\_\+as\+\_\+intervening\+\_\+elements}{}\end{DoxyParamCaption})}
+
+
+
+creation of one or multiple Split\+Boundaries from a lower dimensional region 
+
+1) Checks dim-\/1 region exists 2) Checks no Nodes on the dim-\/1 region have the label INTERNAL before proceeding 3) Counts Unique Regions and creates property "{}region identifyier"{} for all elements within each region with a region-\/specific integer (to be identified after node duplication for region updating) 4) For each \doxylink{classcsmp_1_1_element}{Element} in the dim-\/1 \doxylink{classcsmp_1_1_region}{Region}, it constructs \doxylink{classcsmp_1_1_face_construction_data}{Face\+Construction\+Data}, which stores\+: i) Inner/\+Outer Parents of dim-\/1 element, ii) Faces of inner/outer parent elements that are sharing the dim-\/1 element. iii) Region\+\_\+identifier (\doxylink{classcsmp_1_1_element}{Element} property) of the Inside and Outside Parent \doxylink{classcsmp_1_1_element}{Element} -\/\texorpdfstring{$>$}{>} (materials\+\_\+) (THIS HOWEVER IS NOT ALL THE ELEMENTS THAT SHARE THE NODE) iii) Region\+\_\+\+Identifier of the dim-\/1 element (material\+\_\+) iv) Patch\+Number which is the unique identifier of the subregions determined by the n\+\_\+juxtoposition (Patch is the same if you have the same inside/outside materials\+\_\+ (region identifier))
+
+Creates Split\+Boundar(ies) from lower dimensional region without the need for a user to create \doxylink{classcsmp_1_1_boundary}{Boundary} objects first. The underlying region is removed in the process.
+
+4.\+2) Breaks dim-\/1 region into smaller subregions based on t 5) Breaks dim-\/1 \doxylink{classcsmp_1_1_region}{Region} into smaller subregions, and gives each one a unique name \Hypertarget{classcsmp_1_1_split_boundary_interface_acb2fac24571ca74f7ffae218347d80b0}\index{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$@{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$}!CreateSplitBoundaryName@{CreateSplitBoundaryName}}
+\index{CreateSplitBoundaryName@{CreateSplitBoundaryName}!csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$@{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$}}
+\doxysubsubsection{\texorpdfstring{CreateSplitBoundaryName()}{CreateSplitBoundaryName()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_split_boundary_interface_acb2fac24571ca74f7ffae218347d80b0} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class SPLITBOUNDARY\+\_\+\+COMPLEX$>$ \\
+string \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface}{csmp\+::\+Split\+Boundary\+Interface}}$<$ dim, SPLITBOUNDARY\+\_\+\+COMPLEX $>$\+::\+Create\+Split\+Boundary\+Name (\begin{DoxyParamCaption}\item[{const std\+::pair$<$ std\+::string, std\+::string $>$ \&}]{juxtaposed\+\_\+regions}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+creating name for the case when the \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} was already present in the input mesh 
+
+Creates a name like SPLITBOUNDARY\+\_\+region1\+\_\+region2 adding a number if this is necessary to make the name unique.
+
+\begin{DoxyAttention}{Attention}
+the facing relationships of the boundary are preserved so that region1 is the first in the argument pair.
+\end{DoxyAttention}
+\begin{DoxyAuthor}{Author}
+SKM 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+January 2018 
+\end{DoxyDate}
+\Hypertarget{classcsmp_1_1_split_boundary_interface_ac2f3505cd6c6368e76cc7fbbdf3a5361}\index{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$@{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$}!CreateSplitBoundaryNameFrom@{CreateSplitBoundaryNameFrom}}
+\index{CreateSplitBoundaryNameFrom@{CreateSplitBoundaryNameFrom}!csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$@{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$}}
+\doxysubsubsection{\texorpdfstring{CreateSplitBoundaryNameFrom()}{CreateSplitBoundaryNameFrom()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_split_boundary_interface_ac2f3505cd6c6368e76cc7fbbdf3a5361} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class SPLITBOUNDARY\+\_\+\+COMPLEX$>$ \\
+string \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface}{csmp\+::\+Split\+Boundary\+Interface}}$<$ dim, SPLITBOUNDARY\+\_\+\+COMPLEX $>$\+::\+Create\+Split\+Boundary\+Name\+From (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_face_construction_data}{Face\+Construction\+Data}}$<$ dim $>$ \&}]{}{, }\item[{const std\+::vector$<$ std\+::string $>$ \&}]{region\+\_\+names}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+creates name for one specific patch of the new split boundary 
+
+protected METHOD (not known beyond this compilation unit)
+
+creates underscore-\/separated unique names for the region patches based on the juxtapositions relationships across the lower-\/dimensional regions, the names are composed of\+:
+
+
+\begin{DoxyEnumerate}
+\item the name of the master region
+\item "{}\+SPLITBOUNDARY"{}
+\item the patch identifier number attached to boundary
+\item the name of the inner region, i.\+e. the region that the lower-\/dimensional element normals point away from
+\item the name of the outer region, i.\+e. that into which the normals point
+\end{DoxyEnumerate}
+
+\begin{DoxyAttention}{Attention}
+where the boundary just intersects a single layer (same material on either side), the layer name appears only once. The second instance is replaced by INTERSECTION. 
+\end{DoxyAttention}
+\Hypertarget{classcsmp_1_1_split_boundary_interface_a34e5f96c416a4e88a8b189b7700515f8}\index{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$@{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$}!DetectAndCreateSplitBoundaries@{DetectAndCreateSplitBoundaries}}
+\index{DetectAndCreateSplitBoundaries@{DetectAndCreateSplitBoundaries}!csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$@{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$}}
+\doxysubsubsection{\texorpdfstring{DetectAndCreateSplitBoundaries()}{DetectAndCreateSplitBoundaries()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_split_boundary_interface_a34e5f96c416a4e88a8b189b7700515f8} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class SPLITBOUNDARY\+\_\+\+COMPLEX$>$ \\
+pair$<$ set$<$ string $>$, bool $>$ \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface}{csmp\+::\+Split\+Boundary\+Interface}}$<$ dim, SPLITBOUNDARY\+\_\+\+COMPLEX $>$\+::\+Detect\+And\+Create\+Split\+Boundaries (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Creates Split\+Boundaries detecting disconnected but node-\/matched perimeter element faces in mesh (already created in meshing tool); these are grouped and named for regions. 
+
+Creates Split\+Boundaries detecting, them in the (ANSYS) input model as node-\/matched interfaces, connecting such disconnected perimeter element faces in mesh; these are detected and grouped by bordering regions and turned into \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} objects with names following the same conventions as for \doxylink{classcsmp_1_1_boundary}{Boundary} objects.
+
+\begin{DoxyAttention}{Attention}
+this method does not prompt the generation of any nodes because they are expected to be already there in ANSYS.
+
+this method relies on the existing numbering of nodes, elements, faces and interfaces.
+\end{DoxyAttention}
+\begin{DoxyAuthor}{Author}
+SKM 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+20/03/2018 updated 5/9/2021 
+\end{DoxyDate}
+\Hypertarget{classcsmp_1_1_split_boundary_interface_a8c05e87268deed28098c8770b79fb183}\index{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$@{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$}!FindSplitBoundaryByNames@{FindSplitBoundaryByNames}}
+\index{FindSplitBoundaryByNames@{FindSplitBoundaryByNames}!csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$@{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$}}
+\doxysubsubsection{\texorpdfstring{FindSplitBoundaryByNames()}{FindSplitBoundaryByNames()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_split_boundary_interface_a8c05e87268deed28098c8770b79fb183} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class SPLITBOUNDARY\+\_\+\+COMPLEX$>$ \\
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface}{csmp\+::\+Split\+Boundary\+Interface}}$<$ dim, SPLITBOUNDARY\+\_\+\+COMPLEX $>$\+::\+Find\+Split\+Boundary\+By\+Names (\begin{DoxyParamCaption}\item[{const std\+::set$<$ std\+::string $>$ \&}]{intersected\+\_\+regions}{, }\item[{std\+::set$<$ std\+::string $>$ \&}]{region\+\_\+patches\+\_\+found}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+searches the split boundary map for split-\/boundary names that contain the names of the regions stored in the first set 
+
+Searches the model for splitboundaries the name of which contains the search strings provided via the first set. The results are returnd into the second set.
+
+\begin{DoxyNote}{Note}
+Use this method, for example, to retrieve multiple splitboundary patches that were generated from a single lower-\/dimensional regon, like a fault surface.
+\end{DoxyNote}
+\begin{DoxyAuthor}{Author}
+SKM 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+March 2016 
+\end{DoxyDate}
+\Hypertarget{classcsmp_1_1_split_boundary_interface_a56710d6c84622848e351e794f8e71381}\index{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$@{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$}!InputSplitBoundariesFromBinary@{InputSplitBoundariesFromBinary}}
+\index{InputSplitBoundariesFromBinary@{InputSplitBoundariesFromBinary}!csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$@{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$}}
+\doxysubsubsection{\texorpdfstring{InputSplitBoundariesFromBinary()}{InputSplitBoundariesFromBinary()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_split_boundary_interface_a56710d6c84622848e351e794f8e71381} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class SPLITBOUNDARY\+\_\+\+COMPLEX$>$ \\
+bool \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface}{csmp\+::\+Split\+Boundary\+Interface}}$<$ dim, SPLITBOUNDARY\+\_\+\+COMPLEX $>$\+::\+Input\+Split\+Boundaries\+From\+Binary (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{file\+Name}{, }\item[{const std\+::set$<$ std\+::string $>$ \&}]{subset\+\_\+variables}{}\end{DoxyParamCaption})}
+
+Reads all split boundary objects in a model from binary file, expecting that interfaces and their connectivity are already present in \doxylink{classcsmp_1_1_mesh_manager}{Mesh\+Manager}. \begin{DoxyAuthor}{Author}
+SKM 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+6/9/2021 
+\end{DoxyDate}
+\Hypertarget{classcsmp_1_1_split_boundary_interface_a01c9167b824ee1726bd64390319bcd47}\index{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$@{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$}!InsertLowerDimensionalRegionsIntoSplitBoundaries@{InsertLowerDimensionalRegionsIntoSplitBoundaries}}
+\index{InsertLowerDimensionalRegionsIntoSplitBoundaries@{InsertLowerDimensionalRegionsIntoSplitBoundaries}!csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$@{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$}}
+\doxysubsubsection{\texorpdfstring{InsertLowerDimensionalRegionsIntoSplitBoundaries()}{InsertLowerDimensionalRegionsIntoSplitBoundaries()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_split_boundary_interface_a01c9167b824ee1726bd64390319bcd47} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class SPLITBOUNDARY\+\_\+\+COMPLEX$>$ \\
+set$<$ string $>$ \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface}{csmp\+::\+Split\+Boundary\+Interface}}$<$ dim, SPLITBOUNDARY\+\_\+\+COMPLEX $>$\+::\+Insert\+Lower\+Dimensional\+Regions\+Into\+Split\+Boundaries (\begin{DoxyParamCaption}\item[{int32\+\_\+t}]{material\+\_\+id}{}\end{DoxyParamCaption})}
+
+
+
+Creates isolated lower-\/dimensional mesh regions between split boundaries with unique names matching those of the \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} objects; set will be empty if none created. 
+
+Insert a lower-\/dimensional element mesh into the model, which is fully disconnected from the model, to represent a fracture that coincides with a \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} according to the desire to use \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} objects for lower-\/dimensional fractures for the modelling of both, fluid flow and geomechanics. It only shares the locations of the nodes (if the \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} has not been modified) or lies in the symmetry plane of the 2 sides if the nodes have been separated by deformation.
+
+\begin{DoxyAuthor}{Author}
+JCK updated 26/08/2019
+\end{DoxyAuthor}
+TODO\+: like \doxylink{classcsmp_1_1_boundary}{Boundary} patches, the split boundary patches should have unique names that reflect juxtaposition relationships of regions In all Split\+Boundaries of the model, lower dimensional \doxylink{classcsmp_1_1_element}{Element} regions are inserted.
+
+As many lower-\/dimensional element regions are created as there Split\+Boundaries in the model \begin{DoxyAuthor}{Author}
+SKM 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+26/1/2020 
+\end{DoxyDate}
+\Hypertarget{classcsmp_1_1_split_boundary_interface_a0f810da61d370f5942a8478c3b32ccbc}\index{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$@{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$}!InsertRegionIntoSplitBoundary@{InsertRegionIntoSplitBoundary}}
+\index{InsertRegionIntoSplitBoundary@{InsertRegionIntoSplitBoundary}!csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$@{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$}}
+\doxysubsubsection{\texorpdfstring{InsertRegionIntoSplitBoundary()}{InsertRegionIntoSplitBoundary()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_split_boundary_interface_a0f810da61d370f5942a8478c3b32ccbc} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class SPLITBOUNDARY\+\_\+\+COMPLEX$>$ \\
+pair$<$ string, bool $>$ \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface}{csmp\+::\+Split\+Boundary\+Interface}}$<$ dim, SPLITBOUNDARY\+\_\+\+COMPLEX $>$\+::\+Insert\+Region\+Into\+Split\+Boundary (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{split\+\_\+boundary}{, }\item[{int32\+\_\+t}]{material\+\_\+id}{}\end{DoxyParamCaption})}
+
+
+
+inserts a lower-\/dimensional \doxylink{classcsmp_1_1_region}{Region} inside of the \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary}, assigning its elements to the Intervening\+Element() pointers of its interfaces; the name will be that of the \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} followed by \+\_\+\+REGION 
+
+\begin{DoxyVerb}@author E.P
+@date 07/2/2020
+
+@brief
+Creates lower dimensional elements and adds them to
+1) interface object as middle element
+2) Region of all the middle elements in the split boundary
+3) Model Region
+
+@note This method can be used either
+1) Create an entirely new lower dimensional Region within the SplitBoundary with its name followed by the string "_REGION".
+or
+2) Extends an already existing lower dimensional middle region of the split boundary to include any new interface objects which have the Middle_Element = nullptr.
+\end{DoxyVerb}
+
+
+E.\+P TODO\+: Setting boundary flags to Elements which have faces on a boundary must be done for 3D case! \begin{DoxyVerb}TODO: May be do this mainly in the MeshManager using one of the methds that takes the adjacent higher-dim elements as an input
+TODO: In this case, the input information is similar to entries of a VSet: new 'nodes', 'pelmt' and 'plist' vectors
+\end{DoxyVerb}
+ \Hypertarget{classcsmp_1_1_split_boundary_interface_a932d9bf33ebc1f1feff208c0a8a5e900}\index{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$@{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$}!MergeSplitBoundaries@{MergeSplitBoundaries}}
+\index{MergeSplitBoundaries@{MergeSplitBoundaries}!csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$@{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$}}
+\doxysubsubsection{\texorpdfstring{MergeSplitBoundaries()}{MergeSplitBoundaries()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_split_boundary_interface_a932d9bf33ebc1f1feff208c0a8a5e900} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class SPLITBOUNDARY\+\_\+\+COMPLEX$>$ \\
+string \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface}{csmp\+::\+Split\+Boundary\+Interface}}$<$ dim, SPLITBOUNDARY\+\_\+\+COMPLEX $>$\+::\+Merge\+Split\+Boundaries (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{new\+\_\+sb\+\_\+name}{, }\item[{std\+::set$<$ std\+::string $>$}]{splitboundaries}{}\end{DoxyParamCaption})}
+
+Merges splitboundary objects and gives resultant Splitboundary a new name, original Splitboundaries no longer exist. Original interfaces are not deleted. \Hypertarget{classcsmp_1_1_split_boundary_interface_a4ddcf39d8581ca63a8b618741a5385d5}\index{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$@{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$}!OutputSplitBoundariesToBinary@{OutputSplitBoundariesToBinary}}
+\index{OutputSplitBoundariesToBinary@{OutputSplitBoundariesToBinary}!csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$@{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$}}
+\doxysubsubsection{\texorpdfstring{OutputSplitBoundariesToBinary()}{OutputSplitBoundariesToBinary()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_split_boundary_interface_a4ddcf39d8581ca63a8b618741a5385d5} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class SPLITBOUNDARY\+\_\+\+COMPLEX$>$ \\
+bool \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface}{csmp\+::\+Split\+Boundary\+Interface}}$<$ dim, SPLITBOUNDARY\+\_\+\+COMPLEX $>$\+::\+Output\+Split\+Boundaries\+To\+Binary (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{file\+\_\+name}{}\end{DoxyParamCaption}) const}
+
+Writes \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} objects to file using the section tags\+: \begin{DoxyVerb} SBDFHEDR
+ SPLITBDRY
+ ONE_BDRY
+ SBDRYVAR
+ SBDFFOTR
+\end{DoxyVerb}
+ \Hypertarget{classcsmp_1_1_split_boundary_interface_a85db4d8207a4baec857b7352926900a2}\index{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$@{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$}!RemoveSplitBoundary@{RemoveSplitBoundary}}
+\index{RemoveSplitBoundary@{RemoveSplitBoundary}!csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$@{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$}}
+\doxysubsubsection{\texorpdfstring{RemoveSplitBoundary()}{RemoveSplitBoundary()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_split_boundary_interface_a85db4d8207a4baec857b7352926900a2} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class SPLITBOUNDARY\+\_\+\+COMPLEX$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface}{csmp\+::\+Split\+Boundary\+Interface}}$<$ dim, SPLITBOUNDARY\+\_\+\+COMPLEX $>$\+::\+Remove\+Split\+Boundary (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{splitboundary}{, }\item[{bool}]{erase\+\_\+interfaces}{}\end{DoxyParamCaption})}
+
+
+
+Creates a single lower-\/dimensional mesh region taking into account all split boundaries objects; returning its name and whether this operation was successful. 
+
+Removes splitboundary including interfaces, but does not fuse the mesh back together again
+
+Removes the \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} object with the given name if it exists inside the model; else returns with a warning.
+
+Removing a \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} will also prompt the \doxylink{classcsmp_1_1_mesh_manager}{Mesh\+Manager} to delete the corresponding \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} elements from the model, potentially turning it into a disconnected group of mesh patches.
+
+\begin{DoxyNote}{Note}
+he mesh is not fused together again.
+\end{DoxyNote}
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000187}{Todo}}]Provide the option to fuse the mesh back together again. \end{DoxyRefDesc}
+\begin{DoxyVerb}   @author SKM (refactored - since design was flawed)
+   @date 15/8/2020
+\end{DoxyVerb}
+ \Hypertarget{classcsmp_1_1_split_boundary_interface_a2cc52158fc2fe9373902219e62fb925b}\index{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$@{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$}!RemoveSplitBoundary@{RemoveSplitBoundary}}
+\index{RemoveSplitBoundary@{RemoveSplitBoundary}!csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$@{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$}}
+\doxysubsubsection{\texorpdfstring{RemoveSplitBoundary()}{RemoveSplitBoundary()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_split_boundary_interface_a2cc52158fc2fe9373902219e62fb925b} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class SPLITBOUNDARY\+\_\+\+COMPLEX$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface}{csmp\+::\+Split\+Boundary\+Interface}}$<$ dim, SPLITBOUNDARY\+\_\+\+COMPLEX $>$\+::\+Remove\+Split\+Boundary (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_split_boundary}{csmp\+::\+Split\+Boundary}}$<$ dim $>$ \&}]{split\+\_\+boundary}{, }\item[{bool}]{erase\+\_\+interfaces}{}\end{DoxyParamCaption})}
+
+
+
+Removes splitboundary including interfaces, but does not fuse the mesh back together again. 
+
+Removes the \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} object with the given name if it exists inside the model; else returns with a warning.
+
+Removing a \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} will also prompt the \doxylink{classcsmp_1_1_mesh_manager}{Mesh\+Manager} to delete the corresponding \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} elements from the model, potentially turning it into a disconnected group of mesh patches.
+
+\begin{DoxyNote}{Note}
+he mesh is not fused together again.
+\end{DoxyNote}
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000188}{Todo}}]Provide the option to fuse the mesh back together again. \end{DoxyRefDesc}
+\begin{DoxyVerb}   @author SKM (refactored - since design was flawed)
+   @date 15/8/2020
+\end{DoxyVerb}
+ \Hypertarget{classcsmp_1_1_split_boundary_interface_a69879ca6a06d881fe3ef71251cca84ff}\index{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$@{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$}!SeparateUniqueRegionsBySplitBoundaries@{SeparateUniqueRegionsBySplitBoundaries}}
+\index{SeparateUniqueRegionsBySplitBoundaries@{SeparateUniqueRegionsBySplitBoundaries}!csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$@{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$}}
+\doxysubsubsection{\texorpdfstring{SeparateUniqueRegionsBySplitBoundaries()}{SeparateUniqueRegionsBySplitBoundaries()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_split_boundary_interface_a69879ca6a06d881fe3ef71251cca84ff} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class SPLITBOUNDARY\+\_\+\+COMPLEX$>$ \\
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface}{csmp\+::\+Split\+Boundary\+Interface}}$<$ dim, SPLITBOUNDARY\+\_\+\+COMPLEX $>$\+::\+Separate\+Unique\+Regions\+By\+Split\+Boundaries (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+creates consistently named split boundaries between all unique regions in the model 
+
+Form consistently named split boundaries between all the unique regions in the current model, while detecting and honouring already existing \doxylink{classcsmp_1_1_boundary}{Boundary} and \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} objects identified by INTERNAL boundary flags. These lower-\/dimensional model subdomains will not be touched. Only those unique regions are considered which have the same spatial dimension as the model.
+
+\begin{DoxyAttention}{Attention}
+all perimeter nodes / contact points between split boundaries in 2D will become Node\+Manifolds connecting as many \doxylink{classcsmp_1_1_node}{Node} objects as regions are in contact with one another at that split boundary. 
+\end{DoxyAttention}
+\Hypertarget{classcsmp_1_1_split_boundary_interface_a523aa296793f798a9aa89e3f6334a66d}\index{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$@{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$}!SplitBoundariesOut@{SplitBoundariesOut}}
+\index{SplitBoundariesOut@{SplitBoundariesOut}!csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$@{csmp::SplitBoundaryInterface$<$ dim, SPLITBOUNDARY\_COMPLEX $>$}}
+\doxysubsubsection{\texorpdfstring{SplitBoundariesOut()}{SplitBoundariesOut()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_split_boundary_interface_a523aa296793f798a9aa89e3f6334a66d} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class SPLITBOUNDARY\+\_\+\+COMPLEX$>$ \\
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface}{csmp\+::\+Split\+Boundary\+Interface}}$<$ dim, SPLITBOUNDARY\+\_\+\+COMPLEX $>$\+::\+Split\+Boundaries\+Out (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+prints current split boundaries to screen and returns how many there are 
+
+Prints current Split\+Boundaries to screen 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/model/Split\+Boundary\+Interface.\+h\item 
+source/modules/model/Split\+Boundary\+Interface.\+cpp\end{DoxyCompactItemize}

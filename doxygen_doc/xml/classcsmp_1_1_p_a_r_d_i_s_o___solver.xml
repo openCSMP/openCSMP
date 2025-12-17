@@ -1,0 +1,169 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_p_a_r_d_i_s_o___solver" kind="class" language="C++" prot="public">
+    <compoundname>csmp::PARDISO_Solver</compoundname>
+    <basecompoundref refid="classcsmp_1_1_solver" prot="public" virt="non-virtual">csmp::Solver</basecompoundref>
+    <includes refid="_p_a_r_d_i_s_o___solver_8h" local="no">PARDISO_Solver.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_p_a_r_d_i_s_o___solver_1a59f19fc0ad3d28779b5888f624621060" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_p_a_r_d_i_s_o___solver_settings" kindref="compound">PARDISO_SolverSettings</ref> &amp;</type>
+        <definition>PARDISO_SolverSettings&amp; csmp::PARDISO_Solver::settings_</definition>
+        <argsstring></argsstring>
+        <name>settings_</name>
+        <qualifiedname>csmp::PARDISO_Solver::settings_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/PARDISO_Solver.h" line="37" column="30" bodyfile="source/includes/integration/solver/PARDISO_Solver.h" bodystart="37" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_p_a_r_d_i_s_o___solver_1a5ef7916fda11a9e92744325db50a8947" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::PARDISO_Solver::PARDISO_Solver</definition>
+        <argsstring>(PARDISO_SolverSettings &amp;)</argsstring>
+        <name>PARDISO_Solver</name>
+        <qualifiedname>csmp::PARDISO_Solver::PARDISO_Solver</qualifiedname>
+        <param>
+          <type><ref refid="structcsmp_1_1_p_a_r_d_i_s_o___solver_settings" kindref="compound">PARDISO_SolverSettings</ref> &amp;</type>
+          <defname>settings</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/PARDISO_Solver.h" line="26" column="16" bodyfile="source/modules/integration/solver/PARDISO_Solver.cpp" bodystart="31" bodyend="33"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_p_a_r_d_i_s_o___solver_1a207e56dc0778989bd75a06439859a0a0" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>csmp::PARDISO_Solver::~PARDISO_Solver</definition>
+        <argsstring>()</argsstring>
+        <name>~PARDISO_Solver</name>
+        <qualifiedname>csmp::PARDISO_Solver::~PARDISO_Solver</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/PARDISO_Solver.h" line="27" column="15" bodyfile="source/modules/integration/solver/PARDISO_Solver.cpp" bodystart="35" bodyend="36"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-func">
+      <memberdef kind="function" id="classcsmp_1_1_p_a_r_d_i_s_o___solver_1a72c4ce00928f5f88943ec6f8d2f3bd10" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::PARDISO_Solver::SolveMatrixEquation</definition>
+        <argsstring>(csmp::SparseMatrix &amp;A, std::vector&lt; double &gt; &amp;b, std::vector&lt; double &gt; &amp;x, double solver_tolerance)</argsstring>
+        <name>SolveMatrixEquation</name>
+        <qualifiedname>csmp::PARDISO_Solver::SolveMatrixEquation</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_sparse_matrix" kindref="compound">csmp::SparseMatrix</ref> &amp;</type>
+          <declname>A</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>b</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>solver_tolerance</declname>
+          <defname>tolerance</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Some notes (SKM):</para>
+<para><itemizedlist>
+<listitem><para>Since PARDISO is written in C, extern &quot;C&quot; declarations are needed for MKL functions. For example</para>
+</listitem><listitem><para>good news: PARDISO is free for academic user, just register and download</para>
+</listitem><listitem><para>parameters are rather similar to those used by SAMG, so much of the code can be copied from SAMG_Solver.cpp</para>
+</listitem><listitem><para>C++ examples in mklroot\solverc\source\ directory</para>
+</listitem><listitem><para>Intel MKL PARDISO is a direct sparse solver based on Parallel Direct Sparse <ref refid="classcsmp_1_1_solver" kindref="compound">Solver</ref> PARDISO*), an iterative sparse solver, and supporting sparse BLAS (level 1, 2, and 3) routines for solving sparse systems of equations, as well as a distributed version of Intel MKL PARDISO solver provided for use on clusters.</para>
+</listitem><listitem><para>See PARDISO User&apos;s Guide and <ulink url="http://www.pardiso-project.org">http://www.pardiso-project.org</ulink> (Olaf Schenk, supercomputer center, Mano, Lugano)</para>
+</listitem><listitem><para>PARDISO is defined in MKL_DOMAIN_PARDISO of the mkl.h header file.</para>
+</listitem><listitem><para>is there another sparse direct solver? - mkl_dss.h</para>
+</listitem><listitem><para>solver uses LaPack / libmkl_lapack.dylib </para>
+</listitem></itemizedlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/PARDISO_Solver.h" line="31" column="20" bodyfile="source/modules/integration/solver/PARDISO_Solver.cpp" bodystart="63" bodyend="77"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Interface to the direct PARDISO solver from the MKL library. Derived from <ref refid="classcsmp_1_1_solver" kindref="compound">Solver</ref> class, following CSMP&apos;s strategy design pattern for the solution of linear algebraic systems of equations.</para>
+<para><simplesect kind="note"><para>works only if there is access to the MKL library.</para>
+</simplesect>
+<simplesect kind="author"><para>draft SKM </para>
+</simplesect>
+<simplesect kind="date"><para>30/7/2019 </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::PARDISO_Solver</label>
+        <link refid="classcsmp_1_1_p_a_r_d_i_s_o___solver"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Solver</label>
+        <link refid="classcsmp_1_1_solver"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::PARDISO_Solver</label>
+        <link refid="classcsmp_1_1_p_a_r_d_i_s_o___solver"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Solver</label>
+        <link refid="classcsmp_1_1_solver"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>#solver_settings_</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::SolverSettings</label>
+        <link refid="classcsmp_1_1_solver_settings"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/integration/solver/PARDISO_Solver.h" line="24" column="1" bodyfile="source/includes/integration/solver/PARDISO_Solver.h" bodystart="24" bodyend="38"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_solver_1a352359e5ec450c03b8cf8b4fa2d06c2a" prot="public" virt="non-virtual"><scope>csmp::PARDISO_Solver</scope><name>CalculateResidual</name></member>
+      <member refid="classcsmp_1_1_solver_1abf2c92c54a1e3b493ce1cd8ce981cf8e" prot="public" virt="virtual"><scope>csmp::PARDISO_Solver</scope><name>GetSolverSettings</name></member>
+      <member refid="classcsmp_1_1_solver_1aa134b5de63e32e0a305f9ed4c660a16c" prot="public" virt="virtual"><scope>csmp::PARDISO_Solver</scope><name>InputSolverSettings</name></member>
+      <member refid="classcsmp_1_1_solver_1afb9380e536b4d7080c89cf143421c6f2" prot="public" virt="non-virtual"><scope>csmp::PARDISO_Solver</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_solver_1a38054ec4ca8ea1fca61e4e32abf82c0e" prot="public" virt="non-virtual"><scope>csmp::PARDISO_Solver</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_p_a_r_d_i_s_o___solver_1a5ef7916fda11a9e92744325db50a8947" prot="public" virt="non-virtual"><scope>csmp::PARDISO_Solver</scope><name>PARDISO_Solver</name></member>
+      <member refid="classcsmp_1_1_p_a_r_d_i_s_o___solver_1a59f19fc0ad3d28779b5888f624621060" prot="private" virt="non-virtual"><scope>csmp::PARDISO_Solver</scope><name>settings_</name></member>
+      <member refid="classcsmp_1_1_solver_1a00f2d834fa620f56e50a8cf37808c466" prot="public" virt="non-virtual"><scope>csmp::PARDISO_Solver</scope><name>Solve</name></member>
+      <member refid="classcsmp_1_1_solver_1aad63f80f59d6763b4d0a4c93677df7f9" prot="public" virt="non-virtual"><scope>csmp::PARDISO_Solver</scope><name>Solve</name></member>
+      <member refid="classcsmp_1_1_p_a_r_d_i_s_o___solver_1a72c4ce00928f5f88943ec6f8d2f3bd10" prot="protected" virt="virtual"><scope>csmp::PARDISO_Solver</scope><name>SolveMatrixEquation</name></member>
+      <member refid="classcsmp_1_1_solver_1a027b3b616917c0fcd7a300b8a51b6c41" prot="protected" virt="pure-virtual" ambiguityscope="csmp::Solver::"><scope>csmp::PARDISO_Solver</scope><name>SolveMatrixEquation</name></member>
+      <member refid="classcsmp_1_1_solver_1ad6e05cc358ab9c92cf037cfa24e9f8f9" prot="protected" virt="pure-virtual" ambiguityscope="csmp::Solver::"><scope>csmp::PARDISO_Solver</scope><name>SolveMatrixEquation</name></member>
+      <member refid="classcsmp_1_1_solver_1a331d12fc9b8cb28b1d9614fdd1059a48" prot="public" virt="non-virtual"><scope>csmp::PARDISO_Solver</scope><name>Solver</name></member>
+      <member refid="classcsmp_1_1_solver_1af729d5eb6bc55bdbe950f5eb1b7cd11b" prot="public" virt="non-virtual"><scope>csmp::PARDISO_Solver</scope><name>Solver</name></member>
+      <member refid="classcsmp_1_1_solver_1a52350f4db63c9e48f7354146d9c12d79" prot="protected" virt="non-virtual"><scope>csmp::PARDISO_Solver</scope><name>solver_settings_</name></member>
+      <member refid="classcsmp_1_1_solver_1a7707a8bf03e9dde6396aecc144730c68" prot="public" virt="non-virtual"><scope>csmp::PARDISO_Solver</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_solver_1aa6ac00a1cf7acf5b7aae4df7b8ac4c80" prot="public" virt="non-virtual"><scope>csmp::PARDISO_Solver</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_p_a_r_d_i_s_o___solver_1a207e56dc0778989bd75a06439859a0a0" prot="public" virt="virtual"><scope>csmp::PARDISO_Solver</scope><name>~PARDISO_Solver</name></member>
+      <member refid="classcsmp_1_1_solver_1a1bc444c360ad5d45efcfe56f72bdd45b" prot="public" virt="virtual"><scope>csmp::PARDISO_Solver</scope><name>~Solver</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

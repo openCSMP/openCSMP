@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_f592878491f31df6ceb4f8399a79a805" kind="dir">
+    <compoundname>source/includes/thmc/single_phase_flow</compoundname>
+    <innerfile refid="_compute_single_phase_gravity_term_visitor_8h">ComputeSinglePhaseGravityTermVisitor.h</innerfile>
+    <innerfile refid="_conductivity_visitor_8h">ConductivityVisitor.h</innerfile>
+    <innerfile refid="_dispersivity_visitor_8h">DispersivityVisitor.h</innerfile>
+    <innerfile refid="_gravity_projection_visitor_8h">GravityProjectionVisitor.h</innerfile>
+    <innerfile refid="source_2includes_2thmc_2single__phase__flow_2_groundwater_darcy_velocity_8h">GroundwaterDarcyVelocity.h</innerfile>
+    <innerfile refid="_hydraulic_head_8h">HydraulicHead.h</innerfile>
+    <innerfile refid="parallel_plate_permeability_from_channel_width_8h">parallelPlatePermeabilityFromChannelWidth.h</innerfile>
+    <innerfile refid="_region_boundary_flux_visitor_8h">RegionBoundaryFluxVisitor.h</innerfile>
+    <innerfile refid="_single_phase_velocity_visitor_8h">SinglePhaseVelocityVisitor.h</innerfile>
+    <innerfile refid="_source_visitor_8h">SourceVisitor.h</innerfile>
+    <innerfile refid="_stokes_einstein_diffusivity_8h">StokesEinsteinDiffusivity.h</innerfile>
+    <innerfile refid="_streaming_potential_8h">StreamingPotential.h</innerfile>
+    <innerfile refid="_thermal_visitor_8h">ThermalVisitor.h</innerfile>
+    <innerfile refid="_velocity_and_volume_flux_8h">VelocityAndVolumeFlux.h</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="source/includes/thmc/single_phase_flow/"/>
+  </compounddef>
+</doxygen>

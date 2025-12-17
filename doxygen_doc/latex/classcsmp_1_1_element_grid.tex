@@ -1,0 +1,77 @@
+\doxysection{csmp\+::Element\+Grid Class Reference}
+\hypertarget{classcsmp_1_1_element_grid}{}\label{classcsmp_1_1_element_grid}\index{csmp::ElementGrid@{csmp::ElementGrid}}
+
+
+mapping from triangular finite elements to regular grid  
+
+
+
+
+{\ttfamily \#include $<$Element\+Grid.\+h$>$}
+
+
+
+Collaboration diagram for csmp\+::Element\+Grid\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=190pt]{classcsmp_1_1_element_grid__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_element_grid_ab8bea1b43f258240d8584dd76c2e6287}\label{classcsmp_1_1_element_grid_ab8bea1b43f258240d8584dd76c2e6287} 
+{\bfseries Element\+Grid} (const \mbox{\hyperlink{classcsmp_1_1_element_grid}{Element\+Grid}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_element_grid_ad4b9e018094b3d7697ab5ac026be5852}\label{classcsmp_1_1_element_grid_ad4b9e018094b3d7697ab5ac026be5852} 
+\mbox{\hyperlink{classcsmp_1_1_element_grid}{Element\+Grid}} \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_element_grid}{Element\+Grid}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_element_grid_a9ea49f2399276a3ee1810c4b4ebf9cc9}\label{classcsmp_1_1_element_grid_a9ea49f2399276a3ee1810c4b4ebf9cc9} 
+void {\bfseries Add\+Point} (int32\+\_\+t i, int32\+\_\+t j, double val)
+\item 
+\Hypertarget{classcsmp_1_1_element_grid_a74e0fd8b9b699bfa22f576ff99974a93}\label{classcsmp_1_1_element_grid_a74e0fd8b9b699bfa22f576ff99974a93} 
+std\+::map$<$ std\+::pair$<$ int32\+\_\+t, int32\+\_\+t $>$, double $>$\+::iterator {\bfseries Begin} ()
+\item 
+\Hypertarget{classcsmp_1_1_element_grid_aecab45f1c5893ebabaffbe159216c05a}\label{classcsmp_1_1_element_grid_aecab45f1c5893ebabaffbe159216c05a} 
+std\+::map$<$ std\+::pair$<$ int32\+\_\+t, int32\+\_\+t $>$, double $>$\+::iterator {\bfseries End} ()
+\item 
+\Hypertarget{classcsmp_1_1_element_grid_a35eeb63bf5bd7d2d826e2d14de42d812}\label{classcsmp_1_1_element_grid_a35eeb63bf5bd7d2d826e2d14de42d812} 
+double {\bfseries Value} (int32\+\_\+t i, int32\+\_\+t j) const
+\item 
+\Hypertarget{classcsmp_1_1_element_grid_abf3e69ff1cf7c5017f4ee0c1911e4c1e}\label{classcsmp_1_1_element_grid_abf3e69ff1cf7c5017f4ee0c1911e4c1e} 
+double {\bfseries Grid\+Average} () const
+\item 
+\Hypertarget{classcsmp_1_1_element_grid_ab5362e10623749513af36ccaf17523d2}\label{classcsmp_1_1_element_grid_ab5362e10623749513af36ccaf17523d2} 
+double {\bfseries Sum} () const
+\item 
+\Hypertarget{classcsmp_1_1_element_grid_aa7d75c0389a8f5d2a3b3e31f885ff776}\label{classcsmp_1_1_element_grid_aa7d75c0389a8f5d2a3b3e31f885ff776} 
+void {\bfseries Min\+Max} (double \&dmin, double \&dmax) const
+\item 
+\Hypertarget{classcsmp_1_1_element_grid_ae9834671bf4f2d03f45c977eb06f95a8}\label{classcsmp_1_1_element_grid_ae9834671bf4f2d03f45c977eb06f95a8} 
+void {\bfseries Transfer\+Data\+To\+Grid} (\mbox{\hyperlink{classcsmp_1_1_finite_difference_grid}{Finite\+Difference\+Grid}} \&) const
+\item 
+\Hypertarget{classcsmp_1_1_element_grid_a26e67324ca6ee1ddd55234aa69d85a93}\label{classcsmp_1_1_element_grid_a26e67324ca6ee1ddd55234aa69d85a93} 
+bool {\bfseries Empty} () const
+\item 
+\Hypertarget{classcsmp_1_1_element_grid_a5f863eb7a1f782f8f23ac1d9fd36afb6}\label{classcsmp_1_1_element_grid_a5f863eb7a1f782f8f23ac1d9fd36afb6} 
+int32\+\_\+t {\bfseries Size} () const
+\item 
+\Hypertarget{classcsmp_1_1_element_grid_ac587d84251c8c1c4bea9411a8a256068}\label{classcsmp_1_1_element_grid_ac587d84251c8c1c4bea9411a8a256068} 
+void {\bfseries Out} () const
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+mapping from triangular finite elements to regular grid 
+
+\begin{DoxyCopyright}{Copyright}
+(c) SKM (1996) 
+\end{DoxyCopyright}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/regular\+\_\+grids/Element\+Grid.\+h\item 
+source/modules/regular\+\_\+grids/Element\+Grid.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,1124 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h" kind="file" language="C++">
+    <compoundname>NaClH2OPropertiesVisitorPHX_initializer_list.h</compoundname>
+    <includedby refid="_na_cl_h2_o_properties_visitor_p_h_x_8cpp" local="yes">source/modules/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX.cpp</includedby>
+    <sectiondef kind="var">
+      <memberdef kind="variable" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1ab6f3c269fc46c9c1c0f81b3431240138" prot="public" static="no" mutable="no">
+        <type></type>
+        <definition>__pad0__</definition>
+        <argsstring></argsstring>
+        <name>__pad0__</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="1" column="0" bodyfile="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" bodystart="1" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1acd2120bbd5d53ac34c06efdcad3ceeea" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>bogus_variables</definition>
+        <argsstring>(false)</argsstring>
+        <name>bogus_variables</name>
+        <param>
+          <type>false</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="2" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1afc007f3f65ee29672a13fba7a567b128" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>first</definition>
+        <argsstring>(false)</argsstring>
+        <name>first</name>
+        <param>
+          <type>false</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="3" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1a3ba9e411ee551a9cac905a334d8697ae" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>pure_halite</definition>
+        <argsstring>(false)</argsstring>
+        <name>pure_halite</name>
+        <param>
+          <type>false</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="4" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1acbdf41fc7a2d4e23f5877a9af4fe91bf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>fixed_temperature</definition>
+        <argsstring>(false)</argsstring>
+        <name>fixed_temperature</name>
+        <param>
+          <type>false</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="5" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1a37387ae84483fcda0b8afbd08f09cc50" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>T_dependent_cpr</definition>
+        <argsstring>(false)</argsstring>
+        <name>T_dependent_cpr</name>
+        <param>
+          <type>false</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="6" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1aa55064f17dcfe8ad435931a1f5f6399b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>open_boundaries</definition>
+        <argsstring>(false)</argsstring>
+        <name>open_boundaries</name>
+        <param>
+          <type>false</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="7" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1aca21b3be4aeb97d36b826a2903a71763" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>const_top_pressure</definition>
+        <argsstring>(true)</argsstring>
+        <name>const_top_pressure</name>
+        <param>
+          <type>true</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="8" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1af164a407f256733a37fce035fdea716e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>verbose_eq</definition>
+        <argsstring>(false)</argsstring>
+        <name>verbose_eq</name>
+        <param>
+          <type>false</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="9" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1a6ef7d3e859b7f1a4acf2428a44eb8a14" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>adjust_compressibility_after_phasechange</definition>
+        <argsstring>(false)</argsstring>
+        <name>adjust_compressibility_after_phasechange</name>
+        <param>
+          <type>false</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="11" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1a086e0ab83b9ba07814f5ade201ca93e7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>max_after_phasechange_counter</definition>
+        <argsstring>(10.0)</argsstring>
+        <name>max_after_phasechange_counter</name>
+        <param>
+          <type>10.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="12" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1a45013e2c729d50295abcc95f33afaeb8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>m_rock_</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>m_rock_</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="14" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1aa542c28339af6c93f6b430c741bab8bc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>cp_rock_</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>cp_rock_</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="15" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1af82408f8132eafe01d7c372aad628b46" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>phi_</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>phi_</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="16" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1ae92818f2ead240316c6f7e7f6707ecfd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>m_fluid_</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>m_fluid_</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="17" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1ad3717b63aca8bb732d9173b1a34e4b2a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>tp_</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>tp_</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="18" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1a3b22520283b3909308d1ec8a0b8e1adb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>p_current_</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>p_current_</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="19" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1a1f5f06b257851b1b852d38fd5714d7b3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>H_current_</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>H_current_</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="20" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1adf9a68625e27c29bc57dc8746a011184" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>MS_current_</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>MS_current_</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="21" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1a9fb4414fbec827e7649d6e9492882715" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>H_previous_</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>H_previous_</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="22" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1a700afdbfe651a59f3b896892ef249754" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>t_fixed</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>t_fixed</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="23" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1afcfaccee60726cb1c7f54c60e16b58eb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>rho_rock_</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>rho_rock_</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="24" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1a9aa6c86da0eccbb053c1672035dfffb4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>t_diffusion_</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>t_diffusion_</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="25" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1a76c4a75bf184bedfd62ff32b15311522" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>dT_diff_</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>dT_diff_</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="26" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1a4bffc19519fec10c1f2dca909854632c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>dh_rock_diff_</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>dh_rock_diff_</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="27" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1a72c758ad0f5ebc6fc35d6546b2a3ad46" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>dh_fluid_diff_</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>dh_fluid_diff_</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="28" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1ad036ca228663800c46723e6bbcad1a25" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>dhCl_</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>dhCl_</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="29" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1a6a821ff68f17ac0e03336147dee52736" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>dhCv_</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>dhCv_</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="30" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1a2a0226134653151b59ecf634ba1a81d4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>dxCl_</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>dxCl_</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="31" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1a3e5e595d2f816966c9efff60150ac9d1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>dxCv_</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>dxCv_</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="32" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1a0b56a4ace2991fec2ef6f4dd46f94089" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>dx_diff_</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>dx_diff_</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="33" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1ab3b65f2052c9ffe7437815171e3394c4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>x_</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>x_</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="34" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1ae03705c39b255a9cf639c20292842569" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>dmt_src</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>dmt_src</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="35" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1a2f6a6ec79cd7cd4d15ad9b993666d44b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>dh_src</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>dh_src</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="36" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1a0ba00b757deff42c97e3f94c6199a5c8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>ds_src</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>ds_src</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="37" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1ab1b0e330bdb2fbfdeffad5a4d8579aa9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>dt_</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>dt_</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="38" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1a8fde0655cfa8b43310ece36433fa612f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>dml_</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>dml_</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="39" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1af113eb90effa49d01f2cd75b35c225c8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>dmv_</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>dmv_</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="40" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1a3f892a327ef161408ab2f8708ccbf0cf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>h_fluid_</definition>
+        <argsstring>(2.086e6)</argsstring>
+        <name>h_fluid_</name>
+        <param>
+          <type>2.</type>
+          <declname>086e6</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="41" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1a106ade8ec55b203813d31f6d3a7cb556" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>wt_</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>wt_</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="42" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1a12c512f188d63cedccd0480be81318ea" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>t_</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>t_</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="43" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1af3b4fc1250b2bc7dc85b2b19d9680bd5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>p_bar_</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>p_bar_</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="44" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1ab1a206566da5624d9a623259f66dc136" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>previous_state</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>previous_state</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="45" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1ac46ab22f04da866b250984b53d71a226" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>mlv_</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>mlv_</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="46" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1ae8351ff9cb79eaedfc5a1a3565017b07" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>volume_factor</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>volume_factor</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="47" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1a15df7ac259059f353d6d2cb6a9b4e135" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>volume_factor_LHS</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>volume_factor_LHS</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="48" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1a6305fefdf93c29c06539b95b43a9b42e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>volume_factor_RHS</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>volume_factor_RHS</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="49" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1a80d4817d62469dfd90921a851cbc597a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>pore_volume</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>pore_volume</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="50" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1a20640e6d6e8aff7c99874f2ac06290da" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>rock_volume</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>rock_volume</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="51" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1afed6bffc4b81d87933406dca756dfc52" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>kelvin</definition>
+        <argsstring>(273.15)</argsstring>
+        <name>kelvin</name>
+        <param>
+          <type>273.</type>
+          <declname>15</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="52" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1a1e8fad07c106b6302b2d35beba04f2eb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>res_sl</definition>
+        <argsstring>(0.3)</argsstring>
+        <name>res_sl</name>
+        <param>
+          <type>0.</type>
+          <declname>3</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="53" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1a0b291971914866d080b39b93ef45061d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>res_sv</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>res_sv</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="54" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1a905ee836fa23734c8027f99269419ce1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>krl</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>krl</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="55" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1a260e6f0f5575c2d0736196dd87ce54b8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>krv</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>krv</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="56" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1aa2dfe4a4e65870cb9d9f9cd1416c514a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>ref_spec_h</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>ref_spec_h</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="57" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1affa3ec3e1662880500f42cea568eced1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>ref_sal</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>ref_sal</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="58" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1ac3eb26cd702cafa8b6c59e0d952888f2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>time_factor_p</definition>
+        <argsstring>(1.0)</argsstring>
+        <name>time_factor_p</name>
+        <param>
+          <type>1.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="59" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1a7def92a55f1ce05ecca3e0a2f9a2dba0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>time_factor_h</definition>
+        <argsstring>(1.0)</argsstring>
+        <name>time_factor_h</name>
+        <param>
+          <type>1.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="60" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1a96a999c867176b7243a4bf361e690760" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>time_factor_s</definition>
+        <argsstring>(1.0)</argsstring>
+        <name>time_factor_s</name>
+        <param>
+          <type>1.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="61" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1af9c1679b634aba9e54d6662002d6449e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>expected_dp</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>expected_dp</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="62" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1a58684aeb36baa91acba4b7b252b2f76e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>hrock_prev</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>hrock_prev</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="63" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h_1a3e1735e648fe8f51c5e3ace4181f35fe" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>hrock_curr</definition>
+        <argsstring>(0.0)</argsstring>
+        <name>hrock_curr</name>
+        <param>
+          <type>0.</type>
+          <declname>0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h" line="64" column="5"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="normal">:<sp/><sp/><sp/>top_boundary(</highlight><highlight class="keyword">false</highlight><highlight class="normal">),</highlight></codeline>
+<codeline lineno="2"><highlight class="normal"><sp/><sp/><sp/><sp/>bogus_variables(</highlight><highlight class="keyword">false</highlight><highlight class="normal">),</highlight></codeline>
+<codeline lineno="3"><highlight class="normal"><sp/><sp/><sp/><sp/>first(</highlight><highlight class="keyword">false</highlight><highlight class="normal">),</highlight></codeline>
+<codeline lineno="4"><highlight class="normal"><sp/><sp/><sp/><sp/>pure_halite(</highlight><highlight class="keyword">false</highlight><highlight class="normal">),</highlight></codeline>
+<codeline lineno="5"><highlight class="normal"><sp/><sp/><sp/><sp/>fixed_temperature(</highlight><highlight class="keyword">false</highlight><highlight class="normal">),</highlight></codeline>
+<codeline lineno="6"><highlight class="normal"><sp/><sp/><sp/><sp/>T_dependent_cpr(</highlight><highlight class="keyword">false</highlight><highlight class="normal">),</highlight></codeline>
+<codeline lineno="7"><highlight class="normal"><sp/><sp/><sp/><sp/>open_boundaries(</highlight><highlight class="keyword">false</highlight><highlight class="normal">),</highlight></codeline>
+<codeline lineno="8"><highlight class="normal"><sp/><sp/><sp/><sp/>const_top_pressure(</highlight><highlight class="keyword">true</highlight><highlight class="normal">),</highlight></codeline>
+<codeline lineno="9"><highlight class="normal"><sp/><sp/><sp/><sp/>verbose_eq(</highlight><highlight class="keyword">false</highlight><highlight class="normal">),</highlight></codeline>
+<codeline lineno="10"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//***<sp/>new<sp/>TD<sp/>May<sp/>2011</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"><sp/><sp/><sp/><sp/>adjust_compressibility_after_phasechange(</highlight><highlight class="keyword">false</highlight><highlight class="normal">),</highlight></codeline>
+<codeline lineno="12"><highlight class="normal"><sp/><sp/><sp/><sp/>max_after_phasechange_counter(10.0),</highlight></codeline>
+<codeline lineno="13"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//***<sp/>end<sp/>new</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"><sp/><sp/><sp/><sp/>m_rock_(0.0),</highlight></codeline>
+<codeline lineno="15"><highlight class="normal"><sp/><sp/><sp/><sp/>cp_rock_(0.0),<sp/></highlight></codeline>
+<codeline lineno="16"><highlight class="normal"><sp/><sp/><sp/><sp/>phi_(0.0),<sp/></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"><sp/><sp/><sp/><sp/>m_fluid_(0.0),<sp/></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"><sp/><sp/><sp/><sp/>tp_(0.0),<sp/></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"><sp/><sp/><sp/><sp/>p_current_(0.0),<sp/></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"><sp/><sp/><sp/><sp/>H_current_(0.0),<sp/></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/><sp/>MS_current_(0.0),</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/>H_previous_(0.0),<sp/></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"><sp/><sp/><sp/><sp/>t_fixed(0.0),<sp/></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/>rho_rock_(0.0),<sp/></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/>t_diffusion_(0.0),</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/>dT_diff_(0.0),<sp/></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/>dh_rock_diff_(0.0),<sp/></highlight></codeline>
+<codeline lineno="28"><highlight class="normal"><sp/><sp/><sp/><sp/>dh_fluid_diff_(0.0),<sp/></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/>dhCl_(0.0),<sp/></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/>dhCv_(0.0),</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/>dxCl_(0.0),<sp/></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/>dxCv_(0.0),<sp/></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/>dx_diff_(0.0),<sp/></highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/>x_(0.0),</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/>dmt_src(0.0),<sp/></highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/>dh_src(0.0),<sp/></highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/>ds_src(0.0),<sp/></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/>dt_(0.0),<sp/></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/>dml_(0.0),<sp/></highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/>dmv_(0.0),<sp/></highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/>h_fluid_(2.086e6),<sp/></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/>wt_(0.0),</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/>t_(0.0),<sp/></highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/>p_bar_(0.0),<sp/></highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/>previous_state(0.0),<sp/></highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/>mlv_(0.0),</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/>volume_factor(0.0),<sp/></highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/>volume_factor_LHS(0.0),<sp/></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/>volume_factor_RHS(0.0),</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/>pore_volume(0.0),</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/>rock_volume(0.0),</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/>kelvin(273.15),<sp/></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/>res_sl(0.3),</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/>res_sv(0.0),</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/>krl(0.0),</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/>krv(0.0),</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/>ref_spec_h(0.0),</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/>ref_sal(0.0),</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/>time_factor_p(1.0),</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/>time_factor_h(1.0),</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/>time_factor_s(1.0),</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/>expected_dp(0.0),</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/>hrock_prev(0.0),</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/>hrock_curr(0.0),</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/>equilibrator(m_rock_,cp_rock_,rho_rock_,phi_,m_fluid_,wt_,tp_,p_current_,H_current_,H_previous_,<sp/>fixed_temperature,<sp/>t_fixed,<sp/>t_diffusion_,<sp/>verbose_eq<sp/>)</highlight></codeline>
+    </programlisting>
+    <location file="source/includes/integration/cvfe_hydrothermal/NaClH2OPropertiesVisitorPHX_initializer_list.h"/>
+  </compounddef>
+</doxygen>

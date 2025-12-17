@@ -14,16 +14,16 @@ public:
     virtual double    Volume();
     virtual double    AspectRatio();
     virtual double    InnerRadius();
-    virtual void        EdgeLengths( std::vector<double>& vec );
-    virtual void        CornerNodes( std::vector<uint32_t>& ids ) const;
-    virtual uint32_t      CornerNodes() const  { return 8; }
-    virtual void        MidSideNodes( std::vector<uint32_t>& ids ) const;
-    virtual uint32_t      MidSideNodes() const { return 12; }
-    virtual void        CounterClockwiseNodes( std::vector<uint32_t>& ids ) const;
+    virtual void      EdgeLengths( std::vector<double>& vec );
+    virtual void      CornerNodes( std::vector<uint32_t>& ids ) const;
+    virtual uint32_t  CornerNodes() const  { return 8; }
+    virtual void      MidSideNodes( std::vector<uint32_t>& ids ) const;
+    virtual uint32_t  MidSideNodes() const { return 12; }
+    virtual void      CounterClockwiseNodes( std::vector<uint32_t>& ids ) const;
   
-    virtual void        ExtrapolateIntegrationPointVariableToNodes( uint32_t nvars,
-                                                                    const std::vector<double>& IVAR,
-                                                                    std::vector<double>& NVAR ) const;
+    virtual void      ExtrapolateIntegrationPointVariableToNodes( uint32_t nvars,
+                                                                  const std::vector<double>& IVAR,
+                                                                  std::vector<double>& NVAR ) const;
 
     virtual CSMP_FEM_TYPE  ElementTypeOfFace( uint32_t face ) const;
     virtual CSMP_FEM_TYPE  ElementTypeOfSegment( uint32_t /* segment */ ) const { return ISOPARAMETRIC_QUADRATIC_BAR; };
@@ -34,26 +34,26 @@ public:
     virtual std::vector<uint32_t>  CornerNodesOfFace( uint32_t face_id ) const;
     virtual std::vector<uint32_t>  NodesConnectedTo( uint32_t node_id ) const;
   
-    virtual   void      N(std::vector<double>& N, const std::vector<double>& xyz );
-    virtual   void      N_AtIntegrationPoint( uint32_t ip, std::vector<double>& N );
-    virtual   void      N_AtBaryCenter( std::vector<double>& N );
-    virtual   void      JacobianAtIntegrationPoint( uint32_t ip );
+    virtual   void    N(std::vector<double>& N, const std::vector<double>& xyz );
+    virtual   void    N_AtIntegrationPoint( uint32_t ip, std::vector<double>& N );
+    virtual   void    N_AtBaryCenter( std::vector<double>& N );
+    virtual   void    JacobianAtIntegrationPoint( uint32_t ip );
 
     virtual double    dN( DenseMatrix<DM_MIN>& dn, const std::vector<double>& xyz  );
-    virtual void        dN( DenseMatrix<DM_MIN>& DN8 );
+    virtual void      dN( DenseMatrix<DM_MIN>& DN8 );
     virtual double    dN_AtNode( DenseMatrix<DM_MIN>& M, uint32_t node );
     virtual double    dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& M, uint32_t gauss_point );
     virtual double    dN_AtBarycenter( DenseMatrix<DM_MIN>& M );
 
-    virtual void        Nrst( double r, double s, double t, std::vector<double>& nrst ) const;
-    virtual void        Nrst( double r, double s, double t, double* nrst ) const;
-    virtual void        dNr( double r, double s, double t, std::vector<double>& dNr ) const;
-    virtual void        dNs( double r, double s, double t, std::vector<double>& dNs ) const;
-    virtual void        dNt( double r, double s, double t, std::vector<double>& dNt ) const;
+    virtual void      Nrst( double r, double s, double t, std::vector<double>& nrst ) const;
+    virtual void      Nrst( double r, double s, double t, double* nrst ) const;
+    virtual void      dNr( double r, double s, double t, std::vector<double>& dNr ) const;
+    virtual void      dNs( double r, double s, double t, std::vector<double>& dNs ) const;
+    virtual void      dNt( double r, double s, double t, std::vector<double>& dNt ) const;
 
-    virtual   void      IntegrationPoint( uint32_t i, std::vector<double>& xyz ) const;
+    virtual   void    IntegrationPoint( uint32_t i, std::vector<double>& xyz ) const;
     virtual double    WeightAtIntegrationPoint( uint32_t i ) const;
-    virtual void        ReferenceCoordinates(DenseMatrix<DM_MIN> & matCoords) const;
+    virtual void      ReferenceCoordinates(DenseMatrix<DM_MIN> & matCoords) const;
 
     void OutputNodeDataToVTK( const char* file_name,
                               const char* var_name,

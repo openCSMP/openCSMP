@@ -1,0 +1,2490 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_two_phase_model" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>csmp::TwoPhaseModel</compoundname>
+    <derivedcompoundref refid="classcsmp_1_1_brooks_corey" prot="public" virt="non-virtual">csmp::BrooksCorey&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_brooks_corey_c_o2" prot="public" virt="non-virtual">csmp::BrooksCoreyCO2&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_brooks_corey_with_hysteresis" prot="public" virt="non-virtual">csmp::BrooksCoreyWithHysteresis&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_brooks_corey_with_hysteresis_c_o2" prot="public" virt="non-virtual">csmp::BrooksCoreyWithHysteresisCO2&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_corey" prot="public" virt="non-virtual">csmp::Corey&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_experimental_r_t" prot="public" virt="non-virtual">csmp::ExperimentalRT&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_fourar_lenormand" prot="public" virt="non-virtual">csmp::FourarLenormand&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_fracture_matrix_upscaled" prot="public" virt="non-virtual">csmp::FractureMatrixUpscaled&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_heterogeneity_and_rate_aware_model" prot="public" virt="non-virtual">csmp::HeterogeneityAndRateAwareModel&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_linear_two_phase_model" prot="public" virt="non-virtual">csmp::LinearTwoPhaseModel&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_two_phase_file_based" prot="public" virt="non-virtual">csmp::TwoPhaseFileBased&lt; dim &gt;</derivedcompoundref>
+    <derivedcompoundref refid="classcsmp_1_1_van_genuchten" prot="public" virt="non-virtual">csmp::VanGenuchten&lt; dim &gt;</derivedcompoundref>
+    <includes refid="_two_phase_model_8h" local="no">TwoPhaseModel.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_model_1a4bff3ce11382c26112f7c2cc72974c84" prot="protected" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::TwoPhaseModel&lt; dim &gt;::perm_key_</definition>
+        <argsstring></argsstring>
+        <name>perm_key_</name>
+        <qualifiedname>csmp::TwoPhaseModel::perm_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="215" column="23" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" bodystart="215" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_model_1a1346eac40e3a09c6ae7264737aaa61f6" prot="protected" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::TwoPhaseModel&lt; dim &gt;::sat_key_</definition>
+        <argsstring></argsstring>
+        <name>sat_key_</name>
+        <qualifiedname>csmp::TwoPhaseModel::sat_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="216" column="23" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" bodystart="216" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_model_1a636e1276285fbf97b1c3c2ae942c3c36" prot="protected" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::TwoPhaseModel&lt; dim &gt;::snr_key_</definition>
+        <argsstring></argsstring>
+        <name>snr_key_</name>
+        <qualifiedname>csmp::TwoPhaseModel::snr_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="217" column="23" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" bodystart="217" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_model_1a0ccfc050d9e86571b9bf685770f782fb" prot="protected" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::TwoPhaseModel&lt; dim &gt;::swr_key_</definition>
+        <argsstring></argsstring>
+        <name>swr_key_</name>
+        <qualifiedname>csmp::TwoPhaseModel::swr_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="218" column="23" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" bodystart="218" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_model_1afed59c0d76526b7267fbcb7ddfbd103c" prot="protected" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::TwoPhaseModel&lt; dim &gt;::ift_key_</definition>
+        <argsstring></argsstring>
+        <name>ift_key_</name>
+        <qualifiedname>csmp::TwoPhaseModel::ift_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="219" column="23" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" bodystart="219" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_model_1a85359fbcc412cd4f3d8b4995244bfba3" prot="protected" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::TwoPhaseModel&lt; dim &gt;::mun_key_</definition>
+        <argsstring></argsstring>
+        <name>mun_key_</name>
+        <qualifiedname>csmp::TwoPhaseModel::mun_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="220" column="23" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" bodystart="220" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_model_1a755f5f5de97f71bd11d0c5525a2b825f" prot="protected" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::TwoPhaseModel&lt; dim &gt;::muw_key_</definition>
+        <argsstring></argsstring>
+        <name>muw_key_</name>
+        <qualifiedname>csmp::TwoPhaseModel::muw_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="221" column="23" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" bodystart="221" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_model_1ae7e5792b6ecc96bbe735dd480ef9304d" prot="protected" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::TwoPhaseModel&lt; dim &gt;::rhw_key_</definition>
+        <argsstring></argsstring>
+        <name>rhw_key_</name>
+        <qualifiedname>csmp::TwoPhaseModel::rhw_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="222" column="23" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" bodystart="222" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_model_1acf5e0ea1fde6aa4bfbbfda6bbb39af04" prot="protected" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::TwoPhaseModel&lt; dim &gt;::rhn_key_</definition>
+        <argsstring></argsstring>
+        <name>rhn_key_</name>
+        <qualifiedname>csmp::TwoPhaseModel::rhn_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="223" column="23" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" bodystart="223" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_model_1ab23a76bf8e7190d36540dbb87855e909" prot="protected" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::TwoPhaseModel&lt; dim &gt;::lt_key_</definition>
+        <argsstring></argsstring>
+        <name>lt_key_</name>
+        <qualifiedname>csmp::TwoPhaseModel::lt_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="224" column="23" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" bodystart="224" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_model_1a06e3a9b3d23be9aa3239c74e1c25268c" prot="protected" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::swr_</definition>
+        <argsstring></argsstring>
+        <name>swr_</name>
+        <qualifiedname>csmp::TwoPhaseModel::swr_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="225" column="23" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" bodystart="225" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_model_1a03564672375e3db427e40e77a04b28f8" prot="protected" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::snr_</definition>
+        <argsstring></argsstring>
+        <name>snr_</name>
+        <qualifiedname>csmp::TwoPhaseModel::snr_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="225" column="28" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" bodystart="225" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_model_1a69c352b7101de29a6c298d2a9ac03a2a" prot="protected" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::k_</definition>
+        <argsstring></argsstring>
+        <name>k_</name>
+        <qualifiedname>csmp::TwoPhaseModel::k_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="226" column="23" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" bodystart="226" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_model_1afbd66b65f7f76a8cb18e9fe26eca5045" prot="protected" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::ift_</definition>
+        <argsstring></argsstring>
+        <name>ift_</name>
+        <qualifiedname>csmp::TwoPhaseModel::ift_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="227" column="23" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" bodystart="227" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_model_1a813f4d49ed99e37c8fc80048e0293e93" prot="protected" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::mun_</definition>
+        <argsstring></argsstring>
+        <name>mun_</name>
+        <qualifiedname>csmp::TwoPhaseModel::mun_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="228" column="23" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" bodystart="228" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_model_1a1d87598a734e6671f4b153453f37e2da" prot="protected" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::muw_</definition>
+        <argsstring></argsstring>
+        <name>muw_</name>
+        <qualifiedname>csmp::TwoPhaseModel::muw_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="228" column="28" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" bodystart="228" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_model_1abaeba466b652999181d16909421e2abd" prot="protected" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::rhn_</definition>
+        <argsstring></argsstring>
+        <name>rhn_</name>
+        <qualifiedname>csmp::TwoPhaseModel::rhn_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="229" column="23" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" bodystart="229" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_model_1ae893513c9b4199420b06ab2d68465bf3" prot="protected" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::rhw_</definition>
+        <argsstring></argsstring>
+        <name>rhw_</name>
+        <qualifiedname>csmp::TwoPhaseModel::rhw_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="229" column="28" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" bodystart="229" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_model_1aeef9e999593b3d8d7384c928738683bb" prot="protected" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref>&lt; dim &gt;</type>
+        <definition>TensorVariable&lt;dim&gt; csmp::TwoPhaseModel&lt; dim &gt;::K_</definition>
+        <argsstring></argsstring>
+        <name>K_</name>
+        <qualifiedname>csmp::TwoPhaseModel::K_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="230" column="20" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" bodystart="230" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_model_1a92e6c51b800c1e4e6eb57362c7894ebb" prot="protected" static="no" mutable="yes">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::sat_</definition>
+        <argsstring></argsstring>
+        <name>sat_</name>
+        <qualifiedname>csmp::TwoPhaseModel::sat_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="232" column="23" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" bodystart="232" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_model_1a717178b5b8ebd4e6cd90e806e3c75984" prot="protected" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::seff_</definition>
+        <argsstring></argsstring>
+        <name>seff_</name>
+        <qualifiedname>csmp::TwoPhaseModel::seff_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="233" column="23" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" bodystart="233" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_model_1a23d8c17a39e686e256a0f0089da87b01" prot="protected" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::TwoPhaseModel&lt; dim &gt;::acc_gravity_</definition>
+        <argsstring></argsstring>
+        <name>acc_gravity_</name>
+        <qualifiedname>csmp::TwoPhaseModel::acc_gravity_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="234" column="23" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" bodystart="234" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_model_1a8485eb64c4709f938017a47333fe7fa3" prot="protected" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::TwoPhaseModel&lt; dim &gt;::tolerance_</definition>
+        <argsstring></argsstring>
+        <name>tolerance_</name>
+        <qualifiedname>csmp::TwoPhaseModel::tolerance_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="235" column="23" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" bodystart="235" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_model_1ae429661671b756b0dcbed408dc66a901" prot="protected" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::TwoPhaseModel&lt; dim &gt;::MAX_CAPILLARY_PRESSURE_</definition>
+        <argsstring></argsstring>
+        <name>MAX_CAPILLARY_PRESSURE_</name>
+        <qualifiedname>csmp::TwoPhaseModel::MAX_CAPILLARY_PRESSURE_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="236" column="23" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" bodystart="236" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_model_1a80e0231aee428c8a10389fda1261f33c" prot="protected" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::TwoPhaseModel&lt; dim &gt;::MAX_CAPILLARY_PRESSURE_SLOPE_</definition>
+        <argsstring></argsstring>
+        <name>MAX_CAPILLARY_PRESSURE_SLOPE_</name>
+        <qualifiedname>csmp::TwoPhaseModel::MAX_CAPILLARY_PRESSURE_SLOPE_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="237" column="23" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" bodystart="237" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_model_1aa1396da1d4ffce2a75d3e2344dc12bbe" prot="protected" static="no" mutable="no">
+        <type>const bool</type>
+        <definition>const bool csmp::TwoPhaseModel&lt; dim &gt;::interpolate_fluid_properties_</definition>
+        <argsstring></argsstring>
+        <name>interpolate_fluid_properties_</name>
+        <qualifiedname>csmp::TwoPhaseModel::interpolate_fluid_properties_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="238" column="23" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" bodystart="238" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_model_1a413087063e40e71e90b5f573538ee953" prot="protected" static="no" mutable="no">
+        <type>const bool</type>
+        <definition>const bool csmp::TwoPhaseModel&lt; dim &gt;::sw_ro_mu_placement_</definition>
+        <argsstring></argsstring>
+        <name>sw_ro_mu_placement_</name>
+        <qualifiedname>csmp::TwoPhaseModel::sw_ro_mu_placement_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="239" column="23" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" bodystart="239" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_model_1a111dc3eba3c33c0ccd2cc49c6fff5439" prot="protected" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::TwoPhaseModel&lt; dim &gt;::tensor_permeability_</definition>
+        <argsstring></argsstring>
+        <name>tensor_permeability_</name>
+        <qualifiedname>csmp::TwoPhaseModel::tensor_permeability_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="240" column="23" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" bodystart="240" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1abfdb2ac9fb5d193308c6a217b16cd032" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::TwoPhaseModel&lt; dim &gt;::TwoPhaseModel</definition>
+        <argsstring>(const PropertyDatabase&lt; dim &gt; &amp;database, double viscosity_nw, double viscosity_w, double density_nw, double density_w, const char *kkk, const char *sat, const char *snr, const char *swr, const bool sw_ro_mu_placement=true)</argsstring>
+        <name>TwoPhaseModel</name>
+        <qualifiedname>csmp::TwoPhaseModel::TwoPhaseModel</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>&lt; dim &gt; &amp;</type>
+          <declname>database</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>viscosity_nw</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>viscosity_w</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>density_nw</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>density_w</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>kkk</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>sat</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>snr</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>swr</declname>
+        </param>
+        <param>
+          <type>const bool</type>
+          <declname>sw_ro_mu_placement</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+<para>for fixed values of fluid viscosities and densities </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="26" column="5" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="30" bodyend="90"/>
+        <references refid="classcsmp_1_1_two_phase_model_1abfdb2ac9fb5d193308c6a217b16cd032" compoundref="_two_phase_model_8cpp" startline="30" endline="90">csmp::TwoPhaseModel&lt; dim &gt;::TwoPhaseModel</references>
+        <referencedby refid="classcsmp_1_1_two_phase_model_1abfdb2ac9fb5d193308c6a217b16cd032" compoundref="_two_phase_model_8cpp" startline="30" endline="90">csmp::TwoPhaseModel&lt; dim &gt;::TwoPhaseModel</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a5b0782527b060ea802294942b88adcd8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::TwoPhaseModel&lt; dim &gt;::TwoPhaseModel</definition>
+        <argsstring>(const PropertyDatabase&lt; dim &gt; &amp;database, const char *kkk, const char *mun, const char *muw, const char *rhn, const char *rhw, const char *sat, const char *snr, const char *swr, const bool sw_ro_mu_placement=true)</argsstring>
+        <name>TwoPhaseModel</name>
+        <qualifiedname>csmp::TwoPhaseModel::TwoPhaseModel</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>&lt; dim &gt; &amp;</type>
+          <declname>database</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>kkk</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>mun</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>muw</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>rhn</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>rhw</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>sat</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>snr</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>swr</declname>
+        </param>
+        <param>
+          <type>const bool</type>
+          <declname>sw_ro_mu_placement</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+<para>for interpolated values </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="36" column="5" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="95" bodyend="193"/>
+        <referencedby refid="classcsmp_1_1_two_phase_model_1afe87adcce8dc3c20438072541a973075" compoundref="_two_phase_model_8cpp" startline="316" endline="319">csmp::TwoPhaseModel&lt; 1U &gt;::TotalMobility</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a716a045623682dc5614580d4d18af10e" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>csmp::TwoPhaseModel&lt; dim &gt;::~TwoPhaseModel</definition>
+        <argsstring>()</argsstring>
+        <name>~TwoPhaseModel</name>
+        <qualifiedname>csmp::TwoPhaseModel::~TwoPhaseModel</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="47" column="13" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="198" bodyend="200"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1affc076dda4e95cfbdc9c3e12dfbd68a5" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseModel&lt; dim &gt;::Initialize</definition>
+        <argsstring>(const Element&lt; dim &gt; &amp;e)</argsstring>
+        <name>Initialize</name>
+        <qualifiedname>csmp::TwoPhaseModel::Initialize</qualifiedname>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_1ab632f54034ce47136356bce772f57054">Initialize</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_c_o2_1a4583fa2898ef8912eedc087b38035c80">Initialize</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_corey_1a4ab4cf643a5010e6dd3c3eaa2b132a46">Initialize</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_experimental_r_t_1ac088dbe33ed9ab27b459947a23cf4c90">Initialize</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_fourar_lenormand_1a3d307a22f98bdcb2f542a93810dd8a6a">Initialize</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_fracture_matrix_upscaled_1a2565992dbcdfce12218b5679e54d996b">Initialize</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_heterogeneity_and_rate_aware_model_1ad8a86de42ee655c035ee0e8d6e727366">Initialize</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_linear_two_phase_model_1a27f3acf85eecdb4f34cdbc84cea69c93">Initialize</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_two_phase_file_based_1a0a538cae488693457bfe477d3bebec49">Initialize</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_van_genuchten_1aafbfb80735487da8fc9bd131a989e901">Initialize</reimplementedby>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; &amp;</type>
+          <declname>e</declname>
+        </param>
+        <briefdescription>
+<para>reads element properties snr, swr, k, mtrl_param, fluid_param and interpolates to target placement </para>
+        </briefdescription>
+        <detaileddescription>
+<para>calculates lambda_t (total mobility) = sum of phase mobilities</para>
+<para><xrefsect id="todo_1_todo000236"><xreftitle>Todo</xreftitle><xrefdescription><para>SKM averages tensor properties, but should create tensor mobilities in stead </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="50" column="18" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="333" bodyend="356"/>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6" compoundref="_c_s_m_p__global__enumerations_8h" startline="58">csmp::PLAIN</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1aea34aa1fb3b86a30fd8876ffd6b832df" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseModel&lt; dim &gt;::InitializeAndStore</definition>
+        <argsstring>(Element&lt; dim &gt; &amp;e)</argsstring>
+        <name>InitializeAndStore</name>
+        <qualifiedname>csmp::TwoPhaseModel::InitializeAndStore</qualifiedname>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_with_hysteresis_1a27745e30768368b7083a70bfd28bdcae">InitializeAndStore</reimplementedby>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; &amp;</type>
+          <declname>e</declname>
+        </param>
+        <briefdescription>
+<para>read and modify element properties when the saturation functions are history dependent </para>
+        </briefdescription>
+        <detaileddescription>
+<para>non const version which allows to set parameters on element </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="53" column="18" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="362" bodyend="385"/>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6" compoundref="_c_s_m_p__global__enumerations_8h" startline="58">csmp::PLAIN</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a9b8050e80a78c2dbf7e58edbd1a6fda3" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseModel&lt; dim &gt;::InitializeForBaryCenter</definition>
+        <argsstring>(const Element&lt; dim &gt; &amp;e)</argsstring>
+        <name>InitializeForBaryCenter</name>
+        <qualifiedname>csmp::TwoPhaseModel::InitializeForBaryCenter</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; &amp;</type>
+          <declname>e</declname>
+        </param>
+        <briefdescription>
+<para>interpolates node properties to element barycenter </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="56" column="18" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="391" bodyend="397"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a4946a65cddfb1d2b244bd9202ef6a7c6" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseModel&lt; dim &gt;::InitializeForNode</definition>
+        <argsstring>(const Element&lt; dim &gt; &amp;e, uint32_t node)</argsstring>
+        <name>InitializeForNode</name>
+        <qualifiedname>csmp::TwoPhaseModel::InitializeForNode</qualifiedname>
+        <reimplementedby refid="classcsmp_1_1_fracture_matrix_upscaled_1a9e8daff02cb28a416d4917580c7d55a1">InitializeForNode</reimplementedby>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; &amp;</type>
+          <declname>e</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>node</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="58" column="18" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="401" bodyend="412"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a035564f82664ed735dd10b90252affc1" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseModel&lt; dim &gt;::InitializeForIntegrationPoint</definition>
+        <argsstring>(uint32_t ip, const Element&lt; dim &gt; &amp;e)</argsstring>
+        <name>InitializeForIntegrationPoint</name>
+        <qualifiedname>csmp::TwoPhaseModel::InitializeForIntegrationPoint</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>ip</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; &amp;</type>
+          <declname>e</declname>
+        </param>
+        <briefdescription>
+<para>finite element integration points </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="62" column="18" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="416" bodyend="424"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a7e5ffdf7d5d7e6247f505514c13e59ba" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseModel&lt; dim &gt;::InitializeForFacetIntegrationPoint</definition>
+        <argsstring>(uint32_t facet, uint32_t ip, const Element&lt; dim &gt; &amp;e)</argsstring>
+        <name>InitializeForFacetIntegrationPoint</name>
+        <qualifiedname>csmp::TwoPhaseModel::InitializeForFacetIntegrationPoint</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>facet</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>ip</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; &amp;</type>
+          <declname>e</declname>
+        </param>
+        <briefdescription>
+<para>finite volume facets </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="65" column="18" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="430" bodyend="438"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a76820115685a04287c37f3bf793faaeb" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseModel&lt; dim &gt;::InitializeForSectorIntegrationPoint</definition>
+        <argsstring>(uint32_t sector, uint32_t ip, const Element&lt; dim &gt; &amp;e)</argsstring>
+        <name>InitializeForSectorIntegrationPoint</name>
+        <qualifiedname>csmp::TwoPhaseModel::InitializeForSectorIntegrationPoint</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>sector</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>ip</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; &amp;</type>
+          <declname>e</declname>
+        </param>
+        <briefdescription>
+<para>finite volume sectors </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="68" column="18" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="443" bodyend="451"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a68ba34a53479c12885884d299f8ada02" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseModel&lt; dim &gt;::InterpolateNodeProperties</definition>
+        <argsstring>(const Element&lt; dim &gt; &amp;e)</argsstring>
+        <name>InterpolateNodeProperties</name>
+        <qualifiedname>csmp::TwoPhaseModel::InterpolateNodeProperties</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; &amp;</type>
+          <declname>e</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="71" column="18" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="633" bodyend="650"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1af231e8d21dd47901266bc941f6b20d53" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseModel&lt; dim &gt;::SaturationWettingPhase</definition>
+        <argsstring>(double s_wetting)</argsstring>
+        <name>SaturationWettingPhase</name>
+        <qualifiedname>csmp::TwoPhaseModel::SaturationWettingPhase</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>s_wetting</declname>
+        </param>
+        <briefdescription>
+<para>to set properties on the fly for compressible flow modelling </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="74" column="10" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="230" bodyend="231"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a5725adbe29291d9c0d9555b37b299e14" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseModel&lt; dim &gt;::ViscosityNonWettingPhase</definition>
+        <argsstring>(double visc)</argsstring>
+        <name>ViscosityNonWettingPhase</name>
+        <qualifiedname>csmp::TwoPhaseModel::ViscosityNonWettingPhase</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>visc</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="75" column="10" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="234" bodyend="235"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a68f4aa6b07e0fcf17aeb5865a71699c4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseModel&lt; dim &gt;::ViscosityWettingPhase</definition>
+        <argsstring>(double visc)</argsstring>
+        <name>ViscosityWettingPhase</name>
+        <qualifiedname>csmp::TwoPhaseModel::ViscosityWettingPhase</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>visc</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="76" column="10" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="238" bodyend="239"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a9263314c3cb1d6e50ce8cfd09d411276" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseModel&lt; dim &gt;::DensityNonWettingPhase</definition>
+        <argsstring>(double dens)</argsstring>
+        <name>DensityNonWettingPhase</name>
+        <qualifiedname>csmp::TwoPhaseModel::DensityNonWettingPhase</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>dens</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="77" column="10" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="242" bodyend="243"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a3390594869038bb3cf05256072d50751" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseModel&lt; dim &gt;::DensityWettingPhase</definition>
+        <argsstring>(double dens)</argsstring>
+        <name>DensityWettingPhase</name>
+        <qualifiedname>csmp::TwoPhaseModel::DensityWettingPhase</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>dens</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="78" column="10" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="246" bodyend="247"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a6e0856b1080a40e27e759ab6778ce94b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::TwoPhaseModel&lt; dim &gt;::WettingPhaseSaturationKey</definition>
+        <argsstring>() const</argsstring>
+        <name>WettingPhaseSaturationKey</name>
+        <qualifiedname>csmp::TwoPhaseModel::WettingPhaseSaturationKey</qualifiedname>
+        <briefdescription>
+<para>Return of keys for calculation of two phase mobilities in transport. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="81" column="17" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="611" bodyend="614"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a492aa415c596093780d144d468d778cc" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::TwoPhaseModel&lt; dim &gt;::NonWettingPhaseSaturationKey</definition>
+        <argsstring>() const</argsstring>
+        <name>NonWettingPhaseSaturationKey</name>
+        <qualifiedname>csmp::TwoPhaseModel::NonWettingPhaseSaturationKey</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="82" column="17" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="617" bodyend="622"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a55cb58cd1f8a191f38718932d9b487b7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::TwoPhaseModel&lt; dim &gt;::TotalMobilityKey</definition>
+        <argsstring>() const</argsstring>
+        <name>TotalMobilityKey</name>
+        <qualifiedname>csmp::TwoPhaseModel::TotalMobilityKey</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="83" column="17" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="625" bodyend="628"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a24979dee40c424aa9e78e508a9fdd54a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::Permeability</definition>
+        <argsstring>() const</argsstring>
+        <name>Permeability</name>
+        <qualifiedname>csmp::TwoPhaseModel::Permeability</qualifiedname>
+        <briefdescription>
+<para>accessors </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="86" column="16" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="251" bodyend="252"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1aa93ca9953ff3cf15f4aae0bd7f1ef87a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseModel&lt; dim &gt;::Permeability</definition>
+        <argsstring>(double permeability)</argsstring>
+        <name>Permeability</name>
+        <qualifiedname>csmp::TwoPhaseModel::Permeability</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>permeability</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="87" column="16" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="255" bodyend="256"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1afd18457e1a803d0878ea2eb522abcc0c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref>&lt; dim &gt;</type>
+        <definition>TensorVariable&lt; dim &gt; csmp::TwoPhaseModel&lt; dim &gt;::TensorPermeability</definition>
+        <argsstring>() const</argsstring>
+        <name>TensorPermeability</name>
+        <qualifiedname>csmp::TwoPhaseModel::TensorPermeability</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="88" column="22" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="259" bodyend="260"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a9f750feb26a8c5bd67e688c92d2c2aa5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseModel&lt; dim &gt;::TensorPermeability</definition>
+        <argsstring>(TensorVariable&lt; dim &gt; permeability)</argsstring>
+        <name>TensorPermeability</name>
+        <qualifiedname>csmp::TwoPhaseModel::TensorPermeability</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref>&lt; dim &gt;</type>
+          <declname>permeability</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="89" column="16" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="263" bodyend="264"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a753786842d256a10e2f648781cba80c3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::Swr</definition>
+        <argsstring>() const</argsstring>
+        <name>Swr</name>
+        <qualifiedname>csmp::TwoPhaseModel::Swr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="90" column="16" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="205" bodyend="208"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a2ed211e8b4e44dc03669b415059c495d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::Snr</definition>
+        <argsstring>() const</argsstring>
+        <name>Snr</name>
+        <qualifiedname>csmp::TwoPhaseModel::Snr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="91" column="16" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="211" bodyend="214"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a65060e8f00a9635132b314872c1c2356" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseModel&lt; dim &gt;::Swr</definition>
+        <argsstring>(double swr)</argsstring>
+        <name>Swr</name>
+        <qualifiedname>csmp::TwoPhaseModel::Swr</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>swr</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="92" column="16" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="217" bodyend="220"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1ad635256c30362aafc998b4205bef00bd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseModel&lt; dim &gt;::Snr</definition>
+        <argsstring>(double snr)</argsstring>
+        <name>Snr</name>
+        <qualifiedname>csmp::TwoPhaseModel::Snr</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>snr</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="93" column="16" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="223" bodyend="226"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a4bfb130244e5558dde06f392ef600515" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::ViscosityNonWettingPhase</definition>
+        <argsstring>() const</argsstring>
+        <name>ViscosityNonWettingPhase</name>
+        <qualifiedname>csmp::TwoPhaseModel::ViscosityNonWettingPhase</qualifiedname>
+        <briefdescription>
+<para>fluid properties </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="96" column="14" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="267" bodyend="268"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1ae9a23928fdca86e49806e231f4480251" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::ViscosityWettingPhase</definition>
+        <argsstring>() const</argsstring>
+        <name>ViscosityWettingPhase</name>
+        <qualifiedname>csmp::TwoPhaseModel::ViscosityWettingPhase</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="97" column="14" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="271" bodyend="272"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a6168dc03fed46b8b916b48cd2be4a1d9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::DensityNonWettingPhase</definition>
+        <argsstring>() const</argsstring>
+        <name>DensityNonWettingPhase</name>
+        <qualifiedname>csmp::TwoPhaseModel::DensityNonWettingPhase</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="98" column="14" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="275" bodyend="276"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1abbe4fa907d41d4e83760586ac7547cc8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::DensityWettingPhase</definition>
+        <argsstring>() const</argsstring>
+        <name>DensityWettingPhase</name>
+        <qualifiedname>csmp::TwoPhaseModel::DensityWettingPhase</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="99" column="14" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="279" bodyend="280"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a3dc094ad03c4deb676cd3c2e9f477a1d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::Saturation</definition>
+        <argsstring>(uint32_t phase) const</argsstring>
+        <name>Saturation</name>
+        <qualifiedname>csmp::TwoPhaseModel::Saturation</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>phase</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="100" column="14" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="292" bodyend="297"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1ace751e7ae6bf5a2bd4605e5d29550329" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::MobilityPhase</definition>
+        <argsstring>(uint32_t phase) const</argsstring>
+        <name>MobilityPhase</name>
+        <qualifiedname>csmp::TwoPhaseModel::MobilityPhase</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>phase</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="101" column="14" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="301" bodyend="306"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1ad5825da6dae18e0298d4e4f136971f06" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::ViscosityRatio</definition>
+        <argsstring>() const</argsstring>
+        <name>ViscosityRatio</name>
+        <qualifiedname>csmp::TwoPhaseModel::ViscosityRatio</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="102" column="14" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="322" bodyend="325"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1afe87adcce8dc3c20438072541a973075" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::TotalMobility</definition>
+        <argsstring>() const</argsstring>
+        <name>TotalMobility</name>
+        <qualifiedname>csmp::TwoPhaseModel::TotalMobility</qualifiedname>
+        <briefdescription>
+<para>sum of all phase mobilities * k </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="105" column="12" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="316" bodyend="319"/>
+        <references refid="classcsmp_1_1_two_phase_model_1afba394a0043e79d0929b2c341272b955" compoundref="_two_phase_model_8cpp" startline="310" endline="313">csmp::TwoPhaseModel&lt; dim &gt;::TotalMobilityMultiplier</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1afba394a0043e79d0929b2c341272b955" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::TotalMobilityMultiplier</definition>
+        <argsstring>() const</argsstring>
+        <name>TotalMobilityMultiplier</name>
+        <qualifiedname>csmp::TwoPhaseModel::TotalMobilityMultiplier</qualifiedname>
+        <briefdescription>
+<para>sum of all phase mobilities </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="108" column="12" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="310" bodyend="313"/>
+        <references refid="classcsmp_1_1_two_phase_model_1ab6127c81bce3b1af871ec4cc83b165f7" compoundref="_two_phase_model_8cpp" startline="666" endline="672">csmp::TwoPhaseModel&lt; dim &gt;::krn_Phase</references>
+        <references refid="classcsmp_1_1_two_phase_model_1ab2460fc60f9beaf1c6ffc9f7a4d1200b" compoundref="_two_phase_model_8cpp" startline="655" endline="661">csmp::TwoPhaseModel&lt; dim &gt;::krw_Phase</references>
+        <referencedby refid="classcsmp_1_1_two_phase_model_1af5f9ba8fd94fe48d40cca93a042c6618" compoundref="_two_phase_model_8cpp" startline="497" endline="504">csmp::TwoPhaseModel&lt; dim &gt;::f_Phase</referencedby>
+        <referencedby refid="classcsmp_1_1_two_phase_model_1afe87adcce8dc3c20438072541a973075" compoundref="_two_phase_model_8cpp" startline="316" endline="319">csmp::TwoPhaseModel&lt; dim &gt;::TotalMobility</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1af6fc4c52013d567bc9b2c2acb680becd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::DiffusionMultiplier</definition>
+        <argsstring>(size_t phase) const</argsstring>
+        <name>DiffusionMultiplier</name>
+        <qualifiedname>csmp::TwoPhaseModel::DiffusionMultiplier</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>phase</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns the diffusion coefficient for the phase of interest. If not overloaeded, the hydraulic conductivity is returned. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="112" column="12" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="529" bodyend="533"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a503aab2ef0cdb43b39ae52ed277dfceb" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::CapillaryDiffusionMultiplier</definition>
+        <argsstring>() const</argsstring>
+        <name>CapillaryDiffusionMultiplier</name>
+        <qualifiedname>csmp::TwoPhaseModel::CapillaryDiffusionMultiplier</qualifiedname>
+        <briefdescription>
+<para>driven by capillary pressure gradient </para>
+        </briefdescription>
+        <detaileddescription>
+<para>See Helmig, 1997, p. 108, eqn. 3.74, term 1. This takes into account the permeability in direction of flow x lambda_overbar x pc-gradient. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="115" column="12" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="542" bodyend="545"/>
+        <references refid="classcsmp_1_1_two_phase_model_1aac4bba423c4d31322d744ea5d77d8830" compoundref="_two_phase_model_8cpp" startline="711" endline="714">csmp::TwoPhaseModel&lt; dim &gt;::dpcds_Phase</references>
+        <references refid="classcsmp_1_1_two_phase_model_1a116a6eb34e3be5a267f519b865b89468" compoundref="_two_phase_model_8cpp" startline="513" endline="519">csmp::TwoPhaseModel&lt; dim &gt;::G</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a90c517eb7a5faf1507204f721aba8535" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::GravityTerm</definition>
+        <argsstring>() const</argsstring>
+        <name>GravityTerm</name>
+        <qualifiedname>csmp::TwoPhaseModel::GravityTerm</qualifiedname>
+        <briefdescription>
+<para>multipliers for gravity-driven flow (advection multiplier and source term) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="118" column="12" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="562" bodyend="572"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a6245a32bb53cd9abcf67a5bcded9bf4f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::GravityMultiplier_G</definition>
+        <argsstring>() const</argsstring>
+        <name>GravityMultiplier_G</name>
+        <qualifiedname>csmp::TwoPhaseModel::GravityMultiplier_G</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>See Sebastian Geiger&apos;s thesis (2004), closed form. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="119" column="12" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="577" bodyend="587"/>
+        <references refid="classcsmp_1_1_two_phase_model_1a116a6eb34e3be5a267f519b865b89468" compoundref="_two_phase_model_8cpp" startline="513" endline="519">csmp::TwoPhaseModel&lt; dim &gt;::G</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a697acaf5dd0aad5ed586a9756d8d6875" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::GravityMultiplier_dGds</definition>
+        <argsstring>() const</argsstring>
+        <name>GravityMultiplier_dGds</name>
+        <qualifiedname>csmp::TwoPhaseModel::GravityMultiplier_dGds</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Computes multiplier for advection gravity coefficient. The divergence lamda_ div k g (rhw-rhn) must be dealt with separately, see Helmig, 1997, p. 108, eqn. 3.74, term 2 (second part). </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="120" column="12" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="598" bodyend="608"/>
+        <references refid="classcsmp_1_1_two_phase_model_1ae46b8290e476e6d16ebcf239481e915d" compoundref="_two_phase_model_8cpp" startline="776" endline="794">csmp::TwoPhaseModel&lt; dim &gt;::dGds</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a116a6eb34e3be5a267f519b865b89468" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::G</definition>
+        <argsstring>() const</argsstring>
+        <name>G</name>
+        <qualifiedname>csmp::TwoPhaseModel::G</qualifiedname>
+        <briefdescription>
+<para>G multiplier. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Computes G = lamdba_w * lambda_n / (lambda_w + lambda_n), cf., van Duijn and de Neef (1998). Note that <ref refid="classcsmp_1_1_two_phase_model_1affc076dda4e95cfbdc9c3e12dfbd68a5" kindref="member">Initialize()</ref> must be called first. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="123" column="12" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="513" bodyend="519"/>
+        <references refid="classcsmp_1_1_two_phase_model_1ab6127c81bce3b1af871ec4cc83b165f7" compoundref="_two_phase_model_8cpp" startline="666" endline="672">csmp::TwoPhaseModel&lt; dim &gt;::krn_Phase</references>
+        <references refid="classcsmp_1_1_two_phase_model_1ab2460fc60f9beaf1c6ffc9f7a4d1200b" compoundref="_two_phase_model_8cpp" startline="655" endline="661">csmp::TwoPhaseModel&lt; dim &gt;::krw_Phase</references>
+        <referencedby refid="classcsmp_1_1_two_phase_model_1a503aab2ef0cdb43b39ae52ed277dfceb" compoundref="_two_phase_model_8cpp" startline="542" endline="545">csmp::TwoPhaseModel&lt; dim &gt;::CapillaryDiffusionMultiplier</referencedby>
+        <referencedby refid="classcsmp_1_1_two_phase_model_1a6245a32bb53cd9abcf67a5bcded9bf4f" compoundref="_two_phase_model_8cpp" startline="577" endline="587">csmp::TwoPhaseModel&lt; dim &gt;::GravityMultiplier_G</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a29b1cf1676c8fac2faeea06d341e1e03" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::AdvectionMultiplier</definition>
+        <argsstring>() const</argsstring>
+        <name>AdvectionMultiplier</name>
+        <qualifiedname>csmp::TwoPhaseModel::AdvectionMultiplier</qualifiedname>
+        <briefdescription>
+<para>multiplier for advection viscosity coefficient in the case of non-linear advection </para>
+        </briefdescription>
+        <detaileddescription>
+<para>If not overloaded, this returns the derivative of the fractional flow function at the current saturation of the wetting phase (see Helmig, 1997, p. 108, eqn. 3.74, term 2 (first part). </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="126" column="11" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="556" bodyend="559"/>
+        <references refid="classcsmp_1_1_two_phase_model_1a295c4bd526a0f939f2d810a99a5843b9" compoundref="_two_phase_model_8cpp" startline="754" endline="770">csmp::TwoPhaseModel&lt; dim &gt;::dfds</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a3f28a44e20135a0eda808a185b0b3872" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::DiffusionCharacteristic</definition>
+        <argsstring>(size_t phase) const</argsstring>
+        <name>DiffusionCharacteristic</name>
+        <qualifiedname>csmp::TwoPhaseModel::DiffusionCharacteristic</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>phase</declname>
+        </param>
+        <briefdescription>
+<para>linearized diffusion multiplier for large-timestep calculations </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="129" column="20" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="728" bodyend="733"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1ac160a98a72d2a12fcda59cc513f17fb6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::ShockSpeed</definition>
+        <argsstring>() const</argsstring>
+        <name>ShockSpeed</name>
+        <qualifiedname>csmp::TwoPhaseModel::ShockSpeed</qualifiedname>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_1a82151596aaf5ecea507fbc3bb7fa443b">ShockSpeed</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_c_o2_1a7fdaacd6f69d7f7ca590374c15dbac80">ShockSpeed</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_with_hysteresis_1ab8ccb8d69f03cd42de881dc2cbace3d0">ShockSpeed</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_with_hysteresis_c_o2_1a1fb8422942a3c57583e231bd6fc96358">ShockSpeed</reimplementedby>
+        <briefdescription>
+<para>linearized fractional flow derivative </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="132" column="20" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="957" bodyend="962"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1ab5bd3691e1e08d769292892d02603666" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::ShockHeight</definition>
+        <argsstring>() const</argsstring>
+        <name>ShockHeight</name>
+        <qualifiedname>csmp::TwoPhaseModel::ShockHeight</qualifiedname>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_1a69ee95c4936176a8ebf286734c987316">ShockHeight</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_c_o2_1a7d5a0f2be6c5cc05c0a57d14c0025c23">ShockHeight</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_with_hysteresis_1ae18f9199ec62b66a3def061152991b51">ShockHeight</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_with_hysteresis_c_o2_1ab441703e09b846db0e454b420e51d720">ShockHeight</reimplementedby>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="133" column="20" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="966" bodyend="971"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a3cad2de63b5e4b36c8e2cf4099ea94c8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseModel&lt; dim &gt;::ShockSpeedHeight</definition>
+        <argsstring>(double &amp;speed, double &amp;height) const</argsstring>
+        <name>ShockSpeedHeight</name>
+        <qualifiedname>csmp::TwoPhaseModel::ShockSpeedHeight</qualifiedname>
+        <param>
+          <type>double &amp;</type>
+          <declname>speed</declname>
+        </param>
+        <param>
+          <type>double &amp;</type>
+          <declname>height</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="134" column="10" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="974" bodyend="988"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a46e4e125f5c5eb3c78f081027179d40f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::MaxFractionalFlowDerivative</definition>
+        <argsstring>() const</argsstring>
+        <name>MaxFractionalFlowDerivative</name>
+        <qualifiedname>csmp::TwoPhaseModel::MaxFractionalFlowDerivative</qualifiedname>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_1ad30020f8bd5115bf5a91b2df0c7a3b37">MaxFractionalFlowDerivative</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_c_o2_1a22e5a8412d6be43b44b973c7d5998a2c">MaxFractionalFlowDerivative</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_with_hysteresis_1a00d35bf31ea946e0b71ca390f989e79b">MaxFractionalFlowDerivative</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_with_hysteresis_c_o2_1adc25cb3e862bba07c5f3b61f5835a31b">MaxFractionalFlowDerivative</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_corey_1aa259deb4fa745ab504dfd74747d5dd05">MaxFractionalFlowDerivative</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_fracture_matrix_upscaled_1ae124d234900abe1c331a47ce05c3b63f">MaxFractionalFlowDerivative</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_heterogeneity_and_rate_aware_model_1a3a11b2516dfde7b2c7bae9186be0d136">MaxFractionalFlowDerivative</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_linear_two_phase_model_1ade7e740d4254a2ab6a82d02ba3c05caa">MaxFractionalFlowDerivative</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_two_phase_file_based_1af29463748abf7912ceb927b0abfed514">MaxFractionalFlowDerivative</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_van_genuchten_1ae71b5a036dff7d497eb5e11c1f3e9a6c">MaxFractionalFlowDerivative</reimplementedby>
+        <briefdescription>
+<para>maximum value of previous derivative </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="137" column="20" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="948" bodyend="953"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a04eff9d0d3c09d011aba6bbd46a2eda0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::MaxCapillaryPressure</definition>
+        <argsstring>(uint32_t phase=1U) const</argsstring>
+        <name>MaxCapillaryPressure</name>
+        <qualifiedname>csmp::TwoPhaseModel::MaxCapillaryPressure</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>phase</declname>
+          <defval>1U</defval>
+        </param>
+        <briefdescription>
+<para>maximum value of dpcdS </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="140" column="12" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="283" bodyend="288"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1ac796aeb19755c2905f7f5969c66f7f8c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::EffectiveSaturation</definition>
+        <argsstring>() const</argsstring>
+        <name>EffectiveSaturation</name>
+        <qualifiedname>csmp::TwoPhaseModel::EffectiveSaturation</qualifiedname>
+        <reimplementedby refid="classcsmp_1_1_heterogeneity_and_rate_aware_model_1a7aeb1e0dc66b0ebd53b25977f8a2f8e2">EffectiveSaturation</reimplementedby>
+        <briefdescription>
+<para>always of the wetting phase by convention </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The effective saturation is always computed w.r.t. the wetting phase. (compare with Helmig 1997, p. 71 and note that phase 1 is the wetting phase; note also that <ref refid="classcsmp_1_1_two_phase_model_1affc076dda4e95cfbdc9c3e12dfbd68a5" kindref="member">Initialize()</ref> must be called first to get input parameters like residual saturations). </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="143" column="21" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="467" bodyend="471"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1ae6f67062e5a9702b13340943f6c1142e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::SeffToSw</definition>
+        <argsstring>() const</argsstring>
+        <name>SeffToSw</name>
+        <qualifiedname>csmp::TwoPhaseModel::SeffToSw</qualifiedname>
+        <briefdescription>
+<para>return wetting-phase saturation based on effective saturation </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="144" column="21" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="476" bodyend="480"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1ae25169a198e4423eee83158365897c85" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::SeffToSw</definition>
+        <argsstring>(double seff) const</argsstring>
+        <name>SeffToSw</name>
+        <qualifiedname>csmp::TwoPhaseModel::SeffToSw</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>seff</declname>
+        </param>
+        <briefdescription>
+<para>return wetting-phase saturation based on effective saturation ( useful for numerical calculations ) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="145" column="21" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="484" bodyend="488"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1af5f9ba8fd94fe48d40cca93a042c6618" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::f_Phase</definition>
+        <argsstring>(uint32_t phase) const</argsstring>
+        <name>f_Phase</name>
+        <qualifiedname>csmp::TwoPhaseModel::f_Phase</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>phase</declname>
+        </param>
+        <briefdescription>
+<para>fractional flow </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Computes the fractional flow of the wetting (phase=1) and non-wetting (phase=2) phases using the relative k&apos;s. and viscosities. Note that <ref refid="classcsmp_1_1_two_phase_model_1affc076dda4e95cfbdc9c3e12dfbd68a5" kindref="member">Initialize()</ref> must be called first. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="148" column="12" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="497" bodyend="504"/>
+        <references refid="classcsmp_1_1_two_phase_model_1ab6127c81bce3b1af871ec4cc83b165f7" compoundref="_two_phase_model_8cpp" startline="666" endline="672">csmp::TwoPhaseModel&lt; dim &gt;::krn_Phase</references>
+        <references refid="classcsmp_1_1_two_phase_model_1ab2460fc60f9beaf1c6ffc9f7a4d1200b" compoundref="_two_phase_model_8cpp" startline="655" endline="661">csmp::TwoPhaseModel&lt; dim &gt;::krw_Phase</references>
+        <references refid="classcsmp_1_1_two_phase_model_1afba394a0043e79d0929b2c341272b955" compoundref="_two_phase_model_8cpp" startline="310" endline="313">csmp::TwoPhaseModel&lt; dim &gt;::TotalMobilityMultiplier</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a8f37ad603a4bf7f5d37d453a313da478" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::fw_at</definition>
+        <argsstring>(double sw) const</argsstring>
+        <name>fw_at</name>
+        <qualifiedname>csmp::TwoPhaseModel::fw_at</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>sw</declname>
+        </param>
+        <briefdescription>
+<para>fractional flow of water at water saturation sw </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="151" column="12" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="1006" bodyend="1009"/>
+        <references refid="classcsmp_1_1_two_phase_model_1a8d1dc7daff33c410ba77b49517707b61" compoundref="_two_phase_model_8cpp" startline="993" endline="996">csmp::TwoPhaseModel&lt; dim &gt;::mobility_w_at</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1abfdc07305e42e076e1bab48e147c578b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::fn_at</definition>
+        <argsstring>(double sw) const</argsstring>
+        <name>fn_at</name>
+        <qualifiedname>csmp::TwoPhaseModel::fn_at</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>sw</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="152" column="12" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="1012" bodyend="1015"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1ab6127c81bce3b1af871ec4cc83b165f7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::krn_Phase</definition>
+        <argsstring>() const =0</argsstring>
+        <name>krn_Phase</name>
+        <qualifiedname>csmp::TwoPhaseModel::krn_Phase</qualifiedname>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_1a40e50451890b1dc8b3c02fcf36791f3e">krn_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_c_o2_1a73281210b130d2f49c23a925ff67eaa4">krn_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_with_hysteresis_1abc734fa838f07b7e8fa16af1397d3af1">krn_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_with_hysteresis_c_o2_1aa20c71c21cad52ef3bd3f94be9c048c3">krn_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_corey_1ab248d29b15bbc7e92d319ae0f17f7e90">krn_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_experimental_r_t_1a619a8671a2b4780fea74d2b82aaa81e1">krn_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_fourar_lenormand_1a60b2762e07fd8d93284e5599453af0e4">krn_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_fracture_matrix_upscaled_1a62ca084046ecd8b03ed546c006883d74">krn_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_heterogeneity_and_rate_aware_model_1ac8d5c3ee555aea1d5c17103eb6624b61">krn_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_linear_two_phase_model_1aa74ed58d643df6c15f2c52d35f4fbc9f">krn_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_two_phase_file_based_1a800d9ba356065bde7281f5f779cc4698">krn_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_van_genuchten_1a0cedee53b32dc85aa1fae04a6f7a102c">krn_Phase</reimplementedby>
+        <briefdescription>
+<para>relative permeabilities </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="155" column="20" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="666" bodyend="672"/>
+        <referencedby refid="classcsmp_1_1_two_phase_model_1a295c4bd526a0f939f2d810a99a5843b9" compoundref="_two_phase_model_8cpp" startline="754" endline="770">csmp::TwoPhaseModel&lt; dim &gt;::dfds</referencedby>
+        <referencedby refid="classcsmp_1_1_two_phase_model_1aebb908311eff09132a9741b18115c310" compoundref="_two_phase_model_8cpp" startline="853" endline="885">csmp::TwoPhaseModel&lt; dim &gt;::dfds_numerical</referencedby>
+        <referencedby refid="classcsmp_1_1_two_phase_model_1ae46b8290e476e6d16ebcf239481e915d" compoundref="_two_phase_model_8cpp" startline="776" endline="794">csmp::TwoPhaseModel&lt; dim &gt;::dGds</referencedby>
+        <referencedby refid="classcsmp_1_1_two_phase_model_1af5f9ba8fd94fe48d40cca93a042c6618" compoundref="_two_phase_model_8cpp" startline="497" endline="504">csmp::TwoPhaseModel&lt; dim &gt;::f_Phase</referencedby>
+        <referencedby refid="classcsmp_1_1_two_phase_model_1a116a6eb34e3be5a267f519b865b89468" compoundref="_two_phase_model_8cpp" startline="513" endline="519">csmp::TwoPhaseModel&lt; dim &gt;::G</referencedby>
+        <referencedby refid="classcsmp_1_1_two_phase_model_1afba394a0043e79d0929b2c341272b955" compoundref="_two_phase_model_8cpp" startline="310" endline="313">csmp::TwoPhaseModel&lt; dim &gt;::TotalMobilityMultiplier</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1ab2460fc60f9beaf1c6ffc9f7a4d1200b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::krw_Phase</definition>
+        <argsstring>() const =0</argsstring>
+        <name>krw_Phase</name>
+        <qualifiedname>csmp::TwoPhaseModel::krw_Phase</qualifiedname>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_1a0b82831fcaee9769d27a332cf1f672b3">krw_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_c_o2_1aa7f15068bb9953bd9e443e4f7d96314b">krw_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_with_hysteresis_1ab54c84bc5d9ff5c7e4808ed53ffa64e3">krw_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_with_hysteresis_c_o2_1afe4c8ed1eef223b8e4d1fe036293e20e">krw_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_corey_1a301225b71ceb3188346a71879131c0a4">krw_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_experimental_r_t_1a917cd80c0d58f10adff3a44dcc5cc761">krw_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_fourar_lenormand_1a9ecb06301cd4b40c911291dd431b4a8a">krw_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_fracture_matrix_upscaled_1a90c259f54b4abda423901e88f2f4e8a9">krw_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_heterogeneity_and_rate_aware_model_1abb60a7d47873ad99603a8ec02307a188">krw_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_linear_two_phase_model_1a47e268be79c0ac2dbd3cd7da573844fc">krw_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_two_phase_file_based_1a8dc83cd9c1caa549e35dbfbcd71b177e">krw_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_van_genuchten_1aa9102e98ad3bbb239a34c375cfc37c01">krw_Phase</reimplementedby>
+        <briefdescription>
+<para>relative permeabilities </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="156" column="20" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="655" bodyend="661"/>
+        <referencedby refid="classcsmp_1_1_two_phase_model_1a295c4bd526a0f939f2d810a99a5843b9" compoundref="_two_phase_model_8cpp" startline="754" endline="770">csmp::TwoPhaseModel&lt; dim &gt;::dfds</referencedby>
+        <referencedby refid="classcsmp_1_1_two_phase_model_1aebb908311eff09132a9741b18115c310" compoundref="_two_phase_model_8cpp" startline="853" endline="885">csmp::TwoPhaseModel&lt; dim &gt;::dfds_numerical</referencedby>
+        <referencedby refid="classcsmp_1_1_two_phase_model_1ae46b8290e476e6d16ebcf239481e915d" compoundref="_two_phase_model_8cpp" startline="776" endline="794">csmp::TwoPhaseModel&lt; dim &gt;::dGds</referencedby>
+        <referencedby refid="classcsmp_1_1_two_phase_model_1af5f9ba8fd94fe48d40cca93a042c6618" compoundref="_two_phase_model_8cpp" startline="497" endline="504">csmp::TwoPhaseModel&lt; dim &gt;::f_Phase</referencedby>
+        <referencedby refid="classcsmp_1_1_two_phase_model_1a116a6eb34e3be5a267f519b865b89468" compoundref="_two_phase_model_8cpp" startline="513" endline="519">csmp::TwoPhaseModel&lt; dim &gt;::G</referencedby>
+        <referencedby refid="classcsmp_1_1_two_phase_model_1afba394a0043e79d0929b2c341272b955" compoundref="_two_phase_model_8cpp" startline="310" endline="313">csmp::TwoPhaseModel&lt; dim &gt;::TotalMobilityMultiplier</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a443ab083ab0a009e2976d420099610a9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::dkrnds_Phase</definition>
+        <argsstring>() const</argsstring>
+        <name>dkrnds_Phase</name>
+        <qualifiedname>csmp::TwoPhaseModel::dkrnds_Phase</qualifiedname>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_1a009297404a97b1a2ec1bf2c683126f4a">dkrnds_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_c_o2_1ad763ae60949391783c9a24d01b4d9b6f">dkrnds_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_corey_1a06c34779a1f6932aad956d4af0dbe906">dkrnds_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_experimental_r_t_1a8248ccb6545ca6e7d5778bcb603a43ab">dkrnds_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_fourar_lenormand_1a3a11b7bde5d4af6806e43631a8e94ba5">dkrnds_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_linear_two_phase_model_1ab2d9a7a7878713572de9607b0741b24e">dkrnds_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_two_phase_file_based_1a729f1a60f075109ac9808bdbcfe6fef2">dkrnds_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_van_genuchten_1a66fb2a49544a86f701d441c7e90bccfc">dkrnds_Phase</reimplementedby>
+        <briefdescription>
+<para>derivatives of relative permeabilities </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="159" column="20" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="684" bodyend="687"/>
+        <referencedby refid="classcsmp_1_1_two_phase_model_1a295c4bd526a0f939f2d810a99a5843b9" compoundref="_two_phase_model_8cpp" startline="754" endline="770">csmp::TwoPhaseModel&lt; dim &gt;::dfds</referencedby>
+        <referencedby refid="classcsmp_1_1_two_phase_model_1ae46b8290e476e6d16ebcf239481e915d" compoundref="_two_phase_model_8cpp" startline="776" endline="794">csmp::TwoPhaseModel&lt; dim &gt;::dGds</referencedby>
+        <referencedby refid="classcsmp_1_1_two_phase_model_1ab4eeb89ea5ef7f4712e9992bb3537fa2" compoundref="_two_phase_model_8cpp" startline="746" endline="750">csmp::TwoPhaseModel&lt; dim &gt;::dlnds</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1aee63123cf9276045d351d0f832a41ef0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::dkrwds_Phase</definition>
+        <argsstring>() const</argsstring>
+        <name>dkrwds_Phase</name>
+        <qualifiedname>csmp::TwoPhaseModel::dkrwds_Phase</qualifiedname>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_1ad62e53a71931fd242f190fd8321db655">dkrwds_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_c_o2_1a00632ed453726d98d67946223b35ca33">dkrwds_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_corey_1a9e85566e86456da7cac117d18afda713">dkrwds_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_experimental_r_t_1a40ff5c1312c54fe32b469d849725aa65">dkrwds_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_fourar_lenormand_1ac886e5c5528f8fbc936a1e37f6b01cec">dkrwds_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_linear_two_phase_model_1a374efb73f546f1042849e0adc61574af">dkrwds_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_two_phase_file_based_1a104471b771bb3bd18a61385fa357baaa">dkrwds_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_van_genuchten_1a306cf6d6ef3314e8114d71d00328e6a0">dkrwds_Phase</reimplementedby>
+        <briefdescription>
+<para>derivatives of relative permeabilities </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="160" column="20" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="676" bodyend="679"/>
+        <referencedby refid="classcsmp_1_1_two_phase_model_1a295c4bd526a0f939f2d810a99a5843b9" compoundref="_two_phase_model_8cpp" startline="754" endline="770">csmp::TwoPhaseModel&lt; dim &gt;::dfds</referencedby>
+        <referencedby refid="classcsmp_1_1_two_phase_model_1ae46b8290e476e6d16ebcf239481e915d" compoundref="_two_phase_model_8cpp" startline="776" endline="794">csmp::TwoPhaseModel&lt; dim &gt;::dGds</referencedby>
+        <referencedby refid="classcsmp_1_1_two_phase_model_1adaaeae8402ca9003b29c624f0ba26929" compoundref="_two_phase_model_8cpp" startline="738" endline="742">csmp::TwoPhaseModel&lt; dim &gt;::dlwds</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1ab4eeb89ea5ef7f4712e9992bb3537fa2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::dlnds</definition>
+        <argsstring>() const</argsstring>
+        <name>dlnds</name>
+        <qualifiedname>csmp::TwoPhaseModel::dlnds</qualifiedname>
+        <briefdescription>
+<para>derivative of non-wetting phase mobility </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="162" column="20" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="746" bodyend="750"/>
+        <references refid="classcsmp_1_1_two_phase_model_1a443ab083ab0a009e2976d420099610a9" compoundref="_two_phase_model_8cpp" startline="684" endline="687">csmp::TwoPhaseModel&lt; dim &gt;::dkrnds_Phase</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1adaaeae8402ca9003b29c624f0ba26929" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::dlwds</definition>
+        <argsstring>() const</argsstring>
+        <name>dlwds</name>
+        <qualifiedname>csmp::TwoPhaseModel::dlwds</qualifiedname>
+        <briefdescription>
+<para>derivative of wetting phase mobility </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="163" column="20" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="738" bodyend="742"/>
+        <references refid="classcsmp_1_1_two_phase_model_1aee63123cf9276045d351d0f832a41ef0" compoundref="_two_phase_model_8cpp" startline="676" endline="679">csmp::TwoPhaseModel&lt; dim &gt;::dkrwds_Phase</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1aa22fa0a162c0e3d38012fc24d6ed59f4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::pc_Phase</definition>
+        <argsstring>() const =0</argsstring>
+        <name>pc_Phase</name>
+        <qualifiedname>csmp::TwoPhaseModel::pc_Phase</qualifiedname>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_1a60d9c0bb282cde45b580244be2fc8cee">pc_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_c_o2_1af5cc861149d252d6996a472a8dc40aa0">pc_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_corey_1ad0fb7069559a1443b2d1005575edac3d">pc_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_experimental_r_t_1aac3e94e3a40d7b316fa8fce01267695b">pc_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_fourar_lenormand_1a6012ebf049dd5023855a5b54a6c6fe81">pc_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_fracture_matrix_upscaled_1a7bfa05a4a295f2dd09d1bfe8e7b3102c">pc_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_heterogeneity_and_rate_aware_model_1a214b824e52da0771d3a1a38374ed4013">pc_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_linear_two_phase_model_1a0f8d357b60ee7a5feedf5b626c74351e">pc_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_two_phase_file_based_1ae5e54696662fbadb7a552c415ad67732">pc_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_van_genuchten_1aba9327d35618c813f855e4e1a5366964">pc_Phase</reimplementedby>
+        <briefdescription>
+<para>capillary pressure </para>
+        </briefdescription>
+        <detaileddescription>
+<para>capillary pressure (limit this to 4e7, the max strength of the rock) do this by computing seff for which pc=4e7, then use this seff as a limiting value </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="168" column="20" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="691" bodyend="697"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1aac4bba423c4d31322d744ea5d77d8830" prot="public" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::dpcds_Phase</definition>
+        <argsstring>() const =0</argsstring>
+        <name>dpcds_Phase</name>
+        <qualifiedname>csmp::TwoPhaseModel::dpcds_Phase</qualifiedname>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_1ae7b84dc38ba2f913913be944ac0ef30a">dpcds_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_c_o2_1a97703bb3609e44d1bad3256b2354249e">dpcds_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_corey_1a9073c428fec0cee37c9871cc4c2d2a9c">dpcds_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_experimental_r_t_1a222326266d0f6379306b3b2ac0bfe6f5">dpcds_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_fourar_lenormand_1ac83cc8c5ecea0d9d8b0106f85a3e73cd">dpcds_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_fracture_matrix_upscaled_1a07be81eb2c078c8c3bc236c03d475af4">dpcds_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_heterogeneity_and_rate_aware_model_1ae8f09e847030ae2b543fbea9b18c003a">dpcds_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_linear_two_phase_model_1a21b5700379858e833410227495296522">dpcds_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_two_phase_file_based_1a85c36653f624c372d41d2e3a4edb3934">dpcds_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_van_genuchten_1aba2aa97f2ce594b4632a33431819ce1d">dpcds_Phase</reimplementedby>
+        <briefdescription>
+<para>capillary pressure derivatives (treat seff as for previous function) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>capillary pressure derivatives </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="171" column="20" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="711" bodyend="714"/>
+        <referencedby refid="classcsmp_1_1_two_phase_model_1a503aab2ef0cdb43b39ae52ed277dfceb" compoundref="_two_phase_model_8cpp" startline="542" endline="545">csmp::TwoPhaseModel&lt; dim &gt;::CapillaryDiffusionMultiplier</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1aeb29d7ad37775ec0753fe935ac5e2cc6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::Sw_Phase</definition>
+        <argsstring>(double pc_Phase) const</argsstring>
+        <name>Sw_Phase</name>
+        <qualifiedname>csmp::TwoPhaseModel::Sw_Phase</qualifiedname>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_1a7b5237f7a922503261e452531ced6b77">Sw_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_c_o2_1ac4f0aa6a1893bf0c784805784da7fe58">Sw_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_corey_1ad91ee0f969050b9fc20ab2bbdc32258c">Sw_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_fourar_lenormand_1a02dc3a6fb8eb0f2934d11443bc22c39e">Sw_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_linear_two_phase_model_1a4c725ae7f43b5d4a5884294a129576df">Sw_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_two_phase_file_based_1ac0b859236051b315686c05d197350fa9">Sw_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_van_genuchten_1a18d60b00f64857bf657e52927508e0f2">Sw_Phase</reimplementedby>
+        <param>
+          <type>double</type>
+          <declname>pc_Phase</declname>
+        </param>
+        <briefdescription>
+<para>inverse capillary pressure function </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="174" column="20" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="701" bodyend="707"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a9cfa41794233d9fb6854e0b4a00f8ddf" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::dsdpc_Phase</definition>
+        <argsstring>(double pc_Phase) const</argsstring>
+        <name>dsdpc_Phase</name>
+        <qualifiedname>csmp::TwoPhaseModel::dsdpc_Phase</qualifiedname>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_1ac9fd4dc5adf31a2a6c49c5b5eb72a449">dsdpc_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_c_o2_1a2a6232e0f8d287f7667157b58868a0fd">dsdpc_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_corey_1a416ec4936d8fc915a63b577e751b3207">dsdpc_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_fourar_lenormand_1a116a81979c04fab378b5327fd121b689">dsdpc_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_linear_two_phase_model_1a24d8817c1aecd76985e8a5c87915b284">dsdpc_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_two_phase_file_based_1aa33bee0e3477343cf806ba4d006ed275">dsdpc_Phase</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_van_genuchten_1a6d8549366db1e92627d2654ad01a8c98">dsdpc_Phase</reimplementedby>
+        <param>
+          <type>double</type>
+          <declname>pc_Phase</declname>
+        </param>
+        <briefdescription>
+<para>derivatives of inverse capillary pressure function </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="177" column="20" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="718" bodyend="724"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a295c4bd526a0f939f2d810a99a5843b9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::dfds</definition>
+        <argsstring>() const</argsstring>
+        <name>dfds</name>
+        <qualifiedname>csmp::TwoPhaseModel::dfds</qualifiedname>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_1a78020f5366cb40aa725f50ae40bb58a6">dfds</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_c_o2_1a0a97ddbdd4987c941e20d9b46ef543b6">dfds</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_with_hysteresis_1a2ff25fd52a4b9df31b45184c91c02c46">dfds</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_with_hysteresis_c_o2_1a1e28f17facad7afd42dc1cec50381f0f">dfds</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_fracture_matrix_upscaled_1ae19b90180dd9004118233d41c66d2640">dfds</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_linear_two_phase_model_1a88af23cf46c7a04ce2db8f89cbba7d62">dfds</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_two_phase_file_based_1a5f1285f5a1b4ef1bf520a7d2f5c78c7c">dfds</reimplementedby>
+        <briefdescription>
+<para>derivative of fractional flow (used in advection multiplier); note that fw+fn=1, dfw_dsw=dfn_dsn </para>
+        </briefdescription>
+        <detaileddescription>
+<para>derivative of fractional flow function (advection multipliers) </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="180" column="20" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="754" bodyend="770"/>
+        <references refid="classcsmp_1_1_two_phase_model_1a443ab083ab0a009e2976d420099610a9" compoundref="_two_phase_model_8cpp" startline="684" endline="687">csmp::TwoPhaseModel&lt; dim &gt;::dkrnds_Phase</references>
+        <references refid="classcsmp_1_1_two_phase_model_1aee63123cf9276045d351d0f832a41ef0" compoundref="_two_phase_model_8cpp" startline="676" endline="679">csmp::TwoPhaseModel&lt; dim &gt;::dkrwds_Phase</references>
+        <references refid="classcsmp_1_1_two_phase_model_1ab6127c81bce3b1af871ec4cc83b165f7" compoundref="_two_phase_model_8cpp" startline="666" endline="672">csmp::TwoPhaseModel&lt; dim &gt;::krn_Phase</references>
+        <references refid="classcsmp_1_1_two_phase_model_1ab2460fc60f9beaf1c6ffc9f7a4d1200b" compoundref="_two_phase_model_8cpp" startline="655" endline="661">csmp::TwoPhaseModel&lt; dim &gt;::krw_Phase</references>
+        <referencedby refid="classcsmp_1_1_two_phase_model_1a29b1cf1676c8fac2faeea06d341e1e03" compoundref="_two_phase_model_8cpp" startline="556" endline="559">csmp::TwoPhaseModel&lt; dim &gt;::AdvectionMultiplier</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1ae46b8290e476e6d16ebcf239481e915d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::dGds</definition>
+        <argsstring>() const</argsstring>
+        <name>dGds</name>
+        <qualifiedname>csmp::TwoPhaseModel::dGds</qualifiedname>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_1aeca78297e0a8eb947ad89a072f2d0967">dGds</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_c_o2_1a0b9a287256e9039e20c19f9d6bf48965">dGds</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_with_hysteresis_1ae65fc8fbd41df5f100417f2f4c8c5c5d">dGds</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_with_hysteresis_c_o2_1a8c00cedd64f2333496f79b7586a72eb5">dGds</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_fracture_matrix_upscaled_1aa4391577d83ca04c7f901358a2a0e011">dGds</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_linear_two_phase_model_1ab59ae882d561cafb304e5a34e9e5abd9">dGds</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_two_phase_file_based_1ac04c6a12dbac32361d22ae40f1d101da">dGds</reimplementedby>
+        <briefdescription>
+<para>derivatives of gravitational flow (advection multipliers) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>derivatives of gravitational flow </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="183" column="20" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="776" bodyend="794"/>
+        <references refid="classcsmp_1_1_two_phase_model_1a443ab083ab0a009e2976d420099610a9" compoundref="_two_phase_model_8cpp" startline="684" endline="687">csmp::TwoPhaseModel&lt; dim &gt;::dkrnds_Phase</references>
+        <references refid="classcsmp_1_1_two_phase_model_1aee63123cf9276045d351d0f832a41ef0" compoundref="_two_phase_model_8cpp" startline="676" endline="679">csmp::TwoPhaseModel&lt; dim &gt;::dkrwds_Phase</references>
+        <references refid="classcsmp_1_1_two_phase_model_1ab6127c81bce3b1af871ec4cc83b165f7" compoundref="_two_phase_model_8cpp" startline="666" endline="672">csmp::TwoPhaseModel&lt; dim &gt;::krn_Phase</references>
+        <references refid="classcsmp_1_1_two_phase_model_1ab2460fc60f9beaf1c6ffc9f7a4d1200b" compoundref="_two_phase_model_8cpp" startline="655" endline="661">csmp::TwoPhaseModel&lt; dim &gt;::krw_Phase</references>
+        <referencedby refid="classcsmp_1_1_two_phase_model_1a697acaf5dd0aad5ed586a9756d8d6875" compoundref="_two_phase_model_8cpp" startline="598" endline="608">csmp::TwoPhaseModel&lt; dim &gt;::GravityMultiplier_dGds</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a8d1dc7daff33c410ba77b49517707b61" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::mobility_w_at</definition>
+        <argsstring>(double) const</argsstring>
+        <name>mobility_w_at</name>
+        <qualifiedname>csmp::TwoPhaseModel::mobility_w_at</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>se</defname>
+        </param>
+        <briefdescription>
+<para>Numerical derivatives. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>General accessory functions. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="187" column="13" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="993" bodyend="996"/>
+        <referencedby refid="classcsmp_1_1_two_phase_model_1a8f37ad603a4bf7f5d37d453a313da478" compoundref="_two_phase_model_8cpp" startline="1006" endline="1009">csmp::TwoPhaseModel&lt; dim &gt;::fw_at</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1ad5c106acc437e4c62c14fd916fbaf50c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::mobility_n_at</definition>
+        <argsstring>(double) const</argsstring>
+        <name>mobility_n_at</name>
+        <qualifiedname>csmp::TwoPhaseModel::mobility_n_at</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>se</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="188" column="13" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="999" bodyend="1002"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1afa4bad3a3c573bd5f049132c26a95cee" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::krw_at</definition>
+        <argsstring>(double) const</argsstring>
+        <name>krw_at</name>
+        <qualifiedname>csmp::TwoPhaseModel::krw_at</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>se</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="189" column="13" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="1018" bodyend="1027"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a47cf273a46a177a0b9748646b83ac8bc" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::krn_at</definition>
+        <argsstring>(double) const</argsstring>
+        <name>krn_at</name>
+        <qualifiedname>csmp::TwoPhaseModel::krn_at</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>se</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="190" column="13" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="1030" bodyend="1039"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1abe0652b8778382c04cd18b8ab600ea96" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::dkrwds_at</definition>
+        <argsstring>(double) const</argsstring>
+        <name>dkrwds_at</name>
+        <qualifiedname>csmp::TwoPhaseModel::dkrwds_at</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>se</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="191" column="13" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="1042" bodyend="1050"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a4eec6e36881c230776f38731414f0e4a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::dkrnds_at</definition>
+        <argsstring>(double) const</argsstring>
+        <name>dkrnds_at</name>
+        <qualifiedname>csmp::TwoPhaseModel::dkrnds_at</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>se</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="192" column="13" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="1053" bodyend="1062"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1ab6a0d830d3381b641bde2d0d41ecaf18" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::dfds_at</definition>
+        <argsstring>(double se) const</argsstring>
+        <name>dfds_at</name>
+        <qualifiedname>csmp::TwoPhaseModel::dfds_at</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>se</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="193" column="13" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="1066" bodyend="1075"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a26c99b49057701e4f26a2d12bbc8c6b0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::G_at</definition>
+        <argsstring>(double se) const</argsstring>
+        <name>G_at</name>
+        <qualifiedname>csmp::TwoPhaseModel::G_at</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>se</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="194" column="13" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="1078" bodyend="1087"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a7a5fb8efac951f2c7d61b43bb0aa4014" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::pc_at</definition>
+        <argsstring>(double se) const</argsstring>
+        <name>pc_at</name>
+        <qualifiedname>csmp::TwoPhaseModel::pc_at</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>se</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="195" column="13" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="1090" bodyend="1099"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a210de106c8538e972bcf0f02cb78e278" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::dpcds_at</definition>
+        <argsstring>(double se) const</argsstring>
+        <name>dpcds_at</name>
+        <qualifiedname>csmp::TwoPhaseModel::dpcds_at</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>se</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="196" column="13" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="1102" bodyend="1110"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a9210bd68068b2d27cb01eef6a5c8a464" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::Sw_at</definition>
+        <argsstring>(double se) const</argsstring>
+        <name>Sw_at</name>
+        <qualifiedname>csmp::TwoPhaseModel::Sw_at</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>se</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="197" column="13" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="1113" bodyend="1120"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1ae8eb4d48e0ec82cc6fb2c18b8c5d161d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::dsdpc_at</definition>
+        <argsstring>(double se) const</argsstring>
+        <name>dsdpc_at</name>
+        <qualifiedname>csmp::TwoPhaseModel::dsdpc_at</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>se</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="198" column="13" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="1123" bodyend="1130"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a7734fabaf23e67cac34ca1ccac9dfea5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::dlwds_numerical</definition>
+        <argsstring>(double h=0.001) const</argsstring>
+        <name>dlwds_numerical</name>
+        <qualifiedname>csmp::TwoPhaseModel::dlwds_numerical</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>h</declname>
+          <defval>0.001</defval>
+        </param>
+        <briefdescription>
+<para>Numerical derivatives. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>derivative of wetting phase mobility </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="200" column="20" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="802" bodyend="806"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1abf2edca98411263db66c25c551ce3be7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::dlnds_numerical</definition>
+        <argsstring>(double h=0.001) const</argsstring>
+        <name>dlnds_numerical</name>
+        <qualifiedname>csmp::TwoPhaseModel::dlnds_numerical</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>h</declname>
+          <defval>0.001</defval>
+        </param>
+        <briefdescription>
+<para>derivative of non-wetting phase mobility </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="201" column="20" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="810" bodyend="814"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1aa19c0eb9e5f5c8564c174ff566a44964" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::dkrwds_numerical</definition>
+        <argsstring>(double h=0.001) const</argsstring>
+        <name>dkrwds_numerical</name>
+        <qualifiedname>csmp::TwoPhaseModel::dkrwds_numerical</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>h</declname>
+          <defval>0.001</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="202" column="20" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="817" bodyend="832"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a235c92738451968f796f05b15c0f79c5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::dkrnds_numerical</definition>
+        <argsstring>(double h=0.001) const</argsstring>
+        <name>dkrnds_numerical</name>
+        <qualifiedname>csmp::TwoPhaseModel::dkrnds_numerical</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>h</declname>
+          <defval>0.001</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="203" column="20" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="835" bodyend="848"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1aebb908311eff09132a9741b18115c310" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::dfds_numerical</definition>
+        <argsstring>(double h=0.001) const</argsstring>
+        <name>dfds_numerical</name>
+        <qualifiedname>csmp::TwoPhaseModel::dfds_numerical</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>h</declname>
+          <defval>0.001</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para><itemizedlist>
+<listitem></listitem></itemizedlist>
+</para>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="204" column="20" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="853" bodyend="885"/>
+        <references refid="classcsmp_1_1_two_phase_model_1ab6127c81bce3b1af871ec4cc83b165f7" compoundref="_two_phase_model_8cpp" startline="666" endline="672">csmp::TwoPhaseModel&lt; dim &gt;::krn_Phase</references>
+        <references refid="classcsmp_1_1_two_phase_model_1ab2460fc60f9beaf1c6ffc9f7a4d1200b" compoundref="_two_phase_model_8cpp" startline="655" endline="661">csmp::TwoPhaseModel&lt; dim &gt;::krw_Phase</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1ad5cfd5cb5d31b538a7540906b9cb7b8b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::dGds_numerical</definition>
+        <argsstring>(double h=0.000001) const</argsstring>
+        <name>dGds_numerical</name>
+        <qualifiedname>csmp::TwoPhaseModel::dGds_numerical</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>h</declname>
+          <defval>0.000001</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="205" column="20" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="888" bodyend="920"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1ae929ec1d4c7e905865f8b3b529a16ae4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseModel&lt; dim &gt;::dpcds_numerical</definition>
+        <argsstring>(double h=0.00001) const</argsstring>
+        <name>dpcds_numerical</name>
+        <qualifiedname>csmp::TwoPhaseModel::dpcds_numerical</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>h</declname>
+          <defval>0.00001</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="206" column="20" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="923" bodyend="944"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1a9c8b70b4cb55a2028b78aa0ec631f400" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseModel&lt; dim &gt;::Out</definition>
+        <argsstring>(uint32_t phase=1U) const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::TwoPhaseModel::Out</qualifiedname>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_1af910b8eb5013340eb1886596842d1bfa">Out</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_c_o2_1a57b6dd55f17473c3aa9a6b14242eacd5">Out</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_with_hysteresis_1a1b66c7c73f47f31d5a1db353756aa0f9">Out</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_brooks_corey_with_hysteresis_c_o2_1ac3402e31b6e5adc0bf5220fc7e2f0cdb">Out</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_corey_1a45c7efa5c86c610758004f9c13dc0635">Out</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_heterogeneity_and_rate_aware_model_1a3597d8cc29f0388090b1a2e45d24092f">Out</reimplementedby>
+        <param>
+          <type>uint32_t</type>
+          <declname>phase</declname>
+          <defval>1U</defval>
+        </param>
+        <briefdescription>
+<para>default is the wetting phase </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="209" column="18" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="1135" bodyend="1176"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-func">
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_model_1ae59dbf53ef3861828f80c7c88b38079f" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::TwoPhaseModel&lt; dim &gt;::TwoPhaseModel</definition>
+        <argsstring>()</argsstring>
+        <name>TwoPhaseModel</name>
+        <qualifiedname>csmp::TwoPhaseModel::TwoPhaseModel</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="213" column="5" bodyfile="source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp" bodystart="10" bodyend="26"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>base class for 2-phase flow models</para>
+<para>base class for 2-phase flow models (Linear, Brooks <ref refid="classcsmp_1_1_corey" kindref="compound">Corey</ref>, Van Genuchten, Richards) now you can inherit BrooksCoreyWetting, BrooksCoreyNonWetting... </para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>csmp::BrooksCorey&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_brooks_corey"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::BrooksCoreyCO2&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_brooks_corey_c_o2"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>csmp::BrooksCoreyWithHysteresis&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_brooks_corey_with_hysteresis"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>csmp::BrooksCoreyWithHysteresisCO2&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_brooks_corey_with_hysteresis_c_o2"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>csmp::Corey&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_corey"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>csmp::ExperimentalRT&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_experimental_r_t"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>csmp::FourarLenormand&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_fourar_lenormand"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>csmp::FractureMatrixUpscaled&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_fracture_matrix_upscaled"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>csmp::HeterogeneityAndRateAwareModel&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_heterogeneity_and_rate_aware_model"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>csmp::LinearTwoPhaseModel&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_linear_two_phase_model"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>csmp::TwoPhaseFileBased&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_two_phase_file_based"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>csmp::TwoPhaseModel&lt; 1U &gt;</label>
+        <link refid="classcsmp_1_1_two_phase_model"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; 1U &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::TwoPhaseModel&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_two_phase_model"/>
+      </node>
+      <node id="13">
+        <label>csmp::VanGenuchten&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_van_genuchten"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>csmp::Index</label>
+        <link refid="structcsmp_1_1_index"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>+localVariables</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>+integrationPointVariables</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>+indexTracker</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>csmp::IndexTracker</label>
+        <link refid="classcsmp_1_1_index_tracker"/>
+      </node>
+      <node id="4">
+        <label>csmp::IntegrationPointVariables</label>
+        <link refid="structcsmp_1_1_integration_point_variables"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>+ipvCell</edgelabel>
+          <edgelabel>+ipvFacet</edgelabel>
+          <edgelabel>+ipvSector</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::LocalVariables</label>
+        <link refid="structcsmp_1_1_local_variables"/>
+      </node>
+      <node id="7">
+        <label>csmp::TensorVariable&lt; uint32_t &gt;</label>
+        <link refid="classcsmp_1_1_tensor_variable"/>
+      </node>
+      <node id="6">
+        <label>csmp::TensorVariable&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_tensor_variable"/>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; dim &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::TwoPhaseModel&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_two_phase_model"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>#ift_key_</edgelabel>
+          <edgelabel>#lt_key_</edgelabel>
+          <edgelabel>#mun_key_</edgelabel>
+          <edgelabel>#muw_key_</edgelabel>
+          <edgelabel>#perm_key_</edgelabel>
+          <edgelabel>#rhn_key_</edgelabel>
+          <edgelabel>#rhw_key_</edgelabel>
+          <edgelabel>#sat_key_</edgelabel>
+          <edgelabel>#snr_key_</edgelabel>
+          <edgelabel>#swr_key_</edgelabel>
+          <edgelabel>  ...</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>#K_</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" line="23" column="1" bodyfile="source/includes/thmc/two_phase_flow/TwoPhaseModel.h" bodystart="23" bodyend="241"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_two_phase_model_1a23d8c17a39e686e256a0f0089da87b01" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>acc_gravity_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a29b1cf1676c8fac2faeea06d341e1e03" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>AdvectionMultiplier</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a503aab2ef0cdb43b39ae52ed277dfceb" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>CapillaryDiffusionMultiplier</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a9263314c3cb1d6e50ce8cfd09d411276" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>DensityNonWettingPhase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a6168dc03fed46b8b916b48cd2be4a1d9" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>DensityNonWettingPhase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a3390594869038bb3cf05256072d50751" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>DensityWettingPhase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1abbe4fa907d41d4e83760586ac7547cc8" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>DensityWettingPhase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a295c4bd526a0f939f2d810a99a5843b9" prot="public" virt="virtual"><scope>csmp::TwoPhaseModel</scope><name>dfds</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ab6a0d830d3381b641bde2d0d41ecaf18" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>dfds_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1aebb908311eff09132a9741b18115c310" prot="public" virt="virtual"><scope>csmp::TwoPhaseModel</scope><name>dfds_numerical</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ae46b8290e476e6d16ebcf239481e915d" prot="public" virt="virtual"><scope>csmp::TwoPhaseModel</scope><name>dGds</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ad5cfd5cb5d31b538a7540906b9cb7b8b" prot="public" virt="virtual"><scope>csmp::TwoPhaseModel</scope><name>dGds_numerical</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a3f28a44e20135a0eda808a185b0b3872" prot="public" virt="virtual"><scope>csmp::TwoPhaseModel</scope><name>DiffusionCharacteristic</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1af6fc4c52013d567bc9b2c2acb680becd" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>DiffusionMultiplier</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a4eec6e36881c230776f38731414f0e4a" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>dkrnds_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a235c92738451968f796f05b15c0f79c5" prot="public" virt="virtual"><scope>csmp::TwoPhaseModel</scope><name>dkrnds_numerical</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a443ab083ab0a009e2976d420099610a9" prot="public" virt="virtual"><scope>csmp::TwoPhaseModel</scope><name>dkrnds_Phase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1abe0652b8778382c04cd18b8ab600ea96" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>dkrwds_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1aa19c0eb9e5f5c8564c174ff566a44964" prot="public" virt="virtual"><scope>csmp::TwoPhaseModel</scope><name>dkrwds_numerical</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1aee63123cf9276045d351d0f832a41ef0" prot="public" virt="virtual"><scope>csmp::TwoPhaseModel</scope><name>dkrwds_Phase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ab4eeb89ea5ef7f4712e9992bb3537fa2" prot="public" virt="virtual"><scope>csmp::TwoPhaseModel</scope><name>dlnds</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1abf2edca98411263db66c25c551ce3be7" prot="public" virt="virtual"><scope>csmp::TwoPhaseModel</scope><name>dlnds_numerical</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1adaaeae8402ca9003b29c624f0ba26929" prot="public" virt="virtual"><scope>csmp::TwoPhaseModel</scope><name>dlwds</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a7734fabaf23e67cac34ca1ccac9dfea5" prot="public" virt="virtual"><scope>csmp::TwoPhaseModel</scope><name>dlwds_numerical</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a210de106c8538e972bcf0f02cb78e278" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>dpcds_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ae929ec1d4c7e905865f8b3b529a16ae4" prot="public" virt="virtual"><scope>csmp::TwoPhaseModel</scope><name>dpcds_numerical</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1aac4bba423c4d31322d744ea5d77d8830" prot="public" virt="pure-virtual"><scope>csmp::TwoPhaseModel</scope><name>dpcds_Phase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ae8eb4d48e0ec82cc6fb2c18b8c5d161d" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>dsdpc_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a9cfa41794233d9fb6854e0b4a00f8ddf" prot="public" virt="virtual"><scope>csmp::TwoPhaseModel</scope><name>dsdpc_Phase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ac796aeb19755c2905f7f5969c66f7f8c" prot="public" virt="virtual"><scope>csmp::TwoPhaseModel</scope><name>EffectiveSaturation</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1af5f9ba8fd94fe48d40cca93a042c6618" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>f_Phase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1abfdc07305e42e076e1bab48e147c578b" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>fn_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a8f37ad603a4bf7f5d37d453a313da478" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>fw_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a116a6eb34e3be5a267f519b865b89468" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>G</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a26c99b49057701e4f26a2d12bbc8c6b0" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>G_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a697acaf5dd0aad5ed586a9756d8d6875" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>GravityMultiplier_dGds</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a6245a32bb53cd9abcf67a5bcded9bf4f" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>GravityMultiplier_G</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a90c517eb7a5faf1507204f721aba8535" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>GravityTerm</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1afbd66b65f7f76a8cb18e9fe26eca5045" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>ift_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1afed59c0d76526b7267fbcb7ddfbd103c" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>ift_key_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1affc076dda4e95cfbdc9c3e12dfbd68a5" prot="public" virt="virtual"><scope>csmp::TwoPhaseModel</scope><name>Initialize</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1aea34aa1fb3b86a30fd8876ffd6b832df" prot="public" virt="virtual"><scope>csmp::TwoPhaseModel</scope><name>InitializeAndStore</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a9b8050e80a78c2dbf7e58edbd1a6fda3" prot="public" virt="virtual"><scope>csmp::TwoPhaseModel</scope><name>InitializeForBaryCenter</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a7e5ffdf7d5d7e6247f505514c13e59ba" prot="public" virt="virtual"><scope>csmp::TwoPhaseModel</scope><name>InitializeForFacetIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a035564f82664ed735dd10b90252affc1" prot="public" virt="virtual"><scope>csmp::TwoPhaseModel</scope><name>InitializeForIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a4946a65cddfb1d2b244bd9202ef6a7c6" prot="public" virt="virtual"><scope>csmp::TwoPhaseModel</scope><name>InitializeForNode</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a76820115685a04287c37f3bf793faaeb" prot="public" virt="virtual"><scope>csmp::TwoPhaseModel</scope><name>InitializeForSectorIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1aa1396da1d4ffce2a75d3e2344dc12bbe" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>interpolate_fluid_properties_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a68ba34a53479c12885884d299f8ada02" prot="public" virt="virtual"><scope>csmp::TwoPhaseModel</scope><name>InterpolateNodeProperties</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1aeef9e999593b3d8d7384c928738683bb" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>K_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a69c352b7101de29a6c298d2a9ac03a2a" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>k_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a47cf273a46a177a0b9748646b83ac8bc" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>krn_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ab6127c81bce3b1af871ec4cc83b165f7" prot="public" virt="pure-virtual"><scope>csmp::TwoPhaseModel</scope><name>krn_Phase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1afa4bad3a3c573bd5f049132c26a95cee" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>krw_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ab2460fc60f9beaf1c6ffc9f7a4d1200b" prot="public" virt="pure-virtual"><scope>csmp::TwoPhaseModel</scope><name>krw_Phase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ab23a76bf8e7190d36540dbb87855e909" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>lt_key_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ae429661671b756b0dcbed408dc66a901" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>MAX_CAPILLARY_PRESSURE_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a80e0231aee428c8a10389fda1261f33c" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>MAX_CAPILLARY_PRESSURE_SLOPE_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a04eff9d0d3c09d011aba6bbd46a2eda0" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>MaxCapillaryPressure</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a46e4e125f5c5eb3c78f081027179d40f" prot="public" virt="virtual"><scope>csmp::TwoPhaseModel</scope><name>MaxFractionalFlowDerivative</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ad5c106acc437e4c62c14fd916fbaf50c" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>mobility_n_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a8d1dc7daff33c410ba77b49517707b61" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>mobility_w_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ace751e7ae6bf5a2bd4605e5d29550329" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>MobilityPhase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a813f4d49ed99e37c8fc80048e0293e93" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>mun_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a85359fbcc412cd4f3d8b4995244bfba3" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>mun_key_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a1d87598a734e6671f4b153453f37e2da" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>muw_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a755f5f5de97f71bd11d0c5525a2b825f" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>muw_key_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a492aa415c596093780d144d468d778cc" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>NonWettingPhaseSaturationKey</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a9c8b70b4cb55a2028b78aa0ec631f400" prot="public" virt="virtual"><scope>csmp::TwoPhaseModel</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a7a5fb8efac951f2c7d61b43bb0aa4014" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>pc_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1aa22fa0a162c0e3d38012fc24d6ed59f4" prot="public" virt="pure-virtual"><scope>csmp::TwoPhaseModel</scope><name>pc_Phase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a4bff3ce11382c26112f7c2cc72974c84" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>perm_key_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a24979dee40c424aa9e78e508a9fdd54a" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>Permeability</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1aa93ca9953ff3cf15f4aae0bd7f1ef87a" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>Permeability</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1abaeba466b652999181d16909421e2abd" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>rhn_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1acf5e0ea1fde6aa4bfbbfda6bbb39af04" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>rhn_key_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ae893513c9b4199420b06ab2d68465bf3" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>rhw_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ae7e5792b6ecc96bbe735dd480ef9304d" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>rhw_key_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a92e6c51b800c1e4e6eb57362c7894ebb" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>sat_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a1346eac40e3a09c6ae7264737aaa61f6" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>sat_key_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a3dc094ad03c4deb676cd3c2e9f477a1d" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>Saturation</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1af231e8d21dd47901266bc941f6b20d53" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>SaturationWettingPhase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a717178b5b8ebd4e6cd90e806e3c75984" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>seff_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ae6f67062e5a9702b13340943f6c1142e" prot="public" virt="virtual"><scope>csmp::TwoPhaseModel</scope><name>SeffToSw</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ae25169a198e4423eee83158365897c85" prot="public" virt="virtual"><scope>csmp::TwoPhaseModel</scope><name>SeffToSw</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ab5bd3691e1e08d769292892d02603666" prot="public" virt="virtual"><scope>csmp::TwoPhaseModel</scope><name>ShockHeight</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ac160a98a72d2a12fcda59cc513f17fb6" prot="public" virt="virtual"><scope>csmp::TwoPhaseModel</scope><name>ShockSpeed</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a3cad2de63b5e4b36c8e2cf4099ea94c8" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>ShockSpeedHeight</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a2ed211e8b4e44dc03669b415059c495d" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>Snr</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ad635256c30362aafc998b4205bef00bd" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>Snr</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a03564672375e3db427e40e77a04b28f8" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>snr_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a636e1276285fbf97b1c3c2ae942c3c36" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>snr_key_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a9210bd68068b2d27cb01eef6a5c8a464" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>Sw_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1aeb29d7ad37775ec0753fe935ac5e2cc6" prot="public" virt="virtual"><scope>csmp::TwoPhaseModel</scope><name>Sw_Phase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a413087063e40e71e90b5f573538ee953" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>sw_ro_mu_placement_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a753786842d256a10e2f648781cba80c3" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>Swr</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a65060e8f00a9635132b314872c1c2356" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>Swr</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a06e3a9b3d23be9aa3239c74e1c25268c" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>swr_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a0ccfc050d9e86571b9bf685770f782fb" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>swr_key_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a111dc3eba3c33c0ccd2cc49c6fff5439" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>tensor_permeability_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1afd18457e1a803d0878ea2eb522abcc0c" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>TensorPermeability</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a9f750feb26a8c5bd67e688c92d2c2aa5" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>TensorPermeability</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a8485eb64c4709f938017a47333fe7fa3" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>tolerance_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1afe87adcce8dc3c20438072541a973075" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>TotalMobility</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a55cb58cd1f8a191f38718932d9b487b7" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>TotalMobilityKey</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1afba394a0043e79d0929b2c341272b955" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>TotalMobilityMultiplier</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1abfdb2ac9fb5d193308c6a217b16cd032" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>TwoPhaseModel</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a5b0782527b060ea802294942b88adcd8" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>TwoPhaseModel</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ae59dbf53ef3861828f80c7c88b38079f" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>TwoPhaseModel</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a5725adbe29291d9c0d9555b37b299e14" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>ViscosityNonWettingPhase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a4bfb130244e5558dde06f392ef600515" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>ViscosityNonWettingPhase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ad5825da6dae18e0298d4e4f136971f06" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>ViscosityRatio</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a68f4aa6b07e0fcf17aeb5865a71699c4" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>ViscosityWettingPhase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ae9a23928fdca86e49806e231f4480251" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>ViscosityWettingPhase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a6e0856b1080a40e27e759ab6778ce94b" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseModel</scope><name>WettingPhaseSaturationKey</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a716a045623682dc5614580d4d18af10e" prot="public" virt="virtual"><scope>csmp::TwoPhaseModel</scope><name>~TwoPhaseModel</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

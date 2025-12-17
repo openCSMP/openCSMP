@@ -1,0 +1,145 @@
+\doxysection{csmp\+::Two\+Phase\+Transport\+PHX\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_two_phase_transport_p_h_x}{}\label{classcsmp_1_1_two_phase_transport_p_h_x}\index{csmp::TwoPhaseTransportPHX$<$ dim $>$@{csmp::TwoPhaseTransportPHX$<$ dim $>$}}
+
+
+class to handle two-\/phase flow caclulations of FV part within the CVFEM scheme (Weis et al., Geofluids, 2014).  
+
+
+
+
+{\ttfamily \#include $<$Two\+Phase\+Transport\+PHX.\+h$>$}
+
+
+
+Collaboration diagram for csmp\+::Two\+Phase\+Transport\+PHX\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=226pt]{classcsmp_1_1_two_phase_transport_p_h_x__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_two_phase_transport_p_h_x_ae88631fdb919d0ea34e869f8fd447d0f}{Two\+Phase\+Transport\+PHX}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&model, \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor}{Upwind\+Control\+Visitor}}$<$ dim $>$ \&upwind\+\_\+visitor, \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{Explicit\+Finite\+Volume\+Transport\+PHX}}$<$ dim $>$ \&fv\+\_\+vapor, \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{Explicit\+Finite\+Volume\+Transport\+PHX}}$<$ dim $>$ \&fv\+\_\+liquid)
+\item 
+virtual \mbox{\hyperlink{classcsmp_1_1_two_phase_transport_p_h_x_ac78148d8e5347425186175e75187fb52}{\texorpdfstring{$\sim$}{\string~}\+Two\+Phase\+Transport\+PHX}} ()
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_two_phase_transport_p_h_x_a240068112a3cc1887405b2c16f858eb7}{Advect\+Mass\+Conserved}} (const double \&time\+\_\+increment)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_two_phase_transport_p_h_x_a60f2e022141cb618bb46ecc399656308}{Set\+Largest\+Time\+Step}} (const double \&max\+\_\+time\+\_\+step)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_two_phase_transport_p_h_x_a3cf131fdc705fc72095be6f741ad037d}{With\+Gravity\+Component\+Liquid\+And\+Vapor}} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_two_phase_transport_p_h_x_ac51a53468b6b2e8ad0491ea389afe3c1}{Update\+Projection}} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_two_phase_transport_p_h_x_a6275a81efc763fbcf06db0578331baef}{Add\+Advection\+Variable}} (const char \texorpdfstring{$\ast$}{*}new\+\_\+lhs\+\_\+liquid, const char \texorpdfstring{$\ast$}{*}new\+\_\+rhs\+\_\+liquid, const char \texorpdfstring{$\ast$}{*}new\+\_\+lhs\+\_\+vapor, const char \texorpdfstring{$\ast$}{*}new\+\_\+rhs\+\_\+vapor)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim$>$\newline
+class csmp\+::\+Two\+Phase\+Transport\+PHX$<$ dim $>$}
+class to handle two-\/phase flow caclulations of FV part within the CVFEM scheme (Weis et al., Geofluids, 2014). 
+
+\begin{DoxyAuthor}{Author}
+Philipp Weis, ETH Zuerich 
+\end{DoxyAuthor}
+\hypertarget{compare_floats_8h_contact}{}\doxysubsection{\texorpdfstring{Contact}{Contact}}\label{compare_floats_8h_contact}
+\href{mailto:philipp.weis@erdw.ethz.ch}{\texttt{philipp.\+weis@erdw.\+ethz.\+ch}}
+
+@changes changes Latest Changes ~\newline
+\hypertarget{compare_floats_8h_motivation}{}\doxysubsection{\texorpdfstring{Motivation}{Motivation}}\label{compare_floats_8h_motivation}
+Class for two-\/phase flow calculations within CVFEM scheme.\hypertarget{classcsmp_1_1_upwind_control_visitor_usage}{}\doxysubsection{\texorpdfstring{Usage}{Usage}}\label{classcsmp_1_1_upwind_control_visitor_usage}
+To be used within the CVFEM scheme (Weis et al., Geofluids, 2014).
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{Controls\ two-\/phase\ flow\ calculations\ by\ coordating\ flow\ of\ vapor\ and\ liquid\ phase}
+
+\end{DoxyCode}
+\hypertarget{classcsmp_1_1_upwind_control_visitor_dependencies}{}\doxysubsection{\texorpdfstring{Dependencies}{Dependencies}}\label{classcsmp_1_1_upwind_control_visitor_dependencies}
+Needs \doxylink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{Explicit\+Finite\+Volume\+Transport\+PHX} and \doxylink{classcsmp_1_1_upwind_control_visitor}{Upwind\+Control\+Visitor}\hypertarget{classcsmp_1_1_upwind_control_visitor_issues}{}\doxysubsection{\texorpdfstring{Known issues}{Known issues}}\label{classcsmp_1_1_upwind_control_visitor_issues}
+\hypertarget{compare_floats_8h_testing}{}\doxysubsection{\texorpdfstring{Testing}{Testing}}\label{compare_floats_8h_testing}
+testing was done in the period before publication in 2014. 
+
+\label{doc-constructors}
+\Hypertarget{classcsmp_1_1_two_phase_transport_p_h_x_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcsmp_1_1_two_phase_transport_p_h_x_ae88631fdb919d0ea34e869f8fd447d0f}\index{csmp::TwoPhaseTransportPHX$<$ dim $>$@{csmp::TwoPhaseTransportPHX$<$ dim $>$}!TwoPhaseTransportPHX@{TwoPhaseTransportPHX}}
+\index{TwoPhaseTransportPHX@{TwoPhaseTransportPHX}!csmp::TwoPhaseTransportPHX$<$ dim $>$@{csmp::TwoPhaseTransportPHX$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{TwoPhaseTransportPHX()}{TwoPhaseTransportPHX()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_two_phase_transport_p_h_x_ae88631fdb919d0ea34e869f8fd447d0f} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_two_phase_transport_p_h_x}{csmp\+::\+Two\+Phase\+Transport\+PHX}}$<$ dim $>$\+::\+Two\+Phase\+Transport\+PHX (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&}]{model}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor}{Upwind\+Control\+Visitor}}$<$ dim $>$ \&}]{upwind\+\_\+visitor}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{Explicit\+Finite\+Volume\+Transport\+PHX}}$<$ dim $>$ \&}]{fv\+\_\+vapor}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{Explicit\+Finite\+Volume\+Transport\+PHX}}$<$ dim $>$ \&}]{fv\+\_\+liquid}{}\end{DoxyParamCaption})}
+
+custom constructor \Hypertarget{classcsmp_1_1_two_phase_transport_p_h_x_ac78148d8e5347425186175e75187fb52}\index{csmp::TwoPhaseTransportPHX$<$ dim $>$@{csmp::TwoPhaseTransportPHX$<$ dim $>$}!````~TwoPhaseTransportPHX@{\texorpdfstring{$\sim$}{\string~}TwoPhaseTransportPHX}}
+\index{````~TwoPhaseTransportPHX@{\texorpdfstring{$\sim$}{\string~}TwoPhaseTransportPHX}!csmp::TwoPhaseTransportPHX$<$ dim $>$@{csmp::TwoPhaseTransportPHX$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}TwoPhaseTransportPHX()}{\string~TwoPhaseTransportPHX()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_two_phase_transport_p_h_x_ac78148d8e5347425186175e75187fb52} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_two_phase_transport_p_h_x}{csmp\+::\+Two\+Phase\+Transport\+PHX}}$<$ dim $>$\+::\texorpdfstring{$\sim$}{\string~}\mbox{\hyperlink{classcsmp_1_1_two_phase_transport_p_h_x}{Two\+Phase\+Transport\+PHX}} (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+default destructor 
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_two_phase_transport_p_h_x_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_two_phase_transport_p_h_x_a6275a81efc763fbcf06db0578331baef}\index{csmp::TwoPhaseTransportPHX$<$ dim $>$@{csmp::TwoPhaseTransportPHX$<$ dim $>$}!AddAdvectionVariable@{AddAdvectionVariable}}
+\index{AddAdvectionVariable@{AddAdvectionVariable}!csmp::TwoPhaseTransportPHX$<$ dim $>$@{csmp::TwoPhaseTransportPHX$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{AddAdvectionVariable()}{AddAdvectionVariable()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_two_phase_transport_p_h_x_a6275a81efc763fbcf06db0578331baef} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_two_phase_transport_p_h_x}{csmp\+::\+Two\+Phase\+Transport\+PHX}}$<$ dim $>$\+::\+Add\+Advection\+Variable (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{new\+\_\+lhs\+\_\+liquid}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{new\+\_\+rhs\+\_\+liquid}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{new\+\_\+lhs\+\_\+vapor}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{new\+\_\+rhs\+\_\+vapor}{}\end{DoxyParamCaption})}
+
+adding further variables for FV calculations \Hypertarget{classcsmp_1_1_two_phase_transport_p_h_x_a240068112a3cc1887405b2c16f858eb7}\index{csmp::TwoPhaseTransportPHX$<$ dim $>$@{csmp::TwoPhaseTransportPHX$<$ dim $>$}!AdvectMassConserved@{AdvectMassConserved}}
+\index{AdvectMassConserved@{AdvectMassConserved}!csmp::TwoPhaseTransportPHX$<$ dim $>$@{csmp::TwoPhaseTransportPHX$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{AdvectMassConserved()}{AdvectMassConserved()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_two_phase_transport_p_h_x_a240068112a3cc1887405b2c16f858eb7} 
+template$<$uint32\+\_\+t dim$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_two_phase_transport_p_h_x}{csmp\+::\+Two\+Phase\+Transport\+PHX}}$<$ dim $>$\+::\+Advect\+Mass\+Conserved (\begin{DoxyParamCaption}\item[{const double \&}]{time\+\_\+increment}{}\end{DoxyParamCaption})}
+
+main function to coordinate two-\/phase flow Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_two_phase_transport_p_h_x_a240068112a3cc1887405b2c16f858eb7_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_two_phase_transport_p_h_x_a60f2e022141cb618bb46ecc399656308}\index{csmp::TwoPhaseTransportPHX$<$ dim $>$@{csmp::TwoPhaseTransportPHX$<$ dim $>$}!SetLargestTimeStep@{SetLargestTimeStep}}
+\index{SetLargestTimeStep@{SetLargestTimeStep}!csmp::TwoPhaseTransportPHX$<$ dim $>$@{csmp::TwoPhaseTransportPHX$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{SetLargestTimeStep()}{SetLargestTimeStep()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_two_phase_transport_p_h_x_a60f2e022141cb618bb46ecc399656308} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_two_phase_transport_p_h_x}{csmp\+::\+Two\+Phase\+Transport\+PHX}}$<$ dim $>$\+::\+Set\+Largest\+Time\+Step (\begin{DoxyParamCaption}\item[{const double \&}]{max\+\_\+time\+\_\+step}{}\end{DoxyParamCaption})}
+
+modify maximum size of time step \Hypertarget{classcsmp_1_1_two_phase_transport_p_h_x_ac51a53468b6b2e8ad0491ea389afe3c1}\index{csmp::TwoPhaseTransportPHX$<$ dim $>$@{csmp::TwoPhaseTransportPHX$<$ dim $>$}!UpdateProjection@{UpdateProjection}}
+\index{UpdateProjection@{UpdateProjection}!csmp::TwoPhaseTransportPHX$<$ dim $>$@{csmp::TwoPhaseTransportPHX$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{UpdateProjection()}{UpdateProjection()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_two_phase_transport_p_h_x_ac51a53468b6b2e8ad0491ea389afe3c1} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_two_phase_transport_p_h_x}{csmp\+::\+Two\+Phase\+Transport\+PHX}}$<$ dim $>$\+::\+Update\+Projection (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+update projection of velocity onto facet normal Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_two_phase_transport_p_h_x_ac51a53468b6b2e8ad0491ea389afe3c1_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_two_phase_transport_p_h_x_a3cf131fdc705fc72095be6f741ad037d}\index{csmp::TwoPhaseTransportPHX$<$ dim $>$@{csmp::TwoPhaseTransportPHX$<$ dim $>$}!WithGravityComponentLiquidAndVapor@{WithGravityComponentLiquidAndVapor}}
+\index{WithGravityComponentLiquidAndVapor@{WithGravityComponentLiquidAndVapor}!csmp::TwoPhaseTransportPHX$<$ dim $>$@{csmp::TwoPhaseTransportPHX$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{WithGravityComponentLiquidAndVapor()}{WithGravityComponentLiquidAndVapor()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_two_phase_transport_p_h_x_a3cf131fdc705fc72095be6f741ad037d} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_two_phase_transport_p_h_x}{csmp\+::\+Two\+Phase\+Transport\+PHX}}$<$ dim $>$\+::\+With\+Gravity\+Component\+Liquid\+And\+Vapor (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+active gravity component 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/integration/cvfe\+\_\+hydrothermal/Two\+Phase\+Transport\+PHX.\+h\item 
+source/modules/integration/cvfe\+\_\+hydrothermal/Two\+Phase\+Transport\+PHX.\+cpp\end{DoxyCompactItemize}

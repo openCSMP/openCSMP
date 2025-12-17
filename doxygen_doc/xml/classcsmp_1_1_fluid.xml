@@ -1,0 +1,523 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_fluid" kind="class" language="C++" prot="public">
+    <compoundname>csmp::Fluid</compoundname>
+    <includes refid="_fluid_8h" local="no">Fluid.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+      <param>
+        <type>template&lt; uint32_t &gt; class</type>
+        <declname>USER</declname>
+        <defname>USER</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_fluid_1aa40e2f444b57d5b9cab64096e81532f8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Fluid&lt; dim, USER &gt;::Fluid</definition>
+        <argsstring>()</argsstring>
+        <name>Fluid</name>
+        <qualifiedname>csmp::Fluid::Fluid</qualifiedname>
+        <briefdescription>
+<para>default constructor that tests the phase-state key </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/Fluid.h" line="33" column="5" bodyfile="source/modules/thmc/two_phase_flow/Fluid.cpp" bodystart="15" bodyend="17"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_fluid_1a5d35a075b444911a7e9040682ec52b84" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Fluid&lt; dim, USER &gt;::Viscosity</definition>
+        <argsstring>(Node&lt; dim &gt; *const, uint32_t phase) const</argsstring>
+        <name>Viscosity</name>
+        <qualifiedname>csmp::Fluid::Viscosity</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; dim &gt; * const</type>
+          <defname>n</defname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>phase</declname>
+        </param>
+        <briefdescription>
+<para>the node property fluid viscosity (Pa.s) returned has been interpolated to the user-specified target placement (argument parameter) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/Fluid.h" line="36" column="12" bodyfile="source/modules/thmc/two_phase_flow/Fluid.cpp" bodystart="21" bodyend="27"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_fluid_1ad48d5b1424a713044b64f5f1643b11b0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Fluid&lt; dim, USER &gt;::Viscosity</definition>
+        <argsstring>(Element&lt; dim &gt; *const, uint32_t phase) const</argsstring>
+        <name>Viscosity</name>
+        <qualifiedname>csmp::Fluid::Viscosity</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>phase</declname>
+        </param>
+        <briefdescription>
+<para>the node property fluid viscosity (Pa.s) interpolated to element barycentre </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/Fluid.h" line="38" column="12" bodyfile="source/modules/thmc/two_phase_flow/Fluid.cpp" bodystart="42" bodyend="48"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_fluid_1a61429ffb69af923f493044a3f8e4cf26" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Fluid&lt; dim, USER &gt;::Viscosity</definition>
+        <argsstring>(Element&lt; dim &gt; *const, uint32_t node, uint32_t phase) const</argsstring>
+        <name>Viscosity</name>
+        <qualifiedname>csmp::Fluid::Viscosity</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>node</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>phase</declname>
+        </param>
+        <briefdescription>
+<para>the node property fluid viscosity (Pa.s) at the node i of the element </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/Fluid.h" line="40" column="12" bodyfile="source/modules/thmc/two_phase_flow/Fluid.cpp" bodystart="31" bodyend="38"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_fluid_1a71cf4da9f4528fe980cf17fde0489dd8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Fluid&lt; dim, USER &gt;::Density</definition>
+        <argsstring>(Node&lt; dim &gt; *const, uint32_t phase) const</argsstring>
+        <name>Density</name>
+        <qualifiedname>csmp::Fluid::Density</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; dim &gt; * const</type>
+          <defname>n</defname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>phase</declname>
+        </param>
+        <briefdescription>
+<para>the returned node property fluid density (of phase) (kg/m3) interpolated to the user-specified target placement (argument parameter) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/Fluid.h" line="43" column="12" bodyfile="source/modules/thmc/two_phase_flow/Fluid.cpp" bodystart="56" bodyend="62"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_fluid_1a6f8be3917e76cfb892eee2780563021d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Fluid&lt; dim, USER &gt;::Density</definition>
+        <argsstring>(Element&lt; dim &gt; *const, uint32_t phase) const</argsstring>
+        <name>Density</name>
+        <qualifiedname>csmp::Fluid::Density</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>phase</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/Fluid.h" line="44" column="12" bodyfile="source/modules/thmc/two_phase_flow/Fluid.cpp" bodystart="77" bodyend="83"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_fluid_1abe4c1295be1ce60491b496070a35f0eb" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Fluid&lt; dim, USER &gt;::Density</definition>
+        <argsstring>(Element&lt; dim &gt; *const, uint32_t node, uint32_t phase) const</argsstring>
+        <name>Density</name>
+        <qualifiedname>csmp::Fluid::Density</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>node</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>phase</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/Fluid.h" line="45" column="12" bodyfile="source/modules/thmc/two_phase_flow/Fluid.cpp" bodystart="66" bodyend="73"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_fluid_1ac79983865ce50ef995e71b8d9ce1227f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Fluid&lt; dim, USER &gt;::MixtureDensity</definition>
+        <argsstring>(Node&lt; dim &gt; *const) const</argsstring>
+        <name>MixtureDensity</name>
+        <qualifiedname>csmp::Fluid::MixtureDensity</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; dim &gt; * const</type>
+          <defname>n</defname>
+        </param>
+        <briefdescription>
+<para>returns saturation-weighted density average (kg/m3) for the fluid mixture; properties are interpolated to the target placement </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/Fluid.h" line="48" column="12" bodyfile="source/modules/thmc/two_phase_flow/Fluid.cpp" bodystart="126" bodyend="131"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_fluid_1a4fbb324f0b646984612e237f6b5c957b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Fluid&lt; dim, USER &gt;::MixtureDensity</definition>
+        <argsstring>(Element&lt; dim &gt; *const) const</argsstring>
+        <name>MixtureDensity</name>
+        <qualifiedname>csmp::Fluid::MixtureDensity</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/Fluid.h" line="49" column="12" bodyfile="source/modules/thmc/two_phase_flow/Fluid.cpp" bodystart="148" bodyend="157"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_fluid_1ae3baf07b2ba77e37d620ccd405a326fa" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Fluid&lt; dim, USER &gt;::MixtureDensity</definition>
+        <argsstring>(Element&lt; dim &gt; *const, uint32_t node) const</argsstring>
+        <name>MixtureDensity</name>
+        <qualifiedname>csmp::Fluid::MixtureDensity</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>node</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/Fluid.h" line="50" column="12" bodyfile="source/modules/thmc/two_phase_flow/Fluid.cpp" bodystart="135" bodyend="144"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_fluid_1ae18bd5309962a5d0a15e766c159f8ae0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Fluid&lt; dim, USER &gt;::ViscosityRatio</definition>
+        <argsstring>(Node&lt; dim &gt; *const) const</argsstring>
+        <name>ViscosityRatio</name>
+        <qualifiedname>csmp::Fluid::ViscosityRatio</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; dim &gt; * const</type>
+          <defname>n</defname>
+        </param>
+        <briefdescription>
+<para>returns the ratio of the phase viscosities at the target placement </para>
+        </briefdescription>
+        <detaileddescription>
+<para>aqueous phase viscosity / carbonic phase viscosity </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/Fluid.h" line="53" column="12" bodyfile="source/modules/thmc/two_phase_flow/Fluid.cpp" bodystart="93" bodyend="97"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_fluid_1a3748aec68bc142512495b743330ab9c4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Fluid&lt; dim, USER &gt;::ViscosityRatio</definition>
+        <argsstring>(Element&lt; dim &gt; *const) const</argsstring>
+        <name>ViscosityRatio</name>
+        <qualifiedname>csmp::Fluid::ViscosityRatio</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/Fluid.h" line="54" column="12" bodyfile="source/modules/thmc/two_phase_flow/Fluid.cpp" bodystart="113" bodyend="121"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_fluid_1a5ea885c34cf66e3546676d2c2f903407" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Fluid&lt; dim, USER &gt;::ViscosityRatio</definition>
+        <argsstring>(Element&lt; dim &gt; *const, uint32_t node) const</argsstring>
+        <name>ViscosityRatio</name>
+        <qualifiedname>csmp::Fluid::ViscosityRatio</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>node</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/Fluid.h" line="55" column="12" bodyfile="source/modules/thmc/two_phase_flow/Fluid.cpp" bodystart="101" bodyend="109"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-func">
+      <memberdef kind="function" id="classcsmp_1_1_fluid_1ae6d7eda07d8d4e2ab19593f4045e3056" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>USER&lt; dim &gt; *</type>
+        <definition>USER&lt; dim &gt; * csmp::Fluid&lt; dim, USER &gt;::User</definition>
+        <argsstring>()</argsstring>
+        <name>User</name>
+        <qualifiedname>csmp::Fluid::User</qualifiedname>
+        <briefdescription>
+<para>shorthand for accessing the class that FacetFlux_TracerTransferExplicit is a policy of </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/Fluid.h" line="59" column="10" bodyfile="source/includes/thmc/two_phase_flow/Fluid.h" bodystart="59" bodyend="59"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_fluid_1a3c824350e593f55ced63e0ea96e86eb3" prot="protected" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>USER&lt; dim &gt; const *</type>
+        <definition>USER&lt; dim &gt; const  * csmp::Fluid&lt; dim, USER &gt;::User</definition>
+        <argsstring>() const</argsstring>
+        <name>User</name>
+        <qualifiedname>csmp::Fluid::User</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/Fluid.h" line="60" column="16" bodyfile="source/includes/thmc/two_phase_flow/Fluid.h" bodystart="60" bodyend="60"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Blueprint for any specific <ref refid="classcsmp_1_1_fluid" kindref="compound">Fluid</ref> property class to be used in the generic transport scheme. This generic one is not associated with any particular equation of state, but derived ones in this implementation of static polymorphism may well be.</para>
+<para>When properties are requested for the element, the methods of the class performs a smart interpolation of fluid properties dependent on their existance as indicated by the phase state. Else,the method just reads the properties from the model.</para>
+<para><simplesect kind="attention"><para>the fluid properties must be initialised elsewhere by an equation of state. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="4">
+        <label>csmp::FlowFunctionsModule1&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_flow_functions_module1"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::FlowFunctionsModule1&lt; 3U &gt;</label>
+        <link refid="classcsmp_1_1_flow_functions_module1"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; 3U &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>csmp::FlowFunctionsModule2&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_flow_functions_module2"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>csmp::FlowFunctionsModule2&lt; 3U &gt;</label>
+        <link refid="classcsmp_1_1_flow_functions_module2"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; 3U &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>csmp::FlowFunctionsModule3&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_flow_functions_module3"/>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>csmp::FlowFunctionsModule3&lt; 3U &gt;</label>
+        <link refid="classcsmp_1_1_flow_functions_module3"/>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; 3U &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>csmp::FlowFunctionsModule4&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_flow_functions_module4"/>
+        <childnode refid="11" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>csmp::FlowFunctionsModule4&lt; 3U &gt;</label>
+        <link refid="classcsmp_1_1_flow_functions_module4"/>
+        <childnode refid="11" relation="public-inheritance">
+        </childnode>
+        <childnode refid="13" relation="template-instance">
+          <edgelabel>&lt; 3U &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="16">
+        <label>csmp::FlowFunctionsModule5&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_flow_functions_module5"/>
+        <childnode refid="14" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="15">
+        <label>csmp::FlowFunctionsModule5&lt; 3U &gt;</label>
+        <link refid="classcsmp_1_1_flow_functions_module5"/>
+        <childnode refid="14" relation="public-inheritance">
+        </childnode>
+        <childnode refid="16" relation="template-instance">
+          <edgelabel>&lt; 3U &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="19">
+        <label>csmp::FlowFunctionsModule6&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_flow_functions_module6"/>
+        <childnode refid="17" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="18">
+        <label>csmp::FlowFunctionsModule6&lt; 3U &gt;</label>
+        <link refid="classcsmp_1_1_flow_functions_module6"/>
+        <childnode refid="17" relation="public-inheritance">
+        </childnode>
+        <childnode refid="19" relation="template-instance">
+          <edgelabel>&lt; 3U &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="22">
+        <label>csmp::FlowFunctionsModule7&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_flow_functions_module7"/>
+        <childnode refid="20" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="21">
+        <label>csmp::FlowFunctionsModule7&lt; 3U &gt;</label>
+        <link refid="classcsmp_1_1_flow_functions_module7"/>
+        <childnode refid="20" relation="public-inheritance">
+        </childnode>
+        <childnode refid="22" relation="template-instance">
+          <edgelabel>&lt; 3U &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Fluid&lt; dim, FlowFunctionsModule1 &gt;</label>
+        <link refid="classcsmp_1_1_fluid"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; dim, FlowFunctionsModule1 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>csmp::Fluid&lt; dim, FlowFunctionsModule2 &gt;</label>
+        <link refid="classcsmp_1_1_fluid"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; dim, FlowFunctionsModule2 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>csmp::Fluid&lt; dim, FlowFunctionsModule3 &gt;</label>
+        <link refid="classcsmp_1_1_fluid"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; dim, FlowFunctionsModule3 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>csmp::Fluid&lt; dim, FlowFunctionsModule4 &gt;</label>
+        <link refid="classcsmp_1_1_fluid"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; dim, FlowFunctionsModule4 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>csmp::Fluid&lt; dim, FlowFunctionsModule5 &gt;</label>
+        <link refid="classcsmp_1_1_fluid"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; dim, FlowFunctionsModule5 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="17">
+        <label>csmp::Fluid&lt; dim, FlowFunctionsModule6 &gt;</label>
+        <link refid="classcsmp_1_1_fluid"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; dim, FlowFunctionsModule6 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="20">
+        <label>csmp::Fluid&lt; dim, FlowFunctionsModule7 &gt;</label>
+        <link refid="classcsmp_1_1_fluid"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; dim, FlowFunctionsModule7 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::Fluid&lt; dim, USER &gt;</label>
+        <link refid="classcsmp_1_1_fluid"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::Fluid&lt; dim, USER &gt;</label>
+        <link refid="classcsmp_1_1_fluid"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/thmc/two_phase_flow/Fluid.h" line="30" column="1" bodyfile="source/includes/thmc/two_phase_flow/Fluid.h" bodystart="30" bodyend="61"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_fluid_1a71cf4da9f4528fe980cf17fde0489dd8" prot="public" virt="non-virtual"><scope>csmp::Fluid</scope><name>Density</name></member>
+      <member refid="classcsmp_1_1_fluid_1a6f8be3917e76cfb892eee2780563021d" prot="public" virt="non-virtual"><scope>csmp::Fluid</scope><name>Density</name></member>
+      <member refid="classcsmp_1_1_fluid_1abe4c1295be1ce60491b496070a35f0eb" prot="public" virt="non-virtual"><scope>csmp::Fluid</scope><name>Density</name></member>
+      <member refid="classcsmp_1_1_fluid_1aa40e2f444b57d5b9cab64096e81532f8" prot="public" virt="non-virtual"><scope>csmp::Fluid</scope><name>Fluid</name></member>
+      <member refid="classcsmp_1_1_fluid_1ac79983865ce50ef995e71b8d9ce1227f" prot="public" virt="non-virtual"><scope>csmp::Fluid</scope><name>MixtureDensity</name></member>
+      <member refid="classcsmp_1_1_fluid_1a4fbb324f0b646984612e237f6b5c957b" prot="public" virt="non-virtual"><scope>csmp::Fluid</scope><name>MixtureDensity</name></member>
+      <member refid="classcsmp_1_1_fluid_1ae3baf07b2ba77e37d620ccd405a326fa" prot="public" virt="non-virtual"><scope>csmp::Fluid</scope><name>MixtureDensity</name></member>
+      <member refid="classcsmp_1_1_fluid_1ae6d7eda07d8d4e2ab19593f4045e3056" prot="protected" virt="non-virtual"><scope>csmp::Fluid</scope><name>User</name></member>
+      <member refid="classcsmp_1_1_fluid_1a3c824350e593f55ced63e0ea96e86eb3" prot="protected" virt="non-virtual"><scope>csmp::Fluid</scope><name>User</name></member>
+      <member refid="classcsmp_1_1_fluid_1a5d35a075b444911a7e9040682ec52b84" prot="public" virt="non-virtual"><scope>csmp::Fluid</scope><name>Viscosity</name></member>
+      <member refid="classcsmp_1_1_fluid_1ad48d5b1424a713044b64f5f1643b11b0" prot="public" virt="non-virtual"><scope>csmp::Fluid</scope><name>Viscosity</name></member>
+      <member refid="classcsmp_1_1_fluid_1a61429ffb69af923f493044a3f8e4cf26" prot="public" virt="non-virtual"><scope>csmp::Fluid</scope><name>Viscosity</name></member>
+      <member refid="classcsmp_1_1_fluid_1ae18bd5309962a5d0a15e766c159f8ae0" prot="public" virt="non-virtual"><scope>csmp::Fluid</scope><name>ViscosityRatio</name></member>
+      <member refid="classcsmp_1_1_fluid_1a3748aec68bc142512495b743330ab9c4" prot="public" virt="non-virtual"><scope>csmp::Fluid</scope><name>ViscosityRatio</name></member>
+      <member refid="classcsmp_1_1_fluid_1a5ea885c34cf66e3546676d2c2f903407" prot="public" virt="non-virtual"><scope>csmp::Fluid</scope><name>ViscosityRatio</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

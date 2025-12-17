@@ -14,8 +14,8 @@ class Integral_dNT_rhsop_dN_dV : public MathOperatorRHS<dim,CELL> {
     Integral_dNT_rhsop_dN_dV( const PropertyDatabase<dim>&,
                               const char* oper, const char* test, const char* grad_var );
 
-    virtual void GetOperands( const CELL<dim>& );
-    virtual void ComputeContribution( const CELL<dim>& );
+    void GetOperands( const CELL<dim>& ) override final;
+    void ComputeContribution( const CELL<dim>& ) override final;
 
   private:
     DenseMatrix<DM_MIN>  DN, DNT, VAR; 

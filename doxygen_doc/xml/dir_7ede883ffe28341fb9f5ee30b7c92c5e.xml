@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_7ede883ffe28341fb9f5ee30b7c92c5e" kind="dir">
+    <compoundname>build/CMakeFiles/open-csmp-core.dir/source/modules/interfaces/Rhinoceros</compoundname>
+    <innerfile refid="_rhino_surface_reader_8cpp_8o_8d">RhinoSurfaceReader.cpp.o.d</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="build/CMakeFiles/open-csmp-core.dir/source/modules/interfaces/Rhinoceros/"/>
+  </compounddef>
+</doxygen>

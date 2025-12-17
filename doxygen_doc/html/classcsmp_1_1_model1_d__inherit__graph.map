@@ -1,0 +1,29 @@
+<map id="csmp::Model1D&lt; dim &gt;" name="csmp::Model1D&lt; dim &gt;">
+<area shape="rect" id="Node000001" title="Line model that is templatized so that it can also be placed into three&#45;dimensional space." alt="" coords="331,1969,479,2320"/>
+<area shape="rect" id="Node000012" href="$classcsmp_1_1_model1_d.html" title=" " alt="" coords="333,2391,477,2498"/>
+<area shape="poly" id="edge15_Node000001_Node000012" title=" " alt="" coords="408,2335,408,2392,402,2392,402,2335"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_model.html" title=" " alt="" coords="288,1472,522,1920"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="408,1935,408,1970,402,1970,402,1935"/>
+<area shape="rect" id="Node000003" href="$classcsmp_1_1_region_interface.html" title=" " alt="" coords="255,460,425,806"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="289,820,280,873,260,1022,250,1138,251,1194,255,1254,280,1401,299,1472,294,1473,274,1402,250,1255,245,1195,245,1138,255,1021,274,872,283,819"/>
+<area shape="rect" id="Node000011" href="$classcsmp_1_1_model.html" title="Model the playground for the physics of interest." alt="" coords="288,873,522,1401"/>
+<area shape="poly" id="edge11_Node000011_Node000003" title=" " alt="" coords="367,820,373,872,368,873,361,821"/>
+<area shape="rect" id="Node000004" href="$classcsmp_1_1_region_interface.html" title="Policy of the class model for the management of its labeled subdomains that are equivalent to the par..." alt="" coords="243,16,431,361"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="341,376,341,460,336,460,335,376"/>
+<area shape="rect" id="Node000005" href="$classcsmp_1_1_boundary_interface.html" title=" " alt="" coords="40,470,231,796"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="144,810,155,942,174,1091,203,1248,222,1325,245,1400,266,1455,291,1508,286,1510,261,1457,240,1402,217,1327,198,1249,169,1092,150,942,139,811"/>
+<area shape="poly" id="edge12_Node000011_Node000005" title=" " alt="" coords="232,808,291,918,286,920,227,810"/>
+<area shape="rect" id="Node000006" href="$classcsmp_1_1_boundary_interface.html" title="Policy of Model class for the management of internal and external boundaries which are of a lower spa..." alt="" coords="5,26,218,351"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="124,366,130,470,124,471,119,366"/>
+<area shape="rect" id="Node000007" href="$classcsmp_1_1_split_boundary_interface.html" title=" " alt="" coords="649,442,873,823"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="727,839,699,967,663,1110,621,1258,570,1402,558,1427,545,1450,524,1488,519,1485,540,1447,554,1424,565,1400,615,1256,658,1108,694,966,721,837"/>
+<area shape="poly" id="edge13_Node000011_Node000007" title=" " alt="" coords="643,819,639,825,523,984,519,981,635,822,639,816"/>
+<area shape="rect" id="Node000008" href="$classcsmp_1_1_split_boundary_interface.html" title=" " alt="" coords="652,5,902,371"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="773,386,771,442,765,442,767,386"/>
+<area shape="rect" id="Node000009" href="$classcsmp_1_1_local_variable_storage.html" title=" " alt="" coords="452,490,625,775"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="558,790,566,922,568,1076,560,1240,550,1322,536,1402,515,1473,510,1472,530,1401,545,1321,554,1240,563,1076,561,922,553,790"/>
+<area shape="poly" id="edge14_Node000011_Node000009" title=" " alt="" coords="500,790,477,873,472,872,494,789"/>
+<area shape="rect" id="Node000010" href="$classcsmp_1_1_local_variable_storage.html" title=" " alt="" coords="456,46,629,331"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="544,345,542,491,537,491,538,345"/>
+<area shape="poly" id="edge10_Node000002_Node000011" title=" " alt="" coords="408,1416,408,1473,402,1473,402,1416"/>
+</map>

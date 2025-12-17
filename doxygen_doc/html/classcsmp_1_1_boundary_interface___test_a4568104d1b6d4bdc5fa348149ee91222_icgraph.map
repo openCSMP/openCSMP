@@ -1,0 +1,5 @@
+<map id="csmp::BoundaryInterface_Test::TestBoxShapedModel" name="csmp::BoundaryInterface_Test::TestBoxShapedModel">
+<area shape="rect" id="Node000001" title="can Box&#45;shaped model creation be accomplished and how fast" alt="" coords="221,5,409,46"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_boundary_interface___test.html#a3842888782da98946dcd3dd1f8285bba" title="testing &quot;&quot;fault_boundary_test&quot; creation of a segmented boundary from region &#39;fault&#39;" alt="" coords="5,5,173,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="205,28,173,28,173,23,205,23"/>
+</map>

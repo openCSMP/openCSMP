@@ -1,0 +1,6 @@
+<map id="csmp::SplitBoundaryInterface_Test::Test_NodeCorrespondance_2D" name="csmp::SplitBoundaryInterface_Test::Test_NodeCorrespondance_2D">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,29,249,70"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_a_n_s_y_s___model2_d.html#a18e1ccd2dcf0b41fbbefca5e0e64809b" title="input from ANSYS *.asc, *.dat, and *&#45;variable.txt files, see source for more extensive documentation" alt="" coords="297,29,463,70"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="249,47,281,47,281,52,249,52"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="332,29,330,19,338,10,355,5,380,3,407,5,423,11,421,16,406,10,380,8,356,10,341,15,335,21,338,28"/>
+</map>

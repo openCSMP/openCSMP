@@ -1,0 +1,1139 @@
+.TH "csmp::VData" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::VData \- Container for polygonal data implemented on the basis of NCSA (Urbana, Champagne, Illinois, USA) \fBVSet\fP that forms part of their HDF data file storage\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <VData\&.h>\fP
+.PP
+Inherited by \fBcsmp::VSet< 3U >\fP, and \fBcsmp::VSet< dim >\fP\&.
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef std::vector< std::pair< std::vector< size_t >, \fBManifoldType\fP > > \fBmanifoldContainer\fP"
+.br
+.RI "the storage for node manifolds inside of \fBVData\fP "
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBVData\fP ()"
+.br
+.RI "default constructor: not hybrid, no nodes, nor elements "
+.ti -1c
+.RI "\fBVData\fP (const std::deque< uint32_t > &npes, const std::deque< uint32_t > &epes, size_t nodes)"
+.br
+.RI "constructor for hybrid element meshes "
+.ti -1c
+.RI "\fBVData\fP (uint32_t nodes_per_element, uint32_t nbors_per_element, size_t nodes, size_t elmts)"
+.br
+.RI "constructor for meshes that only hold a single element type "
+.ti -1c
+.RI "void \fBSingleElementType\fP (int8_t etype)"
+.br
+.RI "if the mesh contains only a single element type it can be set with this method "
+.ti -1c
+.RI "void \fBElementTypes\fP (const std::vector< int8_t > &elmt_types)"
+.br
+.RI "CSMP_FEM_TYPEs for all the elements stored in the \fBVData\fP\&. "
+.ti -1c
+.RI "void \fBAddElementTypes\fP (std::vector< int8_t >::const_iterator first, std::vector< int8_t >::const_iterator last)"
+.br
+.ti -1c
+.RI "void \fBAddElementTypes\fP (std::deque< int8_t >::const_iterator first, std::deque< int8_t >::const_iterator last)"
+.br
+.ti -1c
+.RI "void \fBAddNodeManifolds\fP (manifoldContainer::const_iterator first, manifoldContainer::const_iterator last)"
+.br
+.RI "initialises / overwrites the manifold information stored in the \fBVData\fP object "
+.ti -1c
+.RI "void \fBResize\fP (size_t nodes_per_element, size_t nbors_per_element, int8_t etype, size_t nodes, size_t elmts)"
+.br
+.RI "resizes for a single-element type mesh "
+.ti -1c
+.RI "void \fBResize\fP (const std::deque< int8_t > &etypes, const std::deque< uint32_t > &npes, const std::deque< uint32_t > &epes, size_t nodes, size_t faces, size_t interfaces)"
+.br
+.ti -1c
+.RI "void \fBResizeElementTypes\fP (size_t elements)"
+.br
+.RI "for hybrid element meshes, increasing the storage for element types to the new size without invalidating existing types unless the storage is shrunk "
+.ti -1c
+.RI "void \fBResizeNodes\fP (size_t nodes)"
+.br
+.ti -1c
+.RI "void \fBResizePlist\fP (size_t elements)"
+.br
+.ti -1c
+.RI "void \fBResizePlist\fP (size_t elements, uint32_t nperelmt)"
+.br
+.ti -1c
+.RI "void \fBResizeElementNodes\fP (size_t eid, uint32_t nperelmt)"
+.br
+.ti -1c
+.RI "void \fBResizePlist\fP (const std::deque< uint32_t > &mixed_ele_plist)"
+.br
+.ti -1c
+.RI "void \fBResizePfverts\fP (size_t elements)"
+.br
+.ti -1c
+.RI "void \fBResizePfverts\fP (size_t elements, uint32_t nperelmt)"
+.br
+.ti -1c
+.RI "void \fBResizeElementNeighbors\fP (size_t eid, uint32_t nperelmt)"
+.br
+.ti -1c
+.RI "void \fBResizePfverts\fP (const std::deque< uint32_t > &mixed_ele_pfverts)"
+.br
+.ti -1c
+.RI "void \fBResizeBFlags\fP ()"
+.br
+.ti -1c
+.RI "void \fBResizeBREP_Flags\fP ()"
+.br
+.ti -1c
+.RI "bool \fBoperator==\fP (const \fBVData\fP &) const"
+.br
+.RI "compares 'pelmt', 'plist', 'pvferts' and 'pbflags' among the \fBVData\fP; specific mismatches are reported to std::cerr "
+.ti -1c
+.RI "uint32_t \fBSpatialDimension\fP () const"
+.br
+.RI "using element types, coordinate range, and boundary flags, asesses whether this is a 1D, 2D , or three dimensional model "
+.ti -1c
+.RI "size_t \fBVertices\fP () const"
+.br
+.RI "returns number of nodes in the mesh "
+.ti -1c
+.RI "size_t \fBElements\fP () const"
+.br
+.RI "returns number of elements (not including faces and interfaces) "
+.ti -1c
+.RI "size_t \fBFaces\fP () const"
+.br
+.RI "number of lower-dimensional elements that know their higher-dimensional neighbors "
+.ti -1c
+.RI "size_t \fBInterfaces\fP () const"
+.br
+.RI "number of split-boundary faces; faces with multiplicated nodes at boundaries "
+.ti -1c
+.RI "size_t \fBCells\fP () const"
+.br
+.RI "combined number of any entities: elements + faces + interfaces "
+.ti -1c
+.RI "size_t \fBNodeManifolds\fP () const"
+.br
+.RI "topologically collocated nodes along the node-matched boundaries of mesh patches "
+.ti -1c
+.RI "size_t \fBElementTypes\fP () const"
+.br
+.RI "number of unique CSMP finite-element/cell types contained in the mesh "
+.ti -1c
+.RI "size_t \fBElementNeighbors\fP () const"
+.br
+.RI "number of element neighbors in a single element type mesh "
+.ti -1c
+.RI "size_t \fBBFlags\fP () const"
+.br
+.RI "reports the number of different nde flags stored as boundary flags in the model "
+.ti -1c
+.RI "uint32_t \fBPlistSize\fP (size_t eidx) const"
+.br
+.RI "number of nodes stored for element, face or interface "
+.ti -1c
+.RI "uint32_t \fBPfvertsSize\fP (size_t eidx) const"
+.br
+.RI "number of neighbors stored for element, face or interface "
+.ti -1c
+.RI "bool \fBHybridElementTypeMesh\fP () const"
+.br
+.RI "get type; a mesh is of hybrid-element type if it contains multiple element types "
+.ti -1c
+.RI "void \fBHybridElementTypeMesh\fP (bool hybrid_mesh)"
+.br
+.RI "set whether mesh contains multiple element types "
+.ti -1c
+.RI "bool \fBIsoparametricElementMesh\fP () const"
+.br
+.RI "reports whether the model contains only isoparametric element types "
+.ti -1c
+.RI "void \fBEstablishZeroBasedNumbering\fP ()"
+.br
+.RI "if numbering is not 0\&.\&.n-1, this method establishes thos "
+.ti -1c
+.RI "void \fBPx\fP (size_t i, double)"
+.br
+.RI "x-coordinate of node i "
+.ti -1c
+.RI "void \fBPy\fP (size_t i, double)"
+.br
+.ti -1c
+.RI "void \fBPz\fP (size_t i, double)"
+.br
+.ti -1c
+.RI "double \fBPx\fP (size_t i) const"
+.br
+.ti -1c
+.RI "double \fBPy\fP (size_t i) const"
+.br
+.ti -1c
+.RI "double \fBPz\fP (size_t i) const"
+.br
+.ti -1c
+.RI "std::pair< double, double > \fBX_Range\fP () const"
+.br
+.RI "range of the X coordinate (increasing to the east) "
+.ti -1c
+.RI "std::pair< double, double > \fBY_Range\fP () const"
+.br
+.RI "range of the Y coordinate (increasing upward and often indicating elevation above sealevel) "
+.ti -1c
+.RI "std::pair< double, double > \fBZ_Range\fP () const"
+.br
+.RI "range of the Z coordinate (from north to south) "
+.ti -1c
+.RI "void \fBCoordinateRange\fP (char coordinate_axis, double &cmin, double &cmax) const"
+.br
+.RI "calculates min-max vertex coordinate values of mesh stored in \fBVData\fP "
+.ti -1c
+.RI "void \fBScaleCoordinateToRange\fP (char coordinate_axis, double cmin, double cmax)"
+.br
+.RI "rescales vertex coordinate values in given spatial direction "
+.ti -1c
+.RI "void \fBP\fP (uint32_t coordinate_axis, size_t i, double)"
+.br
+.RI "to set vertex=node coordinate of node i for user defined coordinate component (x,y, or z) "
+.ti -1c
+.RI "double \fBP\fP (uint32_t coordinate_axis, size_t i) const"
+.br
+.RI "to get vertex=node coordinate of node i for user defined coordinate component (x,y, or z) "
+.ti -1c
+.RI "void \fBElementType\fP (size_t eidx, int8_t type)"
+.br
+.RI "set CSMP finite element type of element in 'pelmt' container "
+.ti -1c
+.RI "int8_t \fBElementType\fP (size_t eidx) const"
+.br
+.RI "get CSMP finite element type from 'pelmt' container; stores only 1 elmt in single element-type mesh "
+.ti -1c
+.RI "uint32_t \fBOrderOfFiniteElementInterpolationFunctions\fP () const"
+.br
+.RI "assuming that all interpolation functions have same order, returns that order "
+.ti -1c
+.RI "void \fBPlist\fP (size_t eidx, uint32_t node, size_t val)"
+.br
+.RI "set node index of element in serialised array of node ids; use pelmt to determine how many nodes there shoud be "
+.ti -1c
+.RI "size_t \fBPlist\fP (size_t eidx, uint32_t node) const"
+.br
+.RI "get node index of element in serialised array of node ids; use pelmt to determine how many nodes there shoud be "
+.ti -1c
+.RI "void \fBPfvert\fP (size_t eidx, uint32_t i, int64_t val)"
+.br
+.RI "set neighbor element index (or boundary identifier) for neighbor i of element eidx "
+.ti -1c
+.RI "int64_t \fBPfvert\fP (size_t eidx, uint32_t i) const"
+.br
+.RI "get neighbor element index (or boundary identifier) for neighbor i of element eidx "
+.ti -1c
+.RI "void \fBBFlag\fP (size_t node_id, std::int8_t bflag)"
+.br
+.RI "adds id (0\&.\&.n-1) of boundary node and its \fBBOX_BOUNDARY\fP flag (negative integer) "
+.ti -1c
+.RI "std::int8_t \fBBFlag\fP (size_t node_id) const"
+.br
+.RI "returns the boundary flag \fBBOX_BOUNDARY\fP of the node "
+.ti -1c
+.RI "void \fBBREP_Flag\fP (size_t node_id, std::int8_t brep_flag)"
+.br
+.RI "adds id (0\&.\&.n-1) of boundary node and its \fBBOX_BOUNDARY\fP flag (negative integer) "
+.ti -1c
+.RI "std::int8_t \fBBREP_Flag\fP (size_t node_id) const"
+.br
+.RI "returns the boundary flag \fBBOX_BOUNDARY\fP of the node "
+.ti -1c
+.RI "std::int8_t \fBBoundaryFlag\fP (size_t vertex) const"
+.br
+.RI "returns the box boundary identifier of the node if it is located on the model boundary; else returs NOT "
+.ti -1c
+.RI "void \fBRemovePfverts\fP ()"
+.br
+.RI "empties 'pfverts' container if the contained info is flaky so that later code is prompted to recreate it "
+.ti -1c
+.RI "void \fBRemoveBflags\fP ()"
+.br
+.RI "empties map which stores which nodes lie at boundary and what there \fBBOX_BOUNDARY\fP flag is "
+.ti -1c
+.RI "std::deque< std::vector< size_t > >::iterator \fBPlistBegin\fP ()"
+.br
+.ti -1c
+.RI "std::deque< std::vector< size_t > >::iterator \fBPlistEnd\fP ()"
+.br
+.ti -1c
+.RI "std::deque< std::vector< int64_t > >::iterator \fBPfvertsBegin\fP ()"
+.br
+.ti -1c
+.RI "std::deque< std::vector< int64_t > >::iterator \fBPfvertsEnd\fP ()"
+.br
+.ti -1c
+.RI "std::vector< size_t >::iterator \fBPlistBegin\fP (size_t eidx)"
+.br
+.ti -1c
+.RI "std::vector< size_t >::iterator \fBPlistEnd\fP (size_t eidx)"
+.br
+.ti -1c
+.RI "std::vector< int64_t >::iterator \fBPfvertsBegin\fP (size_t eidx)"
+.br
+.ti -1c
+.RI "std::vector< int64_t >::iterator \fBPfvertsEnd\fP (size_t eidx)"
+.br
+.ti -1c
+.RI "std::vector< std::int8_t >::iterator \fBBFlagsBegin\fP ()"
+.br
+.ti -1c
+.RI "std::vector< std::int8_t >::iterator \fBBFlagsEnd\fP ()"
+.br
+.ti -1c
+.RI "std::vector< std::int8_t >::const_iterator \fBBFlagsBegin\fP () const"
+.br
+.ti -1c
+.RI "std::vector< std::int8_t >::const_iterator \fBBFlagsEnd\fP () const"
+.br
+.ti -1c
+.RI "std::vector< std::int8_t >::iterator \fBBREP_FlagsBegin\fP ()"
+.br
+.RI "labels of the nodes that indicate which point, line or surface of the \fBBoundary\fP Representation (BREP) of the original model it represents "
+.ti -1c
+.RI "std::vector< std::int8_t >::iterator \fBBREP_FlagsEnd\fP ()"
+.br
+.ti -1c
+.RI "std::vector< std::int8_t >::const_iterator \fBBREP_FlagsBegin\fP () const"
+.br
+.ti -1c
+.RI "std::vector< std::int8_t >::const_iterator \fBBREP_FlagsEnd\fP () const"
+.br
+.ti -1c
+.RI "std::vector< int8_t >::const_iterator \fBPelmtBegin\fP () const"
+.br
+.ti -1c
+.RI "std::vector< int8_t >::const_iterator \fBPelmtEnd\fP () const"
+.br
+.ti -1c
+.RI "std::deque< std::vector< size_t > >::const_iterator \fBPlistBegin\fP () const"
+.br
+.ti -1c
+.RI "std::deque< std::vector< size_t > >::const_iterator \fBPlistEnd\fP () const"
+.br
+.ti -1c
+.RI "std::deque< std::vector< int64_t > >::const_iterator \fBPfvertsBegin\fP () const"
+.br
+.ti -1c
+.RI "std::deque< std::vector< int64_t > >::const_iterator \fBPfvertsEnd\fP () const"
+.br
+.ti -1c
+.RI "bool \fBWithNeighbourConnectivity\fP () const"
+.br
+.RI "checks whether pfverts, has right size and contains plausible information (no guarantees!) "
+.ti -1c
+.RI "std::vector< size_t >::const_iterator \fBPlistBegin\fP (size_t eidx) const"
+.br
+.ti -1c
+.RI "std::vector< size_t >::const_iterator \fBPlistEnd\fP (size_t eidx) const"
+.br
+.ti -1c
+.RI "std::vector< int64_t >::const_iterator \fBPfvertsBegin\fP (size_t eidx) const"
+.br
+.ti -1c
+.RI "std::vector< int64_t >::const_iterator \fBPfvertsEnd\fP (size_t eidx) const"
+.br
+.ti -1c
+.RI "std::vector< int8_t >::const_iterator \fBPelmtFacesBegin\fP () const"
+.br
+.RI "iterator to CSMP finite element type of first face stored in mesh "
+.ti -1c
+.RI "std::vector< int8_t >::const_iterator \fBPelmtInterfacesBegin\fP () const"
+.br
+.RI "iterator to CSMP finite element type of first interface stored in mesh "
+.ti -1c
+.RI "std::deque< std::vector< size_t > >::const_iterator \fBPlistElmtsBegin\fP () const"
+.br
+.RI "Iterator to beginning of elements in the Plist\&. "
+.ti -1c
+.RI "std::deque< std::vector< size_t > >::const_iterator \fBPlistElmtsEnd\fP () const"
+.br
+.RI "Iterator to end of elements in the Plist\&. "
+.ti -1c
+.RI "std::deque< std::vector< size_t > >::const_iterator \fBPlistFacesBegin\fP () const"
+.br
+.RI "Iterator to beginning of faces in the Plist\&. "
+.ti -1c
+.RI "std::deque< std::vector< size_t > >::const_iterator \fBPlistFacesEnd\fP () const"
+.br
+.RI "Iterator to end of faces in the Plist\&. "
+.ti -1c
+.RI "std::deque< std::vector< size_t > >::const_iterator \fBPlistInterFacesBegin\fP () const"
+.br
+.RI "Iterator to beginning of interfaces in the Plist\&. "
+.ti -1c
+.RI "std::deque< std::vector< size_t > >::const_iterator \fBPlistInterFacesEnd\fP () const"
+.br
+.RI "Iterator to end of interfaces in the Plist\&. "
+.ti -1c
+.RI "std::deque< std::vector< int64_t > >::const_iterator \fBPfvertsFacesBegin\fP () const"
+.br
+.RI "neighbor iterator for first face in plist (use \fBPlistInterFacesBegin()\fP to find last one) "
+.ti -1c
+.RI "std::deque< std::vector< int64_t > >::const_iterator \fBPfvertsInterfaceBegin\fP () const"
+.br
+.RI "neighbor iterator for first interface plist; equivalent to PlistFacesEnd; use PlistEnd() for last one "
+.ti -1c
+.RI "manifoldContainer::iterator \fBPmanifoldsBegin\fP ()"
+.br
+.RI "read / write access to the stored node manifolds "
+.ti -1c
+.RI "manifoldContainer::iterator \fBPmanifoldsEnd\fP ()"
+.br
+.ti -1c
+.RI "manifoldContainer::const_iterator \fBPmanifoldsBegin\fP () const"
+.br
+.ti -1c
+.RI "manifoldContainer::const_iterator \fBPmanifoldsEnd\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBRenumberElementsCounterClockwise2D\fP ()"
+.br
+.RI "flips clockwise-numbered elements, into counter-clockwise right-hand rule compliant orientation; lower dimensional elements are made consistent; returns how many were flipped "
+.ti -1c
+.RI "void \fBEstablishElementConnectivity2D\fP ()"
+.br
+.RI "computes neighbor element connectivity between line and surface elements, faces and interfaces and replaces existing connectivity with it "
+.ti -1c
+.RI "void \fBEstablishElementConnectivity3D\fP ()"
+.br
+.RI "rebuilds 'pfverts' from scratch, needs correect \fBBOX_BOUNDARY\fP flagging of nodes to get the non-neighbors right "
+.ti -1c
+.RI "size_t \fBRemeshCornerSpanningTetrahedra\fP ()"
+.br
+.RI "eliminates corner tetrahedra with all nodes on the model boundary; extra element degrees of freedom are introduced for boundary condition assignment "
+.ti -1c
+.RI "void \fBEstablishNodeNeighborConnectivity\fP (std::vector< std::set< size_t > > &pnode) const"
+.br
+.RI "creates an extra array 'pnode' equivalent to a sparsity pattern recording to which nodes each node pnode[i] is connected to "
+.ti -1c
+.RI "void \fBInitialiseNodeTopologyIdentifiers\fP ()"
+.br
+.RI "initialises the \fBTOPOTYPE\fP flags, indicating which elements of the model boundary representation the node forms part of / represents "
+.ti -1c
+.RI "bool \fBDetectAndEliminateOrphanNodes\fP (bool eliminate_orphan_nodes=true)"
+.br
+.RI "eliminate nodes that are not connected to any element, face or interface; report whether there were any "
+.ti -1c
+.RI "bool \fBDetectAndEliminateDuplicateCells\fP (bool verbose=true)"
+.br
+.RI "eliminate cells with identical nodes, except for interfaces "
+.ti -1c
+.RI "void \fBErase\fP ()"
+.br
+.RI "clear the container "
+.ti -1c
+.RI "void \fBOutASCII\fP (const char *file) const"
+.br
+.RI "wrtie connectivity structure to ASCII text file "
+.ti -1c
+.RI "void \fBOutCPP17\fP (std::ofstream &) const"
+.br
+.RI "writes initialiser lists for the current \fBVData\fP in C++17 format "
+.ti -1c
+.RI "void \fBInText\fP (std::ifstream &)"
+.br
+.RI "initialise \fBVData\fP=mesh connectivity structures from binary file "
+.ti -1c
+.RI "void \fBOut\fP () const"
+.br
+.RI "print connectivity information to screen "
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "bool \fBCheckFix\fP ()"
+.br
+.RI "remove any gaps in the numbering of nodes and elements "
+.ti -1c
+.RI "void \fBCreateConsistentLineElementOrientations2D\fP ()"
+.br
+.RI "aligns potential line elements in a 2D mesh, those at boundary are given the same orientation as the surface-element boundary faces "
+.ti -1c
+.RI "double \fBAngleBetweenLineElements2D\fP (size_t elmt1, size_t elmt2)"
+.br
+.RI "angle between line elements in degrees "
+.ti -1c
+.RI "double \fBAngleBetweenLineElements3D\fP (size_t elmt1, size_t elmt2)"
+.br
+.RI "finds angle between 2 line elements determined by their number in the plist "
+.ti -1c
+.RI "double \fBAngleBetweenSurfaceElements3D\fP (size_t elmt1, size_t elmt2)"
+.br
+.RI "computes the unit normals to the surfaces and then returns the angle between them "
+.ti -1c
+.RI "size_t \fBSwitchCornerTriangles2D\fP ()"
+.br
+.RI "reconnects triangular elements with 3 nodes on the model boundary by switching nodes with their only neighbor; "
+.ti -1c
+.RI "void \fBReduceTo\fP (const std::map< size_t, size_t > &old_and_new_elmt_ids, std::map< size_t, size_t > &o_n_node_ids)"
+.br
+.RI "eliminates the elements that are not contained in 'old_and_new_elmt_ids' from the \fBVSet\fP, returning mapping of old to new node idx (0\&.\&.n-1) "
+.ti -1c
+.RI "void \fBOutBinary\fP (std::fstream &) const"
+.br
+.RI "write mesh to supplied binary file "
+.ti -1c
+.RI "void \fBInBinary\fP (std::fstream &)"
+.br
+.RI "read mesh from supplied binary file "
+.in -1c
+.SS "Friends"
+
+.in +1c
+.ti -1c
+.RI "class \fBVData_Test\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Container for polygonal data implemented on the basis of NCSA (Urbana, Champagne, Illinois, USA) \fBVSet\fP that forms part of their HDF data file storage\&. 
+
+
+.PP
+\fBAuthor\fP
+.RS 4
+Stephan Matthai 
+
+.PP
+Stephen G\&. Roberts 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+1996
+.RE
+.PP
+.SH "Motivation"
+.PP
+Mesh connectivity usually termed as \fBVData\fP typically consists of lists of (1) node and constraint-point coordinates (constraint points can be nodes between nodes but also integration points), (2) a listing of the nodes which belong to each element, and (3) a list of the neighbors of each element\&. If the element lies on the model boundary and there is no neighbor then entries in this list will be UNSPECIFIED\&. (4) A typical \fBVData\fP set also specifies which nodes lie at the model boundary and which property values apply to these nodes\&.
+
+.PP
+The class \fBVData\fP brings all these datasets together into an object which holds the information to build this V-type mesh connectivity\&.
+.SH "Applicability"
+.PP
+\fBVData\fP can be used as isolated object but it is also integrated into the \fBVSet\fP which also holds property data which are assigned to the mesh\&.
+.SH "Structure"
+.PP
+The \fBVData\fP object contains coordinate objects, deques of vectors to store the connectivity and maps to hold the boundary flags and boundary values\&.
+
+.PP
+Detailed content:
+
+.PP
+(double) px, py, pz[0\&.\&.n-1] = coordinates of n nodes (= FE vertices)
+
+.PP
+(int8_t) bflags[0\&.\&.n-1] = negative numbers for nodes at boundary, see later
+
+.PP
+(enum int8_t) pelmt[0\&.\&.e-1] = \fBCSMP_FEM_TYPE\fP of e finite elements (1 entry only for single element-type mesh)
+
+.PP
+(size_t) plist[0\&.\&.e *[sum npe[e]]] = nodes making up each element
+
+.PP
+(int64_t) pfverts[0\&.\&.e *[sum fpe[e]]] = neighbor elements adjacent to the faces of each element
+
+.PP
+For \fBFace\fP and \fBInterFace\fP objects, 'pfverts' also contains the indices of the higher-dimensional neighbor element\&. 
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "csmp::VData::VData (const std::deque< uint32_t > & npes, const std::deque< uint32_t > & epes, size_t nodes)"
+
+.PP
+constructor for hybrid element meshes 
+.PP
+\fBParameters\fP
+.RS 4
+\fInpes\fP just the sizes of the different vectors 
+.RE
+.PP
+
+.SS "csmp::VData::VData (uint32_t nodes_per_element, uint32_t nbors_per_element, size_t nodes, size_t elmts)"
+
+.PP
+constructor for meshes that only hold a single element type constructor for meshes with a single type of element
+
+.PP
+\fBNote\fP
+.RS 4
+it is assumed that there are no faces nor interfaces 
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "double csmp::VData::AngleBetweenLineElements2D (size_t elmt1, size_t elmt2)\fR [protected]\fP"
+
+.PP
+angle between line elements in degrees finds angle between 2 line elements determined by their number in the plist 
+.SS "double csmp::VData::AngleBetweenSurfaceElements3D (size_t elmt1, size_t elmt2)\fR [protected]\fP"
+
+.PP
+computes the unit normals to the surfaces and then returns the angle between them Computes the unit normals to the supplied surface elements and then returns the angle between them in degrees\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+the surface elements are assumed to be planar; only the first 3 nodes are considered\&. 
+.RE
+.PP
+
+.SS "int8_t csmp::VData::BFlag (size_t node_id) const"
+
+.PP
+returns the boundary flag \fBBOX_BOUNDARY\fP of the node returns the boundary flag of the node 
+.SS "int8_t csmp::VData::BoundaryFlag (size_t vertex) const"
+
+.PP
+returns the box boundary identifier of the node if it is located on the model boundary; else returs NOT Returns boundary identifier if any\&. 
+.SS "int8_t csmp::VData::BREP_Flag (size_t node_id) const"
+
+.PP
+returns the boundary flag \fBBOX_BOUNDARY\fP of the node returns the boundary flag of the node 
+.SS "size_t csmp::VData::Cells () const"
+
+.PP
+combined number of any entities: elements + faces + interfaces the plist contains all: elements, faces and interfaces 
+.SS "bool csmp::VData::CheckFix ()\fR [protected]\fP"
+
+.PP
+remove any gaps in the numbering of nodes and elements Checkthe data arrays inside the \fBVData\fP for whether they contain any data that are out of range (node numbers which are greater than the size of the containing array or zero)\&. The datasets which are checked are:
+
+.PP
+px, py, pz (Arrays) plist, pfverts (maps of vectors) 
+.br
+ bflags (map) bvals (map)
+
+.PP
+Non-existant boundary identifier flags (negative integers) in the 'pfverts' array are replaced by the REGION_BOUNDARY (-28) flag\&.
+
+.PP
+\fBReturns\fP
+.RS 4
+If no violations are detected the method returns true, else false\&.
+.RE
+.PP
+.SH "Application Examples"
+.PP
+VSets and the contained \fBVData\fP represent the interface to external programs\&. Thus, before erratic data are used to build \fBModel\fP objects it is useful to check the input data\&. 
+.br
+.SH "Messages"
+.PP
+Check() tries to be as specific as possible in reporting where and what kind of error occurred\&. Warnings are issued when datasets that are not essential for the building of a mesh are corrupted\&. 
+.SS "void csmp::VData::CoordinateRange (char coordinate_axis, double & cmin, double & cmax) const"
+
+.PP
+calculates min-max vertex coordinate values of mesh stored in \fBVData\fP Returns dimensions edge lengths of bounding box\&. 
+.SS "void csmp::VData::CreateConsistentLineElementOrientations2D ()\fR [protected]\fP"
+
+.PP
+aligns potential line elements in a 2D mesh, those at boundary are given the same orientation as the surface-element boundary faces To ensure that the normals pointing out of a lower (1D) dimensional elements located at the model boundary, and that they all point in the same direction for internal boundaries, the nodes of such elements must be locally ordered consistently; meaning these line elements are aligned with the node-numbering of the faces of 2D surface elements located at the model boundary whose nodes are numbered counter clockwise\&.
+
+.PP
+Line elements must be oriented in a consistent way for internal 1D regions or along the boundaries of a2D domain\&. This method accomplishes this\&.
+
+.PP
+The normals of the line elements are found by 90-degrees clockwise rotation of the tangent vector of the line elements, which points from node 0 to node 1 (in a Linear or Quadratic Line \fBElement\fP)\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+this method expects that there already is connectivity information for line elements
+
+.PP
+if the line elements do not know their neighbors already, this method will not work!
+
+.PP
+assumes node numbering in 'plist' follows the convention corner nodes first, then Interior nodes\&.
+
+.PP
+method assumes that all manifolds (connections of more than 2 line elements at a node have been removed =disambiguated before\&. Thus it relies on a valid neighbor connectivity of the line elements, which must stored in pfverts\&.
+
+.PP
+the neighbors of line elements are situated opposite to its corner nodes (like for other simplex elements)
+.RE
+.PP
+\fBNote\fP
+.RS 4
+algorithmic procedure: 1) chains of connected line elements are found and stored in a map, using their "root" nodes as keys\&. 2) these are then traversed, flipping nodes whenever successive elements are not aligned\&. 3) at the model boundaries, the chains of line elements are flipped if their direction is not matched with that of the faces of the surface elements at the model boundary\&. 4) line element chains inside of the model are kept in whichever, yet consistent orientation\&.
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+SKM 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+3/22020 
+.RE
+.PP
+\fBTest\fP
+.RS 4
+2/10/21
+.RE
+.PP
+
+.SS "bool csmp::VData::DetectAndEliminateDuplicateCells (bool verbose = \fRtrue\fP)"
+
+.PP
+eliminate cells with identical nodes, except for interfaces Detect cellls that have the identical set of nodes, report them and eleminate them from the polygonal dataset\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIverbose\fP to report back detailed results\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+whether duplicates were found and eliminated or not\&. 
+.RE
+.PP
+
+.SS "bool csmp::VData::DetectAndEliminateOrphanNodes (bool eliminate_orphan_nodes = \fRtrue\fP)"
+
+.PP
+eliminate nodes that are not connected to any element, face or interface; report whether there were any Using the Plist a unique set of nodes is created\&. If this set contains a larger number of nodes than is stored in the px/py/pz vectors, a FATAL_ERROR is reported and the method returs true\&.
+
+.PP
+A fatal error is reported also if the node numbering as identified from the Plist is discontiguous\&. 
+.br
+
+.PP
+If the numbering of nodes is contiguous but the number of nodes in the px/py/pz vectors is larger than in the node set created from the Plist, the extra nodes are deleted\&. This step is optional\&.
+.SH "Application Examples"
+.PP
+\fBTest\fP the Vdata for internal consistency\&. 
+.SS "void csmp::VData::ElementTypes (const std::vector< int8_t > & elmt_types)"
+
+.PP
+CSMP_FEM_TYPEs for all the elements stored in the \fBVData\fP\&. Re-initialises the element-type vector that is associated with the \fBVSet\fP\&.
+
+.PP
+\fBNote\fP
+.RS 4
+the element type vector contains either:
+.RE
+.PP
+.IP "1." 4
+a single element (mono-element type mesh)
+.IP "2." 4
+element type entries for each element of the mesh including potential faces and interfaces 
+.PP
+
+.SS "void csmp::VData::Erase ()"
+
+.PP
+clear the container Clear() for \fBVSet\fP 
+.SS "void csmp::VData::EstablishElementConnectivity2D ()"
+
+.PP
+computes neighbor element connectivity between line and surface elements, faces and interfaces and replaces existing connectivity with it (Re)bBuild 'pfverts' container for the case it is empty or may contain unreliable information\&. computes 'pfverts' connectivity between equidimensional elements, faces and interfaces and replaces existing connectivity with it\&.
+
+.PP
+The connectivity of line elements is established as well\&. Where there are line element manifolds, those of the line elements that are sharing a node are connected which are most closely aligned\&.
+
+.PP
+All line elements around the perimeter of a model are connected with one another\&.
+
+.PP
+Method calls \fBCreateConsistentLineElementOrientations2D()\fP in order to make edge orientations consistent\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+this method assumes that all elements are numbered in counter-clockwise direction
+
+.PP
+this method does not change the \fBBOX_BOUNDARY\fP flags of the model
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+SKM 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2/2/2020 
+.RE
+.PP
+\fBTest\fP
+.RS 4
+4/10/2021
+.RE
+.PP
+
+.PP
+\fBTodo\fP
+.RS 4
+SKM 4/10/21: the line-element functionality is duplicated elsewhere in CSMP and must also be fixed because it is probably not working\&.
+.RE
+.PP
+
+.SS "void csmp::VData::EstablishElementConnectivity3D ()"
+
+.PP
+rebuilds 'pfverts' from scratch, needs correect \fBBOX_BOUNDARY\fP flagging of nodes to get the non-neighbors right Rebuilds 3D 'pfverts' from scratch
+
+.PP
+\fBAttention\fP
+.RS 4
+method relies on correct boundary flags
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+only use face corner nodes to identify matching faces 
+
+.PP
+needs to take into account potentials Faces and Interfaces\&. 
+.RE
+.PP
+
+.SS "void csmp::VData::EstablishNodeNeighborConnectivity (std::vector< std::set< size_t > > & pnode) const"
+
+.PP
+creates an extra array 'pnode' equivalent to a sparsity pattern recording to which nodes each node pnode[i] is connected to Finds the neighbor nodes of each node and returns them into the argument vector\&.
+
+.PP
+This method is equivalent to creating a sparsity pattern for matrix accumulation\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIpnode\fP is a vector of sets of nodes that share a connection with the node that corresponds to its entry, i\&.e\&., pnode[node]\&.
+.RE
+.PP
+\fBAttention\fP
+.RS 4
+method handles quadratic elements with a single midside node; these mid-side nodes just have two node neighbors each\&. 
+.RE
+.PP
+\fBNote\fP
+.RS 4
+no provisions are made for bubble nodes because they are not connected with one-another and are typically eliminated in static condensation\&.
+.RE
+.PP
+\fBTest\fP
+.RS 4
+OK SKM 8/12/21 
+.RE
+.PP
+
+.SS "void csmp::VData::EstablishZeroBasedNumbering ()"
+
+.PP
+if numbering is not 0\&.\&.n-1, this method establishes thos If this is not already the case, this method will convert the vdata such that nodes, elements, and neighbors are numbered from 0\&.\&.n-1\&. 
+.SS "void csmp::VData::InBinary (std::fstream & )\fR [protected]\fP"
+
+.PP
+read mesh from supplied binary file Initialises \fBVData\fP from binary input file\&. 
+.SS "void csmp::VData::InitialiseNodeTopologyIdentifiers ()"
+
+.PP
+initialises the \fBTOPOTYPE\fP flags, indicating which elements of the model boundary representation the node forms part of / represents Initialises the \fBTOPOTYPE\fP flags, indicating the role that the nodes play in defining the \fBBoundary\fP Representation (BREP) of the model, i\&.e\&., whether they represent essential crossing or corner points, define lines or surfaces on the inside or the outer model boundaries, or whether they are just mesh vertices that can be changed during remeshing\&.
+
+.PP
+Depending on whether the \fBVSet\fP contains only '\fBElement\fP' objects and 'Faces' or whether it already contains split mesh patches joint by '\fBInterFace\fP' objects and therefore NodeManifolds, the geometry flags are initialised differently\&.
+
+.PP
+All previous flags are overwritten\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+this must done before line and surface elements dividing the volume mesh into different regions are removed but AFTER the \fBBOX_BOUNDARY\fP flags have been assigned\&.
+
+.PP
+successful applicaton of the method requires and intact element connectivity with disambiguated manifolds of lower dimensional elements\&.
+.RE
+.PP
+TODO: not tested yet, use Anne-Laure's VSets to perform testing 
+.SS "void csmp::VData::InText (std::ifstream & )"
+
+.PP
+initialise \fBVData\fP=mesh connectivity structures from binary file permits initialisation of \fBVSet\fP from file stream\&.
+
+.PP
+\fBNote\fP
+.RS 4
+no faces or interfaces are considered 
+.RE
+.PP
+
+.SS "bool csmp::VData::operator== (const \fBVData\fP & vd) const"
+
+.PP
+compares 'pelmt', 'plist', 'pvferts' and 'pbflags' among the \fBVData\fP; specific mismatches are reported to std::cerr comparitor for VSets\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+node coordinates are ignored because such a comparison would depend on precision\&. 
+.RE
+.PP
+
+.SS "uint32_t csmp::VData::OrderOfFiniteElementInterpolationFunctions () const"
+
+.PP
+assuming that all interpolation functions have same order, returns that order Considering all known element types, returns their interpolation order\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+assumption is made that all elements in the mesh use the same order element interpolation functions\&. 
+.RE
+.PP
+
+.SS "void csmp::VData::Out () const"
+
+.PP
+print connectivity information to screen Prints contents of \fBVSet\fP to console; 
+.SS "void csmp::VData::OutASCII (const char * file) const"
+
+.PP
+wrtie connectivity structure to ASCII text file 
+.PP
+\fBNote\fP
+.RS 4
+this just prints the vdata not the entire \fBVSet\fP 
+.RE
+.PP
+
+.SS "void csmp::VData::OutBinary (std::fstream & ) const\fR [protected]\fP"
+
+.PP
+write mesh to supplied binary file Writes \fBVData\fP into a binary output file\&. 
+.SS "int64_t csmp::VData::Pfvert (size_t eidx, uint32_t i) const"
+
+.PP
+get neighbor element index (or boundary identifier) for neighbor i of element eidx nidx is neighbour index 
+.SS "void csmp::VData::Pfvert (size_t eidx, uint32_t i, int64_t val)"
+
+.PP
+set neighbor element index (or boundary identifier) for neighbor i of element eidx nidx is neighbour index 
+.SS "void csmp::VData::ReduceTo (const std::map< size_t, size_t > & old_and_new_elmt_ids, std::map< size_t, size_t > & o_n_node_ids)\fR [protected]\fP"
+
+.PP
+eliminates the elements that are not contained in 'old_and_new_elmt_ids' from the \fBVSet\fP, returning mapping of old to new node idx (0\&.\&.n-1) The original \fBVSet\fP is condensed to the elements stored as keys (first arg) in the supplied map\&. Also, only the nodes connected to these elements are retained\&. 
+.br
+
+.PP
+As a second step the elements and nodes are renumbered contiguously and corresponding amendments are made to the pfverts, plist and node arrays\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIo_n_elmt_ids\fP represents the element idx mapping (0\&.\&.n-1) from old (key) to new (value) pairs (input) 
+.br
+\fIo_n_node_ids\fP old->new node idx mapping (0\&.\&.n-1) but only for the nodes that are kept (output)
+.RE
+.PP
+.SH "Input Arguments"
+.PP
+The supplied map must contain the new element IDs (0\&.\&.n) accessible via the old element IDs (x\&.\&.y) depending on which regions were chopped away or selected from the entire model\&. In the original design, the map is output from the \fBModelTopology\fP class\&. 
+.br
+.SH "Application Examples"
+.PP
+Used to make region selections from the supplied input meshes\&. 
+.SS "size_t csmp::VData::RemeshCornerSpanningTetrahedra ()"
+
+.PP
+eliminates corner tetrahedra with all nodes on the model boundary; extra element degrees of freedom are introduced for boundary condition assignment Replaces corner-spanning tetrahedra (all nodes at the model boundary) and their interior neighbors with 3 tedrahedra each to establish the necessary degrees of freedom to assign boundary conditions\&.
+
+.PP
+\fBReturns\fP
+.RS 4
+the number of new tetrahedra created\&.
+.RE
+.PP
+\fBAttention\fP
+.RS 4
+method requires an intact neighbor connectivity\&. Run EstablishElementConnectivity3D before\&. 
+.RE
+.PP
+
+.SS "void csmp::VData::RemoveBflags ()"
+
+.PP
+empties map which stores which nodes lie at boundary and what there \fBBOX_BOUNDARY\fP flag is Empties the map that contains the which nodes lie at the model boundary and the \fBBOX_BOUNDARY\fP flags that these nodes had\&. 
+.SS "size_t csmp::VData::RenumberElementsCounterClockwise2D ()"
+
+.PP
+flips clockwise-numbered elements, into counter-clockwise right-hand rule compliant orientation; lower dimensional elements are made consistent; returns how many were flipped Flips clockwise-numbered elements, into counter-clockwise right-hand rule compliant orientation; lower dimensional elements are made consistent; returns how many were flipped
+
+.PP
+\fBAttention\fP
+.RS 4
+method expects elements to be of \fBCSMP_FEM_TYPE\fP
+
+.PP
+works only for linear and quadratic elements
+
+.PP
+method does not touch the line elements 
+.RE
+.PP
+
+.SS "void csmp::VData::Resize (const std::deque< int8_t > & etypes, const std::deque< uint32_t > & npes, const std::deque< uint32_t > & epes, size_t nodes, size_t faces, size_t interfaces)"
+
+.PP
+\fBParameters\fP
+.RS 4
+\fInpes\fP sizes for resizing the member vectors 
+.RE
+.PP
+
+.SS "void csmp::VData::Resize (size_t nodes_per_element, size_t nbors_per_element, int8_t etype, size_t nodes, size_t elmts)"
+
+.PP
+resizes for a single-element type mesh \fBResize()\fP deletes all the contents of the curren \fBVData\fP and reinitializes the connectivity storage for the single element type specified as argument\&.
+.SH "Input Arguments"
+.PP
+A reference to the \fBFiniteElement\fP type for which connectivity storage shall be created and the quantities of nodes, constraint points, and elements in the mesh that shall be stored\&.
+.SH "Application Examples"
+.PP
+\fBResize()\fP allows a \fBVSet\fP to be re-used in a computation\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+method clears the \fBVSet\fP: any previously stored information is lost\&. 
+.RE
+.PP
+
+.SS "void csmp::VData::ResizeBFlags ()"
+Updates length of vector to that of the node vector, setting potential new flags to zero\&. preserving the original values if the size of the \fBVSet\fP increases\&. 
+.SS "void csmp::VData::ResizeBREP_Flags ()"
+If the record grows in size, the original values are preserved and the new ones are initialised to MESH_VERTEX\&. 
+.SS "void csmp::VData::ResizeElementNeighbors (size_t eid, uint32_t nperelmt)"
+change the size of the storage for the number of neighbors of target element 
+.SS "void csmp::VData::ResizeElementNodes (size_t eid, uint32_t nperelmt)"
+For mono element-type mesh change number of nodes per element\&. 
+.SS "void csmp::VData::ResizeElementTypes (size_t elements)"
+
+.PP
+for hybrid element meshes, increasing the storage for element types to the new size without invalidating existing types unless the storage is shrunk increasing the storage for element types to the new size without invalidating existing types unless the storage is shrunk 
+.SS "void csmp::VData::ResizeNodes (size_t nodes)"
+Changes the size of the storage arrays for the x,y and z coordinates of the nodes to the indicated size\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fInodes\fP The new number of node coordinates stored in the Vdata\&.
+.RE
+.PP
+.SH "Implementation"
+.PP
+Calls \fBResize()\fP on its container class\&. Thus, all previously stored coordinate numbers are lost\&.
+.SH "Application Examples"
+.PP
+To change the order of the elements in parent VSets\&. For instance, to turn a linear triangle mesh in a quadratic triangle mesh\&.
+.SH "Messages"
+.PP
+The method tests whether the new node numbers are compatible with the node indentification numbers in the 'plist' array\&. If not, a warning is issued\&. 
+.SS "void csmp::VData::ResizePfverts (size_t elements)"
+increases the length of the 'pfverts' record 
+.SS "void csmp::VData::ResizePfverts (size_t elements, uint32_t nperelmt)"
+increases the number of neighbor elements in a single element-type mesh 
+.PP
+.nf
+@attention this works only of the size of the pfverts record is increased
+
+.fi
+.PP
+ 
+.SS "void csmp::VData::ResizePlist (size_t elements)"
+Resizes 'plist' so that it can contain a different number of elements\&.
+
+.PP
+\fBNote\fP
+.RS 4
+assumes that the number of faces and interfaces is not affected by the change in the number of elements\&. 
+.RE
+.PP
+
+.SS "void csmp::VData::ResizePlist (size_t elements, uint32_t nperelmt)"
+Resizes 'plist' so that it can contain a different number of elements and neighbors per element\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+use only for meshes with a single element type\&.
+.RE
+.PP
+\fBNote\fP
+.RS 4
+assumes that the number of faces and interfaces is not affected by the change in the number of elements\&. 
+.RE
+.PP
+
+.SS "void csmp::VData::ScaleCoordinateToRange (char coordinate_axis, double cmin, double cmax)"
+
+.PP
+rescales vertex coordinate values in given spatial direction Scales the chosen coordinate range to the supplied minimum - maximum range\&. 
+.SS "void csmp::VData::SingleElementType (int8_t etype)"
+
+.PP
+if the mesh contains only a single element type it can be set with this method Sets the element type of a mono-type element mesh 
+.SS "size_t csmp::VData::SwitchCornerTriangles2D ()\fR [protected]\fP"
+
+.PP
+reconnects triangular elements with 3 nodes on the model boundary by switching nodes with their only neighbor; 
+.PP
+\fBNote\fP
+.RS 4
+needs valid 'pfverts'
+.RE
+.PP
+Reconnects triangular elements with 3 nodes on the model boundary by switching nodes with their only neighbor; 
+.PP
+\fBNote\fP
+.RS 4
+needs valid 'pfverts\&.'
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+the number of replaced triangles; 
+.RE
+.PP
+
+.SS "bool csmp::VData::WithNeighbourConnectivity () const"
+
+.PP
+checks whether pfverts, has right size and contains plausible information (no guarantees!) Searches 'pfverts' for elements that have all their neighbors; returns false if not a single one can be found\&.
+
+.PP
+\fBNote\fP
+.RS 4
+a simple yet stricter check is not possible based on the neighbor connectivity because their may always be legitimate cells without any neighbors like standalone line or surface elements\&. 
+.RE
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

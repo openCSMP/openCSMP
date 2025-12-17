@@ -1,0 +1,320 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="_m_j_l___triangle3_d_8h" kind="file" language="C++">
+    <compoundname>MJL_Triangle3D.h</compoundname>
+    <includes refid="_m_j_l___point3_d_8h" local="yes">MJL_Point3D.h</includes>
+    <includes refid="_m_j_l___edge3_d_8h" local="yes">MJL_Edge3D.h</includes>
+    <includes local="no">vector</includes>
+    <includedby refid="_m_j_l__functions_8h" local="yes">source/includes/discretisation/MJL_functions.h</includedby>
+    <includedby refid="_rhino_surface_reader_8h" local="yes">source/includes/interfaces/Rhinoceros/RhinoSurfaceReader.h</includedby>
+    <includedby refid="_m_j_l___edge3_d_8cpp" local="yes">source/modules/discretisation/MJL_Edge3D.cpp</includedby>
+    <includedby refid="_m_j_l___triangle3_d_8cpp" local="yes">source/modules/discretisation/MJL_Triangle3D.cpp</includedby>
+    <includedby refid="_v_set_converter_8cpp" local="yes">source/modules/integration/finite_elements/VSetConverter.cpp</includedby>
+    <includedby refid="_go_cad_interface_8cpp" local="yes">source/modules/interfaces/gOcad_SKUA/GoCadInterface.cpp</includedby>
+    <incdepgraph>
+      <node id="9">
+        <label>MJL_Edge3D.h</label>
+        <link refid="_m_j_l___edge3_d_8h_source"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>MJL_Point3D.h</label>
+        <link refid="_m_j_l___point3_d_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>source/includes/discretisation/MJL_Triangle3D.h</label>
+        <link refid="_m_j_l___triangle3_d_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>MJL_geometry.h</label>
+        <link refid="_m_j_l__geometry_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>cmath</label>
+      </node>
+      <node id="4">
+        <label>iostream</label>
+      </node>
+      <node id="7">
+        <label>list</label>
+      </node>
+      <node id="6">
+        <label>map</label>
+      </node>
+      <node id="5">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="1">
+        <label>source/includes/discretisation/MJL_Triangle3D.h</label>
+        <link refid="_m_j_l___triangle3_d_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>source/includes/discretisation/MJL_functions.h</label>
+        <link refid="_m_j_l__functions_8h_source"/>
+      </node>
+      <node id="3">
+        <label>source/includes/interfaces/Rhinoceros/RhinoSurfaceReader.h</label>
+        <link refid="_rhino_surface_reader_8h_source"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="classmjl_1_1_triangle3_d" prot="public">mjl::Triangle3D</innerclass>
+    <innernamespace refid="namespacemjl">mjl</innernamespace>
+    <sectiondef kind="define">
+      <memberdef kind="define" id="_m_j_l___triangle3_d_8h_1a4a82b661e0d18db13d925f874a38bcc3" prot="public" static="no">
+        <name>min3</name>
+        <param><defname>A</defname></param>
+        <param><defname>B</defname></param>
+        <param><defname>C</defname></param>
+        <initializer>((A)&lt;(B) ? ((A)&lt;(C)?(A):(C)) : ((B)&lt;(C)?(B):(C)))</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Triangle3D.h" line="10" column="9" bodyfile="source/includes/discretisation/MJL_Triangle3D.h" bodystart="10" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="_m_j_l___triangle3_d_8h_1a4a21e7d55f3db3d474a9f58e27df3b91" prot="public" static="no">
+        <name>max3</name>
+        <param><defname>A</defname></param>
+        <param><defname>B</defname></param>
+        <param><defname>C</defname></param>
+        <initializer>((A)&gt;(B) ? ((A)&gt;(C)?(A):(C)) : ((B)&gt;(C)?(B):(C)))</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Triangle3D.h" line="12" column="9" bodyfile="source/includes/discretisation/MJL_Triangle3D.h" bodystart="12" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="_m_j_l___triangle3_d_8h_1a56e7d1a746f676477b44785792a23dc7" prot="public" static="no">
+        <name>MJL3D_BOTTOM</name>
+        <initializer>-4</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Triangle3D.h" line="14" column="9" bodyfile="source/includes/discretisation/MJL_Triangle3D.h" bodystart="14" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="_m_j_l___triangle3_d_8h_1a65813017707f274d5d86e2639202a3d9" prot="public" static="no">
+        <name>MJL3D_FRONT</name>
+        <initializer>-6</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Triangle3D.h" line="15" column="9" bodyfile="source/includes/discretisation/MJL_Triangle3D.h" bodystart="15" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="_m_j_l___triangle3_d_8h_1a8622147ce66b6c0cf373478a2db274f8" prot="public" static="no">
+        <name>MJL3D_RIGHT</name>
+        <initializer>-3</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Triangle3D.h" line="16" column="9" bodyfile="source/includes/discretisation/MJL_Triangle3D.h" bodystart="16" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="_m_j_l___triangle3_d_8h_1abc834ea9d229f2b70efc04cb5951ecf5" prot="public" static="no">
+        <name>MJL3D_BACK</name>
+        <initializer>-7</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Triangle3D.h" line="17" column="9" bodyfile="source/includes/discretisation/MJL_Triangle3D.h" bodystart="17" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="_m_j_l___triangle3_d_8h_1ad073cf38b7298a8edfb1bbbce2127662" prot="public" static="no">
+        <name>MJL3D_LEFT</name>
+        <initializer>-2</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Triangle3D.h" line="18" column="9" bodyfile="source/includes/discretisation/MJL_Triangle3D.h" bodystart="18" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="_m_j_l___triangle3_d_8h_1afa03606c6187972f1c5d376f73e2e20e" prot="public" static="no">
+        <name>MJL3D_TOP</name>
+        <initializer>-5</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Triangle3D.h" line="19" column="9" bodyfile="source/includes/discretisation/MJL_Triangle3D.h" bodystart="19" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="_m_j_l___triangle3_d_8h_1ab7bc6efcabc5331c8d6c757ada0c7327" prot="public" static="no">
+        <name>MJL3D_TILTED</name>
+        <initializer>-1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Triangle3D.h" line="20" column="9" bodyfile="source/includes/discretisation/MJL_Triangle3D.h" bodystart="20" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="_m_j_l___triangle3_d_8h_1ab8052b5eb2dc9aca33abd0ff01c4768f" prot="public" static="no">
+        <name>EPSILON1</name>
+        <initializer>1e-12</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Triangle3D.h" line="22" column="9" bodyfile="source/includes/discretisation/MJL_Triangle3D.h" bodystart="22" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#ifndef<sp/>MJL_TRIANGLE_3D_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>MJL_TRIANGLE_3D_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;MJL_Point3D.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;MJL_Edge3D.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;vector&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacemjl" kindref="compound">mjl</ref><sp/>{</highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>min3(A,B,C)<sp/>((A)&lt;(B)<sp/>?<sp/>((A)&lt;(C)?(A):(C))<sp/>:<sp/>((B)&lt;(C)?(B):(C)))</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>max3(A,B,C)<sp/>((A)&gt;(B)<sp/>?<sp/>((A)&gt;(C)?(A):(C))<sp/>:<sp/>((B)&gt;(C)?(B):(C)))</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>MJL3D_BOTTOM<sp/>-4</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>MJL3D_FRONT<sp/><sp/>-6</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>MJL3D_RIGHT<sp/><sp/>-3</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>MJL3D_BACK<sp/><sp/><sp/>-7</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>MJL3D_LEFT<sp/><sp/><sp/>-2</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>MJL3D_TOP<sp/><sp/><sp/><sp/>-5</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>MJL3D_TILTED<sp/>-1</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>EPSILON1<sp/>1e-12</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight><highlight class="keyword">enum</highlight><highlight class="normal"><sp/>{<sp/>POSITIVE,<sp/>NEGATIVE,<sp/>ON<sp/>};</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="27" refid="classmjl_1_1_triangle3_d" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal">Triangle3D<sp/>{</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal">:<sp/><sp/></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/>Triangle3D()<sp/><sp/>{};</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/>Triangle3D(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classmjl_1_1_point3_d" kindref="compound">Point3D</ref>&amp;<sp/>v0,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classmjl_1_1_point3_d" kindref="compound">Point3D</ref>&amp;<sp/>v1,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classmjl_1_1_point3_d" kindref="compound">Point3D</ref>&amp;<sp/>v2,<sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">id</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/>Triangle3D(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Triangle3D&amp;<sp/>t<sp/>)<sp/>{<sp/>*</highlight><highlight class="keyword">this</highlight><highlight class="normal"><sp/>=<sp/>t;<sp/>};</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/>~Triangle3D()<sp/>{};</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/>Triangle3D&amp;<sp/>operator=(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Triangle3D&amp;<sp/>t<sp/>);</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classmjl_1_1_point3_d" kindref="compound">Point3D</ref><sp/><sp/><sp/><sp/><sp/>operator[](<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classmjl_1_1_edge3_d" kindref="compound">Edge3D</ref><sp/><sp/><sp/><sp/><sp/><sp/>boundingBox()</highlight><highlight class="keyword"><sp/><sp/><sp/><sp/><sp/><sp/><sp/>const<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>boundingBox_;<sp/>};</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classmjl_1_1_point3_d" kindref="compound">Point3D</ref><sp/><sp/><sp/><sp/><sp/>n()</highlight><highlight class="keyword"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>const<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>n_;<sp/>};</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>UnitNormal(<sp/><ref refid="classmjl_1_1_edge3_d" kindref="compound">Edge3D</ref>&amp;<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;<sp/></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>UnitNormal(<sp/>std::vector&lt;double&gt;&amp;<sp/>vec<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Classify(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classmjl_1_1_point3_d" kindref="compound">Point3D</ref>&amp;<sp/>p<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classmjl_1_1_triangle3_d_1a53285d08f613763cf9c45dcab18bb12e" kindref="member">FacingDirection</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Set(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classmjl_1_1_point3_d" kindref="compound">Point3D</ref>&amp;<sp/>v0,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classmjl_1_1_point3_d" kindref="compound">Point3D</ref>&amp;<sp/>v1,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classmjl_1_1_point3_d" kindref="compound">Point3D</ref>&amp;<sp/>v2,<sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">id</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Out()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"></highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>id_;</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>mark_;</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"></highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classmjl_1_1_point3_d" kindref="compound">Point3D</ref><sp/><sp/>v0_,<sp/>v1_,<sp/>v2_,<sp/>n_;</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classmjl_1_1_edge3_d" kindref="compound">Edge3D</ref><sp/><sp/><sp/>boundingBox_;</highlight></codeline>
+<codeline lineno="50"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"></highlight></codeline>
+<codeline lineno="52"><highlight class="normal"></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"></highlight></codeline>
+<codeline lineno="54"><highlight class="normal"></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/><ref refid="classmjl_1_1_point3_d" kindref="compound">Point3D</ref><sp/><sp/>Triangle3D::operator[](<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i<sp/>)</highlight><highlight class="keyword"><sp/>const</highlight></codeline>
+<codeline lineno="55"><highlight class="keyword"><sp/></highlight><highlight class="normal">{<sp/></highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<sp/>i<sp/>==<sp/>0<sp/>)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>v0_;</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<sp/>i<sp/>==<sp/>1<sp/>)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>v1_;</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>v2_;</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/>}</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"></highlight></codeline>
+<codeline lineno="61"><highlight class="normal"></highlight></codeline>
+<codeline lineno="62"><highlight class="normal"></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><sp/>Triangle3D::Classify(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Point3D&amp;<sp/>p<sp/>)</highlight><highlight class="keyword"><sp/>const</highlight></codeline>
+<codeline lineno="63"><highlight class="keyword"><sp/><sp/><sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Point3D<sp/>v<sp/><sp/>=<sp/>p<sp/>-<sp/>v0_;</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>len<sp/>=<sp/>v.Length();</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<sp/>len<sp/>==<sp/>0.<sp/>)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>ON;</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>v<sp/>=<sp/>(1.<sp/>/<sp/>len)<sp/>*<sp/>v;</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>d<sp/>=<sp/>v.DotProduct(n_);</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<sp/>d<sp/>&gt;<sp/>EPSILON1)<sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>POSITIVE;</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<sp/>d<sp/>&lt;<sp/>-EPSILON1)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>NEGATIVE;</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>ON;</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="74"><highlight class="normal"></highlight></codeline>
+<codeline lineno="75"><highlight class="normal"></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><sp/>Triangle3D::UnitNormal(<sp/><ref refid="classmjl_1_1_edge3_d" kindref="compound">Edge3D</ref>&amp;<sp/>e<sp/>)</highlight><highlight class="keyword"><sp/>const</highlight></codeline>
+<codeline lineno="76"><highlight class="keyword"><sp/><sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>e.org_<sp/><sp/>=<sp/>Point3D(0.,0.,0.);</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>e.dest_<sp/>=<sp/>n_;</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"></highlight></codeline>
+<codeline lineno="81"><highlight class="normal"></highlight></codeline>
+<codeline lineno="82"><highlight class="normal"></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><sp/>Triangle3D::UnitNormal(<sp/>std::vector&lt;double&gt;&amp;<sp/>vec<sp/>)</highlight><highlight class="keyword"><sp/>const</highlight></codeline>
+<codeline lineno="83"><highlight class="keyword"><sp/><sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>vec.resize(3u);</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>vec[0]<sp/>=<sp/>n_.X();</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>vec[1]<sp/>=<sp/>n_.Y();</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>vec[2]<sp/>=<sp/>n_.Z();</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"></highlight></codeline>
+<codeline lineno="90"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="91"><highlight class="normal"></highlight></codeline>
+<codeline lineno="92"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="93"><highlight class="normal"></highlight></codeline>
+<codeline lineno="94"><highlight class="normal"></highlight></codeline>
+<codeline lineno="95"><highlight class="normal"></highlight></codeline>
+<codeline lineno="96"><highlight class="normal"></highlight></codeline>
+<codeline lineno="97"><highlight class="normal"></highlight></codeline>
+<codeline lineno="98"><highlight class="normal"></highlight></codeline>
+<codeline lineno="99"><highlight class="normal"></highlight></codeline>
+<codeline lineno="100"><highlight class="normal"></highlight></codeline>
+<codeline lineno="101"><highlight class="normal"></highlight></codeline>
+<codeline lineno="102"><highlight class="normal"></highlight></codeline>
+<codeline lineno="103"><highlight class="normal"></highlight></codeline>
+<codeline lineno="104"><highlight class="normal"></highlight></codeline>
+<codeline lineno="105"><highlight class="normal"></highlight></codeline>
+<codeline lineno="106"><highlight class="normal"></highlight></codeline>
+<codeline lineno="107"><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="source/includes/discretisation/MJL_Triangle3D.h"/>
+  </compounddef>
+</doxygen>

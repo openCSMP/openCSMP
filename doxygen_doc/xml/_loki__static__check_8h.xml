@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="_loki__static__check_8h" kind="file" language="C++">
+    <compoundname>Loki_static_check.h</compoundname>
+    <innerclass refid="struct_loki_1_1_compile_time_error_3_01true_01_4" prot="public">Loki::CompileTimeError&lt; true &gt;</innerclass>
+    <innernamespace refid="namespace_loki">Loki</innernamespace>
+    <sectiondef kind="define">
+      <memberdef kind="define" id="_loki__static__check_8h_1af0bf8b1b05071c4f755c600f9461b6c5" prot="public" static="no">
+        <name>STATIC_CHECK</name>
+        <param><defname>expr</defname></param>
+        <param><defname>msg</defname></param>
+        <initializer>    { <ref refid="struct_loki_1_1_compile_time_error" kindref="compound">Loki::CompileTimeError</ref>&lt;((expr) != 0)&gt; ERROR_##msg; (void)ERROR_##msg; }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/Loki_static_check.h" line="45" column="9" bodyfile="source/includes/utilities/Loki_static_check.h" bodystart="45" bodyend="46"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="2"><highlight class="comment"></highlight></codeline>
+<codeline lineno="3"><highlight class="comment">The<sp/>Loki<sp/>Library</highlight></codeline>
+<codeline lineno="4"><highlight class="comment">Copyright<sp/>(c)<sp/>2001<sp/>by<sp/>Andrei<sp/>Alexandrescu</highlight></codeline>
+<codeline lineno="5"><highlight class="comment">This<sp/>code<sp/>accompanies<sp/>the<sp/>book:</highlight></codeline>
+<codeline lineno="6"><highlight class="comment">Alexandrescu,<sp/>Andrei.<sp/>&quot;Modern<sp/>C++<sp/>Design:<sp/>Generic<sp/>Programming<sp/>and<sp/>Design</highlight></codeline>
+<codeline lineno="7"><highlight class="comment"><sp/><sp/><sp/><sp/>Patterns<sp/>Applied&quot;.<sp/>Copyright<sp/>(c)<sp/>2001.<sp/>Addison-Wesley.</highlight></codeline>
+<codeline lineno="8"><highlight class="comment">Permission<sp/>to<sp/>use,<sp/>copy,<sp/>modify,<sp/>distribute<sp/>and<sp/>sell<sp/>this<sp/>software<sp/>for<sp/>any</highlight></codeline>
+<codeline lineno="9"><highlight class="comment"><sp/><sp/><sp/><sp/>purpose<sp/>is<sp/>hereby<sp/>granted<sp/>without<sp/>fee,<sp/>provided<sp/>that<sp/>the<sp/>above<sp/>copyright</highlight></codeline>
+<codeline lineno="10"><highlight class="comment"><sp/><sp/><sp/><sp/>notice<sp/>appear<sp/>in<sp/>all<sp/>copies<sp/>and<sp/>that<sp/>both<sp/>that<sp/>copyright<sp/>notice<sp/>and<sp/>this</highlight></codeline>
+<codeline lineno="11"><highlight class="comment"><sp/><sp/><sp/><sp/>permission<sp/>notice<sp/>appear<sp/>in<sp/>supporting<sp/>documentation.</highlight></codeline>
+<codeline lineno="12"><highlight class="comment">The<sp/>author<sp/>or<sp/>Addison-Welsey<sp/>Longman<sp/>make<sp/>no<sp/>representations<sp/>about<sp/>the</highlight></codeline>
+<codeline lineno="13"><highlight class="comment"><sp/><sp/><sp/><sp/>suitability<sp/>of<sp/>this<sp/>software<sp/>for<sp/>any<sp/>purpose.<sp/>It<sp/>is<sp/>provided<sp/>&quot;as<sp/>is&quot;</highlight></codeline>
+<codeline lineno="14"><highlight class="comment"><sp/><sp/><sp/><sp/>without<sp/>express<sp/>or<sp/>implied<sp/>warranty.</highlight></codeline>
+<codeline lineno="15"><highlight class="comment">@date<sp/>2001<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>STATIC_CHECK_INC_</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>STATIC_CHECK_INC_</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight></codeline>
+<codeline lineno="20" refid="namespace_loki" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespace_loki" kindref="compound">Loki</ref></highlight></codeline>
+<codeline lineno="21"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Helper<sp/>structure<sp/>for<sp/>the<sp/>STATIC_CHECK<sp/>macro</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight></codeline>
+<codeline lineno="32" refid="struct_loki_1_1_compile_time_error" refkind="compound"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">&gt;<sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="struct_loki_1_1_compile_time_error" kindref="compound">CompileTimeError</ref>;</highlight></codeline>
+<codeline lineno="33" refid="struct_loki_1_1_compile_time_error_3_01true_01_4" refkind="compound"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;&gt;<sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="struct_loki_1_1_compile_time_error" kindref="compound">CompileTimeError</ref>&lt;true&gt;<sp/>{};</highlight></codeline>
+<codeline lineno="34"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight><highlight class="comment">//<sp/>macro<sp/>STATIC_CHECK</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Invocation:<sp/>STATIC_CHECK(expr,<sp/>id)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"></highlight><highlight class="comment">//<sp/>where:</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="40"><highlight class="normal"></highlight><highlight class="comment">//<sp/>expr<sp/>is<sp/>a<sp/>compile-time<sp/>integral<sp/>or<sp/>pointer<sp/>expression</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="41"><highlight class="normal"></highlight><highlight class="comment">//<sp/>id<sp/>is<sp/>a<sp/>C++<sp/>identifier<sp/>that<sp/>does<sp/>not<sp/>need<sp/>to<sp/>be<sp/>defined</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"></highlight><highlight class="comment">//<sp/>If<sp/>expr<sp/>is<sp/>zero,<sp/>id<sp/>will<sp/>appear<sp/>in<sp/>a<sp/>compile-time<sp/>error<sp/>message.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="44"><highlight class="normal"></highlight></codeline>
+<codeline lineno="45"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>STATIC_CHECK(expr,<sp/>msg)<sp/>\</highlight></codeline>
+<codeline lineno="46"><highlight class="preprocessor"><sp/><sp/><sp/><sp/>{<sp/>Loki::CompileTimeError&lt;((expr)<sp/>!=<sp/>0)&gt;<sp/>ERROR_##msg;<sp/>(void)ERROR_##msg;<sp/>}<sp/></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="47"><highlight class="normal"></highlight></codeline>
+<codeline lineno="48"><highlight class="normal"></highlight></codeline>
+<codeline lineno="50"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Change<sp/>log:</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="51"><highlight class="normal"></highlight><highlight class="comment">//<sp/>March<sp/>20,<sp/>2001:<sp/>add<sp/>extra<sp/>parens<sp/>to<sp/>STATIC_CHECK<sp/>-<sp/>it<sp/>looked<sp/>like<sp/>a<sp/>fun<sp/></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="52"><highlight class="normal"></highlight><highlight class="comment">//<sp/><sp/><sp/><sp/><sp/>definition</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"></highlight><highlight class="comment">//<sp/>June<sp/>20,<sp/>2001:<sp/>ported<sp/>by<sp/>Nick<sp/>Thurn<sp/>to<sp/>gcc<sp/>2.95.3.<sp/>Kudos,<sp/>Nick!!!</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="55"><highlight class="normal"></highlight></codeline>
+<codeline lineno="56"><highlight class="normal"></highlight><highlight class="preprocessor">#endif<sp/></highlight><highlight class="comment">//<sp/>STATIC_CHECK_INC_</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="source/includes/utilities/Loki_static_check.h"/>
+  </compounddef>
+</doxygen>

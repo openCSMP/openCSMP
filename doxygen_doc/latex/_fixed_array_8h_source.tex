@@ -1,0 +1,59 @@
+\doxysection{Fixed\+Array.\+h}
+\hypertarget{_fixed_array_8h_source}{}\label{_fixed_array_8h_source}\index{source/includes/math/FixedArray.h@{source/includes/math/FixedArray.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{FIXED\_ARRAY\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{FIXED\_ARRAY\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{iostream}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{vector}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{FIXED\_ARRAY\_debug}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{template}<\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ dim>}
+\DoxyCodeLine{00012\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_fixed_array}{FixedArray}}\ \{}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00014\ \ \ \ \ \ \ FixedArray()\ \{\}}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \string~FixedArray()\ \{\}}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ FixedArray(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ a\ )\ \{}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ i=0U;\ i<dim;\ i++\ )\ v\_[i]\ =\ a;}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ FixedArray(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_fixed_array}{FixedArray}}\&\ a\ )\ \{}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ i=0U;\ i<dim;\ i++\ )\ v\_[i]\ =\ a.v\_[i];}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_fixed_array}{FixedArray}}\&\ operator=(\ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ vec\ )\ \{}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \mbox{\hyperlink{_fixed_array_8h_a92809f18e131359f27517feaf94ef9bc}{FIXED\_ARRAY\_debug}}}
+\DoxyCodeLine{00024\ \textcolor{keywordflow}{if}\ (\ dim\ !=\ vec.size()\ )\ std::cout<<\textcolor{stringliteral}{"{}\(\backslash\)nFixedArray=vector:\ size\ mismatch."{}}<<\ std::endl;}
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ i=0U;\ i<dim;\ i++\ )\ v\_[i]=vec[i];}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_fixed_array}{FixedArray}}\&\ operator=(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ val\ )\ \{}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ i=0U;\ i<dim;\ i++\ )\ v\_[i]=val;}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ operator[](\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ i\ )\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ v\_[i];\ \}}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\&\ operator[](\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ i\ )\ \{\ \textcolor{keywordflow}{return}\ v\_[i];\ \}}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ size()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ dim;\ \}}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ Out(\ std::vector<\textcolor{keywordtype}{double}>\&\ vec\ )\ \textcolor{keyword}{const}\ \{}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ vec.resize(dim);\ \textcolor{keywordflow}{for}\ (\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ i=0U;\ i<dim;\ i++\ )\ vec[i]=v\_[i];}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ Out()\ \textcolor{keyword}{const}\ \{}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)ncsp::FixedArray<"{}}<<\ dim\ <<\textcolor{stringliteral}{"{}\ "{}};}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ i=0U;\ i<dim;\ i++\ )}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<v\_[i];\ std::cout\ <<\ std::endl;}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \textcolor{comment}{//\ substitute\ call\ "{}fT*\ ary"{}\ with\ \ \&ary[0]}}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ v\_[dim];}
+\DoxyCodeLine{00047\ \ \};}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \}\ \textcolor{comment}{//\ end\ namespace\ csmp}}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

@@ -1,0 +1,420 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classmjl_1_1_triangle3_d" kind="class" language="C++" prot="public">
+    <compoundname>mjl::Triangle3D</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="classmjl_1_1_triangle3_d_1a7c55c65f1404725d05947c6a232ea501" prot="public" static="no" mutable="no">
+        <type>long</type>
+        <definition>long mjl::Triangle3D::id_</definition>
+        <argsstring></argsstring>
+        <name>id_</name>
+        <qualifiedname>mjl::Triangle3D::id_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Triangle3D.h" line="44" column="14" bodyfile="source/includes/discretisation/MJL_Triangle3D.h" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classmjl_1_1_triangle3_d_1a561a00cb1b75665717d61e8a7176e524" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int mjl::Triangle3D::mark_</definition>
+        <argsstring></argsstring>
+        <name>mark_</name>
+        <qualifiedname>mjl::Triangle3D::mark_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Triangle3D.h" line="45" column="14" bodyfile="source/includes/discretisation/MJL_Triangle3D.h" bodystart="45" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classmjl_1_1_triangle3_d_1adcf75db65bfc8e96e999159e6f5d29bf" prot="private" static="no" mutable="no">
+        <type><ref refid="classmjl_1_1_point3_d" kindref="compound">Point3D</ref></type>
+        <definition>Point3D mjl::Triangle3D::v0_</definition>
+        <argsstring></argsstring>
+        <name>v0_</name>
+        <qualifiedname>mjl::Triangle3D::v0_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Triangle3D.h" line="48" column="14" bodyfile="source/includes/discretisation/MJL_Triangle3D.h" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classmjl_1_1_triangle3_d_1a02060e310c4e21017e558e05f317d8d0" prot="private" static="no" mutable="no">
+        <type><ref refid="classmjl_1_1_point3_d" kindref="compound">Point3D</ref></type>
+        <definition>Point3D mjl::Triangle3D::v1_</definition>
+        <argsstring></argsstring>
+        <name>v1_</name>
+        <qualifiedname>mjl::Triangle3D::v1_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Triangle3D.h" line="48" column="18" bodyfile="source/includes/discretisation/MJL_Triangle3D.h" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classmjl_1_1_triangle3_d_1a297acf75a58282289c0a9ab705d98226" prot="private" static="no" mutable="no">
+        <type><ref refid="classmjl_1_1_point3_d" kindref="compound">Point3D</ref></type>
+        <definition>Point3D mjl::Triangle3D::v2_</definition>
+        <argsstring></argsstring>
+        <name>v2_</name>
+        <qualifiedname>mjl::Triangle3D::v2_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Triangle3D.h" line="48" column="22" bodyfile="source/includes/discretisation/MJL_Triangle3D.h" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classmjl_1_1_triangle3_d_1a3a71db8d43632b72e350bb5e1f1cd374" prot="private" static="no" mutable="no">
+        <type><ref refid="classmjl_1_1_point3_d" kindref="compound">Point3D</ref></type>
+        <definition>Point3D mjl::Triangle3D::n_</definition>
+        <argsstring></argsstring>
+        <name>n_</name>
+        <qualifiedname>mjl::Triangle3D::n_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Triangle3D.h" line="48" column="26" bodyfile="source/includes/discretisation/MJL_Triangle3D.h" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classmjl_1_1_triangle3_d_1a735199149a636ea49c7a9a06f478ef61" prot="private" static="no" mutable="no">
+        <type><ref refid="classmjl_1_1_edge3_d" kindref="compound">Edge3D</ref></type>
+        <definition>Edge3D mjl::Triangle3D::boundingBox_</definition>
+        <argsstring></argsstring>
+        <name>boundingBox_</name>
+        <qualifiedname>mjl::Triangle3D::boundingBox_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Triangle3D.h" line="49" column="14" bodyfile="source/includes/discretisation/MJL_Triangle3D.h" bodystart="49" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classmjl_1_1_triangle3_d_1a43ccccdb193697467b24bcbe6680ccb4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>mjl::Triangle3D::Triangle3D</definition>
+        <argsstring>()</argsstring>
+        <name>Triangle3D</name>
+        <qualifiedname>mjl::Triangle3D::Triangle3D</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Triangle3D.h" line="29" column="5" bodyfile="source/includes/discretisation/MJL_Triangle3D.h" bodystart="29" bodyend="29"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_triangle3_d_1a62bfb7a4bc5bfabd5fc315d7678b2549" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>mjl::Triangle3D::Triangle3D</definition>
+        <argsstring>(const Point3D &amp;v0, const Point3D &amp;v1, const Point3D &amp;v2, long id)</argsstring>
+        <name>Triangle3D</name>
+        <qualifiedname>mjl::Triangle3D::Triangle3D</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point3_d" kindref="compound">Point3D</ref> &amp;</type>
+          <declname>v0</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point3_d" kindref="compound">Point3D</ref> &amp;</type>
+          <declname>v1</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point3_d" kindref="compound">Point3D</ref> &amp;</type>
+          <declname>v2</declname>
+        </param>
+        <param>
+          <type>long</type>
+          <declname>id</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Triangle3D.h" line="30" column="5" bodyfile="source/modules/discretisation/MJL_Triangle3D.cpp" bodystart="9" bodyend="24"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_triangle3_d_1ac318e96d3e96426de0f509458707e793" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>mjl::Triangle3D::Triangle3D</definition>
+        <argsstring>(const Triangle3D &amp;t)</argsstring>
+        <name>Triangle3D</name>
+        <qualifiedname>mjl::Triangle3D::Triangle3D</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_triangle3_d" kindref="compound">Triangle3D</ref> &amp;</type>
+          <declname>t</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Triangle3D.h" line="31" column="5" bodyfile="source/includes/discretisation/MJL_Triangle3D.h" bodystart="31" bodyend="31"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_triangle3_d_1a0cedfbc7dba58edeb393624feb4b29a9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>mjl::Triangle3D::~Triangle3D</definition>
+        <argsstring>()</argsstring>
+        <name>~Triangle3D</name>
+        <qualifiedname>mjl::Triangle3D::~Triangle3D</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Triangle3D.h" line="32" column="5" bodyfile="source/includes/discretisation/MJL_Triangle3D.h" bodystart="32" bodyend="32"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_triangle3_d_1a201cb83ac9f6a15d7c7521523cd13d56" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classmjl_1_1_triangle3_d" kindref="compound">Triangle3D</ref> &amp;</type>
+        <definition>Triangle3D &amp; mjl::Triangle3D::operator=</definition>
+        <argsstring>(const Triangle3D &amp;t)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>mjl::Triangle3D::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_triangle3_d" kindref="compound">Triangle3D</ref> &amp;</type>
+          <declname>t</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Triangle3D.h" line="33" column="16" bodyfile="source/modules/discretisation/MJL_Triangle3D.cpp" bodystart="28" bodyend="40"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_triangle3_d_1a640be89f5275aaaa75ef06f1df6956de" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classmjl_1_1_point3_d" kindref="compound">Point3D</ref></type>
+        <definition>Point3D mjl::Triangle3D::operator[]</definition>
+        <argsstring>(int i) const</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>mjl::Triangle3D::operator[]</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Triangle3D.h" line="34" column="17" bodyfile="source/includes/discretisation/MJL_Triangle3D.h" bodystart="54" bodyend="59"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_triangle3_d_1a2b73284728c2841a598b4ec092b3c145" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classmjl_1_1_edge3_d" kindref="compound">Edge3D</ref></type>
+        <definition>Edge3D mjl::Triangle3D::boundingBox</definition>
+        <argsstring>() const</argsstring>
+        <name>boundingBox</name>
+        <qualifiedname>mjl::Triangle3D::boundingBox</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Triangle3D.h" line="35" column="17" bodyfile="source/includes/discretisation/MJL_Triangle3D.h" bodystart="35" bodyend="35"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_triangle3_d_1a1401dfd4e2bae8c971818f8a44af1e7d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classmjl_1_1_point3_d" kindref="compound">Point3D</ref></type>
+        <definition>Point3D mjl::Triangle3D::n</definition>
+        <argsstring>() const</argsstring>
+        <name>n</name>
+        <qualifiedname>mjl::Triangle3D::n</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Triangle3D.h" line="36" column="17" bodyfile="source/includes/discretisation/MJL_Triangle3D.h" bodystart="36" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_triangle3_d_1a2df8611279d90c10fac6108e2b579490" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void mjl::Triangle3D::UnitNormal</definition>
+        <argsstring>(Edge3D &amp;) const</argsstring>
+        <name>UnitNormal</name>
+        <qualifiedname>mjl::Triangle3D::UnitNormal</qualifiedname>
+        <param>
+          <type><ref refid="classmjl_1_1_edge3_d" kindref="compound">Edge3D</ref> &amp;</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Triangle3D.h" line="37" column="17" bodyfile="source/includes/discretisation/MJL_Triangle3D.h" bodystart="75" bodyend="79"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_triangle3_d_1a192f049a0df98a0313c255d460d04a5e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void mjl::Triangle3D::UnitNormal</definition>
+        <argsstring>(std::vector&lt; double &gt; &amp;vec) const</argsstring>
+        <name>UnitNormal</name>
+        <qualifiedname>mjl::Triangle3D::UnitNormal</qualifiedname>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>vec</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Triangle3D.h" line="38" column="17" bodyfile="source/includes/discretisation/MJL_Triangle3D.h" bodystart="82" bodyend="88"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_triangle3_d_1a67bf84aaea76c4d5e0fcb239cbbe619a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>int</type>
+        <definition>int mjl::Triangle3D::Classify</definition>
+        <argsstring>(const Point3D &amp;p) const</argsstring>
+        <name>Classify</name>
+        <qualifiedname>mjl::Triangle3D::Classify</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point3_d" kindref="compound">Point3D</ref> &amp;</type>
+          <declname>p</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Triangle3D.h" line="39" column="17" bodyfile="source/includes/discretisation/MJL_Triangle3D.h" bodystart="62" bodyend="72"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_triangle3_d_1a53285d08f613763cf9c45dcab18bb12e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int mjl::Triangle3D::FacingDirection</definition>
+        <argsstring>() const</argsstring>
+        <name>FacingDirection</name>
+        <qualifiedname>mjl::Triangle3D::FacingDirection</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Identifies the facing direction of the father triangle, by comparing the orientation of its normal to the principle coordinate directions. In CSP, these directions are defined in a righthand coordinate system: <verbatim>     TOP
+
+    y |
+3D:   | 
+      |
+      o-------&gt; RIGHT
+     /       x
+ z  / 
+
+FRONT
+</verbatim></para>
+<para><simplesect kind="return"><para>the integer value definition from &apos;<ref refid="_m_j_l__geometry_8h_source" kindref="compound">MJL_Geometry.h</ref>&apos; for the result of the comparison. If none of the principal axes match, the method will return the value MJL3D_TILTED.</para>
+</simplesect>
+</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>The comparison will evaluate to one of the principal facing directions if the face normal is parallel to-, or inclined by less that 45o to the normal representing that direction.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Identify to which model boundary a face of a tetrahedron in an input mesh belongs. In CSP, for instance, this comparison will be carried out in MeshInterface::ReadTSolid().</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>If the determined facing direction does not match any of the principal axis, a message will report this. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Triangle3D.h" line="40" column="17" bodyfile="source/modules/discretisation/MJL_Triangle3D.cpp" bodystart="108" bodyend="132"/>
+        <references refid="classmjl_1_1_edge3_d_1a2ae63c7ba0b22ba2fb9fe49658fe1231" compoundref="_m_j_l___edge3_d_8cpp" startline="67" endline="91">mjl::Edge3D::AngleTo</references>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_triangle3_d_1a86e7384d132e46fa5222f8b1a0ac02fa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void mjl::Triangle3D::Set</definition>
+        <argsstring>(const Point3D &amp;v0, const Point3D &amp;v1, const Point3D &amp;v2, long id)</argsstring>
+        <name>Set</name>
+        <qualifiedname>mjl::Triangle3D::Set</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point3_d" kindref="compound">Point3D</ref> &amp;</type>
+          <declname>v0</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point3_d" kindref="compound">Point3D</ref> &amp;</type>
+          <declname>v1</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point3_d" kindref="compound">Point3D</ref> &amp;</type>
+          <declname>v2</declname>
+        </param>
+        <param>
+          <type>long</type>
+          <declname>id</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Triangle3D.h" line="41" column="17" bodyfile="source/modules/discretisation/MJL_Triangle3D.cpp" bodystart="44" bodyend="62"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_triangle3_d_1ad9d156190d3f132c3d23f864ebef7608" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void mjl::Triangle3D::Out</definition>
+        <argsstring>() const</argsstring>
+        <name>Out</name>
+        <qualifiedname>mjl::Triangle3D::Out</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Triangle3D.h" line="42" column="17" bodyfile="source/modules/discretisation/MJL_Triangle3D.cpp" bodystart="136" bodyend="148"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>mjl::Triangle3D</label>
+        <link refid="classmjl_1_1_triangle3_d"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/discretisation/MJL_Triangle3D.h" line="27" column="1" bodyfile="source/includes/discretisation/MJL_Triangle3D.h" bodystart="27" bodyend="50"/>
+    <listofallmembers>
+      <member refid="classmjl_1_1_triangle3_d_1a2b73284728c2841a598b4ec092b3c145" prot="public" virt="non-virtual"><scope>mjl::Triangle3D</scope><name>boundingBox</name></member>
+      <member refid="classmjl_1_1_triangle3_d_1a735199149a636ea49c7a9a06f478ef61" prot="private" virt="non-virtual"><scope>mjl::Triangle3D</scope><name>boundingBox_</name></member>
+      <member refid="classmjl_1_1_triangle3_d_1a67bf84aaea76c4d5e0fcb239cbbe619a" prot="public" virt="non-virtual"><scope>mjl::Triangle3D</scope><name>Classify</name></member>
+      <member refid="classmjl_1_1_triangle3_d_1a53285d08f613763cf9c45dcab18bb12e" prot="public" virt="non-virtual"><scope>mjl::Triangle3D</scope><name>FacingDirection</name></member>
+      <member refid="classmjl_1_1_triangle3_d_1a7c55c65f1404725d05947c6a232ea501" prot="public" virt="non-virtual"><scope>mjl::Triangle3D</scope><name>id_</name></member>
+      <member refid="classmjl_1_1_triangle3_d_1a561a00cb1b75665717d61e8a7176e524" prot="public" virt="non-virtual"><scope>mjl::Triangle3D</scope><name>mark_</name></member>
+      <member refid="classmjl_1_1_triangle3_d_1a1401dfd4e2bae8c971818f8a44af1e7d" prot="public" virt="non-virtual"><scope>mjl::Triangle3D</scope><name>n</name></member>
+      <member refid="classmjl_1_1_triangle3_d_1a3a71db8d43632b72e350bb5e1f1cd374" prot="private" virt="non-virtual"><scope>mjl::Triangle3D</scope><name>n_</name></member>
+      <member refid="classmjl_1_1_triangle3_d_1a201cb83ac9f6a15d7c7521523cd13d56" prot="public" virt="non-virtual"><scope>mjl::Triangle3D</scope><name>operator=</name></member>
+      <member refid="classmjl_1_1_triangle3_d_1a640be89f5275aaaa75ef06f1df6956de" prot="public" virt="non-virtual"><scope>mjl::Triangle3D</scope><name>operator[]</name></member>
+      <member refid="classmjl_1_1_triangle3_d_1ad9d156190d3f132c3d23f864ebef7608" prot="public" virt="non-virtual"><scope>mjl::Triangle3D</scope><name>Out</name></member>
+      <member refid="classmjl_1_1_triangle3_d_1a86e7384d132e46fa5222f8b1a0ac02fa" prot="public" virt="non-virtual"><scope>mjl::Triangle3D</scope><name>Set</name></member>
+      <member refid="classmjl_1_1_triangle3_d_1a43ccccdb193697467b24bcbe6680ccb4" prot="public" virt="non-virtual"><scope>mjl::Triangle3D</scope><name>Triangle3D</name></member>
+      <member refid="classmjl_1_1_triangle3_d_1a62bfb7a4bc5bfabd5fc315d7678b2549" prot="public" virt="non-virtual"><scope>mjl::Triangle3D</scope><name>Triangle3D</name></member>
+      <member refid="classmjl_1_1_triangle3_d_1ac318e96d3e96426de0f509458707e793" prot="public" virt="non-virtual"><scope>mjl::Triangle3D</scope><name>Triangle3D</name></member>
+      <member refid="classmjl_1_1_triangle3_d_1a2df8611279d90c10fac6108e2b579490" prot="public" virt="non-virtual"><scope>mjl::Triangle3D</scope><name>UnitNormal</name></member>
+      <member refid="classmjl_1_1_triangle3_d_1a192f049a0df98a0313c255d460d04a5e" prot="public" virt="non-virtual"><scope>mjl::Triangle3D</scope><name>UnitNormal</name></member>
+      <member refid="classmjl_1_1_triangle3_d_1adcf75db65bfc8e96e999159e6f5d29bf" prot="private" virt="non-virtual"><scope>mjl::Triangle3D</scope><name>v0_</name></member>
+      <member refid="classmjl_1_1_triangle3_d_1a02060e310c4e21017e558e05f317d8d0" prot="private" virt="non-virtual"><scope>mjl::Triangle3D</scope><name>v1_</name></member>
+      <member refid="classmjl_1_1_triangle3_d_1a297acf75a58282289c0a9ab705d98226" prot="private" virt="non-virtual"><scope>mjl::Triangle3D</scope><name>v2_</name></member>
+      <member refid="classmjl_1_1_triangle3_d_1a0cedfbc7dba58edeb393624feb4b29a9" prot="public" virt="non-virtual"><scope>mjl::Triangle3D</scope><name>~Triangle3D</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

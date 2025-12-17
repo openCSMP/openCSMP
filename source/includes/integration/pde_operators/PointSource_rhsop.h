@@ -39,13 +39,13 @@ template<uint32_t dim, template<uint32_t> class CELL=Element>
 class PointSource_rhsop : public MathOperatorRHS<dim,CELL> {
   public:
     PointSource_rhsop( const PropertyDatabase<dim>&, const char* nodal_src, const char* test );
-    virtual ~PointSource_rhsop() {}
     
-    virtual void GetOperands( const CELL<dim>& );
-    virtual void ComputeContribution( const CELL<dim>& );
+    void GetOperands( const CELL<dim>& ) override final;
+    void ComputeContribution( const CELL<dim>& ) override final;
     
-    virtual PointSource_rhsop<dim,CELL>* clone() const { return new PointSource_rhsop<dim,CELL> (*this); }
-  private:
+    PointSource_rhsop<dim,CELL>* clone() const override { return new PointSource_rhsop<dim,CELL> (*this); }
+
+private:
     std::vector<ScalarVariable>  SRC_;
 };
 

@@ -1,0 +1,150 @@
+.TH "csmp::Box_Test" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::Box_Test
+.SH SYNOPSIS
+.br
+.PP
+.PP
+Inherits \fBcsmp::Test\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBBox_Test\fP (const char *name='cube_flag')"
+.br
+.ti -1c
+.RI "virtual void \fBrun\fP ()"
+.br
+.ti -1c
+.RI "bool \fBTestBoundaryFlagAssigment2D\fP ()"
+.br
+.ti -1c
+.RI "bool \fBTestWhetherSideBoundaryFlagsArePresent\fP ()"
+.br
+.ti -1c
+.RI "bool \fBTestWhetherAllBoxFlagsArePresent\fP ()"
+.br
+.ti -1c
+.RI "bool \fBTestBoundaryFlagging\fP ()"
+.br
+.ti -1c
+.RI "bool \fBTestBoundaryVersusBOX_BOUNDARY_Flagging\fP ()"
+.br
+.ti -1c
+.RI "bool \fBTestBoundaryFlagRecreation\fP ()"
+.br
+.ti -1c
+.RI "bool \fBTestWhetherBoundaryFlagsArePreservedInBinaryFile\fP ()"
+.br
+.ti -1c
+.RI "bool \fBTestWhetherBoundaryFlagsArePreservedInBinaryFile1\fP ()"
+.br
+.ti -1c
+.RI "bool \fBTestConsistencyOfBoxFlaggingWithBoundaryIdentification\fP ()"
+.br
+.ti -1c
+.RI "void \fBTestWhetherElementNormalsAreOutwardPointing\fP ()"
+.br
+.RI "testing the normals of the volumetric elements and the boundary faces "
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::Test\fP
+.in +1c
+.ti -1c
+.RI "\fBTest\fP (std::ostream *osptr=0)"
+.br
+.ti -1c
+.RI "long \fBgetNumPassed\fP () const"
+.br
+.ti -1c
+.RI "long \fBgetNumFailed\fP () const"
+.br
+.ti -1c
+.RI "const std::ostream * \fBgetStream\fP () const"
+.br
+.ti -1c
+.RI "void \fBsetStream\fP (std::ostream *osptr)"
+.br
+.ti -1c
+.RI "void \fBsetName\fP (std::string testName)"
+.br
+.ti -1c
+.RI "std::string \fBgetName\fP () const"
+.br
+.ti -1c
+.RI "bool \fBhasName\fP () const"
+.br
+.ti -1c
+.RI "void \fBdo_succeed\fP ()"
+.br
+.ti -1c
+.RI "long \fBreport\fP () const"
+.br
+.ti -1c
+.RI "virtual void \fBreset\fP ()"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Member Functions inherited from \fBcsmp::Test\fP
+.in +1c
+.ti -1c
+.RI "void \fBdo_equal\fP (double expr, double value, double tol, const std::string &lbl, const char *fname, long lineno)"
+.br
+.ti -1c
+.RI "void \fBdo_test\fP (bool cond, const std::string &lbl, const char *fname, long lineno)"
+.br
+.ti -1c
+.RI "void \fBdo_fail\fP (const std::string &lbl, const char *fname, long lineno)"
+.br
+.in -1c
+
+Protected Attributes inherited from \fBcsmp::Test\fP
+.in +1c
+.ti -1c
+.RI "const char * \fBprefix_\fP"
+.br
+.in -1c
+.SH "Member Function Documentation"
+.PP 
+.SS "void csmp::Box_Test::run ()\fR [virtual]\fP"
+Tests the functionality of \fBBox\fP class and the flagging of related box-shaped models
+
+.PP
+\fBTodo\fP
+.RS 4
+SKM add testing in 2D 
+.RE
+.PP
+
+.PP
+Implements \fBcsmp::Test\fP\&.
+.SS "bool csmp::Box_Test::TestBoundaryFlagging ()"
+converts flags to scalar variables that are subsequently tested using node numbers\&. 
+.SS "bool csmp::Box_Test::TestBoundaryFlagRecreation ()"
+tests whether method \fBrecreateBoxBoundaryFlags()\fP which allows to recreate boundary flags works correctly
+
+.PP
+\fBNote\fP
+.RS 4
+also tests EstablishBoxBoundariesFromNodeFlags() 
+.RE
+.PP
+
+.SS "bool csmp::Box_Test::TestWhetherAllBoxFlagsArePresent ()"
+All flags for 3D model including edges and corners 
+.SS "bool csmp::Box_Test::TestWhetherBoundaryFlagsArePreservedInBinaryFile ()"
+writes model to CSMP binary and then re-reads it to see whether the box flags survive 
+.SS "bool csmp::Box_Test::TestWhetherBoundaryFlagsArePreservedInBinaryFile1 ()"
+Tests new output functionality\&. 
+.SS "void csmp::Box_Test::TestWhetherElementNormalsAreOutwardPointing ()"
+
+.PP
+testing the normals of the volumetric elements and the boundary faces Comparing the unit normals with the those of the sides of the box-shaped model\&. The expectation is that are are pointing in the direction as the normals of the elements or faces on the outside boundary of the model\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

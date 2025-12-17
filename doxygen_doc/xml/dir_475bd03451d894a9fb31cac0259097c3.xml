@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_475bd03451d894a9fb31cac0259097c3" kind="dir">
+    <compoundname>source/includes/interfaces/Tecplot</compoundname>
+    <innerfile refid="_tecplot___interface_8h">Tecplot_Interface.h</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="source/includes/interfaces/Tecplot/"/>
+  </compounddef>
+</doxygen>

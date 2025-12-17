@@ -1,0 +1,1439 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="group___c_s_m_pglobal_enums" kind="group">
+    <compoundname>CSMPglobalEnums</compoundname>
+    <title>CSMPglobalEnums</title>
+    <sectiondef kind="enum">
+      <memberdef kind="enum" id="group___c_s_m_pglobal_enums_1gaf487cd149273f4c0bdbd1e1027158b86" prot="public" static="no" strong="no">
+        <type></type>
+        <name>CSMP_DMAT_SIZE</name>
+        <qualifiedname>csmp::CSMP_DMAT_SIZE</qualifiedname>
+        <enumvalue id="group___c_s_m_pglobal_enums_1ggaf487cd149273f4c0bdbd1e1027158b86ae5fdd8977d091ee8d98d4b7e4c5cfe05" prot="public">
+          <name>DM3</name>
+          <initializer>=3U</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1ggaf487cd149273f4c0bdbd1e1027158b86a0553033d430b92a59249cb97d1da3428" prot="public">
+          <name>DM4</name>
+          <initializer>=4U</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1ggaf487cd149273f4c0bdbd1e1027158b86aeeda19e63565dbd260693bbe705f33c7" prot="public">
+          <name>DM6</name>
+          <initializer>=6U</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1ggaf487cd149273f4c0bdbd1e1027158b86a0e23e15e6f7b457f68cb83dfd252d175" prot="public">
+          <name>DM12</name>
+          <initializer>=12U</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1ggaf487cd149273f4c0bdbd1e1027158b86ae130cc465bd9e4472c544d0d72bf39e3" prot="public">
+          <name>DM_MIN</name>
+          <initializer>=36U</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1ggaf487cd149273f4c0bdbd1e1027158b86a86877da0a8f0eb3c378b3dfc822db653" prot="public">
+          <name>DM_MAX</name>
+          <initializer>=81U</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+<para>choice of fixed sizes &apos;mn_max&apos; </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/DenseMatrix.h" line="25" column="1" bodyfile="source/includes/math/DenseMatrix.h" bodystart="25" bodyend="25"/>
+      </memberdef>
+      <memberdef kind="enum" id="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" prot="public" static="no" strong="no">
+        <type>std::int8_t</type>
+        <name>BOX_BOUNDARY</name>
+        <qualifiedname>csmp::BOX_BOUNDARY</qualifiedname>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga8e4421c3cd02f67e535bceb2dc74bfb6aa75032f56e77653ffaa7e2eb85566858" prot="public">
+          <name>NOT</name>
+          <initializer>= 0</initializer>
+          <briefdescription>
+<para>not located on a model boundary </para>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga8e4421c3cd02f67e535bceb2dc74bfb6a06df978a517113d47cf3375e7d0a978a" prot="public">
+          <name>IRREGULAR</name>
+          <initializer>= IRREGULAR_OUTSIDE</initializer>
+          <briefdescription>
+<para>located on a not-specified outside boundary of model (usually in the bounding box) </para>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga8e4421c3cd02f67e535bceb2dc74bfb6a2417250e6313bd5a207f44d70a0230b9" prot="public">
+          <name>TOP</name>
+          <initializer>= TOP_OUTSIDE</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga8e4421c3cd02f67e535bceb2dc74bfb6acdc5cafb97c71fd06876ca574058051c" prot="public">
+          <name>BOTTOM</name>
+          <initializer>= BOTTOM_OUTSIDE</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga8e4421c3cd02f67e535bceb2dc74bfb6aec59bd15ffc6bffc803c17aa3c78dd73" prot="public">
+          <name>LEFT</name>
+          <initializer>= LEFT_OUTSIDE</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga8e4421c3cd02f67e535bceb2dc74bfb6a6951002e6a6f2f00730403e6867d7c34" prot="public">
+          <name>RIGHT</name>
+          <initializer>= RIGHT_OUTSIDE</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga8e4421c3cd02f67e535bceb2dc74bfb6ac88adb0b07e71447149ff7c2f61c7d02" prot="public">
+          <name>FRONT</name>
+          <initializer>= FRONT_OUTSIDE</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga8e4421c3cd02f67e535bceb2dc74bfb6a2ad5231b9175c8c0faf517751eb2df0e" prot="public">
+          <name>BACK</name>
+          <initializer>= BACK_OUTSIDE</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga8e4421c3cd02f67e535bceb2dc74bfb6a2c2ca6177a2e4c0af9e6d118f7063d16" prot="public">
+          <name>CNR1</name>
+          <initializer>= CNR_MIN</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga8e4421c3cd02f67e535bceb2dc74bfb6a3d958f54b9f602189ec1c19c29d7f741" prot="public">
+          <name>CNR2</name>
+          <initializer>= CNR_MIN_MAXX</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga8e4421c3cd02f67e535bceb2dc74bfb6a5ae21cbc58c1359489b386291214a83a" prot="public">
+          <name>CNR3</name>
+          <initializer>= CNR_MAX_MAXX</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga8e4421c3cd02f67e535bceb2dc74bfb6a797b5f1a8edf22b336797a466091309d" prot="public">
+          <name>CNR4</name>
+          <initializer>= CNR_MAX_MINXZ</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga8e4421c3cd02f67e535bceb2dc74bfb6ad69196b949c12d509d808d818663cf17" prot="public">
+          <name>CNR5</name>
+          <initializer>= CNR_MIN_MAXZ</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga8e4421c3cd02f67e535bceb2dc74bfb6a59f5eecfd9fb531b3fae6821ddb61886" prot="public">
+          <name>CNR6</name>
+          <initializer>= CNR_MIN_MAXXZ</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga8e4421c3cd02f67e535bceb2dc74bfb6a3cc0e0549f2e15588db8098806fbad1a" prot="public">
+          <name>CNR7</name>
+          <initializer>= CNR_MAX</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga8e4421c3cd02f67e535bceb2dc74bfb6a84fcfbaf6c4367a632ddfface3e12c61" prot="public">
+          <name>CNR8</name>
+          <initializer>= CNR_MAX_MAXZ</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga8e4421c3cd02f67e535bceb2dc74bfb6a8b2cccd1443a9aeed7033e458042f59f" prot="public">
+          <name>EDGE1</name>
+          <initializer>= BACK_BOTTOM</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga8e4421c3cd02f67e535bceb2dc74bfb6ab50df78fe4a8a1d4aee2e8687a34102a" prot="public">
+          <name>EDGE2</name>
+          <initializer>= BACK_RIGHT</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga8e4421c3cd02f67e535bceb2dc74bfb6add8da596a592604fa1a240046c6c9b32" prot="public">
+          <name>EDGE3</name>
+          <initializer>= BACK_TOP</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga8e4421c3cd02f67e535bceb2dc74bfb6a7058511adcc4058538d0c11ce1159a0b" prot="public">
+          <name>EDGE4</name>
+          <initializer>= BACK_LEFT</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga8e4421c3cd02f67e535bceb2dc74bfb6a12af1a5fc2ea9d79cb0dbc13a152a5ec" prot="public">
+          <name>EDGE5</name>
+          <initializer>= BOTTOM_LEFT</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga8e4421c3cd02f67e535bceb2dc74bfb6a5747a63d0e026f2c92e5863d807e30b7" prot="public">
+          <name>EDGE6</name>
+          <initializer>= BOTTOM_RIGHT</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga8e4421c3cd02f67e535bceb2dc74bfb6afd14d9f54e2760f64606c1dc55d5a903" prot="public">
+          <name>EDGE7</name>
+          <initializer>= TOP_RIGHT</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga8e4421c3cd02f67e535bceb2dc74bfb6a17b634d41a5427b7a5aa76af7e7524c9" prot="public">
+          <name>EDGE8</name>
+          <initializer>= TOP_LEFT</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga8e4421c3cd02f67e535bceb2dc74bfb6a7a4fc8f14d458b0874caf683205d1071" prot="public">
+          <name>EDGE9</name>
+          <initializer>= FRONT_BOTTOM</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga8e4421c3cd02f67e535bceb2dc74bfb6a806932fb0c4f681c6bfabcca9e534002" prot="public">
+          <name>EDGE10</name>
+          <initializer>= FRONT_RIGHT</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga8e4421c3cd02f67e535bceb2dc74bfb6ab518587b665833e852e9371677092b79" prot="public">
+          <name>EDGE11</name>
+          <initializer>= FRONT_TOP</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga8e4421c3cd02f67e535bceb2dc74bfb6a36c234d652e4003833271e068e88eed2" prot="public">
+          <name>EDGE12</name>
+          <initializer>= FRONT_LEFT</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga8e4421c3cd02f67e535bceb2dc74bfb6a760090e41d76ddb523e132c0ed2a634b" prot="public">
+          <name>INTERNAL</name>
+          <initializer>= REGION_BOUNDARY</initializer>
+          <briefdescription>
+<para>internal model boundary (usually inside bounding box, with neighbors on either side) </para>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga8e4421c3cd02f67e535bceb2dc74bfb6a71dba2a91c54c4427623ab1b2aa5d473" prot="public">
+          <name>MULTIPLE</name>
+          <initializer>= MULTIPLE_BOUNDARIES</initializer>
+          <briefdescription>
+<para>can result when an element is at the front and back at the same time because model is only a single element thick or similar </para>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+<para>uniquely identifies placement of nodes on the boundary of a box-shaped model </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Box.h" line="62" column="1" bodyfile="source/includes/model/Box.h" bodystart="62" bodyend="93"/>
+      </memberdef>
+      <memberdef kind="enum" id="group___c_s_m_pglobal_enums_1ga182d1fe97a0151d464d8170c0fafa872" prot="public" static="no" strong="no">
+        <type>std::int8_t</type>
+        <name>CSMP_FEM_TYPE</name>
+        <qualifiedname>csmp::CSMP_FEM_TYPE</qualifiedname>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872a6a08c2ae413dc3b9f0ed37a7a6915836" prot="public">
+          <name>UNKNOWN</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872adabb65df6b1085fd837e97f304e15502" prot="public">
+          <name>LINEAR_BAR</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872a714d085f94d76b4d2d53df2c1d42db12" prot="public">
+          <name>QUADRATIC_BAR</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872a5a7118083b61aa5ca78fc95f142eeb93" prot="public">
+          <name>CUBIC_BAR</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872ab9f12ae3bf649e362889d3bc9b6b1a28" prot="public">
+          <name>LINEAR_TRIANGLE</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872ae01fc05c8ee83ba999c39e50469decae" prot="public">
+          <name>LINEAR_TRIANGLE3D</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872adea3c021c7e23a3be8af3614e601ef47" prot="public">
+          <name>LINEAR_QUADRILATERAL</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872a738ad0c3e4e5eb9e7b67eb218abcb5ac" prot="public">
+          <name>LINEAR_CUBOID</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872a4f3108de86f64c9cfa4b7bdac235f1a3" prot="public">
+          <name>LINEAR_RECTANGLE</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872a0a6ac3aa308dc1dd526a43971a27e025" prot="public">
+          <name>BARYCENTRIC_LINEAR_TRIANGLE</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872a92336add17ba4a34e211e3184b57e6d5" prot="public">
+          <name>QUADRATIC_TRIANGLE</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872a1c1a6fbfb222fd80b41f09bc78038432" prot="public">
+          <name>BARYCENTRIC_QUADRATIC_TRIANGLE</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872a9e85ffbf8e9c16710b8ea6ede66550c4" prot="public">
+          <name>CUBIC_TRIANGLE</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872a206e8388e61d9398c2be8875e9767562" prot="public">
+          <name>LINEAR_TETRAHEDRON</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872ac06bee09ce50ffdef386ee8bec757fe7" prot="public">
+          <name>QUADRATIC_TETRAHEDRON</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872a9896049ef13cacfb90f7037c800c4ecd" prot="public">
+          <name>BARYCENTRIC_QUADRATIC_TETRAHEDRON</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872a8be0e1f9382af0aaffa0699a36491fb4" prot="public">
+          <name>CUBIC_TETRAHEDRON</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872a9b49c6660ba738e3904a77f2fb955286" prot="public">
+          <name>ISOPARAMETRIC_LINEAR_BAR</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872a31761b7cbe1b8e1df7180f65b7c539ca" prot="public">
+          <name>ISOPARAMETRIC_QUADRATIC_BAR</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872af3dfe1f734e959d679115f47df00824b" prot="public">
+          <name>ISOPARAMETRIC_CUBIC_BAR</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872a47765f469504b6b8f6422b0376c1a5c9" prot="public">
+          <name>ISOPARAMETRIC_LINEAR_TRIANGLE</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872a13bccebe81d1aa41359e98492c751b44" prot="public">
+          <name>ISOPARAMETRIC_BARYCENTRIC_LINEAR_TRIANGLE</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872ae9937d1fc3e592a685e0b0139bff3203" prot="public">
+          <name>ISOPARAMETRIC_QUADRATIC_TRIANGLE</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872a8b1316f0804d24b8e62ddcead566ea2a" prot="public">
+          <name>ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TRIANGLE</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872a35e43955f190244f9a1b4cb9bbb8cfe2" prot="public">
+          <name>ISOPARAMETRIC_CUBIC_TRIANGLE</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872a4df86fa98c09cdaa98d1f2e5c9ecdfb9" prot="public">
+          <name>ISOPARAMETRIC_LINEAR_TETRAHEDRON</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872afbf3a77c31d7dcbe1c4ad9ef5fb8d6f8" prot="public">
+          <name>ISOPARAMETRIC_QUADRATIC_TETRAHEDRON</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872a657c6e9bc2132bc23b6b4b84a1d7170c" prot="public">
+          <name>ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TETRAHEDRON</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872af04a6421b5c10d270f7be7e9018168ec" prot="public">
+          <name>ISOPARAMETRIC_CUBIC_TETRAHEDRON</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872a513f4a98789b82d32e38bd52f9149e4b" prot="public">
+          <name>ISOPARAMETRIC_LINEAR_PYRAMID</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872a34aeab8e33d9356fb79b1c6843b09f6e" prot="public">
+          <name>ISOPARAMETRIC_QUADRATIC_PYRAMID13</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872ad92699b0d3488d9f5c453d0be1cfa726" prot="public">
+          <name>ISOPARAMETRIC_QUADRATIC_PYRAMID14</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872a90db6e06d188cec9ae620a47c3fb6333" prot="public">
+          <name>ISOPARAMETRIC_CUBIC_PYRAMID</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872ac89b19eba2c4d2ba57fbf13d8a689005" prot="public">
+          <name>ISOPARAMETRIC_LINEAR_PRISM</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872adf848760e0266bbba3c6ff997b1b0a60" prot="public">
+          <name>ISOPARAMETRIC_QUADRATIC_PRISM15</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872a628c5999139c2aa97c8de3765454c769" prot="public">
+          <name>ISOPARAMETRIC_QUADRATIC_PRISM18</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872a1d0848ca4d5f87f043753386955e2b3e" prot="public">
+          <name>ISOPARAMETRIC_CUBIC_PRISM</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872a488e7cc8aafd0ec2deb4b6d6a32da423" prot="public">
+          <name>ISOPARAMETRIC_LINEAR_QUADRILATERAL</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872ab89433f9b9069b3f3b4f983558b4952c" prot="public">
+          <name>ISOPARAMETRIC_BARYCENTRIC_LINEAR_QUADRILATERAL</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872aea88d252d64cf7d65b6cbde029374b45" prot="public">
+          <name>ISOPARAMETRIC_QUADRATIC_QUADRILATERAL</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872a34de2245a65a76cbd239a18a0003d241" prot="public">
+          <name>ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_QUADRILATERAL</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872aab00bf49e73b766e52cb13b7a1ff6a6d" prot="public">
+          <name>ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872ae3dcaae770af3dae05568bff78869427" prot="public">
+          <name>ISOPARAMETRIC_CUBIC_QUADRILATERAL</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872add44807b25e21b097d83020066f120b3" prot="public">
+          <name>ISOPARAMETRIC_LINEAR_HEXAHEDRON</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872a6e95f192ad361f54a8c312a04efcb06f" prot="public">
+          <name>ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872a2ef5d55ea2f8680479df827ed026c05e" prot="public">
+          <name>ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872a88c80bafa44385f6d892056130daa0fc" prot="public">
+          <name>ISOPARAMETRIC_CUBIC_HEXAHEDRON</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872a27f0f6f408f73932c4cce0a10567e824" prot="public">
+          <name>ZERO_DIMENSIONAL_FACE</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872ab67109a1bef9064b88f75aa3aa6a185c" prot="public">
+          <name>POINT_ELEMENT</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872a208c066861fc1448fa15b3e96ff4be98" prot="public">
+          <name>POLYGONAL_ELEMENT</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872aa27a77b1aee911190626ba299a890ca5" prot="public">
+          <name>POLYHEDRAL_ELEMENT</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga182d1fe97a0151d464d8170c0fafa872a7527d6cb48b47f5c36bfcebe5ab8342b" prot="public">
+          <name>EXPERIMENTAL_ELEMENT</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+<para>Data class to deduce properties of the CSMP finite-element types prior to the establishment of a <ref refid="classcsmp_1_1_model" kindref="compound">csmp::Model</ref> from the type information that is provided by declared in file &quot;FiniteElment.h&quot;. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="author"><para>S.K. Matthai </para>
+</simplesect>
+<simplesect kind="author"><para>R. Mansipov </para>
+</simplesect>
+<simplesect kind="date"><para>2003,2015 </para>
+</simplesect>
+<simplesect kind="note"><para>SKM 9/2/17 made static singleton class </para>
+</simplesect>
+<simplesect kind="note"><para>SKM 9/12/21 extras for more independent <ref refid="classcsmp_1_1_v_data" kindref="compound">VData</ref> construction</para>
+</simplesect>
+Used to deduce element characteristics prior to the construction of CSMP <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> classes.</para>
+<para>Parametrised constructor for the <ref refid="classcsmp_1_1_finite_volume_stencil" kindref="compound">FiniteVolumeStencil</ref> class, setting up stencil for given CSMP type of the FE.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>csp_finite_element_type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>is the</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+const char* csp_finite_element_type - pointer to the character array of the FE type. <linebreak/>
+</para>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Standard as for any parametrised constructor. Method parameter should be CSP FE type. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/FiniteElement.h" line="26" column="1" bodyfile="source/includes/integration/finite_elements/FiniteElement.h" bodystart="26" bodyend="78"/>
+      </memberdef>
+      <memberdef kind="enum" id="group___c_s_m_pglobal_enums_1ga6fd0638d9b7163f7f0c2362f44394e10" prot="public" static="no" strong="no">
+        <type>std::int8_t</type>
+        <name>FV_FACET_TYPE</name>
+        <qualifiedname>csmp::FV_FACET_TYPE</qualifiedname>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga6fd0638d9b7163f7f0c2362f44394e10ad035c264e42fa135e5c5e8951c3dcb8e" prot="public">
+          <name>POINT_FACET</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga6fd0638d9b7163f7f0c2362f44394e10a8ecc32dea2f6c0408e11ec6a28ce7155" prot="public">
+          <name>UNIT_LINEAR_FACET</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga6fd0638d9b7163f7f0c2362f44394e10a9ec5db386501007cec43690a72896383" prot="public">
+          <name>TRIANGULAR_FACET</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1gga6fd0638d9b7163f7f0c2362f44394e10a9a087256807a41bee135c5bc75b8ae48" prot="public">
+          <name>QUADRILATERAL_FACET</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/FiniteElement.h" line="80" column="1" bodyfile="source/includes/integration/finite_elements/FiniteElement.h" bodystart="80" bodyend="85"/>
+      </memberdef>
+      <memberdef kind="enum" id="group___c_s_m_pglobal_enums_1gab8e4d76cab7155b1fb3861b500982a07" prot="public" static="no" strong="no">
+        <type></type>
+        <name>LOCATION</name>
+        <qualifiedname>mjl::LOCATION</qualifiedname>
+        <enumvalue id="group___c_s_m_pglobal_enums_1ggab8e4d76cab7155b1fb3861b500982a07a3447f8b384674ec9967dbdc49dabb5fd" prot="public">
+          <name>LEFT</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1ggab8e4d76cab7155b1fb3861b500982a07ad54ca3dbb13d5352128f7ccee55368aa" prot="public">
+          <name>RIGHT</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1ggab8e4d76cab7155b1fb3861b500982a07af94abf8fa6910193724d2bb1f79f3166" prot="public">
+          <name>BEYOND</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1ggab8e4d76cab7155b1fb3861b500982a07a5a1561e06923bce3895dcfcf0fe5fba8" prot="public">
+          <name>BEHIND</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1ggab8e4d76cab7155b1fb3861b500982a07ae8710151b08d3e243b0eb2c7e8553853" prot="public">
+          <name>BETWEEN</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1ggab8e4d76cab7155b1fb3861b500982a07a0a5dffa108f70f0557f032aea9206064" prot="public">
+          <name>ORIGIN</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1ggab8e4d76cab7155b1fb3861b500982a07afc7685c325288b1ff2e2b4bbd8a6c733" prot="public">
+          <name>DESTINATION</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_geometry.h" line="23" column="1" bodyfile="source/includes/discretisation/MJL_geometry.h" bodystart="23" bodyend="23"/>
+      </memberdef>
+      <memberdef kind="enum" id="group___c_s_m_pglobal_enums_1gac8265877c1006595e75c1820e2fac316" prot="public" static="no" strong="no">
+        <type></type>
+        <name>INTERSECTION</name>
+        <qualifiedname>mjl::INTERSECTION</qualifiedname>
+        <enumvalue id="group___c_s_m_pglobal_enums_1ggac8265877c1006595e75c1820e2fac316a54e4fd5fb2c51a5d26b7ea90a42d8b67" prot="public">
+          <name>COLLINEAR</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1ggac8265877c1006595e75c1820e2fac316a04778640f78be3ce44ab42aaec08836e" prot="public">
+          <name>PARALLEL</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1ggac8265877c1006595e75c1820e2fac316ac1ba5d5ac9547e37b7d320d5c7f79d5b" prot="public">
+          <name>SKEW</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1ggac8265877c1006595e75c1820e2fac316aa23d3485c0ae3b2ce6273f4e3ae6c6f9" prot="public">
+          <name>SKEW_CROSS</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1ggac8265877c1006595e75c1820e2fac316a832589e8ff7cdb0faea6d1206ad24bf7" prot="public">
+          <name>SKEW_NO_CROSS</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_geometry.h" line="24" column="1" bodyfile="source/includes/discretisation/MJL_geometry.h" bodystart="24" bodyend="24"/>
+      </memberdef>
+      <memberdef kind="enum" id="group___c_s_m_pglobal_enums_1gaea5d35bacf652ad3d225763d01c90155" prot="public" static="no" strong="no">
+        <type></type>
+        <name>POINT_CLASSIFICATION</name>
+        <qualifiedname>mjl::POINT_CLASSIFICATION</qualifiedname>
+        <enumvalue id="group___c_s_m_pglobal_enums_1ggaea5d35bacf652ad3d225763d01c90155a96e3c99eca9a77dc1cdea00066655732" prot="public">
+          <name>OUTSIDE</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1ggaea5d35bacf652ad3d225763d01c90155aa9cf540a8990768927f7a916246ffd20" prot="public">
+          <name>INSIDE</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1ggaea5d35bacf652ad3d225763d01c90155a07529ecbf045b50a2cbcb23e5a88913e" prot="public">
+          <name>BOUNDARY</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_geometry.h" line="25" column="1" bodyfile="source/includes/discretisation/MJL_geometry.h" bodystart="25" bodyend="25"/>
+      </memberdef>
+      <memberdef kind="enum" id="group___c_s_m_pglobal_enums_1gae3f2bc8786a9fb6f325976a842e1d8dc" prot="public" static="no" strong="no">
+        <type></type>
+        <name>EDGE_CLASSIFICATION</name>
+        <qualifiedname>mjl::EDGE_CLASSIFICATION</qualifiedname>
+        <enumvalue id="group___c_s_m_pglobal_enums_1ggae3f2bc8786a9fb6f325976a842e1d8dca6e94c692ba91db64bf16829d02892769" prot="public">
+          <name>TOUCHING</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1ggae3f2bc8786a9fb6f325976a842e1d8dca158f61be723101f6c7b6f3c2dcf385db" prot="public">
+          <name>CROSSING</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1ggae3f2bc8786a9fb6f325976a842e1d8dca62be6d8009c7cafccd112e774b2b18a7" prot="public">
+          <name>INESSENTIAL</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_geometry.h" line="26" column="1" bodyfile="source/includes/discretisation/MJL_geometry.h" bodystart="26" bodyend="26"/>
+      </memberdef>
+      <memberdef kind="enum" id="group___c_s_m_pglobal_enums_1gaf5ed7c6fa578fb7b86b3042de149fc5e" prot="public" static="no" strong="no">
+        <type></type>
+        <name>POLYGON_CLASSIFICATION</name>
+        <qualifiedname>mjl::POLYGON_CLASSIFICATION</qualifiedname>
+        <enumvalue id="group___c_s_m_pglobal_enums_1ggaf5ed7c6fa578fb7b86b3042de149fc5eaaa9768bf734f2bc8b259b2541cda6390" prot="public">
+          <name>UNKNOWN</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1ggaf5ed7c6fa578fb7b86b3042de149fc5eaf59af4f3471193ccd2e008ddcb38bf93" prot="public">
+          <name>P_IS_INSIDE</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group___c_s_m_pglobal_enums_1ggaf5ed7c6fa578fb7b86b3042de149fc5eac037b4e880e46bdd7829a177e3326faf" prot="public">
+          <name>Q_IS_INSIDE</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_geometry.h" line="27" column="1" bodyfile="source/includes/discretisation/MJL_geometry.h" bodystart="27" bodyend="27"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="var">
+      <memberdef kind="variable" id="group___c_s_m_pglobal_enums_1gadafeabd1a4e77878f42b1eae8d49cbf5" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>std::int8_t</type>
+        <definition>std::int8_t csmp::IRREGULAR_OUTSIDE</definition>
+        <argsstring></argsstring>
+        <name>IRREGULAR_OUTSIDE</name>
+        <qualifiedname>csmp::IRREGULAR_OUTSIDE</qualifiedname>
+        <initializer>{-1}</initializer>
+        <briefdescription>
+<para>fixed boundary identifiers; </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="attention"><para>do not alter numbering or sequence because it is used in iterations </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Box.h" line="31" column="5" bodyfile="source/includes/model/Box.h" bodystart="31" bodyend="31"/>
+      </memberdef>
+      <memberdef kind="variable" id="group___c_s_m_pglobal_enums_1gaf6aebc9df2d683a087d365ca7fc5f983" prot="public" static="yes" mutable="no">
+        <type>std::int8_t</type>
+        <definition>std::int8_t csmp::LEFT_OUTSIDE</definition>
+        <argsstring></argsstring>
+        <name>LEFT_OUTSIDE</name>
+        <qualifiedname>csmp::LEFT_OUTSIDE</qualifiedname>
+        <initializer>{-2}</initializer>
+        <briefdescription>
+<para>model boundary flags </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Box.h" line="32" column="5" bodyfile="source/includes/model/Box.h" bodystart="32" bodyend="32"/>
+      </memberdef>
+      <memberdef kind="variable" id="group___c_s_m_pglobal_enums_1ga23424c74a190432ea0eae4b6f4d512ef" prot="public" static="yes" mutable="no">
+        <type>std::int8_t</type>
+        <definition>std::int8_t csmp::RIGHT_OUTSIDE</definition>
+        <argsstring></argsstring>
+        <name>RIGHT_OUTSIDE</name>
+        <qualifiedname>csmp::RIGHT_OUTSIDE</qualifiedname>
+        <initializer>{-3}</initializer>
+        <briefdescription>
+<para>... </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Box.h" line="33" column="5" bodyfile="source/includes/model/Box.h" bodystart="33" bodyend="33"/>
+      </memberdef>
+      <memberdef kind="variable" id="group___c_s_m_pglobal_enums_1ga7f3968838f4683bc81826f730538507e" prot="public" static="yes" mutable="no">
+        <type>std::int8_t</type>
+        <definition>std::int8_t csmp::BOTTOM_OUTSIDE</definition>
+        <argsstring></argsstring>
+        <name>BOTTOM_OUTSIDE</name>
+        <qualifiedname>csmp::BOTTOM_OUTSIDE</qualifiedname>
+        <initializer>{-4}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Box.h" line="34" column="5" bodyfile="source/includes/model/Box.h" bodystart="34" bodyend="34"/>
+      </memberdef>
+      <memberdef kind="variable" id="group___c_s_m_pglobal_enums_1ga12b06a8322df0944d6187a5dd2ae70ce" prot="public" static="yes" mutable="no">
+        <type>std::int8_t</type>
+        <definition>std::int8_t csmp::TOP_OUTSIDE</definition>
+        <argsstring></argsstring>
+        <name>TOP_OUTSIDE</name>
+        <qualifiedname>csmp::TOP_OUTSIDE</qualifiedname>
+        <initializer>{-5}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Box.h" line="35" column="5" bodyfile="source/includes/model/Box.h" bodystart="35" bodyend="35"/>
+      </memberdef>
+      <memberdef kind="variable" id="group___c_s_m_pglobal_enums_1gaea2e3342f03616e88311ee741d81232f" prot="public" static="yes" mutable="no">
+        <type>std::int8_t</type>
+        <definition>std::int8_t csmp::FRONT_OUTSIDE</definition>
+        <argsstring></argsstring>
+        <name>FRONT_OUTSIDE</name>
+        <qualifiedname>csmp::FRONT_OUTSIDE</qualifiedname>
+        <initializer>{-6}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Box.h" line="36" column="5" bodyfile="source/includes/model/Box.h" bodystart="36" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="variable" id="group___c_s_m_pglobal_enums_1gaacd1404946e8bdc0585de8d23bdc486a" prot="public" static="yes" mutable="no">
+        <type>std::int8_t</type>
+        <definition>std::int8_t csmp::BACK_OUTSIDE</definition>
+        <argsstring></argsstring>
+        <name>BACK_OUTSIDE</name>
+        <qualifiedname>csmp::BACK_OUTSIDE</qualifiedname>
+        <initializer>{-7}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Box.h" line="37" column="5" bodyfile="source/includes/model/Box.h" bodystart="37" bodyend="37"/>
+      </memberdef>
+      <memberdef kind="variable" id="group___c_s_m_pglobal_enums_1gadd4890c409825a73976381f70c93b439" prot="public" static="yes" mutable="no">
+        <type>std::int8_t</type>
+        <definition>std::int8_t csmp::CNR_MIN</definition>
+        <argsstring></argsstring>
+        <name>CNR_MIN</name>
+        <qualifiedname>csmp::CNR_MIN</qualifiedname>
+        <initializer>{-8}</initializer>
+        <briefdescription>
+<para>min-x, min-y, min-z </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Box.h" line="38" column="5" bodyfile="source/includes/model/Box.h" bodystart="38" bodyend="38"/>
+      </memberdef>
+      <memberdef kind="variable" id="group___c_s_m_pglobal_enums_1ga3b04de934ff04fe02d9a39cce946d2db" prot="public" static="yes" mutable="no">
+        <type>std::int8_t</type>
+        <definition>std::int8_t csmp::CNR_MAX</definition>
+        <argsstring></argsstring>
+        <name>CNR_MAX</name>
+        <qualifiedname>csmp::CNR_MAX</qualifiedname>
+        <initializer>{-9}</initializer>
+        <briefdescription>
+<para>max-x, max-y, max-z </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Box.h" line="39" column="5" bodyfile="source/includes/model/Box.h" bodystart="39" bodyend="39"/>
+      </memberdef>
+      <memberdef kind="variable" id="group___c_s_m_pglobal_enums_1ga62705274f0c725cb63b9598af7e5f5a4" prot="public" static="yes" mutable="no">
+        <type>std::int8_t</type>
+        <definition>std::int8_t csmp::CNR_MIN_MAXX</definition>
+        <argsstring></argsstring>
+        <name>CNR_MIN_MAXX</name>
+        <qualifiedname>csmp::CNR_MIN_MAXX</qualifiedname>
+        <initializer>{-10}</initializer>
+        <briefdescription>
+<para>see users guide </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Box.h" line="40" column="5" bodyfile="source/includes/model/Box.h" bodystart="40" bodyend="40"/>
+      </memberdef>
+      <memberdef kind="variable" id="group___c_s_m_pglobal_enums_1ga30bf6965897dcaf3add455463bc359d9" prot="public" static="yes" mutable="no">
+        <type>std::int8_t</type>
+        <definition>std::int8_t csmp::CNR_MIN_MAXXZ</definition>
+        <argsstring></argsstring>
+        <name>CNR_MIN_MAXXZ</name>
+        <qualifiedname>csmp::CNR_MIN_MAXXZ</qualifiedname>
+        <initializer>{-11}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Box.h" line="41" column="5" bodyfile="source/includes/model/Box.h" bodystart="41" bodyend="41"/>
+      </memberdef>
+      <memberdef kind="variable" id="group___c_s_m_pglobal_enums_1ga771014a5a4e826b455ba773cfd6b6fa4" prot="public" static="yes" mutable="no">
+        <type>std::int8_t</type>
+        <definition>std::int8_t csmp::CNR_MIN_MAXZ</definition>
+        <argsstring></argsstring>
+        <name>CNR_MIN_MAXZ</name>
+        <qualifiedname>csmp::CNR_MIN_MAXZ</qualifiedname>
+        <initializer>{-12}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Box.h" line="42" column="5" bodyfile="source/includes/model/Box.h" bodystart="42" bodyend="42"/>
+      </memberdef>
+      <memberdef kind="variable" id="group___c_s_m_pglobal_enums_1ga3e515245c3fe0e152ff0df73469d3178" prot="public" static="yes" mutable="no">
+        <type>std::int8_t</type>
+        <definition>std::int8_t csmp::CNR_MAX_MINXZ</definition>
+        <argsstring></argsstring>
+        <name>CNR_MAX_MINXZ</name>
+        <qualifiedname>csmp::CNR_MAX_MINXZ</qualifiedname>
+        <initializer>{-13}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Box.h" line="43" column="5" bodyfile="source/includes/model/Box.h" bodystart="43" bodyend="43"/>
+      </memberdef>
+      <memberdef kind="variable" id="group___c_s_m_pglobal_enums_1ga03f4c1bd5fe3659634ea92a48e7214d7" prot="public" static="yes" mutable="no">
+        <type>std::int8_t</type>
+        <definition>std::int8_t csmp::CNR_MAX_MAXX</definition>
+        <argsstring></argsstring>
+        <name>CNR_MAX_MAXX</name>
+        <qualifiedname>csmp::CNR_MAX_MAXX</qualifiedname>
+        <initializer>{-14}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Box.h" line="44" column="5" bodyfile="source/includes/model/Box.h" bodystart="44" bodyend="44"/>
+      </memberdef>
+      <memberdef kind="variable" id="group___c_s_m_pglobal_enums_1ga004987c635a7b0999bafe8e41f35fe67" prot="public" static="yes" mutable="no">
+        <type>std::int8_t</type>
+        <definition>std::int8_t csmp::CNR_MAX_MAXZ</definition>
+        <argsstring></argsstring>
+        <name>CNR_MAX_MAXZ</name>
+        <qualifiedname>csmp::CNR_MAX_MAXZ</qualifiedname>
+        <initializer>{-15}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Box.h" line="45" column="5" bodyfile="source/includes/model/Box.h" bodystart="45" bodyend="45"/>
+      </memberdef>
+      <memberdef kind="variable" id="group___c_s_m_pglobal_enums_1gac1301ddfb7cf8739f56058497a9e0d04" prot="public" static="yes" mutable="no">
+        <type>std::int8_t</type>
+        <definition>std::int8_t csmp::BACK_BOTTOM</definition>
+        <argsstring></argsstring>
+        <name>BACK_BOTTOM</name>
+        <qualifiedname>csmp::BACK_BOTTOM</qualifiedname>
+        <initializer>{-16}</initializer>
+        <briefdescription>
+<para>model edges: BACK and BOTTOM </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Box.h" line="46" column="5" bodyfile="source/includes/model/Box.h" bodystart="46" bodyend="46"/>
+      </memberdef>
+      <memberdef kind="variable" id="group___c_s_m_pglobal_enums_1ga7598ac17296b73b096c79bb99d86dcf9" prot="public" static="yes" mutable="no">
+        <type>std::int8_t</type>
+        <definition>std::int8_t csmp::BACK_RIGHT</definition>
+        <argsstring></argsstring>
+        <name>BACK_RIGHT</name>
+        <qualifiedname>csmp::BACK_RIGHT</qualifiedname>
+        <initializer>{-17}</initializer>
+        <briefdescription>
+<para>BACK and RIGHT. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Box.h" line="47" column="5" bodyfile="source/includes/model/Box.h" bodystart="47" bodyend="47"/>
+      </memberdef>
+      <memberdef kind="variable" id="group___c_s_m_pglobal_enums_1gaa8740072b5052220535dd9c2dc1f48ec" prot="public" static="yes" mutable="no">
+        <type>std::int8_t</type>
+        <definition>std::int8_t csmp::BACK_TOP</definition>
+        <argsstring></argsstring>
+        <name>BACK_TOP</name>
+        <qualifiedname>csmp::BACK_TOP</qualifiedname>
+        <initializer>{-18}</initializer>
+        <briefdescription>
+<para>BACK and TOP. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Box.h" line="48" column="5" bodyfile="source/includes/model/Box.h" bodystart="48" bodyend="48"/>
+      </memberdef>
+      <memberdef kind="variable" id="group___c_s_m_pglobal_enums_1gaa6638bb488f7758c7655420bca8adb85" prot="public" static="yes" mutable="no">
+        <type>std::int8_t</type>
+        <definition>std::int8_t csmp::BACK_LEFT</definition>
+        <argsstring></argsstring>
+        <name>BACK_LEFT</name>
+        <qualifiedname>csmp::BACK_LEFT</qualifiedname>
+        <initializer>{-19}</initializer>
+        <briefdescription>
+<para>BACK and LEFT. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Box.h" line="49" column="5" bodyfile="source/includes/model/Box.h" bodystart="49" bodyend="49"/>
+      </memberdef>
+      <memberdef kind="variable" id="group___c_s_m_pglobal_enums_1ga703e29ebc74648763ed3347f777bf0f2" prot="public" static="yes" mutable="no">
+        <type>std::int8_t</type>
+        <definition>std::int8_t csmp::BOTTOM_RIGHT</definition>
+        <argsstring></argsstring>
+        <name>BOTTOM_RIGHT</name>
+        <qualifiedname>csmp::BOTTOM_RIGHT</qualifiedname>
+        <initializer>{-20}</initializer>
+        <briefdescription>
+<para>BOTTOM and RIGHT. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Box.h" line="50" column="5" bodyfile="source/includes/model/Box.h" bodystart="50" bodyend="50"/>
+      </memberdef>
+      <memberdef kind="variable" id="group___c_s_m_pglobal_enums_1ga0294dcfc8d4d70818513573f276288e9" prot="public" static="yes" mutable="no">
+        <type>std::int8_t</type>
+        <definition>std::int8_t csmp::TOP_RIGHT</definition>
+        <argsstring></argsstring>
+        <name>TOP_RIGHT</name>
+        <qualifiedname>csmp::TOP_RIGHT</qualifiedname>
+        <initializer>{-21}</initializer>
+        <briefdescription>
+<para>TOP and RIGHT. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Box.h" line="51" column="5" bodyfile="source/includes/model/Box.h" bodystart="51" bodyend="51"/>
+      </memberdef>
+      <memberdef kind="variable" id="group___c_s_m_pglobal_enums_1ga1ebaf80d06721f6accaac9cacfcef2e2" prot="public" static="yes" mutable="no">
+        <type>std::int8_t</type>
+        <definition>std::int8_t csmp::TOP_LEFT</definition>
+        <argsstring></argsstring>
+        <name>TOP_LEFT</name>
+        <qualifiedname>csmp::TOP_LEFT</qualifiedname>
+        <initializer>{-22}</initializer>
+        <briefdescription>
+<para>TOP and LEFT. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Box.h" line="52" column="5" bodyfile="source/includes/model/Box.h" bodystart="52" bodyend="52"/>
+      </memberdef>
+      <memberdef kind="variable" id="group___c_s_m_pglobal_enums_1ga519030cc6bc787f80797ac764d341132" prot="public" static="yes" mutable="no">
+        <type>std::int8_t</type>
+        <definition>std::int8_t csmp::BOTTOM_LEFT</definition>
+        <argsstring></argsstring>
+        <name>BOTTOM_LEFT</name>
+        <qualifiedname>csmp::BOTTOM_LEFT</qualifiedname>
+        <initializer>{-23}</initializer>
+        <briefdescription>
+<para>BOTTOM and LEFT. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Box.h" line="53" column="5" bodyfile="source/includes/model/Box.h" bodystart="53" bodyend="53"/>
+      </memberdef>
+      <memberdef kind="variable" id="group___c_s_m_pglobal_enums_1ga9fd1eddff339f28f4db152ea95d7afae" prot="public" static="yes" mutable="no">
+        <type>std::int8_t</type>
+        <definition>std::int8_t csmp::FRONT_BOTTOM</definition>
+        <argsstring></argsstring>
+        <name>FRONT_BOTTOM</name>
+        <qualifiedname>csmp::FRONT_BOTTOM</qualifiedname>
+        <initializer>{-24}</initializer>
+        <briefdescription>
+<para>FRONT and BOTTOM. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Box.h" line="54" column="5" bodyfile="source/includes/model/Box.h" bodystart="54" bodyend="54"/>
+      </memberdef>
+      <memberdef kind="variable" id="group___c_s_m_pglobal_enums_1ga4947059b280d83ce47245d94721fc124" prot="public" static="yes" mutable="no">
+        <type>std::int8_t</type>
+        <definition>std::int8_t csmp::FRONT_RIGHT</definition>
+        <argsstring></argsstring>
+        <name>FRONT_RIGHT</name>
+        <qualifiedname>csmp::FRONT_RIGHT</qualifiedname>
+        <initializer>{-25}</initializer>
+        <briefdescription>
+<para>FRONT and RIGHT. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Box.h" line="55" column="5" bodyfile="source/includes/model/Box.h" bodystart="55" bodyend="55"/>
+      </memberdef>
+      <memberdef kind="variable" id="group___c_s_m_pglobal_enums_1gaa111e968d56dc3547efbb6e5f9b3b06a" prot="public" static="yes" mutable="no">
+        <type>std::int8_t</type>
+        <definition>std::int8_t csmp::FRONT_TOP</definition>
+        <argsstring></argsstring>
+        <name>FRONT_TOP</name>
+        <qualifiedname>csmp::FRONT_TOP</qualifiedname>
+        <initializer>{-26}</initializer>
+        <briefdescription>
+<para>FRONT and TOP. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Box.h" line="56" column="5" bodyfile="source/includes/model/Box.h" bodystart="56" bodyend="56"/>
+      </memberdef>
+      <memberdef kind="variable" id="group___c_s_m_pglobal_enums_1ga19cac0d48ef2656271ce9371fb124058" prot="public" static="yes" mutable="no">
+        <type>std::int8_t</type>
+        <definition>std::int8_t csmp::FRONT_LEFT</definition>
+        <argsstring></argsstring>
+        <name>FRONT_LEFT</name>
+        <qualifiedname>csmp::FRONT_LEFT</qualifiedname>
+        <initializer>{-27}</initializer>
+        <briefdescription>
+<para>FRONT and LEFT. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Box.h" line="57" column="5" bodyfile="source/includes/model/Box.h" bodystart="57" bodyend="57"/>
+      </memberdef>
+      <memberdef kind="variable" id="group___c_s_m_pglobal_enums_1ga14b711f24cdf4a98f9ed8e3a0f6b96ec" prot="public" static="yes" mutable="no">
+        <type>std::int8_t</type>
+        <definition>std::int8_t csmp::REGION_BOUNDARY</definition>
+        <argsstring></argsstring>
+        <name>REGION_BOUNDARY</name>
+        <qualifiedname>csmp::REGION_BOUNDARY</qualifiedname>
+        <initializer>{-28}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Box.h" line="58" column="5" bodyfile="source/includes/model/Box.h" bodystart="58" bodyend="58"/>
+      </memberdef>
+      <memberdef kind="variable" id="group___c_s_m_pglobal_enums_1gab97887612cb002ef83c77fe4191027c9" prot="public" static="yes" mutable="no">
+        <type>std::int8_t</type>
+        <definition>std::int8_t csmp::MULTIPLE_BOUNDARIES</definition>
+        <argsstring></argsstring>
+        <name>MULTIPLE_BOUNDARIES</name>
+        <qualifiedname>csmp::MULTIPLE_BOUNDARIES</qualifiedname>
+        <initializer>{-29}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Box.h" line="59" column="5" bodyfile="source/includes/model/Box.h" bodystart="59" bodyend="59"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

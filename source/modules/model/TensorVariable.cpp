@@ -8,9 +8,9 @@ namespace csmp {
 
 TensorVariable<3U>::TensorVariable()
   : flag{ { ANY,ANY,ANY } },
-  data{ numeric_limits<double>::quiet_NaN(),numeric_limits<double>::quiet_NaN(),numeric_limits<double>::quiet_NaN(),
-  numeric_limits<double>::quiet_NaN(),numeric_limits<double>::quiet_NaN(),numeric_limits<double>::quiet_NaN(),
-  numeric_limits<double>::quiet_NaN(),numeric_limits<double>::quiet_NaN(),numeric_limits<double>::quiet_NaN() }
+    data{ { {numeric_limits<double>::quiet_NaN(),numeric_limits<double>::quiet_NaN(),numeric_limits<double>::quiet_NaN() },
+            {numeric_limits<double>::quiet_NaN(),numeric_limits<double>::quiet_NaN(),numeric_limits<double>::quiet_NaN() },
+            {numeric_limits<double>::quiet_NaN(),numeric_limits<double>::quiet_NaN(),numeric_limits<double>::quiet_NaN() } } }
 {
 }
 
@@ -25,7 +25,9 @@ SKM 17/6/2015
 */
 TensorVariable<3U>::TensorVariable( VARIABLE_FLAG f, double val )
   : flag{ { f,f,f } },
-  data{ { val,0.,0.,0.,val,0.,0.,0.,val } }
+    data{ { {val,0.,0.},
+            {0.,val,0.},
+            {0.,0.,val} } }
 {
 }
 

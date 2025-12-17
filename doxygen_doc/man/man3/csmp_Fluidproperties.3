@@ -1,0 +1,91 @@
+.TH "csmp::Fluidproperties" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::Fluidproperties
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include 'eos/h2o_nacl/Fluidproperties\&.h'\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBFluidproperties\fP (const \fBFluidproperties\fP &)"
+.br
+.ti -1c
+.RI "\fBFluidproperties\fP & \fBoperator=\fP (const \fBFluidproperties\fP &)"
+.br
+.ti -1c
+.RI "void \fBInitToZero\fP ()"
+.br
+.ti -1c
+.RI "void \fBInitToBogus\fP ()"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "double \fBt\fP"
+.br
+.ti -1c
+.RI "double \fBp\fP"
+.br
+.ti -1c
+.RI "double \fBx\fP"
+.br
+.ti -1c
+.RI "double \fBwt\fP"
+.br
+.ti -1c
+.RI "double \fBsmf\fP"
+.br
+.ti -1c
+.RI "double \fBrho\fP"
+.br
+.ti -1c
+.RI "double \fBh\fP"
+.br
+.ti -1c
+.RI "double \fBcp\fP"
+.br
+.ti -1c
+.RI "double \fBbeta\fP"
+.br
+.ti -1c
+.RI "double \fBs\fP"
+.br
+.ti -1c
+.RI "double \fBmf\fP"
+.br
+.ti -1c
+.RI "double \fBmu\fP"
+.br
+.ti -1c
+.RI "States \fBstate\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.PP
+\fBAuthor\fP
+.RS 4
+Thomas Driesner, ETH Zuerich 
+.RE
+.PP
+.SH "Contact"
+.PP
+thomas.driesner@erdw.ethz.ch
+.SH "Motivation"
+.PP
+\fBFluidproperties\fP is essentially a container for all kinds of fluid properties used in simulations\&.
+.SH "Known issues"
+.PP
+This version is legacy that is still used but the design should be improved and made more flexible\&. The current version contains way too many variables and cannot be constructed with fewer or more arguments\&. Also, converting to a struct might be better\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

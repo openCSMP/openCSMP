@@ -1,0 +1,13 @@
+<map id="csmp::TwoPhaseModel::dkrnds_Phase" name="csmp::TwoPhaseModel::dkrnds_Phase">
+<area shape="rect" id="Node000001" title="derivatives of relative permeabilities" alt="" coords="420,71,577,111"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_two_phase_model.html#a295c4bd526a0f939f2d810a99a5843b9" title="derivative of fractional flow (used in advection multiplier); note that fw+fn=1, dfw_dsw=dfn_dsn" alt="" coords="215,5,372,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="417,68,359,49,361,44,419,63"/>
+<area shape="rect" id="Node000004" href="$classcsmp_1_1_two_phase_model.html#ae46b8290e476e6d16ebcf239481e915d" title="derivatives of gravitational flow (advection multipliers)" alt="" coords="215,71,372,111"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="405,94,373,94,373,88,405,88"/>
+<area shape="rect" id="Node000006" href="$classcsmp_1_1_two_phase_model.html#ab4eeb89ea5ef7f4712e9992bb3537fa2" title="derivative of non&#45;wetting phase mobility" alt="" coords="215,136,372,177"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="419,119,361,138,359,133,417,114"/>
+<area shape="rect" id="Node000003" href="$classcsmp_1_1_two_phase_model.html#a29b1cf1676c8fac2faeea06d341e1e03" title="multiplier for advection viscosity coefficient in the case of non&#45;linear advection" alt="" coords="7,5,165,46"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="199,28,165,28,165,23,199,23"/>
+<area shape="rect" id="Node000005" href="$classcsmp_1_1_two_phase_model.html#a697acaf5dd0aad5ed586a9756d8d6875" title=" " alt="" coords="5,71,167,111"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="199,94,167,94,167,88,199,88"/>
+</map>

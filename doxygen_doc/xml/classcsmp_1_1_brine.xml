@@ -1,0 +1,1577 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_brine" kind="class" language="C++" prot="public">
+    <compoundname>csmp::Brine</compoundname>
+    <includes refid="_brine_8h" local="yes">eos/h2o_nacl/Brine.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1a86e9ff1968098375df556ae654ec6f22" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::Brine::temperature_</definition>
+        <argsstring></argsstring>
+        <name>temperature_</name>
+        <qualifiedname>csmp::Brine::temperature_</qualifiedname>
+        <briefdescription>
+<para>const ref to temperature [C] in flow code </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="50" column="19" bodyfile="source/includes/eos/Brine.h" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1a9935910b2b4b44c145f6418915f736b5" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::Brine::pressure_</definition>
+        <argsstring></argsstring>
+        <name>pressure_</name>
+        <qualifiedname>csmp::Brine::pressure_</qualifiedname>
+        <briefdescription>
+<para>const ref to fluid pressure [Pa] in flow code </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="51" column="19" bodyfile="source/includes/eos/Brine.h" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1a270ac44987ab2f35946e8a93da95ae93" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::Brine::composition_</definition>
+        <argsstring></argsstring>
+        <name>composition_</name>
+        <qualifiedname>csmp::Brine::composition_</qualifiedname>
+        <briefdescription>
+<para>const ref to salinity [mass fraction NaCl] in flow code </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="52" column="19" bodyfile="source/includes/eos/Brine.h" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1a8e0e6419561d965f1f15ede2ec914bc2" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::Brine::visc_u0_</definition>
+        <argsstring></argsstring>
+        <name>visc_u0_</name>
+        <qualifiedname>csmp::Brine::visc_u0_</qualifiedname>
+        <briefdescription>
+<para>internal parameter of Viscosity function </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="54" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1a1c0eff9f0e6f5fb207f1d8f5810418cf" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::Brine::visc_u1_</definition>
+        <argsstring></argsstring>
+        <name>visc_u1_</name>
+        <qualifiedname>csmp::Brine::visc_u1_</qualifiedname>
+        <briefdescription>
+<para>internal parameter of Viscosity function </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="55" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1a4b9f31db49d52a98d5d5a223a17e17ee" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::Brine::visc_muc800_</definition>
+        <argsstring></argsstring>
+        <name>visc_muc800_</name>
+        <qualifiedname>csmp::Brine::visc_muc800_</qualifiedname>
+        <briefdescription>
+<para>internal parameter of Viscosity function </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="56" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1ac074fc5dbe5717ada21f8449a6e02f7a" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::tcurrent_</definition>
+        <argsstring></argsstring>
+        <name>tcurrent_</name>
+        <qualifiedname>csmp::Brine::tcurrent_</qualifiedname>
+        <briefdescription>
+<para>internal temperature variable [C] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="58" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1a35124bad4672be99b15399ee84979fba" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::pcurrent_</definition>
+        <argsstring></argsstring>
+        <name>pcurrent_</name>
+        <qualifiedname>csmp::Brine::pcurrent_</qualifiedname>
+        <briefdescription>
+<para>internal pressure variable [bar] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="59" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1a4f371a0724906586c4242d1bf6d2acfa" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::xcurrent_</definition>
+        <argsstring></argsstring>
+        <name>xcurrent_</name>
+        <qualifiedname>csmp::Brine::xcurrent_</qualifiedname>
+        <briefdescription>
+<para>internal composition variable [mole fraction NaCl] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="60" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1af56019d7efe59c09bf0fb71998bc5b1c" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::density_</definition>
+        <argsstring></argsstring>
+        <name>density_</name>
+        <qualifiedname>csmp::Brine::density_</qualifiedname>
+        <briefdescription>
+<para>internal variable for density [kg m-3] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="62" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1a95d64408d1e891db087cfa8b51c1c531" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::molarvolume_</definition>
+        <argsstring></argsstring>
+        <name>molarvolume_</name>
+        <qualifiedname>csmp::Brine::molarvolume_</qualifiedname>
+        <briefdescription>
+<para>internal variable for molar volume of solution [cm3 mole-1] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="63" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1a23e61766b12b52697b0bd7e34a522075" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::dmolarvolumedt_</definition>
+        <argsstring></argsstring>
+        <name>dmolarvolumedt_</name>
+        <qualifiedname>csmp::Brine::dmolarvolumedt_</qualifiedname>
+        <briefdescription>
+<para>temperature derivative of molarvolume_ </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="64" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1a1571996802f686854cf1753802dd94bc" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::dmolarvolumedp_</definition>
+        <argsstring></argsstring>
+        <name>dmolarvolumedp_</name>
+        <qualifiedname>csmp::Brine::dmolarvolumedp_</qualifiedname>
+        <briefdescription>
+<para>pressure derivative of molarvolume_ </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="65" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="65" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1a741a9df14ce44be0c488a9c5e1d76495" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::expansivity_</definition>
+        <argsstring></argsstring>
+        <name>expansivity_</name>
+        <qualifiedname>csmp::Brine::expansivity_</qualifiedname>
+        <briefdescription>
+<para>internal variable for themal expansivity [C-1] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="66" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1ad612a5ff4930d4659d6ec232ffa3d97c" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::compressibility_</definition>
+        <argsstring></argsstring>
+        <name>compressibility_</name>
+        <qualifiedname>csmp::Brine::compressibility_</qualifiedname>
+        <briefdescription>
+<para>internal variable for isothermal compressibility [bar-1] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="67" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1a4ca1fadb408426b2e15e14b352c2ec76" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::isochore_</definition>
+        <argsstring></argsstring>
+        <name>isochore_</name>
+        <qualifiedname>csmp::Brine::isochore_</qualifiedname>
+        <briefdescription>
+<para>internal variable for isochore slope [bar C-1] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="68" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1a1f2ce3bc4ac609ddba28f1355ea91290" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::enthalpy_</definition>
+        <argsstring></argsstring>
+        <name>enthalpy_</name>
+        <qualifiedname>csmp::Brine::enthalpy_</qualifiedname>
+        <briefdescription>
+<para>internal variable for specific enthalpy [J kg-1] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="70" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1ae96ea6d83e7cbea27140798f5c2a8cf4" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::heatcapacity_</definition>
+        <argsstring></argsstring>
+        <name>heatcapacity_</name>
+        <qualifiedname>csmp::Brine::heatcapacity_</qualifiedname>
+        <briefdescription>
+<para>internal variable for specific heat capacity [J kg-1 C-1] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="71" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1a5383221f856e82b2a612f149baedef5d" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::tdummy_</definition>
+        <argsstring></argsstring>
+        <name>tdummy_</name>
+        <qualifiedname>csmp::Brine::tdummy_</qualifiedname>
+        <briefdescription>
+<para>internal temperature variable [C] for interfacing with dummywater member </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="73" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1a481ff279662a92ec5840041be42697de" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::pdummy_</definition>
+        <argsstring></argsstring>
+        <name>pdummy_</name>
+        <qualifiedname>csmp::Brine::pdummy_</qualifiedname>
+        <briefdescription>
+<para>internal pressure variable [bar] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="74" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1abaebbf9a4af6417bbcff7f248310dd6a" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::pdummyPa_</definition>
+        <argsstring></argsstring>
+        <name>pdummyPa_</name>
+        <qualifiedname>csmp::Brine::pdummyPa_</qualifiedname>
+        <briefdescription>
+<para>internal pressure variable [Pa] for interfacing with dummywater member </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="75" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="75" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1a29d5496d000e2f82f4e7194c3dc88b51" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::muw_</definition>
+        <argsstring></argsstring>
+        <name>muw_</name>
+        <qualifiedname>csmp::Brine::muw_</qualifiedname>
+        <briefdescription>
+<para>internal variable pure water dynamic viscosity </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="77" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1a9ee44ea7bc178857aa66d888d0ac5b17" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::viscosity_</definition>
+        <argsstring></argsstring>
+        <name>viscosity_</name>
+        <qualifiedname>csmp::Brine::viscosity_</qualifiedname>
+        <briefdescription>
+<para>internal variable dynamic viscosity of solution </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="78" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1a56739be47417b45776f301ad779f7f59" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::pdummy_mu_</definition>
+        <argsstring></argsstring>
+        <name>pdummy_mu_</name>
+        <qualifiedname>csmp::Brine::pdummy_mu_</qualifiedname>
+        <briefdescription>
+<para>pressure variable within viscosity computation </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="79" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1a8ddafb34134053212293a32bb832e6f5" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::xm_</definition>
+        <argsstring></argsstring>
+        <name>xm_</name>
+        <qualifiedname>csmp::Brine::xm_</qualifiedname>
+        <briefdescription>
+<para>internal composition variable within viscosity computation </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="80" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1afbe7b31a222465222beda9ac94c331fd" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::nacl_a0_</definition>
+        <argsstring></argsstring>
+        <name>nacl_a0_</name>
+        <qualifiedname>csmp::Brine::nacl_a0_</qualifiedname>
+        <briefdescription>
+<para>parameter n1,XNaCl=1 in eq 11 of Driesner, GCA 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="82" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1a1f2af3628bcfbf797f1aee57a57fe3bd" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::nacl_a1_</definition>
+        <argsstring></argsstring>
+        <name>nacl_a1_</name>
+        <qualifiedname>csmp::Brine::nacl_a1_</qualifiedname>
+        <briefdescription>
+<para>parameter n2,XNaCl=1 in eq 11 of Driesner, GCA 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="83" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="83" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1a4f7edddfaaae04cd0a5500ec660ffa0f" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::h_nacl_a0_</definition>
+        <argsstring></argsstring>
+        <name>h_nacl_a0_</name>
+        <qualifiedname>csmp::Brine::h_nacl_a0_</qualifiedname>
+        <briefdescription>
+<para>parameter q1,XNaCl=1 in eq 25 of Driesner, GCA 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="84" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1af03c4827b2c1728b545ca671fc51dc32" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::h_nacl_a1_</definition>
+        <argsstring></argsstring>
+        <name>h_nacl_a1_</name>
+        <qualifiedname>csmp::Brine::h_nacl_a1_</qualifiedname>
+        <briefdescription>
+<para>parameter q2,XNaCl=1 in eq 26 of Driesner, GCA 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="85" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1a271a367891d8199a56c0d170fe758f1d" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::dnacl_a0dp_</definition>
+        <argsstring></argsstring>
+        <name>dnacl_a0dp_</name>
+        <qualifiedname>csmp::Brine::dnacl_a0dp_</qualifiedname>
+        <briefdescription>
+<para>pressure derivative of nacl_a0_ </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="86" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1a2e1ad3b3a6cca2557933ec0710fa50bb" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::dnacl_a1dp_</definition>
+        <argsstring></argsstring>
+        <name>dnacl_a1dp_</name>
+        <qualifiedname>csmp::Brine::dnacl_a1dp_</qualifiedname>
+        <briefdescription>
+<para>pressure derivative of nacl_a1_ </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="87" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="87" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1add5448c2e20788396560cfe230e02c84" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::a0_</definition>
+        <argsstring></argsstring>
+        <name>a0_</name>
+        <qualifiedname>csmp::Brine::a0_</qualifiedname>
+        <briefdescription>
+<para>parameter n1 of Driesner, GCA 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="88" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1abe0caf8ce30ee29cdbb2c028b0b47afb" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::a0_1_</definition>
+        <argsstring></argsstring>
+        <name>a0_1_</name>
+        <qualifiedname>csmp::Brine::a0_1_</qualifiedname>
+        <briefdescription>
+<para>parameter n11 of Driesner, GCA 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="89" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="89" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1a71b558c3cb3784d8ffe1b24d960b6501" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::h_a0_</definition>
+        <argsstring></argsstring>
+        <name>h_a0_</name>
+        <qualifiedname>csmp::Brine::h_a0_</qualifiedname>
+        <briefdescription>
+<para>parameter q1 of Driesner, GCA 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="90" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="90" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1a777e05f42b48a35f28f3f98406f8d646" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::h_a0_1_</definition>
+        <argsstring></argsstring>
+        <name>h_a0_1_</name>
+        <qualifiedname>csmp::Brine::h_a0_1_</qualifiedname>
+        <briefdescription>
+<para>parameter q11 of Driesner, GCA 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="91" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1aeac280645bcde31be505bbdebea061b5" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::da0dp_</definition>
+        <argsstring></argsstring>
+        <name>da0dp_</name>
+        <qualifiedname>csmp::Brine::da0dp_</qualifiedname>
+        <briefdescription>
+<para>pressure derivative of a0_ </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="92" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1a37b2d2d5a4210a2da18e773c5a2d0515" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::da0_1dp_</definition>
+        <argsstring></argsstring>
+        <name>da0_1dp_</name>
+        <qualifiedname>csmp::Brine::da0_1dp_</qualifiedname>
+        <briefdescription>
+<para>pressure derivative of a0_1_ </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="93" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="93" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1a66fc9a42e7336012630428c5c117735d" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::a1_0_</definition>
+        <argsstring></argsstring>
+        <name>a1_0_</name>
+        <qualifiedname>csmp::Brine::a1_0_</qualifiedname>
+        <briefdescription>
+<para>parameter n21 of Driesner, GCA 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="94" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="94" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1a8951eab8fd75eb20a9154920d328e622" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::a1_1_</definition>
+        <argsstring></argsstring>
+        <name>a1_1_</name>
+        <qualifiedname>csmp::Brine::a1_1_</qualifiedname>
+        <briefdescription>
+<para>parameter n22 of Driesner, GCA 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="95" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="95" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1a819d42ed76fc36334bf3cc0477e9141d" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::a1_</definition>
+        <argsstring></argsstring>
+        <name>a1_</name>
+        <qualifiedname>csmp::Brine::a1_</qualifiedname>
+        <briefdescription>
+<para>parameter n2 of Driesner, GCA 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="96" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="96" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1ad5cb0dad193b74b8457b2628acbbc189" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::h_a1_1_</definition>
+        <argsstring></argsstring>
+        <name>h_a1_1_</name>
+        <qualifiedname>csmp::Brine::h_a1_1_</qualifiedname>
+        <briefdescription>
+<para>parameter q21 of Driesner, GCA 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="97" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="97" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1afcd32434da42e4db39dc6b49454b55c5" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::h_a1_2_</definition>
+        <argsstring></argsstring>
+        <name>h_a1_2_</name>
+        <qualifiedname>csmp::Brine::h_a1_2_</qualifiedname>
+        <briefdescription>
+<para>parameter q22 of Driesner, GCA 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="98" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="98" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1a8266b8ec908cdfbe01bf6eb800f5630f" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::h_a1_</definition>
+        <argsstring></argsstring>
+        <name>h_a1_</name>
+        <qualifiedname>csmp::Brine::h_a1_</qualifiedname>
+        <briefdescription>
+<para>parameter q2 of Driesner, GCA 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="99" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="99" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1af453bfbada6979561b8dafff760b64c6" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::da1_0dp_</definition>
+        <argsstring></argsstring>
+        <name>da1_0dp_</name>
+        <qualifiedname>csmp::Brine::da1_0dp_</qualifiedname>
+        <briefdescription>
+<para>pressure derivative of a1_0_ </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="100" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="100" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1a141febe65820552cd970d5b6b630172f" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::da1_1dp_</definition>
+        <argsstring></argsstring>
+        <name>da1_1dp_</name>
+        <qualifiedname>csmp::Brine::da1_1dp_</qualifiedname>
+        <briefdescription>
+<para>pressure derivative of a1_1_ </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="101" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="101" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1a88b602d4fa42bb188f6b1af9a15144eb" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::da1dp_</definition>
+        <argsstring></argsstring>
+        <name>da1dp_</name>
+        <qualifiedname>csmp::Brine::da1dp_</qualifiedname>
+        <briefdescription>
+<para>pressure derivative of a1_ </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="102" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1aa5b2970a1cc4101881c02355d6ea14d8" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::dev_a0_0_</definition>
+        <argsstring></argsstring>
+        <name>dev_a0_0_</name>
+        <qualifiedname>csmp::Brine::dev_a0_0_</qualifiedname>
+        <briefdescription>
+<para>parameter n300 of Driesner, GCA 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="103" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1a3de72d4f9bb6b23b2196b1287d0371c9" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::dev_a0_1_</definition>
+        <argsstring></argsstring>
+        <name>dev_a0_1_</name>
+        <qualifiedname>csmp::Brine::dev_a0_1_</qualifiedname>
+        <briefdescription>
+<para>parameter n301 of Driesner, GCA 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="104" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="104" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1a84313afc9e18e301ac016f15eb1736dc" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::dev_a0_2_</definition>
+        <argsstring></argsstring>
+        <name>dev_a0_2_</name>
+        <qualifiedname>csmp::Brine::dev_a0_2_</qualifiedname>
+        <briefdescription>
+<para>parameter n302 of Driesner, GCA 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="105" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="105" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1aa1ffa455b4a3d16d17724c29e4a0df3a" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::dev_a0_</definition>
+        <argsstring></argsstring>
+        <name>dev_a0_</name>
+        <qualifiedname>csmp::Brine::dev_a0_</qualifiedname>
+        <briefdescription>
+<para>parameter n30 of Driesner, GCA 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="106" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1af0ea9ab690f73f587ab8aaec742d82da" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::dev_a1_0_</definition>
+        <argsstring></argsstring>
+        <name>dev_a1_0_</name>
+        <qualifiedname>csmp::Brine::dev_a1_0_</qualifiedname>
+        <briefdescription>
+<para>parameter n310 of Driesner, GCA 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="107" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="107" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1aec98326b38157613bc79f14aaae7ca36" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::dev_a1_1_</definition>
+        <argsstring></argsstring>
+        <name>dev_a1_1_</name>
+        <qualifiedname>csmp::Brine::dev_a1_1_</qualifiedname>
+        <briefdescription>
+<para>parameter n311 of Driesner, GCA 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="108" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="108" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1a56910478109e9962632ff159b94524d8" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::dev_a1_2_</definition>
+        <argsstring></argsstring>
+        <name>dev_a1_2_</name>
+        <qualifiedname>csmp::Brine::dev_a1_2_</qualifiedname>
+        <briefdescription>
+<para>parameter n312 of Driesner, GCA 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="109" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="109" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1a54121b3dc47a597b4a20d995e3c56a80" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::dev_a1_</definition>
+        <argsstring></argsstring>
+        <name>dev_a1_</name>
+        <qualifiedname>csmp::Brine::dev_a1_</qualifiedname>
+        <briefdescription>
+<para>parameter n31 of Driesner, GCA 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="110" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="110" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1aa46cff38defb0e0042b030a362ae1d7f" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::ddev_a0_0dp_</definition>
+        <argsstring></argsstring>
+        <name>ddev_a0_0dp_</name>
+        <qualifiedname>csmp::Brine::ddev_a0_0dp_</qualifiedname>
+        <briefdescription>
+<para>pressure derivative of dev_a0_0_ </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="111" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1a52652764fd967ef350e9339bda661e29" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::ddev_a0_1dp_</definition>
+        <argsstring></argsstring>
+        <name>ddev_a0_1dp_</name>
+        <qualifiedname>csmp::Brine::ddev_a0_1dp_</qualifiedname>
+        <briefdescription>
+<para>pressure derivative of dev_a0_1_ </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="112" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1ab3f27b3fca6859ce55cf07a06737eab1" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::ddev_a0_2dp_</definition>
+        <argsstring></argsstring>
+        <name>ddev_a0_2dp_</name>
+        <qualifiedname>csmp::Brine::ddev_a0_2dp_</qualifiedname>
+        <briefdescription>
+<para>pressure derivative of dev_a0_2_ </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="113" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="113" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1adda0e4a496e0fc821c3d33acf58e1e65" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::ddev_a0dp_</definition>
+        <argsstring></argsstring>
+        <name>ddev_a0dp_</name>
+        <qualifiedname>csmp::Brine::ddev_a0dp_</qualifiedname>
+        <briefdescription>
+<para>pressure derivative of dev_a0_ </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="114" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="114" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1a490968ccab78920fe07684ee263c74de" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::ddev_a1_0dp_</definition>
+        <argsstring></argsstring>
+        <name>ddev_a1_0dp_</name>
+        <qualifiedname>csmp::Brine::ddev_a1_0dp_</qualifiedname>
+        <briefdescription>
+<para>pressure derivative of dev_a1_0_ </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="115" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="115" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1ab02d7f3ed007ce0c2c2cd326211258f9" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::ddev_a1_1dp_</definition>
+        <argsstring></argsstring>
+        <name>ddev_a1_1dp_</name>
+        <qualifiedname>csmp::Brine::ddev_a1_1dp_</qualifiedname>
+        <briefdescription>
+<para>pressure derivative of dev_a1_1_ </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="116" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="116" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1a9e7dd26eb5f20cb46a74a922d9e7d17c" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::ddev_a1_2dp_</definition>
+        <argsstring></argsstring>
+        <name>ddev_a1_2dp_</name>
+        <qualifiedname>csmp::Brine::ddev_a1_2dp_</qualifiedname>
+        <briefdescription>
+<para>pressure derivative of dev_a1_2_ </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="117" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="117" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1a377f813432d4b9e17366990ceacc9690" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Brine::ddev_a1dp_</definition>
+        <argsstring></argsstring>
+        <name>ddev_a1dp_</name>
+        <qualifiedname>csmp::Brine::ddev_a1dp_</qualifiedname>
+        <briefdescription>
+<para>pressure derivative of dev_a1_ </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="118" column="20" bodyfile="source/includes/eos/Brine.h" bodystart="118" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1a0b43c78657ad4947a1157edeffc2c580" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_water" kindref="compound">Water</ref></type>
+        <definition>Water csmp::Brine::dummywater</definition>
+        <argsstring></argsstring>
+        <name>dummywater</name>
+        <qualifiedname>csmp::Brine::dummywater</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="131" column="22" bodyfile="source/includes/eos/Brine.h" bodystart="131" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1aafe22628c22b1ff2350668ce60dafe37" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_threephase_h_l_v" kindref="compound">ThreephaseHLV</ref></type>
+        <definition>ThreephaseHLV csmp::Brine::hlv</definition>
+        <argsstring></argsstring>
+        <name>hlv</name>
+        <qualifiedname>csmp::Brine::hlv</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="132" column="22" bodyfile="source/includes/eos/Brine.h" bodystart="132" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1abb62d5f8a35170edc7d872926af5ea04" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_critical_curve" kindref="compound">CriticalCurve</ref></type>
+        <definition>CriticalCurve csmp::Brine::critcurve</definition>
+        <argsstring></argsstring>
+        <name>critcurve</name>
+        <qualifiedname>csmp::Brine::critcurve</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="133" column="22" bodyfile="source/includes/eos/Brine.h" bodystart="133" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brine_1a2fdd3383b64ffd427d82f4acd7354810" prot="private" static="no" mutable="no">
+        <type>States</type>
+        <definition>States csmp::Brine::mystate</definition>
+        <argsstring></argsstring>
+        <name>mystate</name>
+        <qualifiedname>csmp::Brine::mystate</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="134" column="22" bodyfile="source/includes/eos/Brine.h" bodystart="134" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_brine_1a3ab834697c85d10e2dd3dab232ba3171" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Brine::Brine</definition>
+        <argsstring>(const double &amp;externaltemperature, const double &amp;externalpressure, const double &amp;externalcomposition)</argsstring>
+        <name>Brine</name>
+        <qualifiedname>csmp::Brine::Brine</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>externaltemperature</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>externalpressure</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>externalcomposition</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>custom constructor</para>
+<para><simplesect kind="attention"><para>Use only this conctructor. <ref refid="classcsmp_1_1_brine" kindref="compound">Brine</ref> computes thermodynamic properties of H2O-NaCl solutions as a function of temperature, pressure, and composition. These governing parameters are typically computed somewhere outside this class. By using const refs to those external variables as constructor argument, <ref refid="classcsmp_1_1_brine" kindref="compound">Brine</ref> is able to decipher their current values when being queried for fluid properties. Only this constructor is allowed to ensure that functionality, default constructor has been made private. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="30" column="5" bodyfile="source/modules/eos/h2o_nacl/Brine.cpp" bodystart="16" bodyend="86"/>
+        <references refid="classcsmp_1_1_critical_curve_1a701178f62bd4859b617a62863dca9c0b" compoundref="_critical_curve_8cpp" startline="14" endline="60">csmp::CriticalCurve::CriticalCurve</references>
+        <references refid="classcsmp_1_1_threephase_h_l_v_1a423662bc313dbfac0fcf4e5edd3ea0de" compoundref="_threephase_h_l_v_8cpp" startline="7" endline="25">csmp::ThreephaseHLV::ThreephaseHLV</references>
+        <references refid="classcsmp_1_1_water_1a25dbcb3664c0123565b84e01ce080b14" compoundref="_water_8cpp" startline="13" endline="51">csmp::Water::Water</references>
+        <referencedby refid="classcsmp_1_1_c_v_f_e_m___p_h_x___scheme_1a8729f002b10f167786de431cb2f577cf" compoundref="_c_v_f_e_m___p_h_x___scheme_8cpp" startline="583" endline="590">csmp::CVFEM_PHX_Scheme&lt; dim &gt;::OpenBoundaries</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brine_1a4399c2af9f96f9fcf7f8148fb394422b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Brine::~Brine</definition>
+        <argsstring>()</argsstring>
+        <name>~Brine</name>
+        <qualifiedname>csmp::Brine::~Brine</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>destructor </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="33" column="5" bodyfile="source/modules/eos/h2o_nacl/Brine.cpp" bodystart="90" bodyend="92"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brine_1a66a94a888d081877be3aecdea9e2d22d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Brine::MolarVolume</definition>
+        <argsstring>()</argsstring>
+        <name>MolarVolume</name>
+        <qualifiedname>csmp::Brine::MolarVolume</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Molar volume of H2O-NaCl solution in [cm3 mol-1] </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="35" column="20" bodyfile="source/modules/eos/h2o_nacl/Brine.cpp" bodystart="96" bodyend="100"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brine_1a4b3982d04820f3c3ee06fc022c321ef8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Brine::DMolarVolumeDT</definition>
+        <argsstring>()</argsstring>
+        <name>DMolarVolumeDT</name>
+        <qualifiedname>csmp::Brine::DMolarVolumeDT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Temperature derivative of molar volume of H2O-NaCl solution in [cm3 mol-1 C-1] </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="36" column="20" bodyfile="source/modules/eos/h2o_nacl/Brine.cpp" bodystart="103" bodyend="107"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brine_1a405bcfaf2650940ec005971d4fe515ca" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Brine::Density</definition>
+        <argsstring>()</argsstring>
+        <name>Density</name>
+        <qualifiedname>csmp::Brine::Density</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Density of H2O-NaCl solution in [kg m-3] </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="37" column="20" bodyfile="source/modules/eos/h2o_nacl/Brine.cpp" bodystart="131" bodyend="135"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brine_1af0802fe086365798d8392259d70467b5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Brine::CompressibilityBar</definition>
+        <argsstring>()</argsstring>
+        <name>CompressibilityBar</name>
+        <qualifiedname>csmp::Brine::CompressibilityBar</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Isothermal compressibility of H2O-NaCl solution in [bar-1] </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="38" column="20" bodyfile="source/modules/eos/h2o_nacl/Brine.cpp" bodystart="110" bodyend="114"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brine_1a67d22b158c1a560d3c64278d24e22d06" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Brine::Compressibility</definition>
+        <argsstring>()</argsstring>
+        <name>Compressibility</name>
+        <qualifiedname>csmp::Brine::Compressibility</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Isothermal compressibility of H2O-NaCl solution in [Pa-1] </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="39" column="20" bodyfile="source/modules/eos/h2o_nacl/Brine.cpp" bodystart="117" bodyend="121"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brine_1a8d3e22cdd2dd23b77ee668693fa34f49" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Brine::Expansivity</definition>
+        <argsstring>()</argsstring>
+        <name>Expansivity</name>
+        <qualifiedname>csmp::Brine::Expansivity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Thermal expansivity of H2O-NaCl solution in [C-1] </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="40" column="20" bodyfile="source/modules/eos/h2o_nacl/Brine.cpp" bodystart="124" bodyend="128"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brine_1aad9f6fbcdd61f9d8e9de4bca9b1f97d6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Brine::IsochoreSlope</definition>
+        <argsstring>()</argsstring>
+        <name>IsochoreSlope</name>
+        <qualifiedname>csmp::Brine::IsochoreSlope</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Isochore slope (dP/dT)_V of H2O-NaCl solution in [Pa C-1] </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="41" column="20" bodyfile="source/modules/eos/h2o_nacl/Brine.cpp" bodystart="138" bodyend="142"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brine_1a0d2d8f016b24ee0e4328993a133dda94" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Brine::Enthalpy</definition>
+        <argsstring>()</argsstring>
+        <name>Enthalpy</name>
+        <qualifiedname>csmp::Brine::Enthalpy</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Specific enthalpy of H2O-NaCl solution in [J kg-1] </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="42" column="20" bodyfile="source/modules/eos/h2o_nacl/Brine.cpp" bodystart="145" bodyend="149"/>
+        <referencedby refid="classcsmp_1_1_c_v_f_e_m___p_h_x___scheme_1a8729f002b10f167786de431cb2f577cf" compoundref="_c_v_f_e_m___p_h_x___scheme_8cpp" startline="583" endline="590">csmp::CVFEM_PHX_Scheme&lt; dim &gt;::OpenBoundaries</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brine_1acffa26e700b8822e073678c249c6228d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Brine::HeatCapacity</definition>
+        <argsstring>()</argsstring>
+        <name>HeatCapacity</name>
+        <qualifiedname>csmp::Brine::HeatCapacity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Specific heat capacity of H2O-NaCl solution in [J kg-1 C-1] </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="43" column="20" bodyfile="source/modules/eos/h2o_nacl/Brine.cpp" bodystart="152" bodyend="156"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brine_1aae5ab76535748b4eb3929b11ad1fc385" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Brine::Viscosity</definition>
+        <argsstring>()</argsstring>
+        <name>Viscosity</name>
+        <qualifiedname>csmp::Brine::Viscosity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Dynamic viscosity of H2O-NaCl solution in [Pa s] </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="44" column="20" bodyfile="source/modules/eos/h2o_nacl/Brine.cpp" bodystart="159" bodyend="163"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_brine_1a6f22733f51e5dacf0e0b581b2cec4b8b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Brine::Brine</definition>
+        <argsstring>()</argsstring>
+        <name>Brine</name>
+        <qualifiedname>csmp::Brine::Brine</qualifiedname>
+        <briefdescription>
+<para>default constructor private as public makes no sense </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="48" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brine_1aee1eb46a96d2f48d514516c8cd20df45" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Brine::CheckStatus</definition>
+        <argsstring>()</argsstring>
+        <name>CheckStatus</name>
+        <qualifiedname>csmp::Brine::CheckStatus</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Update internal pressure, temperature, composition variables and decide which formulations to use for computations of properties </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="120" column="22" bodyfile="source/modules/eos/h2o_nacl/Brine.cpp" bodystart="168" bodyend="223"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brine_1a3250f8ee3047a5e18f26dafd2ca1da72" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Brine::UpdateParameters</definition>
+        <argsstring>(const double &amp;t, const double &amp;p, const double &amp;x)</argsstring>
+        <name>UpdateParameters</name>
+        <qualifiedname>csmp::Brine::UpdateParameters</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>t</declname>
+          <defname>t_</defname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>p</declname>
+          <defname>p_</defname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>x</declname>
+          <defname>x_</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Update equation parameters</para>
+<para><simplesect kind="attention"><para>Notice that many expressions in the following memeber functions have been copy/pasted &quot;as is&quot; from Maple I have never checked them for possible numerical pitfalls such as adding/subtracting small and large numbers etc. or for any performance issues </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="121" column="22" bodyfile="source/modules/eos/h2o_nacl/Brine.cpp" bodystart="229" bodyend="310"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brine_1a990e4bedbbaa11a7828250dc649cb7e3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Brine::MolarVolumeFromWater</definition>
+        <argsstring>()</argsstring>
+        <name>MolarVolumeFromWater</name>
+        <qualifiedname>csmp::Brine::MolarVolumeFromWater</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Molar volume from equation 7 of Driesner, GCA, 2007 </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="122" column="20" bodyfile="source/modules/eos/h2o_nacl/Brine.cpp" bodystart="314" bodyend="317"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brine_1a73520e0677c5ad6cdf7ff3a2584812a7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Brine::DMolarVolumeDT</definition>
+        <argsstring>(const double &amp;t_)</argsstring>
+        <name>DMolarVolumeDT</name>
+        <qualifiedname>csmp::Brine::DMolarVolumeDT</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>t_</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Temperature derivative of eq. 7 of Driesner, GCA, 2007 </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="123" column="20" bodyfile="source/modules/eos/h2o_nacl/Brine.cpp" bodystart="421" bodyend="424"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brine_1a642dbaa331b53ee279ed2fad3fd17347" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Brine::DMolarVolumeDP</definition>
+        <argsstring>(const double &amp;t_)</argsstring>
+        <name>DMolarVolumeDP</name>
+        <qualifiedname>csmp::Brine::DMolarVolumeDP</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>t_</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Temperature derivative of eq. 7 of Driesner, GCA, 2007 </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="124" column="20" bodyfile="source/modules/eos/h2o_nacl/Brine.cpp" bodystart="428" bodyend="433"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brine_1a61da58fca86ebf1e287272c14135f6a3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Brine::MolarVolumeHighTX</definition>
+        <argsstring>(const double &amp;t_, const double &amp;p_, const double &amp;x_)</argsstring>
+        <name>MolarVolumeHighTX</name>
+        <qualifiedname>csmp::Brine::MolarVolumeHighTX</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>t_</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>p_</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>x_</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Molar volume from equation 18 of Driesner, GCA, 2007 </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="125" column="20" bodyfile="source/modules/eos/h2o_nacl/Brine.cpp" bodystart="321" bodyend="398"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brine_1aa8ea17d4c4642678d8dc523094c4c80e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Brine::MolarVolumeLowT</definition>
+        <argsstring>()</argsstring>
+        <name>MolarVolumeLowT</name>
+        <qualifiedname>csmp::Brine::MolarVolumeLowT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Molar volume from equation 17 of Driesner, GCA, 2007 </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="126" column="20" bodyfile="source/modules/eos/h2o_nacl/Brine.cpp" bodystart="402" bodyend="417"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brine_1a9db0cea5c6d15121c3cd3a37ff552578" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Brine::Enthalpy</definition>
+        <argsstring>(const double &amp;t_, const double &amp;p_, const double &amp;x_)</argsstring>
+        <name>Enthalpy</name>
+        <qualifiedname>csmp::Brine::Enthalpy</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>t_</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>p_</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>x_</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Specific enthalpy, equation 21 of Driesner, GCA, 2007 </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="127" column="20" bodyfile="source/modules/eos/h2o_nacl/Brine.cpp" bodystart="437" bodyend="457"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brine_1aad321291f472514be7783b988d876ba8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Brine::HeatCapacity</definition>
+        <argsstring>(const double &amp;x_)</argsstring>
+        <name>HeatCapacity</name>
+        <qualifiedname>csmp::Brine::HeatCapacity</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>x_</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Specific isobaric heat capacity, temperature derivative of Driesner, GCA, 2007 </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="128" column="20" bodyfile="source/modules/eos/h2o_nacl/Brine.cpp" bodystart="461" bodyend="464"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brine_1ae8fc2cdc8b27cceebf47c1fabf36ad22" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Brine::Viscosity</definition>
+        <argsstring>(const double &amp;t_, const double &amp;x_, const double &amp;muw_)</argsstring>
+        <name>Viscosity</name>
+        <qualifiedname>csmp::Brine::Viscosity</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>t_</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>x_</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>muw_</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Dynamic viscosity, using Palliser &amp; McKibbin, 1998 </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/Brine.h" line="129" column="20" bodyfile="source/modules/eos/h2o_nacl/Brine.cpp" bodystart="468" bodyend="484"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Thermodynamic properties of H2O-NaCl solutions. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>Thomas Driesner, ETH Zuerich </para>
+</simplesect>
+</para>
+<sect1 id="compare_floats_8h_1contact">
+<title>Contact</title><para><ulink url="mailto:thomas.driesner@erdw.ethz.ch">thomas.driesner@erdw.ethz.ch</ulink></para>
+<para>@changes changes Latest Changes <linebreak/>
+</para>
+</sect1>
+<sect1 id="compare_floats_8h_1motivation">
+<title>Motivation</title><para><ref refid="classcsmp_1_1_brine" kindref="compound">Brine</ref> is legacy code from Thomas Driesner&apos;s developments for the H2O-NaCl system, but it is REQUIRED in the CSMP context. There, it is essential to build accurate lookup tables for the H2O-NaCl system, which are then actually used by CSMP. As long as we don&apos;t distribute the lookup tables per se for the various platforms, the <ref refid="classcsmp_1_1_brine" kindref="compound">Brine</ref> legacy will remain in CSMP.</para>
+<para><ref refid="classcsmp_1_1_brine" kindref="compound">Brine</ref> computes the properties of H<subscript>2</subscript>O-NaCl fluids as a function of temperature-pressure-composition [Celsius, bar, mole fraction NaCl] , according to the paper</para>
+<para>Driesner T. (2007): The system H2O-NaCl. Part II: Correlations for molar volume, enthalpy, and isobaric heat capacity from 0 to 1000oC, 1 to 5000 bar, and 0 to 1 XNaCl. Geochimica et Cosmochimica Acta 71, 4902-4919.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_upwind_control_visitor_1usage">
+<title>Usage</title><para>Construct an instance of &quot;Brine&quot; with the temperature (in C), Pressure (Pa) and NaCl Concentration (mass fraction) that live in your code part as constructor arguments. &quot;Brine&quot; has an internal mechanism (via const&amp;) to make sure that it always uses the current values of temperature, pressure, and composition that you have calculated externally. Public member names should be self-explanatory. Don&apos;t experiment with making private memebrs public as that will almost inevitably lead to wrong results!</para>
+<para><programlisting><codeline><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>temperature(100.0);<sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>temperature<sp/>in<sp/>your<sp/>code</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>fluid_pressure(10.0e6);<sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>fluid<sp/>pressure<sp/>in<sp/>your<sp/>code</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>massfraction_nacl(0.1);<sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>mass<sp/>fraction<sp/>NaCl<sp/>in<sp/>fluid,<sp/>in<sp/>your<sp/>code</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="classcsmp_1_1_brine_1a3ab834697c85d10e2dd3dab232ba3171" kindref="member">Brine</ref><sp/><sp/><sp/><sp/>brine(temperature,<sp/>fluid_pressure,<sp/>massfraction_nacl);<sp/></highlight><highlight class="comment">//<sp/>instantiate<sp/>a<sp/>Brine<sp/>object</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">...<sp/></highlight><highlight class="comment">//<sp/>simulation<sp/>goes<sp/>on</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>new<sp/>values<sp/>for<sp/>temperature,<sp/>fluid<sp/>pressure,<sp/>and<sp/>composition<sp/>have<sp/>been<sp/>computed:</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">temperature<sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>newtemperature;</highlight></codeline>
+<codeline><highlight class="normal">fluid_pressure<sp/><sp/><sp/>=<sp/>new_fluid_pressure;</highlight></codeline>
+<codeline><highlight class="normal">massfractionnacl<sp/>=<sp/>new_massfraction_nacl;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>retrieve<sp/>and<sp/>assign<sp/>new<sp/>fluid<sp/>properties,<sp/>no<sp/>need<sp/>to<sp/>new<sp/>communicate<sp/>he<sp/>new<sp/>temperature,<sp/>fluid<sp/>pressure,<sp/>and<sp/>composition,<sp/>they<sp/>are<sp/>&quot;known&quot;<sp/>automatically<sp/>by<sp/>Brine</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">rho<sp/>=<sp/>brine.Density();</highlight></codeline>
+<codeline><highlight class="normal">mu<sp/><sp/>=<sp/>brine.Viscosity();</highlight></codeline>
+<codeline><highlight class="normal">cp<sp/><sp/>=<sp/>brine.HeatCapacity();</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">...<sp/></highlight><highlight class="comment">//<sp/>move<sp/>on</highlight></codeline>
+</programlisting></para>
+</sect1>
+<sect1 id="classcsmp_1_1_upwind_control_visitor_1dependencies">
+<title>Dependencies</title></sect1>
+<sect1 id="classcsmp_1_1_upwind_control_visitor_1issues">
+<title>Known issues</title><para>Performance is not optimized. Whenever one of the public members is invoked ALL properties are being computed. There is currently no intention to improve this as <ref refid="classcsmp_1_1_brine" kindref="compound">Brine</ref> should only be used to compute the lookup tables. Pressure() still returns values in bars, a legacy from the SoWat development. Composition() is in mole fraction NaCl, to convert to other units, the functions in &quot;ConvertConcentrationUnitsNaCl.h&quot; may be useful</para>
+</sect1>
+<sect1 id="compare_floats_8h_1testing">
+<title>Testing</title><para>testing was done in the period before publication in 2007, prior to writing this documentation, no details are available anymore </para>
+</sect1>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::Brine</label>
+        <link refid="classcsmp_1_1_brine"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/eos/Brine.h" line="25" column="3" bodyfile="source/includes/eos/Brine.h" bodystart="26" bodyend="137"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_brine_1add5448c2e20788396560cfe230e02c84" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>a0_</name></member>
+      <member refid="classcsmp_1_1_brine_1abe0caf8ce30ee29cdbb2c028b0b47afb" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>a0_1_</name></member>
+      <member refid="classcsmp_1_1_brine_1a819d42ed76fc36334bf3cc0477e9141d" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>a1_</name></member>
+      <member refid="classcsmp_1_1_brine_1a66fc9a42e7336012630428c5c117735d" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>a1_0_</name></member>
+      <member refid="classcsmp_1_1_brine_1a8951eab8fd75eb20a9154920d328e622" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>a1_1_</name></member>
+      <member refid="classcsmp_1_1_brine_1a3ab834697c85d10e2dd3dab232ba3171" prot="public" virt="non-virtual"><scope>csmp::Brine</scope><name>Brine</name></member>
+      <member refid="classcsmp_1_1_brine_1a6f22733f51e5dacf0e0b581b2cec4b8b" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>Brine</name></member>
+      <member refid="classcsmp_1_1_brine_1aee1eb46a96d2f48d514516c8cd20df45" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>CheckStatus</name></member>
+      <member refid="classcsmp_1_1_brine_1a270ac44987ab2f35946e8a93da95ae93" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>composition_</name></member>
+      <member refid="classcsmp_1_1_brine_1a67d22b158c1a560d3c64278d24e22d06" prot="public" virt="non-virtual"><scope>csmp::Brine</scope><name>Compressibility</name></member>
+      <member refid="classcsmp_1_1_brine_1ad612a5ff4930d4659d6ec232ffa3d97c" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>compressibility_</name></member>
+      <member refid="classcsmp_1_1_brine_1af0802fe086365798d8392259d70467b5" prot="public" virt="non-virtual"><scope>csmp::Brine</scope><name>CompressibilityBar</name></member>
+      <member refid="classcsmp_1_1_brine_1abb62d5f8a35170edc7d872926af5ea04" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>critcurve</name></member>
+      <member refid="classcsmp_1_1_brine_1a37b2d2d5a4210a2da18e773c5a2d0515" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>da0_1dp_</name></member>
+      <member refid="classcsmp_1_1_brine_1aeac280645bcde31be505bbdebea061b5" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>da0dp_</name></member>
+      <member refid="classcsmp_1_1_brine_1af453bfbada6979561b8dafff760b64c6" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>da1_0dp_</name></member>
+      <member refid="classcsmp_1_1_brine_1a141febe65820552cd970d5b6b630172f" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>da1_1dp_</name></member>
+      <member refid="classcsmp_1_1_brine_1a88b602d4fa42bb188f6b1af9a15144eb" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>da1dp_</name></member>
+      <member refid="classcsmp_1_1_brine_1aa46cff38defb0e0042b030a362ae1d7f" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>ddev_a0_0dp_</name></member>
+      <member refid="classcsmp_1_1_brine_1a52652764fd967ef350e9339bda661e29" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>ddev_a0_1dp_</name></member>
+      <member refid="classcsmp_1_1_brine_1ab3f27b3fca6859ce55cf07a06737eab1" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>ddev_a0_2dp_</name></member>
+      <member refid="classcsmp_1_1_brine_1adda0e4a496e0fc821c3d33acf58e1e65" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>ddev_a0dp_</name></member>
+      <member refid="classcsmp_1_1_brine_1a490968ccab78920fe07684ee263c74de" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>ddev_a1_0dp_</name></member>
+      <member refid="classcsmp_1_1_brine_1ab02d7f3ed007ce0c2c2cd326211258f9" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>ddev_a1_1dp_</name></member>
+      <member refid="classcsmp_1_1_brine_1a9e7dd26eb5f20cb46a74a922d9e7d17c" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>ddev_a1_2dp_</name></member>
+      <member refid="classcsmp_1_1_brine_1a377f813432d4b9e17366990ceacc9690" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>ddev_a1dp_</name></member>
+      <member refid="classcsmp_1_1_brine_1a405bcfaf2650940ec005971d4fe515ca" prot="public" virt="non-virtual"><scope>csmp::Brine</scope><name>Density</name></member>
+      <member refid="classcsmp_1_1_brine_1af56019d7efe59c09bf0fb71998bc5b1c" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>density_</name></member>
+      <member refid="classcsmp_1_1_brine_1aa1ffa455b4a3d16d17724c29e4a0df3a" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>dev_a0_</name></member>
+      <member refid="classcsmp_1_1_brine_1aa5b2970a1cc4101881c02355d6ea14d8" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>dev_a0_0_</name></member>
+      <member refid="classcsmp_1_1_brine_1a3de72d4f9bb6b23b2196b1287d0371c9" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>dev_a0_1_</name></member>
+      <member refid="classcsmp_1_1_brine_1a84313afc9e18e301ac016f15eb1736dc" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>dev_a0_2_</name></member>
+      <member refid="classcsmp_1_1_brine_1a54121b3dc47a597b4a20d995e3c56a80" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>dev_a1_</name></member>
+      <member refid="classcsmp_1_1_brine_1af0ea9ab690f73f587ab8aaec742d82da" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>dev_a1_0_</name></member>
+      <member refid="classcsmp_1_1_brine_1aec98326b38157613bc79f14aaae7ca36" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>dev_a1_1_</name></member>
+      <member refid="classcsmp_1_1_brine_1a56910478109e9962632ff159b94524d8" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>dev_a1_2_</name></member>
+      <member refid="classcsmp_1_1_brine_1a642dbaa331b53ee279ed2fad3fd17347" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>DMolarVolumeDP</name></member>
+      <member refid="classcsmp_1_1_brine_1a1571996802f686854cf1753802dd94bc" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>dmolarvolumedp_</name></member>
+      <member refid="classcsmp_1_1_brine_1a4b3982d04820f3c3ee06fc022c321ef8" prot="public" virt="non-virtual"><scope>csmp::Brine</scope><name>DMolarVolumeDT</name></member>
+      <member refid="classcsmp_1_1_brine_1a73520e0677c5ad6cdf7ff3a2584812a7" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>DMolarVolumeDT</name></member>
+      <member refid="classcsmp_1_1_brine_1a23e61766b12b52697b0bd7e34a522075" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>dmolarvolumedt_</name></member>
+      <member refid="classcsmp_1_1_brine_1a271a367891d8199a56c0d170fe758f1d" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>dnacl_a0dp_</name></member>
+      <member refid="classcsmp_1_1_brine_1a2e1ad3b3a6cca2557933ec0710fa50bb" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>dnacl_a1dp_</name></member>
+      <member refid="classcsmp_1_1_brine_1a0b43c78657ad4947a1157edeffc2c580" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>dummywater</name></member>
+      <member refid="classcsmp_1_1_brine_1a0d2d8f016b24ee0e4328993a133dda94" prot="public" virt="non-virtual"><scope>csmp::Brine</scope><name>Enthalpy</name></member>
+      <member refid="classcsmp_1_1_brine_1a9db0cea5c6d15121c3cd3a37ff552578" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>Enthalpy</name></member>
+      <member refid="classcsmp_1_1_brine_1a1f2ce3bc4ac609ddba28f1355ea91290" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>enthalpy_</name></member>
+      <member refid="classcsmp_1_1_brine_1a8d3e22cdd2dd23b77ee668693fa34f49" prot="public" virt="non-virtual"><scope>csmp::Brine</scope><name>Expansivity</name></member>
+      <member refid="classcsmp_1_1_brine_1a741a9df14ce44be0c488a9c5e1d76495" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>expansivity_</name></member>
+      <member refid="classcsmp_1_1_brine_1a71b558c3cb3784d8ffe1b24d960b6501" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>h_a0_</name></member>
+      <member refid="classcsmp_1_1_brine_1a777e05f42b48a35f28f3f98406f8d646" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>h_a0_1_</name></member>
+      <member refid="classcsmp_1_1_brine_1a8266b8ec908cdfbe01bf6eb800f5630f" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>h_a1_</name></member>
+      <member refid="classcsmp_1_1_brine_1ad5cb0dad193b74b8457b2628acbbc189" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>h_a1_1_</name></member>
+      <member refid="classcsmp_1_1_brine_1afcd32434da42e4db39dc6b49454b55c5" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>h_a1_2_</name></member>
+      <member refid="classcsmp_1_1_brine_1a4f7edddfaaae04cd0a5500ec660ffa0f" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>h_nacl_a0_</name></member>
+      <member refid="classcsmp_1_1_brine_1af03c4827b2c1728b545ca671fc51dc32" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>h_nacl_a1_</name></member>
+      <member refid="classcsmp_1_1_brine_1acffa26e700b8822e073678c249c6228d" prot="public" virt="non-virtual"><scope>csmp::Brine</scope><name>HeatCapacity</name></member>
+      <member refid="classcsmp_1_1_brine_1aad321291f472514be7783b988d876ba8" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>HeatCapacity</name></member>
+      <member refid="classcsmp_1_1_brine_1ae96ea6d83e7cbea27140798f5c2a8cf4" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>heatcapacity_</name></member>
+      <member refid="classcsmp_1_1_brine_1aafe22628c22b1ff2350668ce60dafe37" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>hlv</name></member>
+      <member refid="classcsmp_1_1_brine_1a4ca1fadb408426b2e15e14b352c2ec76" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>isochore_</name></member>
+      <member refid="classcsmp_1_1_brine_1aad9f6fbcdd61f9d8e9de4bca9b1f97d6" prot="public" virt="non-virtual"><scope>csmp::Brine</scope><name>IsochoreSlope</name></member>
+      <member refid="classcsmp_1_1_brine_1a66a94a888d081877be3aecdea9e2d22d" prot="public" virt="non-virtual"><scope>csmp::Brine</scope><name>MolarVolume</name></member>
+      <member refid="classcsmp_1_1_brine_1a95d64408d1e891db087cfa8b51c1c531" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>molarvolume_</name></member>
+      <member refid="classcsmp_1_1_brine_1a990e4bedbbaa11a7828250dc649cb7e3" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>MolarVolumeFromWater</name></member>
+      <member refid="classcsmp_1_1_brine_1a61da58fca86ebf1e287272c14135f6a3" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>MolarVolumeHighTX</name></member>
+      <member refid="classcsmp_1_1_brine_1aa8ea17d4c4642678d8dc523094c4c80e" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>MolarVolumeLowT</name></member>
+      <member refid="classcsmp_1_1_brine_1a29d5496d000e2f82f4e7194c3dc88b51" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>muw_</name></member>
+      <member refid="classcsmp_1_1_brine_1a2fdd3383b64ffd427d82f4acd7354810" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>mystate</name></member>
+      <member refid="classcsmp_1_1_brine_1afbe7b31a222465222beda9ac94c331fd" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>nacl_a0_</name></member>
+      <member refid="classcsmp_1_1_brine_1a1f2af3628bcfbf797f1aee57a57fe3bd" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>nacl_a1_</name></member>
+      <member refid="classcsmp_1_1_brine_1a35124bad4672be99b15399ee84979fba" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>pcurrent_</name></member>
+      <member refid="classcsmp_1_1_brine_1a481ff279662a92ec5840041be42697de" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>pdummy_</name></member>
+      <member refid="classcsmp_1_1_brine_1a56739be47417b45776f301ad779f7f59" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>pdummy_mu_</name></member>
+      <member refid="classcsmp_1_1_brine_1abaebbf9a4af6417bbcff7f248310dd6a" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>pdummyPa_</name></member>
+      <member refid="classcsmp_1_1_brine_1a9935910b2b4b44c145f6418915f736b5" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>pressure_</name></member>
+      <member refid="classcsmp_1_1_brine_1ac074fc5dbe5717ada21f8449a6e02f7a" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>tcurrent_</name></member>
+      <member refid="classcsmp_1_1_brine_1a5383221f856e82b2a612f149baedef5d" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>tdummy_</name></member>
+      <member refid="classcsmp_1_1_brine_1a86e9ff1968098375df556ae654ec6f22" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>temperature_</name></member>
+      <member refid="classcsmp_1_1_brine_1a3250f8ee3047a5e18f26dafd2ca1da72" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>UpdateParameters</name></member>
+      <member refid="classcsmp_1_1_brine_1a4b9f31db49d52a98d5d5a223a17e17ee" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>visc_muc800_</name></member>
+      <member refid="classcsmp_1_1_brine_1a8e0e6419561d965f1f15ede2ec914bc2" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>visc_u0_</name></member>
+      <member refid="classcsmp_1_1_brine_1a1c0eff9f0e6f5fb207f1d8f5810418cf" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>visc_u1_</name></member>
+      <member refid="classcsmp_1_1_brine_1aae5ab76535748b4eb3929b11ad1fc385" prot="public" virt="non-virtual"><scope>csmp::Brine</scope><name>Viscosity</name></member>
+      <member refid="classcsmp_1_1_brine_1ae8fc2cdc8b27cceebf47c1fabf36ad22" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>Viscosity</name></member>
+      <member refid="classcsmp_1_1_brine_1a9ee44ea7bc178857aa66d888d0ac5b17" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>viscosity_</name></member>
+      <member refid="classcsmp_1_1_brine_1a4f371a0724906586c4242d1bf6d2acfa" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>xcurrent_</name></member>
+      <member refid="classcsmp_1_1_brine_1a8ddafb34134053212293a32bb832e6f5" prot="private" virt="non-virtual"><scope>csmp::Brine</scope><name>xm_</name></member>
+      <member refid="classcsmp_1_1_brine_1a4399c2af9f96f9fcf7f8148fb394422b" prot="public" virt="non-virtual"><scope>csmp::Brine</scope><name>~Brine</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

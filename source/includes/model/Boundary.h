@@ -113,10 +113,10 @@ class Boundary : public ModelSubDomain<dim, Face>,
 
     /// assigning the variable values from the FEM_DATA container to the corresponding property of the Boundary
     template<class Var>
-    void InputVariableFrom( const char* property, const FEM_Data<Var>& );
+    void InputVariableFrom( const char* property, const FEM_Data<Var>& property_values );
 
     template<class Var>
-    void OutputVariableTo( const char* property, FEM_Data<Var>& ) const;
+    void OutputVariableTo( const char* property, FEM_Data<Var>& property_values ) const;
 
 
     // ----------------------------------------

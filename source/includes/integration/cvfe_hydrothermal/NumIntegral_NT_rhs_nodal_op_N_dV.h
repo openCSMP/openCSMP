@@ -49,12 +49,12 @@ class NumIntegral_NT_rhs_nodal_op_N_dV : public MathOperatorRHS<dim,CELL> {
     NumIntegral_NT_rhs_nodal_op_N_dV( const PropertyDatabase<dim>&, 
                                       const char* oper, const char* test );
 
-    virtual ~NumIntegral_NT_rhs_nodal_op_N_dV();
+    ~NumIntegral_NT_rhs_nodal_op_N_dV();
 
-    virtual void GetOperands( const CELL<dim>& );
-    virtual void ComputeContribution( const CELL<dim>& );
+    void GetOperands( const CELL<dim>& ) override final;
+    void ComputeContribution( const CELL<dim>& ) override final;
     
-    virtual NumIntegral_NT_rhs_nodal_op_N_dV<dim,CELL>* clone() const { return new NumIntegral_NT_rhs_nodal_op_N_dV<dim,CELL> (*this); }
+    NumIntegral_NT_rhs_nodal_op_N_dV<dim,CELL>* clone() const override final { return new NumIntegral_NT_rhs_nodal_op_N_dV<dim,CELL> (*this); }
     
   private:
 

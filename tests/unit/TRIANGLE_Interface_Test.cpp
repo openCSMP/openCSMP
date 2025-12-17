@@ -10,6 +10,7 @@
 #include "Model.h"
 #include "Boundary.h"
 #include "VSet.h"
+#include "Box.h"
 
 using namespace std;
 
@@ -27,13 +28,11 @@ void TRIANGLE_Interface_Test::Test_BOX_BOUNDARY_NodeFlags()
     // ---------------------------------------------------------------------------------------
     TRIANGLE_Interface  mesh_interface;
     VSet<2U>            mesh_container;
-    string              file_name = "irish1x.1";
+//    string              file_name = "irish1x.1";
+    string              file_name = "blunt30deg.1";
     const bool isoparametric{true};
     mesh_interface.ReadTriangle2DMesh( file_name.c_str(), mesh_container, isoparametric );
-//    auto x_range = mesh_container.X_Range();
-//    auto y_range = mesh_container.Y_Range();
-//    const double tolerance = distance( Point<2>(x_range.second,y_range.second), Point<2>(x_range.first,y_range.first) );
-//    flagCornerNodes( mesh_container, tolerance, x_range.first, x_range.second, y_range.first, y_range.second, 0., 0. );
+//    establishBoundaryFlagsForBoxModel( mesh_container, 0.1 );
 
     Model<2U>  model( mesh_container, "Minimum-variables.txt" );
     mesh_container.Erase();
@@ -42,7 +41,7 @@ void TRIANGLE_Interface_Test::Test_BOX_BOUNDARY_NodeFlags()
     // (EstablishBoxBoundariesFromOrientation will not change flags that were set earlier)
     model.EstablishBoxBoundariesFromOrientation();
     
-    if ( verbose_ ) cout <<"\nmain: checking validity of boundary flags:"<< endl;
+    if ( verbose_ ) cout <<"\n"<<"TRIANGLE_Interface_Test(verbose): checking validity of boundary flags:"<< endl;
     for ( auto bit=model.BoundariesBegin(); bit!=model.BoundariesEnd(); ++bit ) {
          if ( verbose_ ) {
              cout <<"\n"<<"'"<< (*bit).first <<"', with boudary flags: "<< endl;

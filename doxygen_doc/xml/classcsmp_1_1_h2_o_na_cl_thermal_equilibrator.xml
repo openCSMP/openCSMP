@@ -1,0 +1,1448 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator" kind="class" language="C++" prot="public">
+    <compoundname>csmp::H2ONaClThermalEquilibrator</compoundname>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a083d6712978aab345376f41837cc6168" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::H2ONaClThermalEquilibrator::mass_rock</definition>
+        <argsstring></argsstring>
+        <name>mass_rock</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::mass_rock</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="73" column="29" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1af30054cf5b32eeb94a7c5f9096eed608" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::H2ONaClThermalEquilibrator::cp_rock</definition>
+        <argsstring></argsstring>
+        <name>cp_rock</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::cp_rock</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="74" column="29" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a25cf7666148567f615d1d66e4c1f82ef" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::H2ONaClThermalEquilibrator::rho_rock</definition>
+        <argsstring></argsstring>
+        <name>rho_rock</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::rho_rock</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="75" column="29" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="75" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1ae1125296aaaacb708cba69fd7e6e44e6" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::H2ONaClThermalEquilibrator::phi</definition>
+        <argsstring></argsstring>
+        <name>phi</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::phi</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="76" column="29" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="76" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1afc57545e8f0e66bab7d68f1c11ea82ef" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::H2ONaClThermalEquilibrator::mass_fluid</definition>
+        <argsstring></argsstring>
+        <name>mass_fluid</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::mass_fluid</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="77" column="29" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1aa4b35d3fc3c2aa13d70b6281c494777c" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::H2ONaClThermalEquilibrator::wt_current</definition>
+        <argsstring></argsstring>
+        <name>wt_current</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::wt_current</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="78" column="29" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1ac0b3852d2fb0dc86bdd709905b4d6b1d" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::H2ONaClThermalEquilibrator::t_previous</definition>
+        <argsstring></argsstring>
+        <name>t_previous</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::t_previous</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="79" column="29" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1acce373972d5b5afd7ed2e5f16160cce3" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::H2ONaClThermalEquilibrator::p_current</definition>
+        <argsstring></argsstring>
+        <name>p_current</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::p_current</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="80" column="29" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a7a42470be3c963531e7c9b6d9b90d19f" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::H2ONaClThermalEquilibrator::H_current</definition>
+        <argsstring></argsstring>
+        <name>H_current</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::H_current</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="81" column="29" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a586e9fd092c2278f56cbf0246a163240" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::H2ONaClThermalEquilibrator::H_previous</definition>
+        <argsstring></argsstring>
+        <name>H_previous</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::H_previous</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="82" column="29" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a9b17d454b0e6ee12507d7c3f280585f5" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::H2ONaClThermalEquilibrator::t_fix</definition>
+        <argsstring></argsstring>
+        <name>t_fix</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::t_fix</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="83" column="29" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="83" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1ab84001ac24c5a5159ebff80c4a33a5e5" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::H2ONaClThermalEquilibrator::t_diff</definition>
+        <argsstring></argsstring>
+        <name>t_diff</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::t_diff</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="84" column="29" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1aea8143519cc75569c64975608dc44694" prot="private" static="no" mutable="no">
+        <type>const bool &amp;</type>
+        <definition>const bool&amp; csmp::H2ONaClThermalEquilibrator::fixed_t</definition>
+        <argsstring></argsstring>
+        <name>fixed_t</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::fixed_t</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="85" column="31" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a34bd5e42e62615d4bd3f78940d2cba13" prot="private" static="no" mutable="no">
+        <type>const bool &amp;</type>
+        <definition>const bool&amp; csmp::H2ONaClThermalEquilibrator::verbose</definition>
+        <argsstring></argsstring>
+        <name>verbose</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::verbose</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="86" column="31" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1adf7fb606866b113d4fa9c95b0eef691e" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::H2ONaClThermalEquilibrator::equilibrated</definition>
+        <argsstring></argsstring>
+        <name>equilibrated</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::equilibrated</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="88" column="32" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1aa3d1bca227fe9105cdf421c24e48f290" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::H2ONaClThermalEquilibrator::fatal</definition>
+        <argsstring></argsstring>
+        <name>fatal</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::fatal</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="89" column="32" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="89" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a7872073e72062f1202136ba73e83f41f" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::H2ONaClThermalEquilibrator::convergence_criterion</definition>
+        <argsstring></argsstring>
+        <name>convergence_criterion</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::convergence_criterion</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="91" column="30" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1ad81970879a395bc6513cf200cc9fdd42" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::H2ONaClThermalEquilibrator::minimum_dt</definition>
+        <argsstring></argsstring>
+        <name>minimum_dt</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::minimum_dt</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="92" column="30" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a002000b0e855ddc852f8c4eb08972e44" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClThermalEquilibrator::t_eq</definition>
+        <argsstring></argsstring>
+        <name>t_eq</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::t_eq</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="94" column="30" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="94" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a5ae09c4426e7e11f3e5c0459fb2949ec" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClThermalEquilibrator::x_current_eq</definition>
+        <argsstring></argsstring>
+        <name>x_current_eq</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::x_current_eq</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="95" column="30" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="95" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1ab7da78ba97abaef94a0c459b9eef8e6a" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClThermalEquilibrator::h_fluid_eq</definition>
+        <argsstring></argsstring>
+        <name>h_fluid_eq</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::h_fluid_eq</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="96" column="30" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="96" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1ac4b1573a511df31789aabd0c0c212ee8" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClThermalEquilibrator::h_fluid_test</definition>
+        <argsstring></argsstring>
+        <name>h_fluid_test</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::h_fluid_test</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="97" column="30" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="97" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a40eeb745bb73553971dcc5fdbae2f80b" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClThermalEquilibrator::tmin</definition>
+        <argsstring></argsstring>
+        <name>tmin</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::tmin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="98" column="30" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="98" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a8ef487c244cc052da5204820dedc8679" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClThermalEquilibrator::tmax</definition>
+        <argsstring></argsstring>
+        <name>tmax</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::tmax</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="99" column="30" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="99" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1aebbf1f88dfd0c449a29b4a90ea70e7da" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClThermalEquilibrator::resid</definition>
+        <argsstring></argsstring>
+        <name>resid</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::resid</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="100" column="30" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="100" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a994d84242a5cad074d2af8d59039c6e0" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClThermalEquilibrator::Hmax</definition>
+        <argsstring></argsstring>
+        <name>Hmax</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::Hmax</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="101" column="30" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="101" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a4bc2a4ef8731559753feb7fb52146b0b" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClThermalEquilibrator::Hmin</definition>
+        <argsstring></argsstring>
+        <name>Hmin</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::Hmin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="102" column="30" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a86b506df778d20b92ca71d55865d99e6" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClThermalEquilibrator::mass_rock_eq</definition>
+        <argsstring></argsstring>
+        <name>mass_rock_eq</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::mass_rock_eq</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="103" column="30" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1aa47ff9a8c54d0672ef17291c99144c27" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClThermalEquilibrator::cp_rock_eq</definition>
+        <argsstring></argsstring>
+        <name>cp_rock_eq</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::cp_rock_eq</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="104" column="30" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="104" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a4f8e342e0920c13875863c08b3776943" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClThermalEquilibrator::mass_fluid_eq</definition>
+        <argsstring></argsstring>
+        <name>mass_fluid_eq</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::mass_fluid_eq</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="105" column="30" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="105" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a7c600b41dab692584c62dd25fd5c84c4" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClThermalEquilibrator::wt_current_eq</definition>
+        <argsstring></argsstring>
+        <name>wt_current_eq</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::wt_current_eq</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="106" column="30" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1aeb667b4f26ecd0a607f9e317989aaa6c" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClThermalEquilibrator::t_previous_eq</definition>
+        <argsstring></argsstring>
+        <name>t_previous_eq</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::t_previous_eq</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="107" column="30" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="107" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a41fefcac96938f0fd266c236206097d5" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClThermalEquilibrator::p_current_eq</definition>
+        <argsstring></argsstring>
+        <name>p_current_eq</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::p_current_eq</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="108" column="30" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="108" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a6e45c51cfa7d0d6f16dc4a5019750dd1" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClThermalEquilibrator::H_current_eq</definition>
+        <argsstring></argsstring>
+        <name>H_current_eq</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::H_current_eq</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="109" column="30" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="109" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1aeb9c07b9e005ffdc6212129b594328f5" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClThermalEquilibrator::H_previous_eq</definition>
+        <argsstring></argsstring>
+        <name>H_previous_eq</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::H_previous_eq</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="110" column="30" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="110" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a153359b25fc3daafc73ae4652f2d1571" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClThermalEquilibrator::H_test</definition>
+        <argsstring></argsstring>
+        <name>H_test</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::H_test</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="111" column="30" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1abb3a6f01cc222825115d9a0d9d5542f5" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClThermalEquilibrator::tdummy</definition>
+        <argsstring></argsstring>
+        <name>tdummy</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::tdummy</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="112" column="30" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a69b6e1c6ead5a6601abb301a70d0aba0" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClThermalEquilibrator::hdummy</definition>
+        <argsstring></argsstring>
+        <name>hdummy</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::hdummy</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="113" column="30" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="113" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a6f44bc6e22721660e4408887660b2a6b" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClThermalEquilibrator::t_previous_ini</definition>
+        <argsstring></argsstring>
+        <name>t_previous_ini</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::t_previous_ini</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="114" column="30" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="114" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a58f8f8ccbc317c16fa835acb5f4426bf" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClThermalEquilibrator::mass_rock_ini</definition>
+        <argsstring></argsstring>
+        <name>mass_rock_ini</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::mass_rock_ini</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="116" column="30" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="116" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a98ba8467af7c506d15eef0ae6791cc64" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClThermalEquilibrator::cp_rock_ini</definition>
+        <argsstring></argsstring>
+        <name>cp_rock_ini</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::cp_rock_ini</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="117" column="30" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="117" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a30d92c3ca8357b54a321a2d87393326d" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClThermalEquilibrator::rho_rock_ini</definition>
+        <argsstring></argsstring>
+        <name>rho_rock_ini</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::rho_rock_ini</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="118" column="30" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="118" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1ae3c0bbe7c87ae951040eeff0602fdb76" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClThermalEquilibrator::porosity_ini</definition>
+        <argsstring></argsstring>
+        <name>porosity_ini</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::porosity_ini</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="119" column="30" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="119" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1abb75858d32eab416f82160ab4e3a2450" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClThermalEquilibrator::mass_fluid_ini</definition>
+        <argsstring></argsstring>
+        <name>mass_fluid_ini</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::mass_fluid_ini</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="120" column="30" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="120" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a8c1e3e014ef4ce163f6163419c4f3344" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClThermalEquilibrator::wt_current_ini</definition>
+        <argsstring></argsstring>
+        <name>wt_current_ini</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::wt_current_ini</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="121" column="30" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="121" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a91d0fed05f480f45935b7e7917028ad1" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClThermalEquilibrator::x_current_ini</definition>
+        <argsstring></argsstring>
+        <name>x_current_ini</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::x_current_ini</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="122" column="30" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="122" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a6766f600d7c42750488f64e00f5e5603" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClThermalEquilibrator::p_current_ini</definition>
+        <argsstring></argsstring>
+        <name>p_current_ini</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::p_current_ini</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="123" column="30" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="123" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a84ac87f353d12229739854cfb3197e74" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClThermalEquilibrator::H_current_ini</definition>
+        <argsstring></argsstring>
+        <name>H_current_ini</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::H_current_ini</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="124" column="30" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="124" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a2ce3523ed9c8bdea86716d6150e2494a" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClThermalEquilibrator::H_previous_ini</definition>
+        <argsstring></argsstring>
+        <name>H_previous_ini</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::H_previous_ini</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="125" column="30" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="125" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1ae02ec5fbf9b3d50418ad1ef7343fbc4d" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int csmp::H2ONaClThermalEquilibrator::icrit</definition>
+        <argsstring></argsstring>
+        <name>icrit</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::icrit</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="128" column="32" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="128" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a0be0a5e22ca381d95221a48c387134a3" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int csmp::H2ONaClThermalEquilibrator::icrit_max</definition>
+        <argsstring></argsstring>
+        <name>icrit_max</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::icrit_max</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="129" column="32" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="129" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a79da7125a9673ac4b763c25f6537dc62" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_rock" kindref="compound">Rock</ref></type>
+        <definition>Rock csmp::H2ONaClThermalEquilibrator::rock</definition>
+        <argsstring></argsstring>
+        <name>rock</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::rock</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="134" column="32" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="134" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1aaf16ceda4b67224ba109af691b89e01b" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_h2_o_na_cl_fluid_properties" kindref="compound">H2ONaClFluidProperties</ref></type>
+        <definition>H2ONaClFluidProperties csmp::H2ONaClThermalEquilibrator::fluid</definition>
+        <argsstring></argsstring>
+        <name>fluid</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::fluid</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="135" column="32" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="135" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a20837a340e62b39fc67c14120ccf40a3" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_h2_o_thermal_equilibrator" kindref="compound">H2OThermalEquilibrator</ref></type>
+        <definition>H2OThermalEquilibrator csmp::H2ONaClThermalEquilibrator::water_equilibrator</definition>
+        <argsstring></argsstring>
+        <name>water_equilibrator</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::water_equilibrator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="136" column="32" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="136" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1ae7de2ddb042957d8ea54202eabc0b8bf" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_fluidproperties" kindref="compound">Fluidproperties</ref></type>
+        <definition>Fluidproperties csmp::H2ONaClThermalEquilibrator::liquidprops</definition>
+        <argsstring></argsstring>
+        <name>liquidprops</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::liquidprops</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="146" column="32" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="146" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1ab6118bf0ac05e4d65159147d464ef523" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_fluidproperties" kindref="compound">Fluidproperties</ref></type>
+        <definition>Fluidproperties csmp::H2ONaClThermalEquilibrator::vaporprops</definition>
+        <argsstring></argsstring>
+        <name>vaporprops</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::vaporprops</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="147" column="32" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="147" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a51b3bcfc5d8694324f27effb8a37f06e" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_fluidproperties" kindref="compound">Fluidproperties</ref></type>
+        <definition>Fluidproperties csmp::H2ONaClThermalEquilibrator::bulkprops</definition>
+        <argsstring></argsstring>
+        <name>bulkprops</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::bulkprops</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="148" column="32" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="148" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a18867ae010354fe096454123696ea066" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_fluidproperties" kindref="compound">Fluidproperties</ref></type>
+        <definition>Fluidproperties csmp::H2ONaClThermalEquilibrator::saltprops</definition>
+        <argsstring></argsstring>
+        <name>saltprops</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::saltprops</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="149" column="32" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="149" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1adc49aded257c7432d7087560c8360c97" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_error_handler" kindref="compound">ErrorHandler</ref> &amp;</type>
+        <definition>ErrorHandler&amp; csmp::H2ONaClThermalEquilibrator::csmp_error</definition>
+        <argsstring></argsstring>
+        <name>csmp_error</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::csmp_error</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="156" column="31" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="156" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a4b29ded60c4aaca6485248e344d1b970" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::H2ONaClThermalEquilibrator::H2ONaClThermalEquilibrator</definition>
+        <argsstring>(const double &amp;external_mass_rock, const double &amp;external_cp_rock, const double &amp;external_rho_rock, const double &amp;external_porosity, const double &amp;external_mass_fluid, const double &amp;external_wt_current, const double &amp;external_t_previous, const double &amp;external_p_current, const double &amp;external_H_current, const double &amp;external_H_previous, const bool &amp;fixed_external_t, const double &amp;t_fix, const double &amp;external_t_diff, const bool &amp;verbose)</argsstring>
+        <name>H2ONaClThermalEquilibrator</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::H2ONaClThermalEquilibrator</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>external_mass_rock</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>external_cp_rock</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>external_rho_rock</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>external_porosity</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>external_mass_fluid</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>external_wt_current</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>external_t_previous</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>external_p_current</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>external_H_current</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>external_H_previous</declname>
+        </param>
+        <param>
+          <type>const bool &amp;</type>
+          <declname>fixed_external_t</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>t_fix</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>external_t_diff</declname>
+        </param>
+        <param>
+          <type>const bool &amp;</type>
+          <declname>verbose</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="23" column="5" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClThermalEquilibrator.cpp" bodystart="12" bodyend="103"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1aed92f0a500b3991c7c74d8f0793ea571" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::H2ONaClThermalEquilibrator::~H2ONaClThermalEquilibrator</definition>
+        <argsstring>()</argsstring>
+        <name>~H2ONaClThermalEquilibrator</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::~H2ONaClThermalEquilibrator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="37" column="5" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClThermalEquilibrator.cpp" bodystart="105" bodyend="107"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1aebb17652e62a59e44b1a8f7647022c9c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structcsmp_1_1_fluidproperties" kindref="compound">Fluidproperties</ref></type>
+        <definition>Fluidproperties csmp::H2ONaClThermalEquilibrator::Liquid</definition>
+        <argsstring>()</argsstring>
+        <name>Liquid</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::Liquid</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="39" column="32" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClThermalEquilibrator.cpp" bodystart="110" bodyend="114"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a9dcac00cb4fa19b5cbec9110cae3c31d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structcsmp_1_1_fluidproperties" kindref="compound">Fluidproperties</ref></type>
+        <definition>Fluidproperties csmp::H2ONaClThermalEquilibrator::Vapor</definition>
+        <argsstring>()</argsstring>
+        <name>Vapor</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::Vapor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="40" column="32" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClThermalEquilibrator.cpp" bodystart="117" bodyend="121"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a5d3bfddb11620972f2ee13001faf1226" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structcsmp_1_1_fluidproperties" kindref="compound">Fluidproperties</ref></type>
+        <definition>Fluidproperties csmp::H2ONaClThermalEquilibrator::Bulk</definition>
+        <argsstring>()</argsstring>
+        <name>Bulk</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::Bulk</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="41" column="32" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClThermalEquilibrator.cpp" bodystart="124" bodyend="128"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1ab81f26fc8d6ce631dfbf23399d642c4d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structcsmp_1_1_fluidproperties" kindref="compound">Fluidproperties</ref></type>
+        <definition>Fluidproperties csmp::H2ONaClThermalEquilibrator::Salt</definition>
+        <argsstring>()</argsstring>
+        <name>Salt</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::Salt</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="42" column="32" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClThermalEquilibrator.cpp" bodystart="131" bodyend="135"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a71d5a9a72be3552fed27ed5f637c8377" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::H2ONaClThermalEquilibrator::ThreePhaseProperties</definition>
+        <argsstring>(Fluidproperties &amp;bulk_external, Fluidproperties &amp;liquid_external, Fluidproperties &amp;vapor_external, Fluidproperties &amp;salt_external)</argsstring>
+        <name>ThreePhaseProperties</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::ThreePhaseProperties</qualifiedname>
+        <param>
+          <type><ref refid="structcsmp_1_1_fluidproperties" kindref="compound">Fluidproperties</ref> &amp;</type>
+          <declname>bulk_external</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_fluidproperties" kindref="compound">Fluidproperties</ref> &amp;</type>
+          <declname>liquid_external</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_fluidproperties" kindref="compound">Fluidproperties</ref> &amp;</type>
+          <declname>vapor_external</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_fluidproperties" kindref="compound">Fluidproperties</ref> &amp;</type>
+          <declname>salt_external</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="44" column="32" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClThermalEquilibrator.cpp" bodystart="674" bodyend="684"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a5025f1def44e9bb8fd262baf715fe073" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structcsmp_1_1_fluidproperties" kindref="compound">Fluidproperties</ref></type>
+        <definition>Fluidproperties csmp::H2ONaClThermalEquilibrator::ReportLiquidProperties</definition>
+        <argsstring>(const double &amp;t, const double &amp;p, const double &amp;x, const double &amp;h)</argsstring>
+        <name>ReportLiquidProperties</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::ReportLiquidProperties</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>t</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>h</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="49" column="32" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClThermalEquilibrator.cpp" bodystart="633" bodyend="641"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1ae89f63cb5206ac35aee0155854e6fd5b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structcsmp_1_1_fluidproperties" kindref="compound">Fluidproperties</ref></type>
+        <definition>Fluidproperties csmp::H2ONaClThermalEquilibrator::ReportVaporProperties</definition>
+        <argsstring>(const double &amp;t, const double &amp;p, const double &amp;x, const double &amp;h)</argsstring>
+        <name>ReportVaporProperties</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::ReportVaporProperties</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>t</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>h</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="53" column="32" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClThermalEquilibrator.cpp" bodystart="643" bodyend="651"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a4d32ee1fdb5c367c46c341dd8227b750" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structcsmp_1_1_fluidproperties" kindref="compound">Fluidproperties</ref></type>
+        <definition>Fluidproperties csmp::H2ONaClThermalEquilibrator::ReportBulkProperties</definition>
+        <argsstring>(const double &amp;t, const double &amp;p, const double &amp;x, const double &amp;h)</argsstring>
+        <name>ReportBulkProperties</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::ReportBulkProperties</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>t</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>h</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="57" column="32" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClThermalEquilibrator.cpp" bodystart="653" bodyend="661"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a145544e7405826a93fcc4d58fae9db48" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structcsmp_1_1_fluidproperties" kindref="compound">Fluidproperties</ref></type>
+        <definition>Fluidproperties csmp::H2ONaClThermalEquilibrator::ReportSaltProperties</definition>
+        <argsstring>(const double &amp;t, const double &amp;p, const double &amp;x, const double &amp;h)</argsstring>
+        <name>ReportSaltProperties</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::ReportSaltProperties</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>t</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>h</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="61" column="32" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClThermalEquilibrator.cpp" bodystart="663" bodyend="671"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a38632e435b2e81625b8517cf5a531be0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::H2ONaClThermalEquilibrator::Resid</definition>
+        <argsstring>()</argsstring>
+        <name>Resid</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::Resid</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="66" column="30" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClThermalEquilibrator.cpp" bodystart="138" bodyend="141"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a1fcf6a783da02bcd37495888465b5638" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int csmp::H2ONaClThermalEquilibrator::n_iterations</definition>
+        <argsstring>()</argsstring>
+        <name>n_iterations</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::n_iterations</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="67" column="32" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClThermalEquilibrator.cpp" bodystart="144" bodyend="147"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1af803ca3a8ab1aa4f29d4f25b4ad42668" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::H2ONaClThermalEquilibrator::Equilibrated</definition>
+        <argsstring>()</argsstring>
+        <name>Equilibrated</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::Equilibrated</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="68" column="32" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClThermalEquilibrator.cpp" bodystart="150" bodyend="153"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1ac1d51fe151bcf51ea64ce6430826b818" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::H2ONaClThermalEquilibrator::Fatal</definition>
+        <argsstring>()</argsstring>
+        <name>Fatal</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::Fatal</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="69" column="32" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClThermalEquilibrator.cpp" bodystart="156" bodyend="159"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1adb5df78746de620c4c8f17552ad6fe8a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::H2ONaClThermalEquilibrator::ComputeTotalEnthalpyAtTemperature</definition>
+        <argsstring>(const double &amp;t)</argsstring>
+        <name>ComputeTotalEnthalpyAtTemperature</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::ComputeTotalEnthalpyAtTemperature</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>t</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="138" column="30" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClThermalEquilibrator.cpp" bodystart="375" bodyend="394"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1af984f51938da09ed4b2231e033055514" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::H2ONaClThermalEquilibrator::ErrorCheckHmin</definition>
+        <argsstring>(const int &amp;i)</argsstring>
+        <name>ErrorCheckHmin</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::ErrorCheckHmin</qualifiedname>
+        <param>
+          <type>const int &amp;</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="139" column="32" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClThermalEquilibrator.cpp" bodystart="398" bodyend="420"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a4c0338387739cc49ced435817aa8de9d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::H2ONaClThermalEquilibrator::ErrorCheckHmax</definition>
+        <argsstring>(const int &amp;i)</argsstring>
+        <name>ErrorCheckHmax</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::ErrorCheckHmax</qualifiedname>
+        <param>
+          <type>const int &amp;</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="140" column="32" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClThermalEquilibrator.cpp" bodystart="422" bodyend="444"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1acfc576ca894667344dac04f63bcf1a66" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::H2ONaClThermalEquilibrator::FluidPropertiesErrorCheck</definition>
+        <argsstring>()</argsstring>
+        <name>FluidPropertiesErrorCheck</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::FluidPropertiesErrorCheck</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="141" column="32" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClThermalEquilibrator.cpp" bodystart="447" bodyend="528"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1ac21415902c4a463008f5d9ae670575da" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::H2ONaClThermalEquilibrator::PrintStatusToCerr</definition>
+        <argsstring>()</argsstring>
+        <name>PrintStatusToCerr</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::PrintStatusToCerr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="142" column="32" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClThermalEquilibrator.cpp" bodystart="530" bodyend="594"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1ab958d86f6b6dd9adb9da936ce7ef5707" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::H2ONaClThermalEquilibrator::ErrorConditionsToScreen</definition>
+        <argsstring>()</argsstring>
+        <name>ErrorConditionsToScreen</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::ErrorConditionsToScreen</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="143" column="32" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClThermalEquilibrator.cpp" bodystart="596" bodyend="629"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a49a6360dd410323ee1b05b255102277e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::H2ONaClThermalEquilibrator::FindInitialValues</definition>
+        <argsstring>()</argsstring>
+        <name>FindInitialValues</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::FindInitialValues</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="144" column="32" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClThermalEquilibrator.cpp" bodystart="686" bodyend="744"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1acdc5296584f15f9e56b9f485d0ffd1ee" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::H2ONaClThermalEquilibrator::Equilibrate</definition>
+        <argsstring>()</argsstring>
+        <name>Equilibrate</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::Equilibrate</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="151" column="32" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClThermalEquilibrator.cpp" bodystart="162" bodyend="360"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1ad41a1d27e9473b575661910dc1b6edcf" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::H2ONaClThermalEquilibrator::UpdateEquilibratedFluidproperties</definition>
+        <argsstring>()</argsstring>
+        <name>UpdateEquilibratedFluidproperties</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::UpdateEquilibratedFluidproperties</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="152" column="32"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a44b8445aa6d6caf71f6a3631c66df4ed" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::H2ONaClThermalEquilibrator::AssignAllPropertiesViaReport</definition>
+        <argsstring>()</argsstring>
+        <name>AssignAllPropertiesViaReport</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::AssignAllPropertiesViaReport</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="153" column="32" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClThermalEquilibrator.cpp" bodystart="363" bodyend="373"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1afc02c37f2cc7a9e6de19a5aef26e5211" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::H2ONaClThermalEquilibrator::AssignAllPropertiesNormally</definition>
+        <argsstring>()</argsstring>
+        <name>AssignAllPropertiesNormally</name>
+        <qualifiedname>csmp::H2ONaClThermalEquilibrator::AssignAllPropertiesNormally</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="154" column="32"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::H2ONaClThermalEquilibrator</label>
+        <link refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/eos/H2ONaClThermalEquilibrator.h" line="17" column="3" bodyfile="source/includes/eos/H2ONaClThermalEquilibrator.h" bodystart="18" bodyend="157"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1afc02c37f2cc7a9e6de19a5aef26e5211" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>AssignAllPropertiesNormally</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a44b8445aa6d6caf71f6a3631c66df4ed" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>AssignAllPropertiesViaReport</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a5d3bfddb11620972f2ee13001faf1226" prot="public" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>Bulk</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a51b3bcfc5d8694324f27effb8a37f06e" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>bulkprops</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1adb5df78746de620c4c8f17552ad6fe8a" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>ComputeTotalEnthalpyAtTemperature</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a7872073e72062f1202136ba73e83f41f" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>convergence_criterion</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1af30054cf5b32eeb94a7c5f9096eed608" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>cp_rock</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1aa47ff9a8c54d0672ef17291c99144c27" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>cp_rock_eq</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a98ba8467af7c506d15eef0ae6791cc64" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>cp_rock_ini</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1adc49aded257c7432d7087560c8360c97" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>csmp_error</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1acdc5296584f15f9e56b9f485d0ffd1ee" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>Equilibrate</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1af803ca3a8ab1aa4f29d4f25b4ad42668" prot="public" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>Equilibrated</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1adf7fb606866b113d4fa9c95b0eef691e" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>equilibrated</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a4c0338387739cc49ced435817aa8de9d" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>ErrorCheckHmax</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1af984f51938da09ed4b2231e033055514" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>ErrorCheckHmin</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1ab958d86f6b6dd9adb9da936ce7ef5707" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>ErrorConditionsToScreen</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1ac1d51fe151bcf51ea64ce6430826b818" prot="public" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>Fatal</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1aa3d1bca227fe9105cdf421c24e48f290" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>fatal</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a49a6360dd410323ee1b05b255102277e" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>FindInitialValues</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1aea8143519cc75569c64975608dc44694" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>fixed_t</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1aaf16ceda4b67224ba109af691b89e01b" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>fluid</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1acfc576ca894667344dac04f63bcf1a66" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>FluidPropertiesErrorCheck</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a4b29ded60c4aaca6485248e344d1b970" prot="public" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>H2ONaClThermalEquilibrator</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a7a42470be3c963531e7c9b6d9b90d19f" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>H_current</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a6e45c51cfa7d0d6f16dc4a5019750dd1" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>H_current_eq</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a84ac87f353d12229739854cfb3197e74" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>H_current_ini</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1ab7da78ba97abaef94a0c459b9eef8e6a" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>h_fluid_eq</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1ac4b1573a511df31789aabd0c0c212ee8" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>h_fluid_test</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a586e9fd092c2278f56cbf0246a163240" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>H_previous</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1aeb9c07b9e005ffdc6212129b594328f5" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>H_previous_eq</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a2ce3523ed9c8bdea86716d6150e2494a" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>H_previous_ini</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a153359b25fc3daafc73ae4652f2d1571" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>H_test</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a69b6e1c6ead5a6601abb301a70d0aba0" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>hdummy</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a994d84242a5cad074d2af8d59039c6e0" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>Hmax</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a4bc2a4ef8731559753feb7fb52146b0b" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>Hmin</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1ae02ec5fbf9b3d50418ad1ef7343fbc4d" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>icrit</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a0be0a5e22ca381d95221a48c387134a3" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>icrit_max</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1aebb17652e62a59e44b1a8f7647022c9c" prot="public" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>Liquid</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1ae7de2ddb042957d8ea54202eabc0b8bf" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>liquidprops</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1afc57545e8f0e66bab7d68f1c11ea82ef" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>mass_fluid</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a4f8e342e0920c13875863c08b3776943" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>mass_fluid_eq</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1abb75858d32eab416f82160ab4e3a2450" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>mass_fluid_ini</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a083d6712978aab345376f41837cc6168" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>mass_rock</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a86b506df778d20b92ca71d55865d99e6" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>mass_rock_eq</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a58f8f8ccbc317c16fa835acb5f4426bf" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>mass_rock_ini</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1ad81970879a395bc6513cf200cc9fdd42" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>minimum_dt</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a1fcf6a783da02bcd37495888465b5638" prot="public" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>n_iterations</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1acce373972d5b5afd7ed2e5f16160cce3" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>p_current</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a41fefcac96938f0fd266c236206097d5" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>p_current_eq</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a6766f600d7c42750488f64e00f5e5603" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>p_current_ini</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1ae1125296aaaacb708cba69fd7e6e44e6" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>phi</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1ae3c0bbe7c87ae951040eeff0602fdb76" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>porosity_ini</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1ac21415902c4a463008f5d9ae670575da" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>PrintStatusToCerr</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a4d32ee1fdb5c367c46c341dd8227b750" prot="public" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>ReportBulkProperties</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a5025f1def44e9bb8fd262baf715fe073" prot="public" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>ReportLiquidProperties</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a145544e7405826a93fcc4d58fae9db48" prot="public" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>ReportSaltProperties</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1ae89f63cb5206ac35aee0155854e6fd5b" prot="public" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>ReportVaporProperties</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a38632e435b2e81625b8517cf5a531be0" prot="public" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>Resid</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1aebbf1f88dfd0c449a29b4a90ea70e7da" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>resid</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a25cf7666148567f615d1d66e4c1f82ef" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>rho_rock</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a30d92c3ca8357b54a321a2d87393326d" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>rho_rock_ini</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a79da7125a9673ac4b763c25f6537dc62" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>rock</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1ab81f26fc8d6ce631dfbf23399d642c4d" prot="public" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>Salt</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a18867ae010354fe096454123696ea066" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>saltprops</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1ab84001ac24c5a5159ebff80c4a33a5e5" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>t_diff</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a002000b0e855ddc852f8c4eb08972e44" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>t_eq</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a9b17d454b0e6ee12507d7c3f280585f5" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>t_fix</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1ac0b3852d2fb0dc86bdd709905b4d6b1d" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>t_previous</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1aeb667b4f26ecd0a607f9e317989aaa6c" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>t_previous_eq</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a6f44bc6e22721660e4408887660b2a6b" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>t_previous_ini</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1abb3a6f01cc222825115d9a0d9d5542f5" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>tdummy</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a71d5a9a72be3552fed27ed5f637c8377" prot="public" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>ThreePhaseProperties</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a8ef487c244cc052da5204820dedc8679" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>tmax</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a40eeb745bb73553971dcc5fdbae2f80b" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>tmin</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1ad41a1d27e9473b575661910dc1b6edcf" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>UpdateEquilibratedFluidproperties</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a9dcac00cb4fa19b5cbec9110cae3c31d" prot="public" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>Vapor</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1ab6118bf0ac05e4d65159147d464ef523" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>vaporprops</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a34bd5e42e62615d4bd3f78940d2cba13" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>verbose</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a20837a340e62b39fc67c14120ccf40a3" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>water_equilibrator</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1aa4b35d3fc3c2aa13d70b6281c494777c" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>wt_current</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a7c600b41dab692584c62dd25fd5c84c4" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>wt_current_eq</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a8c1e3e014ef4ce163f6163419c4f3344" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>wt_current_ini</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a5ae09c4426e7e11f3e5c0459fb2949ec" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>x_current_eq</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1a91d0fed05f480f45935b7e7917028ad1" prot="private" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>x_current_ini</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_thermal_equilibrator_1aed92f0a500b3991c7c74d8f0793ea571" prot="public" virt="non-virtual"><scope>csmp::H2ONaClThermalEquilibrator</scope><name>~H2ONaClThermalEquilibrator</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

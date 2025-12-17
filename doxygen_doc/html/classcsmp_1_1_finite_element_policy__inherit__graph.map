@@ -1,0 +1,24 @@
+<map id="csmp::FiniteElementPolicy&lt; dim, CELL &gt;" name="csmp::FiniteElementPolicy&lt; dim, CELL &gt;">
+<area shape="rect" id="Node000001" title="finite element policy for class Element" alt="" coords="307,5,499,290"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_finite_element_policy.html" title=" " alt="" coords="5,361,197,646"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="299,267,215,363,199,382,195,379,211,359,295,263"/>
+<area shape="rect" id="Node000004" href="$classcsmp_1_1_finite_element_policy.html" title=" " alt="" coords="225,361,417,646"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="370,305,356,362,351,361,364,303"/>
+<area shape="rect" id="Node000008" href="$classcsmp_1_1_finite_element_policy.html" title=" " alt="" coords="473,361,665,646"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="478,302,505,360,501,363,473,304"/>
+<area shape="rect" id="Node000010" href="$classcsmp_1_1_finite_element_policy.html" title=" " alt="" coords="735,361,927,646"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="512,227,679,359,737,410,733,414,676,363,509,231"/>
+<area shape="rect" id="Node000003" href="$classcsmp_1_1_edge.html" title=" " alt="" coords="12,743,166,1013"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="99,661,96,743,91,743,94,660"/>
+<area shape="rect" id="Node000005" href="$classcsmp_1_1_element.html" title=" " alt="" coords="156,1132,295,1402"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="242,661,232,696,213,809,206,925,207,1035,213,1132,207,1132,201,1035,201,925,208,808,227,694,237,659"/>
+<area shape="rect" id="Node000006" href="$classcsmp_1_1_element.html" title="Object representation of a finite element Bridge pattern together with FiniteElement class." alt="" coords="242,743,385,1013"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="321,661,319,743,314,743,315,660"/>
+<area shape="rect" id="Node000007" href="$classcsmp_1_1_element_with_storage_and_f_e_m.html" title=" " alt="" coords="409,837,580,919"/>
+<area shape="poly" id="edge7_Node000004_Node000007" title=" " alt="" coords="396,658,479,836,474,839,391,660"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="282,1028,258,1133,253,1131,277,1027"/>
+<area shape="rect" id="Node000009" href="$classcsmp_1_1_face.html" title=" " alt="" coords="604,743,729,1013"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="613,659,634,743,629,744,607,661"/>
+<area shape="rect" id="Node000011" href="$classcsmp_1_1_inter_face.html" title="Surface (3D) or line (2D) element connector for elements which share faces but not nodes." alt="" coords="753,695,954,1061"/>
+<area shape="poly" id="edge11_Node000010_Node000011" title=" " alt="" coords="843,660,845,695,840,695,837,660"/>
+</map>

@@ -1,0 +1,1330 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case" kind="class" language="C++" prot="public">
+    <compoundname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</compoundname>
+    <basecompoundref refid="classcsmp_1_1_test" prot="public" virt="non-virtual">csmp::Test</basecompoundref>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-type">
+      <memberdef kind="enum" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1adeea30f966cef76b3a47ad2ed93cc8b9" prot="private" static="no" strong="no">
+        <type></type>
+        <name></name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</qualifiedname>
+        <enumvalue id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1adeea30f966cef76b3a47ad2ed93cc8b9aa63027350596e5edf0813b4a39d3bce0" prot="private">
+          <name>LINEAR_TWOPHASE_MODEL</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1adeea30f966cef76b3a47ad2ed93cc8b9a670544a13490fd1ab018b7748a7c57a2" prot="private">
+          <name>BROOKS_COREY_MODEL</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1adeea30f966cef76b3a47ad2ed93cc8b9ab47af341e5e9d53534b8857a6d7b9e61" prot="private">
+          <name>COREY_MODEL</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1adeea30f966cef76b3a47ad2ed93cc8b9af9b185917947833d0fb0621d63fd6d94" prot="private">
+          <name>VAN_GENUCHTEN_MODEL</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="92" column="5" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="92" bodyend="92"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a3d3690cac041986dfe1bd9c0f883140e" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::debug_</definition>
+        <argsstring></argsstring>
+        <name>debug_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::debug_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="37" column="10" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a0a2ae6caa97c32901cd45c982f3c5687" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::input_file_name_</definition>
+        <argsstring></argsstring>
+        <name>input_file_name_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::input_file_name_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="44" column="17" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a692b81e4fdd5ec8b02c58c77fd495322" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::variables_file_prefix_</definition>
+        <argsstring></argsstring>
+        <name>variables_file_prefix_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::variables_file_prefix_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="45" column="17" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1af14906530b5d951f02f9bcdd422abb4a" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::variables_file_cutted_prefix_</definition>
+        <argsstring></argsstring>
+        <name>variables_file_cutted_prefix_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::variables_file_cutted_prefix_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="46" column="17" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a676cdf0a7d93e8d771d379741f18727b" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; *</type>
+        <definition>Model&lt;dim&gt;* csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::model_</definition>
+        <argsstring></argsstring>
+        <name>model_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::model_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="49" column="11" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a5fae0032e50c8a57a4eb1133b087b262" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::outlet_boundary_name_</definition>
+        <argsstring></argsstring>
+        <name>outlet_boundary_name_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::outlet_boundary_name_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="59" column="17" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a990dad3ea1c2e1f7e447145cee4b9c94" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::inlet_boundary_name_</definition>
+        <argsstring></argsstring>
+        <name>inlet_boundary_name_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::inlet_boundary_name_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="59" column="38" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a1f24878ad8fc5b0b1cf76ad7e3d2ba1d" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::porosity_</definition>
+        <argsstring></argsstring>
+        <name>porosity_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::porosity_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="62" column="17" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a6a15e3e23b8ddb2e856253394c5e07c9" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::rho_w_</definition>
+        <argsstring></argsstring>
+        <name>rho_w_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::rho_w_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="62" column="26" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a146026e0a2cb1519f8ebab182c431d7d" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::rho_n_</definition>
+        <argsstring></argsstring>
+        <name>rho_n_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::rho_n_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="62" column="32" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1aecd0200f6a7200de2514e8e6f3498031" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::visc_n_</definition>
+        <argsstring></argsstring>
+        <name>visc_n_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::visc_n_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="62" column="38" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1ae058c1afd45882122d8ebab47806454a" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::visc_w_</definition>
+        <argsstring></argsstring>
+        <name>visc_w_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::visc_w_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="62" column="45" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a7f8d3488987feb5dc875dd4f462eb2a1" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::total_mobility_</definition>
+        <argsstring></argsstring>
+        <name>total_mobility_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::total_mobility_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="63" column="17" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a06e136cdd9c7151c3d1c4c222fe63de2" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::permeability_</definition>
+        <argsstring></argsstring>
+        <name>permeability_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::permeability_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="63" column="32" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a6433904ef0d780d0e04459a8701085f5" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::entry_pressure_</definition>
+        <argsstring></argsstring>
+        <name>entry_pressure_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::entry_pressure_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="63" column="45" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1ac86f9dd66928d3060b6ea030edc22ef4" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::brooks_corey_parameter_</definition>
+        <argsstring></argsstring>
+        <name>brooks_corey_parameter_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::brooks_corey_parameter_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="63" column="60" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1addee627d2b4461615b22604970b61861" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::frac_apperture_</definition>
+        <argsstring></argsstring>
+        <name>frac_apperture_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::frac_apperture_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="63" column="84" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1aae280b6ea2d0c5b2572bae3f81f84c2f" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::fluid_pressure_</definition>
+        <argsstring></argsstring>
+        <name>fluid_pressure_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::fluid_pressure_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="66" column="17" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a17fe1d494d98c20703762b0ad690654f" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::cap_diffusivity_</definition>
+        <argsstring></argsstring>
+        <name>cap_diffusivity_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::cap_diffusivity_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="66" column="33" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a4147c85cebe28b2fa9ad9e6cec400bad" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::sw_</definition>
+        <argsstring></argsstring>
+        <name>sw_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::sw_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="66" column="50" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a3d62cb412f8930d6ccfb392c75bf6cde" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::swr_</definition>
+        <argsstring></argsstring>
+        <name>swr_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::swr_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="66" column="53" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a31c9e5590b7b0a48f7bdd7c7c8f2c4a4" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::sn_</definition>
+        <argsstring></argsstring>
+        <name>sn_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::sn_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="66" column="57" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1aa3743be3b97f394a00584ec2fa5047a2" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::snr_</definition>
+        <argsstring></argsstring>
+        <name>snr_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::snr_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="66" column="60" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1ab92e4370ab800551e39ac824033070c0" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::nodal_fluid_volume_source_</definition>
+        <argsstring></argsstring>
+        <name>nodal_fluid_volume_source_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::nodal_fluid_volume_source_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="66" column="65" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a8d47ace8fd470b9a5c16e8d1551d3b54" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::fluid_volume_source_</definition>
+        <argsstring></argsstring>
+        <name>fluid_volume_source_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::fluid_volume_source_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="66" column="92" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a6d378fad13a4625c5dbc02502a9f32f3" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::sw_limiter</definition>
+        <argsstring></argsstring>
+        <name>sw_limiter</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::sw_limiter</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="67" column="17" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a943680bf3b64df1e989fffdf328b8811" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::sn_limiter</definition>
+        <argsstring></argsstring>
+        <name>sn_limiter</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::sn_limiter</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="67" column="27" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a9f78d6fdbdca646df1a64b993006cb02" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::mass_center</definition>
+        <argsstring></argsstring>
+        <name>mass_center</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::mass_center</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="67" column="38" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1af9d3a59885364bf382b495138fb2d2ec" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::total_velocity_</definition>
+        <argsstring></argsstring>
+        <name>total_velocity_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::total_velocity_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="68" column="17" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a30cd0ffb77d9200e53602ab832fa233c" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::velocity_n_</definition>
+        <argsstring></argsstring>
+        <name>velocity_n_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::velocity_n_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="68" column="32" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a1df05b3d1f1ddeeea06ede30b24ed5ff" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::velocity_w_</definition>
+        <argsstring></argsstring>
+        <name>velocity_w_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::velocity_w_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="68" column="43" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a11f1f73dbc93d79eb14096cda84be450" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::total_volume_flux_</definition>
+        <argsstring></argsstring>
+        <name>total_volume_flux_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::total_volume_flux_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="68" column="55" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a498e33a3e2b121c6876087a60b0d51fd" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::total_pore_velocity_</definition>
+        <argsstring></argsstring>
+        <name>total_pore_velocity_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::total_pore_velocity_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="68" column="74" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1abe1304eac0b7a9f506a34b6639179fb0" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::thickness_</definition>
+        <argsstring></argsstring>
+        <name>thickness_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::thickness_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="68" column="95" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a46af36950a91b4ff7154ec05feec346f" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref></type>
+        <definition>Index csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::porosity_idx_</definition>
+        <argsstring></argsstring>
+        <name>porosity_idx_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::porosity_idx_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="71" column="11" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a981a00c321863f34432ff37453224916" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref></type>
+        <definition>Index csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::rho_w_idx_</definition>
+        <argsstring></argsstring>
+        <name>rho_w_idx_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::rho_w_idx_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="71" column="24" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a50f2bd48cb1b6c86ad2a1567e5c7cb43" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref></type>
+        <definition>Index csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::rho_n_idx_</definition>
+        <argsstring></argsstring>
+        <name>rho_n_idx_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::rho_n_idx_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="71" column="34" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1aec26834933f502b2f5799a373057beea" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref></type>
+        <definition>Index csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::total_mobility_idx_</definition>
+        <argsstring></argsstring>
+        <name>total_mobility_idx_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::total_mobility_idx_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="72" column="11" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1acc290e10fadfb6be42c03f4bc2e00e93" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref></type>
+        <definition>Index csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::permeability_idx_</definition>
+        <argsstring></argsstring>
+        <name>permeability_idx_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::permeability_idx_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="72" column="31" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a63eaf6de3910f6c6d4ceb02873abe32d" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref></type>
+        <definition>Index csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::fluid_pressure_idx_</definition>
+        <argsstring></argsstring>
+        <name>fluid_pressure_idx_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::fluid_pressure_idx_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="73" column="11" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a402c16461a0f694a43a469fe5576693a" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref></type>
+        <definition>Index csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::cap_diffusivity_idx_</definition>
+        <argsstring></argsstring>
+        <name>cap_diffusivity_idx_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::cap_diffusivity_idx_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="73" column="30" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a31430a265d7933d3f7ac2abb6cd28af8" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref></type>
+        <definition>Index csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::sw_idx_</definition>
+        <argsstring></argsstring>
+        <name>sw_idx_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::sw_idx_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="73" column="50" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a30f846b47724219a53e407b59aedf59d" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref></type>
+        <definition>Index csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::sn_idx_</definition>
+        <argsstring></argsstring>
+        <name>sn_idx_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::sn_idx_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="73" column="57" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a3778ade60848d178c74e6cf8b38bd79f" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref></type>
+        <definition>Index csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::fluid_volume_source_idx_</definition>
+        <argsstring></argsstring>
+        <name>fluid_volume_source_idx_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::fluid_volume_source_idx_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="73" column="65" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a43f6c3015a4a921e249030ce14d79610" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref></type>
+        <definition>Index csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::nodal_fluid_volume_source_idx_</definition>
+        <argsstring></argsstring>
+        <name>nodal_fluid_volume_source_idx_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::nodal_fluid_volume_source_idx_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="73" column="89" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a333e58a2329bfc66cbfe525aa965048c" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref></type>
+        <definition>Index csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::total_velocity_idx_</definition>
+        <argsstring></argsstring>
+        <name>total_velocity_idx_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::total_velocity_idx_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="74" column="11" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a613337060239393468651f2303157607" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref></type>
+        <definition>Index csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::velocity_w_idx_</definition>
+        <argsstring></argsstring>
+        <name>velocity_w_idx_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::velocity_w_idx_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="74" column="30" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a40e8983dc91aef8b1ba4d6caaae9bdcc" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref></type>
+        <definition>Index csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::velocity_n_idx_</definition>
+        <argsstring></argsstring>
+        <name>velocity_n_idx_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::velocity_n_idx_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="74" column="45" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a7ac9e6f771aaf66693923f1131d0b063" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref></type>
+        <definition>Index csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::thickness_idx_</definition>
+        <argsstring></argsstring>
+        <name>thickness_idx_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::thickness_idx_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="74" column="60" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a68af60a2920a43f4f98adfc7a5bc4d2f" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::time_increment_</definition>
+        <argsstring></argsstring>
+        <name>time_increment_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::time_increment_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="84" column="12" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1af0f0b1dcfc24377893840f7e3164ed6f" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::max_time_</definition>
+        <argsstring></argsstring>
+        <name>max_time_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::max_time_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="84" column="28" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a1097e2d4222639e7cb04cc29d8758a7c" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::tolerance_l2_</definition>
+        <argsstring></argsstring>
+        <name>tolerance_l2_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::tolerance_l2_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="85" column="12" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1aa93aaff18e5af9adb48f5d1dd68ca02b" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::tolerance_linf_</definition>
+        <argsstring></argsstring>
+        <name>tolerance_linf_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::tolerance_linf_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="85" column="25" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a537452f3975adab07076c22d79e70eb0" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::tolerance_mean_</definition>
+        <argsstring></argsstring>
+        <name>tolerance_mean_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::tolerance_mean_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="85" column="40" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a2826d0fba9281139dabf396ee6ffecef" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::cfl_multiplier_</definition>
+        <argsstring></argsstring>
+        <name>cfl_multiplier_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::cfl_multiplier_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="86" column="12" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a4a7b4ae21a53c906db120f8d638f1a98" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::courant_increment_</definition>
+        <argsstring></argsstring>
+        <name>courant_increment_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::courant_increment_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="86" column="27" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1aed816b72f15e88963e45193344963dd0" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::relperm_model_type_</definition>
+        <argsstring></argsstring>
+        <name>relperm_model_type_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::relperm_model_type_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="89" column="12" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="89" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1af4d3987b6de18f8fad48a26809c92fe2" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::relperm_model_name_</definition>
+        <argsstring></argsstring>
+        <name>relperm_model_name_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::relperm_model_name_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="90" column="17" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="90" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a99e4e00b2c0f952f3d2fbb55d5bed8d9" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_two_phase_model" kindref="compound">TwoPhaseModel</ref>&lt; dim &gt; *</type>
+        <definition>TwoPhaseModel&lt;dim&gt;* csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::relperm_model_</definition>
+        <argsstring></argsstring>
+        <name>relperm_model_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::relperm_model_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="91" column="19" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a2fe43df8dc9a7279694c90b95486ff96" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::second_order_in_space_</definition>
+        <argsstring></argsstring>
+        <name>second_order_in_space_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::second_order_in_space_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="95" column="10" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="95" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a609d639dd72ed6e20d04d961e7ff4608" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::second_order_in_time_</definition>
+        <argsstring></argsstring>
+        <name>second_order_in_time_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::second_order_in_time_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="96" column="10" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="96" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a524de2ff1641e1168c45a0e94ae099e1" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::with_lsm_grad_limiter_</definition>
+        <argsstring></argsstring>
+        <name>with_lsm_grad_limiter_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::with_lsm_grad_limiter_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="97" column="10" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="97" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a800b2649319cd6805c277429c47326aa" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::with_capillary_forces_</definition>
+        <argsstring></argsstring>
+        <name>with_capillary_forces_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::with_capillary_forces_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="98" column="10" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="98" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1aeb5a4cd2f9394e5b2ab442fead944cf5" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::with_gravity_forces_</definition>
+        <argsstring></argsstring>
+        <name>with_gravity_forces_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::with_gravity_forces_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="99" column="10" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="99" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1ac4f37220aa996eacb29985f1f60b2740" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::nonlinear_scheme_</definition>
+        <argsstring></argsstring>
+        <name>nonlinear_scheme_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::nonlinear_scheme_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="100" column="10" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="100" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1abbb8ba6d89260126f2eb659c96c6e019" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::explicit_scheme_</definition>
+        <argsstring></argsstring>
+        <name>explicit_scheme_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::explicit_scheme_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="101" column="10" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="101" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1af8a1c27bd429d662f958a29d382ea316" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::no_flow_bc_</definition>
+        <argsstring></argsstring>
+        <name>no_flow_bc_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::no_flow_bc_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="102" column="17" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a7190d36fb2ddf7a2c00094ba78cc3602" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::assign_dirichlet_saturation_on_the_right_boundaries_</definition>
+        <argsstring></argsstring>
+        <name>assign_dirichlet_saturation_on_the_right_boundaries_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::assign_dirichlet_saturation_on_the_right_boundaries_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="104" column="10" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="104" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a30eef840659afe1a497a5317dcb3a2a4" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::lu_solver_</definition>
+        <argsstring></argsstring>
+        <name>lu_solver_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::lu_solver_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="105" column="10" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="105" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a0309a1652ee5389e11777a54a6716aa2" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_node_centered_finite_volume_transport" kindref="compound">NodeCenteredFiniteVolumeTransport</ref>&lt; dim &gt; *</type>
+        <definition>NodeCenteredFiniteVolumeTransport&lt;dim&gt;* csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::tpncfvt_</definition>
+        <argsstring></argsstring>
+        <name>tpncfvt_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::tpncfvt_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="112" column="40" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1ad596e302bd7b77b9936a22ca2377a337" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_p_d_e___integrator" kindref="compound">PDE_Integrator</ref>&lt; dim, <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> &gt; *</type>
+        <definition>PDE_Integrator&lt;dim,Element&gt;* csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::steady_state_pressure_solver_</definition>
+        <argsstring></argsstring>
+        <name>steady_state_pressure_solver_</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::steady_state_pressure_solver_</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="118" column="20" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="118" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1ac67a18ec79f626a9afbc5b94d7b539fb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</definition>
+        <argsstring>(const char *prefix, const char *twophase_model=&quot;Brooks Corey&quot;, const char *explicit_implicit=&quot;explicit&quot;, const char *first_second_order=&quot;1st order&quot;)</argsstring>
+        <name>IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>prefix</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>twophase_model</declname>
+          <defval>&quot;Brooks Corey&quot;</defval>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>explicit_implicit</declname>
+          <defval>&quot;explicit&quot;</defval>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>first_second_order</declname>
+          <defval>&quot;1st order&quot;</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para>Set the name of the test and the name of variables file</para>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="24" column="5" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.cpp" bodystart="58" bodyend="153"/>
+        <references refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1ac67a18ec79f626a9afbc5b94d7b539fb" compoundref="_incompressible_two_phase_flow_fractures___viscous___v_v_case_8cpp" startline="58" endline="153">csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</references>
+        <referencedby refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1ac67a18ec79f626a9afbc5b94d7b539fb" compoundref="_incompressible_two_phase_flow_fractures___viscous___v_v_case_8cpp" startline="58" endline="153">csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1afcb8eca18645f3e461632812ea660f2b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::~IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</definition>
+        <argsstring>()</argsstring>
+        <name>~IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::~IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="30" column="5" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.cpp" bodystart="156" bodyend="166"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a9f521bbc2248f20fdc554e71700c14ab" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::run</definition>
+        <argsstring>()</argsstring>
+        <name>run</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::run</qualifiedname>
+        <reimplements refid="classcsmp_1_1_test_1af63cd2af47d8d03819b05cf8bfb27eac">run</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="32" column="18" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.cpp" bodystart="434" bodyend="818"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a976853e9ad6e634eb5dcfaea08e6e9dd" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::LoadModel</definition>
+        <argsstring>()</argsstring>
+        <name>LoadModel</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::LoadModel</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="50" column="10" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.cpp" bodystart="174" bodyend="187"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1ad37005d97d0d8e71f161e65b00b37f7d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::VariablesSetup</definition>
+        <argsstring>()</argsstring>
+        <name>VariablesSetup</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::VariablesSetup</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="76" column="6" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.cpp" bodystart="195" bodyend="247"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1ae6ea7aa99476738a9585e3b336bc2ced" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::ModelSetup</definition>
+        <argsstring>()</argsstring>
+        <name>ModelSetup</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::ModelSetup</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="77" column="6" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.cpp" bodystart="255" bodyend="357"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1acdabe58346b3230676c8a9c044e7c81a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::UpdateSaturations</definition>
+        <argsstring>(TwoPhaseModel&lt; dim &gt; &amp;saturationFunctions)</argsstring>
+        <name>UpdateSaturations</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::UpdateSaturations</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_two_phase_model" kindref="compound">TwoPhaseModel</ref>&lt; dim &gt; &amp;</type>
+          <declname>saturationFunctions</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="121" column="10" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.cpp" bodystart="368" bodyend="382"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a52fa96b399ab5ddb833036ac38d25ebb" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;::ComputeTotalMobility</definition>
+        <argsstring>(TwoPhaseModel&lt; dim &gt; &amp;saturationFunctions)</argsstring>
+        <name>ComputeTotalMobility</name>
+        <qualifiedname>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase::ComputeTotalMobility</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_two_phase_model" kindref="compound">TwoPhaseModel</ref>&lt; dim &gt; &amp;</type>
+          <declname>saturationFunctions</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="122" column="10" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.cpp" bodystart="385" bodyend="407"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Test</label>
+        <link refid="classcsmp_1_1_test"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Test</label>
+        <link refid="classcsmp_1_1_test"/>
+      </node>
+    </collaborationgraph>
+    <location file="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" line="21" column="1" bodyfile="tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h" bodystart="21" bodyend="123"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a7190d36fb2ddf7a2c00094ba78cc3602" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>assign_dirichlet_saturation_on_the_right_boundaries_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1adeea30f966cef76b3a47ad2ed93cc8b9a670544a13490fd1ab018b7748a7c57a2" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>BROOKS_COREY_MODEL</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1ac86f9dd66928d3060b6ea030edc22ef4" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>brooks_corey_parameter_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a17fe1d494d98c20703762b0ad690654f" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>cap_diffusivity_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a402c16461a0f694a43a469fe5576693a" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>cap_diffusivity_idx_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a2826d0fba9281139dabf396ee6ffecef" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>cfl_multiplier_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a52fa96b399ab5ddb833036ac38d25ebb" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>ComputeTotalMobility</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1adeea30f966cef76b3a47ad2ed93cc8b9ab47af341e5e9d53534b8857a6d7b9e61" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>COREY_MODEL</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a4a7b4ae21a53c906db120f8d638f1a98" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>courant_increment_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a3d3690cac041986dfe1bd9c0f883140e" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>debug_</name></member>
+      <member refid="classcsmp_1_1_test_1ad3346b23b36fbe34ac5f306a2a5d0e28" prot="protected" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>do_equal</name></member>
+      <member refid="classcsmp_1_1_test_1aee0da28e82775ce7d1ebd3b9fae9bf7d" prot="protected" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>do_fail</name></member>
+      <member refid="classcsmp_1_1_test_1a9976e7601c20a057d2f0ed2f8318c862" prot="public" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>do_succeed</name></member>
+      <member refid="classcsmp_1_1_test_1a0bf5d355d1455b2bc113ba2572e95ad8" prot="protected" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>do_test</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a6433904ef0d780d0e04459a8701085f5" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>entry_pressure_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1abbb8ba6d89260126f2eb659c96c6e019" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>explicit_scheme_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1aae280b6ea2d0c5b2572bae3f81f84c2f" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>fluid_pressure_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a63eaf6de3910f6c6d4ceb02873abe32d" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>fluid_pressure_idx_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a8d47ace8fd470b9a5c16e8d1551d3b54" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>fluid_volume_source_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a3778ade60848d178c74e6cf8b38bd79f" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>fluid_volume_source_idx_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1addee627d2b4461615b22604970b61861" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>frac_apperture_</name></member>
+      <member refid="classcsmp_1_1_test_1ab8d7cbdfd0588aa57d7ce4d2574d665b" prot="public" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>getName</name></member>
+      <member refid="classcsmp_1_1_test_1a47920cfd13f92f0860ca62ade4f2e150" prot="public" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>getNumFailed</name></member>
+      <member refid="classcsmp_1_1_test_1af0f3b897ba4ff0cb7c94cde8be1fb32b" prot="public" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>getNumPassed</name></member>
+      <member refid="classcsmp_1_1_test_1ac340370a07ff5fd4bd85bae93f0a3dac" prot="public" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>getStream</name></member>
+      <member refid="classcsmp_1_1_test_1adfad3f1f85aa766958ffcc59070e2d2d" prot="public" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>hasName</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1ac67a18ec79f626a9afbc5b94d7b539fb" prot="public" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a990dad3ea1c2e1f7e447145cee4b9c94" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>inlet_boundary_name_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a0a2ae6caa97c32901cd45c982f3c5687" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>input_file_name_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1adeea30f966cef76b3a47ad2ed93cc8b9aa63027350596e5edf0813b4a39d3bce0" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>LINEAR_TWOPHASE_MODEL</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a976853e9ad6e634eb5dcfaea08e6e9dd" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>LoadModel</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a30eef840659afe1a497a5317dcb3a2a4" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>lu_solver_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a9f78d6fdbdca646df1a64b993006cb02" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>mass_center</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1af0f0b1dcfc24377893840f7e3164ed6f" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>max_time_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a676cdf0a7d93e8d771d379741f18727b" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>model_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1ae6ea7aa99476738a9585e3b336bc2ced" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>ModelSetup</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1af8a1c27bd429d662f958a29d382ea316" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>no_flow_bc_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1ab92e4370ab800551e39ac824033070c0" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>nodal_fluid_volume_source_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a43f6c3015a4a921e249030ce14d79610" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>nodal_fluid_volume_source_idx_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1ac4f37220aa996eacb29985f1f60b2740" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>nonlinear_scheme_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a5fae0032e50c8a57a4eb1133b087b262" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>outlet_boundary_name_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a06e136cdd9c7151c3d1c4c222fe63de2" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>permeability_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1acc290e10fadfb6be42c03f4bc2e00e93" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>permeability_idx_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a1f24878ad8fc5b0b1cf76ad7e3d2ba1d" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>porosity_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a46af36950a91b4ff7154ec05feec346f" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>porosity_idx_</name></member>
+      <member refid="classcsmp_1_1_test_1a73afdd22caa8aac000b0d07fb3ae42e5" prot="protected" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>prefix_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a99e4e00b2c0f952f3d2fbb55d5bed8d9" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>relperm_model_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1af4d3987b6de18f8fad48a26809c92fe2" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>relperm_model_name_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1aed816b72f15e88963e45193344963dd0" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>relperm_model_type_</name></member>
+      <member refid="classcsmp_1_1_test_1aa241dcb3adf0ec6716ed08739bd3f79b" prot="public" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>report</name></member>
+      <member refid="classcsmp_1_1_test_1a5d334e867a3de4afd434dd9b0034234c" prot="public" virt="virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>reset</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a146026e0a2cb1519f8ebab182c431d7d" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>rho_n_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a50f2bd48cb1b6c86ad2a1567e5c7cb43" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>rho_n_idx_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a6a15e3e23b8ddb2e856253394c5e07c9" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>rho_w_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a981a00c321863f34432ff37453224916" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>rho_w_idx_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a9f521bbc2248f20fdc554e71700c14ab" prot="public" virt="virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>run</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a2fe43df8dc9a7279694c90b95486ff96" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>second_order_in_space_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a609d639dd72ed6e20d04d961e7ff4608" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>second_order_in_time_</name></member>
+      <member refid="classcsmp_1_1_test_1a3e006cad54b35d9e20561f4a64843b4e" prot="public" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>setName</name></member>
+      <member refid="classcsmp_1_1_test_1a20ba6ab18fcaaf806df6348a3b2e032b" prot="public" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>setStream</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a31c9e5590b7b0a48f7bdd7c7c8f2c4a4" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>sn_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a30f846b47724219a53e407b59aedf59d" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>sn_idx_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a943680bf3b64df1e989fffdf328b8811" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>sn_limiter</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1aa3743be3b97f394a00584ec2fa5047a2" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>snr_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1ad596e302bd7b77b9936a22ca2377a337" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>steady_state_pressure_solver_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a4147c85cebe28b2fa9ad9e6cec400bad" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>sw_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a31430a265d7933d3f7ac2abb6cd28af8" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>sw_idx_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a6d378fad13a4625c5dbc02502a9f32f3" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>sw_limiter</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a3d62cb412f8930d6ccfb392c75bf6cde" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>swr_</name></member>
+      <member refid="classcsmp_1_1_test_1aa4e274174d16215448eab6198bdb5979" prot="public" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>Test</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1abe1304eac0b7a9f506a34b6639179fb0" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>thickness_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a7ac9e6f771aaf66693923f1131d0b063" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>thickness_idx_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a68af60a2920a43f4f98adfc7a5bc4d2f" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>time_increment_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a1097e2d4222639e7cb04cc29d8758a7c" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>tolerance_l2_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1aa93aaff18e5af9adb48f5d1dd68ca02b" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>tolerance_linf_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a537452f3975adab07076c22d79e70eb0" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>tolerance_mean_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a7f8d3488987feb5dc875dd4f462eb2a1" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>total_mobility_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1aec26834933f502b2f5799a373057beea" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>total_mobility_idx_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a498e33a3e2b121c6876087a60b0d51fd" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>total_pore_velocity_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1af9d3a59885364bf382b495138fb2d2ec" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>total_velocity_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a333e58a2329bfc66cbfe525aa965048c" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>total_velocity_idx_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a11f1f73dbc93d79eb14096cda84be450" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>total_volume_flux_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a0309a1652ee5389e11777a54a6716aa2" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>tpncfvt_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1acdabe58346b3230676c8a9c044e7c81a" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>UpdateSaturations</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1adeea30f966cef76b3a47ad2ed93cc8b9af9b185917947833d0fb0621d63fd6d94" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>VAN_GENUCHTEN_MODEL</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1af14906530b5d951f02f9bcdd422abb4a" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>variables_file_cutted_prefix_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a692b81e4fdd5ec8b02c58c77fd495322" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>variables_file_prefix_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1ad37005d97d0d8e71f161e65b00b37f7d" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>VariablesSetup</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a30cd0ffb77d9200e53602ab832fa233c" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>velocity_n_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a40e8983dc91aef8b1ba4d6caaae9bdcc" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>velocity_n_idx_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a1df05b3d1f1ddeeea06ede30b24ed5ff" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>velocity_w_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a613337060239393468651f2303157607" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>velocity_w_idx_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1aecd0200f6a7200de2514e8e6f3498031" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>visc_n_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1ae058c1afd45882122d8ebab47806454a" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>visc_w_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a800b2649319cd6805c277429c47326aa" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>with_capillary_forces_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1aeb5a4cd2f9394e5b2ab442fead944cf5" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>with_gravity_forces_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1a524de2ff1641e1168c45a0e94ae099e1" prot="private" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>with_lsm_grad_limiter_</name></member>
+      <member refid="classcsmp_1_1_incompressible_two_phase_flow_fractures___viscous___v_v_case_1afcb8eca18645f3e461632812ea660f2b" prot="public" virt="non-virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>~IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</name></member>
+      <member refid="classcsmp_1_1_test_1ac154a16a5e086fe52e032c30722f5060" prot="public" virt="virtual"><scope>csmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase</scope><name>~Test</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

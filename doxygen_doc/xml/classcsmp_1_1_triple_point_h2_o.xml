@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_triple_point_h2_o" kind="class" language="C++" prot="public">
+    <compoundname>csmp::TriplePointH2O</compoundname>
+    <includes refid="_triple_point_h2_o_8h" local="no">TriplePointH2O.h</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_triple_point_h2_o_1a36e9c25116d31237f7af976295df63f0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::TriplePointH2O::TriplePointH2O</definition>
+        <argsstring>()</argsstring>
+        <name>TriplePointH2O</name>
+        <qualifiedname>csmp::TriplePointH2O::TriplePointH2O</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TriplePointH2O.h" line="20" column="5" bodyfile="source/modules/eos/h2o_nacl/TriplePointH2O.cpp" bodystart="8" bodyend="8"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_triple_point_h2_o_1a5c5ee9d17262db92bc68831fd5348221" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::TriplePointH2O::~TriplePointH2O</definition>
+        <argsstring>()</argsstring>
+        <name>~TriplePointH2O</name>
+        <qualifiedname>csmp::TriplePointH2O::~TriplePointH2O</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TriplePointH2O.h" line="21" column="5" bodyfile="source/modules/eos/h2o_nacl/TriplePointH2O.cpp" bodystart="9" bodyend="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_triple_point_h2_o_1ac167679a34248dcbe33710733f1b2a10" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TriplePointH2O::Temperature</definition>
+        <argsstring>() const</argsstring>
+        <name>Temperature</name>
+        <qualifiedname>csmp::TriplePointH2O::Temperature</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Output H2O triple point temperature in [C] </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TriplePointH2O.h" line="23" column="12" bodyfile="source/modules/eos/h2o_nacl/TriplePointH2O.cpp" bodystart="12" bodyend="12"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_triple_point_h2_o_1af21025ae1e7831fc495c7a4dfcf55b6c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TriplePointH2O::Pressure</definition>
+        <argsstring>() const</argsstring>
+        <name>Pressure</name>
+        <qualifiedname>csmp::TriplePointH2O::Pressure</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Output H2O triple point pressure in [Pa] </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TriplePointH2O.h" line="24" column="12" bodyfile="source/modules/eos/h2o_nacl/TriplePointH2O.cpp" bodystart="16" bodyend="16"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Temperature and pressure at the triple point of pure H2O. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::TriplePointH2O</label>
+        <link refid="classcsmp_1_1_triple_point_h2_o"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/eos/TriplePointH2O.h" line="15" column="3" bodyfile="source/includes/eos/TriplePointH2O.h" bodystart="16" bodyend="28"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_triple_point_h2_o_1af21025ae1e7831fc495c7a4dfcf55b6c" prot="public" virt="non-virtual"><scope>csmp::TriplePointH2O</scope><name>Pressure</name></member>
+      <member refid="classcsmp_1_1_triple_point_h2_o_1ac167679a34248dcbe33710733f1b2a10" prot="public" virt="non-virtual"><scope>csmp::TriplePointH2O</scope><name>Temperature</name></member>
+      <member refid="classcsmp_1_1_triple_point_h2_o_1a36e9c25116d31237f7af976295df63f0" prot="public" virt="non-virtual"><scope>csmp::TriplePointH2O</scope><name>TriplePointH2O</name></member>
+      <member refid="classcsmp_1_1_triple_point_h2_o_1a5c5ee9d17262db92bc68831fd5348221" prot="public" virt="non-virtual"><scope>csmp::TriplePointH2O</scope><name>~TriplePointH2O</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

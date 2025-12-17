@@ -1,0 +1,354 @@
+\doxysection{csmp\+::ODE\+\_\+\+Stiff\+Solver Class Reference}
+\hypertarget{classcsmp_1_1_o_d_e___stiff_solver}{}\label{classcsmp_1_1_o_d_e___stiff_solver}\index{csmp::ODE\_StiffSolver@{csmp::ODE\_StiffSolver}}
+
+
+Burlisch-\/\+Stoer solver for a stiff systemof ordinary differential equations.  
+
+
+
+
+{\ttfamily \#include $<$ODE\+\_\+\+Stiff\+Solver.\+h$>$}
+
+
+
+Collaboration diagram for csmp\+::ODE\+\_\+\+Stiff\+Solver\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=217pt]{classcsmp_1_1_o_d_e___stiff_solver__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_a2f8b60e5fc892ffca9993e52614b19c4}{ODE\+\_\+\+Stiff\+Solver}} (const std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_sum_of_products_with_exponents}{Sum\+Of\+Products\+With\+Exponents}} $>$ \&equations)
+\item 
+\Hypertarget{classcsmp_1_1_o_d_e___stiff_solver_a24e3a2fb073d71bbeaeca272e2a773de}\label{classcsmp_1_1_o_d_e___stiff_solver_a24e3a2fb073d71bbeaeca272e2a773de} 
+double \& {\bfseries operator()} (size\+\_\+t i)
+\begin{DoxyCompactList}\small\item\em assign initial conditions and read computed values (equations 1...n) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_o_d_e___stiff_solver_a15a809222872cf68d4a85664aac1f399}\label{classcsmp_1_1_o_d_e___stiff_solver_a15a809222872cf68d4a85664aac1f399} 
+double {\bfseries operator\mbox{[}$\,$\mbox{]}} (size\+\_\+t i) const
+\begin{DoxyCompactList}\small\item\em retrieve the time derivatives from the last step before the solver quit \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_o_d_e___stiff_solver_a2551bd0f03b890b515309b243668a00b}\label{classcsmp_1_1_o_d_e___stiff_solver_a2551bd0f03b890b515309b243668a00b} 
+void {\bfseries Tolerance} (double epsilon)
+\item 
+\Hypertarget{classcsmp_1_1_o_d_e___stiff_solver_a94465bb3371a99c7c09a26c9d4de5bea}\label{classcsmp_1_1_o_d_e___stiff_solver_a94465bb3371a99c7c09a26c9d4de5bea} 
+double {\bfseries Tolerance} () const
+\item 
+\Hypertarget{classcsmp_1_1_o_d_e___stiff_solver_a6bb0bc3987e51940e1528bf57ef0155e}\label{classcsmp_1_1_o_d_e___stiff_solver_a6bb0bc3987e51940e1528bf57ef0155e} 
+size\+\_\+t {\bfseries Equations} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_a856241b03713d65682f084f599042af3}{Intermediate\+Steps\+To\+Save}} (size\+\_\+t s)
+\item 
+\Hypertarget{classcsmp_1_1_o_d_e___stiff_solver_a3a18575161e0419af853f46c62eb8adf}\label{classcsmp_1_1_o_d_e___stiff_solver_a3a18575161e0419af853f46c62eb8adf} 
+size\+\_\+t {\bfseries Intermediate\+Steps\+To\+Save} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_a96ab3b72cdd686b0c56748ff1402190b}{Initial\+Conditions}} (const std\+::vector$<$ double $>$ \&init)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_a2b49904fb2de07d9e0e3a34abe176663}{Read\+ODEs\+From}} (const char \texorpdfstring{$\ast$}{*}file)
+\item 
+\Hypertarget{classcsmp_1_1_o_d_e___stiff_solver_ab39d6346960f6b06993caabe94be7d8f}\label{classcsmp_1_1_o_d_e___stiff_solver_ab39d6346960f6b06993caabe94be7d8f} 
+void {\bfseries Read\+ODEs\+From} (const char \texorpdfstring{$\ast$}{*}file, std\+::vector$<$ std\+::pair$<$ int32\+\_\+t, std\+::string $>$ $>$ \&coefs, std\+::vector$<$ std\+::pair$<$ int32\+\_\+t, std\+::string $>$ $>$ \&dependent\+\_\+comps, std\+::vector$<$ std\+::pair$<$ int32\+\_\+t, std\+::string $>$ $>$ \&independent\+\_\+comps)
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_a6c0b5900d596870a228a27e9370b0572}{Solve}} (double time, double init\+\_\+stepsize, size\+\_\+t n\+\_\+savesteps, double tolerance=1.\+0e-\/10, bool print\+\_\+step\+\_\+numbers=false)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_a2704ba9e53517f5abf80b0126eb4539a}{Out}} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_a21f9b1ac4e0691d26f2c79c6b6d8e3e6}{Output\+Results}} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_af0779321112fc3151e3815a1cba2fd34}{Output\+Results\+To}} (const char \texorpdfstring{$\ast$}{*}textfile) const
+\item 
+\Hypertarget{classcsmp_1_1_o_d_e___stiff_solver_a0bd828f2b46ccb5d141ae5be1801d711}\label{classcsmp_1_1_o_d_e___stiff_solver_a0bd828f2b46ccb5d141ae5be1801d711} 
+void {\bfseries Output\+Last\+Derivatives} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_ac51e021a34564405cd4e92c41810c94f}{Evaluate\+Independent\+Product\+Terms}} (const double dependent\+\_\+vals\mbox{[}$\,$\mbox{]}, std\+::vector$<$ double $>$ \&indep\+\_\+vals)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_a48f9e3fbd26801e8bf29ea3b8a568a87}{Reset\+Independent\+Product\+Terms}} (std\+::vector$<$ std\+::pair$<$ int32\+\_\+t, std\+::string $>$ $>$ \&ind, std\+::vector$<$ double $>$ \&vals)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_aa359371c064d134d43e4959d7d989338}{Assign\+Independent\+Product\+Terms}} (std\+::vector$<$ std\+::pair$<$ int32\+\_\+t, std\+::string $>$ $>$ \&ind, std\+::vector$<$ double $>$ \&vals)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_o_d_e___stiff_solver_a4bc9c1390ae07cff8e26672257d1c38a}{Out}} (const std\+::vector$<$ int32\+\_\+t $>$ \&vec) const
+\item 
+\Hypertarget{classcsmp_1_1_o_d_e___stiff_solver_a753476ef89532f7e9af185d336f72a3b}\label{classcsmp_1_1_o_d_e___stiff_solver_a753476ef89532f7e9af185d336f72a3b} 
+void {\bfseries Out} (const std\+::vector$<$ double $>$ \&vec) const
+\item 
+\Hypertarget{classcsmp_1_1_o_d_e___stiff_solver_a2c1cef75b6a0db34e8814cd03591c1c2}\label{classcsmp_1_1_o_d_e___stiff_solver_a2c1cef75b6a0db34e8814cd03591c1c2} 
+void {\bfseries Out} (const std\+::vector$<$ std\+::vector$<$ double $>$ $>$ \&vec) const
+\item 
+\Hypertarget{classcsmp_1_1_o_d_e___stiff_solver_a7d0013e28fd31f7cf1fe584f8615d89e}\label{classcsmp_1_1_o_d_e___stiff_solver_a7d0013e28fd31f7cf1fe584f8615d89e} 
+void {\bfseries Out} (int32\+\_\+t \texorpdfstring{$\ast$}{*}vec, int32\+\_\+t n)
+\item 
+\Hypertarget{classcsmp_1_1_o_d_e___stiff_solver_a27f229fd812d21e25e498be85dbf77f1}\label{classcsmp_1_1_o_d_e___stiff_solver_a27f229fd812d21e25e498be85dbf77f1} 
+void {\bfseries Out} (double \texorpdfstring{$\ast$}{*}vec, int32\+\_\+t n)
+\item 
+\Hypertarget{classcsmp_1_1_o_d_e___stiff_solver_a481edf02430e5b18a45c675b7b01471f}\label{classcsmp_1_1_o_d_e___stiff_solver_a481edf02430e5b18a45c675b7b01471f} 
+void {\bfseries Out} (double \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}vec, int32\+\_\+t m, int32\+\_\+t n)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Burlisch-\/\+Stoer solver for a stiff systemof ordinary differential equations. 
+
+\hypertarget{compare_floats_8h_motivation}{}\doxysubsection{\texorpdfstring{Motivation}{Motivation}}\label{compare_floats_8h_motivation}
+A great variety of physical processes are best described by non-\/linear systems of ordinary differential equations (ODEs) which describe the change of the system. Typically, these ODEs can only be integrated (solved) numerically as is the case for rate-\/dependent chemical reactions. If the rate coefficients differ among the equations by many orders of magnitude, the systems are called stiff. The main numerical problem imposed by the \textquotesingle{}stiffness\textquotesingle{} is that, for instance in a time-\/dependent system, some equilibria described by individual ODE equations are obtained very fast while other equations evolve very slowly. Coupling such different equations together, therefore requires very small time steps to limit the change in each step over periods where rapid changes occur. Large timesteps are however essential in periods of minor change to obtain a solution in a reasonable amount of time. ~\newline
+
+
+Solution methods which provide the necessary adaptive timestepping are known as stiff ODE solvers, and the motivation for the design of the class \doxylink{classcsmp_1_1_o_d_e___stiff_solver}{ODE\+\_\+\+Stiff\+Solver} is to make a robust solver of this kind available to CSP. ~\newline
+\hypertarget{classcsmp_1_1_o_d_e___stiff_solver_Design}{}\doxysubsection{\texorpdfstring{Intent}{Intent}}\label{classcsmp_1_1_o_d_e___stiff_solver_Design}
+The class \doxylink{classcsmp_1_1_o_d_e___stiff_solver}{ODE\+\_\+\+Stiff\+Solver} encapsulates a semi-\/implicit form of a Burlisch-\/\+Stoer method as described by Bader and Deuflhard (1983) into a code module which is also capable of the house keeping and analytical differentiation of the actual ordinary differential equations. Textfile input provides an interface for the definition and description of the system of equations in human-\/readable form. The equations are linked in a matrix scheme which uses LU decomposition and back substitution of the results after the inversion of the matrix in each timestep. The integration routine \textquotesingle{}odeint\textquotesingle{} controls the timestep size using the cross derivatives of all of the individual ODEs. For this purpose, the derivatives are assembled into a Jacobian matrix. Additional methods are provided to change coefficients in individual equations without having to redine them. This capability is useful, for instance, if activities or surface area changes in an equilibration calculation. ~\newline
+\hypertarget{classcsmp_1_1_o_d_e___stiff_solver_Applicability}{}\doxysubsection{\texorpdfstring{Applicability}{Applicability}}\label{classcsmp_1_1_o_d_e___stiff_solver_Applicability}
+The class \doxylink{classcsmp_1_1_o_d_e___stiff_solver}{ODE\+\_\+\+Stiff\+Solver} is useful only for relatively small systems of ODEs (\texorpdfstring{$<$}{<}50 degrees of freedom). Runtime scales with number of ODEs which is also readily explained on a physical basis. Since the ODE coefficients will influence the condition number of the solution matrix, these must not differ from one-\/another by more than the numerical (double) precision. Otherwise the matrix will become singular. The solution speed also limits the applicability of the stiff ODE integration algorithm in serial application in a finite-\/element model.\hypertarget{classcsmp_1_1_o_d_e___stiff_solver_Implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{classcsmp_1_1_o_d_e___stiff_solver_Implementation}
+The implementation of the ODE solver stems from the second edition of Numerical Recipes in C by Press et al. 1996 (p. 742ff) which also provides detailed documentation of functions included. The original names of the functions which have been integrated as private methods of the class \doxylink{classcsmp_1_1_o_d_e___stiff_solver}{ODE\+\_\+\+Stiff\+Solver} are derivs(), jacobn(), ludcmp(), lubksb(), simpr() pzextr(), odeint(), and stifbs(). Additional auxiliary methods manage storage in the peculiar numerical recipe way.
+
+The method implemented herein goes back to Bader, G. and Deuflhard, P. 1983, Numerische Mathematik 41, 373-\/398.\hypertarget{classcsmp_1_1_o_d_e___stiff_solver_Participants}{}\doxysubsection{\texorpdfstring{Participants}{Participants}}\label{classcsmp_1_1_o_d_e___stiff_solver_Participants}
+The objects \doxylink{classcsmp_1_1_sum_of_products_with_exponents}{Sum\+Of\+Products\+With\+Exponents} and \doxylink{classcsmp_1_1_sum_of_products}{Sum\+Of\+Products} are used to represent individual OD equations in the stiff solver object.\hypertarget{classcsmp_1_1_o_d_e___stiff_solver_Collaboration}{}\doxysubsection{\texorpdfstring{Collaboration}{Collaboration}}\label{classcsmp_1_1_o_d_e___stiff_solver_Collaboration}
+Inside the CSP framework the class \doxylink{classcsmp_1_1_o_d_e___stiff_solver}{ODE\+\_\+\+Stiff\+Solver} is used by the Reaction\+Visitor object. This object uses the solver to find fluid-\/rock equilibria in individual finite elements.\hypertarget{classcsmp_1_1_o_d_e___stiff_solver_Consequences}{}\doxysubsection{\texorpdfstring{Consequences}{Consequences}}\label{classcsmp_1_1_o_d_e___stiff_solver_Consequences}
+The \doxylink{classcsmp_1_1_o_d_e___stiff_solver}{ODE\+\_\+\+Stiff\+Solver} form a sequentially applied reaction module in the object-\/oriented implementation of an decoupled incremental transport followed by reaction scheme for reactive transport calculations with CSP.\hypertarget{namespacecsmp_Application}{}\doxysubsection{\texorpdfstring{Examples}{Examples}}\label{namespacecsmp_Application}
+The \doxylink{classcsmp_1_1_o_d_e___stiff_solver}{ODE\+\_\+\+Stiff\+Solver} can be applied using its \doxylink{classcsmp_1_1_o_d_e___stiff_solver_a6c0b5900d596870a228a27e9370b0572}{Solve()} method inside of other CSP objects or it can be used as a stand-\/alone tool to solve non-\/linear ODEs. The system of equations is defined in a textfile starting with an underlined headline followed by a blank line, e.\+g.\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{carbonate\ -\/\ dissolution\ example}
+\DoxyCodeLine{===============================}
+\DoxyCodeLine{}
+\DoxyCodeLine{independent\ variables}
+\DoxyCodeLine{-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}
+\DoxyCodeLine{}
+\DoxyCodeLine{dependent\ variable\ definitions\ \textcolor{keywordflow}{for}\ which\ is\ solved\ \textcolor{keywordflow}{for}\ (aqueous,\ gaseous,\ and\ solid)}
+\DoxyCodeLine{-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}
+\DoxyCodeLine{OH\_1m\ \ CO2\_aq\ \ CC\ \ Ca\_2p\ \ H\_1p\ \ H2O\_aq\ \ HCO3\_1m\ \ }
+\DoxyCodeLine{}
+\DoxyCodeLine{equilibrium\ constants\ (in\ sequence\ of\ listed\ reactions,\ same\ number)}
+\DoxyCodeLine{-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}
+\DoxyCodeLine{KF=4.37e-\/2\ \ KB1=3.4593938e-\/12\ \ KB2=8.336811e+10\ \ KB3=9727.4722}
+\DoxyCodeLine{}
+\DoxyCodeLine{reactions\ (odes)\ A\ +\ B\ -\/>\ C\ (K):\ \ dA/dt\ =\ -\/kf\ [A][B]\ +\ kf\ [C]\ /\ K}
+\DoxyCodeLine{-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\&mdash;}
+\DoxyCodeLine{OH\_1m\ \ \ \ =\ -\/KF\ H\_1p\ OH\_1m\ \ \ \ +\ \ KB1\ H2O\_aq}
+\DoxyCodeLine{CO2\_aq\ \ \ =\ -\/KF\ CO2\_aq\ H2O\_aq\ +\ \ KB2\ HCO3\_1m\ H\_1p}
+\DoxyCodeLine{CC\ \ \ \ \ \ \ =\ -\/KF\ CC\ H\_1p\ \ \ \ \ \ \ +\ \ KB3\ HCO3\_1m\ Ca\_2p}
+\DoxyCodeLine{Ca\_2p\ \ \ \ =\ \ KF\ CC\ H\_1p\ \ \ \ \ \ \ +\ -\/KB3\ HCO3\_1m\ Ca\_2p}
+\DoxyCodeLine{H\_1p\ \ \ \ \ =\ \ KF\ CO2\_aq\ H2O\_aq\ +\ -\/KB2\ HCO3\_1m\ H\_1p\ +\ -\/KF\ CC\ H\_1p\ +\ KB3\ HCO3\_1m\ Ca\_2p\ +\ -\/KF\ H\_1p\ OH\_1m\ +\ KB1\ H2O\_aq}
+\DoxyCodeLine{H2O\_aq\ \ \ =\ \ KF\ H\_1p\ OH\_1m\ \ \ \ +\ -\/KB1\ H2O\_aq}
+\DoxyCodeLine{HCO3\_1m\ \ =\ \ KF\ CO2\_aq\ H2O\_aq\ +\ -\/KB2\ HCO3\_1m\ H\_1p\ +\ KF\ CC\ H\_1p\ +\ -\/KB3\ HCO3\_1m\ Ca\_2p}
+
+\end{DoxyCode}
+
+
+Independent variables are specified next (such as constant coefficients). In this example, there are no independent variables. Again there is an underlined headline followed by the data and a blank line.
+
+The next block defines the names of the dependent variables in the equations (i.\+e., those variables which shall be calculated as a function of time). Importantly, no \textquotesingle{}+\textquotesingle{} or \textquotesingle{}-\/\textquotesingle{} signs must be used here since these symbols are reserved by the equation parser for algebraic operations. A similar block follows, specifying the numerical values of the equation coefficients using the assigment operator without blank space. In the example, forward and backward reaction rates are specified in terms of dissolution data and the equilibrium constants. This first order kinetic approach is described by Carl Steefel in the Min. Soc. America volume on reactive transport processes. ~\newline
+
+
+A following \textquotesingle{}reaction\textquotesingle{} block defines the actual ordinary differential equations in terms of the notation established above. Importantly, the ODEs must be listed in exactly the same order in which the dependent variables were defined before. There must be exactly one equation for each dependent variable and the stochiometry of the aqueous species/minerals determines the exponents and multipliers of the equation coefficients. This derives directly from the related mass-\/action expressions. ~\newline
+
+
+Everything which follows after the blank line below the equation block is ignored. Here the user can insert comments and a discussion of the system he defined and its time-\/dependent behaviour.
+
+Of course, the described syntax can also be used to define arbitrary ODE systems other than sets of reaction equations.
+
+copyright (c) 1999 by Dr. Stephan K. Matthaei \& Stephen G. Roberts 
+
+\label{doc-constructors}
+\Hypertarget{classcsmp_1_1_o_d_e___stiff_solver_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcsmp_1_1_o_d_e___stiff_solver_a2f8b60e5fc892ffca9993e52614b19c4}\index{csmp::ODE\_StiffSolver@{csmp::ODE\_StiffSolver}!ODE\_StiffSolver@{ODE\_StiffSolver}}
+\index{ODE\_StiffSolver@{ODE\_StiffSolver}!csmp::ODE\_StiffSolver@{csmp::ODE\_StiffSolver}}
+\doxysubsubsection{\texorpdfstring{ODE\_StiffSolver()}{ODE\_StiffSolver()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_o_d_e___stiff_solver_a2f8b60e5fc892ffca9993e52614b19c4} 
+csmp\+::\+ODE\+\_\+\+Stiff\+Solver\+::\+ODE\+\_\+\+Stiff\+Solver (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_sum_of_products_with_exponents}{Sum\+Of\+Products\+With\+Exponents}} $>$ \&}]{equations}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+Builds the ODE solver, initializing the Kaps-\/\+Rentrop parameters for the adaptive stepsize algorithm and a number of other constants used by the solver. GROW and SHRNK define by how much the stepsize can increase or decrease in one step, and TINY defines a threshold value below which entries in the solution matrix will be zeroed. Memory is allocated for the solution and jacobian matrices and vectors which store temporary variables. The system of equations is build.
+
+
+\begin{DoxyParams}{Parameters}
+{\em equations} & A vector of ordinary differential equations which define system to be integrated by the solver. The equations are stored as STL maps inside of the \textquotesingle{}\doxylink{classcsmp_1_1_sum_of_products_with_exponents}{Sum\+Of\+Products\+With\+Exponents}\textquotesingle{} class objects.\\
+\hline
+\end{DoxyParams}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+The constructor calls the private method Allocate\+Solver\+Memory() to allocate the matrices and vectors.\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+Standard constructor for the ODE solver. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=199pt]{classcsmp_1_1_o_d_e___stiff_solver_a2f8b60e5fc892ffca9993e52614b19c4_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=199pt]{classcsmp_1_1_o_d_e___stiff_solver_a2f8b60e5fc892ffca9993e52614b19c4_icgraph}
+\end{center}
+\end{figure}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_o_d_e___stiff_solver_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_o_d_e___stiff_solver_aa359371c064d134d43e4959d7d989338}\index{csmp::ODE\_StiffSolver@{csmp::ODE\_StiffSolver}!AssignIndependentProductTerms@{AssignIndependentProductTerms}}
+\index{AssignIndependentProductTerms@{AssignIndependentProductTerms}!csmp::ODE\_StiffSolver@{csmp::ODE\_StiffSolver}}
+\doxysubsubsection{\texorpdfstring{AssignIndependentProductTerms()}{AssignIndependentProductTerms()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_o_d_e___stiff_solver_aa359371c064d134d43e4959d7d989338} 
+void csmp\+::\+ODE\+\_\+\+Stiff\+Solver\+::\+Assign\+Independent\+Product\+Terms (\begin{DoxyParamCaption}\item[{std\+::vector$<$ std\+::pair$<$ int32\+\_\+t, std\+::string $>$ $>$ \&}]{ind}{, }\item[{std\+::vector$<$ double $>$ \&}]{vals}{}\end{DoxyParamCaption})}
+
+The method uses position integers and new values to change independent product terms in a system of differential equations which was already defined earlier.
+
+
+\begin{DoxyParams}{Parameters}
+{\em ind} & An STL vector of integer -\/ string pairs defines the name of the independent variables/coefficient, its position index in the equation and its numerical value.\\
+\hline
+\end{DoxyParams}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+The method first calls \doxylink{classcsmp_1_1_o_d_e___stiff_solver_a48f9e3fbd26801e8bf29ea3b8a568a87}{Reset\+Independent\+Product\+Terms()} and then re-\/assigns new values using STL vector assignment.\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+To change independent variables in equations without redefining the system of equations. This may apply for instance if PT-\/dependent equilibrium constants are used in a model in which the temperature varies. \Hypertarget{classcsmp_1_1_o_d_e___stiff_solver_ac51e021a34564405cd4e92c41810c94f}\index{csmp::ODE\_StiffSolver@{csmp::ODE\_StiffSolver}!EvaluateIndependentProductTerms@{EvaluateIndependentProductTerms}}
+\index{EvaluateIndependentProductTerms@{EvaluateIndependentProductTerms}!csmp::ODE\_StiffSolver@{csmp::ODE\_StiffSolver}}
+\doxysubsubsection{\texorpdfstring{EvaluateIndependentProductTerms()}{EvaluateIndependentProductTerms()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_o_d_e___stiff_solver_ac51e021a34564405cd4e92c41810c94f} 
+void csmp\+::\+ODE\+\_\+\+Stiff\+Solver\+::\+Evaluate\+Independent\+Product\+Terms (\begin{DoxyParamCaption}\item[{const double}]{dependent\+\_\+vals}{\mbox{[}$\,$\mbox{]}, }\item[{std\+::vector$<$ double $>$ \&}]{indep\+\_\+vals}{}\end{DoxyParamCaption})}
+
+A change of the coefficients in the system of equations, for instance by \doxylink{classcsmp_1_1_o_d_e___stiff_solver_a48f9e3fbd26801e8bf29ea3b8a568a87}{Reset\+Independent\+Product\+Terms()} necessitates a reavaluation of the product terms as done in derivs(). \doxylink{classcsmp_1_1_o_d_e___stiff_solver_ac51e021a34564405cd4e92c41810c94f}{Evaluate\+Independent\+Product\+Terms()} was written for this purpose and is called inside odeint(). ~\newline
+\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+The methods requires the values of the dependent variables as first argument.
+
+
+\begin{DoxyParams}{Parameters}
+{\em vals} & the new derivatives (righthand sides of the ODEs) are returned into the STL vector which is supplied as second argument.\\
+\hline
+\end{DoxyParams}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+The righthand side values are calculated using the Sum() method of the \doxylink{classcsmp_1_1_sum_of_products}{Sum\+Of\+Products} class object. The terms are added in the output vector at the locations 1...n.\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+The method is called inside of odeint(), after \doxylink{classcsmp_1_1_o_d_e___stiff_solver_a48f9e3fbd26801e8bf29ea3b8a568a87}{Reset\+Independent\+Product\+Terms()}, if and only if independent parameters were modified between solution steps.\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+Currently, the method reports the calculated values for each product term. \Hypertarget{classcsmp_1_1_o_d_e___stiff_solver_a96ab3b72cdd686b0c56748ff1402190b}\index{csmp::ODE\_StiffSolver@{csmp::ODE\_StiffSolver}!InitialConditions@{InitialConditions}}
+\index{InitialConditions@{InitialConditions}!csmp::ODE\_StiffSolver@{csmp::ODE\_StiffSolver}}
+\doxysubsubsection{\texorpdfstring{InitialConditions()}{InitialConditions()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_o_d_e___stiff_solver_a96ab3b72cdd686b0c56748ff1402190b} 
+void csmp\+::\+ODE\+\_\+\+Stiff\+Solver\+::\+Initial\+Conditions (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ double $>$ \&}]{init}{}\end{DoxyParamCaption})}
+
+Sets the initial values of the dependent variables for the starting step of the calculation. In the case of a chemical rate-\/dependent speciation calculation with the ODE solver, initial conditions are the starting activities of the aqueous species and minerals.
+
+
+\begin{DoxyParams}{Parameters}
+{\em init} & A constant reference to an STL vector with the initial dependent variable values. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classcsmp_1_1_o_d_e___stiff_solver_a856241b03713d65682f084f599042af3}\index{csmp::ODE\_StiffSolver@{csmp::ODE\_StiffSolver}!IntermediateStepsToSave@{IntermediateStepsToSave}}
+\index{IntermediateStepsToSave@{IntermediateStepsToSave}!csmp::ODE\_StiffSolver@{csmp::ODE\_StiffSolver}}
+\doxysubsubsection{\texorpdfstring{IntermediateStepsToSave()}{IntermediateStepsToSave()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_o_d_e___stiff_solver_a856241b03713d65682f084f599042af3} 
+void csmp\+::\+ODE\+\_\+\+Stiff\+Solver\+::\+Intermediate\+Steps\+To\+Save (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{s}{}\end{DoxyParamCaption})}
+
+Defines the number of intermediate solution steps which shall be saved before the integration interval is covered. The storage for these steps is allocated correspondingly. The solver attempts to distribute the save steps evenly over the timespan of interest. ~\newline
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & The number of steps which shall be saved. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classcsmp_1_1_o_d_e___stiff_solver_a2704ba9e53517f5abf80b0126eb4539a}\index{csmp::ODE\_StiffSolver@{csmp::ODE\_StiffSolver}!Out@{Out}}
+\index{Out@{Out}!csmp::ODE\_StiffSolver@{csmp::ODE\_StiffSolver}}
+\doxysubsubsection{\texorpdfstring{Out()}{Out()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_o_d_e___stiff_solver_a2704ba9e53517f5abf80b0126eb4539a} 
+void csmp\+::\+ODE\+\_\+\+Stiff\+Solver\+::\+Out (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+Prints the defined differential and potential algebraic equations involving independent variables to screen. The differential equation are stored as \doxylink{classcsmp_1_1_sum_of_products_with_exponents}{Sum\+Of\+Products\+With\+Exponents} objects and the algebraic equations as \doxylink{classcsmp_1_1_sum_of_products}{Sum\+Of\+Products} objects. The \doxylink{classcsmp_1_1_o_d_e___stiff_solver_a2704ba9e53517f5abf80b0126eb4539a}{Out()} methods of these classes are used to obtain the output. ~\newline
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+Calls the \doxylink{classcsmp_1_1_o_d_e___stiff_solver_a2704ba9e53517f5abf80b0126eb4539a}{Out()} interfaces of the \doxylink{classcsmp_1_1_sum_of_products_with_exponents}{Sum\+Of\+Products\+With\+Exponents} and \doxylink{classcsmp_1_1_sum_of_products}{Sum\+Of\+Products} class objects.\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+To externalize the state of the solver to examine whether the system of equations has been correctly parsed from the input file. \Hypertarget{classcsmp_1_1_o_d_e___stiff_solver_a4bc9c1390ae07cff8e26672257d1c38a}\index{csmp::ODE\_StiffSolver@{csmp::ODE\_StiffSolver}!Out@{Out}}
+\index{Out@{Out}!csmp::ODE\_StiffSolver@{csmp::ODE\_StiffSolver}}
+\doxysubsubsection{\texorpdfstring{Out()}{Out()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_o_d_e___stiff_solver_a4bc9c1390ae07cff8e26672257d1c38a} 
+void csmp\+::\+ODE\+\_\+\+Stiff\+Solver\+::\+Out (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ int32\+\_\+t $>$ \&}]{vec}{}\end{DoxyParamCaption}) const}
+
+Prints an stl vector, or a C 1-\/ or 2D-\/array indexed from 1...n to screen.
+
+
+\begin{DoxyParams}{Parameters}
+{\em vec} & The template object to be printed.\\
+\hline
+\end{DoxyParams}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+All of these output routines assume an indexing from 1...n. \Hypertarget{classcsmp_1_1_o_d_e___stiff_solver_a21f9b1ac4e0691d26f2c79c6b6d8e3e6}\index{csmp::ODE\_StiffSolver@{csmp::ODE\_StiffSolver}!OutputResults@{OutputResults}}
+\index{OutputResults@{OutputResults}!csmp::ODE\_StiffSolver@{csmp::ODE\_StiffSolver}}
+\doxysubsubsection{\texorpdfstring{OutputResults()}{OutputResults()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_o_d_e___stiff_solver_a21f9b1ac4e0691d26f2c79c6b6d8e3e6} 
+void csmp\+::\+ODE\+\_\+\+Stiff\+Solver\+::\+Output\+Results (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+Prints the results including intermediate steps to the screen. \Hypertarget{classcsmp_1_1_o_d_e___stiff_solver_af0779321112fc3151e3815a1cba2fd34}\index{csmp::ODE\_StiffSolver@{csmp::ODE\_StiffSolver}!OutputResultsTo@{OutputResultsTo}}
+\index{OutputResultsTo@{OutputResultsTo}!csmp::ODE\_StiffSolver@{csmp::ODE\_StiffSolver}}
+\doxysubsubsection{\texorpdfstring{OutputResultsTo()}{OutputResultsTo()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_o_d_e___stiff_solver_af0779321112fc3151e3815a1cba2fd34} 
+void csmp\+::\+ODE\+\_\+\+Stiff\+Solver\+::\+Output\+Results\+To (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{textfile}{}\end{DoxyParamCaption}) const}
+
+Writes the results of a calculation to a user-\/defined textfile with the extension \textquotesingle{}.txt\textquotesingle{}. Each line will give the timestep and the values of each dependent variable. The output may be corrupted when not enough savesteps were specified to accurately portray the system behaviour.
+
+
+\begin{DoxyParams}{Parameters}
+{\em textfile} & The name of the textfile to which the results shall be written to. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classcsmp_1_1_o_d_e___stiff_solver_a2b49904fb2de07d9e0e3a34abe176663}\index{csmp::ODE\_StiffSolver@{csmp::ODE\_StiffSolver}!ReadODEsFrom@{ReadODEsFrom}}
+\index{ReadODEsFrom@{ReadODEsFrom}!csmp::ODE\_StiffSolver@{csmp::ODE\_StiffSolver}}
+\doxysubsubsection{\texorpdfstring{ReadODEsFrom()}{ReadODEsFrom()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_o_d_e___stiff_solver_a2b49904fb2de07d9e0e3a34abe176663} 
+void csmp\+::\+ODE\+\_\+\+Stiff\+Solver\+::\+Read\+ODEs\+From (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{file}{}\end{DoxyParamCaption})}
+
+Initializes the system of ordinary differential equations maintained by the ODE solver from a textfile with the format specified in the documentation of the ODE solver object (\begin{DoxyParagraph}{Application\+Example section). }
+
+\end{DoxyParagraph}
+
+\begin{DoxyParams}{Parameters}
+{\em file} & the name of the textfile which contains the definition of the system of differential equations.\\
+\hline
+\end{DoxyParams}
+The textfile itself consists of 5 text blocks always starting with an underlined heading and separated by blank lines. The blocks are\+: the file header (1), the independent variables (2), the dependent variables (3), the equation coefficients (4), and the equations themselves (5). Text after the blank line following the last equation is ignored. This gives the user the possibility to add comments.\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+The method uses STL functionality to parse the textfile and store the interpreted equations into a vector of \doxylink{classcsmp_1_1_sum_of_products_with_exponents}{Sum\+Of\+Products\+With\+Exponents} objects.\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+The method tries to analyze the reasons for parsing mistakes and reports corresponding messages to the user. Common mistakes include missing blank lines between definition blocks or mispelled independent or dependent variable names or the use of reserved \textquotesingle{}+,-\/\textquotesingle{} notation in variable names. An error is reported also when the number of differential equations does not correspond to the number of dependent variables. \Hypertarget{classcsmp_1_1_o_d_e___stiff_solver_a48f9e3fbd26801e8bf29ea3b8a568a87}\index{csmp::ODE\_StiffSolver@{csmp::ODE\_StiffSolver}!ResetIndependentProductTerms@{ResetIndependentProductTerms}}
+\index{ResetIndependentProductTerms@{ResetIndependentProductTerms}!csmp::ODE\_StiffSolver@{csmp::ODE\_StiffSolver}}
+\doxysubsubsection{\texorpdfstring{ResetIndependentProductTerms()}{ResetIndependentProductTerms()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_o_d_e___stiff_solver_a48f9e3fbd26801e8bf29ea3b8a568a87} 
+void csmp\+::\+ODE\+\_\+\+Stiff\+Solver\+::\+Reset\+Independent\+Product\+Terms (\begin{DoxyParamCaption}\item[{std\+::vector$<$ std\+::pair$<$ int32\+\_\+t, std\+::string $>$ $>$ \&}]{ind}{, }\item[{std\+::vector$<$ double $>$ \&}]{vals}{}\end{DoxyParamCaption})}
+
+The need to change independent equation coefficients (such as activity coefficients) as the values of dependent variables change in an evolution of a system is accounted for by this method.
+
+
+\begin{DoxyParams}{Parameters}
+{\em ind} & The method takes vector arguments which define the new product coefficients. The individual products in the equations are identified by integers (e.\+g. product 1, product 2, etc.) and negative integers denote independent product coefficients (those that are not calculated by ODEs). The values correspond to the exponents of the terms.\\
+\hline
+\end{DoxyParams}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+The Sum\+Of\+Product\+With\+Expondents is defined as pairs of c.\+idx/coefficient and e.\+idx/exponents. The method performs on all independent variables in the ODEs, on every ODE, in every product which the ODE contains, if the tested independent variable is part of this product. Also, for all independent variables in algebraic equations, in every algebraic equation, in every product which the equation contains, if the independent variable is part of this product, the coefficient will be modified. The correct index is abs(idx-\/1) since all independent var indices are set as negative (-\/1...-\/n). The exponents stay untouched.\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+The method is called inside of odeint() if independent variables are part of the system of differential equations. The capability to change coefficients while the ODE solver converges to a solution allows to modify, for instance, the activities of chemical species as their concentrations change over time. \Hypertarget{classcsmp_1_1_o_d_e___stiff_solver_a6c0b5900d596870a228a27e9370b0572}\index{csmp::ODE\_StiffSolver@{csmp::ODE\_StiffSolver}!Solve@{Solve}}
+\index{Solve@{Solve}!csmp::ODE\_StiffSolver@{csmp::ODE\_StiffSolver}}
+\doxysubsubsection{\texorpdfstring{Solve()}{Solve()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_o_d_e___stiff_solver_a6c0b5900d596870a228a27e9370b0572} 
+bool csmp\+::\+ODE\+\_\+\+Stiff\+Solver\+::\+Solve (\begin{DoxyParamCaption}\item[{double}]{time}{, }\item[{double}]{init\+\_\+stepsize}{, }\item[{size\+\_\+t}]{n\+\_\+savesteps}{, }\item[{double}]{tolerance}{ = {\ttfamily 1.0e-\/10}, }\item[{bool}]{print\+\_\+step\+\_\+numbers}{ = {\ttfamily false}}\end{DoxyParamCaption})}
+
+Evolves the system of equations from the starting time (t=0) over a user-\/specified period of time and returns the dependent variable values at the end of the timespan, as well as intermediate values if this is requested. ~\newline
+\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+The first argument defines the timespan over which the system shall be evolved and the second argument sets the size of the first timestep which shall be calculated. If this initial timestep is too large and it already bridges pronounced changes which would normally occur in the system, no solution may be obtained. ~\newline
+
+
+The third argument gives the number of intermediate steps which shall be saved in the solution process. The default value is zero since one is usually only interested in the final solution. In this case the solver will perform significantly faster. ~\newline
+
+
+The fourth argument defines the precision to which the dependent variable values shall be approximated to at each timestep. This parameter strongly influences the number of iterations which the solver must perform to find a solutions.
+
+\begin{DoxyReturn}{Returns}
+a boolean variable indicating whether a solution was found or not. The solution can be retrieved simply with the () operator of the ODE-\/solver object.
+\end{DoxyReturn}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+The method relies on the Numerical Recipes C functions odeint(), stifbs(), simpr(), and pzextr() as documented on p. 744ff in the book. The results will be saved into a file with the same name as the equation systems file but with the extension \textquotesingle{}.results\textquotesingle{}.\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+For practical purposes the initial step size and tolerance which can be obtained varies considerable with the type of OD equations which shall be integrated over time. For the chemical reaction calculations carried out so far, an initial step size of 1.\+0e-\/17 and a tolerance of 1.\+0e-\/10 has proved useful. The solver will rapidly increase the stepsize if it is too small, but it will fail to converge if the first step was too large. It seems impossible to achieve convergence at a tolerance smaller than 1.\+0e-\/12 in most of the examined systems.
+
+Before using a system of equations in a finite-\/element model, a series of tests for a host of initial values is recommended to get a feel for the time-\/characteristics of the system behaviour and to tune the \doxylink{classcsmp_1_1_o_d_e___stiff_solver_a6c0b5900d596870a228a27e9370b0572}{Solve()} arguments accordingly. This is best achieved by saving about 100 steps and examining these with a plot program to understand system behaviour.\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+Upon completion, the solver returns the number of successful and bad solution steps which were performed. Other messages may include those issued by methods which are called internally, for instance, when the matrix inversion routine failed to find a solution. Usually, a large percentage of bad steps indicates a problem with the system of equations. The most common problem may be that the system is too stiff, i.\+e. that the dependent variable coefficients diverge by more than 16 orders of magnitude (about the limit for this double-\/precision implementation of the solver). 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/math/ODE\+\_\+\+Stiff\+Solver.\+h\item 
+source/modules/math/ODE\+\_\+\+Stiff\+Solver.\+cpp\end{DoxyCompactItemize}

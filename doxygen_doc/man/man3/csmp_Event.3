@@ -1,0 +1,69 @@
+.TH "csmp::Event< dim >" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::Event< dim >
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef \fBajb::detail::FibonacciHeap_Node\fP< double, size_t > \fBHeap_Node\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBEvent\fP (\fBNode\fP< dim > *nd)"
+.br
+.ti -1c
+.RI "\fBcsmp::Node\fP< dim > * \fBgetNode\fP () const"
+.br
+.ti -1c
+.RI "bool \fBvalid\fP () const"
+.br
+.ti -1c
+.RI "void \fBvalid\fP (bool validity)"
+.br
+.ti -1c
+.RI "bool \fBinPEPStack\fP () const"
+.br
+.ti -1c
+.RI "void \fBinPEPStack\fP (bool boolean)"
+.br
+.ti -1c
+.RI "bool \fBinQueue\fP () const"
+.br
+.ti -1c
+.RI "void \fBinQueue\fP (bool boolean)"
+.br
+.ti -1c
+.RI "double \fBt_schedule\fP () const"
+.br
+.ti -1c
+.RI "void \fBt_schedule\fP (double time)"
+.br
+.ti -1c
+.RI "void \fBsetHeapNode\fP (\fBHeap_Node\fP *heap_node)"
+.br
+.ti -1c
+.RI "\fBHeap_Node\fP * \fBgetHeapNode\fP ()"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::vector< double > \fBfacetAreaCollection\fP"
+.br
+.ti -1c
+.RI "std::vector< \fBPoint\fP< dim > > \fBfacetNormalCollection\fP"
+.br
+.in -1c
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

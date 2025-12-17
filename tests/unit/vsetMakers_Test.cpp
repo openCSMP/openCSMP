@@ -26,7 +26,7 @@ vector<vector<uint32_t>> vsetMakers_Test::NodesOfElementFaces( const VSet<dim>& 
     const auto n_nbors = distance( vset.PfvertsBegin(elmt), vset.PfvertsEnd(elmt) );
     const auto e_type  = vset.ElementType( elmt );
 
-    vector<vector<uint32_t>> elmt_face_nodes( n_nbors );
+    vector<vector<uint32_t>> elmt_face_nodes( static_cast<size_t>(n_nbors) );
     cout <<"\nprintNeighboursOfElement: element "<< elmt << endl;
     cout <<"\t"<<"faces and their nodes:"<< endl;
     for ( uint32_t face{0u}; face<n_nbors; ++face ) {
@@ -68,7 +68,7 @@ void vsetMakers_Test::run()
        create_Pyramid_VSet( vset, bSkewed );
        TestConnectedElementNeighborNumbering( vset );
 
-       create_RubikCube_VSet( vset );
+       create_Hexahedra_VSet( vset );
        TestConnectedElementNeighborNumbering( vset );
 
        create_Pyramid_Hexa_VSet( vset, bSkewed );
@@ -139,13 +139,13 @@ bool vsetMakers_Test::TestConsistencyWithCSMP_Conventions( const VSet<dim>& vset
             // If the face has a neighbor
             if (neighbor_idx >= 0 ) {  // numbers below zero indicate no neighbor
                 // Check the neighbors of this neighbor
-                for (uint32_t k = 0; k < vset.PfvertsSize(neighbor_idx); ++k) {
-                    auto neighbor_of_neighbor_idx = vset.Pfvert(neighbor_idx, k);
+              for ( uint32_t k{0u}; k < vset.PfvertsSize(static_cast<size_t>(neighbor_idx)); ++k) {
+                    auto neighbor_of_neighbor_idx = vset.Pfvert(static_cast<size_t>(neighbor_idx), k);
 
                     // If neighbor_of_neighbor is valid and connected to the current element
-                    if ( neighbor_of_neighbor_idx >= 0 && neighbor_of_neighbor_idx == eidx ) {
-                        auto etype      = ( vset.HybridElementTypeMesh() == true ) ? vset.ElementType(neighbor_idx) : vset.ElementType(0);
-                        auto nbor_etype = ( vset.HybridElementTypeMesh() == true ) ? vset.ElementType(neighbor_of_neighbor_idx) : vset.ElementType(0);
+                    if ( neighbor_of_neighbor_idx >= 0 && neighbor_of_neighbor_idx == static_cast<int64_t>(eidx) ) {
+                        auto etype      = ( vset.HybridElementTypeMesh() == true ) ? vset.ElementType(static_cast<size_t>(neighbor_idx)) : vset.ElementType(0);
+                        auto nbor_etype = ( vset.HybridElementTypeMesh() == true ) ? vset.ElementType(static_cast<size_t>(neighbor_of_neighbor_idx)) : vset.ElementType(0);
                         if ( verbose_ )
                              cout << "\nNeighbor " << neighbor_idx << ": "
                                   << parseAbbreviated_FE_Type(etype)
@@ -186,10 +186,10 @@ void vsetMakers_Test::TestConnectedElementNeighborNumbering(  const VSet<dim>& v
            // testing consistency of element type
            // testing consistency of neighbors
            if ( neighbor >= 0 ) {
-                _test( neighbor < n_elements );
+                _test( neighbor < static_cast<int64_t>(n_elements) );
                 if ( vset.HybridElementTypeMesh() ) {
-                     _test( vset.PfvertsSize(neighbor) == CSMP_ElementSpecifications::NeighborsPerElementOfType( vset.ElementType(neighbor) ) );
-                     _test( vset.PlistSize(neighbor) == CSMP_ElementSpecifications::NodesPerElementOfType( vset.ElementType(neighbor) ) );
+                  _test( vset.PfvertsSize(static_cast<uint32_t>(neighbor)) == CSMP_ElementSpecifications::NeighborsPerElementOfType( vset.ElementType(static_cast<uint32_t>(neighbor)) ) );
+                  _test( vset.PlistSize(static_cast<uint32_t>(neighbor)) == CSMP_ElementSpecifications::NodesPerElementOfType( vset.ElementType(static_cast<uint32_t>(neighbor)) ) );
                   }
              }
         }

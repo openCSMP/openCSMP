@@ -1,0 +1,180 @@
+\doxysection{source/includes/integration/finite\+\_\+elements/\+Finite\+Element.h File Reference}
+\hypertarget{_finite_element_8h}{}\label{_finite_element_8h}\index{source/includes/integration/finite\_elements/FiniteElement.h@{source/includes/integration/finite\_elements/FiniteElement.h}}
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include "{}CSMP\+\_\+global\+\_\+enumerations.\+h"{}}\newline
+{\ttfamily \#include "{}Dense\+Matrix.\+h"{}}\newline
+Include dependency graph for Finite\+Element.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_finite_element_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_finite_element_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classcsmp_1_1_finite_element}{csmp\+::\+Finite\+Element}}
+\begin{DoxyCompactList}\small\item\em CSMP\textquotesingle{}s base class of all finite elements whose functionality is provided through polymorphism. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespacecsmp}{csmp}}
+\begin{DoxyCompactList}\small\item\em Complex System Modeling Platform. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{csmp\+::\+CSMP\+\_\+\+FEM\+\_\+\+TYPE}} \+: std\+::int8\+\_\+t \{ \newline
+{\bfseries UNKNOWN}
+, {\bfseries LINEAR\+\_\+\+BAR}
+, {\bfseries QUADRATIC\+\_\+\+BAR}
+, {\bfseries CUBIC\+\_\+\+BAR}
+, \newline
+{\bfseries LINEAR\+\_\+\+TRIANGLE}
+, {\bfseries LINEAR\+\_\+\+TRIANGLE3D}
+, {\bfseries LINEAR\+\_\+\+QUADRILATERAL}
+, {\bfseries LINEAR\+\_\+\+CUBOID}
+, \newline
+{\bfseries LINEAR\+\_\+\+RECTANGLE}
+, {\bfseries BARYCENTRIC\+\_\+\+LINEAR\+\_\+\+TRIANGLE}
+, {\bfseries QUADRATIC\+\_\+\+TRIANGLE}
+, {\bfseries BARYCENTRIC\+\_\+\+QUADRATIC\+\_\+\+TRIANGLE}
+, \newline
+{\bfseries CUBIC\+\_\+\+TRIANGLE}
+, {\bfseries LINEAR\+\_\+\+TETRAHEDRON}
+, {\bfseries QUADRATIC\+\_\+\+TETRAHEDRON}
+, {\bfseries BARYCENTRIC\+\_\+\+QUADRATIC\+\_\+\+TETRAHEDRON}
+, \newline
+{\bfseries CUBIC\+\_\+\+TETRAHEDRON}
+, {\bfseries ISOPARAMETRIC\+\_\+\+LINEAR\+\_\+\+BAR}
+, {\bfseries ISOPARAMETRIC\+\_\+\+QUADRATIC\+\_\+\+BAR}
+, {\bfseries ISOPARAMETRIC\+\_\+\+CUBIC\+\_\+\+BAR}
+, \newline
+{\bfseries ISOPARAMETRIC\+\_\+\+LINEAR\+\_\+\+TRIANGLE}
+, {\bfseries ISOPARAMETRIC\+\_\+\+BARYCENTRIC\+\_\+\+LINEAR\+\_\+\+TRIANGLE}
+, {\bfseries ISOPARAMETRIC\+\_\+\+QUADRATIC\+\_\+\+TRIANGLE}
+, {\bfseries ISOPARAMETRIC\+\_\+\+BARYCENTRIC\+\_\+\+QUADRATIC\+\_\+\+TRIANGLE}
+, \newline
+{\bfseries ISOPARAMETRIC\+\_\+\+CUBIC\+\_\+\+TRIANGLE}
+, {\bfseries ISOPARAMETRIC\+\_\+\+LINEAR\+\_\+\+TETRAHEDRON}
+, {\bfseries ISOPARAMETRIC\+\_\+\+QUADRATIC\+\_\+\+TETRAHEDRON}
+, {\bfseries ISOPARAMETRIC\+\_\+\+BARYCENTRIC\+\_\+\+QUADRATIC\+\_\+\+TETRAHEDRON}
+, \newline
+{\bfseries ISOPARAMETRIC\+\_\+\+CUBIC\+\_\+\+TETRAHEDRON}
+, {\bfseries ISOPARAMETRIC\+\_\+\+LINEAR\+\_\+\+PYRAMID}
+, {\bfseries ISOPARAMETRIC\+\_\+\+QUADRATIC\+\_\+\+PYRAMID13}
+, {\bfseries ISOPARAMETRIC\+\_\+\+QUADRATIC\+\_\+\+PYRAMID14}
+, \newline
+{\bfseries ISOPARAMETRIC\+\_\+\+CUBIC\+\_\+\+PYRAMID}
+, {\bfseries ISOPARAMETRIC\+\_\+\+LINEAR\+\_\+\+PRISM}
+, {\bfseries ISOPARAMETRIC\+\_\+\+QUADRATIC\+\_\+\+PRISM15}
+, {\bfseries ISOPARAMETRIC\+\_\+\+QUADRATIC\+\_\+\+PRISM18}
+, \newline
+{\bfseries ISOPARAMETRIC\+\_\+\+CUBIC\+\_\+\+PRISM}
+, {\bfseries ISOPARAMETRIC\+\_\+\+LINEAR\+\_\+\+QUADRILATERAL}
+, {\bfseries ISOPARAMETRIC\+\_\+\+BARYCENTRIC\+\_\+\+LINEAR\+\_\+\+QUADRILATERAL}
+, {\bfseries ISOPARAMETRIC\+\_\+\+QUADRATIC\+\_\+\+QUADRILATERAL}
+, \newline
+{\bfseries ISOPARAMETRIC\+\_\+\+BARYCENTRIC\+\_\+\+QUADRATIC\+\_\+\+QUADRILATERAL}
+, {\bfseries ISOPARAMETRIC\+\_\+\+QUADRATIC\+\_\+\+QUADRILATERAL9}
+, {\bfseries ISOPARAMETRIC\+\_\+\+CUBIC\+\_\+\+QUADRILATERAL}
+, {\bfseries ISOPARAMETRIC\+\_\+\+LINEAR\+\_\+\+HEXAHEDRON}
+, \newline
+{\bfseries ISOPARAMETRIC\+\_\+\+QUADRATIC\+\_\+\+HEXAHEDRON20}
+, {\bfseries ISOPARAMETRIC\+\_\+\+QUADRATIC\+\_\+\+HEXAHEDRON27}
+, {\bfseries ISOPARAMETRIC\+\_\+\+CUBIC\+\_\+\+HEXAHEDRON}
+, {\bfseries ZERO\+\_\+\+DIMENSIONAL\+\_\+\+FACE}
+, \newline
+{\bfseries POINT\+\_\+\+ELEMENT}
+, {\bfseries POLYGONAL\+\_\+\+ELEMENT}
+, {\bfseries POLYHEDRAL\+\_\+\+ELEMENT}
+, {\bfseries EXPERIMENTAL\+\_\+\+ELEMENT}
+ \}
+\begin{DoxyCompactList}\small\item\em Data class to deduce properties of the CSMP finite-\/element types prior to the establishment of a \doxylink{classcsmp_1_1_model}{csmp\+::\+Model} from the type information that is provided by declared in file "{}\+Finite\+Elment.\+h"{}. \end{DoxyCompactList}\item 
+\Hypertarget{group___c_s_m_pglobal_enums_ga6fd0638d9b7163f7f0c2362f44394e10}\label{group___c_s_m_pglobal_enums_ga6fd0638d9b7163f7f0c2362f44394e10} 
+enum {\bfseries FV\+\_\+\+FACET\+\_\+\+TYPE} \+: std\+::int8\+\_\+t \{ {\bfseries POINT\+\_\+\+FACET}
+, {\bfseries UNIT\+\_\+\+LINEAR\+\_\+\+FACET}
+, {\bfseries TRIANGULAR\+\_\+\+FACET}
+, {\bfseries QUADRILATERAL\+\_\+\+FACET}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{namespacecsmp_ae8940acacaee4de384f429a8aa9a120e}\label{namespacecsmp_ae8940acacaee4de384f429a8aa9a120e} 
+bool {\bfseries csmp\+::is\+Triangular\+Element} (\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}})
+\item 
+\Hypertarget{namespacecsmp_a625a9d7fe52fc0026dfd1dc14b47d1e4}\label{namespacecsmp_a625a9d7fe52fc0026dfd1dc14b47d1e4} 
+bool {\bfseries csmp\+::is\+Quadrilateral\+Element} (\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}})
+\item 
+\Hypertarget{namespacecsmp_a9e36a5e2f233665f84253eed204bb864}\label{namespacecsmp_a9e36a5e2f233665f84253eed204bb864} 
+bool {\bfseries csmp\+::is\+Line\+Element} (\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}})
+\item 
+\Hypertarget{namespacecsmp_ab80b3674effddf575479d65c5c969fd8}\label{namespacecsmp_ab80b3674effddf575479d65c5c969fd8} 
+bool {\bfseries csmp\+::is\+Triangular} (\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}})
+\item 
+\Hypertarget{namespacecsmp_acd4bc026f05cee5fbed12257bb62f292}\label{namespacecsmp_acd4bc026f05cee5fbed12257bb62f292} 
+bool {\bfseries csmp\+::is\+Quadrilateral} (\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}})
+\item 
+\Hypertarget{namespacecsmp_a7c4763b4cfcb9ba8ebc9b770e67347fc}\label{namespacecsmp_a7c4763b4cfcb9ba8ebc9b770e67347fc} 
+bool {\bfseries csmp\+::is\+Surface\+Element} (\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}})
+\item 
+\Hypertarget{namespacecsmp_a426bc97b39ede805b267e690d17c2bc1}\label{namespacecsmp_a426bc97b39ede805b267e690d17c2bc1} 
+bool {\bfseries csmp\+::is\+Tetrahedral} (\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}})
+\item 
+\Hypertarget{namespacecsmp_af5f457fd89c9aae7bd1f189043c77225}\label{namespacecsmp_af5f457fd89c9aae7bd1f189043c77225} 
+bool {\bfseries csmp\+::is\+Hexahedral} (\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}})
+\item 
+\Hypertarget{namespacecsmp_a819ba730c6f6de43ae2953d30936236e}\label{namespacecsmp_a819ba730c6f6de43ae2953d30936236e} 
+bool {\bfseries csmp\+::is\+Prism} (\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}})
+\item 
+\Hypertarget{namespacecsmp_aff73636c974bdf05a71581e20eb02f92}\label{namespacecsmp_aff73636c974bdf05a71581e20eb02f92} 
+bool {\bfseries csmp\+::is\+Pyramid} (\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}})
+\item 
+\Hypertarget{namespacecsmp_affeadbc558d37b5ed6e6447a6bf5d4c7}\label{namespacecsmp_affeadbc558d37b5ed6e6447a6bf5d4c7} 
+bool {\bfseries csmp\+::is\+Volume\+Element} (\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}})
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gae70f4082919c7730a8934bfcac658ea2}{CELL\+\_\+\+SHAPE}} \mbox{\hyperlink{namespacecsmp_a6b4623904b3501667bf8dcc9e900a465}{csmp\+::parse\+Finite\+Element\+Dimension}} (\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}})
+\item 
+\Hypertarget{namespacecsmp_a57e684bfd78ec30ef1872882565c78cf}\label{namespacecsmp_a57e684bfd78ec30ef1872882565c78cf} 
+\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}} {\bfseries csmp\+::parse\+Finite\+Element\+Type\+Enum} (int8\+\_\+t etype)
+\begin{DoxyCompactList}\small\item\em converts enum names \end{DoxyCompactList}\item 
+\Hypertarget{namespacecsmp_a97c20f9a62758e55c4bd4a8ce6049431}\label{namespacecsmp_a97c20f9a62758e55c4bd4a8ce6049431} 
+\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}} {\bfseries csmp\+::parse\+Finite\+Element\+Type} (const std\+::string \&etype)
+\begin{DoxyCompactList}\small\item\em converts enum names into text \end{DoxyCompactList}\item 
+\Hypertarget{namespacecsmp_afa0d74c50aa7a298859096b434799214}\label{namespacecsmp_afa0d74c50aa7a298859096b434799214} 
+const char \texorpdfstring{$\ast$}{*} {\bfseries csmp\+::parse\+Finite\+Element\+Type} (int8\+\_\+t etype)
+\begin{DoxyCompactList}\small\item\em converts enum names into text \end{DoxyCompactList}\item 
+\Hypertarget{namespacecsmp_aada64883e3a3b176f8bbfe6614ac6efd}\label{namespacecsmp_aada64883e3a3b176f8bbfe6614ac6efd} 
+const char \texorpdfstring{$\ast$}{*} {\bfseries csmp\+::parse\+Abbreviated\+\_\+\+FE\+\_\+\+Type} (int8\+\_\+t etype)
+\begin{DoxyCompactList}\small\item\em converts enum names into text \end{DoxyCompactList}\item 
+\Hypertarget{namespacecsmp_a9ba56baa27113ee98690ca7895c30dbe}\label{namespacecsmp_a9ba56baa27113ee98690ca7895c30dbe} 
+FV\+\_\+\+FACET\+\_\+\+TYPE {\bfseries csmp\+::parse\+Facet\+Type} (const std\+::string \&ftype)
+\item 
+\Hypertarget{namespacecsmp_ac97afd0247a105a6395c25104c11a6c2}\label{namespacecsmp_ac97afd0247a105a6395c25104c11a6c2} 
+const char \texorpdfstring{$\ast$}{*} {\bfseries csmp\+::parse\+Facet\+Type} (int8\+\_\+t ftype)
+\item 
+\Hypertarget{namespacecsmp_a467bd90d673e94bd780c2859f72b8d69}\label{namespacecsmp_a467bd90d673e94bd780c2859f72b8d69} 
+\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}} {\bfseries csmp\+::finite\+Element\+Type\+Of\+Shared\+Face} (\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}} csp\+\_\+etype1, \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}} csp\+\_\+etype2, bool isoparametric=true)
+\begin{DoxyCompactList}\small\item\em returns UNKNOWN if more information is required \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyAuthor}{Author}
+S.\+K. Matthai 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+1996
+\end{DoxyDate}
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000025}{Todo}}](3) Make Finite\+Elements singletons 
+
+(3) Manage elements in a more generic way \end{DoxyRefDesc}

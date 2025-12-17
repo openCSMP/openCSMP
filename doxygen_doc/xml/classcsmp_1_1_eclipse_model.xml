@@ -1,0 +1,817 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_eclipse_model" kind="class" language="C++" prot="public">
+    <compoundname>csmp::EclipseModel</compoundname>
+    <basecompoundref refid="classcsmp_1_1_model" prot="public" virt="non-virtual">csmp::Model&lt; 3U &gt;</basecompoundref>
+    <includes refid="_eclipse_model_8h" local="no">EclipseModel.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_model_1a2bf1fe910b5a8ec579df018d4dfe705e" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_eclipse_interface" kindref="compound">EclipseInterface</ref></type>
+        <definition>EclipseInterface csmp::EclipseModel::mesh_interface</definition>
+        <argsstring></argsstring>
+        <name>mesh_interface</name>
+        <qualifiedname>csmp::EclipseModel::mesh_interface</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseModel.h" line="70" column="21" bodyfile="source/includes/interfaces/Eclipse/EclipseModel.h" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_model_1a84ed117528dba6aacf12e40229f62557" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_eclipse_model_settings" kindref="compound">EclipseModelSettings</ref></type>
+        <definition>EclipseModelSettings csmp::EclipseModel::eclipse_model_settings_</definition>
+        <argsstring></argsstring>
+        <name>eclipse_model_settings_</name>
+        <qualifiedname>csmp::EclipseModel::eclipse_model_settings_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseModel.h" line="71" column="28" bodyfile="source/includes/interfaces/Eclipse/EclipseModel.h" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_model_1a43e1bc15d033f5c42275f36341fb1bfa" prot="private" static="no" mutable="no">
+        <type>std::set&lt; std::string &gt;</type>
+        <definition>std::set&lt;std::string&gt; csmp::EclipseModel::regions_</definition>
+        <argsstring></argsstring>
+        <name>regions_</name>
+        <qualifiedname>csmp::EclipseModel::regions_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseModel.h" line="72" column="15" bodyfile="source/includes/interfaces/Eclipse/EclipseModel.h" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_model_1ab0f516bdb5a00f782c4fa6bda6f010bb" prot="private" static="no" mutable="no">
+        <type>std::set&lt; std::string &gt;</type>
+        <definition>std::set&lt;std::string&gt; csmp::EclipseModel::faults_</definition>
+        <argsstring></argsstring>
+        <name>faults_</name>
+        <qualifiedname>csmp::EclipseModel::faults_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseModel.h" line="73" column="15" bodyfile="source/includes/interfaces/Eclipse/EclipseModel.h" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_model_1ab79e341caf9a3b401a9a663f5ee96930" prot="private" static="no" mutable="no">
+        <type>std::set&lt; std::string &gt;</type>
+        <definition>std::set&lt;std::string&gt; csmp::EclipseModel::wells_</definition>
+        <argsstring></argsstring>
+        <name>wells_</name>
+        <qualifiedname>csmp::EclipseModel::wells_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseModel.h" line="74" column="15" bodyfile="source/includes/interfaces/Eclipse/EclipseModel.h" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_model_1a8882ab07e8fcda502b9ad7e95c2e55ab" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::EclipseModel::grid_dim_I_</definition>
+        <argsstring></argsstring>
+        <name>grid_dim_I_</name>
+        <qualifiedname>csmp::EclipseModel::grid_dim_I_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseModel.h" line="77" column="13" bodyfile="source/includes/interfaces/Eclipse/EclipseModel.h" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_model_1afe5852af6be0700a5c79b6ad86ed7f57" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::EclipseModel::grid_dim_J_</definition>
+        <argsstring></argsstring>
+        <name>grid_dim_J_</name>
+        <qualifiedname>csmp::EclipseModel::grid_dim_J_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseModel.h" line="77" column="25" bodyfile="source/includes/interfaces/Eclipse/EclipseModel.h" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_model_1ac9de0c29ff127b7d730595ae0d10cba3" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::EclipseModel::grid_dim_K_</definition>
+        <argsstring></argsstring>
+        <name>grid_dim_K_</name>
+        <qualifiedname>csmp::EclipseModel::grid_dim_K_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseModel.h" line="77" column="37" bodyfile="source/includes/interfaces/Eclipse/EclipseModel.h" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_model_1a35a38ca507e918f773c86eec3a7c96b9" prot="private" static="no" mutable="no">
+        <type>std::unordered_multimap&lt; <ref refid="structijk" kindref="compound">ijk</ref>, <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; 3u &gt; * &gt;</type>
+        <definition>std::unordered_multimap&lt;ijk,Element&lt;3u&gt;*&gt; csmp::EclipseModel::ijk_to_elmt_</definition>
+        <argsstring></argsstring>
+        <name>ijk_to_elmt_</name>
+        <qualifiedname>csmp::EclipseModel::ijk_to_elmt_</qualifiedname>
+        <briefdescription>
+<para>stores mapping from i,j,k to elements </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseModel.h" line="80" column="30" bodyfile="source/includes/interfaces/Eclipse/EclipseModel.h" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_model_1a15e66001fb9d1fec2110b8fe6fad0fa7" prot="private" static="no" mutable="no">
+        <type>std::unordered_map&lt; <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; 3u &gt; *, <ref refid="structijk" kindref="compound">ijk</ref> &gt;</type>
+        <definition>std::unordered_map&lt;Element&lt;3u&gt;*,ijk&gt; csmp::EclipseModel::elmt_to_ijk_</definition>
+        <argsstring></argsstring>
+        <name>elmt_to_ijk_</name>
+        <qualifiedname>csmp::EclipseModel::elmt_to_ijk_</qualifiedname>
+        <briefdescription>
+<para>stores mapping from elements to i,j,k </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseModel.h" line="81" column="30" bodyfile="source/includes/interfaces/Eclipse/EclipseModel.h" bodystart="81" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_model_1a25b282fdf9de65e9cdaadf351e94a6fb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::EclipseModel::EclipseModel</definition>
+        <argsstring>(EclipseModelSettings &amp;settings, const std::string &amp;model_name, const std::string &amp;variables_file)</argsstring>
+        <name>EclipseModel</name>
+        <qualifiedname>csmp::EclipseModel::EclipseModel</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_eclipse_model_settings" kindref="compound">EclipseModelSettings</ref> &amp;</type>
+          <declname>settings</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>model_name</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>variables_file</declname>
+        </param>
+        <briefdescription>
+<para>CSMP model construction from Eclipse files; property database is created from &quot;variables_file.txt&quot;. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseModel.h" line="27" column="7"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_model_1a521a84a0620c16e0d80feeda960dff3f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::EclipseModel::EclipseModel</definition>
+        <argsstring>(EclipseModelSettings &amp;settings, const std::string &amp;model_name)</argsstring>
+        <name>EclipseModel</name>
+        <qualifiedname>csmp::EclipseModel::EclipseModel</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_eclipse_model_settings" kindref="compound">EclipseModelSettings</ref> &amp;</type>
+          <declname>settings</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>model_name</declname>
+        </param>
+        <briefdescription>
+<para>CSMP model construction from mesh files; empty property database. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseModel.h" line="32" column="7"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_model_1a6197c517830bb479b7a9ac703c0c4535" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>csmp::EclipseModel::~EclipseModel</definition>
+        <argsstring>()</argsstring>
+        <name>~EclipseModel</name>
+        <qualifiedname>csmp::EclipseModel::~EclipseModel</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseModel.h" line="34" column="15" bodyfile="source/modules/interfaces/Eclipse/EclipseModel.cpp" bodystart="35" bodyend="37"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_model_1a8b83a0b6df4e6b640d9e8a06bc564a45" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Container</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>template void csmp::EclipseModel::GetRegions</definition>
+        <argsstring>(Container &amp;data)</argsstring>
+        <name>GetRegions</name>
+        <qualifiedname>csmp::EclipseModel::GetRegions</qualifiedname>
+        <param>
+          <type>Container &amp;</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+<para>volumetric model subdomains if any </para>
+        </briefdescription>
+        <detaileddescription>
+<para>existing special regions </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseModel.h" line="37" column="24" bodyfile="source/modules/interfaces/Eclipse/EclipseModel.cpp" bodystart="169" bodyend="172"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_model_1a619a663cf64cb58801dff4721cf0c6c4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Container</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>template void csmp::EclipseModel::GetFaults</definition>
+        <argsstring>(Container &amp;data)</argsstring>
+        <name>GetFaults</name>
+        <qualifiedname>csmp::EclipseModel::GetFaults</qualifiedname>
+        <param>
+          <type>Container &amp;</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+<para>lower-dimensional element regions representing geological faults </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseModel.h" line="40" column="24" bodyfile="source/modules/interfaces/Eclipse/EclipseModel.cpp" bodystart="180" bodyend="183"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_model_1a6c79047fd6b8410fe003193a444ebf10" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Container</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>template void csmp::EclipseModel::GetWells</definition>
+        <argsstring>(Container &amp;data)</argsstring>
+        <name>GetWells</name>
+        <qualifiedname>csmp::EclipseModel::GetWells</qualifiedname>
+        <param>
+          <type>Container &amp;</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+<para>wells which do not have a discrete representation inside of Eclipse </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseModel.h" line="43" column="24" bodyfile="source/modules/interfaces/Eclipse/EclipseModel.cpp" bodystart="191" bodyend="194"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_model_1a77a5f95f5f7af96ec8953f255d7cb908" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::EclipseModel::CreateBoundariesAroundFaults</definition>
+        <argsstring>(bool keep_fault_regions=false)</argsstring>
+        <name>CreateBoundariesAroundFaults</name>
+        <qualifiedname>csmp::EclipseModel::CreateBoundariesAroundFaults</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>keep_fault_regions</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>JC: remove it later - processing special regions. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>processing special regions </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseModel.h" line="46" column="12" bodyfile="source/modules/interfaces/Eclipse/EclipseModel.cpp" bodystart="210" bodyend="220"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_model_1aa30c50d84068a079dc74fc023713b46c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::EclipseModel::CreateSplitBoundariesAroundFaults</definition>
+        <argsstring>(bool delete_fault_regions=false)</argsstring>
+        <name>CreateSplitBoundariesAroundFaults</name>
+        <qualifiedname>csmp::EclipseModel::CreateSplitBoundariesAroundFaults</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>delete_fault_regions</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>JC: remove it later - TODO: not implemented yet. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseModel.h" line="49" column="12" bodyfile="source/modules/interfaces/Eclipse/EclipseModel.cpp" bodystart="223" bodyend="236"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_model_1affd70fe23cb3244a2b9b2e1e4f8c6a58" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::EclipseModel::AssignBoxBoundaryFlagsWherePossible</definition>
+        <argsstring>(const char *target_region)</argsstring>
+        <name>AssignBoxBoundaryFlagsWherePossible</name>
+        <qualifiedname>csmp::EclipseModel::AssignBoxBoundaryFlagsWherePossible</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>target_region</declname>
+        </param>
+        <briefdescription>
+<para>JC: remove it later - BOX flag nodes and elements of volumetric target region. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>BOX flag nodes and elements of volumetric target region This method assumes that the nodes of the mesh were previously flagged correctly. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseModel.h" line="52" column="12" bodyfile="source/modules/interfaces/Eclipse/EclipseModel.cpp" bodystart="245" bodyend="331"/>
+        <references refid="group___c_s_m_pglobal_enums_1gga8e4421c3cd02f67e535bceb2dc74bfb6aa75032f56e77653ffaa7e2eb85566858" compoundref="_box_8h" startline="63">csmp::NOT</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_model_1a694073cca375de10759b7c6710cf4bca" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structijk" kindref="compound">ijk</ref></type>
+        <definition>ijk csmp::EclipseModel::EclipseCoordinates</definition>
+        <argsstring>(Element&lt; 3u &gt; *e) const</argsstring>
+        <name>EclipseCoordinates</name>
+        <qualifiedname>csmp::EclipseModel::EclipseCoordinates</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; 3u &gt; *</type>
+          <declname>e</declname>
+        </param>
+        <briefdescription>
+<para>Get ijk coordinates of corner-point grid cell that corresponds to <ref refid="classcsmp_1_1_element" kindref="compound">csmp::Element</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseModel.h" line="55" column="11" bodyfile="source/includes/interfaces/Eclipse/EclipseModel.h" bodystart="55" bodyend="55"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_model_1a3bcaadbc8fc2436a30e43b6748ff4f6d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::EclipseModel::AddWell</definition>
+        <argsstring>(const std::string &amp;well_name, const Point&lt; 3U &gt; &amp;well_start_point, const Point&lt; 3U &gt; &amp;well_end_point)</argsstring>
+        <name>AddWell</name>
+        <qualifiedname>csmp::EclipseModel::AddWell</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>well_name</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 3U &gt; &amp;</type>
+          <declname>well_start_point</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 3U &gt; &amp;</type>
+          <declname>well_end_point</declname>
+        </param>
+        <briefdescription>
+<para>inserts a well path that penetrates the centers of the faces of the supplied cells </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseModel.h" line="58" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseModel.cpp" bodystart="202" bodyend="205"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_model_1a707640c77a9a4ffe1560078edb41c1e4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::EclipseModel::GridDimensions</definition>
+        <argsstring>(size_t &amp;max_I, size_t &amp;max_J, size_t &amp;max_K) const</argsstring>
+        <name>GridDimensions</name>
+        <qualifiedname>csmp::EclipseModel::GridDimensions</qualifiedname>
+        <param>
+          <type>size_t &amp;</type>
+          <declname>max_I</declname>
+        </param>
+        <param>
+          <type>size_t &amp;</type>
+          <declname>max_J</declname>
+        </param>
+        <param>
+          <type>size_t &amp;</type>
+          <declname>max_K</declname>
+        </param>
+        <briefdescription>
+<para>the dimensions of the original corner-point grid </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseModel.h" line="62" column="12" bodyfile="source/includes/interfaces/Eclipse/EclipseModel.h" bodystart="62" bodyend="63"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_model_1a3658a30300ca84fe88afc42af5a46004" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::EclipseModel::Initialize</definition>
+        <argsstring>()</argsstring>
+        <name>Initialize</name>
+        <qualifiedname>csmp::EclipseModel::Initialize</qualifiedname>
+        <briefdescription>
+<para>Master method to build the model. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Master function that BUILDS CSMP MODEL FROM ECLIPSE DATA </para>
+        </detaileddescription>
+        <inbodydescription>
+<para>checking whether any undefined properties are left</para>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseModel.h" line="67" column="10" bodyfile="source/modules/interfaces/Eclipse/EclipseModel.cpp" bodystart="43" bodyend="164"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Input interface which converts a standard corner-point (hexahedral cell) grid from Schlumberger&apos;s reservoir simulator Eclipse into a CSMP model object in which the cells are represented by hexahedra. Degenerate cells are converted to other element types like prisms and tetrahedra. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="attention"><para>do not apply to Eclipse grids with non-standard (partially overlapping) connections with grid cells.</para>
+</simplesect>
+<simplesect kind="author"><para>R. Manasipov </para>
+</simplesect>
+<simplesect kind="author"><para>Stephan Matthai (done some refactoring, but still needs much work) </para>
+</simplesect>
+<simplesect kind="date"><para>2014, 2016, 2018 @revised SKM 12/04/2018 </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="6">
+        <label>csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;</label>
+        <link refid="classcsmp_1_1_boundary_interface"/>
+      </node>
+      <node id="5">
+        <label>csmp::BoundaryInterface&lt; dim, Model &gt;</label>
+        <link refid="classcsmp_1_1_boundary_interface"/>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; dim, Model &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::EclipseModel</label>
+        <link refid="classcsmp_1_1_eclipse_model"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>csmp::LocalVariableStorage&lt; dim, STOREE &gt;</label>
+        <link refid="classcsmp_1_1_local_variable_storage"/>
+      </node>
+      <node id="9">
+        <label>csmp::LocalVariableStorage&lt; dim, Model &gt;</label>
+        <link refid="classcsmp_1_1_local_variable_storage"/>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; dim, Model &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>csmp::Model&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_model"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Model&lt; 3U &gt;</label>
+        <link refid="classcsmp_1_1_model"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; 3U &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>csmp::RegionInterface&lt; dim, REGION_COMPLEX &gt;</label>
+        <link refid="classcsmp_1_1_region_interface"/>
+      </node>
+      <node id="3">
+        <label>csmp::RegionInterface&lt; dim, Model &gt;</label>
+        <link refid="classcsmp_1_1_region_interface"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; dim, Model &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>csmp::SplitBoundaryInterface&lt; dim, SPLITBOUNDARY_COMPLEX &gt;</label>
+        <link refid="classcsmp_1_1_split_boundary_interface"/>
+      </node>
+      <node id="7">
+        <label>csmp::SplitBoundaryInterface&lt; dim, Model &gt;</label>
+        <link refid="classcsmp_1_1_split_boundary_interface"/>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; dim, Model &gt;</edgelabel>
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="6">
+        <label>csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;</label>
+        <link refid="classcsmp_1_1_boundary_interface"/>
+      </node>
+      <node id="5">
+        <label>csmp::BoundaryInterface&lt; dim, Model &gt;</label>
+        <link refid="classcsmp_1_1_boundary_interface"/>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; dim, Model &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::EclipseModel</label>
+        <link refid="classcsmp_1_1_eclipse_model"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>csmp::LocalVariableStorage&lt; dim, STOREE &gt;</label>
+        <link refid="classcsmp_1_1_local_variable_storage"/>
+      </node>
+      <node id="9">
+        <label>csmp::LocalVariableStorage&lt; dim, Model &gt;</label>
+        <link refid="classcsmp_1_1_local_variable_storage"/>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; dim, Model &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>csmp::Model&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_model"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Model&lt; 3U &gt;</label>
+        <link refid="classcsmp_1_1_model"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; 3U &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>csmp::RegionInterface&lt; dim, REGION_COMPLEX &gt;</label>
+        <link refid="classcsmp_1_1_region_interface"/>
+      </node>
+      <node id="3">
+        <label>csmp::RegionInterface&lt; dim, Model &gt;</label>
+        <link refid="classcsmp_1_1_region_interface"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; dim, Model &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>csmp::SplitBoundaryInterface&lt; dim, SPLITBOUNDARY_COMPLEX &gt;</label>
+        <link refid="classcsmp_1_1_split_boundary_interface"/>
+      </node>
+      <node id="7">
+        <label>csmp::SplitBoundaryInterface&lt; dim, Model &gt;</label>
+        <link refid="classcsmp_1_1_split_boundary_interface"/>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; dim, Model &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/interfaces/Eclipse/EclipseModel.h" line="24" column="1" bodyfile="source/includes/interfaces/Eclipse/EclipseModel.h" bodystart="24" bodyend="82"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_model_1a2e12f259012989765f3269d8ea721092" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>Accept</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a9bdc4e94ff3dbf306bdcccfefd721969" prot="protected" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>AddBoundary</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1ae81c2b297f4166821bc3de2856e055ae" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>AddProperty</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a0ef20e1c34990ef368737e0060a84b1c" prot="protected" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>AddSplitBoundary</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_1a3bcaadbc8fc2436a30e43b6748ff4f6d" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>AddWell</name></member>
+      <member refid="classcsmp_1_1_model_1a1f470e567edc05fb61d72ba12dbda6b8" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>Apply</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a0f98d57cdb8354375492e1ecab895b05" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>AssertFiniteVolumeIntegrationPointPlacement</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a5143bb03ae0bda92a0c01260dee54615" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>AssertIntegrationPointPlacement</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a4cc75be181f8519badea275810fe8275" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>AssertPlacement</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_1affd70fe23cb3244a2b9b2e1e4f8c6a58" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>AssignBoxBoundaryFlagsWherePossible</name></member>
+      <member refid="classcsmp_1_1_model_1afa95b2a116d4772dcc7ef61c4a7b6c2c" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>AssignCellCharacteristicsTo</name></member>
+      <member refid="classcsmp_1_1_model_1a0da00f2577ff08d7ee4d6cc1ede60d34" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>AssignNodeCoordinatesTo</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a3a5c416879b0f17829f989a65c4a18a1" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>AssimilateRegion</name></member>
+      <member refid="classcsmp_1_1_model_1a935a4dea2784b6a57ff0f6d1b888323b" prot="protected" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>BinaryBoundariesFileName</name></member>
+      <member refid="classcsmp_1_1_model_1a9ab51937d76c554fee2f22a31220f9c0" prot="protected" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>BinaryRegionsFileName</name></member>
+      <member refid="classcsmp_1_1_model_1a233cebc02de94805352d84bbb3936d89" prot="protected" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>BinarySplitBoundariesFileName</name></member>
+      <member refid="classcsmp_1_1_model_1aee11ba02736a22c1b82c8f70d63519bb" prot="protected" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>BinaryVariablesFileName</name></member>
+      <member refid="classcsmp_1_1_model_1a04cff6fae0c64ae7a8dce5f57ad8eee6" prot="protected" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>BinaryVsetFileName</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1afc9322d44807e26716d48f2c616d3b78" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>Boundaries</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a2771e6533d70e579027431c1ee070926" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>BoundariesBegin</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a1c2e56d21a8535986a71d7a2e37f03ee" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>BoundariesEnd</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1ae4bfaeada6c1968a38b739272df2e8a5" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>BoundariesOut</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1ab40b76a0d54da3105648ed8e454cdd98" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>Boundary</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a093f6e8261b159874d8537dd3abc0927" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>boundaryConstIterator</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a995b5c3880056bdc0f2e9940be241b7d" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>BoundaryInterface</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1ad9e5b080197df15de0fc223a7793de2d" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>boundaryIterator</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a9ec05234ca81cb71c04c9b5e57064a8c" prot="protected" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>boundaryMap_</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a170a0b5502f6e14e6ea475714b6764db" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>BoxShaped</name></member>
+      <member refid="classcsmp_1_1_model_1a79de9bdafebf73cfe8d7472b46c5ac54" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>ChangePropertyStatus</name></member>
+      <member refid="classcsmp_1_1_model_1a8175c191fb82044c968d087ce6ca5c20" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>ChangePropertyStatusWhere</name></member>
+      <member refid="classcsmp_1_1_region_interface_1ab61ce01e8782b79e4e2b1bdbc619a9dc" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>CheckRegionIdentifierIsUpToDate</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1ad82b6e1229b2eaa3311dc068aa3f0ba6" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>ContainsBoundary</name></member>
+      <member refid="classcsmp_1_1_region_interface_1aad7bc91dc4450d45f48103c85ae940e5" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>ContainsRegion</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1afb450a873c86b4ce2468d4d29920cb2d" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>ContainsSplitBoundary</name></member>
+      <member refid="classcsmp_1_1_model_1a28e317bfa74330d1b2ce9763e52803c6" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>CopyGradientOfProperty_A_To_B</name></member>
+      <member refid="classcsmp_1_1_region_interface_1ad6890490309612e7b94004a89026b392" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>CopyRegion</name></member>
+      <member refid="classcsmp_1_1_model_1acf6ea2249b3f45d733262b3977a61a1f" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>CopyReplace</name></member>
+      <member refid="classcsmp_1_1_region_interface_1adf554e6b22902ffe7e6793538a05f8d4" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>CountAndLabelUniqueRegions</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_1a77a5f95f5f7af96ec8953f255d7cb908" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>CreateBoundariesAroundFaults</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1ad24b7f5db1277b6a7837a700d103d153" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>CreateBoundaryAround</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a4e8a32b74b875851b1805944812b3a70" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>CreateBoundaryBetween</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a7f343a42577037dff47093f62a90b84b" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>CreateBoundaryName</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a7aef8cb4f10754a119e7df1309b9d98a" prot="protected" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>CreateBoundaryNameFrom</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a46772c373bade27cc1bfd5de6a7f2cb1" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>CreateExternalBoundaryFrom</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a41271a0826a7dfae74abdb5cf4856b4f" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>CreateInternalBoundaryFrom</name></member>
+      <member refid="classcsmp_1_1_model_1aff7668a969afb1b8934e63a27b47ca31" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>CreateProperty</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_1aa30c50d84068a079dc74fc023713b46c" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>CreateSplitBoundariesAroundFaults</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a0a4e52dd0e6018a0b751be1dfc4b13a5" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>CreateSplitBoundaryBetween</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1aabc87e8481fc15687fdb428da104a5d2" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>CreateSplitBoundaryFrom</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1acb2fac24571ca74f7ffae218347d80b0" prot="protected" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>CreateSplitBoundaryName</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1ac2f3505cd6c6368e76cc7fbbdf3a5361" prot="protected" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>CreateSplitBoundaryNameFrom</name></member>
+      <member refid="classcsmp_1_1_model_1a538d966f27bfa2c6a791f5ed4fd7f446" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>Database</name></member>
+      <member refid="classcsmp_1_1_model_1a6c9c1075f4048ab03276569f580fce19" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>DeleteProperty</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a3b56bab7bc4a1db37bfc4d4176457349" prot="public" virt="non-virtual" ambiguityscope="csmp::LocalVariableStorage&lt; dim, Model &gt;::"><scope>csmp::EclipseModel</scope><name>DeleteProperty</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a34e5f96c416a4e88a8b189b7700515f8" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>DetectAndCreateSplitBoundaries</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_1a84ed117528dba6aacf12e40229f62557" prot="private" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>eclipse_model_settings_</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_1a694073cca375de10759b7c6710cf4bca" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>EclipseCoordinates</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_1a25b282fdf9de65e9cdaadf351e94a6fb" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>EclipseModel</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_1a521a84a0620c16e0d80feeda960dff3f" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>EclipseModel</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_1a15e66001fb9d1fec2110b8fe6fad0fa7" prot="private" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>elmt_to_ijk_</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a110040be6c3f197163729b7c4ea81069" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>EmptyLVS</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1ad0eed3c326997f854db44d5a7320a1e2" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>EstablishBoundariesFromRegions</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1aa3b79631cd879e55338d14803caae786" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>EstablishBoxBoundaries</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a806f539a7761ee70feaa892a22d040ff" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>EstablishBoxBoundariesFromNodeFlags</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a432e8ca3268d6ef31eaf6b9fd23a3e7c" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>EstablishBoxBoundariesFromOrientation</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1ad1c6156ff7aa50d5a1c26d12d32006f7" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>EstablishEdgeBoundariesOfBoxShapedModel</name></member>
+      <member refid="classcsmp_1_1_model_1a13852cb18c944af4b5f132e5714f4d7a" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>ExtrapolateCellToNodeProperty</name></member>
+      <member refid="classcsmp_1_1_model_1a4bfc03c69ae4b2523a1b9d40da381823" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>ExtrapolateIntegrationPointToNodeProperty</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_1ab0f516bdb5a00f782c4fa6bda6f010bb" prot="private" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>faults_</name></member>
+      <member refid="classcsmp_1_1_model_1a527ae316cdaa330e3e1897dc10eda71c" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>FE_Manager</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1ad66b7d53568c18e4241ad24ef51f51d7" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>FindBoundaryByName</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a8c12cd3934001fdeea4d927a94bd4e9d" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>FindBoundaryByNames</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a8c05e87268deed28098c8770b79fb183" prot="protected" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>FindSplitBoundaryByNames</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1abc0392784790ae33fdc9759a7bf19615" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>FormBoundariesFrom</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a01c89d70b2cc76f81224c318f0840bb8" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>FormModelRegion</name></member>
+      <member refid="classcsmp_1_1_region_interface_1afdab232b6b3ef6880224f6f72ade4cb5" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>FormRectangularRegion</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a54852db0700b343b2c21d420fa387797" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>FormRegionFrom</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a47865ffc9553be4af8b2f5ed92bb5061" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>FormRegionInBoundingBox</name></member>
+      <member refid="classcsmp_1_1_region_interface_1aefd55525755bb027d8b6204b2ce604c3" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>FormRegionsFrom</name></member>
+      <member refid="classcsmp_1_1_region_interface_1aba5ce4ad7998c91591500e6385bd5fe3" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>FormRegionsFromMaterialIDs</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a893076f9f7bf4711e6d4897f719bb2b5" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>FormRegionsFromPropertyValues</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a30cbaf4eabbcff716be8742b47e0c869" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>FormSplitBoundariesFrom</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_1a619a663cf64cb58801dff4721cf0c6c4" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>GetFaults</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_1a8b83a0b6df4e6b640d9e8a06bc564a45" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>GetRegions</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_1a6c79047fd6b8410fe003193a444ebf10" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>GetWells</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_1a8882ab07e8fcda502b9ad7e95c2e55ab" prot="private" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>grid_dim_I_</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_1afe5852af6be0700a5c79b6ad86ed7f57" prot="private" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>grid_dim_J_</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_1ac9de0c29ff127b7d730595ae0d10cba3" prot="private" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>grid_dim_K_</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_1a707640c77a9a4ffe1560078edb41c1e4" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>GridDimensions</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a4e541b2682544636c2cd62d569716946" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>HasValidModelRegion</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_1a35a38ca507e918f773c86eec3a7c96b9" prot="private" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>ijk_to_elmt_</name></member>
+      <member refid="classcsmp_1_1_model_1ac629d1175ce8e74dbdc3974553b14531" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>IndexByPropertyValues</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_1a3658a30300ca84fe88afc42af5a46004" prot="private" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>Initialize</name></member>
+      <member refid="classcsmp_1_1_model_1a659628e032169aace551f8493bb8d64e" prot="protected" virt="non-virtual" ambiguityscope="csmp::Model&lt; 3U &gt;::"><scope>csmp::EclipseModel</scope><name>Initialize</name></member>
+      <member refid="classcsmp_1_1_model_1a3beebcda9fd039ea50be5e7b41948bfe" prot="protected" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>InitializeLocalVariableStorage</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a573cc9956b043b7010b5c70eebc47a40" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>InputBoundariesFromBinary</name></member>
+      <member refid="classcsmp_1_1_model_1a0420507bc518fc8f233ecdccfaaf531e" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>InputBoundaryFlags</name></member>
+      <member refid="classcsmp_1_1_model_1af02c3aae20950e871acfafd520dd532f" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>InputBoundaryValue</name></member>
+      <member refid="classcsmp_1_1_model_1a54b42649c2116beae5b32cb0e8750dab" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>InputFromBinaryFile</name></member>
+      <member refid="classcsmp_1_1_model_1ab7e40578f44ca6ced2cf05db309f122e" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>InputPropertyValue</name></member>
+      <member refid="classcsmp_1_1_region_interface_1abf1c6bc80311fc070ff4da11211093d8" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>InputRegionsFromBinary</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a56710d6c84622848e351e794f8e71381" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>InputSplitBoundariesFromBinary</name></member>
+      <member refid="classcsmp_1_1_model_1a9d88f8a2aa52d8c26944faf4ae8c5e6c" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>InputVariableFrom</name></member>
+      <member refid="classcsmp_1_1_model_1a1c8cd5a8dabcd4733b9545d813e78559" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>InputVariablesFrom</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a01c9167b824ee1726bd64390319bcd47" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>InsertLowerDimensionalRegionsIntoSplitBoundaries</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a0f810da61d370f5942a8478c3b32ccbc" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>InsertRegionIntoSplitBoundary</name></member>
+      <member refid="classcsmp_1_1_model_1a8a437f9aa192afd88f871720f320bd8e" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>InstantiateFiniteVolumes</name></member>
+      <member refid="classcsmp_1_1_model_1a69f9911b3ea97c2db09cd990442126f9" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>InterpolateBoundaryValues</name></member>
+      <member refid="classcsmp_1_1_model_1a242fb0eb48c3c42c69a204882d5704e4" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>InterpolateIntegrationPointToCellProperty</name></member>
+      <member refid="classcsmp_1_1_model_1acec8aaf9553395187eef0cd4105e5197" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>InterpolateNodeToCellProperty</name></member>
+      <member refid="classcsmp_1_1_model_1ac613db5a43becbf675a09fab65ff37a4" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>InterpolateNodeToIntegrationPointProperty</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1af8d883b322003e0e831b114a53120eef" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>IsBoundaryName</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a6ee3292130db84d62ea9b3ddbb81461d" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>IsUnique</name></member>
+      <member refid="classcsmp_1_1_model_1ae5e7ec4fee6a39db1fa287bdbc88f77e" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>IsWithinRange</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1aa8f995011429356bfd7e7744794c9b9b" prot="public" virt="non-virtual" ambiguityscope="csmp::LocalVariableStorage&lt; dim, Model &gt;::"><scope>csmp::EclipseModel</scope><name>IsWithinRange</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1aa711649557c9cd84c0a69e7e1ffe301b" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>LocalVariableStorage</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a3568b1d87af863a457f038ca8982bcea" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>LVS</name></member>
+      <member refid="classcsmp_1_1_region_interface_1accd91c4d081a411697194ba99b0b9d88" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>MergeRegions</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a932d9bf33ebc1f1feff208c0a8a5e900" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>MergeSplitBoundaries</name></member>
+      <member refid="classcsmp_1_1_model_1acdd487a168aedd26d138cb74127f87b0" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>Mesh</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_1a2bf1fe910b5a8ec579df018d4dfe705e" prot="private" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>mesh_interface</name></member>
+      <member refid="classcsmp_1_1_model_1af05be8dbc1bdfd766ae01def456e8314" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>MinMaxCoordinates</name></member>
+      <member refid="classcsmp_1_1_model_1ae98b627c7aa1d3422044856e211fdf96" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>MinMaxOf</name></member>
+      <member refid="classcsmp_1_1_model_1acefd52598cd77133895e29d4f9cf8814" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>Model</name></member>
+      <member refid="classcsmp_1_1_model_1a1215540ea41e232f4e5c845e5466f92d" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>MoveNodeCoordinatesBy</name></member>
+      <member refid="classcsmp_1_1_region_interface_1afc081b026c8c072b1fef0c9df85b6ce6" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>MoveToNonUniqueRegions</name></member>
+      <member refid="classcsmp_1_1_region_interface_1ab4d772d282e5e1a4a529f0d0cf9aedcf" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>MoveToUniqueRegions</name></member>
+      <member refid="classcsmp_1_1_model_1ad122aa50ee0c315e3aa2720f81ad0f74" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>Name</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1add3acd9ec49db71e0e5bf4f8dda13744" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>operator==</name></member>
+      <member refid="classcsmp_1_1_model_1a39c10e94cf437465bf27cf9b6b53b0a8" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1ade5ec5a8e9afb482c1619924cf8259b2" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>OutLVS</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a4e58d1c493b2e439a430621ea11df640" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>OutputBoundariesToBinary</name></member>
+      <member refid="classcsmp_1_1_model_1a359e24041d64774eb63b4c583a2c08bc" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>OutputMeshTo</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a4baedc0566e529f2a54d46a56e62a138" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>OutputRegionsToBinary</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a4ddcf39d8581ca63a8b618741a5385d5" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>OutputSplitBoundariesToBinary</name></member>
+      <member refid="classcsmp_1_1_model_1a40267f0970a5f782de8ae9916da1e005" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>OutputToBinaryFile</name></member>
+      <member refid="classcsmp_1_1_model_1adf5297f19ae1481d29afd513aaa29699" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>OutputVariableTo</name></member>
+      <member refid="classcsmp_1_1_model_1a1f918e53e2331dbe07719e023535152b" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>OutputVariableToScreen</name></member>
+      <member refid="classcsmp_1_1_region_interface_1ac9096a4b2be14096aafa13fc61322bce" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>PartitionRegionIntoContiguousSubRegions</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a1261d193620bc36dfed780945f7f6751" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>PartitionRegionIntoContiguousSubRegions_Bromage</name></member>
+      <member refid="classcsmp_1_1_model_1a0d0aad3ae1bce2e9ae382ef3aa6d284f" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>Placement</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a7317f73445deb0ffe24f8d7c2d8fa705" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>PrintDomainIndices</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a4387c2c28afd79c9142834fc4a976b48" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>Read</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a15454666d6c782ff34dc7cbcd5654881" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>ReadArrayEntry</name></member>
+      <member refid="classcsmp_1_1_region_interface_1aa4904242d78be33ce82cca5065e35c5b" prot="protected" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>RebuildUniqueRegions</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a726722b33ee2b3fe7e739de1cc23ef61" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>Region</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a76b7f2f0b92cb59c95116e06d31a120a" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>RegionByDomainIndex</name></member>
+      <member refid="classcsmp_1_1_region_interface_1ad3c0608a067423428f7123c13a80346b" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>regionConstIterator</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a24356853ec2de423c20a55b22c7244b8" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>RegionDifference</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a4167afbf2ee98fda0fd380bcbcbb1fb8" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>RegionIncludes</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a6b3627eec17360f841826792fc846e3e" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>RegionInterface</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a35cbd8c6094105001f9b2bc740263939" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>RegionIntersection</name></member>
+      <member refid="classcsmp_1_1_region_interface_1ac93adcf7fe57c7630ea5f07af6e7bada" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>regionIterator</name></member>
+      <member refid="classcsmp_1_1_region_interface_1ae9135b7a7051bdd188b1ea03c9e1078b" prot="protected" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>regionMap_</name></member>
+      <member refid="classcsmp_1_1_region_interface_1ab4e46d0953e5ac0004b53d240b4c79dc" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>Regions</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_1a43e1bc15d033f5c42275f36341fb1bfa" prot="private" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>regions_</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a039af112e1af659415de489780acc0fc" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>RegionsBegin</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a42be1c04db6a8b874ebe54724c72eb6d" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>RegionsEnd</name></member>
+      <member refid="classcsmp_1_1_region_interface_1abcf00391fd601c027d59e03ecacc7023" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>RegionsOut</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a8b2d9d622d7203e8e050cb9ca7811b46" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>RegionSymmetricDifference</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a21a8c8d8c50e40797b13e059d83a0773" prot="protected" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>regionTraits_</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a02754829ba2beb42af7bdf232f646188" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>RegionUnion</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1ae8976912d2d26ce92222880798dba583" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>RemoveBoundary</name></member>
+      <member refid="classcsmp_1_1_region_interface_1afdc209398fea9597da430153ace32208" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>RemoveFromRegion</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a753c2b6332c5c14f228abbf81568123c" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>RemoveRegion</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a830b59da55e4235995ebfc6affa254e6" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>RemoveRegionPartitionsFor</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a85db4d8207a4baec857b7352926900a2" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>RemoveSplitBoundary</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a0a622ed266b74e15e39f8ad734ad7a3d" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>RenameRegion</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a7a7f6185d60844c2f5acc1bcf475e215" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>ResizePropertyStorage</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a69879ca6a06d881fe3ef71251cca84ff" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>SeparateUniqueRegionsBySplitBoundaries</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a6eb99206ead464836c322df187ef4d2f" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>SharedPerimeterFaces</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a3d663bc8af57097f34baa6bb0a4242d9" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>SplitBoundaries</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a6810f0a2f352d7e258c592583d4288f0" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>SplitBoundariesBegin</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1ab4643e71e068ffcebc662ea4ee9e7403" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>SplitBoundariesEnd</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a523aa296793f798a9aa89e3f6334a66d" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>SplitBoundariesOut</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a5bba3cfaaf7f3ae8a1f4f29d8809e796" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>SplitBoundary</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a3f4f82c375ed9ab373c4b3d976bd8b92" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>splitBoundaryConstIterator</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a93b412f12c1ab04c06cbceec5a545a98" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>SplitBoundaryInterface</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a459a94f78fd569ddf0e2cff1a970e401" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>splitBoundaryIterator</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a8b0e0207c170947f916a79ced2262ef7" prot="protected" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>splitBoundaryMap_</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a13c8a3dae3a8ba916f712f7e96d000d1" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>Status</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a8642fe6f83bb6981e7c0d6ab5b2c0248" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>Store</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a0e9b7ddb382ce5e6bbb03158289dd5d4" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>StoreArrayEntry</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a482c445697287f2ae4d8b76319725d7a" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>StoreLocalState</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a45d2da858a30e67ffd9993c81705c180" prot="protected" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>uniqueRegionMap_</name></member>
+      <member refid="classcsmp_1_1_region_interface_1ac86acab5c8c0c3412e429f321f9b3553" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>UniqueRegions</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a916ae01f21232f48b60fe780f252bdd1" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>UniqueRegionsBegin</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a96069c1357b77587e58f698593f10e34" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>UniqueRegionsEnd</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a0f61dad58f69e668195d5a8bbcfdc9cf" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>UpdateRegions</name></member>
+      <member refid="classcsmp_1_1_model_1aa508619f940dab016d03df48e4a2bd7e" prot="protected" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>UpdateSubdomainPropertyStorage</name></member>
+      <member refid="classcsmp_1_1_model_1ab53b48cf02b4209d52a47484189168b6" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_1ab79e341caf9a3b401a9a663f5ee96930" prot="private" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>wells_</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a8e78dcdf294a7c03e43880b5e362fa73" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>~BoundaryInterface</name></member>
+      <member refid="classcsmp_1_1_eclipse_model_1a6197c517830bb479b7a9ac703c0c4535" prot="public" virt="virtual"><scope>csmp::EclipseModel</scope><name>~EclipseModel</name></member>
+      <member refid="classcsmp_1_1_model_1a5330b8f1f65b441691a80a749f5e0015" prot="public" virt="virtual"><scope>csmp::EclipseModel</scope><name>~Model</name></member>
+      <member refid="classcsmp_1_1_region_interface_1ab3dd95b675711d592d29496e48d0726c" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>~RegionInterface</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a196823862fcb230a82e5d0ca21a47142" prot="public" virt="non-virtual"><scope>csmp::EclipseModel</scope><name>~SplitBoundaryInterface</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

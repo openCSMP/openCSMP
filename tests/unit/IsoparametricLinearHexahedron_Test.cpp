@@ -8,14 +8,8 @@
 #include "Element.h"
 #include "FV_IntegrationPointsAndWeights.h"
 #include "FiniteElement.h"
-#include "DenseMatrix.h"
-
-#ifdef FV_STENCIL_TESTING
-#include "FiniteVolumeStencil_refactored.h"
-#else
 #include "FiniteVolumeStencil.h"
-#endif
-
+#include "DenseMatrix.h"
 
 using namespace std;
 

@@ -1,0 +1,105 @@
+\doxysection{csmp\+::Quadrilaterator Class Reference}
+\hypertarget{classcsmp_1_1_quadrilaterator}{}\label{classcsmp_1_1_quadrilaterator}\index{csmp::Quadrilaterator@{csmp::Quadrilaterator}}
+
+
+Creates a quadrilateral finite-\/element mesh from the input bitmap. The node and element numbering is from 0..n-\/1; negative numbers identify missing neighbor elements and corresponding model boundary identifiers.  
+
+
+
+
+{\ttfamily \#include $<$Quadrilaterator.\+h$>$}
+
+
+
+Collaboration diagram for csmp\+::Quadrilaterator\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=214pt]{classcsmp_1_1_quadrilaterator__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_quadrilaterator_aa70fcdeb43c8694069543ea159d7deee}{Quadrilaterator}} (bool harmonic\+\_\+permeability\+\_\+averaging=false)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_quadrilaterator_a437452ed5b55eb4142ab65735c25d7e4}{Quadrilaterals\+From\+Regular\+Grid}} (\mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}$<$ 2U $>$ \&vset, bool from\+\_\+bitmap=true)
+\begin{DoxyCompactList}\small\item\em prompts user for color-\/coded permeability values (0..256) matrix in ascii text file and creates a regular quadrilateral mesh from this data \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_quadrilaterator_a9e80a910c63bf90e22878d4cf295e721}\label{classcsmp_1_1_quadrilaterator_a9e80a910c63bf90e22878d4cf295e721} 
+void {\bfseries Quadrilaterals\+From\+Regular\+Grid} (\mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}$<$ 2U $>$ \&vset, const char \texorpdfstring{$\ast$}{*}file\+\_\+name, double x\+\_\+extend, double y\+\_\+extend, bool from\+\_\+bitmap=true)
+\begin{DoxyCompactList}\small\item\em reads 0..256 valued point matrix of color-\/coded permeability values from ascii text file and creates a regular, yet scaled quadrilateral mesh from it \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_quadrilaterator_a096ed3b0018543230975068f1b5b204d}{Quadrilaterals\+From\+Regular\+Grid}} (\mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}$<$ 2U $>$ \&vset, double x\+\_\+extend, double y\+\_\+extend, size\+\_\+t row\+\_\+nodes, size\+\_\+t column\+\_\+nodes)
+\begin{DoxyCompactList}\small\item\em creates a regular quadrilateral mesh with row\+\_\+nodes-\/1 elements in the vertical, anr column\+\_\+nodes-\/1 elements in the horizontal direction \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Creates a quadrilateral finite-\/element mesh from the input bitmap. The node and element numbering is from 0..n-\/1; negative numbers identify missing neighbor elements and corresponding model boundary identifiers. 
+
+\begin{DoxyAuthor}{Author}
+Stephan K. Matthaei 
+
+Stephen G. Roberts 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+1999
+\end{DoxyDate}
+\hypertarget{compare_floats_8h_motivation}{}\doxysubsection{\texorpdfstring{Motivation}{Motivation}}\label{compare_floats_8h_motivation}
+Have a simple procedure to go from a geometry drawn with a pixel-\/type tool or defined by a processed image, to go to a simple triangular finite-\/element mesh for CSMP computations. 
+
+\label{doc-constructors}
+\Hypertarget{classcsmp_1_1_quadrilaterator_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcsmp_1_1_quadrilaterator_aa70fcdeb43c8694069543ea159d7deee}\index{csmp::Quadrilaterator@{csmp::Quadrilaterator}!Quadrilaterator@{Quadrilaterator}}
+\index{Quadrilaterator@{Quadrilaterator}!csmp::Quadrilaterator@{csmp::Quadrilaterator}}
+\doxysubsubsection{\texorpdfstring{Quadrilaterator()}{Quadrilaterator()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_quadrilaterator_aa70fcdeb43c8694069543ea159d7deee} 
+csmp\+::\+Quadrilaterator\+::\+Quadrilaterator (\begin{DoxyParamCaption}\item[{bool}]{harmonic\+\_\+permeability\+\_\+averaging}{ = {\ttfamily false}}\end{DoxyParamCaption})}
+
+Constructor. By setting the boolean to true (default is false), the bitmap entires corresponding to a nodal permeability value are harmonically averaged for each quadrilateral finite element. 
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_quadrilaterator_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_quadrilaterator_a437452ed5b55eb4142ab65735c25d7e4}\index{csmp::Quadrilaterator@{csmp::Quadrilaterator}!QuadrilateralsFromRegularGrid@{QuadrilateralsFromRegularGrid}}
+\index{QuadrilateralsFromRegularGrid@{QuadrilateralsFromRegularGrid}!csmp::Quadrilaterator@{csmp::Quadrilaterator}}
+\doxysubsubsection{\texorpdfstring{QuadrilateralsFromRegularGrid()}{QuadrilateralsFromRegularGrid()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_quadrilaterator_a437452ed5b55eb4142ab65735c25d7e4} 
+void csmp\+::\+Quadrilaterator\+::\+Quadrilaterals\+From\+Regular\+Grid (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}$<$ 2U $>$ \&}]{vset}{, }\item[{bool}]{from\+\_\+bitmap}{ = {\ttfamily true}}\end{DoxyParamCaption})}
+
+
+
+prompts user for color-\/coded permeability values (0..256) matrix in ascii text file and creates a regular quadrilateral mesh from this data 
+
+A pixel bitmap image is used to generate 2D straightsided isoparametric quadrilateral elements to which a permeability is assigned. The permeability is chosen to be that of the lower left pixel of four pixels that are converted into 4 nodes of the quadrilateral elements. Alternatively, by setting the boolean of the constructor to true, the harmonic permeability average is calculated for each element from the four nodes. ~\newline
+
+
+The method automatically assigns the boundary flags for nodes and elements and prompts the user to scale the model to the physical dimensions. The finite element mesh is stored in a \doxylink{classcsmp_1_1_v_set}{VSet} object that can be used to construct the \doxylink{classcsmp_1_1_model}{Model}. ~\newline
+
+
+The nodes are ordered in a counter-\/clockwise fashion with the first node being the lower left corner of the quadrilateral.
+
+
+\begin{DoxyParams}{Parameters}
+{\em vset} & The reference to the \doxylink{classcsmp_1_1_v_set}{VSet} that will be used to construct the \doxylink{classcsmp_1_1_model}{Model} object later on. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classcsmp_1_1_quadrilaterator_a096ed3b0018543230975068f1b5b204d}\index{csmp::Quadrilaterator@{csmp::Quadrilaterator}!QuadrilateralsFromRegularGrid@{QuadrilateralsFromRegularGrid}}
+\index{QuadrilateralsFromRegularGrid@{QuadrilateralsFromRegularGrid}!csmp::Quadrilaterator@{csmp::Quadrilaterator}}
+\doxysubsubsection{\texorpdfstring{QuadrilateralsFromRegularGrid()}{QuadrilateralsFromRegularGrid()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_quadrilaterator_a096ed3b0018543230975068f1b5b204d} 
+void csmp\+::\+Quadrilaterator\+::\+Quadrilaterals\+From\+Regular\+Grid (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}$<$ 2U $>$ \&}]{vset}{, }\item[{double}]{x\+\_\+extend}{, }\item[{double}]{y\+\_\+extend}{, }\item[{size\+\_\+t}]{x\+\_\+nodes}{, }\item[{size\+\_\+t}]{y\+\_\+nodes}{}\end{DoxyParamCaption})}
+
+
+
+creates a regular quadrilateral mesh with row\+\_\+nodes-\/1 elements in the vertical, anr column\+\_\+nodes-\/1 elements in the horizontal direction 
+
+\begin{DoxyAttention}{Attention}
+x\+\_\+nodes actually refers to the number of rows in the matrix, i.\+e. nodes along the Y (vertical) axes, y\+\_\+nodes are the number of nodes in the horizontal=x direction. 
+\end{DoxyAttention}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/discretisation/Quadrilaterator.\+h\item 
+source/modules/discretisation/Quadrilaterator.\+cpp\end{DoxyCompactItemize}

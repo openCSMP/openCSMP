@@ -517,10 +517,10 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
             for ( auto eit=model_domain.CellsBegin(); eit!=model_domain.CellsEnd(); eit++ ) {
                 assert( (*eit)->FV() != NULL );
                 // node numbering is equivalent to sector numbering
-                for ( auto i{0U}; i<(*eit)->FV()->Facets(); ++i )
+                for ( uint32_t i{0U}; i<(*eit)->FV()->Facets(); ++i )
                 {
                   // printing the element id first
-                  fprintf( fp, "%ul\t", (*eit)->Idx() );
+                  fprintf( fp, "%lu\t", (*eit)->Idx() );
                   
                   // printing the facet integration point locations in global coordinates
                   for ( uint32_t j=1U; j<(*eit)->FV()->FacetPoints(i); ++j ) {

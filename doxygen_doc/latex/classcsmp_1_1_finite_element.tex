@@ -1,0 +1,1129 @@
+\doxysection{csmp\+::Finite\+Element Class Reference}
+\hypertarget{classcsmp_1_1_finite_element}{}\label{classcsmp_1_1_finite_element}\index{csmp::FiniteElement@{csmp::FiniteElement}}
+
+
+CSMP\textquotesingle{}s base class of all finite elements whose functionality is provided through polymorphism.  
+
+
+
+
+{\ttfamily \#include $<$Finite\+Element.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Finite\+Element\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_finite_element__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Finite\+Element\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_finite_element__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_a746f7ba1b4acf8dd74f39e3962f0707f}\label{classcsmp_1_1_finite_element_a746f7ba1b4acf8dd74f39e3962f0707f} 
+{\bfseries Finite\+Element} (\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}} csp\+\_\+fem\+\_\+type, bool isoparametric, bool uses\+\_\+local\+\_\+coordinates, uint32\+\_\+t order\+\_\+of\+\_\+shape\+\_\+functions)
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_a9831bfb64a8fa07f20eb7024fc5a22f2}\label{classcsmp_1_1_finite_element_a9831bfb64a8fa07f20eb7024fc5a22f2} 
+void {\bfseries Current\+ID} (size\+\_\+t id)
+\begin{DoxyCompactList}\small\item\em assigns integer value used to avoid repeating the same operation \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_ab44758c4df00ff2cac338fbf7580b8d0}\label{classcsmp_1_1_finite_element_ab44758c4df00ff2cac338fbf7580b8d0} 
+size\+\_\+t {\bfseries Current\+ID} () const
+\begin{DoxyCompactList}\small\item\em returns integer value for comparison to avoid repeating the same operation \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_a93be3242020acc01e32f26ee56c5d487}\label{classcsmp_1_1_finite_element_a93be3242020acc01e32f26ee56c5d487} 
+uint32\+\_\+t {\bfseries Dim} () const
+\begin{DoxyCompactList}\small\item\em return minimum spatial dimension in which this element can exist \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_ad1e29de6aed41fb434a485b875d7d8d4}\label{classcsmp_1_1_finite_element_ad1e29de6aed41fb434a485b875d7d8d4} 
+uint32\+\_\+t {\bfseries Nodes} () const
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_a7f488b707067cb6d1ee0b25a97c883a2}\label{classcsmp_1_1_finite_element_a7f488b707067cb6d1ee0b25a97c883a2} 
+uint32\+\_\+t {\bfseries Segments} () const
+\begin{DoxyCompactList}\small\item\em returns the number of edges of the FE, i.\+e. the number of connections between nodes \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_a9666661fa30a04d97f6c04a059a6bba6}\label{classcsmp_1_1_finite_element_a9666661fa30a04d97f6c04a059a6bba6} 
+uint32\+\_\+t {\bfseries Faces} () const
+\begin{DoxyCompactList}\small\item\em returns the number of sides the finite element has \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_ad75cb0ef9bea852c900e58b74662b0d4}\label{classcsmp_1_1_finite_element_ad75cb0ef9bea852c900e58b74662b0d4} 
+uint32\+\_\+t {\bfseries Neighbors} () const
+\begin{DoxyCompactList}\small\item\em neighbor elements that may be connected to this FE in its characteristic space \end{DoxyCompactList}\item 
+virtual uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_a3cb7bc938ad00c9f4dbfbfa94c13e781}{Nodes\+Per\+Face}} (uint32\+\_\+t face) const
+\begin{DoxyCompactList}\small\item\em returns how many nodes make up a particular face; some elements have different numbers \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_a35ee85b7635207926c97d4bf0bec7d1d}\label{classcsmp_1_1_finite_element_a35ee85b7635207926c97d4bf0bec7d1d} 
+uint32\+\_\+t {\bfseries Integration\+Points} () const
+\begin{DoxyCompactList}\small\item\em returns number of quadrature points used by current integration scheme \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_ae2d5d559efe7f2b27dc5ec5e271c9b68}\label{classcsmp_1_1_finite_element_ae2d5d559efe7f2b27dc5ec5e271c9b68} 
+uint32\+\_\+t {\bfseries Interpolation} () const
+\begin{DoxyCompactList}\small\item\em returns order of interpolation scheme\+: linear=1, quadratic=2, cubic=3 \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_a5d0543e1e432fdf65177495d72e4d51c}\label{classcsmp_1_1_finite_element_a5d0543e1e432fdf65177495d72e4d51c} 
+bool {\bfseries Isoparametric} () const
+\begin{DoxyCompactList}\small\item\em for numerically integrated elements, reports whether the order of the interpolation functions is the same as that of the shape functions \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_ad4d20a792255fd2b0984b255ec3e6817}\label{classcsmp_1_1_finite_element_ad4d20a792255fd2b0984b255ec3e6817} 
+bool {\bfseries Uses\+Local\+Coordinates} () const
+\begin{DoxyCompactList}\small\item\em reports whether element is defined in a local (r,s,t) coordinate system; analytically integrated elements are not \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_a94820d970b7a970757c91dac9934b424}\label{classcsmp_1_1_finite_element_a94820d970b7a970757c91dac9934b424} 
+uint32\+\_\+t {\bfseries Order\+Of\+Shape\+Functions} () const
+\begin{DoxyCompactList}\small\item\em returns the interpolation order of the shape functions as opposed to the interpolation (basis) functions \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_a4390186773409c6a5e30feb449e55f17}\label{classcsmp_1_1_finite_element_a4390186773409c6a5e30feb449e55f17} 
+bool {\bfseries Is\+Line} () const
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_a09d0c59e19d2cd5a6e46b7dc60fd5f07}\label{classcsmp_1_1_finite_element_a09d0c59e19d2cd5a6e46b7dc60fd5f07} 
+bool {\bfseries Is\+Surface} () const
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_a7ffd856e7bb1b9c1009d572775925c8d}\label{classcsmp_1_1_finite_element_a7ffd856e7bb1b9c1009d572775925c8d} 
+bool {\bfseries Is\+Volume} () const
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_aca610ffda39cad1d959db0ec403c3019}\label{classcsmp_1_1_finite_element_aca610ffda39cad1d959db0ec403c3019} 
+bool {\bfseries Is\+Simplex} () const
+\begin{DoxyCompactList}\small\item\em true for linear line-\/, triangle-\/ or tetrahedral elements for which the Jacobian matrix is constant throughout \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_ac2a37f7440f83acbcda169280fcb84b0}\label{classcsmp_1_1_finite_element_ac2a37f7440f83acbcda169280fcb84b0} 
+\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}} {\bfseries Element\+Type} () const
+\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_finite_element_a16025c5d7f2ac217d2dbedad5d561a06}{Volume}} ()
+\begin{DoxyCompactList}\small\item\em computes and returns the volume of the element which is an area for a surface-\/ and a length for a line element \end{DoxyCompactList}\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_finite_element_a6c6148f7a38b639b721013dbd8f8d3f5}{Aspect\+Ratio}} ()
+\begin{DoxyCompactList}\small\item\em returns the ratio between the maximum and minimum spatial extent of the element \end{DoxyCompactList}\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_finite_element_a3ad8c30e7136d47df5ca95907647c538}{Inner\+Radius}} ()
+\begin{DoxyCompactList}\small\item\em returns the radius of the largest sphere that could be inscribed in the element \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_ac2348fa774457d4adde9354189277d9e}{Edge\+Lengths}} (std\+::vector$<$ double $>$ \&vec)
+\begin{DoxyCompactList}\small\item\em reports the lengths of all edges (connections between nodes) in the currrent element \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_a443213e98dc0cc9692bd3eef5a168295}{Nodes\+Of\+Segment}} (uint32\+\_\+t segm\+\_\+id, std\+::vector$<$ uint32\+\_\+t $>$ \&snids) const
+\begin{DoxyCompactList}\small\item\em reports the egde nodes (0..nodes-\/1) which can be more than 2 in higher-\/order elements \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_ae3f0ae4a9ad3424ccc4553ff270b155e}{Corner\+Nodes}} (std\+::vector$<$ uint32\+\_\+t $>$ \&ids) const
+\begin{DoxyCompactList}\small\item\em reports only the corner nodes (0..nodes-\/1) of the element \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_a8149423046e10426a7eb520164ad3a38}{Mid\+Side\+Nodes}} (std\+::vector$<$ uint32\+\_\+t $>$ \&ids) const
+\begin{DoxyCompactList}\small\item\em reports only the mid-\/edge nodes (0..nodes-\/1) of the element \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_a8439ec45c22a2741b8782de67de98862}\label{classcsmp_1_1_finite_element_a8439ec45c22a2741b8782de67de98862} 
+virtual void {\bfseries Interior\+Nodes} (std\+::vector$<$ uint32\+\_\+t $>$ \&ids) const
+\begin{DoxyCompactList}\small\item\em reports the nodes (0..nodes-\/1) of the element which are not shared with any other element \end{DoxyCompactList}\item 
+virtual std\+::vector$<$ uint32\+\_\+t $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_a32fc14575277846326041fe914209f9a}{Nodes\+Of\+Face}} (uint32\+\_\+t face\+\_\+id) const
+\begin{DoxyCompactList}\small\item\em reports the face nodes (0..nodes-\/1) of the given face \end{DoxyCompactList}\item 
+virtual std\+::vector$<$ uint32\+\_\+t $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_a9614d03193a707898a0b26336a61d9d9}{Corner\+Nodes\+Of\+Face}} (uint32\+\_\+t face\+\_\+id) const
+\begin{DoxyCompactList}\small\item\em returns the local numbers of the corner nodes of the face \end{DoxyCompactList}\item 
+virtual std\+::vector$<$ uint32\+\_\+t $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_ab7196476d9fb740d91384c6c4521b0f5}{Nodes\+Connected\+To}} (uint32\+\_\+t node) const
+\begin{DoxyCompactList}\small\item\em returns the local numbers of the nodes at the other end of the sgment that the argument node is on \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_abf2597e5cf0563435169689ee94d57a1}\label{classcsmp_1_1_finite_element_abf2597e5cf0563435169689ee94d57a1} 
+virtual uint32\+\_\+t {\bfseries Corner\+Nodes} () const
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_aec5a871df4af8c883e496f6283872780}\label{classcsmp_1_1_finite_element_aec5a871df4af8c883e496f6283872780} 
+virtual uint32\+\_\+t {\bfseries Mid\+Side\+Nodes} () const
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_a2d45ffc4fd8598af124125bfe93a2597}\label{classcsmp_1_1_finite_element_a2d45ffc4fd8598af124125bfe93a2597} 
+virtual uint32\+\_\+t {\bfseries Interior\+Nodes} () const
+\item 
+virtual \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}} \mbox{\hyperlink{classcsmp_1_1_finite_element_a066cbd92cd983a3c2e73859286280587}{Element\+Type\+Of\+Face}} (uint32\+\_\+t face) const
+\begin{DoxyCompactList}\small\item\em reports the element type that would match that of its corresponding face \end{DoxyCompactList}\item 
+virtual \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}} \mbox{\hyperlink{classcsmp_1_1_finite_element_a136f53aa9d4cd295a984ca46c0864ff7}{Element\+Type\+Of\+Segment}} (uint32\+\_\+t segment) const
+\begin{DoxyCompactList}\small\item\em reports the element type that would match that of its corresponding segment \end{DoxyCompactList}\item 
+virtual std\+::vector$<$ double $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_a1dedbd91a6e8765f57dfdaf999494b76}{Unit\+Normal}} () const
+\begin{DoxyCompactList}\small\item\em returns unit normal to element where it makes sense (line and surface elements); expects XY matrix to be initialised with node coordinates \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_a39eb6d5a1827783a679870277b4c68b8}{Unit\+Normal\+To\+Face}} (uint32\+\_\+t face, std\+::vector$<$ double $>$ \&unrml) const
+\begin{DoxyCompactList}\small\item\em returns the unit normal to element face (for planar elements, normal lies in that plane; expects XY matrix to be initialised with node coordinates \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_ae600307171225f53a2615aaffd5afb18}{Unit\+Normal\+At\+Face\+Barycenter}} (uint32\+\_\+t face, std\+::vector$<$ double $>$ \&nrml)
+\begin{DoxyCompactList}\small\item\em computes unit normal to face using a parametric to physical space transformation available in elements with a local coordinate framework \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_ae4bd0bcbccb811f852c26668f6959f14}\label{classcsmp_1_1_finite_element_ae4bd0bcbccb811f852c26668f6959f14} 
+double {\bfseries XYZ} (uint32\+\_\+t i, uint32\+\_\+t j) const
+\begin{DoxyCompactList}\small\item\em accessor for coordinate matrix which is associated with the element \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_a56c5bc7db73c50f4448380eeee48fa3f}\label{classcsmp_1_1_finite_element_a56c5bc7db73c50f4448380eeee48fa3f} 
+void {\bfseries XYZ} (uint32\+\_\+t i, uint32\+\_\+t j, double val)
+\begin{DoxyCompactList}\small\item\em mutator for coordinate matrix which is associated with the element \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_a34a5c030987c7e9842af332f5ed0d61b}{Reference\+Coordinates}} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&mat\+Coords) const
+\begin{DoxyCompactList}\small\item\em for element types defined using a local coordinate system, returns the node coordinates into the argument matrix \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_ae7ea6940dcaa8403c7c35e70db4ba21c}{Extrapolate\+Integration\+Point\+Variable\+To\+Nodes}} (uint32\+\_\+t nvars, const std\+::vector$<$ double $>$ \&IVAR, std\+::vector$<$ double $>$ \&NVAR) const
+\begin{DoxyCompactList}\small\item\em using the interpolation functions, the supplied suite of scalar variable values is extrapolated from the Gauss points to the nodes \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_aef00dcb02705580693988e47924a055d}{Integration\+Point}} (uint32\+\_\+t i, std\+::vector$<$ double $>$ \&xyz) const
+\begin{DoxyCompactList}\small\item\em returns the global coordinates of the element integration point \end{DoxyCompactList}\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_finite_element_ac224265aa216deebfcf44b54d2689d1d}{Weight\+At\+Integration\+Point}} (uint32\+\_\+t i) const
+\begin{DoxyCompactList}\small\item\em returns the integration weight of the desired quadrature point \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_aac8b400d7e198282e0b8196df3338858}{N}} (std\+::vector$<$ double $>$ \&N, const std\+::vector$<$ double $>$ \&xyz)
+\begin{DoxyCompactList}\small\item\em reports the values of the interpolation functions at the point given in global coordinates; \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_ac1168c0c1cc280d1a1ecba676877d13b}{N\+\_\+\+At\+Integration\+Point}} (uint32\+\_\+t ip, std\+::vector$<$ double $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_aac8b400d7e198282e0b8196df3338858}{N}})
+\begin{DoxyCompactList}\small\item\em reports the values of the interpolation functions at the given quadrature point \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_a6df28d2a7b4bcaff49cb726d6ef0890b}{N\+\_\+\+At\+Bary\+Center}} (std\+::vector$<$ double $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_aac8b400d7e198282e0b8196df3338858}{N}})
+\begin{DoxyCompactList}\small\item\em reports the values of the interpolation functions at the center of gravity of the element \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_a3bf543b54ba24535aced15598495730f}{dN}} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&)
+\begin{DoxyCompactList}\small\item\em first derivatives of interpolation functions for elements where this is a single constant value \end{DoxyCompactList}\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_finite_element_adb4103981ca8a56bbea237ef71c0cdc1}{d\+N\+\_\+\+At}} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&, const std\+::vector$<$ double $>$ \&xyz)
+\begin{DoxyCompactList}\small\item\em returns first derivative of interpolaton functions at global point; in isoparametric elements, the determinant of the Jacobian is returned as well \end{DoxyCompactList}\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_finite_element_a885bb35784705f295c5f8ad9aa47f227}{d\+N\+\_\+\+At\+Integration\+Point}} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&, uint32\+\_\+t gauss\+\_\+point)
+\begin{DoxyCompactList}\small\item\em returns first derivative of interpolaton functions at quadrature point; determinant of the Jacobian is returned as well \end{DoxyCompactList}\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_finite_element_a89d6f320e17b4cfe1f9ddbeade1c9255}{d\+N\+\_\+\+At\+Node}} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&, uint32\+\_\+t node)
+\begin{DoxyCompactList}\small\item\em returns first derivative of interpolaton functions at node; determinant of the Jacobian is returned as well \end{DoxyCompactList}\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_finite_element_a703b7ce9d818248bbd9864dffee30b7c}{d\+N\+\_\+\+At\+Barycenter}} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&)
+\begin{DoxyCompactList}\small\item\em returns first derivative of interpolaton functions at center of gravity; determinant of the Jacobian is returned as well \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_ac6a31722bbf25abad86ccea3b653953e}{Jacobian\+At\+Integration\+Point}} (uint32\+\_\+t ip)
+\begin{DoxyCompactList}\small\item\em initialises JAC = DN\texorpdfstring{$\ast$}{*}\+XY (intpl. derivative \texorpdfstring{$\ast$}{*} coordinate matrix) parametric-\/to-\/physical space transformation matrix for given quadrature point \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_a246043f81c66c9f65e08c6a5190ea381}{Jacobian\+At}} (const std\+::vector$<$ double $>$ \&rst)
+\begin{DoxyCompactList}\small\item\em initialises JAC = DN\texorpdfstring{$\ast$}{*}\+XY (intpl. derivative \texorpdfstring{$\ast$}{*} coordinate matrix) parametric-\/to-\/physical space transformation matrix for given quadrature point defined in parametric space (r,s,t) \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_ae62e0c447141f0e2b7f7a4eb8412278b}{Jacobian}} (const std\+::vector$<$ double $>$ \&dnr)
+\begin{DoxyCompactList}\small\item\em initialises JAC = DN\texorpdfstring{$\ast$}{*}\+XY (intpl. derivative \texorpdfstring{$\ast$}{*} coordinate matrix) parametric-\/to-\/physical space transformation matrix for 1D element using the supplied intpol.\+f.\+derivatives \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_a81d93860f25ffe781837581f45caac4c}\label{classcsmp_1_1_finite_element_a81d93860f25ffe781837581f45caac4c} 
+virtual void {\bfseries Jacobian} (const std\+::vector$<$ double $>$ \&dnr, const std\+::vector$<$ double $>$ \&dns)
+\begin{DoxyCompactList}\small\item\em initialises JAC = DN\texorpdfstring{$\ast$}{*}\+XY (intpl. derivative \texorpdfstring{$\ast$}{*} coordinate matrix) parametric-\/to-\/physical space transformation matrix for 2D element using the supplied intpol.\+f.\+derivatives \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_af63fe74d4b20b02d72574d8380f5e41a}\label{classcsmp_1_1_finite_element_af63fe74d4b20b02d72574d8380f5e41a} 
+virtual void {\bfseries Jacobian} (const std\+::vector$<$ double $>$ \&dnr, const std\+::vector$<$ double $>$ \&dns, const std\+::vector$<$ double $>$ \&dnt)
+\begin{DoxyCompactList}\small\item\em initialises JAC = DN\texorpdfstring{$\ast$}{*}\+XY (intpl. derivative \texorpdfstring{$\ast$}{*} coordinate matrix) parametric-\/to-\/physical space transformation matrix for 3D element using the supplied intpol.\+f.\+derivatives \end{DoxyCompactList}\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_finite_element_a3639fc962596899333d6a65cb1ef66ce}{Jacobian\+Inverse}} ()
+\begin{DoxyCompactList}\small\item\em initializes the member matrix JINV \end{DoxyCompactList}\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_finite_element_ae758e82d3b214e9f9c5bda10cd20b515}{Jacobian\+Determinant}} ()
+\begin{DoxyCompactList}\small\item\em returns the determinant of the member Jacobian matrix JAC that must have been initialised before \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_a84a69958fd3567565d4dc83037664d97}{Integral\+NN}} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&)
+\begin{DoxyCompactList}\small\item\em initialises interpolation function product matrix N\texorpdfstring{$^\wedge$}{\string^}T x N for analytically integrated elements \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_a5d79c3309e261dd0939e5b733aac83d9}{Integrald\+NdN}} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&)
+\begin{DoxyCompactList}\small\item\em initialises interpolation function derivatives product matrix DN\texorpdfstring{$^\wedge$}{\string^}T x DN for element where derivatives are constant \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_aa5c7e3d4b60cdaa863b70edad755b09a}\label{classcsmp_1_1_finite_element_aa5c7e3d4b60cdaa863b70edad755b09a} 
+virtual void {\bfseries Integral\+\_\+d\+NT\+\_\+\+K\+\_\+dN} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_a64381c8d0e2f4840551c2da986fb9a25}{M}}, \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&K)
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_af583becda82f4fef39bbe2d4c3b41cea}{Nr}} (double r, std\+::vector$<$ double $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_aa13754bef9eb502c77561f216d0258e7}{NRST}}) const
+\begin{DoxyCompactList}\small\item\em 1D element interpolation functions N(r) \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_a84befa0a4da0b4b8469ec5e7be89860e}{d\+Nr}} (double r, std\+::vector$<$ double $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_a8602e2b2682d1734501fa44da5f4a230}{DNR}}) const
+\begin{DoxyCompactList}\small\item\em 1D element interpolation functions derivatives N(r)/dr \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_adb2baab01a52b040d73c10623a0605b2}{Nrs}} (double r, double s, std\+::vector$<$ double $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_aa13754bef9eb502c77561f216d0258e7}{NRST}}) const
+\begin{DoxyCompactList}\small\item\em 2D element interpolation functions N(r,s) \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_af159e5f99a0281ae603ca6ddde9bf6bf}{d\+Nr}} (double r, double s, std\+::vector$<$ double $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_a8602e2b2682d1734501fa44da5f4a230}{DNR}}) const
+\begin{DoxyCompactList}\small\item\em 2D element interpolation functions derivatives N(r,s)/dr \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_a6d2fb4557b0681959501365138c9d3c3}{d\+Ns}} (double r, double s, std\+::vector$<$ double $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_a1a9d9ee7a3326164b35a523273dc54c9}{DNS}}) const
+\begin{DoxyCompactList}\small\item\em 2D element interpolation functions derivatives N(r,s)/ds \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_a34bd4d39b1a026b1de15f028e9692bd8}{Nrst}} (double r, double s, double t, std\+::vector$<$ double $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_aa13754bef9eb502c77561f216d0258e7}{NRST}}) const
+\begin{DoxyCompactList}\small\item\em 3D element interpolation functions N(r,s,t) \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_a5b77ad8925c75b096867822e83bed7cd}{d\+Nr}} (double r, double s, double t, std\+::vector$<$ double $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_a8602e2b2682d1734501fa44da5f4a230}{DNR}}) const
+\begin{DoxyCompactList}\small\item\em 2D element interpolation functions derivatives N(r,s,t)/dr \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_a1c5cfe76807ea0d685c8e22d74c5582e}{d\+Ns}} (double r, double s, double t, std\+::vector$<$ double $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_a1a9d9ee7a3326164b35a523273dc54c9}{DNS}}) const
+\begin{DoxyCompactList}\small\item\em 2D element interpolation functions derivatives N(r,s,t)/ds \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_a6c22543bd89563413954beb8697fa914}{d\+Nt}} (double r, double s, double t, std\+::vector$<$ double $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_a203a9d019620abee39fdbe7847ee8df0}{DNT}}) const
+\begin{DoxyCompactList}\small\item\em 2D element interpolation functions derivatives N(r,s,t)/dt \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_ae963674dc3ef25ce0e7bd8d2937c75ee}\label{classcsmp_1_1_finite_element_ae963674dc3ef25ce0e7bd8d2937c75ee} 
+virtual void {\bfseries Out} () const
+\begin{DoxyCompactList}\small\item\em prints finite element properties to screen \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_a67341585f83bc9d941c67e7a84801248}{Output\+Node\+Data\+To\+VTK}} (const char \texorpdfstring{$\ast$}{*}file\+\_\+name, const char \texorpdfstring{$\ast$}{*}var\+\_\+name, \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&DATA) const
+\begin{DoxyCompactList}\small\item\em prints the current finite element into a visualisation toolkit (VTK) textfile for visual examination \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_ad4aaeb22c3a8da44a33361057ef2097f}{Initial\+ID}} ()
+\begin{DoxyCompactList}\small\item\em returns ID value set to FEM during construction \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_a022fd86373136421b00ce343508efe52}{XY}}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_a5de71dcc5e56c2e814d31d798969f437}{JAC}}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_a5c3fd117b986587599dcb441feeb000a}{JINV}}
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_aa13754bef9eb502c77561f216d0258e7}\label{classcsmp_1_1_finite_element_aa13754bef9eb502c77561f216d0258e7} 
+std\+::vector$<$ double $>$ {\bfseries NRST}
+\begin{DoxyCompactList}\small\item\em convenience storage for interpolation function values \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_a8602e2b2682d1734501fa44da5f4a230}\label{classcsmp_1_1_finite_element_a8602e2b2682d1734501fa44da5f4a230} 
+std\+::vector$<$ double $>$ {\bfseries DNR}
+\begin{DoxyCompactList}\small\item\em convenience storage for interpolation function derivatives \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_a1a9d9ee7a3326164b35a523273dc54c9}\label{classcsmp_1_1_finite_element_a1a9d9ee7a3326164b35a523273dc54c9} 
+std\+::vector$<$ double $>$ {\bfseries DNS}
+\begin{DoxyCompactList}\small\item\em convenience storage for interpolation function derivatives \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_a203a9d019620abee39fdbe7847ee8df0}\label{classcsmp_1_1_finite_element_a203a9d019620abee39fdbe7847ee8df0} 
+std\+::vector$<$ double $>$ {\bfseries DNT}
+\begin{DoxyCompactList}\small\item\em convenience storage for interpolation function derivatives \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_a564e0da11c00c28430fb146d5597c6ce}\label{classcsmp_1_1_finite_element_a564e0da11c00c28430fb146d5597c6ce} 
+std\+::vector$<$ uint32\+\_\+t $>$ {\bfseries IDX}
+\begin{DoxyCompactList}\small\item\em convenience storage for integer vectors \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_aa7a383bc5d1c0ee8f71ecb6c604db2ec}\label{classcsmp_1_1_finite_element_aa7a383bc5d1c0ee8f71ecb6c604db2ec} 
+{\bfseries Finite\+Element} (const \mbox{\hyperlink{classcsmp_1_1_finite_element}{Finite\+Element}} \&)=default
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_aa61e202519a3523f70da1f1854170c64}\label{classcsmp_1_1_finite_element_aa61e202519a3523f70da1f1854170c64} 
+{\bfseries Finite\+Element} (\mbox{\hyperlink{classcsmp_1_1_finite_element}{Finite\+Element}} \&\&)=default
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_a1aa0c4f0fabe88be0c254f121d5a483b}\label{classcsmp_1_1_finite_element_a1aa0c4f0fabe88be0c254f121d5a483b} 
+\mbox{\hyperlink{classcsmp_1_1_finite_element}{Finite\+Element}} \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_finite_element}{Finite\+Element}} \&)=default
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_a698633a6c268ac88c82929093cd65cc1}\label{classcsmp_1_1_finite_element_a698633a6c268ac88c82929093cd65cc1} 
+\mbox{\hyperlink{classcsmp_1_1_finite_element}{Finite\+Element}} \& {\bfseries operator=} (\mbox{\hyperlink{classcsmp_1_1_finite_element}{Finite\+Element}} \&\&)=default
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_ac57108260f93ab6ef491448def2e9c50}\label{classcsmp_1_1_finite_element_ac57108260f93ab6ef491448def2e9c50} 
+void {\bfseries Isoparametric} (bool isoparam)
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_a8211ac6a7c8734f142eaa51f459d25af}\label{classcsmp_1_1_finite_element_a8211ac6a7c8734f142eaa51f459d25af} 
+void {\bfseries Uses\+Local\+Coordinates} (bool uses)
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_ac3204e22e57b8658797037802003c490}\label{classcsmp_1_1_finite_element_ac3204e22e57b8658797037802003c490} 
+void {\bfseries Line\+Element} ()
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_a930e53402dc4847a3084e38853d3bfd6}\label{classcsmp_1_1_finite_element_a930e53402dc4847a3084e38853d3bfd6} 
+void {\bfseries Surface\+Element} ()
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_ad92268835407ea5fc1df04583a754637}\label{classcsmp_1_1_finite_element_ad92268835407ea5fc1df04583a754637} 
+void {\bfseries Volume\+Element} ()
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_ac0a98e18654722a181c17a7e01b67e56}\label{classcsmp_1_1_finite_element_ac0a98e18654722a181c17a7e01b67e56} 
+void {\bfseries Element\+Type} (\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}} etype)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_ab749771eccc931e112125efe7bf8252c}{dim}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_ac8f4f6ea8649710e01ea018c61d93a30}{itp}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_a9d9ced72fa35fd6a9fc755a219590820}{npf}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_a329300ec856aa91bfe492daf93556b04}{npe}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_a609a2f0f70b086a278d112761c07c9de}{spe}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_a36972113f6f8351c891431038f8514bd}{fpe}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_a5684660784d3f15adffb485e8f47d9f3}{epe}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_a2509e6d8ab556b6a65a9036a62485df4}{nne}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_ab4ad41c705b9691a4d01ee979b6214cc}{cne}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_a0729a0486b6febb96160f3e184c3f33f}{gpe}}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_a64381c8d0e2f4840551c2da986fb9a25}{M}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+CSMP\textquotesingle{}s base class of all finite elements whose functionality is provided through polymorphism. 
+
+\begin{DoxyAuthor}{Author}
+S.\+K. Matthai 
+
+Stephen G. Roberts 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+1996
+\end{DoxyDate}
+\hypertarget{classcsmp_1_1_finite_element_motivatio}{}\doxysubsection{\texorpdfstring{Motivation}{Motivation}}\label{classcsmp_1_1_finite_element_motivatio}
+\doxylink{classcsmp_1_1_base}{Base} class for CSMP\textquotesingle{}s finite element library. ~\newline
+\hypertarget{classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_design}{}\doxysubsection{\texorpdfstring{Design Intent}{Design Intent}}\label{classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_design}
+Provide a unified interface for all finite element calculations carried out by CSMP. ~\newline
+
+
+Store the matrices necessary for finite element computations so that these do not have to be constructed/destructed by every method that uses them. ~\newline
+\hypertarget{classcsmp_1_1_time_step_evaluator_collaborations}{}\doxysubsection{\texorpdfstring{Collaborations}{Collaborations}}\label{classcsmp_1_1_time_step_evaluator_collaborations}
+Forms a bridge pattern with the \doxylink{classcsmp_1_1_element}{Element} class which provides an interface to it. Used by any FEM calculations facilitated by the Algorithm class.
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000026}{Todo}}]make this class a Singleton and avoid pointer connections with elements\end{DoxyRefDesc}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_finite_element_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_finite_element_a6c6148f7a38b639b721013dbd8f8d3f5}\index{csmp::FiniteElement@{csmp::FiniteElement}!AspectRatio@{AspectRatio}}
+\index{AspectRatio@{AspectRatio}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{AspectRatio()}{AspectRatio()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_a6c6148f7a38b639b721013dbd8f8d3f5} 
+double csmp\+::\+Finite\+Element\+::\+Aspect\+Ratio (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+returns the ratio between the maximum and minimum spatial extent of the element 
+
+
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_hexahedron_a075fa6b9bfa4ab2bb3feb36659f33060}{csmp\+::\+Isoparametric\+Linear\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_line_element_a89d12b01820a57088d610bad70df2223}{csmp\+::\+Isoparametric\+Linear\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_aaa664417cb363205a66347d907726f0a}{csmp\+::\+Isoparametric\+Linear\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a93f028356c8cddd2f1ae210f86a029bc}{csmp\+::\+Isoparametric\+Linear\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_quadrilateral_af9b3e2d15dfe8d99bd8d026b47be6c01}{csmp\+::\+Isoparametric\+Linear\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_tetrahedron_a56872ece511ca81b48812d8d0f87f228}{csmp\+::\+Isoparametric\+Linear\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_triangle_ac6a7a91c0cb98b6a4ae4ba5a1ee3875c}{csmp\+::\+Isoparametric\+Linear\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_hexahedron_a6516e03f0b76ff34a7137b4b11bd8ae8}{csmp\+::\+Isoparametric\+Quadratic\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a79a41bc74d4066bacc173052d79647d2}{csmp\+::\+Isoparametric\+Quadratic\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_pyramid_ad8220f0491d61b3c5db4670ae0c6b56b}{csmp\+::\+Isoparametric\+Quadratic\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_quadrilateral_a9b1c39b1848912b4eb003fb03baca987}{csmp\+::\+Isoparametric\+Quadratic\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_a9fccbbb8546bec83ec0bf35044c114a0}{csmp\+::\+Isoparametric\+Quadratic\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_triangle_a2f03d8344658351b87b811b374e35f10}{csmp\+::\+Isoparametric\+Quadratic\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_linear_cuboid_a2f7cd58661dffcefe9e9f5f452c6d37f}{csmp\+::\+Linear\+Cuboid}}, \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a743e4220e8a43b2ecc61c42ad14d5791}{csmp\+::\+Linear\+Triangle3D}}, and \mbox{\hyperlink{classcsmp_1_1_linear_triangle_aa602f72f185e39d5e42359c85f0830ba}{csmp\+::\+Linear\+Triangle}}.
+
+\Hypertarget{classcsmp_1_1_finite_element_ae3f0ae4a9ad3424ccc4553ff270b155e}\index{csmp::FiniteElement@{csmp::FiniteElement}!CornerNodes@{CornerNodes}}
+\index{CornerNodes@{CornerNodes}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{CornerNodes()}{CornerNodes()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_ae3f0ae4a9ad3424ccc4553ff270b155e} 
+void csmp\+::\+Finite\+Element\+::\+Corner\+Nodes (\begin{DoxyParamCaption}\item[{std\+::vector$<$ uint32\+\_\+t $>$ \&}]{ids}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+reports only the corner nodes (0..nodes-\/1) of the element 
+
+
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_hexahedron_a8a14a378a95952e862048e6e7697cb47}{csmp\+::\+Isoparametric\+Linear\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_line_element_ae2b1fbdce119df7994cf4895c9f2746a}{csmp\+::\+Isoparametric\+Linear\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_ac167683317315d95dcfbc00d7e8cf952}{csmp\+::\+Isoparametric\+Linear\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a8c3554679a861f5cf65ee525209d4056}{csmp\+::\+Isoparametric\+Linear\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_quadrilateral_a3c2d2b81b3ca7e2b0bca035d538dce6b}{csmp\+::\+Isoparametric\+Linear\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_tetrahedron_a9da50ec0d968d777023a805e516c0fd2}{csmp\+::\+Isoparametric\+Linear\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_triangle_a4acdf51ac2be08e532e05e008e7c93c1}{csmp\+::\+Isoparametric\+Linear\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_hexahedron_a5b236db1d304c78aac83fc4df345b252}{csmp\+::\+Isoparametric\+Quadratic\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_af042c5cf9944e6b68b97c5845605a3b1}{csmp\+::\+Isoparametric\+Quadratic\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a8ef2406b7e151ed97fe6e77b33957cd2}{csmp\+::\+Isoparametric\+Quadratic\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_pyramid_ab295ffdf9262e80c5b108b0aaa583ceb}{csmp\+::\+Isoparametric\+Quadratic\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_quadrilateral_a215f1ef053d3d043b4c7015ba459ab3b}{csmp\+::\+Isoparametric\+Quadratic\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_af458046b0390a613b5f8e9f81a785094}{csmp\+::\+Isoparametric\+Quadratic\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_triangle_ac7a7f70f33cb29cb1aa75153c42618f1}{csmp\+::\+Isoparametric\+Quadratic\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_linear_cuboid_ad496cf1879f971900327e8c54eee7763}{csmp\+::\+Linear\+Cuboid}}, \mbox{\hyperlink{classcsmp_1_1_linear_line_element_a4d611ce4de6668298b92ef4a7add8560}{csmp\+::\+Linear\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_linear_rectangle_ad9d037ee6731cda8b363d02ac102ad56}{csmp\+::\+Linear\+Rectangle}}, \mbox{\hyperlink{classcsmp_1_1_linear_tetrahedron_a44e5e15fcda97d383b392dfe5c76ef85}{csmp\+::\+Linear\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a7fa2dcc2e063a32b175037721adeaa38}{csmp\+::\+Linear\+Triangle3D}}, and \mbox{\hyperlink{classcsmp_1_1_linear_triangle_a7b1a45f0bb224148193a959b3ad9f0a7}{csmp\+::\+Linear\+Triangle}}.
+
+\Hypertarget{classcsmp_1_1_finite_element_a9614d03193a707898a0b26336a61d9d9}\index{csmp::FiniteElement@{csmp::FiniteElement}!CornerNodesOfFace@{CornerNodesOfFace}}
+\index{CornerNodesOfFace@{CornerNodesOfFace}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{CornerNodesOfFace()}{CornerNodesOfFace()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_a9614d03193a707898a0b26336a61d9d9} 
+std\+::vector$<$ uint32\+\_\+t $>$ csmp\+::\+Finite\+Element\+::\+Corner\+Nodes\+Of\+Face (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{face\+\_\+id}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+returns the local numbers of the corner nodes of the face 
+
+
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_hexahedron_ab26d9330c5f24b9c7bc71c7d2c3ee117}{csmp\+::\+Isoparametric\+Linear\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_line_element_a6b2c4fbb60804ab660e36230383057c0}{csmp\+::\+Isoparametric\+Linear\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_a378a031bfa5619de70e01a5bfe5a31ed}{csmp\+::\+Isoparametric\+Linear\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a20b8e7fb59bcdc5b9a871d8407d7257a}{csmp\+::\+Isoparametric\+Linear\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_quadrilateral_a649e34892b4fafa0d4a880d18a619d39}{csmp\+::\+Isoparametric\+Linear\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_tetrahedron_a3625d8a959e403ea7b5b77d554768a94}{csmp\+::\+Isoparametric\+Linear\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_triangle_a29d9dbca9ff64634c6b09a6b479571f0}{csmp\+::\+Isoparametric\+Linear\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_hexahedron_a9a98945591081a41cb7757ff1142a784}{csmp\+::\+Isoparametric\+Quadratic\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_ac79c90573d22726e8137684de81083d9}{csmp\+::\+Isoparametric\+Quadratic\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a4d63ca749f7e7bb41a03b724785279d7}{csmp\+::\+Isoparametric\+Quadratic\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_pyramid_a2906d7a70d5383e9eed5dffd1b1cdab3}{csmp\+::\+Isoparametric\+Quadratic\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_quadrilateral_a628f369dda5c1908b5543ea223496693}{csmp\+::\+Isoparametric\+Quadratic\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_ab0aec1b787e4e742198efb465a287e6a}{csmp\+::\+Isoparametric\+Quadratic\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_triangle_a082a40b8ec606abef2cee4e0b7c12370}{csmp\+::\+Isoparametric\+Quadratic\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_linear_cuboid_abf45f4d9a020c1472d15af27cb8e5d28}{csmp\+::\+Linear\+Cuboid}}, \mbox{\hyperlink{classcsmp_1_1_linear_line_element_aac1fd396ebf2c8e481694dbb491234d9}{csmp\+::\+Linear\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_linear_rectangle_ae51e9ade99500ff13848a222ebfae216}{csmp\+::\+Linear\+Rectangle}}, \mbox{\hyperlink{classcsmp_1_1_linear_tetrahedron_a8ae9e958ad4740c98a25951f2cc6a46c}{csmp\+::\+Linear\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_af3f7227da1d6868fb0b6d0908e4407b8}{csmp\+::\+Linear\+Triangle3D}}, and \mbox{\hyperlink{classcsmp_1_1_linear_triangle_a1d43cd42879fdfa02779be4c3cccb729}{csmp\+::\+Linear\+Triangle}}.
+
+\Hypertarget{classcsmp_1_1_finite_element_a3bf543b54ba24535aced15598495730f}\index{csmp::FiniteElement@{csmp::FiniteElement}!dN@{dN}}
+\index{dN@{dN}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{dN()}{dN()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_a3bf543b54ba24535aced15598495730f} 
+void csmp\+::\+Finite\+Element\+::dN (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&}]{DM}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+first derivatives of interpolation functions for elements where this is a single constant value 
+
+
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_hexahedron_a36cfa0622d52fe96b32bc9fc53c98aab}{csmp\+::\+Isoparametric\+Linear\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_line_element_aec14f97219fb2dd2a0bb58572f75529f}{csmp\+::\+Isoparametric\+Linear\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_ac8f4dce61ec1363a09768f48310fa97a}{csmp\+::\+Isoparametric\+Linear\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_ab889840ae2d7e955e476ab780d4818eb}{csmp\+::\+Isoparametric\+Linear\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_quadrilateral_a14784f387a1112f1a4451eda26dd6e33}{csmp\+::\+Isoparametric\+Linear\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_tetrahedron_ab5d8000497c00cc91822e4e802923c2c}{csmp\+::\+Isoparametric\+Linear\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_triangle_ac5dbcdb7f31d089fd0a01fd564be63b3}{csmp\+::\+Isoparametric\+Linear\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_hexahedron_a60102743fb30fb0dd8a3f6cec1138398}{csmp\+::\+Isoparametric\+Quadratic\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_a0b8b2428d10593865d5a339ba15274ee}{csmp\+::\+Isoparametric\+Quadratic\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a86ca2ffee047d2bc4f3040e5e2af8ede}{csmp\+::\+Isoparametric\+Quadratic\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_pyramid_a1ec3dfbb78e07bfabd7019eaebd5dca2}{csmp\+::\+Isoparametric\+Quadratic\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_quadrilateral_a364748b1eda9c81550625427bebfd494}{csmp\+::\+Isoparametric\+Quadratic\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_a2c861e91df9740dc137c9a4e8651f322}{csmp\+::\+Isoparametric\+Quadratic\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_triangle_a00d025f34a9b3b188a24d0cc6660d66e}{csmp\+::\+Isoparametric\+Quadratic\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_linear_line_element_a3215d59d15de7f29788814eb62b99831}{csmp\+::\+Linear\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_linear_rectangle_a23fbf48986900a68c751b8dbb5e53b43}{csmp\+::\+Linear\+Rectangle}}, \mbox{\hyperlink{classcsmp_1_1_linear_tetrahedron_afc29f30fd0d5ad2486358dcafb9735e1}{csmp\+::\+Linear\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a4a3028362fc43fbdefc57a1892391f28}{csmp\+::\+Linear\+Triangle3D}}, and \mbox{\hyperlink{classcsmp_1_1_linear_triangle_a417549c0ef71e52089017c961bd91f42}{csmp\+::\+Linear\+Triangle}}.
+
+\Hypertarget{classcsmp_1_1_finite_element_adb4103981ca8a56bbea237ef71c0cdc1}\index{csmp::FiniteElement@{csmp::FiniteElement}!dN\_At@{dN\_At}}
+\index{dN\_At@{dN\_At}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{dN\_At()}{dN\_At()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_adb4103981ca8a56bbea237ef71c0cdc1} 
+double csmp\+::\+Finite\+Element\+::d\+N\+\_\+\+At (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&}]{DM}{, }\item[{const std\+::vector$<$ double $>$ \&}]{xyz}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+returns first derivative of interpolaton functions at global point; in isoparametric elements, the determinant of the Jacobian is returned as well 
+
+
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_hexahedron_af03b04f49d21152149aef4cb1e98384d}{csmp\+::\+Isoparametric\+Linear\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_ae580475c435f63aef5781b59e04f0b18}{csmp\+::\+Isoparametric\+Quadratic\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_pyramid_a8ee661a0036873acd024707cc59df66d}{csmp\+::\+Isoparametric\+Quadratic\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_quadrilateral_ab0015f981679c243e58eadde0ff19920}{csmp\+::\+Isoparametric\+Quadratic\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_a55890b2586e5d6d8578014b2ac4c1a1f}{csmp\+::\+Isoparametric\+Quadratic\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_triangle_a4ac74063d5c4bf21b3e4346da49343d2}{csmp\+::\+Isoparametric\+Quadratic\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_linear_cuboid_a2b2db69138df7e843a34c857000dc5cf}{csmp\+::\+Linear\+Cuboid}}, \mbox{\hyperlink{classcsmp_1_1_linear_line_element_a010aa55943e1a52ca704395db8bf347b}{csmp\+::\+Linear\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a46b917869e349473f991b0584bcf7d7f}{csmp\+::\+Linear\+Triangle3D}}, and \mbox{\hyperlink{classcsmp_1_1_linear_triangle_a5ce801f35372d6f7f47a8c67c8ac4a8d}{csmp\+::\+Linear\+Triangle}}.
+
+\Hypertarget{classcsmp_1_1_finite_element_a703b7ce9d818248bbd9864dffee30b7c}\index{csmp::FiniteElement@{csmp::FiniteElement}!dN\_AtBarycenter@{dN\_AtBarycenter}}
+\index{dN\_AtBarycenter@{dN\_AtBarycenter}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{dN\_AtBarycenter()}{dN\_AtBarycenter()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_a703b7ce9d818248bbd9864dffee30b7c} 
+double csmp\+::\+Finite\+Element\+::d\+N\+\_\+\+At\+Barycenter (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&}]{DM}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+returns first derivative of interpolaton functions at center of gravity; determinant of the Jacobian is returned as well 
+
+
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_hexahedron_aae8bf6e56ca82a1a623f7b3ba6243f49}{csmp\+::\+Isoparametric\+Linear\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_line_element_a8d8a3bffb5453f05d81f65124794fe3b}{csmp\+::\+Isoparametric\+Linear\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_aa3d8c85176ce21c9cd38526d522a0ed5}{csmp\+::\+Isoparametric\+Linear\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a58554db038cb2deda402edaccff9f7e4}{csmp\+::\+Isoparametric\+Linear\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_quadrilateral_abe7b2080f28d69cdbd1ddd6cfc4b653a}{csmp\+::\+Isoparametric\+Linear\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_tetrahedron_a40b9dc333b49f6b729979d93f9ef4021}{csmp\+::\+Isoparametric\+Linear\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_triangle_a650ba185543cba1da41459a8d792e36e}{csmp\+::\+Isoparametric\+Linear\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_hexahedron_abf3d708933f93fdf4c62345e245128fb}{csmp\+::\+Isoparametric\+Quadratic\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_a319bd782d436c69a9efdc97d4756b4dc}{csmp\+::\+Isoparametric\+Quadratic\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_af04285d753b54356da3d2fe8e80e2df4}{csmp\+::\+Isoparametric\+Quadratic\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_pyramid_af2b08d59998bb2688eca7b3fdf78e888}{csmp\+::\+Isoparametric\+Quadratic\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_quadrilateral_ad7b1761d95d399409c517086a227c2bb}{csmp\+::\+Isoparametric\+Quadratic\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_a2588054b997d33227315fb9e8e1b34f5}{csmp\+::\+Isoparametric\+Quadratic\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_triangle_ad101dc8deb001e6378781e5b81dbda87}{csmp\+::\+Isoparametric\+Quadratic\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_linear_line_element_a1541852d4c86a22d6aeaa825fb938987}{csmp\+::\+Linear\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a11ee66bbf4277701f3702ee2a9e2f5c0}{csmp\+::\+Linear\+Triangle3D}}, and \mbox{\hyperlink{classcsmp_1_1_linear_triangle_ada3239ff54f9a99ad4436a21534587bf}{csmp\+::\+Linear\+Triangle}}.
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=328pt]{classcsmp_1_1_finite_element_a703b7ce9d818248bbd9864dffee30b7c_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_finite_element_a885bb35784705f295c5f8ad9aa47f227}\index{csmp::FiniteElement@{csmp::FiniteElement}!dN\_AtIntegrationPoint@{dN\_AtIntegrationPoint}}
+\index{dN\_AtIntegrationPoint@{dN\_AtIntegrationPoint}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{dN\_AtIntegrationPoint()}{dN\_AtIntegrationPoint()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_a885bb35784705f295c5f8ad9aa47f227} 
+double csmp\+::\+Finite\+Element\+::d\+N\+\_\+\+At\+Integration\+Point (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&}]{DM}{, }\item[{uint32\+\_\+t}]{gauss\+\_\+point}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+returns first derivative of interpolaton functions at quadrature point; determinant of the Jacobian is returned as well 
+
+
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_hexahedron_a0c7c0c1752ca1e6a8220eb54b7e5280e}{csmp\+::\+Isoparametric\+Linear\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_line_element_ac823ac0cc1022d34d9477404f24e12c6}{csmp\+::\+Isoparametric\+Linear\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_a9afbf1aa9966651568562ffda8bcba6b}{csmp\+::\+Isoparametric\+Linear\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_aba19d9570109d65f19523c9ee9fcc64d}{csmp\+::\+Isoparametric\+Linear\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_quadrilateral_a565d9bf4f6873ae70dff610f6b0be5d3}{csmp\+::\+Isoparametric\+Linear\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_tetrahedron_ac6d05f35643d0c00939303c6894ea85d}{csmp\+::\+Isoparametric\+Linear\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_triangle_a25db2facfc1a51eba64ce2faa1fb6e1f}{csmp\+::\+Isoparametric\+Linear\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_hexahedron_ac148069758146bc3c7827966d0b9bcde}{csmp\+::\+Isoparametric\+Quadratic\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_a11f266f395615274432becfa4a51ffe4}{csmp\+::\+Isoparametric\+Quadratic\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_aa0186f938b29c14e5a53e056035025e2}{csmp\+::\+Isoparametric\+Quadratic\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_pyramid_a0fd45917e3476943ac5f9c81303ac34e}{csmp\+::\+Isoparametric\+Quadratic\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_quadrilateral_a52e518f5f0243632bb183ce6b634d76c}{csmp\+::\+Isoparametric\+Quadratic\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_ad26ad9ae942298c81c762404bc15ac8b}{csmp\+::\+Isoparametric\+Quadratic\+Tetrahedron}}, and \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_triangle_aeb38e0efc139f751a46c1dc7f69d37c4}{csmp\+::\+Isoparametric\+Quadratic\+Triangle}}.
+
+\Hypertarget{classcsmp_1_1_finite_element_a89d6f320e17b4cfe1f9ddbeade1c9255}\index{csmp::FiniteElement@{csmp::FiniteElement}!dN\_AtNode@{dN\_AtNode}}
+\index{dN\_AtNode@{dN\_AtNode}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{dN\_AtNode()}{dN\_AtNode()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_a89d6f320e17b4cfe1f9ddbeade1c9255} 
+double csmp\+::\+Finite\+Element\+::d\+N\+\_\+\+At\+Node (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&}]{DM}{, }\item[{uint32\+\_\+t}]{node}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+returns first derivative of interpolaton functions at node; determinant of the Jacobian is returned as well 
+
+
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_hexahedron_a02ecdac25cb8c396e40575a5b842d2af}{csmp\+::\+Isoparametric\+Linear\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_line_element_a202676bd684455f1a0786735bd4af4c0}{csmp\+::\+Isoparametric\+Linear\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_a2a9f617ad79f749a0dc238f41dbf6cb4}{csmp\+::\+Isoparametric\+Linear\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a5f0f3033fc24c89bb725e5005be5b334}{csmp\+::\+Isoparametric\+Linear\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_quadrilateral_a2282a4cf2df616a24967f5e5c9275788}{csmp\+::\+Isoparametric\+Linear\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_tetrahedron_a8d06c8b36d00b6dc163662f10cfbbbe4}{csmp\+::\+Isoparametric\+Linear\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_triangle_a4f73440045576e154acf189be39baf58}{csmp\+::\+Isoparametric\+Linear\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_hexahedron_a11214bdff57f6894fb4484c38a700b53}{csmp\+::\+Isoparametric\+Quadratic\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_adff61be20d1c22c54675b5518a8add09}{csmp\+::\+Isoparametric\+Quadratic\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_adcff2efa1aec7c9c3e851a1c02105b53}{csmp\+::\+Isoparametric\+Quadratic\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_pyramid_a83cd68dba4353feb2fe005244494455d}{csmp\+::\+Isoparametric\+Quadratic\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_quadrilateral_a17e3e228de702416db7b7e1d9b6e0e96}{csmp\+::\+Isoparametric\+Quadratic\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_af5f449ad3d1d7932b0742a0b3ffd507d}{csmp\+::\+Isoparametric\+Quadratic\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_triangle_a032b2bcc328fd72ae3f008a4beab06fa}{csmp\+::\+Isoparametric\+Quadratic\+Triangle}}, and \mbox{\hyperlink{classcsmp_1_1_linear_line_element_af803b107c2669bb061dff681f7424304}{csmp\+::\+Linear\+Line\+Element}}.
+
+\Hypertarget{classcsmp_1_1_finite_element_a5b77ad8925c75b096867822e83bed7cd}\index{csmp::FiniteElement@{csmp::FiniteElement}!dNr@{dNr}}
+\index{dNr@{dNr}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{dNr()}{dNr()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_a5b77ad8925c75b096867822e83bed7cd} 
+void csmp\+::\+Finite\+Element\+::d\+Nr (\begin{DoxyParamCaption}\item[{double}]{r}{, }\item[{double}]{s}{, }\item[{double}]{t}{, }\item[{std\+::vector$<$ double $>$ \&}]{DNR}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+2D element interpolation functions derivatives N(r,s,t)/dr 
+
+
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_hexahedron_a2bf2ff87acdee8e2a63a48ebb77ff5a4}{csmp\+::\+Isoparametric\+Linear\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_a4a83087c213f17cbf357e35f42775200}{csmp\+::\+Isoparametric\+Linear\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a9d130f3c5f010df937a46769c6b53555}{csmp\+::\+Isoparametric\+Linear\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_tetrahedron_ad59d8577742bcf773762d253f3caf220}{csmp\+::\+Isoparametric\+Linear\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_hexahedron_a20412c5eec1b3cc50af69ee5c14b7d39}{csmp\+::\+Isoparametric\+Quadratic\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_aa1103aa792e971a43046706c97ec0343}{csmp\+::\+Isoparametric\+Quadratic\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_pyramid_aa8de476f0d5e47893fd4ce571eceda5c}{csmp\+::\+Isoparametric\+Quadratic\+Pyramid}}, and \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_a69a8be5957c3b66ae3c7bac841c45e93}{csmp\+::\+Isoparametric\+Quadratic\+Tetrahedron}}.
+
+\Hypertarget{classcsmp_1_1_finite_element_af159e5f99a0281ae603ca6ddde9bf6bf}\index{csmp::FiniteElement@{csmp::FiniteElement}!dNr@{dNr}}
+\index{dNr@{dNr}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{dNr()}{dNr()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_af159e5f99a0281ae603ca6ddde9bf6bf} 
+void csmp\+::\+Finite\+Element\+::d\+Nr (\begin{DoxyParamCaption}\item[{double}]{r}{, }\item[{double}]{s}{, }\item[{std\+::vector$<$ double $>$ \&}]{DNR}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+2D element interpolation functions derivatives N(r,s)/dr 
+
+
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_quadrilateral_a55c9e027ea2c132b44199a5e83eef303}{csmp\+::\+Isoparametric\+Linear\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_triangle_a8888ca55f9dcaf38dacef128ff408703}{csmp\+::\+Isoparametric\+Linear\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_quadrilateral_a355be36e4b1b04c5a92d4af48e024ebf}{csmp\+::\+Isoparametric\+Quadratic\+Quadrilateral}}, and \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_triangle_a43c8569e9453b242a7afdb2e3cf477ab}{csmp\+::\+Isoparametric\+Quadratic\+Triangle}}.
+
+\Hypertarget{classcsmp_1_1_finite_element_a84befa0a4da0b4b8469ec5e7be89860e}\index{csmp::FiniteElement@{csmp::FiniteElement}!dNr@{dNr}}
+\index{dNr@{dNr}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{dNr()}{dNr()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_a84befa0a4da0b4b8469ec5e7be89860e} 
+void csmp\+::\+Finite\+Element\+::d\+Nr (\begin{DoxyParamCaption}\item[{double}]{r}{, }\item[{std\+::vector$<$ double $>$ \&}]{DNR}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+1D element interpolation functions derivatives N(r)/dr 
+
+
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_line_element_a591997b6332bda5e64f47dca51b112e1}{csmp\+::\+Isoparametric\+Linear\+Line\+Element}}, and \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_a7bf32125d537c667ebd1388ce5831057}{csmp\+::\+Isoparametric\+Quadratic\+Line\+Element}}.
+
+\Hypertarget{classcsmp_1_1_finite_element_a1c5cfe76807ea0d685c8e22d74c5582e}\index{csmp::FiniteElement@{csmp::FiniteElement}!dNs@{dNs}}
+\index{dNs@{dNs}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{dNs()}{dNs()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_a1c5cfe76807ea0d685c8e22d74c5582e} 
+void csmp\+::\+Finite\+Element\+::d\+Ns (\begin{DoxyParamCaption}\item[{double}]{r}{, }\item[{double}]{s}{, }\item[{double}]{t}{, }\item[{std\+::vector$<$ double $>$ \&}]{DNS}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+2D element interpolation functions derivatives N(r,s,t)/ds 
+
+
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_hexahedron_a32f1b79d4ab49b98290b15aa4d5b4d18}{csmp\+::\+Isoparametric\+Linear\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_a13d7d9d7d177be033d1854343909867a}{csmp\+::\+Isoparametric\+Linear\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a76fc5ea41779c5bac06ef5dac23bdc01}{csmp\+::\+Isoparametric\+Linear\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_tetrahedron_a6fce37b743eea628314e3ade966d41fd}{csmp\+::\+Isoparametric\+Linear\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_hexahedron_afd635c46e6da292e672de9a2dec174d5}{csmp\+::\+Isoparametric\+Quadratic\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a20cbdc2294a01bf9e9fa3fa2dc203655}{csmp\+::\+Isoparametric\+Quadratic\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_pyramid_ac58748396da0f28293758ee7ab895d10}{csmp\+::\+Isoparametric\+Quadratic\+Pyramid}}, and \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_a80f1af2ef961977bebff429816394c43}{csmp\+::\+Isoparametric\+Quadratic\+Tetrahedron}}.
+
+\Hypertarget{classcsmp_1_1_finite_element_a6d2fb4557b0681959501365138c9d3c3}\index{csmp::FiniteElement@{csmp::FiniteElement}!dNs@{dNs}}
+\index{dNs@{dNs}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{dNs()}{dNs()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_a6d2fb4557b0681959501365138c9d3c3} 
+void csmp\+::\+Finite\+Element\+::d\+Ns (\begin{DoxyParamCaption}\item[{double}]{r}{, }\item[{double}]{s}{, }\item[{std\+::vector$<$ double $>$ \&}]{DNS}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+2D element interpolation functions derivatives N(r,s)/ds 
+
+
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_quadrilateral_a62c965686df8d2d4fa09de66f2c8d395}{csmp\+::\+Isoparametric\+Linear\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_triangle_ade3bc44a19951b080e803ef09f24a45f}{csmp\+::\+Isoparametric\+Linear\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_quadrilateral_a144f02727c7513626b4d4339a9fa2c33}{csmp\+::\+Isoparametric\+Quadratic\+Quadrilateral}}, and \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_triangle_a477f2a8ae3cf92e9715b53fc52a16811}{csmp\+::\+Isoparametric\+Quadratic\+Triangle}}.
+
+\Hypertarget{classcsmp_1_1_finite_element_a6c22543bd89563413954beb8697fa914}\index{csmp::FiniteElement@{csmp::FiniteElement}!dNt@{dNt}}
+\index{dNt@{dNt}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{dNt()}{dNt()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_a6c22543bd89563413954beb8697fa914} 
+void csmp\+::\+Finite\+Element\+::d\+Nt (\begin{DoxyParamCaption}\item[{double}]{r}{, }\item[{double}]{s}{, }\item[{double}]{t}{, }\item[{std\+::vector$<$ double $>$ \&}]{DNT}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+2D element interpolation functions derivatives N(r,s,t)/dt 
+
+
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_hexahedron_a189223d67689c91d533e7d62202c8ded}{csmp\+::\+Isoparametric\+Linear\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_acfd7f65e867bcd1d286b6a7646ddd0e7}{csmp\+::\+Isoparametric\+Linear\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a34b1a95a7b351eb4422a1e104807d0c2}{csmp\+::\+Isoparametric\+Linear\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_tetrahedron_a5bbbe46c0d180f3da821d3975763e35a}{csmp\+::\+Isoparametric\+Linear\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_hexahedron_a001e5ede66c30cbf757ed6ee0b17411e}{csmp\+::\+Isoparametric\+Quadratic\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a5b1bd6b614deed31382bd74e8b33af3f}{csmp\+::\+Isoparametric\+Quadratic\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_pyramid_af840ae88e2d43cfecc4129c6a2f7ea69}{csmp\+::\+Isoparametric\+Quadratic\+Pyramid}}, and \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_aae1e07bb04116103c51c85aca61b2402}{csmp\+::\+Isoparametric\+Quadratic\+Tetrahedron}}.
+
+\Hypertarget{classcsmp_1_1_finite_element_ac2348fa774457d4adde9354189277d9e}\index{csmp::FiniteElement@{csmp::FiniteElement}!EdgeLengths@{EdgeLengths}}
+\index{EdgeLengths@{EdgeLengths}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{EdgeLengths()}{EdgeLengths()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_ac2348fa774457d4adde9354189277d9e} 
+void csmp\+::\+Finite\+Element\+::\+Edge\+Lengths (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$ \&}]{vec}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+reports the lengths of all edges (connections between nodes) in the currrent element 
+
+
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_hexahedron_ac68a12abfb1a1df7bfaeedce66202dc1}{csmp\+::\+Isoparametric\+Linear\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_line_element_aae0611de1faa42d1d58fbb0488650306}{csmp\+::\+Isoparametric\+Linear\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_aef302c98c4e86fb197483b68d2348bde}{csmp\+::\+Isoparametric\+Linear\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a373b64b29ec48659211d05cb9d6c1831}{csmp\+::\+Isoparametric\+Linear\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_quadrilateral_aca7db311c98f7c5d6d1af076722c12c7}{csmp\+::\+Isoparametric\+Linear\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_tetrahedron_a8af87ebc53a59bd74f3e6359d8aa5c39}{csmp\+::\+Isoparametric\+Linear\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_triangle_a31040540ce8e37b0075ab500fbc93b71}{csmp\+::\+Isoparametric\+Linear\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_hexahedron_a26bb52f43ca79987156b9f18c5cc0ddb}{csmp\+::\+Isoparametric\+Quadratic\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_a50f7b4eb15e6ea6adee2f08399d5387c}{csmp\+::\+Isoparametric\+Quadratic\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a52adbc34d62f09adced740e5b70ed128}{csmp\+::\+Isoparametric\+Quadratic\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_pyramid_afef376250556dbea4658c515dd79d94a}{csmp\+::\+Isoparametric\+Quadratic\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_quadrilateral_a0d65a2bf4c317a65a330165f661fc978}{csmp\+::\+Isoparametric\+Quadratic\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_a7ddb203d36719ad60ba0391483328b76}{csmp\+::\+Isoparametric\+Quadratic\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_triangle_a0e43a8194fc3d78d8929c910ebf41917}{csmp\+::\+Isoparametric\+Quadratic\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_linear_cuboid_a4cdd5b61ea9304b1e4bc935ecbbf025f}{csmp\+::\+Linear\+Cuboid}}, \mbox{\hyperlink{classcsmp_1_1_linear_rectangle_a6db9ff95a7cf5d78963d05880060f05b}{csmp\+::\+Linear\+Rectangle}}, \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a1870dcbde8f7ef115956240be3632e51}{csmp\+::\+Linear\+Triangle3D}}, and \mbox{\hyperlink{classcsmp_1_1_linear_triangle_a32a777cc1f54021c18f8c668052ed433}{csmp\+::\+Linear\+Triangle}}.
+
+\Hypertarget{classcsmp_1_1_finite_element_a066cbd92cd983a3c2e73859286280587}\index{csmp::FiniteElement@{csmp::FiniteElement}!ElementTypeOfFace@{ElementTypeOfFace}}
+\index{ElementTypeOfFace@{ElementTypeOfFace}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{ElementTypeOfFace()}{ElementTypeOfFace()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_a066cbd92cd983a3c2e73859286280587} 
+\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}} csmp\+::\+Finite\+Element\+::\+Element\+Type\+Of\+Face (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{face}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+reports the element type that would match that of its corresponding face 
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000069}{Todo}}](2-\/P) Remove typid by name fct \end{DoxyRefDesc}
+
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_hexahedron_a3555b2bd51565d8cc7bd118c406f61cc}{csmp\+::\+Isoparametric\+Linear\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_line_element_aa91d08c6b8b06c41c2a3e05cea870893}{csmp\+::\+Isoparametric\+Linear\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_aad304836aea3fa43563baea74e6ddd9e}{csmp\+::\+Isoparametric\+Linear\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a8c636b847b54f12d9052de2e3e154455}{csmp\+::\+Isoparametric\+Linear\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_quadrilateral_a6b4eeaa4bbe4594748d7dd74e1080473}{csmp\+::\+Isoparametric\+Linear\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_tetrahedron_a54e75b817a6e3c98f206a845ae64e219}{csmp\+::\+Isoparametric\+Linear\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_triangle_a09495d30b8a99fc0b06be33af6ad4264}{csmp\+::\+Isoparametric\+Linear\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_hexahedron_a3ffc79b58de382ca83395139e335e5f2}{csmp\+::\+Isoparametric\+Quadratic\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a554c1d1879a7524106931c16b0fcf8fd}{csmp\+::\+Isoparametric\+Quadratic\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_pyramid_a8b023c271e766041bb8d93e19708ea7f}{csmp\+::\+Isoparametric\+Quadratic\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_quadrilateral_a7489f96decff9a12c11187b2e43f6db0}{csmp\+::\+Isoparametric\+Quadratic\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_accfd6c15523f7652dd0a2d09c798ea6f}{csmp\+::\+Isoparametric\+Quadratic\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_triangle_aee07fadda506b2ed0cef4442c28486da}{csmp\+::\+Isoparametric\+Quadratic\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_linear_cuboid_a57b24b5534cc4e3cc3794695c71c838f}{csmp\+::\+Linear\+Cuboid}}, \mbox{\hyperlink{classcsmp_1_1_linear_rectangle_a53864877d76127fd42229d25ae5c7adc}{csmp\+::\+Linear\+Rectangle}}, \mbox{\hyperlink{classcsmp_1_1_linear_tetrahedron_a9212c6c7eb0512ad8a03ed294a021c2e}{csmp\+::\+Linear\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a8306fafab98fe11af16795dd673d86aa}{csmp\+::\+Linear\+Triangle3D}}, and \mbox{\hyperlink{classcsmp_1_1_linear_triangle_a4de3c63de75763821476e3d63bae7d4a}{csmp\+::\+Linear\+Triangle}}.
+
+\Hypertarget{classcsmp_1_1_finite_element_a136f53aa9d4cd295a984ca46c0864ff7}\index{csmp::FiniteElement@{csmp::FiniteElement}!ElementTypeOfSegment@{ElementTypeOfSegment}}
+\index{ElementTypeOfSegment@{ElementTypeOfSegment}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{ElementTypeOfSegment()}{ElementTypeOfSegment()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_a136f53aa9d4cd295a984ca46c0864ff7} 
+\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}} csmp\+::\+Finite\+Element\+::\+Element\+Type\+Of\+Segment (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{segment}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+reports the element type that would match that of its corresponding segment 
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000070}{Todo}}](2-\/P) Remove typid by name fct \end{DoxyRefDesc}
+
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_hexahedron_a85a4657a97d7ffd9316f5e7781dd3c41}{csmp\+::\+Isoparametric\+Linear\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_a2b18e7ddc9cd1968287d22b0f4b9fd74}{csmp\+::\+Isoparametric\+Linear\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_ab3f857b1bd9fae79a10bbb354f984f91}{csmp\+::\+Isoparametric\+Linear\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_quadrilateral_a2270aed76f31957f05b0cf3ec68d8215}{csmp\+::\+Isoparametric\+Linear\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_tetrahedron_a41a628b81a4debff6ebc210db8276b82}{csmp\+::\+Isoparametric\+Linear\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_triangle_a1240c80b31e49e16765a9e8ffaa9fcf9}{csmp\+::\+Isoparametric\+Linear\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_hexahedron_a5aaf6ebbfd09dcd62771d8c52d2fe6f5}{csmp\+::\+Isoparametric\+Quadratic\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_adf982b6af5901f91eaf588748a7c8f34}{csmp\+::\+Isoparametric\+Quadratic\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_pyramid_a20bf2557d3590154563fda3c773cb270}{csmp\+::\+Isoparametric\+Quadratic\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_quadrilateral_a8fbfe619b34c1b42e6c2b60be15e3ad9}{csmp\+::\+Isoparametric\+Quadratic\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_ad066d2f663d2f9fd22d6473a389eb3dc}{csmp\+::\+Isoparametric\+Quadratic\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_triangle_aa09c108412158ceae6bd299f06b0286a}{csmp\+::\+Isoparametric\+Quadratic\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_linear_cuboid_a74187f476e45a6d8e3971b04637f9e5d}{csmp\+::\+Linear\+Cuboid}}, \mbox{\hyperlink{classcsmp_1_1_linear_rectangle_a9e54e145e4e259ea9461c047c1d08ec9}{csmp\+::\+Linear\+Rectangle}}, \mbox{\hyperlink{classcsmp_1_1_linear_tetrahedron_a1f2efed716554976b353a7539ce21073}{csmp\+::\+Linear\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_ad6d380b38427648167de15f05a88b685}{csmp\+::\+Linear\+Triangle3D}}, and \mbox{\hyperlink{classcsmp_1_1_linear_triangle_adc2ce515c9efe0fb5ac3096fa1099132}{csmp\+::\+Linear\+Triangle}}.
+
+\Hypertarget{classcsmp_1_1_finite_element_ae7ea6940dcaa8403c7c35e70db4ba21c}\index{csmp::FiniteElement@{csmp::FiniteElement}!ExtrapolateIntegrationPointVariableToNodes@{ExtrapolateIntegrationPointVariableToNodes}}
+\index{ExtrapolateIntegrationPointVariableToNodes@{ExtrapolateIntegrationPointVariableToNodes}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{ExtrapolateIntegrationPointVariableToNodes()}{ExtrapolateIntegrationPointVariableToNodes()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_ae7ea6940dcaa8403c7c35e70db4ba21c} 
+void csmp\+::\+Finite\+Element\+::\+Extrapolate\+Integration\+Point\+Variable\+To\+Nodes (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{nvars}{, }\item[{const std\+::vector$<$ double $>$ \&}]{IVAR}{, }\item[{std\+::vector$<$ double $>$ \&}]{NVAR}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+using the interpolation functions, the supplied suite of scalar variable values is extrapolated from the Gauss points to the nodes 
+
+Extrapolation member( gauss points to nodes )
+
+Expects input vector to be of size nvars \texorpdfstring{$\ast$}{*} gauss points and in format \mbox{[} var1 @ gp1, var2 @ gp1, var3 @ gp1, var1 @ gp2, var2 @ gp2, var3 @ gp2 for all gauss points, with nvar == 3 \mbox{]} 
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_hexahedron_adcd7740af0a1cf8888643a1bfbfa90d5}{csmp\+::\+Isoparametric\+Linear\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_line_element_aebaae951d118e73f96ff38e93ad33828}{csmp\+::\+Isoparametric\+Linear\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_a02801bde0da7f9f56e3c584e10f8288a}{csmp\+::\+Isoparametric\+Linear\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_acbbe8983ce4e2172d2a4c11bf4f5fbd5}{csmp\+::\+Isoparametric\+Linear\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_quadrilateral_a68d9e36b9b823ec05296905669265586}{csmp\+::\+Isoparametric\+Linear\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_tetrahedron_ac60dcd30f577ec57b1a575f0345b45a2}{csmp\+::\+Isoparametric\+Linear\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_triangle_a3bce9f2a34af88bbe6d5400d819d3bbe}{csmp\+::\+Isoparametric\+Linear\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_hexahedron_aec2dd1f4854c79777cfe2d5ce715bb52}{csmp\+::\+Isoparametric\+Quadratic\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_a7717384f07dc958bdef1285c3554913f}{csmp\+::\+Isoparametric\+Quadratic\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_ab31f97622036469448bc2b4a213340f3}{csmp\+::\+Isoparametric\+Quadratic\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_pyramid_a4a7e7285ab3b77217bfda44ac83725cf}{csmp\+::\+Isoparametric\+Quadratic\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_quadrilateral_ae6fb3c2e868c68ae1db88e83291afd46}{csmp\+::\+Isoparametric\+Quadratic\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_a759d8b75f4bc95b9d47709162c188822}{csmp\+::\+Isoparametric\+Quadratic\+Tetrahedron}}, and \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_triangle_a4a7e492185c34cfa5b91230b8c1db271}{csmp\+::\+Isoparametric\+Quadratic\+Triangle}}.
+
+\Hypertarget{classcsmp_1_1_finite_element_ad4aaeb22c3a8da44a33361057ef2097f}\index{csmp::FiniteElement@{csmp::FiniteElement}!InitialID@{InitialID}}
+\index{InitialID@{InitialID}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{InitialID()}{InitialID()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_ad4aaeb22c3a8da44a33361057ef2097f} 
+size\+\_\+t csmp\+::\+Finite\+Element\+::\+Initial\+ID (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+returns ID value set to FEM during construction 
+
+initalizing to a value that makes sure that ID does not equal initial element idx \Hypertarget{classcsmp_1_1_finite_element_a3ad8c30e7136d47df5ca95907647c538}\index{csmp::FiniteElement@{csmp::FiniteElement}!InnerRadius@{InnerRadius}}
+\index{InnerRadius@{InnerRadius}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{InnerRadius()}{InnerRadius()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_a3ad8c30e7136d47df5ca95907647c538} 
+double csmp\+::\+Finite\+Element\+::\+Inner\+Radius (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+returns the radius of the largest sphere that could be inscribed in the element 
+
+
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_hexahedron_a0264ae8c672419fed9237868036bc707}{csmp\+::\+Isoparametric\+Linear\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_line_element_a0e42254cef69e4f36c5dcfd22dc6ccce}{csmp\+::\+Isoparametric\+Linear\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_a5a97535f17ba2fe211645d27cc24f25e}{csmp\+::\+Isoparametric\+Linear\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_ad1b4a36b0e840e00f5d52f3d27ccaa88}{csmp\+::\+Isoparametric\+Linear\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_quadrilateral_a29b9559537ca82e4f0d405bd11b227c8}{csmp\+::\+Isoparametric\+Linear\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_tetrahedron_acbcbeb9bedc702dd76faabc0a4aed1df}{csmp\+::\+Isoparametric\+Linear\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_triangle_a786f3a8fe6fa8b7f0f87126c424f1280}{csmp\+::\+Isoparametric\+Linear\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_hexahedron_a29e3cc0230a2f21db9c4ce389eda55ed}{csmp\+::\+Isoparametric\+Quadratic\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a81d24a04fa8efe9c3ddf99819e9cca89}{csmp\+::\+Isoparametric\+Quadratic\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_pyramid_a4f692a9fe54d6e490eb686bb49aa8561}{csmp\+::\+Isoparametric\+Quadratic\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_quadrilateral_ad17f56d147dfaca45544496b127bda3a}{csmp\+::\+Isoparametric\+Quadratic\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_aa56e795385ac8033518e4008249832cd}{csmp\+::\+Isoparametric\+Quadratic\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_triangle_a01de422ca203db1797c65289a5524edf}{csmp\+::\+Isoparametric\+Quadratic\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_linear_cuboid_a45cf4f975fc8068422e29dd2cb8ca0a1}{csmp\+::\+Linear\+Cuboid}}, \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a442a3b96f8359b42ed7d9351deb4d4e0}{csmp\+::\+Linear\+Triangle3D}}, and \mbox{\hyperlink{classcsmp_1_1_linear_triangle_adf570523d3e8910b5269393d414abc11}{csmp\+::\+Linear\+Triangle}}.
+
+\Hypertarget{classcsmp_1_1_finite_element_a5d79c3309e261dd0939e5b733aac83d9}\index{csmp::FiniteElement@{csmp::FiniteElement}!IntegraldNdN@{IntegraldNdN}}
+\index{IntegraldNdN@{IntegraldNdN}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{IntegraldNdN()}{IntegraldNdN()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_a5d79c3309e261dd0939e5b733aac83d9} 
+void csmp\+::\+Finite\+Element\+::\+Integrald\+NdN (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&}]{DM}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+initialises interpolation function derivatives product matrix DN\texorpdfstring{$^\wedge$}{\string^}T x DN for element where derivatives are constant 
+
+
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_linear_cuboid_ab5677773b1097d815b9f34371002de40}{csmp\+::\+Linear\+Cuboid}}.
+
+\Hypertarget{classcsmp_1_1_finite_element_a84a69958fd3567565d4dc83037664d97}\index{csmp::FiniteElement@{csmp::FiniteElement}!IntegralNN@{IntegralNN}}
+\index{IntegralNN@{IntegralNN}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{IntegralNN()}{IntegralNN()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_a84a69958fd3567565d4dc83037664d97} 
+void csmp\+::\+Finite\+Element\+::\+Integral\+NN (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&}]{DM}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+initialises interpolation function product matrix N\texorpdfstring{$^\wedge$}{\string^}T x N for analytically integrated elements 
+
+
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a0eb89dd35e7fbba1789dfa45d429fb9f}{csmp\+::\+Isoparametric\+Quadratic\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_linear_cuboid_a8ba10c74ad78f585ea385618b6d2bef2}{csmp\+::\+Linear\+Cuboid}}, \mbox{\hyperlink{classcsmp_1_1_linear_line_element_a4eb52dec9f686e2e86f79cb7c67457cf}{csmp\+::\+Linear\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_linear_rectangle_a7e3b697c937138ea5aa2755a608c63df}{csmp\+::\+Linear\+Rectangle}}, \mbox{\hyperlink{classcsmp_1_1_linear_tetrahedron_a6ab5250b2358d6a53606e318ca061cf3}{csmp\+::\+Linear\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a71dcc8b7baf243235d8fea2da93a4e63}{csmp\+::\+Linear\+Triangle3D}}, and \mbox{\hyperlink{classcsmp_1_1_linear_triangle_a4c3fcf8b458ea3468424d63d91d4deba}{csmp\+::\+Linear\+Triangle}}.
+
+\Hypertarget{classcsmp_1_1_finite_element_aef00dcb02705580693988e47924a055d}\index{csmp::FiniteElement@{csmp::FiniteElement}!IntegrationPoint@{IntegrationPoint}}
+\index{IntegrationPoint@{IntegrationPoint}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{IntegrationPoint()}{IntegrationPoint()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_aef00dcb02705580693988e47924a055d} 
+void csmp\+::\+Finite\+Element\+::\+Integration\+Point (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{i}{, }\item[{std\+::vector$<$ double $>$ \&}]{xyz}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+returns the global coordinates of the element integration point 
+
+
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_hexahedron_ab3d011d9c008289703521551df6937d8}{csmp\+::\+Isoparametric\+Linear\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_line_element_ae2582347c81a3be67bf622c6d7483fc1}{csmp\+::\+Isoparametric\+Linear\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_a4b8ce3016024ff06e66890f0e0857f3b}{csmp\+::\+Isoparametric\+Linear\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a2b05356ecccf8a78a38c9d4b79493b07}{csmp\+::\+Isoparametric\+Linear\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_quadrilateral_aa353f06abd5922f7ffb52fa5c76a31e0}{csmp\+::\+Isoparametric\+Linear\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_tetrahedron_a652bf8e38a393e84f0b760766651a8bd}{csmp\+::\+Isoparametric\+Linear\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_triangle_aff465171ce038f0486361d923f9d7df0}{csmp\+::\+Isoparametric\+Linear\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_hexahedron_a6002903ac45bd8507422753e2b432550}{csmp\+::\+Isoparametric\+Quadratic\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_a245c686edf1dec4dde876aae5b7a6a6e}{csmp\+::\+Isoparametric\+Quadratic\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a857901bdac71486331ad66d8ab2994e4}{csmp\+::\+Isoparametric\+Quadratic\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_pyramid_af45ee5bb6c4de1a04f63f9e36baf2822}{csmp\+::\+Isoparametric\+Quadratic\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_quadrilateral_a50da2e68ea7d576c36b7fbc9dbf86858}{csmp\+::\+Isoparametric\+Quadratic\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_aa19b610812b8a3ab2b6c285e9b69bd7c}{csmp\+::\+Isoparametric\+Quadratic\+Tetrahedron}}, and \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_triangle_ac86677f8b1286411119f7c23462c42e0}{csmp\+::\+Isoparametric\+Quadratic\+Triangle}}.
+
+\Hypertarget{classcsmp_1_1_finite_element_ae62e0c447141f0e2b7f7a4eb8412278b}\index{csmp::FiniteElement@{csmp::FiniteElement}!Jacobian@{Jacobian}}
+\index{Jacobian@{Jacobian}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{Jacobian()}{Jacobian()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_ae62e0c447141f0e2b7f7a4eb8412278b} 
+void csmp\+::\+Finite\+Element\+::\+Jacobian (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ double $>$ \&}]{dnr}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+initialises JAC = DN\texorpdfstring{$\ast$}{*}\+XY (intpl. derivative \texorpdfstring{$\ast$}{*} coordinate matrix) parametric-\/to-\/physical space transformation matrix for 1D element using the supplied intpol.\+f.\+derivatives 
+
+Compute the Jacobian matrix for the local coordinate point \textquotesingle{}rst\textquotesingle{} in the finite element.
+
+
+\begin{DoxyParams}{Parameters}
+{\em dnr} & The local shape function derivatives at the point of interest. These are provided as pointers to inbuilt arrays of type \textquotesingle{}double\textquotesingle{}. Whether a third argument is supplied or not determines whether a 2D or a 3D Jacobian is output. ~\newline
+\\
+\hline
+\end{DoxyParams}
+The Jacobian matrix is returned into the protected matrix JAC. \Hypertarget{classcsmp_1_1_finite_element_a246043f81c66c9f65e08c6a5190ea381}\index{csmp::FiniteElement@{csmp::FiniteElement}!JacobianAt@{JacobianAt}}
+\index{JacobianAt@{JacobianAt}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{JacobianAt()}{JacobianAt()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_a246043f81c66c9f65e08c6a5190ea381} 
+void csmp\+::\+Finite\+Element\+::\+Jacobian\+At (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ double $>$ \&}]{rst}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+initialises JAC = DN\texorpdfstring{$\ast$}{*}\+XY (intpl. derivative \texorpdfstring{$\ast$}{*} coordinate matrix) parametric-\/to-\/physical space transformation matrix for given quadrature point defined in parametric space (r,s,t) 
+
+
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_hexahedron_aa0f7dbf2547965b2cc6b3d7f565b2a8e}{csmp\+::\+Isoparametric\+Linear\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_line_element_a5d3b2479b759786add7befe72b5bb045}{csmp\+::\+Isoparametric\+Linear\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_aa4fe2377b1bcd7a5319645ad5004e65a}{csmp\+::\+Isoparametric\+Linear\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_af9cb335cdb14c3b155328d6b02e6cb4c}{csmp\+::\+Isoparametric\+Linear\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_quadrilateral_a7fe6ddacc85943f90875fd272761da4d}{csmp\+::\+Isoparametric\+Linear\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_tetrahedron_a26eb13197398968c62549d35a53057a5}{csmp\+::\+Isoparametric\+Linear\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_triangle_a4b33c09168e6f416ac247872a5bb51a5}{csmp\+::\+Isoparametric\+Linear\+Triangle}}, and \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_ad5bfab2561ca300a32fe3db3ce7c1287}{csmp\+::\+Isoparametric\+Quadratic\+Tetrahedron}}.
+
+\Hypertarget{classcsmp_1_1_finite_element_ac6a31722bbf25abad86ccea3b653953e}\index{csmp::FiniteElement@{csmp::FiniteElement}!JacobianAtIntegrationPoint@{JacobianAtIntegrationPoint}}
+\index{JacobianAtIntegrationPoint@{JacobianAtIntegrationPoint}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{JacobianAtIntegrationPoint()}{JacobianAtIntegrationPoint()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_ac6a31722bbf25abad86ccea3b653953e} 
+void csmp\+::\+Finite\+Element\+::\+Jacobian\+At\+Integration\+Point (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{ip}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+initialises JAC = DN\texorpdfstring{$\ast$}{*}\+XY (intpl. derivative \texorpdfstring{$\ast$}{*} coordinate matrix) parametric-\/to-\/physical space transformation matrix for given quadrature point 
+
+
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_hexahedron_a11dad4148037da7535ca80768e1d85b3}{csmp\+::\+Isoparametric\+Linear\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_line_element_a635b53df15f59db360122a5a5c7cd683}{csmp\+::\+Isoparametric\+Linear\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_aa91eb3e0495fa63af15ac252bca997a1}{csmp\+::\+Isoparametric\+Linear\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a55d2ce2ca27fbc4095749f2643c0d944}{csmp\+::\+Isoparametric\+Linear\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_quadrilateral_a683e121acf6403eb8169d4083b48ccac}{csmp\+::\+Isoparametric\+Linear\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_tetrahedron_af0906b8268c6a948d4a2feee75c0021e}{csmp\+::\+Isoparametric\+Linear\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_triangle_ac0fcba58f86cf88132235e9adb83a3ff}{csmp\+::\+Isoparametric\+Linear\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_hexahedron_af0164b784a9f422745d98dc2025ddffa}{csmp\+::\+Isoparametric\+Quadratic\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_a643a444148c8b42aa93e7e8ac4b779d7}{csmp\+::\+Isoparametric\+Quadratic\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a6fde3659b0f09747b09d9d4e3649bf1b}{csmp\+::\+Isoparametric\+Quadratic\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_pyramid_ad25c80ffac58a733b57c833129834606}{csmp\+::\+Isoparametric\+Quadratic\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_quadrilateral_ac6d3206349a66525445cf2c6a69768aa}{csmp\+::\+Isoparametric\+Quadratic\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_af59743b332269bdec27e24f4e659dab3}{csmp\+::\+Isoparametric\+Quadratic\+Tetrahedron}}, and \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_triangle_a19c1fd614cf63059d9305b4e90f639bd}{csmp\+::\+Isoparametric\+Quadratic\+Triangle}}.
+
+\Hypertarget{classcsmp_1_1_finite_element_ae758e82d3b214e9f9c5bda10cd20b515}\index{csmp::FiniteElement@{csmp::FiniteElement}!JacobianDeterminant@{JacobianDeterminant}}
+\index{JacobianDeterminant@{JacobianDeterminant}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{JacobianDeterminant()}{JacobianDeterminant()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_ae758e82d3b214e9f9c5bda10cd20b515} 
+double csmp\+::\+Finite\+Element\+::\+Jacobian\+Determinant (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+returns the determinant of the member Jacobian matrix JAC that must have been initialised before 
+
+
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_line_element_ace9c1f2c35b5a457a5d00f818b5dffb9}{csmp\+::\+Isoparametric\+Linear\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_quadrilateral_a54138c34bbdccc97aad5f6962cf22475}{csmp\+::\+Isoparametric\+Linear\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_triangle_acffaff1292ad12448dbfb21bce33a9e6}{csmp\+::\+Isoparametric\+Linear\+Triangle}}, and \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_triangle_a94e20ecd7e251910277d07966b15e281}{csmp\+::\+Isoparametric\+Quadratic\+Triangle}}.
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_finite_element_ae758e82d3b214e9f9c5bda10cd20b515_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_finite_element_a3639fc962596899333d6a65cb1ef66ce}\index{csmp::FiniteElement@{csmp::FiniteElement}!JacobianInverse@{JacobianInverse}}
+\index{JacobianInverse@{JacobianInverse}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{JacobianInverse()}{JacobianInverse()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_a3639fc962596899333d6a65cb1ef66ce} 
+double csmp\+::\+Finite\+Element\+::\+Jacobian\+Inverse (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+initializes the member matrix JINV 
+
+Computes the determinant J of the Jacobian matrix computed for this element/integration point
+
+\begin{DoxyAttention}{Attention}
+if the calculation fails, an ERROR is reported and some details about the Jacobian are printed to screen. 
+\end{DoxyAttention}
+
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_line_element_a21270c7af646531d5157cfa069ff8623}{csmp\+::\+Isoparametric\+Linear\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_quadrilateral_a8ef0dab93d89b5325a1972d3f46047b4}{csmp\+::\+Isoparametric\+Linear\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_triangle_a9e6d47dc9de095bcc549c394f809f5a3}{csmp\+::\+Isoparametric\+Linear\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_a476ee50a8c7f6b823c0f8bedd579e09c}{csmp\+::\+Isoparametric\+Quadratic\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_quadrilateral_a3f6d72da7887d4810a2dab5661513406}{csmp\+::\+Isoparametric\+Quadratic\+Quadrilateral}}, and \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_triangle_aea97a05ab24f6cf8e8a2f95be4008b07}{csmp\+::\+Isoparametric\+Quadratic\+Triangle}}.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=348pt]{classcsmp_1_1_finite_element_a3639fc962596899333d6a65cb1ef66ce_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_finite_element_a3639fc962596899333d6a65cb1ef66ce_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_finite_element_a8149423046e10426a7eb520164ad3a38}\index{csmp::FiniteElement@{csmp::FiniteElement}!MidSideNodes@{MidSideNodes}}
+\index{MidSideNodes@{MidSideNodes}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{MidSideNodes()}{MidSideNodes()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_a8149423046e10426a7eb520164ad3a38} 
+void csmp\+::\+Finite\+Element\+::\+Mid\+Side\+Nodes (\begin{DoxyParamCaption}\item[{std\+::vector$<$ uint32\+\_\+t $>$ \&}]{ids}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+reports only the mid-\/edge nodes (0..nodes-\/1) of the element 
+
+
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_hexahedron_a0075efcc78a7959293fb288d088e9366}{csmp\+::\+Isoparametric\+Linear\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_line_element_a852786c841b25d1ea8febfb61bb443cd}{csmp\+::\+Isoparametric\+Linear\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_ab6746a86481dc778ee7b17c9a8172d9a}{csmp\+::\+Isoparametric\+Linear\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a77f231fb9e6a43bbe97aa3b76366aca4}{csmp\+::\+Isoparametric\+Linear\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_quadrilateral_a5752cf3324a52fb32e50aa1832c4627f}{csmp\+::\+Isoparametric\+Linear\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_tetrahedron_a73d2f5ddcf82586cb4778c770f7c368d}{csmp\+::\+Isoparametric\+Linear\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_triangle_aa73e9c9a122dea5ae043c0d4afa4b15a}{csmp\+::\+Isoparametric\+Linear\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_hexahedron_a0bac667641efb79f4c3397cd2f3e61e5}{csmp\+::\+Isoparametric\+Quadratic\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_afc8a863ca884bbf698181c547fd8676f}{csmp\+::\+Isoparametric\+Quadratic\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a5ebc18ef7eea2baf0167abee4be29942}{csmp\+::\+Isoparametric\+Quadratic\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_pyramid_aa66a2a71713072669d917c2a6eacdca9}{csmp\+::\+Isoparametric\+Quadratic\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_quadrilateral_aaaa695e8664c13ae061f9d128875e886}{csmp\+::\+Isoparametric\+Quadratic\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_a55ed0e6fe4eef381e70f88540b26489b}{csmp\+::\+Isoparametric\+Quadratic\+Tetrahedron}}, and \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_triangle_a9a7375bc8c49670bab1cb0229b4e1b8b}{csmp\+::\+Isoparametric\+Quadratic\+Triangle}}.
+
+\Hypertarget{classcsmp_1_1_finite_element_aac8b400d7e198282e0b8196df3338858}\index{csmp::FiniteElement@{csmp::FiniteElement}!N@{N}}
+\index{N@{N}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{N()}{N()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_aac8b400d7e198282e0b8196df3338858} 
+void csmp\+::\+Finite\+Element\+::N (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$ \&}]{N}{, }\item[{const std\+::vector$<$ double $>$ \&}]{xyz}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+reports the values of the interpolation functions at the point given in global coordinates; 
+
+\begin{DoxyAttention}{Attention}
+due to iteration method is slow for numerically integrated elements 
+\end{DoxyAttention}
+
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_hexahedron_ac69730372e01e96b50ffd7b3b41f391e}{csmp\+::\+Isoparametric\+Linear\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_line_element_ace209e1a0ff9d113d061afe1a5a6cf49}{csmp\+::\+Isoparametric\+Linear\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_ae87862e24a894772540e4e60e1c9140e}{csmp\+::\+Isoparametric\+Linear\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a2b08a5642237c52723cd1493917334b6}{csmp\+::\+Isoparametric\+Linear\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_quadrilateral_a2cf7f39b6e517dcd82335a884fd67f7b}{csmp\+::\+Isoparametric\+Linear\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_tetrahedron_a356492c0a10292dadbe04b169eaefde2}{csmp\+::\+Isoparametric\+Linear\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_triangle_a88b6751e46d19ca8aea0f76e0f44f5c1}{csmp\+::\+Isoparametric\+Linear\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_hexahedron_a91bc613b5653344fbbc1cd10e41e7ab0}{csmp\+::\+Isoparametric\+Quadratic\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_ad7372aa242a270713b85a80f790295ab}{csmp\+::\+Isoparametric\+Quadratic\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_pyramid_a0f37751422f5169b8109f0acf4d8859b}{csmp\+::\+Isoparametric\+Quadratic\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_quadrilateral_a24673effa264741edc3f717296c82cdb}{csmp\+::\+Isoparametric\+Quadratic\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_a931cae919c839063d3fefdb1b3d40da9}{csmp\+::\+Isoparametric\+Quadratic\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_triangle_a1df782992622eb83dfc44e20c434403b}{csmp\+::\+Isoparametric\+Quadratic\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_linear_cuboid_a493e75088e6df7fa7ae858f612ecd945}{csmp\+::\+Linear\+Cuboid}}, \mbox{\hyperlink{classcsmp_1_1_linear_line_element_a3c54fba043f023c0828cc3c9f318b6eb}{csmp\+::\+Linear\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_linear_rectangle_ab7cd80b857e2a7e826869347f5e9aea7}{csmp\+::\+Linear\+Rectangle}}, \mbox{\hyperlink{classcsmp_1_1_linear_tetrahedron_ab05468d480fda73aaf7e4c0bb59b8524}{csmp\+::\+Linear\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_ac3a06318940bff7b325843665eebec8b}{csmp\+::\+Linear\+Triangle3D}}, and \mbox{\hyperlink{classcsmp_1_1_linear_triangle_af904a8a800f512af551614923334d5bd}{csmp\+::\+Linear\+Triangle}}.
+
+\Hypertarget{classcsmp_1_1_finite_element_a6df28d2a7b4bcaff49cb726d6ef0890b}\index{csmp::FiniteElement@{csmp::FiniteElement}!N\_AtBaryCenter@{N\_AtBaryCenter}}
+\index{N\_AtBaryCenter@{N\_AtBaryCenter}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{N\_AtBaryCenter()}{N\_AtBaryCenter()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_a6df28d2a7b4bcaff49cb726d6ef0890b} 
+void csmp\+::\+Finite\+Element\+::\+N\+\_\+\+At\+Bary\+Center (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$ \&}]{N}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+reports the values of the interpolation functions at the center of gravity of the element 
+
+
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_hexahedron_ac1d93d5f30293258732ebb992057609c}{csmp\+::\+Isoparametric\+Linear\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_line_element_a833d03dad28c51439d6f5230f1d4671c}{csmp\+::\+Isoparametric\+Linear\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_afb4e1d40cc3c368fe0d51a6498a4ad79}{csmp\+::\+Isoparametric\+Linear\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a009d80d643c846f487597d0fc5452af5}{csmp\+::\+Isoparametric\+Linear\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_quadrilateral_ad0da2a9d9160c4bf47bcfc4424a63849}{csmp\+::\+Isoparametric\+Linear\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_tetrahedron_a667db94f6b7e1955a09419fd780edccd}{csmp\+::\+Isoparametric\+Linear\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_triangle_a7ce5635eff9d27c8c5b1bc682d799edb}{csmp\+::\+Isoparametric\+Linear\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_hexahedron_a6ab6e79dbafeb7cb7c26d9f8d9394e30}{csmp\+::\+Isoparametric\+Quadratic\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_a6b3e858dccfd44b1b4e48e66fb0d14fe}{csmp\+::\+Isoparametric\+Quadratic\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a7cc118c625b16c783159b03a3029581f}{csmp\+::\+Isoparametric\+Quadratic\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_pyramid_a1f38a92491e86190fb37b713e81a1764}{csmp\+::\+Isoparametric\+Quadratic\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_quadrilateral_ab6a933d1269659c13b3bbb8e1135c87b}{csmp\+::\+Isoparametric\+Quadratic\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_a615592b8cab9af70edc94e2113f82ad8}{csmp\+::\+Isoparametric\+Quadratic\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_triangle_a71334e99bb13710a4660b5353eb1224e}{csmp\+::\+Isoparametric\+Quadratic\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_linear_cuboid_ae1364bd168749c8ada38d14cdd46d14a}{csmp\+::\+Linear\+Cuboid}}, \mbox{\hyperlink{classcsmp_1_1_linear_line_element_a8d83bfbb8a1a74408e6968480082f83a}{csmp\+::\+Linear\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_linear_rectangle_a3411bf9968e1e5a8ae776e2d5ac72420}{csmp\+::\+Linear\+Rectangle}}, \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a9dcc5734869993fdd19f8839da1cd745}{csmp\+::\+Linear\+Triangle3D}}, and \mbox{\hyperlink{classcsmp_1_1_linear_triangle_a6c1d1cc28bfb1440182e2c8b8ec27791}{csmp\+::\+Linear\+Triangle}}.
+
+\Hypertarget{classcsmp_1_1_finite_element_ac1168c0c1cc280d1a1ecba676877d13b}\index{csmp::FiniteElement@{csmp::FiniteElement}!N\_AtIntegrationPoint@{N\_AtIntegrationPoint}}
+\index{N\_AtIntegrationPoint@{N\_AtIntegrationPoint}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{N\_AtIntegrationPoint()}{N\_AtIntegrationPoint()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_ac1168c0c1cc280d1a1ecba676877d13b} 
+void csmp\+::\+Finite\+Element\+::\+N\+\_\+\+At\+Integration\+Point (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{ip}{, }\item[{std\+::vector$<$ double $>$ \&}]{N}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+reports the values of the interpolation functions at the given quadrature point 
+
+
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_hexahedron_ad14bed4d528a779322240d36e5c5421e}{csmp\+::\+Isoparametric\+Linear\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_line_element_a8c1641657762290f1769ae3e3e3328b0}{csmp\+::\+Isoparametric\+Linear\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_a29a2402fbccabaf8ff12bf871319040f}{csmp\+::\+Isoparametric\+Linear\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a88dc3392cfe695b9dc03c9e348579132}{csmp\+::\+Isoparametric\+Linear\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_quadrilateral_aa4dad3f957840de218671e0eb432c396}{csmp\+::\+Isoparametric\+Linear\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_tetrahedron_a1bff0ab2a98dca7c091f8cef4d1604fd}{csmp\+::\+Isoparametric\+Linear\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_triangle_af8557d3b42b0a05b7888d55fd92c5aca}{csmp\+::\+Isoparametric\+Linear\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_hexahedron_abc8031fd0e0ff4b481c8c1397c9d3c2b}{csmp\+::\+Isoparametric\+Quadratic\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_abbb38dc34933853889110f5c5f71c3bb}{csmp\+::\+Isoparametric\+Quadratic\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a843002ade7869c386e5743ef096c2205}{csmp\+::\+Isoparametric\+Quadratic\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_pyramid_a3776973659a4bb631a721e834a730f19}{csmp\+::\+Isoparametric\+Quadratic\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_quadrilateral_a8972ee19a9d2144f4c928d526a6808f0}{csmp\+::\+Isoparametric\+Quadratic\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_a7c07ebbdd869afd7b25318a0748f9bbf}{csmp\+::\+Isoparametric\+Quadratic\+Tetrahedron}}, and \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_triangle_a78d706b9913984e4a24da1b5b114bf59}{csmp\+::\+Isoparametric\+Quadratic\+Triangle}}.
+
+\Hypertarget{classcsmp_1_1_finite_element_ab7196476d9fb740d91384c6c4521b0f5}\index{csmp::FiniteElement@{csmp::FiniteElement}!NodesConnectedTo@{NodesConnectedTo}}
+\index{NodesConnectedTo@{NodesConnectedTo}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{NodesConnectedTo()}{NodesConnectedTo()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_ab7196476d9fb740d91384c6c4521b0f5} 
+\mbox{\hyperlink{classvector}{vector}}$<$ uint32\+\_\+t $>$ csmp\+::\+Finite\+Element\+::\+Nodes\+Connected\+To (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{node}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+returns the local numbers of the nodes at the other end of the sgment that the argument node is on 
+
+
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_hexahedron_a5854eab12458a5a0ad76fc431f6b5f85}{csmp\+::\+Isoparametric\+Linear\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_line_element_a81f081c6bbb8cf3b0a31ad3ae67c06f8}{csmp\+::\+Isoparametric\+Linear\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_afd62718afcf8969ade1ef0ed886b2e25}{csmp\+::\+Isoparametric\+Linear\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_aee60889f9ec03a9abaabb470117e796f}{csmp\+::\+Isoparametric\+Linear\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_quadrilateral_a05322c2d5786073f487e2ffe5c4c4416}{csmp\+::\+Isoparametric\+Linear\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_tetrahedron_a6b64d9096bc3d8cc2e6a40deeeea424f}{csmp\+::\+Isoparametric\+Linear\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_triangle_a8c60c6731bf969a6db6fdb0ba47a7208}{csmp\+::\+Isoparametric\+Linear\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_hexahedron_a06594c47eed35792ed1a10ff7a621551}{csmp\+::\+Isoparametric\+Quadratic\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_a7cb1010a94ac0091fbdbea69c330f3e6}{csmp\+::\+Isoparametric\+Quadratic\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a7a163ac97a0936ee9ea20e43f1f08ba3}{csmp\+::\+Isoparametric\+Quadratic\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_pyramid_a47de9073e0a7ffe2850e8516d10922fe}{csmp\+::\+Isoparametric\+Quadratic\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_quadrilateral_affd8cdea5e6a07eb72cb894ad17cd063}{csmp\+::\+Isoparametric\+Quadratic\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_a9b3e95fba5e41ac7a39a1f48297cc67a}{csmp\+::\+Isoparametric\+Quadratic\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_triangle_a0d258280b2b0fd03f698655ed73bc667}{csmp\+::\+Isoparametric\+Quadratic\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_linear_cuboid_ad5521280aadd9fb6df9f9f5aaadb2166}{csmp\+::\+Linear\+Cuboid}}, \mbox{\hyperlink{classcsmp_1_1_linear_line_element_af5356f974435d771c0895f4951211a83}{csmp\+::\+Linear\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_linear_rectangle_a1b8ff6535771ebb13fd96525b996e16f}{csmp\+::\+Linear\+Rectangle}}, \mbox{\hyperlink{classcsmp_1_1_linear_tetrahedron_a099bcd468e7cc32c739b5f61822be989}{csmp\+::\+Linear\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a018d54edd6dc5a40eca57ebc20bb25d7}{csmp\+::\+Linear\+Triangle3D}}, and \mbox{\hyperlink{classcsmp_1_1_linear_triangle_a57540dda59880c9d405cf90153cd819e}{csmp\+::\+Linear\+Triangle}}.
+
+\Hypertarget{classcsmp_1_1_finite_element_a32fc14575277846326041fe914209f9a}\index{csmp::FiniteElement@{csmp::FiniteElement}!NodesOfFace@{NodesOfFace}}
+\index{NodesOfFace@{NodesOfFace}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{NodesOfFace()}{NodesOfFace()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_a32fc14575277846326041fe914209f9a} 
+\mbox{\hyperlink{classvector}{vector}}$<$ uint32\+\_\+t $>$ csmp\+::\+Finite\+Element\+::\+Nodes\+Of\+Face (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{face\+\_\+id}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+reports the face nodes (0..nodes-\/1) of the given face 
+
+
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_hexahedron_ae85152eee885a4126cfe05af65b73773}{csmp\+::\+Isoparametric\+Linear\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_line_element_a88b95a67daf989e329008f850bdb4050}{csmp\+::\+Isoparametric\+Linear\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_ae06a2521f4e024d1cdbd95328a742087}{csmp\+::\+Isoparametric\+Linear\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_ab1651a0b8fd416319de756e994d9b716}{csmp\+::\+Isoparametric\+Linear\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_quadrilateral_ab065ceaeec839f6980f3371d4fbbb48c}{csmp\+::\+Isoparametric\+Linear\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_tetrahedron_a682c6c13db15ada7a93d5c2a6ffd5efd}{csmp\+::\+Isoparametric\+Linear\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_triangle_a9d39d2517c97cd2170174b1e550e82d6}{csmp\+::\+Isoparametric\+Linear\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_hexahedron_aab69b5ed6bd1681e1ed582af2ec1b94e}{csmp\+::\+Isoparametric\+Quadratic\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_a2a79285fc241b8d71ea374eefd7ca950}{csmp\+::\+Isoparametric\+Quadratic\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_aeebcbe39dbd27d436b6e9444e0c2adbd}{csmp\+::\+Isoparametric\+Quadratic\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_pyramid_a45560294a4ab858b4503bcd8b637023f}{csmp\+::\+Isoparametric\+Quadratic\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_quadrilateral_a2b117a96de0c8f8345f3140c577a9f60}{csmp\+::\+Isoparametric\+Quadratic\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_ad643bc5c2df06b27e9f966512c9a7a37}{csmp\+::\+Isoparametric\+Quadratic\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_triangle_a31e72a1a29ea94737d7a7ead7e21c7f9}{csmp\+::\+Isoparametric\+Quadratic\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_linear_cuboid_a060186c391c939fbe7cec4ee957ef124}{csmp\+::\+Linear\+Cuboid}}, \mbox{\hyperlink{classcsmp_1_1_linear_line_element_a089cc3227093acbfc9ad9ab8f40d7bf6}{csmp\+::\+Linear\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_linear_rectangle_a5a91b469f3f387e88d7a34d22633b183}{csmp\+::\+Linear\+Rectangle}}, \mbox{\hyperlink{classcsmp_1_1_linear_tetrahedron_a3ca9805d394830e68670df2137418aa7}{csmp\+::\+Linear\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a944a1435b382f7dd44fc6b8122015610}{csmp\+::\+Linear\+Triangle3D}}, and \mbox{\hyperlink{classcsmp_1_1_linear_triangle_a5234fb11dc29caa9a2b12b4a9a7b8b23}{csmp\+::\+Linear\+Triangle}}.
+
+\Hypertarget{classcsmp_1_1_finite_element_a443213e98dc0cc9692bd3eef5a168295}\index{csmp::FiniteElement@{csmp::FiniteElement}!NodesOfSegment@{NodesOfSegment}}
+\index{NodesOfSegment@{NodesOfSegment}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{NodesOfSegment()}{NodesOfSegment()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_a443213e98dc0cc9692bd3eef5a168295} 
+void csmp\+::\+Finite\+Element\+::\+Nodes\+Of\+Segment (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{segm\+\_\+id}{, }\item[{std\+::vector$<$ uint32\+\_\+t $>$ \&}]{snids}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+reports the egde nodes (0..nodes-\/1) which can be more than 2 in higher-\/order elements 
+
+
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_hexahedron_a00d448ef2326542739fef4f32f115297}{csmp\+::\+Isoparametric\+Linear\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_line_element_aba04acfa46c7854a61023f704f3947cc}{csmp\+::\+Isoparametric\+Linear\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_a6d08e010aef3dec1b1b5bbc681aa970b}{csmp\+::\+Isoparametric\+Linear\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_aa84327ab9e0880c34a360d6f54eeb406}{csmp\+::\+Isoparametric\+Linear\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_quadrilateral_a4136e5c0c21520c73ddb27e3be043ac8}{csmp\+::\+Isoparametric\+Linear\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_tetrahedron_a7de7d776a5d7d170d0710345c86fe975}{csmp\+::\+Isoparametric\+Linear\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_triangle_aec78a84f7cdc4941fa9f13d8f45fa991}{csmp\+::\+Isoparametric\+Linear\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_hexahedron_a6be32f7d1225b32856ffb060866bbf6e}{csmp\+::\+Isoparametric\+Quadratic\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_afa90ba0142300bc094ced138d0be8048}{csmp\+::\+Isoparametric\+Quadratic\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_afd4d6b7b02072aab2a7fcaa6c8c2d73b}{csmp\+::\+Isoparametric\+Quadratic\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_pyramid_aac60f7055edb457d8ec958795c54c3bc}{csmp\+::\+Isoparametric\+Quadratic\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_quadrilateral_a2c2d74eb4acbfe0ceb879bc44a6dbed5}{csmp\+::\+Isoparametric\+Quadratic\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_a056cc2aef94a4d2950b563d6ecf2ea6f}{csmp\+::\+Isoparametric\+Quadratic\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_triangle_a1abc41cffd8706800041ab5d59987cce}{csmp\+::\+Isoparametric\+Quadratic\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_linear_cuboid_ac10396c001ec148504d438ce0934caf9}{csmp\+::\+Linear\+Cuboid}}, \mbox{\hyperlink{classcsmp_1_1_linear_line_element_a395f2fcbc697c64dd64d542c855348c3}{csmp\+::\+Linear\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_linear_rectangle_a9fe098e081aa9ed6801f36a4319a8fd3}{csmp\+::\+Linear\+Rectangle}}, \mbox{\hyperlink{classcsmp_1_1_linear_tetrahedron_a8ae00314273404833de150918921e7c3}{csmp\+::\+Linear\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a6b419c20f544a1ff1d1a7943ad6f8396}{csmp\+::\+Linear\+Triangle3D}}, and \mbox{\hyperlink{classcsmp_1_1_linear_triangle_a9b6c262e1c52692cbc5f7286689a7a9a}{csmp\+::\+Linear\+Triangle}}.
+
+\Hypertarget{classcsmp_1_1_finite_element_a3cb7bc938ad00c9f4dbfbfa94c13e781}\index{csmp::FiniteElement@{csmp::FiniteElement}!NodesPerFace@{NodesPerFace}}
+\index{NodesPerFace@{NodesPerFace}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{NodesPerFace()}{NodesPerFace()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_a3cb7bc938ad00c9f4dbfbfa94c13e781} 
+uint32\+\_\+t csmp\+::\+Finite\+Element\+::\+Nodes\+Per\+Face (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{face}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+returns how many nodes make up a particular face; some elements have different numbers 
+
+
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_aad6aeeb3fbc4a42cfd508c458b8e4941}{csmp\+::\+Isoparametric\+Linear\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a7c459d9d52b006113e36c0bc1e09f469}{csmp\+::\+Isoparametric\+Linear\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a28e0ed1c417e912e8c48e4e48c127eb2}{csmp\+::\+Isoparametric\+Quadratic\+Prism}}, and \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_pyramid_a6074d88c63cd328e9801cf528f8c7ebd}{csmp\+::\+Isoparametric\+Quadratic\+Pyramid}}.
+
+\Hypertarget{classcsmp_1_1_finite_element_af583becda82f4fef39bbe2d4c3b41cea}\index{csmp::FiniteElement@{csmp::FiniteElement}!Nr@{Nr}}
+\index{Nr@{Nr}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{Nr()}{Nr()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_af583becda82f4fef39bbe2d4c3b41cea} 
+void csmp\+::\+Finite\+Element\+::\+Nr (\begin{DoxyParamCaption}\item[{double}]{r}{, }\item[{std\+::vector$<$ double $>$ \&}]{NRST}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+1D element interpolation functions N(r) 
+
+
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_line_element_ab92b188727b36d0b42d504e3e78e4d86}{csmp\+::\+Isoparametric\+Linear\+Line\+Element}}, and \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_a5ada67d18b85fa985842e2119739c301}{csmp\+::\+Isoparametric\+Quadratic\+Line\+Element}}.
+
+\Hypertarget{classcsmp_1_1_finite_element_adb2baab01a52b040d73c10623a0605b2}\index{csmp::FiniteElement@{csmp::FiniteElement}!Nrs@{Nrs}}
+\index{Nrs@{Nrs}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{Nrs()}{Nrs()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_adb2baab01a52b040d73c10623a0605b2} 
+void csmp\+::\+Finite\+Element\+::\+Nrs (\begin{DoxyParamCaption}\item[{double}]{r}{, }\item[{double}]{s}{, }\item[{std\+::vector$<$ double $>$ \&}]{NRST}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+2D element interpolation functions N(r,s) 
+
+
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_quadrilateral_ab4378d6aa30559aac7bc30b27a66d731}{csmp\+::\+Isoparametric\+Linear\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_triangle_a877f45f5c0bdd55b06c50a160cc42c6e}{csmp\+::\+Isoparametric\+Linear\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_quadrilateral_a39597f003b23db701b7ff08cf800762a}{csmp\+::\+Isoparametric\+Quadratic\+Quadrilateral}}, and \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_triangle_a63d12f7aa60345e2f012189e7ed6cf5e}{csmp\+::\+Isoparametric\+Quadratic\+Triangle}}.
+
+\Hypertarget{classcsmp_1_1_finite_element_a34bd4d39b1a026b1de15f028e9692bd8}\index{csmp::FiniteElement@{csmp::FiniteElement}!Nrst@{Nrst}}
+\index{Nrst@{Nrst}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{Nrst()}{Nrst()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_a34bd4d39b1a026b1de15f028e9692bd8} 
+void csmp\+::\+Finite\+Element\+::\+Nrst (\begin{DoxyParamCaption}\item[{double}]{r}{, }\item[{double}]{s}{, }\item[{double}]{t}{, }\item[{std\+::vector$<$ double $>$ \&}]{NRST}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+3D element interpolation functions N(r,s,t) 
+
+
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_hexahedron_a4ef2eb111409de57fd03aafd3f4d0a76}{csmp\+::\+Isoparametric\+Linear\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_a19b01da2ad0b9a912c129a8d59146007}{csmp\+::\+Isoparametric\+Linear\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_ad0c6bdb4957a7f90c74b225d844b0b46}{csmp\+::\+Isoparametric\+Linear\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_tetrahedron_abf232a8b05e5ec3f68de039df5a6589f}{csmp\+::\+Isoparametric\+Linear\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_hexahedron_a607fbe398d357a618c26e107f84e8465}{csmp\+::\+Isoparametric\+Quadratic\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a3121f2d6b0999c4cfedc55a0274cf524}{csmp\+::\+Isoparametric\+Quadratic\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_pyramid_a3afacbc2217cc9e943b6084e8b3c77be}{csmp\+::\+Isoparametric\+Quadratic\+Pyramid}}, and \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_aa3c1d868b62aea56bc4048a23981fca1}{csmp\+::\+Isoparametric\+Quadratic\+Tetrahedron}}.
+
+\Hypertarget{classcsmp_1_1_finite_element_a67341585f83bc9d941c67e7a84801248}\index{csmp::FiniteElement@{csmp::FiniteElement}!OutputNodeDataToVTK@{OutputNodeDataToVTK}}
+\index{OutputNodeDataToVTK@{OutputNodeDataToVTK}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{OutputNodeDataToVTK()}{OutputNodeDataToVTK()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_a67341585f83bc9d941c67e7a84801248} 
+void csmp\+::\+Finite\+Element\+::\+Output\+Node\+Data\+To\+VTK (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{file\+\_\+name}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{var\+\_\+name}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&}]{DATA}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+prints the current finite element into a visualisation toolkit (VTK) textfile for visual examination 
+
+
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_hexahedron_aeaa63c891acea3659cee4176a273e4fc}{csmp\+::\+Isoparametric\+Linear\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_line_element_a5715c8e90d03beb5945a3195866c3b64}{csmp\+::\+Isoparametric\+Linear\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_a61dc16e628c1460af9b8c7c14da878f4}{csmp\+::\+Isoparametric\+Linear\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_af4c86619c75cfceceadd513bb97b8bfb}{csmp\+::\+Isoparametric\+Linear\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_quadrilateral_acbea5f778eb5c2a214dcd1159e7460a1}{csmp\+::\+Isoparametric\+Linear\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_tetrahedron_acbacc74cce26a928e5e8f6f33d5dc98d}{csmp\+::\+Isoparametric\+Linear\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_triangle_a146ac4ff1201107ca6a5162eb844a1c9}{csmp\+::\+Isoparametric\+Linear\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_hexahedron_a69acb73ac1eb9eca394963c3591b6acd}{csmp\+::\+Isoparametric\+Quadratic\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_a439923c83ce6c4b65eb53dac5a40b3f1}{csmp\+::\+Isoparametric\+Quadratic\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a6e8c5d05f45b46aeb00723031391d26f}{csmp\+::\+Isoparametric\+Quadratic\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_pyramid_a6eba9afb7e8d38c72af9cfeb06345f7a}{csmp\+::\+Isoparametric\+Quadratic\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_quadrilateral_abbffb01b8ddf81c16f5f8a23ad568fed}{csmp\+::\+Isoparametric\+Quadratic\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_afff9420db93435d80446692044bad26e}{csmp\+::\+Isoparametric\+Quadratic\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_triangle_a7b325571b51e1902063adbc8e6284265}{csmp\+::\+Isoparametric\+Quadratic\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_linear_cuboid_a9649dca67cdc17bb6ef99588d0d4a4c8}{csmp\+::\+Linear\+Cuboid}}, \mbox{\hyperlink{classcsmp_1_1_linear_line_element_af01d9b22d26956eb7f761f27a9f2185d}{csmp\+::\+Linear\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a0b487e8ed898104b91cda9dc97ace3cb}{csmp\+::\+Linear\+Triangle3D}}, and \mbox{\hyperlink{classcsmp_1_1_linear_triangle_af01a417ecaa31effbbf43a27a32dbb2e}{csmp\+::\+Linear\+Triangle}}.
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_finite_element_a67341585f83bc9d941c67e7a84801248_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_finite_element_a34a5c030987c7e9842af332f5ed0d61b}\index{csmp::FiniteElement@{csmp::FiniteElement}!ReferenceCoordinates@{ReferenceCoordinates}}
+\index{ReferenceCoordinates@{ReferenceCoordinates}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{ReferenceCoordinates()}{ReferenceCoordinates()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_a34a5c030987c7e9842af332f5ed0d61b} 
+void csmp\+::\+Finite\+Element\+::\+Reference\+Coordinates (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&}]{mat\+Coords}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+for element types defined using a local coordinate system, returns the node coordinates into the argument matrix 
+
+Returns the reference coordinates of the element.
+
+\doxylink{classcsmp_1_1_dense_matrix}{Dense\+Matrix$<$\+DM\+\_\+\+MIN$>$} \& mat\+Coords; -\/\texorpdfstring{$>$}{>} Holds the reference coordinates of the finite element. 
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_hexahedron_a02d13cd91b7495a487093a598fda59fe}{csmp\+::\+Isoparametric\+Linear\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_line_element_a7c80b33aec3c36b6fe29d9b91ce4f4ca}{csmp\+::\+Isoparametric\+Linear\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_a8d5562b5d1754674a15bf145b5fe1255}{csmp\+::\+Isoparametric\+Linear\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a3aa8b95ed9c82a94fcbe728299bed694}{csmp\+::\+Isoparametric\+Linear\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_quadrilateral_a7a2cd070d875820b7e24cd82970b0341}{csmp\+::\+Isoparametric\+Linear\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_tetrahedron_a0049fef323b552bdcc0209e4120ed764}{csmp\+::\+Isoparametric\+Linear\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_triangle_a6ee0256085412fd92fb1885b11471611}{csmp\+::\+Isoparametric\+Linear\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_hexahedron_a93454cbe5c933e7337e1e59b0ec5a526}{csmp\+::\+Isoparametric\+Quadratic\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_af9bfb14b864c0cd601c245f5f69ab510}{csmp\+::\+Isoparametric\+Quadratic\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a122adf0f6b3c1ea7a66de590c13cdff4}{csmp\+::\+Isoparametric\+Quadratic\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_pyramid_abc94dc8940b44e4e565b7e663aee5acb}{csmp\+::\+Isoparametric\+Quadratic\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_quadrilateral_a5fb567d36c9eac8435344776d43671ef}{csmp\+::\+Isoparametric\+Quadratic\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_a2eb6b773665c2b80533808d8bf3b5557}{csmp\+::\+Isoparametric\+Quadratic\+Tetrahedron}}, and \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_triangle_abe9bef4b09c9dd6373a46bafd28c8666}{csmp\+::\+Isoparametric\+Quadratic\+Triangle}}.
+
+\Hypertarget{classcsmp_1_1_finite_element_a1dedbd91a6e8765f57dfdaf999494b76}\index{csmp::FiniteElement@{csmp::FiniteElement}!UnitNormal@{UnitNormal}}
+\index{UnitNormal@{UnitNormal}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{UnitNormal()}{UnitNormal()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_a1dedbd91a6e8765f57dfdaf999494b76} 
+\mbox{\hyperlink{classvector}{vector}}$<$ double $>$ csmp\+::\+Finite\+Element\+::\+Unit\+Normal (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+returns unit normal to element where it makes sense (line and surface elements); expects XY matrix to be initialised with node coordinates 
+
+
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_line_element_a68007d4b65077a29c0f759a3a055feaa}{csmp\+::\+Isoparametric\+Linear\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_quadrilateral_aa50336dee7a7b9f08d1f2890c899be55}{csmp\+::\+Isoparametric\+Linear\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_triangle_a4461f2d8579fc0fe8f4af9afe0e3f6b0}{csmp\+::\+Isoparametric\+Linear\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_a9f2f72929c24c047b0b05851a21d0879}{csmp\+::\+Isoparametric\+Quadratic\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_quadrilateral_a3b7602c168791e62825e6064f752ea37}{csmp\+::\+Isoparametric\+Quadratic\+Quadrilateral}}, and \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_triangle_a00ad809c56bb4c59a6420cd383390313}{csmp\+::\+Isoparametric\+Quadratic\+Triangle}}.
+
+\Hypertarget{classcsmp_1_1_finite_element_ae600307171225f53a2615aaffd5afb18}\index{csmp::FiniteElement@{csmp::FiniteElement}!UnitNormalAtFaceBarycenter@{UnitNormalAtFaceBarycenter}}
+\index{UnitNormalAtFaceBarycenter@{UnitNormalAtFaceBarycenter}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{UnitNormalAtFaceBarycenter()}{UnitNormalAtFaceBarycenter()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_ae600307171225f53a2615aaffd5afb18} 
+void csmp\+::\+Finite\+Element\+::\+Unit\+Normal\+At\+Face\+Barycenter (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{face}{, }\item[{std\+::vector$<$ double $>$ \&}]{nrml}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+computes unit normal to face using a parametric to physical space transformation available in elements with a local coordinate framework 
+
+This method is intended for numerically integrated element types with higher order shape functions. As these elements can get deformed in physical space, it is important to specify the precise location of the unit normal.
+
+\begin{DoxyNote}{Note}
+this method cannot be constant because it modifies matrices that are data members of the \doxylink{classcsmp_1_1_finite_element}{Finite\+Element} class. 
+\end{DoxyNote}
+
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_a8e55135cd48da35eeb7e61241560f15e}{csmp\+::\+Isoparametric\+Quadratic\+Tetrahedron}}.
+
+\Hypertarget{classcsmp_1_1_finite_element_a39eb6d5a1827783a679870277b4c68b8}\index{csmp::FiniteElement@{csmp::FiniteElement}!UnitNormalToFace@{UnitNormalToFace}}
+\index{UnitNormalToFace@{UnitNormalToFace}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{UnitNormalToFace()}{UnitNormalToFace()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_a39eb6d5a1827783a679870277b4c68b8} 
+void csmp\+::\+Finite\+Element\+::\+Unit\+Normal\+To\+Face (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{face}{, }\item[{std\+::vector$<$ double $>$ \&}]{unrml}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+returns the unit normal to element face (for planar elements, normal lies in that plane; expects XY matrix to be initialised with node coordinates 
+
+Virtual function stub, overload method in desired subclass of \doxylink{classcsmp_1_1_finite_element}{Finite\+Element}
+
+method should return the unit normal to element face (for planar elements, this normal will lie in that plane
+
+method expects that the XY matrix is initialised with node coordinates 
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_hexahedron_aad8f27693e0e261f7228202f48002711}{csmp\+::\+Isoparametric\+Linear\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_line_element_a4633fe1e80200bd5e01130cbec4c259a}{csmp\+::\+Isoparametric\+Linear\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_a9981c27373244ecaf7af94f009d1f85c}{csmp\+::\+Isoparametric\+Linear\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a395ab2157167b66ed801121c4f3e9dd0}{csmp\+::\+Isoparametric\+Linear\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_quadrilateral_af1436b632ba5fcba905ca22af955668d}{csmp\+::\+Isoparametric\+Linear\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_tetrahedron_a416a1556f4fa20f3674de6836f987849}{csmp\+::\+Isoparametric\+Linear\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_triangle_adbc30ec60739948f58ea3729bbfb71ac}{csmp\+::\+Isoparametric\+Linear\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_linear_cuboid_ab151240f310dd30a70d96ef161564177}{csmp\+::\+Linear\+Cuboid}}, \mbox{\hyperlink{classcsmp_1_1_linear_line_element_ae445b9033b859831fcda99a0c6124e17}{csmp\+::\+Linear\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_linear_tetrahedron_a8ea677f8770009cd5aae301822552d9e}{csmp\+::\+Linear\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_ae392eaa6606fa4becb4bccb113940f44}{csmp\+::\+Linear\+Triangle3D}}, and \mbox{\hyperlink{classcsmp_1_1_linear_triangle_a8deb43a50229ce96f937fe6f5cc3f6f1}{csmp\+::\+Linear\+Triangle}}.
+
+\Hypertarget{classcsmp_1_1_finite_element_a16025c5d7f2ac217d2dbedad5d561a06}\index{csmp::FiniteElement@{csmp::FiniteElement}!Volume@{Volume}}
+\index{Volume@{Volume}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{Volume()}{Volume()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_a16025c5d7f2ac217d2dbedad5d561a06} 
+double csmp\+::\+Finite\+Element\+::\+Volume (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+computes and returns the volume of the element which is an area for a surface-\/ and a length for a line element 
+
+
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_hexahedron_a0e7f5c3497b38e4fc72908fc01efd1d0}{csmp\+::\+Isoparametric\+Linear\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_line_element_a0573db7ee73d6a73e8b6e510f148ad8c}{csmp\+::\+Isoparametric\+Linear\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_a19d22823f25c5498aa7ee769c74935e5}{csmp\+::\+Isoparametric\+Linear\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a086fe8ab2435cd660f17d920e1e5137c}{csmp\+::\+Isoparametric\+Linear\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_quadrilateral_af6422c3311e155c202a8a1abac99f621}{csmp\+::\+Isoparametric\+Linear\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_tetrahedron_ac150932d9fddb22fb2318573f74653a2}{csmp\+::\+Isoparametric\+Linear\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_triangle_a1915fda940309e013abb704ee1d37cdc}{csmp\+::\+Isoparametric\+Linear\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_hexahedron_af24ae3e61fda39bed0379894f2980bc2}{csmp\+::\+Isoparametric\+Quadratic\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_a7e615d4d48fd60773e35d2659608fcc8}{csmp\+::\+Isoparametric\+Quadratic\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a77d5a171812c77102a0ae6cec7b46121}{csmp\+::\+Isoparametric\+Quadratic\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_pyramid_af644246672cfe7a6ae21001548246b04}{csmp\+::\+Isoparametric\+Quadratic\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_quadrilateral_a884c7e04b97b888b6c609a548fc30c64}{csmp\+::\+Isoparametric\+Quadratic\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_aa4ed09cce0fbad65dff3d92637622cb7}{csmp\+::\+Isoparametric\+Quadratic\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_triangle_a1b68593cd6450f74b28529c7e068c745}{csmp\+::\+Isoparametric\+Quadratic\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_linear_cuboid_a9cbf9756633e31bcb708d8e1bfbbb675}{csmp\+::\+Linear\+Cuboid}}, \mbox{\hyperlink{classcsmp_1_1_linear_line_element_a1047e6fc3cdc0df73a6eed7a31a57c5c}{csmp\+::\+Linear\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_linear_rectangle_a37bb379b19c6372969674b0a2c63012e}{csmp\+::\+Linear\+Rectangle}}, \mbox{\hyperlink{classcsmp_1_1_linear_tetrahedron_a7db3b66dbc97924380d057eb00b9ed83}{csmp\+::\+Linear\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_aedb176275d71119ec5253b625321608b}{csmp\+::\+Linear\+Triangle3D}}, and \mbox{\hyperlink{classcsmp_1_1_linear_triangle_ab4468ebd9e3ff009a19b27543bfeff0f}{csmp\+::\+Linear\+Triangle}}.
+
+\Hypertarget{classcsmp_1_1_finite_element_ac224265aa216deebfcf44b54d2689d1d}\index{csmp::FiniteElement@{csmp::FiniteElement}!WeightAtIntegrationPoint@{WeightAtIntegrationPoint}}
+\index{WeightAtIntegrationPoint@{WeightAtIntegrationPoint}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{WeightAtIntegrationPoint()}{WeightAtIntegrationPoint()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_ac224265aa216deebfcf44b54d2689d1d} 
+double csmp\+::\+Finite\+Element\+::\+Weight\+At\+Integration\+Point (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{i}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+returns the integration weight of the desired quadrature point 
+
+
+
+Reimplemented in \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_hexahedron_af413239e30bc576c790fa800a60225f7}{csmp\+::\+Isoparametric\+Linear\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_line_element_aa54fb3c519aa2979de902395c96c8503}{csmp\+::\+Isoparametric\+Linear\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_a8ff79a4ddb34f5fe69206f25399bfc1d}{csmp\+::\+Isoparametric\+Linear\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid_a0b586ded081e52c0df08299da9edcbed}{csmp\+::\+Isoparametric\+Linear\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_quadrilateral_a1dd0d4790b79d17594e8d4651c1a548f}{csmp\+::\+Isoparametric\+Linear\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_tetrahedron_ab6aa9b788d3ccb37f1a4932a49784a4b}{csmp\+::\+Isoparametric\+Linear\+Tetrahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_triangle_af0a1ca0db0b0e7dd77c38734cb7718ea}{csmp\+::\+Isoparametric\+Linear\+Triangle}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_hexahedron_a17e5123ba37c9479d0cc6fbf7439194a}{csmp\+::\+Isoparametric\+Quadratic\+Hexahedron}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_a2921abddd5332d414fac7e83627e8a91}{csmp\+::\+Isoparametric\+Quadratic\+Line\+Element}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a1ee503a297a92f3e1ad9affb17f496f8}{csmp\+::\+Isoparametric\+Quadratic\+Prism}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_pyramid_aa22ec539593b86f1725552231766488e}{csmp\+::\+Isoparametric\+Quadratic\+Pyramid}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_quadrilateral_ad8a626f383455711fb351031056a6768}{csmp\+::\+Isoparametric\+Quadratic\+Quadrilateral}}, \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_a9c8cbd69442615c8000039b35d4139e2}{csmp\+::\+Isoparametric\+Quadratic\+Tetrahedron}}, and \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_triangle_aea35add74e797932438cb901ce79b397}{csmp\+::\+Isoparametric\+Quadratic\+Triangle}}.
+
+
+
+\label{doc-variable-members}
+\Hypertarget{classcsmp_1_1_finite_element_doc-variable-members}
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classcsmp_1_1_finite_element_ab4ad41c705b9691a4d01ee979b6214cc}\index{csmp::FiniteElement@{csmp::FiniteElement}!cne@{cne}}
+\index{cne@{cne}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{cne}{cne}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_ab4ad41c705b9691a4d01ee979b6214cc} 
+uint32\+\_\+t csmp\+::\+Finite\+Element\+::cne\hspace{0.3cm}{\ttfamily [protected]}}
+
+typical number of elements that share each integration point \Hypertarget{classcsmp_1_1_finite_element_ab749771eccc931e112125efe7bf8252c}\index{csmp::FiniteElement@{csmp::FiniteElement}!dim@{dim}}
+\index{dim@{dim}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{dim}{dim}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_ab749771eccc931e112125efe7bf8252c} 
+uint32\+\_\+t csmp\+::\+Finite\+Element\+::dim\hspace{0.3cm}{\ttfamily [protected]}}
+
+spatial dimension of element \Hypertarget{classcsmp_1_1_finite_element_a5684660784d3f15adffb485e8f47d9f3}\index{csmp::FiniteElement@{csmp::FiniteElement}!epe@{epe}}
+\index{epe@{epe}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{epe}{epe}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_a5684660784d3f15adffb485e8f47d9f3} 
+uint32\+\_\+t csmp\+::\+Finite\+Element\+::epe\hspace{0.3cm}{\ttfamily [protected]}}
+
+neighbors of element \Hypertarget{classcsmp_1_1_finite_element_a36972113f6f8351c891431038f8514bd}\index{csmp::FiniteElement@{csmp::FiniteElement}!fpe@{fpe}}
+\index{fpe@{fpe}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{fpe}{fpe}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_a36972113f6f8351c891431038f8514bd} 
+uint32\+\_\+t csmp\+::\+Finite\+Element\+::fpe\hspace{0.3cm}{\ttfamily [protected]}}
+
+faces per element \Hypertarget{classcsmp_1_1_finite_element_a0729a0486b6febb96160f3e184c3f33f}\index{csmp::FiniteElement@{csmp::FiniteElement}!gpe@{gpe}}
+\index{gpe@{gpe}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{gpe}{gpe}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_a0729a0486b6febb96160f3e184c3f33f} 
+uint32\+\_\+t csmp\+::\+Finite\+Element\+::gpe\hspace{0.3cm}{\ttfamily [protected]}}
+
+Gauss points per element for numerical integration \Hypertarget{classcsmp_1_1_finite_element_ac8f4f6ea8649710e01ea018c61d93a30}\index{csmp::FiniteElement@{csmp::FiniteElement}!itp@{itp}}
+\index{itp@{itp}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{itp}{itp}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_ac8f4f6ea8649710e01ea018c61d93a30} 
+uint32\+\_\+t csmp\+::\+Finite\+Element\+::itp\hspace{0.3cm}{\ttfamily [protected]}}
+
+degree of interpolation \Hypertarget{classcsmp_1_1_finite_element_a5de71dcc5e56c2e814d31d798969f437}\index{csmp::FiniteElement@{csmp::FiniteElement}!JAC@{JAC}}
+\index{JAC@{JAC}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{JAC}{JAC}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_a5de71dcc5e56c2e814d31d798969f437} 
+\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$DM\+\_\+\+MIN$>$ csmp\+::\+Finite\+Element\+::\+JAC}
+
+Jacobian matrix \Hypertarget{classcsmp_1_1_finite_element_a5c3fd117b986587599dcb441feeb000a}\index{csmp::FiniteElement@{csmp::FiniteElement}!JINV@{JINV}}
+\index{JINV@{JINV}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{JINV}{JINV}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_a5c3fd117b986587599dcb441feeb000a} 
+\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$DM\+\_\+\+MIN$>$ csmp\+::\+Finite\+Element\+::\+JINV}
+
+the Jacobians inverse \Hypertarget{classcsmp_1_1_finite_element_a64381c8d0e2f4840551c2da986fb9a25}\index{csmp::FiniteElement@{csmp::FiniteElement}!M@{M}}
+\index{M@{M}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{M}{M}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_a64381c8d0e2f4840551c2da986fb9a25} 
+\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$DM\+\_\+\+MIN$>$ csmp\+::\+Finite\+Element\+::M\hspace{0.3cm}{\ttfamily [protected]}}
+
+test-\/function coefficients \Hypertarget{classcsmp_1_1_finite_element_a2509e6d8ab556b6a65a9036a62485df4}\index{csmp::FiniteElement@{csmp::FiniteElement}!nne@{nne}}
+\index{nne@{nne}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{nne}{nne}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_a2509e6d8ab556b6a65a9036a62485df4} 
+uint32\+\_\+t csmp\+::\+Finite\+Element\+::nne\hspace{0.3cm}{\ttfamily [protected]}}
+
+typical number of elements that share each node \Hypertarget{classcsmp_1_1_finite_element_a329300ec856aa91bfe492daf93556b04}\index{csmp::FiniteElement@{csmp::FiniteElement}!npe@{npe}}
+\index{npe@{npe}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{npe}{npe}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_a329300ec856aa91bfe492daf93556b04} 
+uint32\+\_\+t csmp\+::\+Finite\+Element\+::npe\hspace{0.3cm}{\ttfamily [protected]}}
+
+nodes per element \Hypertarget{classcsmp_1_1_finite_element_a9d9ced72fa35fd6a9fc755a219590820}\index{csmp::FiniteElement@{csmp::FiniteElement}!npf@{npf}}
+\index{npf@{npf}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{npf}{npf}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_a9d9ced72fa35fd6a9fc755a219590820} 
+uint32\+\_\+t csmp\+::\+Finite\+Element\+::npf\hspace{0.3cm}{\ttfamily [protected]}}
+
+nodes per face \Hypertarget{classcsmp_1_1_finite_element_a609a2f0f70b086a278d112761c07c9de}\index{csmp::FiniteElement@{csmp::FiniteElement}!spe@{spe}}
+\index{spe@{spe}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{spe}{spe}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_a609a2f0f70b086a278d112761c07c9de} 
+uint32\+\_\+t csmp\+::\+Finite\+Element\+::spe\hspace{0.3cm}{\ttfamily [protected]}}
+
+segments per element \Hypertarget{classcsmp_1_1_finite_element_a022fd86373136421b00ce343508efe52}\index{csmp::FiniteElement@{csmp::FiniteElement}!XY@{XY}}
+\index{XY@{XY}!csmp::FiniteElement@{csmp::FiniteElement}}
+\doxysubsubsection{\texorpdfstring{XY}{XY}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_a022fd86373136421b00ce343508efe52} 
+\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$DM\+\_\+\+MIN$>$ csmp\+::\+Finite\+Element\+::\+XY}
+
+node coordinates 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/integration/finite\+\_\+elements/\mbox{\hyperlink{_finite_element_8h}{Finite\+Element.\+h}}\item 
+source/modules/integration/finite\+\_\+elements/Finite\+Element.\+cpp\end{DoxyCompactItemize}

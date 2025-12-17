@@ -1,0 +1,187 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_binary_file_handler" kind="class" language="C++" prot="public">
+    <compoundname>csmp::BinaryFileHandler</compoundname>
+    <includes refid="_binary_file_handler_8h" local="no">BinaryFileHandler.h</includes>
+    <templateparamlist>
+      <param>
+        <type>class S</type>
+      </param>
+      <param>
+        <type>class T</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_binary_file_handler_1a57e46ca79a659c0b7f5e7ad187cec949" prot="private" static="no" mutable="no">
+        <type>char</type>
+        <definition>char csmp::BinaryFileHandler&lt; S, T &gt;::fname[NAME_STRING]</definition>
+        <argsstring>[NAME_STRING]</argsstring>
+        <name>fname</name>
+        <qualifiedname>csmp::BinaryFileHandler::fname</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/BinaryFileHandler.h" line="11" column="11" bodyfile="source/includes/interfaces/BinaryFileHandler.h" bodystart="11" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_binary_file_handler_1a3a49a262adb2c35bbdfdc2f61c10ffc6" prot="private" static="no" mutable="no">
+        <type>std::FILE *</type>
+        <definition>std::FILE* csmp::BinaryFileHandler&lt; S, T &gt;::fp</definition>
+        <argsstring></argsstring>
+        <name>fp</name>
+        <qualifiedname>csmp::BinaryFileHandler::fp</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/BinaryFileHandler.h" line="12" column="15" bodyfile="source/includes/interfaces/BinaryFileHandler.h" bodystart="12" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_binary_file_handler_1a0379b8049c2fc26c17dbdaa521913f44" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::BinaryFileHandler&lt; S, T &gt;::BinaryFileHandler</definition>
+        <argsstring>()</argsstring>
+        <name>BinaryFileHandler</name>
+        <qualifiedname>csmp::BinaryFileHandler::BinaryFileHandler</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/BinaryFileHandler.h" line="14" column="5" bodyfile="source/includes/interfaces/BinaryFileHandler.h" bodystart="25" bodyend="27"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_binary_file_handler_1a0261d4396ee1ec5aa75ec45e10d4e6cf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::BinaryFileHandler&lt; S, T &gt;::~BinaryFileHandler</definition>
+        <argsstring>()</argsstring>
+        <name>~BinaryFileHandler</name>
+        <qualifiedname>csmp::BinaryFileHandler::~BinaryFileHandler</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/BinaryFileHandler.h" line="15" column="5" bodyfile="source/includes/interfaces/BinaryFileHandler.h" bodystart="31" bodyend="33"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_binary_file_handler_1a10bd3fb1c3b0cc6cdf2303d8a689a33d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::BinaryFileHandler&lt; S, T &gt;::SaveAs</definition>
+        <argsstring>(const char *s, const std::vector&lt; S &gt; &amp;obj_list)</argsstring>
+        <name>SaveAs</name>
+        <qualifiedname>csmp::BinaryFileHandler::SaveAs</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>s</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; S &gt; &amp;</type>
+          <declname>obj_list</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/BinaryFileHandler.h" line="16" column="11" bodyfile="source/includes/interfaces/BinaryFileHandler.h" bodystart="37" bodyend="59"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_binary_file_handler_1a19ebd0451a901c0330a997059449cca1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::BinaryFileHandler&lt; S, T &gt;::SaveAs</definition>
+        <argsstring>(const char *s, const std::map&lt; S, T &gt; &amp;obj_list)</argsstring>
+        <name>SaveAs</name>
+        <qualifiedname>csmp::BinaryFileHandler::SaveAs</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>s</declname>
+        </param>
+        <param>
+          <type>const std::map&lt; S, T &gt; &amp;</type>
+          <declname>obj_list</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/BinaryFileHandler.h" line="17" column="11" bodyfile="source/includes/interfaces/BinaryFileHandler.h" bodystart="65" bodyend="87"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_binary_file_handler_1a27b493137f0aba5f03bec02e4ed347d9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::BinaryFileHandler&lt; S, T &gt;::Read</definition>
+        <argsstring>(const char *s, std::vector&lt; S &gt; &amp;obj_list)</argsstring>
+        <name>Read</name>
+        <qualifiedname>csmp::BinaryFileHandler::Read</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>s</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; S &gt; &amp;</type>
+          <declname>obj_list</declname>
+        </param>
+        <briefdescription>
+<para>Objects of type S are added in the <ref refid="classvector" kindref="compound">vector&lt;double&gt;</ref> &apos;obj_list&apos;. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/BinaryFileHandler.h" line="18" column="11" bodyfile="source/includes/interfaces/BinaryFileHandler.h" bodystart="95" bodyend="121"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_binary_file_handler_1a10b516c4f40c6ea7127f94529141be24" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::BinaryFileHandler&lt; S, T &gt;::Read</definition>
+        <argsstring>(const char *s, std::map&lt; S, T &gt; &amp;obj_list)</argsstring>
+        <name>Read</name>
+        <qualifiedname>csmp::BinaryFileHandler::Read</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>s</declname>
+        </param>
+        <param>
+          <type>std::map&lt; S, T &gt; &amp;</type>
+          <declname>obj_list</declname>
+        </param>
+        <briefdescription>
+<para>Objects of type T are read and added in the map &apos;obj_list&apos; with keys S. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/BinaryFileHandler.h" line="19" column="11" bodyfile="source/includes/interfaces/BinaryFileHandler.h" bodystart="128" bodyend="155"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>writes objects and collections thereof to binary file </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::BinaryFileHandler&lt; S, T &gt;</label>
+        <link refid="classcsmp_1_1_binary_file_handler"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/interfaces/BinaryFileHandler.h" line="10" column="1" bodyfile="source/includes/interfaces/BinaryFileHandler.h" bodystart="10" bodyend="20"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_binary_file_handler_1a0379b8049c2fc26c17dbdaa521913f44" prot="public" virt="non-virtual"><scope>csmp::BinaryFileHandler</scope><name>BinaryFileHandler</name></member>
+      <member refid="classcsmp_1_1_binary_file_handler_1a57e46ca79a659c0b7f5e7ad187cec949" prot="private" virt="non-virtual"><scope>csmp::BinaryFileHandler</scope><name>fname</name></member>
+      <member refid="classcsmp_1_1_binary_file_handler_1a3a49a262adb2c35bbdfdc2f61c10ffc6" prot="private" virt="non-virtual"><scope>csmp::BinaryFileHandler</scope><name>fp</name></member>
+      <member refid="classcsmp_1_1_binary_file_handler_1a27b493137f0aba5f03bec02e4ed347d9" prot="public" virt="non-virtual"><scope>csmp::BinaryFileHandler</scope><name>Read</name></member>
+      <member refid="classcsmp_1_1_binary_file_handler_1a10b516c4f40c6ea7127f94529141be24" prot="public" virt="non-virtual"><scope>csmp::BinaryFileHandler</scope><name>Read</name></member>
+      <member refid="classcsmp_1_1_binary_file_handler_1a10bd3fb1c3b0cc6cdf2303d8a689a33d" prot="public" virt="non-virtual"><scope>csmp::BinaryFileHandler</scope><name>SaveAs</name></member>
+      <member refid="classcsmp_1_1_binary_file_handler_1a19ebd0451a901c0330a997059449cca1" prot="public" virt="non-virtual"><scope>csmp::BinaryFileHandler</scope><name>SaveAs</name></member>
+      <member refid="classcsmp_1_1_binary_file_handler_1a0261d4396ee1ec5aa75ec45e10d4e6cf" prot="public" virt="non-virtual"><scope>csmp::BinaryFileHandler</scope><name>~BinaryFileHandler</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

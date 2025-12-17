@@ -34,7 +34,7 @@ NodeManifoldManager<dim>::NodeManifoldManager( plf::colony<Node<dim>>& mesh_node
         return;
       }
     // checking that the deque does indeed have ther required node entries
-    if ( distance(first,last) > mesh_nodes.size() )
+    if ( distance(first,last) > static_cast<long>(mesh_nodes.size()) )
       csmp_error.Note( WARNING, "NodeManifoldManager::constructor:",
                         "it appears that more manifold indices are supplied than nodes" );
 
@@ -61,15 +61,6 @@ NodeManifoldManager<dim>::NodeManifoldManager( plf::colony<Node<dim>>& mesh_node
  } // end custom constructor
 
 
-
-
-
-
-// disconnecting and deleting the node manifolds
-template<uint32_t dim>
-NodeManifoldManager<dim>::~NodeManifoldManager<dim>()
- {
- }
 
 template<uint32_t dim>
 typename NodeManifoldManager<dim>::manifoldIterator NodeManifoldManager<dim>::ManifoldsBegin()
@@ -161,7 +152,6 @@ bool NodeManifoldManager<dim>::MergeManifolds( NodeManifold<dim>* nmf1, NodeMani
     // 1. do the manifolds share nodes
     // -------------------------------
     // (the set of their node pointers must be smaller than the sum of their branches)
-    //set<const Node<dim>* const>  connected_nodes;
     set<const Node<dim>*>  connected_nodes;
     const auto n_nodes_nmf1{ nmf1->Branches() };
     for ( auto i{0U}; i<n_nodes_nmf1; ++i ) {

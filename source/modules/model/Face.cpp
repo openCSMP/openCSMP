@@ -558,7 +558,7 @@ void Face<dim>::UnassignNeighbor( uint32_t nbor )
 
 
 template<uint32_t dim>
-uint32_t  Face<dim>::Nodes() const
+uint32_t  Face<dim>::Nodes() const noexcept
 {
 	return static_cast<uint32_t>(node_connector_.size());
 }
@@ -566,14 +566,14 @@ uint32_t  Face<dim>::Nodes() const
 
 
 template<uint32_t dim>
-uint32_t  Face<dim>::Neighbors() const
+uint32_t  Face<dim>::Neighbors() const noexcept
 {
 	return static_cast<uint32_t>(face_connector_.size());
 }
 
 
 template<uint32_t dim>
-uint32_t  Face<dim>::ConnectedNeighbors() const
+uint32_t  Face<dim>::ConnectedNeighbors() const noexcept
 {
 	size_t nulls(0);
 	for (auto& f : face_connector_)
@@ -583,7 +583,7 @@ uint32_t  Face<dim>::ConnectedNeighbors() const
 
 
 template<uint32_t dim>
-uint32_t  Face<dim>::Faces() const
+uint32_t  Face<dim>::Faces() const noexcept
 {
 	return static_cast<uint32_t>(face_connector_.size());
 }
@@ -731,13 +731,13 @@ void Face<dim>::Unassign( const csmp::Node<dim>* const nd_ptr )
 
 /// iterator to the element nodes
 template<uint32_t dim>
-typename std::vector<csmp::Node<dim>*>::const_iterator  Face<dim>::NodesBegin() const
+typename std::vector<csmp::Node<dim>*>::const_iterator  Face<dim>::NodesBegin() const noexcept
 {
   return node_connector_.begin();
 }
 
 template<uint32_t dim>
-typename std::vector<csmp::Node<dim>*>::const_iterator  Face<dim>::NodesEnd() const
+typename std::vector<csmp::Node<dim>*>::const_iterator  Face<dim>::NodesEnd() const noexcept
 {
   return node_connector_.end();
 }
@@ -745,13 +745,13 @@ typename std::vector<csmp::Node<dim>*>::const_iterator  Face<dim>::NodesEnd() co
 
 /// assuming that the corner nodes are the first, the midside nodes the second, and the .. in the elements node set according to CSMP_FEM_conventions.pdf
 template<uint32_t dim>
-typename vector<csmp::Node<dim>*>::const_iterator Face<dim>::CornerNodesBegin() const
+typename vector<csmp::Node<dim>*>::const_iterator Face<dim>::CornerNodesBegin() const noexcept
 {
   return node_connector_.begin();
 }
 
 template<uint32_t dim>
-typename vector<csmp::Node<dim>*>::const_iterator Face<dim>::CornerNodesEnd() const
+typename vector<csmp::Node<dim>*>::const_iterator Face<dim>::CornerNodesEnd() const noexcept
 {
   return next(node_connector_.begin(),this->FE()->CornerNodes());
 }
@@ -759,13 +759,13 @@ typename vector<csmp::Node<dim>*>::const_iterator Face<dim>::CornerNodesEnd() co
 
 
 template<uint32_t dim>
-typename std::vector<Face<dim>*>::const_iterator  Face<dim>::NeighborsBegin() const
+typename std::vector<Face<dim>*>::const_iterator  Face<dim>::NeighborsBegin() const noexcept
 {
   return face_connector_.begin();
 }
 
 template<uint32_t dim>
-typename std::vector<Face<dim>*>::const_iterator  Face<dim>::NeighborsEnd() const
+typename std::vector<Face<dim>*>::const_iterator  Face<dim>::NeighborsEnd() const noexcept
 {
   return face_connector_.end();
 }
@@ -804,27 +804,27 @@ void Face<dim>::Accept( csmp::Visitor<dim>& vis )
 
 /// returns the current index of this face assuming that a meaningful value was assigned earlier
 template<uint32_t dim>
-void  Face<dim>::Idx( size_t idx_to_assign ) const
+void  Face<dim>::Idx( size_t idx_to_assign ) const noexcept
   {
     idx_ = idx_to_assign;
   }
 
 template<uint32_t dim>
-size_t   Face<dim>::Idx() const
+size_t   Face<dim>::Idx() const noexcept
   {
     return idx_;
   }
 
 
 template<uint32_t dim>
-typename std::vector<csmp::Face<dim>*>&  Face<dim>::NeighborElementVector()
+typename std::vector<csmp::Face<dim>*>&  Face<dim>::NeighborElementVector() noexcept
   {
     return face_connector_;
   }
 
 
 template<uint32_t dim>
-csmp::Node<dim>* const Face<dim>::N( uint32_t n ) const
+csmp::Node<dim>* const Face<dim>::N( uint32_t n ) const noexcept
   {
      assert( n < Nodes() );
      return node_connector_[n];
@@ -835,7 +835,7 @@ csmp::Node<dim>* const Face<dim>::N( uint32_t n ) const
     watch out if there is no neighbor this returns a NULL pointer
 */
 template<uint32_t dim>
-csmp::Face<dim>* const Face<dim>::Neighbor( uint32_t n ) const
+csmp::Face<dim>* const Face<dim>::Neighbor( uint32_t n ) const noexcept
  {
     assert( n < Neighbors() );
     return face_connector_[n];
@@ -847,7 +847,7 @@ csmp::Face<dim>* const Face<dim>::Neighbor( uint32_t n ) const
     connected to this face if they exist.
 */
 template<uint32_t dim>
-Element<dim>* const Face<dim>::Parent( INTERFACE_SIDE side ) const
+Element<dim>* const Face<dim>::Parent( INTERFACE_SIDE side ) const noexcept
  {
     assert( side != MIDDLE );
     assert( side != 0 );
@@ -860,7 +860,7 @@ Element<dim>* const Face<dim>::Parent( INTERFACE_SIDE side ) const
     inner parent is always initialised for a valid face
 */
 template<uint32_t dim>
-Element<dim>* const Face<dim>::InnerParent() const
+Element<dim>* const Face<dim>::InnerParent() const noexcept
  {
     assert( innerParent_ != nullptr );
     return innerParent_;
@@ -871,7 +871,7 @@ Element<dim>* const Face<dim>::InnerParent() const
     @attention outer parent will not be initialised if the Face lies on the outside boundary of the model
 */
 template<uint32_t dim>
-Element<dim>* const Face<dim>::OuterParent() const
+Element<dim>* const Face<dim>::OuterParent() const noexcept
  {
     return outerParent_;
  }
@@ -881,7 +881,7 @@ Element<dim>* const Face<dim>::OuterParent() const
 
 /// return face ID of inner parent element
 template<uint32_t dim>
-uint32_t  Face<dim>::InnerParentFaceID() const
+uint32_t  Face<dim>::InnerParentFaceID() const noexcept
 {
   if ( innerParent_ == nullptr ) return NULL_IDX;
   return inner_parent_face_id_;
@@ -892,7 +892,7 @@ uint32_t  Face<dim>::InnerParentFaceID() const
 
 /// return face ID of outer parent element
 template<uint32_t dim>
-uint32_t  Face<dim>::OuterParentFaceID() const
+uint32_t  Face<dim>::OuterParentFaceID() const noexcept
 {
   if ( outerParent_ == nullptr ) return NULL_IDX;
   return outer_parent_face_id_;

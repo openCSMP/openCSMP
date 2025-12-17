@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_1115c4e601824dccce47873f2e05e0af" kind="dir">
+    <compoundname>source/modules/interfaces/CGNS</compoundname>
+    <innerfile refid="_c_g_n_s___element_specifications_8cpp">CGNS_ElementSpecifications.cpp</innerfile>
+    <innerfile refid="_c_g_n_s___interface_8cpp">CGNS_Interface.cpp</innerfile>
+    <innerfile refid="_c_g_n_s___model_8cpp">CGNS_Model.cpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="source/modules/interfaces/CGNS/"/>
+  </compounddef>
+</doxygen>

@@ -372,14 +372,14 @@ void ArrayVariable::Out( long digits ) const
 
 
 
-bool ArrayVariable::Out( const char* filename, size_t precision ) const
-  {
-    std::ofstream f;
-    f.open(filename);
-    if( !f.is_open() )
-      return false;
-    f.precision(precision);
-    for (size_t i(0); i < Size(); ++i )
+bool ArrayVariable::Out( const char* filename, long precision ) const
+{
+  std::ofstream f;
+  f.open(filename);
+  if( !f.is_open() )
+    return false;
+  f.precision(precision);
+  for (size_t i{0u}; i < Size(); ++i )
       f << data_[i] << std::endl;
     return true;
   }

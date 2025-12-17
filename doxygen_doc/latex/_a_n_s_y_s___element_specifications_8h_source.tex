@@ -1,0 +1,179 @@
+\doxysection{ANSYS\+\_\+\+Element\+Specifications.\+h}
+\hypertarget{_a_n_s_y_s___element_specifications_8h_source}{}\label{_a_n_s_y_s___element_specifications_8h_source}\index{source/includes/interfaces/ANSYS/ANSYS\_ElementSpecifications.h@{source/includes/interfaces/ANSYS/ANSYS\_ElementSpecifications.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{ANSYS\_ELEMENT\_SPECIFICATIONS\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{ANSYS\_ELEMENT\_SPECIFICATIONS\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_finite_element_8h}{"{}FiniteElement.h"{}}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_box_8h}{"{}Box.h"{}}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__global__enumerations_8h}{"{}CSMP\_global\_enumerations.h"{}}}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{comment}{///\ types\ generated\ by\ ANSYS\ Tetra\ mesher}}
+\DoxyCodeLine{00012\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{namespacecsmp_a47f6d9c44a7d72e254d2d160685cebd2}{ANSYS\_FEM\_TYPE}}\ \{\ TRI\_3\ \ \ \ =8,}
+\DoxyCodeLine{00013\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ TRI\_3\_X\ \ \ =9,}
+\DoxyCodeLine{00014\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ TRI\_6\ \ \ \ =10,}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ TRI\_6\_X\ \ =11,}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ TETRA\_4\ \ \ =4,}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ TETRA\_10\ \ =5,}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PYRA\_5\ \ \ =18,}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PYRA\_13\ \ =24,}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PYRA\_14\ \ =22,}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PENTA\_6\ \ =12,}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PENTA\_15\ =13,}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PENTA\_18\ =21,}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ QUAD\_4\ \ \ =14,}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ QUAD\_4\_X\ =15,}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ QUAD\_8\ \ \ =16,}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ QUAD\_8\_X\ =17,}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ QUAD\_9\ \ \ =19,}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ HEXA\_8\ \ \ \ =6,}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ HEXA\_20\ \ \ =7,}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ HEXA\_27\ \ \ =5,}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ BAR\_2\ \ \ \ \ =2,}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ BAR\_3\ \ \ \ \ =3,}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ POLYGON\ \ =23\ \};}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00038\ \textcolor{comment}{@brief\ Represents\ ANSYS\ element\ type\ specifications\ that\ are\ needed\ }}
+\DoxyCodeLine{00039\ \textcolor{comment}{prior\ to\ model\ construction\ in\ order\ to\ identify\ corresponding}}
+\DoxyCodeLine{00040\ \textcolor{comment}{element\ types\ in\ CSMP++.}}
+\DoxyCodeLine{00041\ \textcolor{comment}{}}
+\DoxyCodeLine{00042\ \textcolor{comment}{@author\ S.K.\ Matthai}}
+\DoxyCodeLine{00043\ \textcolor{comment}{@date\ 2003}}
+\DoxyCodeLine{00044\ \textcolor{comment}{}}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00046\ \textcolor{comment}{@section\ motivation\ Motivation}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00048\ \textcolor{comment}{Relates\ the\ ANSYS\ finite\ element\ types\ to\ the\ generic\ finite\ element\ }}
+\DoxyCodeLine{00049\ \textcolor{comment}{names\ that\ are\ used\ inside\ of\ CSP.\ Also\ additional\ diagnostics\ are\ }}
+\DoxyCodeLine{00050\ \textcolor{comment}{obtained\ as\ to\ whether\ the\ element\ is\ a\ line,\ surface,\ or\ volume,\ and}}
+\DoxyCodeLine{00051\ \textcolor{comment}{whether\ the\ element\ uses\ linear,\ quadratic\ or\ cubic\ basis\ functions.}}
+\DoxyCodeLine{00052\ \textcolor{comment}{Furthermore\ the\ element\ can\ be\ queried\ for\ the\ number\ of\ neighbors\ }}
+\DoxyCodeLine{00053\ \textcolor{comment}{and\ its\ minimum\ spatial\ dimension.}}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00055\ \textcolor{comment}{}}
+\DoxyCodeLine{00056\ \textcolor{comment}{@section\ implementation\ Implementation}}
+\DoxyCodeLine{00057\ \textcolor{comment}{}}
+\DoxyCodeLine{00058\ \textcolor{comment}{ANSYS\ definitions\ of\ element\ types\ and\ their\ identification}}
+\DoxyCodeLine{00059\ \textcolor{comment}{numbers\ are\ the\ following.\ They\ are\ only\ partially\ mapped\ to}}
+\DoxyCodeLine{00060\ \textcolor{comment}{CSP\ and\ incorporated\ into\ enumerations\ to\ avoid\ the\ pollution\ of\ }}
+\DoxyCodeLine{00061\ \textcolor{comment}{the\ csp\ namespace.\ \ }}
+\DoxyCodeLine{00062\ \textcolor{comment}{}}
+\DoxyCodeLine{00063\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00064\ \textcolor{comment}{\#ifndef\ MAX\_NODES\_ELEMENT}}
+\DoxyCodeLine{00065\ \textcolor{comment}{\#define\ MIXED\ \ \ \ \ \ \ 0}}
+\DoxyCodeLine{00066\ \textcolor{comment}{\#define\ NODE\ \ \ \ \ \ \ \ 1}}
+\DoxyCodeLine{00067\ \textcolor{comment}{\#define\ BAR\_2\ \ \ \ \ \ \ 2}}
+\DoxyCodeLine{00068\ \textcolor{comment}{\#define\ BAR\_3\ \ \ \ \ \ \ 3}}
+\DoxyCodeLine{00069\ \textcolor{comment}{\#define\ TETRA\_4\ \ \ \ \ 4}}
+\DoxyCodeLine{00070\ \textcolor{comment}{\#define\ TETRA\_10\ \ \ \ 5}}
+\DoxyCodeLine{00071\ \textcolor{comment}{\#define\ HEXA\_8\ \ \ \ \ \ 6}}
+\DoxyCodeLine{00072\ \textcolor{comment}{\#define\ HEXA\_20\ \ \ \ \ 7}}
+\DoxyCodeLine{00073\ \textcolor{comment}{\#define\ TRI\_3\ \ \ \ \ \ \ 8}}
+\DoxyCodeLine{00074\ \textcolor{comment}{\#define\ TRI\_3\_X\ \ \ \ \ 9}}
+\DoxyCodeLine{00075\ \textcolor{comment}{\#define\ TRI\_6\ \ \ \ \ \ \ 10}}
+\DoxyCodeLine{00076\ \textcolor{comment}{\#define\ TRI\_6\_X\ \ \ \ \ 11}}
+\DoxyCodeLine{00077\ \textcolor{comment}{\#define\ PENTA\_6\ \ \ \ \ 12\ //\ prism\ elements\ }}
+\DoxyCodeLine{00078\ \textcolor{comment}{\#define\ PENTA\_15\ \ \ \ 13}}
+\DoxyCodeLine{00079\ \textcolor{comment}{\#define\ PENTA\_18\ \ \ \ 21\ //\ quadratic\ prisms\ with\ face\ nodes\ on\ sides}}
+\DoxyCodeLine{00080\ \textcolor{comment}{\#define\ QUAD\_4\ \ \ \ \ \ 14}}
+\DoxyCodeLine{00081\ \textcolor{comment}{\#define\ QUAD\_4\_X\ \ \ \ 15}}
+\DoxyCodeLine{00082\ \textcolor{comment}{\#define\ QUAD\_8\ \ \ \ \ \ 16}}
+\DoxyCodeLine{00083\ \textcolor{comment}{\#define\ QUAD\_8\_X\ \ \ \ 17}}
+\DoxyCodeLine{00084\ \textcolor{comment}{\#define\ PYRA\_5\ \ \ \ \ \ 18}}
+\DoxyCodeLine{00085\ \textcolor{comment}{}}
+\DoxyCodeLine{00086\ \textcolor{comment}{\#define\ QUAD\_9\ \ \ \ \ \ 19}}
+\DoxyCodeLine{00087\ \textcolor{comment}{\#define\ HEXA\_27\ \ \ \ \ 20}}
+\DoxyCodeLine{00088\ \textcolor{comment}{\#define\ PYRA\_14\ \ \ \ \ 22}}
+\DoxyCodeLine{00089\ \textcolor{comment}{}}
+\DoxyCodeLine{00090\ \textcolor{comment}{\#define\ PYRA\_13\ \ \ \ \ 24}}
+\DoxyCodeLine{00091\ \textcolor{comment}{}}
+\DoxyCodeLine{00092\ \textcolor{comment}{\#define\ POLYGON\ \ \ \ \ 23}}
+\DoxyCodeLine{00093\ \textcolor{comment}{}}
+\DoxyCodeLine{00094\ \textcolor{comment}{\#define\ N\_ELEMENT\_TYPES\ 25}}
+\DoxyCodeLine{00095\ \textcolor{comment}{}}
+\DoxyCodeLine{00096\ \textcolor{comment}{\#define\ MAX\_NODES\_ELEMENT\ \ \ 27}}
+\DoxyCodeLine{00097\ \textcolor{comment}{\#define\ MAX\_EDGES\_ELEMENT\ \ \ 12}}
+\DoxyCodeLine{00098\ \textcolor{comment}{\#define\ MAX\_FACES\_ELEMENT\ \ \ \ 6}}
+\DoxyCodeLine{00099\ \textcolor{comment}{\#define\ MAX\_FACE\_SIDES\ \ \ \ \ \ 10}}
+\DoxyCodeLine{00100\ \textcolor{comment}{}}
+\DoxyCodeLine{00101\ \textcolor{comment}{Element\ masks\ are\ defined\ in\ terms\ of\ member\ functions\ which}}
+\DoxyCodeLine{00102\ \textcolor{comment}{recognize\ line-\/,\ surface-\/,\ and\ volumetric\ elements:}}
+\DoxyCodeLine{00103\ \textcolor{comment}{}}
+\DoxyCodeLine{00104\ \textcolor{comment}{\#define\ EDGE\_ELEMENT\_MASK\ \ \ \ \ \ ((1\ <<\ BAR\_2)\ |\ (1\ <<\ BAR\_3))}}
+\DoxyCodeLine{00105\ \textcolor{comment}{\#define\ SURFACE\_ELEMENT\_MASK\ \ \ ((1\ <<\ TRI\_3)\ |\ (1\ <<\ TRI\_6)\ |\ \(\backslash\)}}
+\DoxyCodeLine{00106\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (1\ <<\ QUAD\_4)\ |\ (1\ <<\ QUAD\_8))}}
+\DoxyCodeLine{00107\ \textcolor{comment}{\#define\ VOLUME\_ELEMENT\_MASK\ \ \ \ ((1\ <<\ TETRA\_4)\ |\ (1\ <<\ TETRA\_10)\ |\ \(\backslash\)}}
+\DoxyCodeLine{00108\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (1\ <<\ HEXA\_8)\ |\ (1\ <<\ HEXA\_20)\ |\ \(\backslash\)}}
+\DoxyCodeLine{00109\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (1\ <<\ PENTA\_6)\ |\ (1\ <<\ PENTA\_15)\ |\ \(\backslash\)}}
+\DoxyCodeLine{00110\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (1\ <<\ PYRA\_5)\ |\ (1\ <<\ HEXA\_27)\ |\ \(\backslash\)}}
+\DoxyCodeLine{00111\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (1\ <<\ PENTA\_18)\ |\ (1\ <<\ PYRA\_14)\ |\ \(\backslash\)}}
+\DoxyCodeLine{00112\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (1\ <<\ PYRA\_13))}}
+\DoxyCodeLine{00113\ \textcolor{comment}{}}
+\DoxyCodeLine{00114\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00115\ \textcolor{comment}{\#define\ LINEAR\_ELEMENT\_MASK\ \ \ \ ((1\ <<\ NODE)\ |\ (1\ <<\ BAR\_2)\ |\ \(\backslash\)}}
+\DoxyCodeLine{00116\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (1\ <<\ TETRA\_4)\ |\ (1\ <<\ HEXA\_8)\ |\ \(\backslash\)}}
+\DoxyCodeLine{00117\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (1\ <<\ TRI\_3)\ |\ (1\ <<\ PENTA\_6)\ |\ \(\backslash\)}}
+\DoxyCodeLine{00118\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (1\ <<\ QUAD\_4)\ |\ (1\ <<\ PYRA\_5))}}
+\DoxyCodeLine{00119\ \textcolor{comment}{}}
+\DoxyCodeLine{00120\ \textcolor{comment}{\#define\ QUADRATIC\_ELEMENT\_MASK\ ((1\ <<\ BAR\_3)\ |\ (1\ <<\ TETRA\_10)\ |\ \(\backslash\)}}
+\DoxyCodeLine{00121\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (1\ <<\ HEXA\_20)\ |\ (1\ <<\ TRI\_6)\ |\ \(\backslash\)}}
+\DoxyCodeLine{00122\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (1\ <<\ PENTA\_15)\ |\ (1\ <<\ QUAD\_8)\ |\ \(\backslash\)}}
+\DoxyCodeLine{00123\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (1\ <<\ QUAD\_9)\ |\ (1\ <<\ HEXA\_27)\ |\ \ \(\backslash\)}}
+\DoxyCodeLine{00124\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (1\ <<\ PENTA\_18)\ |\ (1\ <<\ PYRA\_14)\ |\ \(\backslash\)}}
+\DoxyCodeLine{00125\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (1\ <<\ PYRA\_13))}}
+\DoxyCodeLine{00126\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00127\ \textcolor{comment}{}}
+\DoxyCodeLine{00128\ \textcolor{comment}{TODO:\ make\ all\ the\ member\ functions\ static\ so\ this\ becomes\ a\ trait\ like\ numeric\_limits<>()}}
+\DoxyCodeLine{00129\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00130\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00131\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___element_specifications}{ANSYS\_ElementSpecifications}}\ \{}
+\DoxyCodeLine{00132\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00133\ \ \ \ \ ANSYS\_ElementSpecifications()\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00134\ \ \ \ \ \string~ANSYS\_ElementSpecifications()\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00135\ }
+\DoxyCodeLine{00136\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\_FEM\_TYPE}}\ \ \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___element_specifications_ab13b4534cf743ee7d4d6055638a2be36}{CSMP\_TypeFrom\_ANSYS\_Type}}(\ int8\_t\ ANSYS\_finite\_element\_type,\ \textcolor{keywordtype}{bool}\ isoparametric,\ uint32\_t\ dim\ );}
+\DoxyCodeLine{00137\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\_FEM\_TYPE}}\ \ \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___element_specifications_a965135067f99644f4336d0f62976c450}{CSMP\_TypeFrom\_ANSYS\_TypeName}}(\ \textcolor{keyword}{const}\ std::string\&\ ANSYS\_finite\_element\_type,\ \textcolor{keywordtype}{bool}\ isoparametric,\ uint32\_t\ dim\ );}
+\DoxyCodeLine{00138\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___element_specifications_a20db90e7455efdf68ac6ffb84e9f68c9}{std}}::\mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___element_specifications_a20db90e7455efdf68ac6ffb84e9f68c9}{string}}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___element_specifications_a20db90e7455efdf68ac6ffb84e9f68c9}{CSMP\_TypeNameFrom\_ANSYS\_Type}}(\ int8\_t\ ANSYS\_finite\_element\_type,\ \textcolor{keywordtype}{bool}\ isoparametric,\ uint32\_t\ dim\ );}
+\DoxyCodeLine{00139\ \ \ \ \ \textcolor{keyword}{static}\ std::string\ \ \ \ CSMP\_TypeNameFrom\_ANSYS\_TypeName(\ \textcolor{keyword}{const}\ std::string\&\ ANSYS\_finite\_element\_type,\ \textcolor{keywordtype}{bool}\ isoparametric,\ uint32\_t\ dim\ );}
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00141\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___element_specifications_a0cb644ba4805fddfef5197b7491c42f1}{int8\_t}}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___element_specifications_a0cb644ba4805fddfef5197b7491c42f1}{ANSYS\_Type}}(\ \textcolor{keyword}{const}\ std::string\&\ FEtype\ );}
+\DoxyCodeLine{00142\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___element_specifications_a2fa7d7616ba7de7160b54f61115ae4de}{size\_t}}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___element_specifications_a2fa7d7616ba7de7160b54f61115ae4de}{NodesPerElementOfType}}(\ int8\_t\ ANSYS\_finite\_element\_type\ );}
+\DoxyCodeLine{00143\ \ \ \ \ \textcolor{keyword}{static}\ size\_t\ \ \ \ \ \ \ \ FacesPerElementOfType(\ int8\_t\ ANSYS\_finite\_element\_type\ );}
+\DoxyCodeLine{00144\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___element_specifications_a9749122d9953e3bd3bde4a55b50afafe}{size\_t}}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___element_specifications_a9749122d9953e3bd3bde4a55b50afafe}{NeighborsPerElementOfType}}(\ int8\_t\ ANSYS\_finite\_element\_type\ );}
+\DoxyCodeLine{00145\ \ \ \ \ \textcolor{keyword}{static}\ size\_t\ \ \ \ \ \ \ \ NodesPerFaceForElementOfType(\ int8\_t\ ANSYS\_finite\_element\_type,\ size\_t\ face\ );}
+\DoxyCodeLine{00146\ \ \ \ \ \textcolor{keyword}{static}\ size\_t\ \ \ \ \ \ \ \ FaceNodeForElementOfType(\ int8\_t\ ANSYS\_finite\_element\_type,\ size\_t\ face,\ size\_t\ face\_node\ );}
+\DoxyCodeLine{00147\ }
+\DoxyCodeLine{00148\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___element_specifications_a3b0f4d5433692ed89db95557102d8fc3}{LineElement}}(\ int8\_t\ ANSYS\_finite\_element\_type\ );}
+\DoxyCodeLine{00149\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___element_specifications_a40bd5eb1dd4774ec494969efac597627}{SurfaceElement}}(\ int8\_t\ ANSYS\_finite\_element\_type\ );}
+\DoxyCodeLine{00150\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___element_specifications_a0ad4fcefca69ca045d38bc5782a9afb8}{VolumeElement}}(\ int8\_t\ ANSYS\_finite\_element\_type\ );}
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00152\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___element_specifications_a7f06c7b6d52512ac12655c7b7c4bf573}{size\_t}}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___element_specifications_a7f06c7b6d52512ac12655c7b7c4bf573}{MinimumSpatialDimension}}(\ \textcolor{keyword}{const}\ std::string\&\ ANSYS\_finite\_element\_type\ );}
+\DoxyCodeLine{00153\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ LineElement(\ \textcolor{keyword}{const}\ std::string\&\ ANSYS\_finite\_element\_type\ );}
+\DoxyCodeLine{00154\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ SurfaceElement(\ \textcolor{keyword}{const}\ std::string\&\ ANSYS\_finite\_element\_type\ );}
+\DoxyCodeLine{00155\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ VolumeElement(\ \textcolor{keyword}{const}\ std::string\&\ ANSYS\_finite\_element\_type\ );}
+\DoxyCodeLine{00156\ }
+\DoxyCodeLine{00157\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___element_specifications_a7de89e3d7cc4ee8a2cc16891dd31c3e0}{LineElements}}(\ std::list<std::string>\&\ line\_elements\ );}
+\DoxyCodeLine{00158\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___element_specifications_a24b61539dccbf474d56f57cf5364bfef}{SurfaceElements}}(\ std::list<std::string>\&\ surf\_elements\ );}
+\DoxyCodeLine{00159\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___element_specifications_a80220ffe782ad67213cf277e6e4d7fba}{VolumeElements}}(\ std::list<std::string>\&\ vol\_elements\ );}
+\DoxyCodeLine{00160\ }
+\DoxyCodeLine{00161\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___element_specifications_aed188bb084cfc7647fbfff45b628f85c}{size\_t}}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___element_specifications_aed188bb084cfc7647fbfff45b628f85c}{InterpolationOrder}}(\ \textcolor{keyword}{const}\ std::string\&\ etype\ );}
+\DoxyCodeLine{00162\ \ \ \ \ \textcolor{keyword}{static}\ size\_t\ \ \ \ \ \ \ \ InterpolationOrder(\ int8\_t\ etype\ );}
+\DoxyCodeLine{00163\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___element_specifications_a43563cba473a6af83c171eca2d7a85f7}{LinearElement}}(\ int8\_t\ etype\ );}
+\DoxyCodeLine{00164\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___element_specifications_a9d4a9a82112ac68e01d34c805e835a3c}{QuadraticElement}}(\ int8\_t\ etype\ );}
+\DoxyCodeLine{00165\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___element_specifications_ac6417d9280b0b1e953e8a76f088abf81}{CubicElement}}(\ int8\_t\ etype\ );}
+\DoxyCodeLine{00166\ \};}
+\DoxyCodeLine{00167\ }
+\DoxyCodeLine{00168\ std::string\ \ \ \ parse\_ANSYS\_BoundaryFlag(\ int8\_t\ i\ );}
+\DoxyCodeLine{00169\ }
+\DoxyCodeLine{00170\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00171\ }
+\DoxyCodeLine{00172\ }
+\DoxyCodeLine{00173\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

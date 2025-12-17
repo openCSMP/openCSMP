@@ -46,10 +46,10 @@ class PropertyConstraints {
     void DeleteConstraint( const PropertyDatabase<dim>&, const char* prop_name );
     
     template<uint32_t dim, template<uint32_t> class CELL>
-    bool CheckConstraints( const CELL<dim>* const ) const;
+    bool CheckConstraints( const CELL<dim>* ) const;
     
     template<uint32_t dim, template<uint32_t> class CELL>
-    bool CheckConstraints( const CELL<dim>* const, Index& idx ) const;
+    bool CheckConstraints( const CELL<dim>* , Index& idx ) const;
     
     // default: void SatisfyConstraintsForAllNodes( bool satisfy );
     void SatisfyConstraintsForAtLeastOneNode( bool satisfy );
@@ -61,13 +61,13 @@ class PropertyConstraints {
   
   private:
     template<uint32_t dim, template<uint32_t> class CELL>
-    bool CheckSingleNodeConstraints( const CELL<dim>* const ) const;
+    bool CheckSingleNodeConstraints( const CELL<dim>* ) const;
     
     template<uint32_t dim, template<uint32_t> class CELL>
-    bool CheckNodeAverageConstraints( const CELL<dim>* const ) const;
+    bool CheckNodeAverageConstraints( const CELL<dim>* ) const;
     
     template<uint32_t dim, template<uint32_t> class CELL>
-    bool VectorLengthCheck( const CELL<dim>* const,
+    bool VectorLengthCheck( const CELL<dim>*,
                             const csmp::Index&, double vmin, double vmax ) const;
 
     std::map<std::string,std::pair<double,double> >  criteria;

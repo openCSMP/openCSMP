@@ -1,0 +1,9 @@
+<map id="csmp::IsoparametricLinearLineElement::Volume" name="csmp::IsoparametricLinearLineElement::Volume">
+<area shape="rect" id="Node000001" title=" " alt="" coords="229,71,404,111"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_isoparametric_linear_line_element.html#a89d12b01820a57088d610bad70df2223" title="assuming an unscaled unit thickness, the aspect ratio of this element is equivalent to its length" alt="" coords="5,5,181,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="229,68,164,49,166,44,231,63"/>
+<area shape="rect" id="Node000003" href="$namespacecsmp.html#a454b86bd00b667e07e864d97e187fcde" title="extrapolates element property values stored in VSet to its vertices" alt="" coords="6,71,180,111"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="213,94,180,94,180,88,213,88"/>
+<area shape="rect" id="Node000004" href="$classcsmp_1_1_isoparametric_linear_line_element.html#a0e42254cef69e4f36c5dcfd22dc6ccce" title="returns the radius of the largest sphere that could be inscribed in the element" alt="" coords="5,136,181,177"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="231,119,166,138,164,133,229,114"/>
+</map>

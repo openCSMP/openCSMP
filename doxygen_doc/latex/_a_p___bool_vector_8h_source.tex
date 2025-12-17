@@ -1,0 +1,52 @@
+\doxysection{AP\+\_\+\+Bool\+Vector.\+h}
+\hypertarget{_a_p___bool_vector_8h_source}{}\label{_a_p___bool_vector_8h_source}\index{source/includes/utilities/AP\_BoolVector.h@{source/includes/utilities/AP\_BoolVector.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{BOOL\_VECTOR\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{BOOL\_VECTOR\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{comment}{//\ include\ declarations}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{comment}{/**\ Provides\ functionality\ to\ handle\ a\ bit\ vector.}}
+\DoxyCodeLine{00009\ \textcolor{comment}{@author\ A\ Paluszny}}
+\DoxyCodeLine{00010\ \textcolor{comment}{@date\ 05\ 2007}}
+\DoxyCodeLine{00011\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00012\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_bool_vector}{BoolVector}}}
+\DoxyCodeLine{00015\ \{}
+\DoxyCodeLine{00016\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00017\ \ \ \mbox{\hyperlink{classcsmp_1_1_bool_vector_af3891bb3077a33a74c6a11763200e59e}{BoolVector}}();}
+\DoxyCodeLine{00018\ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classcsmp_1_1_bool_vector_aa0bcc3f1916606845b69a653b1d260e0}{BoolVector}}(size\_t\ uSize);}
+\DoxyCodeLine{00019\ \ \ \mbox{\hyperlink{classcsmp_1_1_bool_vector_a6ff02d4ce8c31b58a02b83732e22d45f}{BoolVector}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_bool_vector}{BoolVector}}\ \&\ bv);}
+\DoxyCodeLine{00020\ \ \ \mbox{\hyperlink{classcsmp_1_1_bool_vector}{BoolVector}}\&\ \mbox{\hyperlink{classcsmp_1_1_bool_vector_a32fa221a797cfd5a7fb51c9e0c4ce8c6}{operator}}=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_bool_vector}{BoolVector}}\&\ );}
+\DoxyCodeLine{00021\ \ \ \string~\mbox{\hyperlink{classcsmp_1_1_bool_vector_a8e178bcb783148109c9251b16c657f65}{BoolVector}}();}
+\DoxyCodeLine{00022\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_bool_vector_ab5630fa85af9e12464486b0b6bd840ff}{Resize}}(size\_t\ uSize);}
+\DoxyCodeLine{00023\ \ \ size\_t\ Size()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \textcolor{comment}{///\ sets\ the\ value\ of\ the\ bit\ with\ the\ specified\ offset.\ (uOffset:\ 0-\/>\ uSize\_-\/1)}}
+\DoxyCodeLine{00026\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_bool_vector_ac0bee613cc7b07375ec9797d4d97e849}{SetBit}}(\ size\_t\ uOffset,\ \textcolor{keywordtype}{bool}\ bValue\ );}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \textcolor{comment}{///\ sets\ the\ value\ of\ the\ bit\ with\ the\ specified\ offset.\ (uOffset:\ 0-\/>\ uSize\_-\/1)}}
+\DoxyCodeLine{00029\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_bool_vector_a92048db061ce79230b8b69bb61ffa15c}{GetBit}}(\ size\_t\ uOffset\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \textcolor{comment}{///\ sets\ all\ bits\ to\ a\ value}}
+\DoxyCodeLine{00032\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_bool_vector_a3037d715fd022378b6f1a75a9a6a5569}{SetAll}}(\ \textcolor{keywordtype}{bool}\ value\ );}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \textcolor{keywordtype}{void}\ Out()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00037\ \ \ \textcolor{comment}{///\ bit\ vector}}
+\DoxyCodeLine{00038\ \ \ uint8\_t*\ pBits\_;}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \textcolor{comment}{///\ size\ of\ the\ vector\ in\ bytes}}
+\DoxyCodeLine{00041\ \ \ size\_t\ uSize\_;}
+\DoxyCodeLine{00042\ \};}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \}}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{//BoolVector\_h}}
+
+\end{DoxyCode}

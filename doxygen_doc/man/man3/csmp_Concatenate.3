@@ -1,0 +1,148 @@
+.TH "csmp::Concatenate< dim, operation >" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::Concatenate< dim, operation >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+Inherits \fBcsmp::Interrelation< dim >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBConcatenate\fP (const \fBPropertyDatabase\fP< dim > &p, const char *resultProperty, const char *argumentProperty1, const char *argumentProperty2)"
+.br
+.ti -1c
+.RI "\fBConcatenate\fP (const \fBPropertyDatabase\fP< dim > &p, const char *resultProperty, std::vector< std::string > &arguments)"
+.br
+.ti -1c
+.RI "void \fBCalculate\fP ()"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::Interrelation< dim >\fP
+.in +1c
+.ti -1c
+.RI "\fBInterrelation\fP (const \fBPropertyDatabase\fP< dim > &p)"
+.br
+.ti -1c
+.RI "void \fBName\fP (const char *s)"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBApplicationLevel\fP () const"
+.br
+.ti -1c
+.RI "void \fBApply\fP (\fBModel\fP< dim > &)"
+.br
+.ti -1c
+.RI "template<template< uint32_t > class CELL> void \fBApply\fP (\fBModelSubDomain\fP< dim, CELL > &)"
+.br
+.RI "a simplex is any geometrical association of points "
+.ti -1c
+.RI "bool \fBResultWithinRange\fP ()"
+.br
+.ti -1c
+.RI "std::map< std::string, \fBOperand\fP< dim > >::const_iterator \fBOperandsBegin\fP () const"
+.br
+.ti -1c
+.RI "std::map< std::string, \fBOperand\fP< dim > >::const_iterator \fBOperandsEnd\fP () const"
+.br
+.ti -1c
+.RI "std::map< std::string, \fBOperand\fP< dim > >::iterator \fBResult\fP ()"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Member Functions inherited from \fBcsmp::Interrelation< dim >\fP
+.in +1c
+.ti -1c
+.RI "\fBOperand\fP< dim > & \fBGlobalProperty\fP (const char *var)"
+.br
+.ti -1c
+.RI "void \fBResultProperty\fP (const char *var)"
+.br
+.ti -1c
+.RI "void \fBOutputCondition\fP (\fBOperand\fP< dim > &var, \fBVARIABLE_FLAG\fP output)"
+.br
+.in -1c
+
+Protected Attributes inherited from \fBcsmp::Interrelation< dim >\fP
+.in +1c
+.ti -1c
+.RI "const \fBPropertyDatabase\fP< dim > & \fBp_ref\fP"
+.br
+.ti -1c
+.RI "std::string \fBname_\fP"
+.br
+.ti -1c
+.RI "std::string \fBresult_property_\fP"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBapplication_level_\fP"
+.br
+.ti -1c
+.RI "std::map< std::string, \fBOperand\fP< dim > > \fBoperand_list_\fP"
+.br
+.ti -1c
+.RI "std::map< std::string, \fBOperand\fP< dim > >::iterator \fBresult_\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim, template< typename > class operation>
+.br
+class csmp::Concatenate< dim, operation >"
+.PP
+\fBAuthor\fP
+.RS 4
+Adrian Burri 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2002
+.RE
+.PP
+\fBConcatenate\fP is an interrelation which allows users to combine an arbitrary number of variables\&. An STL binary function object is used to define the operation used to combine the variables\&. For most applications, std::multiplies (for multiplication) and std::plus (for summation) of the STL base library will be used, but in principle one is free to define an arbitrary binary function\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+for this interrelation to work all variables must have the same placement\&.
+.RE
+.PP
+.SH "Applicability"
+.PP
+Use this interrelation when you need to combine different variables\&. 
+.br
+.SH "Implementation"
+.PP
+The implementation makes use of the STL binary function classes and the \fBOperand\fP class\&. Therefore, combining element and nodal variables should be possible (not tested)\&. The first operand is used to initialize the result operand, which results in the following behaviour when using non-commutative operands (here shown for std::minus):
+
+.PP
+.PP
+.nf
+result_property = first_property \- (\\sum other_properties)   
+.fi
+.PP
+
+.PP
+If the result property is used as argument as well, first_property will be result_property, no matter at which position it was named in the list\&. 
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<uint32_t dim, template< typename > class operation> \fBcsmp::Concatenate\fP< dim, operation >::Concatenate (const \fBPropertyDatabase\fP< dim > & p, const char * resultProperty, const char * argumentProperty1, const char * argumentProperty2)"
+Constructor which is there for convenience, since most of the time to variables are being combined\&. 
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim, template< typename > class operation> void \fBcsmp::Concatenate\fP< dim, operation >::Calculate ()\fR [inline]\fP, \fR [virtual]\fP"
+Combines the arguments and stores result into resultProperty\&. 
+.PP
+Reimplemented from \fBcsmp::Interrelation< dim >\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

@@ -1,0 +1,128 @@
+\doxysection{H2\+ONa\+Cl\+Lookup.\+h}
+\hypertarget{_h2_o_na_cl_lookup_8h_source}{}\label{_h2_o_na_cl_lookup_8h_source}\index{source/includes/eos/H2ONaClLookup.h@{source/includes/eos/H2ONaClLookup.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{H2ONACLLOOKUP\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{H2ONACLLOOKUP\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_states_8h}{"{}States.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}}
+\DoxyCodeLine{00008\ \{}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \ \ \textcolor{comment}{//\ 2D\ grid}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \ \ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_h2_o_na_cl_lookup}{H2ONaClLookup}}}
+\DoxyCodeLine{00013\ \ \ \{}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00016\ \ \ \ \ H2ONaClLookup(\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ externaltemperature,}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ externalpressure,}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ externalcomposition);}
+\DoxyCodeLine{00019\ \ \ \ \ \string~H2ONaClLookup();}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ Temperature();}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ Pressure();}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ MassFractionNaCl();}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ Density();}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ Enthalpy();}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ HeatCapacity();}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ Compressibility();}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ Viscosity();}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{comment}{//\ \ \ \ double\ \ \ DEnthalpyDX();}}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ PrintAll();}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordtype}{double}\ SubcriticalVaporDensity();}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{double}\ SubcriticalVaporEnthalpy();}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordtype}{double}\ SubcriticalVaporHeatCapacity();}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{double}\ SubcriticalVaporCompressibility();}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordtype}{double}\ SubcriticalVaporViscosity();}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{double}\ SubcriticalLiquidDensity();}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordtype}{double}\ SubcriticalLiquidEnthalpy();}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{double}\ SubcriticalLiquidHeatCapacity();}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{double}\ SubcriticalLiquidCompressibility();}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keywordtype}{double}\ SubcriticalLiquidViscosity();}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keywordtype}{long}\ GetTableID(\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ t);}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordtype}{long}\ t\_dim;}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keywordtype}{long}\ p\_dim;}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{long}\ x\_dim;}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{long}\ x\_dim200;}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{long}\ x\_dim400;}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{long}\ x\_dim600;}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{long}\ x\_dim700;}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{long}\ it\_200;}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{long}\ it\_400;}
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{long}\ it\_600;}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{long}\ it\_700;}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordtype}{long}\ \ n\_tables,\ table\_id;}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keywordtype}{long}\ \ i,it,ip,ix,iA,iB,iC,iD,iE,iF,iG,iH,block\_id;}
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keywordtype}{long}\ \ iA\_t,\ iB\_t,\ iA\_p,\ iD\_p,\ iA\_x,\ iE\_x;}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keywordtype}{long}\ \ storage\_index;}
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keywordtype}{long}\ \ ip\_boiling,storageindex\_lowp1,storageindex\_lowp2,storageindex\_highp1,storageindex\_highp2;}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keywordtype}{long}\ \ ix\_twophase,\ storage\_index\_left,\ ix\_old,ip\_low,ip\_high;}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ States\ \ \ state;}
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keywordtype}{char}\ \ filename[6][60];}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ BinaryOut(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ bin\_name,\ \textcolor{keywordtype}{long}\ table\_id\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ BinaryIn(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fname,\ \textcolor{keywordtype}{long}\ dimension,\ \textcolor{keywordtype}{long}\ table\_id\ );}
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keywordtype}{bool}\ file\_found;}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ temperature;}
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ pressure;}
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ composition;}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ tcurrent,pcurrent,xcurrent,xdummy,pdummy,tdummy,t\_res,p\_res,x\_res;}
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ t\_iA,\ t\_iB,\ p\_iA,\ p\_iD,\ x\_iA,\ x\_iE;}
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ tnorm,pnorm,xnorm;}
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ v\_bottom,v\_top,v\_right,v\_left,v\_point;}
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ dh;}
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ DP\_extrapol,DP\_lowp,DDensityDP,DEnthalpyDP,DHeatCapacityDP,DCompressibilityDP,DViscosityDP,DP\_highp;}
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ p\_boil;}
+\DoxyCodeLine{00084\ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\ \ \ table0,table1,table2,table3,table4,table5;}
+\DoxyCodeLine{00085\ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\ \ \ t\_min\_table,\ t\_max\_table;}
+\DoxyCodeLine{00086\ \ \ \ \ std::vector<\textcolor{keywordtype}{long}>\ \ \ \ \ \ \ \ ip\_vl,it\_max\_table;}
+\DoxyCodeLine{00087\ \ \ \ \ std::vector<\textcolor{keywordtype}{long}>\ \ \ \ \ \ \ \ it\_offset,x\_dim\_block,t\_dim\_table,x\_dim\_table,tablesize;}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keywordtype}{void}\ BuildTable0();}
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{comment}{//\ \ \ \ void\ Table0LeftRightInterpolation();}}
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{keywordtype}{void}\ BuildTable1();}
+\DoxyCodeLine{00092\ \ \ \ \ \textcolor{keywordtype}{void}\ BuildTable2();}
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{keywordtype}{void}\ BuildSimpleTable(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{long}\&\ i,}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\&\ table\ );}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keywordtype}{void}\ GetTemperatureIndex(\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ t);}
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{keywordtype}{void}\ GetPressureIndex(\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ p);}
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keywordtype}{void}\ GetCompositionIndex(\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ p);}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{keywordtype}{long}\ ComputeTemperatureIndex(\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ t);}
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{keywordtype}{long}\ ComputePressureIndex(\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ p);}
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keywordtype}{long}\ ComputeCompositionIndex(\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ p);}
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keywordtype}{double}\ Interpolate(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ t,}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\&\ property\_index\ );}
+\DoxyCodeLine{00105\ \ \ \ \ \textcolor{keywordtype}{double}\ TrilinearInterpolation(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{long}\&\ table\_id,}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ storage\_vector,}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\&\ property\_index\ );}
+\DoxyCodeLine{00108\ \ \ \ \ \textcolor{keywordtype}{double}\ PropertyAtPointH(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\&\ property\_index\ );}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ \ \ \};}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00117\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00118\ \textcolor{comment}{}}
+\DoxyCodeLine{00119\ \textcolor{comment}{}}
+\DoxyCodeLine{00120\ \textcolor{comment}{\ \ \ @todo}}
+\DoxyCodeLine{00121\ \textcolor{comment}{\ \ \ -\/\ mv\ table\ building\ into\ external\ class!}}
+\DoxyCodeLine{00122\ \textcolor{comment}{\ */}}
+
+\end{DoxyCode}

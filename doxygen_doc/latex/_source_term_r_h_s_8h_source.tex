@@ -1,0 +1,52 @@
+\doxysection{Source\+Term\+RHS.\+h}
+\hypertarget{_source_term_r_h_s_8h_source}{}\label{_source_term_r_h_s_8h_source}\index{source/includes/integration/finite\_volumes/generic\_transport\_scheme/SourceTermRHS.h@{source/includes/integration/finite\_volumes/generic\_transport\_scheme/SourceTermRHS.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ \ SourceTermRHS.h}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ \ CSMP\_GitHub}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ \ Created\ by\ Stephan\ Matthai\ on\ 6/12/2017.}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//\ \ Copyright\ ©\ 2017\ Stephan\ Matthai.\ All\ rights\ reserved.}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_SOURCE\_TERM\_RHS\_H}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_SOURCE\_TERM\_RHS\_H}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_vector_operator_8h}{"{}VectorOperator.h"{}}}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ \ \ Either\ an\ areal/volumetric\ source\ specified\ on\ the\ Element\ or\ Face\ or}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ \ \ a\ nodal\ (point)\ source\ term\ to\ be\ accumulated\ into\ the\ righthand\ vector.}}
+\DoxyCodeLine{00019\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00020\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00021\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_source_term_r_h_s}{SourceTermRHS}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_vector_operator}{VectorOperator}}<dim>\ \{}
+\DoxyCodeLine{00022\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{comment}{///\ note\ that\ this\ source\ variable\ may\ be\ an\ element\ or\ a\ nodal\ one}}
+\DoxyCodeLine{00024\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_source_term_r_h_s_a1a26e75ef7ee904658d514c18174be38}{SourceTermRHS}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{INDEX}}<SCALAR,ELEMENT>\&\ source\_variable\_key,}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{INDEX}}<SCALAR,NODE>\&\ nodal\_source\_variable\_key,}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{INDEX}}<SCALAR,NODE>\&\ transported\_variable\_key\ );}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~SourceTermRHS()\ \{\}}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{comment}{///\ accumulates\ integrated\ (single)\ values\ of\ source\ term\ onto\ the\ finite\ volume\ centered\ on\ the\ Node}}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_source_term_r_h_s_a485ebc52855a458d2bd659ff43435845}{AccumulateFiniteVolume}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>\&,\ std::vector<\textcolor{keywordtype}{double}>\&\ rhs\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{comment}{///\ accumulates\ distributed\ values\ of\ the\ source\ term\ on\ the\ finite\ volume}}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_source_term_r_h_s_a7b6144de8609449f08ebafb50b95bbbd}{AccumulateStencil}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&,\ std::vector<\textcolor{keywordtype}{double}>\&\ rhs\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{comment}{//virtual\ void\ AccumulateStencil(\ const\ Face<dim>\&,\ std::vector<double>\&\ rhs\ )\ const;}}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{comment}{//virtual\ void\ AccumulateStencil(\ const\ InterFace<dim>\&,\ std::vector<double>\&\ rhs\ )\ const;}}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\&\ esrc\_key\_;\ \ \ \textcolor{comment}{///<\ \ area/volume\ source\ \ placed\ on\ the\ element\ }}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\&\ nsrc\_key\_;\ \ \ \textcolor{comment}{///<\ point\ source}}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\&\ adv\_key\_;\ \ \ \ \textcolor{comment}{///<\ \ transport\ variable}}
+\DoxyCodeLine{00042\ \};}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \}\ \textcolor{comment}{//\ end\ csmp}}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{/*\ CSMP\_SOURCE\_TERM\_RHS\_H\ */}}
+
+\end{DoxyCode}

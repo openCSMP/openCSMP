@@ -1,0 +1,22 @@
+<map id="csmp::RegionBoundaryFluxVisitor&lt; dim, COMPUTATION_DOMAIN &gt;" name="csmp::RegionBoundaryFluxVisitor&lt; dim, COMPUTATION_DOMAIN &gt;">
+<area shape="rect" id="Node000001" title="using the FVM this visitor computes the cumulative single&#45;phase influx into the target region" alt="" coords="298,1687,496,1905"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_visitor.html" title=" " alt="" coords="24,1184,166,1474"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="126,1487,148,1553,180,1614,206,1648,236,1679,300,1731,296,1736,232,1683,202,1651,176,1617,143,1555,121,1489"/>
+<area shape="rect" id="Node000003" href="$classcsmp_1_1_model_sub_domain.html" title=" " alt="" coords="191,1042,406,1616"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="352,1615,363,1662,365,1669,359,1671,358,1663,347,1616"/>
+<area shape="rect" id="Node000004" href="$classcsmp_1_1_model_sub_domain.html" title="Storage of Node and Cell pointers to subdomains of the overall computational model...." alt="" coords="5,427,220,971"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="99,984,117,1016,130,1027,145,1029,162,1030,180,1040,193,1054,189,1057,177,1044,161,1035,144,1034,128,1032,112,1020,94,986"/>
+<area shape="rect" id="Node000005" href="$structcsmp_1_1_index.html" title="Accessor for discretized physical variables." alt="" coords="430,1082,562,1576"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="468,1576,449,1663,447,1671,442,1669,444,1662,463,1575"/>
+<area shape="rect" id="Node000006" href="$structcsmp_1_1_local_variables.html" title="Data class to store physical variable count at given placement." alt="" coords="236,5,372,316"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="286,316,269,489,259,679,260,770,266,852,277,920,296,970,309,986,323,996,354,1006,388,1015,405,1025,420,1040,437,1066,433,1069,416,1044,401,1029,386,1020,353,1011,320,1001,305,990,292,972,272,921,260,852,255,770,254,679,264,488,281,315"/>
+<area shape="rect" id="Node000007" href="$structcsmp_1_1_integration_point_variables.html" title=" " alt="" coords="402,625,597,773"/>
+<area shape="poly" id="edge7_Node000007_Node000006" title=" " alt="" coords="362,315,470,609,465,611,357,316"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="501,773,499,995,499,1065,493,1065,494,995,496,772"/>
+<area shape="rect" id="Node000008" href="$classcsmp_1_1_index_tracker.html" title="Keeps track of all Index objects once they have been registered." alt="" coords="622,564,748,834"/>
+<area shape="poly" id="edge8_Node000005_Node000008" title=" " alt="" coords="687,834,678,926,658,1019,641,1069,620,1119,572,1211,568,1208,615,1117,636,1067,653,1017,672,925,681,834"/>
+<area shape="rect" id="Node000009" href="$classcsmp_1_1_vector_variable.html" title=" " alt="" coords="712,1288,847,1370"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="756,1371,679,1484,576,1617,509,1690,505,1687,572,1614,675,1481,752,1368"/>
+<area shape="rect" id="Node000010" href="$classcsmp_1_1_vector_variable.html" title=" " alt="" coords="772,658,907,740"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="837,755,786,1289,781,1288,832,755"/>
+</map>

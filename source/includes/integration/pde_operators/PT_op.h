@@ -30,12 +30,11 @@ template<uint32_t dim, template<uint32_t> class CELL=Element>
 class PT_op : public MathOperatorRHS<dim,CELL> {
   public:
     PT_op( const PropertyDatabase<dim>&, const char* oper, const char* test );
-    virtual ~PT_op() {}
     
-    virtual void GetOperands( const CELL<dim>& );
-    virtual void ComputeContribution( const CELL<dim>& );
+    void GetOperands( const CELL<dim>& ) override final;
+    void ComputeContribution( const CELL<dim>& ) override final;
     
-    virtual PT_op<dim,CELL>* clone() const { return new PT_op<dim,CELL> (*this); }
+    PT_op<dim,CELL>* clone() const override { return new PT_op<dim,CELL> (*this); }
     
   private:
     std::vector<VectorVariable<dim> >  NODAL_FORCE;

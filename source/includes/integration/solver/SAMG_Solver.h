@@ -3,11 +3,7 @@
 
 #include "Solver.h"
 #include "SparseMatrix.h"
-#if defined(_OPENMP )
-#include "CSRMatrix.h"
-#else
 #include "CompressedRowMatrix.h"
-#endif
 
 namespace csmp {
 
@@ -50,11 +46,10 @@ namespace csmp {
       explicit SAMG_Solver( SAMG_Settings* settings );
       SAMG_Solver();
       SAMG_Solver( const SAMG_Solver& );
-      virtual ~SAMG_Solver();
       SAMG_Solver& operator=( const SAMG_Solver& );
       
-      virtual void InputSolverSettings( SolverSettings& settings );
-      virtual SolverSettings* GetSolverSettings();
+      void InputSolverSettings( SolverSettings& settings ) override final;
+      SolverSettings* GetSolverSettings() override final;
 
       bool Write_SAMG_TextInputFile( const char* filename ) const;
       void Write_SAMG_TextOutput( bool write );
@@ -69,50 +64,45 @@ namespace csmp {
       void OutputVectors() const;
 
     protected:
-      virtual void SolveMatrixEquation( SparseMatrix& A,
-                                        std::vector<double>& b,
-                                        std::vector<double>& x,
-                                        size_t no_unknowns );
+      void SolveMatrixEquation( SparseMatrix& A,
+                                std::vector<double>& b,
+                                std::vector<double>& x,
+                                size_t no_unknowns ) override final;
 
-      virtual void SolveMatrixEquation( CompressedRowMatrix& A,
-                                        std::vector<double>& b,
-                                        std::vector<double>& x,
-                                        size_t no_unknowns );
+      void SolveMatrixEquation( CompressedRowMatrix& A,
+                                std::vector<double>& b,
+                                std::vector<double>& x,
+                                size_t no_unknowns ) override final;
       
     private:
-      SAMG_Settings*        settings_;
+      SAMG_Settings*          settings_ = nullptr;
 
-      int32_t                 nsys_;    /// < Number of unknowns
-      int32_t                 npnts_;   /// < Number of points (in mesh)
-      int32_t                 nnu_;	    /// < Number of variables >= 1 (matrix size nnu^2)
-      int32_t                 nna_;	    /// < Number of matrix entries stored in vector a >= nnu
+      int32_t                 nsys_;    ///< Number of unknowns
+      int32_t                 npnts_;   ///< Number of points (in mesh)
+      int32_t                 nnu_;	    ///< Number of variables >= 1 (matrix size nnu^2)
+      int32_t                 nna_;	    ///< Number of matrix entries stored in vector a >= nnu
 
-      std::vector<double> u_;	      /// < [] First guess solution to A.u=f
-      std::vector<double> f_;	      /// < [] Right hand side
+      std::vector<double> u_;	          ///< [] First guess solution to A.u=f
+      std::vector<double> f_;	          ///< [] Right hand side
 
       // For coupled systems
-      std::vector<int32_t>    iscale_;  /// < [] which unknowns require scaling (nsys >= 1)
-                                      /// < iscale(k)=0	means k-th unknown does NOT require scaling
-                                      /// < iscale(k)=1	means k-th unknown DOES require scaling
-      std::vector<int32_t>    iu_;	    /// < [] variable to unknown pointer
-      int                   ndiu_;    /// < if nsys>1, m_diu=m_nnu
-      std::vector<int32_t>    ip_;	    /// < []
-      int                   ndip_;
+      std::vector<int32_t>    iscale_;  ///< [] which unknowns require scaling (nsys >= 1)
+                                        ///< iscale(k)=0	means k-th unknown does NOT require scaling
+                                        ///< iscale(k)=1	means k-th unknown DOES require scaling
+      std::vector<int32_t>    iu_;	    ///< [] variable to unknown pointer
+      int                     ndiu_;    ///< if nsys>1, m_diu=m_nnu
+      std::vector<int32_t>    ip_;	    ///< []
+      int                     ndip_;
 
-#if defined(_OPENMP )
-      CSRMatrix crmat_;
-#else
-      CompressedRowMatrix   crmat_;
-
-#endif
+      CompressedRowMatrix     crmat_;   ///<  ia (in32), ja (int32), a(double)
 
       // Output parameters
-      double  res_in_;      /// < residual of first guess
-      double  res_out_;     /// < residual of final approximation
-      int32_t     ncyc_done_;   /// < total number cycles (iterations) performed
-      int32_t     ncyc_best_;   /// < stores lowest number of iterations achieved
+      double      res_in_;              ///< residual of first guess
+      double      res_out_;             ///< residual of final approximation
+      int32_t     ncyc_done_;           ///< total number cycles (iterations) performed
+      int32_t     ncyc_best_;           ///< stores lowest number of iterations achieved
 
-      int32_t     ierr_;        /// < error inidicator (= 0 no error, > 0 fatal error, < 0 completed with warnings)
+      int32_t     ierr_;                ///< error inidicator (= 0 no error, > 0 fatal error, < 0 completed with warnings)
 
       const bool  newed_SAMG_Settings_object; 
       bool output_amg_data_to_text_files_;
@@ -121,7 +111,7 @@ namespace csmp {
 } // end namespace csmp
 
 
-void USER_coo( int* i, int* ndim, double* x, double* y, double* z );
+//void USER_coo( int* i, int* ndim, double* x, double* y, double* z );
 
 #endif
  

@@ -1,0 +1,230 @@
+.TH "csmp::BoundaryStressVisitor< dim >" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::BoundaryStressVisitor< dim > \- \fBBoundaryStressVisitor\fP accesses a \fBBoundary\fP object that must be a surface, computing nodal forces based on the normal and shear stresses applied to that \fBBoundary\fP element\&. If the boundary is inclined or vertical and body forces are enabled, the visitor takes the vertical variation in the boundary normal stress into account\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <BoundaryStressVisitor\&.h>\fP
+.PP
+Inherits \fBcsmp::Visitor< dim >\fP, and \fBcsmp::Visitor< dim >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBBoundaryStressVisitor\fP (const \fBModel\fP< dim > &, const char *SV_variable, bool overwrite_force_vector=true)"
+.br
+.RI "by default, any entries into the RHS force vectors will get overwritten "
+.ti -1c
+.RI "\fBBoundaryStressVisitor\fP (const \fBModel\fP< dim > &, BOUNDARY_STRESS=BOUNDARY_STRESS::SINGLE_VALUED, bool overwrite_force_vector=true)"
+.br
+.RI "computations using absolute stress values on the boundary "
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBBoundary\fP< dim > *)"
+.br
+.RI "to zero out force vector, prior to accumulation of forces\&. "
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBFace\fP< dim > *)"
+.br
+.RI "computes nodal forces weighted by node "
+.ti -1c
+.RI "\fBBoundaryStressVisitor\fP (const \fBModel\fP< dim > &, const char *SV_variable, bool overwrite_force_vector=true)"
+.br
+.RI "by default, any entries into the RHS force vectors will get overwritten "
+.ti -1c
+.RI "\fBBoundaryStressVisitor\fP (const \fBModel\fP< dim > &, BOUNDARY_STRESS=BOUNDARY_STRESS::SINGLE_VALUED, bool overwrite_force_vector=true)"
+.br
+.RI "computations using absolute stress values on the boundary "
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBBoundary\fP< dim > *)"
+.br
+.RI "to zero out force vector, prior to accumulation of forces\&. "
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBFace\fP< dim > *)"
+.br
+.RI "computes nodal forces weighted by node "
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::Visitor< dim >\fP
+.in +1c
+.ti -1c
+.RI "\fBVisitor\fP (\fBPLACEMENT\fP level=MODEL, \fBPLACEMENT\fP target=ELEMENT)"
+.br
+.ti -1c
+.RI "void \fBApplicationLevel\fP (\fBPLACEMENT\fP p)"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBApplicationLevel\fP () const"
+.br
+.ti -1c
+.RI "void \fBApplicationTarget\fP (\fBPLACEMENT\fP p)"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBApplicationTarget\fP () const"
+.br
+.ti -1c
+.RI "virtual void \fBSetInitialProperties\fP (\fBModel\fP< dim > *model)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBModel\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBRegion\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBSplitBoundary\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBElement\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBInterFace\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBEdge\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBNode\fP< dim > *)"
+.br
+.ti -1c
+.RI "bool \fBVerbose\fP ()"
+.br
+.ti -1c
+.RI "void \fBVerbose\fP (bool verbose)"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Attributes inherited from \fBcsmp::Visitor< dim >\fP
+.in +1c
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBapplication_level_\fP"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBapplication_target_\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim>
+.br
+class csmp::BoundaryStressVisitor< dim >"\fBBoundaryStressVisitor\fP accesses a \fBBoundary\fP object that must be a surface, computing nodal forces based on the normal and shear stresses applied to that \fBBoundary\fP element\&. If the boundary is inclined or vertical and body forces are enabled, the visitor takes the vertical variation in the boundary normal stress into account\&. 
+
+
+.PP
+\fBAttention\fP
+.RS 4
+this visitor assumes that the driving stresses are Andersonian, i\&.e\&. that one of the principal stress axes is aligned with the vertical (Y)-axis of the model\&.
+.RE
+.PP
+\fBNote\fP
+.RS 4
+This visitor allows for a workaround for applying stress boundary conditions if one does not want to use the Neumann condition functionality of the \fBPDE_Integrator\fP\&.
+.RE
+.PP
+Input are the \fBFace\fP variables 'normal stress' and 'shear stress\&.' The nodal forces are computed from these\&.
+
+.PP
+Use this, for instance to compute and apply overburden stresses\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+by default all forces that were previously assigned are zeroed first\&.
+
+.PP
+compressive (inward pointing) stresses are positive\&.
+
+.PP
+this visitor assumes that the far-field stress regime is Andersonian, i\&.e\&. one of the principal stresses is oriented perpendicular to the earth surface\&.
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+SKM 29/9/2014 
+.RE
+.PP
+
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<uint32_t dim> \fBcsmp::BoundaryStressVisitor\fP< dim >::BoundaryStressVisitor (const \fBModel\fP< dim > & model, const char * SV_variable, bool overwrite_force_vector = \fRtrue\fP)"
+
+.PP
+by default, any entries into the RHS force vectors will get overwritten For the computation of the nodal 'gravity force'
+
+.PP
+Application level is model so that all boundaries are visited followed by a visitation of their faces\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fImodel\fP computation domain\&.
+.br
+\fISV_variable\fP denotes overburden = vertical stress calculated by integration of the sediment column dry density up to the earth' surface\&. 
+.RE
+.PP
+
+.PP
+\fBParameters\fP
+.RS 4
+\fISV_variable\fP should vary with depth 
+.RE
+.PP
+
+.SS "template<uint32_t dim> \fBcsmp::BoundaryStressVisitor\fP< dim >::BoundaryStressVisitor (const \fBModel\fP< dim > & , const char * SV_variable, bool overwrite_force_vector = \fRtrue\fP)"
+
+.PP
+by default, any entries into the RHS force vectors will get overwritten 
+.PP
+\fBParameters\fP
+.RS 4
+\fISV_variable\fP should vary with depth 
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim> virtual void \fBcsmp::BoundaryStressVisitor\fP< dim >::Visit (\fBBoundary\fP< dim > * )\fR [virtual]\fP"
+
+.PP
+to zero out force vector, prior to accumulation of forces\&. 
+.PP
+Reimplemented from \fBcsmp::Visitor< dim >\fP\&.
+.SS "template<uint32_t dim> void \fBcsmp::BoundaryStressVisitor\fP< dim >::Visit (\fBBoundary\fP< dim > * b)\fR [virtual]\fP"
+
+.PP
+to zero out force vector, prior to accumulation of forces\&. Collects the stress value placed on the boudary and (optionally) zeros out the initial force values assigned to this boundary\&. 
+.PP
+Reimplemented from \fBcsmp::Visitor< dim >\fP\&.
+.SS "template<uint32_t dim> virtual void \fBcsmp::BoundaryStressVisitor\fP< dim >::Visit (\fBFace\fP< dim > * )\fR [virtual]\fP"
+
+.PP
+computes nodal forces weighted by node 
+.PP
+Reimplemented from \fBcsmp::Visitor< dim >\fP\&.
+.SS "template<uint32_t dim> void \fBcsmp::BoundaryStressVisitor\fP< dim >::Visit (\fBFace\fP< dim > * f)\fR [virtual]\fP"
+
+.PP
+computes nodal forces weighted by node Interpolates the applied element-centric forces to the nodes\&.
+
+.PP
+An approach is used where the nodal contribution is weighted on the basis of the distance of the barycenter to the node\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+this is an integration (for uniform nodal forces, see option, we get non-uniform stresses) 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBcsmp::Visitor< dim >\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

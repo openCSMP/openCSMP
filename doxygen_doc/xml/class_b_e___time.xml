@@ -1,0 +1,415 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="class_b_e___time" kind="class" language="C++" prot="public">
+    <compoundname>BE_Time</compoundname>
+    <includes refid="_b_e___time_8h" local="no">BE_Time.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="class_b_e___time_1a3031158b3167da62dfa7b059948abb13" prot="private" static="no" mutable="no">
+        <type>std::time_t</type>
+        <definition>std::time_t BE_Time::time</definition>
+        <argsstring></argsstring>
+        <name>time</name>
+        <qualifiedname>BE_Time::time</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/BE_Time.h" line="75" column="20" bodyfile="source/includes/utilities/BE_Time.h" bodystart="75" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_b_e___time_1aa8f438676447da767c1110a26dd8cb95" prot="private" static="no" mutable="no">
+        <type>std::tm</type>
+        <definition>std::tm BE_Time::local</definition>
+        <argsstring></argsstring>
+        <name>local</name>
+        <qualifiedname>BE_Time::local</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/BE_Time.h" line="76" column="20" bodyfile="source/includes/utilities/BE_Time.h" bodystart="76" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_b_e___time_1abb1afce3616a28f3c68a70895d1b1ced" prot="private" static="no" mutable="no">
+        <type>char</type>
+        <definition>char BE_Time::Ascii[26]</definition>
+        <argsstring>[26]</argsstring>
+        <name>Ascii</name>
+        <qualifiedname>BE_Time::Ascii</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/BE_Time.h" line="77" column="20" bodyfile="source/includes/utilities/BE_Time.h" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_b_e___time_1a3ad6d513667527865fa2ceafe6edd07a" prot="private" static="no" mutable="no">
+        <type>unsigned char</type>
+        <definition>unsigned char BE_Time::lflag</definition>
+        <argsstring></argsstring>
+        <name>lflag</name>
+        <qualifiedname>BE_Time::lflag</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/BE_Time.h" line="78" column="20" bodyfile="source/includes/utilities/BE_Time.h" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_b_e___time_1ac877d712b0758de5a1b9ba3e81a5e5c8" prot="private" static="no" mutable="no">
+        <type>unsigned char</type>
+        <definition>unsigned char BE_Time::aflag</definition>
+        <argsstring></argsstring>
+        <name>aflag</name>
+        <qualifiedname>BE_Time::aflag</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/BE_Time.h" line="78" column="26" bodyfile="source/includes/utilities/BE_Time.h" bodystart="78" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_b_e___time_1a1d73898d6b7555c543eda0895893c947" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>BE_Time::BE_Time</definition>
+        <argsstring>()</argsstring>
+        <name>BE_Time</name>
+        <qualifiedname>BE_Time::BE_Time</qualifiedname>
+        <briefdescription>
+<para>constructor records current system time </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/BE_Time.h" line="14" column="5" bodyfile="source/includes/utilities/BE_Time.h" bodystart="14" bodyend="14"/>
+      </memberdef>
+      <memberdef kind="function" id="class_b_e___time_1a445266d3ac6a29cab7d9bbda5ac86650" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>BE_Time::~BE_Time</definition>
+        <argsstring>()</argsstring>
+        <name>~BE_Time</name>
+        <qualifiedname>BE_Time::~BE_Time</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/BE_Time.h" line="15" column="5" bodyfile="source/includes/utilities/BE_Time.h" bodystart="15" bodyend="15"/>
+      </memberdef>
+      <memberdef kind="function" id="class_b_e___time_1aeeabe169ebdd6ab7fa3b1fac9879c74c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void BE_Time::mark</definition>
+        <argsstring>()</argsstring>
+        <name>mark</name>
+        <qualifiedname>BE_Time::mark</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/BE_Time.h" line="16" column="10" bodyfile="source/includes/utilities/BE_Time.h" bodystart="16" bodyend="19"/>
+      </memberdef>
+      <memberdef kind="function" id="class_b_e___time_1a27088bca1654c8230adf49a4a150de2a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>const char *</type>
+        <definition>const char * BE_Time::ascii</definition>
+        <argsstring>()</argsstring>
+        <name>ascii</name>
+        <qualifiedname>BE_Time::ascii</qualifiedname>
+        <briefdescription>
+<para>time as a day/month/year string </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/BE_Time.h" line="21" column="16" bodyfile="source/includes/utilities/BE_Time.h" bodystart="21" bodyend="24"/>
+      </memberdef>
+      <memberdef kind="function" id="class_b_e___time_1ab43dc97444cd3ec1d1d0cf6ce75f7993" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double BE_Time::delta</definition>
+        <argsstring>(const BE_Time &amp;dt) const</argsstring>
+        <name>delta</name>
+        <qualifiedname>BE_Time::delta</qualifiedname>
+        <param>
+          <type>const <ref refid="class_b_e___time" kindref="compound">BE_Time</ref> &amp;</type>
+          <declname>dt</declname>
+        </param>
+        <briefdescription>
+<para>difference in seconds </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/BE_Time.h" line="26" column="12" bodyfile="source/includes/utilities/BE_Time.h" bodystart="26" bodyend="28"/>
+      </memberdef>
+      <memberdef kind="function" id="class_b_e___time_1aeceaed2f7a42013a6f62ba8ba84f3828" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>int</type>
+        <definition>int BE_Time::DaylightSavings</definition>
+        <argsstring>()</argsstring>
+        <name>DaylightSavings</name>
+        <qualifiedname>BE_Time::DaylightSavings</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/BE_Time.h" line="29" column="9" bodyfile="source/includes/utilities/BE_Time.h" bodystart="29" bodyend="32"/>
+      </memberdef>
+      <memberdef kind="function" id="class_b_e___time_1ae544c4f38782d9dcacd3f112ce121373" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>int</type>
+        <definition>int BE_Time::DayOfYear</definition>
+        <argsstring>()</argsstring>
+        <name>DayOfYear</name>
+        <qualifiedname>BE_Time::DayOfYear</qualifiedname>
+        <briefdescription>
+<para>days since January 1 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/BE_Time.h" line="34" column="9" bodyfile="source/includes/utilities/BE_Time.h" bodystart="34" bodyend="37"/>
+      </memberdef>
+      <memberdef kind="function" id="class_b_e___time_1a42585dd421d0f66f93973160e90fab28" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>int</type>
+        <definition>int BE_Time::DayOfWeek</definition>
+        <argsstring>()</argsstring>
+        <name>DayOfWeek</name>
+        <qualifiedname>BE_Time::DayOfWeek</qualifiedname>
+        <briefdescription>
+<para>days since Sunday </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/BE_Time.h" line="39" column="9" bodyfile="source/includes/utilities/BE_Time.h" bodystart="39" bodyend="42"/>
+      </memberdef>
+      <memberdef kind="function" id="class_b_e___time_1aceab4d2b80de5ccb5464378bc4c8eaf9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>int</type>
+        <definition>int BE_Time::Since1900</definition>
+        <argsstring>()</argsstring>
+        <name>Since1900</name>
+        <qualifiedname>BE_Time::Since1900</qualifiedname>
+        <briefdescription>
+<para>years since 1/1/1900 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/BE_Time.h" line="44" column="9" bodyfile="source/includes/utilities/BE_Time.h" bodystart="44" bodyend="47"/>
+      </memberdef>
+      <memberdef kind="function" id="class_b_e___time_1ad4fd1158a23743768fe974fb044b856a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>int</type>
+        <definition>int BE_Time::Month</definition>
+        <argsstring>()</argsstring>
+        <name>Month</name>
+        <qualifiedname>BE_Time::Month</qualifiedname>
+        <briefdescription>
+<para>since January </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/BE_Time.h" line="49" column="9" bodyfile="source/includes/utilities/BE_Time.h" bodystart="49" bodyend="52"/>
+      </memberdef>
+      <memberdef kind="function" id="class_b_e___time_1a5ea5fdef6e90b27b964e8b36ae88ffbf" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>int</type>
+        <definition>int BE_Time::DayOfMonth</definition>
+        <argsstring>()</argsstring>
+        <name>DayOfMonth</name>
+        <qualifiedname>BE_Time::DayOfMonth</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/BE_Time.h" line="53" column="9" bodyfile="source/includes/utilities/BE_Time.h" bodystart="53" bodyend="56"/>
+      </memberdef>
+      <memberdef kind="function" id="class_b_e___time_1a4f91d8c62fb2c19df27aa0e19b109896" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>int</type>
+        <definition>int BE_Time::Hour</definition>
+        <argsstring>()</argsstring>
+        <name>Hour</name>
+        <qualifiedname>BE_Time::Hour</qualifiedname>
+        <briefdescription>
+<para>since midnight (24 hour clock) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/BE_Time.h" line="58" column="9" bodyfile="source/includes/utilities/BE_Time.h" bodystart="58" bodyend="61"/>
+      </memberdef>
+      <memberdef kind="function" id="class_b_e___time_1a483b08ae8dfaa37f7191acbd6110ee33" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>int</type>
+        <definition>int BE_Time::Minute</definition>
+        <argsstring>()</argsstring>
+        <name>Minute</name>
+        <qualifiedname>BE_Time::Minute</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/BE_Time.h" line="62" column="9" bodyfile="source/includes/utilities/BE_Time.h" bodystart="62" bodyend="65"/>
+      </memberdef>
+      <memberdef kind="function" id="class_b_e___time_1a50ef43353976350961f52a0a536ae399" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>int</type>
+        <definition>int BE_Time::Second</definition>
+        <argsstring>()</argsstring>
+        <name>Second</name>
+        <qualifiedname>BE_Time::Second</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/BE_Time.h" line="66" column="9" bodyfile="source/includes/utilities/BE_Time.h" bodystart="66" bodyend="69"/>
+      </memberdef>
+      <memberdef kind="function" id="class_b_e___time_1a0ebcfcf0a7e64e973890627dff8200dd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void BE_Time::Time</definition>
+        <argsstring>(long &amp;yr, long &amp;hr, long &amp;mi, long &amp;sec)</argsstring>
+        <name>Time</name>
+        <qualifiedname>BE_Time::Time</qualifiedname>
+        <param>
+          <type>long &amp;</type>
+          <declname>yr</declname>
+        </param>
+        <param>
+          <type>long &amp;</type>
+          <declname>hr</declname>
+        </param>
+        <param>
+          <type>long &amp;</type>
+          <declname>mi</declname>
+        </param>
+        <param>
+          <type>long &amp;</type>
+          <declname>sec</declname>
+        </param>
+        <briefdescription>
+<para>gets ascii hours,minutes, seconds and tenth&apos;s of seconds out of the time-string </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/BE_Time.h" line="71" column="10" bodyfile="source/modules/utilities/BE_Time.cpp" bodystart="6" bodyend="39"/>
+      </memberdef>
+      <memberdef kind="function" id="class_b_e___time_1a7136da93e0ba63a8aa90488f6bc5e538" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void BE_Time::Time</definition>
+        <argsstring>(long &amp;year, long &amp;month, long &amp;day)</argsstring>
+        <name>Time</name>
+        <qualifiedname>BE_Time::Time</qualifiedname>
+        <param>
+          <type>long &amp;</type>
+          <declname>year</declname>
+        </param>
+        <param>
+          <type>long &amp;</type>
+          <declname>month</declname>
+        </param>
+        <param>
+          <type>long &amp;</type>
+          <declname>day</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/BE_Time.h" line="72" column="10" bodyfile="source/modules/utilities/BE_Time.cpp" bodystart="44" bodyend="88"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="class_b_e___time_1ad1fa10df7a901ca2fd6da0dd27dedbdb" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void BE_Time::updateLocal</definition>
+        <argsstring>()</argsstring>
+        <name>updateLocal</name>
+        <qualifiedname>BE_Time::updateLocal</qualifiedname>
+        <briefdescription>
+<para>copy time into local time buffer </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/BE_Time.h" line="81" column="10" bodyfile="source/includes/utilities/BE_Time.h" bodystart="81" bodyend="86"/>
+      </memberdef>
+      <memberdef kind="function" id="class_b_e___time_1a22507dc47861546ff28da1a3da1d3327" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void BE_Time::updateAscii</definition>
+        <argsstring>()</argsstring>
+        <name>updateAscii</name>
+        <qualifiedname>BE_Time::updateAscii</qualifiedname>
+        <briefdescription>
+<para>stores asctime results in local variable </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/BE_Time.h" line="88" column="10" bodyfile="source/includes/utilities/BE_Time.h" bodystart="88" bodyend="94"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Bruce Eckel&apos;s Time class from &quot;Thinking in C++&quot; p. 314 </para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>BE_Time</label>
+        <link refid="class_b_e___time"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/utilities/BE_Time.h" line="11" column="1" bodyfile="source/includes/utilities/BE_Time.h" bodystart="11" bodyend="95"/>
+    <listofallmembers>
+      <member refid="class_b_e___time_1ac877d712b0758de5a1b9ba3e81a5e5c8" prot="private" virt="non-virtual"><scope>BE_Time</scope><name>aflag</name></member>
+      <member refid="class_b_e___time_1abb1afce3616a28f3c68a70895d1b1ced" prot="private" virt="non-virtual"><scope>BE_Time</scope><name>Ascii</name></member>
+      <member refid="class_b_e___time_1a27088bca1654c8230adf49a4a150de2a" prot="public" virt="non-virtual"><scope>BE_Time</scope><name>ascii</name></member>
+      <member refid="class_b_e___time_1a1d73898d6b7555c543eda0895893c947" prot="public" virt="non-virtual"><scope>BE_Time</scope><name>BE_Time</name></member>
+      <member refid="class_b_e___time_1aeceaed2f7a42013a6f62ba8ba84f3828" prot="public" virt="non-virtual"><scope>BE_Time</scope><name>DaylightSavings</name></member>
+      <member refid="class_b_e___time_1a5ea5fdef6e90b27b964e8b36ae88ffbf" prot="public" virt="non-virtual"><scope>BE_Time</scope><name>DayOfMonth</name></member>
+      <member refid="class_b_e___time_1a42585dd421d0f66f93973160e90fab28" prot="public" virt="non-virtual"><scope>BE_Time</scope><name>DayOfWeek</name></member>
+      <member refid="class_b_e___time_1ae544c4f38782d9dcacd3f112ce121373" prot="public" virt="non-virtual"><scope>BE_Time</scope><name>DayOfYear</name></member>
+      <member refid="class_b_e___time_1ab43dc97444cd3ec1d1d0cf6ce75f7993" prot="public" virt="non-virtual"><scope>BE_Time</scope><name>delta</name></member>
+      <member refid="class_b_e___time_1a4f91d8c62fb2c19df27aa0e19b109896" prot="public" virt="non-virtual"><scope>BE_Time</scope><name>Hour</name></member>
+      <member refid="class_b_e___time_1a3ad6d513667527865fa2ceafe6edd07a" prot="private" virt="non-virtual"><scope>BE_Time</scope><name>lflag</name></member>
+      <member refid="class_b_e___time_1aa8f438676447da767c1110a26dd8cb95" prot="private" virt="non-virtual"><scope>BE_Time</scope><name>local</name></member>
+      <member refid="class_b_e___time_1aeeabe169ebdd6ab7fa3b1fac9879c74c" prot="public" virt="non-virtual"><scope>BE_Time</scope><name>mark</name></member>
+      <member refid="class_b_e___time_1a483b08ae8dfaa37f7191acbd6110ee33" prot="public" virt="non-virtual"><scope>BE_Time</scope><name>Minute</name></member>
+      <member refid="class_b_e___time_1ad4fd1158a23743768fe974fb044b856a" prot="public" virt="non-virtual"><scope>BE_Time</scope><name>Month</name></member>
+      <member refid="class_b_e___time_1a50ef43353976350961f52a0a536ae399" prot="public" virt="non-virtual"><scope>BE_Time</scope><name>Second</name></member>
+      <member refid="class_b_e___time_1aceab4d2b80de5ccb5464378bc4c8eaf9" prot="public" virt="non-virtual"><scope>BE_Time</scope><name>Since1900</name></member>
+      <member refid="class_b_e___time_1a0ebcfcf0a7e64e973890627dff8200dd" prot="public" virt="non-virtual"><scope>BE_Time</scope><name>Time</name></member>
+      <member refid="class_b_e___time_1a7136da93e0ba63a8aa90488f6bc5e538" prot="public" virt="non-virtual"><scope>BE_Time</scope><name>Time</name></member>
+      <member refid="class_b_e___time_1a3031158b3167da62dfa7b059948abb13" prot="private" virt="non-virtual"><scope>BE_Time</scope><name>time</name></member>
+      <member refid="class_b_e___time_1a22507dc47861546ff28da1a3da1d3327" prot="private" virt="non-virtual"><scope>BE_Time</scope><name>updateAscii</name></member>
+      <member refid="class_b_e___time_1ad1fa10df7a901ca2fd6da0dd27dedbdb" prot="private" virt="non-virtual"><scope>BE_Time</scope><name>updateLocal</name></member>
+      <member refid="class_b_e___time_1a445266d3ac6a29cab7d9bbda5ac86650" prot="public" virt="non-virtual"><scope>BE_Time</scope><name>~BE_Time</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

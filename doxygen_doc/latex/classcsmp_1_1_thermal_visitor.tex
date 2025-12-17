@@ -1,0 +1,163 @@
+\doxysection{csmp\+::Thermal\+Visitor\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_thermal_visitor}{}\label{classcsmp_1_1_thermal_visitor}\index{csmp::ThermalVisitor$<$ dim $>$@{csmp::ThermalVisitor$<$ dim $>$}}
+
+
+Computes PT-\/dependent fluid properties for flow simulations.  
+
+
+
+
+{\ttfamily \#include $<$Thermal\+Visitor.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Thermal\+Visitor\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=253pt]{classcsmp_1_1_thermal_visitor__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Thermal\+Visitor\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=253pt]{classcsmp_1_1_thermal_visitor__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_thermal_visitor_a8119ac79a9d7d6c8e8309ff893a00466}\label{classcsmp_1_1_thermal_visitor_a8119ac79a9d7d6c8e8309ff893a00466} 
+{\bfseries Thermal\+Visitor} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&, std\+::vector$<$ std\+::string $>$ \texorpdfstring{$\ast$}{*}to\+\_\+initialize\+\_\+keys=nullptr)
+\item 
+\Hypertarget{classcsmp_1_1_thermal_visitor_a4e95d063d4082b0a7e09a614dab5e53d}\label{classcsmp_1_1_thermal_visitor_a4e95d063d4082b0a7e09a614dab5e53d} 
+{\bfseries Thermal\+Visitor} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&model, \mbox{\hyperlink{structcsmp_1_1_index}{Index}} n\+CPT\+\_\+key, \mbox{\hyperlink{structcsmp_1_1_index}{Index}} cp\+\_\+fluid\+\_\+key, \mbox{\hyperlink{structcsmp_1_1_index}{Index}} cp\+\_\+rock\+\_\+key, \mbox{\hyperlink{structcsmp_1_1_index}{Index}} rho\+\_\+rock\+\_\+key, \mbox{\hyperlink{structcsmp_1_1_index}{Index}} t\+\_\+key, \mbox{\hyperlink{structcsmp_1_1_index}{Index}} p\+\_\+key, \mbox{\hyperlink{structcsmp_1_1_index}{Index}} hl\+\_\+key, \mbox{\hyperlink{structcsmp_1_1_index}{Index}} h\+Cl\+\_\+key, \mbox{\hyperlink{structcsmp_1_1_index}{Index}} h\+Clp\+\_\+key, \mbox{\hyperlink{structcsmp_1_1_index}{Index}} h\+Vl\+\_\+key, \mbox{\hyperlink{structcsmp_1_1_index}{Index}} mt\+\_\+key, \mbox{\hyperlink{structcsmp_1_1_index}{Index}} rl\+\_\+key, \mbox{\hyperlink{structcsmp_1_1_index}{Index}} mu\+\_\+key, \mbox{\hyperlink{structcsmp_1_1_index}{Index}} nphi\+\_\+key, \mbox{\hyperlink{structcsmp_1_1_index}{Index}} n\+Q\+\_\+key, \mbox{\hyperlink{structcsmp_1_1_index}{Index}} d\+Rho\+\_\+key, \mbox{\hyperlink{structcsmp_1_1_index}{Index}} volume\+\_\+factor\+\_\+key, \mbox{\hyperlink{structcsmp_1_1_index}{Index}} beta\+\_\+rock\+\_\+key, \mbox{\hyperlink{structcsmp_1_1_index}{Index}} beta\+\_\+tot\+\_\+key, \mbox{\hyperlink{structcsmp_1_1_index}{Index}} beta\+\_\+fluid\+\_\+key)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_thermal_visitor_aa869eeec7d556b382a67db630584a798}{Set\+Initial\+Properties}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}model)
+\item 
+\Hypertarget{classcsmp_1_1_thermal_visitor_a970358a6e4f0503cd7c7b8706cfa9a11}\label{classcsmp_1_1_thermal_visitor_a970358a6e4f0503cd7c7b8706cfa9a11} 
+void {\bfseries Apply\+Temperature\+Boundary\+Conditions\+To\+Transported\+Variables} ()
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_thermal_visitor_a88f447191342709a98afffdfc1f3a92c}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_thermal_visitor_a3ee1dce7aee71aa932c2c7c8d2dc8df2}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_visitor_a1097abaa59d3a35d65c0cb6335e2719c}{Visitor}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} level=MODEL, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} target=ELEMENT)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_visitor_a04cef3d343b9721c4d636f5496ccfa42}{Application\+Level}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} p)
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Application\+Level} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_visitor_a05b9c8127e47ce0ca524e2804c14251a}{Application\+Target}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} p)
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Application\+Target} () const
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_ac71cf14aab11139d8b03b39d4e4709bc}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_region}{Region}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_ac735e758870331b6639ea969504c47bf}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_boundary}{Boundary}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void {\bfseries Visit} (\mbox{\hyperlink{classcsmp_1_1_split_boundary}{Split\+Boundary}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a1a3ed57d253eef9a0097232c7359627c}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_abdca6daa1802e3727868d2d614c65015}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_face}{Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a0f21f0cfcf5328584883eb38effb58d4}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void {\bfseries Visit} (\mbox{\hyperlink{classcsmp_1_1_edge}{Edge}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+bool {\bfseries Verbose} ()
+\item 
+void {\bfseries Verbose} (bool verbose)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries application\+\_\+level\+\_\+}
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries application\+\_\+target\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim$>$\newline
+class csmp\+::\+Thermal\+Visitor$<$ dim $>$}
+Computes PT-\/dependent fluid properties for flow simulations. 
+
+\begin{DoxyAuthor}{Author}
+Thomas Driesner, ETH Zuerich 
+\end{DoxyAuthor}
+\hypertarget{compare_floats_8h_contact}{}\doxysubsection{\texorpdfstring{Contact}{Contact}}\label{compare_floats_8h_contact}
+\href{mailto:thomas.driesner@erdw.ethz.ch}{\texttt{thomas.\+driesner@erdw.\+ethz.\+ch}} 
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_thermal_visitor_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_thermal_visitor_aa869eeec7d556b382a67db630584a798}\index{csmp::ThermalVisitor$<$ dim $>$@{csmp::ThermalVisitor$<$ dim $>$}!SetInitialProperties@{SetInitialProperties}}
+\index{SetInitialProperties@{SetInitialProperties}!csmp::ThermalVisitor$<$ dim $>$@{csmp::ThermalVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{SetInitialProperties()}{SetInitialProperties()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_thermal_visitor_aa869eeec7d556b382a67db630584a798} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_thermal_visitor}{csmp\+::\+Thermal\+Visitor}}$<$ dim $>$\+::\+Set\+Initial\+Properties (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}}]{model}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Loops over the nodes writing basis fluid (from H2\+O-\/\+EOS) and rock properties there.
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000224}{Todo}}]if this visitor gets applied to another region than the model, all hell will break loose! -\/ fix\end{DoxyRefDesc}
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=333pt]{classcsmp_1_1_thermal_visitor_aa869eeec7d556b382a67db630584a798_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_thermal_visitor_a3ee1dce7aee71aa932c2c7c8d2dc8df2}\index{csmp::ThermalVisitor$<$ dim $>$@{csmp::ThermalVisitor$<$ dim $>$}!Visit@{Visit}}
+\index{Visit@{Visit}!csmp::ThermalVisitor$<$ dim $>$@{csmp::ThermalVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Visit()}{Visit()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_thermal_visitor_a3ee1dce7aee71aa932c2c7c8d2dc8df2} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_thermal_visitor}{csmp\+::\+Thermal\+Visitor}}$<$ dim $>$\+::\+Visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}}]{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}.
+
+\Hypertarget{classcsmp_1_1_thermal_visitor_a88f447191342709a98afffdfc1f3a92c}\index{csmp::ThermalVisitor$<$ dim $>$@{csmp::ThermalVisitor$<$ dim $>$}!Visit@{Visit}}
+\index{Visit@{Visit}!csmp::ThermalVisitor$<$ dim $>$@{csmp::ThermalVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Visit()}{Visit()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_thermal_visitor_a88f447191342709a98afffdfc1f3a92c} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_thermal_visitor}{csmp\+::\+Thermal\+Visitor}}$<$ dim $>$\+::\+Visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}}]{n}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+This is the key part of this \doxylink{classcsmp_1_1_node}{Node} visitor. for wells
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=333pt]{classcsmp_1_1_thermal_visitor_a88f447191342709a98afffdfc1f3a92c_cgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/thmc/single\+\_\+phase\+\_\+flow/Thermal\+Visitor.\+h\item 
+source/modules/thmc/single\+\_\+phase\+\_\+flow/Thermal\+Visitor.\+cpp\end{DoxyCompactItemize}

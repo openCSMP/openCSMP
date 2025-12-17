@@ -126,7 +126,7 @@ class ModelSubDomain {
     // ----------------------------------------
 
     /// reference counting-based unique domain identifier  (0..n-1)
-    int32_t DomainIndex() const;
+    int32_t DomainIndex() const noexcept;
 
     /// renumbers nodes in domain 0..n-1
     size_t  RenumberNodes() const;
@@ -145,24 +145,24 @@ class ModelSubDomain {
     // ----------------------------------------
 
     /// reference to container of finite cell pointers to either Element, Face or InterFace objects; @note used for boolean operations
-    const typename std::vector<CELL<dim>*>&  CellVector() const;
+    const typename std::vector<CELL<dim>*>&  CellVector() const noexcept;
     
     /// do not remove!;  used for boolean operations
-    typename std::vector<CELL<dim>*>&        CellVector();
+    typename std::vector<CELL<dim>*>&        CellVector() noexcept;
   
     /// reference to const Node pointer vector
-    const typename std::vector<Node<dim>*>&  NodeVector() const;
+    const typename std::vector<Node<dim>*>&  NodeVector() const noexcept;
 
     /// reference to Node pointer vector
-    typename std::vector<Node<dim>*>&        NodeVector();
+    typename std::vector<Node<dim>*>&        NodeVector() noexcept;
 
     /// const iterators (cell and node pointers cannot be modified but the nodes and cells can!)
-    typename std::vector<csmp::Node<dim>*>::const_iterator  NodesBegin() const;
-    typename std::vector<csmp::Node<dim>*>::const_iterator  PerimeterNodesBegin() const;
-    typename std::vector<csmp::Node<dim>*>::const_iterator  NodesEnd() const;
-    typename std::vector<CELL<dim>*>::const_iterator        CellsBegin() const;
-    typename std::vector<CELL<dim>*>::const_iterator        PerimeterCellsBegin() const;
-    typename std::vector<CELL<dim>*>::const_iterator        CellsEnd() const;
+    typename std::vector<csmp::Node<dim>*>::const_iterator  NodesBegin() const noexcept;
+    typename std::vector<csmp::Node<dim>*>::const_iterator  PerimeterNodesBegin() const noexcept;
+    typename std::vector<csmp::Node<dim>*>::const_iterator  NodesEnd() const noexcept;
+    typename std::vector<CELL<dim>*>::const_iterator        CellsBegin() const noexcept;
+    typename std::vector<CELL<dim>*>::const_iterator        PerimeterCellsBegin() const noexcept;
+    typename std::vector<CELL<dim>*>::const_iterator        CellsEnd() const noexcept;
 
     /// returns how many of the nodes in the supplied iterator range also form part of the current subdomain's perimeter
     size_t SharedPerimeterNodes( typename std::vector<csmp::Node<dim>*>::const_iterator start,
@@ -171,33 +171,33 @@ class ModelSubDomain {
     // see also the non-member functions below
 
     /// check whether subdomain conatains any cells
-    bool              Empty() const;
+    bool              Empty() const noexcept;
     
-    size_t            Nodes() const;
-    size_t            InteriorNodes() const;
-    size_t            PerimeterNodes() const;
-    size_t            IntegrationPoints() const;
-    size_t            SectorIntegrationPoints() const;
-    size_t            FacetIntegrationPoints() const;
-    size_t            Cells() const;
-    size_t            InteriorCells() const;
-    size_t            PerimeterCells() const;
+    size_t            Nodes() const noexcept;
+    size_t            InteriorNodes() const noexcept;
+    size_t            PerimeterNodes() const noexcept;
+    size_t            IntegrationPoints() const noexcept;
+    size_t            SectorIntegrationPoints() const noexcept;
+    size_t            FacetIntegrationPoints() const noexcept;
+    size_t            Cells() const noexcept;
+    size_t            InteriorCells() const noexcept;
+    size_t            PerimeterCells() const noexcept;
     
-    bool              Contains( const CELL<dim>* const ) const;
-    bool              Contains( const Node<dim>* const ) const;
+    bool              Contains( const CELL<dim>* const ) const noexcept;
+    bool              Contains( const Node<dim>* const ) const noexcept;
     
-    bool              IsPerimeterNode( const csmp::Node<dim>* const ) const;
-    bool              IsPerimeterCell( const CELL<dim>* const ) const;
+    bool              IsPerimeterNode( const csmp::Node<dim>* const ) const noexcept;
+    bool              IsPerimeterCell( const CELL<dim>* const ) const noexcept;
     
     /// for looping over the perimeter faces of perimeter cell with #eid, method is used to travel across subdomain surface / outline
-    uint32_t          PerimeterFaces( size_t eid ) const;
+    uint32_t          PerimeterFaces( size_t cell_idx ) const;
     /// returns local face id of face #face that lies on perimeter of model subdomain
-    uint32_t          PerimeterFace( size_t eid, uint32_t face ) const;
+    uint32_t          PerimeterFace( size_t cell_idx, uint32_t face ) const;
 
     /// pointer to node #n in subdomain; @attention node can vary from initialization to initialization
-    csmp::Node<dim>*  N( size_t n ) const;
+    csmp::Node<dim>*  N( size_t n ) const noexcept;
     /// pointer to cell #n of model subdomain
-    CELL<dim>*        E( size_t n ) const;
+    CELL<dim>*        E( size_t n ) const noexcept;
 
     /// is the node located on the surface of the model subdomain?
     bool              IsPerimeterNode( const size_t nidx ) const;
@@ -216,6 +216,12 @@ class ModelSubDomain {
 
     /// returns 1) cells of how many different spatial dimensions are contained, and 2) the highest cell spatial dimension in subdomain
     std::pair<int32_t,int32_t>  SpatialDimensions() const;
+    
+    /// computes the "mid-point of the object
+    Point<dim> Centroid() const;
+    
+    /// computes centre of gravity of a heterogenous subdomain as  volume*density weighted average of the element barycentres.
+    Point<dim> CenterOfGravity( const csmp::Index& rho_key ) const;
 
     /// returns diagonally opposite points of bounding box
     void  MinMaxCoordinates( Point<dim>& xyz_min, Point<dim>& xyz_max ) const;
@@ -331,13 +337,13 @@ class ModelSubDomain {
     size_t  PartitionCellVectorForSplitBoundary();
 
     const PropertyDatabase<dim>&        pref_;
-    std::string                         subdomain_name_;         ///< passed down when domain is created so that it can be referred to
+    std::string                         subdomain_name_="none";  ///< passed down when domain is created so that it can be referred to
     std::vector<CELL<dim>*>             cell_vec_;               ///< doubly sorted, interior cells first
     std::vector<std::vector<uint32_t> > bd_face_vec_;            ///< matching second sorted range of cell_vec_
     std::vector<csmp::Node<dim>*>       node_vec_;               ///< doubly sorted, interior nodes first
-    size_t                              first_bd_node_ = std::numeric_limits<size_t>::max(); ///< begin of the perimeter nodes
-    inline static int32_t               domain_count_ = 0;       ///<  reference-counting to get unique identifier for subdomains
-    int32_t                             domain_idx_;             ///< created during construction from domain_count_
+    size_t                              first_bd_node_  = std::numeric_limits<size_t>::max(); ///< begin of the perimeter nodes
+    inline static int32_t               domain_count_   = 0;     ///<  reference-counting to get unique identifier for subdomains
+    int32_t                             domain_idx_     = 0;     ///< created during construction from domain_count_
     bool                                rebuilt_needed_ = false; ///< parameter set when mesh gets modified by MeshManager so that update can be prompted
     static constexpr bool               verbose_ = false;
 

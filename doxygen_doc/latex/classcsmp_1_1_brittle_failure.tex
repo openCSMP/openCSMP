@@ -1,0 +1,92 @@
+\doxysection{csmp\+::Brittle\+Failure Class Reference}
+\hypertarget{classcsmp_1_1_brittle_failure}{}\label{classcsmp_1_1_brittle_failure}\index{csmp::BrittleFailure@{csmp::BrittleFailure}}
+
+
+Collaboration diagram for csmp\+::Brittle\+Failure\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=173pt]{classcsmp_1_1_brittle_failure__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static FAILURE \mbox{\hyperlink{classcsmp_1_1_brittle_failure_ae425db83e4bf557fdd129ed251988fbf}{Evaluate}} (const \mbox{\hyperlink{structcsmp_1_1_mechanical_properties}{Mechanical\+Properties}} \&, const \mbox{\hyperlink{classcsmp_1_1_stress_invariants}{csmp\+::\+Stress\+Invariants}} \&)
+\begin{DoxyCompactList}\small\item\em evaluates failure criteria -\/1 to 4 without explicit consideration of pore pressure \end{DoxyCompactList}\item 
+static FAILURE \mbox{\hyperlink{classcsmp_1_1_brittle_failure_aef7c8a0ec1a31e92c7d2cfbb4dddb113}{Evaluate}} (const \mbox{\hyperlink{structcsmp_1_1_mechanical_properties}{Mechanical\+Properties}} \&, const \mbox{\hyperlink{classcsmp_1_1_stress_invariants}{csmp\+::\+Stress\+Invariants}} \&, double pf)
+\begin{DoxyCompactList}\small\item\em evaluates failure criteria -\/1 to 4 with consideration of pore pressure \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_brittle_failure_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_brittle_failure_ae425db83e4bf557fdd129ed251988fbf}\index{csmp::BrittleFailure@{csmp::BrittleFailure}!Evaluate@{Evaluate}}
+\index{Evaluate@{Evaluate}!csmp::BrittleFailure@{csmp::BrittleFailure}}
+\doxysubsubsection{\texorpdfstring{Evaluate()}{Evaluate()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_brittle_failure_ae425db83e4bf557fdd129ed251988fbf} 
+FAILURE csmp\+::\+Brittle\+Failure\+::\+Evaluate (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structcsmp_1_1_mechanical_properties}{Mechanical\+Properties}} \&}]{props}{, }\item[{const \mbox{\hyperlink{classcsmp_1_1_stress_invariants}{csmp\+::\+Stress\+Invariants}} \&}]{invars}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+evaluates failure criteria -\/1 to 4 without explicit consideration of pore pressure 
+
+Evaluates failure criteria -\/1 to 4 without the explicit consideration of pore pressure (note that this works for fluid-\/saturated porous media as well, if the computed stresses are already effective stresses.
+
+\begin{DoxyAttention}{Attention}
+Since this approach is based on civil engineering concepts, tensile stresses are treated as positive and compressive ones as negative. 
+\end{DoxyAttention}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_brittle_failure_ae425db83e4bf557fdd129ed251988fbf_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_brittle_failure_aef7c8a0ec1a31e92c7d2cfbb4dddb113}\index{csmp::BrittleFailure@{csmp::BrittleFailure}!Evaluate@{Evaluate}}
+\index{Evaluate@{Evaluate}!csmp::BrittleFailure@{csmp::BrittleFailure}}
+\doxysubsubsection{\texorpdfstring{Evaluate()}{Evaluate()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_brittle_failure_aef7c8a0ec1a31e92c7d2cfbb4dddb113} 
+FAILURE csmp\+::\+Brittle\+Failure\+::\+Evaluate (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structcsmp_1_1_mechanical_properties}{Mechanical\+Properties}} \&}]{props}{, }\item[{const \mbox{\hyperlink{classcsmp_1_1_stress_invariants}{csmp\+::\+Stress\+Invariants}} \&}]{invars}{, }\item[{double}]{pf}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+evaluates failure criteria -\/1 to 4 with consideration of pore pressure 
+
+Evaluates failure criteria -\/1 to 4 considering pore pressure explicitly, establishing the effective stress\+:
+
+sigma\+\_\+ij\textquotesingle{} = sigma\+\_\+ij -\/ pf \texorpdfstring{$\ast$}{*} alpha \texorpdfstring{$\ast$}{*} delta\+\_\+ij
+
+where delta\+\_\+ij is Kronecker delta.
+
+\begin{DoxyAttention}{Attention}
+Since this approach is based on civil engineering concepts, tensile stresses are treated as positive and compressive ones as negative.
+
+The ordering of the principal stresses in engineering is such that sigma1 is the most negative = least tensile stress.
+\end{DoxyAttention}
+\begin{DoxyRefDesc}{Test}
+\item[\mbox{\hyperlink{test__test000073}{Test}}]looks OK, but not rigorously tested yet. \end{DoxyRefDesc}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_brittle_failure_aef7c8a0ec1a31e92c7d2cfbb4dddb113_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=345pt]{classcsmp_1_1_brittle_failure_aef7c8a0ec1a31e92c7d2cfbb4dddb113_icgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/thmc/mechanics/Brittle\+Failure.\+h\item 
+source/modules/thmc/mechanics/Brittle\+Failure.\+cpp\end{DoxyCompactItemize}

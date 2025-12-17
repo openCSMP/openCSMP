@@ -1,0 +1,19 @@
+<map id="csmp::EOS_CO2H2ONaCl_Spycher04::densityBrine" name="csmp::EOS_CO2H2ONaCl_Spycher04::densityBrine">
+<area shape="rect" id="Node000001" title="Density of brine phase." alt="" coords="767,107,948,147"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a585ee473d2a2d06ff4fc985076e79757" title="density brine" alt="" coords="539,107,719,147"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="752,130,720,130,720,124,752,124"/>
+<area shape="rect" id="Node000003" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#aa73eb9a9cfed7485eb2ccbc97ebb169f" title="compressibility of brine" alt="" coords="284,5,464,46"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="576,101,490,61,454,49,456,44,492,57,578,97"/>
+<area shape="rect" id="Node000005" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a6dbf0f5cc7ad412cbc7879218d198baa" title="density of aqueous phase with contained dissolved CO2" alt="" coords="265,71,482,111"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="523,115,483,109,483,104,524,109"/>
+<area shape="rect" id="Node000006" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#ad27d7f23cc337badee730400a574677b" title=" " alt="" coords="277,135,471,191"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="524,145,472,152,471,147,523,139"/>
+<area shape="rect" id="Node000008" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#aa179fe804c5befddba70f6a789ce205f" title=" " alt="" coords="257,215,491,271"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="583,158,492,205,463,217,461,212,490,201,580,153"/>
+<area shape="rect" id="Node000004" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#af2894f36e375258ef96e9a96eb2cd08e" title="compressibility of aqueous phase with dissolved CO2" alt="" coords="5,5,209,46"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="268,28,209,28,209,23,268,23"/>
+<area shape="rect" id="Node000007" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a5589546dfe45b9651f6997362d279c81" title="reservoir solution water&#45;CO2 ratio" alt="" coords="17,143,197,183"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="261,166,198,166,198,160,261,160"/>
+<area shape="rect" id="Node000009" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a26252ff434ea32a5d5dfa66e4031dd04" title="water formation volume factor, Bw" alt="" coords="17,223,197,263"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="241,246,198,246,198,240,241,240"/>
+</map>

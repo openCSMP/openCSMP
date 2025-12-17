@@ -1,0 +1,909 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="namespacecsmp_1_1local_variable_dispatch" kind="namespace" language="C++">
+    <compoundname>csmp::localVariableDispatch</compoundname>
+    <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="local_variable_dispatch_8h_1afdd4e1454a6b43be7d55d32e1baf6910" prot="public" static="no">
+        <type><ref refid="structcsmp_1_1_local_variables_1af8bec2aa21bd639c2f0953597f0f8376" kindref="member">LocalVariables::int_type</ref></type>
+        <definition>using csmp::localVariableDispatch::int_type =  LocalVariables::int_type</definition>
+        <argsstring></argsstring>
+        <name>int_type</name>
+        <qualifiedname>csmp::localVariableDispatch::int_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/localVariableDispatch.h" line="25" column="5" bodyfile="source/includes/model/localVariableDispatch.h" bodystart="25" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="local_variable_dispatch_8h_1af8f098a8ec999a0d248ba23a608f02b4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+          <param>
+            <type>template&lt; uint32_t &gt; class</type>
+            <declname>STOREE</declname>
+            <defname>STOREE</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::localVariableDispatch::assertFiniteVolumeIntegrationPointIndex</definition>
+        <argsstring>(const STOREE&lt; dim &gt; *, uint32_t, uint32_t)</argsstring>
+        <name>assertFiniteVolumeIntegrationPointIndex</name>
+        <qualifiedname>csmp::localVariableDispatch::assertFiniteVolumeIntegrationPointIndex</qualifiedname>
+        <param>
+          <type>const STOREE&lt; dim &gt; *</type>
+        </param>
+        <param>
+          <type>uint32_t</type>
+        </param>
+        <param>
+          <type>uint32_t</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/localVariableDispatch.h" line="31" column="10" bodyfile="source/includes/model/localVariableDispatch.h" bodystart="31" bodyend="34"/>
+      </memberdef>
+      <memberdef kind="function" id="local_variable_dispatch_8h_1acd1185108adad39f11e0cd2fd1186085" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::localVariableDispatch::assertFiniteVolumeIntegrationPointIndex</definition>
+        <argsstring>(const csmp::Element&lt; dim &gt; *e, uint32_t sector_or_facet, uint32_t ip)</argsstring>
+        <name>assertFiniteVolumeIntegrationPointIndex</name>
+        <qualifiedname>csmp::localVariableDispatch::assertFiniteVolumeIntegrationPointIndex</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_element" kindref="compound">csmp::Element</ref>&lt; dim &gt; *</type>
+          <declname>e</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>sector_or_facet</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>ip</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/localVariableDispatch.h" line="37" column="10" bodyfile="source/includes/model/localVariableDispatch.h" bodystart="37" bodyend="41"/>
+      </memberdef>
+      <memberdef kind="function" id="local_variable_dispatch_8h_1a5cf362986db45bef4db13efe12496acd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::localVariableDispatch::assertFiniteVolumeIntegrationPointIndex</definition>
+        <argsstring>(const csmp::Face&lt; dim &gt; *e, uint32_t sector_or_facet, uint32_t ip)</argsstring>
+        <name>assertFiniteVolumeIntegrationPointIndex</name>
+        <qualifiedname>csmp::localVariableDispatch::assertFiniteVolumeIntegrationPointIndex</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_face" kindref="compound">csmp::Face</ref>&lt; dim &gt; *</type>
+          <declname>e</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>sector_or_facet</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>ip</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/localVariableDispatch.h" line="44" column="10" bodyfile="source/includes/model/localVariableDispatch.h" bodystart="44" bodyend="48"/>
+      </memberdef>
+      <memberdef kind="function" id="local_variable_dispatch_8h_1a1c8ff38f729f413cee48aba2a001656f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::localVariableDispatch::assertFiniteVolumeIntegrationPointIndex</definition>
+        <argsstring>(const csmp::InterFace&lt; dim &gt; *e, uint32_t sector_or_facet, uint32_t ip)</argsstring>
+        <name>assertFiniteVolumeIntegrationPointIndex</name>
+        <qualifiedname>csmp::localVariableDispatch::assertFiniteVolumeIntegrationPointIndex</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_inter_face" kindref="compound">csmp::InterFace</ref>&lt; dim &gt; *</type>
+          <declname>e</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>sector_or_facet</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>ip</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/localVariableDispatch.h" line="51" column="10" bodyfile="source/includes/model/localVariableDispatch.h" bodystart="51" bodyend="55"/>
+      </memberdef>
+      <memberdef kind="function" id="local_variable_dispatch_8h_1a84ba183fedbfdf7a707dba82e7ce887e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+          <param>
+            <type>template&lt; uint32_t &gt; class</type>
+            <declname>STOREE</declname>
+            <defname>STOREE</defname>
+          </param>
+        </templateparamlist>
+        <type>std::pair&lt; int_type, int_type &gt;</type>
+        <definition>std::pair&lt; int_type, int_type &gt; csmp::localVariableDispatch::containerNewSize</definition>
+        <argsstring>(const STOREE&lt; dim &gt; *, const LocalVariables &amp;lv, const IntegrationPointVariables &amp;)</argsstring>
+        <name>containerNewSize</name>
+        <qualifiedname>csmp::localVariableDispatch::containerNewSize</qualifiedname>
+        <param>
+          <type>const STOREE&lt; dim &gt; *</type>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_local_variables" kindref="compound">LocalVariables</ref> &amp;</type>
+          <declname>lv</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_integration_point_variables" kindref="compound">IntegrationPointVariables</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>templatized function to associate <ref refid="classcsmp_1_1_local_variable_storage" kindref="compound">LocalVariableStorage</ref> with <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>, <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref>, <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> and <ref refid="classcsmp_1_1_split_boundary" kindref="compound">SplitBoundary</ref> classes which all have no integration points. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/localVariableDispatch.h" line="65" column="22" bodyfile="source/includes/model/localVariableDispatch.h" bodystart="65" bodyend="70"/>
+      </memberdef>
+      <memberdef kind="function" id="local_variable_dispatch_8h_1aba733097b1fdc179003760238bc80cd9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>std::pair&lt; int_type, int_type &gt;</type>
+        <definition>std::pair&lt; int_type, int_type &gt; csmp::localVariableDispatch::containerNewSize</definition>
+        <argsstring>(const csmp::Element&lt; dim &gt; *e, const LocalVariables &amp;lv, const IntegrationPointVariables &amp;ipv)</argsstring>
+        <name>containerNewSize</name>
+        <qualifiedname>csmp::localVariableDispatch::containerNewSize</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_element" kindref="compound">csmp::Element</ref>&lt; dim &gt; *</type>
+          <declname>e</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_local_variables" kindref="compound">LocalVariables</ref> &amp;</type>
+          <declname>lv</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_integration_point_variables" kindref="compound">IntegrationPointVariables</ref> &amp;</type>
+          <declname>ipv</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>templatized function for <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>, <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> and <ref refid="classcsmp_1_1_inter_face" kindref="compound">InterFace</ref> classes which have integration points. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/localVariableDispatch.h" line="76" column="22" bodyfile="source/includes/model/localVariableDispatch.h" bodystart="76" bodyend="87"/>
+      </memberdef>
+      <memberdef kind="function" id="local_variable_dispatch_8h_1ae949be93366b970dc5895d3512552b8c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>std::pair&lt; int_type, int_type &gt;</type>
+        <definition>std::pair&lt; int_type, int_type &gt; csmp::localVariableDispatch::containerNewSize</definition>
+        <argsstring>(const csmp::Face&lt; dim &gt; *e, const LocalVariables &amp;lv, const IntegrationPointVariables &amp;ipv)</argsstring>
+        <name>containerNewSize</name>
+        <qualifiedname>csmp::localVariableDispatch::containerNewSize</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_face" kindref="compound">csmp::Face</ref>&lt; dim &gt; *</type>
+          <declname>e</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_local_variables" kindref="compound">LocalVariables</ref> &amp;</type>
+          <declname>lv</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_integration_point_variables" kindref="compound">IntegrationPointVariables</ref> &amp;</type>
+          <declname>ipv</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/localVariableDispatch.h" line="90" column="22" bodyfile="source/includes/model/localVariableDispatch.h" bodystart="90" bodyend="101"/>
+      </memberdef>
+      <memberdef kind="function" id="local_variable_dispatch_8h_1ab5070d6b31f75b30b01d4e63f1db9699" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>std::pair&lt; int_type, int_type &gt;</type>
+        <definition>std::pair&lt; int_type, int_type &gt; csmp::localVariableDispatch::containerNewSize</definition>
+        <argsstring>(const csmp::InterFace&lt; dim &gt; *e, const LocalVariables &amp;lv, const IntegrationPointVariables &amp;ipv)</argsstring>
+        <name>containerNewSize</name>
+        <qualifiedname>csmp::localVariableDispatch::containerNewSize</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_inter_face" kindref="compound">csmp::InterFace</ref>&lt; dim &gt; *</type>
+          <declname>e</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_local_variables" kindref="compound">LocalVariables</ref> &amp;</type>
+          <declname>lv</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_integration_point_variables" kindref="compound">IntegrationPointVariables</ref> &amp;</type>
+          <declname>ipv</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/localVariableDispatch.h" line="104" column="22" bodyfile="source/includes/model/localVariableDispatch.h" bodystart="104" bodyend="115"/>
+      </memberdef>
+      <memberdef kind="function" id="local_variable_dispatch_8h_1a2ec33260e4ef8ca954490f4fd2d98fc6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+          <param>
+            <type>template&lt; uint32_t &gt; class</type>
+            <declname>STOREE</declname>
+            <defname>STOREE</defname>
+          </param>
+        </templateparamlist>
+        <type>std::pair&lt; int_type, uint32_t &gt;</type>
+        <definition>std::pair&lt; int_type, uint32_t &gt; csmp::localVariableDispatch::containerTotalDataDepth</definition>
+        <argsstring>(const STOREE&lt; dim &gt; *, const csmp::Index &amp;idx)</argsstring>
+        <name>containerTotalDataDepth</name>
+        <qualifiedname>csmp::localVariableDispatch::containerTotalDataDepth</qualifiedname>
+        <param>
+          <type>const STOREE&lt; dim &gt; *</type>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <declname>idx</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/localVariableDispatch.h" line="121" column="22" bodyfile="source/includes/model/localVariableDispatch.h" bodystart="121" bodyend="126"/>
+      </memberdef>
+      <memberdef kind="function" id="local_variable_dispatch_8h_1a127cca1e0a650cff0cd8b5ac441a0e13" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>std::pair&lt; int_type, int_type &gt;</type>
+        <definition>std::pair&lt; int_type, int_type &gt; csmp::localVariableDispatch::containerTotalDataDepth</definition>
+        <argsstring>(const csmp::Element&lt; dim &gt; *e, const csmp::Index &amp;idx)</argsstring>
+        <name>containerTotalDataDepth</name>
+        <qualifiedname>csmp::localVariableDispatch::containerTotalDataDepth</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_element" kindref="compound">csmp::Element</ref>&lt; dim &gt; *</type>
+          <declname>e</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <declname>idx</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/localVariableDispatch.h" line="129" column="22" bodyfile="source/includes/model/localVariableDispatch.h" bodystart="129" bodyend="140"/>
+      </memberdef>
+      <memberdef kind="function" id="local_variable_dispatch_8h_1ab46816e5b50767e33ee99f3aa6dec8f9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>std::pair&lt; int_type, int_type &gt;</type>
+        <definition>std::pair&lt; int_type, int_type &gt; csmp::localVariableDispatch::containerTotalDataDepth</definition>
+        <argsstring>(const csmp::Face&lt; dim &gt; *f, const csmp::Index &amp;idx)</argsstring>
+        <name>containerTotalDataDepth</name>
+        <qualifiedname>csmp::localVariableDispatch::containerTotalDataDepth</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_face" kindref="compound">csmp::Face</ref>&lt; dim &gt; *</type>
+          <declname>f</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <declname>idx</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/localVariableDispatch.h" line="143" column="22" bodyfile="source/includes/model/localVariableDispatch.h" bodystart="143" bodyend="154"/>
+      </memberdef>
+      <memberdef kind="function" id="local_variable_dispatch_8h_1a963b50a59d838296c244b138449c80ee" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>std::pair&lt; int_type, int_type &gt;</type>
+        <definition>std::pair&lt; int_type, int_type &gt; csmp::localVariableDispatch::containerTotalDataDepth</definition>
+        <argsstring>(const csmp::InterFace&lt; dim &gt; *f, const csmp::Index &amp;idx)</argsstring>
+        <name>containerTotalDataDepth</name>
+        <qualifiedname>csmp::localVariableDispatch::containerTotalDataDepth</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_inter_face" kindref="compound">csmp::InterFace</ref>&lt; dim &gt; *</type>
+          <declname>f</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <declname>idx</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/localVariableDispatch.h" line="157" column="22" bodyfile="source/includes/model/localVariableDispatch.h" bodystart="157" bodyend="168"/>
+      </memberdef>
+      <memberdef kind="function" id="local_variable_dispatch_8h_1a41a80a8665cb9a87e1e8b32095a7494d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+          <param>
+            <type>template&lt; uint32_t &gt; class</type>
+            <declname>STOREE</declname>
+            <defname>STOREE</defname>
+          </param>
+        </templateparamlist>
+        <type>std::pair&lt; int_type, int_type &gt;</type>
+        <definition>std::pair&lt; int_type, int_type &gt; csmp::localVariableDispatch::containerOffset</definition>
+        <argsstring>(const STOREE&lt; dim &gt; *, const csmp::Index &amp;idx)</argsstring>
+        <name>containerOffset</name>
+        <qualifiedname>csmp::localVariableDispatch::containerOffset</qualifiedname>
+        <param>
+          <type>const STOREE&lt; dim &gt; *</type>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <declname>idx</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Offset from beginning of data vector of the variable value record referred to by <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> idx <verbatim>     Master template
+</verbatim> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/localVariableDispatch.h" line="179" column="15" bodyfile="source/includes/model/localVariableDispatch.h" bodystart="179" bodyend="184"/>
+      </memberdef>
+      <memberdef kind="function" id="local_variable_dispatch_8h_1a5b1edd8d5407c8f63dd00767e71362ff" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>std::pair&lt; int_type, int_type &gt;</type>
+        <definition>std::pair&lt; int_type, int_type &gt; csmp::localVariableDispatch::containerOffset</definition>
+        <argsstring>(const csmp::Element&lt; dim &gt; *e, const csmp::Index &amp;idx)</argsstring>
+        <name>containerOffset</name>
+        <qualifiedname>csmp::localVariableDispatch::containerOffset</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_element" kindref="compound">csmp::Element</ref>&lt; dim &gt; *</type>
+          <declname>e</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <declname>idx</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Specialization for <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> class.</para>
+<para>Offset of sector or facet integration variable records from beginning of data vector in local variable storage associated with an element</para>
+<para>Function used only if index refers to a sector- or facet integration point variable.</para>
+<para>Method takes offset calculated in property database ignoring the number of integration points because these will vary from element to element type. This offset is now expanded for the element variable of interest by multiplicating those other element integration point variables which precede the current variable.</para>
+<para><simplesect kind="attention"><para>storage order is: all sector integration point variables for the first ip, then the second and so forth. Subsequently all facet integration point variables in the same fashion.</para>
+</simplesect>
+<simplesect kind="attention"><para>: this method is only used for the reading of variables that are stored in the LVS associated with <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> objects</para>
+</simplesect>
+<simplesect kind="attention"><para><ref refid="structcsmp_1_1_index_1a74a6be7459ba4a62d9bf33c311918178" kindref="member">Index::offsetFactorSector</ref> is zero for sector integration point variables and 1 for facet integration point variables </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/localVariableDispatch.h" line="210" column="22" bodyfile="source/includes/model/localVariableDispatch.h" bodystart="210" bodyend="223"/>
+      </memberdef>
+      <memberdef kind="function" id="local_variable_dispatch_8h_1a7d151c33ca063316d3cf8a99d73ad28e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>std::pair&lt; int_type, int_type &gt;</type>
+        <definition>std::pair&lt; int_type, int_type &gt; csmp::localVariableDispatch::containerOffset</definition>
+        <argsstring>(const csmp::Face&lt; dim &gt; *f, const csmp::Index &amp;idx)</argsstring>
+        <name>containerOffset</name>
+        <qualifiedname>csmp::localVariableDispatch::containerOffset</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_face" kindref="compound">csmp::Face</ref>&lt; dim &gt; *</type>
+          <declname>f</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <declname>idx</declname>
+        </param>
+        <briefdescription>
+<para>specialisation <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/localVariableDispatch.h" line="228" column="22" bodyfile="source/includes/model/localVariableDispatch.h" bodystart="228" bodyend="239"/>
+      </memberdef>
+      <memberdef kind="function" id="local_variable_dispatch_8h_1aec85212257711546f17ad8bbdde81f19" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>std::pair&lt; int_type, int_type &gt;</type>
+        <definition>std::pair&lt; int_type, int_type &gt; csmp::localVariableDispatch::containerOffset</definition>
+        <argsstring>(const csmp::InterFace&lt; dim &gt; *f, const csmp::Index &amp;idx)</argsstring>
+        <name>containerOffset</name>
+        <qualifiedname>csmp::localVariableDispatch::containerOffset</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_inter_face" kindref="compound">csmp::InterFace</ref>&lt; dim &gt; *</type>
+          <declname>f</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <declname>idx</declname>
+        </param>
+        <briefdescription>
+<para>specialisation <ref refid="classcsmp_1_1_inter_face" kindref="compound">InterFace</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/localVariableDispatch.h" line="245" column="22" bodyfile="source/includes/model/localVariableDispatch.h" bodystart="245" bodyend="256"/>
+      </memberdef>
+      <memberdef kind="function" id="local_variable_dispatch_8h_1a16f1c7d4d80881c41282677ee6fabc95" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+          <param>
+            <type>template&lt; uint32_t &gt; class</type>
+            <declname>STOREE</declname>
+            <defname>STOREE</defname>
+          </param>
+        </templateparamlist>
+        <type>std::pair&lt; int_type, int_type &gt;</type>
+        <definition>std::pair&lt; int_type, int_type &gt; csmp::localVariableDispatch::containerIPCycles</definition>
+        <argsstring>(const STOREE&lt; dim &gt; *, const csmp::Index &amp;)</argsstring>
+        <name>containerIPCycles</name>
+        <qualifiedname>csmp::localVariableDispatch::containerIPCycles</qualifiedname>
+        <param>
+          <type>const STOREE&lt; dim &gt; *</type>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/localVariableDispatch.h" line="264" column="15" bodyfile="source/includes/model/localVariableDispatch.h" bodystart="264" bodyend="267"/>
+      </memberdef>
+      <memberdef kind="function" id="local_variable_dispatch_8h_1af9ba61b9ba17039547057c91a926d12c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>std::pair&lt; int_type, int_type &gt;</type>
+        <definition>std::pair&lt; int_type, int_type &gt; csmp::localVariableDispatch::containerIPCycles</definition>
+        <argsstring>(const csmp::Element&lt; dim &gt; *e, const csmp::Index &amp;idx)</argsstring>
+        <name>containerIPCycles</name>
+        <qualifiedname>csmp::localVariableDispatch::containerIPCycles</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_element" kindref="compound">csmp::Element</ref>&lt; dim &gt; *</type>
+          <declname>e</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <declname>idx</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/localVariableDispatch.h" line="270" column="22" bodyfile="source/includes/model/localVariableDispatch.h" bodystart="270" bodyend="283"/>
+      </memberdef>
+      <memberdef kind="function" id="local_variable_dispatch_8h_1a43e98414754c0093d4b9a60836ee9413" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>std::pair&lt; int_type, int_type &gt;</type>
+        <definition>std::pair&lt; int_type, int_type &gt; csmp::localVariableDispatch::containerIPCycles</definition>
+        <argsstring>(const csmp::Face&lt; dim &gt; *f, const csmp::Index &amp;idx)</argsstring>
+        <name>containerIPCycles</name>
+        <qualifiedname>csmp::localVariableDispatch::containerIPCycles</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_face" kindref="compound">csmp::Face</ref>&lt; dim &gt; *</type>
+          <declname>f</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <declname>idx</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/localVariableDispatch.h" line="286" column="22" bodyfile="source/includes/model/localVariableDispatch.h" bodystart="286" bodyend="299"/>
+      </memberdef>
+      <memberdef kind="function" id="local_variable_dispatch_8h_1af4aa8da35eb3b21f54572a6dfa09a5b0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>std::pair&lt; int_type, int_type &gt;</type>
+        <definition>std::pair&lt; int_type, int_type &gt; csmp::localVariableDispatch::containerIPCycles</definition>
+        <argsstring>(const csmp::InterFace&lt; dim &gt; *f, const csmp::Index &amp;idx)</argsstring>
+        <name>containerIPCycles</name>
+        <qualifiedname>csmp::localVariableDispatch::containerIPCycles</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_inter_face" kindref="compound">csmp::InterFace</ref>&lt; dim &gt; *</type>
+          <declname>f</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <declname>idx</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/localVariableDispatch.h" line="302" column="22" bodyfile="source/includes/model/localVariableDispatch.h" bodystart="302" bodyend="315"/>
+      </memberdef>
+      <memberdef kind="function" id="local_variable_dispatch_8h_1a4a43d759bf87006b127bdd5afea5f2c5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+          <param>
+            <type>template&lt; uint32_t &gt; class</type>
+            <declname>STOREE</declname>
+            <defname>STOREE</defname>
+          </param>
+        </templateparamlist>
+        <type>std::pair&lt; int_type, int_type &gt;</type>
+        <definition>std::pair&lt; int_type, int_type &gt; csmp::localVariableDispatch::containerIPCycle1Offset</definition>
+        <argsstring>(const STOREE&lt; dim &gt; *, const csmp::Index &amp;)</argsstring>
+        <name>containerIPCycle1Offset</name>
+        <qualifiedname>csmp::localVariableDispatch::containerIPCycle1Offset</qualifiedname>
+        <param>
+          <type>const STOREE&lt; dim &gt; *</type>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/localVariableDispatch.h" line="322" column="15" bodyfile="source/includes/model/localVariableDispatch.h" bodystart="322" bodyend="325"/>
+      </memberdef>
+      <memberdef kind="function" id="local_variable_dispatch_8h_1a36563815c558e1c63cc0bc0768cb77a3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>std::pair&lt; int_type, int_type &gt;</type>
+        <definition>std::pair&lt; int_type, int_type &gt; csmp::localVariableDispatch::containerIPCycle1Offset</definition>
+        <argsstring>(const csmp::Element&lt; dim &gt; *e, const csmp::Index &amp;idx)</argsstring>
+        <name>containerIPCycle1Offset</name>
+        <qualifiedname>csmp::localVariableDispatch::containerIPCycle1Offset</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_element" kindref="compound">csmp::Element</ref>&lt; dim &gt; *</type>
+          <declname>e</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <declname>idx</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/localVariableDispatch.h" line="328" column="22" bodyfile="source/includes/model/localVariableDispatch.h" bodystart="328" bodyend="337"/>
+      </memberdef>
+      <memberdef kind="function" id="local_variable_dispatch_8h_1afb625b2f691f725c0f1e301fe80ffd39" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>std::pair&lt; int_type, int_type &gt;</type>
+        <definition>std::pair&lt; int_type, int_type &gt; csmp::localVariableDispatch::containerIPCycle1Offset</definition>
+        <argsstring>(const csmp::Face&lt; dim &gt; *f, const csmp::Index &amp;idx)</argsstring>
+        <name>containerIPCycle1Offset</name>
+        <qualifiedname>csmp::localVariableDispatch::containerIPCycle1Offset</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_face" kindref="compound">csmp::Face</ref>&lt; dim &gt; *</type>
+          <declname>f</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <declname>idx</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/localVariableDispatch.h" line="340" column="22" bodyfile="source/includes/model/localVariableDispatch.h" bodystart="340" bodyend="349"/>
+      </memberdef>
+      <memberdef kind="function" id="local_variable_dispatch_8h_1a60bdec75faa8a3e1d21c11c363372b84" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>std::pair&lt; int_type, int_type &gt;</type>
+        <definition>std::pair&lt; int_type, int_type &gt; csmp::localVariableDispatch::containerIPCycle1Offset</definition>
+        <argsstring>(const csmp::InterFace&lt; dim &gt; *f, const csmp::Index &amp;idx)</argsstring>
+        <name>containerIPCycle1Offset</name>
+        <qualifiedname>csmp::localVariableDispatch::containerIPCycle1Offset</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_inter_face" kindref="compound">csmp::InterFace</ref>&lt; dim &gt; *</type>
+          <declname>f</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <declname>idx</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/localVariableDispatch.h" line="352" column="22" bodyfile="source/includes/model/localVariableDispatch.h" bodystart="352" bodyend="361"/>
+      </memberdef>
+      <memberdef kind="function" id="local_variable_dispatch_8h_1a31adb7662bfadfa4a16e3262f6422775" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+          <param>
+            <type>template&lt; uint32_t &gt; class</type>
+            <declname>STOREE</declname>
+            <defname>STOREE</defname>
+          </param>
+        </templateparamlist>
+        <type>std::pair&lt; int_type, int_type &gt;</type>
+        <definition>std::pair&lt; int_type, int_type &gt; csmp::localVariableDispatch::containerIPCycle2Offset</definition>
+        <argsstring>(const STOREE&lt; dim &gt; *, const csmp::Index &amp;)</argsstring>
+        <name>containerIPCycle2Offset</name>
+        <qualifiedname>csmp::localVariableDispatch::containerIPCycle2Offset</qualifiedname>
+        <param>
+          <type>const STOREE&lt; dim &gt; *</type>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/localVariableDispatch.h" line="368" column="15" bodyfile="source/includes/model/localVariableDispatch.h" bodystart="368" bodyend="371"/>
+      </memberdef>
+      <memberdef kind="function" id="local_variable_dispatch_8h_1a256e87da6c7c90e26623e3492e3b6e80" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>std::pair&lt; int_type, int_type &gt;</type>
+        <definition>std::pair&lt; int_type, int_type &gt; csmp::localVariableDispatch::containerIPCycle2Offset</definition>
+        <argsstring>(const csmp::Element&lt; dim &gt; *, const csmp::Index &amp;idx)</argsstring>
+        <name>containerIPCycle2Offset</name>
+        <qualifiedname>csmp::localVariableDispatch::containerIPCycle2Offset</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_element" kindref="compound">csmp::Element</ref>&lt; dim &gt; *</type>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <declname>idx</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/localVariableDispatch.h" line="374" column="22" bodyfile="source/includes/model/localVariableDispatch.h" bodystart="374" bodyend="385"/>
+      </memberdef>
+      <memberdef kind="function" id="local_variable_dispatch_8h_1a4b2daf8e26a16135e89ed827c16972db" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>std::pair&lt; int_type, int_type &gt;</type>
+        <definition>std::pair&lt; int_type, int_type &gt; csmp::localVariableDispatch::containerIPCycle2Offset</definition>
+        <argsstring>(const csmp::Face&lt; dim &gt; *, const csmp::Index &amp;idx)</argsstring>
+        <name>containerIPCycle2Offset</name>
+        <qualifiedname>csmp::localVariableDispatch::containerIPCycle2Offset</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_face" kindref="compound">csmp::Face</ref>&lt; dim &gt; *</type>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <declname>idx</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/localVariableDispatch.h" line="388" column="22" bodyfile="source/includes/model/localVariableDispatch.h" bodystart="388" bodyend="399"/>
+      </memberdef>
+      <memberdef kind="function" id="local_variable_dispatch_8h_1a1dc6db6083825b44cf407cdd5d580c44" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>std::pair&lt; int_type, int_type &gt;</type>
+        <definition>std::pair&lt; int_type, int_type &gt; csmp::localVariableDispatch::containerIPCycle2Offset</definition>
+        <argsstring>(const csmp::InterFace&lt; dim &gt; *, const csmp::Index &amp;idx)</argsstring>
+        <name>containerIPCycle2Offset</name>
+        <qualifiedname>csmp::localVariableDispatch::containerIPCycle2Offset</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_inter_face" kindref="compound">csmp::InterFace</ref>&lt; dim &gt; *</type>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <declname>idx</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/localVariableDispatch.h" line="402" column="22" bodyfile="source/includes/model/localVariableDispatch.h" bodystart="402" bodyend="413"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="source/includes/model/localVariableDispatch.h" line="23" column="1"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,71 @@
+\doxysection{Exception.\+h}
+\hypertarget{_exception_8h_source}{}\label{_exception_8h_source}\index{source/includes/run\_control/Exception.h@{source/includes/run\_control/Exception.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_EXCEPTION\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_EXCEPTION\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{exception}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{comment}{///\ classification\ of\ exception;\ warning\ (possible\ problem),\ error\ (actual\ problem;\ fatal\ (need\ to\ terminate)}}
+\DoxyCodeLine{00010\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{namespacecsmp_a6a7cd0f08693c4632eea521f4ab13cb8}{CSMP\_MESSAGE}}\ :\ \mbox{\hyperlink{namespacecsmp_a6a7cd0f08693c4632eea521f4ab13cb8}{std}}::\mbox{\hyperlink{namespacecsmp_a6a7cd0f08693c4632eea521f4ab13cb8}{int8\_t}}\ \{\ INFO=0,\ EXCEPTION=-\/1,\ WARNING=-\/2,\ ERROR=-\/3,\ FATAL\_ERROR=-\/4\ \};}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{comment}{///\ convert\ enum\ to\ a\ printable\ string}}
+\DoxyCodeLine{00013\ \mbox{\hyperlink{namespacecsmp_a2a6c2c39bf98f5a4f2832f68215a0795}{std}}::\mbox{\hyperlink{namespacecsmp_a2a6c2c39bf98f5a4f2832f68215a0795}{string}}\ \ \mbox{\hyperlink{namespacecsmp_a2a6c2c39bf98f5a4f2832f68215a0795}{parseMessage}}(\ \mbox{\hyperlink{namespacecsmp_a6a7cd0f08693c4632eea521f4ab13cb8}{CSMP\_MESSAGE}}\ );}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{comment}{/**\ @brief\ base\ class\ for\ CSMP-\/specific\ exception\ handling\ using\ an\ exception\ qualifier\ (CSMP\_MESSAGE),}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ \ \ \ an\ originator\ (the\ class\ and\ method\ from\ where\ the\ exception\ comes\ from,\ and\ a\ string}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ \ \ \ that\ contains\ the\ message\ that\ describes\ what\ happened\ locally.}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ \ \ \ \ @note\ no\ need\ to\ use\ a\ csmp::Exception\ if\ the\ case\ is\ well\ described\ by\ one\ of\ the\ }}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ \ \ \ \ standard\ exceptions.}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ \ \ \ \ \ @author\ Stephan\ Matthai}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ \ \ \ \ \ @date\ 1999}}
+\DoxyCodeLine{00024\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00025\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_exception}{Exception}}\ :\ \mbox{\hyperlink{classcsmp_1_1_exception}{std}}::\mbox{\hyperlink{classcsmp_1_1_exception}{exception}}\ \{}
+\DoxyCodeLine{00026\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{comment}{///\ use\ as:\ throw\ csmp::Exception(\ WARNING,\ "{}class::method\ where\ this\ comes\ from"{},\ messsage\ );}}
+\DoxyCodeLine{00028\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_exception_aeeb5f6b6949fce20e2e4c91c1e844559}{Exception}}(\ \mbox{\hyperlink{namespacecsmp_a6a7cd0f08693c4632eea521f4ab13cb8}{CSMP\_MESSAGE}},}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ originator,}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ message\ );}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ Exception(\ \mbox{\hyperlink{namespacecsmp_a6a7cd0f08693c4632eea521f4ab13cb8}{CSMP\_MESSAGE}},}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ originator,}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ parameter,}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ message\ );}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~Exception()\ \textcolor{keywordflow}{throw}();}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ Exception(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_exception}{Exception}}\&\ );}
+\DoxyCodeLine{00040\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_exception}{Exception}}\&\ operator=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_exception}{Exception}}\&\ );}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ what()\ \textcolor{keyword}{const}\ \textcolor{keywordflow}{throw}();}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{comment}{///\ returns\ what()\ for\ the\ underlying\ standard\ exception}}
+\DoxyCodeLine{00045\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_exception_af89cbd55496472087c037ee19caff8c4}{std}}::\mbox{\hyperlink{classcsmp_1_1_exception_af89cbd55496472087c037ee19caff8c4}{string}}\ \ \ \mbox{\hyperlink{classcsmp_1_1_exception_af89cbd55496472087c037ee19caff8c4}{What}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{comment}{///\ the\ class\ and\ method\ (or\ function)\ from\ which\ the\ exception\ was\ thrown}}
+\DoxyCodeLine{00048\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_exception_ae5b044f37d5fcdf3f69be12d3ec781bc}{std}}::\mbox{\hyperlink{classcsmp_1_1_exception_ae5b044f37d5fcdf3f69be12d3ec781bc}{string}}\ \ \ \mbox{\hyperlink{classcsmp_1_1_exception_ae5b044f37d5fcdf3f69be12d3ec781bc}{Originator}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{comment}{///\ what\ went\ wrong\ in\ as\ much\ as\ was\ known\ at\ the\ executation\ of\ the\ program\ from\ where\ the\ exception\ was\ thrown}}
+\DoxyCodeLine{00051\ \ \ \ \ \mbox{\hyperlink{namespacecsmp_a6a7cd0f08693c4632eea521f4ab13cb8}{CSMP\_MESSAGE}}\ \ \mbox{\hyperlink{classcsmp_1_1_exception_a844fdf88ddb365d0fb5ae63dbe5b7547}{Message}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{comment}{///\ prints\ all\ data\ assocatiated\ with\ the\ exception\ (following\ the\ convention\ for\ all\ CSMP\ classes)}}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_exception_ab8a55ea01f63ceded4a827a661faef83}{Out}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00057\ \ \ \ \ \mbox{\hyperlink{namespacecsmp_a6a7cd0f08693c4632eea521f4ab13cb8}{CSMP\_MESSAGE}}\ csmp\_exception\_;}
+\DoxyCodeLine{00058\ \ \ \ \ std::string\ \ originator\_;}
+\DoxyCodeLine{00059\ \ \ \ \ std::string\ \ message\_;}
+\DoxyCodeLine{00060\ \ \ \ \ Exception();}
+\DoxyCodeLine{00061\ \ \};}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

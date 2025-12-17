@@ -1,0 +1,110 @@
+\doxysection{csmp\+::Opening\+Mode\+Fracture Class Reference}
+\hypertarget{classcsmp_1_1_opening_mode_fracture}{}\label{classcsmp_1_1_opening_mode_fracture}\index{csmp::OpeningModeFracture@{csmp::OpeningModeFracture}}
+
+
+Collaboration diagram for csmp\+::Opening\+Mode\+Fracture\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=214pt]{classcsmp_1_1_opening_mode_fracture__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_opening_mode_fracture_a1ae435868ecae56ae89311476ab1ca1a}\label{classcsmp_1_1_opening_mode_fracture_a1ae435868ecae56ae89311476ab1ca1a} 
+{\bfseries Opening\+Mode\+Fracture} (const \mbox{\hyperlink{classcsmp_1_1_opening_mode_fracture}{Opening\+Mode\+Fracture}} \&)
+\begin{DoxyCompactList}\small\item\em copy-\/constructor \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_opening_mode_fracture_a7fffdb8d6c1c18829f5fadf7c3f61a20}\label{classcsmp_1_1_opening_mode_fracture_a7fffdb8d6c1c18829f5fadf7c3f61a20} 
+{\bfseries Opening\+Mode\+Fracture} (double length, double Poissons\+\_\+ratio, double Youngs\+\_\+modulus)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_opening_mode_fracture_a236e54296e1385aee3e01a299508c467}{Length}} (double length)
+\item 
+\Hypertarget{classcsmp_1_1_opening_mode_fracture_a8f91575ba90f809eade33911d9a7312f}\label{classcsmp_1_1_opening_mode_fracture_a8f91575ba90f809eade33911d9a7312f} 
+double {\bfseries Length} () const
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_opening_mode_fracture_acf0c7bbb273554cafbeac8edebc7bd13}{Center\+Aperture}} (double pf, double syy) const
+\begin{DoxyCompactList}\small\item\em convention syy, the fracture normal stress, is positive if compressive \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_opening_mode_fracture_ae94ee157d93ad32dabda12ecbe83d38b}\label{classcsmp_1_1_opening_mode_fracture_ae94ee157d93ad32dabda12ecbe83d38b} 
+double {\bfseries Aperture} (double pf, double syy, double cx) const
+\begin{DoxyCompactList}\small\item\em calculates fracture aperture at some distance cx (0..length/2) from the fracture center \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_opening_mode_fracture_a5dce75783a8aefbb3d5fb0f3b4acb40e}\label{classcsmp_1_1_opening_mode_fracture_a5dce75783a8aefbb3d5fb0f3b4acb40e} 
+double {\bfseries Transmissivity} (double pf, double syy, double visc) const
+\begin{DoxyCompactList}\small\item\em returns (permeability/viscosity) \texorpdfstring{$\ast$}{*} aperture product \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_opening_mode_fracture_a844cd863d68a137b4dda7b94afd34891}\label{classcsmp_1_1_opening_mode_fracture_a844cd863d68a137b4dda7b94afd34891} 
+double {\bfseries Mode\+\_\+\+I\+\_\+\+Volume} (double pf, double syy) const
+\begin{DoxyCompactList}\small\item\em joint volume (assuming unit thickness) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_opening_mode_fracture_a9bba3205473a9a03770ec042df78bf41}\label{classcsmp_1_1_opening_mode_fracture_a9bba3205473a9a03770ec042df78bf41} 
+double {\bfseries Mode\+\_\+\+II\+\_\+\+Volume} (double sxy) const
+\begin{DoxyCompactList}\small\item\em volume of a joint in shear (assuming unit thickness) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_opening_mode_fracture_aefbba6bfc2576feccac82997fa7a4aa2}\label{classcsmp_1_1_opening_mode_fracture_aefbba6bfc2576feccac82997fa7a4aa2} 
+double {\bfseries Maximum\+Volume} (double pf, double syy, double sxy) const
+\begin{DoxyCompactList}\small\item\em maximum volume in response to tensile and shear stresses \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_opening_mode_fracture_a87af282351c73e38fe777233c0d9d4d2}{Dilatation}} (double frac\+\_\+intensity, double pf, double syy, double sxy) const
+\begin{DoxyCompactList}\small\item\em dilatation of a square block of rock with fracture intensity (f/m), and dimensions = frac length\texorpdfstring{$^\wedge$}{\string^}2 \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_opening_mode_fracture_ad6347bc79a48d20c98e3fd41b2068723}\label{classcsmp_1_1_opening_mode_fracture_ad6347bc79a48d20c98e3fd41b2068723} 
+void {\bfseries Sixteen\+Point\+Convex\+Hull} (double pf, double syy, const \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} \&a, const \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} \&b, std\+::list$<$ \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} $>$ \&chain)
+\begin{DoxyCompactList}\small\item\em 2D construction routines for fracture polygons \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_opening_mode_fracture_a6c0f86f205a333c9ce8de84691679800}\label{classcsmp_1_1_opening_mode_fracture_a6c0f86f205a333c9ce8de84691679800} 
+void {\bfseries Blunt\+Ten\+Point\+Hull} (double pf, double syy, const \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} \&b, const \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} \&c, std\+::list$<$ \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} $>$ \&chain)
+\item 
+\Hypertarget{classcsmp_1_1_opening_mode_fracture_a65a5305720ca3c0068f1b9f1c61e1760}\label{classcsmp_1_1_opening_mode_fracture_a65a5305720ca3c0068f1b9f1c61e1760} 
+void {\bfseries Rectangle\+Hull} (double pf, double syy, \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} \&b, \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} \&c, std\+::list$<$ \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} $>$ \&chain)
+\item 
+\Hypertarget{classcsmp_1_1_opening_mode_fracture_a10f5c016fd6ff0539d6e6fb4ce90a6b8}\label{classcsmp_1_1_opening_mode_fracture_a10f5c016fd6ff0539d6e6fb4ce90a6b8} 
+void {\bfseries Rectangle\+Hull} (double fixed\+\_\+aperture, \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} \&b, \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} \&c, std\+::list$<$ \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} $>$ \&chain)
+\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_opening_mode_fracture_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_opening_mode_fracture_acf0c7bbb273554cafbeac8edebc7bd13}\index{csmp::OpeningModeFracture@{csmp::OpeningModeFracture}!CenterAperture@{CenterAperture}}
+\index{CenterAperture@{CenterAperture}!csmp::OpeningModeFracture@{csmp::OpeningModeFracture}}
+\doxysubsubsection{\texorpdfstring{CenterAperture()}{CenterAperture()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_opening_mode_fracture_acf0c7bbb273554cafbeac8edebc7bd13} 
+double csmp\+::\+Opening\+Mode\+Fracture\+::\+Center\+Aperture (\begin{DoxyParamCaption}\item[{double}]{pf}{, }\item[{double}]{syy}{}\end{DoxyParamCaption}) const}
+
+
+
+convention syy, the fracture normal stress, is positive if compressive 
+
+normal stress is negative if tensile Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_opening_mode_fracture_acf0c7bbb273554cafbeac8edebc7bd13_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_opening_mode_fracture_a87af282351c73e38fe777233c0d9d4d2}\index{csmp::OpeningModeFracture@{csmp::OpeningModeFracture}!Dilatation@{Dilatation}}
+\index{Dilatation@{Dilatation}!csmp::OpeningModeFracture@{csmp::OpeningModeFracture}}
+\doxysubsubsection{\texorpdfstring{Dilatation()}{Dilatation()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_opening_mode_fracture_a87af282351c73e38fe777233c0d9d4d2} 
+double csmp\+::\+Opening\+Mode\+Fracture\+::\+Dilatation (\begin{DoxyParamCaption}\item[{double}]{frac\+\_\+intensity}{, }\item[{double}]{pf}{, }\item[{double}]{syy}{, }\item[{double}]{sxy}{}\end{DoxyParamCaption}) const}
+
+
+
+dilatation of a square block of rock with fracture intensity (f/m), and dimensions = frac length\texorpdfstring{$^\wedge$}{\string^}2 
+
+dilatation of a square block of rock with fracture intensity (f/m), and dimensions = frac length\texorpdfstring{$^\wedge$}{\string^}2 Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_opening_mode_fracture_a87af282351c73e38fe777233c0d9d4d2_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_opening_mode_fracture_a236e54296e1385aee3e01a299508c467}\index{csmp::OpeningModeFracture@{csmp::OpeningModeFracture}!Length@{Length}}
+\index{Length@{Length}!csmp::OpeningModeFracture@{csmp::OpeningModeFracture}}
+\doxysubsubsection{\texorpdfstring{Length()}{Length()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_opening_mode_fracture_a236e54296e1385aee3e01a299508c467} 
+void csmp\+::\+Opening\+Mode\+Fracture\+::\+Length (\begin{DoxyParamCaption}\item[{double}]{len}{}\end{DoxyParamCaption})}
+
+NB\+: also setting fracture half-\/length a ! 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/thmc/mechanics/Opening\+Mode\+Fracture.\+h\item 
+source/modules/thmc/mechanics/Opening\+Mode\+Fracture.\+cpp\end{DoxyCompactItemize}

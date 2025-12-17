@@ -92,7 +92,7 @@ void VectorVariable_Test1::Addition_Operator1()
    
 
    //Testing for constant_value addition
-   csmpvector3 = csmpvector1 + 10;
+   csmpvector3 = csmpvector1 + 10.;
    _equal(csmpvector3( 0 ), 12.0, fTolerance);
    _equal(csmpvector3.Flag( 0 ), ROBIN, fTolerance);
    

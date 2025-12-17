@@ -1,0 +1,87 @@
+.TH "csmp::GenericSingleton< CT >" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::GenericSingleton< CT > \- references based generic singleton base class template  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <GenericSingleton\&.h>\fP
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static SingletonType & \fBInstance\fP ()"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<class CT>
+.br
+class csmp::GenericSingleton< CT >"references based generic singleton base class template 
+
+
+.PP
+\fBAuthor\fP
+.RS 4
+P\&. Lang 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2011
+.RE
+.PP
+Class template that allows to inherit from with singleton(GoF) functionality\&. The inherited class should look as outlined:
+
+.PP
+.PP
+.nf
+class TestSingleton : public GenericSingleton<TestSingleton>
+{
+  friend class GenericSingleton<TestSingleton>;
+ 
+  private:
+    TestSingleton() : i(3) {}
+
+  public:
+    int i;
+};
+.fi
+.PP
+
+.PP
+and is consequently (globally!!!) available\&. For usage see:
+
+.PP
+.PP
+.nf
+TestSingleton& single( TestSingleton::Instance() );
+single\&.i = 4;
+.fi
+.PP
+
+.PP
+alternatively
+
+.PP
+.PP
+.nf
+TestSingleton::Instance()\&.i = 4;
+.fi
+.PP
+
+.PP
+\fBAttention\fP
+.RS 4
+Strictly speaking singletons(and statics for that matter) are considered to be a violation of OOP and should be treated as such\&. 
+.RE
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

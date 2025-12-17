@@ -1,0 +1,133 @@
+\doxysection{csmp\+::Mass\+Based\+Stencil\+Processor\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_mass_based_stencil_processor}{}\label{classcsmp_1_1_mass_based_stencil_processor}\index{csmp::MassBasedStencilProcessor$<$ dim $>$@{csmp::MassBasedStencilProcessor$<$ dim $>$}}
+
+
+Inheritance diagram for csmp\+::Mass\+Based\+Stencil\+Processor\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_mass_based_stencil_processor__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Mass\+Based\+Stencil\+Processor\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_mass_based_stencil_processor__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_mass_based_stencil_processor_a38177ba65dea9e394491f44e369f6d85}\label{classcsmp_1_1_mass_based_stencil_processor_a38177ba65dea9e394491f44e369f6d85} 
+{\bfseries Mass\+Based\+Stencil\+Processor} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&adv\+\_\+lhs\+\_\+key, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&adv\+\_\+rhs\+\_\+key, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&velo\+\_\+key)
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_mass_based_stencil_processor_a4b2d47c4796d3ac158ae966783385128}{Initialize\+First\+Order}} (const \mbox{\hyperlink{classcsmp_1_1_f_v___parameter}{FV\+\_\+\+Parameter}} \&param, const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&e, const \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}} \&vt=SCALAR, uint32\+\_\+t var\+\_\+comp\+\_\+nr=0)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{structcsmp_1_1_explicit_stencil_processor}{csmp\+::\+Explicit\+Stencil\+Processor$<$ dim $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Explicit\+Stencil\+Processor} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&adv\+\_\+key, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&velo\+\_\+key)
+\begin{DoxyCompactList}\small\item\em for advection only \end{DoxyCompactList}\item 
+{\bfseries Explicit\+Stencil\+Processor} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&adv\+\_\+key, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&velo\+\_\+key, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&diffusivity\+\_\+key)
+\begin{DoxyCompactList}\small\item\em for advection diffusion \end{DoxyCompactList}\item 
+virtual \mbox{\hyperlink{structcsmp_1_1_explicit_stencil_processor_a6fde42414ef4b898ad62379d24cbf192}{\texorpdfstring{$\sim$}{\string~}\+Explicit\+Stencil\+Processor}} ()
+\begin{DoxyCompactList}\small\item\em standard assignment operator \end{DoxyCompactList}\item 
+void {\bfseries Accumulate\+Explicit\+Advection\+Solution2} (const std\+::vector$<$ std\+::pair$<$ double, double $>$ $>$ \&SMINMAX, const \mbox{\hyperlink{classcsmp_1_1_f_v___parameter}{FV\+\_\+\+Parameter}} \&param, const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&e, std\+::vector$<$ double $>$ \&res)
+\begin{DoxyCompactList}\small\item\em limited second-\/order explicit advection equation ( standart limiter, without diffusion ) \end{DoxyCompactList}\item 
+void {\bfseries Accumulate\+Explicit\+Advection\+Solution2} (const std\+::vector$<$ std\+::pair$<$ double, double $>$ $>$ \&SMINMAX, const \mbox{\hyperlink{classcsmp_1_1_f_v___parameter}{FV\+\_\+\+Parameter}} \&param, const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&e, std\+::vector$<$ double $>$ \&res, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&mass\+\_\+center\+\_\+key, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&grad\+\_\+psi\+\_\+key, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&grad\+\_\+psi\+\_\+limiter\+\_\+key)
+\begin{DoxyCompactList}\small\item\em limited second-\/order explicit advection equation ( lsm gradient limiter, without diffusion ) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{structcsmp_1_1_explicit_stencil_processor_a1cf01e83d7aca9072a40cf0c28346271}{Accumulate\+Explicit\+Advection\+Diffusion\+Solution1}} (const \mbox{\hyperlink{classcsmp_1_1_f_v___parameter}{FV\+\_\+\+Parameter}} \&param, const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&e, std\+::vector$<$ double $>$ \&res, const \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}} \&vt=SCALAR, uint32\+\_\+t var\+\_\+comp\+\_\+nr=0)
+\begin{DoxyCompactList}\small\item\em limited second-\/order explicit advection-\/diffusion equation ( standart limiter ) \end{DoxyCompactList}\item 
+void {\bfseries Accumulate\+Explicit\+Advection\+Diffusion\+Solution2} (const std\+::vector$<$ std\+::pair$<$ double, double $>$ $>$ \&SMINMAX, const \mbox{\hyperlink{classcsmp_1_1_f_v___parameter}{FV\+\_\+\+Parameter}} \&param, const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&e, std\+::vector$<$ double $>$ \&res)
+\begin{DoxyCompactList}\small\item\em limited second-\/order explicit advection-\/diffusion equation ( standart limiter ) \end{DoxyCompactList}\item 
+void {\bfseries Accumulate\+Explicit\+Advection\+Diffusion\+Solution2} (const std\+::vector$<$ std\+::pair$<$ double, double $>$ $>$ \&SMINMAX, const \mbox{\hyperlink{classcsmp_1_1_f_v___parameter}{FV\+\_\+\+Parameter}} \&param, const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&e, std\+::vector$<$ double $>$ \&res, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&mass\+\_\+center\+\_\+key, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&grad\+\_\+psi\+\_\+key, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&grad\+\_\+psi\+\_\+limiter\+\_\+key)
+\begin{DoxyCompactList}\small\item\em limited second-\/order explicit advection-\/diffusion equation ( lsm gradient limiter ) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{structcsmp_1_1_explicit_stencil_processor_a3f388d15cedce931bf5a25c9da293dea}{Accumulate\+Explicit\+Two\+Phase\+Solution1\+\_\+\+Visc}} (const \mbox{\hyperlink{classcsmp_1_1_f_v___parameter}{FV\+\_\+\+Parameter}} \&param, const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&e, \mbox{\hyperlink{classcsmp_1_1_two_phase_model}{Two\+Phase\+Model}}$<$ dim $>$ \&relperm, std\+::vector$<$ double $>$ \&res)
+\begin{DoxyCompactList}\small\item\em Incompressible Two Phase Flow Equation. \end{DoxyCompactList}\item 
+void {\bfseries Accumulate\+Explicit\+Two\+Phase\+Solution2\+\_\+\+Visc} (const std\+::vector$<$ std\+::pair$<$ double, double $>$ $>$ \&SMINMAX, const \mbox{\hyperlink{classcsmp_1_1_f_v___parameter}{FV\+\_\+\+Parameter}} \&param, const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&e, \mbox{\hyperlink{classcsmp_1_1_two_phase_model}{Two\+Phase\+Model}}$<$ dim $>$ \&relperm, std\+::vector$<$ double $>$ \&res)
+\begin{DoxyCompactList}\small\item\em second-\/order accurate solution for two phase flow ( standart limiter, only viscous flow ) \end{DoxyCompactList}\item 
+void {\bfseries Accumulate\+Explicit\+Two\+Phase\+Solution2\+\_\+\+Visc} (const std\+::vector$<$ std\+::pair$<$ double, double $>$ $>$ \&SMINMAX, const \mbox{\hyperlink{classcsmp_1_1_f_v___parameter}{FV\+\_\+\+Parameter}} \&param, const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&e, \mbox{\hyperlink{classcsmp_1_1_two_phase_model}{Two\+Phase\+Model}}$<$ dim $>$ \&relperm, std\+::vector$<$ double $>$ \&res, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&mass\+\_\+center\+\_\+key, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&grad\+\_\+sn\+\_\+key, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&grad\+\_\+sn\+\_\+limiter\+\_\+key)
+\begin{DoxyCompactList}\small\item\em second-\/order accurate solution for two phase flow ( lsm gradient limiter, only viscous flow ) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{structcsmp_1_1_explicit_stencil_processor_add8058818b54bbd02683a3f7a71c544e}{Accumulate\+Explicit\+Two\+Phase\+Solution1}} (const \mbox{\hyperlink{classcsmp_1_1_f_v___parameter}{FV\+\_\+\+Parameter}} \&param, const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&e, \mbox{\hyperlink{classcsmp_1_1_two_phase_model}{Two\+Phase\+Model}}$<$ dim $>$ \&relperm, std\+::vector$<$ double $>$ \&res, bool with\+\_\+gravity\+\_\+forces, bool with\+\_\+capillary\+\_\+spreading)
+\begin{DoxyCompactList}\small\item\em first-\/order accurate solution for two-\/phase flow with gravitational and capillary effects \end{DoxyCompactList}\item 
+void {\bfseries Accumulate\+Explicit\+Two\+Phase\+Solution2} (const std\+::vector$<$ std\+::pair$<$ double, double $>$ $>$ \&SMINMAX, const \mbox{\hyperlink{classcsmp_1_1_f_v___parameter}{FV\+\_\+\+Parameter}} \&param, const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&e, \mbox{\hyperlink{classcsmp_1_1_two_phase_model}{Two\+Phase\+Model}}$<$ dim $>$ \&relperm, std\+::vector$<$ double $>$ \&res)
+\begin{DoxyCompactList}\small\item\em second-\/order accurate solution for two phase flow ( standart limiter ) \end{DoxyCompactList}\item 
+void {\bfseries Accumulate\+Explicit\+Two\+Phase\+Solution2} (const std\+::vector$<$ std\+::pair$<$ double, double $>$ $>$ \&SMINMAX, const \mbox{\hyperlink{classcsmp_1_1_f_v___parameter}{FV\+\_\+\+Parameter}} \&param, const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&e, \mbox{\hyperlink{classcsmp_1_1_two_phase_model}{Two\+Phase\+Model}}$<$ dim $>$ \&relperm, std\+::vector$<$ double $>$ \&res, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&mass\+\_\+center\+\_\+key, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&grad\+\_\+sn\+\_\+key, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&grad\+\_\+sn\+\_\+limiter\+\_\+key)
+\begin{DoxyCompactList}\small\item\em second-\/order accurate solution for two phase flow ( lsm gradient limiter ) \end{DoxyCompactList}\item 
+void {\bfseries Accumulate\+Explicit\+Two\+Phase\+Solution2} (const std\+::vector$<$ std\+::pair$<$ double, double $>$ $>$ \&SMINMAX, const \mbox{\hyperlink{classcsmp_1_1_f_v___parameter}{FV\+\_\+\+Parameter}} \&param, const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&e, \mbox{\hyperlink{classcsmp_1_1_two_phase_model}{Two\+Phase\+Model}}$<$ dim $>$ \&relperm, std\+::vector$<$ double $>$ \&res, bool with\+\_\+gravity\+\_\+forces, bool with\+\_\+capillary\+\_\+spreading)
+\begin{DoxyCompactList}\small\item\em second-\/order accurate solution for two phase flow with standart limiter ( with gravity forces ) \end{DoxyCompactList}\item 
+void {\bfseries Accumulate\+Explicit\+Two\+Phase\+Solution2} (const std\+::vector$<$ std\+::pair$<$ double, double $>$ $>$ \&SMINMAX, const \mbox{\hyperlink{classcsmp_1_1_f_v___parameter}{FV\+\_\+\+Parameter}} \&param, const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&e, \mbox{\hyperlink{classcsmp_1_1_two_phase_model}{Two\+Phase\+Model}}$<$ dim $>$ \&relperm, std\+::vector$<$ double $>$ \&res, bool with\+\_\+gravity\+\_\+forces, bool with\+\_\+capillary\+\_\+spreading, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&mass\+\_\+center\+\_\+key, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&grad\+\_\+sn\+\_\+key, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&grad\+\_\+sn\+\_\+limiter\+\_\+key)
+\begin{DoxyCompactList}\small\item\em second-\/order accurate solution for two phase flow with lsm gradient limiter ( with gravity forces ) \end{DoxyCompactList}\item 
+void {\bfseries Accumulate\+Explicit\+Two\+Phase\+Solution\+At\+Boundary} (const \mbox{\hyperlink{classcsmp_1_1_f_v___parameter}{FV\+\_\+\+Parameter}} \&param, const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&e, \mbox{\hyperlink{classcsmp_1_1_two_phase_model}{Two\+Phase\+Model}}$<$ dim $>$ \&relperm, uint32\+\_\+t pnid, double \&flux, bool with\+\_\+gravity\+\_\+forces, bool with\+\_\+capillary\+\_\+spreading)
+\begin{DoxyCompactList}\small\item\em inflow \& outflow boundary correction for two phase flow \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{structcsmp_1_1_explicit_stencil_processor_a2f2a92fbe93286d4cb3c77542b92f4b6}{Out}} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_mass_based_stencil_processor_afb4a6c68a75e24d43bae2e65f3ccf298}\label{classcsmp_1_1_mass_based_stencil_processor_afb4a6c68a75e24d43bae2e65f3ccf298} 
+\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} {\bfseries adv\+\_\+rhs\+\_\+key\+\_\+}
+\item 
+\Hypertarget{classcsmp_1_1_mass_based_stencil_processor_adfacec21096c905d88de040c4c8a1a56}\label{classcsmp_1_1_mass_based_stencil_processor_adfacec21096c905d88de040c4c8a1a56} 
+std\+::vector$<$ double $>$ {\bfseries psi2\+\_\+}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{structcsmp_1_1_explicit_stencil_processor}{csmp\+::\+Explicit\+Stencil\+Processor$<$ dim $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+size\+\_\+t {\bfseries eidx\+\_\+}
+\item 
+std\+::vector$<$ double $>$ {\bfseries sector\+\_\+pore\+\_\+volume\+\_\+}
+\item 
+std\+::vector$<$ double $>$ {\bfseries facet\+\_\+flux\+\_\+}
+\item 
+std\+::vector$<$ double $>$ {\bfseries psi1\+\_\+}
+\item 
+std\+::vector$<$ double $>$ {\bfseries src\+\_\+}
+\item 
+std\+::vector$<$ double $>$ {\bfseries pc\+\_\+}
+\item 
+uint32\+\_\+t {\bfseries inside\+\_\+node\+\_\+}
+\item 
+uint32\+\_\+t {\bfseries outside\+\_\+node\+\_\+}
+\item 
+\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} {\bfseries adv1\+\_\+key\+\_\+}
+\item 
+\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} {\bfseries vel\+\_\+key\+\_\+}
+\item 
+\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} {\bfseries diff\+\_\+key\+\_\+}
+\item 
+std\+::vector$<$ double $>$ {\bfseries grad\+\_\+}
+\item 
+std\+::vector$<$ double $>$ {\bfseries pc\+\_\+grad\+\_\+}
+\item 
+std\+::vector$<$ double $>$ {\bfseries dsdn\+\_\+}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ {\bfseries DN\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_mass_based_stencil_processor_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_mass_based_stencil_processor_a4b2d47c4796d3ac158ae966783385128}\index{csmp::MassBasedStencilProcessor$<$ dim $>$@{csmp::MassBasedStencilProcessor$<$ dim $>$}!InitializeFirstOrder@{InitializeFirstOrder}}
+\index{InitializeFirstOrder@{InitializeFirstOrder}!csmp::MassBasedStencilProcessor$<$ dim $>$@{csmp::MassBasedStencilProcessor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{InitializeFirstOrder()}{InitializeFirstOrder()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_mass_based_stencil_processor_a4b2d47c4796d3ac158ae966783385128} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_mass_based_stencil_processor}{csmp\+::\+Mass\+Based\+Stencil\+Processor}}$<$ dim $>$\+::\+Initialize\+First\+Order (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_f_v___parameter}{FV\+\_\+\+Parameter}} \&}]{param}{, }\item[{const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&}]{e}{, }\item[{const \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}} \&}]{vt}{ = {\ttfamily SCALAR}, }\item[{uint32\+\_\+t}]{var\+\_\+comp\+\_\+nr}{ = {\ttfamily 0}}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Initializes sector pore volume and facet flux vectors for current finite element = finite volume stencil. 
+
+Reimplemented from \mbox{\hyperlink{structcsmp_1_1_explicit_stencil_processor_a2c79c04ce02dc3a1595b75dfa641ec6e}{csmp\+::\+Explicit\+Stencil\+Processor$<$ dim $>$}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/integration/finite\+\_\+volumes/legacy\+\_\+transport\+\_\+scheme/Mass\+Based\+Stencil\+Processor.\+h\item 
+source/modules/integration/finite\+\_\+volumes/legacy\+\_\+transport\+\_\+scheme/Mass\+Based\+Stencil\+Processor.\+cpp\end{DoxyCompactItemize}

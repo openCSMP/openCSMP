@@ -1,0 +1,9 @@
+<map id="csmp::VData::Erase" name="csmp::VData::Erase">
+<area shape="rect" id="Node000001" title="clear the container" alt="" coords="210,55,350,80"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_v_set.html#ac1e76ff26b8868ea0487c854fa829af3" title="deletes all content of the VSet" alt="" coords="17,5,150,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="210,53,137,34,138,29,212,48"/>
+<area shape="rect" id="Node000003" href="$classcsmp_1_1_v_data.html#a61738dbcfd728e6680c82092f7f824ec" title="initialise VData=mesh connectivity structures from binary file" alt="" coords="12,55,155,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="194,70,155,70,155,65,194,65"/>
+<area shape="rect" id="Node000004" href="$classcsmp_1_1_v_data___test.html#a4b450b418b836954a3937618f41a6e73" title=" " alt="" coords="5,104,162,130"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="212,87,138,106,137,101,210,82"/>
+</map>

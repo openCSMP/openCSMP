@@ -1,0 +1,58 @@
+.TH "csmp::H2ONaClThermalEquilibrator" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::H2ONaClThermalEquilibrator
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBH2ONaClThermalEquilibrator\fP (const double &external_mass_rock, const double &external_cp_rock, const double &external_rho_rock, const double &external_porosity, const double &external_mass_fluid, const double &external_wt_current, const double &external_t_previous, const double &external_p_current, const double &external_H_current, const double &external_H_previous, const bool &fixed_external_t, const double &t_fix, const double &external_t_diff, const bool &verbose)"
+.br
+.ti -1c
+.RI "\fBFluidproperties\fP \fBLiquid\fP ()"
+.br
+.ti -1c
+.RI "\fBFluidproperties\fP \fBVapor\fP ()"
+.br
+.ti -1c
+.RI "\fBFluidproperties\fP \fBBulk\fP ()"
+.br
+.ti -1c
+.RI "\fBFluidproperties\fP \fBSalt\fP ()"
+.br
+.ti -1c
+.RI "void \fBThreePhaseProperties\fP (\fBFluidproperties\fP &bulk_external, \fBFluidproperties\fP &liquid_external, \fBFluidproperties\fP &vapor_external, \fBFluidproperties\fP &salt_external)"
+.br
+.ti -1c
+.RI "\fBFluidproperties\fP \fBReportLiquidProperties\fP (const double &t, const double &p, const double &x, const double &\fBh\fP)"
+.br
+.ti -1c
+.RI "\fBFluidproperties\fP \fBReportVaporProperties\fP (const double &t, const double &p, const double &x, const double &\fBh\fP)"
+.br
+.ti -1c
+.RI "\fBFluidproperties\fP \fBReportBulkProperties\fP (const double &t, const double &p, const double &x, const double &\fBh\fP)"
+.br
+.ti -1c
+.RI "\fBFluidproperties\fP \fBReportSaltProperties\fP (const double &t, const double &p, const double &x, const double &\fBh\fP)"
+.br
+.ti -1c
+.RI "double \fBResid\fP ()"
+.br
+.ti -1c
+.RI "int \fBn_iterations\fP ()"
+.br
+.ti -1c
+.RI "bool \fBEquilibrated\fP ()"
+.br
+.ti -1c
+.RI "bool \fBFatal\fP ()"
+.br
+.in -1c
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

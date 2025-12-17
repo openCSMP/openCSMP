@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="structcsmp_1_1_placement_access_traits_3_01_e_l_e_m_e_n_t___i_n_t_e_g_r_a_t_i_o_n___p_o_i_n_t_01_4" kind="struct" language="C++" prot="public">
+    <compoundname>csmp::PlacementAccessTraits&lt; ELEMENT_INTEGRATION_POINT &gt;</compoundname>
+    <includes refid="property__manipulation_2_field_variable_8h" local="no">FieldVariable.h</includes>
+    <templateparamlist>
+    </templateparamlist>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="structcsmp_1_1_placement_access_traits_3_01_e_l_e_m_e_n_t___i_n_t_e_g_r_a_t_i_o_n___p_o_i_n_t_01_4_1aabeb14935324a14ac0b284843790ee1a" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::PlacementAccessTraits&lt; ELEMENT_INTEGRATION_POINT &gt;::is_node</definition>
+        <argsstring></argsstring>
+        <name>is_node</name>
+        <qualifiedname>csmp::PlacementAccessTraits&lt; ELEMENT_INTEGRATION_POINT &gt;::is_node</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/FieldVariable.h" line="66" column="25" bodyfile="source/includes/property_manipulation/FieldVariable.h" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_placement_access_traits_3_01_e_l_e_m_e_n_t___i_n_t_e_g_r_a_t_i_o_n___p_o_i_n_t_01_4_1a02d664adb71827f863eef128f1ce78d0" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::PlacementAccessTraits&lt; ELEMENT_INTEGRATION_POINT &gt;::is_element</definition>
+        <argsstring></argsstring>
+        <name>is_element</name>
+        <qualifiedname>csmp::PlacementAccessTraits&lt; ELEMENT_INTEGRATION_POINT &gt;::is_element</qualifiedname>
+        <initializer>= true</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/FieldVariable.h" line="67" column="25" bodyfile="source/includes/property_manipulation/FieldVariable.h" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_placement_access_traits_3_01_e_l_e_m_e_n_t___i_n_t_e_g_r_a_t_i_o_n___p_o_i_n_t_01_4_1a7d17b1495edd152751b12c007c3549b8" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::PlacementAccessTraits&lt; ELEMENT_INTEGRATION_POINT &gt;::is_integration_point</definition>
+        <argsstring></argsstring>
+        <name>is_integration_point</name>
+        <qualifiedname>csmp::PlacementAccessTraits&lt; ELEMENT_INTEGRATION_POINT &gt;::is_integration_point</qualifiedname>
+        <initializer>= true</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/FieldVariable.h" line="68" column="25" bodyfile="source/includes/property_manipulation/FieldVariable.h" bodystart="68" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>ELEMENT_INTEGRATION_POINT uses CellVector() with ip access. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>csmp::PlacementAccessTraits&lt; Pl &gt;</label>
+        <link refid="structcsmp_1_1_placement_access_traits"/>
+      </node>
+      <node id="1">
+        <label>csmp::PlacementAccessTraits&lt; ELEMENT_INTEGRATION_POINT &gt;</label>
+        <link refid="structcsmp_1_1_placement_access_traits_3_01_e_l_e_m_e_n_t___i_n_t_e_g_r_a_t_i_o_n___p_o_i_n_t_01_4"/>
+        <childnode refid="2" relation="template-instance">
+          <edgelabel>&lt; ELEMENT_INTEGRATION_POINT &gt;</edgelabel>
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>csmp::PlacementAccessTraits&lt; Pl &gt;</label>
+        <link refid="structcsmp_1_1_placement_access_traits"/>
+      </node>
+      <node id="1">
+        <label>csmp::PlacementAccessTraits&lt; ELEMENT_INTEGRATION_POINT &gt;</label>
+        <link refid="structcsmp_1_1_placement_access_traits_3_01_e_l_e_m_e_n_t___i_n_t_e_g_r_a_t_i_o_n___p_o_i_n_t_01_4"/>
+        <childnode refid="2" relation="template-instance">
+          <edgelabel>&lt; ELEMENT_INTEGRATION_POINT &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/property_manipulation/FieldVariable.h" line="65" column="1" bodyfile="source/includes/property_manipulation/FieldVariable.h" bodystart="65" bodyend="69"/>
+    <listofallmembers>
+      <member refid="structcsmp_1_1_placement_access_traits_3_01_e_l_e_m_e_n_t___i_n_t_e_g_r_a_t_i_o_n___p_o_i_n_t_01_4_1a02d664adb71827f863eef128f1ce78d0" prot="public" virt="non-virtual"><scope>csmp::PlacementAccessTraits&lt; ELEMENT_INTEGRATION_POINT &gt;</scope><name>is_element</name></member>
+      <member refid="structcsmp_1_1_placement_access_traits_3_01_e_l_e_m_e_n_t___i_n_t_e_g_r_a_t_i_o_n___p_o_i_n_t_01_4_1a7d17b1495edd152751b12c007c3549b8" prot="public" virt="non-virtual"><scope>csmp::PlacementAccessTraits&lt; ELEMENT_INTEGRATION_POINT &gt;</scope><name>is_integration_point</name></member>
+      <member refid="structcsmp_1_1_placement_access_traits_3_01_e_l_e_m_e_n_t___i_n_t_e_g_r_a_t_i_o_n___p_o_i_n_t_01_4_1aabeb14935324a14ac0b284843790ee1a" prot="public" virt="non-virtual"><scope>csmp::PlacementAccessTraits&lt; ELEMENT_INTEGRATION_POINT &gt;</scope><name>is_node</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

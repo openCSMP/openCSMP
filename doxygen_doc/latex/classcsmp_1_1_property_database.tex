@@ -1,0 +1,749 @@
+\doxysection{csmp\+::Property\+Database\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_property_database}{}\label{classcsmp_1_1_property_database}\index{csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}}
+
+
+Specifications of the variables used by the current model, i.\+e. name, notation, SI-\/unit, placement, type etc.  
+
+
+
+
+{\ttfamily \#include $<$Property\+Database.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Property\+Database\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_property_database__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Property\+Database\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=197pt]{classcsmp_1_1_property_database__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_property_database_a77a585c9504558ced79177d24e02ddf7}\label{classcsmp_1_1_property_database_a77a585c9504558ced79177d24e02ddf7} 
+{\bfseries Property\+Database} ()
+\begin{DoxyCompactList}\small\item\em default constructor\+: all variable counters are set to zero \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_property_database_aed2d3bacccc20ec3ef8ae4f32e46f507}{Property\+Database}} (const char \texorpdfstring{$\ast$}{*}variables\+File\+Name)
+\begin{DoxyCompactList}\small\item\em reads all variables from variables text file \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_property_database_a2a8cbb94f060bc3753fed7307deb2bbb}\label{classcsmp_1_1_property_database_a2a8cbb94f060bc3753fed7307deb2bbb} 
+{\bfseries Property\+Database} (const char \texorpdfstring{$\ast$}{*}variables\+Binary\+File\+Name, const std\+::set$<$ std\+::string $>$ \&subset\+\_\+variables)
+\begin{DoxyCompactList}\small\item\em reads all variables from binary variables file unless a subset of variables is supplied for the reading \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_property_database_a7e19640562c755042e58d8c6ff9b47db}{Property\+Database}} (const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&)
+\item 
+\Hypertarget{classcsmp_1_1_property_database_ac6f815f91b17ee551baae939e368780b}\label{classcsmp_1_1_property_database_ac6f815f91b17ee551baae939e368780b} 
+\mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&p)
+\item 
+\Hypertarget{classcsmp_1_1_property_database_a28bcd89a32ba7433c6ba0ccb5e560e65}\label{classcsmp_1_1_property_database_a28bcd89a32ba7433c6ba0ccb5e560e65} 
+const char \texorpdfstring{$\ast$}{*} {\bfseries Variables\+File} () const
+\item 
+\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \mbox{\hyperlink{classcsmp_1_1_property_database_aa250a020d765e4a8fe7c3083ad79848b}{Storage\+Key}} (const char \texorpdfstring{$\ast$}{*}property\+\_\+name) const
+\item 
+\Hypertarget{classcsmp_1_1_property_database_ad0dc97b4c3353ab804958d99c5a3e4d0}\label{classcsmp_1_1_property_database_ad0dc97b4c3353ab804958d99c5a3e4d0} 
+\mbox{\hyperlink{structcsmp_1_1_parameter}{csmp\+::\+Parameter}} {\bfseries Parameter} (const char \texorpdfstring{$\ast$}{*}property\+\_\+name) const
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} \mbox{\hyperlink{classcsmp_1_1_property_database_a75b89fb0b080d03e738e25002e3136d9}{Placement}} (const char \texorpdfstring{$\ast$}{*}property\+\_\+name) const
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_property_database_a9542868c2c78ce9e23c9b596296727fd}{Index}} (const char \texorpdfstring{$\ast$}{*}property\+\_\+name) const
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}} \mbox{\hyperlink{classcsmp_1_1_property_database_afbd8155f1083c09ccf8ef9e8cb6ea950}{Type}} (const char \texorpdfstring{$\ast$}{*}property\+\_\+name) const
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_property_database_a1ed7bff3b01bf2ccd82adc99328eafb7}{Components}} (const char \texorpdfstring{$\ast$}{*}property\+\_\+name) const
+\item 
+const char \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classcsmp_1_1_property_database_a101741343c1a3accc5e74071bc3ced01}{Name}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&idx) const
+\item 
+const char \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classcsmp_1_1_property_database_acb9f4b6dc6a9471f6733a123d476105f}{Unit}} (const char \texorpdfstring{$\ast$}{*}property\+\_\+name) const
+\item 
+\Hypertarget{classcsmp_1_1_property_database_a1151de2d7a9e36651edaad7ce636308d}\label{classcsmp_1_1_property_database_a1151de2d7a9e36651edaad7ce636308d} 
+const char \texorpdfstring{$\ast$}{*} {\bfseries Usage} (const char \texorpdfstring{$\ast$}{*}property\+\_\+name) const
+\begin{DoxyCompactList}\small\item\em reports how the variable is normally used (as input by user vs. computed) \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_property_database_a13d47bfd0481aadc53ffa00cfa6b902f}{Is\+Defined}} (const char \texorpdfstring{$\ast$}{*}property\+\_\+name) const
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_property_database_aa233a7c4dc80ac05ee01547bd800d7c2}{Is\+Defined}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&idx) const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_property_database_a32162c9b60986b664a6a86fb7a4a4174}{Range\+Of}} (const char \texorpdfstring{$\ast$}{*}property\+\_\+name, double \&min, double \&max) const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_property_database_acb69cc7f6429ae3c9b68e5ed24ac2962}{Set\+Range\+Of}} (const char \texorpdfstring{$\ast$}{*}property\+\_\+name, double vmin, double vmax)
+\item 
+\Hypertarget{classcsmp_1_1_property_database_ab4d9259183f8f7ad2f58a48641eff181}\label{classcsmp_1_1_property_database_ab4d9259183f8f7ad2f58a48641eff181} 
+double {\bfseries Lower\+Limit\+Of} (const char \texorpdfstring{$\ast$}{*}property\+\_\+name) const
+\item 
+\Hypertarget{classcsmp_1_1_property_database_a8e7d86ab0605442aac0fedd7d6a64c67}\label{classcsmp_1_1_property_database_a8e7d86ab0605442aac0fedd7d6a64c67} 
+double {\bfseries Upper\+Limit\+Of} (const char \texorpdfstring{$\ast$}{*}property\+\_\+name) const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_property_database_a915e2f65ef7e6e489d142ac8a7edb9ab}{Check\+Range}} (const char \texorpdfstring{$\ast$}{*}property\+\_\+name, double \&var) const
+\begin{DoxyCompactList}\small\item\em prints details of the range check to screen and terminates program is value is out of range \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_property_database_ad2a667069324a7ffbe72e2af3bf645b4}{Check\+Range}} (const char \texorpdfstring{$\ast$}{*}property\+\_\+name, const \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&) const
+\begin{DoxyCompactList}\small\item\em checks value against the range specified in the database; \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_property_database_a35b2fde85f09ce829a434956cb38e84b}\label{classcsmp_1_1_property_database_a35b2fde85f09ce829a434956cb38e84b} 
+bool {\bfseries Check\+Range} (const char \texorpdfstring{$\ast$}{*}property\+\_\+name, const \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&) const
+\begin{DoxyCompactList}\small\item\em checks whether the magnitude of the specified variable value is within database range \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_property_database_ae61da6255067450c2922a5f0429fa62f}\label{classcsmp_1_1_property_database_ae61da6255067450c2922a5f0429fa62f} 
+bool {\bfseries Check\+Range} (const char \texorpdfstring{$\ast$}{*}property\+\_\+name, const \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ dim $>$ \&) const
+\begin{DoxyCompactList}\small\item\em checks whether the determinant of the tensor is within range assuming that it is symmetric, diagonally dominant \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_property_database_a5182a79f43a4683cc02b0cfcac06d991}\label{classcsmp_1_1_property_database_a5182a79f43a4683cc02b0cfcac06d991} 
+bool {\bfseries Check\+Range} (const char \texorpdfstring{$\ast$}{*}property\+\_\+name, const \mbox{\hyperlink{classcsmp_1_1_array_variable}{Array\+Variable}} \&) const
+\begin{DoxyCompactList}\small\item\em L1 norm of the supplied arrays. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_property_database_a876b49d1ab50653f74d4dbf18706b641}\label{classcsmp_1_1_property_database_a876b49d1ab50653f74d4dbf18706b641} 
+bool {\bfseries Check\+Range} (const char \texorpdfstring{$\ast$}{*}property\+\_\+name, const \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \&) const
+\item 
+\Hypertarget{classcsmp_1_1_property_database_a72a4a694daf7a93268b79554524860dd}\label{classcsmp_1_1_property_database_a72a4a694daf7a93268b79554524860dd} 
+\mbox{\hyperlink{structcsmp_1_1_local_variables}{Local\+Variables}} {\bfseries Local\+Variables\+At} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} within) const
+\item 
+\mbox{\hyperlink{structcsmp_1_1_integration_point_variables}{Integration\+Point\+Variables}} \mbox{\hyperlink{classcsmp_1_1_property_database_ae49b6c38f1bf2ace7977f01ea0a40989}{Integration\+Point\+Variables\+At}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} within) const
+\item 
+\Hypertarget{classcsmp_1_1_property_database_aff955fd6d340b5bbdab077ff75b3ca4e}\label{classcsmp_1_1_property_database_aff955fd6d340b5bbdab077ff75b3ca4e} 
+void {\bfseries Variable\+Count\+At} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} within, uint32\+\_\+t \&scalars, uint32\+\_\+t \&vectors, uint32\+\_\+t \&tensors, uint32\+\_\+t \&array\+Count, uint32\+\_\+t \&array\+Length) const
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_property_database_a16182da7986e543a22fbed1859332d36}{Unit\+Conversion\+Factor}} (const char \texorpdfstring{$\ast$}{*}current\+\_\+system, const char \texorpdfstring{$\ast$}{*}desired\+\_\+system, const char \texorpdfstring{$\ast$}{*}unit) const
+\item 
+\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \mbox{\hyperlink{classcsmp_1_1_property_database_a50b012fcee349b7668d61132b6ac34ca}{Add\+Property}} ()
+\begin{DoxyCompactList}\small\item\em adding a property at runtime from the command line (NB\+: you should call method Create\+Property() of model to do this) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_property_database_a4616a3a78fde0f098b4d77f618a9c1b7}\label{classcsmp_1_1_property_database_a4616a3a78fde0f098b4d77f618a9c1b7} 
+\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} {\bfseries Add\+Property} (const char \texorpdfstring{$\ast$}{*}property\+\_\+name, const char \texorpdfstring{$\ast$}{*}notation, const char \texorpdfstring{$\ast$}{*}unit, uint32\+\_\+t last\+\_\+max\+\_\+index, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}}, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}, uint32\+\_\+t vsize=1, double vmin=-\/1.\+0e+30, double vmax=1.\+0e+30, std\+::string usage="{}???"{})
+\item 
+\Hypertarget{classcsmp_1_1_property_database_a525d89a51144ecb72dc50be8ebf3e41c}\label{classcsmp_1_1_property_database_a525d89a51144ecb72dc50be8ebf3e41c} 
+\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} {\bfseries Add\+Property} (const char \texorpdfstring{$\ast$}{*}property\+\_\+name, const char \texorpdfstring{$\ast$}{*}notation, const char \texorpdfstring{$\ast$}{*}unit, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}}, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}, uint32\+\_\+t vsize=1, double vmin=-\/1.\+0e+30, double vmax=1.\+0e+30, std\+::string usage="{}???"{})
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_property_database_a95b9df709b7c56bbea66c2ecaec2368a}{Delete\+Property}} (const char \texorpdfstring{$\ast$}{*}property\+\_\+name)
+\item 
+\Hypertarget{classcsmp_1_1_property_database_a0d4af1e42d14a4c739fd4cb5852080ae}\label{classcsmp_1_1_property_database_a0d4af1e42d14a4c739fd4cb5852080ae} 
+std\+::map$<$ std\+::string, \mbox{\hyperlink{structcsmp_1_1_parameter}{csmp\+::\+Parameter}} $>$\+::const\+\_\+iterator {\bfseries Begin} () const
+\item 
+\Hypertarget{classcsmp_1_1_property_database_a5ac9e835499bc7dbd05ac4655a1b9aea}\label{classcsmp_1_1_property_database_a5ac9e835499bc7dbd05ac4655a1b9aea} 
+std\+::map$<$ std\+::string, \mbox{\hyperlink{structcsmp_1_1_parameter}{csmp\+::\+Parameter}} $>$\+::const\+\_\+iterator {\bfseries End} () const
+\item 
+\Hypertarget{classcsmp_1_1_property_database_ae5cdef53efa3d3aadd8cecc14534b669}\label{classcsmp_1_1_property_database_ae5cdef53efa3d3aadd8cecc14534b669} 
+std\+::map$<$ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}, std\+::map$<$ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}}, uint32\+\_\+t $>$ $>$\+::const\+\_\+iterator {\bfseries Variable\+Count\+Begin} () const
+\item 
+\Hypertarget{classcsmp_1_1_property_database_ab5239db578e57cb6ceeb2d3312c68236}\label{classcsmp_1_1_property_database_ab5239db578e57cb6ceeb2d3312c68236} 
+std\+::map$<$ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}, std\+::map$<$ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}}, uint32\+\_\+t $>$ $>$\+::const\+\_\+iterator {\bfseries Variable\+Count\+End} () const
+\item 
+\Hypertarget{classcsmp_1_1_property_database_a371f5940a391b31e7d2489ff05af3699}\label{classcsmp_1_1_property_database_a371f5940a391b31e7d2489ff05af3699} 
+const \mbox{\hyperlink{classcsmp_1_1_index_tracker}{Index\+Tracker}} \& {\bfseries Variable\+Indexes} () const
+\item 
+\Hypertarget{classcsmp_1_1_property_database_a32c639c4473c691c1723db246cfa9a6c}\label{classcsmp_1_1_property_database_a32c639c4473c691c1723db246cfa9a6c} 
+void {\bfseries Flush\+To\+Screen} () const
+\begin{DoxyCompactList}\small\item\em Prints all parameter records in the database to std output. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_property_database_a774d94649d03bcd2395e87d66557ec7c}{Flush\+To\+Screen}} (const char \texorpdfstring{$\ast$}{*}propname) const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_property_database_a50d39883deae8513cb9eb399307b9a28}{List\+Variable\+Names}} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_property_database_af2ef74264364a9fbae12390d2bc27161}{List\+Keys}} (std\+::list$<$ \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} $>$ \&keys) const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_property_database_a7e1fb50fc0847053e231285685ce1fd4}{List\+Variables}} () const
+\item 
+\Hypertarget{classcsmp_1_1_property_database_a00a0a2330a88bced5cfee6cb40310ef2}\label{classcsmp_1_1_property_database_a00a0a2330a88bced5cfee6cb40310ef2} 
+void {\bfseries List\+Variables} (std\+::map$<$ std\+::string, \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} $>$ \&props) const
+\item 
+\Hypertarget{classcsmp_1_1_property_database_accc8296fcb685b78c6d8109377647cb4}\label{classcsmp_1_1_property_database_accc8296fcb685b78c6d8109377647cb4} 
+void {\bfseries List\+Variables} (const std\+::set$<$ std\+::string $>$ \&, std\+::set$<$ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} $>$ \&props) const
+\item 
+\Hypertarget{classcsmp_1_1_property_database_a1b6d13a426fbd4d975d22c2dfb515ead}\label{classcsmp_1_1_property_database_a1b6d13a426fbd4d975d22c2dfb515ead} 
+uint32\+\_\+t {\bfseries List\+Variables} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place, std\+::map$<$ std\+::string, \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} $>$ \&props) const
+\item 
+\Hypertarget{classcsmp_1_1_property_database_adb490e45f2d20b9c56c8a03dbbbdbb1c}\label{classcsmp_1_1_property_database_adb490e45f2d20b9c56c8a03dbbbdbb1c} 
+uint32\+\_\+t {\bfseries List\+Variables} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place, std\+::set$<$ std\+::string $>$ \&props) const
+\item 
+\Hypertarget{classcsmp_1_1_property_database_a70642f9673f73fde6612eda2808f07c6}\label{classcsmp_1_1_property_database_a70642f9673f73fde6612eda2808f07c6} 
+uint32\+\_\+t {\bfseries List\+Variables} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}}, std\+::set$<$ std\+::string $>$ \&props) const
+\item 
+\Hypertarget{classcsmp_1_1_property_database_a4d47b710f938f97147a50a53c4aecd25}\label{classcsmp_1_1_property_database_a4d47b710f938f97147a50a53c4aecd25} 
+uint32\+\_\+t {\bfseries Variable\+Count} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}) const
+\item 
+\Hypertarget{classcsmp_1_1_property_database_a193051e361c84695ae3df6b19a439724}\label{classcsmp_1_1_property_database_a193051e361c84695ae3df6b19a439724} 
+uint32\+\_\+t {\bfseries Variable\+Count} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}}) const
+\item 
+\Hypertarget{classcsmp_1_1_property_database_a58cfd55681dbfa613964045c77cdfe6d}\label{classcsmp_1_1_property_database_a58cfd55681dbfa613964045c77cdfe6d} 
+uint32\+\_\+t {\bfseries Variable\+Count} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}}) const
+\item 
+\Hypertarget{classcsmp_1_1_property_database_a3f594f64639a407517414fd0a3081149}\label{classcsmp_1_1_property_database_a3f594f64639a407517414fd0a3081149} 
+uint32\+\_\+t {\bfseries Variable\+Count} () const
+\item 
+\Hypertarget{classcsmp_1_1_property_database_ac7605a2acfac9440cc8fe0ef4fa821d7}\label{classcsmp_1_1_property_database_ac7605a2acfac9440cc8fe0ef4fa821d7} 
+uint32\+\_\+t {\bfseries Array\+Length\+Total} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place) const
+\item 
+\Hypertarget{classcsmp_1_1_property_database_a20e787191d9adb7fe7c0681ec09e3f56}\label{classcsmp_1_1_property_database_a20e787191d9adb7fe7c0681ec09e3f56} 
+void {\bfseries Array\+Lengths} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place, std\+::vector$<$ uint32\+\_\+t $>$ \&array\+Lengths) const
+\begin{DoxyCompactList}\small\item\em Clears array\+Lengths and inserts depth of ARRAY variables for place in order of index. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_property_database_ac3165fc15ab3718a1fa78ab1999792c6}\label{classcsmp_1_1_property_database_ac3165fc15ab3718a1fa78ab1999792c6} 
+uint32\+\_\+t {\bfseries Flagged\+Array\+Length\+Total} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place) const
+\item 
+\Hypertarget{classcsmp_1_1_property_database_ac652657b6416ecb0c766e9c3b5f9dcbc}\label{classcsmp_1_1_property_database_ac652657b6416ecb0c766e9c3b5f9dcbc} 
+void {\bfseries Flagged\+Array\+Lengths} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place, std\+::vector$<$ uint32\+\_\+t $>$ \&array\+Lengths) const
+\begin{DoxyCompactList}\small\item\em Clears array\+Lengths and inserts depth of FLAGGEDARRAY variables for place in order of index. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_property_database_a8419c808ddaa3377cce237584c2b53a3}\label{classcsmp_1_1_property_database_a8419c808ddaa3377cce237584c2b53a3} 
+bool {\bfseries Write\+Variables\+File} (const char \texorpdfstring{$\ast$}{*}file\+Name) const
+\begin{DoxyCompactList}\small\item\em writes a csmp variables text file. NB\+: parameter is fully specified file\+Name(incl extension) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_property_database_a15064180c59d5a26e720d887a442bb82}{Write\+Variable\+Set\+To\+Header\+File}} (const char \texorpdfstring{$\ast$}{*}header\+\_\+file, const char \texorpdfstring{$\ast$}{*}variable\+\_\+set\+\_\+name) const
+\begin{DoxyCompactList}\small\item\em writes templatized \doxylink{structcsmp_1_1_i_n_d_e_x}{INDEX} variable definitions of the current variables into header file and instantiates their keys \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_property_database_a04a2eaeedddf403f9cabd202927c2252}\label{classcsmp_1_1_property_database_a04a2eaeedddf403f9cabd202927c2252} 
+void {\bfseries Out} () const
+\begin{DoxyCompactList}\small\item\em write current content of database to screen \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_property_database_abc7bfb5b0f2f69991cf15f415158a2bc}\label{classcsmp_1_1_property_database_abc7bfb5b0f2f69991cf15f415158a2bc} 
+void {\bfseries Index\+Tracker\+Out} () const
+\begin{DoxyCompactList}\small\item\em write current \doxylink{structcsmp_1_1_index}{Index} objects in \doxylink{classcsmp_1_1_model}{Model} to screen including state (values of stored variables) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_property_database_a4e8212927d9320438aa73be9cd8416cf}\label{classcsmp_1_1_property_database_a4e8212927d9320438aa73be9cd8416cf} 
+bool {\bfseries Binary\+Out} (const char \texorpdfstring{$\ast$}{*}file\+Name) const
+\begin{DoxyCompactList}\small\item\em Writes to binary file, appends \textquotesingle{}\+\_\+variables.\+dat\textquotesingle{} to file\+Name if necessary. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_property_database_a48ab49c7872952ff8d3a9f0c48aa4eb1}\label{classcsmp_1_1_property_database_a48ab49c7872952ff8d3a9f0c48aa4eb1} 
+bool {\bfseries Binary\+Out} (std\+::fstream \&fp) const
+\item 
+\Hypertarget{classcsmp_1_1_property_database_a462163042f07230c39ae917377acc6b8}\label{classcsmp_1_1_property_database_a462163042f07230c39ae917377acc6b8} 
+bool {\bfseries Binary\+In} (const char \texorpdfstring{$\ast$}{*}file\+Name, const std\+::set$<$ std\+::string $>$ \&subset\+\_\+variables)
+\item 
+\Hypertarget{classcsmp_1_1_property_database_a4e57dede0649fb7c8f7fadd00663a8e7}\label{classcsmp_1_1_property_database_a4e57dede0649fb7c8f7fadd00663a8e7} 
+bool {\bfseries Binary\+In} (std\+::fstream \&fp, const std\+::set$<$ std\+::string $>$ \&subset\+\_\+variables)
+\item 
+\Hypertarget{classcsmp_1_1_property_database_a85594bb1ef5d25d09d7072cbda0b693c}\label{classcsmp_1_1_property_database_a85594bb1ef5d25d09d7072cbda0b693c} 
+void {\bfseries Verbose} (bool verbose)
+\item 
+\Hypertarget{classcsmp_1_1_property_database_ab8f6ca7f7d148496e246b868b2258df8}\label{classcsmp_1_1_property_database_ab8f6ca7f7d148496e246b868b2258df8} 
+bool {\bfseries Verbose} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim$>$\newline
+class csmp\+::\+Property\+Database$<$ dim $>$}
+Specifications of the variables used by the current model, i.\+e. name, notation, SI-\/unit, placement, type etc. 
+
+to be applied to entire model
+
+\begin{DoxyAuthor}{Author}
+S. K. Matthaei 
+
+P. Lang 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+1994-\/2012
+\end{DoxyDate}
+\hypertarget{compare_floats_8h_motivation}{}\doxysubsection{\texorpdfstring{Motivation}{Motivation}}\label{compare_floats_8h_motivation}
+To manage access to physical variables in the numerical simulation. Depending on their purpose such variables have a different type such as scalar, vector, tensor or array. In addition, they have a different placement in the mesh\+: model, region, element node etc. Thus, housekeeping is required to keep track of such different variables. Firstly, one must be able to search for them by name. Secondly, their values have to be checked against a physically meaningful range. Thirdly, one needs to know how a variable was defined (as a scalar, vector or tensor) and at which locations in a discretization it shall be computed (nodes, integration points or elements etc.). To accomplish this there must be a unique access key for each variable in order to retrueve it in a computationally efficient way.\hypertarget{classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_design}{}\doxysubsection{\texorpdfstring{Design Intent}{Design Intent}}\label{classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_design}
+The design intent of the \doxylink{classcsmp_1_1_property_database}{Property\+Database} is to have a single object in the CSMP code which manages the physical variables of a simulation and can be queried for their type, placement, and property index. These three characteristics combine into the structure \doxylink{structcsmp_1_1_index}{csmp\+::\+Index} which serves the role of an access keys to distributed variable values.
+
+The records in the \doxylink{classcsmp_1_1_property_database}{Property\+Database} are \doxylink{structcsmp_1_1_parameter}{Parameter} class instances which contain the variable name, its \doxylink{structcsmp_1_1_index}{csmp\+::\+Index}, and a physically meaningful range for each variable. This range can be queried to test whether implausible results were computed.
+
+Finally, the database must ascertain uniqueness of the variable \textquotesingle{}string\textquotesingle{} identifiers and allow to retrieve these in a reverse approach, starting from the inside of a computation in which only the efficient access keys are known. This capability is needed for error reporting.
+
+The creation or deletion of variables at runtime is a further task of the \doxylink{classcsmp_1_1_property_database}{Property\+Database}.\hypertarget{classcsmp_1_1_v_data_structure}{}\doxysubsection{\texorpdfstring{Structure}{Structure}}\label{classcsmp_1_1_v_data_structure}
+The \doxylink{classcsmp_1_1_property_database}{Property\+Database} represents a binary tree of fixed-\/size physical-\/variable records which are accessed via name strings. Access of variable specifications benefits from the tree structure, but the reverse search for a variable name using the \doxylink{structcsmp_1_1_index}{csmp\+::\+Index} as a key has a linear time complexity. Due to the typically small number of physical variables in a model, this is not important.\hypertarget{classcsmp_1_1_solver_participants}{}\doxysubsection{\texorpdfstring{Participants}{Participants}}\label{classcsmp_1_1_solver_participants}
+The \doxylink{classcsmp_1_1_property_database}{Property\+Database} uses \doxylink{structcsmp_1_1_parameter}{Parameter} class objects as variable records. These are accessed by the variable names which are stored in std\+::string objects.\hypertarget{classcsmp_1_1_time_step_evaluator_collaborations}{}\doxysubsection{\texorpdfstring{Collaborations}{Collaborations}}\label{classcsmp_1_1_time_step_evaluator_collaborations}
+The \doxylink{classcsmp_1_1_property_database}{Property\+Database} is a data member of the \doxylink{classcsmp_1_1_model}{Model} object and collaborates with \doxylink{structcsmp_1_1_index}{Index} and \doxylink{structcsmp_1_1_parameter}{Parameter} records.
+
+\begin{DoxyAttention}{Attention}
+The \doxylink{classcsmp_1_1_property_database}{Property\+Database} does not store any variable values! These are stored in the \doxylink{classcsmp_1_1_local_variable_storage}{Local\+Variable\+Storage} associated with the basic tree objects\+: \doxylink{classcsmp_1_1_node}{Node}, \doxylink{classcsmp_1_1_element}{Element}, etc.
+\end{DoxyAttention}
+\hypertarget{classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_consequences}{}\doxysubsection{\texorpdfstring{Consequences}{Consequences}}\label{classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_consequences}
+As is described in the CSMP User\textquotesingle{}s Guide, properties of a physical variable and \doxylink{structcsmp_1_1_index}{csmp\+::\+Index} structures can be obtained from the \doxylink{classcsmp_1_1_property_database}{Property\+Database}. As additional functionality, the \doxylink{classcsmp_1_1_property_database}{Property\+Database} can be used for unit conversions and to add or delete physical variables at runtime.\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+The \doxylink{classcsmp_1_1_property_database}{Property\+Database} contains an STL map of variable names serving as keys to \doxylink{structcsmp_1_1_parameter}{Parameter} objects which hold the variable specifications. The variable names are stored in the map in alphabetical order and the map is initialized from a text file when the \doxylink{classcsmp_1_1_property_database}{Property\+Database} is constructed. After all variable records have been added to the map, they are counted and \doxylink{structcsmp_1_1_index_a16dd82c3058e3f91a76485a2bb574efb}{csmp\+::\+Index.\+index} integers are issued. These indices are used to access the right \doxylink{classcsmp_1_1_local_variable_storage}{Local\+Variable\+Storage} object.\hypertarget{classcsmp_1_1_visitor_examples}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{classcsmp_1_1_visitor_examples}
+An example of a variable entry in the text input file which is read by the constructor to initialize the \doxylink{classcsmp_1_1_property_database}{Property\+Database}, is shown below\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{name\ \ parameter\ \ unit\ \ index\ \ min.\ \ max.\ \ place\ \ usage\ \ explanation\ \ reference}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{fluid\ pressure\ PF\ Pa\ 1\ 0.00E+00\ 1.00E+10\ node\ \ \ absolute\ value\ \ fluid\ pressure\ at\ node\ \ alpha\ version\ doc}
+
+\end{DoxyCode}
+
+
+In this example, the string \textquotesingle{}fluid pressure\textquotesingle{} defines the variable name which is used in the top level interfaces of the \doxylink{classcsmp_1_1_model}{Model}, the Algorithm, \doxylink{classcsmp_1_1_interrelation}{Interrelation} or \doxylink{classcsmp_1_1_visitor}{Visitor} objects. The second variable \textquotesingle{}PF\textquotesingle{} is an abbreviation which relates this variable name to the notation which the modeler uses in his/her equations. \textquotesingle{}index\textquotesingle{} defines the variable type\+: \textquotesingle{}1\textquotesingle{} for a scalar, \textquotesingle{}2\textquotesingle{} for a vector, and \textquotesingle{}3\textquotesingle{} for a tensor variable. The following two floating point values in scientific notation, define a physically meaningful range for the variable, and the third parameter denotes the variable placement in the finite-\/element mesh.
+
+The second examples illustrates how to get a \doxylink{structcsmp_1_1_index}{csmp\+::\+Index} from a variable name\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{comment}{//\ get\ a\ reference\ to\ the\ property\ database\ from\ the\ Model}}
+\DoxyCodeLine{\textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database_a77a585c9504558ced79177d24e02ddf7}{PropertyDatabase<dim>}}\&\ \ p\_ref\ =\ moab.Database();}
+\DoxyCodeLine{\textcolor{comment}{//\ get\ the\ access\ key\ for\ the\ variable\ "{}fluid\ pressure"{}}}
+\DoxyCodeLine{csmp::Index\ property\_key\ =\ p\_ref.StorageKey(\textcolor{stringliteral}{"{}fluid\ pressure"{}});}
+
+\end{DoxyCode}
+
+
+This code retrieves the \doxylink{structcsmp_1_1_index}{csmp\+::\+Index} from the variable database. Typically, one retrieves the property key only once if one needs to access variable values. Once the key is established it can be used instead of the property name for fast property access.\hypertarget{classcsmp_1_1_property_database_arrayVariables}{}\doxysubsection{\texorpdfstring{Array Variables}{Array Variables}}\label{classcsmp_1_1_property_database_arrayVariables}
+Worth mentioning is the variable file syntax for \doxylink{classcsmp_1_1_array_variable}{Array\+Variable} handling. Array variables are created by assigning a number greater than 3 where the variable type is specified. The number indicates the size of the array, which as of now (9/3/2012) may not be changed at runtime. 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{element\ array\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ EA\ \ \ \ X\ \ \ 22\ \ \ \ 0.\ \ 1.\ \ element}
+
+\end{DoxyCode}
+ here we instantiated an array on the element of size 22. So to recap the variable type options\+: 1 .. \doxylink{classcsmp_1_1_scalar_variable}{Scalar\+Variable} 2 .. \doxylink{classcsmp_1_1_vector_variable}{Vector\+Variable} 3 .. \doxylink{classcsmp_1_1_tensor_variable}{Tensor\+Variable} 4 to max$<$uint32\+\_\+t$>$ \doxylink{classcsmp_1_1_array_variable}{Array\+Variable} of that size
+
+\begin{DoxyAttention}{Attention}
+in addition to the old numbered style a the new way of reading variable types is now supported\+: The type\textquotesingle{}s can be represented by name and size specification For types SCALAR, VECTOR, TENSOR there is no need to specify the size For ARRAY and FLAGGEDARRAY size should be specified after the "{}space"{} following the name of the variable,, e.\+g. ARRAY 1000, FLAGGEDARRAY 2, but SCALAR, VECTOR, TENSOR
+\end{DoxyAttention}
+\begin{DoxyNote}{Note}
+name of the variable is not case sensitive, i.\+e. one can put Flagged\+Array or FLAGGEDARRAY or flaggedarray 
+\end{DoxyNote}
+
+
+\label{doc-constructors}
+\Hypertarget{classcsmp_1_1_property_database_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcsmp_1_1_property_database_aed2d3bacccc20ec3ef8ae4f32e46f507}\index{csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}!PropertyDatabase@{PropertyDatabase}}
+\index{PropertyDatabase@{PropertyDatabase}!csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{PropertyDatabase()}{PropertyDatabase()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_database_aed2d3bacccc20ec3ef8ae4f32e46f507} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_property_database}{csmp\+::\+Property\+Database}}$<$ dim $>$\+::\+Property\+Database (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{variables\+File\+Name}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+reads all variables from variables text file 
+
+Initializes variables database from text variables file Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=205pt]{classcsmp_1_1_property_database_aed2d3bacccc20ec3ef8ae4f32e46f507_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=205pt]{classcsmp_1_1_property_database_aed2d3bacccc20ec3ef8ae4f32e46f507_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_property_database_a7e19640562c755042e58d8c6ff9b47db}\index{csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}!PropertyDatabase@{PropertyDatabase}}
+\index{PropertyDatabase@{PropertyDatabase}!csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{PropertyDatabase()}{PropertyDatabase()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_database_a7e19640562c755042e58d8c6ff9b47db} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_property_database}{csmp\+::\+Property\+Database}}$<$ dim $>$\+::\+Property\+Database (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&}]{p}{}\end{DoxyParamCaption})}
+
+\begin{DoxyAttention}{Attention}
+We do not copy the \doxylink{classcsmp_1_1_index_tracker}{Index\+Tracker} here! 
+\end{DoxyAttention}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=205pt]{classcsmp_1_1_property_database_a7e19640562c755042e58d8c6ff9b47db_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=205pt]{classcsmp_1_1_property_database_a7e19640562c755042e58d8c6ff9b47db_icgraph}
+\end{center}
+\end{figure}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_property_database_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_property_database_a50b012fcee349b7668d61132b6ac34ca}\index{csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}!AddProperty@{AddProperty}}
+\index{AddProperty@{AddProperty}!csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{AddProperty()}{AddProperty()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_database_a50b012fcee349b7668d61132b6ac34ca} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \mbox{\hyperlink{classcsmp_1_1_property_database}{csmp\+::\+Property\+Database}}$<$ dim $>$\+::\+Add\+Property (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+adding a property at runtime from the command line (NB\+: you should call method Create\+Property() of model to do this) 
+
+Interactive method allowing to a add a property at runtime, provided that the user knows which storage-\/vector index he can assign (this can be established by first calling Scalar\+Properties() or an equivalent method to establish how many properties of the desired type there already are. The index of the new property should use the next higher integer such that the property can be allocated by the Memory\+Manager at the end of the current property storage.
+
+\begin{DoxyWarning}{Warning}
+Any runtime change in variables invalidates existing \doxylink{structcsmp_1_1_index}{Index} objects! They need to be updated.
+\end{DoxyWarning}
+\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+The user will be prompted to enter the \doxylink{structcsmp_1_1_parameter}{Parameter} record specifications.
+
+A \doxylink{structcsmp_1_1_index}{csmp\+::\+Index} for the new property.\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+The method will first prompt the user to define the characteristics of the new variable. Then Count\+Variables() is called to update the variable number lists inside of the \doxylink{classcsmp_1_1_property_database}{Property\+Database}. Finally, the updated variable list will be written to file.\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+To define a new variable at runtime.\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+The method will report a warning and print the existing variable record if the new variable already exists in the property database.
+
+\begin{DoxyReturn}{Returns}
+The \doxylink{structcsmp_1_1_index}{Index} reflecting the new state ov \doxylink{structcsmp_1_1_local_variables}{Local\+Variables} and \doxylink{structcsmp_1_1_integration_point_variables}{Integration\+Point\+Variables}, including added property.
+\end{DoxyReturn}
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000180}{Todo}}](3-\/D) These cout should become either \doxylink{classcsmp_1_1_exception}{Exception} or errors using \doxylink{classcsmp_1_1_error_handler}{Error\+Handler} 
+
+(3-\/D) Refactor to use overload internally \end{DoxyRefDesc}
+Roman,2013\+: Added explicit way of reading the size of variable provided by user input in function added\+\_\+prop.\+Define\+From\+Stdin()Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_property_database_a50b012fcee349b7668d61132b6ac34ca_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_property_database_ad2a667069324a7ffbe72e2af3bf645b4}\index{csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}!CheckRange@{CheckRange}}
+\index{CheckRange@{CheckRange}!csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{CheckRange()}{CheckRange()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_database_ad2a667069324a7ffbe72e2af3bf645b4} 
+template$<$uint32\+\_\+t dim$>$ \\
+bool \mbox{\hyperlink{classcsmp_1_1_property_database}{csmp\+::\+Property\+Database}}$<$ dim $>$\+::\+Check\+Range (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{s}{, }\item[{const \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&}]{var}{}\end{DoxyParamCaption}) const}
+
+
+
+checks value against the range specified in the database; 
+
+\begin{DoxyNote}{Note}
+not fast; use only for selected values
+\end{DoxyNote}
+returns true if tha value of the supplied variable is within the range stored in the database, else false \Hypertarget{classcsmp_1_1_property_database_a915e2f65ef7e6e489d142ac8a7edb9ab}\index{csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}!CheckRange@{CheckRange}}
+\index{CheckRange@{CheckRange}!csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{CheckRange()}{CheckRange()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_database_a915e2f65ef7e6e489d142ac8a7edb9ab} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_property_database}{csmp\+::\+Property\+Database}}$<$ dim $>$\+::\+Check\+Range (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{s}{, }\item[{double \&}]{var}{}\end{DoxyParamCaption}) const}
+
+
+
+prints details of the range check to screen and terminates program is value is out of range 
+
+Tests whether the supplied value of the target variable is within the physical meaningful range which was specified for the variable in the database file. ~\newline
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & The first method argument give the name of the target variable.\\
+\hline
+{\em var} & The second method argument specifies the actual physical-\/variable value which will be overwritten by the closest range bound if the target variable is out of range.\\
+\hline
+\end{DoxyParams}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+Checks range of variable \texorpdfstring{$\ast$}{*}s. A warning is issued if the variable is out of range and the variable is set to the closest range bound.\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+If the target variable has not been defined in the property database, an error will be reported. \Hypertarget{classcsmp_1_1_property_database_a1ed7bff3b01bf2ccd82adc99328eafb7}\index{csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}!Components@{Components}}
+\index{Components@{Components}!csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Components()}{Components()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_database_a1ed7bff3b01bf2ccd82adc99328eafb7} 
+template$<$uint32\+\_\+t dim$>$ \\
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_property_database}{csmp\+::\+Property\+Database}}$<$ dim $>$\+::\+Components (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{s}{}\end{DoxyParamCaption}) const}
+
+Returns the number of components of a variable.
+
+Scalar\+: 1 Vector\+: 2 Tensor\+: 3
+
+Array\+: variable (as defined in the variables file) Flagged\+Array\+: variable (as defined in the variables file)
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & The name of the physical variable whose type shall be established.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The number of components of a variable.
+\end{DoxyReturn}
+\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+If the variable is not defined, an error will be reported. \Hypertarget{classcsmp_1_1_property_database_a95b9df709b7c56bbea66c2ecaec2368a}\index{csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}!DeleteProperty@{DeleteProperty}}
+\index{DeleteProperty@{DeleteProperty}!csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{DeleteProperty()}{DeleteProperty()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_database_a95b9df709b7c56bbea66c2ecaec2368a} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_property_database}{csmp\+::\+Property\+Database}}$<$ dim $>$\+::\+Delete\+Property (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{s}{}\end{DoxyParamCaption})}
+
+Deletes the target property from the property database.
+
+\begin{DoxyWarning}{Warning}
+Existing \doxylink{structcsmp_1_1_index}{Index} objects may be invalidated after invoking this function
+\end{DoxyWarning}
+
+\begin{DoxyParams}{Parameters}
+{\em s} & The name of the physical variable whose database entry shall be deleted.\\
+\hline
+\end{DoxyParams}
+\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+A warning will be issued, if the target variable does not exist in the property database. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_property_database_a95b9df709b7c56bbea66c2ecaec2368a_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_property_database_a774d94649d03bcd2395e87d66557ec7c}\index{csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}!FlushToScreen@{FlushToScreen}}
+\index{FlushToScreen@{FlushToScreen}!csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{FlushToScreen()}{FlushToScreen()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_database_a774d94649d03bcd2395e87d66557ec7c} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_property_database}{csmp\+::\+Property\+Database}}$<$ dim $>$\+::\+Flush\+To\+Screen (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{propname}{}\end{DoxyParamCaption}) const}
+
+Prints the parameter record of the target variable to stdout.
+
+
+\begin{DoxyParams}{Parameters}
+{\em propname} & name of variable to be output\\
+\hline
+\end{DoxyParams}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+The method uses the \textquotesingle{}\doxylink{classcsmp_1_1_property_database_a04a2eaeedddf403f9cabd202927c2252}{Out()}\textquotesingle{} interface of the \doxylink{structcsmp_1_1_parameter}{Parameter} class to print the variable record(s). \Hypertarget{classcsmp_1_1_property_database_a9542868c2c78ce9e23c9b596296727fd}\index{csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}!Index@{Index}}
+\index{Index@{Index}!csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Index()}{Index()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_database_a9542868c2c78ce9e23c9b596296727fd} 
+template$<$uint32\+\_\+t dim$>$ \\
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_property_database}{csmp\+::\+Property\+Database}}$<$ dim $>$\+::\+Index (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{s}{}\end{DoxyParamCaption}) const}
+
+Returns the \doxylink{structcsmp_1_1_index_a16dd82c3058e3f91a76485a2bb574efb}{csmp\+::\+Index.\+index} of the target physical variable.
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & The name of the physical variable whose index shall be determined.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The variable index which defines the number of the corresponding property vector inside of the Memory\+Manager. If undefined, numeric\+\_\+limits$<$uint32\+\_\+t$>$\+::max() is returned.
+\end{DoxyReturn}
+\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+If the variable is not defined, an error will be reported. \Hypertarget{classcsmp_1_1_property_database_ae49b6c38f1bf2ace7977f01ea0a40989}\index{csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}!IntegrationPointVariablesAt@{IntegrationPointVariablesAt}}
+\index{IntegrationPointVariablesAt@{IntegrationPointVariablesAt}!csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{IntegrationPointVariablesAt()}{IntegrationPointVariablesAt()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_database_ae49b6c38f1bf2ace7977f01ea0a40989} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{structcsmp_1_1_integration_point_variables}{Integration\+Point\+Variables}} \mbox{\hyperlink{classcsmp_1_1_property_database}{csmp\+::\+Property\+Database}}$<$ dim $>$\+::\+Integration\+Point\+Variables\+At (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}}]{within}{}\end{DoxyParamCaption}) const}
+
+only for \doxylink{classcsmp_1_1_element}{Element} / \doxylink{classcsmp_1_1_face}{Face} / \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} and their \doxylink{structcsmp_1_1_integration_point_variables}{Integration\+Point\+Variables}
+
+for all others zero\Hypertarget{classcsmp_1_1_property_database_a13d47bfd0481aadc53ffa00cfa6b902f}\index{csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}!IsDefined@{IsDefined}}
+\index{IsDefined@{IsDefined}!csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{IsDefined()}{IsDefined()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_database_a13d47bfd0481aadc53ffa00cfa6b902f} 
+template$<$uint32\+\_\+t dim$>$ \\
+bool \mbox{\hyperlink{classcsmp_1_1_property_database}{csmp\+::\+Property\+Database}}$<$ dim $>$\+::\+Is\+Defined (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{s}{}\end{DoxyParamCaption}) const}
+
+Tells the user whether a variable exists in the property database.
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & The name or \doxylink{structcsmp_1_1_index}{csmp\+::\+Index} of the variable which shall be searched for in the database.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The boolean variable \textquotesingle{}true\textquotesingle{} or \textquotesingle{}false\textquotesingle{}. 
+\end{DoxyReturn}
+\Hypertarget{classcsmp_1_1_property_database_aa233a7c4dc80ac05ee01547bd800d7c2}\index{csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}!IsDefined@{IsDefined}}
+\index{IsDefined@{IsDefined}!csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{IsDefined()}{IsDefined()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_database_aa233a7c4dc80ac05ee01547bd800d7c2} 
+template$<$uint32\+\_\+t dim$>$ \\
+bool \mbox{\hyperlink{classcsmp_1_1_property_database}{csmp\+::\+Property\+Database}}$<$ dim $>$\+::\+Is\+Defined (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&}]{idx}{}\end{DoxyParamCaption}) const}
+
+Tells the user whether a variable exists in the property database.
+
+
+\begin{DoxyParams}{Parameters}
+{\em idx} & The \doxylink{structcsmp_1_1_index}{csmp\+::\+Index} of the variable which shall be searched for in the database.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The boolean variable \textquotesingle{}true\textquotesingle{} or \textquotesingle{}false\textquotesingle{}. 
+\end{DoxyReturn}
+\Hypertarget{classcsmp_1_1_property_database_af2ef74264364a9fbae12390d2bc27161}\index{csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}!ListKeys@{ListKeys}}
+\index{ListKeys@{ListKeys}!csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{ListKeys()}{ListKeys()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_database_af2ef74264364a9fbae12390d2bc27161} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_property_database}{csmp\+::\+Property\+Database}}$<$ dim $>$\+::\+List\+Keys (\begin{DoxyParamCaption}\item[{std\+::list$<$ \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} $>$ \&}]{keys}{}\end{DoxyParamCaption}) const}
+
+Creates a list of \doxylink{structcsmp_1_1_index}{Index} class objects corresponding to the current set of physical variables stored in the property database.
+
+The first argument is a reference to an STL list of \doxylink{structcsmp_1_1_index}{Index} class objects. If this list already contains data, it is erased before the new indices are entered. \Hypertarget{classcsmp_1_1_property_database_a50d39883deae8513cb9eb399307b9a28}\index{csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}!ListVariableNames@{ListVariableNames}}
+\index{ListVariableNames@{ListVariableNames}!csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{ListVariableNames()}{ListVariableNames()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_database_a50d39883deae8513cb9eb399307b9a28} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_property_database}{csmp\+::\+Property\+Database}}$<$ dim $>$\+::\+List\+Variable\+Names (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+Prints an alphabetically ordered list of all current physical variables to \textquotesingle{}stdout\textquotesingle{}.
+
+\begin{DoxyRefDesc}{Test}
+\item[\mbox{\hyperlink{test__test000053}{Test}}]last modified\+: SKM 25/10/14\+: fixed segmentation fault caused by printing empty variable. \end{DoxyRefDesc}
+\Hypertarget{classcsmp_1_1_property_database_a7e1fb50fc0847053e231285685ce1fd4}\index{csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}!ListVariables@{ListVariables}}
+\index{ListVariables@{ListVariables}!csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{ListVariables()}{ListVariables()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_database_a7e1fb50fc0847053e231285685ce1fd4} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_property_database}{csmp\+::\+Property\+Database}}$<$ dim $>$\+::\+List\+Variables (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+Prints the \doxylink{structcsmp_1_1_parameter}{Parameter} records of all current physical variables to stdout.\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+Method calls the \doxylink{classcsmp_1_1_property_database_a04a2eaeedddf403f9cabd202927c2252}{Out()} interface of the \doxylink{structcsmp_1_1_parameter}{Parameter} class.\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+To get full descriptions of the characteristics of all model variables. \Hypertarget{classcsmp_1_1_property_database_a101741343c1a3accc5e74071bc3ced01}\index{csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}!Name@{Name}}
+\index{Name@{Name}!csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Name()}{Name()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_database_a101741343c1a3accc5e74071bc3ced01} 
+template$<$uint32\+\_\+t dim$>$ \\
+const char \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classcsmp_1_1_property_database}{csmp\+::\+Property\+Database}}$<$ dim $>$\+::\+Name (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&}]{idx}{}\end{DoxyParamCaption}) const}
+
+Finds the name of the physical variable on the basis of its \doxylink{structcsmp_1_1_index}{Index}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em idx} & The \doxylink{structcsmp_1_1_index}{Index} of the target physical variable whose name shall be retrieved.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The name of the physical variable returned in C-\/string format. If the variable has not been defined in the property database, the output string will be \textquotesingle{}undefined\textquotesingle{}. 
+\end{DoxyReturn}
+\Hypertarget{classcsmp_1_1_property_database_a75b89fb0b080d03e738e25002e3136d9}\index{csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}!Placement@{Placement}}
+\index{Placement@{Placement}!csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Placement()}{Placement()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_database_a75b89fb0b080d03e738e25002e3136d9} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} \mbox{\hyperlink{classcsmp_1_1_property_database}{csmp\+::\+Property\+Database}}$<$ dim $>$\+::\+Placement (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{s}{}\end{DoxyParamCaption}) const}
+
+Returns the placement (\doxylink{classcsmp_1_1_node}{Node}, Integration\+Point or \doxylink{classcsmp_1_1_element}{Element}) of the target physical variable.
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & The name of the physical variable whose placement shall be determined.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The variable placement.
+\end{DoxyReturn}
+\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+If the variable is not defined, an error will be reported. \Hypertarget{classcsmp_1_1_property_database_a32162c9b60986b664a6a86fb7a4a4174}\index{csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}!RangeOf@{RangeOf}}
+\index{RangeOf@{RangeOf}!csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{RangeOf()}{RangeOf()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_database_a32162c9b60986b664a6a86fb7a4a4174} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_property_database}{csmp\+::\+Property\+Database}}$<$ dim $>$\+::\+Range\+Of (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{s}{, }\item[{double \&}]{mn}{, }\item[{double \&}]{mx}{}\end{DoxyParamCaption}) const}
+
+Outputs the physically meaningful range of the target variable. This range is equivalent to the range which was specified in the variable database file.
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & The name of the physical variable whose range shall be established.\\
+\hline
+{\em mn} & The second and third method arguments will store the mininum and maximum permitted values of the target variable.\\
+\hline
+\end{DoxyParams}
+\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+If the target variable has not been defined in the property database, an error will be reported. \Hypertarget{classcsmp_1_1_property_database_acb69cc7f6429ae3c9b68e5ed24ac2962}\index{csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}!SetRangeOf@{SetRangeOf}}
+\index{SetRangeOf@{SetRangeOf}!csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{SetRangeOf()}{SetRangeOf()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_database_acb69cc7f6429ae3c9b68e5ed24ac2962} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_property_database}{csmp\+::\+Property\+Database}}$<$ dim $>$\+::\+Set\+Range\+Of (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{property\+\_\+name}{, }\item[{double}]{vmin}{, }\item[{double}]{vmax}{}\end{DoxyParamCaption})}
+
+Sets of the range of the target variable at runtime in case relevant information becomes available. \Hypertarget{classcsmp_1_1_property_database_aa250a020d765e4a8fe7c3083ad79848b}\index{csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}!StorageKey@{StorageKey}}
+\index{StorageKey@{StorageKey}!csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{StorageKey()}{StorageKey()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_database_aa250a020d765e4a8fe7c3083ad79848b} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \mbox{\hyperlink{classcsmp_1_1_property_database}{csmp\+::\+Property\+Database}}$<$ dim $>$\+::\+Storage\+Key (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{s}{}\end{DoxyParamCaption}) const}
+
+Returns the \doxylink{structcsmp_1_1_index}{Index} type for the target physical variable. This index is an efficient access key for the physical variable andcan be used in repeated operations on the property storage, such as Read() / Write() operations of variable values.
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & The name of the variable whose \doxylink{structcsmp_1_1_index}{Index} shall be retrieved.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\doxylink{structcsmp_1_1_index}{csmp\+::\+Index} initialised with variable specifications
+\end{DoxyReturn}
+A \doxylink{structcsmp_1_1_index}{Index} class object specifying the type, placement and property-\/array index of the target variable. If the variable cannot be found in the database the returned \doxylink{structcsmp_1_1_index}{Index} will be initialized using its default constructor.\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+\doxylink{classcsmp_1_1_property_database_aa250a020d765e4a8fe7c3083ad79848b}{Storage\+Key()} is used inside \doxylink{classcsmp_1_1_interrelation}{Interrelation}, Algorithm, \doxylink{classcsmp_1_1_visitor}{Visitor} and other class objects to derive \doxylink{structcsmp_1_1_index}{Index} keys for computations.\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+If the variable does not exist in the property database, an error will be reported. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=341pt]{classcsmp_1_1_property_database_aa250a020d765e4a8fe7c3083ad79848b_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_property_database_aa250a020d765e4a8fe7c3083ad79848b_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_property_database_afbd8155f1083c09ccf8ef9e8cb6ea950}\index{csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}!Type@{Type}}
+\index{Type@{Type}!csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Type()}{Type()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_database_afbd8155f1083c09ccf8ef9e8cb6ea950} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}} \mbox{\hyperlink{classcsmp_1_1_property_database}{csmp\+::\+Property\+Database}}$<$ dim $>$\+::\+Type (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{s}{}\end{DoxyParamCaption}) const}
+
+Reports whether the target physical variable is of scalar, vector or tensor type.
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & The name of the physical variable whose type shall be established.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The type of the physical variable.
+\end{DoxyReturn}
+\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+If the variable is not defined, an error will be reported. \Hypertarget{classcsmp_1_1_property_database_acb9f4b6dc6a9471f6733a123d476105f}\index{csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}!Unit@{Unit}}
+\index{Unit@{Unit}!csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Unit()}{Unit()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_database_acb9f4b6dc6a9471f6733a123d476105f} 
+template$<$uint32\+\_\+t dim$>$ \\
+const char \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classcsmp_1_1_property_database}{csmp\+::\+Property\+Database}}$<$ dim $>$\+::\+Unit (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{s}{}\end{DoxyParamCaption}) const}
+
+Returns the unit record string of the \doxylink{structcsmp_1_1_parameter}{Parameter} record which describes the target variable.
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & The name of the target physical variable.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The unit string record in the \doxylink{structcsmp_1_1_parameter}{Parameter} object which stores the specifications of the physical variable. If the variable record cannot be found, a NULL pointer is returned.
+\end{DoxyReturn}
+\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+An error is reported if the variable cannot be found in the property database. \Hypertarget{classcsmp_1_1_property_database_a16182da7986e543a22fbed1859332d36}\index{csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}!UnitConversionFactor@{UnitConversionFactor}}
+\index{UnitConversionFactor@{UnitConversionFactor}!csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{UnitConversionFactor()}{UnitConversionFactor()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_database_a16182da7986e543a22fbed1859332d36} 
+template$<$uint32\+\_\+t dim$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_property_database}{csmp\+::\+Property\+Database}}$<$ dim $>$\+::\+Unit\+Conversion\+Factor (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{sys\+\_\+in}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{sys\+\_\+out}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{unit}{}\end{DoxyParamCaption}) const}
+
+Reports conversion factors which allow the user to convert variable values from the SI to the CGS system or vice versa.\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+The method expects three string arguments, the name of the system from which the variable is converted (options are SI or CGS), the name of the system into which the variable is converted (SI or CGS), and the unit which is converted. The SI unit options are the following\+:
+
+"{}o\+C"{},"{}m"{},"{}\+MPa"{},"{}kg m-\/3"{},"{}yr"{},"{}m Ma-\/1"{},"{}\+W m-\/2"{},"{}m2"{},"{}\+J m-\/1 K-\/1 s-\/1"{},"{}kg m-\/2 s-\/1"{}
+
+and the available CGS (and other) units which can be converted are\+:
+
+"{}cm"{}, "{}cm2"{}, "{}cm-\/2"{}, "{}m"{},"{}feet"{},"{}dyne cm-\/2 s-\/1"{},"{}g cm-\/1 s-\/1"{}, "{}g cm-\/2 s-\/1"{}, "{}g cm-\/3"{}, "{}cal"{}, "{}cal g-\/1 o\+C-\/1"{}, "{}cal cm-\/1 s-\/1 o\+C-\/1"{},"{}cal cm-\/2 s-\/1"{},"{}o\+C"{}, "{}bars"{}, "{}cm s-\/1"{}.
+
+\begin{DoxyReturn}{Returns}
+A floating point conversion factor.
+\end{DoxyReturn}
+\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+To get conversion factors which allow to output variables in non SI units for comparison with simulation results from non CSP simulation tools.\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+The method will report an error if it cannot identify one of its string arguments. \Hypertarget{classcsmp_1_1_property_database_a15064180c59d5a26e720d887a442bb82}\index{csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}!WriteVariableSetToHeaderFile@{WriteVariableSetToHeaderFile}}
+\index{WriteVariableSetToHeaderFile@{WriteVariableSetToHeaderFile}!csmp::PropertyDatabase$<$ dim $>$@{csmp::PropertyDatabase$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{WriteVariableSetToHeaderFile()}{WriteVariableSetToHeaderFile()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_database_a15064180c59d5a26e720d887a442bb82} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_property_database}{csmp\+::\+Property\+Database}}$<$ dim $>$\+::\+Write\+Variable\+Set\+To\+Header\+File (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{header\+\_\+file}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{variable\+\_\+set\+\_\+name}{}\end{DoxyParamCaption}) const}
+
+
+
+writes templatized \doxylink{structcsmp_1_1_i_n_d_e_x}{INDEX} variable definitions of the current variables into header file and instantiates their keys 
+
+Writes templatized \doxylink{structcsmp_1_1_i_n_d_e_x}{INDEX} variable definitions of the current variables into header file and instantiates their keys. If the variable set name is empty, the variables are inserted into the global namespace. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/model/\mbox{\hyperlink{_property_database_8h}{Property\+Database.\+h}}\item 
+source/modules/model/Property\+Database.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,369 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_look_up_storage" kind="class" language="C++" prot="public">
+    <compoundname>csmp::LookUpStorage</compoundname>
+    <templateparamlist>
+      <param>
+        <type>typename fT</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_look_up_storage_1abc4fddf10c58c56ff5234cba7b3ce84a" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; fT &gt;</type>
+        <definition>std::vector&lt;fT&gt; csmp::LookUpStorage&lt; fT &gt;::grid</definition>
+        <argsstring></argsstring>
+        <name>grid</name>
+        <qualifiedname>csmp::LookUpStorage::grid</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/LookUpStorage.h" line="30" column="17" bodyfile="source/includes/eos/LookUpStorage.h" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_look_up_storage_1aec2701d6192080591ae2a197696f9d97" prot="private" static="no" mutable="no">
+        <type>fT</type>
+        <definition>fT csmp::LookUpStorage&lt; fT &gt;::xresolution</definition>
+        <argsstring></argsstring>
+        <name>xresolution</name>
+        <qualifiedname>csmp::LookUpStorage::xresolution</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/LookUpStorage.h" line="31" column="21" bodyfile="source/includes/eos/LookUpStorage.h" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_look_up_storage_1a2228b1415393af203bb8d5d2ec1a7d3d" prot="private" static="no" mutable="no">
+        <type>fT</type>
+        <definition>fT csmp::LookUpStorage&lt; fT &gt;::yresolution</definition>
+        <argsstring></argsstring>
+        <name>yresolution</name>
+        <qualifiedname>csmp::LookUpStorage::yresolution</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/LookUpStorage.h" line="31" column="33" bodyfile="source/includes/eos/LookUpStorage.h" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_look_up_storage_1a5ab8090279d48c8a386a4cc41cbd17ba" prot="private" static="no" mutable="no">
+        <type>fT</type>
+        <definition>fT csmp::LookUpStorage&lt; fT &gt;::x_max</definition>
+        <argsstring></argsstring>
+        <name>x_max</name>
+        <qualifiedname>csmp::LookUpStorage::x_max</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/LookUpStorage.h" line="32" column="21" bodyfile="source/includes/eos/LookUpStorage.h" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_look_up_storage_1af7afd81ef9700b1e78bd565f5bfbcd58" prot="private" static="no" mutable="no">
+        <type>fT</type>
+        <definition>fT csmp::LookUpStorage&lt; fT &gt;::y_max</definition>
+        <argsstring></argsstring>
+        <name>y_max</name>
+        <qualifiedname>csmp::LookUpStorage::y_max</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/LookUpStorage.h" line="32" column="27" bodyfile="source/includes/eos/LookUpStorage.h" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_look_up_storage_1a40c4720e86b636852998fff33762a642" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t csmp::LookUpStorage&lt; fT &gt;::size_x</definition>
+        <argsstring></argsstring>
+        <name>size_x</name>
+        <qualifiedname>csmp::LookUpStorage::size_x</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/LookUpStorage.h" line="33" column="23" bodyfile="source/includes/eos/LookUpStorage.h" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_look_up_storage_1a23b489afd44f34b5bfea2881bffd985c" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t csmp::LookUpStorage&lt; fT &gt;::size_y</definition>
+        <argsstring></argsstring>
+        <name>size_y</name>
+        <qualifiedname>csmp::LookUpStorage::size_y</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/LookUpStorage.h" line="33" column="30" bodyfile="source/includes/eos/LookUpStorage.h" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_look_up_storage_1a329cc744fef67133325ef1555ff9dc73" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t csmp::LookUpStorage&lt; fT &gt;::rowlength</definition>
+        <argsstring></argsstring>
+        <name>rowlength</name>
+        <qualifiedname>csmp::LookUpStorage::rowlength</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/LookUpStorage.h" line="33" column="37" bodyfile="source/includes/eos/LookUpStorage.h" bodystart="33" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_look_up_storage_1a4d404bb128980725ea8ff2d7d11255b9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::LookUpStorage&lt; fT &gt;::LookUpStorage</definition>
+        <argsstring>()</argsstring>
+        <name>LookUpStorage</name>
+        <qualifiedname>csmp::LookUpStorage::LookUpStorage</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/LookUpStorage.h" line="12" column="5" bodyfile="source/modules/eos/LookUpStorage.cpp" bodystart="9" bodyend="16"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_look_up_storage_1ad904cf18a53ba1ca265de22ae4d7504a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::LookUpStorage&lt; fT &gt;::LookUpStorage</definition>
+        <argsstring>(const LookUpStorage&lt; fT &gt; &amp;)</argsstring>
+        <name>LookUpStorage</name>
+        <qualifiedname>csmp::LookUpStorage::LookUpStorage</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_look_up_storage" kindref="compound">LookUpStorage</ref>&lt; fT &gt; &amp;</type>
+          <defname>g</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/LookUpStorage.h" line="13" column="5" bodyfile="source/modules/eos/LookUpStorage.cpp" bodystart="34" bodyend="38"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_look_up_storage_1afec64ff6cbc85f4873e69799033561a0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::LookUpStorage&lt; fT &gt;::LookUpStorage</definition>
+        <argsstring>(fT x_dim, fT y_dim, fT xres, fT yres)</argsstring>
+        <name>LookUpStorage</name>
+        <qualifiedname>csmp::LookUpStorage::LookUpStorage</qualifiedname>
+        <param>
+          <type>fT</type>
+          <declname>x_dim</declname>
+        </param>
+        <param>
+          <type>fT</type>
+          <declname>y_dim</declname>
+        </param>
+        <param>
+          <type>fT</type>
+          <declname>xres</declname>
+        </param>
+        <param>
+          <type>fT</type>
+          <declname>yres</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/LookUpStorage.h" line="15" column="5" bodyfile="source/modules/eos/LookUpStorage.cpp" bodystart="21" bodyend="26"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_look_up_storage_1a6ecd97c6f8bec1acf60032682ccd9a22" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::LookUpStorage&lt; fT &gt;::~LookUpStorage</definition>
+        <argsstring>()</argsstring>
+        <name>~LookUpStorage</name>
+        <qualifiedname>csmp::LookUpStorage::~LookUpStorage</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/LookUpStorage.h" line="17" column="5" bodyfile="source/modules/eos/LookUpStorage.cpp" bodystart="44" bodyend="46"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_look_up_storage_1a351904e5e5cc2427e23cac8bd658f031" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::LookUpStorage&lt; fT &gt;::Initialize</definition>
+        <argsstring>(fT x_dim, fT y_dim, fT xres, fT yres)</argsstring>
+        <name>Initialize</name>
+        <qualifiedname>csmp::LookUpStorage::Initialize</qualifiedname>
+        <param>
+          <type>fT</type>
+          <declname>x_dim</declname>
+        </param>
+        <param>
+          <type>fT</type>
+          <declname>y_dim</declname>
+        </param>
+        <param>
+          <type>fT</type>
+          <declname>xres</declname>
+        </param>
+        <param>
+          <type>fT</type>
+          <declname>yres</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/LookUpStorage.h" line="18" column="10" bodyfile="source/modules/eos/LookUpStorage.cpp" bodystart="51" bodyend="75"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_look_up_storage_1ab1af095c1f25723d6dc650b790480819" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_look_up_storage" kindref="compound">LookUpStorage</ref> &amp;</type>
+        <definition>LookUpStorage&lt; fT &gt; &amp; csmp::LookUpStorage&lt; fT &gt;::operator=</definition>
+        <argsstring>(const LookUpStorage &amp;g)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::LookUpStorage::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_look_up_storage" kindref="compound">LookUpStorage</ref> &amp;</type>
+          <declname>g</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/LookUpStorage.h" line="20" column="19" bodyfile="source/modules/eos/LookUpStorage.cpp" bodystart="80" bodyend="93"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_look_up_storage_1afca62426934e6a89a0f541abfeb1467d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>fT &amp;</type>
+        <definition>fT &amp; csmp::LookUpStorage&lt; fT &gt;::operator()</definition>
+        <argsstring>(int32_t row, int32_t col)</argsstring>
+        <name>operator()</name>
+        <qualifiedname>csmp::LookUpStorage::operator()</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>row</declname>
+        </param>
+        <param>
+          <type>int32_t</type>
+          <declname>col</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/LookUpStorage.h" line="21" column="10" bodyfile="source/includes/eos/LookUpStorage.h" bodystart="38" bodyend="41"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_look_up_storage_1acb037c31573e81796450b6b01400d6cf" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>int32_t</type>
+        <definition>int32_t csmp::LookUpStorage&lt; fT &gt;::Rows</definition>
+        <argsstring>() const</argsstring>
+        <name>Rows</name>
+        <qualifiedname>csmp::LookUpStorage::Rows</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/LookUpStorage.h" line="22" column="13" bodyfile="source/includes/eos/LookUpStorage.h" bodystart="43" bodyend="43"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_look_up_storage_1acab5874f81f7777aa915fa3e82c96972" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>int32_t</type>
+        <definition>int32_t csmp::LookUpStorage&lt; fT &gt;::Columns</definition>
+        <argsstring>() const</argsstring>
+        <name>Columns</name>
+        <qualifiedname>csmp::LookUpStorage::Columns</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/LookUpStorage.h" line="23" column="13" bodyfile="source/includes/eos/LookUpStorage.h" bodystart="46" bodyend="46"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_look_up_storage_1ae95abab98749e9907f66c0abe371a2e2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::LookUpStorage&lt; fT &gt;::BinaryOut</definition>
+        <argsstring>(const char *bin_name) const</argsstring>
+        <name>BinaryOut</name>
+        <qualifiedname>csmp::LookUpStorage::BinaryOut</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>bin_name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/LookUpStorage.h" line="26" column="11" bodyfile="source/modules/eos/LookUpStorage.cpp" bodystart="99" bodyend="131"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_look_up_storage_1ad4893dc1a5ff4467afc4c5ca06a0bf13" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::LookUpStorage&lt; fT &gt;::BinaryIn</definition>
+        <argsstring>(const char *fname)</argsstring>
+        <name>BinaryIn</name>
+        <qualifiedname>csmp::LookUpStorage::BinaryIn</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>fname</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/LookUpStorage.h" line="27" column="11" bodyfile="source/modules/eos/LookUpStorage.cpp" bodystart="135" bodyend="168"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::LookUpStorage&lt; fT &gt;</label>
+        <link refid="classcsmp_1_1_look_up_storage"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/eos/LookUpStorage.h" line="10" column="1" bodyfile="source/includes/eos/LookUpStorage.h" bodystart="10" bodyend="35"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_look_up_storage_1ad4893dc1a5ff4467afc4c5ca06a0bf13" prot="public" virt="non-virtual"><scope>csmp::LookUpStorage</scope><name>BinaryIn</name></member>
+      <member refid="classcsmp_1_1_look_up_storage_1ae95abab98749e9907f66c0abe371a2e2" prot="public" virt="non-virtual"><scope>csmp::LookUpStorage</scope><name>BinaryOut</name></member>
+      <member refid="classcsmp_1_1_look_up_storage_1acab5874f81f7777aa915fa3e82c96972" prot="public" virt="non-virtual"><scope>csmp::LookUpStorage</scope><name>Columns</name></member>
+      <member refid="classcsmp_1_1_look_up_storage_1abc4fddf10c58c56ff5234cba7b3ce84a" prot="private" virt="non-virtual"><scope>csmp::LookUpStorage</scope><name>grid</name></member>
+      <member refid="classcsmp_1_1_look_up_storage_1a351904e5e5cc2427e23cac8bd658f031" prot="public" virt="non-virtual"><scope>csmp::LookUpStorage</scope><name>Initialize</name></member>
+      <member refid="classcsmp_1_1_look_up_storage_1a4d404bb128980725ea8ff2d7d11255b9" prot="public" virt="non-virtual"><scope>csmp::LookUpStorage</scope><name>LookUpStorage</name></member>
+      <member refid="classcsmp_1_1_look_up_storage_1ad904cf18a53ba1ca265de22ae4d7504a" prot="public" virt="non-virtual"><scope>csmp::LookUpStorage</scope><name>LookUpStorage</name></member>
+      <member refid="classcsmp_1_1_look_up_storage_1afec64ff6cbc85f4873e69799033561a0" prot="public" virt="non-virtual"><scope>csmp::LookUpStorage</scope><name>LookUpStorage</name></member>
+      <member refid="classcsmp_1_1_look_up_storage_1afca62426934e6a89a0f541abfeb1467d" prot="public" virt="non-virtual"><scope>csmp::LookUpStorage</scope><name>operator()</name></member>
+      <member refid="classcsmp_1_1_look_up_storage_1ab1af095c1f25723d6dc650b790480819" prot="public" virt="non-virtual"><scope>csmp::LookUpStorage</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_look_up_storage_1a329cc744fef67133325ef1555ff9dc73" prot="private" virt="non-virtual"><scope>csmp::LookUpStorage</scope><name>rowlength</name></member>
+      <member refid="classcsmp_1_1_look_up_storage_1acb037c31573e81796450b6b01400d6cf" prot="public" virt="non-virtual"><scope>csmp::LookUpStorage</scope><name>Rows</name></member>
+      <member refid="classcsmp_1_1_look_up_storage_1a40c4720e86b636852998fff33762a642" prot="private" virt="non-virtual"><scope>csmp::LookUpStorage</scope><name>size_x</name></member>
+      <member refid="classcsmp_1_1_look_up_storage_1a23b489afd44f34b5bfea2881bffd985c" prot="private" virt="non-virtual"><scope>csmp::LookUpStorage</scope><name>size_y</name></member>
+      <member refid="classcsmp_1_1_look_up_storage_1a5ab8090279d48c8a386a4cc41cbd17ba" prot="private" virt="non-virtual"><scope>csmp::LookUpStorage</scope><name>x_max</name></member>
+      <member refid="classcsmp_1_1_look_up_storage_1aec2701d6192080591ae2a197696f9d97" prot="private" virt="non-virtual"><scope>csmp::LookUpStorage</scope><name>xresolution</name></member>
+      <member refid="classcsmp_1_1_look_up_storage_1af7afd81ef9700b1e78bd565f5bfbcd58" prot="private" virt="non-virtual"><scope>csmp::LookUpStorage</scope><name>y_max</name></member>
+      <member refid="classcsmp_1_1_look_up_storage_1a2228b1415393af203bb8d5d2ec1a7d3d" prot="private" virt="non-virtual"><scope>csmp::LookUpStorage</scope><name>yresolution</name></member>
+      <member refid="classcsmp_1_1_look_up_storage_1a6ecd97c6f8bec1acf60032682ccd9a22" prot="public" virt="non-virtual"><scope>csmp::LookUpStorage</scope><name>~LookUpStorage</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

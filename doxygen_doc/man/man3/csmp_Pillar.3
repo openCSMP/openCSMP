@@ -1,0 +1,78 @@
+.TH "csmp::Pillar" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::Pillar
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPillar\fP (const \fBcsmp::Point\fP< 3U > &pStart, const \fBcsmp::Point\fP< 3U > &pEnd)"
+.br
+.ti -1c
+.RI "void \fBReserve\fP (size_t zpoints)"
+.br
+.RI "reserve capacity "
+.ti -1c
+.RI "size_t \fBGetNumPoints\fP () const"
+.br
+.RI "beads on the pillar "
+.ti -1c
+.RI "const \fBPoint\fP< 3 > & \fBStartPoint\fP () const"
+.br
+.RI "returns the starting point of the pillar at the smallest Z "
+.ti -1c
+.RI "const \fBPoint\fP< 3 > & \fBEndPoint\fP () const"
+.br
+.RI "returns the starting point of the pillar at the largest Z "
+.ti -1c
+.RI "void \fBAddZCoord\fP (double z)"
+.br
+.ti -1c
+.RI "void \fBSetZCoords\fP (const std::vector< double > &zcoords)"
+.br
+.ti -1c
+.RI "double \fBGetZCoord\fP (size_t zid) const"
+.br
+.ti -1c
+.RI "\fBcsmp::Point\fP< 3U > \fBGetPoint\fP (size_t zid) const"
+.br
+.ti -1c
+.RI "size_t \fBFindPoint\fP (double z) const"
+.br
+.ti -1c
+.RI "void \fBSetFirstNodeNum\fP (size_t node_num)"
+.br
+.ti -1c
+.RI "size_t \fBFirstNodeNum\fP () const"
+.br
+.ti -1c
+.RI "void \fBOut\fP () const"
+.br
+.RI "prints the data stored in the pillar to screen "
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. Manasipov 
+
+.PP
+A\&.J\&. Bromage 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2015-2017 
+.RE
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

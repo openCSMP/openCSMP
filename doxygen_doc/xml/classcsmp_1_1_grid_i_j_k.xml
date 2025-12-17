@@ -1,0 +1,200 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_grid_i_j_k" kind="class" language="C++" prot="public">
+    <compoundname>csmp::GridIJK</compoundname>
+    <includes refid="_grid_i_j_k_8h" local="no">GridIJK.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_grid_i_j_k_1af7076e296cd774142f7684ac2a0fb777" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::GridIJK::grid_dim_I_</definition>
+        <argsstring></argsstring>
+        <name>grid_dim_I_</name>
+        <qualifiedname>csmp::GridIJK::grid_dim_I_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/GridIJK.h" line="43" column="14" bodyfile="source/includes/interfaces/Eclipse/GridIJK.h" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_grid_i_j_k_1a6ae23323aab7a1d625ff2c38833e5c93" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::GridIJK::grid_dim_J_</definition>
+        <argsstring></argsstring>
+        <name>grid_dim_J_</name>
+        <qualifiedname>csmp::GridIJK::grid_dim_J_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/GridIJK.h" line="43" column="26" bodyfile="source/includes/interfaces/Eclipse/GridIJK.h" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_grid_i_j_k_1a70a9dc27b0fdc14165eeb86a79e91adb" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::GridIJK::grid_dim_K_</definition>
+        <argsstring></argsstring>
+        <name>grid_dim_K_</name>
+        <qualifiedname>csmp::GridIJK::grid_dim_K_</qualifiedname>
+        <briefdescription>
+<para>corner-point grid dimensions </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/GridIJK.h" line="43" column="38" bodyfile="source/includes/interfaces/Eclipse/GridIJK.h" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_grid_i_j_k_1aacb39e3fd1344aa022bc6ce24eed38f5" prot="private" static="no" mutable="no">
+        <type>std::unordered_multimap&lt; <ref refid="structijk" kindref="compound">ijk</ref>, <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; 3u &gt; * &gt;</type>
+        <definition>std::unordered_multimap&lt;ijk,Element&lt;3u&gt;*&gt; csmp::GridIJK::ijk_to_elmt_</definition>
+        <argsstring></argsstring>
+        <name>ijk_to_elmt_</name>
+        <qualifiedname>csmp::GridIJK::ijk_to_elmt_</qualifiedname>
+        <briefdescription>
+<para>stores mapping from i,j,k to elements </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/GridIJK.h" line="44" column="31" bodyfile="source/includes/interfaces/Eclipse/GridIJK.h" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_grid_i_j_k_1a970970aa93b8417aded2d444da2665ab" prot="private" static="no" mutable="no">
+        <type>std::unordered_map&lt; <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; 3u &gt; *, <ref refid="structijk" kindref="compound">ijk</ref> &gt;</type>
+        <definition>std::unordered_map&lt;Element&lt;3u&gt;*,ijk&gt; csmp::GridIJK::elmt_to_ijk_</definition>
+        <argsstring></argsstring>
+        <name>elmt_to_ijk_</name>
+        <qualifiedname>csmp::GridIJK::elmt_to_ijk_</qualifiedname>
+        <briefdescription>
+<para>stores mapping from elements to i,j,k </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/GridIJK.h" line="45" column="31" bodyfile="source/includes/interfaces/Eclipse/GridIJK.h" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_grid_i_j_k_1ad9f6b6a632bf1560b62bebc125591fbd" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; uint8_t &gt;</type>
+        <definition>std::vector&lt;uint8_t&gt; csmp::GridIJK::cell_activity_</definition>
+        <argsstring></argsstring>
+        <name>cell_activity_</name>
+        <qualifiedname>csmp::GridIJK::cell_activity_</qualifiedname>
+        <briefdescription>
+<para>active/inactive cells </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/GridIJK.h" line="46" column="18" bodyfile="source/includes/interfaces/Eclipse/GridIJK.h" bodystart="46" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_grid_i_j_k_1a30cc02152b3547fed6481650363cab0c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::GridIJK::GridDimensions</definition>
+        <argsstring>(size_t &amp;max_I, size_t &amp;max_J, size_t &amp;max_K) const</argsstring>
+        <name>GridDimensions</name>
+        <qualifiedname>csmp::GridIJK::GridDimensions</qualifiedname>
+        <param>
+          <type>size_t &amp;</type>
+          <declname>max_I</declname>
+        </param>
+        <param>
+          <type>size_t &amp;</type>
+          <declname>max_J</declname>
+        </param>
+        <param>
+          <type>size_t &amp;</type>
+          <declname>max_K</declname>
+        </param>
+        <briefdescription>
+<para>the dimensions of the original corner-point grid </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/GridIJK.h" line="29" column="12" bodyfile="source/includes/interfaces/Eclipse/GridIJK.h" bodystart="29" bodyend="30"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_grid_i_j_k_1a9f4b76fd6459dbf880b061c5d3ba8534" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structijk" kindref="compound">ijk</ref></type>
+        <definition>ijk csmp::GridIJK::EclipseCoordinates</definition>
+        <argsstring>(const Element&lt; 3u &gt; *e) const</argsstring>
+        <name>EclipseCoordinates</name>
+        <qualifiedname>csmp::GridIJK::EclipseCoordinates</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; 3u &gt; *</type>
+          <declname>e</declname>
+        </param>
+        <briefdescription>
+<para>Get ijk coordinates of corner-point grid cell that corresponds to <ref refid="classcsmp_1_1_element" kindref="compound">csmp::Element</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/GridIJK.h" line="33" column="11" bodyfile="source/includes/interfaces/Eclipse/GridIJK.h" bodystart="33" bodyend="33"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_grid_i_j_k_1a5f86eb6c56101351105eb15caf71ded9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint8_t &amp;</type>
+        <definition>uint8_t &amp; csmp::GridIJK::CellActivity</definition>
+        <argsstring>(uint32_t i, uint32_t j, uint32_t k)</argsstring>
+        <name>CellActivity</name>
+        <qualifiedname>csmp::GridIJK::CellActivity</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>j</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>k</declname>
+        </param>
+        <briefdescription>
+<para>activitate or deactivate cells </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/GridIJK.h" line="36" column="15" bodyfile="source/includes/interfaces/Eclipse/GridIJK.h" bodystart="36" bodyend="39"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref> mapper for the retrieval of cells by the I,J,K coordinates of the original model.</para>
+<para><simplesect kind="attention"><para>deadcells are flagged allowing for testing.</para>
+</simplesect>
+<simplesect kind="note"><para>contained is based on hashmap and best suited for single creation followed by lookup. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::GridIJK</label>
+        <link refid="classcsmp_1_1_grid_i_j_k"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/interfaces/Eclipse/GridIJK.h" line="25" column="1" bodyfile="source/includes/interfaces/Eclipse/GridIJK.h" bodystart="25" bodyend="48"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_grid_i_j_k_1ad9f6b6a632bf1560b62bebc125591fbd" prot="private" virt="non-virtual"><scope>csmp::GridIJK</scope><name>cell_activity_</name></member>
+      <member refid="classcsmp_1_1_grid_i_j_k_1a5f86eb6c56101351105eb15caf71ded9" prot="public" virt="non-virtual"><scope>csmp::GridIJK</scope><name>CellActivity</name></member>
+      <member refid="classcsmp_1_1_grid_i_j_k_1a9f4b76fd6459dbf880b061c5d3ba8534" prot="public" virt="non-virtual"><scope>csmp::GridIJK</scope><name>EclipseCoordinates</name></member>
+      <member refid="classcsmp_1_1_grid_i_j_k_1a970970aa93b8417aded2d444da2665ab" prot="private" virt="non-virtual"><scope>csmp::GridIJK</scope><name>elmt_to_ijk_</name></member>
+      <member refid="classcsmp_1_1_grid_i_j_k_1af7076e296cd774142f7684ac2a0fb777" prot="private" virt="non-virtual"><scope>csmp::GridIJK</scope><name>grid_dim_I_</name></member>
+      <member refid="classcsmp_1_1_grid_i_j_k_1a6ae23323aab7a1d625ff2c38833e5c93" prot="private" virt="non-virtual"><scope>csmp::GridIJK</scope><name>grid_dim_J_</name></member>
+      <member refid="classcsmp_1_1_grid_i_j_k_1a70a9dc27b0fdc14165eeb86a79e91adb" prot="private" virt="non-virtual"><scope>csmp::GridIJK</scope><name>grid_dim_K_</name></member>
+      <member refid="classcsmp_1_1_grid_i_j_k_1a30cc02152b3547fed6481650363cab0c" prot="public" virt="non-virtual"><scope>csmp::GridIJK</scope><name>GridDimensions</name></member>
+      <member refid="classcsmp_1_1_grid_i_j_k_1aacb39e3fd1344aa022bc6ce24eed38f5" prot="private" virt="non-virtual"><scope>csmp::GridIJK</scope><name>ijk_to_elmt_</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

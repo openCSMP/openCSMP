@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_4d9b8eb9f5d173fce8c07d9cbb204261" kind="dir">
+    <compoundname>source/includes/integration/finite_volumes/legacy_transport_scheme</compoundname>
+    <innerfile refid="_explicit_mass_based_transport_8h">ExplicitMassBasedTransport.h</innerfile>
+    <innerfile refid="_explicit_node_centered_finite_volume_transport_8h">ExplicitNodeCenteredFiniteVolumeTransport.h</innerfile>
+    <innerfile refid="_explicit_stencil_processor_8h">ExplicitStencilProcessor.h</innerfile>
+    <innerfile refid="_f_v___parameter_8h">FV_Parameter.h</innerfile>
+    <innerfile refid="_mass_based_stencil_processor_8h">MassBasedStencilProcessor.h</innerfile>
+    <innerfile refid="_node_centered_finite_volume_algorithm_8h">NodeCenteredFiniteVolumeAlgorithm.h</innerfile>
+    <innerfile refid="_node_centered_finite_volume_transport_8h">NodeCenteredFiniteVolumeTransport.h</innerfile>
+    <innerfile refid="_stencil_processor_8h">StencilProcessor.h</innerfile>
+    <innerfile refid="_two_phase_explicit_node_centered_f_v_transport_8h">TwoPhaseExplicitNodeCenteredFVTransport.h</innerfile>
+    <innerfile refid="_two_phase_implicit_node_centered_f_v_transport_8h">TwoPhaseImplicitNodeCenteredFVTransport.h</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/"/>
+  </compounddef>
+</doxygen>

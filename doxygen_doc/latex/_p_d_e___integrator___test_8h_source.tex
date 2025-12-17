@@ -1,0 +1,172 @@
+\doxysection{PDE\+\_\+\+Integrator\+\_\+\+Test.\+h}
+\hypertarget{_p_d_e___integrator___test_8h_source}{}\label{_p_d_e___integrator___test_8h_source}\index{tests/unit/PDE\_Integrator\_Test.h@{tests/unit/PDE\_Integrator\_Test.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_PDE\_INTEGRATOR\_TEST\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_PDE\_INTEGRATOR\_TEST\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_test_8h}{"{}Test.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_attorney_8h}{"{}Attorney.h"{}}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_p_d_e___integrator_8h}{"{}PDE\_Integrator.h"{}}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_box_8h}{"{}Box.h"{}}}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_property_database}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}};}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{comment}{/**\ Attorney\ design\ pattern\ gives\ access\ to\ protected\ /\ private\ member\ variables\ and\ methods\ of\ PDE\_Integrator\ */}}
+\DoxyCodeLine{00015\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00016\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_p_d_e___integrator___attorney}{PDE\_Integrator\_Attorney}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_p_d_e___integrator___attorney}{Attorney}}<\textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_p_d_e___integrator___attorney}{PDE\_Integrator}}<\mbox{\hyperlink{classcsmp_1_1_p_d_e___integrator___attorney}{dim}}>>\ \{}
+\DoxyCodeLine{00017\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keyword}{using}\ \mbox{\hyperlink{classcsmp_1_1_p_d_e___integrator___attorney}{Attorney}}<\mbox{\hyperlink{classcsmp_1_1_p_d_e___integrator___attorney}{PDE\_Integrator}}<\mbox{\hyperlink{classcsmp_1_1_p_d_e___integrator___attorney}{dim}}>>::\mbox{\hyperlink{classcsmp_1_1_p_d_e___integrator___attorney}{Attorney}};\ \textcolor{comment}{//\ Inherit\ Attorney\ constructor}}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{using}\ \mbox{\hyperlink{classcsmp_1_1_p_d_e___integrator___attorney}{PDE\_Integrator}}<\mbox{\hyperlink{classcsmp_1_1_p_d_e___integrator___attorney}{dim}}>::\mbox{\hyperlink{classcsmp_1_1_p_d_e___integrator___attorney}{Accumulate}};}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{using}\ \mbox{\hyperlink{classcsmp_1_1_p_d_e___integrator___attorney}{PDE\_Integrator}}<\mbox{\hyperlink{classcsmp_1_1_p_d_e___integrator___attorney}{dim}}>::\mbox{\hyperlink{classcsmp_1_1_p_d_e___integrator___attorney}{EstablishMatrixSetup}};}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{using}\ \mbox{\hyperlink{classcsmp_1_1_p_d_e___integrator___attorney}{PDE\_Integrator}}<\mbox{\hyperlink{classcsmp_1_1_p_d_e___integrator___attorney}{dim}}>::\mbox{\hyperlink{classcsmp_1_1_p_d_e___integrator___attorney}{lhs\_operators\_}};}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{using}\ \mbox{\hyperlink{classcsmp_1_1_p_d_e___integrator___attorney}{PDE\_Integrator}}<\mbox{\hyperlink{classcsmp_1_1_p_d_e___integrator___attorney}{dim}}>::\mbox{\hyperlink{classcsmp_1_1_p_d_e___integrator___attorney}{rhs\_operators\_}};}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{using}\ \mbox{\hyperlink{classcsmp_1_1_p_d_e___integrator___attorney}{PDE\_Integrator}}<\mbox{\hyperlink{classcsmp_1_1_p_d_e___integrator___attorney}{dim}}>::\mbox{\hyperlink{classcsmp_1_1_p_d_e___integrator___attorney}{G\_}};}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{using}\ \mbox{\hyperlink{classcsmp_1_1_p_d_e___integrator___attorney}{PDE\_Integrator}}<\mbox{\hyperlink{classcsmp_1_1_p_d_e___integrator___attorney}{dim}}>::\mbox{\hyperlink{classcsmp_1_1_p_d_e___integrator___attorney}{rh\_}};}
+\DoxyCodeLine{00025\ \};}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{comment}{/**\ LHS\ operator\ that\ puts\ fixed\ values\ in\ the\ matrix\ */}}
+\DoxyCodeLine{00030\ \textcolor{keyword}{template}<uint32\_t\ dim,\textcolor{keyword}{class}\ CELL=\mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\ >}
+\DoxyCodeLine{00031\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_l_h_s___fixed_value_matrix}{LHS\_FixedValueMatrix}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_l_h_s___fixed_value_matrix}{MathOperatorLHS}}<\mbox{\hyperlink{classcsmp_1_1_l_h_s___fixed_value_matrix}{dim}}>\ \{}
+\DoxyCodeLine{00032\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00033\ \ \ \ \ LHS\_FixedValueMatrix(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&\ p,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ oper,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ basic,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ test,\ \textcolor{keywordtype}{double}\ value\ )}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ :\ MathOperatorLHS<dim>(p,oper,basic,test),\ value\_label\_for\_matrix\_entry\_\{value\}\ \{}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ MathOperatorLHS<dim>::Name(\ \textcolor{stringliteral}{"{}LHS\_FixedValueMatrix"{}},\ oper,\ basic,\ test\ );}
+\DoxyCodeLine{00036\ \ \ \ \ \}}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~LHS\_FixedValueMatrix()\ \{\}}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{comment}{//\ use\ method\ of\ base\ class:\ virtual\ void\ GetOperands(\ const\ CELL\&\ );}}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_l_h_s___fixed_value_matrix_a3f1feccf60f1423d2697ce8414ae58dc}{ComputeContribution}}(\ \textcolor{keyword}{const}\ CELL\&\ );}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classcsmp_1_1_l_h_s___fixed_value_matrix}{LHS\_FixedValueMatrix}}<dim,CELL\ >*\ clone()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classcsmp_1_1_l_h_s___fixed_value_matrix}{LHS\_FixedValueMatrix}}<dim,CELL\ >(*\textcolor{keyword}{this});\ \}}
+\DoxyCodeLine{00041\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keywordtype}{double}\ value\_label\_for\_matrix\_entry\_;}
+\DoxyCodeLine{00043\ \};}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \textcolor{comment}{/**\ RHS\ operator\ that\ puts\ fixed\ values\ in\ the\ matrix\ */}}
+\DoxyCodeLine{00048\ \textcolor{keyword}{template}<uint32\_t\ dim,\textcolor{keyword}{class}\ CELL=\mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\ >}
+\DoxyCodeLine{00049\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_r_h_s___fixed_value_matrix}{RHS\_FixedValueMatrix}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_r_h_s___fixed_value_matrix}{MathOperatorRHS}}<\mbox{\hyperlink{classcsmp_1_1_r_h_s___fixed_value_matrix}{dim}}>\ \{}
+\DoxyCodeLine{00050\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00051\ \ \ \ \ RHS\_FixedValueMatrix(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&\ p,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ oper,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ test,\ \textcolor{keywordtype}{double}\ value\ )}
+\DoxyCodeLine{00052\ \ \ \ \ \ :\ MathOperatorRHS<dim>(p,oper,test),\ value\_label\_for\_vector\_entry\_\{value\}\ \{}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ MathOperatorRHS<dim>::Name(\ \textcolor{stringliteral}{"{}RHS\_FixedValueMatrix"{}},\ test\ );}
+\DoxyCodeLine{00054\ \ \ \ \ \}}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~RHS\_FixedValueMatrix()\ \{\}}
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_r_h_s___fixed_value_matrix_a2daddc57992bbb9927a8d0097c67a22e}{ComputeContribution}}(\ \textcolor{keyword}{const}\ CELL\&\ );}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classcsmp_1_1_r_h_s___fixed_value_matrix}{RHS\_FixedValueMatrix}}<dim,CELL\ >*\ clone()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classcsmp_1_1_r_h_s___fixed_value_matrix}{RHS\_FixedValueMatrix}}<dim,CELL\ >(*\textcolor{keyword}{this});\ \}}
+\DoxyCodeLine{00058\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordtype}{double}\ value\_label\_for\_vector\_entry\_;}
+\DoxyCodeLine{00060\ \};}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_model}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}};}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00066\ \textcolor{comment}{}}
+\DoxyCodeLine{00067\ \textcolor{comment}{TODO}}
+\DoxyCodeLine{00068\ \textcolor{comment}{}}
+\DoxyCodeLine{00069\ \textcolor{comment}{@todo\ test\ that\ the\ PDE\ operators\ are\ accumulated\ into\ the\ right\ places\ in\ the\ lefthand\ matrix}}
+\DoxyCodeLine{00070\ \textcolor{comment}{@todo\ test\ that\ late\ accumulate\ methods\ do\ the\ right\ things}}
+\DoxyCodeLine{00071\ \textcolor{comment}{@todo\ test\ accumulation\ of\ boundary\ integrals}}
+\DoxyCodeLine{00072\ \textcolor{comment}{@todo\ test\ coupling\ of\ domains\ by\ SplitBoundary\ integrals}}
+\DoxyCodeLine{00073\ \textcolor{comment}{@todo\ test\ accumulation\ of\ a\ coupled\ system}}
+\DoxyCodeLine{00074\ \textcolor{comment}{@todo\ test\ that\ the\ contacts\ between\ domain\ and\ boundaries\ are\ identified\ correctly\ for\ the\ accumulation\ of\ surface\ integrals\ at\ the\ boundary}}
+\DoxyCodeLine{00075\ \textcolor{comment}{@todo\ move\ all\ the\ testing\ that\ relates\ to\ matrix\ inversion\ into\ Solver\_Test\ and\ specific\ subclasses}}
+\DoxyCodeLine{00076\ \textcolor{comment}{@todo\ test\ repeated\ use\ of\ integrator\ in\ a\ time-\/dependent\ problem:\ \ matrix\ retention\ vs.\ reconstruction,\ test\ change\ of\ DOF\ from\ step\ to\ step}}
+\DoxyCodeLine{00077\ \textcolor{comment}{}}
+\DoxyCodeLine{00078\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00079\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_p_d_e___integrator___test}{PDE\_Integrator\_Test}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_test}{Test}}\ \{}
+\DoxyCodeLine{00080\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00081\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_p_d_e___integrator___test_abee4016295616f9bc1003c7d196eb672}{PDE\_Integrator\_Test}}();}
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classcsmp_1_1_p_d_e___integrator___test_a9881b39947b61761352694df84ccbe3b}{PDE\_Integrator\_Test}}(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<2U>\&\ model\ );}
+\DoxyCodeLine{00083\ \ \ \ \ \string~PDE\_Integrator\_Test();}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keywordtype}{void}\ run();}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ verbose\_\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00091\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<2U>*\ model\_\{\textcolor{keywordtype}{nullptr}\};\ \textcolor{comment}{//\ any\ dimension\ is\ fully\ sufficient}}
+\DoxyCodeLine{00092\ \ \ \ \ \textcolor{keywordtype}{bool}\ delete\_model\_\{\textcolor{keyword}{false}\};\ \textcolor{comment}{//\ in\ case\ an\ existing\ model\ was\ passed\ in}}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{comment}{///\ checks\ that\ element\ matrices\ and\ vectors\ end\ up\ in\ the\ right\ place}}
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keywordtype}{void}\ TestAssembly();}
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keywordtype}{void}\ TestAssemblySingleScalarNoDirichlet(\ \textcolor{keywordtype}{bool}\ debug\ );}
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{keywordtype}{void}\ TestAssemblySingleScalarDirichlet(\ \textcolor{keywordtype}{bool}\ debug\ );}
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keywordtype}{void}\ TestAssemblySingleVectorNoDirichlet(\ \textcolor{keywordtype}{bool}\ debug\ );}
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{keywordtype}{void}\ TestAssemblySingleVectorDirichlet(\ \textcolor{keywordtype}{bool}\ debug\ );}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{comment}{//\ SKM\ test\ development}}
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keywordtype}{void}\ TestAssemblyTwoScalarVariablesNoDirichlet(\ \textcolor{keywordtype}{bool}\ debug\ );}
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keywordtype}{void}\ TestAssemblyScalarAndVectorVariableNoDirichlet(\ \textcolor{keywordtype}{bool}\ debug\ );}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ \ \ \ \ \textcolor{comment}{//\ remaining\ methods\ from\ Luat}}
+\DoxyCodeLine{00106\ \ \ \ \ \textcolor{keywordtype}{void}\ Reset();}
+\DoxyCodeLine{00107\ \ \ \ \ \textcolor{keywordtype}{void}\ TestSingleVariable()\ \{\}\ \ \ \ \ \ \ \textcolor{comment}{//\ TODO:\ reinstate\ method}}
+\DoxyCodeLine{00108\ \ \ \ \ \textcolor{keywordtype}{void}\ TestTwoScalarVariables()\ \{\}\ \ \ \textcolor{comment}{//\ TODO:\ reinstate\ method}}
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{keywordtype}{void}\ TestOutputSingleVariable()\ \{\}\ \textcolor{comment}{//\ TODO:\ reinstate\ method}}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ \ \ \ \ \textcolor{comment}{///\ testing\ accumulation\ inside\ of\ the\ PDE\_Integrator}}
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00113\ \ \ \ \ \textcolor{keywordtype}{void}\ TestMatrix(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_p_d_e___integrator___attorney}{PDE\_Integrator\_Attorney}}<dim>\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_mesh_manager}{MeshManager}}<dim>\&,}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::set<BOX\_BOUNDARY>\&\ dirich,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\_TYPE}}\ variable\_type\ );}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00117\ \ \ \ \ \textcolor{keywordtype}{void}\ TestRHSVector(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_p_d_e___integrator___attorney}{PDE\_Integrator\_Attorney}}<dim>\&,}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_mesh_manager}{MeshManager}}<dim>\&,}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ val,}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::set<BOX\_BOUNDARY>\&\ dirich,\ \textcolor{comment}{///<\ account\ for\ eliminated\ degrees\ of\ freedom}}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\_TYPE}}\ variable\_type\ );}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ \ \ \};}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ \}\ \textcolor{comment}{//\ end\ namespace\ csmp}}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ \ \ \ \ \textcolor{comment}{/*\ INTEGRALS\ TO\ TEST\ SEPARATELLY}}
+\DoxyCodeLine{00129\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00130\ \textcolor{comment}{\ \ \ \ =================>\ LHS:}}
+\DoxyCodeLine{00131\ \textcolor{comment}{\ \ \ \ NumIntegral\_BT\_D\_B\_dV}}
+\DoxyCodeLine{00132\ \textcolor{comment}{\ \ \ \ NumIntegral\_BT\_D\_op\_dV}}
+\DoxyCodeLine{00133\ \textcolor{comment}{\ \ \ \ NumIntegral\_dNT\_dN\_dV}}
+\DoxyCodeLine{00134\ \textcolor{comment}{\ \ \ \ NumIntegral\_dNT\_mixed\_op\_dN\_dV}}
+\DoxyCodeLine{00135\ \textcolor{comment}{\ \ \ \ NumIntegral\_dNT\_mixed\_op\_dN\_NT\_v\_dN\_dV}}
+\DoxyCodeLine{00136\ \textcolor{comment}{\ \ \ \ NumIntegral\_dNT\_op\_dN\_dV\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 1}}
+\DoxyCodeLine{00137\ \textcolor{comment}{\ \ \ \ NumIntegral\_dNT\_op\_dN\_dV\_NT\_v\_dN\_dV}}
+\DoxyCodeLine{00138\ \textcolor{comment}{\ \ \ \ NumIntegral\_dNT\_op\_dN\_NT\_op\_dop\_dN\_dV}}
+\DoxyCodeLine{00139\ \textcolor{comment}{\ \ \ \ NumIntegral\_DNT\_op\_DN\_NT\_v\_DN\_dV}}
+\DoxyCodeLine{00140\ \textcolor{comment}{\ \ \ \ NumIntegral\_NT\_dNi\_dV}}
+\DoxyCodeLine{00141\ \textcolor{comment}{\ \ \ \ NumIntegral\_NT\_dNi\_dV\_sc}}
+\DoxyCodeLine{00142\ \textcolor{comment}{\ \ \ \ NumIntegral\_NT\_lhsop\_N\_dV}}
+\DoxyCodeLine{00143\ \textcolor{comment}{\ \ \ \ NumIntegral\_PT\_lhsop\_P\_dV}}
+\DoxyCodeLine{00144\ \textcolor{comment}{}}
+\DoxyCodeLine{00145\ \textcolor{comment}{\ \ \ \ ==================>\ RHS:}}
+\DoxyCodeLine{00146\ \textcolor{comment}{\ \ \ \ MathOperatorRHS}}
+\DoxyCodeLine{00147\ \textcolor{comment}{\ \ \ \ NumIntegral\_DNi\_rhsop\_dV}}
+\DoxyCodeLine{00148\ \textcolor{comment}{\ \ \ \ NumIntegral\_dNT\_op\_dV\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 1}}
+\DoxyCodeLine{00149\ \textcolor{comment}{\ \ \ \ NumIntegral\_DNT\_rhsop\_DN\_dV}}
+\DoxyCodeLine{00150\ \textcolor{comment}{\ \ \ \ NumIntegral\_DNT\_v\_dV}}
+\DoxyCodeLine{00151\ \textcolor{comment}{\ \ \ \ NumIntegral\_NT\_mixed\_op\_dNi\_dV}}
+\DoxyCodeLine{00152\ \textcolor{comment}{\ \ \ \ NumIntegral\_NT\_op\_dNi\_dV}}
+\DoxyCodeLine{00153\ \textcolor{comment}{\ \ \ \ NumIntegral\_NT\_op\_N\_dS}}
+\DoxyCodeLine{00154\ \textcolor{comment}{\ \ \ \ NumIntegral\_NT\_op\_N\_dV\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 1}}
+\DoxyCodeLine{00155\ \textcolor{comment}{\ \ \ \ NumIntegral\_NT\_op1\_op2\_dNi\_dV}}
+\DoxyCodeLine{00156\ \textcolor{comment}{\ \ \ \ NumIntegral\_op\_NT\_dN\_orthogonal\_dV}}
+\DoxyCodeLine{00157\ \textcolor{comment}{\ \ \ \ NumIntegral\_op\_NT\_N\_dV}}
+\DoxyCodeLine{00158\ \textcolor{comment}{\ \ \ \ NumIntegral\_op\_PT\_P\_dV}}
+\DoxyCodeLine{00159\ \textcolor{comment}{\ \ \ \ NumIntegral\_PT\_op\_dS}}
+\DoxyCodeLine{00160\ \textcolor{comment}{\ \ \ \ NumIntegral\_PT\_op\_dV}}
+\DoxyCodeLine{00161\ \textcolor{comment}{\ \ \ \ NumIntegral\_PT\_op\_P\_dV}}
+\DoxyCodeLine{00162\ \textcolor{comment}{\ \ \ \ PointSource\_rhsop}}
+\DoxyCodeLine{00163\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 1}}
+\DoxyCodeLine{00164\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{00165\ }
+\DoxyCodeLine{00166\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{/*\ CSMP\_PDE\_INTEGRATOR\_TEST\_H\ */}}
+
+\end{DoxyCode}

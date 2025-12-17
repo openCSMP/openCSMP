@@ -1,0 +1,218 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_c_f_l___test_case" kind="class" language="C++" prot="public">
+    <compoundname>csmp::CFL_TestCase</compoundname>
+    <basecompoundref refid="classcsmp_1_1_test" prot="public" virt="non-virtual">csmp::Test</basecompoundref>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_c_f_l___test_case_1aac4cc607b4335cec0250f398f55fce2d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::CFL_TestCase::CFL_TestCase</definition>
+        <argsstring>()</argsstring>
+        <name>CFL_TestCase</name>
+        <qualifiedname>csmp::CFL_TestCase::CFL_TestCase</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CFL_VVCase.h" line="14" column="5" bodyfile="tests/integration/CFL_VVCase.cpp" bodystart="29" bodyend="31"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_c_f_l___test_case_1aa0b56eb44c9af1646d053b8f3e88c4aa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::CFL_TestCase::~CFL_TestCase</definition>
+        <argsstring>()</argsstring>
+        <name>~CFL_TestCase</name>
+        <qualifiedname>csmp::CFL_TestCase::~CFL_TestCase</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CFL_VVCase.h" line="15" column="5" bodyfile="tests/integration/CFL_VVCase.cpp" bodystart="33" bodyend="35"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_c_f_l___test_case_1a67916268287e4b063b8431a30095b591" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::CFL_TestCase::run</definition>
+        <argsstring>()</argsstring>
+        <name>run</name>
+        <qualifiedname>csmp::CFL_TestCase::run</qualifiedname>
+        <reimplements refid="classcsmp_1_1_test_1af63cd2af47d8d03819b05cf8bfb27eac">run</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CFL_VVCase.h" line="17" column="18" bodyfile="tests/integration/CFL_VVCase.cpp" bodystart="44" bodyend="70"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_c_f_l___test_case_1a8ddfa19df1cd7a3155a3b0114007bd4b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CFL_TestCase::SetModel</definition>
+        <argsstring>(Model&lt; 3 &gt; &amp;model, double mobilityRatio, double velX, double phi)</argsstring>
+        <name>SetModel</name>
+        <qualifiedname>csmp::CFL_TestCase::SetModel</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; 3 &gt; &amp;</type>
+          <declname>model</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>mobilityRatio</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>velX</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>phi</declname>
+        </param>
+        <briefdescription>
+<para>Set model. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CFL_VVCase.h" line="20" column="10" bodyfile="tests/integration/CFL_VVCase.cpp" bodystart="114" bodyend="150"/>
+        <references refid="namespacecsmp_1a045796fbaba7d5053c66ae8e794e5f9b" compoundref="_scalar_variable_8cpp" startline="222" endline="225">csmp::makeScalar</references>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6" compoundref="_c_s_m_p__global__enumerations_8h" startline="58">csmp::PLAIN</references>
+        <references refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a9f25b6eea3e09c5afd9dabac74240040" compoundref="_vector_variable_8cpp" startline="27" endline="32">csmp::VectorVariable&lt; 3U &gt;::VectorVariable</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_c_f_l___test_case_1a683f791bd9f9f9eb637eac4f221268fd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CFL_TestCase::OutputVTU</definition>
+        <argsstring>(Model&lt; 3 &gt; &amp;model, const char *fileName, long time)</argsstring>
+        <name>OutputVTU</name>
+        <qualifiedname>csmp::CFL_TestCase::OutputVTU</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; 3 &gt; &amp;</type>
+          <declname>model</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>fileName</declname>
+        </param>
+        <param>
+          <type>long</type>
+          <declname>time</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CFL_VVCase.h" line="25" column="10" bodyfile="tests/integration/CFL_VVCase.cpp" bodystart="101" bodyend="111"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_c_f_l___test_case_1aa79e885a567e305e52dad9b573b7c59e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CFL_TestCase::SetFront</definition>
+        <argsstring>(Model&lt; 3 &gt; &amp;model, double satOil, double xFront)</argsstring>
+        <name>SetFront</name>
+        <qualifiedname>csmp::CFL_TestCase::SetFront</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; 3 &gt; &amp;</type>
+          <declname>model</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>satOil</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>xFront</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CFL_VVCase.h" line="29" column="10" bodyfile="tests/integration/CFL_VVCase.cpp" bodystart="153" bodyend="175"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_c_f_l___test_case_1af05fcfc7346edd00342e599c7b1d9acd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CFL_TestCase::Test</definition>
+        <argsstring>(CFL_TestData &amp;data, double satOil, double tolFront)</argsstring>
+        <name>Test</name>
+        <qualifiedname>csmp::CFL_TestCase::Test</qualifiedname>
+        <param>
+          <type><ref refid="structcsmp_1_1_c_f_l___test_data" kindref="compound">CFL_TestData</ref> &amp;</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>satOil</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>tolFront</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CFL_VVCase.h" line="33" column="10" bodyfile="tests/integration/CFL_VVCase.cpp" bodystart="72" bodyend="98"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::CFL_TestCase</label>
+        <link refid="classcsmp_1_1_c_f_l___test_case"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Test</label>
+        <link refid="classcsmp_1_1_test"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::CFL_TestCase</label>
+        <link refid="classcsmp_1_1_c_f_l___test_case"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Test</label>
+        <link refid="classcsmp_1_1_test"/>
+      </node>
+    </collaborationgraph>
+    <location file="tests/integration/CFL_VVCase.h" line="11" column="1" bodyfile="tests/integration/CFL_VVCase.h" bodystart="12" bodyend="35"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_c_f_l___test_case_1aac4cc607b4335cec0250f398f55fce2d" prot="public" virt="non-virtual"><scope>csmp::CFL_TestCase</scope><name>CFL_TestCase</name></member>
+      <member refid="classcsmp_1_1_test_1ad3346b23b36fbe34ac5f306a2a5d0e28" prot="protected" virt="non-virtual"><scope>csmp::CFL_TestCase</scope><name>do_equal</name></member>
+      <member refid="classcsmp_1_1_test_1aee0da28e82775ce7d1ebd3b9fae9bf7d" prot="protected" virt="non-virtual"><scope>csmp::CFL_TestCase</scope><name>do_fail</name></member>
+      <member refid="classcsmp_1_1_test_1a9976e7601c20a057d2f0ed2f8318c862" prot="public" virt="non-virtual"><scope>csmp::CFL_TestCase</scope><name>do_succeed</name></member>
+      <member refid="classcsmp_1_1_test_1a0bf5d355d1455b2bc113ba2572e95ad8" prot="protected" virt="non-virtual"><scope>csmp::CFL_TestCase</scope><name>do_test</name></member>
+      <member refid="classcsmp_1_1_test_1ab8d7cbdfd0588aa57d7ce4d2574d665b" prot="public" virt="non-virtual"><scope>csmp::CFL_TestCase</scope><name>getName</name></member>
+      <member refid="classcsmp_1_1_test_1a47920cfd13f92f0860ca62ade4f2e150" prot="public" virt="non-virtual"><scope>csmp::CFL_TestCase</scope><name>getNumFailed</name></member>
+      <member refid="classcsmp_1_1_test_1af0f3b897ba4ff0cb7c94cde8be1fb32b" prot="public" virt="non-virtual"><scope>csmp::CFL_TestCase</scope><name>getNumPassed</name></member>
+      <member refid="classcsmp_1_1_test_1ac340370a07ff5fd4bd85bae93f0a3dac" prot="public" virt="non-virtual"><scope>csmp::CFL_TestCase</scope><name>getStream</name></member>
+      <member refid="classcsmp_1_1_test_1adfad3f1f85aa766958ffcc59070e2d2d" prot="public" virt="non-virtual"><scope>csmp::CFL_TestCase</scope><name>hasName</name></member>
+      <member refid="classcsmp_1_1_c_f_l___test_case_1a683f791bd9f9f9eb637eac4f221268fd" prot="public" virt="non-virtual"><scope>csmp::CFL_TestCase</scope><name>OutputVTU</name></member>
+      <member refid="classcsmp_1_1_test_1a73afdd22caa8aac000b0d07fb3ae42e5" prot="protected" virt="non-virtual"><scope>csmp::CFL_TestCase</scope><name>prefix_</name></member>
+      <member refid="classcsmp_1_1_test_1aa241dcb3adf0ec6716ed08739bd3f79b" prot="public" virt="non-virtual"><scope>csmp::CFL_TestCase</scope><name>report</name></member>
+      <member refid="classcsmp_1_1_test_1a5d334e867a3de4afd434dd9b0034234c" prot="public" virt="virtual"><scope>csmp::CFL_TestCase</scope><name>reset</name></member>
+      <member refid="classcsmp_1_1_c_f_l___test_case_1a67916268287e4b063b8431a30095b591" prot="public" virt="virtual"><scope>csmp::CFL_TestCase</scope><name>run</name></member>
+      <member refid="classcsmp_1_1_c_f_l___test_case_1aa79e885a567e305e52dad9b573b7c59e" prot="public" virt="non-virtual"><scope>csmp::CFL_TestCase</scope><name>SetFront</name></member>
+      <member refid="classcsmp_1_1_c_f_l___test_case_1a8ddfa19df1cd7a3155a3b0114007bd4b" prot="public" virt="non-virtual"><scope>csmp::CFL_TestCase</scope><name>SetModel</name></member>
+      <member refid="classcsmp_1_1_test_1a3e006cad54b35d9e20561f4a64843b4e" prot="public" virt="non-virtual"><scope>csmp::CFL_TestCase</scope><name>setName</name></member>
+      <member refid="classcsmp_1_1_test_1a20ba6ab18fcaaf806df6348a3b2e032b" prot="public" virt="non-virtual"><scope>csmp::CFL_TestCase</scope><name>setStream</name></member>
+      <member refid="classcsmp_1_1_c_f_l___test_case_1af05fcfc7346edd00342e599c7b1d9acd" prot="public" virt="non-virtual"><scope>csmp::CFL_TestCase</scope><name>Test</name></member>
+      <member refid="classcsmp_1_1_test_1aa4e274174d16215448eab6198bdb5979" prot="public" virt="non-virtual" ambiguityscope="csmp::Test::"><scope>csmp::CFL_TestCase</scope><name>Test</name></member>
+      <member refid="classcsmp_1_1_c_f_l___test_case_1aa0b56eb44c9af1646d053b8f3e88c4aa" prot="public" virt="non-virtual"><scope>csmp::CFL_TestCase</scope><name>~CFL_TestCase</name></member>
+      <member refid="classcsmp_1_1_test_1ac154a16a5e086fe52e032c30722f5060" prot="public" virt="virtual"><scope>csmp::CFL_TestCase</scope><name>~Test</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,504 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="namespacemjl" kind="namespace" language="C++">
+    <compoundname>mjl</compoundname>
+    <innerclass refid="classmjl_1_1_edge" prot="public">mjl::Edge</innerclass>
+    <innerclass refid="classmjl_1_1_edge3_d" prot="public">mjl::Edge3D</innerclass>
+    <innerclass refid="classmjl_1_1_node" prot="public">mjl::Node</innerclass>
+    <innerclass refid="classmjl_1_1_plane3_d" prot="public">mjl::Plane3D</innerclass>
+    <innerclass refid="classmjl_1_1_point" prot="public">mjl::Point</innerclass>
+    <innerclass refid="classmjl_1_1_point3_d" prot="public">mjl::Point3D</innerclass>
+    <innerclass refid="classmjl_1_1_polygon" prot="public">mjl::Polygon</innerclass>
+    <innerclass refid="classmjl_1_1_triangle3_d" prot="public">mjl::Triangle3D</innerclass>
+    <innerclass refid="classmjl_1_1_vertex" prot="public">mjl::Vertex</innerclass>
+    <sectiondef kind="enum">
+      <member refid="group___c_s_m_pglobal_enums_1gab8e4d76cab7155b1fb3861b500982a07" kind="enum"><name>LOCATION</name></member>
+      <member refid="group___c_s_m_pglobal_enums_1gac8265877c1006595e75c1820e2fac316" kind="enum"><name>INTERSECTION</name></member>
+      <member refid="group___c_s_m_pglobal_enums_1gaea5d35bacf652ad3d225763d01c90155" kind="enum"><name>POINT_CLASSIFICATION</name></member>
+      <member refid="group___c_s_m_pglobal_enums_1gae3f2bc8786a9fb6f325976a842e1d8dc" kind="enum"><name>EDGE_CLASSIFICATION</name></member>
+      <member refid="group___c_s_m_pglobal_enums_1gaf5ed7c6fa578fb7b86b3042de149fc5e" kind="enum"><name>POLYGON_CLASSIFICATION</name></member>
+      <memberdef kind="enum" id="namespacemjl_1a4c167791020c0eea8e14755808ee7557" prot="public" static="no" strong="no">
+        <type></type>
+        <name></name>
+        <qualifiedname>mjl</qualifiedname>
+        <enumvalue id="namespacemjl_1a4c167791020c0eea8e14755808ee7557abdbbc6f675ead17aff195b5738bc7778" prot="public">
+          <name>POSITIVE</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="namespacemjl_1a4c167791020c0eea8e14755808ee7557a7caf9164905eca4bf8b986844b92a584" prot="public">
+          <name>NEGATIVE</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="namespacemjl_1a4c167791020c0eea8e14755808ee7557af67947272266f6ebeda2a2460f3b3e15" prot="public">
+          <name>ON</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Triangle3D.h" line="24" column="1" bodyfile="source/includes/discretisation/MJL_Triangle3D.h" bodystart="24" bodyend="24"/>
+      </memberdef>
+      <memberdef kind="enum" id="namespacemjl_1af929dd6a45b7a5da549fa956c56ae1d4" prot="public" static="no" strong="no">
+        <type></type>
+        <name></name>
+        <qualifiedname>mjl</qualifiedname>
+        <enumvalue id="namespacemjl_1af929dd6a45b7a5da549fa956c56ae1d4a491dcd133c6a7defe7183b7b919d9944" prot="public">
+          <name>UPPER</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="namespacemjl_1af929dd6a45b7a5da549fa956c56ae1d4a377aa887041dbe0ada001769b908d687" prot="public">
+          <name>LOWER</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/discretisation/MJL_functions.cpp" line="274" column="1" bodyfile="source/modules/discretisation/MJL_functions.cpp" bodystart="274" bodyend="274"/>
+      </memberdef>
+      <memberdef kind="enum" id="namespacemjl_1a4c3b7be813333418b1725c40a8483f0d" prot="public" static="no" strong="no">
+        <type></type>
+        <name>ORIENTATION</name>
+        <qualifiedname>mjl::ORIENTATION</qualifiedname>
+        <enumvalue id="namespacemjl_1a4c3b7be813333418b1725c40a8483f0da1c822034c94cdbc3d7c6b38925f4b8de" prot="public">
+          <name>CLOCKWISE</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="namespacemjl_1a4c3b7be813333418b1725c40a8483f0da04717b17bad63b1b6d03cf9500c00a61" prot="public">
+          <name>COUNTER_CLOCKWISE</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Vertex.h" line="9" column="1" bodyfile="source/includes/discretisation/MJL_Vertex.h" bodystart="9" bodyend="9"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="var">
+      <memberdef kind="variable" id="namespacemjl_1a71fe4c088fbeac6f1d7037e003476702" prot="public" static="no" mutable="no">
+        <type><ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref></type>
+        <definition>mjl::Point mjl::somePoint</definition>
+        <argsstring></argsstring>
+        <name>somePoint</name>
+        <qualifiedname>mjl::somePoint</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/discretisation/MJL_functions.cpp" line="187" column="12" bodyfile="source/modules/discretisation/MJL_functions.cpp" bodystart="187" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespacemjl_1a3e4c9816fd6836783b2d2ee709e7aa21" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classmjl_1_1_point3_d" kindref="compound">Point3D</ref></type>
+        <definition>Point3D mjl::crossProduct</definition>
+        <argsstring>(const Point3D &amp;, const Point3D &amp;)</argsstring>
+        <name>crossProduct</name>
+        <qualifiedname>mjl::crossProduct</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point3_d" kindref="compound">Point3D</ref> &amp;</type>
+          <defname>a</defname>
+        </param>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point3_d" kindref="compound">Point3D</ref> &amp;</type>
+          <defname>b</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Point3D.h" line="211" column="17" bodyfile="source/includes/discretisation/MJL_Point3D.h" bodystart="211" bodyend="216" declfile="source/includes/discretisation/MJL_Point3D.h" declline="51" declcolumn="10"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemjl_1a8eae082a654d61bef19eac9cf702b4f6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classmjl_1_1_point3_d" kindref="compound">Point3D</ref></type>
+        <definition>Point3D mjl::operator*</definition>
+        <argsstring>(double s, const Point3D &amp;p)</argsstring>
+        <name>operator*</name>
+        <qualifiedname>mjl::operator*</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>s</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point3_d" kindref="compound">Point3D</ref> &amp;</type>
+          <declname>p</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Point3D.h" line="219" column="17" bodyfile="source/includes/discretisation/MJL_Point3D.h" bodystart="219" bodyend="220"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemjl_1a46b4a82bced4640cc11268d65ea81ed5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool mjl::aimsAt</definition>
+        <argsstring>(const mjl::Edge &amp;a, const mjl::Edge &amp;b, LOCATION aClass, mjl::INTERSECTION crossType)</argsstring>
+        <name>aimsAt</name>
+        <qualifiedname>mjl::aimsAt</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_edge" kindref="compound">mjl::Edge</ref> &amp;</type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classmjl_1_1_edge" kindref="compound">mjl::Edge</ref> &amp;</type>
+          <declname>b</declname>
+        </param>
+        <param>
+          <type>LOCATION</type>
+          <declname>aClass</declname>
+        </param>
+        <param>
+          <type>mjl::INTERSECTION</type>
+          <declname>crossType</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>examines the orientation of 2 edges relative to one-another. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/discretisation/MJL_Edge.cpp" line="195" column="7" bodyfile="source/modules/discretisation/MJL_Edge.cpp" bodystart="195" bodyend="207" declfile="source/includes/discretisation/MJL_Edge.h" declline="55" declcolumn="21"/>
+        <referencedby refid="group___c_s_m_pglobal_functions_1ga9855cfe021c08cc1f9bde489be203e1c" compoundref="_m_j_l__functions_8cpp" startline="214" endline="267">convexPolygonIntersect</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="namespacemjl_1a24fe914e67952eeec27fab5d5265a692" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double mjl::signedAngle</definition>
+        <argsstring>(const mjl::Point &amp;a, const mjl::Edge &amp;e)</argsstring>
+        <name>signedAngle</name>
+        <qualifiedname>mjl::signedAngle</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &amp;</type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classmjl_1_1_edge" kindref="compound">mjl::Edge</ref> &amp;</type>
+          <declname>e</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns the signed angle (0-180o) between an <ref refid="classmjl_1_1_edge" kindref="compound">Edge</ref> and the <ref refid="classmjl_1_1_edge" kindref="compound">Edge</ref> from the beginning point of the <ref refid="classmjl_1_1_edge" kindref="compound">Edge</ref> and the supplied point. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/discretisation/MJL_Edge.cpp" line="219" column="9" bodyfile="source/modules/discretisation/MJL_Edge.cpp" bodystart="219" bodyend="232" declfile="source/includes/discretisation/MJL_Edge.h" declline="56" declcolumn="21"/>
+        <referencedby refid="classmjl_1_1_polygon_1a487220e1e6659b5e090ecaf5de2e4bc5" compoundref="_m_j_l___polygon_8cpp" startline="301" endline="326">mjl::Polygon::CheckAngles</referencedby>
+        <referencedby refid="classmjl_1_1_polygon_1a346b36cfb94c8e6906b74f7f634a57a8" compoundref="_m_j_l___polygon_8cpp" startline="330" endline="354">mjl::Polygon::InsidePointSA</referencedby>
+        <referencedby refid="group___c_s_m_pglobal_functions_1gaefc5a7c57cb80172558eced9b844ee8f" compoundref="_m_j_l__functions_8cpp" startline="56" endline="69">pointInPolygonSA</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="namespacemjl_1a32b3a8d58f823cb167c3f3c499f56224" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>INTERSECTION</type>
+        <definition>INTERSECTION mjl::crossingPoint</definition>
+        <argsstring>(double tolerance, const mjl::Edge &amp;e, const mjl::Edge &amp;f, mjl::Point &amp;p)</argsstring>
+        <name>crossingPoint</name>
+        <qualifiedname>mjl::crossingPoint</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>tolerance</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classmjl_1_1_edge" kindref="compound">mjl::Edge</ref> &amp;</type>
+          <declname>e</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classmjl_1_1_edge" kindref="compound">mjl::Edge</ref> &amp;</type>
+          <declname>f</declname>
+        </param>
+        <param>
+          <type><ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &amp;</type>
+          <declname>p</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Laszlo, p. 162 </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/discretisation/MJL_Edge.cpp" line="241" column="15" bodyfile="source/modules/discretisation/MJL_Edge.cpp" bodystart="241" bodyend="267" declfile="source/includes/discretisation/MJL_Edge.h" declline="57" declcolumn="21"/>
+        <references refid="classmjl_1_1_edge_1a977fdbbbeae30e368545c71835aa7fd9" compoundref="_m_j_l___edge_8cpp" startline="176" endline="189">mjl::Edge::Intersect</references>
+        <referencedby refid="group___c_s_m_pglobal_functions_1ga9855cfe021c08cc1f9bde489be203e1c" compoundref="_m_j_l__functions_8cpp" startline="214" endline="267">convexPolygonIntersect</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="namespacemjl_1a01541bb9449c7d2bae817f6476dd408f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>EDGE_CLASSIFICATION</type>
+        <definition>EDGE_CLASSIFICATION mjl::edgeType</definition>
+        <argsstring>(const mjl::Point &amp;a, const Edge &amp;e)</argsstring>
+        <name>edgeType</name>
+        <qualifiedname>mjl::edgeType</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &amp;</type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classmjl_1_1_edge" kindref="compound">Edge</ref> &amp;</type>
+          <declname>e</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/discretisation/MJL_Edge.cpp" line="271" column="21" bodyfile="source/modules/discretisation/MJL_Edge.cpp" bodystart="271" bodyend="288" declfile="source/includes/discretisation/MJL_Edge.h" declline="58" declcolumn="21"/>
+      </memberdef>
+      <member refid="group___c_s_m_pglobal_functions_1ga053d54563be9acde49470bd3f6b915fa" kind="function"><name>pointInConvexPolygon</name></member>
+      <member refid="group___c_s_m_pglobal_functions_1ga64cdb764eca9edf178ab6f150b6ea442" kind="function"><name>pointInPolygonRS</name></member>
+      <member refid="group___c_s_m_pglobal_functions_1gaefc5a7c57cb80172558eced9b844ee8f" kind="function"><name>pointInPolygonSA</name></member>
+      <member refid="group___c_s_m_pglobal_functions_1ga6be7eab6408f5b088c53fca7bf86c285" kind="function"><name>firstContainsSecondRS</name></member>
+      <member refid="group___c_s_m_pglobal_functions_1gad0c65e760ab51db4f6d69fc3b3df1275" kind="function"><name>lineTriangle3DIntersect</name></member>
+      <member refid="group___c_s_m_pglobal_functions_1ga3842086f8e9c889fda20ec752eb9521e" kind="function"><name>project</name></member>
+      <member refid="group___c_s_m_pglobal_functions_1ga4036b26d513b7b8b06e505aecdf6aafb" kind="function"><name>starShapedPolygon</name></member>
+      <member refid="group___c_s_m_pglobal_functions_1gaea8a18b26b51f566412167647313d90e" kind="function"><name>insertionHull</name></member>
+      <member refid="group___c_s_m_pglobal_functions_1ga9855cfe021c08cc1f9bde489be203e1c" kind="function"><name>convexPolygonIntersect</name></member>
+      <member refid="group___c_s_m_pglobal_functions_1ga4c5b0d0e367b95ba94568213ac285891" kind="function"><name>merge</name></member>
+      <member refid="group___c_s_m_pglobal_functions_1gafe7c71cc3060c3d0a5f7a68d11f53bf6" kind="function"><name>bridge</name></member>
+      <member refid="group___c_s_m_pglobal_functions_1gac42b3f706331cfb9d8180cb67674873c" kind="function"><name>supportingLine</name></member>
+      <member refid="group___c_s_m_pglobal_functions_1ga3972ddcf70c166892dc5e365ff6b8d2f" kind="function"><name>clipPolygonToEdge</name></member>
+      <member refid="group___c_s_m_pglobal_functions_1ga85e8aa8dcc3d8d4c0dd5040561c42762" kind="function"><name>clipEdgeToPolygon</name></member>
+      <member refid="group___c_s_m_pglobal_functions_1gacd8af910a04c305310a5c4604717022c" kind="function"><name>advance</name></member>
+      <memberdef kind="function" id="namespacemjl_1a348040fdb4ce16d483f82390665a1741" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>INTERSECTION</type>
+        <definition>INTERSECTION mjl::crossingPoint</definition>
+        <argsstring>(double tolerance, const mjl::Edge3D &amp;e, const mjl::Plane3D &amp;pl, mjl::Point3D &amp;p)</argsstring>
+        <name>crossingPoint</name>
+        <qualifiedname>mjl::crossingPoint</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>tolerance</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classmjl_1_1_edge3_d" kindref="compound">mjl::Edge3D</ref> &amp;</type>
+          <declname>e</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classmjl_1_1_plane3_d" kindref="compound">mjl::Plane3D</ref> &amp;</type>
+          <declname>pl</declname>
+        </param>
+        <param>
+          <type><ref refid="classmjl_1_1_point3_d" kindref="compound">mjl::Point3D</ref> &amp;</type>
+          <declname>p</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>e</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>= a segment </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>pl</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>= a plane {<ref refid="classmjl_1_1_point" kindref="compound">Point</ref> p; Vector vc;} </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>the intersect point (so it exists) </para>
+</simplesect>
+<simplesect kind="return"><para>0 = disjoint (no intersection) </para>
+</simplesect>
+<simplesect kind="return"><para>1 = intersection in the unique point *I0 </para>
+</simplesect>
+<simplesect kind="return"><para>2 = the segment lies in the plane </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/discretisation/MJL_Plane3D.cpp" line="20" column="15" bodyfile="source/modules/discretisation/MJL_Plane3D.cpp" bodystart="20" bodyend="43" declfile="source/includes/discretisation/MJL_Plane3D.h" declline="26" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemjl_1a443051f9c1d069b20f9367efe234472b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int mjl::polarCmp</definition>
+        <argsstring>(const mjl::Point &amp;p, const mjl::Point &amp;a, const mjl::Point &amp;b)</argsstring>
+        <name>polarCmp</name>
+        <qualifiedname>mjl::polarCmp</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &amp;</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &amp;</type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &amp;</type>
+          <declname>b</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>compares points a, b with regard to their radial ordering around p. polarCmp:</para>
+<para><simplesect kind="return"><para>-1 if a &gt; b </para>
+</simplesect>
+<simplesect kind="return"><para>1 if a &lt; b </para>
+</simplesect>
+<simplesect kind="return"><para>0 if a = b </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/discretisation/MJL_Point.cpp" line="85" column="6" bodyfile="source/modules/discretisation/MJL_Point.cpp" bodystart="85" bodyend="96" declfile="source/includes/discretisation/MJL_Point.h" declline="51" declcolumn="6"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemjl_1a638205c927679c5d77aaf37087bbb984" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classmjl_1_1_point" kindref="compound">Point</ref></type>
+        <definition>Point mjl::operator*</definition>
+        <argsstring>(double s, const Point &amp;p)</argsstring>
+        <name>operator*</name>
+        <qualifiedname>mjl::operator*</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>s</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point" kindref="compound">Point</ref> &amp;</type>
+          <declname>p</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Point.h" line="133" column="15" bodyfile="source/includes/discretisation/MJL_Point.h" bodystart="133" bodyend="136"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemjl_1a9c82947a5e15786d5107fb1e146ff9c0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>int</type>
+        <definition>int mjl::leftToRightCmp</definition>
+        <argsstring>(const mjl::Point &amp;a, const mjl::Point &amp;b)</argsstring>
+        <name>leftToRightCmp</name>
+        <qualifiedname>mjl::leftToRightCmp</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &amp;</type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &amp;</type>
+          <declname>b</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Polygon.h" line="202" column="12" bodyfile="source/includes/discretisation/MJL_Polygon.h" bodystart="202" bodyend="207" declfile="source/includes/discretisation/MJL_Polygon.h" declline="63" declcolumn="5"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemjl_1adc42ffab5c38d6337724fc3665f63162" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>int</type>
+        <definition>int mjl::rightToLeftCmp</definition>
+        <argsstring>(const mjl::Point &amp;a, const mjl::Point &amp;b)</argsstring>
+        <name>rightToLeftCmp</name>
+        <qualifiedname>mjl::rightToLeftCmp</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &amp;</type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &amp;</type>
+          <declname>b</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Polygon.h" line="209" column="12" bodyfile="source/includes/discretisation/MJL_Polygon.h" bodystart="209" bodyend="212" declfile="source/includes/discretisation/MJL_Polygon.h" declline="64" declcolumn="5"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemjl_1a1979b1c0b4667a253aa54c89a7e6fdd2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>int</type>
+        <definition>int mjl::closestToPolygonCmp</definition>
+        <argsstring>(const mjl::Point &amp;a, const mjl::Point &amp;b)</argsstring>
+        <name>closestToPolygonCmp</name>
+        <qualifiedname>mjl::closestToPolygonCmp</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &amp;</type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &amp;</type>
+          <declname>b</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Polygon.h" line="215" column="12" bodyfile="source/includes/discretisation/MJL_Polygon.h" bodystart="215" bodyend="223" declfile="source/includes/discretisation/MJL_Polygon.h" declline="65" declcolumn="5"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemjl_1a4ec0fcac0d5a20470e42d60d0a6e193e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool mjl::adjacent</definition>
+        <argsstring>(const Vertex *, const Vertex *)</argsstring>
+        <name>adjacent</name>
+        <qualifiedname>mjl::adjacent</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_vertex" kindref="compound">Vertex</ref> *</type>
+          <defname>v</defname>
+        </param>
+        <param>
+          <type>const <ref refid="classmjl_1_1_vertex" kindref="compound">Vertex</ref> *</type>
+          <defname>w</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Vertex.h" line="29" column="13" bodyfile="source/includes/discretisation/MJL_Vertex.h" bodystart="29" bodyend="32" declfile="source/includes/discretisation/MJL_Vertex.h" declline="26" declcolumn="6"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Lazlo p. 88. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Mathematical Library(Lazlo) </para>
+    </detaileddescription>
+    <location file="source/includes/discretisation/MJL_geometry.h" line="10" column="1"/>
+  </compounddef>
+</doxygen>

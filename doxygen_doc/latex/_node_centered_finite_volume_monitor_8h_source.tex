@@ -1,0 +1,48 @@
+\doxysection{Node\+Centered\+Finite\+Volume\+Monitor.\+h}
+\hypertarget{_node_centered_finite_volume_monitor_8h_source}{}\label{_node_centered_finite_volume_monitor_8h_source}\index{source/includes/analysis/NodeCenteredFiniteVolumeMonitor.h@{source/includes/analysis/NodeCenteredFiniteVolumeMonitor.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{NODE\_CENTERED\_FINITE\_VOLUME\_MONITOR\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{NODE\_CENTERED\_FINITE\_VOLUME\_MONITOR\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_model_8h}{"{}Model.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_model}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}};}
+\DoxyCodeLine{00009\ \textcolor{keyword}{template}<\mbox{\hyperlink{structcsmp_1_1_stencil_processor}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{structcsmp_1_1_stencil_processor}{StencilProcessor}};}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{comment}{///\ monitoring\ of\ variables\ stored\ on\ the\ nodes,\ integrating\ them\ over\ the\ finite\ volumes}}
+\DoxyCodeLine{00012\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00013\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_monitor}{NodeCenteredFiniteVolumeMonitor}}\ \{}
+\DoxyCodeLine{00014\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00015\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_monitor_af896286730600eeaf18629c931cbba04}{NodeCenteredFiniteVolumeMonitor}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ output\_file,}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ prop,}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ monitor\_regions\ );}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{comment}{///\ triggering\ monitoring\ with\ the\ option\ to\ write\ to\ the\ file\ specified\ during\ class\ construction}}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_monitor_a6f867d2b4797614b6bcadae3c29efb6b}{MonitorPropertyIntegrals}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ consider\_porosity,}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ normalize\_by\_initial\_integral,}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ write\_output\ );}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{comment}{///\ file\ output\ of\ variable\ values\ monitored\ up\ to\ current\ point\ of\ time\ and\ without\ normalization}}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_monitor_adb8361c3325b21489c3cd2bb59145c9b}{Out}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,\ \textcolor{keywordtype}{bool}\ normalize\_values=\textcolor{keyword}{false}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordtype}{void}\ SaveToFile(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,\ \textcolor{keywordtype}{bool}\ normalize\_by\_initial\_integral\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00032\ \ \ \ \ std::string\ \ output\_file;}
+\DoxyCodeLine{00033\ \ \ \ \ std::string\ \ output\_variable;}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ group\_by\_group;}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_monitor}{std}}::\mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_monitor}{list}}<\mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_monitor}{std}}::\mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_monitor}{pair}}<\textcolor{keywordtype}{double},\textcolor{keywordtype}{double}>\ >\ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_monitor}{integrals}};}
+\DoxyCodeLine{00037\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_monitor}{std}}::\mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_monitor}{list}}<\mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_monitor}{std}}::\mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_monitor}{pair}}<\textcolor{keywordtype}{double},\mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_monitor}{std}}::\mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_monitor}{list}}<\textcolor{keywordtype}{double}>\ >\ >\ \ \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_monitor}{group\_integrals}};}
+\DoxyCodeLine{00038\ \};}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \}\ \textcolor{comment}{//\ end\ namespace\ csmp}}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

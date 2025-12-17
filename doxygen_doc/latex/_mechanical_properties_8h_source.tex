@@ -1,0 +1,73 @@
+\doxysection{Mechanical\+Properties.\+h}
+\hypertarget{_mechanical_properties_8h_source}{}\label{_mechanical_properties_8h_source}\index{source/includes/thmc/mechanics/MechanicalProperties.h@{source/includes/thmc/mechanics/MechanicalProperties.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ \ MechanicalProperties.h}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ \ CSMP\_ReservoirSimulator}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ \ Created\ by\ Stephan\ Matthai\ on\ 6/23/13.}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//\ \ Copyright\ (c)\ 2013\ Stephan\ Matthai.\ All\ rights\ reserved.}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_MECHANICAL\_PROPERTIES\_H}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_MECHANICAL\_PROPERTIES\_H}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{comment}{///\ returns\ arctan(mu)\ in\ degrees,\ @test\ OK}}
+\DoxyCodeLine{00017\ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{namespacecsmp_a13b5d55bb94700f5ade9c043610c14f5}{frictionAngle}}(\ \textcolor{keywordtype}{double}\ friction\_coeff\ );}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{comment}{///\ modified\ Griffith\ criterion\ from\ Brace,\ 1960}}
+\DoxyCodeLine{00020\ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{namespacecsmp_a6303b51ecccb15eb79edfa0bcb96c63c}{tensileStrengthFromUCS\_Griffith}}(\ \textcolor{keywordtype}{double}\ UCS,\ \textcolor{keywordtype}{double}\ fric\_coeff\ );}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ \ \ \ Regional\ properties\ shared\ by\ multiple\ elements,\ but\ have\ variations}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ \ \ that\ can\ be\ calculated\ knowing\ other\ local\ properties\ discretized}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ \ \ \ on\ the\ elements.}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ \ \ \ Example:\ Young's\ modulus\ can\ be\ calculated\ from\ the\ value\ stored}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ \ \ \ here\ with\ corrections\ based\ on\ the\ deviation\ of\ the\ local\ porosity}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ \ \ \ from\ that\ for\ which\ E\ was\ determined.}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ \ \ \ Such\ calculations\ must\ be\ informed\ by\ petrophysical\ correlations}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ \ \ \ and\ the\ results\ might\ have\ to\ be\ perturbed\ by\ some\ randon\ variable}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ to\ reflect\ natural\ variations.}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00036\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00037\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcsmp_1_1_mechanical_properties}{MechanicalProperties}}\ \{}
+\DoxyCodeLine{00038\ \ \ \ \textcolor{comment}{///\ granite\ properties\ as\ default}}
+\DoxyCodeLine{00039\ \ \ \ \mbox{\hyperlink{structcsmp_1_1_mechanical_properties_a2c51e4fa685aac81bc22ef81bbb68405}{MechanicalProperties}}();}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \textcolor{comment}{///\ from\ property\ values\ supplied\ as\ a\ vector}}
+\DoxyCodeLine{00042\ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{structcsmp_1_1_mechanical_properties_a7d527a166ec61ea5dfddae38221b9546}{MechanicalProperties}}(\ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ properties\ );}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \textcolor{comment}{///\ partial\ initialisation}}
+\DoxyCodeLine{00045\ \ \ \ \mbox{\hyperlink{structcsmp_1_1_mechanical_properties_ad83bcdbde0525000da56225c7131c7da}{MechanicalProperties}}(\ \textcolor{keywordtype}{double}\ E,\ \textcolor{keywordtype}{double}\ K,\ \textcolor{keywordtype}{double}\ nu,}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ tensile\_strength,\ \textcolor{keywordtype}{double}\ fric\_coeff\ );}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{structcsmp_1_1_mechanical_properties_a8d60095b812751fede002c973ebc9a86}{E\_}};\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ Young's\ modulus}}
+\DoxyCodeLine{00049\ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{structcsmp_1_1_mechanical_properties_a6ce7e084d293502c647530c81758c5d3}{B\_}};\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ bulk\ modulus\ =\ compressibility\ of\ rock\ skeleton\ =\ K\_dry}}
+\DoxyCodeLine{00050\ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{structcsmp_1_1_mechanical_properties_aa6b07b53f262a9a01f29fc93b84ca8f3}{G\_}};\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ shear\ modulus\ =\ modulus\ of\ rigidity}}
+\DoxyCodeLine{00051\ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{structcsmp_1_1_mechanical_properties_a18979820fa9278cb7eac7706704e250f}{alpha\_}};\ \ \ \ \ \ \textcolor{comment}{///<\ Biot\ coefficient\ alpha\ =\ 1\ -\/\ K\_dry/K\_grain}}
+\DoxyCodeLine{00052\ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{structcsmp_1_1_mechanical_properties_a43985b8aa00f82d516409adbf189b5d9}{TS\_}};\ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ tensile\ strength}}
+\DoxyCodeLine{00053\ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{structcsmp_1_1_mechanical_properties_a68734fb2b8efaf757ac9ffc1ed53d3f5}{UCS\_}};\ \ \ \ \ \ \ \ \textcolor{comment}{///<\ unconfined\ compressive\ strength}}
+\DoxyCodeLine{00054\ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{structcsmp_1_1_mechanical_properties_a6dfd02a87a6d575b35affdc3066a5926}{pstar\_}};\ \ \ \ \ \ \textcolor{comment}{///<\ crushing\ pressure\ of\ the\ rock,\ see\ Fjaer\ et\ al.\ 08',\ p.\ 68}}
+\DoxyCodeLine{00055\ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{structcsmp_1_1_mechanical_properties_a02466d663d4b98028e2dfe5e57694a4d}{mu\_}};\ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ friction\ coefficient}}
+\DoxyCodeLine{00056\ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{structcsmp_1_1_mechanical_properties_a0e16ee565eb7917500eebf223c38597b}{nu\_}};\ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ Poisson's\ ratio}}
+\DoxyCodeLine{00057\ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{structcsmp_1_1_mechanical_properties_a23f0425b75a0dc654b1a229abca80cbe}{C\_}};\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ cohesive\ strength\ =\ inherent\ shear\ strength}}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \textcolor{comment}{//\ TODO:\ here\ we\ need\ the\ correlations\ that\ relate\ the\ properties\ to\ variations\ in\ the\ parent\ rock\ type}}
+\DoxyCodeLine{00060\ \ \ \ \textcolor{comment}{//\ derived\ properties\ for\ fault\ rocks:\ dilatation,\ compaction\ etc.}}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \ \textcolor{keywordtype}{void}\ Out()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00063\ \};}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \}\ \ \textcolor{comment}{//\ end\ namespace\ csmp}}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{/*\ CSMP\_MECHANICAL\_PROPERTIES\_H\ */}}
+
+\end{DoxyCode}

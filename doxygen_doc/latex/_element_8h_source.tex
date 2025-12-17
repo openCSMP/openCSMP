@@ -1,0 +1,309 @@
+\doxysection{Element.\+h}
+\hypertarget{_element_8h_source}{}\label{_element_8h_source}\index{source/includes/model/Element.h@{source/includes/model/Element.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_ELEMENT\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_ELEMENT\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_finite_element_8h}{"{}FiniteElement.h"{}}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_finite_element_policy_8h}{"{}FiniteElementPolicy.h"{}}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_finite_volume_policy_8h}{"{}FiniteVolumePolicy.h"{}}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_local_variable_storage_8h}{"{}LocalVariableStorage.h"{}}}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_box_8h}{"{}Box.h"{}}}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{struct}\ \ \mbox{\hyperlink{structcsmp_1_1_index}{Index}};}
+\DoxyCodeLine{00015\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_node}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}};}
+\DoxyCodeLine{00016\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{FiniteVolumeStencil}};}
+\DoxyCodeLine{00017\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_visitor}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_visitor}{Visitor}};}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00020\ \textcolor{comment}{@brief\ Object\ representation\ of\ a\ finite\ element\ Bridge\ pattern\ together\ with}}
+\DoxyCodeLine{00021\ \textcolor{comment}{FiniteElement\ class.}}
+\DoxyCodeLine{00022\ \textcolor{comment}{}}
+\DoxyCodeLine{00023\ \textcolor{comment}{@author\ S.K.\ Matthai}}
+\DoxyCodeLine{00024\ \textcolor{comment}{@author\ Stephen\ G.\ Roberts}}
+\DoxyCodeLine{00025\ \textcolor{comment}{@date\ 1999}}
+\DoxyCodeLine{00026\ \textcolor{comment}{}}
+\DoxyCodeLine{00027\ \textcolor{comment}{@section\ motivation\ Motivation}}
+\DoxyCodeLine{00028\ \textcolor{comment}{}}
+\DoxyCodeLine{00029\ \textcolor{comment}{The\ finite-\/element\ method\ uses\ areal/volumetric\ elements\ as\ smallest\ computational}}
+\DoxyCodeLine{00030\ \textcolor{comment}{units.\ Each\ element\ has\ 2\ functions:\ (1)\ to\ store\ material\ properties\ and}}
+\DoxyCodeLine{00031\ \textcolor{comment}{nodes\ with\ associated\ properties;\ (2)\ To\ generate\ matrices\ which\ contribute\ to}}
+\DoxyCodeLine{00032\ \textcolor{comment}{a\ global\ system\ of\ algebraic\ equations\ which\ is\ solved\ to\ obtain\ the\ value}}
+\DoxyCodeLine{00033\ \textcolor{comment}{of\ the\ dependent\ spatially-\/distributed\ variable\ which\ typically\ is\ stored}}
+\DoxyCodeLine{00034\ \textcolor{comment}{on\ the\ nodes.}}
+\DoxyCodeLine{00035\ \textcolor{comment}{}}
+\DoxyCodeLine{00036\ \textcolor{comment}{}}
+\DoxyCodeLine{00037\ \textcolor{comment}{@section\ design\ Design\ Intent}}
+\DoxyCodeLine{00038\ \textcolor{comment}{}}
+\DoxyCodeLine{00039\ \textcolor{comment}{The\ Element\ class\ is\ a\ structural\ object\ that\ forms\ part\ of\ a\ Bridge\ design}}
+\DoxyCodeLine{00040\ \textcolor{comment}{pattern\ (pattern\ 151,\ Gamma\ et\ al.\ 1995).\ The\ bridge\ pattern\ is\ used\ to}}
+\DoxyCodeLine{00041\ \textcolor{comment}{allow\ that\ elements\ can\ be\ mass-\/contructed\ by\ a\ container\ class\ (an\ STL\ vector}}
+\DoxyCodeLine{00042\ \textcolor{comment}{in\ the\ MeshManager),\ but\ that\ they\ have\ polymorphic\ properties\ at\ the\ same.}}
+\DoxyCodeLine{00043\ \textcolor{comment}{time.\ Also\ a\ mesh\ usually\ has\ many\ elements,\ but\ only\ a\ few\ element\ types.}}
+\DoxyCodeLine{00044\ \textcolor{comment}{This\ is\ achieved\ by\ "{}bridging"{}\ the\ Element\ objects\ to\ a\ few\ FiniteElement}}
+\DoxyCodeLine{00045\ \textcolor{comment}{object\ pointers\ stored\ in\ the\ global\ array\ globalFE\_types[].}}
+\DoxyCodeLine{00046\ \textcolor{comment}{}}
+\DoxyCodeLine{00047\ \textcolor{comment}{A\ class\ diagram\ of\ the\ Element-\/FiniteElement\ bridge\ pattern\ is\ shown\ in}}
+\DoxyCodeLine{00048\ \textcolor{comment}{the\ CSP3D\ User\ Guide\ in\ the\ developers\ section.}}
+\DoxyCodeLine{00049\ \textcolor{comment}{}}
+\DoxyCodeLine{00050\ \textcolor{comment}{}}
+\DoxyCodeLine{00051\ \textcolor{comment}{@section\ Applicability}}
+\DoxyCodeLine{00052\ \textcolor{comment}{}}
+\DoxyCodeLine{00053\ \textcolor{comment}{The\ Element\ class\ should\ be\ applicable\ in\ any\ type\ of\ finite-\/element}}
+\DoxyCodeLine{00054\ \textcolor{comment}{computation.\ Higher-\/order\ elements\ will\ make\ use\ of\ the\ ability\ to\ store}}
+\DoxyCodeLine{00055\ \textcolor{comment}{retrieve\ integration\ point\ data.}}
+\DoxyCodeLine{00056\ \textcolor{comment}{}}
+\DoxyCodeLine{00057\ \textcolor{comment}{}}
+\DoxyCodeLine{00058\ \textcolor{comment}{@section\ structure\ Structure}}
+\DoxyCodeLine{00059\ \textcolor{comment}{}}
+\DoxyCodeLine{00060\ \textcolor{comment}{The\ structure\ of\ the\ Element\ -\/\ FiniteElement\ bridge\ pattern\ is\ described}}
+\DoxyCodeLine{00061\ \textcolor{comment}{in\ Gamma\ et\ al.\ 1995\ (p.\ 151).\ The\ element\ interface\ is\ broken\ down\ into}}
+\DoxyCodeLine{00062\ \textcolor{comment}{a\ part\ that\ echoes\ the\ interfaces\ of\ the\ FiniteElement\ base\ class\ from}}
+\DoxyCodeLine{00063\ \textcolor{comment}{which\ the\ desired\ element\ types\ are\ inherited\ thereby\ giving\ these\ inter-\/}}
+\DoxyCodeLine{00064\ \textcolor{comment}{faces\ polymorphic\ behaviour.}}
+\DoxyCodeLine{00065\ \textcolor{comment}{}}
+\DoxyCodeLine{00066\ \textcolor{comment}{The\ main\ operations\ which\ the\ element\ is\ used\ for\ are\ the\ retrieval\ of}}
+\DoxyCodeLine{00067\ \textcolor{comment}{property\ values,\ node\ coordinate\ matrices,\ and\ node\ ID\ number\ vectors\ which}}
+\DoxyCodeLine{00068\ \textcolor{comment}{are\ used\ in\ the\ assembly\ of\ the\ element\ equations.\ The\ element\ matrices\ are}}
+\DoxyCodeLine{00069\ \textcolor{comment}{square\ and\ theur\ size\ is\ equivalent\ to\ the\ product\ of\ the\ degrees\ of\ freedom}}
+\DoxyCodeLine{00070\ \textcolor{comment}{of\ each\ node\ and\ the\ number\ of\ nodes.}}
+\DoxyCodeLine{00071\ \textcolor{comment}{}}
+\DoxyCodeLine{00072\ \textcolor{comment}{}}
+\DoxyCodeLine{00073\ \textcolor{comment}{@section\ partcipants\ Participants}}
+\DoxyCodeLine{00074\ \textcolor{comment}{}}
+\DoxyCodeLine{00075\ \textcolor{comment}{The\ Element\ queries\ Nodes,\ IntegrationPoints,\ and\ the\ MemoryManager<dim>\ to}}
+\DoxyCodeLine{00076\ \textcolor{comment}{obtain\ the\ data\ which\ it\ needs\ in\ its\ computations.\ It\ cannot\ exist\ without}}
+\DoxyCodeLine{00077\ \textcolor{comment}{reference\ to\ the\ FiniteElement\ which\ implements\ half\ of\ its\ interface.}}
+\DoxyCodeLine{00078\ \textcolor{comment}{}}
+\DoxyCodeLine{00079\ \textcolor{comment}{The\ Element\ uses\ DenseMatrix<DM\_MIN>,\ and\ STL\ vector\ objects\ to\ receive}}
+\DoxyCodeLine{00080\ \textcolor{comment}{and\ tranfer\ data.}}
+\DoxyCodeLine{00081\ \textcolor{comment}{}}
+\DoxyCodeLine{00082\ \textcolor{comment}{}}
+\DoxyCodeLine{00083\ \textcolor{comment}{@section\ collaborations\ Collaborations}}
+\DoxyCodeLine{00084\ \textcolor{comment}{}}
+\DoxyCodeLine{00085\ \textcolor{comment}{Elements\ can\ collaborate\ with}}
+\DoxyCodeLine{00086\ \textcolor{comment}{Visitor\ objects\ through\ their\ Accept()\ interface.\ This\ combines\ the}}
+\DoxyCodeLine{00087\ \textcolor{comment}{methods\ of\ the\ Visitor\ with\ the\ functionality\ of\ the\ Element.}}
+\DoxyCodeLine{00088\ \textcolor{comment}{}}
+\DoxyCodeLine{00089\ \textcolor{comment}{The\ main\ collaboration\ exists\ between\ Elements\ and\ Algorithms.\ The\ latter}}
+\DoxyCodeLine{00090\ \textcolor{comment}{query\ the\ Element\ for\ coordinate\ and\ property\ matrices\ and\ a\ node\ number}}
+\DoxyCodeLine{00091\ \textcolor{comment}{vector.\ The\ new\ Algorithm\ class\ queries\ Elements\ through\ \ virtual\ methods}}
+\DoxyCodeLine{00092\ \textcolor{comment}{of\ the\ MathOperator\ base\ classes.}}
+\DoxyCodeLine{00093\ \textcolor{comment}{}}
+\DoxyCodeLine{00094\ \textcolor{comment}{}}
+\DoxyCodeLine{00095\ \textcolor{comment}{@section\ consequences\ Consequences}}
+\DoxyCodeLine{00096\ \textcolor{comment}{}}
+\DoxyCodeLine{00097\ \textcolor{comment}{Elements\ are\ "{}finite-\/element-\/independent"{}\ mesh-\/building\ blocks.\ Because}}
+\DoxyCodeLine{00098\ \textcolor{comment}{variables\ are\ only\ accessed\ through\ the\ Elements\ but\ not\ stored\ there,\ the}}
+\DoxyCodeLine{00099\ \textcolor{comment}{mesh\ storage\ is\ also\ independent\ from\ the\ number\ of\ properties\ associated}}
+\DoxyCodeLine{00100\ \textcolor{comment}{with\ it,\ while\ encapsulation\ is\ maintained\ and\ the\ access\ hierarchy\ is}}
+\DoxyCodeLine{00101\ \textcolor{comment}{preserved.}}
+\DoxyCodeLine{00102\ \textcolor{comment}{}}
+\DoxyCodeLine{00103\ \textcolor{comment}{}}
+\DoxyCodeLine{00104\ \textcolor{comment}{@section\ implementation\ Implementation}}
+\DoxyCodeLine{00105\ \textcolor{comment}{}}
+\DoxyCodeLine{00106\ \textcolor{comment}{The\ bridge\ between\ the\ Element\ and\ the\ FiniteElement\ is\ implemented\ as}}
+\DoxyCodeLine{00107\ \textcolor{comment}{a\ reference.\ It\ is\ initialized\ either\ through\ the\ default\ constructor}}
+\DoxyCodeLine{00108\ \textcolor{comment}{which\ accesses\ the\ globalFE\_types[]\ array,\ or,\ through\ a\ constructor}}
+\DoxyCodeLine{00109\ \textcolor{comment}{which\ takes\ a\ reference\ to\ a\ finite\ element\ as\ argument.}}
+\DoxyCodeLine{00110\ \textcolor{comment}{}}
+\DoxyCodeLine{00111\ \textcolor{comment}{Nodes,\ IntegrationPoints,\ and\ Neighbors\ of\ an\ Element\ are}}
+\DoxyCodeLine{00112\ \textcolor{comment}{accessed\ by\ pointers\ which\ are\ initialized\ through\ the\ ConnectTo...()}}
+\DoxyCodeLine{00113\ \textcolor{comment}{interfaces.\ Methods\ with\ the\ same\ name\ interface\ the\ Element\ with\ the}}
+\DoxyCodeLine{00114\ \textcolor{comment}{methods\ of\ the\ FiniteElement.\ The\ Element\ methods\ Read(),\ Store()\ and}}
+\DoxyCodeLine{00115\ \textcolor{comment}{Status()\ are\ used\ to\ access\ element\ properties.\ Alternatively,\ to}}
+\DoxyCodeLine{00116\ \textcolor{comment}{property\ output\ into\ DenseMatrix<DM\_MIN>\ and\ vector\ objects}}
+\DoxyCodeLine{00117\ \textcolor{comment}{you\ can\ also\ get\ STL\ vectors}}
+\DoxyCodeLine{00118\ \textcolor{comment}{of\ scalar,\ vector,\ and\ tensor\ properties.}}
+\DoxyCodeLine{00119\ \textcolor{comment}{}}
+\DoxyCodeLine{00120\ \textcolor{comment}{}}
+\DoxyCodeLine{00121\ \textcolor{comment}{@section\ application\ Application\ Examples}}
+\DoxyCodeLine{00122\ \textcolor{comment}{}}
+\DoxyCodeLine{00123\ \textcolor{comment}{The\ Visit(Element*\ e)\ method\ in\ "{}TransportVisitor.h"{}\ illustrates\ nicely}}
+\DoxyCodeLine{00124\ \textcolor{comment}{the\ functionality\ of\ the\ Element\ class.\ In\ this\ method\ element\ and\ node}}
+\DoxyCodeLine{00125\ \textcolor{comment}{properties\ and\ node\ property\ averages\ are\ obtained\ and\ written\ back\ to}}
+\DoxyCodeLine{00126\ \textcolor{comment}{the\ mesh.}}
+\DoxyCodeLine{00127\ \textcolor{comment}{}}
+\DoxyCodeLine{00128\ \textcolor{comment}{@section\ IMPORTANT\ -\/\ FOR\ DEVELOPERS}}
+\DoxyCodeLine{00129\ \textcolor{comment}{}}
+\DoxyCodeLine{00130\ \textcolor{comment}{Consider\ that\ users\ of\ the\ policies\ may\ also\ want\ to\ work\ on\ other}}
+\DoxyCodeLine{00131\ \textcolor{comment}{incarnations\ of\ the\ Element,\ in\ particular\ ones\ with\ less\ policies.}}
+\DoxyCodeLine{00132\ \textcolor{comment}{This\ only\ works\ when\ the\ policies\ only\ depend\ on\ the\ functionality}}
+\DoxyCodeLine{00133\ \textcolor{comment}{of\ the\ element,\ but\ not\ on\ each\ other!}}
+\DoxyCodeLine{00134\ \textcolor{comment}{}}
+\DoxyCodeLine{00135\ \textcolor{comment}{As\ a\ key\ difference\ between\ policies\ and\ traits,\ the\ latter\ have\ state.}}
+\DoxyCodeLine{00136\ \textcolor{comment}{Thus,\ the\ finite-\/element\ policy\ own\ the\ fe\ pointer\ and\ the\ fv\ policy\ ons\ the\ fv\ pointer}}
+\DoxyCodeLine{00137\ \textcolor{comment}{which\ is\ key\ to\ the\ design.}}
+\DoxyCodeLine{00138\ \textcolor{comment}{}}
+\DoxyCodeLine{00139\ \textcolor{comment}{For\ the\ current\ design,\ however,\ this\ is\ only\ partially\ true\ because\ the}}
+\DoxyCodeLine{00140\ \textcolor{comment}{FiniteVolumePolicy\ depends\ on\ finite\ element\ functionality.}}
+\DoxyCodeLine{00141\ \textcolor{comment}{Thus,\ one\ can\ have\ an\ element\ with\ FEM\ but\ without\ FVM,\ but\ not\ vice\ versa.}}
+\DoxyCodeLine{00142\ \textcolor{comment}{}}
+\DoxyCodeLine{00143\ \textcolor{comment}{@todo\ (3)\ Write\ faster\ code\ to\ determine\ whether\ a\ Point\ is\ contained\ in\ a\ certain\ element\ (A)}}
+\DoxyCodeLine{00144\ \textcolor{comment}{}}
+\DoxyCodeLine{00145\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00146\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00147\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_element}{FiniteElementPolicy}}<\mbox{\hyperlink{classcsmp_1_1_element}{dim}},\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}>,}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_element}{FiniteVolumePolicy}}<\mbox{\hyperlink{classcsmp_1_1_element}{dim}},\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}>,}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_element}{LocalVariableStorage}}<\mbox{\hyperlink{classcsmp_1_1_element}{dim}},\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}>\ \{}
+\DoxyCodeLine{00150\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00151\ \ \ \ \ \textcolor{comment}{///\ constructor\ for\ testing\ element\ in\ isolation}}
+\DoxyCodeLine{00152\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classcsmp_1_1_element_abc0ac6c582a28543898f2c512b46c20f}{Element}}(\ \mbox{\hyperlink{classcsmp_1_1_finite_element}{FiniteElement}}*\ );}
+\DoxyCodeLine{00153\ }
+\DoxyCodeLine{00154\ \ \ \ \ \textcolor{comment}{///\ constructor\ for\ testing\ element\ in\ isolation}}
+\DoxyCodeLine{00155\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_element_ae5b44630a6b73e7286b74d02d58fe82c}{Element}}(\ \mbox{\hyperlink{classcsmp_1_1_finite_element}{FiniteElement}}*,}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{FiniteVolumeStencil}}<dim>*\ );}
+\DoxyCodeLine{00157\ }
+\DoxyCodeLine{00158\ \ \ \ \ Element(\ \mbox{\hyperlink{classcsmp_1_1_finite_element}{FiniteElement}}*,}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{FiniteVolumeStencil}}<dim>*,}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcsmp_1_1_local_variables}{LocalVariables}}\&\ element\_props,}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcsmp_1_1_integration_point_variables}{IntegrationPointVariables}}\&\ integration\_point\_props\ );}
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00163\ \ \ \ \ \textcolor{comment}{///\ for\ model\ reconstruction\ from\ CSMP\ native\ binary\ file}}
+\DoxyCodeLine{00164\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_element_a276d45bc7868c390a7caf25c7389cbe4}{Element}}(\ size\_t\ index,}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_element}{FiniteElement}}*,}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{FiniteVolumeStencil}}<dim>*,}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcsmp_1_1_local_variables}{LocalVariables}}\&\ element\_props,}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcsmp_1_1_integration_point_variables}{IntegrationPointVariables}}\&\ integration\_point\_props,}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \ \ \ \ \ int32\_t\ material\ );}
+\DoxyCodeLine{00170\ }
+\DoxyCodeLine{00171\ \ \ \ \ \textcolor{comment}{//\ NB:\ no\ rule\ of\ zero\ because\ FE/FV\ pointers\ in\ policies}}
+\DoxyCodeLine{00172\ \ \ \ \ Element(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&\ );}
+\DoxyCodeLine{00173\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&\ operator=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&\ );}
+\DoxyCodeLine{00174\ \ \ \ \ \textcolor{comment}{//\ move\ semantics\ essential\ for\ storage\ in\ plf::colony}}
+\DoxyCodeLine{00175\ \ \ \ \ Element(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&\&\ );}
+\DoxyCodeLine{00176\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&\ operator=(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&\&\ );}
+\DoxyCodeLine{00177\ }
+\DoxyCodeLine{00178\ \ \ \ \ \textcolor{comment}{//\ \string~Element();}}
+\DoxyCodeLine{00179\ }
+\DoxyCodeLine{00180\ \ \ \ \ \textcolor{comment}{///\ compares\ finite\ element\ type,\ material\ id,\ nodes,\ and\ neighbors;\ ignoring\ mutable\ idx\ and\ other\ attributes}}
+\DoxyCodeLine{00181\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_element_a6bf1e4fbe77959916eb6eca0299434c0}{operator}}==(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00182\ }
+\DoxyCodeLine{00183\ \ \ \ \ \textcolor{comment}{///\ less\ than\ operator\ for\ comparing\ barycentre\ locations\ using\ operator\ of\ the\ corresponding\ point\ object}}
+\DoxyCodeLine{00184\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_element_a05d606a299723df07481f5be4e3fef90}{operator}}<(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00185\ }
+\DoxyCodeLine{00186\ \ \ \ \ \textcolor{comment}{///\ Local\ variable\ storage\ interface}}
+\DoxyCodeLine{00187\ \ \ \ \ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}\ \mbox{\hyperlink{classcsmp_1_1_element_a9d970a14b52b39ef43821b619e3a9f83}{Placement}}()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ ELEMENT;\ \}}
+\DoxyCodeLine{00188\ }
+\DoxyCodeLine{00189\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_element_aa81a196f4cdd443d0e75b7b1de514d94}{Accept}}(\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_visitor}{Visitor}}<dim>\&\ );}
+\DoxyCodeLine{00190\ }
+\DoxyCodeLine{00191\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00192\ \ \ \ \ \textcolor{comment}{//\ Functionality\ of\ construction\ process}}
+\DoxyCodeLine{00193\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00194\ }
+\DoxyCodeLine{00195\ \ \ \ \ \textcolor{comment}{///\ (re)connect\ the\ element\ to\ its\ neighbors\ (during\ the\ model\ construction\ process\ or\ after\ remeshing)}}
+\DoxyCodeLine{00196\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_element_a91f8a43383a001d60140869dc4006e8f}{Assign}}(\ uint32\_t\ nbor,\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const}\ );}
+\DoxyCodeLine{00197\ \ \ \ \ \textcolor{comment}{///\ sets\ pointer\ to\ given\ neighbor\ element\ to\ zero,\ reports\ whether\ removal\ was\ made}}
+\DoxyCodeLine{00198\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_element_a146e0c0d32268d27acfe4dde18af4c71}{Unassign}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const}\ );}
+\DoxyCodeLine{00199\ \ \ \ \ \textcolor{comment}{///\ sets\ pointer\ to\ given\ neighbor\ element\ identifed\ by\ its\ number\ to\ zero}}
+\DoxyCodeLine{00200\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_element_a45b16e40b093339c44da8d0208241ed6}{UnassignNeighbor}}(\ \mbox{\hyperlink{classcsmp_1_1_element_a45b16e40b093339c44da8d0208241ed6}{uint32\_t}}\ );}
+\DoxyCodeLine{00201\ }
+\DoxyCodeLine{00202\ \ \ \ \ \textcolor{comment}{///\ (re)connect\ the\ element\ to\ its\ nodes\ (during\ the\ model\ construction\ process\ or\ after\ remeshing\ /\ split\ boundary\ creation)}}
+\DoxyCodeLine{00203\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_element_ab024082fc4b7e1ab507e19f69c620ffc}{Assign}}(\ uint32\_t\ node,\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>*\ \textcolor{keyword}{const}\ );}
+\DoxyCodeLine{00204\ \ \ \ \ \textcolor{comment}{///\ sets\ pointer\ to\ given\ node\ to\ zero}}
+\DoxyCodeLine{00205\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_element_a3640be79507d1ad36e50c0c8769abf70}{Unassign}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>*\ \textcolor{keyword}{const}\ );}
+\DoxyCodeLine{00206\ }
+\DoxyCodeLine{00207\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00208\ \ \ \ \ \textcolor{comment}{//\ Member\ access}}
+\DoxyCodeLine{00209\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00210\ }
+\DoxyCodeLine{00211\ \ \ \ \ \textcolor{comment}{///\ number\ of\ nodes\ of\ this\ element}}
+\DoxyCodeLine{00212\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_element_ae5f104e84a351e90dea3c92dbb1ace50}{uint32\_t}}\ \ \mbox{\hyperlink{classcsmp_1_1_element_ae5f104e84a351e90dea3c92dbb1ace50}{Nodes}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00213\ }
+\DoxyCodeLine{00214\ \ \ \ \ \textcolor{comment}{///\ number\ of\ equidimensional\ neighbor\ elements\ of\ this\ element\ (not\ necessarily\ connected)}}
+\DoxyCodeLine{00215\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_element_aac6526a038dcf8c383fb92558c058c12}{uint32\_t}}\ \ \mbox{\hyperlink{classcsmp_1_1_element_aac6526a038dcf8c383fb92558c058c12}{Neighbors}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00216\ }
+\DoxyCodeLine{00217\ \ \ \ \ \textcolor{comment}{///\ number\ of\ equidimensional\ neighbor\ elements\ of\ this\ element\ (necessarily\ connected)}}
+\DoxyCodeLine{00218\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_element_accbb6588a21a19778b197252c6000920}{uint32\_t}}\ \ \mbox{\hyperlink{classcsmp_1_1_element_accbb6588a21a19778b197252c6000920}{ConnectedNeighbors}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00219\ }
+\DoxyCodeLine{00220\ \ \ \ \ \textcolor{comment}{///\ number\ of\ faces\ (side-\/surfaces)\ of\ the\ current\ element;\ for\ each\ element\ face,\ there\ can\ be\ a\ neighbor}}
+\DoxyCodeLine{00221\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_element_a982df7a84cbf6e8ac83ee19d92f7d05c}{uint32\_t}}\ \ \mbox{\hyperlink{classcsmp_1_1_element_a982df7a84cbf6e8ac83ee19d92f7d05c}{Faces}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00222\ }
+\DoxyCodeLine{00223\ \ \ \ \ \textcolor{comment}{///\ only\ constant\ iterators\ are\ provided\ because\ the\ user\ is\ not\ supposed\ to\ change\ the\ node\ pr\ neighbor\ connectivity\ (done\ by\ MeshManager);\ thus,\ nodes\ and\ element\ neighbors\ can\ be\ manipulated\ but\ not\ the\ pointers\ to\ them}}
+\DoxyCodeLine{00224\ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_element}{std}}::\mbox{\hyperlink{classcsmp_1_1_element}{vector}}<\mbox{\hyperlink{classcsmp_1_1_element}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_element}{Node}}<\mbox{\hyperlink{classcsmp_1_1_element}{dim}}>*>::\mbox{\hyperlink{classcsmp_1_1_element}{const\_iterator}}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_element}{NodesBegin}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00225\ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_element}{std}}::\mbox{\hyperlink{classcsmp_1_1_element}{vector}}<\mbox{\hyperlink{classcsmp_1_1_element}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_element}{Node}}<\mbox{\hyperlink{classcsmp_1_1_element}{dim}}>*>::\mbox{\hyperlink{classcsmp_1_1_element}{const\_iterator}}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_element}{NodesEnd}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00226\ }
+\DoxyCodeLine{00227\ \ \ \ \ \textcolor{comment}{///\ assuming\ that\ the\ corner\ nodes\ are\ the\ first,\ the\ midside\ nodes\ the\ second,\ and\ the\ ..\ in\ the\ elements\ node\ set\ according\ to\ CSMP\_FEM\_conventions.pdf}}
+\DoxyCodeLine{00228\ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_element}{std}}::\mbox{\hyperlink{classcsmp_1_1_element}{vector}}<\mbox{\hyperlink{classcsmp_1_1_element}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_element}{Node}}<\mbox{\hyperlink{classcsmp_1_1_element}{dim}}>*>::\mbox{\hyperlink{classcsmp_1_1_element}{const\_iterator}}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_element}{CornerNodesBegin}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00229\ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_element}{std}}::\mbox{\hyperlink{classcsmp_1_1_element}{vector}}<\mbox{\hyperlink{classcsmp_1_1_element}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_element}{Node}}<\mbox{\hyperlink{classcsmp_1_1_element}{dim}}>*>::\mbox{\hyperlink{classcsmp_1_1_element}{const\_iterator}}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_element}{CornerNodesEnd}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00230\ }
+\DoxyCodeLine{00231\ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_element}{std}}::\mbox{\hyperlink{classcsmp_1_1_element}{vector}}<\mbox{\hyperlink{classcsmp_1_1_element}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_element}{Element}}<\mbox{\hyperlink{classcsmp_1_1_element}{dim}}>*>::\mbox{\hyperlink{classcsmp_1_1_element}{const\_iterator}}\ \ \ \mbox{\hyperlink{classcsmp_1_1_element}{NeighborsBegin}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00232\ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_element}{std}}::\mbox{\hyperlink{classcsmp_1_1_element}{vector}}<\mbox{\hyperlink{classcsmp_1_1_element}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_element}{Element}}<\mbox{\hyperlink{classcsmp_1_1_element}{dim}}>*>::\mbox{\hyperlink{classcsmp_1_1_element}{const\_iterator}}\ \ \ \mbox{\hyperlink{classcsmp_1_1_element}{NeighborsEnd}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00233\ }
+\DoxyCodeLine{00234\ \ \ \ \ \textcolor{keyword}{typename}\ \ \mbox{\hyperlink{classcsmp_1_1_element}{std}}::\mbox{\hyperlink{classcsmp_1_1_element}{vector}}<\mbox{\hyperlink{classcsmp_1_1_element}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_element}{Node}}<\mbox{\hyperlink{classcsmp_1_1_element}{dim}}>*>\&\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_element}{NodeVector}}();}
+\DoxyCodeLine{00235\ \ \ \ \ \textcolor{keyword}{typename}\ \ \mbox{\hyperlink{classcsmp_1_1_element}{std}}::\mbox{\hyperlink{classcsmp_1_1_element}{vector}}<\mbox{\hyperlink{classcsmp_1_1_element}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_element}{Element}}<\mbox{\hyperlink{classcsmp_1_1_element}{dim}}>*>\&\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_element}{NeighborElementVector}}();}
+\DoxyCodeLine{00236\ }
+\DoxyCodeLine{00237\ \ \ \ \ \textcolor{comment}{///\ accessor\ of\ the\ nodes\ of\ the\ current\ finite\ element}}
+\DoxyCodeLine{00238\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element_a78c480763ea500ff5fdafe4e22ecaeab}{N}}(\ uint32\_t\ n\_local\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00239\ }
+\DoxyCodeLine{00240\ \ \ \ \ \textcolor{comment}{///\ accessor\ of\ the\ equidimensional\ neighbor\ elements\ of\ the\ current\ element\ (volume-\/>volume,\ surface-\/>surfaces\ element\ etc.)}}
+\DoxyCodeLine{00241\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element_a87b70a11933114e46bf4dfc93bfefa39}{Neighbor}}(\ \mbox{\hyperlink{classcsmp_1_1_element_a87b70a11933114e46bf4dfc93bfefa39}{uint32\_t}}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00242\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const}\ Neighbor(\ uint32\_t\ );}
+\DoxyCodeLine{00243\ }
+\DoxyCodeLine{00244\ \ \ \ \ \textcolor{comment}{///\ on-\/the-\/fly\ 0..n-\/1\ numbering\ stored\ in\ a\ mutable\ local\ variable\ (therefore\ const)}}
+\DoxyCodeLine{00245\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_element_a3f8ae10231344f76c0319889726fd5ea}{Idx}}(\ \mbox{\hyperlink{classcsmp_1_1_element_a3f8ae10231344f76c0319889726fd5ea}{size\_t}}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00246\ \ \ \ \ size\_t\ \ \ \ \ \ \ Idx()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00247\ }
+\DoxyCodeLine{00248\ \ \ \ \ \textcolor{comment}{///\ is\ element\ located\ at\ an\ outside\ or\ internal\ model\ boundary;\ if\ it\ shares\ a\ face\ with\ a\ boundary,\ this\ is\ true}}
+\DoxyCodeLine{00249\ \ \ \ \ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}}\ \mbox{\hyperlink{classcsmp_1_1_element_a5442be3111d28acc46e58d38b1365c4f}{AtBoundary}}(\ uint32\_t\ boundary\_face\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00250\ }
+\DoxyCodeLine{00251\ \ \ \ \ \textcolor{comment}{///\ unique\ material\ identifier\ used\ to\ store\ 'rocktype'\ or\ ModelSubDomain::domain\_idx\_}}
+\DoxyCodeLine{00252\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_element_a2847ee2549aafd60c960ef2a2c5ee8c8}{int32\_t}}\ \mbox{\hyperlink{classcsmp_1_1_element_a2847ee2549aafd60c960ef2a2c5ee8c8}{Material\_ID}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00253\ \ \ \ \ \textcolor{keywordtype}{void}\ Material\_ID(\ int32\_t\ id\ );}
+\DoxyCodeLine{00254\ }
+\DoxyCodeLine{00255\ \ \ \ \ \textcolor{comment}{///\ unique\ region\ identifier\ to\ be\ set\ to\ minus\ ModelSubDomain::domain\_idx\_\ for\ non-\/unique\ regions}}
+\DoxyCodeLine{00256\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_element_a7f2868b4e551a799340eb1b11d397216}{int32\_t}}\ \mbox{\hyperlink{classcsmp_1_1_element_a7f2868b4e551a799340eb1b11d397216}{Region\_ID}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00257\ \ \ \ \ \textcolor{keywordtype}{void}\ Region\_ID(\ int32\_t\ id\ );}
+\DoxyCodeLine{00258\ }
+\DoxyCodeLine{00259\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00260\ \ \ \ \ \textcolor{comment}{//\ Functionality}}
+\DoxyCodeLine{00261\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00262\ }
+\DoxyCodeLine{00263\ \ \ \ \ \textcolor{comment}{///\ returns\ a\ vector\ of\ the\ property\ of\ interest\ discretized\ on\ the\ node}}
+\DoxyCodeLine{00264\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ Var>}
+\DoxyCodeLine{00265\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_element_a473b91eac001ffe4865f3f5608697bba}{NodePropertyVector}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\&,\ std::vector<Var>\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00266\ }
+\DoxyCodeLine{00267\ \ \ \ \ \textcolor{comment}{///\ inputs\ node\ coordinates\ into\ supplied\ matrix}}
+\DoxyCodeLine{00268\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_element_a37c261873f3fcda5ea1f1ee7ce5c1836}{NodeCoordinateMatrix}}(\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00269\ }
+\DoxyCodeLine{00270\ \ \ \ \ \textcolor{comment}{///\ the\ centre\ of\ gravity\ of\ the\ elemt}}
+\DoxyCodeLine{00271\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\ \ \mbox{\hyperlink{classcsmp_1_1_element_a0d60cba1686c6e0eddfb3e279407c3f1}{BaryCenter}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00272\ }
+\DoxyCodeLine{00273\ \ \ \ \ \textcolor{comment}{///\ projects\ node\ points\ onto\ line\ returning\ max\ distance\ between\ them;\ vec\ direction\ can\ have\ any\ length}}
+\DoxyCodeLine{00274\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_element_a72c8f8760ffd33d3a0cb5eee69e92c70}{LengthInDirection}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\&\ vecDirection\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00275\ }
+\DoxyCodeLine{00276\ }
+\DoxyCodeLine{00277\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00278\ \ \ \ \ \textcolor{comment}{//\ Screen\ Output}}
+\DoxyCodeLine{00279\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00280\ }
+\DoxyCodeLine{00281\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_element_ac5f6bea5ff639c59450f7ce825fbec8a}{Out}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00282\ }
+\DoxyCodeLine{00283\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00284\ \ \ \ \ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_mesh_manager}{uint32\_t}}>\ \textcolor{keyword}{friend}\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_mesh_manager}{MeshManager}};}
+\DoxyCodeLine{00285\ \ \ \ \ \textcolor{keywordtype}{void}*\ operator\ \textcolor{keyword}{new}(\ size\_t\ size\ );}
+\DoxyCodeLine{00286\ \ \ \ \ \textcolor{keywordtype}{void}\ operator\ \ \textcolor{keyword}{delete}(\ \textcolor{keywordtype}{void}*\ p\ );}
+\DoxyCodeLine{00287\ }
+\DoxyCodeLine{00288\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00289\ \ \ \ \ \textcolor{keyword}{mutable}\ size\_t\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ idx\_;}
+\DoxyCodeLine{00290\ \ \ \ \ std::vector<Element<dim>*>\ \ \ \ \ elmt\_connector\_;\ \textcolor{comment}{///<\ neighbors}}
+\DoxyCodeLine{00291\ \ \ \ \ std::vector<csmp::Node<dim>*>\ \ node\_connector\_;\ \textcolor{comment}{///<\ nodes}}
+\DoxyCodeLine{00292\ \ \ \ \ int32\_t\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ material\_id\_;\ \ \ \ \textcolor{comment}{///<\ unique\ identifier,\ equal\ to\ number\ of\ unique\ region\ that\ \ element\ belongs\ or\ rocktype\ indentifier}}
+\DoxyCodeLine{00293\ \ \ \ \ int32\_t\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ region\_id\_;\ \ \ \ \ \ \textcolor{comment}{///<\ to\ identify\ which\ region\ element\ belongs\ to;,\ IMPORTANT:\ since\ ref-\/counted\ these\ indices\ are\ not\ preserved\ on\ restart}}
+\DoxyCodeLine{00294\ \};}
+\DoxyCodeLine{00295\ }
+\DoxyCodeLine{00296\ }
+\DoxyCodeLine{00297\ \textcolor{comment}{///\ Method\ that\ is\ not\ dependent\ on\ neighbor\ connectivity\ to\ return\ the\ nodes\ that\ are\ shared\ between\ the\ two\ elements;\ if\ these\ are\ the\ node-\/set\ of\ a\ shared\ face\ the\ returned\ boolean\ is\ set\ to\ true}}
+\DoxyCodeLine{00298\ \textcolor{keyword}{template}<\mbox{\hyperlink{namespacecsmp}{uint32\_t}}\ \mbox{\hyperlink{namespacecsmp}{dim}}>}
+\DoxyCodeLine{00299\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{pair}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{Node}}<\mbox{\hyperlink{namespacecsmp}{dim}}>*>,\textcolor{keywordtype}{bool}>\ \ \mbox{\hyperlink{namespacecsmp}{sharedNodes}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{Element}}<\mbox{\hyperlink{namespacecsmp}{dim}}>*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{eptr1}},\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{Element}}<\mbox{\hyperlink{namespacecsmp}{dim}}>*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{eptr2}}\ );}
+\DoxyCodeLine{00300\ }
+\DoxyCodeLine{00301\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00302\ }
+\DoxyCodeLine{00303\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

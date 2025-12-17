@@ -1,0 +1,60 @@
+\doxysection{h Class Reference}
+\hypertarget{class_h2_o_na_cl_thermal_equilibrator_1_1h}{}\label{class_h2_o_na_cl_thermal_equilibrator_1_1h}\index{h@{h}}
+
+
+Collaboration diagram for h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=93pt]{class_h2_o_na_cl_thermal_equilibrator_1_1h__coll__graph}
+\end{center}
+\end{figure}
+
+
+\doxysubsection{Detailed Description}
+)
+
+\begin{DoxyAuthor}{Author}
+Thomas Driesner, ETH Zuerich 
+\end{DoxyAuthor}
+\hypertarget{compare_floats_8h_contact}{}\doxysubsection{\texorpdfstring{Contact}{Contact}}\label{compare_floats_8h_contact}
+\href{mailto:thomas.driesner@erdw.ethz.ch}{\texttt{thomas.\+driesner@erdw.\+ethz.\+ch}}\hypertarget{compare_floats_8h_motivation}{}\doxysubsection{\texorpdfstring{Motivation}{Motivation}}\label{compare_floats_8h_motivation}
+H2\+ONa\+Cl\+Thermal\+Equilibrator performs an isobaric thermal equilibration between a mass of rock and a mass of fluid (from the system H2\+O-\/\+Na\+Cl) given a total enthalpy for this system.\hypertarget{class_h2_o_na_cl_thermal_equilibrator_1_1h_assumptions}{}\doxysubsection{\texorpdfstring{Assumptions}{Assumptions}}\label{class_h2_o_na_cl_thermal_equilibrator_1_1h_assumptions}
+Currently, we assume that we can consistently treat treat the rock\textquotesingle{}s enthalpy as h\+\_\+rock = cp\+\_\+rock\texorpdfstring{$\ast$}{*}t . As only differences are used, this principally wrong formula \mbox{[}rather, it\textquotesingle{}d be h0+integral(cp\+\_\+rock(t) dt)\mbox{]}, should work here. It does, however, fail in the case of a t-\/dependent heat capacity.\hypertarget{classcsmp_1_1_upwind_control_visitor_usage}{}\doxysubsection{\texorpdfstring{Usage}{Usage}}\label{classcsmp_1_1_upwind_control_visitor_usage}
+Construct an instance of H2\+ONa\+Cl\+Thermal\+Equilibrator with references to the following properties (units are given in square brackets) as constructor arguments\+:
+\begin{DoxyItemize}
+\item const double\& external\+\_\+mass\+\_\+rock \mbox{[}kg\mbox{]} \+: the mass of rock that shall be equilibrated with the fluid
+\item const double\& external\+\_\+cp\+\_\+rock \mbox{[}J/kg/K\mbox{]}\+: the rock\textquotesingle{}s isobaric heat capacity (assumed to be independent of temperature)
+\item const double\& external\+\_\+rho\+\_\+rock \mbox{[}kg/m\texorpdfstring{$^\wedge$}{\string^}3\mbox{]}\+: the rock\textquotesingle{}s mass density
+\item const double\& external\+\_\+porosity \mbox{[} \mbox{]} \+: (currently not used) the rock\textquotesingle{}s porosity (this is allowed to be different from the actual fluid volume);
+\item const double\& external\+\_\+mass\+\_\+fluid \mbox{[}kg\mbox{]} \+: the mass of "{}fluid"{} -\/ this is kg H2O + kg Na\+Cl (solid+dissolved); including the solid is essential here as salt may be dissolved during equilibration
+\item const double\& external\+\_\+wt\+\_\+current \mbox{[} \mbox{]} \+: 100 \texorpdfstring{$\ast$}{*} \mbox{[}kg Na\+Cl (solid+dissolved)\mbox{]} / \mbox{[}kg Na\+Cl (solid+dissolved) + kg H2O\mbox{]}
+\item const double\& external\+\_\+t\+\_\+previous \mbox{[}C\mbox{]} \+: temperature at thermal equilibrium from the previous time step
+\item const double\& external\+\_\+p\+\_\+current \mbox{[}bar\mbox{]} \+: preesure ar which thermal equilibration will be performed
+\item const double\& external\+\_\+\+H\+\_\+current \mbox{[}J\mbox{]} \+: total enthalpy in system (total enthalpy of rock + total enthalpy of fluid); this is the result of a transport step, including advection and thermal diffusion
+\item const double\& external\+\_\+\+H\+\_\+previous \mbox{[}J\mbox{]} \+: the above at the previous time step
+\item const bool\& fixed\+\_\+external\+\_\+t \mbox{[} \mbox{]} \+: a bool, mostly for use at fixed temperature boundary condition; if true, no thermal equilibration will be performed, the fluid properties and volume at p\+\_\+current and t\+\_\+fix (see next entry) will be calculated
+\item const double\& t\+\_\+fix \mbox{[}C\mbox{]} \+: the fixed temperature to be used if fixed\+\_\+external\+\_\+t == true
+\item const double\& external\+\_\+t\+\_\+diff \mbox{[}C\mbox{]} \+: rock temperature after the thermal diffusion step and prior to equilibration. By default, if thermal equilibration fails, this will be assumed to be the best proxy to an equilibration result
+\end{DoxyItemize}
+
+H2\+ONa\+Cl\+Thermal\+Equilibrator is typically used by Na\+Cl\+H2\+OProperties\+Visitor.
+
+
+\begin{DoxyCode}{0}
+
+\end{DoxyCode}
+\hypertarget{classcsmp_1_1_upwind_control_visitor_dependencies}{}\doxysubsection{\texorpdfstring{Dependencies}{Dependencies}}\label{classcsmp_1_1_upwind_control_visitor_dependencies}
+\hypertarget{classcsmp_1_1_upwind_control_visitor_issues}{}\doxysubsection{\texorpdfstring{Known issues}{Known issues}}\label{classcsmp_1_1_upwind_control_visitor_issues}
+\hypertarget{class_h2_o_na_cl_thermal_equilibrator_1_1h_todo}{}\doxysubsection{\texorpdfstring{To do list}{To do list}}\label{class_h2_o_na_cl_thermal_equilibrator_1_1h_todo}
+
+\begin{DoxyItemize}
+\item Constitutive relation for rock enthalpies
+\item make t\+\_\+diff as default in non-\/equilibration case an option
+\end{DoxyItemize}\hypertarget{compare_floats_8h_testing}{}\doxysubsection{\texorpdfstring{Testing}{Testing}}\label{compare_floats_8h_testing}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/eos/H2\+ONa\+Cl\+Thermal\+Equilibrator.\+h\end{DoxyCompactItemize}

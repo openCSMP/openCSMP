@@ -1,0 +1,380 @@
+\doxysection{Model\+Sub\+Domain.\+h}
+\hypertarget{_model_sub_domain_8h_source}{}\label{_model_sub_domain_8h_source}\index{source/includes/model/ModelSubDomain.h@{source/includes/model/ModelSubDomain.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_MODEL\_SUB\_DOMAIN\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_MODEL\_SUB\_DOMAIN\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_local_variable_storage_8h}{"{}LocalVariableStorage.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{comment}{///\ Parts\ of\ ModelSubDomain}}
+\DoxyCodeLine{00010\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{namespacecsmp_a4b8f1ad9f1a09a957714679ce72aee3f}{SUBDOMAIN\_PART}}\ \{\ COMPLETE,}
+\DoxyCodeLine{00011\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ INTERIOR,}
+\DoxyCodeLine{00012\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PERIMETER\ \};}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \mbox{\hyperlink{namespacecsmp_a4b8f1ad9f1a09a957714679ce72aee3f}{SUBDOMAIN\_PART}}\ parseSubdomainPart(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ subdomain\ );}
+\DoxyCodeLine{00015\ std::string\ \ \ \ parseSubdomainPart(\ \mbox{\hyperlink{namespacecsmp_a4b8f1ad9f1a09a957714679ce72aee3f}{SUBDOMAIN\_PART}}\ part\ );}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_finite_element_manager}{FiniteElementManager}};}
+\DoxyCodeLine{00018\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_property_database}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}};}
+\DoxyCodeLine{00019\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_mesh_manager}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_mesh_manager}{MeshManager}};}
+\DoxyCodeLine{00020\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_manager}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_manager}{FiniteVolumeStencilManager}};}
+\DoxyCodeLine{00021\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_point}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}};}
+\DoxyCodeLine{00022\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_node}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}};}
+\DoxyCodeLine{00023\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_element}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}};}
+\DoxyCodeLine{00024\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_interrelation}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_interrelation}{Interrelation}};}
+\DoxyCodeLine{00025\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_visitor}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_visitor}{Visitor}};}
+\DoxyCodeLine{00026\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_property_constraints}{PropertyConstraints}};}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ \ \ \ Complete\ index\ specifications\ of\ a\ ModelSubDomain}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ \ \ \ used\ in\ the\ reconstruction\ of\ subdomains\ from\ binary\ files.}}
+\DoxyCodeLine{00031\ \textcolor{comment}{}}
+\DoxyCodeLine{00032\ \textcolor{comment}{@author\ SKM}}
+\DoxyCodeLine{00033\ \textcolor{comment}{@date\ 14/3/2016}}
+\DoxyCodeLine{00034\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00035\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcsmp_1_1_sub_domain_info}{SubDomainInfo}}\ \{}
+\DoxyCodeLine{00036\ \ \ \ \mbox{\hyperlink{structcsmp_1_1_sub_domain_info_a3d9cfa28b95bd240a537f0a5c80b68b7}{std}}::\mbox{\hyperlink{structcsmp_1_1_sub_domain_info_a3d9cfa28b95bd240a537f0a5c80b68b7}{string}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_sub_domain_info_a3d9cfa28b95bd240a537f0a5c80b68b7}{name}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ unique\ name}}
+\DoxyCodeLine{00037\ \ \ \ \mbox{\hyperlink{structcsmp_1_1_sub_domain_info_a9553318e345ff4b0e079534afd98e499}{std}}::\mbox{\hyperlink{structcsmp_1_1_sub_domain_info_a9553318e345ff4b0e079534afd98e499}{vector}}<\mbox{\hyperlink{structcsmp_1_1_sub_domain_info_a9553318e345ff4b0e079534afd98e499}{size\_t}}>\ \mbox{\hyperlink{structcsmp_1_1_sub_domain_info_a9553318e345ff4b0e079534afd98e499}{interior\_elmts}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ cells\ that\ have\ no\ face\ on\ the\ perimeter}}
+\DoxyCodeLine{00038\ \ \ \ \mbox{\hyperlink{structcsmp_1_1_sub_domain_info_a0be953a3f3ef8d4136d394e6730e7e62}{std}}::\mbox{\hyperlink{structcsmp_1_1_sub_domain_info_a0be953a3f3ef8d4136d394e6730e7e62}{vector}}<\mbox{\hyperlink{structcsmp_1_1_sub_domain_info_a0be953a3f3ef8d4136d394e6730e7e62}{size\_t}}>\ \mbox{\hyperlink{structcsmp_1_1_sub_domain_info_a0be953a3f3ef8d4136d394e6730e7e62}{perimeter\_elmts}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ cells\ that\ have\ at\ least\ one\ face\ on\ perimeter}}
+\DoxyCodeLine{00039\ \ \ \ \mbox{\hyperlink{structcsmp_1_1_sub_domain_info}{std}}::\mbox{\hyperlink{structcsmp_1_1_sub_domain_info}{vector}}<\mbox{\hyperlink{structcsmp_1_1_sub_domain_info}{std}}::\mbox{\hyperlink{structcsmp_1_1_sub_domain_info}{vector}}<\mbox{\hyperlink{structcsmp_1_1_sub_domain_info}{uint32\_t}}>\ >\ \mbox{\hyperlink{structcsmp_1_1_sub_domain_info}{perimeter\_faces}};\ \ \textcolor{comment}{///<\ local\ 0..faces-\/1\ identifiers\ of\ the\ faces\ of\ the\ simplices\ that\ lie\ on\ domain\ boundary}}
+\DoxyCodeLine{00040\ \ \ \ \mbox{\hyperlink{structcsmp_1_1_sub_domain_info_a3ecafefe8e489b3d9632cf360491351f}{std}}::\mbox{\hyperlink{structcsmp_1_1_sub_domain_info_a3ecafefe8e489b3d9632cf360491351f}{vector}}<\mbox{\hyperlink{structcsmp_1_1_sub_domain_info_a3ecafefe8e489b3d9632cf360491351f}{size\_t}}>\ \mbox{\hyperlink{structcsmp_1_1_sub_domain_info_a3ecafefe8e489b3d9632cf360491351f}{interior\_nodes}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ nodes\ within\ the\ subdomain}}
+\DoxyCodeLine{00041\ \ \ \ \mbox{\hyperlink{structcsmp_1_1_sub_domain_info_ad70b224c87487b17b7c6fba45484b44e}{std}}::\mbox{\hyperlink{structcsmp_1_1_sub_domain_info_ad70b224c87487b17b7c6fba45484b44e}{vector}}<\mbox{\hyperlink{structcsmp_1_1_sub_domain_info_ad70b224c87487b17b7c6fba45484b44e}{size\_t}}>\ \mbox{\hyperlink{structcsmp_1_1_sub_domain_info_ad70b224c87487b17b7c6fba45484b44e}{perimeter\_nodes}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ nodes\ on\ the\ perimeter\ of\ the\ subdomain}}
+\DoxyCodeLine{00042\ \};}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \textcolor{comment}{/**\ @brief\ Storage\ of\ Node\ and\ Cell\ pointers\ to\ subdomains\ of\ the\ overall\ computational\ model.}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ \ \ \ Distinguishes\ interior\ from\ perimeter\ nodes\ (located\ on\ subdomain\ boundary)\ and\ interior\ and\ perimeter\ cells}}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ \ \ \ which\ have\ at\ least\ a\ single\ Face\ on\ the\ subdomain\ boundary.}}
+\DoxyCodeLine{00049\ \textcolor{comment}{\ \ \ \ Base\ class\ to\ Region,\ Boundary\ and\ SplitBoundary.}}
+\DoxyCodeLine{00050\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00051\ \textcolor{comment}{\ \ \ \ @attention\ Region,\ Bounday,\ SplitBoundary\ ARE\ AGNOSTIC\ ABOUT\ MESH\ CONNECTIVITY.}}
+\DoxyCodeLine{00052\ \textcolor{comment}{\ \ \ \ ModelSubDomain\ objects\ do\ not\ create\ Nodes,\ Elements,\ Faces\ or\ Interfaces.\ This\ is\ the\ role\ of\ the\ MeshManager}}
+\DoxyCodeLine{00053\ \textcolor{comment}{\ \ \ \ that\ is\ agnostic\ about\ subdomains\ but\ maintains\ and\ updates\ the\ mesh.}}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00055\ \textcolor{comment}{\ \ \ \ @note\ Boundary\ and\ SplitBoundare\ are\ ModelSubDomain\ subclasses\ consisting\ of\ lower-\/dimensional\ Face\ and}}
+\DoxyCodeLine{00056\ \textcolor{comment}{\ \ \ \ InterFace\ objects.}}
+\DoxyCodeLine{00057\ \textcolor{comment}{\ \ \ \ -\/\ SplitBoundaries\ are\ Internal\ boundaries\ connecting\ node-\/matched\ but\ disconnected\ mesh\ patches}}
+\DoxyCodeLine{00058\ \textcolor{comment}{\ \ \ \ -\/\ Boundaries\ tend\ to\ be\ external\ boundaries\ with\ names\ corresponding\ to\ the\ sides\ of\ box-\/shaped}}
+\DoxyCodeLine{00059\ \textcolor{comment}{\ \ \ \ \ \ models\ or\ other\ unique\ names.}}
+\DoxyCodeLine{00060\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00061\ \textcolor{keyword}{template}<uint32\_t\ dim,\textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ CELL>}
+\DoxyCodeLine{00062\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{ModelSubDomain}}\ \{}
+\DoxyCodeLine{00063\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{comment}{///\ constructs\ incomplete\ subdomain\ for\ later\ initialisation\ with\ suitable\ methods\ in\ subclasses}}
+\DoxyCodeLine{00065\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a381ef688858074ec3f9826ad81f2e449}{ModelSubDomain}}(\ \textcolor{keyword}{const}\ std::string\&\ subdomain\_name,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&\ );}
+\DoxyCodeLine{00066\ \ \ \ \ ModelSubDomain(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{ModelSubDomain}}\&\ );}
+\DoxyCodeLine{00067\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a1bac94ce20a8fd5d7c75fc6d1e1d6407}{ModelSubDomain}}(\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{ModelSubDomain}}\&\&\ );}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~ModelSubDomain();}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \ \ ModelSubDomain<dim,CELL>\&\ \ operator=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{ModelSubDomain}}\&\ );}
+\DoxyCodeLine{00072\ \ \ \ \ ModelSubDomain<dim,CELL>\&\ \ operator=(\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{ModelSubDomain}}\&\&\ );}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \ \ \ \ std::string\ Name()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keywordtype}{void}\ Name(\ \textcolor{keyword}{const}\ std::string\&\ );}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{comment}{///\ local\ variable\ storage\ interface}}
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a74ddc3c010264bef70bd0604ec19ff11}{Placement}}()\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ \ \ \ \ \ ValidVariable(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ variableName\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{comment}{///\ support\ of\ the\ Visitor\ pattern}}
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ad584415f46a55043ff7f3ca6aedede95}{Accept}}(\ \mbox{\hyperlink{classcsmp_1_1_visitor}{Visitor}}<dim>\&\ );}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{comment}{///\ modification\ via\ Operand-\/based\ relations\ between\ discretised\ properties\ that\ only\ modify\ a\ single\ result\ variable}}
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ac2e34ce178d5896bdff2826e02e022d5}{Apply}}(\ \mbox{\hyperlink{classcsmp_1_1_interrelation}{Interrelation}}<dim>\&\ );}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \ \ \ \ \textcolor{comment}{///\ deletes\ nullptr\ cells,\ rebuilds\ node\ vector,\ sorts\ everything\ and\ re-\/establishes\ the\ perimeter\ face\ vectors\ after\ modifications\ of\ cells}}
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_aedad5f8e462b7e645c1745f5c674e39c}{RebuildSubDomainAfterChangeOfCellVector}}();}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{comment}{///\ rebuilds\ node\ vector,\ sorts\ everything\ and\ re-\/establishes\ interior\ and\ perimeter}}
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a1ad43d5a139bb75dbf945808dd33598a}{RebuildSubDomainAfterChangeOfNodeVector}}();}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{comment}{///\ rebuilds\ subdomain\ on\ the\ basis\ of\ the\ cells\ that\ will\ be\ selected\ according\ to\ the\ supplied\ property\ constraints}}
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a3491b83e51e7f2595c8136109af1f9b6}{UpdateCellMembershipApplyingConstraints}}(\ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a3491b83e51e7f2595c8136109af1f9b6}{std}}::\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a3491b83e51e7f2595c8136109af1f9b6}{vector}}<\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a3491b83e51e7f2595c8136109af1f9b6}{CELL}}<\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a3491b83e51e7f2595c8136109af1f9b6}{dim}}>*>::\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a3491b83e51e7f2595c8136109af1f9b6}{const\_iterator}}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a3491b83e51e7f2595c8136109af1f9b6}{master\_domain\_start}},}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a3491b83e51e7f2595c8136109af1f9b6}{std}}::\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a3491b83e51e7f2595c8136109af1f9b6}{vector}}<\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a3491b83e51e7f2595c8136109af1f9b6}{CELL}}<\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a3491b83e51e7f2595c8136109af1f9b6}{dim}}>*>::\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a3491b83e51e7f2595c8136109af1f9b6}{const\_iterator}}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a3491b83e51e7f2595c8136109af1f9b6}{master\_domain\_end}},}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a3491b83e51e7f2595c8136109af1f9b6}{PropertyConstraints}}\&\ );}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{comment}{///\ distinguishes\ PERIMETER\ simplices\ that\ have\ at\ least\ one\ face\ on\ domain\ boundary\ from\ INTERIOR\ ones;\ calls\ PartitionElementVector()}}
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a558d771a7d76ff360397d9c2383d89fc}{IdentifyPerimeter}}();}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{comment}{///\ creates\ node\ pointer\ vector\ from\ cell\ vector,\ using\ a\ vector\ to\ achieve\ uniqueness\ via\ sort,\ unique,\ erase\ algorithms}}
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_aaf3ef248874090a67fe87e50d8bd5873}{CreateNodePointerVector}}();}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{comment}{///\ creates\ node\ pointer\ vector\ from\ the\ shared\ face\ nodes\ of\ the\ supplied\ range\ of\ contacting\ cells}}
+\DoxyCodeLine{00105\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_affa7b7d337eda5f28449212d8fe6fffa}{CreateNodePointerVector}}(\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_affa7b7d337eda5f28449212d8fe6fffa}{std}}::\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_affa7b7d337eda5f28449212d8fe6fffa}{vector}}<\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_affa7b7d337eda5f28449212d8fe6fffa}{std}}::\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_affa7b7d337eda5f28449212d8fe6fffa}{pair}}<\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_affa7b7d337eda5f28449212d8fe6fffa}{std}}::\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_affa7b7d337eda5f28449212d8fe6fffa}{pair}}<\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_affa7b7d337eda5f28449212d8fe6fffa}{CELL}}<\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_affa7b7d337eda5f28449212d8fe6fffa}{dim}}>*,\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_affa7b7d337eda5f28449212d8fe6fffa}{uint32\_t}}>,\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_affa7b7d337eda5f28449212d8fe6fffa}{std}}::\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_affa7b7d337eda5f28449212d8fe6fffa}{pair}}<\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_affa7b7d337eda5f28449212d8fe6fffa}{CELL}}<\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_affa7b7d337eda5f28449212d8fe6fffa}{dim}}>*,\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_affa7b7d337eda5f28449212d8fe6fffa}{uint32\_t}}>\ >\ >\&\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_affa7b7d337eda5f28449212d8fe6fffa}{contacting\_cells}}\ );}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \ \ \ \ \textcolor{comment}{///\ sorts\ the\ node\ and\ CELL\ vectors\ split\ into\ the\ interior\ and\ perimeter\ ranges\ (4\ sorting\ operations)}}
+\DoxyCodeLine{00108\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a3757b2383895058cff32c8e3ea1a7b3c}{SortVectors}}(\ size\_t\ interior\_cells,\ size\_t\ interior\_nodes\ );}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{comment}{///\ assuming\ that\ a\ partitioned\ (and\ sorted)\ cell\ vector\ is\ in\ place,\ constructs\ the\ bd\_face\_vec\_\ by\ checking\ whether\ neighbor\ cells\ belong\ to\ the\ domain\ or\ not}}
+\DoxyCodeLine{00111\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a03118649c3f6254773d9e9ed34f33aea}{BuildPerimeterFaceVector}}(\ int64\_t\ interior\_cells\ );}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \ \ \ \ \textcolor{comment}{///\ for\ rebuilding\ subdomains\ when\ nodes\ or\ cells\ changed:\ \ flag\ up\ for\ a\ rebuild\ using\ RebuildSubDomainAfterChangeOfCellVector}}
+\DoxyCodeLine{00114\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_aeffc17e357e44a5386bcf9c285741401}{ScheduleForRebuild}}();}
+\DoxyCodeLine{00115\ \ \ \ \ \textcolor{keywordtype}{bool}\ NeedsRebuild()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00117\ \ \ \ \ \textcolor{comment}{///\ deletes\ 'nullptr'\ cells\ from\ cell\ vector,\ retaining\ the\ sorting\ into\ interior\ and\ perimeter\ elements,\ and\ rebuilding\ perimeter\ faces\ as\ necessary}}
+\DoxyCodeLine{00118\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a23464a6c34ba9416419f87036a813d68}{size\_t}}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a23464a6c34ba9416419f87036a813d68}{RebuildCellAndPerimeterFaceVector}}();}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00120\ \ \ \ \ \textcolor{comment}{///\ deletes\ 'nullptr'\ nodes\ from\ Node\ vector,\ retaining\ the\ sorting\ into\ interior\ and\ perimeter\ nodes}}
+\DoxyCodeLine{00121\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a028f4a5b3dc58fb6b59ac9237b7f519c}{size\_t}}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a028f4a5b3dc58fb6b59ac9237b7f519c}{RebuildNodeVector}}();}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00125\ \ \ \ \ \textcolor{comment}{//\ Indexes}}
+\DoxyCodeLine{00126\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ \ \ \ \ \textcolor{comment}{///\ reference\ counting-\/based\ unique\ domain\ identifier\ \ (0..n-\/1)}}
+\DoxyCodeLine{00129\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a7ff2a29db10191df6e4ea7c0a0caa8c4}{int32\_t}}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a7ff2a29db10191df6e4ea7c0a0caa8c4}{DomainIndex}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ \ \ \ \ \textcolor{comment}{///\ renumbers\ nodes\ in\ domain\ 0..n-\/1}}
+\DoxyCodeLine{00132\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ad79aeada5222861dabe5c81323c59507}{size\_t}}\ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ad79aeada5222861dabe5c81323c59507}{RenumberNodes}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00134\ \ \ \ \ \textcolor{comment}{///\ renumbers\ cells\ in\ domain\ 0..n-\/1}}
+\DoxyCodeLine{00135\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a17520db92d9751e03853275afc84fa09}{size\_t}}\ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a17520db92d9751e03853275afc84fa09}{RenumberCells}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00137\ \ \ \ \ \textcolor{comment}{///\ renumber\ cells\ and\ nodes\ consecutively\ from\ 0..n-\/1}}
+\DoxyCodeLine{00138\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af44335d9a2ce08027b18924e2a10927c}{UpdateMemberIndexes}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00140\ \ \ \ \ \textcolor{comment}{///\ output\ current\ indices\ to\ vector}}
+\DoxyCodeLine{00141\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a67e17a74c2386395bb019a4c9e440be0}{std}}::\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a67e17a74c2386395bb019a4c9e440be0}{vector}}<\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a67e17a74c2386395bb019a4c9e440be0}{size\_t}}>\ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a67e17a74c2386395bb019a4c9e440be0}{MemberCellIndexes}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00143\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00144\ \ \ \ \ \textcolor{comment}{//\ access}}
+\DoxyCodeLine{00145\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00146\ }
+\DoxyCodeLine{00147\ \ \ \ \ \textcolor{comment}{///\ reference\ to\ container\ of\ finite\ cell\ pointers\ to\ either\ Element,\ Face\ or\ InterFace\ objects;\ @note\ used\ for\ boolean\ operations}}
+\DoxyCodeLine{00148\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{std}}::\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{vector}}<\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{CELL}}<\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{dim}}>*>\&\ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{CellVector}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00149\ }
+\DoxyCodeLine{00150\ \ \ \ \ \textcolor{comment}{///\ do\ not\ remove!;\ \ used\ for\ boolean\ operations}}
+\DoxyCodeLine{00151\ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{std}}::\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{vector}}<\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{CELL}}<\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{dim}}>*>\&\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{CellVector}}();}
+\DoxyCodeLine{00152\ }
+\DoxyCodeLine{00153\ \ \ \ \ \textcolor{comment}{///\ reference\ to\ const\ Node\ pointer\ vector}}
+\DoxyCodeLine{00154\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{std}}::\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{vector}}<\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{Node}}<\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{dim}}>*>\&\ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{NodeVector}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00155\ }
+\DoxyCodeLine{00156\ \ \ \ \ \textcolor{comment}{///\ reference\ to\ Node\ pointer\ vector}}
+\DoxyCodeLine{00157\ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{std}}::\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{vector}}<\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{Node}}<\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{dim}}>*>\&\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{NodeVector}}();}
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00159\ \ \ \ \ \textcolor{comment}{///\ const\ iterators\ (cell\ and\ node\ pointers\ cannot\ be\ modified\ but\ the\ nodes\ and\ cells\ can!)}}
+\DoxyCodeLine{00160\ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{std}}::\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{vector}}<\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{Node}}<\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{dim}}>*>::\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{const\_iterator}}\ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{NodesBegin}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00161\ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{std}}::\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{vector}}<\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{Node}}<\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{dim}}>*>::\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{const\_iterator}}\ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{PerimeterNodesBegin}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00162\ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{std}}::\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{vector}}<\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{Node}}<\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{dim}}>*>::\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{const\_iterator}}\ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{NodesEnd}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00163\ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{std}}::\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{vector}}<\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{CELL}}<\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{dim}}>*>::\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{const\_iterator}}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{CellsBegin}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00164\ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{std}}::\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{vector}}<\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{CELL}}<\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{dim}}>*>::\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{const\_iterator}}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{PerimeterCellsBegin}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00165\ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{std}}::\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{vector}}<\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{CELL}}<\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{dim}}>*>::\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{const\_iterator}}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{CellsEnd}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00166\ }
+\DoxyCodeLine{00167\ \ \ \ \ \textcolor{comment}{///\ returns\ how\ many\ of\ the\ nodes\ in\ the\ supplied\ iterator\ range\ also\ form\ part\ of\ the\ current\ subdomain's\ perimeter}}
+\DoxyCodeLine{00168\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ad09876ac74479c2fce0230ca4eb623fd}{size\_t}}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ad09876ac74479c2fce0230ca4eb623fd}{SharedPerimeterNodes}}(\ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ad09876ac74479c2fce0230ca4eb623fd}{std}}::\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ad09876ac74479c2fce0230ca4eb623fd}{vector}}<\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ad09876ac74479c2fce0230ca4eb623fd}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ad09876ac74479c2fce0230ca4eb623fd}{Node}}<\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ad09876ac74479c2fce0230ca4eb623fd}{dim}}>*>::\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ad09876ac74479c2fce0230ca4eb623fd}{const\_iterator}}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ad09876ac74479c2fce0230ca4eb623fd}{start}},}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ad09876ac74479c2fce0230ca4eb623fd}{std}}::\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ad09876ac74479c2fce0230ca4eb623fd}{vector}}<\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ad09876ac74479c2fce0230ca4eb623fd}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ad09876ac74479c2fce0230ca4eb623fd}{Node}}<\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ad09876ac74479c2fce0230ca4eb623fd}{dim}}>*>::\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ad09876ac74479c2fce0230ca4eb623fd}{const\_iterator}}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ad09876ac74479c2fce0230ca4eb623fd}{end}}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00170\ }
+\DoxyCodeLine{00171\ \ \ \ \ \textcolor{comment}{//\ see\ also\ the\ non-\/member\ functions\ below}}
+\DoxyCodeLine{00172\ }
+\DoxyCodeLine{00173\ \ \ \ \ \textcolor{comment}{///\ check\ whether\ subdomain\ conatains\ any\ cells}}
+\DoxyCodeLine{00174\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ae22732985cad72f47f024b61e6dee131}{Empty}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00175\ }
+\DoxyCodeLine{00176\ \ \ \ \ size\_t\ \ \ \ \ \ \ \ \ \ \ \ Nodes()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00177\ \ \ \ \ size\_t\ \ \ \ \ \ \ \ \ \ \ \ InteriorNodes()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00178\ \ \ \ \ size\_t\ \ \ \ \ \ \ \ \ \ \ \ PerimeterNodes()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00179\ \ \ \ \ size\_t\ \ \ \ \ \ \ \ \ \ \ \ IntegrationPoints()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00180\ \ \ \ \ size\_t\ \ \ \ \ \ \ \ \ \ \ \ SectorIntegrationPoints()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00181\ \ \ \ \ size\_t\ \ \ \ \ \ \ \ \ \ \ \ FacetIntegrationPoints()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00182\ \ \ \ \ size\_t\ \ \ \ \ \ \ \ \ \ \ \ Cells()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00183\ \ \ \ \ size\_t\ \ \ \ \ \ \ \ \ \ \ \ InteriorCells()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00184\ \ \ \ \ size\_t\ \ \ \ \ \ \ \ \ \ \ \ PerimeterCells()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00185\ }
+\DoxyCodeLine{00186\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a347ab9b03b1dfa44c93f1b99956bc47b}{Contains}}(\ \textcolor{keyword}{const}\ CELL<dim>*\ \textcolor{keyword}{const}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00187\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_aeb9421db9871e4821cb2be25088903c1}{Contains}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>*\ \textcolor{keyword}{const}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00188\ }
+\DoxyCodeLine{00189\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ IsPerimeterNode(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>*\ \textcolor{keyword}{const}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00190\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ IsPerimeterCell(\ \textcolor{keyword}{const}\ CELL<dim>*\ \textcolor{keyword}{const}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00191\ }
+\DoxyCodeLine{00192\ \ \ \ \ \textcolor{comment}{///\ for\ looping\ over\ the\ perimeter\ faces\ of\ perimeter\ cell\ with\ \#eid,\ method\ is\ used\ to\ travel\ across\ subdomain\ surface\ /\ outline}}
+\DoxyCodeLine{00193\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a57da45c091a50ea8cbbb337fdc6a64c6}{uint32\_t}}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a57da45c091a50ea8cbbb337fdc6a64c6}{PerimeterFaces}}(\ size\_t\ eid\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00194\ \ \ \ \ \textcolor{comment}{///\ returns\ local\ face\ id\ of\ face\ \#face\ that\ lies\ on\ perimeter\ of\ model\ subdomain}}
+\DoxyCodeLine{00195\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a1a759eb5ea8a606b18524cb1fbd133f6}{uint32\_t}}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a1a759eb5ea8a606b18524cb1fbd133f6}{PerimeterFace}}(\ size\_t\ eid,\ uint32\_t\ face\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00196\ }
+\DoxyCodeLine{00197\ \ \ \ \ \textcolor{comment}{///\ pointer\ to\ node\ \#n\ in\ subdomain;\ @attention\ node\ can\ vary\ from\ initialization\ to\ initialization}}
+\DoxyCodeLine{00198\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>*\ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a010f14b108721967ca9978df1499d52f}{N}}(\ size\_t\ n\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00199\ \ \ \ \ \textcolor{comment}{///\ pointer\ to\ cell\ \#n\ of\ model\ subdomain}}
+\DoxyCodeLine{00200\ \ \ \ \ CELL<dim>*\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a3d7b51c9fab4a9e77f6e2f704d87ed6a}{E}}(\ size\_t\ n\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00201\ }
+\DoxyCodeLine{00202\ \ \ \ \ \textcolor{comment}{///\ is\ the\ node\ located\ on\ the\ surface\ of\ the\ model\ subdomain?}}
+\DoxyCodeLine{00203\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ac297c68f9388d50bce4960aca7983d3a}{IsPerimeterNode}}(\ \textcolor{keyword}{const}\ size\_t\ nidx\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00204\ \ \ \ \ \textcolor{comment}{///\ does\ the\ cell\ have\ at\ least\ on\ face\ on\ the\ surface\ of\ the\ model\ subdomain?}}
+\DoxyCodeLine{00205\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ae09542e53d40f91434c7105ba1cf935e}{IsPerimeterCell}}(\ \textcolor{keyword}{const}\ size\_t\ eidx\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00206\ }
+\DoxyCodeLine{00207\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00208\ \ \ \ \ \textcolor{comment}{//\ geometry}}
+\DoxyCodeLine{00209\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00210\ }
+\DoxyCodeLine{00211\ \ \ \ \ \textcolor{comment}{///\ checks\ whether\ all\ cells\ within\ the\ subdomain\ are\ interconnected\ (if\ the\ domain\ has\ multi-\/dimensional\ cells\ this\ is\ never\ the\ case)}}
+\DoxyCodeLine{00212\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a2f8fe3782a143a775c253d3c6191fc62}{IsContiguous}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00213\ }
+\DoxyCodeLine{00214\ \ \ \ \ \textcolor{comment}{///\ if\ the\ model\ subdomain\ consists\ of\ a\ single\ cell\ shape\ (line,\ surface,\ volume)\ this\ method\ returns\ true\ revealing\ the\ type}}
+\DoxyCodeLine{00215\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a6a2bf3c96a66498cc330c4c25a0d7413}{std}}::\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a6a2bf3c96a66498cc330c4c25a0d7413}{pair}}<\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a6a2bf3c96a66498cc330c4c25a0d7413}{CELL\_SHAPE}},\textcolor{keywordtype}{bool}>\ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a6a2bf3c96a66498cc330c4c25a0d7413}{SingleCellShapeDomain}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00216\ }
+\DoxyCodeLine{00217\ \ \ \ \ \textcolor{comment}{///\ returns\ 1)\ cells\ of\ how\ many\ different\ spatial\ dimensions\ are\ contained,\ and\ 2)\ the\ highest\ cell\ spatial\ dimension\ in\ subdomain}}
+\DoxyCodeLine{00218\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ab4c56e525a0880281af8173c8538565e}{std}}::\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ab4c56e525a0880281af8173c8538565e}{pair}}<\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ab4c56e525a0880281af8173c8538565e}{int32\_t}},\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ab4c56e525a0880281af8173c8538565e}{int32\_t}}>\ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ab4c56e525a0880281af8173c8538565e}{SpatialDimensions}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00219\ }
+\DoxyCodeLine{00220\ \ \ \ \ \textcolor{comment}{///\ returns\ diagonally\ opposite\ points\ of\ bounding\ box}}
+\DoxyCodeLine{00221\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a68dd9c88e06295fb1f8d7145e9b642ea}{MinMaxCoordinates}}(\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\&\ xyz\_min,\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\&\ xyz\_max\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00222\ }
+\DoxyCodeLine{00223\ \ \ \ \ \textcolor{comment}{///\ output\ coordinates\ to\ user-\/defined\ vector\ variable\ [x1,y1,z1,...xn,yn,zn]}}
+\DoxyCodeLine{00224\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ae5f0861ac366755bbc9a7bedd3c7eb79}{AssignNodeCoordinatesTo}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ vector\_prop\ );}
+\DoxyCodeLine{00225\ }
+\DoxyCodeLine{00226\ \ \ \ \ \textcolor{comment}{///\ assigment\ of\ coordinate\ component\ 'x','y','z'\ to\ scalar\ variable\ of\ choice}}
+\DoxyCodeLine{00227\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a92a7d2334e83968ed2feb076a4f3139c}{AssignNodeCoordinatesTo}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ scalar\_prop,\ \textcolor{keywordtype}{char}\ coord\ );}
+\DoxyCodeLine{00228\ }
+\DoxyCodeLine{00229\ \ \ \ \ \textcolor{comment}{///\ characteristics\ like\ 'length',\ 'area',\ 'volume'\ ,\ 'aspect\ ratio',\ 'inner\ radius'\ are\ assigned\ to\ user-\/defined\ variable}}
+\DoxyCodeLine{00230\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_affe9c994091a81214bffdec3b1eb379d}{AssignCellCharacteristicsTo}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ characteristic,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ var\ );}
+\DoxyCodeLine{00231\ }
+\DoxyCodeLine{00232\ \ \ \ \ \textcolor{comment}{///\ writes\ a\ CSV\ (comma\ delimited\ ascii\ text)\ file\ with\ point\ coordinates,\ node-\/idx,\ BOX\_BOUNDARY\ flags,\ and\ interior\ vs\ perimeter\ information}}
+\DoxyCodeLine{00233\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a67ef0c828a71395fd0fe06c01c0ada6e}{NodeAttributesToCSV}}();}
+\DoxyCodeLine{00234\ }
+\DoxyCodeLine{00235\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00236\ \ \ \ \ \textcolor{comment}{//\ manipulation\ of\ properties}}
+\DoxyCodeLine{00237\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00238\ }
+\DoxyCodeLine{00239\ \ \ \ \ \textcolor{comment}{///\ assigns\ uniform\ (single)\ variable\ value\ to\ either\ the\ entire\ subdomain\ or\ its\ interior\ or\ perimeter}}
+\DoxyCodeLine{00240\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ Var>}
+\DoxyCodeLine{00241\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a75a4cf21feddd36d999043a1451dabce}{InputPropertyValue}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ input\_prop,\ \textcolor{keyword}{const}\ Var\&\ new\_value,\ \mbox{\hyperlink{namespacecsmp_a4b8f1ad9f1a09a957714679ce72aee3f}{SUBDOMAIN\_PART}}\ sd=COMPLETE\ );}
+\DoxyCodeLine{00242\ }
+\DoxyCodeLine{00243\ \ \ \ \ \textcolor{comment}{///\ as\ InputPropertyValue,\ but\ with\ overwrite\ protection\ for\ variable\ components\ that\ have\ the\ flag\ 'do\_not\_overwrite'}}
+\DoxyCodeLine{00244\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ Var>}
+\DoxyCodeLine{00245\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ada0b34c0622632b49152b8e9961bb914}{InputPropertyValue}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ input\_prop,\ \textcolor{keyword}{const}\ Var\&\ new\_value,}
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\_FLAG}}\ do\_not\_overwrite,\ \mbox{\hyperlink{namespacecsmp_a4b8f1ad9f1a09a957714679ce72aee3f}{SUBDOMAIN\_PART}}\ sd=COMPLETE\ );}
+\DoxyCodeLine{00247\ }
+\DoxyCodeLine{00248\ \ \ \ \ \textcolor{comment}{///\ changes\ the\ flag\ of\ the\ scalar\ variable\ 'property'\ to\ new\ value;\ applied\ either\ in\ the\ entire\ subdomain\ or\ its\ interior\ or\ perimeter}}
+\DoxyCodeLine{00249\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a88ef5a0e3360ff49b5108e668a36225b}{ChangePropertyStatus}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ property,}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\_FLAG}}\ new\_status\_of\_scalar,}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp_a4b8f1ad9f1a09a957714679ce72aee3f}{SUBDOMAIN\_PART}}=COMPLETE\ );}
+\DoxyCodeLine{00252\ }
+\DoxyCodeLine{00253\ \ \ \ \ \textcolor{comment}{///\ changes\ the\ flag\ of\ the\ scalar\ variable\ 'property'\ to\ new\ value\ if\ the\ scalar\ variable\ is\ withing\ the\ specified\ range}}
+\DoxyCodeLine{00254\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a53c1ced2c270e2ae96ffffda70f28ac1}{ChangePropertyStatusWhere}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ property,}
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\_FLAG}}\ new\_status\_of\_scalar,}
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ min\_value\_to\_change,}
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ max\_value\_to\_change\ );}
+\DoxyCodeLine{00258\ }
+\DoxyCodeLine{00259\ \ \ \ \ \textcolor{comment}{///\ changes\ the\ flags\ of\ the\ vector\ variable\ 'property'\ to\ new\ value;\ applied\ either\ in\ the\ entire\ subdomain\ or\ its\ interior\ or\ perimeter}}
+\DoxyCodeLine{00260\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ab1884dd8feaf870c7cb6993de8137219}{ChangePropertyStatus}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ property,}
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<VARIABLE\_FLAG>\&\ new\_status,}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp_a4b8f1ad9f1a09a957714679ce72aee3f}{SUBDOMAIN\_PART}}=COMPLETE\ );}
+\DoxyCodeLine{00263\ }
+\DoxyCodeLine{00264\ \ \ \ \ \textcolor{comment}{///\ changes\ the\ flag\ of\ the\ vector\ variable\ 'property'\ to\ new\ value\ if\ the\ scalar\ variable\ is\ withing\ the\ specified\ range}}
+\DoxyCodeLine{00265\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ad90701052f6d05eb6c2cc9f59957f933}{ChangePropertyStatusWhere}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ property,}
+\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<VARIABLE\_FLAG>\&\ new\_status,}
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ min\_value\_to\_change,}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ max\_value\_to\_change\ );}
+\DoxyCodeLine{00269\ }
+\DoxyCodeLine{00270\ \ \ \ \ \textcolor{comment}{///\ changes\ the\ flag\ of\ a\ particular\ variable\ component\ to\ new\ value;\ applied\ either\ in\ the\ entire\ subdomain\ or\ its\ interior\ or\ perimeter}}
+\DoxyCodeLine{00271\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ad26f6e2d20ddd978cd25a84abfa215ae}{ChangePropertyStatus}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ property,}
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ component,}
+\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\_FLAG}}\ new\_status,}
+\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp_a4b8f1ad9f1a09a957714679ce72aee3f}{SUBDOMAIN\_PART}}=COMPLETE\ );}
+\DoxyCodeLine{00275\ }
+\DoxyCodeLine{00276\ \ \ \ \ \textcolor{comment}{///\ changes\ the\ flag\ of\ a\ particular\ variable\ component\ to\ new\ value\ if\ the\ scalar\ variable\ is\ withing\ the\ specified\ range}}
+\DoxyCodeLine{00277\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a761f74d7a7aedfc1f6f483cd518fc41f}{ChangePropertyStatusWhere}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ property,}
+\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ component,}
+\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\_FLAG}}\ new\_status,}
+\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ min\_value\_to\_change,}
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ max\_value\_to\_change\ );}
+\DoxyCodeLine{00282\ }
+\DoxyCodeLine{00283\ \ \ \ \ \textcolor{comment}{///\ by\ default\ (i=0)\ returns\ status\ of\ scalar\ variable\ or\ first\ component\ of\ a\ vector\ or\ tensor\ variable;\ if\ i>0\ flag\ of\ corresponding\ component\ is\ returned}}
+\DoxyCodeLine{00284\ \ \ \ \ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\_FLAG}}\ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ababfefdacbec60ddd809e37ec764997b}{PropertyStatus}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ variable,\ \mbox{\hyperlink{namespacecsmp_a4b8f1ad9f1a09a957714679ce72aee3f}{SUBDOMAIN\_PART}}\ flag=COMPLETE\ ,\ uint32\_t\ i=0\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00285\ }
+\DoxyCodeLine{00286\ \ \ \ \ \textcolor{comment}{///\ min/max\ property\ values\ (length\ of\ vectors\ and\ eigenvalues\ of\ tensors)}}
+\DoxyCodeLine{00287\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a427056542aa764b22ca3284fc77e170f}{MinMaxOf}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ property,\ \ \ \textcolor{keywordtype}{double}\&\ gmin,\ \textcolor{keywordtype}{double}\&\ gmax\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00288\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a3e09e5e5197084a0d2a680ec82e6adb8}{MinMaxOf}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\&,\ \ \ \ \ \textcolor{keywordtype}{double}\&\ gmin,\ \textcolor{keywordtype}{double}\&\ gmax\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00289\ }
+\DoxyCodeLine{00290\ }
+\DoxyCodeLine{00291\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00292\ \ \ \ \ \textcolor{comment}{//\ interpolation\ and\ extrapolation}}
+\DoxyCodeLine{00293\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00294\ }
+\DoxyCodeLine{00295\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a4e074800bd8dbe5099bc9a3b71089f44}{InterpolateNodeToCellProperty}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ nprop,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ eprop\ );}
+\DoxyCodeLine{00296\ \ \ \ \ \textcolor{keywordtype}{void}\ InterpolateNodeToIntegrationPointProperty(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ nprop,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ eprop\ );}
+\DoxyCodeLine{00297\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a1a884652fb9c34a64d55665a19939b22}{InterpolateIntegrationPointToCellProperty}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ cprop,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ eprop\ );}
+\DoxyCodeLine{00298\ \ \ \ \ \textcolor{keywordtype}{void}\ ExtrapolateCellToIntegrationPointProperty(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ eprop,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ cprop\ );}
+\DoxyCodeLine{00299\ \ \ \ \ \textcolor{keywordtype}{void}\ ExtrapolateCellToFacetIntegrationPointProperty(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ eprop,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fipprop\ );}
+\DoxyCodeLine{00300\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a0646dd865affebcbae44e00f4d00aa21}{ExtrapolateCellToNodeProperty}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ eprop,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ nprop,\ \textcolor{keywordtype}{bool}\ by\_distance=\textcolor{keyword}{true}\ );}
+\DoxyCodeLine{00301\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_aecc9505535c81b0151704fc5b9fac09e}{ExtrapolateIntegrationPointToNodeProperty}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ cprop,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ nprop\ );}
+\DoxyCodeLine{00302\ }
+\DoxyCodeLine{00303\ }
+\DoxyCodeLine{00304\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00305\ \ \ \ \ \textcolor{comment}{//\ calculations}}
+\DoxyCodeLine{00306\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00307\ }
+\DoxyCodeLine{00308\ \ \ \ \ \textcolor{comment}{///\ arithmetic\ (number\ as\ opposed\ to\ volume\ weighted)\ average}}
+\DoxyCodeLine{00309\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ad56987658b3732e443a349b49445792b}{Average}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ property\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00310\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af7671cce5f309418f3b52d5a1d3ab02e}{CopyGradientOfProperty\_A\_To\_B}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ node\_prop,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ cell\_prop\ );}
+\DoxyCodeLine{00311\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ CopyReplace(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ from,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ to\ );}
+\DoxyCodeLine{00312\ }
+\DoxyCodeLine{00313\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00314\ \ \ \ \ \textcolor{comment}{//\ output}}
+\DoxyCodeLine{00315\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00316\ }
+\DoxyCodeLine{00317\ \ \ \ \ \textcolor{comment}{///\ writes\ complete\ ModelSubDomain\ specifications\ in\ terms\ of\ unique\ indices\ as\ block\ to\ binary\ file}}
+\DoxyCodeLine{00318\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a472e8d79822b50bf470b3faf71266cb0}{WriteDomainIndexesToBinaryFile}}(\ std::fstream\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00319\ \ \ \ \ \textcolor{comment}{//\ see\ non-\/member\ function\ readDomainIndexesFromBinaryFile()\ in\ this\ source\ file\ for\ reading\ the\ indices\ back}}
+\DoxyCodeLine{00320\ }
+\DoxyCodeLine{00321\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a3e4530100fdef7bf13ba9fd963f83fd0}{OutputVariableToScreen}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ prop\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00322\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_ae83133e61ae2e75a6da7cce17a4afe5d}{Out}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00323\ }
+\DoxyCodeLine{00324\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain___test}{ModelSubDomain\_Test}};}
+\DoxyCodeLine{00325\ }
+\DoxyCodeLine{00326\ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00327\ }
+\DoxyCodeLine{00328\ \ \ \ \ \textcolor{comment}{///\ establishes\ interior\ vs.\ exterior\ simplices\ and\ nodes;\ returns\ index\ of\ first\ boundary\ cell}}
+\DoxyCodeLine{00329\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a9d850f869aa6838cecb95fb492a02568}{size\_t}}\ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a9d850f869aa6838cecb95fb492a02568}{PartitionCellVector}}();}
+\DoxyCodeLine{00330\ \ \ \ \ size\_t\ \ PartitionCellVectorForBoundary();}
+\DoxyCodeLine{00331\ \ \ \ \ size\_t\ \ PartitionCellVectorForSplitBoundary();}
+\DoxyCodeLine{00332\ }
+\DoxyCodeLine{00333\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&\ \ \ \ \ \ \ \ pref\_;}
+\DoxyCodeLine{00334\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a203a3e4ddf9905cd03fbf10781b05778}{std}}::\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a203a3e4ddf9905cd03fbf10781b05778}{string}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a203a3e4ddf9905cd03fbf10781b05778}{subdomain\_name\_}};\ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ passed\ down\ when\ domain\ is\ created\ so\ that\ it\ can\ be\ referred\ to}}
+\DoxyCodeLine{00335\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_abf921fd0d1ea0635f584cf909b85f411}{std}}::\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_abf921fd0d1ea0635f584cf909b85f411}{vector}}<\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_abf921fd0d1ea0635f584cf909b85f411}{CELL}}<\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_abf921fd0d1ea0635f584cf909b85f411}{dim}}>*>\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_abf921fd0d1ea0635f584cf909b85f411}{cell\_vec\_}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ doubly\ sorted,\ interior\ cells\ first}}
+\DoxyCodeLine{00336\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{std}}::\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{vector}}<\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{std}}::\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{vector}}<\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{uint32\_t}}>\ >\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{bd\_face\_vec\_}};\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ matching\ second\ sorted\ range\ of\ cell\_vec\_}}
+\DoxyCodeLine{00337\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a087f5475188c230492ce792812a5f5eb}{std}}::\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a087f5475188c230492ce792812a5f5eb}{vector}}<\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a087f5475188c230492ce792812a5f5eb}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a087f5475188c230492ce792812a5f5eb}{Node}}<\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a087f5475188c230492ce792812a5f5eb}{dim}}>*>\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a087f5475188c230492ce792812a5f5eb}{node\_vec\_}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ doubly\ sorted,\ interior\ nodes\ first}}
+\DoxyCodeLine{00338\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a6fd65f017bd632530c92f69810da8aa9}{size\_t}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a6fd65f017bd632530c92f69810da8aa9}{first\_bd\_node\_}}\ =\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{std}}::\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{numeric\_limits}}<\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{size\_t}}>::\mbox{\hyperlink{classcsmp_1_1_model_sub_domain_af2350a5f4c5d02d924da9ea8054512ed}{max}}();\ \textcolor{comment}{///<\ begin\ of\ the\ perimeter\ nodes}}
+\DoxyCodeLine{00339\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a410a2e7773096122dc005ce7332c56ee}{int32\_t}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a410a2e7773096122dc005ce7332c56ee}{domain\_count\_}}\ =\ 0;\ \ \ \ \ \ \ \textcolor{comment}{///<\ \ reference-\/counting\ to\ get\ unique\ identifier\ for\ subdomains}}
+\DoxyCodeLine{00340\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a6147d916c36176edc6f20745772d5469}{int32\_t}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a6147d916c36176edc6f20745772d5469}{domain\_idx\_}};\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ created\ during\ construction\ from\ domain\_count\_}}
+\DoxyCodeLine{00341\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain_a2715a105ea0b1055cacc175c4782e62e}{rebuilt\_needed\_}}\ =\ \textcolor{keyword}{false};\ \textcolor{comment}{///<\ parameter\ set\ when\ mesh\ gets\ modified\ by\ MeshManager\ so\ that\ update\ can\ be\ prompted}}
+\DoxyCodeLine{00342\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ verbose\_\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00343\ }
+\DoxyCodeLine{00344\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00345\ \ \ \ \ ModelSubDomain();}
+\DoxyCodeLine{00346\ \};}
+\DoxyCodeLine{00347\ }
+\DoxyCodeLine{00348\ \textcolor{comment}{///\ uses\ subdomain\ name\ to\ distinguish\ between\ Region,\ Boundary\ and\ SplitBoundary}}
+\DoxyCodeLine{00349\ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}\ \mbox{\hyperlink{namespacecsmp_a03f70f42a6d70ad83235c451a55babe2}{modelSubdomainType}}(\ \textcolor{keyword}{const}\ std::string\&\ subdomain\_name\ );}
+\DoxyCodeLine{00350\ }
+\DoxyCodeLine{00351\ \textcolor{comment}{///\ returns\ number\ of\ nodes\ that\ are\ shared\ by\ the\ two\ subdomains\ (matches\ by\ pointers)}}
+\DoxyCodeLine{00352\ \textcolor{keyword}{template}<uint32\_t\ dim,\textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ CELL>}
+\DoxyCodeLine{00353\ \mbox{\hyperlink{namespacecsmp_af6eb93c19bbb00e6484c01ee8649a2a4}{size\_t}}\ \ \mbox{\hyperlink{namespacecsmp_af6eb93c19bbb00e6484c01ee8649a2a4}{sharedNodes}}(\ \textcolor{keyword}{const}\ ModelSubDomain<dim,CELL>\&,\ \textcolor{keyword}{const}\ ModelSubDomain<dim,CELL>\&\ );}
+\DoxyCodeLine{00354\ }
+\DoxyCodeLine{00355\ \textcolor{comment}{///\ returns\ number\ of\ nodes\ on\ the\ subdomain\ perimeters\ that\ are\ shared\ by\ the\ two\ subdomains\ (matches\ by\ pointers)}}
+\DoxyCodeLine{00356\ \textcolor{keyword}{template}<uint32\_t\ dim,\textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ CELL>}
+\DoxyCodeLine{00357\ \mbox{\hyperlink{namespacecsmp_a5525d05bba5dd7f9417aa8759dcd0632}{size\_t}}\ \ \mbox{\hyperlink{namespacecsmp_a5525d05bba5dd7f9417aa8759dcd0632}{sharedPerimeterNodes}}(\ \textcolor{keyword}{const}\ ModelSubDomain<dim,CELL>\&,\ \textcolor{keyword}{const}\ ModelSubDomain<dim,CELL>\&\ );}
+\DoxyCodeLine{00358\ }
+\DoxyCodeLine{00359\ \textcolor{comment}{///\ returns\ the\ shared\ perimeter\ nodes\ into\ the\ argument\ vector}}
+\DoxyCodeLine{00360\ \textcolor{keyword}{template}<uint32\_t\ dim,\textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ CELL>}
+\DoxyCodeLine{00361\ \mbox{\hyperlink{namespacecsmp_aefbf1e61a9f2b57389f4da0cb7fabd4c}{size\_t}}\ \ \mbox{\hyperlink{namespacecsmp_aefbf1e61a9f2b57389f4da0cb7fabd4c}{sharedPerimeterNodes}}(\ \textcolor{keyword}{const}\ ModelSubDomain<dim,CELL>\&,\ \textcolor{keyword}{const}\ ModelSubDomain<dim,CELL>\&,\ std::vector<Node<dim>*>\&\ );}
+\DoxyCodeLine{00362\ }
+\DoxyCodeLine{00363\ \textcolor{comment}{///\ maps\ potential\ contacting\ faces\ and\ cell\ pointers\ of\ cells\ that\ are\ contacting\ each\ other\ in\ the\ two\ regions;\ @return\ the\ number\ of\ these\ cells,\ pointers\ to\ them,\ and\ corresponding\ face\ number\ written\ into\ the\ argument\ map}}
+\DoxyCodeLine{00364\ \textcolor{keyword}{template}<uint32\_t\ dim,\ \textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ CELL>}
+\DoxyCodeLine{00365\ \mbox{\hyperlink{namespacecsmp_a8e79311c96b08a1cd6a3d8922886501f}{size\_t}}\ \ \mbox{\hyperlink{namespacecsmp_a8e79311c96b08a1cd6a3d8922886501f}{sharedPerimeterCells}}(\ \textcolor{keyword}{const}\ ModelSubDomain<dim,CELL>\&\ subdomain1,\ \textcolor{keyword}{const}\ ModelSubDomain<dim,CELL>\&\ subdomain2,}
+\DoxyCodeLine{00366\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp_a8e79311c96b08a1cd6a3d8922886501f}{std}}::\mbox{\hyperlink{namespacecsmp_a8e79311c96b08a1cd6a3d8922886501f}{vector}}<\mbox{\hyperlink{namespacecsmp_a8e79311c96b08a1cd6a3d8922886501f}{std}}::\mbox{\hyperlink{namespacecsmp_a8e79311c96b08a1cd6a3d8922886501f}{pair}}<\mbox{\hyperlink{namespacecsmp_a8e79311c96b08a1cd6a3d8922886501f}{std}}::\mbox{\hyperlink{namespacecsmp_a8e79311c96b08a1cd6a3d8922886501f}{pair}}<\mbox{\hyperlink{namespacecsmp_a8e79311c96b08a1cd6a3d8922886501f}{CELL}}<\mbox{\hyperlink{namespacecsmp_a8e79311c96b08a1cd6a3d8922886501f}{dim}}>*,\mbox{\hyperlink{namespacecsmp_a8e79311c96b08a1cd6a3d8922886501f}{uint32\_t}}>,\mbox{\hyperlink{namespacecsmp_a8e79311c96b08a1cd6a3d8922886501f}{std}}::\mbox{\hyperlink{namespacecsmp_a8e79311c96b08a1cd6a3d8922886501f}{pair}}<\mbox{\hyperlink{namespacecsmp_a8e79311c96b08a1cd6a3d8922886501f}{CELL}}<\mbox{\hyperlink{namespacecsmp_a8e79311c96b08a1cd6a3d8922886501f}{dim}}>*,\mbox{\hyperlink{namespacecsmp_a8e79311c96b08a1cd6a3d8922886501f}{uint32\_t}}>\ >\ >\&\ \mbox{\hyperlink{namespacecsmp_a8e79311c96b08a1cd6a3d8922886501f}{matching\_cells}}\ );}
+\DoxyCodeLine{00367\ }
+\DoxyCodeLine{00368\ \textcolor{comment}{///\ reads\ ModelSubDomain\ data\ block\ written\ by\ writeDomainIndexesToBinaryFile()\ into\ the\ domain\ info\ structure}}
+\DoxyCodeLine{00369\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp_ab6cbba8728c3d0623994137b69905395}{readDomainIndexesFromBinaryFile}}(\ std::fstream\&,\ \mbox{\hyperlink{structcsmp_1_1_sub_domain_info}{SubDomainInfo}}\&\ );}
+\DoxyCodeLine{00370\ }
+\DoxyCodeLine{00371\ }
+\DoxyCodeLine{00372\ \}\ \textcolor{comment}{//\ end\ namespace}}
+\DoxyCodeLine{00373\ }
+\DoxyCodeLine{00374\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

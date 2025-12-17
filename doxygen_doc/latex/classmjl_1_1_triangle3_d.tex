@@ -1,0 +1,103 @@
+\doxysection{mjl\+::Triangle3D Class Reference}
+\hypertarget{classmjl_1_1_triangle3_d}{}\label{classmjl_1_1_triangle3_d}\index{mjl::Triangle3D@{mjl::Triangle3D}}
+
+
+Collaboration diagram for mjl\+::Triangle3D\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=172pt]{classmjl_1_1_triangle3_d__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classmjl_1_1_triangle3_d_a62bfb7a4bc5bfabd5fc315d7678b2549}\label{classmjl_1_1_triangle3_d_a62bfb7a4bc5bfabd5fc315d7678b2549} 
+{\bfseries Triangle3D} (const \mbox{\hyperlink{classmjl_1_1_point3_d}{Point3D}} \&v0, const \mbox{\hyperlink{classmjl_1_1_point3_d}{Point3D}} \&v1, const \mbox{\hyperlink{classmjl_1_1_point3_d}{Point3D}} \&v2, long id)
+\item 
+\Hypertarget{classmjl_1_1_triangle3_d_ac318e96d3e96426de0f509458707e793}\label{classmjl_1_1_triangle3_d_ac318e96d3e96426de0f509458707e793} 
+{\bfseries Triangle3D} (const \mbox{\hyperlink{classmjl_1_1_triangle3_d}{Triangle3D}} \&t)
+\item 
+\Hypertarget{classmjl_1_1_triangle3_d_a201cb83ac9f6a15d7c7521523cd13d56}\label{classmjl_1_1_triangle3_d_a201cb83ac9f6a15d7c7521523cd13d56} 
+\mbox{\hyperlink{classmjl_1_1_triangle3_d}{Triangle3D}} \& {\bfseries operator=} (const \mbox{\hyperlink{classmjl_1_1_triangle3_d}{Triangle3D}} \&t)
+\item 
+\Hypertarget{classmjl_1_1_triangle3_d_a640be89f5275aaaa75ef06f1df6956de}\label{classmjl_1_1_triangle3_d_a640be89f5275aaaa75ef06f1df6956de} 
+\mbox{\hyperlink{classmjl_1_1_point3_d}{Point3D}} {\bfseries operator\mbox{[}$\,$\mbox{]}} (int i) const
+\item 
+\Hypertarget{classmjl_1_1_triangle3_d_a2b73284728c2841a598b4ec092b3c145}\label{classmjl_1_1_triangle3_d_a2b73284728c2841a598b4ec092b3c145} 
+\mbox{\hyperlink{classmjl_1_1_edge3_d}{Edge3D}} {\bfseries bounding\+Box} () const
+\item 
+\Hypertarget{classmjl_1_1_triangle3_d_a1401dfd4e2bae8c971818f8a44af1e7d}\label{classmjl_1_1_triangle3_d_a1401dfd4e2bae8c971818f8a44af1e7d} 
+\mbox{\hyperlink{classmjl_1_1_point3_d}{Point3D}} {\bfseries n} () const
+\item 
+\Hypertarget{classmjl_1_1_triangle3_d_a2df8611279d90c10fac6108e2b579490}\label{classmjl_1_1_triangle3_d_a2df8611279d90c10fac6108e2b579490} 
+void {\bfseries Unit\+Normal} (\mbox{\hyperlink{classmjl_1_1_edge3_d}{Edge3D}} \&) const
+\item 
+\Hypertarget{classmjl_1_1_triangle3_d_a192f049a0df98a0313c255d460d04a5e}\label{classmjl_1_1_triangle3_d_a192f049a0df98a0313c255d460d04a5e} 
+void {\bfseries Unit\+Normal} (std\+::vector$<$ double $>$ \&vec) const
+\item 
+\Hypertarget{classmjl_1_1_triangle3_d_a67bf84aaea76c4d5e0fcb239cbbe619a}\label{classmjl_1_1_triangle3_d_a67bf84aaea76c4d5e0fcb239cbbe619a} 
+int {\bfseries Classify} (const \mbox{\hyperlink{classmjl_1_1_point3_d}{Point3D}} \&p) const
+\item 
+int \mbox{\hyperlink{classmjl_1_1_triangle3_d_a53285d08f613763cf9c45dcab18bb12e}{Facing\+Direction}} () const
+\item 
+\Hypertarget{classmjl_1_1_triangle3_d_a86e7384d132e46fa5222f8b1a0ac02fa}\label{classmjl_1_1_triangle3_d_a86e7384d132e46fa5222f8b1a0ac02fa} 
+void {\bfseries Set} (const \mbox{\hyperlink{classmjl_1_1_point3_d}{Point3D}} \&v0, const \mbox{\hyperlink{classmjl_1_1_point3_d}{Point3D}} \&v1, const \mbox{\hyperlink{classmjl_1_1_point3_d}{Point3D}} \&v2, long id)
+\item 
+\Hypertarget{classmjl_1_1_triangle3_d_ad9d156190d3f132c3d23f864ebef7608}\label{classmjl_1_1_triangle3_d_ad9d156190d3f132c3d23f864ebef7608} 
+void {\bfseries Out} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classmjl_1_1_triangle3_d_a7c55c65f1404725d05947c6a232ea501}\label{classmjl_1_1_triangle3_d_a7c55c65f1404725d05947c6a232ea501} 
+long {\bfseries id\+\_\+}
+\item 
+\Hypertarget{classmjl_1_1_triangle3_d_a561a00cb1b75665717d61e8a7176e524}\label{classmjl_1_1_triangle3_d_a561a00cb1b75665717d61e8a7176e524} 
+int {\bfseries mark\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{classmjl_1_1_triangle3_d_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classmjl_1_1_triangle3_d_a53285d08f613763cf9c45dcab18bb12e}\index{mjl::Triangle3D@{mjl::Triangle3D}!FacingDirection@{FacingDirection}}
+\index{FacingDirection@{FacingDirection}!mjl::Triangle3D@{mjl::Triangle3D}}
+\doxysubsubsection{\texorpdfstring{FacingDirection()}{FacingDirection()}}
+{\footnotesize\ttfamily \label{classmjl_1_1_triangle3_d_a53285d08f613763cf9c45dcab18bb12e} 
+int mjl\+::\+Triangle3\+D\+::\+Facing\+Direction (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+Identifies the facing direction of the father triangle, by comparing the orientation of its normal to the principle coordinate directions. In CSP, these directions are defined in a righthand coordinate system\+: \begin{DoxyVerb}     TOP
+
+    y |
+3D:   | 
+      |
+      o-------> RIGHT
+     /       x
+ z  / 
+
+FRONT
+\end{DoxyVerb}
+
+
+\begin{DoxyReturn}{Returns}
+the integer value definition from \textquotesingle{}\doxylink{_m_j_l__geometry_8h_source}{MJL\+\_\+\+Geometry.\+h}\textquotesingle{} for the result of the comparison. If none of the principal axes match, the method will return the value MJL3\+D\+\_\+\+TILTED.
+\end{DoxyReturn}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+The comparison will evaluate to one of the principal facing directions if the face normal is parallel to-\/, or inclined by less that 45o to the normal representing that direction.\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+Identify to which model boundary a face of a tetrahedron in an input mesh belongs. In CSP, for instance, this comparison will be carried out in Mesh\+Interface\+::\+Read\+TSolid().\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+If the determined facing direction does not match any of the principal axis, a message will report this. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classmjl_1_1_triangle3_d_a53285d08f613763cf9c45dcab18bb12e_cgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/discretisation/MJL\+\_\+\+Triangle3\+D.\+h\item 
+source/modules/discretisation/MJL\+\_\+\+Triangle3\+D.\+cpp\end{DoxyCompactItemize}

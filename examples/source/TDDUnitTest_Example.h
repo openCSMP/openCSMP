@@ -1,15 +1,16 @@
-#ifndef TDDUNITTEST_EXAMPLE_H
-#define TDDUNITTEST_EXAMPLE_H
+#ifndef TDD_UNIT_TEST_EXAMPLE_H
+#define TDD_UNIT_TEST_EXAMPLE_H
+// Test-driven software development - example
 
 #include "Example.h"
 
 namespace csmp {
 
 /// Introduces to Test Driven Development in general and attempts to provide a CSMP++ specific approach.
-class  TDDUnitTest_Example : public Example{
-public:
-  virtual void Run();
-  virtual void Specifications();
+class  TDDUnitTest_Example : public Example {
+  public:
+    virtual void Run() override final;
+    virtual void Specifications() override final;
 };
 
 /**
@@ -238,4 +239,4 @@ int main( int argc, char** argv)
 
 } // csmp
 
-#endif // TDDUNITTEST_EXAMPLE_H
+#endif // TDD_UNIT_TEST_EXAMPLE_H

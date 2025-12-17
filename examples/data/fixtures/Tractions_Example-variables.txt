@@ -1,0 +1,13 @@
+name	MParameter	unit	index	min.	max.	place
+									
+fluid pressure		PF	Pa	1	 0.00E+00	1.00E+10	node
+permeability		k	m2	1	 1.00E-25	1.00E+02	element
+conductivity		K	m s-1	1	 1.00E-25	1.00E+02	element
+density			RHO	kg m-3	1	 0.20E+03	1.00E+04	element
+porosity		PHI	m3	1	 1.00E-03	1.00E+01	element
+fluid volume source	QV	m3	1	-1.00E+08	1.00E+08	element
+force			F	N	2	-1.00E+12	1.00E+12	node
+volume flux		VF	m s-1	1	-1.00E+10	1.00E+10	element
+velocity		VEL	m s-1	2	-1.00E+10	1.00E+10	element
+pore velocity		PVEL	m s-1	2	-1.00E+10	1.00E+10	element
+pore velocity face	PVELF	m s-1	2	-1.00E+10	1.00E+10	face

@@ -171,7 +171,7 @@ void generateSparsityPatternEliminatingEssentialConditions( CompressedRowMatrix&
           G.ia.push_back(index);
           for ( const auto& node_index : node1_pos ) {
             assert( node_index < numeric_limits<int32_t>::max() );
-            G.ja.push_back(static_cast<uint32_t>(node_index));
+            G.ja.push_back(static_cast<int32_t>(node_index));
             G.a.push_back(initial_value);
           }
 
@@ -183,7 +183,7 @@ void generateSparsityPatternEliminatingEssentialConditions( CompressedRowMatrix&
     } //end looping over test_operands
 
     G.ia.pop_back();
-    G.ia.push_back( static_cast<uint32_t>(G.ja.size()) );
+    G.ia.push_back( static_cast<int32_t>(G.ja.size()) );
 
 
 #ifdef debug_sparsity_pattern
@@ -459,16 +459,16 @@ double CompressedRowMatrix::At( uint32_t i, uint32_t j ) const
 
   if(IsFormattedForSAMG()) {
     for (auto index = ia[i]; index < ia[i + 1]; index++) {
-      if (ja[index - 1]-1 == j) return a[index - 1];
+      if ( ja[ static_cast<size_t>(index - 1) ]-1 == static_cast<int32_t>(j) ) return a[ static_cast<size_t>(index - 1) ];
     }
   } else {
     if(j <= i) {
       for (auto index = ia[i]; index < ia[i + 1]; index++) {
-        if (ja[index] == j) return a[index];
+        if ( ja[ static_cast<size_t>(index) ] == static_cast<int32_t>(j) ) return a[ static_cast<size_t>(index) ];
       }
     } else {
       for (auto index = (ia[i+1]-1); index >= ia[i]; index--) {
-        if (ja[index] == j) return a[index];
+        if ( ja[ static_cast<size_t>(index) ] == static_cast<int32_t>(j) ) return a[ static_cast<size_t>(index) ];
       }
     }
   }
@@ -501,16 +501,16 @@ void CompressedRowMatrix::Assign( uint32_t i, uint32_t j, double val )
   }
 
   if(j <= i) {
-    for ( uint32_t  index = ia[i]; index < ia[i+1]; index++ )
-      if (ja[index] == j) {a[index] = val; return;}
+    for ( auto index = ia[i]; index < ia[i+1]; index++ )
+      if (ja[ static_cast<size_t>(index) ] == static_cast<int32_t>(j) ) {a[ static_cast<size_t>(index) ] = val; return;}
   } else {
-    for ( uint32_t  index = ia[i+1]-1; index >= ia[i]; index-- )
-      if (ja[index] == j) {a[index] = val; return;}
+    for ( auto index = ia[i+1]-1; index >= ia[i]; index-- )
+      if (ja[ static_cast<size_t>(index) ] == static_cast<int32_t>(j) ) {a[ static_cast<size_t>(index) ] = val; return;}
   }
 
   cerr <<"\nCompressedRowMatrix::Assign: Error: Cannot find target element in the compressed row matrix, i ="<<i<<", j = "<<j<<endl;
   cerr <<"candidate col IDs in the row are:"<<endl;
-  for ( uint32_t index=ia[i]; index <ia[i+1]; index++ ) cerr<<ja[index]<<", ";
+  for ( auto index=ia[i]; index <ia[i+1]; index++ ) cerr<<ja[ static_cast<size_t>(index) ]<<", ";
   cerr<<endl;
   throw runtime_error("CompressedRowMatrix::Assign: Error: Cannot find target element in the compressed row matrix.");
 
@@ -541,12 +541,12 @@ void CompressedRowMatrix::MultiplyEntryWith( uint32_t i, uint32_t j, double val 
   }
 
   if(j <= i) {
-    for (uint32_t index = ia[i]; index < ia[i + 1]; index++) {
-      if (ja[index] == j) {a[index] *= val; return;}
+    for ( auto index = ia[i]; index < ia[i + 1]; index++) {
+      if (ja[static_cast<size_t>(index)] == static_cast<int32_t>(j) ) {a[static_cast<size_t>(index)] *= val; return;}
     }
   } else {
-    for (uint32_t index = ia[i+1]-1; index >= ia[i]; index--) {
-      if (ja[index] == j) {a[index] *= val; return;}
+    for ( auto index = ia[i+1]-1; index >= ia[i]; index--) {
+      if (ja[static_cast<size_t>(index)] == static_cast<int32_t>(j) ) {a[static_cast<size_t>(index)] *= val; return;}
     }
   }
 
@@ -583,18 +583,18 @@ void CompressedRowMatrix::Add( uint32_t i, uint32_t j, double val )
   }
 
   if(j <= i) {
-    for (uint32_t index = ia[i]; index < ia[i + 1]; index++) {
-      if (ja[index] == j) {a[index] += val; return;}
+    for (auto index = ia[i]; index < ia[i + 1]; index++) {
+      if (ja[static_cast<size_t>(index)] == static_cast<int32_t>(j) ) {a[static_cast<size_t>(index)] += val; return;}
     }
   }else {
-    for (uint32_t index = ia[i+1]-1; index >= ia[i]; index--) {
-      if (ja[index] == j) {a[index] += val; return;}
+    for (auto index = ia[i+1]-1; index >= ia[i]; index--) {
+      if (ja[static_cast<size_t>(index)] == static_cast<int32_t>(j) ) {a[static_cast<size_t>(index)] += val; return;}
     }
   }
 
   cerr <<"\nCompressedRowMatrix::Add: Error: Cannot find target element in the compressed row matrix, i ="<<i<<", j = "<<j<<endl;
   cerr <<"candidate col IDs in the row are:"<<endl;
-  for ( uint32_t index=ia[i]; index <ia[i+1]; index++ ) cerr<<ja[index]<<", ";
+  for ( auto index=ia[i]; index <ia[i+1]; index++ ) cerr<<ja[static_cast<size_t>(index)]<<", ";
   cerr<<endl;
 
   throw runtime_error("CompressedRowMatrix::Add: Error: Cannot find target element in the compressed row matrix.");
@@ -605,8 +605,7 @@ void CompressedRowMatrix::Add( uint32_t i, uint32_t j, double val )
 Check whether the compressed row matrix has been converted into SAMG format.
 */
 bool CompressedRowMatrix::IsFormattedForSAMG() const {
-  auto it_end = ia.end()-1;
-  if(*it_end > ja.size()) return true;
+  if( *(ia.end() - 1) > static_cast<int32_t>(ja.size()) ) return true;
 
   return false;
 }
@@ -630,8 +629,8 @@ void CompressedRowMatrix::ZeroRow( size_t row )
     throw runtime_error("CompressedRowMatrix::ZeroRow:: Error: this operation should perform before the matrix is turned into SAMG format.");
   }
 
-  for ( uint32_t index=ia[row]; index <ia[row+1]; index++ ) {
-    a[index] = 0.;
+  for ( auto index=ia[row]; index <ia[row+1]; index++ ) {
+    a[ static_cast<size_t>(index) ] = 0.;
   }
 
 }
@@ -677,11 +676,11 @@ void CompressedRowMatrix::AddRowByAnotherRow(uint32_t i, uint32_t j)
       throw runtime_error("CompressedRowMatrix::AddRowByAnotherRow: Error: this operation needs to be performed before the matrix is turned into SAMG format.");
     }
 
-    for (uint32_t index = ia[j]; index < ia[j + 1]; index++) {
-      auto col_id = ja[index];
-      auto value = a[index];
-      if(col_id!=i && col_id!=j) //do not add diagonal elements
-        Add(i, col_id, value);
+    for ( auto index = ia[j]; index < ia[j + 1]; index++) {
+      auto col_id = ja[ static_cast<size_t>(index) ];
+      auto value  = a[ static_cast<size_t>(index) ];
+      if ( col_id != static_cast<int32_t>(i) && col_id != static_cast<int32_t>(j) ) //do not add diagonal elements
+        Add( static_cast<uint32_t>(i), static_cast<uint32_t>(col_id), value );
     }
 
 }
@@ -711,11 +710,11 @@ void CompressedRowMatrix::AssignRowByAnotherRow(uint32_t i, uint32_t j)
       throw runtime_error("CompressedRowMatrix::AssignRowByAnotherRow: Error: this operation needs to be performed before the matrix is turned into SAMG format.");
     }
 
-    for (uint32_t index = ia[j]; index < ia[j + 1]; index++) {
-      auto col_id = ja[index];
-      auto value = a[index];
-      if(col_id!=i && col_id!=j) //do not assign diagonal elements
-        Assign(i, col_id, value);
+    for ( auto index = ia[j]; index < ia[j + 1]; index++) {
+      auto col_id = ja[ static_cast<size_t>(index) ];
+      auto value  = a[ static_cast<size_t>(index) ];
+      if(col_id!=static_cast<int32_t>(i) && col_id!=static_cast<int32_t>(j) ) //do not assign diagonal elements
+        Assign( static_cast<uint32_t>(i), static_cast<uint32_t>(col_id), value);
     }
 }
 
@@ -769,23 +768,23 @@ void CompressedRowMatrix::Initialize( const SparseMatrix& A )
 
       // looping over all rows intializing ja and testing for diagonal entries which are zero
       // here n counts from 0 to j=nnu, i.e. all non-zero elements in the matrix
-      uint32_t n(0U);
+      int32_t n(0U);
       ia[0] = 0;
 
-      for ( auto i{0}; i < A.Rows(); i++ )
+      for ( size_t i{0}; i < A.Rows(); i++ )
        {
-          uint32_t  diag(UNSPECIFIED);
+          int32_t  diag(UNSPECIFIED);
           // looping over the non-zero elements row i
           for ( auto rit=A.RowBegin(i); rit!=A.RowEnd(i); rit++ ) {
                // copying A's entry row(i) into the compressed row storage vector 'a'
-               a[n]  = (*rit).second;
+               a[ static_cast<size_t>(n) ]  = (*rit).second;
                // recording the corresponding column index in 'ja'
                // (NB: rit.first points to matrix column index from 0..rows-1)
-               ja[n] = static_cast<uint32_t>((*rit).first);
+               ja[ static_cast<size_t>(n) ] = static_cast<int32_t>((*rit).first);
                // if i=j, i.e., if this is a diagonal elemnt, its position is recorded by 'diag'
                // if the diagonal element is zero, however, it will not have been stored in 'ja'
                // so that this situation is never encountered and diag remains UNSPECIFIED
-               if ( ja[n] == static_cast<uint32_t>(i) ) diag = static_cast<uint32_t>(n);
+               if ( ja[ static_cast<size_t>(n) ] == static_cast<int32_t>(i) ) diag = n;
                n++;
 	          }
           if ( diag == UNSPECIFIED ) {
@@ -793,7 +792,7 @@ void CompressedRowMatrix::Initialize( const SparseMatrix& A )
                cout <<"\nSparseMatrix (rows=columns="<< A.Rows() <<") Zero entries (i=j): "<< endl;
                cout.setf(ios::scientific);
                long prec = cout.precision(15U);
-               for ( auto i2{0}; i2 < A.Rows(); i2++ )
+               for ( size_t i2{0}; i2 < A.Rows(); i2++ )
                  if ( std::fabs(A(i2,i2)) < std::numeric_limits<double>::epsilon() )
                    cout <<"\n\t"<< i2 <<": "<< A(i2,i2);
                cout << endl;
@@ -804,16 +803,16 @@ void CompressedRowMatrix::Initialize( const SparseMatrix& A )
             }
         
           // setting matrix such that diagonal element is at the beginning of next row 
-          ia[i+1U]       = static_cast<uint32_t>(n);
+          ia[i+1U] = n;
           // inserting the diagonal elements at the beginning of each row
-          const uint32_t istart = static_cast<uint32_t>(ia[i]);
-          uint32_t jatemp = ja[ istart ];
-          double  atemp  = a[ istart ];
-          uint32_t dindex = diag;
-          ja[ istart ]   = ja[ dindex ];
-          a[ istart]     = a[ dindex ];
-          a[ dindex ]    = atemp;
-          ja[ dindex ]   = jatemp;
+          const int32_t istart = ia[i];
+          int32_t jatemp = ja[ static_cast<size_t>(istart) ];
+          double  atemp  = a[ static_cast<size_t>(istart) ];
+          int32_t dindex = diag;
+          ja[ static_cast<size_t>(istart) ]   = ja[ static_cast<size_t>(dindex) ];
+          a[ static_cast<size_t>(istart) ]    = a[ static_cast<size_t>(dindex) ];
+          a[ static_cast<size_t>(dindex) ]    = atemp;
+          ja[ static_cast<size_t>(dindex) ]   = jatemp;
        }
 
      // converting C++ array indices (0..n-1) into Fortran indices (1..n) 
@@ -840,20 +839,20 @@ void CompressedRowMatrix::ConvertFromSparseMatrix( const SparseMatrix& A )
       uint32_t n(0U);
       ia[0] = 0;
 
-      for ( auto i{0}; i < A.Rows(); i++ )
+      for ( size_t i{0}; i < A.Rows(); i++ )
        {
-          uint32_t  diag(UNSPECIFIED);
+          int32_t  diag(UNSPECIFIED);
           // looping over the non-zero elements row i
           for ( auto rit=A.RowBegin(i); rit!=A.RowEnd(i); rit++ ) {
                // copying A's entry row(i) into the compressed row storage vector 'a'
                a[n]  = (*rit).second;
                // recording the corresponding column index in 'ja'
                // (NB: rit.first points to matrix column index from 0..rows-1)
-               ja[n] = static_cast<uint32_t>((*rit).first);
+               ja[n] = static_cast<int32_t>((*rit).first);
                // if i=j, i.e., if this is a diagonal elemnt, its position is recorded by 'diag'
                // if the diagonal element is zero, however, it will not have been stored in 'ja'
                // so that this situation is never encountered and diag remains UNSPECIFIED
-               if ( ja[n] == static_cast<uint32_t>(i) ) diag = static_cast<uint32_t>(n);
+               if ( ja[n] == static_cast<int32_t>(i) ) diag = static_cast<int32_t>(n);
                n++;
 	          }
           if ( diag == UNSPECIFIED ) {
@@ -861,7 +860,7 @@ void CompressedRowMatrix::ConvertFromSparseMatrix( const SparseMatrix& A )
                cout <<"\nSparseMatrix (rows=columns="<< A.Rows() <<") Zero entries (i=j): "<< endl;
                cout.setf(ios::scientific);
                long prec = cout.precision(15U);
-               for ( auto i2{0}; i2 < A.Rows(); i2++ )
+               for ( size_t i2{0}; i2 < A.Rows(); i2++ )
                  if ( std::fabs(A(i2,i2)) < std::numeric_limits<double>::epsilon() )
                    cout <<"\n\t"<< i2 <<": "<< A(i2,i2);
                cout << endl;
@@ -870,10 +869,13 @@ void CompressedRowMatrix::ConvertFromSparseMatrix( const SparseMatrix& A )
                A.Out();
                throw underflow_error("CompressedRowMatrix::Initialize: Error: Zero value(s) in matrix diagonal.");
             }
-            ia[i+1U]       = static_cast<uint32_t>(n);
+            ia[i+1U] = static_cast<int32_t>(n);
        }
 
 }  // end ConvertFromSparseMatrix
+
+
+
 
 
 //this function converts compressed row matrix to the SAMG format
@@ -884,10 +886,10 @@ void CompressedRowMatrix::ConvertToSAMGFormat()
     return;
   }
 
-  for ( auto i{0}; i < ia.size()-1; i++ ) {
-    uint32_t  diag(UNSPECIFIED);
-    for(auto n=ia[i];n<ia[i+1];n++){
-      if ( ja[n] == i ) {diag = n; break;}
+  for ( size_t i{0lu}; i < ia.size()-1; i++ ) {
+    int32_t  diag(UNSPECIFIED);
+    for( int32_t n=ia[i]; n<ia[i+1]; n++ ){
+      if ( ja[ static_cast<size_t>(n) ] == static_cast<int32_t>(i) ) {diag = n; break;}
     }
     if ( diag == UNSPECIFIED ) {
       cout <<"\nCompressedRowMatrix::ConvertToSAMGFormat: Error: no diagonal element can be found in row: "<<i<<endl;
@@ -898,11 +900,11 @@ void CompressedRowMatrix::ConvertToSAMGFormat()
     // setting matrix such that diagonal element is at the beginning of next row
     // inserting the diagonal elements at the beginning of each row
     const auto istart = ia[i];
-    uint32_t jatemp = ja[ istart ];
-    double  atemp  = a[ istart ];
-    uint32_t dindex = diag;
-    ja[ istart ]   = ja[ dindex ];
-    a[ istart]     = a[ dindex ];
+    int32_t jatemp = ja[ static_cast<size_t>(istart) ];
+    double  atemp  = a[ static_cast<size_t>(istart) ];
+    size_t dindex = static_cast<size_t>(diag);
+    ja[ static_cast<size_t>(istart) ]   = ja[ dindex ];
+    a[ static_cast<size_t>(istart) ]     = a[ dindex ];
     a[ dindex ]    = atemp;
     ja[ dindex ]   = jatemp;
   }
@@ -921,45 +923,46 @@ void CompressedRowMatrix::ConvertToSAMGFormat()
 Initialises the public CompressedRowMatrix vectors ia, ja, a for given 
 SparseMatrix in case the Point-based approach is selected.
 */
-void CompressedRowMatrix::InitializePointBased( const SparseMatrix& A, size_t nsys ) 
+void CompressedRowMatrix::InitializePointBased( const SparseMatrix& A, size_t system_size ) 
  {
       // resize internal storage
-      ia.resize( (A.Rows() + 1U) );
+      ia.resize( (A.Rows() + 1) );
       ja.resize( A.Entries() );
       a.resize( ja.size() );
    
-      long      i, j, k;
-      uint32_t  diag;
-      bool      zero_diag_element(false);
+      int32_t  i, j, k, diag;
+      bool     zero_diag_element(false);
 	  
-      std::vector<uint32_t>  temp( ja.size() ); // auxilary vector
+      std::vector<int32_t>  temp( ja.size() ); // auxilary vector
 
-      const size_t nnu_(A.Rows());
-	    for ( k = 0U; k < nnu_; k++)
-	      temp[k] = static_cast<uint32_t>(k%(nnu_/nsys)*nsys+k/(nnu_/nsys));
+      const int32_t nnu = static_cast<int32_t>(A.Rows());
+      const int32_t nsys = static_cast<int32_t>(system_size);
+      
+	    for ( k = 0U; k < nnu; k++)
+	      temp[ static_cast<size_t>(k) ] = k%(nnu/nsys)*nsys+k/(nnu/nsys);
 	  		
-      for ( i=j=0U, ia[0]=0; i < nnu_; i++ )
+      for ( i=j=0, ia[0]=0; i < nnu; i++ )
        {
-	        long row = i%nsys*(nnu_/nsys)+i/nsys; // amending the order rows will be written in a[]
-          auto rit=A.RowBegin(row);
-          for ( diag=-1; rit!=A.RowEnd(row); rit++ )
+	        int32_t row = i%nsys*(nnu/nsys)+i/nsys; // amending the order rows will be written in a[]
+          auto rit = A.RowBegin( static_cast<size_t>(row) );
+          for ( diag=-1; rit!=A.RowEnd( static_cast<size_t>(row) ); rit++ )
             {
-               a[j]  = (*rit).second;
-               ja[j] = temp[(*rit).first];
+               a[ static_cast<size_t>(j) ]  = (*rit).second;
+               ja[ static_cast<size_t>(j) ] = temp[(*rit).first];
                // rit.first points to matrix entries indexed from 0..rows-1
-               if ( ja[j] == temp[row] ) diag = static_cast<uint32_t>(j);
+               if ( ja[ static_cast<size_t>(j) ] == temp[ static_cast<size_t>(row) ] ) diag = j;
                j++;
             }
           if ( diag == -1 ) zero_diag_element = true;
           
-          ia[i+1] = static_cast<uint32_t>(j);
+          ia[ static_cast<size_t>(i+1) ] = j;
 			
 		      // inserting the diagonal elements at the beginning of each row
-          const uint32_t istart = ia[i];
-          ja[static_cast<uint32_t>(istart)] = ja[ static_cast<uint32_t>(diag) ];
-          a[static_cast<uint32_t>(istart)]  = a[ static_cast<uint32_t>(diag) ];
-          a[static_cast<uint32_t>(diag)]    = a[ static_cast<uint32_t>(istart) ];
-          ja[static_cast<uint32_t>(diag)]   = ja[ static_cast<uint32_t>(istart) ];
+          const auto istart = ia[ static_cast<size_t>(i) ];
+          ja[static_cast<size_t>(istart)] = ja[ static_cast<size_t>(diag) ];
+          a[static_cast<size_t>(istart)]  = a[ static_cast<size_t>(diag) ];
+          a[static_cast<size_t>(diag)]    = a[ static_cast<size_t>(istart) ];
+          ja[static_cast<size_t>(diag)]   = ja[ static_cast<size_t>(istart) ];
        }
 
       if ( zero_diag_element ) {
@@ -1007,7 +1010,7 @@ void CompressedRowMatrix::Out() const
     for (auto it : ja) cout << it <<" ";
     cout <<"\nmatrix elements 'a' with size = "<<a.size()<<"\n";
 
-    for(auto i{0U};i<ia.size()-1;i++) {
+    for( size_t i{0U};i<ia.size()-1;i++) {
       for(size_t index=ia[i];index<ia[i+1];index++){
         if(!SAMG_format) cout<<ja[index]<<":"<<a[index]<<" ";
         else cout<<ja[index-1]<<":"<<a[index-1]<<" ";
@@ -1039,10 +1042,10 @@ void CompressedRowMatrix::Out( const string& outfile ) const
 
     const long precision = ofs.precision();
     ofs.precision(15);
-    for(auto i{0U};i<ia.size()-1;i++) {
-      for(size_t index=ia[i];index<ia[i+1];index++){
-        if(!SAMG_format) ofs<<ja[index]<<":"<<a[index]<<" ";
-        else ofs<<ja[index-1]<<":"<<a[index-1]<<" ";
+    for( size_t i{0U};i<ia.size()-1;i++) {
+      for( auto index=ia[i]; index<ia[i+1]; index++ ){
+        if(!SAMG_format) ofs<<ja[ static_cast<size_t>(index) ]<<":"<<a[ static_cast<size_t>(index) ]<<" ";
+        else ofs<<ja[ static_cast<size_t>(index-1) ]<<":"<<a[ static_cast<size_t>(index-1) ]<<" ";
       }
       ofs<<endl;
     }

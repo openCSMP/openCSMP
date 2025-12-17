@@ -1,0 +1,139 @@
+\doxysection{csmp\+::Variables\+\_\+\+Test Class Reference}
+\hypertarget{classcsmp_1_1_variables___test}{}\label{classcsmp_1_1_variables___test}\index{csmp::Variables\_Test@{csmp::Variables\_Test}}
+
+
+{\ttfamily \#include $<$Variables\+\_\+\+Test.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Variables\+\_\+\+Test\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=182pt]{classcsmp_1_1_variables___test__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Variables\+\_\+\+Test\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=182pt]{classcsmp_1_1_variables___test__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_variables___test_adcd2c1ac86c0c4778efb5ea781f26fba}{Variables\+\_\+\+Test}} (const char \texorpdfstring{$\ast$}{*})
+\begin{DoxyCompactList}\small\item\em takes the name of a test model as argument; this model should contain \doxylink{classcsmp_1_1_boundary}{Boundary} and \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} objects \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_variables___test_ada27fe193d2c5a358c6c3723961e5883}{run}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Test} (std\+::ostream \texorpdfstring{$\ast$}{*}osptr=0)
+\item 
+long {\bfseries get\+Num\+Passed} () const
+\item 
+long {\bfseries get\+Num\+Failed} () const
+\item 
+const std\+::ostream \texorpdfstring{$\ast$}{*} {\bfseries get\+Stream} () const
+\item 
+void {\bfseries set\+Stream} (std\+::ostream \texorpdfstring{$\ast$}{*}osptr)
+\item 
+void {\bfseries set\+Name} (std\+::string test\+Name)
+\item 
+std\+::string {\bfseries get\+Name} () const
+\item 
+bool {\bfseries has\+Name} () const
+\item 
+void {\bfseries do\+\_\+succeed} ()
+\item 
+long {\bfseries report} () const
+\item 
+virtual void {\bfseries reset} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}}
+\begin{DoxyCompactItemize}
+\item 
+void {\bfseries do\+\_\+equal} (double expr, double value, double tol, const std\+::string \&lbl, const char \texorpdfstring{$\ast$}{*}fname, long lineno)
+\item 
+void {\bfseries do\+\_\+test} (bool cond, const std\+::string \&lbl, const char \texorpdfstring{$\ast$}{*}fname, long lineno)
+\item 
+void {\bfseries do\+\_\+fail} (const std\+::string \&lbl, const char \texorpdfstring{$\ast$}{*}fname, long lineno)
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}}
+\begin{DoxyCompactItemize}
+\item 
+const char \texorpdfstring{$\ast$}{*} {\bfseries prefix\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Tests Read(), Store() and Status() operations for all variable placements and types with the Frac\+Box model which contains \doxylink{classcsmp_1_1_boundary}{Boundary} objects. The operations are performed twice\+: 1) on the live model and 2) on a model recovered form disk.
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000245}{Todo}}]Add tests for variables placed on \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} objects.\end{DoxyRefDesc}
+
+
+\begin{DoxyAuthor}{Author}
+Phillip Lang 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+9/24/2012 
+\end{DoxyDate}
+
+
+\label{doc-constructors}
+\Hypertarget{classcsmp_1_1_variables___test_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcsmp_1_1_variables___test_adcd2c1ac86c0c4778efb5ea781f26fba}\index{csmp::Variables\_Test@{csmp::Variables\_Test}!Variables\_Test@{Variables\_Test}}
+\index{Variables\_Test@{Variables\_Test}!csmp::Variables\_Test@{csmp::Variables\_Test}}
+\doxysubsubsection{\texorpdfstring{Variables\_Test()}{Variables\_Test()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_variables___test_adcd2c1ac86c0c4778efb5ea781f26fba} 
+csmp\+::\+Variables\+\_\+\+Test\+::\+Variables\+\_\+\+Test (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{prefix}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+takes the name of a test model as argument; this model should contain \doxylink{classcsmp_1_1_boundary}{Boundary} and \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} objects 
+
+
+\begin{DoxyParams}{Parameters}
+{\em prefix} & is the model name. \\
+\hline
+\end{DoxyParams}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_variables___test_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_variables___test_ada27fe193d2c5a358c6c3723961e5883}\index{csmp::Variables\_Test@{csmp::Variables\_Test}!run@{run}}
+\index{run@{run}!csmp::Variables\_Test@{csmp::Variables\_Test}}
+\doxysubsubsection{\texorpdfstring{run()}{run()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_variables___test_ada27fe193d2c5a358c6c3723961e5883} 
+void csmp\+::\+Variables\+\_\+\+Test\+::run (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000270}{Todo}}](2-\/F) \doxylink{classcsmp_1_1_test}{Test} for \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} and \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} properties\end{DoxyRefDesc}
+
+
+\begin{DoxyAuthor}{Author}
+P. Lang 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+9/24/2012 
+\end{DoxyDate}
+
+
+Implements \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+tests/unit/Variables\+\_\+\+Test.\+h\item 
+tests/unit/Variables\+\_\+\+Test.\+cpp\end{DoxyCompactItemize}

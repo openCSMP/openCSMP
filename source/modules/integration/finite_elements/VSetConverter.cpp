@@ -697,34 +697,34 @@ int8_t  VSetConverter<dim>::TestForBoundaryFlags( const vector<std::int8_t>& bfl
       if ( flag1 == LEFT_OUTSIDE   && flag2 == LEFT_OUTSIDE )   return LEFT;
       if ( flag1 == RIGHT_OUTSIDE  && flag2 == RIGHT_OUTSIDE )  return RIGHT;
       // corner boundaries
-      if ( flag1 == TOP_OUTSIDE    && flag2 == CNR_MAX_MAXX )   return TOP;
-      if ( flag1 == TOP_OUTSIDE    && flag2 == CNR_MAX_MINXZ )  return TOP;
+      if ( flag1 == TOP_OUTSIDE    && flag2 == CNR_XY )         return TOP;
+      if ( flag1 == TOP_OUTSIDE    && flag2 == CNR_Y )          return TOP;
       if ( flag1 == BOTTOM_OUTSIDE && flag2 == CNR_MIN )        return BOTTOM;
-      if ( flag1 == BOTTOM_OUTSIDE && flag2 == CNR_MIN_MAXX )   return BOTTOM;
+      if ( flag1 == BOTTOM_OUTSIDE && flag2 == CNR_X )          return BOTTOM;
       if ( flag1 == LEFT_OUTSIDE   && flag2 == CNR_MIN )        return LEFT;
-      if ( flag1 == LEFT_OUTSIDE   && flag2 == CNR_MAX_MINXZ )  return LEFT;
-      if ( flag1 == RIGHT_OUTSIDE  && flag2 == CNR_MIN_MAXX )   return RIGHT;
-      if ( flag1 == RIGHT_OUTSIDE  && flag2 == CNR_MAX_MAXX )   return RIGHT;
+      if ( flag1 == LEFT_OUTSIDE   && flag2 == CNR_Y )          return LEFT;
+      if ( flag1 == RIGHT_OUTSIDE  && flag2 == CNR_X )          return RIGHT;
+      if ( flag1 == RIGHT_OUTSIDE  && flag2 == CNR_XZ )         return RIGHT;
       // permutations
-      if ( flag2 == TOP_OUTSIDE    && flag1 == CNR_MAX_MAXX )   return TOP;
-      if ( flag2 == TOP_OUTSIDE    && flag1 == CNR_MAX_MINXZ )  return TOP;
-      if ( flag2 == BOTTOM_OUTSIDE && flag1 == CNR_MIN )        return BOTTOM;
-      if ( flag2 == BOTTOM_OUTSIDE && flag1 == CNR_MIN_MAXX )   return BOTTOM;
-      if ( flag2 == LEFT_OUTSIDE   && flag1 == CNR_MIN )        return LEFT;
-      if ( flag2 == LEFT_OUTSIDE   && flag1 == CNR_MAX_MINXZ )  return LEFT;
-      if ( flag2 == RIGHT_OUTSIDE  && flag1 == CNR_MIN_MAXX )   return RIGHT;
-      if ( flag2 == RIGHT_OUTSIDE  && flag1 == CNR_MAX_MAXX )   return RIGHT;
+      if ( flag2 == TOP_OUTSIDE    && flag1 == CNR_XY )  return TOP;
+      if ( flag2 == TOP_OUTSIDE    && flag1 == CNR_Y )   return TOP;
+      if ( flag2 == BOTTOM_OUTSIDE && flag1 == CNR_MIN ) return BOTTOM;
+      if ( flag2 == BOTTOM_OUTSIDE && flag1 == CNR_X )   return BOTTOM;
+      if ( flag2 == LEFT_OUTSIDE   && flag1 == CNR_MIN ) return LEFT;
+      if ( flag2 == LEFT_OUTSIDE   && flag1 == CNR_Y )   return LEFT;
+      if ( flag2 == RIGHT_OUTSIDE  && flag1 == CNR_X )   return RIGHT;
+      if ( flag2 == RIGHT_OUTSIDE  && flag1 == CNR_XZ )  return RIGHT;
       // special cases for boundaries that are only one element long 
-      if ( flag1 == CNR_MAX_MAXX && flag2 == CNR_MAX_MINXZ )    return TOP;
-      if ( flag1 == CNR_MIN      && flag2 == CNR_MIN_MAXX )     return BOTTOM;
-      if ( flag1 == CNR_MIN      && flag2 == CNR_MAX_MINXZ )    return LEFT;
-      if ( flag1 == CNR_MIN_MAXX && flag2 == CNR_MAX_MAXX )     return RIGHT;
-      if ( flag2 == CNR_MAX_MAXX && flag1 == CNR_MAX_MINXZ )    return TOP;
-      if ( flag2 == CNR_MIN      && flag1 == CNR_MIN_MAXX )     return BOTTOM;
-      if ( flag2 == CNR_MIN      && flag1 == CNR_MAX_MINXZ )    return LEFT;
-      if ( flag2 == CNR_MIN_MAXX && flag1 == CNR_MAX_MAXX )     return RIGHT;
+      if ( flag1 == CNR_XY       && flag2 == CNR_Y )  return TOP;
+      if ( flag1 == CNR_MIN      && flag2 == CNR_X )  return BOTTOM;
+      if ( flag1 == CNR_MIN      && flag2 == CNR_Y )  return LEFT;
+      if ( flag1 == CNR_X        && flag2 == CNR_XY ) return RIGHT;
+      if ( flag2 == CNR_X        && flag1 == CNR_XZ ) return TOP;
+      if ( flag2 == CNR_MIN      && flag1 == CNR_X )  return BOTTOM;
+      if ( flag2 == CNR_MIN      && flag1 == CNR_Y )  return LEFT;
+      if ( flag2 == CNR_X        && flag1 == CNR_XZ ) return RIGHT;
       // irregular boundaries
-      if ( flag1 == IRREGULAR_OUTSIDE  && flag2 == IRREGULAR_OUTSIDE ) return IRREGULAR;
+      if ( flag1 == IRREGULAR_OUTSIDE && flag2 == IRREGULAR_OUTSIDE ) return IRREGULAR;
 
 if constexpr ( dim == 3 )
   throw csmp::Exception( ERROR, "VSetConverter<dim>::TestForBoundaryFlags", "3D case not implemented yet ");
@@ -789,12 +789,12 @@ int8_t  VSetConverter<dim>::BoundaryFlags3D( const vector<std::int8_t>& bflags,
 	       // corners
 	       if ( flag1 == CNR_MIN  )      return CNR_MIN;
 	       if ( flag1 == CNR_MAX )       return CNR_MAX;
-	       if ( flag1 == CNR_MIN_MAXX )  return CNR_MIN_MAXX;
-	       if ( flag1 == CNR_MIN_MAXXZ ) return CNR_MIN_MAXXZ;
-	       if ( flag1 == CNR_MIN_MAXZ )  return CNR_MIN_MAXZ;
-	       if ( flag1 == CNR_MAX_MINXZ ) return CNR_MAX_MINXZ;
-	       if ( flag1 == CNR_MAX_MAXX )  return CNR_MAX_MAXX;
-	       if ( flag1 == CNR_MAX_MAXZ )  return CNR_MAX_MAXZ;
+	       if ( flag1 == CNR2 )  return CNR2;
+	       if ( flag1 == CNR3 )  return CNR3;
+	       if ( flag1 == CNR4 )  return CNR4;
+	       if ( flag1 == CNR5 )  return CNR5;
+	       if ( flag1 == CNR6 )  return CNR6;
+	       if ( flag1 == CNR8 )  return CNR8;
         }
       else
         {
@@ -803,10 +803,10 @@ int8_t  VSetConverter<dim>::BoundaryFlags3D( const vector<std::int8_t>& bflags,
 	       if ( flag1 == TOP_OUTSIDE && flag2 == TOP_LEFT )      return TOP_OUTSIDE;
 	       if ( flag1 == TOP_OUTSIDE && flag2 == TOP_RIGHT )     return TOP_OUTSIDE;
 	       if ( flag1 == TOP_OUTSIDE && flag2 == FRONT_TOP )     return TOP_OUTSIDE;
-	       if ( flag1 == TOP_OUTSIDE && flag2 == CNR_MAX_MAXX )  return TOP_OUTSIDE;
-	       if ( flag1 == TOP_OUTSIDE && flag2 == CNR_MAX_MINXZ ) return TOP_OUTSIDE;
-	       if ( flag1 == TOP_OUTSIDE && flag2 == CNR_MAX )       return TOP_OUTSIDE;
-	       if ( flag1 == TOP_OUTSIDE && flag2 == CNR_MAX_MAXZ )  return TOP_OUTSIDE;
+	       if ( flag1 == TOP_OUTSIDE && flag2 == CNR3 ) return TOP_OUTSIDE;
+	       if ( flag1 == TOP_OUTSIDE && flag2 == CNR4 ) return TOP_OUTSIDE;
+	       if ( flag1 == TOP_OUTSIDE && flag2 == CNR7 ) return TOP_OUTSIDE;
+	       if ( flag1 == TOP_OUTSIDE && flag2 == CNR8 ) return TOP_OUTSIDE;
 	       
 	       // BOTTOM
 	       if ( flag1 == BOTTOM_OUTSIDE && flag2 == BACK_BOTTOM )   return BOTTOM_OUTSIDE;
@@ -814,9 +814,9 @@ int8_t  VSetConverter<dim>::BoundaryFlags3D( const vector<std::int8_t>& bflags,
 	       if ( flag1 == BOTTOM_OUTSIDE && flag2 == BOTTOM_RIGHT )  return BOTTOM_OUTSIDE;
 	       if ( flag1 == BOTTOM_OUTSIDE && flag2 == FRONT_BOTTOM )  return BOTTOM_OUTSIDE;
 	       if ( flag1 == BOTTOM_OUTSIDE && flag2 == CNR_MIN )       return BOTTOM_OUTSIDE;
-	       if ( flag1 == BOTTOM_OUTSIDE && flag2 == CNR_MIN_MAXX )  return BOTTOM_OUTSIDE;
-	       if ( flag1 == BOTTOM_OUTSIDE && flag2 == CNR_MIN_MAXZ )  return BOTTOM_OUTSIDE;
-	       if ( flag1 == BOTTOM_OUTSIDE && flag2 == CNR_MIN_MAXXZ ) return BOTTOM_OUTSIDE;
+	       if ( flag1 == BOTTOM_OUTSIDE && flag2 == CNR2 ) return BOTTOM_OUTSIDE;
+	       if ( flag1 == BOTTOM_OUTSIDE && flag2 == CNR5 ) return BOTTOM_OUTSIDE;
+	       if ( flag1 == BOTTOM_OUTSIDE && flag2 == CNR6 ) return BOTTOM_OUTSIDE;
            
            // LEFT
 	       if ( flag1 == LEFT_OUTSIDE   && flag2 == BOTTOM_LEFT )   return LEFT_OUTSIDE;
@@ -824,39 +824,39 @@ int8_t  VSetConverter<dim>::BoundaryFlags3D( const vector<std::int8_t>& bflags,
 	       if ( flag1 == LEFT_OUTSIDE   && flag2 == TOP_LEFT )      return LEFT_OUTSIDE;
 	       if ( flag1 == LEFT_OUTSIDE   && flag2 == FRONT_LEFT )    return LEFT_OUTSIDE;
 	       if ( flag1 == LEFT_OUTSIDE   && flag2 == CNR_MIN )       return LEFT_OUTSIDE;
-	       if ( flag1 == LEFT_OUTSIDE   && flag2 == CNR_MAX_MINXZ ) return LEFT_OUTSIDE;
-	       if ( flag1 == LEFT_OUTSIDE   && flag2 == CNR_MIN_MAXZ )  return LEFT_OUTSIDE;
-	       if ( flag1 == LEFT_OUTSIDE   && flag2 == CNR_MAX_MAXZ )  return LEFT_OUTSIDE;
+	       if ( flag1 == LEFT_OUTSIDE   && flag2 == CNR4 ) return LEFT_OUTSIDE;
+	       if ( flag1 == LEFT_OUTSIDE   && flag2 == CNR5 ) return LEFT_OUTSIDE;
+	       if ( flag1 == LEFT_OUTSIDE   && flag2 == CNR8 ) return LEFT_OUTSIDE;
 	       
 	       // RIGHT
 	       if ( flag1 == RIGHT_OUTSIDE  && flag2 == BACK_RIGHT )    return RIGHT_OUTSIDE;
 	       if ( flag1 == RIGHT_OUTSIDE  && flag2 == BOTTOM_RIGHT )  return RIGHT_OUTSIDE;
 	       if ( flag1 == RIGHT_OUTSIDE  && flag2 == TOP_RIGHT )     return RIGHT_OUTSIDE;
 	       if ( flag1 == RIGHT_OUTSIDE  && flag2 == FRONT_RIGHT )   return RIGHT_OUTSIDE;
-	       if ( flag1 == RIGHT_OUTSIDE  && flag2 == CNR_MIN_MAXX )  return RIGHT_OUTSIDE;
-	       if ( flag1 == RIGHT_OUTSIDE  && flag2 == CNR_MAX_MAXX )  return RIGHT_OUTSIDE;
-	       if ( flag1 == RIGHT_OUTSIDE  && flag2 == CNR_MIN_MAXXZ ) return RIGHT_OUTSIDE;
-	       if ( flag1 == RIGHT_OUTSIDE  && flag2 == CNR_MAX )       return RIGHT_OUTSIDE;
+	       if ( flag1 == RIGHT_OUTSIDE  && flag2 == CNR2 )    return RIGHT_OUTSIDE;
+	       if ( flag1 == RIGHT_OUTSIDE  && flag2 == CNR3 )    return RIGHT_OUTSIDE;
+	       if ( flag1 == RIGHT_OUTSIDE  && flag2 == CNR6 )    return RIGHT_OUTSIDE;
+	       if ( flag1 == RIGHT_OUTSIDE  && flag2 == CNR_MAX ) return RIGHT_OUTSIDE;
 
            // FRONT
 	       if ( flag1 == FRONT_OUTSIDE  && flag2 == FRONT_BOTTOM )  return FRONT_OUTSIDE;
 	       if ( flag1 == FRONT_OUTSIDE  && flag2 == FRONT_RIGHT )   return FRONT_OUTSIDE;
 	       if ( flag1 == FRONT_OUTSIDE  && flag2 == FRONT_TOP )     return FRONT_OUTSIDE;
 	       if ( flag1 == FRONT_OUTSIDE  && flag2 == FRONT_LEFT )    return FRONT_OUTSIDE;
-	       if ( flag1 == FRONT_OUTSIDE  && flag2 == CNR_MIN_MAXZ )  return FRONT_OUTSIDE;
-	       if ( flag1 == FRONT_OUTSIDE  && flag2 == CNR_MIN_MAXXZ ) return FRONT_OUTSIDE;
-	       if ( flag1 == FRONT_OUTSIDE  && flag2 == CNR_MAX )       return FRONT_OUTSIDE;
-	       if ( flag1 == FRONT_OUTSIDE  && flag2 == CNR_MAX_MAXZ )  return FRONT_OUTSIDE;
+	       if ( flag1 == FRONT_OUTSIDE  && flag2 == 5 )       return FRONT_OUTSIDE;
+	       if ( flag1 == FRONT_OUTSIDE  && flag2 == 6 )       return FRONT_OUTSIDE;
+	       if ( flag1 == FRONT_OUTSIDE  && flag2 == CNR_MAX ) return FRONT_OUTSIDE;
+	       if ( flag1 == FRONT_OUTSIDE  && flag2 == 8 )       return FRONT_OUTSIDE;
 	       
 	       // BACK
-	       if ( flag1 == BACK_OUTSIDE   && flag2 == BACK_BOTTOM )   return RIGHT_OUTSIDE;
-	       if ( flag1 == BACK_OUTSIDE   && flag2 == BACK_RIGHT )    return RIGHT_OUTSIDE;
-	       if ( flag1 == BACK_OUTSIDE   && flag2 == BACK_TOP )      return RIGHT_OUTSIDE;
-	       if ( flag1 == BACK_OUTSIDE   && flag2 == BACK_LEFT )     return RIGHT_OUTSIDE;
-	       if ( flag1 == BACK_OUTSIDE   && flag2 == CNR_MIN )       return RIGHT_OUTSIDE;
-	       if ( flag1 == BACK_OUTSIDE   && flag2 == CNR_MIN_MAXX )  return RIGHT_OUTSIDE;
-	       if ( flag1 == BACK_OUTSIDE   && flag2 == CNR_MAX_MAXX )  return RIGHT_OUTSIDE;
-	       if ( flag1 == BACK_OUTSIDE   && flag2 == CNR_MAX_MINXZ ) return RIGHT_OUTSIDE;
+	       if ( flag1 == BACK_OUTSIDE   && flag2 == BACK_BOTTOM ) return RIGHT_OUTSIDE;
+	       if ( flag1 == BACK_OUTSIDE   && flag2 == BACK_RIGHT )  return RIGHT_OUTSIDE;
+	       if ( flag1 == BACK_OUTSIDE   && flag2 == BACK_TOP )    return RIGHT_OUTSIDE;
+	       if ( flag1 == BACK_OUTSIDE   && flag2 == BACK_LEFT )   return RIGHT_OUTSIDE;
+	       if ( flag1 == BACK_OUTSIDE   && flag2 == CNR_MIN )     return RIGHT_OUTSIDE;
+	       if ( flag1 == BACK_OUTSIDE   && flag2 == CNR2 ) return RIGHT_OUTSIDE;
+	       if ( flag1 == BACK_OUTSIDE   && flag2 == CNR3 ) return RIGHT_OUTSIDE;
+	       if ( flag1 == BACK_OUTSIDE   && flag2 == CNR4 ) return RIGHT_OUTSIDE;
 
            // flag1 flipped with flag2
 
@@ -865,20 +865,20 @@ int8_t  VSetConverter<dim>::BoundaryFlags3D( const vector<std::int8_t>& bflags,
 	       if ( flag2 == TOP_OUTSIDE && flag1 == TOP_LEFT )      return TOP_OUTSIDE;
 	       if ( flag2 == TOP_OUTSIDE && flag1 == TOP_RIGHT )     return TOP_OUTSIDE;
 	       if ( flag2 == TOP_OUTSIDE && flag1 == FRONT_TOP )     return TOP_OUTSIDE;
-	       if ( flag2 == TOP_OUTSIDE && flag1 == CNR_MAX_MAXX )  return TOP_OUTSIDE;
-	       if ( flag2 == TOP_OUTSIDE && flag1 == CNR_MAX_MINXZ ) return TOP_OUTSIDE;
-	       if ( flag2 == TOP_OUTSIDE && flag1 == CNR_MAX )       return TOP_OUTSIDE;
-	       if ( flag2 == TOP_OUTSIDE && flag1 == CNR_MAX_MAXZ )  return TOP_OUTSIDE;
+	       if ( flag2 == TOP_OUTSIDE && flag1 == 3 ) return TOP_OUTSIDE;
+	       if ( flag2 == TOP_OUTSIDE && flag1 == 4 ) return TOP_OUTSIDE;
+	       if ( flag2 == TOP_OUTSIDE && flag1 == 7 ) return TOP_OUTSIDE;
+	       if ( flag2 == TOP_OUTSIDE && flag1 == 8 ) return TOP_OUTSIDE;
 	       
 	       // BOTTOM
-	       if ( flag2 == BOTTOM_OUTSIDE && flag1 == BACK_BOTTOM )   return BOTTOM_OUTSIDE;
-	       if ( flag2 == BOTTOM_OUTSIDE && flag1 == BOTTOM_LEFT )   return BOTTOM_OUTSIDE;
-	       if ( flag2 == BOTTOM_OUTSIDE && flag1 == BOTTOM_RIGHT )  return BOTTOM_OUTSIDE;
-	       if ( flag2 == BOTTOM_OUTSIDE && flag1 == FRONT_BOTTOM )  return BOTTOM_OUTSIDE;
-	       if ( flag2 == BOTTOM_OUTSIDE && flag1 == CNR_MIN )       return BOTTOM_OUTSIDE;
-	       if ( flag2 == BOTTOM_OUTSIDE && flag1 == CNR_MIN_MAXX )  return BOTTOM_OUTSIDE;
-	       if ( flag2 == BOTTOM_OUTSIDE && flag1 == CNR_MIN_MAXZ )  return BOTTOM_OUTSIDE;
-	       if ( flag2 == BOTTOM_OUTSIDE && flag1 == CNR_MIN_MAXXZ ) return BOTTOM_OUTSIDE;
+	       if ( flag2 == BOTTOM_OUTSIDE && flag1 == BACK_BOTTOM )  return BOTTOM_OUTSIDE;
+	       if ( flag2 == BOTTOM_OUTSIDE && flag1 == BOTTOM_LEFT )  return BOTTOM_OUTSIDE;
+	       if ( flag2 == BOTTOM_OUTSIDE && flag1 == BOTTOM_RIGHT ) return BOTTOM_OUTSIDE;
+	       if ( flag2 == BOTTOM_OUTSIDE && flag1 == FRONT_BOTTOM ) return BOTTOM_OUTSIDE;
+	       if ( flag2 == BOTTOM_OUTSIDE && flag1 == CNR_MIN )      return BOTTOM_OUTSIDE;
+	       if ( flag2 == BOTTOM_OUTSIDE && flag1 == CNR2 ) return BOTTOM_OUTSIDE;
+	       if ( flag2 == BOTTOM_OUTSIDE && flag1 == CNR5 ) return BOTTOM_OUTSIDE;
+	       if ( flag2 == BOTTOM_OUTSIDE && flag1 == CNR5 ) return BOTTOM_OUTSIDE;
            
            // LEFT
 	       if ( flag2 == LEFT_OUTSIDE   && flag1 == BOTTOM_LEFT )   return LEFT_OUTSIDE;
@@ -886,29 +886,29 @@ int8_t  VSetConverter<dim>::BoundaryFlags3D( const vector<std::int8_t>& bflags,
 	       if ( flag2 == LEFT_OUTSIDE   && flag1 == TOP_LEFT )      return LEFT_OUTSIDE;
 	       if ( flag2 == LEFT_OUTSIDE   && flag1 == FRONT_LEFT )    return LEFT_OUTSIDE;
 	       if ( flag2 == LEFT_OUTSIDE   && flag1 == CNR_MIN )       return LEFT_OUTSIDE;
-	       if ( flag2 == LEFT_OUTSIDE   && flag1 == CNR_MAX_MINXZ ) return LEFT_OUTSIDE;
-	       if ( flag2 == LEFT_OUTSIDE   && flag1 == CNR_MIN_MAXZ )  return LEFT_OUTSIDE;
-	       if ( flag2 == LEFT_OUTSIDE   && flag1 == CNR_MAX_MAXZ )  return LEFT_OUTSIDE;
+	       if ( flag2 == LEFT_OUTSIDE   && flag1 == 4 ) return LEFT_OUTSIDE;
+	       if ( flag2 == LEFT_OUTSIDE   && flag1 == 5 ) return LEFT_OUTSIDE;
+	       if ( flag2 == LEFT_OUTSIDE   && flag1 == 8 ) return LEFT_OUTSIDE;
 	       
 	       // RIGHT
 	       if ( flag2 == RIGHT_OUTSIDE  && flag1 == BACK_RIGHT )    return RIGHT_OUTSIDE;
 	       if ( flag2 == RIGHT_OUTSIDE  && flag1 == BOTTOM_RIGHT )  return RIGHT_OUTSIDE;
 	       if ( flag2 == RIGHT_OUTSIDE  && flag1 == TOP_RIGHT )     return RIGHT_OUTSIDE;
 	       if ( flag2 == RIGHT_OUTSIDE  && flag1 == FRONT_RIGHT )   return RIGHT_OUTSIDE;
-	       if ( flag2 == RIGHT_OUTSIDE  && flag1 == CNR_MIN_MAXX )  return RIGHT_OUTSIDE;
-	       if ( flag2 == RIGHT_OUTSIDE  && flag1 == CNR_MAX_MAXX )  return RIGHT_OUTSIDE;
-	       if ( flag2 == RIGHT_OUTSIDE  && flag1 == CNR_MIN_MAXXZ ) return RIGHT_OUTSIDE;
-	       if ( flag2 == RIGHT_OUTSIDE  && flag1 == CNR_MAX )       return RIGHT_OUTSIDE;
+	       if ( flag2 == RIGHT_OUTSIDE  && flag1 == 2 )       return RIGHT_OUTSIDE;
+	       if ( flag2 == RIGHT_OUTSIDE  && flag1 == 3 )       return RIGHT_OUTSIDE;
+	       if ( flag2 == RIGHT_OUTSIDE  && flag1 == 6 )       return RIGHT_OUTSIDE;
+	       if ( flag2 == RIGHT_OUTSIDE  && flag1 == CNR_MAX ) return RIGHT_OUTSIDE;
 
            // FRONT
 	       if ( flag2 == FRONT_OUTSIDE  && flag1 == FRONT_BOTTOM )  return FRONT_OUTSIDE;
 	       if ( flag2 == FRONT_OUTSIDE  && flag1 == FRONT_RIGHT )   return FRONT_OUTSIDE;
 	       if ( flag2 == FRONT_OUTSIDE  && flag1 == FRONT_TOP )     return FRONT_OUTSIDE;
 	       if ( flag2 == FRONT_OUTSIDE  && flag1 == FRONT_LEFT )    return FRONT_OUTSIDE;
-	       if ( flag2 == FRONT_OUTSIDE  && flag1 == CNR_MIN_MAXZ )  return FRONT_OUTSIDE;
-	       if ( flag2 == FRONT_OUTSIDE  && flag1 == CNR_MIN_MAXXZ ) return FRONT_OUTSIDE;
-	       if ( flag2 == FRONT_OUTSIDE  && flag1 == CNR_MAX )       return FRONT_OUTSIDE;
-	       if ( flag2 == FRONT_OUTSIDE  && flag1 == CNR_MAX_MAXZ )  return FRONT_OUTSIDE;
+	       if ( flag2 == FRONT_OUTSIDE  && flag1 == 5 )       return FRONT_OUTSIDE;
+	       if ( flag2 == FRONT_OUTSIDE  && flag1 == 6 )       return FRONT_OUTSIDE;
+	       if ( flag2 == FRONT_OUTSIDE  && flag1 == CNR_MAX ) return FRONT_OUTSIDE;
+	       if ( flag2 == FRONT_OUTSIDE  && flag1 == 8 )       return FRONT_OUTSIDE;
 	       
 	       // BACK
 	       if ( flag2 == BACK_OUTSIDE   && flag1 == BACK_BOTTOM )   return RIGHT_OUTSIDE;
@@ -916,9 +916,9 @@ int8_t  VSetConverter<dim>::BoundaryFlags3D( const vector<std::int8_t>& bflags,
 	       if ( flag2 == BACK_OUTSIDE   && flag1 == BACK_TOP )      return RIGHT_OUTSIDE;
 	       if ( flag2 == BACK_OUTSIDE   && flag1 == BACK_LEFT )     return RIGHT_OUTSIDE;
 	       if ( flag2 == BACK_OUTSIDE   && flag1 == CNR_MIN )       return RIGHT_OUTSIDE;
-	       if ( flag2 == BACK_OUTSIDE   && flag1 == CNR_MIN_MAXX )  return RIGHT_OUTSIDE;
-	       if ( flag2 == BACK_OUTSIDE   && flag1 == CNR_MAX_MAXX )  return RIGHT_OUTSIDE;
-	       if ( flag2 == BACK_OUTSIDE   && flag1 == CNR_MAX_MINXZ ) return RIGHT_OUTSIDE;
+	       if ( flag2 == BACK_OUTSIDE   && flag1 == CNR2 ) return RIGHT_OUTSIDE;
+	       if ( flag2 == BACK_OUTSIDE   && flag1 == CNR3 ) return RIGHT_OUTSIDE;
+	       if ( flag2 == BACK_OUTSIDE   && flag1 == CNR4 ) return RIGHT_OUTSIDE;
 	       
 	       // If unfortunate elements across 2 boundaries, the midside nodes on
 	       // such edges must not lie on the boundary !
@@ -974,54 +974,54 @@ int8_t  VSetConverter<dim>::BoundaryFlags3D( const vector<std::int8_t>& bflags,
 
            // edge and corner cases
 	       if ( flag1 == BACK_BOTTOM && flag2 == CNR_MIN )        return BACK_BOTTOM;
-	       if ( flag1 == BACK_BOTTOM && flag2 == CNR_MIN_MAXX )   return BACK_BOTTOM;
-	       if ( flag1 == BACK_RIGHT && flag2 == CNR_MIN_MAXX )    return BACK_RIGHT;
-	       if ( flag1 == BACK_RIGHT && flag2 == CNR_MAX_MAXX )    return BACK_RIGHT;
-	       if ( flag1 == BACK_TOP && flag2 == CNR_MAX_MAXX )      return BACK_TOP;
-	       if ( flag1 == BACK_TOP && flag2 == CNR_MAX_MINXZ )     return BACK_TOP;
-	       if ( flag1 == BACK_LEFT && flag2 == CNR_MAX_MINXZ )    return BACK_LEFT;
+	       if ( flag1 == BACK_BOTTOM && flag2 == CNR2 )   return BACK_BOTTOM;
+	       if ( flag1 == BACK_RIGHT && flag2 == CNR2 )    return BACK_RIGHT;
+	       if ( flag1 == BACK_RIGHT && flag2 == CNR3 )    return BACK_RIGHT;
+	       if ( flag1 == BACK_TOP && flag2 == CNR3 )      return BACK_TOP;
+	       if ( flag1 == BACK_TOP && flag2 == CNR4 )     return BACK_TOP;
+	       if ( flag1 == BACK_LEFT && flag2 == CNR4 )    return BACK_LEFT;
 	       if ( flag1 == BACK_LEFT && flag2 == CNR_MIN )          return BACK_LEFT;
 	       if ( flag1 == BOTTOM_LEFT && flag2 == CNR_MIN )        return BOTTOM_LEFT;
-	       if ( flag1 == BOTTOM_LEFT && flag2 == CNR_MIN_MAXZ )   return BOTTOM_LEFT;
-	       if ( flag1 == BOTTOM_RIGHT && flag2 == CNR_MIN_MAXX )  return BOTTOM_RIGHT;
-	       if ( flag1 == BOTTOM_RIGHT && flag2 == CNR_MIN_MAXXZ ) return BOTTOM_RIGHT;
-	       if ( flag1 == TOP_RIGHT && flag2 == CNR_MAX_MAXX )     return TOP_RIGHT;
+	       if ( flag1 == BOTTOM_LEFT && flag2 == CNR5 )   return BOTTOM_LEFT;
+	       if ( flag1 == BOTTOM_RIGHT && flag2 == CNR2 )  return BOTTOM_RIGHT;
+	       if ( flag1 == BOTTOM_RIGHT && flag2 == CNR6 ) return BOTTOM_RIGHT;
+	       if ( flag1 == TOP_RIGHT && flag2 == CNR3 )     return TOP_RIGHT;
 	       if ( flag1 == TOP_RIGHT && flag2 == CNR_MAX )          return TOP_RIGHT;
-	       if ( flag1 == TOP_LEFT && flag2 == CNR_MAX_MINXZ )     return TOP_LEFT;
-	       if ( flag1 == TOP_LEFT && flag2 == CNR_MAX_MAXZ )      return TOP_LEFT;
-	       if ( flag1 == FRONT_BOTTOM && flag2 == CNR_MIN_MAXZ )  return FRONT_BOTTOM;
-	       if ( flag1 == FRONT_BOTTOM && flag2 == CNR_MIN_MAXXZ ) return FRONT_BOTTOM;
-	       if ( flag1 == FRONT_RIGHT && flag2 == CNR_MIN_MAXXZ )  return FRONT_RIGHT;
+	       if ( flag1 == TOP_LEFT && flag2 == CNR4 )     return TOP_LEFT;
+	       if ( flag1 == TOP_LEFT && flag2 == CNR8 )      return TOP_LEFT;
+	       if ( flag1 == FRONT_BOTTOM && flag2 == CNR5 )  return FRONT_BOTTOM;
+	       if ( flag1 == FRONT_BOTTOM && flag2 == CNR6 ) return FRONT_BOTTOM;
+	       if ( flag1 == FRONT_RIGHT && flag2 == CNR6 )  return FRONT_RIGHT;
 	       if ( flag1 == FRONT_RIGHT && flag2 == CNR_MAX )        return FRONT_RIGHT;
 	       if ( flag1 == FRONT_TOP && flag2 == CNR_MAX )          return FRONT_TOP;
-	       if ( flag1 == FRONT_TOP && flag2 == CNR_MAX_MAXZ )     return FRONT_TOP;
-	       if ( flag1 == FRONT_LEFT && flag2 == CNR_MAX_MAXZ )    return FRONT_LEFT;
-	       if ( flag1 == FRONT_LEFT && flag2 == CNR_MIN_MAXZ )    return FRONT_LEFT;
+	       if ( flag1 == FRONT_TOP && flag2 == CNR8 )     return FRONT_TOP;
+	       if ( flag1 == FRONT_LEFT && flag2 == CNR8 )    return FRONT_LEFT;
+	       if ( flag1 == FRONT_LEFT && flag2 == CNR6 )    return FRONT_LEFT;
 	       
 	       if ( flag2 == BACK_BOTTOM && flag1 == CNR_MIN )        return BACK_BOTTOM;
-	       if ( flag2 == BACK_BOTTOM && flag1 == CNR_MIN_MAXX )   return BACK_BOTTOM;
-	       if ( flag2 == BACK_RIGHT && flag1 == CNR_MIN_MAXX )    return BACK_RIGHT;
-	       if ( flag2 == BACK_RIGHT && flag1 == CNR_MAX_MAXX )    return BACK_RIGHT;
-	       if ( flag2 == BACK_TOP && flag1 == CNR_MAX_MAXX )      return BACK_TOP;
-	       if ( flag2 == BACK_TOP && flag1 == CNR_MAX_MINXZ )     return BACK_TOP;
-	       if ( flag2 == BACK_LEFT && flag1 == CNR_MAX_MINXZ )    return BACK_LEFT;
+	       if ( flag2 == BACK_BOTTOM && flag1 == CNR2 )   return BACK_BOTTOM;
+	       if ( flag2 == BACK_RIGHT && flag1 == CNR2 )    return BACK_RIGHT;
+	       if ( flag2 == BACK_RIGHT && flag1 == CNR3 )    return BACK_RIGHT;
+	       if ( flag2 == BACK_TOP && flag1 == CNR3 )      return BACK_TOP;
+	       if ( flag2 == BACK_TOP && flag1 == CNR4 )     return BACK_TOP;
+	       if ( flag2 == BACK_LEFT && flag1 == CNR4 )    return BACK_LEFT;
 	       if ( flag2 == BACK_LEFT && flag1 == CNR_MIN )          return BACK_LEFT;
 	       if ( flag2 == BOTTOM_LEFT && flag1 == CNR_MIN )        return BOTTOM_LEFT;
-	       if ( flag2 == BOTTOM_LEFT && flag1 == CNR_MIN_MAXZ )   return BOTTOM_LEFT;
-	       if ( flag2 == BOTTOM_RIGHT && flag1 == CNR_MIN_MAXX )  return BOTTOM_RIGHT;
-	       if ( flag2 == BOTTOM_RIGHT && flag1 == CNR_MIN_MAXXZ ) return BOTTOM_RIGHT;
-	       if ( flag2 == TOP_RIGHT && flag1 == CNR_MAX_MAXX )     return TOP_RIGHT;
+	       if ( flag2 == BOTTOM_LEFT && flag1 == CNR5 )   return BOTTOM_LEFT;
+	       if ( flag2 == BOTTOM_RIGHT && flag1 == CNR2 )  return BOTTOM_RIGHT;
+	       if ( flag2 == BOTTOM_RIGHT && flag1 == CNR6 ) return BOTTOM_RIGHT;
+	       if ( flag2 == TOP_RIGHT && flag1 == CNR3 )     return TOP_RIGHT;
 	       if ( flag2 == TOP_RIGHT && flag1 == CNR_MAX )          return TOP_RIGHT;
-	       if ( flag2 == TOP_LEFT && flag1 == CNR_MAX_MINXZ )     return TOP_LEFT;
-	       if ( flag2 == TOP_LEFT && flag1 == CNR_MAX_MAXZ )      return TOP_LEFT;
-	       if ( flag2 == FRONT_BOTTOM && flag1 == CNR_MIN_MAXZ )  return FRONT_BOTTOM;
-	       if ( flag2 == FRONT_BOTTOM && flag1 == CNR_MIN_MAXXZ ) return FRONT_BOTTOM;
-	       if ( flag2 == FRONT_RIGHT && flag1 == CNR_MIN_MAXXZ )  return FRONT_RIGHT;
+	       if ( flag2 == TOP_LEFT && flag1 == CNR4 )     return TOP_LEFT;
+	       if ( flag2 == TOP_LEFT && flag1 == CNR8 )      return TOP_LEFT;
+	       if ( flag2 == FRONT_BOTTOM && flag1 == CNR5 )  return FRONT_BOTTOM;
+	       if ( flag2 == FRONT_BOTTOM && flag1 == CNR6 ) return FRONT_BOTTOM;
+	       if ( flag2 == FRONT_RIGHT && flag1 == CNR6 )  return FRONT_RIGHT;
 	       if ( flag2 == FRONT_RIGHT && flag1 == CNR_MAX )        return FRONT_RIGHT;
 	       if ( flag2 == FRONT_TOP && flag1 == CNR_MAX )          return FRONT_TOP;
-	       if ( flag2 == FRONT_TOP && flag1 == CNR_MAX_MAXZ )     return FRONT_TOP;
-	       if ( flag2 == FRONT_LEFT && flag1 == CNR_MAX_MAXZ )    return FRONT_LEFT;
-	       if ( flag2 == FRONT_LEFT && flag1 == CNR_MIN_MAXZ )    return FRONT_LEFT;
+	       if ( flag2 == FRONT_TOP && flag1 == CNR8 )     return FRONT_TOP;
+	       if ( flag2 == FRONT_LEFT && flag1 == CNR8 )    return FRONT_LEFT;
+	       if ( flag2 == FRONT_LEFT && flag1 == CNR6 )    return FRONT_LEFT;
         }
       // special cases for boundaries that are only one element long 
       if ( flag1 == IRREGULAR_OUTSIDE  && flag2 == IRREGULAR_OUTSIDE ) return IRREGULAR_OUTSIDE;
@@ -1147,13 +1147,13 @@ void VSetConverter<dim>::FlagCornerNodes( VSet<dim>& vset, bool three_dimensiona
                      { (*bit) = CNR_MIN; flagging_count++; }
                    // CNR2
                    else if ( approximatelyEqual( vset.Px( n_node ), xmax ) && approximatelyEqual( vset.Py( n_node ), ymin ) )
-                     { (*bit) = CNR_MIN_MAXX; flagging_count++; }
+                     { (*bit) = CNR2; flagging_count++; }
                    // CNR3
                    else if ( approximatelyEqual( vset.Px( n_node ), xmax ) && approximatelyEqual( vset.Py( n_node ), ymax ) )
-                     { (*bit) = CNR_MAX_MAXX; flagging_count++; }
+                     { (*bit) = CNR3; flagging_count++; }
                    // CNR4
                    else if ( approximatelyEqual( vset.Px( n_node ), xmin ) && approximatelyEqual( vset.Py( n_node ), ymax ) )
-                     { (*bit) = CNR_MAX_MINXZ; flagging_count++; }
+                     { (*bit) = CNR4; flagging_count++; }
                 }
            }
          if ( flagging_count < 4U ) {
@@ -1185,28 +1185,28 @@ void VSetConverter<dim>::FlagCornerNodes( VSet<dim>& vset, bool three_dimensiona
                       { (*bit) = CNR_MIN; flagging_count++; }
                     // CNR2
                     else if ( approximatelyEqual(vset.Px( n_node ),xmax,tol) && approximatelyEqual(vset.Py( n_node ),ymin,tol) )
-                      { (*bit) = CNR_MIN_MAXX; flagging_count++; }
+                      { (*bit) = CNR2; flagging_count++; }
                     // CNR3
                     else if ( approximatelyEqual(vset.Px( n_node ),xmax,tol) && approximatelyEqual(vset.Py( n_node ),ymax,tol) )
-                      { (*bit) = CNR_MAX_MAXX; flagging_count++; }
+                      { (*bit) = CNR3; flagging_count++; }
                     // CNR4
                     else if ( approximatelyEqual(vset.Px( n_node ),xmin,tol) && approximatelyEqual(vset.Py( n_node ),ymax,tol) )
-                      { (*bit) = CNR_MAX_MINXZ; flagging_count++; }
+                      { (*bit) = CNR4; flagging_count++; }
                  }
                else if ( approximatelyEqual( vset.Pz( n_node ), zmax, tol ) )
                  {
                     // CNR5
                     if ( approximatelyEqual(vset.Px( n_node ),xmin,tol) && approximatelyEqual(vset.Py( n_node ),ymin,tol) )
-                      { (*bit) = CNR_MIN_MAXZ; flagging_count++; }
+                      { (*bit) = CNR5; flagging_count++; }
                     // CNR6
                     else if ( approximatelyEqual(vset.Px( n_node ),xmax,tol) && approximatelyEqual(vset.Py( n_node ),ymin,tol) )
-                      { (*bit) = CNR_MIN_MAXXZ; flagging_count++; }
+                      { (*bit) = CNR6; flagging_count++; }
                     // CNR7
                     else if ( approximatelyEqual(vset.Px( n_node ),xmax,tol) && approximatelyEqual(vset.Py( n_node ),ymax,tol) )
                       { (*bit) = CNR_MAX; flagging_count++; }
                     // CNR8
                     else if ( approximatelyEqual(vset.Px( n_node ),xmin,tol) && approximatelyEqual(vset.Py( n_node ),ymax,tol) )
-                      { (*bit) = CNR_MAX_MAXZ; flagging_count++; }
+                      { (*bit) = CNR8; flagging_count++; }
                  }
             }
        }     

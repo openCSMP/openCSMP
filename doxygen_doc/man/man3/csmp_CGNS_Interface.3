@@ -1,0 +1,82 @@
+.TH "csmp::CGNS_Interface" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::CGNS_Interface \- CFD General Notation System (CGNS cfd data standard, NASA) interface to CSMP\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <CGNS_Interface\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBCGNS_Interface\fP (bool isoparametric_mesh=true)"
+.br
+.ti -1c
+.RI "template<uint32_t dim> int \fBWrite_CGNS_Mesh\fP (const std::string &filename, const \fBcsmp::Model\fP< dim > &model)"
+.br
+.ti -1c
+.RI "template<uint32_t dim> int \fBRead_CGNS_Mesh\fP (const std::string &filename, \fBcsmp::VSet\fP< dim > &vset, \fBcsmp::ModelTopology\fP &mesh_topology)"
+.br
+.ti -1c
+.RI "int \fBSetFileType\fP (int)"
+.br
+.ti -1c
+.RI "int \fBGetFileType\fP () const"
+.br
+.ti -1c
+.RI "void \fBAssignMaterialPropertiesInteractively\fP (bool assign=true)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+CFD General Notation System (CGNS cfd data standard, NASA) interface to CSMP\&. 
+
+cgns\&.org\&.
+
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. Manasipov 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2015 
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim> template int csmp::CGNS_Interface::Read_CGNS_Mesh (const std::string & filename, \fBcsmp::VSet\fP< dim > & vset, \fBcsmp::ModelTopology\fP & mesh_topology)"
+Reads simple 3-D unstructured grid from a CGNS file open CGNS file for read-only
+
+.PP
+read mesh
+
+.PP
+close CGNS file
+.SS "int csmp::CGNS_Interface::SetFileType (int file_type)"
+Avaliable file formats: CG_FILE_HDF5, CG_FILE_ADF2, CG_FILE_ADF 
+.SS "template<uint32_t dim> template int csmp::CGNS_Interface::Write_CGNS_Mesh (const std::string & filename, const \fBcsmp::Model\fP< dim > & model)"
+Writess simple 3-D unstructured grid to CGNS file prepare file
+
+.PP
+set file type
+
+.PP
+open CGNS file for write
+
+.PP
+.PP
+
+.PP
+.PP
+ close CGNS file
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

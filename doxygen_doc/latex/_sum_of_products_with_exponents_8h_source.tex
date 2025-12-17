@@ -1,0 +1,68 @@
+\doxysection{Sum\+Of\+Products\+With\+Exponents.\+h}
+\hypertarget{_sum_of_products_with_exponents_8h_source}{}\label{_sum_of_products_with_exponents_8h_source}\index{source/includes/math/SumOfProductsWithExponents.h@{source/includes/math/SumOfProductsWithExponents.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_SUM\_OF\_PRODUCTS\_WITH\_EXPONENTS\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_SUM\_OF\_PRODUCTS\_WITH\_EXPONENTS\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00007\ \textcolor{comment}{}}
+\DoxyCodeLine{00008\ \textcolor{comment}{proxy\ for\ chemical\ reactions\ (mass\ action\ laws)\ with\ stochiometric}}
+\DoxyCodeLine{00009\ \textcolor{comment}{\ exponents}}
+\DoxyCodeLine{00010\ \textcolor{comment}{}}
+\DoxyCodeLine{00011\ \textcolor{comment}{CONVENTION:\ indepent\ species\ terms\ have\ negative\ indices\ and\ they\ are\ not\ differentiated}}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ for\ in\ derivative*/}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ c.idx/coefficient\ \ \ \ e.idx/exponent}}
+\DoxyCodeLine{00017\ \textcolor{keyword}{typedef}\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{pair}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{pair}}<\mbox{\hyperlink{namespacecsmp}{int32\_t}},\textcolor{keywordtype}{double}>,\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{map}}<\mbox{\hyperlink{namespacecsmp}{int32\_t}},\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{pair}}<\textcolor{keywordtype}{double},\textcolor{keywordtype}{double}>\ >\ >\ \ \mbox{\hyperlink{namespacecsmp}{sumofproducts\_pair}};}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_sum_of_products_with_exponents}{SumOfProductsWithExponents}}\ \{}
+\DoxyCodeLine{00020\ \ \ \ \textcolor{comment}{//\ terms\ that\ make\ up\ sum,\ e.g.,}}
+\DoxyCodeLine{00021\ \ \ \ \textcolor{comment}{//\ a1\ c2\ -\/\ b2\string^2\ c1\ ...}}
+\DoxyCodeLine{00022\ \ \ \ \textcolor{comment}{//\ terms\ \ \ \ coeff\ \ \ spec.idx\ \ exponents\ \ \ }}
+\DoxyCodeLine{00023\ \ \ \ std::vector<sumofproducts\_pair>\ \ sumproducts;}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00026\ \ \ \ SumOfProductsWithExponents();}
+\DoxyCodeLine{00027\ \ \ \ \string~SumOfProductsWithExponents();}
+\DoxyCodeLine{00028\ \ \ \ SumOfProductsWithExponents(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_sum_of_products_with_exponents}{SumOfProductsWithExponents}}\&\ s\ );}
+\DoxyCodeLine{00029\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_sum_of_products_with_exponents}{SumOfProductsWithExponents}}\&\ operator=(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_sum_of_products_with_exponents}{SumOfProductsWithExponents}}\&\ s\ );}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_sum_of_products_with_exponents_a5fc04bac2da9bf370f1df7ef80a10b51}{AddProduct}}(\ int32\_t\ coeff\_idx,\ \textcolor{keywordtype}{double}\ coeff,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_sum_of_products_with_exponents_a5fc04bac2da9bf370f1df7ef80a10b51}{std}}::\mbox{\hyperlink{classcsmp_1_1_sum_of_products_with_exponents_a5fc04bac2da9bf370f1df7ef80a10b51}{map}}<\mbox{\hyperlink{classcsmp_1_1_sum_of_products_with_exponents_a5fc04bac2da9bf370f1df7ef80a10b51}{int32\_t}},\mbox{\hyperlink{classcsmp_1_1_sum_of_products_with_exponents_a5fc04bac2da9bf370f1df7ef80a10b51}{std}}::\mbox{\hyperlink{classcsmp_1_1_sum_of_products_with_exponents_a5fc04bac2da9bf370f1df7ef80a10b51}{pair}}<\textcolor{keywordtype}{double},\textcolor{keywordtype}{double}>\ >\&\ \mbox{\hyperlink{classcsmp_1_1_sum_of_products_with_exponents_a5fc04bac2da9bf370f1df7ef80a10b51}{product}}\ );}
+\DoxyCodeLine{00032\ \ \ \ \textcolor{keywordtype}{double}\ \ Sum(\ \textcolor{keywordtype}{double}\ a[]\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00033\ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_sum_of_products_with_exponents_a2b37de226905622520fa402f1fb8070c}{DerivativeWithRespectTo}}(\ int32\_t\ spec\_idx,\ \textcolor{keywordtype}{double}\ a[]\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00034\ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ Erase();}
+\DoxyCodeLine{00035\ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ Out()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00036\ \ \ \ \textcolor{keywordtype}{double}\ \ Sign(\ \textcolor{keywordtype}{double}\ a\ )\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ a\ >=\ 0.0\ ?\ 1.0\ :\ -\/1.0;\ \};}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ std::vector<sumofproducts\_pair>::iterator\ \ \mbox{\hyperlink{classcsmp_1_1_sum_of_products_with_exponents}{Begin}}()\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcsmp_1_1_sum_of_products_with_exponents}{sumproducts}}.\mbox{\hyperlink{classcsmp_1_1_sum_of_products_with_exponents}{begin}}();\ \};}
+\DoxyCodeLine{00039\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_sum_of_products_with_exponents}{std}}::\mbox{\hyperlink{classcsmp_1_1_sum_of_products_with_exponents}{vector}}<\mbox{\hyperlink{classcsmp_1_1_sum_of_products_with_exponents}{sumofproducts\_pair}}>::\mbox{\hyperlink{classcsmp_1_1_sum_of_products_with_exponents}{iterator}}\ \ \mbox{\hyperlink{classcsmp_1_1_sum_of_products_with_exponents}{End}}()\ \ \ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcsmp_1_1_sum_of_products_with_exponents}{sumproducts}}.\mbox{\hyperlink{classcsmp_1_1_sum_of_products_with_exponents}{end}}();\ \};}
+\DoxyCodeLine{00040\ \};}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00044\ \textcolor{comment}{}}
+\DoxyCodeLine{00045\ \textcolor{comment}{@class\ SumOfProductsWithExponents\ SumOfProductsWithExponents\ "{}applied\_math/SumOfProductsWithExponents.h"{}}}
+\DoxyCodeLine{00046\ \textcolor{comment}{}}
+\DoxyCodeLine{00047\ \textcolor{comment}{-\/\ Sum\ of\ products\ must\ has\ storage\ for\ constant\ product\ terms\ and\ their\ exponents.\ The\ indices}}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ \ for\ such\ constant\ terms\ should\ be\ set\ to\ <0,\ since\ they\ are\ not\ dependent\ variables.}}
+\DoxyCodeLine{00049\ \textcolor{comment}{const\ term,\ exponent}}
+\DoxyCodeLine{00050\ \textcolor{comment}{}}
+\DoxyCodeLine{00051\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00052\ \textcolor{comment}{idea:\ pair<pair<int,double>,map<int,pair<double,double>,less<int>\ >\ >\ \ sumofproducts\_pair;}}
+\DoxyCodeLine{00053\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00054\ \textcolor{comment}{}}
+\DoxyCodeLine{00055\ \textcolor{comment}{when\ derivatives\ are\ taken\ and\ the\ spec.index,\ idx\ <\ 0,\ the\ constants\ are\ used\ rather\ than}}
+\DoxyCodeLine{00056\ \textcolor{comment}{the\ values\ supplied\ through\ a[].}}
+\DoxyCodeLine{00057\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \}\ \textcolor{comment}{//\ end\ namespace\ csp}}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

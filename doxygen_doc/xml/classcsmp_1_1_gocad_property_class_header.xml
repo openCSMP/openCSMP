@@ -1,0 +1,694 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_gocad_property_class_header" kind="class" language="C++" prot="public">
+    <compoundname>csmp::GocadPropertyClassHeader</compoundname>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_gocad_property_class_header_1a4812d7ce6a695e83a7833d9244e13398" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::GocadPropertyClassHeader::property_name</definition>
+        <argsstring></argsstring>
+        <name>property_name</name>
+        <qualifiedname>csmp::GocadPropertyClassHeader::property_name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" line="9" column="18" bodyfile="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" bodystart="9" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_gocad_property_class_header_1a33d497b10be97e97cca2d2fde629cfb0" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::GocadPropertyClassHeader::property_class</definition>
+        <argsstring></argsstring>
+        <name>property_class</name>
+        <qualifiedname>csmp::GocadPropertyClassHeader::property_class</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" line="10" column="18" bodyfile="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" bodystart="10" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_gocad_property_class_header_1a87ce97011dc2ad075488f47d7ca7c597" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::GocadPropertyClassHeader::components</definition>
+        <argsstring></argsstring>
+        <name>components</name>
+        <qualifiedname>csmp::GocadPropertyClassHeader::components</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" line="11" column="15" bodyfile="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" bodystart="11" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_gocad_property_class_header_1a814fa1c3478eaf3b2f26d3ba4ab9d995" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::GocadPropertyClassHeader::no_data_value</definition>
+        <argsstring></argsstring>
+        <name>no_data_value</name>
+        <qualifiedname>csmp::GocadPropertyClassHeader::no_data_value</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" line="12" column="15" bodyfile="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" bodystart="12" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_gocad_property_class_header_1adce8f39570cba7461f2cac2ef97b82ac" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::GocadPropertyClassHeader::low_clip</definition>
+        <argsstring></argsstring>
+        <name>low_clip</name>
+        <qualifiedname>csmp::GocadPropertyClassHeader::low_clip</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" line="13" column="15" bodyfile="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" bodystart="13" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_gocad_property_class_header_1a07b39d34821c165c33c8926a17c0cb7e" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::GocadPropertyClassHeader::high_clip</definition>
+        <argsstring></argsstring>
+        <name>high_clip</name>
+        <qualifiedname>csmp::GocadPropertyClassHeader::high_clip</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" line="14" column="15" bodyfile="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" bodystart="14" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_gocad_property_class_header_1a6bdcfc507fdb6ab86e1bcb47338fa149" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::GocadPropertyClassHeader::p_clip</definition>
+        <argsstring></argsstring>
+        <name>p_clip</name>
+        <qualifiedname>csmp::GocadPropertyClassHeader::p_clip</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" line="15" column="18" bodyfile="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" bodystart="15" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_gocad_property_class_header_1ad788c5e3bcb529e935e3620bd79b851b" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::GocadPropertyClassHeader::colormap</definition>
+        <argsstring></argsstring>
+        <name>colormap</name>
+        <qualifiedname>csmp::GocadPropertyClassHeader::colormap</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" line="16" column="18" bodyfile="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" bodystart="16" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_gocad_property_class_header_1aac47c2326c35ca0ab39b0786dc0116c7" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::GocadPropertyClassHeader::colormap_contrast</definition>
+        <argsstring></argsstring>
+        <name>colormap_contrast</name>
+        <qualifiedname>csmp::GocadPropertyClassHeader::colormap_contrast</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" line="17" column="15" bodyfile="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" bodystart="17" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_gocad_property_class_header_1a7d6490d99ff8a624f29ad24e13a6574d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::GocadPropertyClassHeader::GocadPropertyClassHeader</definition>
+        <argsstring>()</argsstring>
+        <name>GocadPropertyClassHeader</name>
+        <qualifiedname>csmp::GocadPropertyClassHeader::GocadPropertyClassHeader</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" line="20" column="5" bodyfile="source/modules/interfaces/gOcad_SKUA/GocadPropertyClassHeader.cpp" bodystart="9" bodyend="17"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_gocad_property_class_header_1af060854af30a5ab83f711ff9dc9cce9e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::GocadPropertyClassHeader::GocadPropertyClassHeader</definition>
+        <argsstring>(const char *name, double lclip, double hclip, long pclip=99, size_t comp=1)</argsstring>
+        <name>GocadPropertyClassHeader</name>
+        <qualifiedname>csmp::GocadPropertyClassHeader::GocadPropertyClassHeader</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>lclip</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>hclip</declname>
+        </param>
+        <param>
+          <type>long</type>
+          <declname>pclip</declname>
+          <defval>99</defval>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>comp</declname>
+          <defval>1</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" line="21" column="5" bodyfile="source/modules/interfaces/gOcad_SKUA/GocadPropertyClassHeader.cpp" bodystart="19" bodyend="28"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_gocad_property_class_header_1a6fa4d3edfdfbaaf6e99078f5bb7330cf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::GocadPropertyClassHeader::GocadPropertyClassHeader</definition>
+        <argsstring>(const GocadPropertyClassHeader &amp;p)</argsstring>
+        <name>GocadPropertyClassHeader</name>
+        <qualifiedname>csmp::GocadPropertyClassHeader::GocadPropertyClassHeader</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_gocad_property_class_header" kindref="compound">GocadPropertyClassHeader</ref> &amp;</type>
+          <declname>p</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" line="25" column="5" bodyfile="source/modules/interfaces/gOcad_SKUA/GocadPropertyClassHeader.cpp" bodystart="53" bodyend="56"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_gocad_property_class_header_1a5a5f755097ff475318385a9af38ca621" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::GocadPropertyClassHeader::~GocadPropertyClassHeader</definition>
+        <argsstring>()</argsstring>
+        <name>~GocadPropertyClassHeader</name>
+        <qualifiedname>csmp::GocadPropertyClassHeader::~GocadPropertyClassHeader</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" line="26" column="5" bodyfile="source/modules/interfaces/gOcad_SKUA/GocadPropertyClassHeader.cpp" bodystart="59" bodyend="61"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_gocad_property_class_header_1a15b48fe597544d5b7f37867f7e4af0e1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_gocad_property_class_header" kindref="compound">GocadPropertyClassHeader</ref> &amp;</type>
+        <definition>GocadPropertyClassHeader &amp; csmp::GocadPropertyClassHeader::operator=</definition>
+        <argsstring>(const GocadPropertyClassHeader &amp;p)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::GocadPropertyClassHeader::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_gocad_property_class_header" kindref="compound">GocadPropertyClassHeader</ref> &amp;</type>
+          <declname>p</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" line="27" column="31" bodyfile="source/modules/interfaces/gOcad_SKUA/GocadPropertyClassHeader.cpp" bodystart="32" bodyend="48"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_gocad_property_class_header_1a07f6a95ca791f43388ff13be4cb44d33" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::string</type>
+        <definition>std::string csmp::GocadPropertyClassHeader::Property</definition>
+        <argsstring>() const</argsstring>
+        <name>Property</name>
+        <qualifiedname>csmp::GocadPropertyClassHeader::Property</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" line="30" column="17" bodyfile="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" bodystart="30" bodyend="30"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_gocad_property_class_header_1a7850e227e6da2273eebd5028d513d212" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::GocadPropertyClassHeader::Property</definition>
+        <argsstring>(const std::string &amp;s)</argsstring>
+        <name>Property</name>
+        <qualifiedname>csmp::GocadPropertyClassHeader::Property</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>s</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" line="31" column="17" bodyfile="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" bodystart="31" bodyend="31"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_gocad_property_class_header_1aafb078991f12e2192662b72ab4d0697c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::GocadPropertyClassHeader::Property</definition>
+        <argsstring>(const char *s)</argsstring>
+        <name>Property</name>
+        <qualifiedname>csmp::GocadPropertyClassHeader::Property</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>s</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" line="32" column="17" bodyfile="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" bodystart="32" bodyend="32"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_gocad_property_class_header_1a0f3dc869fa2e4f832d4dc326d77eb746" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::string</type>
+        <definition>std::string csmp::GocadPropertyClassHeader::PropertyClass</definition>
+        <argsstring>() const</argsstring>
+        <name>PropertyClass</name>
+        <qualifiedname>csmp::GocadPropertyClassHeader::PropertyClass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" line="34" column="17" bodyfile="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" bodystart="34" bodyend="34"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_gocad_property_class_header_1a4a7bbafc118bb332ae322f24a66deada" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::GocadPropertyClassHeader::PropertyClass</definition>
+        <argsstring>(const std::string &amp;s)</argsstring>
+        <name>PropertyClass</name>
+        <qualifiedname>csmp::GocadPropertyClassHeader::PropertyClass</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>s</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" line="35" column="17" bodyfile="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" bodystart="35" bodyend="35"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_gocad_property_class_header_1ae2fdc583277702b2433c90b422746e56" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::GocadPropertyClassHeader::PropertyClass</definition>
+        <argsstring>(const char *s)</argsstring>
+        <name>PropertyClass</name>
+        <qualifiedname>csmp::GocadPropertyClassHeader::PropertyClass</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>s</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" line="36" column="17" bodyfile="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" bodystart="36" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_gocad_property_class_header_1af85ca4f018f47a16afddc04319e4138e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::GocadPropertyClassHeader::LowClip</definition>
+        <argsstring>() const</argsstring>
+        <name>LowClip</name>
+        <qualifiedname>csmp::GocadPropertyClassHeader::LowClip</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" line="38" column="14" bodyfile="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" bodystart="38" bodyend="38"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_gocad_property_class_header_1ada9423eecb43930c313b1979b3d57572" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::GocadPropertyClassHeader::LowClip</definition>
+        <argsstring>(double lc)</argsstring>
+        <name>LowClip</name>
+        <qualifiedname>csmp::GocadPropertyClassHeader::LowClip</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>lc</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" line="39" column="17" bodyfile="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" bodystart="39" bodyend="39"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_gocad_property_class_header_1a81402bd23e1db2ceb6076379743d0586" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::GocadPropertyClassHeader::HighClip</definition>
+        <argsstring>() const</argsstring>
+        <name>HighClip</name>
+        <qualifiedname>csmp::GocadPropertyClassHeader::HighClip</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" line="41" column="14" bodyfile="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" bodystart="41" bodyend="41"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_gocad_property_class_header_1a347f67434c87f323a149e1149e0ad2ff" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::GocadPropertyClassHeader::HighClip</definition>
+        <argsstring>(double hc)</argsstring>
+        <name>HighClip</name>
+        <qualifiedname>csmp::GocadPropertyClassHeader::HighClip</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>hc</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" line="42" column="17" bodyfile="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" bodystart="42" bodyend="42"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_gocad_property_class_header_1ac3f4d433446838c70fe1cc701635a681" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>long</type>
+        <definition>long csmp::GocadPropertyClassHeader::PClip</definition>
+        <argsstring>() const</argsstring>
+        <name>PClip</name>
+        <qualifiedname>csmp::GocadPropertyClassHeader::PClip</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" line="44" column="17" bodyfile="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" bodystart="44" bodyend="44"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_gocad_property_class_header_1a5f4c446982b526733052bac53e6b65ab" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::GocadPropertyClassHeader::PClip</definition>
+        <argsstring>(long pc)</argsstring>
+        <name>PClip</name>
+        <qualifiedname>csmp::GocadPropertyClassHeader::PClip</qualifiedname>
+        <param>
+          <type>long</type>
+          <declname>pc</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" line="45" column="17" bodyfile="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" bodystart="45" bodyend="45"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_gocad_property_class_header_1ae00f49f04890cd853092b73627c6a20c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::GocadPropertyClassHeader::ColorContrast</definition>
+        <argsstring>() const</argsstring>
+        <name>ColorContrast</name>
+        <qualifiedname>csmp::GocadPropertyClassHeader::ColorContrast</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" line="47" column="14" bodyfile="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" bodystart="47" bodyend="47"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_gocad_property_class_header_1ad44e0937b02331824438847d5238d3e2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::GocadPropertyClassHeader::ColorContrat</definition>
+        <argsstring>(double ct)</argsstring>
+        <name>ColorContrat</name>
+        <qualifiedname>csmp::GocadPropertyClassHeader::ColorContrat</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>ct</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" line="48" column="17" bodyfile="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" bodystart="48" bodyend="48"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_gocad_property_class_header_1a6dae31e676f0cb89965b8ed1c1863e17" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::string</type>
+        <definition>std::string csmp::GocadPropertyClassHeader::ColorMap</definition>
+        <argsstring>() const</argsstring>
+        <name>ColorMap</name>
+        <qualifiedname>csmp::GocadPropertyClassHeader::ColorMap</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" line="50" column="17" bodyfile="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" bodystart="50" bodyend="50"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_gocad_property_class_header_1ae56206b46a868261ae653ae3e1ca2a61" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::GocadPropertyClassHeader::ColorMap</definition>
+        <argsstring>(const std::string &amp;s)</argsstring>
+        <name>ColorMap</name>
+        <qualifiedname>csmp::GocadPropertyClassHeader::ColorMap</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>s</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" line="51" column="17" bodyfile="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" bodystart="51" bodyend="51"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_gocad_property_class_header_1a8f066be61a98399d2fb3e4c6268d47e1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::GocadPropertyClassHeader::ColorMap</definition>
+        <argsstring>(char *s)</argsstring>
+        <name>ColorMap</name>
+        <qualifiedname>csmp::GocadPropertyClassHeader::ColorMap</qualifiedname>
+        <param>
+          <type>char *</type>
+          <declname>s</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" line="52" column="17" bodyfile="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" bodystart="52" bodyend="52"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_gocad_property_class_header_1ac5c88626d2554af2164081b039a20e18" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::GocadPropertyClassHeader::Components</definition>
+        <argsstring>() const</argsstring>
+        <name>Components</name>
+        <qualifiedname>csmp::GocadPropertyClassHeader::Components</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" line="54" column="14" bodyfile="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" bodystart="54" bodyend="54"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_gocad_property_class_header_1aaae703a321cf7a4017ccb5daf8dbd7f5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::GocadPropertyClassHeader::ESize</definition>
+        <argsstring>() const</argsstring>
+        <name>ESize</name>
+        <qualifiedname>csmp::GocadPropertyClassHeader::ESize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" line="56" column="14" bodyfile="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" bodystart="56" bodyend="56"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_gocad_property_class_header_1a4e4272ba2e49102c16954dd90247f652" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::GocadPropertyClassHeader::ESize</definition>
+        <argsstring>(size_t esize)</argsstring>
+        <name>ESize</name>
+        <qualifiedname>csmp::GocadPropertyClassHeader::ESize</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>esize</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" line="57" column="17" bodyfile="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" bodystart="57" bodyend="57"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_gocad_property_class_header_1a699a8a83f9fe0cd0a8275d4fc4c47c12" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::GocadPropertyClassHeader::NoDataValue</definition>
+        <argsstring>() const</argsstring>
+        <name>NoDataValue</name>
+        <qualifiedname>csmp::GocadPropertyClassHeader::NoDataValue</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" line="59" column="14" bodyfile="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" bodystart="59" bodyend="59"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_gocad_property_class_header_1a5892d8517566370fa62db0bf927671f7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::GocadPropertyClassHeader::NoDataValue</definition>
+        <argsstring>(double val)</argsstring>
+        <name>NoDataValue</name>
+        <qualifiedname>csmp::GocadPropertyClassHeader::NoDataValue</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" line="60" column="17" bodyfile="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" bodystart="60" bodyend="60"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_gocad_property_class_header_1a24439ae89f3e60a6498805d6b8f36029" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::GocadPropertyClassHeader::InitializeFrom</definition>
+        <argsstring>(std::ifstream &amp;ifn)</argsstring>
+        <name>InitializeFrom</name>
+        <qualifiedname>csmp::GocadPropertyClassHeader::InitializeFrom</qualifiedname>
+        <param>
+          <type>std::ifstream &amp;</type>
+          <declname>ifn</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" line="62" column="17" bodyfile="source/modules/interfaces/gOcad_SKUA/GocadPropertyClassHeader.cpp" bodystart="64" bodyend="124"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_gocad_property_class_header_1ae2198d98760ebe2b87d9ed5c4325488e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::GocadPropertyClassHeader::WriteToText</definition>
+        <argsstring>(std::ofstream &amp;ofs) const</argsstring>
+        <name>WriteToText</name>
+        <qualifiedname>csmp::GocadPropertyClassHeader::WriteToText</qualifiedname>
+        <param>
+          <type>std::ofstream &amp;</type>
+          <declname>ofs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" line="63" column="17" bodyfile="source/modules/interfaces/gOcad_SKUA/GocadPropertyClassHeader.cpp" bodystart="127" bodyend="150"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_gocad_property_class_header_1a12e3ea181a0b1cc6b1415f237f1c516a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::GocadPropertyClassHeader::Out</definition>
+        <argsstring>() const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::GocadPropertyClassHeader::Out</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" line="65" column="10" bodyfile="source/modules/interfaces/gOcad_SKUA/GocadPropertyClassHeader.cpp" bodystart="155" bodyend="169"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::GocadPropertyClassHeader</label>
+        <link refid="classcsmp_1_1_gocad_property_class_header"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" line="8" column="1" bodyfile="source/includes/interfaces/gOcad_SKUA/GocadPropertyClassHeader.h" bodystart="8" bodyend="66"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_gocad_property_class_header_1ae00f49f04890cd853092b73627c6a20c" prot="public" virt="non-virtual"><scope>csmp::GocadPropertyClassHeader</scope><name>ColorContrast</name></member>
+      <member refid="classcsmp_1_1_gocad_property_class_header_1ad44e0937b02331824438847d5238d3e2" prot="public" virt="non-virtual"><scope>csmp::GocadPropertyClassHeader</scope><name>ColorContrat</name></member>
+      <member refid="classcsmp_1_1_gocad_property_class_header_1a6dae31e676f0cb89965b8ed1c1863e17" prot="public" virt="non-virtual"><scope>csmp::GocadPropertyClassHeader</scope><name>ColorMap</name></member>
+      <member refid="classcsmp_1_1_gocad_property_class_header_1ae56206b46a868261ae653ae3e1ca2a61" prot="public" virt="non-virtual"><scope>csmp::GocadPropertyClassHeader</scope><name>ColorMap</name></member>
+      <member refid="classcsmp_1_1_gocad_property_class_header_1a8f066be61a98399d2fb3e4c6268d47e1" prot="public" virt="non-virtual"><scope>csmp::GocadPropertyClassHeader</scope><name>ColorMap</name></member>
+      <member refid="classcsmp_1_1_gocad_property_class_header_1ad788c5e3bcb529e935e3620bd79b851b" prot="private" virt="non-virtual"><scope>csmp::GocadPropertyClassHeader</scope><name>colormap</name></member>
+      <member refid="classcsmp_1_1_gocad_property_class_header_1aac47c2326c35ca0ab39b0786dc0116c7" prot="private" virt="non-virtual"><scope>csmp::GocadPropertyClassHeader</scope><name>colormap_contrast</name></member>
+      <member refid="classcsmp_1_1_gocad_property_class_header_1ac5c88626d2554af2164081b039a20e18" prot="public" virt="non-virtual"><scope>csmp::GocadPropertyClassHeader</scope><name>Components</name></member>
+      <member refid="classcsmp_1_1_gocad_property_class_header_1a87ce97011dc2ad075488f47d7ca7c597" prot="private" virt="non-virtual"><scope>csmp::GocadPropertyClassHeader</scope><name>components</name></member>
+      <member refid="classcsmp_1_1_gocad_property_class_header_1aaae703a321cf7a4017ccb5daf8dbd7f5" prot="public" virt="non-virtual"><scope>csmp::GocadPropertyClassHeader</scope><name>ESize</name></member>
+      <member refid="classcsmp_1_1_gocad_property_class_header_1a4e4272ba2e49102c16954dd90247f652" prot="public" virt="non-virtual"><scope>csmp::GocadPropertyClassHeader</scope><name>ESize</name></member>
+      <member refid="classcsmp_1_1_gocad_property_class_header_1a7d6490d99ff8a624f29ad24e13a6574d" prot="public" virt="non-virtual"><scope>csmp::GocadPropertyClassHeader</scope><name>GocadPropertyClassHeader</name></member>
+      <member refid="classcsmp_1_1_gocad_property_class_header_1af060854af30a5ab83f711ff9dc9cce9e" prot="public" virt="non-virtual"><scope>csmp::GocadPropertyClassHeader</scope><name>GocadPropertyClassHeader</name></member>
+      <member refid="classcsmp_1_1_gocad_property_class_header_1a6fa4d3edfdfbaaf6e99078f5bb7330cf" prot="public" virt="non-virtual"><scope>csmp::GocadPropertyClassHeader</scope><name>GocadPropertyClassHeader</name></member>
+      <member refid="classcsmp_1_1_gocad_property_class_header_1a07b39d34821c165c33c8926a17c0cb7e" prot="private" virt="non-virtual"><scope>csmp::GocadPropertyClassHeader</scope><name>high_clip</name></member>
+      <member refid="classcsmp_1_1_gocad_property_class_header_1a81402bd23e1db2ceb6076379743d0586" prot="public" virt="non-virtual"><scope>csmp::GocadPropertyClassHeader</scope><name>HighClip</name></member>
+      <member refid="classcsmp_1_1_gocad_property_class_header_1a347f67434c87f323a149e1149e0ad2ff" prot="public" virt="non-virtual"><scope>csmp::GocadPropertyClassHeader</scope><name>HighClip</name></member>
+      <member refid="classcsmp_1_1_gocad_property_class_header_1a24439ae89f3e60a6498805d6b8f36029" prot="public" virt="non-virtual"><scope>csmp::GocadPropertyClassHeader</scope><name>InitializeFrom</name></member>
+      <member refid="classcsmp_1_1_gocad_property_class_header_1adce8f39570cba7461f2cac2ef97b82ac" prot="private" virt="non-virtual"><scope>csmp::GocadPropertyClassHeader</scope><name>low_clip</name></member>
+      <member refid="classcsmp_1_1_gocad_property_class_header_1af85ca4f018f47a16afddc04319e4138e" prot="public" virt="non-virtual"><scope>csmp::GocadPropertyClassHeader</scope><name>LowClip</name></member>
+      <member refid="classcsmp_1_1_gocad_property_class_header_1ada9423eecb43930c313b1979b3d57572" prot="public" virt="non-virtual"><scope>csmp::GocadPropertyClassHeader</scope><name>LowClip</name></member>
+      <member refid="classcsmp_1_1_gocad_property_class_header_1a814fa1c3478eaf3b2f26d3ba4ab9d995" prot="private" virt="non-virtual"><scope>csmp::GocadPropertyClassHeader</scope><name>no_data_value</name></member>
+      <member refid="classcsmp_1_1_gocad_property_class_header_1a699a8a83f9fe0cd0a8275d4fc4c47c12" prot="public" virt="non-virtual"><scope>csmp::GocadPropertyClassHeader</scope><name>NoDataValue</name></member>
+      <member refid="classcsmp_1_1_gocad_property_class_header_1a5892d8517566370fa62db0bf927671f7" prot="public" virt="non-virtual"><scope>csmp::GocadPropertyClassHeader</scope><name>NoDataValue</name></member>
+      <member refid="classcsmp_1_1_gocad_property_class_header_1a15b48fe597544d5b7f37867f7e4af0e1" prot="public" virt="non-virtual"><scope>csmp::GocadPropertyClassHeader</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_gocad_property_class_header_1a12e3ea181a0b1cc6b1415f237f1c516a" prot="public" virt="non-virtual"><scope>csmp::GocadPropertyClassHeader</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_gocad_property_class_header_1a6bdcfc507fdb6ab86e1bcb47338fa149" prot="private" virt="non-virtual"><scope>csmp::GocadPropertyClassHeader</scope><name>p_clip</name></member>
+      <member refid="classcsmp_1_1_gocad_property_class_header_1ac3f4d433446838c70fe1cc701635a681" prot="public" virt="non-virtual"><scope>csmp::GocadPropertyClassHeader</scope><name>PClip</name></member>
+      <member refid="classcsmp_1_1_gocad_property_class_header_1a5f4c446982b526733052bac53e6b65ab" prot="public" virt="non-virtual"><scope>csmp::GocadPropertyClassHeader</scope><name>PClip</name></member>
+      <member refid="classcsmp_1_1_gocad_property_class_header_1a07f6a95ca791f43388ff13be4cb44d33" prot="public" virt="non-virtual"><scope>csmp::GocadPropertyClassHeader</scope><name>Property</name></member>
+      <member refid="classcsmp_1_1_gocad_property_class_header_1a7850e227e6da2273eebd5028d513d212" prot="public" virt="non-virtual"><scope>csmp::GocadPropertyClassHeader</scope><name>Property</name></member>
+      <member refid="classcsmp_1_1_gocad_property_class_header_1aafb078991f12e2192662b72ab4d0697c" prot="public" virt="non-virtual"><scope>csmp::GocadPropertyClassHeader</scope><name>Property</name></member>
+      <member refid="classcsmp_1_1_gocad_property_class_header_1a33d497b10be97e97cca2d2fde629cfb0" prot="private" virt="non-virtual"><scope>csmp::GocadPropertyClassHeader</scope><name>property_class</name></member>
+      <member refid="classcsmp_1_1_gocad_property_class_header_1a4812d7ce6a695e83a7833d9244e13398" prot="private" virt="non-virtual"><scope>csmp::GocadPropertyClassHeader</scope><name>property_name</name></member>
+      <member refid="classcsmp_1_1_gocad_property_class_header_1a0f3dc869fa2e4f832d4dc326d77eb746" prot="public" virt="non-virtual"><scope>csmp::GocadPropertyClassHeader</scope><name>PropertyClass</name></member>
+      <member refid="classcsmp_1_1_gocad_property_class_header_1a4a7bbafc118bb332ae322f24a66deada" prot="public" virt="non-virtual"><scope>csmp::GocadPropertyClassHeader</scope><name>PropertyClass</name></member>
+      <member refid="classcsmp_1_1_gocad_property_class_header_1ae2fdc583277702b2433c90b422746e56" prot="public" virt="non-virtual"><scope>csmp::GocadPropertyClassHeader</scope><name>PropertyClass</name></member>
+      <member refid="classcsmp_1_1_gocad_property_class_header_1ae2198d98760ebe2b87d9ed5c4325488e" prot="public" virt="non-virtual"><scope>csmp::GocadPropertyClassHeader</scope><name>WriteToText</name></member>
+      <member refid="classcsmp_1_1_gocad_property_class_header_1a5a5f755097ff475318385a9af38ca621" prot="public" virt="non-virtual"><scope>csmp::GocadPropertyClassHeader</scope><name>~GocadPropertyClassHeader</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

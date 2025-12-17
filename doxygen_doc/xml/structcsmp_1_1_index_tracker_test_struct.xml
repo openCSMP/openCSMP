@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="structcsmp_1_1_index_tracker_test_struct" kind="struct" language="C++" prot="public">
+    <compoundname>csmp::IndexTrackerTestStruct</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcsmp_1_1_index_tracker_test_struct_1a32699276f2b10561f6236992f827e44e" prot="public" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::IndexTrackerTestStruct::key1_</definition>
+        <argsstring></argsstring>
+        <name>key1_</name>
+        <qualifiedname>csmp::IndexTrackerTestStruct::key1_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/INDEXandVariables_Test.cpp" line="26" column="17" bodyfile="tests/unit/INDEXandVariables_Test.cpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_index_tracker_test_struct_1ab6bca82a61cc56f475870cd80f0609aa" prot="public" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::IndexTrackerTestStruct::key2_</definition>
+        <argsstring></argsstring>
+        <name>key2_</name>
+        <qualifiedname>csmp::IndexTrackerTestStruct::key2_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/INDEXandVariables_Test.cpp" line="26" column="23" bodyfile="tests/unit/INDEXandVariables_Test.cpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>csmp::Index</label>
+        <link refid="structcsmp_1_1_index"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>+localVariables</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>+integrationPointVariables</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>+indexTracker</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>csmp::IndexTracker</label>
+        <link refid="classcsmp_1_1_index_tracker"/>
+      </node>
+      <node id="1">
+        <label>csmp::IndexTrackerTestStruct</label>
+        <link refid="structcsmp_1_1_index_tracker_test_struct"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>+key1_</edgelabel>
+          <edgelabel>+key2_</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>csmp::IntegrationPointVariables</label>
+        <link refid="structcsmp_1_1_integration_point_variables"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>+ipvCell</edgelabel>
+          <edgelabel>+ipvFacet</edgelabel>
+          <edgelabel>+ipvSector</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::LocalVariables</label>
+        <link refid="structcsmp_1_1_local_variables"/>
+      </node>
+    </collaborationgraph>
+    <location file="tests/unit/INDEXandVariables_Test.cpp" line="24" column="1" bodyfile="tests/unit/INDEXandVariables_Test.cpp" bodystart="25" bodyend="27"/>
+    <listofallmembers>
+      <member refid="structcsmp_1_1_index_tracker_test_struct_1a32699276f2b10561f6236992f827e44e" prot="public" virt="non-virtual"><scope>csmp::IndexTrackerTestStruct</scope><name>key1_</name></member>
+      <member refid="structcsmp_1_1_index_tracker_test_struct_1ab6bca82a61cc56f475870cd80f0609aa" prot="public" virt="non-virtual"><scope>csmp::IndexTrackerTestStruct</scope><name>key2_</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

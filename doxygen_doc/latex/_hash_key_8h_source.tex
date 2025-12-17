@@ -1,0 +1,239 @@
+\doxysection{Hash\+Key.\+h}
+\hypertarget{_hash_key_8h_source}{}\label{_hash_key_8h_source}\index{source/includes/utilities/HashKey.h@{source/includes/utilities/HashKey.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_HASHKEY\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_HASHKEY\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_hash_key}{HashKey}}\ \{}
+\DoxyCodeLine{00009\ \ \ \ \ \textcolor{keywordtype}{char}\ \ key\_text[60];}
+\DoxyCodeLine{00010\ \ \ \ \ \textcolor{keywordtype}{char}\ \ num[20];\ \ \ \ \ \ \textcolor{comment}{//\ 20\ =\ size\ of\ 8-\/byte\ size\_t\ size\_t\ as\ char\ string}}
+\DoxyCodeLine{00011\ \ \ \ \ \textcolor{keywordtype}{short}\ hash\_key\_digits;}
+\DoxyCodeLine{00012\ \ \ \ \ std::set<size\_t>\ \ sorter;}
+\DoxyCodeLine{00013\ \ \ \ \ size\_t\ key;}
+\DoxyCodeLine{00014\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00015\ \ \ \ \ HashKey();}
+\DoxyCodeLine{00016\ \ \ \ \ \string~HashKey()\ \{\};}
+\DoxyCodeLine{00017\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_hash_key_a17e4e980bcc8c58f70a0016d2a63004d}{size\_t}}\ \mbox{\hyperlink{classcsmp_1_1_hash_key_a17e4e980bcc8c58f70a0016d2a63004d}{Key}}(\ size\_t\ a,\ size\_t\ b\ );}
+\DoxyCodeLine{00018\ \ \ \ \ size\_t\ Key(\ size\_t\ a,\ size\_t\ b,\ size\_t\ c\ );}
+\DoxyCodeLine{00019\ \ \ \ \ size\_t\ Key(\ size\_t\ a,\ size\_t\ b,\ size\_t\ c,\ size\_t\ d\ );}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{void}\ Key(\ size\_t\ a,\ size\_t\ b,\ \textcolor{keywordtype}{char}*\ s\ );}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{void}\ Key(\ size\_t\ a,\ size\_t\ b,\ size\_t\ c,\ \textcolor{keywordtype}{char}*\ s\ );}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{void}\ Key(\ size\_t\ a,\ size\_t\ b,\ size\_t\ c,\ size\_t\ d,\ \textcolor{keywordtype}{char}*\ s\ );}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{void}\ Key(\ size\_t\ a,\ size\_t\ b,\ std::string\&\ s\ );}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{void}\ Key(\ size\_t\ a,\ size\_t\ b,\ size\_t\ c,\ std::string\&\ s\ );}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{void}\ Key(\ size\_t\ a,\ size\_t\ b,\ size\_t\ c,\ size\_t\ d,\ std::string\&\ s\ );}
+\DoxyCodeLine{00028\ \};}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classcsmp_1_1_hash_key}{HashKey}}::HashKey()}
+\DoxyCodeLine{00033\ \ \ :\ hash\_key\_digits(9)}
+\DoxyCodeLine{00034\ \ \{}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordflow}{if}\ (\ \textcolor{keyword}{sizeof}(size\_t)\ ==\ \ 8\ )\ hash\_key\_digits\ =\ 19;}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordflow}{if}\ (\ \textcolor{keyword}{sizeof}(size\_t)\ ==\ 12\ )\ hash\_key\_digits\ =\ 29;}
+\DoxyCodeLine{00037\ \ \}}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \textcolor{comment}{/**\ Key(a,b)}}
+\DoxyCodeLine{00041\ \textcolor{comment}{}}
+\DoxyCodeLine{00042\ \textcolor{comment}{\ \ \ \ Makes\ unique\ hashkey\ out\ of\ 2\ unsigned\ integers.\ The\ integers}}
+\DoxyCodeLine{00043\ \textcolor{comment}{\ \ \ \ are\ sorted\ in\ increasing\ order.}}
+\DoxyCodeLine{00044\ \textcolor{comment}{}}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ \ \ \ @note\ use\ only\ unsigned\ integers\ here,\ because\ negative\ numbers\ cannot\ be\ concenated.}}
+\DoxyCodeLine{00046\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{00047\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classcsmp_1_1_hash_key_a17e4e980bcc8c58f70a0016d2a63004d}{size\_t}}\ \mbox{\hyperlink{classcsmp_1_1_hash_key}{HashKey}}::\mbox{\hyperlink{classcsmp_1_1_hash_key_a17e4e980bcc8c58f70a0016d2a63004d}{Key}}(\ size\_t\ a,\ size\_t\ b\ )}
+\DoxyCodeLine{00048\ \ \{}
+\DoxyCodeLine{00049\ \ \ \ \ sorter.erase(\ sorter.begin(),\ sorter.end()\ );}
+\DoxyCodeLine{00050\ \ \ \ \ sorter.insert(a);}
+\DoxyCodeLine{00051\ \ \ \ \ sorter.insert(b);}
+\DoxyCodeLine{00052\ \ \ \ \ std::strcpy(\ key\_text,\ \textcolor{stringliteral}{"{}\(\backslash\)0"{}});}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordflow}{for}\ (\ \textcolor{keyword}{auto}\ sit\ :\ sorter\ )}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ std::snprintf(\ num,\ \textcolor{keyword}{sizeof}(num),\ \textcolor{stringliteral}{"{}\%lu"{}},\ sit\ );}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ std::strcat(\ key\_text,\ num\ );}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordflow}{if}\ (\ std::strlen(key\_text)\ >\ \textcolor{keyword}{static\_cast}<size\_t>(hash\_key\_digits)\ )}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\textcolor{stringliteral}{"{}\(\backslash\)nHashKey::Key:\ too\ many\ digits\ to\ convert\ string\ '"{}};}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ key\_text\ <<\ \textcolor{stringliteral}{"{}'\ to\ size\_t."{}}<<\ std::endl;}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00064\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \textcolor{preprocessor}{SGI}}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keywordflow}{return}\ std::atoll(\ key\_text\ );}
+\DoxyCodeLine{00066\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{else}}
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keywordflow}{return}\ std::atol(\ key\_text\ );}
+\DoxyCodeLine{00068\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00069\ \ \}}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \textcolor{keyword}{inline}\ size\_t\ \mbox{\hyperlink{classcsmp_1_1_hash_key}{HashKey}}::Key(\ size\_t\ a,\ size\_t\ b,\ size\_t\ c\ )}
+\DoxyCodeLine{00075\ \ \{}
+\DoxyCodeLine{00076\ \ \ \ \ sorter.erase(\ sorter.begin(),\ sorter.end()\ );}
+\DoxyCodeLine{00077\ \ \ \ \ sorter.insert(a);}
+\DoxyCodeLine{00078\ \ \ \ \ sorter.insert(b);}
+\DoxyCodeLine{00079\ \ \ \ \ sorter.insert(c);}
+\DoxyCodeLine{00080\ \ \ \ \ std::strcpy(\ key\_text,\ \textcolor{stringliteral}{"{}\(\backslash\)0"{}});}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keywordflow}{for}\ (\ \textcolor{keyword}{auto}\ sit\ :\ sorter\ )}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ std::snprintf(\ num,\ \textcolor{keyword}{sizeof}(num),\ \textcolor{stringliteral}{"{}\%lu"{}},\ sit\ );}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ std::strcat(\ key\_text,\ num\ );}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00087\ \ \ \ \ \textcolor{keywordflow}{if}\ (\ std::strlen(key\_text)\ >\ \textcolor{keyword}{static\_cast}<size\_t>(hash\_key\_digits)\ )}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\textcolor{stringliteral}{"{}\(\backslash\)nHashKey::Key:\ too\ many\ digits\ to\ convert\ string\ '"{}};}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ key\_text\ <<\ \textcolor{stringliteral}{"{}'\ to\ size\_t."{}}<<\ std::endl;}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00092\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \textcolor{preprocessor}{SGI}}
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{keywordflow}{return}\ std::atoll(\ key\_text\ );}
+\DoxyCodeLine{00094\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{else}}
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keywordflow}{return}\ std::atol(\ key\_text\ );}
+\DoxyCodeLine{00096\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00097\ \ \}}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ \textcolor{keyword}{inline}\ size\_t\ \mbox{\hyperlink{classcsmp_1_1_hash_key}{HashKey}}::Key(\ size\_t\ a,\ size\_t\ b,\ size\_t\ c,\ size\_t\ d\ )}
+\DoxyCodeLine{00102\ \ \{}
+\DoxyCodeLine{00103\ \ \ \ \ sorter.erase(\ sorter.begin(),\ sorter.end()\ );}
+\DoxyCodeLine{00104\ \ \ \ \ sorter.insert(a);}
+\DoxyCodeLine{00105\ \ \ \ \ sorter.insert(b);}
+\DoxyCodeLine{00106\ \ \ \ \ sorter.insert(c);}
+\DoxyCodeLine{00107\ \ \ \ \ sorter.insert(d);}
+\DoxyCodeLine{00108\ \ \ \ \ std::strcpy(\ key\_text,\ \textcolor{stringliteral}{"{}\(\backslash\)0"{}});}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{keywordflow}{for}\ (\ \textcolor{keyword}{auto}\ sit\ :\ sorter\ )}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ std::snprintf(\ num,\ \textcolor{keyword}{sizeof}(num),\ \textcolor{stringliteral}{"{}\%lu"{}},\ sit\ );}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ std::strcat(\ key\_text,\ num\ );}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00115\ \ \ \ \ \textcolor{keywordflow}{if}\ (\ std::strlen(key\_text)\ >\ \textcolor{keyword}{static\_cast}<size\_t>(hash\_key\_digits)\ )}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\textcolor{stringliteral}{"{}\(\backslash\)nHashKey::Key:\ too\ many\ digits\ to\ convert\ string\ '"{}};}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ key\_text\ <<\ \textcolor{stringliteral}{"{}'\ to\ size\_t."{}}<<\ std::endl;}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00120\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \textcolor{preprocessor}{SGI}}
+\DoxyCodeLine{00121\ \ \ \ \ \textcolor{keywordflow}{return}\ std::atoll(\ key\_text\ );}
+\DoxyCodeLine{00122\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{else}}
+\DoxyCodeLine{00123\ \ \ \ \ \textcolor{keywordflow}{return}\ std::atol(\ key\_text\ );}
+\DoxyCodeLine{00124\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00125\ \ \}}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ \textcolor{comment}{//\ outputting\ strings}}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_hash_key}{HashKey}}::Key(\ size\_t\ a,\ size\_t\ b,\ \textcolor{keywordtype}{char}*\ s\ )}
+\DoxyCodeLine{00132\ \ \{}
+\DoxyCodeLine{00133\ \ \ \ \ sorter.erase(\ sorter.begin(),\ sorter.end()\ );}
+\DoxyCodeLine{00134\ \ \ \ \ sorter.insert(a);}
+\DoxyCodeLine{00135\ \ \ \ \ sorter.insert(b);}
+\DoxyCodeLine{00136\ \ \ \ \ std::strcpy(\ s,\ \textcolor{stringliteral}{"{}\(\backslash\)0"{}});}
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00138\ \ \ \ \ \textcolor{keywordflow}{for}\ (\ \textcolor{keyword}{auto}\ sit\ :\ sorter\ )}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \ std::snprintf(\ num,\ \textcolor{keyword}{sizeof}(num),\ \textcolor{stringliteral}{"{}\%lu"{}},\ sit\ );}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \ std::strcat(\ s,\ num\ );}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00143\ \ \}}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00146\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_hash_key}{HashKey}}::Key(\ size\_t\ a,\ size\_t\ b,\ size\_t\ c,\ \textcolor{keywordtype}{char}*\ s\ )}
+\DoxyCodeLine{00147\ \ \{}
+\DoxyCodeLine{00148\ \ \ \ \ sorter.erase(\ sorter.begin(),\ sorter.end()\ );}
+\DoxyCodeLine{00149\ \ \ \ \ sorter.insert(a);}
+\DoxyCodeLine{00150\ \ \ \ \ sorter.insert(b);}
+\DoxyCodeLine{00151\ \ \ \ \ sorter.insert(c);}
+\DoxyCodeLine{00152\ \ \ \ \ std::strcpy(\ s,\ \textcolor{stringliteral}{"{}\(\backslash\)0"{}});}
+\DoxyCodeLine{00153\ }
+\DoxyCodeLine{00154\ \ \ \ \ \textcolor{keywordflow}{for}\ (\ \textcolor{keyword}{auto}\ sit\ :\ sorter\ )}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ std::snprintf(\ num,\ \textcolor{keyword}{sizeof}(num),\ \textcolor{stringliteral}{"{}\%lu"{}},\ sit\ );}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \ std::strcat(\ s,\ num\ );}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00159\ \ \}}
+\DoxyCodeLine{00160\ }
+\DoxyCodeLine{00161\ }
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00163\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_hash_key}{HashKey}}::Key(\ size\_t\ a,\ size\_t\ b,\ size\_t\ c,\ size\_t\ d,\ \textcolor{keywordtype}{char}*\ s\ )}
+\DoxyCodeLine{00164\ \ \{}
+\DoxyCodeLine{00165\ \ \ \ \ sorter.erase(\ sorter.begin(),\ sorter.end()\ );}
+\DoxyCodeLine{00166\ \ \ \ \ sorter.insert(a);}
+\DoxyCodeLine{00167\ \ \ \ \ sorter.insert(b);}
+\DoxyCodeLine{00168\ \ \ \ \ sorter.insert(c);}
+\DoxyCodeLine{00169\ \ \ \ \ sorter.insert(d);}
+\DoxyCodeLine{00170\ \ \ \ \ std::strcpy(\ s,\ \textcolor{stringliteral}{"{}\(\backslash\)0"{}});}
+\DoxyCodeLine{00171\ }
+\DoxyCodeLine{00172\ \ \ \ \ \textcolor{keywordflow}{for}\ (\ \textcolor{keyword}{auto}\ sit\ :\ sorter\ )}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ std::snprintf(\ num,\ \textcolor{keyword}{sizeof}(num),\ \textcolor{stringliteral}{"{}\%lu"{}},\ sit\ );}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ std::strcat(\ s,\ num\ );}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00177\ \ \}}
+\DoxyCodeLine{00178\ }
+\DoxyCodeLine{00179\ }
+\DoxyCodeLine{00180\ \textcolor{comment}{//\ string}}
+\DoxyCodeLine{00181\ }
+\DoxyCodeLine{00182\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_hash_key}{HashKey}}::Key(\ size\_t\ a,\ size\_t\ b,\ std::string\&\ s\ )}
+\DoxyCodeLine{00183\ \ \{}
+\DoxyCodeLine{00184\ \ \ \ \ sorter.erase(\ sorter.begin(),\ sorter.end()\ );}
+\DoxyCodeLine{00185\ \ \ \ \ sorter.insert(a);}
+\DoxyCodeLine{00186\ \ \ \ \ sorter.insert(b);}
+\DoxyCodeLine{00187\ \ \ \ \ s\ =\ \textcolor{stringliteral}{"{}\(\backslash\)0"{}};}
+\DoxyCodeLine{00188\ }
+\DoxyCodeLine{00189\ \ \ \ \ \textcolor{keywordflow}{for}\ (\ \textcolor{keyword}{auto}\ sit\ :\ sorter\ )}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \ std::snprintf(\ num,\ \textcolor{keyword}{sizeof}(num),\ \textcolor{stringliteral}{"{}\%lu"{}},\ sit\ );}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \ s\ +=\ num;}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00194\ \ \}}
+\DoxyCodeLine{00195\ }
+\DoxyCodeLine{00196\ }
+\DoxyCodeLine{00197\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_hash_key}{HashKey}}::Key(\ size\_t\ a,\ size\_t\ b,\ size\_t\ c,\ std::string\&\ s\ )}
+\DoxyCodeLine{00198\ \ \{}
+\DoxyCodeLine{00199\ \ \ \ \ sorter.erase(\ sorter.begin(),\ sorter.end()\ );}
+\DoxyCodeLine{00200\ \ \ \ \ sorter.insert(a);}
+\DoxyCodeLine{00201\ \ \ \ \ sorter.insert(b);}
+\DoxyCodeLine{00202\ \ \ \ \ sorter.insert(c);}
+\DoxyCodeLine{00203\ \ \ \ \ s\ =\ \textcolor{stringliteral}{"{}\(\backslash\)0"{}};}
+\DoxyCodeLine{00204\ }
+\DoxyCodeLine{00205\ \ \ \ \ \textcolor{keywordflow}{for}\ (\ \textcolor{keyword}{auto}\ sit\ :\ sorter\ )}
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \ std::snprintf(\ num,\ \textcolor{keyword}{sizeof}(num),\ \textcolor{stringliteral}{"{}\%lu"{}},\ sit\ );}
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \ s\ +=\ num;}
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00210\ \textcolor{comment}{//\ \ \ \ cout\ <<"{}\(\backslash\)nHashKey::Key:\ "{}<<\ s.CharPointer()\ <<\ endl;}}
+\DoxyCodeLine{00211\ \ \}}
+\DoxyCodeLine{00212\ }
+\DoxyCodeLine{00213\ }
+\DoxyCodeLine{00214\ }
+\DoxyCodeLine{00215\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_hash_key}{HashKey}}::Key(\ size\_t\ a,\ size\_t\ b,\ size\_t\ c,\ size\_t\ d,\ std::string\&\ s\ )}
+\DoxyCodeLine{00216\ \ \{}
+\DoxyCodeLine{00217\ \ \ \ \ sorter.erase(\ sorter.begin(),\ sorter.end()\ );}
+\DoxyCodeLine{00218\ \ \ \ \ sorter.insert(a);}
+\DoxyCodeLine{00219\ \ \ \ \ sorter.insert(b);}
+\DoxyCodeLine{00220\ \ \ \ \ sorter.insert(c);}
+\DoxyCodeLine{00221\ \ \ \ \ sorter.insert(d);}
+\DoxyCodeLine{00222\ \ \ \ \ s\ =\ \textcolor{stringliteral}{"{}\(\backslash\)0"{}};}
+\DoxyCodeLine{00223\ }
+\DoxyCodeLine{00224\ \ \ \ \ \textcolor{keywordflow}{for}\ (\ \textcolor{keyword}{auto}\ sit\ :\ sorter\ )}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \ std::snprintf(\ num,\ \textcolor{keyword}{sizeof}(num),\ \textcolor{stringliteral}{"{}\%lu"{}},\ sit\ );}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \ s\ +=\ num;}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00229\ \ \}}
+\DoxyCodeLine{00230\ }
+\DoxyCodeLine{00231\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00232\ }
+\DoxyCodeLine{00233\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

@@ -1,0 +1,176 @@
+\doxysection{Line\+Element\+Mesher.\+h}
+\hypertarget{_line_element_mesher_8h_source}{}\label{_line_element_mesher_8h_source}\index{source/includes/discretisation/LineElementMesher.h@{source/includes/discretisation/LineElementMesher.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_LINE\_ELEMENT\_MESHER\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_LINE\_ELEMENT\_MESHER\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_v_set_8h}{"{}VSet.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_point_8h}{"{}Point.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{comment}{///\ mesh\ refinement\ helper\ base\ class}}
+\DoxyCodeLine{00010\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_mesh_density}{MeshDensity}}\ \{}
+\DoxyCodeLine{00011\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00012\ \ \ \ \ \ \ MeshDensity(\ );}
+\DoxyCodeLine{00013\ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \string~MeshDensity();}
+\DoxyCodeLine{00014\ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ operator()(\ \textcolor{keywordtype}{double}\ x\ );}
+\DoxyCodeLine{00015\ \};}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{comment}{///\ helper\ subclass}}
+\DoxyCodeLine{00018\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_lin_density}{LinDensity}}:\ \textcolor{keyword}{virtual}\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_mesh_density}{MeshDensity}}\ \{}
+\DoxyCodeLine{00019\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ LinDensity(\ \textcolor{keywordtype}{double}\ a\ =\ 1.0,\ \textcolor{keywordtype}{double}\ b\ =\ 0.0\ );}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \string~LinDensity();}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ operator()(\ \textcolor{keywordtype}{double}\ x\ );}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ SetA(\ \textcolor{keywordtype}{double}\ );}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ SetB(\ \textcolor{keywordtype}{double}\ );}
+\DoxyCodeLine{00025\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \textcolor{comment}{///\ y\ =\ a\_\ *\ x\ +\ b\_}}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ a\_;}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ b\_;}
+\DoxyCodeLine{00029\ \};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{comment}{///\ exponential\ element\ size\ variation}}
+\DoxyCodeLine{00032\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_exp_density}{ExpDensity}}:\ \textcolor{keyword}{virtual}\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_mesh_density}{MeshDensity}}\ \{}
+\DoxyCodeLine{00033\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ ExpDensity(\ \textcolor{keywordtype}{double}\ a\ =\ 1.0,\ \textcolor{keywordtype}{double}\ b\ =\ 1.0\ \ );}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \string~ExpDensity();}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ operator()(\textcolor{keywordtype}{double}\ x\ );}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ SetA(\ \textcolor{keywordtype}{double}\ );}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ SetB(\ \textcolor{keywordtype}{double}\ );}
+\DoxyCodeLine{00039\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \textcolor{comment}{///\ y\ =\ b\_\ *\ exp(\ a\_\ *\ x\ )}}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ a\_;}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ b\_;}
+\DoxyCodeLine{00043\ \};}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \textcolor{comment}{///\ error\ function\ based\ mesh\ size\ variation}}
+\DoxyCodeLine{00046\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_erf_density}{ErfDensity}}:\ \textcolor{keyword}{virtual}\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_mesh_density}{MeshDensity}}\ \{}
+\DoxyCodeLine{00047\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ ErfDensity(\ \textcolor{keywordtype}{double}\ a\ =\ 3.0,\ \textcolor{keywordtype}{double}\ b\ =\ 1.0\ );}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \string~ErfDensity();}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ operator()(\textcolor{keywordtype}{double}\ x\ );}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ SetA(\ \textcolor{keywordtype}{double}\ );}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ SetB(\ \textcolor{keywordtype}{double}\ );}
+\DoxyCodeLine{00053\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \textcolor{comment}{///\ y\ =\ b\_\ *\ erf(\ a\ *\ x\ )}}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ a\_;}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ b\_;}
+\DoxyCodeLine{00057\ \};}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00061\ \textcolor{comment}{\ \ \ \ \ Line\ element\ mesher:\ collection\ of\ functions.}}
+\DoxyCodeLine{00062\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00063\ \textcolor{comment}{\ \ \ \ \ Creates\ polyline\ meshes\ that\ of\ an\ arbitrary\ dimension\ (like\ a\ spiral\ in\ 3D\ space).}}
+\DoxyCodeLine{00064\ \textcolor{comment}{\ \ \ \ \ The\ meshes\ can\ contain\ duplicated\ nodes\ and\ INTERNAL\ boundaries.}}
+\DoxyCodeLine{00065\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00066\ \textcolor{comment}{\ \ \ \ \ @attention\ Mesher\ does\ not\ assign\ BOX\_BOUNDARY\ flags\ nor\ neighbor\ connectivity}}
+\DoxyCodeLine{00067\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00068\ \textcolor{comment}{\ \ \ \ \ @author\ Stephan\ Matthai}}
+\DoxyCodeLine{00069\ \textcolor{comment}{\ \ \ \ \ @author\ extended\ to\ work\ with\ mulit-\/dimensional\ models\ by\ Roman\ Manasipov}}
+\DoxyCodeLine{00070\ \textcolor{comment}{\ \ \ \ \ @date\ 2002,\ 2012}}
+\DoxyCodeLine{00071\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00072\ \textcolor{comment}{\ \ \ \ \ @todo\ ADD\ BOUNDARY\ FLAGS,\ TOPOTYPE,\ AND\ MATERIAL\ IDENTIFIERS\ TO\ VSET!}}
+\DoxyCodeLine{00073\ \textcolor{comment}{\ \ \ \ \ @todo\ create\ NodeManifold\ objects\ in\ case\ of\ a\ split\ boundary}}
+\DoxyCodeLine{00074\ \textcolor{comment}{\ \ \ \ \ @todo\ create\ BOX\_BOUNDARY\ flags}}
+\DoxyCodeLine{00075\ \textcolor{comment}{\ \ \ \ \ @todo\ create\ neighbor\ connectivity}}
+\DoxyCodeLine{00076\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00077\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00078\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_line_element_mesher}{LineElementMesher}}\ \{}
+\DoxyCodeLine{00079\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{comment}{///\ creates\ an\ uniform\ mesh;\ org\ \&\ dest\ mark\ the\ desired\ end\ point\ coordinates\ of\ the\ mesh}}
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_line_element_mesher_af75feb811a6dea4e9ca87ed4655dd33b}{BuildUniformMesh}}(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ vset,}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ length,}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ size\_t\ \ \ n\_elements,}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ splitnode\_coordinates\ =\ \mbox{\hyperlink{classcsmp_1_1_line_element_mesher_af75feb811a6dea4e9ca87ed4655dd33b}{std}}::\mbox{\hyperlink{classcsmp_1_1_line_element_mesher_af75feb811a6dea4e9ca87ed4655dd33b}{vector}}<\textcolor{keywordtype}{double}>(),}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\&\ origin\ =\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>(),}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\&\ destination\ =\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>()\ );}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{comment}{///\ creates\ a\ refined\ mesh}}
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_line_element_mesher_a76d66fcce4d9d857e255aff2867142c1}{BuildRefinedMesh}}(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ vset,}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ length,}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ dx\_min,}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ dx\_max,}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ width\_of\_transition\_zone,}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_mesh_density}{MeshDensity}}*\ density,}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ splitnode\_coordinates\ =\ \mbox{\hyperlink{classcsmp_1_1_line_element_mesher_a76d66fcce4d9d857e255aff2867142c1}{std}}::\mbox{\hyperlink{classcsmp_1_1_line_element_mesher_a76d66fcce4d9d857e255aff2867142c1}{vector}}<\textcolor{keywordtype}{double}>(),}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\&\ origin\ =\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>(),}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\&\ destination\ =\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>()\ );}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{comment}{///\ creates\ a\ custom\ mesh\ with\ vector(\ 1D\ node\ coordinates\ )}}
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_line_element_mesher_ae727ff608c1ae59cec6ef4f75ee0962d}{BuildCustomMesh}}(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ vset,}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ node\_coordinates,}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ splitnode\_coordinates\ =\ \mbox{\hyperlink{classcsmp_1_1_line_element_mesher_ae727ff608c1ae59cec6ef4f75ee0962d}{std}}::\mbox{\hyperlink{classcsmp_1_1_line_element_mesher_ae727ff608c1ae59cec6ef4f75ee0962d}{vector}}<\textcolor{keywordtype}{double}>(),}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\&\ origin\ =\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>(),}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\&\ destination\ =\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>()\ );}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ \ \ \ \ \textcolor{comment}{///\ creates\ a\ custom\ mesh\ with\ vector(\ 1D,\ 2D\ or\ 3D\ node\ coordinates\ )}}
+\DoxyCodeLine{00107\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_line_element_mesher_ae727ff608c1ae59cec6ef4f75ee0962d}{BuildCustomMesh}}(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ vset,}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<Point<dim>\ >\&\ node\_coordinates,}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<Point<dim>\ >\&\ splitnode\_coordinates\ =\ \mbox{\hyperlink{classcsmp_1_1_line_element_mesher_ae727ff608c1ae59cec6ef4f75ee0962d}{std}}::\mbox{\hyperlink{classcsmp_1_1_line_element_mesher_ae727ff608c1ae59cec6ef4f75ee0962d}{vector}}<\mbox{\hyperlink{classcsmp_1_1_line_element_mesher_ae727ff608c1ae59cec6ef4f75ee0962d}{Point}}<\mbox{\hyperlink{classcsmp_1_1_line_element_mesher_ae727ff608c1ae59cec6ef4f75ee0962d}{dim}}>\ >(),}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\&\ origin\ =\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>(),}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\&\ destination\ =\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>()\ );}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \ \ \ \ \textcolor{comment}{///\ Method\ which\ modifies\ already\ existing\ mesh}}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_line_element_mesher_a76acb9605473e767730dff61d31d1e7f}{AssignCornerPoints}}(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ vset,}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\&\ origin,}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\&\ destination\ );}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \ \ \ \ \textcolor{keywordtype}{void}\ InsertSplitNodes(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ vset,}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ splitnodes\ );}
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00122\ \ \ \ \ \textcolor{keywordtype}{void}\ InsertSplitNodes(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ vset,}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::set<Point<dim>\ >\&\ splitnodes\ );}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00126\ \ \ \ \ \textcolor{comment}{///\ duplicates\ nodes,\ for\ the\ purpose\ of\ creating\ split\ boundaries}}
+\DoxyCodeLine{00127\ \ \ \ \ \textcolor{keywordtype}{void}\ CompleteMesh(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ vset,}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ splitnodes,}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\&\ origin\ =\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>(),}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\&\ destination\ =\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>()\ );}
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00132\ \ \ \ \ \textcolor{keywordtype}{void}\ CompleteMesh(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ vset,}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<Point<dim>\ >\&\ splitnodes,}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\&\ origin\ =\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>(),}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\&\ destination\ =\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>()\ );}
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00137\ \ \ \ \ \textcolor{comment}{///\ creates\ an\ uniform\ mesh}}
+\DoxyCodeLine{00138\ \ \ \ \ \textcolor{keywordtype}{void}\ UniformMesh(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ vset,}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ length,}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ size\_t\ n\_elements\ );}
+\DoxyCodeLine{00141\ }
+\DoxyCodeLine{00142\ \ \ \ \ \textcolor{comment}{///\ creates\ a\ refined\ mesh\ based\ on\ errf}}
+\DoxyCodeLine{00143\ \ \ \ \ \textcolor{keywordtype}{void}\ RefinedMesh(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ vset,}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ length,}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ dx\_min,}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ dx\_max,}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ width\_of\_transition\_zone,}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_mesh_density}{MeshDensity}}*\ density\ );}
+\DoxyCodeLine{00149\ }
+\DoxyCodeLine{00150\ \ \ \ \ \textcolor{comment}{///\ creates\ a\ custom\ mesh\ with\ vector(\ 1D\ node\ coordinates\ )}}
+\DoxyCodeLine{00151\ \ \ \ \ \textcolor{keywordtype}{void}\ CustomMesh(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ vset,}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ node\_coordinates\ );}
+\DoxyCodeLine{00153\ }
+\DoxyCodeLine{00154\ \ \ \ \ \textcolor{comment}{///\ creates\ a\ custom\ mesh\ with\ vector(\ 1D,\ 2D\ or\ 3D\ node\ coordinates\ )}}
+\DoxyCodeLine{00155\ \ \ \ \ \textcolor{keywordtype}{void}\ CustomMesh(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ vset,}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<Point<dim>\ >\&\ node\_coordinates\ );}
+\DoxyCodeLine{00157\ }
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00159\ \ \ \ \ \textcolor{keywordtype}{void}\ EstablishConnectivity(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ vset\ );}
+\DoxyCodeLine{00160\ }
+\DoxyCodeLine{00161\ \ \ \ \ \textcolor{keywordtype}{void}\ EstablishConnectivity(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ vset,}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::set<Point<dim>\ >\&\ splitnodes\ );}
+\DoxyCodeLine{00163\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00164\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>*\ \ \ \ \ \ \ \ vset\_;}
+\DoxyCodeLine{00165\ \ \ \ \ std::set<\textcolor{keywordtype}{double}>\ \ splitnodes\_;\ \textcolor{comment}{///<\ nodes\ that\ will\ be\ duplicated\ to\ model\ split\ boundaries}}
+\DoxyCodeLine{00166\ \};}
+\DoxyCodeLine{00167\ }
+\DoxyCodeLine{00168\ \}\ \textcolor{comment}{//\ end\ namespace\ csmp}}
+\DoxyCodeLine{00169\ }
+\DoxyCodeLine{00170\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

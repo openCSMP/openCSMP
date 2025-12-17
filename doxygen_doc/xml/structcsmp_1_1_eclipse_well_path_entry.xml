@@ -1,0 +1,102 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="structcsmp_1_1_eclipse_well_path_entry" kind="struct" language="C++" prot="public">
+    <compoundname>csmp::EclipseWellPathEntry</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcsmp_1_1_eclipse_well_path_entry_1a5ebad5627f4cc2b2d220ec7446932213" prot="public" static="no" mutable="no">
+        <type><ref refid="structijk" kindref="compound">ijk</ref></type>
+        <definition>ijk csmp::EclipseWellPathEntry::cell</definition>
+        <argsstring></argsstring>
+        <name>cell</name>
+        <qualifiedname>csmp::EclipseWellPathEntry::cell</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="105" column="7" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="105" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_eclipse_well_path_entry_1a451c5a51facc3f00b00310a26bb7286b" prot="public" static="no" mutable="no">
+        <type><ref refid="namespacecsmp_1ae8bbaf7555417ec6195d15112682a43d" kindref="member">::csmp::CORNER_POINT_CELL_FACE_INDEX</ref></type>
+        <definition>::csmp::CORNER_POINT_CELL_FACE_INDEX csmp::EclipseWellPathEntry::from</definition>
+        <argsstring></argsstring>
+        <name>from</name>
+        <qualifiedname>csmp::EclipseWellPathEntry::from</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="106" column="40" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_eclipse_well_path_entry_1a04f501195219b5a0c0a40f3f6cb97da0" prot="public" static="no" mutable="no">
+        <type><ref refid="namespacecsmp_1ae8bbaf7555417ec6195d15112682a43d" kindref="member">::csmp::CORNER_POINT_CELL_FACE_INDEX</ref></type>
+        <definition>::csmp::CORNER_POINT_CELL_FACE_INDEX csmp::EclipseWellPathEntry::to</definition>
+        <argsstring></argsstring>
+        <name>to</name>
+        <qualifiedname>csmp::EclipseWellPathEntry::to</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="106" column="45" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="106" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structcsmp_1_1_eclipse_well_path_entry_1a72ed7a2fa605d59d7528b0fc98e47cd8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::EclipseWellPathEntry::EclipseWellPathEntry</definition>
+        <argsstring>(const ijk &amp;cell, ::csmp::CORNER_POINT_CELL_FACE_INDEX from, ::csmp::CORNER_POINT_CELL_FACE_INDEX to)</argsstring>
+        <name>EclipseWellPathEntry</name>
+        <qualifiedname>csmp::EclipseWellPathEntry::EclipseWellPathEntry</qualifiedname>
+        <param>
+          <type>const <ref refid="structijk" kindref="compound">ijk</ref> &amp;</type>
+          <declname>cell</declname>
+        </param>
+        <param>
+          <type><ref refid="namespacecsmp_1ae8bbaf7555417ec6195d15112682a43d" kindref="member">::csmp::CORNER_POINT_CELL_FACE_INDEX</ref></type>
+          <declname>from</declname>
+        </param>
+        <param>
+          <type><ref refid="namespacecsmp_1ae8bbaf7555417ec6195d15112682a43d" kindref="member">::csmp::CORNER_POINT_CELL_FACE_INDEX</ref></type>
+          <declname>to</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="108" column="3" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="108" bodyend="111"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::EclipseWellPathEntry</label>
+        <link refid="structcsmp_1_1_eclipse_well_path_entry"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>+cell</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>ijk</label>
+        <link refid="structijk"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="103" column="1" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="104" bodyend="112"/>
+    <listofallmembers>
+      <member refid="structcsmp_1_1_eclipse_well_path_entry_1a5ebad5627f4cc2b2d220ec7446932213" prot="public" virt="non-virtual"><scope>csmp::EclipseWellPathEntry</scope><name>cell</name></member>
+      <member refid="structcsmp_1_1_eclipse_well_path_entry_1a72ed7a2fa605d59d7528b0fc98e47cd8" prot="public" virt="non-virtual"><scope>csmp::EclipseWellPathEntry</scope><name>EclipseWellPathEntry</name></member>
+      <member refid="structcsmp_1_1_eclipse_well_path_entry_1a451c5a51facc3f00b00310a26bb7286b" prot="public" virt="non-virtual"><scope>csmp::EclipseWellPathEntry</scope><name>from</name></member>
+      <member refid="structcsmp_1_1_eclipse_well_path_entry_1a04f501195219b5a0c0a40f3f6cb97da0" prot="public" virt="non-virtual"><scope>csmp::EclipseWellPathEntry</scope><name>to</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

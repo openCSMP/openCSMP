@@ -1,0 +1,120 @@
+.TH "csmp::Test" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::Test
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <Test\&.h>\fP
+.PP
+Inherited by \fBcsmp::ANSYS_Model2D_Test\fP, \fBcsmp::ANSYS_Model3D_Test\fP, \fBcsmp::ANSYS_SplitBoundaryMatch_Test\fP, \fBcsmp::AccumulationSpeedProfiling_Test\fP, \fBcsmp::ArrayVariable_Test\fP, \fBcsmp::BoreHole_stability2D_VVCase\fP, \fBcsmp::BoreHole_stability_InclinedWell3D_VVCase\fP, \fBcsmp::BoreHole_stability_VerticalWell3D_VVCase\fP, \fBcsmp::BoundaryInterface_Test\fP, \fBcsmp::Boundary_Test\fP, \fBcsmp::Box_Test\fP, \fBcsmp::CFL_Calculation_VVCase< dim >\fP, \fBcsmp::CFL_TestCase\fP, \fBcsmp::CVFEM_1D_VVCase\fP, \fBcsmp::Colony_Test\fP, \fBcsmp::ColorPalette_Test\fP, \fBcsmp::CommandLineParser_Test\fP, \fBcsmp::CompressedRowMatrix_Test\fP, \fBcsmp::ConvexPolygon_Test\fP, \fBcsmp::CopyReplaceVisitor_Test\fP, \fBcsmp::CsmpIntro1_TestCase\fP, \fBcsmp::CubicSpline_Test\fP, \fBcsmp::DenseMatrix_Test\fP, \fBcsmp::DirichletPressureBoxModel_VVCase\fP, \fBcsmp::DynamicArray_Test\fP, \fBcsmp::ElementPolicyIntegrity_Test\fP, \fBcsmp::Element_Test\fP, \fBcsmp::ExactVersusNumericIntegrationSpeed_Test\fP, \fBcsmp::ExplicitAdvection2D_VVCase\fP, \fBcsmp::ExplicitTransport_Test\fP, \fBcsmp::ExponentialTransferFunction_Test\fP, \fBcsmp::FEM_Data_Test\fP, \fBcsmp::FV_Parameter_Test\fP, \fBcsmp::Face_Test\fP, \fBcsmp::FibonacciHeap_Test\fP, \fBcsmp::FiniteElementManager_Test\fP, \fBcsmp::FiniteElementPolicy_Test\fP, \fBcsmp::FiniteElement_Test\fP, \fBcsmp::FiniteVolumePolicy_Test\fP, \fBcsmp::FiniteVolumeStencilSpeed_Test\fP, \fBcsmp::FiniteVolumeStencil_Test\fP, \fBcsmp::GenericFiniteVolumeTransport_Test\fP, \fBcsmp::GenericSingleton_Test\fP, \fBcsmp::Geothermal_1D_VVCase\fP, \fBcsmp::Geothermal_2D_VVCase\fP, \fBcsmp::Geothermal_3D_VVCase\fP, \fBcsmp::Geothermal_pseudo1D_VVCase\fP, \fBcsmp::GravityInducedFluidPressure_Test\fP, \fBcsmp::INDEXandVariables_Test\fP, \fBcsmp::ImplicitTransport_Test\fP, \fBcsmp::IncompressibleSinglePhaseFlowFEM_VVCase\fP, \fBcsmp::IncompressibleSinglePhaseFlowTensorPerm2DFEM_VVCase\fP, \fBcsmp::IncompressibleSinglePhaseFlowTensorPerm3DFEM_VVCase\fP, \fBcsmp::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase< dim >\fP, \fBcsmp::Index_Test\fP, \fBcsmp::InflowOutflowCalculation_VVCase< dim >\fP, \fBcsmp::InputDataManager_Test\fP, \fBcsmp::Integral_var_NT_lhsop_N_dV_Test\fP, \fBcsmp::Integral_var_NT_rhsop_N_dV_Test\fP, \fBcsmp::IntegrationPointToNodePropertyVisitor_Test\fP, \fBcsmp::InterFace_Test\fP, \fBcsmp::IsnanIsinf_Test\fP, \fBcsmp::IsoparametricLinearHexahedron_Test\fP, \fBcsmp::IsoparametricLinearPyramid_Test\fP, \fBcsmp::IsoparametricQuadraticTetrahedron_Test\fP, \fBcsmp::JaggedArray3D_Comparison_Test\fP, \fBcsmp::LinearCuboid_Test\fP, \fBcsmp::LinearElasticFractureAperture2D_VVCase\fP, \fBcsmp::LinearElasticIsotropicDeformation2D_VVCase\fP, \fBcsmp::LinearElasticityA_VVCase\fP, \fBcsmp::LinearElasticityB_VVCase\fP, \fBcsmp::LinearElasticityC_VVCase\fP, \fBcsmp::LinearElasticityD_VVCase\fP, \fBcsmp::LinearElasticityE_VVCase\fP, \fBcsmp::LocalVariableStorage_Test\fP, \fBcsmp::MathOperatorLHS_Test\fP, \fBcsmp::MathOperatorRHS_Test\fP, \fBcsmp::Matrix_Test\fP, \fBcsmp::MeshManager_Test\fP, \fBcsmp::MiscFunctionality_Test\fP, \fBcsmp::ModelBasics_Test\fP, \fBcsmp::ModelComparator_Test\fP, \fBcsmp::ModelSubDomain_Test\fP, \fBcsmp::ModelTopology_Test\fP, \fBcsmp::NimbleRegion_Test\fP, \fBcsmp::NodeFunctions_Test\fP, \fBcsmp::NodeManifoldManager_Test\fP, \fBcsmp::Node_Test\fP, \fBcsmp::Operand_Test\fP, \fBcsmp::PDE_Integrator_Test\fP, \fBcsmp::PDE_Integrator_Transient_Test\fP, \fBcsmp::Parallel_TestCase\fP, \fBcsmp::Parameter_Test\fP, \fBcsmp::PointPropertyToCellMapper2D_Test\fP, \fBcsmp::Point_Test\fP, \fBcsmp::PropertyAtPointVisitor_Test\fP, \fBcsmp::PropertyConstraints_Test\fP, \fBcsmp::PropertyData_Test\fP, \fBcsmp::PropertyDatabase_Test\fP, \fBcsmp::PropertyHandle_Test\fP, \fBcsmp::PropertyStorageSpeed_Test\fP, \fBcsmp::RegionMonitor_Test\fP, \fBcsmp::Region_Test\fP, \fBcsmp::RelativePermeabilityModel_Test\fP, \fBcsmp::SKUA_FiniteElementMeshInterface_Test\fP, \fBcsmp::ScalarVariable_Test\fP, \fBcsmp::SneddonCrackCoupled3D_VVCase\fP, \fBcsmp::SneddonCrackCoupled_VVCase\fP, \fBcsmp::SneddonCrack_VVCase\fP, \fBcsmp::SparseMatrix_Test\fP, \fBcsmp::SplitBoundaryInterface_Test< dim >\fP, \fBcsmp::SplitBoundaryPressureDiffusion_Test\fP, \fBcsmp::SplitBoundary_Test\fP, \fBcsmp::StatisticalAnalyzer_Test\fP, \fBcsmp::TPINCFVT3D_VVCase\fP, \fBcsmp::TRIANGLE_Interface_Test\fP, \fBcsmp::TensorVariable_Test\fP, \fBcsmp::TensorVariable_Test1\fP, \fBcsmp::TensorVariable_Test2\fP, \fBcsmp::TwoPhaseModel_Test\fP, \fBcsmp::TwoPhaseModel_TestSuite\fP, \fBcsmp::TwoPhaseModel_TestSuite\fP, \fBcsmp::TwoPhaseModel_TestSuite\fP, \fBcsmp::TwoPhaseModelwithHysteresis_Test\fP, \fBcsmp::UG4_UGX_FileExport_Test\fP, \fBcsmp::VData_Test\fP, \fBcsmp::VSet_Test1\fP, \fBcsmp::VSet_Test2\fP, \fBcsmp::VTU_Interface_Test\fP, \fBcsmp::VariableBenchmarking_Test\fP, \fBcsmp::VariableStorageSpeed_Test\fP, \fBcsmp::Variables_Test\fP, \fBcsmp::VectorVariable_Test\fP, \fBcsmp::VectorVariable_Test1\fP, \fBcsmp::VectorVariable_Test2\fP, \fBcsmp::Visitor_TestSuite\fP, \fBcsmp::geometricCalculations_Test\fP, \fBcsmp::parentElementStorageOptions_Test\fP, \fBcsmp::test::FieldVariableTest\fP, and \fBcsmp::vsetMakers_Test\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBTest\fP (std::ostream *osptr=0)"
+.br
+.ti -1c
+.RI "virtual void \fBrun\fP ()=0"
+.br
+.ti -1c
+.RI "long \fBgetNumPassed\fP () const"
+.br
+.ti -1c
+.RI "long \fBgetNumFailed\fP () const"
+.br
+.ti -1c
+.RI "const std::ostream * \fBgetStream\fP () const"
+.br
+.ti -1c
+.RI "void \fBsetStream\fP (std::ostream *osptr)"
+.br
+.ti -1c
+.RI "void \fBsetName\fP (std::string testName)"
+.br
+.ti -1c
+.RI "std::string \fBgetName\fP () const"
+.br
+.ti -1c
+.RI "bool \fBhasName\fP () const"
+.br
+.ti -1c
+.RI "void \fBdo_succeed\fP ()"
+.br
+.ti -1c
+.RI "long \fBreport\fP () const"
+.br
+.ti -1c
+.RI "virtual void \fBreset\fP ()"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBdo_equal\fP (double expr, double value, double tol, const std::string &lbl, const char *fname, long lineno)"
+.br
+.ti -1c
+.RI "void \fBdo_test\fP (bool cond, const std::string &lbl, const char *fname, long lineno)"
+.br
+.ti -1c
+.RI "void \fBdo_fail\fP (const std::string &lbl, const char *fname, long lineno)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "const char * \fBprefix_\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+\fBTest\fP base class for unit testing\&.
+
+.PP
+Usage example:
+.IP "1." 4
+define default constructor and run() function
+.IP "2." 4
+in run() function, use the macros provided to test whether desired conditions apply or not\&.
+.PP
+
+.PP
+Examples:
+.IP "\(bu" 2
+check whether the floating point value, a, is equal to b within given tolerance, tol:
+
+.PP
+_equal(a,b,tol);
+.IP "\(bu" 2
+check whether a boolean conditions applies:
+
+.PP
+_test(isoparametric==false);
+.IP "\(bu" 2
+add a message to a failure report:
+
+.PP
+_fail("for this input this did not work");
+.IP "\(bu" 2
+report that a test passed: if (\&.\&.\&.) _succeed();
+.PP
+
+.PP
+Obtain a fail/succeed report after running the test\&.
+
+.PP
+test\&.report(); 
+.SH "Member Function Documentation"
+.PP 
+.SS "virtual void csmp::Test::run ()\fR [pure virtual]\fP"
+
+.PP
+Implemented in \fBcsmp::ANSYS_Model2D_Test\fP, \fBcsmp::ANSYS_SplitBoundaryMatch_Test\fP, \fBcsmp::BoundaryInterface_Test\fP, \fBcsmp::Box_Test\fP, \fBcsmp::Colony_Test\fP, \fBcsmp::CVFEM_1D_VVCase\fP, \fBcsmp::Element_Test\fP, \fBcsmp::ExplicitTransport_Test\fP, \fBcsmp::FiniteElement_Test\fP, \fBcsmp::FiniteElementPolicy_Test\fP, \fBcsmp::FiniteVolumePolicy_Test\fP, \fBcsmp::GenericFiniteVolumeTransport_Test\fP, \fBcsmp::geometricCalculations_Test\fP, \fBcsmp::Geothermal_1D_VVCase\fP, \fBcsmp::Geothermal_2D_VVCase\fP, \fBcsmp::Geothermal_3D_VVCase\fP, \fBcsmp::Geothermal_pseudo1D_VVCase\fP, \fBcsmp::GravityInducedFluidPressure_Test\fP, \fBcsmp::ImplicitTransport_Test\fP, \fBcsmp::INDEXandVariables_Test\fP, \fBcsmp::InflowOutflowCalculation_VVCase< dim >\fP, \fBcsmp::InputDataManager_Test\fP, \fBcsmp::InterFace_Test\fP, \fBcsmp::IsoparametricQuadraticTetrahedron_Test\fP, \fBcsmp::LinearElasticFractureAperture2D_VVCase\fP, \fBcsmp::LinearElasticIsotropicDeformation2D_VVCase\fP, \fBcsmp::MeshManager_Test\fP, \fBcsmp::ModelBasics_Test\fP, \fBcsmp::ModelSubDomain_Test\fP, \fBcsmp::NodeFunctions_Test\fP, \fBcsmp::PropertyConstraints_Test\fP, \fBcsmp::PropertyData_Test\fP, \fBcsmp::Region_Test\fP, \fBcsmp::SKUA_FiniteElementMeshInterface_Test\fP, \fBcsmp::SneddonCrack_VVCase\fP, \fBcsmp::SneddonCrackCoupled3D_VVCase\fP, \fBcsmp::SneddonCrackCoupled_VVCase\fP, \fBcsmp::SplitBoundaryInterface_Test< dim >\fP, \fBcsmp::SplitBoundaryPressureDiffusion_Test\fP, \fBcsmp::TPINCFVT3D_VVCase\fP, \fBcsmp::TwoPhaseModelwithHysteresis_Test\fP, \fBcsmp::Variables_Test\fP, \fBcsmp::VData_Test\fP, \fBcsmp::VSet_Test2\fP, and \fBcsmp::vsetMakers_Test\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

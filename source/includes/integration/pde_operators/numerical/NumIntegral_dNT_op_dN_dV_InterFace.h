@@ -33,8 +33,8 @@ class NumIntegral_dNT_op_dN_dV_InterFace : public MathOperatorLHS<dim,InterFace>
                                         const char* basic,
                                         const char* test );
     
-    virtual void GetOperands( const InterFace<dim>& );
-    virtual void ComputeContribution( InterFace<dim>& );
+    void GetOperands( const InterFace<dim>& ) override final;
+    void ComputeContribution( const InterFace<dim>& ) override final;
     
   protected:
       /// separates opposing nodes and writes new coordinates to XY matrix of corresponding finite element type

@@ -120,6 +120,7 @@ Model<dim>::Model( const string& binaryFileName, const string& variable_txt_file
 }
 
 
+
 /**
     Re-constructor: builds model from binary file set, using only the variables specified in the subset, but with the definitions
     that these variables have in the binary.
@@ -151,7 +152,7 @@ elements of different types, for instance, tetrahedra and prism elements. If,
 these are not already stored in the VSet, different material properties
 can be assigned to regions inside the the calculation.
 
-@param vset A VSet is supplied as constructor argument and should contain a
+@param polygonal_dataset A VSet is supplied as constructor argument and should contain a
 finite-element mesh and associated properties with names which must correspond
 to the properties specified in the Property input file
 (default: CSMP_variables.txt).  Note that VSet is not const because it may be shrunk in construction process).
@@ -165,12 +166,12 @@ Constructor is used when an ANSYS Model is built from topology and VData.
  
 */
 template<uint32_t dim>
-Model<dim>::Model( VSet<dim>& vset, const char* var_file )
+Model<dim>::Model( VSet<dim>& polygonal_dataset, const char* var_file )
   : model_name_( "to be named" ),
     database_( var_file ),
     verbose_( true )
 {
-  Initialize( vset );
+  Initialize( polygonal_dataset );
 
 } // end VSet constructor
 
@@ -411,8 +412,8 @@ if ( mesh_manager_.Faces() > 0 ) {
           cout <<"\n\t\t"<<"Face storage is broken.";
        }
   }
-if ( mesh_manager_.InterFaces() > 0 ) {
-     cells_ok = integrityCheck<dim,InterFace>( mesh_manager_.InterFacesBegin(), mesh_manager_.InterFacesEnd() );
+if ( mesh_manager_.Interfaces() > 0 ) {
+     cells_ok = integrityCheck<dim,InterFace>( mesh_manager_.InterfacesBegin(), mesh_manager_.InterfacesEnd() );
      if ( !cells_ok ) {
           cout <<"\n\t\t"<<"InterFace storage is broken.";
        }
@@ -433,11 +434,11 @@ if ( mesh_manager_.InterFaces() > 0 ) {
          assert( volume_faces == 0U );
          cout <<"\n\t\t\t("<< mesh_manager_.Faces() <<" faces: surfaces "<< surface_faces <<", lines "<< line_faces <<")";
       }
-    if ( mesh_manager_.InterFaces() > 0 ) {
+    if ( mesh_manager_.Interfaces() > 0 ) {
          size_t volume_ifaces{0U}, surface_ifaces{0U}, line_ifaces{0U};
          currentCellTypes( mesh_manager_, INTER_FACE, volume_ifaces, surface_ifaces, line_ifaces );
          assert( volume_ifaces == 0U );
-         cout <<"\n\t\t\t("<< mesh_manager_.InterFaces() <<" interfaces: surfaces "<< surface_ifaces <<", lines "<< line_ifaces <<")";
+         cout <<"\n\t\t\t("<< mesh_manager_.Interfaces() <<" interfaces: surfaces "<< surface_ifaces <<", lines "<< line_ifaces <<")";
       }
     cout << "\n==================================================================================================";
     cout << endl;
@@ -596,8 +597,8 @@ if ( mesh_manager_.Faces() > 0 ) {
           cout <<"\n\t\t"<<"Face storage is broken.";
        }
   }
-if ( mesh_manager_.InterFaces() > 0 ) {
-     cells_ok = integrityCheck<dim,InterFace>( mesh_manager_.InterFacesBegin(), mesh_manager_.InterFacesEnd() );
+if ( mesh_manager_.Interfaces() > 0 ) {
+     cells_ok = integrityCheck<dim,InterFace>( mesh_manager_.InterfacesBegin(), mesh_manager_.InterfacesEnd() );
      if ( !cells_ok ) {
           cout <<"\n\t\t"<<"InterFace storage is broken.";
        }
@@ -618,11 +619,11 @@ if ( mesh_manager_.InterFaces() > 0 ) {
          assert( volume_faces == 0U );
          cout <<"\n\t\t\t("<< mesh_manager_.Faces() <<" faces: surfaces "<< surface_faces <<", lines "<< line_faces <<")";
       }
-    if ( mesh_manager_.InterFaces() > 0 ) {
+    if ( mesh_manager_.Interfaces() > 0 ) {
          size_t volume_ifaces{0U}, surface_ifaces{0U}, line_ifaces{0U};
          currentCellTypes( mesh_manager_, INTER_FACE, volume_ifaces, surface_ifaces, line_ifaces );
          assert( volume_ifaces == 0U );
-         cout <<"\n\t\t\t("<< mesh_manager_.InterFaces() <<" interfaces: surfaces "<< surface_ifaces <<", lines "<< line_ifaces <<")";
+         cout <<"\n\t\t\t("<< mesh_manager_.Interfaces() <<" interfaces: surfaces "<< surface_ifaces <<", lines "<< line_ifaces <<")";
       }
     cout << "\n==================================================================================================";
     cout << endl;
@@ -655,7 +656,7 @@ if ( mesh_manager_.InterFaces() > 0 ) {
 
 /**
     Initialises model from VSet. Similar to Initialise(VSet,ModelTopology), but without
-    the creation of regions other than 'Model'.
+    the creation of Region or Boundary objects other than 'Model'.
 
  @attention a fully (boundary) flagged valid VSet is expected by this method.
 
@@ -666,8 +667,10 @@ void Model<dim>::Initialize( VSet<dim>& vset )
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
   if ( vset.Faces() > 0 ||
-       vset.Interfaces() > 0 )
-    csmp_error.Note( WARNING, "Model<dim>::Initialize(VSet):", "method not tested yet for models with Face and InterFace objects.");
+       vset.Interfaces() > 0 ) {
+       csmp_error.Note( WARNING, "Model<dim>::Initialize(VSet):",
+                       "Face or InterFace objects will be placed into 'Model Boundaries' and 'Model SplitBoundaries'.");
+    }
 
   // 1. checking whether BOX_BOUNDARY flags are there which are essential for a model without boundary domains
   if ( *min_element(vset.BFlagsBegin(),vset.BFlagsEnd()) ==  *max_element(vset.BFlagsBegin(),vset.BFlagsEnd()) ) {
@@ -696,11 +699,20 @@ void Model<dim>::Initialize( VSet<dim>& vset )
   const bool with_FV_variables = (finiteVolumeVariables(Database()) > 0 ) ? true : false;
   mesh_manager_.Initialize( Database(), vset, with_FV_variables );
   
-  // 4. forming default computational domain called "Model" or contiguous multiple domains called "Model_#n"
+  // 4. forming default computational domain "Model", "Model Boundaries" and "Model SplitBoundaries" if any.
   const bool unique(true);
   const size_t elmts = this->FormModelRegion( unique );
   if ( elmts == 0U )
     csmp_error.Note( FATAL_ERROR, "Model<dim>::Initialize(VSet):", "Region 'Model' has zero elements.");
+  // if model is box-shaped, bespoke boundaries will be reacted
+  if ( this->Mesh().Faces() > 0 )
+    this->EstablishBoxBoundariesFromNodeFlags( false /* recreate_box_boundary_flags_before */ );
+  // split boundaries
+  if ( this->Mesh().Interfaces() > 0 ) {
+       const bool created_SB = this->CreateSplitBoundaryFromInterfaces( "Model SplitBoundaries" );
+       if ( !created_SB )
+         csmp_error.Note( ERROR, "Model<dim>::Initialize(VSet):", "'Model SplitBoundaries' could not be created.");
+    }
   
   cout << "\nModel<dim>::Initialize (VSet): mesh has been built successfully..." << endl;
 
@@ -719,8 +731,8 @@ Mesh().AssignUniqueNumbers( true );
 integrityCheck<dim,Element>( mesh_manager_.ElementsBegin(), mesh_manager_.ElementsEnd() );
 if ( mesh_manager_.Faces() > 0 )
   integrityCheck<dim,Face>( mesh_manager_.FacesBegin(), mesh_manager_.FacesEnd() );
-if ( mesh_manager_.InterFaces() > 0 )
-  integrityCheck<dim,InterFace>( mesh_manager_.InterFacesBegin(), mesh_manager_.InterFacesEnd() );
+if ( mesh_manager_.Interfaces() > 0 )
+  integrityCheck<dim,InterFace>( mesh_manager_.InterfacesBegin(), mesh_manager_.InterfacesEnd() );
 #endif
 
   cout << "\n===========================================================";
@@ -1148,13 +1160,13 @@ void Model<dim>::IndexByPropertyValues()
       }
 
     // interfaces
-    if ( Mesh().InterFaces() > 0 ) {
+    if ( Mesh().Interfaces() > 0 ) {
         if ( Database().IsDefined( "interface number" ) ) {
              const csmp::Index key = this->Database().StorageKey("interface number");
-             const size_t n_ifaces{mesh.InterFaces()};
+             const size_t n_ifaces{mesh.Interfaces()};
              const size_t n_all_cells{ n_ifaces + mesh.Faces() + mesh.Elements() };
-             const typename plf::colony<csmp::InterFace<dim>>::iterator ifaces_end(mesh.InterFacesEnd());
-             for ( auto it=mesh.InterFacesBegin(); it!=ifaces_end; ++it ) {
+             const typename plf::colony<csmp::InterFace<dim>>::iterator ifaces_end(mesh.InterfacesEnd());
+             for ( auto it=mesh.InterfacesBegin(); it!=ifaces_end; ++it ) {
                   const size_t iface_number = static_cast<uint32_t>((*it).Read(key));
                   if ( iface_number < mesh.Elements() + mesh.Faces() )
                     csmp_error.Note( WARNING, "Model::IndexByPropertyValues:",
@@ -2626,7 +2638,6 @@ template<uint32_t dim>
 void Model<dim>::Apply( PDE_Integrator<dim,Element>& problem, bool debug )
 {
   problem.IntegrateOver( this->Region( "Model" ), debug );
-
 }
 
 
@@ -2647,7 +2658,6 @@ template<uint32_t dim>
 void Model<dim>::Apply( PDE_Integrator<dim,Element>& problem, const char* region_name, bool debug )
 {
   problem.IntegrateOver( this->Region( region_name ), debug );
-
 }
 
 
@@ -2830,21 +2840,59 @@ void Model<dim>::MinMaxOf( const char* prop, double& vmin, double& vmax ) const
   }
 
 
-  // unique and non-unique regions 
+  // not distinguishing between unique and non-unique regions
   if ( prop_key.place == REGION ) {
+    VectorVariable<dim> vc;
+    TensorVariable<dim> ts;
     typename map<string, csmp::Region<dim> >::const_iterator  git( this->UniqueRegionsBegin() );
-    (*git).second.MinMaxOf( prop_key, vmin, vmax );
+    switch( prop_key.type ) {
+         case SCALAR: vmin = vmax = (*git).second.Read( prop_key );
+           return;
+         case VECTOR:
+              (*git).second.Read( prop_key, vc );
+              vmin = vmax = vc.Length();
+           return;
+         case TENSOR:
+              minMaxEigenValues( ts, vmin, vmax );
+           return;
+         default:
+           csmp_error.Note( ERROR, "Model<dim>::MinMaxOf", prop, "region property placements ARRAY/FLAGGEDARRAY not handled yet" );
+      }
     double  gmin( vmin ), gmax( vmax );
     while ( git != this->UniqueRegionsEnd() ) {
-      (*git).second.MinMaxOf( prop_key, vmin, vmax );
+        switch( prop_key.type ) {
+             case SCALAR: vmin = vmax = (*git).second.Read( prop_key );
+               return;
+             case VECTOR:
+                  (*git).second.Read( prop_key, vc );
+                  vmin = vmax = vc.Length();
+               return;
+             case TENSOR:
+                  minMaxEigenValues( ts, vmin, vmax );
+               return;
+             default:
+               csmp_error.Note( ERROR, "Model<dim>::MinMaxOf", prop, "Region property placements ARRAY/FLAGGEDARRAY not handled yet" );
+          }
       gmin = min( gmin, vmin );
       gmax = max( gmax, vmax );
       git++;
     }
     for ( auto ngit = this->RegionsBegin(); ngit != this->RegionsEnd(); ngit++ ) {
-      (*ngit).second.MinMaxOf( prop_key, vmin, vmax );
-      gmin = min( gmin, vmin );
-      gmax = max( gmax, vmax );
+        switch( prop_key.type ) {
+             case SCALAR: vmin = vmax = (*git).second.Read( prop_key );
+               return;
+             case VECTOR:
+                  (*git).second.Read( prop_key, vc );
+                  vmin = vmax = vc.Length();
+               return;
+             case TENSOR:
+                  minMaxEigenValues( ts, vmin, vmax );
+               return;
+             default:
+               csmp_error.Note( ERROR, "Model<dim>::MinMaxOf", prop, "Region property placement not handled yet" );
+          }
+        gmin = min( gmin, vmin );
+        gmax = max( gmax, vmax );
     }
     vmin = gmin;
     vmax = gmax;
@@ -2860,15 +2908,41 @@ void Model<dim>::MinMaxOf( const char* prop, double& vmin, double& vmax ) const
          csmp_error.Note( ERROR, "Model<dim>::MinMaxOf", prop, "model does not contain any boundaries; nothing could be done" );
          return;
       }
+    VectorVariable<dim> vc;
+    TensorVariable<dim> ts;
     typename map<string, csmp::Boundary<dim> >::const_iterator  git( this->BoundariesBegin() );
-    (*git).second.MinMaxOf( prop_key, vmin, vmax );
+    switch( prop_key.type ) {
+         case SCALAR: vmin = vmax = (*git).second.Read( prop_key );
+           return;
+         case VECTOR:
+              (*git).second.Read( prop_key, vc );
+              vmin = vmax = vc.Length();
+           return;
+         case TENSOR:
+              minMaxEigenValues( ts, vmin, vmax );
+           return;
+         default:
+           csmp_error.Note( ERROR, "Model<dim>::MinMaxOf", prop, "Boundary property placements ARRAY/FLAGGEDARRAY not handled yet" );
+      }
     double  gmin( vmin ), gmax( vmax );
     while ( git != this->BoundariesEnd() ) {
-      (*git).second.MinMaxOf( prop_key, vmin, vmax );
-      gmin = min( gmin, vmin );
-      gmax = max( gmax, vmax );
-      git++;
-    }
+        switch( prop_key.type ) {
+             case SCALAR: vmin = vmax = (*git).second.Read( prop_key );
+               return;
+             case VECTOR:
+                  (*git).second.Read( prop_key, vc );
+                  vmin = vmax = vc.Length();
+               return;
+             case TENSOR:
+                  minMaxEigenValues( ts, vmin, vmax );
+               return;
+             default:
+               csmp_error.Note( ERROR, "Model<dim>::MinMaxOf", prop, "Boundary property placements ARRAY/FLAGGEDARRAY not handled yet" );
+          }
+        gmin = min( gmin, vmin );
+        gmax = max( gmax, vmax );
+        git++;
+      }
     vmin = gmin;
     vmax = gmax;
     return;
@@ -2884,14 +2958,40 @@ void Model<dim>::MinMaxOf( const char* prop, double& vmin, double& vmax ) const
          return;
       }
     typename map<string, csmp::SplitBoundary<dim> >::const_iterator  git( this->SplitBoundariesBegin() );
-    (*git).second.MinMaxOf( prop_key, vmin, vmax );
+    VectorVariable<dim> vc;
+    TensorVariable<dim> ts;
+    switch( prop_key.type ) {
+         case SCALAR: vmin = vmax = (*git).second.Read( prop_key );
+           return;
+         case VECTOR:
+              (*git).second.Read( prop_key, vc );
+              vmin = vmax = vc.Length();
+           return;
+         case TENSOR:
+              minMaxEigenValues( ts, vmin, vmax );
+           return;
+         default:
+           csmp_error.Note( ERROR, "Model<dim>::MinMaxOf", prop, "SplitBoundary property placements ARRAY/FLAGGEDARRAY not handled yet" );
+      }
     double  gmin( vmin ), gmax( vmax );
     while ( git != this->SplitBoundariesEnd() ) {
-      (*git).second.MinMaxOf( prop_key, vmin, vmax );
-      gmin = min( gmin, vmin );
-      gmax = max( gmax, vmax );
-      git++;
-    }
+        switch( prop_key.type ) {
+             case SCALAR: vmin = vmax = (*git).second.Read( prop_key );
+               return;
+             case VECTOR:
+                  (*git).second.Read( prop_key, vc );
+                  vmin = vmax = vc.Length();
+               return;
+             case TENSOR:
+                  minMaxEigenValues( ts, vmin, vmax );
+               return;
+             default:
+               csmp_error.Note( ERROR, "Model<dim>::MinMaxOf", prop, "SplitBoundary property placements ARRAY/FLAGGEDARRAY not handled yet" );
+          }
+        gmin = min( gmin, vmin );
+        gmax = max( gmax, vmax );
+        git++;
+      }
     vmin = gmin;
     vmax = gmax;
   }
@@ -3320,7 +3420,7 @@ The result is printed to the screen.
 */
 template<uint32_t  dim>
 double printRangeOfVariable( const Model<dim>& sg,
-                               const char* var, bool max_or_min )
+                             const char* var, bool max_or_min )
  {
      double pmin, pmax;
      sg.MinMaxOf( var, pmin, pmax );
@@ -3335,8 +3435,8 @@ double printRangeOfVariable( const Model<dim>& sg,
 
 template<uint32_t  dim>
 double printRangeOfVariable( const Model<dim>& sg,
-                               Standard_IO_Handler& io,
-                               const char* var, bool max_or_min )
+                             Standard_IO_Handler& io,
+                             const char* var, bool max_or_min )
  {
      double  pmin, pmax;
      sg.MinMaxOf( var, pmin, pmax );
@@ -3371,21 +3471,44 @@ double printRangeOfVariable( const Model<dim>& sg,
 /// as above, but for individual model regions
 template<uint32_t  dim>
 double printRangeOfVariable( const Model<dim>& sg,
-                               const char* group, const char* var, bool max_or_min )
+                             const char* group, const char* var, bool max_or_min )
  {
      double  pmin, pmax;
-     const PropertyDatabase<dim>& p_ref = sg.Database();
-     const PLACEMENT place = sg.Database().Placement(var);
+     const csmp::Index var_key = sg.Database().StorageKey(var);
+     const auto        place   = var_key.place;
      
-     if ( sg.ContainsRegion(group) && !faceVariable(place) && !interFaceVariable(place) )
-       sg.Region( group ).MinMaxOf( var, pmin, pmax );
-     else if ( sg.ContainsBoundary(group) ) sg.Boundary( group ).MinMaxOf( var, pmin, pmax );
-     else if ( sg.ContainsSplitBoundary(group) ) sg.SplitBoundary( group ).MinMaxOf( var, pmin, pmax );
+     if ( sg.ContainsRegion(group) && !faceVariable(place) && !interFaceVariable(place) ) {
+          switch( place ) {
+            case REGION:
+                 pmin = pmax = sg.Region(group).Read( var_key );
+              return pmax;
+            default:
+                 sg.Region(group).MinMaxOf( var_key, pmin, pmax );
+          }
+       }
+     else if ( sg.ContainsBoundary(group) && !interFaceVariable(place) ) {
+          switch( place ) {
+            case BOUNDARY:
+                 pmin = pmax = sg.Boundary(group).Read( var_key );
+              return pmax;
+            default:
+                 sg.Boundary(group).MinMaxOf( var_key, pmin, pmax );
+          }
+       }
+     else if ( sg.ContainsSplitBoundary(group) && !faceVariable(place) ) {
+          switch( place ) {
+            case SPLIT_BOUNDARY:
+                 pmin = pmax = sg.SplitBoundary(group).Read( var_key );
+              return pmax;
+            default:
+                 sg.SplitBoundary(group).MinMaxOf( var_key, pmin, pmax );
+          }
+       }
      else {
           cerr <<"\nprintRangeOfVariable: '"<< group <<"' does not exist."<< endl;
           return numeric_limits<double>::signaling_NaN();
        }
-     cout << scientific << setprecision(5) <<"\nRange of variable ["<< p_ref.Unit(var) <<"]: '";
+     cout << scientific << setprecision(5) <<"\nRange of variable ["<< sg.Database().Unit(var) <<"]: '";
      cout << var <<"' in subdomain of model '"<< group <<"': "<< pmin <<" to "<< pmax << endl;
           
      if ( !max_or_min ) return pmin;
@@ -3397,24 +3520,47 @@ double printRangeOfVariable( const Model<dim>& sg,
 
 template<uint32_t  dim>
 double printRangeOfVariable( const Model<dim>& sg,
-                                Standard_IO_Handler& io,
-                                const char* group,
-                                const char* var, bool max_or_min )
+                             Standard_IO_Handler& io,
+                             const char* group,
+                             const char* var, bool max_or_min )
  {
-     double& model_time( ModelTime::Instance().modelTime );
-     double         pmin, pmax;
-     const PropertyDatabase<dim>& p_ref = sg.Database();
-     const PLACEMENT place = sg.Database().Placement(var);
+     double&           model_time( ModelTime::Instance().modelTime );
+     double            pmin, pmax;
+     const csmp::Index var_key = sg.Database().StorageKey(var);
+     const auto        place   = var_key.place;
 
-     if ( sg.ContainsRegion(group) && !faceVariable(place) && !interFaceVariable(place) )
-       sg.Region( group ).MinMaxOf( var, pmin, pmax );
-     else if ( sg.ContainsBoundary(group) ) sg.Boundary( group ).MinMaxOf( var, pmin, pmax );
-     else if ( sg.ContainsSplitBoundary(group) ) sg.SplitBoundary( group ).MinMaxOf( var, pmin, pmax );
+     if ( sg.ContainsRegion(group) && !faceVariable(place) && !interFaceVariable(place) ) {
+          switch( place ) {
+            case REGION:
+                 pmin = pmax = sg.Region(group).Read( var_key );
+              return pmax;
+            default:
+                 sg.Region(group).MinMaxOf( var_key, pmin, pmax );
+          }
+       }
+     else if ( sg.ContainsBoundary(group) ) {
+          switch( place ) {
+            case BOUNDARY:
+                 pmin = pmax = sg.Boundary(group).Read( var_key );
+              return pmax;
+            default:
+                 sg.Boundary(group).MinMaxOf( var_key, pmin, pmax );
+          }
+       }
+     else if ( sg.ContainsSplitBoundary(group) ) {
+          switch( place ) {
+            case SPLIT_BOUNDARY:
+                 pmin = pmax = sg.SplitBoundary(group).Read( var_key );
+              return pmax;
+            default:
+                 sg.SplitBoundary(group).MinMaxOf( var_key, pmin, pmax );
+          }
+       }
      else {
           cerr <<"\nprintRangeOfVariable: '"<< group <<"' does not exist."<< endl;
           return numeric_limits<double>::signaling_NaN();
        }
-     cout << scientific << setprecision(5) <<"\nRange of variable ["<< p_ref.Unit(var) <<"]: '";
+     cout << scientific << setprecision(5) <<"\nRange of variable ["<< sg.Database().Unit(var) <<"]: '";
      cout << var <<"': "<< pmin <<" to "<< pmax <<" in subdomain of model '"<< group <<"'"<< endl;
      
      // recording the measured variable value range at given timestep
@@ -3427,7 +3573,7 @@ double printRangeOfVariable( const Model<dim>& sg,
      var_info += ", secs, range of '";
      var_info += var;
      var_info += "' [";
-     var_info += p_ref.Unit(var);
+     var_info += sg.Database().Unit(var);
      var_info += "]: ";
      snprintf( info, sizeof(info), "%lf", pmin );
      var_info += info;

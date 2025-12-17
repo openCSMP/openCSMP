@@ -1,0 +1,632 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_v_l_h___vapor_lookup" kind="class" language="C++" prot="public">
+    <compoundname>csmp::VLH_VaporLookup</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_v_l_h___vapor_lookup_1a086c6e3da267e5c8d3ecb4a3ef41c7c3" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::VLH_VaporLookup::properties_at_tmax</definition>
+        <argsstring></argsstring>
+        <name>properties_at_tmax</name>
+        <qualifiedname>csmp::VLH_VaporLookup::properties_at_tmax</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/VLH_VaporLookup.h" line="34" column="19" bodyfile="source/includes/eos/VLH_VaporLookup.h" bodystart="34" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_v_l_h___vapor_lookup_1abd6ee6aa3574752651531f2f8188f3cf" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::VLH_VaporLookup::temperature</definition>
+        <argsstring></argsstring>
+        <name>temperature</name>
+        <qualifiedname>csmp::VLH_VaporLookup::temperature</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/VLH_VaporLookup.h" line="37" column="26" bodyfile="source/includes/eos/VLH_VaporLookup.h" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_v_l_h___vapor_lookup_1a0c4a624771f928668e05c08b0e6a9522" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::VLH_VaporLookup::tcurrent</definition>
+        <argsstring></argsstring>
+        <name>tcurrent</name>
+        <qualifiedname>csmp::VLH_VaporLookup::tcurrent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/VLH_VaporLookup.h" line="39" column="27" bodyfile="source/includes/eos/VLH_VaporLookup.h" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_v_l_h___vapor_lookup_1a533f8f930a381bf0393fc23e42cabb0b" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::VLH_VaporLookup::pcurrent</definition>
+        <argsstring></argsstring>
+        <name>pcurrent</name>
+        <qualifiedname>csmp::VLH_VaporLookup::pcurrent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/VLH_VaporLookup.h" line="40" column="27" bodyfile="source/includes/eos/VLH_VaporLookup.h" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_v_l_h___vapor_lookup_1ac7b4fcb4db66d67b157beb856b4236db" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::VLH_VaporLookup::xcurrent</definition>
+        <argsstring></argsstring>
+        <name>xcurrent</name>
+        <qualifiedname>csmp::VLH_VaporLookup::xcurrent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/VLH_VaporLookup.h" line="41" column="27" bodyfile="source/includes/eos/VLH_VaporLookup.h" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_v_l_h___vapor_lookup_1acc3ca1f8b50c427b82e8b9fd975a99a5" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::VLH_VaporLookup::tmax</definition>
+        <argsstring></argsstring>
+        <name>tmax</name>
+        <qualifiedname>csmp::VLH_VaporLookup::tmax</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/VLH_VaporLookup.h" line="42" column="27" bodyfile="source/includes/eos/VLH_VaporLookup.h" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_v_l_h___vapor_lookup_1a0faf14d63dc287f43a13c41a8c699bc3" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::VLH_VaporLookup::pmax</definition>
+        <argsstring></argsstring>
+        <name>pmax</name>
+        <qualifiedname>csmp::VLH_VaporLookup::pmax</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/VLH_VaporLookup.h" line="43" column="27" bodyfile="source/includes/eos/VLH_VaporLookup.h" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_v_l_h___vapor_lookup_1a75986a9451818495f8d1d75e868030aa" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::VLH_VaporLookup::t_res</definition>
+        <argsstring></argsstring>
+        <name>t_res</name>
+        <qualifiedname>csmp::VLH_VaporLookup::t_res</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/VLH_VaporLookup.h" line="44" column="27" bodyfile="source/includes/eos/VLH_VaporLookup.h" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_v_l_h___vapor_lookup_1a19eb48824837e1f881ec842fed9c3749" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::VLH_VaporLookup::tnorm</definition>
+        <argsstring></argsstring>
+        <name>tnorm</name>
+        <qualifiedname>csmp::VLH_VaporLookup::tnorm</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/VLH_VaporLookup.h" line="45" column="27" bodyfile="source/includes/eos/VLH_VaporLookup.h" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_v_l_h___vapor_lookup_1a513465cb8941b7ab5e56b5b64e4fe319" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::VLH_VaporLookup::pnorm</definition>
+        <argsstring></argsstring>
+        <name>pnorm</name>
+        <qualifiedname>csmp::VLH_VaporLookup::pnorm</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/VLH_VaporLookup.h" line="46" column="27" bodyfile="source/includes/eos/VLH_VaporLookup.h" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_v_l_h___vapor_lookup_1a6a62fa1d5f70c09c2e399dfe5c0562f8" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::VLH_VaporLookup::dp</definition>
+        <argsstring></argsstring>
+        <name>dp</name>
+        <qualifiedname>csmp::VLH_VaporLookup::dp</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/VLH_VaporLookup.h" line="47" column="27" bodyfile="source/includes/eos/VLH_VaporLookup.h" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_v_l_h___vapor_lookup_1a9c682770a4b630015796378be237e8a6" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::VLH_VaporLookup::it</definition>
+        <argsstring></argsstring>
+        <name>it</name>
+        <qualifiedname>csmp::VLH_VaporLookup::it</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/VLH_VaporLookup.h" line="49" column="29" bodyfile="source/includes/eos/VLH_VaporLookup.h" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_v_l_h___vapor_lookup_1a41e48369577e8df2816898ca27fe15e0" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::VLH_VaporLookup::t_dim</definition>
+        <argsstring></argsstring>
+        <name>t_dim</name>
+        <qualifiedname>csmp::VLH_VaporLookup::t_dim</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/VLH_VaporLookup.h" line="50" column="29" bodyfile="source/includes/eos/VLH_VaporLookup.h" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_v_l_h___vapor_lookup_1a555f208f276b42520af037063856874e" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::VLH_VaporLookup::i_guess</definition>
+        <argsstring></argsstring>
+        <name>i_guess</name>
+        <qualifiedname>csmp::VLH_VaporLookup::i_guess</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/VLH_VaporLookup.h" line="51" column="29" bodyfile="source/includes/eos/VLH_VaporLookup.h" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_v_l_h___vapor_lookup_1aefde52c983493b5df9e497f6ffc2c9df" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::VLH_VaporLookup::i_max</definition>
+        <argsstring></argsstring>
+        <name>i_max</name>
+        <qualifiedname>csmp::VLH_VaporLookup::i_max</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/VLH_VaporLookup.h" line="52" column="29" bodyfile="source/includes/eos/VLH_VaporLookup.h" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_v_l_h___vapor_lookup_1a58afdf1b2b6d2486f159d99c2e272b19" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::VLH_VaporLookup::i_min</definition>
+        <argsstring></argsstring>
+        <name>i_min</name>
+        <qualifiedname>csmp::VLH_VaporLookup::i_min</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/VLH_VaporLookup.h" line="53" column="29" bodyfile="source/includes/eos/VLH_VaporLookup.h" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_v_l_h___vapor_lookup_1ab9c97fe7500d6acafecd8a849c842ddd" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::VLH_VaporLookup::it_p_max</definition>
+        <argsstring></argsstring>
+        <name>it_p_max</name>
+        <qualifiedname>csmp::VLH_VaporLookup::it_p_max</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/VLH_VaporLookup.h" line="54" column="29" bodyfile="source/includes/eos/VLH_VaporLookup.h" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_v_l_h___vapor_lookup_1ae737cf91c01ba30279c7ad0296372cc1" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::VLH_VaporLookup::tdim_times_pindex</definition>
+        <argsstring></argsstring>
+        <name>tdim_times_pindex</name>
+        <qualifiedname>csmp::VLH_VaporLookup::tdim_times_pindex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/VLH_VaporLookup.h" line="55" column="29" bodyfile="source/includes/eos/VLH_VaporLookup.h" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_v_l_h___vapor_lookup_1ab3200e34a766dcc8ffcc0398fdb58e6b" prot="private" static="no" mutable="no">
+        <type>States</type>
+        <definition>States csmp::VLH_VaporLookup::state</definition>
+        <argsstring></argsstring>
+        <name>state</name>
+        <qualifiedname>csmp::VLH_VaporLookup::state</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/VLH_VaporLookup.h" line="57" column="29" bodyfile="source/includes/eos/VLH_VaporLookup.h" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_v_l_h___vapor_lookup_1a511e18dfcde8cc80f08c668c74979f23" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::VLH_VaporLookup::storage_vector</definition>
+        <argsstring></argsstring>
+        <name>storage_vector</name>
+        <qualifiedname>csmp::VLH_VaporLookup::storage_vector</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/VLH_VaporLookup.h" line="59" column="19" bodyfile="source/includes/eos/VLH_VaporLookup.h" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_v_l_h___vapor_lookup_1a548067da8d558f40654a5097042304e0" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_triple_point_na_cl" kindref="compound">TriplePointNaCl</ref></type>
+        <definition>TriplePointNaCl csmp::VLH_VaporLookup::tp_nacl</definition>
+        <argsstring></argsstring>
+        <name>tp_nacl</name>
+        <qualifiedname>csmp::VLH_VaporLookup::tp_nacl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/VLH_VaporLookup.h" line="61" column="42" bodyfile="source/includes/eos/VLH_VaporLookup.h" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_v_l_h___vapor_lookup_1a05c286fdd7f1ae38e471082c93c99972" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_error_handler" kindref="compound">ErrorHandler</ref> &amp;</type>
+        <definition>ErrorHandler&amp; csmp::VLH_VaporLookup::csmp_error</definition>
+        <argsstring></argsstring>
+        <name>csmp_error</name>
+        <qualifiedname>csmp::VLH_VaporLookup::csmp_error</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/VLH_VaporLookup.h" line="65" column="28" bodyfile="source/includes/eos/VLH_VaporLookup.h" bodystart="65" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_v_l_h___vapor_lookup_1a3feef8c160148f5f825262aea8ea93b3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::VLH_VaporLookup::VLH_VaporLookup</definition>
+        <argsstring>(const double &amp;externaltemperature)</argsstring>
+        <name>VLH_VaporLookup</name>
+        <qualifiedname>csmp::VLH_VaporLookup::VLH_VaporLookup</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>externaltemperature</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/VLH_VaporLookup.h" line="16" column="5" bodyfile="source/modules/eos/h2o_nacl_lookup/VLH_VaporLookup.cpp" bodystart="20" bodyend="211"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_l_h___vapor_lookup_1ab7216eb047e2bb671b25c22014973574" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::VLH_VaporLookup::~VLH_VaporLookup</definition>
+        <argsstring>()</argsstring>
+        <name>~VLH_VaporLookup</name>
+        <qualifiedname>csmp::VLH_VaporLookup::~VLH_VaporLookup</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/VLH_VaporLookup.h" line="17" column="5" bodyfile="source/modules/eos/h2o_nacl_lookup/VLH_VaporLookup.cpp" bodystart="214" bodyend="216"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_l_h___vapor_lookup_1abf8474fab33479b520c959fe32d7b850" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::VLH_VaporLookup::Temperature</definition>
+        <argsstring>()</argsstring>
+        <name>Temperature</name>
+        <qualifiedname>csmp::VLH_VaporLookup::Temperature</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/VLH_VaporLookup.h" line="19" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/VLH_VaporLookup.cpp" bodystart="423" bodyend="423"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_l_h___vapor_lookup_1a1e907ee570f9142b25a5689ef98da8fa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::VLH_VaporLookup::Pressure</definition>
+        <argsstring>()</argsstring>
+        <name>Pressure</name>
+        <qualifiedname>csmp::VLH_VaporLookup::Pressure</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/VLH_VaporLookup.h" line="20" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/VLH_VaporLookup.cpp" bodystart="424" bodyend="424"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_l_h___vapor_lookup_1a1241b114144f7a5f820c133abe86a891" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::VLH_VaporLookup::MassFractionNaCl</definition>
+        <argsstring>()</argsstring>
+        <name>MassFractionNaCl</name>
+        <qualifiedname>csmp::VLH_VaporLookup::MassFractionNaCl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/VLH_VaporLookup.h" line="21" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/VLH_VaporLookup.cpp" bodystart="425" bodyend="425"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_l_h___vapor_lookup_1a9801d62b303392d753a0288d0bff707f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::VLH_VaporLookup::Density</definition>
+        <argsstring>()</argsstring>
+        <name>Density</name>
+        <qualifiedname>csmp::VLH_VaporLookup::Density</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/VLH_VaporLookup.h" line="22" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/VLH_VaporLookup.cpp" bodystart="426" bodyend="426"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_l_h___vapor_lookup_1a5792ca12b2a08bb72f5edbb466bfa2ef" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::VLH_VaporLookup::Enthalpy</definition>
+        <argsstring>()</argsstring>
+        <name>Enthalpy</name>
+        <qualifiedname>csmp::VLH_VaporLookup::Enthalpy</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/VLH_VaporLookup.h" line="23" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/VLH_VaporLookup.cpp" bodystart="427" bodyend="427"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_l_h___vapor_lookup_1aca2b419ad5df20c46d5852b71852659d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::VLH_VaporLookup::HeatCapacity</definition>
+        <argsstring>()</argsstring>
+        <name>HeatCapacity</name>
+        <qualifiedname>csmp::VLH_VaporLookup::HeatCapacity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/VLH_VaporLookup.h" line="24" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/VLH_VaporLookup.cpp" bodystart="428" bodyend="428"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_l_h___vapor_lookup_1a30f9c149f968921e933bb078cacf52f0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::VLH_VaporLookup::Compressibility</definition>
+        <argsstring>()</argsstring>
+        <name>Compressibility</name>
+        <qualifiedname>csmp::VLH_VaporLookup::Compressibility</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/VLH_VaporLookup.h" line="25" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/VLH_VaporLookup.cpp" bodystart="429" bodyend="429"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_l_h___vapor_lookup_1a323417fe78a76326a28792ead38f8097" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::VLH_VaporLookup::Viscosity</definition>
+        <argsstring>()</argsstring>
+        <name>Viscosity</name>
+        <qualifiedname>csmp::VLH_VaporLookup::Viscosity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/VLH_VaporLookup.h" line="26" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/VLH_VaporLookup.cpp" bodystart="430" bodyend="430"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_l_h___vapor_lookup_1a47e40bbcebfdb1027796d2737dc4f959" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::VLH_VaporLookup::Pmax</definition>
+        <argsstring>()</argsstring>
+        <name>Pmax</name>
+        <qualifiedname>csmp::VLH_VaporLookup::Pmax</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/VLH_VaporLookup.h" line="27" column="27" bodyfile="source/includes/eos/VLH_VaporLookup.h" bodystart="69" bodyend="69"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_l_h___vapor_lookup_1a868f4432379a5fd4ffb23d21b031010e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::VLH_VaporLookup::Tmax</definition>
+        <argsstring>()</argsstring>
+        <name>Tmax</name>
+        <qualifiedname>csmp::VLH_VaporLookup::Tmax</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/VLH_VaporLookup.h" line="28" column="27" bodyfile="source/includes/eos/VLH_VaporLookup.h" bodystart="68" bodyend="68"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_l_h___vapor_lookup_1a7e3287e4923cc7ea8f979564595dc14d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::VLH_VaporLookup::TfromP</definition>
+        <argsstring>(const double &amp;press, const double &amp;t_estimate)</argsstring>
+        <name>TfromP</name>
+        <qualifiedname>csmp::VLH_VaporLookup::TfromP</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>press</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>t_estimate</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/VLH_VaporLookup.h" line="29" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/VLH_VaporLookup.cpp" bodystart="288" bodyend="420"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_l_h___vapor_lookup_1ad2c44dfd6648a6a453d33b9a9773e655" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::VLH_VaporLookup::DPressureDT</definition>
+        <argsstring>()</argsstring>
+        <name>DPressureDT</name>
+        <qualifiedname>csmp::VLH_VaporLookup::DPressureDT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/VLH_VaporLookup.h" line="30" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/VLH_VaporLookup.cpp" bodystart="219" bodyend="252"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_l_h___vapor_lookup_1a58871c5abdfd87187cd40011b59e764c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::VLH_VaporLookup::DEnthalpyDT</definition>
+        <argsstring>()</argsstring>
+        <name>DEnthalpyDT</name>
+        <qualifiedname>csmp::VLH_VaporLookup::DEnthalpyDT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/VLH_VaporLookup.h" line="31" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/VLH_VaporLookup.cpp" bodystart="254" bodyend="286"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_l_h___vapor_lookup_1aeb75f72ff2134b6909723ddfa41eeb96" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::VLH_VaporLookup::ValueOf</definition>
+        <argsstring>(const int &amp;property_index)</argsstring>
+        <name>ValueOf</name>
+        <qualifiedname>csmp::VLH_VaporLookup::ValueOf</qualifiedname>
+        <param>
+          <type>const int &amp;</type>
+          <declname>property_index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/VLH_VaporLookup.h" line="32" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/VLH_VaporLookup.cpp" bodystart="433" bodyend="472"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_v_l_h___vapor_lookup_1a5437a37ac948e7fe4c9a6a677e8356dd" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VLH_VaporLookup::GetTemperatureIndex</definition>
+        <argsstring>(const double &amp;t)</argsstring>
+        <name>GetTemperatureIndex</name>
+        <qualifiedname>csmp::VLH_VaporLookup::GetTemperatureIndex</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>t</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/VLH_VaporLookup.h" line="63" column="10" bodyfile="source/modules/eos/h2o_nacl_lookup/VLH_VaporLookup.cpp" bodystart="476" bodyend="492"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::VLH_VaporLookup</label>
+        <link refid="classcsmp_1_1_v_l_h___vapor_lookup"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/eos/VLH_VaporLookup.h" line="12" column="3" bodyfile="source/includes/eos/VLH_VaporLookup.h" bodystart="13" bodyend="66"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_v_l_h___vapor_lookup_1a30f9c149f968921e933bb078cacf52f0" prot="public" virt="non-virtual"><scope>csmp::VLH_VaporLookup</scope><name>Compressibility</name></member>
+      <member refid="classcsmp_1_1_v_l_h___vapor_lookup_1a05c286fdd7f1ae38e471082c93c99972" prot="private" virt="non-virtual"><scope>csmp::VLH_VaporLookup</scope><name>csmp_error</name></member>
+      <member refid="classcsmp_1_1_v_l_h___vapor_lookup_1a9801d62b303392d753a0288d0bff707f" prot="public" virt="non-virtual"><scope>csmp::VLH_VaporLookup</scope><name>Density</name></member>
+      <member refid="classcsmp_1_1_v_l_h___vapor_lookup_1a58871c5abdfd87187cd40011b59e764c" prot="public" virt="non-virtual"><scope>csmp::VLH_VaporLookup</scope><name>DEnthalpyDT</name></member>
+      <member refid="classcsmp_1_1_v_l_h___vapor_lookup_1a6a62fa1d5f70c09c2e399dfe5c0562f8" prot="private" virt="non-virtual"><scope>csmp::VLH_VaporLookup</scope><name>dp</name></member>
+      <member refid="classcsmp_1_1_v_l_h___vapor_lookup_1ad2c44dfd6648a6a453d33b9a9773e655" prot="public" virt="non-virtual"><scope>csmp::VLH_VaporLookup</scope><name>DPressureDT</name></member>
+      <member refid="classcsmp_1_1_v_l_h___vapor_lookup_1a5792ca12b2a08bb72f5edbb466bfa2ef" prot="public" virt="non-virtual"><scope>csmp::VLH_VaporLookup</scope><name>Enthalpy</name></member>
+      <member refid="classcsmp_1_1_v_l_h___vapor_lookup_1a5437a37ac948e7fe4c9a6a677e8356dd" prot="private" virt="non-virtual"><scope>csmp::VLH_VaporLookup</scope><name>GetTemperatureIndex</name></member>
+      <member refid="classcsmp_1_1_v_l_h___vapor_lookup_1aca2b419ad5df20c46d5852b71852659d" prot="public" virt="non-virtual"><scope>csmp::VLH_VaporLookup</scope><name>HeatCapacity</name></member>
+      <member refid="classcsmp_1_1_v_l_h___vapor_lookup_1a555f208f276b42520af037063856874e" prot="private" virt="non-virtual"><scope>csmp::VLH_VaporLookup</scope><name>i_guess</name></member>
+      <member refid="classcsmp_1_1_v_l_h___vapor_lookup_1aefde52c983493b5df9e497f6ffc2c9df" prot="private" virt="non-virtual"><scope>csmp::VLH_VaporLookup</scope><name>i_max</name></member>
+      <member refid="classcsmp_1_1_v_l_h___vapor_lookup_1a58afdf1b2b6d2486f159d99c2e272b19" prot="private" virt="non-virtual"><scope>csmp::VLH_VaporLookup</scope><name>i_min</name></member>
+      <member refid="classcsmp_1_1_v_l_h___vapor_lookup_1a9c682770a4b630015796378be237e8a6" prot="private" virt="non-virtual"><scope>csmp::VLH_VaporLookup</scope><name>it</name></member>
+      <member refid="classcsmp_1_1_v_l_h___vapor_lookup_1ab9c97fe7500d6acafecd8a849c842ddd" prot="private" virt="non-virtual"><scope>csmp::VLH_VaporLookup</scope><name>it_p_max</name></member>
+      <member refid="classcsmp_1_1_v_l_h___vapor_lookup_1a1241b114144f7a5f820c133abe86a891" prot="public" virt="non-virtual"><scope>csmp::VLH_VaporLookup</scope><name>MassFractionNaCl</name></member>
+      <member refid="classcsmp_1_1_v_l_h___vapor_lookup_1a533f8f930a381bf0393fc23e42cabb0b" prot="private" virt="non-virtual"><scope>csmp::VLH_VaporLookup</scope><name>pcurrent</name></member>
+      <member refid="classcsmp_1_1_v_l_h___vapor_lookup_1a47e40bbcebfdb1027796d2737dc4f959" prot="public" virt="non-virtual"><scope>csmp::VLH_VaporLookup</scope><name>Pmax</name></member>
+      <member refid="classcsmp_1_1_v_l_h___vapor_lookup_1a0faf14d63dc287f43a13c41a8c699bc3" prot="private" virt="non-virtual"><scope>csmp::VLH_VaporLookup</scope><name>pmax</name></member>
+      <member refid="classcsmp_1_1_v_l_h___vapor_lookup_1a513465cb8941b7ab5e56b5b64e4fe319" prot="private" virt="non-virtual"><scope>csmp::VLH_VaporLookup</scope><name>pnorm</name></member>
+      <member refid="classcsmp_1_1_v_l_h___vapor_lookup_1a1e907ee570f9142b25a5689ef98da8fa" prot="public" virt="non-virtual"><scope>csmp::VLH_VaporLookup</scope><name>Pressure</name></member>
+      <member refid="classcsmp_1_1_v_l_h___vapor_lookup_1a086c6e3da267e5c8d3ecb4a3ef41c7c3" prot="public" virt="non-virtual"><scope>csmp::VLH_VaporLookup</scope><name>properties_at_tmax</name></member>
+      <member refid="classcsmp_1_1_v_l_h___vapor_lookup_1ab3200e34a766dcc8ffcc0398fdb58e6b" prot="private" virt="non-virtual"><scope>csmp::VLH_VaporLookup</scope><name>state</name></member>
+      <member refid="classcsmp_1_1_v_l_h___vapor_lookup_1a511e18dfcde8cc80f08c668c74979f23" prot="private" virt="non-virtual"><scope>csmp::VLH_VaporLookup</scope><name>storage_vector</name></member>
+      <member refid="classcsmp_1_1_v_l_h___vapor_lookup_1a41e48369577e8df2816898ca27fe15e0" prot="private" virt="non-virtual"><scope>csmp::VLH_VaporLookup</scope><name>t_dim</name></member>
+      <member refid="classcsmp_1_1_v_l_h___vapor_lookup_1a75986a9451818495f8d1d75e868030aa" prot="private" virt="non-virtual"><scope>csmp::VLH_VaporLookup</scope><name>t_res</name></member>
+      <member refid="classcsmp_1_1_v_l_h___vapor_lookup_1a0c4a624771f928668e05c08b0e6a9522" prot="private" virt="non-virtual"><scope>csmp::VLH_VaporLookup</scope><name>tcurrent</name></member>
+      <member refid="classcsmp_1_1_v_l_h___vapor_lookup_1ae737cf91c01ba30279c7ad0296372cc1" prot="private" virt="non-virtual"><scope>csmp::VLH_VaporLookup</scope><name>tdim_times_pindex</name></member>
+      <member refid="classcsmp_1_1_v_l_h___vapor_lookup_1abf8474fab33479b520c959fe32d7b850" prot="public" virt="non-virtual"><scope>csmp::VLH_VaporLookup</scope><name>Temperature</name></member>
+      <member refid="classcsmp_1_1_v_l_h___vapor_lookup_1abd6ee6aa3574752651531f2f8188f3cf" prot="private" virt="non-virtual"><scope>csmp::VLH_VaporLookup</scope><name>temperature</name></member>
+      <member refid="classcsmp_1_1_v_l_h___vapor_lookup_1a7e3287e4923cc7ea8f979564595dc14d" prot="public" virt="non-virtual"><scope>csmp::VLH_VaporLookup</scope><name>TfromP</name></member>
+      <member refid="classcsmp_1_1_v_l_h___vapor_lookup_1a868f4432379a5fd4ffb23d21b031010e" prot="public" virt="non-virtual"><scope>csmp::VLH_VaporLookup</scope><name>Tmax</name></member>
+      <member refid="classcsmp_1_1_v_l_h___vapor_lookup_1acc3ca1f8b50c427b82e8b9fd975a99a5" prot="private" virt="non-virtual"><scope>csmp::VLH_VaporLookup</scope><name>tmax</name></member>
+      <member refid="classcsmp_1_1_v_l_h___vapor_lookup_1a19eb48824837e1f881ec842fed9c3749" prot="private" virt="non-virtual"><scope>csmp::VLH_VaporLookup</scope><name>tnorm</name></member>
+      <member refid="classcsmp_1_1_v_l_h___vapor_lookup_1a548067da8d558f40654a5097042304e0" prot="private" virt="non-virtual"><scope>csmp::VLH_VaporLookup</scope><name>tp_nacl</name></member>
+      <member refid="classcsmp_1_1_v_l_h___vapor_lookup_1aeb75f72ff2134b6909723ddfa41eeb96" prot="public" virt="non-virtual"><scope>csmp::VLH_VaporLookup</scope><name>ValueOf</name></member>
+      <member refid="classcsmp_1_1_v_l_h___vapor_lookup_1a323417fe78a76326a28792ead38f8097" prot="public" virt="non-virtual"><scope>csmp::VLH_VaporLookup</scope><name>Viscosity</name></member>
+      <member refid="classcsmp_1_1_v_l_h___vapor_lookup_1a3feef8c160148f5f825262aea8ea93b3" prot="public" virt="non-virtual"><scope>csmp::VLH_VaporLookup</scope><name>VLH_VaporLookup</name></member>
+      <member refid="classcsmp_1_1_v_l_h___vapor_lookup_1ac7b4fcb4db66d67b157beb856b4236db" prot="private" virt="non-virtual"><scope>csmp::VLH_VaporLookup</scope><name>xcurrent</name></member>
+      <member refid="classcsmp_1_1_v_l_h___vapor_lookup_1ab7216eb047e2bb671b25c22014973574" prot="public" virt="non-virtual"><scope>csmp::VLH_VaporLookup</scope><name>~VLH_VaporLookup</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

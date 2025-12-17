@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="structcsmp_1_1_f_e___transformation" kind="struct" language="C++" prot="public">
+    <compoundname>csmp::FE_Transformation</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcsmp_1_1_f_e___transformation_1ae9bc89aefdd5e06e2bc3ee41c347eb40" prot="public" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_finite_element" kindref="compound">FiniteElement</ref> *</type>
+        <definition>FiniteElement* csmp::FE_Transformation::element_</definition>
+        <argsstring></argsstring>
+        <name>element_</name>
+        <qualifiedname>csmp::FE_Transformation::element_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/FiniteVolumeStencil_Test.cpp" line="564" column="23" bodyfile="tests/unit/FiniteVolumeStencil_Test.cpp" bodystart="564" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structcsmp_1_1_f_e___transformation_1aed2ed2d71656569ff655f5a27561c0b8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::FE_Transformation::FE_Transformation</definition>
+        <argsstring>(csmp::FiniteElement *element)</argsstring>
+        <name>FE_Transformation</name>
+        <qualifiedname>csmp::FE_Transformation::FE_Transformation</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_finite_element" kindref="compound">csmp::FiniteElement</ref> *</type>
+          <declname>element</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/FiniteVolumeStencil_Test.cpp" line="559" column="9" bodyfile="tests/unit/FiniteVolumeStencil_Test.cpp" bodystart="559" bodyend="562"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="4">
+        <label>csmp::DenseMatrix&lt; mn_max &gt;</label>
+        <link refid="classcsmp_1_1_dense_matrix"/>
+      </node>
+      <node id="3">
+        <label>csmp::DenseMatrix&lt; DM_MIN &gt;</label>
+        <link refid="classcsmp_1_1_dense_matrix"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; DM_MIN &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::FE_Transformation</label>
+        <link refid="structcsmp_1_1_f_e___transformation"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>+element_</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::FiniteElement</label>
+        <link refid="classcsmp_1_1_finite_element"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>#M</edgelabel>
+          <edgelabel>+JAC</edgelabel>
+          <edgelabel>+JINV</edgelabel>
+          <edgelabel>+XY</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="tests/unit/FiniteVolumeStencil_Test.cpp" line="558" column="5" bodyfile="tests/unit/FiniteVolumeStencil_Test.cpp" bodystart="558" bodyend="565"/>
+    <listofallmembers>
+      <member refid="structcsmp_1_1_f_e___transformation_1ae9bc89aefdd5e06e2bc3ee41c347eb40" prot="public" virt="non-virtual"><scope>csmp::FE_Transformation</scope><name>element_</name></member>
+      <member refid="structcsmp_1_1_f_e___transformation_1aed2ed2d71656569ff655f5a27561c0b8" prot="public" virt="non-virtual"><scope>csmp::FE_Transformation</scope><name>FE_Transformation</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

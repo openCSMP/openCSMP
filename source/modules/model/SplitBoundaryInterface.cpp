@@ -1,4 +1,7 @@
 #include "SplitBoundaryInterface.h"
+
+#include <ranges>
+
 #include "ModelTopology.h"
 #include "Model.h"
 #include "Region.h"
@@ -33,7 +36,7 @@ SplitBoundary<dim>&  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SplitBo
     errMsg.append( " (" + spbName + ")" );
     throw csmp::Exception( ERROR,
                            "SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::SplitBoundary",
-                           errMsg.c_str() );
+                           errMsg );
   }
 }
 
@@ -52,7 +55,7 @@ const SplitBoundary<dim>&  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::S
     errMsg.append( " (" + spbName + ")" );
     throw csmp::Exception( ERROR,
                            "SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::SplitBoundary",
-                           errMsg.c_str() );
+                           errMsg );
   }
 }
 
@@ -63,30 +66,30 @@ Reports whether a SplitBoundary with the corresponding name exists inside the mo
 template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
 bool  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::ContainsSplitBoundary( const string& bname ) const
 {
-  if ( splitBoundaryMap_.find( bname ) != splitBoundaryMap_.end() ) return true;
+  if ( splitBoundaryMap_.contains(bname) ) return true;
   return false;
 }
 
 
 template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
-typename map<string, csmp::SplitBoundary<dim> >::iterator
+ map<string, typename csmp::SplitBoundary<dim> >::iterator
 SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SplitBoundariesBegin()
 { return splitBoundaryMap_.begin(); }
 
 
 template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
-typename map<string, csmp::SplitBoundary<dim> >::iterator
+ map<string, csmp::SplitBoundary<dim> >::iterator
 SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SplitBoundariesEnd()
 { return splitBoundaryMap_.end(); }
 
 
 template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
-typename map<string, csmp::SplitBoundary<dim> >::const_iterator  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SplitBoundariesBegin() const
+ map<string, csmp::SplitBoundary<dim> >::const_iterator  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SplitBoundariesBegin() const
 { return splitBoundaryMap_.begin(); }
 
 
 template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
-typename map<string, csmp::SplitBoundary<dim> >::const_iterator  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SplitBoundariesEnd() const
+ map<string, csmp::SplitBoundary<dim> >::const_iterator  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SplitBoundariesEnd() const
 { return splitBoundaryMap_.end(); }
 
 
@@ -202,29 +205,27 @@ void SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::RemoveSplitBoundary( cs
 /**
 Merges splitboundary objects and gives resultant Splitboundary a new name, original Splitboundaries no longer exist.
 Original interfaces are not deleted.
-
 */
 template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
-string SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::MergeSplitBoundaries( const char* new_sb_name, set<string> splitboundaries )
+string SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::MergeSplitBoundaries( const char* new_sb_name, const set<string> &splitboundaries )
  {
-
       vector<InterFace<dim>*> iface_ptrs;
-      for ( auto sb_name : splitboundaries){
+      for ( auto& sb_name : splitboundaries){
         //get splitboundary
         csmp::SplitBoundary<dim>& sb = this->SplitBoundary( sb_name );
         iface_ptrs.reserve( iface_ptrs.size() + sb.Cells() );                   //reserve space for interfaces
-        for ( auto ifit = sb.CellsBegin(); ifit != sb.CellsEnd(); ifit++ ){
-          iface_ptrs.push_back(*ifit);                                          //insert interface
+        for ( auto& ifit : sb.CellVector() ){
+          iface_ptrs.push_back(ifit);                                          //insert interface
         }
       } //end of iface collection
 
 
       //Create merged splitboundary
       string new_name = string(new_sb_name) + "_SPLITBOUNDARY";
-      AddSplitBoundary( new_name.c_str(), iface_ptrs.begin(), iface_ptrs.end(), INTERNAL );
+      AddSplitBoundary( new_name.c_str(), iface_ptrs.begin(), iface_ptrs.end() );
 
       //Delete original splitboundaries (but not interfaces) after merged splitboundary has been created
-      for (auto sb_name : splitboundaries){
+      for (auto& sb_name : splitboundaries){
         //Remove original splitboundary
         bool delete_interfaces = false;
         RemoveSplitBoundary( sb_name.c_str() , delete_interfaces ); //We do not want to delete interfaces, just moving them to a new splitboundary
@@ -263,7 +264,6 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::OutputSplitBoundariesTo
   fstream fp( bin_file.c_str(), ios::out | ios::binary );
   if ( !fp.is_open() ) {
       throw csmp::Exception( ERROR, "SplitBoundaryInterface<dim>::OutputSplitBoundariesToBinary:", "Binary file could not be created." );
-      return false;
     }
   // 0. writing file header
   {
@@ -452,10 +452,10 @@ string SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryNa
   string split_boundary_name( "SPLITBOUNDARY_" + juxtaposed_regions.first + '_' + juxtaposed_regions.second );
 
   // if the substring set is empty
-  if ( ContainsSplitBoundary( split_boundary_name.c_str() ) ) {
+  if ( ContainsSplitBoundary( split_boundary_name ) ) {
     ErrorHandler::Instance().Note( WARNING, "SplitBoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateSplitBoundaryName:",
-                                     split_boundary_name.c_str(), "already exists, try other name.'\0'." );
-    return string( "\0" );
+                                     split_boundary_name, "already exists, try other name" );
+    return "\0";
   }
 
   return split_boundary_name;
@@ -559,9 +559,9 @@ size_t SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::FindSplitBoundaryByNam
      const size_t substrings_used_in_search(intersected_regions.size());
      for ( auto it=splitBoundaryComplex.SplitBoundariesBegin(); it!=splitBoundaryComplex.SplitBoundariesEnd(); ++it ) {
           size_t substrings_found(0U);
-          for ( auto ir=intersected_regions.begin(); ir!=intersected_regions.end(); ++ir )
+          for (const auto& intersected_region : intersected_regions)
             // if the substring is found
-            if ( (*it).first.find(*ir) !=string::npos ) substrings_found++;
+            if ( (*it).first.find(intersected_region) !=string::npos ) substrings_found++;
           // when all substrings are contained in the boundary name, it is returned
           if ( substrings_found == substrings_used_in_search )
             region_patches_found.insert( (*it).first );
@@ -580,8 +580,7 @@ size_t SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::FindSplitBoundaryByNam
 template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
 bool SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::AddSplitBoundary( const char* split_boundary_name,
                                                                           typename vector<InterFace<dim>*>::iterator ifacesBegin,
-                                                                          typename vector<InterFace<dim>*>::iterator ifacesEnd,
-                                                                          BOX_BOUNDARY bflag )
+                                                                          typename vector<InterFace<dim>*>::iterator ifacesEnd )
  {
     SPLITBOUNDARY_COMPLEX<dim>* const splitBoundaryComplex( static_cast<SPLITBOUNDARY_COMPLEX<dim>* const>(this) );
     assert( splitBoundaryComplex != nullptr );
@@ -733,7 +732,7 @@ pair<set<string>,bool> SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Detec
       else
         throw csmp::Exception( INFO,
                                "SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::DetectAndCreateSplitBoundaries:",
-                               bname.c_str(),
+                               bname,
                                "boundary already exists. Nothing was done." );
     }
 
@@ -815,7 +814,7 @@ size_t SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::SeparateUniqueRegionsB
                   if ( new_region.second ) {
                       discovered.insert( make_pair( neighbour_region, current_region ) );
                       current_regions.push_back( neighbour_region );
-                      region_final_pairs.push_back( make_pair( current_region, neighbour_region ) );
+                      region_final_pairs.emplace_back( current_region, neighbour_region );
                     }
                }
             // removing the sub-region from the discovered (but not yet explored) deque
@@ -863,18 +862,18 @@ size_t SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::FormSplitBoundariesFro
   else return 0;
 
   size_t new_split_boundaries{0};
-  for ( auto lit = split_boundaries.begin(); lit != split_boundaries.end(); lit++ )
+  for (auto& split_boundarie : split_boundaries)
     {
-      string domain_name( *lit );
+      string domain_name( split_boundarie );
       auto it = splitBoundaryMap_.insert( make_pair( domain_name, csmp::SplitBoundary<dim>( domain_name, static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this)->Database() ) ) );
       // if the region was successfully inserted
       if ( it.second )
         {
           // making a list of the element numbers
           vector<size_t>  cell_ids;
-          cell_ids.reserve( topo.CellsWithinDomain( (*lit).c_str() ) );
-          copy( topo.CellsOfDomainBegin( (*lit).c_str() ),
-                topo.CellsOfDomainEnd( (*lit).c_str() ),
+          cell_ids.reserve( topo.CellsWithinDomain( split_boundarie.c_str() ) );
+          copy( topo.CellsOfDomainBegin( split_boundarie.c_str() ),
+                topo.CellsOfDomainEnd( split_boundarie.c_str() ),
                 back_inserter( cell_ids ) );
 
           // retrieving the elements by their IDs and assigning them  to the region
@@ -885,7 +884,7 @@ size_t SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::FormSplitBoundariesFro
           if ( (*it.first).second.Cells() == 0U ) {
               splitBoundaryMap_.erase( it.first );
               csmp_error.Note( WARNING, "SplitBoundaryInterface::FormSplitBoundariesFrom",
-                                 "SplitBoundary could not be formed", (*lit).c_str() );
+                                 "SplitBoundary could not be formed", split_boundarie );
             }
           else {
                // reporting the name of the newly generated region
@@ -895,7 +894,7 @@ size_t SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::FormSplitBoundariesFro
         }
       else
         throw csmp::Exception( ERROR, "SplitBoundaryInterface::FormSplitBoundariesFrom",
-                              "SplitBoundary could not be formed. Does this region already exist?", (*lit).c_str() );
+                              "SplitBoundary could not be formed. Does this region already exist?", split_boundarie );
     }
   cout << endl;
 
@@ -950,12 +949,12 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
     set<string>       pre_existing_splitboundaries;
     if ( FindSplitBoundaryByNames( intersected_regions, pre_existing_splitboundaries ) > 0 ) {
           string error_info;
-          for ( auto it : pre_existing_splitboundaries ) {
+          for ( auto& it : pre_existing_splitboundaries ) {
                error_info += it;
                error_info +=", ";
             }
           ErrorHandler::Instance().Note( ERROR, "SplitBoundaryInterface::CreateSplitBoundaryFrom:",
-                                           error_info.c_str(), "boundaries are already contained in this model." );
+                                           error_info, "boundaries are already contained in this model." );
           return make_pair( set<string>({creation_failed}), false );
       }
     // 1.2 does the model contain unique regions
@@ -1003,11 +1002,11 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
     if ( !model.CheckRegionIdentifierIsUpToDate(region_tag.c_str()) ) {
          // for each of labels created (0..regions-1), region_names remembers which region the label refers to
          if ( model.CountAndLabelUniqueRegions( region_tag.c_str(), region_names ) == 1U )
-            ErrorHandler::Instance().Note( INFO, "SplitBoundaryInterface::CreateSplitBoundaryFrom:", region_tag.c_str(),
+            ErrorHandler::Instance().Note( INFO, "SplitBoundaryInterface::CreateSplitBoundaryFrom:", region_tag,
                                                   "is single valued; so there is only one patch." );
       }
     else { // assigning region names
-         region_names.reserve( distance( model.UniqueRegionsBegin(),model.UniqueRegionsEnd()) );
+         region_names.reserve( static_cast<size_t>(abs(distance( model.UniqueRegionsBegin(),model.UniqueRegionsEnd()))) );
          for ( auto rit=model.UniqueRegionsBegin(); rit!=model.UniqueRegionsEnd(); ++rit )
            region_names.push_back( (*rit).first );
       }
@@ -1137,7 +1136,7 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
     const size_t                       new_interfaces_required(subdomain.Cells());
     vector<FaceConstructionData<dim>>  iface_construction_vector;
     iface_construction_vector.reserve(new_interfaces_required);
-    const size_t n_original_faces(model.Mesh().InterFaces());
+    const size_t n_original_faces(model.Mesh().Interfaces());
     const size_t n_original_elmts(model.Mesh().Elements());
 
     // looping over the region, identifying and recording the juxtaposition relationships
@@ -1206,8 +1205,8 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
     // 3.2.2 building new map where the patch faces are organised by patch names
     map<string,vector<InterFace<dim>*>>  patch_data;
     vector<InterFace<dim>*>              empty_vec;
-    for ( const auto& it : patch_names )
-      patch_data.insert( make_pair( it.second, empty_vec ) );
+    for (const auto& val: patch_names | views::values)
+      patch_data.insert( make_pair( val, empty_vec ) );
 
     // 3.2.3 inserting the patch identifiers into the vectors in the map
     for ( auto& pit : patch_data )
@@ -1232,11 +1231,11 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
     // 4. Creating SplitBoundary objects for each of the mesh patches established above
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     for ( size_t i{0U}; i<patch_names.size(); ++i )
-      AddSplitBoundary( patch_names[i].c_str(), patch_data[ patch_names[i] ].begin(), patch_data[ patch_names[i] ].end(), INTERNAL );
+      AddSplitBoundary( patch_names[i].c_str(), patch_data[ patch_names[i] ].begin(), patch_data[ patch_names[i] ].end() );
       
 #ifdef DEBUG
     cout <<"\n\n"<<"SplitBoundaryInterface<"<< dim <<">::CreateSplitBoundaryFrom:";
-    cout << "\n\t\t"<<"Added "<< model.Mesh().InterFaces() - n_original_faces <<" interfaces to mesh.";
+    cout << "\n\t\t"<<"Added "<< model.Mesh().Interfaces() - n_original_faces <<" interfaces to mesh.";
 #endif
 
     // ----------------------------------------------------------------------------------------------------------------------------------------------
@@ -1246,7 +1245,7 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
     // disconnecting the intervening element pointers in the new SplitBoundary from them elements that will be deleted
     if ( remove_elmts ) {
          for ( size_t i{0U}; i<patch_names.size(); ++i ) {
-              auto& split_boundary = SplitBoundary( patch_names[i].c_str() );
+              auto& split_boundary = SplitBoundary( patch_names[i] );
               for ( auto& it : split_boundary.CellVector() )
                  it->UnAssignInterveningElement();
            }
@@ -1500,6 +1499,29 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertReg
 
 
 
+    /// Creates a single lower-dimensional mesh region taking into account all split boundaries objects; returning its name and whether this operation was successful
+template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
+bool  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryFromInterfaces( const char* splitboundary_name )
+ {
+     SPLITBOUNDARY_COMPLEX<dim>*  model(static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this));
+
+     // for each of the boundary patches discovered, a uniquely named SplitBoundary object is created
+     string bname = splitboundary_name;
+     bname       += "_SPLITBOUNDARY";
+
+     // collecting all interfaces into a vector
+     vector<InterFace<dim>*> interface_ptrs;
+     interface_ptrs.reserve( model->Mesh().Interfaces() );
+     for ( auto itf=model->Mesh().InterfacesBegin(); itf!=model->Mesh().InterfacesEnd(); ++itf )
+       interface_ptrs.push_back( &(*itf) );
+      
+     return AddSplitBoundary( bname.c_str(), interface_ptrs.begin(), interface_ptrs.end() );
+
+ } // end CreateSplitBoundaryFromAllInterfaces
+
+
+
+
 
 
 
@@ -1687,7 +1709,7 @@ set<string>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertLowerDime
 Prints current SplitBoundaries to screen
 */
 template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
-size_t SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SplitBoundariesOut() const
+long SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SplitBoundariesOut() const
   {
      const SPLITBOUNDARY_COMPLEX<dim>*  model(static_cast<const SPLITBOUNDARY_COMPLEX<dim>*>(this));
 
@@ -1713,7 +1735,7 @@ size_t SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SplitBoundariesOut() 
                 else cout <<"length (m): "<< (*bit).second.Area();
              }
            if constexpr ( dim == 2U )
-             cout <<"length (m): "<< (*bit).second.Area();
+             cout <<"length (m): "<< (*bit).second.Length();
        }
      cout << endl << endl;
      cout.flush();

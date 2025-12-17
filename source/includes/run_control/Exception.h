@@ -1,6 +1,7 @@
 #ifndef CSMP_EXCEPTION_H
 #define CSMP_EXCEPTION_H
 
+#include <cstdint>
 #include <string>
 #include <exception>
 

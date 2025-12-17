@@ -22,8 +22,8 @@ class Jacobian_Upwind_Integral_dNT_op_dN_dV : public MathOperatorLHS<dim,CELL> {
                                             const double delta,
                                             const double prefactor = 1.0);
     
-    void ComputeContribution( const CELL<dim>& );
-    void GetOperands( const CELL<dim>& );
+    void ComputeContribution( const CELL<dim>& ) override final;
+    void GetOperands( const CELL<dim>& ) override final;
 
   private:
     DenseMatrix<DM_MIN> DN, DNT;

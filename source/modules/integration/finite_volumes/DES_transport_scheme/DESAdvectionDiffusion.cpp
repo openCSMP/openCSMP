@@ -633,7 +633,7 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_TDS_serial( double time_interval
     cout <<"\n\tScaled time increment = "<< time_increment;
     cout <<"\n\tSolution steps needed = "<< max(floor(time_interval/time_increment),one);
 
-    size_t   substep(1);
+    size_t substep(1);
     double time(0.);
     
     while (time < time_interval)
@@ -682,7 +682,7 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_TDS_serial( double time_interval
 #if defined(_OPENMP)
 //advect variable with TDS (time-driven simulation), parallel mode
 template<uint32_t dim>
-void DESAdvectionDiffusion<dim>::AdvectVariable_TDS_parallel( double time_interval )
+void DESAdvectionDiffusion<dim>::AdvectVariable_TDS_parallel( double time_interval, size_t num_threads )
 {
     cout<<"Start DESAdvectionDiffusion<dim>::AdvectVariable_TDS_parallel "<<endl;
     cout<<"Using threads = "<<num_threads<<" Maximum available threads ="<< omp_get_max_threads() << endl;
@@ -697,14 +697,14 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_TDS_parallel( double time_interv
     #pragma omp parallel num_threads(num_threads)
     {
         #pragma omp for schedule(dynamic)
-        for( size_t i{0U}; i < PEPList_size; ++i)
+        for( long i{0}; i < PEPList_size; ++i)
         {
             auto it = PEPList.begin()+i;
             ComputeRateofChange((*it));  
         };
     }
 
-    for( size_t i{0U}; i < PEPList_size; ++i)
+    for( long i{0}; i < PEPList_size; ++i)
     {
         auto it = PEPList.begin()+i;
         Event<dim>* event = *it;     
@@ -740,14 +740,14 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_TDS_parallel( double time_interv
         #pragma omp parallel num_threads(num_threads)
         {        
             #pragma omp for schedule(dynamic)     
-            for( size_t i{0U}; i < PEPList_size; ++i)
+            for( long i{0}; i < PEPList_size; ++i)
             {
                 auto it = PEPList.begin()+i;
                 ComputeRateofChange((*it));;
             }
         }        
         
-        for( size_t i{0U}; i < PEPList_size; ++i)
+        for( long i{0}; i < PEPList_size; ++i)
         {
             auto it = PEPList.begin()+i;
             ArrayVariable array2;
@@ -818,7 +818,7 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_DES_serial( double model_time )
                 if (isactive) {
                     T_begin= clock();
                     double scheduled_time = event->t_schedule();
-                    size_t index = event->getNode()->Read(key_EventIndex); // TODO: deal with implicit type conversion
+                    size_t index = static_cast<size_t>(event->getNode()->Read(key_EventIndex));
                     //HeapNodeFullList[index] = new Heap_Node(scheduled_time,index);
                     //EventHeap.insert(HeapNodeFullList[index]);
                     event->setHeapNode( EventHeap.insert(scheduled_time,index) );
@@ -912,7 +912,7 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_DES_serial( double model_time )
 #if defined(_OPENMP)
 //advect variable with DES (discrete event simulation), parallel mode
 template<uint32_t dim>
-void DESAdvectionDiffusion<dim>::AdvectVariable_DES_parallel( double model_time, size_t num_threads)
+void DESAdvectionDiffusion<dim>::AdvectVariable_DES_parallel( double model_time, size_t num_threads )
 {
     double begin=omp_get_wtime();
     cout<<"Start DESAdvectionDiffusion<dim>::AdvectVariable_DES_parallel "<<endl;
@@ -994,7 +994,7 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_DES_parallel( double model_time,
         {           
             Heap_Node* root_node = EventHeap.minimum();
             size_t top_index = root_node->getV();
-            Event<dim>* top_event = FullList[top_index];
+            Event<dim>* top_event = &FullList[top_index];
             
             if(top_event->valid() == false) {
                 T_begin= omp_get_wtime();

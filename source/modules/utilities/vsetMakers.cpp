@@ -11,9 +11,6 @@
 #include "IsoparametricLinearTetrahedron.h"
 #include "IsoparametricLinearQuadrilateral.h"
 
-
-
-
 ///this variable controls the perturbation of the node when it is skewed, the smaller it is, the smaller the perturbation will be
 #define PERTURBATION 0.0001
 
@@ -132,10 +129,72 @@ VSet<2U> create_Quadrilateral_VSet()
 
 
 
+/**
+    Unit square. Only corners! - to test neighbor flagging.
+      
+    3               2
+     o--------o
+     | \     1   o       element 1
+     |   \        o
+     |     \      o
+     |       \    o       element 0
+     |    0   \  o
+     o--------o
+    0                1
+ */
+void create_2_Triangle_VSet(VSet<2U>& vset )
+{
+  	IsoparametricLinearTriangle iso_tria;
+  	
+    const size_t   n_nodes(4), n_elmts{2};
+    const uint32_t nodes_per_elmt{3}, nbors_per_elmt{3};
+  	vset.Resize( nodes_per_elmt, nbors_per_elmt, ISOPARAMETRIC_LINEAR_TRIANGLE, n_nodes, n_elmts );
+ 
+    //--------------------------ELEMENT TYPES
+  	//add element types
+    vector<int8_t> vecElementTypes = { ISOPARAMETRIC_LINEAR_TRIANGLE, ISOPARAMETRIC_LINEAR_TRIANGLE };
+  	vset.AddElementTypes( vecElementTypes.begin(), vecElementTypes.end() );
+ 
+  	//-----------------------NODES
+  	//define nodes
+  	deque<double> px(n_nodes);
+  	deque<double> py(n_nodes);
+  	deque<double> pz(n_nodes);
+  	
+  	px[0]=0;   py[0]=0.;    pz[0]=0.;
+  	px[1]=1.;  py[1]=0.;    pz[1]=0.;
+  	px[2]=1.;  py[2]=1.;    pz[2]=0.;
+  	px[3]=0.;  py[3]=1.;    pz[3]=0.;
+  	
+  	vset.AddXYZ( px, py, pz );
+  	
+  	//--------------------------ELEMENTS
+    //define quadrilateral elements (elements 0->26), assign nodes per element
+    deque< vector<size_t> > deqElements = { {0, 1, 3}, {1, 2, 3} };
+    vset.AddPlist( deqElements.begin(),deqElements.end());
+
+     //---------------------------------NEIGHBORS
+    //define neighbors
+    deque<vector<int64_t> > deqElementNeighbors = { {1,LEFT_OUTSIDE,BOTTOM_OUTSIDE}, {TOP_OUTSIDE,0,RIGHT_OUTSIDE} };
+    vset.AddPfverts( deqElementNeighbors.begin(), deqElementNeighbors.end());
+  	
+  	//----------------------------NODE BOUNDARIES
+  	vset.BFlag( 0, CNR1 );
+  	vset.BFlag( 1, CNR2 );
+  	vset.BFlag( 2, CNR3 );
+  	vset.BFlag( 3, CNR4 );
+  	
+    //vset.Out();
+    cout <<"\n"<<"create_2_Triangle_VSet: model '2Triangle_VSet': done."<< endl;
+    
+} // end create_2_Triangle_VSet
 
 
 
 
+/**
+        No neighbors, but (negative) boundary flags.
+*/
 void create_1Square_VSet(VSet<2U>& vset, double length_of_sides, bool bSkewed )
 {
   	IsoparametricLinearQuadrilateral iso_quad;
@@ -446,7 +505,7 @@ void create_TrianglePatch_VSet( VSet<2U>& vset )
     vector<int32_t> pmtrl( vset.Elements(), 1 );
     vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
     
-    cout <<"\n"<<"create_TrianglePatch_VSet: model 'Prism_Hexa': done."<< endl;
+    cout <<"\n"<<"create_TrianglePatch_VSet: model 'TrianglePatch': done."<< endl;
 //    vset.Out();
     
 } // end create_TrianglePatch_VSet
@@ -736,6 +795,120 @@ ModelTopology create_MeshPatchWithLineElements_VSet( VSet<2U>& vset )
 
 
     /// 2D rectangular model the two halfs of each are offset from one another
+void create_Disconnected2D_VSet(VSet<2U>& vset)
+{
+    // ----------------------- ELEMENT TYPES
+    static constexpr size_t n_cells = 5;
+    static constexpr size_t n_nodes = 12;
+    static const deque<int8_t> vecElementTypes = {
+        ISOPARAMETRIC_LINEAR_QUADRILATERAL, // Element 0
+        ISOPARAMETRIC_LINEAR_QUADRILATERAL, // Element 1
+        ISOPARAMETRIC_LINEAR_TRIANGLE,      // Element 2
+        ISOPARAMETRIC_LINEAR_TRIANGLE,      // Element 3
+        ISOPARAMETRIC_LINEAR_TRIANGLE       // Element 4 (corrected to triangle)
+    };
+    static const deque<uint32_t> npes = {4, 4, 3, 3, 3}; // Nodes per element
+    static const deque<uint32_t> epes = {4, 4, 3, 3, 3}; // Neighbors per element
+    assert(vecElementTypes.size() == n_cells && "Error: Element types size mismatch.");
+    assert(npes.size() == n_cells && epes.size() == n_cells && "Error: npes/epes size mismatch.");
+
+    vset.Resize(vecElementTypes, npes, epes, n_nodes, 0, 0);
+    vset.AddElementTypes(vecElementTypes.begin(), vecElementTypes.end());
+
+    // ----------------------- NODES
+    static const deque<double> px = {1.0, 4.0, 1.0, 4.0, 1.0, 4.0, 5.0, 7.0, 5.0, 7.0, 5.0, 7.0};
+    static const deque<double> py = {5.0, 5.0, 3.0, 3.0, 1.0, 1.0, 5.0, 5.0, 3.0, 3.0, 1.0, 1.0};
+    deque<double> pz(n_nodes, 0.0);
+    assert(px.size() == n_nodes && py.size() == n_nodes && pz.size() == n_nodes && "Error: Node coordinates size mismatch.");
+
+    vset.AddXYZ(px, py, pz);
+
+    // ----------------------- NODE BOUNDARY FLAGS
+    static const vector<int8_t> bflags = {
+        CNR4, TOP, LEFT, INTERNAL, CNR1, BOTTOM, // Nodes 0-5
+        TOP, CNR3, INTERNAL, RIGHT, BOTTOM, CNR2  // Nodes 6-11
+    };
+    assert(bflags.size() == n_nodes && "Error: Boundary flags size mismatch.");
+
+    vset.AddBFlags(bflags.begin(), bflags.end());
+
+    // ----------------------- TOPOTYPE NODE FLAGS
+    static const vector<int8_t> gflags = {
+        MESH_VERTEX, MESH_VERTEX, MESH_VERTEX, EXTERIOR_POINT, // Nodes 0-3
+        MESH_VERTEX, MESH_VERTEX, MESH_VERTEX, MESH_VERTEX,    // Nodes 4-7
+        EXTERIOR_POINT, MESH_VERTEX, MESH_VERTEX, MESH_VERTEX  // Nodes 8-11
+    };
+    assert(gflags.size() == n_nodes && "Error: Topological flags size mismatch.");
+
+    vset.AddBREP_Flags(gflags.begin(), gflags.end());
+
+    // ----------------------- ELEMENTS
+    static const deque<vector<size_t>> plist = {
+        {2, 3, 1, 0}, // Quad 0: (1,3), (4,3), (4,5), (1,5)
+        {4, 5, 3, 2}, // Quad 1: (1,1), (4,1), (4,3), (1,3)
+        {6, 9, 7},    // Tri 2: (5,5), (7,3), (7,5)
+        {6, 8, 9},    // Tri 3: (5,5), (5,3), (7,3)
+        {10, 11, 9}   // Tri 4: (5,1), (7,1), (7,3)
+    };
+    assert(plist.size() == n_cells && "Error: Elements size mismatch.");
+
+    vset.AddPlist(plist.begin(), plist.end());
+
+    // ----------------------- NEIGHBORS
+    static const deque<vector<int64_t>> pfverts = {
+        {1, -INTERNAL, -TOP, -LEFT},        // Quad 0: to quad 1, internal, top, left
+        {-BOTTOM, -INTERNAL, 0, -LEFT},     // Quad 1: bottom, internal, quad 0, left
+        {4, -RIGHT, -TOP},                  // Tri 2: to tri 4, right, top
+        {-RIGHT, -TOP, 4},                  // Tri 3: right, top, tri 4
+        {-BOTTOM, -RIGHT, 3}                // Tri 4: bottom, right, tri 3
+    };
+    assert(pfverts.size() == n_cells && "Error: Neighbors size mismatch.");
+
+    vset.AddPfverts(pfverts.begin(), pfverts.end());
+
+    // ----------------------- MATERIALS
+    static const vector<int32_t> pmtrl = {1, 1, 2, 2, 2};
+    assert(pmtrl.size() == n_cells && "Error: Materials size mismatch.");
+
+    vset.AddPmtrl(pmtrl.begin(), pmtrl.end());
+
+    // ----------------------- ELEMENT & NODE NUMBERS
+    PropertyData elmt_nums(ELEMENT, SCALAR, 2U);
+    elmt_nums.Reserve(vset.Elements());
+    for (size_t n = 0; n < vset.Elements(); ++n) {
+        pushBack( elmt_nums, makeScalar(ANY, static_cast<double>(n)) );
+    }
+    vset.AddData("element number", elmt_nums);
+
+    PropertyData node_nums(NODE, SCALAR, 2U);
+    node_nums.Reserve(vset.Vertices());
+    for (size_t n = 0; n < vset.Vertices(); ++n) {
+        pushBack( node_nums, makeScalar(ANY, static_cast<double>(n)) );
+    }
+    vset.AddData("node number", node_nums);
+
+    // ----------------------- CONSISTENCY CHECKS
+    for (size_t i = 0; i < n_cells; ++i) {
+        assert(vset.ElementType(i) == vecElementTypes[i] && "Error: Element type mismatch.");
+        assert(plist[i].size() == npes[i] && "Error: Incorrect number of nodes for element.");
+        assert(pfverts[i].size() == epes[i] && "Error: Incorrect number of neighbors for element.");
+    }
+    for (size_t i = 0; i < n_nodes; ++i) {
+        assert(px[i] >= 1.0 && px[i] <= 7.0 && py[i] >= 1.0 && py[i] <= 5.0 && pz[i] == 0.0 &&
+               "Error: Node coordinates out of range.");
+    }
+    // Verify boundary flags
+    assert(bflags[0] == CNR4 && bflags[4] == CNR1 && bflags[7] == CNR3 && bflags[11] == CNR2 &&
+           "Error: Corner boundary flags incorrect.");
+    assert(bflags[1] == TOP && bflags[6] == TOP && "Error: Top boundary flags incorrect.");
+    assert(bflags[5] == BOTTOM && bflags[10] == BOTTOM && "Error: Bottom boundary flags incorrect.");
+    assert(bflags[2] == LEFT && bflags[9] == RIGHT && "Error: Left/right boundary flags incorrect.");
+    assert(bflags[3] == INTERNAL && bflags[8] == INTERNAL && "Error: Internal boundary flags incorrect.");
+
+    cout << "create_Disconnected2D_VSet: model 'Disconnected2D': done." << endl;
+}
+
+/* FORMER VERSION
 void create_Disconnected2D_VSet( VSet<2U>& vset )
  {
     //--------------------------ELEMENT TYPES
@@ -805,17 +978,16 @@ void create_Disconnected2D_VSet( VSet<2U>& vset )
     vset.AddData( "node number", node_nums );
     
      //---------------------------------PERMEABILITY
-/*
     PropertyData perm( ELEMENT, SCALAR, 2U );
     perm.Reserve( vset.Elements() );
     for ( size_t n{0U}; n<5; ++n ) pushBack( perm, makeScalar( ANY, 1.0e-13 ) );
     vset.AddData( "permeability", perm );
-*/
+
      cout <<"\n"<<"create_Disconnected2D_VSet: model 'un-named': done."<< endl;
 //    vset.Out();
 
  } // end create_Disconnected2D_VSet
-
+*/
 
 
 
@@ -962,289 +1134,267 @@ ModelTopology  create_BoundarySplitBoundaryPatch( VSet<2U>& vset )
 
 
 
-void create_1Hexahedron_VSet( VSet<3U>& vset, bool bSkewed )
+/**
+        No neighbors, but (negative) boundary flags.
+*/
+void create_1Hexahedron_VSet(VSet<3U>& vset, bool bSkewed)
 {
-  	IsoparametricLinearHexahedron iso_hexahedron;
-  	
-  	//elements hexahedrons
-    const size_t nodes(8);  
-    vset.Resize( nodes, 6, ISOPARAMETRIC_LINEAR_HEXAHEDRON, 8, 1 );
+    IsoparametricLinearHexahedron iso_hexahedron;
+    constexpr size_t nodes = 8;
 
-  	//-----------------------NODES
-  	//define nodes
-  	deque<double> px(nodes);
-  	deque<double> py(nodes);
-  	deque<double> pz(nodes);
-  	
-  	px[0]=0;py[0]=0;pz[0]=0;
-  	px[1]=1;py[1]=0;pz[1]=0;
-  	px[2]=1;py[2]=1;pz[2]=0;
-  	px[3]=0;py[3]=1;pz[3]=0;
-  	px[4]=0;py[4]=0;pz[4]=1;
-  	px[5]=1;py[5]=0;pz[5]=1;
-  	px[6]=1;py[6]=1;pz[6]=1;
-  	px[7]=0;py[7]=1;pz[7]=1;
-  	
-  	if( bSkewed )
-  	 for ( unsigned int i = 0; i < 8; i++)
-  	  {
-  	    px[i]+= (rand()%2000)*PERTURBATION;
-  	    py[i]+= (rand()%2000)*PERTURBATION;
-  	    pz[i]+= (rand()%2000)*PERTURBATION;
-  	  }
-  	  	
-  	//load nodes
-  	vset.AddXYZ( px, py, pz );
+    // Initialize VSet
+    vset.SingleElementType(iso_hexahedron.ElementType());
+    vset.Resize(iso_hexahedron.Nodes(), iso_hexahedron.Neighbors(),
+                iso_hexahedron.ElementType(), nodes, 1);
+
+    // Define node coordinates using initializer lists
+    deque<double> px = {0.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0};
+    deque<double> py = {0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0};
+    deque<double> pz = {0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0};
+
+    // Apply random perturbations if skewed
+    if (bSkewed)
+    {
+        for (size_t i = 0; i < nodes; ++i)
+        {
+            px[i] += (rand() % 2000) * PERTURBATION;
+            py[i] += (rand() % 2000) * PERTURBATION;
+            pz[i] += (rand() % 2000) * PERTURBATION;
+        }
+    }
+
+    // Load nodes
+    vset.AddXYZ(px, py, pz);
+
+    // Define element type
+    vector<int8_t> vecElementTypes = {ISOPARAMETRIC_LINEAR_HEXAHEDRON};
+    vset.AddElementTypes(vecElementTypes.begin(), vecElementTypes.end());
+
+    // Define single hexahedron element
+//    deque<vector<size_t>> deqElements = {{0, 1, 2, 3, 4, 5, 6, 7}};
+    deque<vector<size_t>> deqElements = {{ 4, 5, 1, 0, 7, 6, 2, 3 }};
+    vset.AddPlist(deqElements.begin(), deqElements.end());
+
+    // Define neighbors (BOTTOM=0, FRONT=1, RIGHT=2, BACK=3, LEFT=4, TOP=5)
+    deque<vector<int64_t>> deqElementNeighbors = {
+        {BOTTOM_OUTSIDE, FRONT_OUTSIDE, RIGHT_OUTSIDE, BACK_OUTSIDE, LEFT_OUTSIDE, TOP_OUTSIDE}
+    };
+    vset.AddPfverts(deqElementNeighbors.begin(), deqElementNeighbors.end());
+
+    // Assign node boundary flags
     vset.ResizeBFlags();
-  	
-  	//--------------------------ELEMENTS
-    //define hexahedron elements (elements 0->26), assign nodes per element
-    deque<vector<size_t> > deqElements(1);
-    deqElements[0].resize(8);
-  	 
-    deqElements[0][0]= 0;
-    deqElements[0][1]= 1;
-    deqElements[0][2]= 2;
-    deqElements[0][3]= 3;
-    deqElements[0][4]= 4;
-    deqElements[0][5]= 5;
-    deqElements[0][6]= 6;
-    deqElements[0][7]= 7;
-  	vset.AddPlist( deqElements.begin(),deqElements.end());
+    vset.BFlag(0, CNR1);
+    vset.BFlag(1, CNR2);
+    vset.BFlag(2, CNR3);
+    vset.BFlag(3, CNR4);
+    vset.BFlag(4, CNR5);
+    vset.BFlag(5, CNR6);
+    vset.BFlag(6, CNR7);
+    vset.BFlag(7, CNR8);
 
-     //---------------------------------NEIGHBORS
-    //define neighbors
-    deque<vector<int64_t> > deqElementNeighbors(1);
-    deqElementNeighbors[0].resize(6);
-  	deqElementNeighbors[0][0]= BACK_OUTSIDE;
-  	deqElementNeighbors[0][1]= BOTTOM_OUTSIDE;
-  	deqElementNeighbors[0][2]= RIGHT_OUTSIDE;
-  	deqElementNeighbors[0][3]= TOP_OUTSIDE;
-  	deqElementNeighbors[0][4]= LEFT_OUTSIDE;
-  	deqElementNeighbors[0][5]= FRONT_OUTSIDE;
+    // Assign material ID
+    vector<int32_t> pmtrl(vset.Elements(), 1);
+    vset.AddPmtrl(pmtrl.begin(), pmtrl.end());
 
-    vset.AddPfverts( deqElementNeighbors.begin(), deqElementNeighbors.end());
-    vset.ResizeBFlags();
-  	
-  	//----------------------------NODE BOUNDARIES
-  	vset.BFlag( 0, CNR1);
-  	vset.BFlag( 1, CNR2);
-  	vset.BFlag( 2, CNR3);
-  	vset.BFlag( 3, CNR4);
-  	vset.BFlag( 4, CNR5);
-  	vset.BFlag( 5, CNR6);
-  	vset.BFlag( 6, CNR7);
-  	vset.BFlag( 7, CNR8);
- 
-     //-------------------------MATERIALS
-    vector<int32_t> pmtrl( vset.Elements(), 1 );
-    vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
-
-     cout <<"\n"<<"create_1Hexahedron_VSet: model 'un-named': done."<< endl;
-//    vset.Out();
+    cout << "\ncreate_1Hexahedron_VSet: model 'un-named': done.\n";
 }
-
 
 
 
 
 /**
+    "Rubik-Cube"
     @test SKM 10/7/2024 - nbor connectivity and node flags are consistent with CSMP conventions
 */
-void create_Hexahedra_VSet(VSet<3U>& vset, bool bSkewed )
+void create_Hexahedra_VSet(VSet<3U>& vset, bool bSkewed)
 {
+    // 27 hexahedral elements on a 4x4x4 node grid (3x3x3 elements)
     const size_t iNrOfElements(27);
     
-  	IsoparametricLinearHexahedron iso_hexahedron;
-  	
-  	//node dimensions of box
-  	const int iDim_k(4);//k - height
-  	const int iDim_j(4);//j - width
-  	const int iDim_i(4);//i - length
-  	const int iDim_k2(iDim_k*iDim_k);//k - height
-  	const int iDim_km1_2((iDim_k-1)*(iDim_k-1));//i - length
-  	
-  	//elements hexahedrons
-    int nodes(iDim_i*iDim_j*iDim_k);  //number of nodes: 64 on a 4x4x4 grid
+    IsoparametricLinearHexahedron iso_hexahedron;
     
-    //------------------------CREATE VSET
-    //this is a 3D model, it is a cube of hexahedron with six pyramid elements in the middle 	
-  	vset.Resize( iso_hexahedron.Nodes(),
-                 iso_hexahedron.Neighbors(),
-                 iso_hexahedron.ElementType(),
-                 nodes, iNrOfElements );
+    // Node dimensions of box (x right, y up, z forward)
+    const size_t iDim_k(4); // k - height (z)
+    const size_t iDim_j(4); // j - width (y)
+    const size_t iDim_i(4); // i - length (x)
+    const size_t iDim_k2(iDim_k*iDim_k); // k^2
+    const size_t iDim_km1_2((iDim_k-1)*(iDim_k-1)); // (k-1)^2
+    
+    // Total nodes: 64 (4x4x4)
+    size_t nodes(iDim_i*iDim_j*iDim_k);
 
-  	//-----------------------NODES
-  	//define nodes
-  	deque<double> px(nodes);
-  	deque<double> py(nodes);
-  	deque<double> pz(nodes);
+    //------------------------CREATE VSET
+    vset.SingleElementType(iso_hexahedron.ElementType());
+    vset.Resize(iso_hexahedron.Nodes(), // 8 nodes per hexahedron
+                iso_hexahedron.Neighbors(), // 6 neighbors per hexahedron
+                iso_hexahedron.ElementType(),
+                nodes, iNrOfElements);
+    
+    //-----------------------NODES
+    // Define node coordinates (0-based indexing)
+    deque<double> px(nodes);
+    deque<double> py(nodes);
+    deque<double> pz(nodes);
   
-  	for( int k{0}; k < iDim_k; k++) //z
-  	for( int j{0}; j < iDim_j; j++) //y
-  	for( int i{0}; i < iDim_i; i++) //x
-  	{
-  	  //this unused inside node boolean stays, just in case, in the future, we only want to skew internal nodes
- // 	  const bool inside_node (!(i == 0 || j == 0 || k == 0 || i == iDim_i-1 || j == iDim_j-1 || k == iDim_k-1));
-      
-      if(bSkewed)
-  	  {
-  	    px[k*iDim_k2+(iDim_j)*j+i]=i + (rand()%2000)*PERTURBATION;
-  	    py[k*iDim_k2+(iDim_j)*j+i]=j + (rand()%2000)*PERTURBATION;
-  	    pz[k*iDim_k2+(iDim_j)*j+i]=k + (rand()%2000)*PERTURBATION;
-  	  }
-  	  else
-  	  {
-  	    px[k*iDim_k2+(iDim_j)*j+i]=i;
-  	    py[k*iDim_k2+(iDim_j)*j+i]=j;
-  	    pz[k*iDim_k2+(iDim_j)*j+i]=k;
-  	  }
-  	}
-  	//load nodes
-  	vset.AddXYZ( px, py, pz );
+    for(size_t k{0}; k < iDim_k; k++) // z (back to front)
+        for(size_t j{0}; j < iDim_j; j++) // y (bottom to top)
+            for(size_t i{0}; i < iDim_i; i++) // x (left to right)
+            {
+                size_t iNode = k*iDim_k2 + j*iDim_j + i;
+                if(bSkewed)
+                {
+                    px[iNode] = i + (rand()%2000)*PERTURBATION;
+                    py[iNode] = j + (rand()%2000)*PERTURBATION;
+                    pz[iNode] = k + (rand()%2000)*PERTURBATION;
+                }
+                else
+                {
+                    px[iNode] = i;
+                    py[iNode] = j;
+                    pz[iNode] = k;
+                }
+            }
+    
+    // Load nodes
+    vset.AddXYZ(px, py, pz);
     vset.ResizeBFlags();
-  	
     
     //--------------------------ELEMENTS
-    //define hexahedron elements (elements 0->26), assign nodes per element
-    deque<vector<size_t> > deqElements(iNrOfElements);
-    for( int k{0}; k < iDim_k-1; k++) //z
-  	for( int j{0}; j < iDim_j-1; j++) //y
-  	for( int i{0}; i < iDim_i-1; i++) //x
-  	{
-  	 const int iElement(iDim_km1_2*k+(iDim_j-1)*j+i);
-      
-  	 deqElements[iElement].resize(8);
-  	 
-  	 deqElements[iElement][0]= 1+ iDim_k2*k+(iDim_j)*j+i;
-  	 deqElements[iElement][1]= 1+ iDim_k2*k+(iDim_j)*j+i+1;
-  	 deqElements[iElement][2]= 1+ iDim_k2*k+(iDim_j)*(j+1)+i+1;
-  	 deqElements[iElement][3]= 1+ iDim_k2*k+(iDim_j)*(j+1)+i;
-  	 deqElements[iElement][4]= 1+ iDim_k2*(k+1)+(iDim_j)*j+i;
-  	 deqElements[iElement][5]= 1+ iDim_k2*(k+1)+(iDim_j)*j+i+1;
-  	 deqElements[iElement][6]= 1+ iDim_k2*(k+1)+(iDim_j)*(j+1)+i+1;
-  	 deqElements[iElement][7]= 1+ iDim_k2*(k+1)+(iDim_j)*(j+1)+i;
-    }
-  	
-  	vset.AddPlist( deqElements.begin(),deqElements.end() );
+    // Define element types
+    vector<int8_t> vecElementTypes(1, ISOPARAMETRIC_LINEAR_HEXAHEDRON);
+    vset.AddElementTypes(vecElementTypes.begin(), vecElementTypes.end());
+
+    // Define hexahedron elements (0 to 26), assign 8 nodes per element (0-based)
+    deque<vector<size_t>> deqElements(iNrOfElements);
+    for(size_t k{0}; k < iDim_k-1; k++) // z
+        for(size_t j{0}; j < iDim_j-1; j++) // y
+            for(size_t i{0}; i < iDim_i-1; i++) // x
+            {
+                const size_t iElement = iDim_km1_2*k + (iDim_j-1)*j + i;
+                deqElements[iElement].resize(8);
+                // Corrected node order to match CSMP face conventions
+                deqElements[iElement][0] = iDim_k2*(k+1) + iDim_j*j + i;          // (i,j,k+1)
+                deqElements[iElement][1] = iDim_k2*(k+1) + iDim_j*j + i + 1;      // (i+1,j,k+1)
+                deqElements[iElement][2] = iDim_k2*k + iDim_j*j + i + 1;          // (i+1,j,k)
+                deqElements[iElement][3] = iDim_k2*k + iDim_j*j + i;              // (i,j,k)
+                deqElements[iElement][4] = iDim_k2*(k+1) + iDim_j*(j+1) + i;      // (i,j+1,k+1)
+                deqElements[iElement][5] = iDim_k2*(k+1) + iDim_j*(j+1) + i + 1;  // (i+1,j+1,k+1)
+                deqElements[iElement][6] = iDim_k2*k + iDim_j*(j+1) + i + 1;      // (i+1,j+1,k)
+                deqElements[iElement][7] = iDim_k2*k + iDim_j*(j+1) + i;          // (i,j+1,k)
+            }
+    
+    vset.AddPlist(deqElements.begin(), deqElements.end());
 
     //---------------------------------NEIGHBORS
-    //define neighbors
-    const int64_t   iDim_i_(iDim_i), iDim_j_(iDim_j), iDim_k_(iDim_k), iDim_km1_2_(iDim_km1_2);
-    deque<vector<int64_t> > deqElementNeighbors(iNrOfElements);
-    for( int k = 0; k < iDim_k_-1; k++) //z
-  	for( int j = 0; j < iDim_j_-1; j++) //y
-  	for( int i = 0; i < iDim_i_-1; i++) //x
-  	{
-  	 const int iElement(iDim_km1_2*k+(iDim_j-1)*j+i);
-     
-     deqElementNeighbors[iElement].resize(6);
-  	 
-     //face 0
-     deqElementNeighbors[iElement][0]= k==0?BACK_OUTSIDE:(1+ iDim_km1_2_*(k-1)+(iDim_j_-1)*j+i);
-     //face 1
-     deqElementNeighbors[iElement][1]= j==0?BOTTOM_OUTSIDE:(1+ iDim_km1_2_*k+(iDim_j_-1)*(j-1)+i);
-     //face 2
-     deqElementNeighbors[iElement][2]= i==iDim_i-2?RIGHT_OUTSIDE:(1+ iDim_km1_2_*k+(iDim_j_-1)*j+i+1);
-     //face iDim_k-1
-     deqElementNeighbors[iElement][3]= j==iDim_j-2?TOP_OUTSIDE:(1+ iDim_km1_2_*k+(iDim_j_-1)*(j+1)+i);
-     //face 4
-     deqElementNeighbors[iElement][4]= i==0?LEFT_OUTSIDE:(1+ iDim_km1_2_*k+(iDim_j_-1)*j+(i-1));
-     //face 5
-     deqElementNeighbors[iElement][5]= k==iDim_k-2?FRONT_OUTSIDE:(1+ iDim_km1_2_*(k+1)+(iDim_j_-1)*j+i);
-      	 
-    }
-    vset.AddPfverts( deqElementNeighbors.begin(), deqElementNeighbors.end());
-  	
-  	//-----------------------------------------------------NODE BOUNDARIES
-  	//define node boundaries
-  	//nodes at corners:
-    //nodes at edges:
-  	//nodes at faces:
-  	for( int k{0}; k < iDim_k; k++) //z
-  	for( int j{0}; j < iDim_j; j++) //y
-  	for( int i{0}; i < iDim_i; i++) //x
-  	{
-  	  int8_t bBoundary = NOT;
-  	  
-  	  if(k==0)
-  	  {
-  	    if(j==0)
-  	    {
-          if(i==0) bBoundary=CNR1;
-          else if(i==(iDim_i-1)) bBoundary=CNR2;
-          else bBoundary=EDGE1;
-  	    }
-  	    else if(j==(iDim_j-1))
-  	    {
-          if(i==0) bBoundary=CNR4; //shouldn't this be i?
-          else if(i==(iDim_i-1)) bBoundary=CNR3; //shouldn't this be i?
-          else bBoundary=EDGE3;
-  	    }
-  	    else //j is in the middle
-  	    {
-  	      if(i==0) bBoundary=EDGE4;
-          else if(i==(iDim_i-1)) bBoundary=EDGE2;
-          else bBoundary=BACK_OUTSIDE;
-  	    }
-  	  }
-      else if(k==(iDim_k-1))
-  	  {
-  	    if(j==0)
-  	    {
-          if(i==0) bBoundary=CNR5;
-          else if(i==(iDim_i-1)) bBoundary=CNR6;
-          else bBoundary=EDGE9;
-  	    }
-  	    else if(j==(iDim_j-1))
-  	    {
-          if(i==0) bBoundary=CNR8;
-          else if(i==(iDim_i-1)) bBoundary=CNR7;
-          else bBoundary=EDGE11;
-  	    }
-  	    else //j in the middle
-  	    {
-  	      if(i==0) bBoundary=EDGE12;
-          else if(i==(iDim_i-1)) bBoundary=EDGE10;
-          else bBoundary=FRONT_OUTSIDE;
-  	    }
-  	  }
-  	  else //k is in the middle
-  	  {
-  	   if(j==0)
-  	    {
-          if(i==0) bBoundary=EDGE5;
-          else if(i==(iDim_i-1)) bBoundary=EDGE6;
-          else bBoundary=BOTTOM_OUTSIDE;
-  	    }
-  	    else if(j==(iDim_j-1))
-  	    {
-          if(i==0) bBoundary=EDGE8;
-          else if(i==(iDim_i-1)) bBoundary=EDGE7;
-          else bBoundary=TOP_OUTSIDE;
-  	    }
-  	    else //j in the middle
-  	    {
-  	      if(i==0) bBoundary=LEFT_OUTSIDE;
-          else if(i==(iDim_i-1)) bBoundary=RIGHT_OUTSIDE;
-          else ;//do nothing: no boundary
-  	    }
-  	  }
-  	
-      if(bBoundary!=NOT)
-      {
-        const size_t iNode((iDim_k2*k+(iDim_j)*j+i));
-        vset.BFlag( iNode, bBoundary);
-      }
-  	}
-  	
+    // Define neighbors (BOTTOM=0 (y=0), FRONT=1 (z=max), RIGHT=2 (x=max),
+    //                  BACK=3 (z=0), LEFT=4 (x=0), TOP=5 (y=max))
+    deque<vector<int64_t>> deqElementNeighbors(iNrOfElements);
+    for(size_t k{0}; k < iDim_k-1; k++) // z
+        for(size_t j{0}; j < iDim_j-1; j++) // y
+            for(size_t i{0}; i < iDim_i-1; i++) // x
+            {
+                const size_t iElement = iDim_km1_2*k + (iDim_j-1)*j + i;
+                deqElementNeighbors[iElement].resize(6);
+                // Face 0: BOTTOM (y=0, xz-plane)
+                deqElementNeighbors[iElement][0] = (j==0 ? BOTTOM_OUTSIDE : static_cast<int64_t>(iDim_km1_2*k + (iDim_j-1)*(j-1) + i));
+                // Face 1: FRONT (z=max, xy-plane)
+                deqElementNeighbors[iElement][1] = (k==iDim_k-2 ? FRONT_OUTSIDE : static_cast<int64_t>(iDim_km1_2*(k+1) + (iDim_j-1)*j + i));
+                // Face 2: RIGHT (x=max, yz-plane)
+                deqElementNeighbors[iElement][2] = (i==iDim_i-2 ? RIGHT_OUTSIDE : static_cast<int64_t>(iDim_km1_2*k + (iDim_j-1)*j + i + 1));
+                // Face 3: BACK (z=0, xy-plane)
+                deqElementNeighbors[iElement][3] = (k==0 ? BACK_OUTSIDE : static_cast<int64_t>(iDim_km1_2*(k-1) + (iDim_j-1)*j + i));
+                // Face 4: LEFT (x=0, yz-plane)
+                deqElementNeighbors[iElement][4] = (i==0 ? LEFT_OUTSIDE : static_cast<int64_t>(iDim_km1_2*k + (iDim_j-1)*j + i - 1));
+                // Face 5: TOP (y=max, xz-plane)
+                deqElementNeighbors[iElement][5] = (j==iDim_j-2 ? TOP_OUTSIDE : static_cast<int64_t>(iDim_km1_2*k + (iDim_j-1)*(j+1) + i));
+            }
+    
+    vset.AddPfverts(deqElementNeighbors.begin(), deqElementNeighbors.end());
+    
+    //-----------------------------------------------------NODE BOUNDARIES
+    // Define boundary flags for nodes
+    for(size_t k{0}; k < iDim_k; k++) // z
+        for(size_t j{0}; j < iDim_j; j++) // y
+            for(size_t i{0}; i < iDim_i; i++) // x
+            {
+                int8_t bBoundary = NOT;
+                if(k==0)
+                {
+                    if(j==0)
+                    {
+                        if(i==0) bBoundary = CNR1; // (0,0,0)
+                        else if(i==iDim_i-1) bBoundary = CNR2; // (3,0,0)
+                        else bBoundary = EDGE1; // x-axis, y=0, z=0
+                    }
+                    else if(j==iDim_j-1)
+                    {
+                        if(i==0) bBoundary = CNR4; // (0,3,0)
+                        else if(i==iDim_i-1) bBoundary = CNR3; // (3,3,0)
+                        else bBoundary = EDGE3; // x-axis, y=3, z=0
+                    }
+                    else
+                    {
+                        if(i==0) bBoundary = EDGE4; // y-axis, x=0, z=0
+                        else if(i==iDim_i-1) bBoundary = EDGE2; // y-axis, x=3, z=0
+                        else bBoundary = BACK_OUTSIDE; // z=0 plane
+                    }
+                }
+                else if(k==iDim_k-1)
+                {
+                    if(j==0)
+                    {
+                        if(i==0) bBoundary = CNR5; // (0,0,3)
+                        else if(i==iDim_i-1) bBoundary = CNR6; // (3,0,3)
+                        else bBoundary = EDGE9; // x-axis, y=0, z=3
+                    }
+                    else if(j==iDim_j-1)
+                    {
+                        if(i==0) bBoundary = CNR8; // (0,3,3)
+                        else if(i==iDim_i-1) bBoundary = CNR7; // (3,3,3)
+                        else bBoundary = EDGE11; // x-axis, y=3, z=3
+                    }
+                    else
+                    {
+                        if(i==0) bBoundary = EDGE12; // y-axis, x=0, z=3
+                        else if(i==iDim_i-1) bBoundary = EDGE10; // y-axis, x=3, z=3
+                        else bBoundary = FRONT_OUTSIDE; // z=3 plane
+                    }
+                }
+                else
+                {
+                    if(j==0)
+                    {
+                        if(i==0) bBoundary = EDGE5; // z-axis, x=0, y=0
+                        else if(i==iDim_i-1) bBoundary = EDGE6; // z-axis, x=3, y=0
+                        else bBoundary = BOTTOM_OUTSIDE; // y=0 plane
+                    }
+                    else if(j==iDim_j-1)
+                    {
+                        if(i==0) bBoundary = EDGE8; // z-axis, x=0, y=3
+                        else if(i==iDim_i-1) bBoundary = EDGE7; // z-axis, x=3, y=3
+                        else bBoundary = TOP_OUTSIDE; // y=3 plane
+                    }
+                    else
+                    {
+                        if(i==0) bBoundary = LEFT_OUTSIDE; // x=0 plane
+                        else if(i==iDim_i-1) bBoundary = RIGHT_OUTSIDE; // x=3 plane
+                        else ; // internal node, no boundary
+                    }
+                }
+    
+                if(bBoundary != NOT)
+                {
+                    const size_t iNode = iDim_k2*k + (iDim_j)*j + i;
+                    vset.BFlag(iNode, bBoundary);
+                }
+            }
+    
     //-------------------------MATERIALS
-    vector<int32_t> pmtrl( vset.Elements(), 1 );
-    vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
+    // Assign material ID 1 to all elements
+    vector<int32_t> pmtrl(vset.Elements(), 1);
+    vset.AddPmtrl(pmtrl.begin(), pmtrl.end());
 
-    vset.EstablishZeroBasedNumbering();
-    cout <<"\n"<<"create_Hexahedra_VSet: model 'un-named': done."<< endl;
-//    vset.Out();
+    cout << "\n" << "create_Hexahedra_VSet: model 'un-named': done." << endl;
 }
 
 
@@ -1253,11 +1403,7 @@ void create_Hexahedra_VSet(VSet<3U>& vset, bool bSkewed )
 
 
 
-
-
-
-
-void create_Square_VSet( VSet<2U>& vset, int size_sides, double dimension, bool bSkewed )
+void create_Square_VSet( VSet<2U>& vset, size_t size_sides, double dimension, bool bSkewed )
 {
   if(size_sides==1)
     create_1Square_VSet( vset, dimension, bSkewed );
@@ -1268,243 +1414,188 @@ void create_Square_VSet( VSet<2U>& vset, int size_sides, double dimension, bool 
 
 
 
-
-
-
-// TODO: nbor connectivity and node flags are inconsistent with CSMP conventions
-void create_SlitRectangle_VSet( VSet<2U>& vset, int x_dimension, int y_dimension,
-                                double x_length, double y_length, int depth_of_slit, bool bSkewed )
+void create_SlitRectangle_VSet( VSet<2U>& vset, size_t x_dimension, size_t y_dimension,
+                                double x_length, double y_length, size_t depth_of_slit, bool bSkewed )
 {
-  assert(x_dimension>0);
-  assert(y_dimension>0);
-  assert(depth_of_slit<x_dimension);
-  assert(x_length>1.e-7);
-  assert(y_length>1.e-7);
-  
-  IsoparametricLinearQuadrilateral iso_quadrilateral;
-  	
-  //node dimensions of box
-  long iDim_i(x_dimension+1);//j - width
-  long iDim_j(y_dimension+1);//i - length
-  	
-  long iNrOfElements( (iDim_i-1)*(iDim_j-1) );
-    
-  //elements
-  long nodes(iDim_i*iDim_j); // number of nodes
-  
-  cout <<"\ncreate_SlitRectangle_VSet:\n";
-  cout << "\n\tDim i: " << iDim_i << " Dim j: " << iDim_j << " nr of elements: " << iNrOfElements << " nodes: " << nodes;
-     
-  vset.Resize( iso_quadrilateral.Nodes(),
-               iso_quadrilateral.Neighbors(),
-               iso_quadrilateral.ElementType(), 
-               nodes, iNrOfElements );
+    assert(x_dimension > 0);
+    assert(y_dimension > 0);
+    assert(depth_of_slit < x_dimension);
+    assert(x_length > 1e-7);
+    assert(y_length > 1e-7);
 
-  	//-----------------------NODES
-  	//define nodes
-  	deque<double> px(nodes);
-  	deque<double> py(nodes);
-  	deque<double> pz(nodes);
-  
-  	double delta_x = x_length/static_cast<double>(x_dimension);
-  	double delta_y = y_length/static_cast<double>(y_dimension);
-  	
-  	for(long j{0U}; j < iDim_j; j++) //y
-  	for(long i{0U}; i < iDim_i; i++) //x
-  	{
-  	  if(bSkewed)
-  	  {
-  	    px[(iDim_i)*j+i]=i*delta_x + (rand()%2000)*PERTURBATION;
-  	    py[(iDim_i)*j+i]=j*delta_y + (rand()%2000)*PERTURBATION;
-  	    pz[(iDim_i)*j+i]=0.;
-  	  }
-  	  else
-  	  {
-  	    px[(iDim_i)*j+i]=i*delta_x;
-  	    py[(iDim_i)*j+i]=j*delta_y;
-  	    pz[(iDim_i)*j+i]=0.;
-  	  }
-  	}
-  	
-    //--------------------------ELEMENTS
-    //define quad elements (elements 0->26), assign nodes per element
-    deque<vector<size_t> > deqElements(iNrOfElements);
-    for(long j{0}; j < iDim_j-1; j++) //y
-  	for(long i{0}; i < iDim_i-1; i++) //x
-  	{
-  	 const long iElement((iDim_i-1)*j+i);
-      
-  	 deqElements[iElement].resize(4);
-  	 
-  	 deqElements[iElement][0]= 1+ (iDim_i)*j+i;
-  	 deqElements[iElement][1]= 1+ (iDim_i)*j+i+1;
-  	 deqElements[iElement][2]= 1+ (iDim_i)*(j+1)+i+1;
-  	 deqElements[iElement][3]= 1+ (iDim_i)*(j+1)+i;
-  	}
-  	
-    //---------------------------------NEIGHBORS
-    //define neighbors
-    const long   iDim_i_(iDim_i), iDim_j_(iDim_j);
-    deque<vector<int64_t> > deqElementNeighbors(iNrOfElements);
-    for( long j = 0; j < iDim_j_-1; j++ ) //y
-  	for( long i = 0; i < iDim_i_-1; i++ ) //x
-  	{
-  	 const long iElement((iDim_i-1)*j+i);
-     
-     deqElementNeighbors[iElement].resize(4);
-  	 
-	 	 //face 1
-     deqElementNeighbors[iElement][0]= j==0?BOTTOM_OUTSIDE:(1+ (iDim_i_-1)*(j-1)+i);
-     //face 2
-     deqElementNeighbors[iElement][1]= i==iDim_i_-2?RIGHT_OUTSIDE:(1+ (iDim_i_-1)*j+i+1);
-     //face iDim_k-1
-     deqElementNeighbors[iElement][2]= j==iDim_j_-2?TOP_OUTSIDE:(1+ (iDim_i_-1)*(j+1)+i);
-     //face 4
-     deqElementNeighbors[iElement][3]= i==0?LEFT_OUTSIDE:(1+ (iDim_i_-1)*j+(i-1));
-     
-     const bool over_slit  = (j == y_dimension/2       && i+1 >= x_dimension-depth_of_slit);
-     const bool under_slit = (j == (y_dimension/2 - 1) && i+1 >= x_dimension-depth_of_slit);
-     
-     //cout << "\n\nTo be over the slit: j("<<j<<") == " <<  y_dimension/2 << " and i("<<i<<") > " << x_dimension-depth_of_slit;
-     //cout << "\n\nTo be under the slit: j("<<j<<") == " <<  y_dimension/2-1 << " and i("<<i<<") > " << x_dimension-depth_of_slit;
-     //cout << "\nElement " << iElement << "-> i,j:" << i << "," << j << " under slit? " << (under_slit?"yes":"no") << " over slit? " << (over_slit?"yes":"no");
-     if (over_slit)
-  	  deqElementNeighbors[iElement][1]= static_cast<int32_t>(IRREGULAR_OUTSIDE);
-     else if (under_slit)
-  	  deqElementNeighbors[iElement][3]= static_cast<int32_t>(IRREGULAR_OUTSIDE);
-  	   
+    IsoparametricLinearQuadrilateral iso_quadrilateral;
+
+    // Node dimensions of box
+    size_t iDim_i = x_dimension + 1; // x-direction nodes
+    size_t iDim_j = y_dimension + 1; // y-direction nodes
+    size_t iNrOfElements = (iDim_i - 1) * (iDim_j - 1);
+    size_t nodes = iDim_i * iDim_j; // Total number of nodes initially
+
+    cout << "create_SlitRectangle_VSet:\n";
+    cout << "\tDim i: " << iDim_i << " Dim j: " << iDim_j
+              << " nr of elements: " << iNrOfElements << " nodes: " << nodes << endl;
+
+    vset.Resize(iso_quadrilateral.Nodes(),
+                iso_quadrilateral.Neighbors(),
+                iso_quadrilateral.ElementType(),
+                nodes, iNrOfElements);
+
+    // ----------------------- NODES
+    deque<double> px(nodes);
+    deque<double> py(nodes);
+    deque<double> pz(nodes);
+
+    double delta_x = x_length / static_cast<double>(x_dimension);
+    double delta_y = y_length / static_cast<double>(y_dimension);
+
+    for (size_t j = 0; j < iDim_j; ++j) { // y
+        for (size_t i = 0; i < iDim_i; ++i) { // x
+            size_t idx = iDim_i * j + i;
+            if (bSkewed) {
+                px[idx] = i * delta_x + (rand() % 2000) * PERTURBATION;
+                py[idx] = j * delta_y + (rand() % 2000) * PERTURBATION;
+                pz[idx] = 0.0;
+            } else {
+                px[idx] = i * delta_x;
+                py[idx] = j * delta_y;
+                pz[idx] = 0.0;
+            }
+        }
     }
-    
-  	//-----------------------------------------------------NODE BOUNDARIES
-  	//define node boundaries
-  	//nodes at corners:
-    //nodes at edges:
-  	//nodes at faces:
-  	for( long j{0}; j < iDim_j; j++) //y
-  	for( long i{0}; i < iDim_i; i++) //x
-  	{
-  	  int8_t bBoundary = NOT;
-  	  
-      if(j==0)
-      {
-        if(i==0) bBoundary=LEFT_OUTSIDE;
-        else if(i==(iDim_i-1)) bBoundary=RIGHT_OUTSIDE;
-        else bBoundary=BOTTOM_OUTSIDE;
-      }
-      else if(j==(iDim_j-1))
-      {
-        if(i==0) bBoundary=LEFT_OUTSIDE;
-        else if(i==(iDim_i-1)) bBoundary=RIGHT_OUTSIDE;
-        else bBoundary=TOP_OUTSIDE;
-      }
-      else //j in the middle
-      {
-        if(i==0) bBoundary=LEFT_OUTSIDE;
-        else if(i==(iDim_i-1)) bBoundary=RIGHT_OUTSIDE;
-        else ;//do nothing: no boundary
-      }
-  	 
-  	 if(bBoundary!=NOT)
-     {
-        const size_t iNode(((iDim_i)*j+i));
-        vset.BFlag( iNode, bBoundary);
-     }
-     }
-    
-    cout << "\n\tIntroduce Slit Nodes...";
-    
-    //go over elements, introduce slit
-    for( long j{0}; j < iDim_j-1; j++) //y
-  	for( long i{0}; i < iDim_i-1; i++) //x
-  	{
-     const bool over_slit  = (j == y_dimension/2       && i >= x_dimension-depth_of_slit);
-     const bool under_slit = (j == (y_dimension/2 - 1) && i >= x_dimension-depth_of_slit);
-     
-     const long iElement((iDim_i-1)*j+i);
-    
-     //cout << "\nElement " << iElement << "-> i,j:" << i << "," << j << " under slit? " << (under_slit?"yes":"no") << " over slit? " << (over_slit?"yes":"no");
-     
-     if (over_slit)
-  	 {
-  	  if(i > x_dimension-depth_of_slit) // node is NOT at the end of the slit
-  	  {
-    	  //create new duplicate node (0)
-    	  double new_px(px[(iDim_i)*j+i]), 
-    	            new_py(py[(iDim_i)*j+i]), 
-    	            new_pz(pz[(iDim_i)*j+i]);
-    	  size_t node_number = px.size();
-    	  px.push_back(new_px);
-    	  py.push_back(new_py);
-    	  pz.push_back(new_pz);
-    	  //set new duplicate node
-        deqElements[iElement][0]= 1+ node_number;
-        vset.BFlag( node_number, IRREGULAR_OUTSIDE);
-      }
-      
-      //create new duplicate node (1)
-  	  double new_px = px[(iDim_i)*j+i+1]; 
-  	  double new_py = py[(iDim_i)*j+i+1]; 
-  	  double  new_pz = pz[(iDim_i)*j+i+1];
-  	  size_t node_number = px.size();
-  	  px.push_back(new_px);
-  	  py.push_back(new_py);
-  	  pz.push_back(new_pz);
-  	  //set new duplicate node
-      deqElements[iElement][1]= 1+ node_number;
-      
-      //set boundary
-  	  vset.BFlag( node_number, IRREGULAR_OUTSIDE);
-     }
-  	 
-  	 if (under_slit)
-       {
-        //create new duplicate node (2)
-        double new_px(px[(iDim_i)*(j+1)+i+1]),
-                 new_py(py[(iDim_i)*(j+1)+i+1]),
-                 new_pz(pz[(iDim_i)*(j+1)+i+1]);
-        size_t node_number = px.size();
-        px.push_back(new_px);
-        py.push_back(new_py);
-        pz.push_back(new_pz);
-        //set new duplicate node
-        deqElements[iElement][2]= 1+ node_number;
-        //set boundary
-        vset.BFlag( node_number, IRREGULAR_OUTSIDE);
 
-        if(i > x_dimension-depth_of_slit) // node is NOT at the end of the slit
-          {
-            //create new duplicate node (3)
-            double new_px2 = px[(iDim_i)*(j+1)+i];
-            double new_py2 = py[(iDim_i)*(j+1)+i];
-            double new_pz2 = pz[(iDim_i)*(j+1)+i];
-            node_number = px.size();
-            px.push_back(new_px2);
-            py.push_back(new_py2);
-            pz.push_back(new_pz2);
-            //set new duplicate node
-            deqElements[iElement][3]= 1+ node_number;
-            
-            //set boundary
-            vset.BFlag( node_number, IRREGULAR_OUTSIDE );
-          }
-       }
-      
-      }
-  	
-  	//load nodes
-  	vset.AddXYZ( px, py, pz );
-    vset.AddPlist( deqElements.begin(),deqElements.end());
-    vset.AddPfverts( deqElementNeighbors.begin(), deqElementNeighbors.end());
-  	    
-    //-------------------------MATERIALS
-    vector<int32_t> pmtrl( vset.Elements(), 1 );
-    vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
+    // ----------------------- ELEMENTS
+    deque<vector<size_t>> deqElements(iNrOfElements);
+    for (size_t j = 0; j < iDim_j - 1; ++j) { // y
+        for (size_t i = 0; i < iDim_i - 1; ++i) { // x
+            size_t iElement = (iDim_i - 1) * j + i;
+            deqElements[iElement].resize(4);
+            deqElements[iElement][0] = iDim_i * j + i;         // Bottom-left
+            deqElements[iElement][1] = iDim_i * j + i + 1;     // Bottom-right
+            deqElements[iElement][2] = iDim_i * (j + 1) + i + 1; // Top-right
+            deqElements[iElement][3] = iDim_i * (j + 1) + i;     // Top-left
+        }
+    }
 
-    vset.EstablishZeroBasedNumbering();
-    cout <<"\n"<<"splitRectangle_VSet: model 'un-named': done."<< endl;
-//  vset.Out();
+    // ----------------------- NEIGHBORS
+    deque<vector<int64_t>> deqElementNeighbors(iNrOfElements);
+    for (size_t j = 0; j < iDim_j - 1; ++j) { // y
+        for (size_t i = 0; i < iDim_i - 1; ++i) { // x
+            size_t iElement = (iDim_i - 1) * j + i;
+            deqElementNeighbors[iElement].resize(4);
+
+            // Face 0: BOTTOM (connects to element below, j-1)
+            deqElementNeighbors[iElement][0] = (j == 0) ? BOTTOM_OUTSIDE : static_cast<int64_t>((iDim_i - 1) * (j - 1) + i);
+            // Face 2: RIGHT (connects to element right, i+1)
+            deqElementNeighbors[iElement][1] = (i == iDim_i - 2) ? RIGHT_OUTSIDE : static_cast<int64_t>((iDim_i - 1) * j + i + 1);
+            // Face 4: TOP (connects to element above, j+1)
+            deqElementNeighbors[iElement][2] = (j == iDim_j - 2) ? TOP_OUTSIDE : static_cast<int64_t>((iDim_i - 1) * (j + 1) + i);
+            // Face 6: LEFT (connects to element left, i-1)
+            deqElementNeighbors[iElement][3] = (i == 0) ? LEFT_OUTSIDE : static_cast<int64_t>((iDim_i - 1) * j + i - 1);
+
+            bool over_slit = (j == y_dimension / 2 && i >= x_dimension - depth_of_slit);
+            bool under_slit = (j == y_dimension / 2 - 1 && i >= x_dimension - depth_of_slit);
+
+            if (over_slit) {
+                deqElementNeighbors[iElement][1] = static_cast<int64_t>(IRREGULAR_OUTSIDE); // Right face on slit
+            } else if (under_slit) {
+                deqElementNeighbors[iElement][2] = static_cast<int64_t>(IRREGULAR_OUTSIDE); // Top face on slit
+            }
+        }
+    }
+
+    // ----------------------- NODE BOUNDARIES
+    vector<int8_t> bflags(nodes, NOT);
+    for (size_t j = 0; j < iDim_j; ++j) { // y
+        for (size_t i = 0; i < iDim_i; ++i) { // x
+            size_t iNode = iDim_i * j + i;
+            int8_t& bBoundary = bflags[iNode];
+
+            // Corners
+            if (i == 0 && j == 0) {
+                bBoundary = CNR1; // (0,0,0)
+            } else if (i == iDim_i - 1 && j == 0) {
+                bBoundary = CNR2; // (max,0,0)
+            } else if (i == iDim_i - 1 && j == iDim_j - 1) {
+                bBoundary = CNR3; // (max,max,0)
+            } else if (i == 0 && j == iDim_j - 1) {
+                bBoundary = CNR4; // (0,max,0)
+            }
+            // Edges (excluding corners)
+            else if (j == 0) {
+                bBoundary = BOTTOM_OUTSIDE; // y=0
+            } else if (j == iDim_j - 1) {
+                bBoundary = TOP_OUTSIDE; // y=max
+            } else if (i == 0) {
+                bBoundary = LEFT_OUTSIDE; // x=0
+            } else if (i == iDim_i - 1) {
+                bBoundary = RIGHT_OUTSIDE; // x=max
+            }
+        }
+    }
+
+    // ----------------------- SLIT NODES
+    cout << "\tIntroduce Slit Nodes..." << endl;
+    for (size_t j = 0; j < iDim_j - 1; ++j) { // y
+        for (size_t i = 0; i < iDim_i - 1; ++i) { // x
+            bool over_slit = (j == y_dimension / 2 && i >= x_dimension - depth_of_slit);
+            bool under_slit = (j == y_dimension / 2 - 1 && i >= x_dimension - depth_of_slit);
+            size_t iElement = (iDim_i - 1) * j + i;
+
+            if (over_slit) {
+                if (i > x_dimension - depth_of_slit) { // Node 0 (bottom-left)
+                    size_t node_number = px.size();
+                    px.push_back(px[iDim_i * j + i]);
+                    py.push_back(py[iDim_i * j + i]);
+                    pz.push_back(pz[iDim_i * j + i]);
+                    deqElements[iElement][0] = node_number;
+                    bflags.push_back(IRREGULAR_OUTSIDE);
+                }
+                // Node 1 (bottom-right)
+                size_t node_number = px.size();
+                px.push_back(px[iDim_i * j + i + 1]);
+                py.push_back(py[iDim_i * j + i + 1]);
+                pz.push_back(pz[iDim_i * j + i + 1]);
+                deqElements[iElement][1] = node_number;
+                bflags.push_back(IRREGULAR_OUTSIDE);
+            }
+
+            if (under_slit) {
+                // Node 2 (top-right)
+                size_t node_number = px.size();
+                px.push_back(px[iDim_i * (j + 1) + i + 1]);
+                py.push_back(py[iDim_i * (j + 1) + i + 1]);
+                pz.push_back(pz[iDim_i * (j + 1) + i + 1]);
+                deqElements[iElement][2] = node_number;
+                bflags.push_back(IRREGULAR_OUTSIDE);
+
+                if (i > x_dimension - depth_of_slit) { // Node 3 (top-left)
+                    node_number = px.size();
+                    px.push_back(px[iDim_i * (j + 1) + i]);
+                    py.push_back(py[iDim_i * (j + 1) + i]);
+                    pz.push_back(pz[iDim_i * (j + 1) + i]);
+                    deqElements[iElement][3] = node_number;
+                    bflags.push_back(IRREGULAR_OUTSIDE);
+                }
+            }
+        }
+    }
+
+    // Load nodes and boundary flags
+    vset.AddXYZ(px, py, pz);
+    for (size_t i = 0; i < bflags.size(); ++i) {
+        if (bflags[i] != NOT) {
+            vset.BFlag(i, bflags[i]);
+        }
+    }
+    vset.AddPlist(deqElements.begin(), deqElements.end());
+    vset.AddPfverts(deqElementNeighbors.begin(), deqElementNeighbors.end());
+
+    // ----------------------- MATERIALS
+    vector<int32_t> pmtrl(vset.Elements(), 1);
+    vset.AddPmtrl(pmtrl.begin(), pmtrl.end());
+
+    cout << "splitRectangle_VSet: model 'un-named': done." << endl;
 }
-
 
 
 
@@ -1521,469 +1612,759 @@ void create_SlitRectangle_VSet( VSet<2U>& vset, int x_dimension, int y_dimension
     
     @test boundary flags not correct yet
 */
-void create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
+/* FIXED create_Pyramid_Hexa_VSet() as follows: */
+void create_Pyramid_Hexa_VSet(VSet<3U>& vset, bool bSkewed)
 {
-    const int iNrOfElements(32/*26 hexahedrons + 6 pyramids*/);
-    
-  	IsoparametricLinearHexahedron iso_hexahedron;
-  	IsoparametricLinearPyramid    iso_pyramid;
-  	
-  	//node dimensions of box
-  	const int iDim_k(4);//k - height
-  	const int iDim_j(4);//j - width
-  	const int iDim_i(4);//i - length
-  	const int iDim_k2(iDim_k*iDim_k);//k - height
-  	const int iDim_km1_2((iDim_k-1)*(iDim_k-1));//i - length
-  	const int iPyramidsPlacement(13);
-  	
-  	//this is a 3D model, it is a cube of hexahedron with six pyramid elements in the middle
-  	
-  	//elements 0->7 are hexahedrons
-  	//elements 8->13 are pyramids
-    const    int     nodes((iDim_i*iDim_j*iDim_k)+1);  //number of nodes: 64 on a 4x4x4 grid + 1 barycenter
-  	deque<uint32_t>  npes(iNrOfElements);  //number of nodes per element
-    deque<uint32_t>  epes(iNrOfElements);  //element type per element
-    deque<int8_t>    etypes(iNrOfElements,ISOPARAMETRIC_LINEAR_HEXAHEDRON); // NB: the pyramid elements still need to be dealt with
+    static constexpr int32_t iNrOfElements = 32; // 26 hexahedrons + 6 pyramids
+    constexpr double EPSILON = 1e-6; // Tolerance for boundary checks
 
-    for( unsigned int iElement = 0u; iElement < 26U; iElement++ )
-  	{
-  	  npes[iElement]=iso_hexahedron.Nodes();
-  	  epes[iElement]=iso_hexahedron.Neighbors();
-  	}
-  	for( unsigned int iElement = 26U; iElement < 32U; iElement++ )
-  	{
-  	  npes[iElement]=iso_pyramid.Nodes();
-  	  epes[iElement]=iso_pyramid.Neighbors();
-  	}
-    
-    //--------------------------ELEMENT TYPES
-  	//add element types
-    vector<int8_t> vecElementTypes(iNrOfElements);
-    for( unsigned int iElement = 0u; iElement < 26U; iElement++ )
-  	{
-  	  vecElementTypes[iElement]= ISOPARAMETRIC_LINEAR_HEXAHEDRON;
-  	}
-  	for( unsigned int iElement = 26U; iElement < 32U; iElement++ )
-  	{
-      vecElementTypes[iElement] = ISOPARAMETRIC_LINEAR_PYRAMID;
-      etypes[iElement]          = ISOPARAMETRIC_LINEAR_PYRAMID;
-  	}
+    IsoparametricLinearHexahedron iso_hexahedron;
+    IsoparametricLinearPyramid iso_pyramid;
 
-    vset.Resize( etypes, npes, epes, nodes, 0, 0 );
-    vset.AddElementTypes( vecElementTypes.begin(), vecElementTypes.end() );
-    
-    //---------------------------MATERIALS
-    const int32_t material_id(5); // some plausible integer identifier
-    vector<int32_t> materials( iNrOfElements, material_id );
-    vset.AddPmtrl( materials.begin(), materials.end() );
+    // Node dimensions of box
+    static constexpr size_t iDim_i = 4; // x - length
+    static constexpr size_t iDim_j = 4; // y - width
+    static constexpr size_t iDim_k = 4; // z - height
+    static constexpr size_t iDim_k2 = iDim_k * iDim_j; // k * j
+    static constexpr size_t iDim_km1_2 = (iDim_k - 1) * (iDim_j - 1); // (k-1) * (j-1)
+    static constexpr size_t iPyramidsPlacement = 13; // Center element index
 
-    
-  	//-----------------------NODES
-  	//define nodes
-  	deque<double> px(nodes);
-  	deque<double> py(nodes);
-  	deque<double> pz(nodes);
-  
-  	for( int k{0}; k < iDim_k; k++ ) //z
-  	for( int j{0}; j < iDim_j; j++ ) //y
-  	for( int i{0}; i < iDim_i; i++ ) //x
-  	{
-      if(bSkewed)
-  	  {
-  	    px[k*iDim_k2+(iDim_j)*j+i]=i + (rand()%2000)*PERTURBATION;
-  	    py[k*iDim_k2+(iDim_j)*j+i]=j + (rand()%2000)*PERTURBATION;
-  	    pz[k*iDim_k2+(iDim_j)*j+i]=k + (rand()%2000)*PERTURBATION;
-  	  }
-  	  else
-  	  {
-  	    px[k*iDim_k2+(iDim_j)*j+i]=i;
-  	    py[k*iDim_k2+(iDim_j)*j+i]=j;
-  	    pz[k*iDim_k2+(iDim_j)*j+i]=k;
-  	  }
-  	  
-  	}
-  	
-  	//add barycenter 
-  	px[64]=3./2. + (rand()%2000)*PERTURBATION;
-  	py[64]=3./2. + (rand()%2000)*PERTURBATION;
-  	pz[64]=3./2. + (rand()%2000)*PERTURBATION;
-  	
-  	//load nodes
-  	vset.AddXYZ( px, py, pz );
+    // Total nodes: 4x4x4 grid (64) + 1 barycenter
+    static constexpr size_t nodes = iDim_i * iDim_j * iDim_k + 1;
+
+    // Initialize element properties
+    std::deque<uint32_t> npes(iNrOfElements);
+    std::deque<uint32_t> epes(iNrOfElements);
+    std::deque<int8_t> etypes(iNrOfElements);
+
+    for (size_t iElement = 0; iElement < 26; ++iElement) {
+        npes[iElement] = iso_hexahedron.Nodes(); // 8 nodes
+        epes[iElement] = iso_hexahedron.Neighbors(); // 6 neighbors
+        etypes[iElement] = iso_hexahedron.ElementType();
+    }
+    for (size_t iElement = 26; iElement < iNrOfElements; ++iElement) {
+        npes[iElement] = iso_pyramid.Nodes(); // 5 nodes
+        epes[iElement] = iso_pyramid.Neighbors(); // 5 neighbors
+        etypes[iElement] = iso_pyramid.ElementType();
+    }
+
+    vset.Resize(etypes, npes, epes, nodes, 0, 0);
+    vset.AddElementTypes(etypes.begin(), etypes.end());
+
+    // ----------------------- MATERIALS
+    static constexpr int32_t material_id = 5;
+    std::vector<int32_t> materials(iNrOfElements, material_id);
+    vset.AddPmtrl(materials.begin(), materials.end());
+
+    // ----------------------- NODES
+    std::deque<double> px(nodes);
+    std::deque<double> py(nodes);
+    std::deque<double> pz(nodes);
+
+    // Initialize random number generator for perturbations
+    std::mt19937 rng(12345); // Fixed seed for reproducibility
+    std::uniform_real_distribution<double> dist(0.0, 1.0);
+
+    for (size_t k = 0; k < iDim_k; ++k) { // z
+        for (size_t j = 0; j < iDim_j; ++j) { // y
+            for (size_t i = 0; i < iDim_i; ++i) { // x
+                size_t idx = k * iDim_k2 + j * iDim_j + i;
+                if (bSkewed) {
+                    px[idx] = static_cast<double>(i) + dist(rng) * PERTURBATION;
+                    py[idx] = static_cast<double>(j) + dist(rng) * PERTURBATION;
+                    pz[idx] = static_cast<double>(k) + dist(rng) * PERTURBATION;
+                } else {
+                    px[idx] = static_cast<double>(i);
+                    py[idx] = static_cast<double>(j);
+                    pz[idx] = static_cast<double>(k);
+                }
+            }
+        }
+    }
+
+    // Barycenter node (index 64)
+    px[64] = 1.5 + (bSkewed ? dist(rng) * PERTURBATION : 0.0);
+    py[64] = 1.5 + (bSkewed ? dist(rng) * PERTURBATION : 0.0);
+    pz[64] = 1.5 + (bSkewed ? dist(rng) * PERTURBATION : 0.0);
+
+    vset.AddXYZ(px, py, pz);
     vset.ResizeBFlags();
-  	
-    
-    //--------------------------ELEMENTS
-    //define hexahedron elements (elements 0->31), assign nodes per element
-    deque<vector<size_t> > deqElements(iNrOfElements);
-    for( int k{0}; k < iDim_k-1; k++ ) //z
-  	for( int j{0}; j < iDim_j-1; j++ ) //y
-  	for( int i{0}; i < iDim_i-1; i++ ) //x
-  	{
-  	 int iElement(iDim_km1_2*k+(iDim_j-1)*j+i);
-     
-     if(i==1 && j==1 && k==1) //its the center element (6 pyramids)
-  	  continue;
 
-     if(iElement>iPyramidsPlacement)
-      iElement--;
-     
-  	 deqElements[iElement].resize(8);
-	   deqElements[iElement][0]= iDim_k2*k+(iDim_j)*j+i;
-  	 deqElements[iElement][1]= iDim_k2*k+(iDim_j)*j+i+1;
-  	 deqElements[iElement][2]= iDim_k2*k+(iDim_j)*(j+1)+i+1;
-  	 deqElements[iElement][3]= iDim_k2*k+(iDim_j)*(j+1)+i;
-  	 deqElements[iElement][4]= iDim_k2*(k+1)+(iDim_j)*j+i;
-  	 deqElements[iElement][5]= iDim_k2*(k+1)+(iDim_j)*j+i+1;
-  	 deqElements[iElement][6]= iDim_k2*(k+1)+(iDim_j)*(j+1)+i+1;
-  	 deqElements[iElement][7]= iDim_k2*(k+1)+(iDim_j)*(j+1)+i;
+    // ----------------------- ELEMENTS
+    std::deque<std::vector<size_t>> deqElements(iNrOfElements);
+    for (size_t k = 0; k < iDim_k - 1; ++k) { // z
+        for (size_t j = 0; j < iDim_j - 1; ++j) { // y
+            for (size_t i = 0; i < iDim_i - 1; ++i) { // x
+                size_t iElement = iDim_km1_2 * k + (iDim_j - 1) * j + i;
+                if (i == 1 && j == 1 && k == 1) continue; // Skip center for pyramids
+                if (iElement > iPyramidsPlacement) --iElement;
+
+                deqElements[iElement].resize(8);
+                deqElements[iElement][0] = k * iDim_k2 + j * iDim_j + i;         // Bottom-left-back (i,j,k)
+                deqElements[iElement][1] = k * iDim_k2 + j * iDim_j + i + 1;     // Bottom-right-back (i+1,j,k)
+                deqElements[iElement][2] = k * iDim_k2 + (j + 1) * iDim_j + i + 1; // Bottom-right-front (i+1,j+1,k)
+                deqElements[iElement][3] = k * iDim_k2 + (j + 1) * iDim_j + i;     // Bottom-left-front (i,j+1,k)
+                deqElements[iElement][4] = (k + 1) * iDim_k2 + j * iDim_j + i;     // Top-left-back (i,j,k+1)
+                deqElements[iElement][5] = (k + 1) * iDim_k2 + j * iDim_j + i + 1; // Top-right-back (i+1,j,k+1)
+                deqElements[iElement][6] = (k + 1) * iDim_k2 + (j + 1) * iDim_j + i + 1; // Top-right-front (i+1,j+1,k+1)
+                deqElements[iElement][7] = (k + 1) * iDim_k2 + (j + 1) * iDim_j + i;     // Top-left-front (i,j+1,k+1)
+            }
+        }
     }
-  	
-  	int node_center(64);
-    //element 26, assign nodes per element
-    vector<size_t> vecNodes(5);
-    vecNodes[0]= 21;
-    vecNodes[1]= 22;
-    vecNodes[2]= 26;
-    vecNodes[3]= 25;
-    vecNodes[4]= node_center;
-    deqElements[26]=vecNodes;
 
-    //element 27
-    vecNodes[0]= 37;
-    vecNodes[1]= 38;
-    vecNodes[2]= 22;
-    vecNodes[3]= 21;
-    vecNodes[4]= node_center;
-    deqElements[27]=vecNodes;
+    // Pyramid elements (26–31) with adjusted node orders for consistent outward normals
+    // Pyramid 26
+    deqElements[26] = {25, 21, 22, 26, 64};
+    // Pyramid 27
+    deqElements[27] = {38, 22, 21, 37, 64};
+    // Pyramid 28
+    deqElements[28] = {26, 22, 38, 42, 64};
+    // Pyramid 29
+    deqElements[29] = {41, 25, 26, 42, 64};
+    // Pyramid 30
+    deqElements[30] = {37, 21, 25, 41, 64};
+    // Pyramid 31
+    deqElements[31] = {38, 37, 41, 42, 64};
 
-    //element 28
-    vecNodes[0]= 22;
-    vecNodes[1]= 38;
-    vecNodes[2]= 42;
-    vecNodes[3]= 26;
-    vecNodes[4]= node_center;
-    deqElements[28]=vecNodes;
+    vset.AddPlist(deqElements.begin(), deqElements.end());
 
-    //element 29
-    vecNodes[0]= 25;
-    vecNodes[1]= 26;
-    vecNodes[2]= 42;
-    vecNodes[3]= 41;
-    vecNodes[4]= node_center;
-    deqElements[29]=vecNodes;
-    
-    //element 30
-    vecNodes[0]= 37;
-    vecNodes[1]= 21;
-    vecNodes[2]= 25;
-    vecNodes[3]= 41;
-    vecNodes[4]= node_center;
-    deqElements[30]=vecNodes;
+    // ---------------------------------NEIGHBORS (Algorithmic Detection)
+    std::deque<std::vector<int64_t>> deqElementNeighbors(iNrOfElements);
 
-    //element 31
-    vecNodes[0]= 38;
-    vecNodes[1]= 37;
-    vecNodes[2]= 41;
-    vecNodes[3]= 42;
-    vecNodes[4]= node_center;
-    deqElements[31]=vecNodes;
-    
-    vset.AddPlist( deqElements.begin(), deqElements.end() );
+    // Define face nodes for each element type
+    const std::vector<std::vector<size_t>> hexaFaceNodes = {
+        {0, 3, 2, 1}, // Face 0
+        {0, 1, 5, 4}, // Face 1
+        {1, 2, 6, 5}, // Face 2
+        {2, 3, 7, 6}, // Face 3
+        {0, 4, 7, 3}, // Face 4
+        {4, 5, 6, 7}  // Face 5
+    };
+    const std::vector<std::vector<size_t>> pyramidFaceNodes = {
+        {0, 1, 4},    // Face 0
+        {1, 2, 4},    // Face 1
+        {2, 3, 4},    // Face 2
+        {0, 4, 3},    // Face 3
+        {0, 3, 2, 1}  // Face 4
+    };
 
-    //---------------------------------NEIGHBORS
-    const int   iDim_i_(iDim_i), iDim_j_(iDim_j), iDim_k_(iDim_k);
-    //define neighbors
-    deque<vector<int64_t> >  deqElementNeighbors(iNrOfElements);
-    for( int k{0}; k < iDim_k_-1; k++ ) //z
-  	for( int j{0}; j < iDim_j_-1; j++ ) //y
-  	for( int i{0}; i < iDim_i_-1; i++ ) //x
-  	{
-  	 if(i==1 && j==1 && k==1) //its the center element (6 pyramids)
-  	  continue;
-  	 
-  	 int iElement(iDim_km1_2*k+(iDim_j-1)*j+i);
-     
-     if(iElement>iPyramidsPlacement)
-      iElement--;
-      
-     deqElementNeighbors[iElement].resize(6);
-  
-     //face 0
-     int iNeighbor(iDim_km1_2*(k-1)+(iDim_j-1)*j+i);
-     if(iNeighbor>iPyramidsPlacement)
-      iNeighbor--;
-     deqElementNeighbors[iElement][0U]= (k==0) ? BACK_OUTSIDE : iNeighbor;
-     //face 1
-     iNeighbor = iDim_km1_2*k+(iDim_j-1)*(j-1)+i;
-     if(iNeighbor>iPyramidsPlacement)
-      iNeighbor--;
-     deqElementNeighbors[iElement][1]= (j==0) ? BOTTOM_OUTSIDE : iNeighbor;
-     //face 2
-     iNeighbor = iDim_km1_2*k+(iDim_j-1)*j+i+1;
-     if(iNeighbor>iPyramidsPlacement)
-      iNeighbor--;     
-     deqElementNeighbors[iElement][2]= (i==iDim_i_-2) ? RIGHT_OUTSIDE : iNeighbor;
-     //face 3
-     iNeighbor = iDim_km1_2*k+(iDim_j-1)*(j+1)+i;
-     if(iNeighbor>iPyramidsPlacement)
-      iNeighbor--;     
-     deqElementNeighbors[iElement][3]= (j==iDim_j_-2) ? TOP_OUTSIDE : iNeighbor;
-     //face 4
-     iNeighbor = iDim_km1_2*k+(iDim_j-1)*j+(i-1);
-     if(iNeighbor>iPyramidsPlacement)
-      iNeighbor--;     
-     deqElementNeighbors[iElement][4]= (i==0) ? LEFT_OUTSIDE : iNeighbor;
-     //face 5
-     iNeighbor = iDim_km1_2*(k+1)+(iDim_j-1)*j+i;
-     if(iNeighbor>iPyramidsPlacement)
-      iNeighbor--;     
-     deqElementNeighbors[iElement][5]= (k==iDim_k_-2) ? FRONT_OUTSIDE : iNeighbor;
-  
+    // Helper function to get sorted face nodes (for matching)
+    auto getSortedFaceNodes = [](const std::vector<size_t>& elementNodes, const std::vector<size_t>& faceIndices) {
+        std::vector<size_t> faceNodes;
+        for (size_t idx : faceIndices) {
+            faceNodes.push_back(elementNodes[idx]);
+        }
+        std::sort(faceNodes.begin(), faceNodes.end());
+        return faceNodes;
+    };
+
+    // Helper function to get face nodes in original order
+    auto getFaceNodes = [](const std::vector<size_t>& elementNodes, const std::vector<size_t>& faceIndices) {
+        std::vector<size_t> faceNodes;
+        for (size_t idx : faceIndices) {
+            faceNodes.push_back(elementNodes[idx]);
+        }
+        return faceNodes;
+    };
+
+    // Initialize neighbor vectors
+    for (size_t e = 0; e < iNrOfElements; ++e) {
+        deqElementNeighbors[e].resize(epes[e], NOT);
     }
-    
-    //hexa-elements with pyramid neighbors are (6): 
-    
-    //element 5  - face 5 -> neighbor: 26 (under)
-    deqElementNeighbors[4][5]=26;
-    
-    //element 22 - face 0 -> neighbor: 31 (over)
-    deqElementNeighbors[21][0]=31;
-    
-    //element 13 - face 2 -> neighbor: 30 (left)
-    deqElementNeighbors[12][2]=30;
 
-    //element 14 - face 4 -> neighbor: 28 (right)
-    deqElementNeighbors[13][4]=28;
-    
-    //element 11 - face 3 -> neighbor: 27 (front)
-    deqElementNeighbors[10][3]=27;
-    
-    //element 16 - face 1 -> neighbor: 29 (front)
-    deqElementNeighbors[15][1]=29;
-    
-    //pyramid neighbors are:
-    vector<int64_t> vecNeighbors(5);
-    
-    //element 26
-    vecNeighbors[0]=27;
-    vecNeighbors[1]=28;
-    vecNeighbors[2]=29;
-    vecNeighbors[3]=30;
-    vecNeighbors[4]=4;
-    deqElementNeighbors[26]=vecNeighbors;
+    // Compute neighbors
+    for (size_t e = 0; e < iNrOfElements; ++e) {
+        bool isPyramid = (etypes[e] == iso_pyramid.ElementType());
+        const auto& faceNodesRef = isPyramid ? pyramidFaceNodes : hexaFaceNodes;
+        size_t numFaces = isPyramid ? 5 : 6;
 
-    //element 27
-    vecNeighbors[0]=31;
-    vecNeighbors[1]=28;
-    vecNeighbors[2]=26;
-    vecNeighbors[3]=30;
-    vecNeighbors[4]=10;
-    deqElementNeighbors[27]=vecNeighbors;
+        for (size_t f = 0; f < numFaces; ++f) {
+            // Get sorted face nodes for current element's face
+            std::vector<size_t> faceNodes = getSortedFaceNodes(deqElements[e], faceNodesRef[f]);
+            std::vector<size_t> faceNodesOrdered = getFaceNodes(deqElements[e], faceNodesRef[f]);
 
-    //element 28
-    vecNeighbors[0]=27;
-    vecNeighbors[1]=31;
-    vecNeighbors[2]=29;
-    vecNeighbors[3]=26;
-    vecNeighbors[4]=13;
-    deqElementNeighbors[28]=vecNeighbors;
+            // Search for matching face in other elements
+            bool found = false;
+            for (size_t e2 = 0; e2 < iNrOfElements; ++e2) {
+                if (e2 == e) continue;
+                bool isPyramid2 = (etypes[e2] == iso_pyramid.ElementType());
+                const auto& faceNodesRef2 = isPyramid2 ? pyramidFaceNodes : hexaFaceNodes;
+                size_t numFaces2 = isPyramid2 ? 5 : 6;
 
-    //element 29
-    vecNeighbors[0]=26;
-    vecNeighbors[1]=28;
-    vecNeighbors[2]=31;
-    vecNeighbors[3]=30;
-    vecNeighbors[4]=15;
-    deqElementNeighbors[29]=vecNeighbors;
+                for (size_t f2 = 0; f2 < numFaces2; ++f2) {
+                    std::vector<size_t> faceNodes2 = getSortedFaceNodes(deqElements[e2], faceNodesRef2[f2]);
+                    if (faceNodes == faceNodes2) {
+                        // Check if nodes match in reverse order (outward normals), accounting for cyclic permutations
+                        std::vector<size_t> faceNodes2Ordered = getFaceNodes(deqElements[e2], faceNodesRef2[f2]);
+                        std::vector<size_t> faceNodesRev = faceNodesOrdered;
+                        std::reverse(faceNodesRev.begin(), faceNodesRev.end());
 
-    //element 30
-    vecNeighbors[0]=27;
-    vecNeighbors[1]=26;
-    vecNeighbors[2]=29;
-    vecNeighbors[3]=31;
-    vecNeighbors[4]=12;
-    deqElementNeighbors[30]=vecNeighbors;
+                        // Double the second ordered list for cyclic check
+                        std::vector<size_t> doubled = faceNodes2Ordered;
+                        doubled.insert(doubled.end(), faceNodes2Ordered.begin(), faceNodes2Ordered.end());
 
-    //element 31
-    vecNeighbors[0]=27;
-    vecNeighbors[1]=30;
-    vecNeighbors[2]=29;
-    vecNeighbors[3]=28;
-    vecNeighbors[4]=21;
-    deqElementNeighbors[31]=vecNeighbors;
+                        bool opposite = false;
+                        size_t len = faceNodesRev.size();
+                        for (size_t s = 0; s < faceNodes2Ordered.size(); ++s) {
+                            if (std::equal(faceNodesRev.begin(), faceNodesRev.end(), doubled.begin() + s)) {
+                                opposite = true;
+                                break;
+                            }
+                        }
 
-    vset.AddPfverts( deqElementNeighbors.begin(), deqElementNeighbors.end());
-  	
-  	//------------------------------------------NODE BOUNDARY FLAGS
-  	//define node boundaries
-  	//nodes at corners:
-    //nodes at edges:
-  	//nodes at faces:
-    // tested: SKM 27/5/2024
-  	for( int k{0}; k < iDim_k; k++) //z
-  	for( int j{0}; j < iDim_j; j++) //y
-  	for( int i{0}; i < iDim_i; i++) //x
-  	{
-  	  BOX_BOUNDARY bBoundary = NOT;
-  	  
-     // back
-  	  if(k==0)
-  	  {
-  	    if(j==0) // along edge1
-  	    {
-          if(i==0) bBoundary=CNR1;
-          else if(i==(iDim_i-1)) bBoundary=CNR2;
-          else bBoundary=EDGE1;
-  	    }
-  	    else if(j==(iDim_j-1)) // along edge3
-  	    {
-          if(i==0) bBoundary=CNR4;
-          else if(i==(iDim_i-1)) bBoundary=CNR3;
-          else bBoundary=EDGE3;
-  	    }
-  	    else //j is in the middle
-  	    {
-  	      if(i==0) bBoundary=EDGE4;
-          else if(i==(iDim_i-1)) bBoundary=EDGE2;
-          else bBoundary=BACK;
-  	    }
-  	  }
-      // front
-      else if(k==(iDim_k-1))
-  	  {
-  	    if(j==0)
-  	    {
-          if(i==0) bBoundary=CNR5; // along edge9
-          else if(i==(iDim_i-1)) bBoundary=CNR6;
-          else bBoundary=EDGE9;
-  	    }
-  	    else if(j==(iDim_j-1))
-  	    {
-          if(i==0) bBoundary=CNR8; // along edge11
-          else if(i==(iDim_i-1)) bBoundary=CNR7;
-          else bBoundary=EDGE11;
-  	    }
-  	    else //j in the middle
-  	    {
-  	      if(i==0) bBoundary=EDGE12;
-          else if(i==(iDim_i-1)) bBoundary=EDGE10;
-          else bBoundary=FRONT;
-  	    }
-  	  }
+                        if (opposite) {
+                            deqElementNeighbors[e][f] = static_cast<int64_t>(e2);
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+                if (found) break;
+            }
 
-  	  else //k is in the middle
-  	  {
-  	   if(j==0)
-  	    {
-          if(i==0) bBoundary=EDGE5;
-          else if(i==(iDim_i-1)) bBoundary=EDGE6;
-          else bBoundary=BOTTOM;
-  	    }
-  	    else if(j==(iDim_j-1))
-  	    {
-          if(i==0) bBoundary=EDGE8;
-          else if(i==(iDim_i-1)) bBoundary=EDGE7;
-          else bBoundary=TOP;
-  	    }
-  	    else //j in the middle
-  	    {
-  	      if(i==0) bBoundary=LEFT;
-          else if(i==(iDim_i-1)) bBoundary=RIGHT;
-          else ;//do nothing: no boundary
-  	    }
-  	  }
+            // If no neighbor found, assign boundary flag
+            if (!found) {
+                // Compute face centroid to determine boundary
+                double cx = 0, cy = 0, cz = 0;
+                for (size_t node : faceNodesOrdered) {
+                    cx += px[node];
+                    cy += py[node];
+                    cz += pz[node];
+                }
+                cx /= faceNodesOrdered.size();
+                cy /= faceNodesOrdered.size();
+                cz /= faceNodesOrdered.size();
 
-      // SKM FIX - all flags must be captured and different indexing is required
-      const size_t iNode((iDim_k2*k+(iDim_j)*j+i));
-      vset.BFlag( iNode, bBoundary );
-// TESTING
-//      cout <<" "<< iNode <<":"<< parseBoundary( bBoundary );
-  	}
-  	
-    //-------------------------MATERIALS
-    vector<int32_t> pmtrl( vset.Elements(), 1 );
-    vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
- 
- 
-    // =====================================================
-    // Checking the dataset for consistency
-    // =====================================================
-    
-    // checking the element types
+                if (std::abs(cy) < EPSILON) deqElementNeighbors[e][f] = BOTTOM_OUTSIDE;
+                else if (std::abs(cy - (iDim_j - 1)) < EPSILON) deqElementNeighbors[e][f] = TOP_OUTSIDE;
+                else if (std::abs(cx) < EPSILON) deqElementNeighbors[e][f] = LEFT_OUTSIDE;
+                else if (std::abs(cx - (iDim_i - 1)) < EPSILON) deqElementNeighbors[e][f] = RIGHT_OUTSIDE;
+                else if (std::abs(cz) < EPSILON) deqElementNeighbors[e][f] = BACK_OUTSIDE;
+                else if (std::abs(cz - (iDim_k - 1)) < EPSILON) deqElementNeighbors[e][f] = FRONT_OUTSIDE;
+                else deqElementNeighbors[e][f] = INTERNAL; // Internal boundary
+            }
+        }
+    }
+
+    vset.AddPfverts(deqElementNeighbors.begin(), deqElementNeighbors.end());
+
+    // ----------------------- NODE BOUNDARY FLAGS
+    std::vector<int8_t> bflags(nodes, NOT);
+    for (size_t k = 0; k < iDim_k; ++k) { // z
+        for (size_t j = 0; j < iDim_j; ++j) { // y
+            for (size_t i = 0; i < iDim_i; ++i) { // x
+                size_t iNode = k * iDim_k2 + j * iDim_j + i;
+                int8_t bBoundary = NOT;
+
+                if (bSkewed) {
+                    if (std::abs(px[iNode]) < EPSILON) {
+                        if (std::abs(py[iNode]) < EPSILON && std::abs(pz[iNode]) < EPSILON) bBoundary = CNR1;
+                        else if (std::abs(py[iNode]) < EPSILON && std::abs(pz[iNode] - (iDim_k - 1)) < EPSILON) bBoundary = CNR5;
+                        else if (std::abs(py[iNode] - (iDim_j - 1)) < EPSILON && std::abs(pz[iNode]) < EPSILON) bBoundary = CNR4;
+                        else if (std::abs(py[iNode] - (iDim_j - 1)) < EPSILON && std::abs(pz[iNode] - (iDim_k - 1)) < EPSILON) bBoundary = CNR8;
+                        else if (std::abs(py[iNode]) < EPSILON) bBoundary = EDGE5;
+                        else if (std::abs(py[iNode] - (iDim_j - 1)) < EPSILON) bBoundary = EDGE8;
+                        else if (std::abs(pz[iNode]) < EPSILON) bBoundary = EDGE4;
+                        else if (std::abs(pz[iNode] - (iDim_k - 1)) < EPSILON) bBoundary = EDGE12;
+                        else bBoundary = LEFT_OUTSIDE;
+                    } else if (std::abs(px[iNode] - (iDim_i - 1)) < EPSILON) {
+                        if (std::abs(py[iNode]) < EPSILON && std::abs(pz[iNode]) < EPSILON) bBoundary = CNR2;
+                        else if (std::abs(py[iNode]) < EPSILON && std::abs(pz[iNode] - (iDim_k - 1)) < EPSILON) bBoundary = CNR6;
+                        else if (std::abs(py[iNode] - (iDim_j - 1)) < EPSILON && std::abs(pz[iNode]) < EPSILON) bBoundary = CNR3;
+                        else if (std::abs(py[iNode] - (iDim_j - 1)) < EPSILON && std::abs(pz[iNode] - (iDim_k - 1)) < EPSILON) bBoundary = CNR7;
+                        else if (std::abs(py[iNode]) < EPSILON) bBoundary = EDGE6;
+                        else if (std::abs(py[iNode] - (iDim_j - 1)) < EPSILON) bBoundary = EDGE7;
+                        else if (std::abs(pz[iNode]) < EPSILON) bBoundary = EDGE2;
+                        else if (std::abs(pz[iNode] - (iDim_k - 1)) < EPSILON) bBoundary = EDGE10;
+                        else bBoundary = RIGHT_OUTSIDE;
+                    } else if (std::abs(py[iNode]) < EPSILON) {
+                        if (std::abs(pz[iNode]) < EPSILON) bBoundary = EDGE1;
+                        else if (std::abs(pz[iNode] - (iDim_k - 1)) < EPSILON) bBoundary = EDGE9;
+                        else bBoundary = BOTTOM_OUTSIDE;
+                    } else if (std::abs(py[iNode] - (iDim_j - 1)) < EPSILON) {
+                        if (std::abs(pz[iNode]) < EPSILON) bBoundary = EDGE3;
+                        else if (std::abs(pz[iNode] - (iDim_k - 1)) < EPSILON) bBoundary = EDGE11;
+                        else bBoundary = TOP_OUTSIDE;
+                    } else if (std::abs(pz[iNode]) < EPSILON) {
+                        bBoundary = BACK_OUTSIDE;
+                    } else if (std::abs(pz[iNode] - (iDim_k - 1)) < EPSILON) {
+                        bBoundary = FRONT_OUTSIDE;
+                    }
+                } else {
+                    // Back (z=0)
+                    if (k == 0) {
+                        if (j == 0) { // Edge 1
+                            if (i == 0) bBoundary = CNR1;
+                            else if (i == iDim_i - 1) bBoundary = CNR2;
+                            else bBoundary = EDGE1;
+                        } else if (j == iDim_j - 1) { // Edge 3
+                            if (i == 0) bBoundary = CNR4;
+                            else if (i == iDim_i - 1) bBoundary = CNR3;
+                            else bBoundary = EDGE3;
+                        } else { // j in middle
+                            if (i == 0) bBoundary = EDGE4;
+                            else if (i == iDim_i - 1) bBoundary = EDGE2;
+                            else bBoundary = BACK_OUTSIDE;
+                        }
+                    }
+                    // Front (z=max)
+                    else if (k == iDim_k - 1) {
+                        if (j == 0) { // Edge 9
+                            if (i == 0) bBoundary = CNR5;
+                            else if (i == iDim_i - 1) bBoundary = CNR6;
+                            else bBoundary = EDGE9;
+                        } else if (j == iDim_j - 1) { // Edge 11
+                            if (i == 0) bBoundary = CNR8;
+                            else if (i == iDim_i - 1) bBoundary = CNR7;
+                            else bBoundary = EDGE11;
+                        } else { // j in middle
+                            if (i == 0) bBoundary = EDGE12;
+                            else if (i == iDim_i - 1) bBoundary = EDGE10;
+                            else bBoundary = FRONT_OUTSIDE;
+                        }
+                    }
+                    // Middle k
+                    else {
+                        if (j == 0) { // Bottom (y=0)
+                            if (i == 0) bBoundary = EDGE5;
+                            else if (i == iDim_i - 1) bBoundary = EDGE6;
+                            else bBoundary = BOTTOM_OUTSIDE;
+                        } else if (j == iDim_j - 1) { // Top (y=max)
+                            if (i == 0) bBoundary = EDGE8;
+                            else if (i == iDim_i - 1) bBoundary = EDGE7;
+                            else bBoundary = TOP_OUTSIDE;
+                        } else { // j in middle
+                            if (i == 0) bBoundary = LEFT_OUTSIDE;
+                            else if (i == iDim_i - 1) bBoundary = RIGHT_OUTSIDE;
+                        }
+                    }
+                }
+                bflags[iNode] = bBoundary;
+            }
+        }
+    }
+    // Barycenter node is internal
+    bflags[64] = NOT;
+
+    // Apply boundary flags
+    for (size_t i = 0; i < bflags.size(); ++i) {
+        if (bflags[i] != NOT) {
+            vset.BFlag(i, bflags[i]);
+        }
+    }
+
+    // ----------------------- CONSISTENCY CHECKS
     for (size_t i = 0; i < 26; ++i) {
-    assert(etypes[i] == ISOPARAMETRIC_LINEAR_HEXAHEDRON && "Error: Element type mismatch for hexahedrons.");
+        assert(etypes[i] == iso_hexahedron.ElementType() && "Error: Element type mismatch for hexahedrons.");
+        assert(npes[i] == 8 && "Error: Hexahedron does not have 8 nodes.");
     }
     for (size_t i = 26; i < iNrOfElements; ++i) {
-        assert(etypes[i] == ISOPARAMETRIC_LINEAR_PYRAMID && "Error: Element type mismatch for pyramids.");
-    }
-    // number of nodes per element
-    for (size_t i = 0; i < 26; ++i) {
-    assert(npes[i] == 8 && "Error: Hexahedron does not have 8 nodes.");
-    }
-    for (size_t i = 26; i < iNrOfElements; ++i) {
+        assert(etypes[i] == iso_pyramid.ElementType() && "Error: Element type mismatch for pyramids.");
         assert(npes[i] == 5 && "Error: Pyramid does not have 5 nodes.");
     }
-    // node coordinates
     for (size_t k = 0; k < iDim_k; ++k) {
-    for (size_t j = 0; j < iDim_j; ++j) {
-        for (size_t i = 0; i < iDim_i; ++i) {
-            size_t index = k * iDim_k2 + iDim_j * j + i;
-            if (bSkewed) {
-                assert(px[index] >= i && px[index] <= i + 2.0 && "Error: Skewed px coordinate out of range.");
-                assert(py[index] >= j && py[index] <= j + 2.0 && "Error: Skewed py coordinate out of range.");
-                assert(pz[index] >= k && pz[index] <= k + 2.0 && "Error: Skewed pz coordinate out of range.");
-            } else {
-                assert(px[index] == i && py[index] == j && pz[index] == k && "Error: Non-skewed coordinate mismatch.");
-            }
+        for (size_t j = 0; j < iDim_j; ++j) {
+            for (size_t i = 0; i < iDim_i; ++i) {
+                size_t idx = k * iDim_k2 + j * iDim_j + i;
+                if (bSkewed) {
+                    assert(px[idx] >= static_cast<double>(i) && px[idx] <= static_cast<double>(i) + PERTURBATION &&
+                           "Error: Skewed px coordinate out of range.");
+                    assert(py[idx] >= static_cast<double>(j) && py[idx] <= static_cast<double>(j) + PERTURBATION &&
+                           "Error: Skewed py coordinate out of range.");
+                    assert(pz[idx] >= static_cast<double>(k) && pz[idx] <= static_cast<double>(k) + PERTURBATION &&
+                           "Error: Skewed pz coordinate out of range.");
+                } else {
+                    assert(px[idx] == static_cast<double>(i) && py[idx] == static_cast<double>(j) &&
+                           pz[idx] == static_cast<double>(k) && "Error: Non-skewed coordinate mismatch.");
+                }
             }
         }
     }
-    // barycentre coordinate
-    assert(px[64] >= 1.5 && px[64] <= 2.5 && "Error: Barycenter px out of expected range.");
-    assert(py[64] >= 1.5 && py[64] <= 2.5 && "Error: Barycenter py out of expected range.");
-    assert(pz[64] >= 1.5 && pz[64] <= 2.5 && "Error: Barycenter pz out of expected range.");
+    // Barycenter check
+    assert(px[64] >= 1.5 && px[64] <= 1.5 + PERTURBATION && "Error: Barycenter px out of expected range.");
+    assert(py[64] >= 1.5 && py[64] <= 1.5 + PERTURBATION && "Error: Barycenter py out of expected range.");
+    assert(pz[64] >= 1.5 && pz[64] <= 1.5 + PERTURBATION && "Error: Barycenter pz out of expected range.");
+
+    std::cout << "create_Pyramid_Hexa_VSet: model 'un-named': done." << std::endl;
+}
+
+
+
+
+
+
+
+
+
+/**
+    Generates 24 hexahedra + 6 prism elements.
+    The model can be distorted on demand.
     
-    // neigbor relationships
-    for (size_t k = 0; k < iDim_k-1; ++k) {
-    for (size_t j = 0; j < iDim_j-1; ++j) {
-        for (size_t i = 0; i < iDim_i-1; ++i) {
-            long iElement = iDim_km1_2 * k + (iDim_j-1) * j + i;
-            if (i == 1 && j == 1 && k == 1) continue;  // Skip the center element
+    @note model comes with the correct box boundary flags.
+    
+    TODO: boundary labelling for BACK and FRONT are not correct
+*/
+void create_Prism_Hexa_VSet(VSet<3U>& vset, bool bSkewed) {
+    constexpr size_t iNrOfElements = 30;
+    constexpr double EPSILON = PERTURBATION * 0.5 + 1e-6;
 
-            if (iElement > iPyramidsPlacement) iElement--;
+    IsoparametricLinearHexahedron iso_hexahedron;
+    IsoparametricLinearPrism iso_prism;
 
-            auto& neighbors = deqElementNeighbors[iElement];
+    constexpr size_t iDim_i = 4;
+    constexpr size_t iDim_j = 4;
+    constexpr size_t iDim_k = 4;
+    constexpr size_t iDim_k2 = iDim_i * iDim_j;
+    const size_t nodes = iDim_i * iDim_j * iDim_k;
 
-            if (k == 0) assert(neighbors[0] == BACK_OUTSIDE && "Error: Incorrect back boundary neighbor.");
-            if (j == 0) assert(neighbors[1] == BOTTOM_OUTSIDE && "Error: Incorrect bottom boundary neighbor.");
-            if (i == iDim_i-2) assert(neighbors[2] == RIGHT_OUTSIDE && "Error: Incorrect right boundary neighbor.");
-            if (j == iDim_j-2) assert(neighbors[3] == TOP_OUTSIDE && "Error: Incorrect top boundary neighbor.");
-            if (i == 0) assert(neighbors[4] == LEFT_OUTSIDE && "Error: Incorrect left boundary neighbor.");
-            if (k == iDim_k-2) assert(neighbors[5] == FRONT_OUTSIDE && "Error: Incorrect front boundary neighbor.");
-        }
+    deque<uint32_t> npes(iNrOfElements);
+    deque<uint32_t> epes(iNrOfElements);
+    deque<int8_t> etypes(iNrOfElements);
+
+    size_t iElement = 0;
+    for (size_t k = 0; k < iDim_k - 1; ++k) {
+        for (size_t j = 0; j < iDim_j - 1; ++j) {
+            for (size_t i = 0; i < iDim_i - 1; ++i) {
+                if (i == 1 && j == 1) {
+                    npes[iElement] = iso_prism.Nodes();
+                    epes[iElement] = iso_prism.Neighbors();
+                    etypes[iElement] = ISOPARAMETRIC_LINEAR_PRISM;
+                    ++iElement;
+
+                    npes[iElement] = iso_prism.Nodes();
+                    epes[iElement] = iso_prism.Neighbors();
+                    etypes[iElement] = ISOPARAMETRIC_LINEAR_PRISM;
+                    ++iElement;
+                    continue;
+                }
+                npes[iElement] = iso_hexahedron.Nodes();
+                epes[iElement] = iso_hexahedron.Neighbors();
+                etypes[iElement] = ISOPARAMETRIC_LINEAR_HEXAHEDRON;
+                ++iElement;
+            }
         }
     }
-    
-    // pyramid neighbor relationships
-    const std::vector<std::vector<int>> expectedPyramidNeighbors = {
-        {27, 28, 29, 30, 4},    // Pyramid 26
-        {31, 28, 26, 30, 10},   // Pyramid 27
-        {27, 31, 29, 26, 13},   // Pyramid 28
-        {26, 28, 31, 30, 15},   // Pyramid 29
-        {27, 26, 29, 31, 12},   // Pyramid 30
-        {27, 30, 29, 28, 21}    // Pyramid 31
+    vset.Resize(etypes, npes, epes, nodes, 0, 0);
+    vset.AddElementTypes(etypes.begin(), etypes.end());
+
+    // Nodes
+    deque<double> px(nodes), py(nodes), pz(nodes);
+    mt19937 rng(12345);
+    uniform_real_distribution<double> dist(0.0, 1.0);
+    for (size_t k = 0; k < iDim_k; ++k) {
+        for (size_t j = 0; j < iDim_j; ++j) {
+            for (size_t i = 0; i < iDim_i; ++i) {
+                const size_t iNode = k * iDim_k2 + iDim_j * j + i;
+                px[iNode] = i + (bSkewed ? dist(rng) * PERTURBATION : 0.0);
+                py[iNode] = j + (bSkewed ? dist(rng) * PERTURBATION : 0.0);
+                pz[iNode] = k + (bSkewed ? dist(rng) * PERTURBATION : 0.0);
+            }
+        }
+    }
+    vset.AddXYZ(px, py, pz);
+    vset.ResizeBFlags();
+
+    // Elements
+    deque<vector<size_t>> deqElements(iNrOfElements);
+    iElement = 0;
+    for (size_t k = 0; k < iDim_k - 1; ++k) {         // z - axis
+        for (size_t j = 0; j < iDim_j - 1; ++j) {     // y
+            for (size_t i = 0; i < iDim_i - 1; ++i) { // x
+                if (i == 1 && j == 1) {
+                    // nodes of a cubic cell
+                    const size_t node1 = k * iDim_k2 + iDim_j * j + i;
+                    const size_t node2 = k * iDim_k2 + iDim_j * j + i + 1;
+                    const size_t node3 = k * iDim_k2 + iDim_j * (j + 1) + i + 1;
+                    const size_t node4 = k * iDim_k2 + iDim_j * (j + 1) + i;
+                    const size_t node5 = (k + 1) * iDim_k2 + iDim_j * j + i;
+                    const size_t node6 = (k + 1) * iDim_k2 + iDim_j * j + i + 1;
+                    const size_t node7 = (k + 1) * iDim_k2 + iDim_j * (j + 1) + i + 1;
+                    const size_t node8 = (k + 1) * iDim_k2 + iDim_j * (j + 1) + i;
+
+                    // prism elements (wrong face numbering)
+                    // - SKM corrected and tested 5/12/25 (clockwise because bottom and top of prism are flipped)
+                    // bottom-face z is < top-face z
+                    deqElements[iElement] = { node1, node2, node4, node5, node6, node8 };
+                    ++iElement;
+
+//                    deqElements[iElement] = {node6, node7, node8, node2, node3, node4};
+                    // bottom-face z is < top-face z
+                    deqElements[iElement] = { node2, node3, node4, node6, node7, node8 };
+                    ++iElement;
+                    continue;
+                }
+
+                // hexahedra
+                deqElements[iElement] = {
+                    k * iDim_k2 + iDim_j * j + i,
+                    k * iDim_k2 + iDim_j * j + i + 1,
+                    k * iDim_k2 + iDim_j * (j + 1) + i + 1,
+                    k * iDim_k2 + iDim_j * (j + 1) + i,
+                    (k + 1) * iDim_k2 + iDim_j * j + i,
+                    (k + 1) * iDim_k2 + iDim_j * j + i + 1,
+                    (k + 1) * iDim_k2 + iDim_j * (j + 1) + i + 1,
+                    (k + 1) * iDim_k2 + iDim_j * (j + 1) + i
+                };
+                ++iElement;
+            }
+        }
+    }
+    vset.AddPlist(deqElements.begin(), deqElements.end());
+
+
+    // Neighbor connectivity
+    // =====================
+    deque<vector<int64_t>> deqElementNeighbors(iNrOfElements);
+
+    const vector<vector<size_t>> hexaFaceNodes = {
+        {0, 3, 2, 1}, // bottom - counter-clockwise numbering
+        {0, 1, 5, 4}, // front
+        {1, 2, 6, 5}, // right
+        {2, 3, 7, 6}, // back
+        {0, 4, 7, 3}, // left
+        {4, 5, 6, 7}  // top
     };
-    for (size_t i = 26; i < 32; ++i) {
-        for (size_t j = 0; j < 5; ++j) {
-            assert(deqElementNeighbors[i][j] == expectedPyramidNeighbors[i - 26][j] &&
-                   "Error: Incorrect neighbor for pyramid element.");
+    const vector<vector<size_t>> prismFaceNodes = {
+        {0, 2, 1},    // Face 0: bottom (triangle, adjusted for -z normal)
+        {0, 1, 4, 3}, // Face 1: quad
+        {1, 2, 5, 4}, // Face 2: quad
+        {0, 3, 5, 2}, // Face 3: quad
+        {3, 4, 5}     // Face 4: top (triangle, adjusted for +z normal)
+    };
+
+    auto getSortedFaceNodes = [](const vector<size_t>& elementNodes, const vector<size_t>& faceIndices) {
+        vector<size_t> faceNodes;
+        for (size_t idx : faceIndices) {
+            faceNodes.push_back(elementNodes[idx]);
+        }
+        sort(faceNodes.begin(), faceNodes.end());
+        return faceNodes;
+    };
+
+    auto getFaceNodes = [](const vector<size_t>& elementNodes, const vector<size_t>& faceIndices) {
+        vector<size_t> faceNodes;
+        for (size_t idx : faceIndices) {
+            faceNodes.push_back(elementNodes[idx]);
+        }
+        return faceNodes;
+    };
+
+    auto computeFaceNormal = [&](const vector<size_t>& faceNodesOrdered) -> vector<double> {
+        vector<double> normal(3, 0.0);
+        size_t n = faceNodesOrdered.size();
+        if (n < 3) return normal;
+        for (size_t i = 0; i < n; ++i) {
+            size_t j = (i + 1) % n;
+            normal[0] += (py[faceNodesOrdered[i]] - py[faceNodesOrdered[j]]) * (pz[faceNodesOrdered[i]] + pz[faceNodesOrdered[j]]);
+            normal[1] += (pz[faceNodesOrdered[i]] - pz[faceNodesOrdered[j]]) * (px[faceNodesOrdered[i]] + px[faceNodesOrdered[j]]);
+            normal[2] += (px[faceNodesOrdered[i]] - px[faceNodesOrdered[j]]) * (py[faceNodesOrdered[i]] + py[faceNodesOrdered[j]]);
+        }
+        double mag = sqrt(normal[0] * normal[0] + normal[1] * normal[1] + normal[2] * normal[2]);
+        if (mag > EPSILON) {
+            normal[0] /= mag;
+            normal[1] /= mag;
+            normal[2] /= mag;
+        }
+        return normal;
+    };
+
+    for (size_t e = 0; e < iNrOfElements; ++e) {
+        deqElementNeighbors[e].resize(epes[e], NOT);
+    }
+
+    for (size_t e = 0; e < iNrOfElements; ++e) {
+        bool isPrism = (etypes[e] == ISOPARAMETRIC_LINEAR_PRISM);
+        const auto& faceNodesRef = isPrism ? prismFaceNodes : hexaFaceNodes;
+        size_t numFaces = isPrism ? 5 : 6;
+
+        for (size_t f = 0; f < numFaces; ++f) {
+            vector<size_t> faceNodesOrdered = getFaceNodes(deqElements[e], faceNodesRef[f]);
+            vector<size_t> faceNodes = getSortedFaceNodes(deqElements[e], faceNodesRef[f]);
+
+            bool found = false;
+            for (size_t e2 = 0; e2 < iNrOfElements; ++e2) {
+                if (e2 == e) continue;
+                bool isPrism2 = (etypes[e2] == ISOPARAMETRIC_LINEAR_PRISM);
+                const auto& faceNodesRef2 = isPrism2 ? prismFaceNodes : hexaFaceNodes;
+                size_t numFaces2 = isPrism2 ? 5 : 6;
+
+                for (size_t f2 = 0; f2 < numFaces2; ++f2) {
+                    vector<size_t> faceNodes2 = getSortedFaceNodes(deqElements[e2], faceNodesRef2[f2]);
+                    if (faceNodes == faceNodes2) {
+                        vector<size_t> faceNodes2Ordered = getFaceNodes(deqElements[e2], faceNodesRef2[f2]);
+                        vector<size_t> faceNodesRev = faceNodesOrdered;
+                        reverse(faceNodesRev.begin(), faceNodesRev.end());
+                        vector<size_t> doubled = faceNodes2Ordered;
+                        doubled.insert(doubled.end(), faceNodes2Ordered.begin(), faceNodes2Ordered.end());
+
+                        bool opposite = false;
+                        for (size_t s = 0; s < faceNodes2Ordered.size(); ++s) {
+                            if (equal(faceNodesRev.begin(), faceNodesRev.end(), doubled.begin() + static_cast<long>(s))) {
+                                opposite = true;
+                                break;
+                            }
+                        }
+                        if (opposite) {
+                            deqElementNeighbors[e][f] = static_cast<int64_t>(e2);
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+                if (found) break;
+            }
+
+            if (!found) {
+                vector<double> normal = computeFaceNormal(faceNodesOrdered);
+                if (abs(normal[0] + 1.0) < EPSILON && abs(normal[1]) < EPSILON && abs(normal[2]) < EPSILON) {
+                    deqElementNeighbors[e][f] = LEFT_OUTSIDE;
+                } else if (abs(normal[0] - 1.0) < EPSILON && abs(normal[1]) < EPSILON && abs(normal[2]) < EPSILON) {
+                    deqElementNeighbors[e][f] = RIGHT_OUTSIDE;
+                } else if (abs(normal[1] + 1.0) < EPSILON && abs(normal[0]) < EPSILON && abs(normal[2]) < EPSILON) {
+                    deqElementNeighbors[e][f] = BOTTOM_OUTSIDE;
+                } else if (abs(normal[1] - 1.0) < EPSILON && abs(normal[0]) < EPSILON && abs(normal[2]) < EPSILON) {
+                    deqElementNeighbors[e][f] = TOP_OUTSIDE;
+                } else if (abs(normal[2] + 1.0) < EPSILON && abs(normal[0]) < EPSILON && abs(normal[1]) < EPSILON) {
+                    deqElementNeighbors[e][f] = BACK_OUTSIDE;
+                } else if (abs(normal[2] - 1.0) < EPSILON && abs(normal[0]) < EPSILON && abs(normal[1]) < EPSILON) {
+                    deqElementNeighbors[e][f] = FRONT_OUTSIDE;
+                } else {
+                    double cx = 0, cy = 0, cz = 0;
+                    for (size_t node : faceNodesOrdered) {
+                        cx += px[node];
+                        cy += py[node];
+                        cz += pz[node];
+                    }
+                    cx /= faceNodesOrdered.size();
+                    cy /= faceNodesOrdered.size();
+                    cz /= faceNodesOrdered.size();
+                    if (abs(cy) < EPSILON) deqElementNeighbors[e][f] = BOTTOM_OUTSIDE;
+                    else if (abs(cy - (iDim_j - 1)) < EPSILON) deqElementNeighbors[e][f] = TOP_OUTSIDE;
+                    else if (abs(cx) < EPSILON) deqElementNeighbors[e][f] = LEFT_OUTSIDE;
+                    else if (abs(cx - (iDim_i - 1)) < EPSILON) deqElementNeighbors[e][f] = RIGHT_OUTSIDE;
+                    else if (abs(cz) < EPSILON) deqElementNeighbors[e][f] = BACK_OUTSIDE;
+                    else if (abs(cz - (iDim_k - 1)) < EPSILON) deqElementNeighbors[e][f] = FRONT_OUTSIDE;
+                    else deqElementNeighbors[e][f] = IRREGULAR_OUTSIDE;
+                }
+            }
         }
     }
-    
-//    vset.Out();
-    
-} // end create_Pyramid_Hexa_VSet
+    vset.AddPfverts(deqElementNeighbors.begin(), deqElementNeighbors.end());
+
+
+    // Node boundary flags
+    // ===================
+    for (size_t k = 0; k < iDim_k; ++k) {
+        for (size_t j = 0; j < iDim_j; ++j) {
+            for (size_t i = 0; i < iDim_i; ++i) {
+                const size_t iNode = k * iDim_k2 + iDim_j * j + i;
+                int8_t bBoundary = NOT;
+
+                if (bSkewed) {
+                    if (abs(px[iNode]) < EPSILON) {
+                        if (abs(py[iNode]) < EPSILON && abs(pz[iNode]) < EPSILON) bBoundary = CNR1;
+                        else if (abs(py[iNode]) < EPSILON && abs(pz[iNode] - (iDim_k - 1)) < EPSILON) bBoundary = CNR5;
+                        else if (abs(py[iNode] - (iDim_j - 1)) < EPSILON && abs(pz[iNode]) < EPSILON) bBoundary = CNR4;
+                        else if (abs(py[iNode] - (iDim_j - 1)) < EPSILON && abs(pz[iNode] - (iDim_k - 1)) < EPSILON) bBoundary = CNR8;
+                        else if (abs(py[iNode]) < EPSILON && pz[iNode] > EPSILON && pz[iNode] < (iDim_k - 1) - EPSILON) bBoundary = EDGE5;
+                        else if (abs(py[iNode] - (iDim_j - 1)) < EPSILON && pz[iNode] > EPSILON && pz[iNode] < (iDim_k - 1) - EPSILON) bBoundary = EDGE8;
+                        else if (abs(pz[iNode]) < EPSILON && py[iNode] > EPSILON && py[iNode] < (iDim_j - 1) - EPSILON) bBoundary = EDGE4;
+                        else if (abs(pz[iNode] - (iDim_k - 1)) < EPSILON && py[iNode] > EPSILON && py[iNode] < (iDim_j - 1) - EPSILON) bBoundary = EDGE12;
+                        else bBoundary = LEFT_OUTSIDE;
+                    } else if (abs(px[iNode] - (iDim_i - 1)) < EPSILON) {
+                        if (abs(py[iNode]) < EPSILON && abs(pz[iNode]) < EPSILON) bBoundary = CNR2;
+                        else if (abs(py[iNode]) < EPSILON && abs(pz[iNode] - (iDim_k - 1)) < EPSILON) bBoundary = CNR6;
+                        else if (abs(py[iNode] - (iDim_j - 1)) < EPSILON && abs(pz[iNode]) < EPSILON) bBoundary = CNR3;
+                        else if (abs(py[iNode] - (iDim_j - 1)) < EPSILON && abs(pz[iNode] - (iDim_k - 1)) < EPSILON) bBoundary = CNR7;
+                        else if (abs(py[iNode]) < EPSILON && pz[iNode] > EPSILON && pz[iNode] < (iDim_k - 1) - EPSILON) bBoundary = EDGE6;
+                        else if (abs(py[iNode] - (iDim_j - 1)) < EPSILON && pz[iNode] > EPSILON && pz[iNode] < (iDim_k - 1) - EPSILON) bBoundary = EDGE7;
+                        else if (abs(pz[iNode]) < EPSILON && py[iNode] > EPSILON && py[iNode] < (iDim_j - 1) - EPSILON) bBoundary = EDGE2;
+                        else if (abs(pz[iNode] - (iDim_k - 1)) < EPSILON && py[iNode] > EPSILON && py[iNode] < (iDim_j - 1) - EPSILON) bBoundary = EDGE10;
+                        else bBoundary = RIGHT_OUTSIDE;
+                    } else if (abs(py[iNode]) < EPSILON) {
+                        if (abs(pz[iNode]) < EPSILON && px[iNode] > EPSILON && px[iNode] < (iDim_i - 1) - EPSILON) bBoundary = EDGE1;
+                        else if (abs(pz[iNode] - (iDim_k - 1)) < EPSILON && px[iNode] > EPSILON && px[iNode] < (iDim_i - 1) - EPSILON) bBoundary = EDGE9;
+                        else bBoundary = BOTTOM_OUTSIDE;
+                    } else if (abs(py[iNode] - (iDim_j - 1)) < EPSILON) {
+                        if (abs(pz[iNode]) < EPSILON && px[iNode] > EPSILON && px[iNode] < (iDim_i - 1) - EPSILON) bBoundary = EDGE3;
+                        else if (abs(pz[iNode] - (iDim_k - 1)) < EPSILON && px[iNode] > EPSILON && px[iNode] < (iDim_i - 1) - EPSILON) bBoundary = EDGE11;
+                        else bBoundary = TOP_OUTSIDE;
+                    } else if (abs(pz[iNode]) < EPSILON) {
+                        bBoundary = BACK_OUTSIDE;
+                    } else if (abs(pz[iNode] - (iDim_k - 1)) < EPSILON) {
+                        bBoundary = FRONT_OUTSIDE;
+                    }
+                } else {
+                    if (i == 0 && j == 0 && k == 0) bBoundary = CNR1;
+                    else if (i == iDim_i - 1 && j == 0 && k == 0) bBoundary = CNR2;
+                    else if (i == iDim_i - 1 && j == iDim_j - 1 && k == 0) bBoundary = CNR3;
+                    else if (i == 0 && j == iDim_j - 1 && k == 0) bBoundary = CNR4;
+                    else if (i == 0 && j == 0 && k == iDim_k - 1) bBoundary = CNR5;
+                    else if (i == iDim_i - 1 && j == 0 && k == iDim_k - 1) bBoundary = CNR6;
+                    else if (i == iDim_i - 1 && j == iDim_j - 1 && k == iDim_k - 1) bBoundary = CNR7;
+                    else if (i == 0 && j == iDim_j - 1 && k == iDim_k - 1) bBoundary = CNR8;
+                    else if (j == 0 && k == 0 && i > 0 && i < iDim_i - 1) bBoundary = EDGE1;
+                    else if (i == iDim_i - 1 && k == 0 && j > 0 && j < iDim_j - 1) bBoundary = EDGE2;
+                    else if (j == iDim_j - 1 && k == 0 && i > 0 && i < iDim_i - 1) bBoundary = EDGE3;
+                    else if (i == 0 && k == 0 && j > 0 && j < iDim_j - 1) bBoundary = EDGE4;
+                    else if (i == 0 && j == 0 && k > 0 && k < iDim_k - 1) bBoundary = EDGE5;
+                    else if (i == iDim_i - 1 && j == 0 && k > 0 && k < iDim_k - 1) bBoundary = EDGE6;
+                    else if (i == iDim_i - 1 && j == iDim_j - 1 && k > 0 && k < iDim_k - 1) bBoundary = EDGE7;
+                    else if (i == 0 && j == iDim_j - 1 && k > 0 && k < iDim_k - 1) bBoundary = EDGE8;
+                    else if (j == 0 && k == iDim_k - 1 && i > 0 && i < iDim_i - 1) bBoundary = EDGE9;
+                    else if (i == iDim_i - 1 && k == iDim_k - 1 && j > 0 && j < iDim_j - 1) bBoundary = EDGE10;
+                    else if (j == iDim_j - 1 && k == iDim_k - 1 && i > 0 && i < iDim_i - 1) bBoundary = EDGE11;
+                    else if (i == 0 && k == iDim_k - 1 && j > 0 && j < iDim_j - 1) bBoundary = EDGE12;
+                    else if (k == 0 && i > 0 && i < iDim_i - 1 && j > 0 && j < iDim_j - 1) bBoundary = BACK_OUTSIDE;
+                    else if (k == iDim_k - 1 && i > 0 && i < iDim_i - 1 && j > 0 && j < iDim_j - 1) bBoundary = FRONT_OUTSIDE;
+                    else if (i == 0 && j > 0 && j < iDim_j - 1 && k > 0 && k < iDim_k - 1) bBoundary = LEFT_OUTSIDE;
+                    else if (i == iDim_i - 1 && j > 0 && j < iDim_j - 1 && k > 0 && k < iDim_k - 1) bBoundary = RIGHT_OUTSIDE;
+                    else if (j == 0 && i > 0 && i < iDim_i - 1 && k > 0 && k < iDim_k - 1) bBoundary = BOTTOM_OUTSIDE;
+                    else if (j == iDim_j - 1 && i > 0 && i < iDim_i - 1 && k > 0 && k < iDim_k - 1) bBoundary = TOP_OUTSIDE;
+                }
+                vset.BFlag(iNode, bBoundary);
+            }
+        }
+    }
+    vset.ResizeNodes(nodes);
+
+    // Validity check for skewed
+    if (bSkewed) {
+        for (size_t e = 0; e < iNrOfElements; ++e) {
+            set<size_t> unique_nodes(deqElements[e].begin(), deqElements[e].end());
+            if (unique_nodes.size() != deqElements[e].size()) {
+                cout << "Degenerate element detected in element " << e << endl;
+            }
+        }
+    }
+
+    // Materials
+    vector<int32_t> pmtrl(vset.Elements(), 1);
+    iElement = 0;
+    for (size_t k = 0; k < iDim_k - 1; ++k) {
+        for (size_t j = 0; j < iDim_j - 1; ++j) {
+            for (size_t i = 0; i < iDim_i - 1; ++i) {
+                if (i == 1 && j == 1) {
+                    pmtrl[iElement++] = 7;
+                    pmtrl[iElement++] = 7;
+                    continue;
+                }
+                pmtrl[iElement++] = 1;
+            }
+        }
+    }
+    vset.AddPmtrl(pmtrl.begin(), pmtrl.end());
+
+    // Element number
+    PropertyData elmt_nums(ELEMENT, SCALAR, 3U);
+    elmt_nums.Reserve(vset.Elements());
+    for (size_t i = 0; i < vset.Elements(); ++i) {
+        pushBack(elmt_nums, makeScalar(ANY, i));
+    }
+    vset.AddData("element number", elmt_nums);
+
+    cout << "\ncreate_Prism_Hexa_VSet: model 'Prism_Hexa': done." << endl;
+}
 
 
 
@@ -1993,6 +2374,10 @@ void create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
 
 
 
+/**
+    Prism that lies on its front side.
+    No neighbors, but ony (negative) boundary flags.
+*/
 void create_1Prism_VSet(VSet<3U>& vset, bool bSkewed )
 {
   	IsoparametricLinearPrism iso_prism;
@@ -2018,7 +2403,7 @@ void create_1Prism_VSet(VSet<3U>& vset, bool bSkewed )
   	px[5]=1;py[5]=1;pz[5]=1;
   	
   	if( bSkewed )
-  	 for ( int i = 0; i < 6; i++)
+  	 for ( size_t i = 0; i < 6; i++)
   	  {
   	    px[i]+= (rand()%2000)*PERTURBATION;
   	    py[i]+= (rand()%2000)*PERTURBATION;
@@ -2031,27 +2416,12 @@ void create_1Prism_VSet(VSet<3U>& vset, bool bSkewed )
   	
   	//--------------------------ELEMENTS
     //define prism element, assign nodes per element (0..n-1)
-    deque<vector<size_t> > deqElements(1);
-    deqElements[0].resize(6);
-  	 
-    deqElements[0][0]= 0;
-    deqElements[0][1]= 1;
-    deqElements[0][2]= 2;
-    deqElements[0][3]= 3;
-    deqElements[0][4]= 4;
-    deqElements[0][5]= 5;
+    deque<vector<size_t> > deqElements = { {0, 1, 2, 3, 4, 5} };
   	vset.AddPlist( deqElements.begin(),deqElements.end());
 
      //---------------------------------NEIGHBORS
     //define neighbors
-    deque<vector<int64_t> > deqElementNeighbors(1);
-    deqElementNeighbors[0].resize(6);
-  	deqElementNeighbors[0][0]= BACK_OUTSIDE;
-  	deqElementNeighbors[0][1]= BOTTOM_OUTSIDE;
-  	deqElementNeighbors[0][2]= RIGHT_OUTSIDE;
-  	deqElementNeighbors[0][3]= TOP_OUTSIDE/*or LEFT_OUTSIDE*/;
-  	deqElementNeighbors[0][4]= FRONT_OUTSIDE;
-
+    deque<vector<int64_t> > deqElementNeighbors = { {BACK_OUTSIDE, BOTTOM_OUTSIDE, RIGHT_OUTSIDE, IRREGULAR, FRONT_OUTSIDE } };
     vset.AddPfverts( deqElementNeighbors.begin(), deqElementNeighbors.end());
   	
   	//----------------------------NODE BOUNDARIES
@@ -2076,1025 +2446,143 @@ void create_1Prism_VSet(VSet<3U>& vset, bool bSkewed )
 
 
 
-/**
-    Generates 24 hexahedra + 6 prism elements.
-    The model can be distorted on demand.
-    
-    @note model comes with the correct box boundary flags.
-    
-    TODO: element neighbor connectivity does not match, nodes-per-face convention of CSMP (9/7/24)
-*/
-void create_Prism_Hexa_VSet( VSet<3U> & vset, bool bSkewed )
+void create_Prism_VSet(VSet<3U>& vset, bool bSkewed)
 {
-    const size_t iNrOfElements(30/*24 hexahedrons + 6 prisms*/);
-    
-  	IsoparametricLinearHexahedron iso_hexahedron;
-  	IsoparametricLinearPrism iso_prism;
-  	
-  	//node dimensions of box
-  	const int iDim_k(4);//k - height
-  	const int iDim_j(4);//j - width
-  	const int iDim_i(4);//i - length
-  	const int iDim_k2(iDim_k*iDim_k);//k - height
-  	
-  	//this is a 3D model, it is a cube of hexahedra with prisms in the middle
-  	
-  	//elements 0->23 are hexahedrons
-  	//elements 8->29 are prisms
-    const size_t   nodes(iDim_i*iDim_j*iDim_k);  //number of nodes: 64 on a 4x4x4 grid
-  	deque<uint32_t>  npes(iNrOfElements);  //number of nodes per element
-    deque<uint32_t>  epes(iNrOfElements);  //element type per element
-    deque<int8_t>  etypes(iNrOfElements,ISOPARAMETRIC_LINEAR_HEXAHEDRON);
-    
-    size_t iElement = 0;
-    for( int k{0}; k < iDim_k-1; k++) //z
-  	for( int j{0}; j < iDim_j-1; j++) //y
-  	for( int i{0}; i < iDim_i-1; i++) //x
-  	{
-  	  if(i==1 && j==1) //its a prism
-  	  { 
-  	    npes[iElement]=iso_prism.Nodes();
-  	    epes[iElement]=iso_prism.Neighbors();
-  	    etypes[iElement] = ISOPARAMETRIC_LINEAR_PRISM;
-  	    iElement++; 
-  	    
-  	    npes[iElement]=iso_prism.Nodes();
-  	    epes[iElement]=iso_prism.Neighbors();
-  	    etypes[iElement] = ISOPARAMETRIC_LINEAR_PRISM;
-  	    iElement++; 
-  	    continue; 
-  	  }
-  	
-  	  npes[iElement]=iso_hexahedron.Nodes();
-  	  epes[iElement]=iso_hexahedron.Neighbors();
-  	  
-  	  iElement++;
-  	}
-  	cout << "e:" << iElement;
-  	vset.Resize( etypes, npes, epes, nodes, 0, 0 );
-    
-    //--------------------------ELEMENT TYPES
-  	//add element types
-  	iElement = 0;
-  
-    vector<int8_t> vecElementTypes(iNrOfElements);
-    for( int k{0}; k < iDim_k-1; k++) //z
-  	for( int j{0}; j < iDim_j-1; j++) //y
-  	for( int i{0}; i < iDim_i-1; i++) //x
-  	{
-  	  if(i==1 && j==1) //its a prism
-  	  {
-  	    vecElementTypes[iElement]= ISOPARAMETRIC_LINEAR_PRISM;
-  	    iElement++; 
-  	    
-  	    vecElementTypes[iElement]= ISOPARAMETRIC_LINEAR_PRISM;
-  	    iElement++; 
-  	    continue; 
-  	  }
-  	  
-  	  vecElementTypes[iElement]= ISOPARAMETRIC_LINEAR_HEXAHEDRON;
-  	  iElement++;
-  	}
-    vset.AddElementTypes( vecElementTypes.begin(), vecElementTypes.end() );
+    // --- Dimensions of the prism stack ---
+    const size_t nx = 3; // nodes in x
+    const size_t ny = 3; // nodes in y
+    const size_t nz = 3; // nodes in z
 
-    
-  	//-----------------------NODES
-  	//define nodes
-  	deque<double> px(nodes);
-  	deque<double> py(nodes);
-  	deque<double> pz(nodes);
-  
-  	for( int k{0}; k < iDim_k; k++) //z
-  	for( int j{0}; j < iDim_j; j++) //y
-  	for( int i{0}; i < iDim_i; i++) //x
-  	{
-  	  //this unused inside node boolean stays, just in case, in the future, we only want to skew internal nodes
-//  	  const bool inside_node (!(i == 0 || j == 0 || k == 0 || i == iDim_i-1 || j == iDim_j-1 || k == iDim_k-1));
-      
-      if(bSkewed)
-  	  {
-  	    px[k*iDim_k2+(iDim_j)*j+i]=i + (rand()%2000)*PERTURBATION;
-  	    py[k*iDim_k2+(iDim_j)*j+i]=j + (rand()%2000)*PERTURBATION;
-  	    pz[k*iDim_k2+(iDim_j)*j+i]=k + (rand()%2000)*PERTURBATION;
-  	  }
-  	  else
-  	  {
-  	    px[k*iDim_k2+(iDim_j)*j+i]=i;
-  	    py[k*iDim_k2+(iDim_j)*j+i]=j;
-  	    pz[k*iDim_k2+(iDim_j)*j+i]=k;
-  	  }
-  	}
-  	
-  	//load nodes
-  	vset.AddXYZ( px, py, pz );
-    vset.ResizeBFlags();
-  	
-    
-    //--------------------------ELEMENTS
-    //define hexahedron elements (elements 0->26), assign nodes per element
-    deque<vector<size_t> > deqElements(iNrOfElements);
-    
-    iElement = 0;
-    for( int k{0}; k < iDim_k-1; k++) //z
-  	for( int j{0}; j < iDim_j-1; j++) //y
-  	for( int i{0}; i < iDim_i-1; i++) //x
-  	{
-  	 
-     //size_t iElement(iDim_km1_2*k+(iDim_j-1)*j+i);
-     if(i==1 && j==1) //its the center element (6 pyramids)
-  	 {
-  	  const int node1 = iDim_k2*k+(iDim_j)*j+i;
-  	  const int node2 = iDim_k2*k+(iDim_j)*j+i+1;;
-  	  const int node3 = iDim_k2*k+(iDim_j)*(j+1)+i+1;
-  	  const int node4 = iDim_k2*k+(iDim_j)*(j+1)+i;
-  	  const int node5 = iDim_k2*(k+1)+(iDim_j)*j+i;
-  	  const int node6 = iDim_k2*(k+1)+(iDim_j)*j+i+1;
-  	  const int node7 = iDim_k2*(k+1)+(iDim_j)*(j+1)+i+1;
-  	  const int node8 = iDim_k2*(k+1)+(iDim_j)*(j+1)+i;
-  	  
-  	  deqElements[iElement].resize(6);
-	    deqElements[iElement][0]= node1;
-  	  deqElements[iElement][1]= node2;
-  	  deqElements[iElement][2]= node4;
-  	  deqElements[iElement][3]= node5;
-  	  deqElements[iElement][4]= node6;
-  	  deqElements[iElement][5]= node8;
-  	  
-  	  iElement++;
-      
-      deqElements[iElement].resize(6);
-	    deqElements[iElement][0]= node3;
-  	  deqElements[iElement][1]= node4;
-  	  deqElements[iElement][2]= node2;
-  	  deqElements[iElement][3]= node7;
-  	  deqElements[iElement][4]= node8;
-  	  deqElements[iElement][5]= node6;
-  	  
-  	  iElement++;
-      
-  	  continue;
-  	 }
- 
-  	 deqElements[iElement].resize(8);
-	   deqElements[iElement][0]= iDim_k2*k+(iDim_j)*j+i;
-  	 deqElements[iElement][1]= iDim_k2*k+(iDim_j)*j+i+1;
-  	 deqElements[iElement][2]= iDim_k2*k+(iDim_j)*(j+1)+i+1;
-  	 deqElements[iElement][3]= iDim_k2*k+(iDim_j)*(j+1)+i;
-  	 deqElements[iElement][4]= iDim_k2*(k+1)+(iDim_j)*j+i;
-  	 deqElements[iElement][5]= iDim_k2*(k+1)+(iDim_j)*j+i+1;
-  	 deqElements[iElement][6]= iDim_k2*(k+1)+(iDim_j)*(j+1)+i+1;
-  	 deqElements[iElement][7]= iDim_k2*(k+1)+(iDim_j)*(j+1)+i;
-    
-     iElement++;
-    
+    size_t nNodes = nx * ny * nz;
+    size_t nCells = (nx-1)*(ny-1)*(nz-1) * 2; // two prisms per brick
+
+    // --- Coordinates ---
+    std::deque<double> px(nNodes), py(nNodes), pz(nNodes);
+    for (size_t k = 0; k < nz; ++k)
+    for (size_t j = 0; j < ny; ++j)
+    for (size_t i = 0; i < nx; ++i)
+    {
+        size_t idx = k*(nx*ny) + j*nx + i;
+        px[idx] = i + (bSkewed ? ((rand()%1000)/1000.0)*PERTURBATION : 0.0);
+        py[idx] = j + (bSkewed ? ((rand()%1000)/1000.0)*PERTURBATION : 0.0);
+        pz[idx] = k + (bSkewed ? ((rand()%1000)/1000.0)*PERTURBATION : 0.0);
     }
-    
-    vset.AddPlist( deqElements.begin(),deqElements.end());
+    vset.AddXYZ(px, py, pz);
 
-    //---------------------------------NEIGHBORS
-    //define neighbors
-    deque<vector<int64_t> > deqElementNeighbors(iNrOfElements);
-    deqElementNeighbors[0].resize(6);
-    deqElementNeighbors[0][0] = BOTTOM_OUTSIDE;
-    deqElementNeighbors[0][1] = FRONT_OUTSIDE;
-    deqElementNeighbors[0][2] = 1;
-    deqElementNeighbors[0][3] = 3;
-    deqElementNeighbors[0][4] = LEFT_OUTSIDE;
-    deqElementNeighbors[0][5] = 10;
-    
-    deqElementNeighbors[1].resize(6);
-    deqElementNeighbors[1][0] = BOTTOM_OUTSIDE;
-    deqElementNeighbors[1][1] = FRONT_OUTSIDE;
-    deqElementNeighbors[1][2] = 2;
-    deqElementNeighbors[1][3] = 4;
-    deqElementNeighbors[1][4] = 0;
-    deqElementNeighbors[1][5] = 11;
-    
-    deqElementNeighbors[2].resize(6);
-    deqElementNeighbors[2][0] = BOTTOM_OUTSIDE;
-    deqElementNeighbors[2][1] = FRONT_OUTSIDE;
-    deqElementNeighbors[2][2] = RIGHT_OUTSIDE;
-    deqElementNeighbors[2][3] = 6;
-    deqElementNeighbors[2][4] = 1;
-    deqElementNeighbors[2][5] = 12;
-    
-    deqElementNeighbors[3].resize(6);
-    deqElementNeighbors[3][0] = BOTTOM_OUTSIDE;
-    deqElementNeighbors[3][1] = 0;
-    deqElementNeighbors[3][2] = 4;
-    deqElementNeighbors[3][3] = 7;
-    deqElementNeighbors[3][4] = LEFT_OUTSIDE;
-    deqElementNeighbors[3][5] = 13;
-    
-    deqElementNeighbors[6].resize(6);
-    deqElementNeighbors[6][0] = BOTTOM_OUTSIDE;
-    deqElementNeighbors[6][1] = 2;
-    deqElementNeighbors[6][2] = RIGHT_OUTSIDE;
-    deqElementNeighbors[6][3] = 9;
-    deqElementNeighbors[6][4] = 5;
-    deqElementNeighbors[6][5] = 16;
-    
-    deqElementNeighbors[7].resize(6);
-    deqElementNeighbors[7][0] = BOTTOM_OUTSIDE;
-    deqElementNeighbors[7][1] = 3;
-    deqElementNeighbors[7][2] = 8;
-    deqElementNeighbors[7][3] = BACK_OUTSIDE;
-    deqElementNeighbors[7][4] = LEFT_OUTSIDE;
-    deqElementNeighbors[7][5] = 17;
-    
-    deqElementNeighbors[8].resize(6);
-    deqElementNeighbors[8][0] = BOTTOM_OUTSIDE;
-    deqElementNeighbors[8][1] = 5;
-    deqElementNeighbors[8][2] = 9;
-    deqElementNeighbors[8][3] = BACK_OUTSIDE;
-    deqElementNeighbors[8][4] = 7;
-    deqElementNeighbors[8][5] = 18;
-    
-    deqElementNeighbors[9].resize(6);
-    deqElementNeighbors[9][0] = BOTTOM_OUTSIDE;
-    deqElementNeighbors[9][1] = 6;
-    deqElementNeighbors[9][2] = RIGHT_OUTSIDE;
-    deqElementNeighbors[9][3] = BACK_OUTSIDE;
-    deqElementNeighbors[9][4] = 8;
-    deqElementNeighbors[9][5] = 19;
-    
-    deqElementNeighbors[10].resize(6);
-    deqElementNeighbors[10][0] = 0;
-    deqElementNeighbors[10][1] = FRONT_OUTSIDE;
-    deqElementNeighbors[10][2] = 11;
-    deqElementNeighbors[10][3] = 13;
-    deqElementNeighbors[10][4] = LEFT_OUTSIDE;
-    deqElementNeighbors[10][5] = 20;
-    
-    deqElementNeighbors[11].resize(6);
-    deqElementNeighbors[11][0] = 1;
-    deqElementNeighbors[11][1] = FRONT_OUTSIDE;
-    deqElementNeighbors[11][2] = 12;
-    deqElementNeighbors[11][3] = 14;
-    deqElementNeighbors[11][4] = 10;
-    deqElementNeighbors[11][5] = 21;
-    
-    deqElementNeighbors[12].resize(6);
-    deqElementNeighbors[12][0] = 2;
-    deqElementNeighbors[12][1] = FRONT_OUTSIDE;
-    deqElementNeighbors[12][2] = RIGHT_OUTSIDE;
-    deqElementNeighbors[12][3] = 16;
-    deqElementNeighbors[12][4] = 11;
-    deqElementNeighbors[12][5] = 22;
-    
-    deqElementNeighbors[13].resize(6);
-    deqElementNeighbors[13][0] = 3;
-    deqElementNeighbors[13][1] = 10;
-    deqElementNeighbors[13][2] = 14;
-    deqElementNeighbors[13][3] = 17;
-    deqElementNeighbors[13][4] = LEFT_OUTSIDE;
-    deqElementNeighbors[13][5] = 23;
-    
-    deqElementNeighbors[16].resize(6);
-    deqElementNeighbors[16][0] = 6;
-    deqElementNeighbors[16][1] = 12;
-    deqElementNeighbors[16][2] = RIGHT_OUTSIDE;
-    deqElementNeighbors[16][3] = 19;
-    deqElementNeighbors[16][4] = 15;
-    deqElementNeighbors[16][5] = 26;
-    
-    deqElementNeighbors[17].resize(6);
-    deqElementNeighbors[17][0] = 7;
-    deqElementNeighbors[17][1] = 13;
-    deqElementNeighbors[17][2] = 18;
-    deqElementNeighbors[17][3] = BACK_OUTSIDE;
-    deqElementNeighbors[17][4] = LEFT_OUTSIDE;
-    deqElementNeighbors[17][5] = 27;
-    
-    deqElementNeighbors[18].resize(6);
-    deqElementNeighbors[18][0] = 8;
-    deqElementNeighbors[18][1] = 15;
-    deqElementNeighbors[18][2] = 19;
-    deqElementNeighbors[18][3] = BACK_OUTSIDE;
-    deqElementNeighbors[18][4] = 17;
-    deqElementNeighbors[18][5] = 28;
-    
-    deqElementNeighbors[19].resize(6);
-    deqElementNeighbors[19][0] = 9;
-    deqElementNeighbors[19][1] = 16;
-    deqElementNeighbors[19][2] = RIGHT_OUTSIDE;
-    deqElementNeighbors[19][3] = BACK_OUTSIDE;
-    deqElementNeighbors[19][4] = 18;
-    deqElementNeighbors[19][5] = 29;
-    
-    deqElementNeighbors[20].resize(6);
-    deqElementNeighbors[20][0] = 10;
-    deqElementNeighbors[20][1] = FRONT_OUTSIDE;
-    deqElementNeighbors[20][2] = 21;
-    deqElementNeighbors[20][3] = 23;
-    deqElementNeighbors[20][4] = LEFT_OUTSIDE;
-    deqElementNeighbors[20][5] = TOP_OUTSIDE;
-      
-    deqElementNeighbors[21].resize(6);
-    deqElementNeighbors[21][0] = 11;
-    deqElementNeighbors[21][1] = FRONT_OUTSIDE;
-    deqElementNeighbors[21][2] = 22;
-    deqElementNeighbors[21][3] = 24;
-    deqElementNeighbors[21][4] = 20;
-    deqElementNeighbors[21][5] = TOP_OUTSIDE;
-      
-    deqElementNeighbors[22].resize(6);
-    deqElementNeighbors[22][0] = 12;
-    deqElementNeighbors[22][1] = FRONT_OUTSIDE;
-    deqElementNeighbors[22][2] = RIGHT_OUTSIDE;
-    deqElementNeighbors[22][3] = 26;
-    deqElementNeighbors[22][4] = 21;
-    deqElementNeighbors[22][5] = TOP_OUTSIDE;
-    
-    deqElementNeighbors[23].resize(6);
-    deqElementNeighbors[23][0] = 13;
-    deqElementNeighbors[23][1] = 20;
-    deqElementNeighbors[23][2] = 24;
-    deqElementNeighbors[23][3] = 27;
-    deqElementNeighbors[23][4] = LEFT_OUTSIDE;
-    deqElementNeighbors[23][5] = TOP_OUTSIDE;
-    
-    deqElementNeighbors[26].resize(6);
-    deqElementNeighbors[26][0] = 16;
-    deqElementNeighbors[26][1] = 22;
-    deqElementNeighbors[26][2] = RIGHT_OUTSIDE;
-    deqElementNeighbors[26][3] = 29;
-    deqElementNeighbors[26][4] = 25;
-    deqElementNeighbors[26][5] = TOP_OUTSIDE;
-    
-    deqElementNeighbors[27].resize(6);
-    deqElementNeighbors[27][0] = 17;
-    deqElementNeighbors[27][1] = 23;
-    deqElementNeighbors[27][2] = 28;
-    deqElementNeighbors[27][3] = BACK_OUTSIDE;
-    deqElementNeighbors[27][4] = LEFT_OUTSIDE;
-    deqElementNeighbors[27][5] = TOP_OUTSIDE;
-    
-    deqElementNeighbors[28].resize(6);
-    deqElementNeighbors[28][0] = 18;
-    deqElementNeighbors[28][1] = 25;
-    deqElementNeighbors[28][2] = 29;
-    deqElementNeighbors[28][3] = BACK_OUTSIDE;
-    deqElementNeighbors[28][4] = 27;
-    deqElementNeighbors[28][5] = TOP_OUTSIDE;
-    
-    deqElementNeighbors[29].resize(6);
-    deqElementNeighbors[29][0] = 19;
-    deqElementNeighbors[29][1] = 26;
-    deqElementNeighbors[29][2] = RIGHT_OUTSIDE;
-    deqElementNeighbors[29][3] = BACK_OUTSIDE;
-    deqElementNeighbors[29][4] = 28;
-    deqElementNeighbors[29][5] = TOP_OUTSIDE;
-    
-    //prism neighbors are:
-    vector<int64_t> vecNeighbors(5);
-    
-    //element 4
-    vecNeighbors[0]=BOTTOM_OUTSIDE;
-    vecNeighbors[1]=1;
-    vecNeighbors[2]=5;
-    vecNeighbors[3]=3;
-    vecNeighbors[4]=14;
-    deqElementNeighbors[4]=vecNeighbors;
-  
-    //element 5
-    vecNeighbors[0]=BOTTOM_OUTSIDE;
-    vecNeighbors[1]=8;
-    vecNeighbors[2]=4;
-    vecNeighbors[3]=6;
-    vecNeighbors[4]=15;
-    deqElementNeighbors[5]=vecNeighbors;
+    // --- Node flags (CSMP BOX_BOUNDARY) ---
+    int8_t nodeFlag = NOT;
+    for (size_t k = 0; k < nz; ++k)
+    for (size_t j = 0; j < ny; ++j)
+    for (size_t i = 0; i < nx; ++i)
+    {
+        size_t idx = k*(nx*ny) + j*nx + i;
+        bool onX0=i==0, onX1=i==nx-1, onY0=j==0, onY1=j==ny-1, onZ0=k==0, onZ1=k==nz-1;
 
-    //element 14
-    vecNeighbors[0]=4;
-    vecNeighbors[1]=11;
-    vecNeighbors[2]=15;
-    vecNeighbors[3]=13;
-    vecNeighbors[4]=24;
-    deqElementNeighbors[14]=vecNeighbors;
-
-    //element 15
-    vecNeighbors[0]=5;
-    vecNeighbors[1]=18;
-    vecNeighbors[2]=14;
-    vecNeighbors[3]=16;
-    vecNeighbors[4]=25;
-    deqElementNeighbors[15]=vecNeighbors;
-
-    //element 24
-    vecNeighbors[0]=14;
-    vecNeighbors[1]=21;
-    vecNeighbors[2]=25;
-    vecNeighbors[3]=23;
-    vecNeighbors[4]=TOP_OUTSIDE;
-    deqElementNeighbors[24]=vecNeighbors;
-
-    //element 25
-    vecNeighbors[0]=15;
-    vecNeighbors[1]=28;
-    vecNeighbors[2]=24;
-    vecNeighbors[3]=26;
-    vecNeighbors[4]=TOP_OUTSIDE;
-    deqElementNeighbors[25]=vecNeighbors;
- 
-     assert( deqElementNeighbors.size() == deqElementNeighbors.size() );
-     vset.AddPfverts( deqElementNeighbors.begin(), deqElementNeighbors.end());
- 
-    
-  	//------------------------------------------NODE BOUNDARY FLAGS
-  	//define node boundaries
-  	//nodes at corners:
-    //nodes at edges:
-  	//nodes at faces:
-    // retested: SKM: 27/5/24
-  	for( int k{0}; k < iDim_k; k++) //z -> Y in CSMP
-  	for( int j{0}; j < iDim_j; j++) //y -> X
-  	for( int i{0}; i < iDim_i; i++) //x -> Z
-  	{
-  	  int8_t bBoundary = NOT;
-  	  
-  	  if(k==0)
-  	  {
-  	    if(j==0) // along edge1
-  	    {
-          if(i==0) bBoundary=CNR1;
-          else if(i==(iDim_i-1)) bBoundary=CNR2;
-          else bBoundary=EDGE1;
-  	    }
-  	    else if(j==(iDim_j-1)) // along edge3
-  	    {
-          if(i==0) bBoundary=CNR4;
-          else if(i==(iDim_i-1)) bBoundary=CNR3;
-          else bBoundary=EDGE3;
-  	    }
-  	    else //j is in the middle
-  	    {
-  	      if(i==0) bBoundary=EDGE4;
-          else if(i==(iDim_i-1)) bBoundary=EDGE2;
-          else bBoundary=BACK_OUTSIDE;
-  	    }
-  	  }
-      else if(k==(iDim_k-1))
-  	  {
-  	    if(j==0)
-  	    {
-          if(i==0) bBoundary=CNR5;
-          else if(i==(iDim_i-1)) bBoundary=CNR6;
-          else bBoundary=EDGE9;
-  	    }
-  	    else if(j==(iDim_j-1))
-  	    {
-          if(i==0) bBoundary=CNR8;
-          else if(i==(iDim_i-1)) bBoundary=CNR7;
-          else bBoundary=EDGE11;
-  	    }
-  	    else //j in the middle
-  	    {
-  	      if(i==0) bBoundary=EDGE12;
-          else if(i==(iDim_i-1)) bBoundary=EDGE10;
-          else bBoundary=FRONT_OUTSIDE;
-  	    }
-  	  }
-  	  else //k is in the middle
-  	  {
-  	   if(j==0)
-  	    {
-          if(i==0) bBoundary=EDGE5;
-          else if(i==(iDim_i-1)) bBoundary=EDGE6;
-          else bBoundary=BOTTOM_OUTSIDE;
-  	    }
-  	    else if(j==(iDim_j-1))
-  	    {
-          if(i==0) bBoundary=EDGE8;
-          else if(i==(iDim_i-1)) bBoundary=EDGE7;
-          else bBoundary=TOP_OUTSIDE;
-  	    }
-  	    else //j in the middle
-  	    {
-  	      if(i==0) bBoundary=LEFT_OUTSIDE;
-          else if(i==(iDim_i-1)) bBoundary=RIGHT_OUTSIDE;
-          else ;//do nothing: no boundary
-  	    }
-  	  }
-  	
-      // SKM_FIX -1
-      const size_t iNode((iDim_k2*k+(iDim_j)*j+i));
-      vset.BFlag( iNode, bBoundary );
-  	}
-
-    vset.ResizeNodes( 64 );
-    
-    // additional must haves
-    vector<int32_t> pmtrl(vset.Elements(),1); // all the same material=1
-    // fill( next(pmtrl.begin(),42), pmtrl.end(), 7 );
-    vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
-    
-            // element number
-    PropertyData elmt_nums( ELEMENT, SCALAR, 3U );
-    elmt_nums.Reserve( vset.Elements() );
-    for ( size_t i{0U}; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
-    vset.AddData( "element number", elmt_nums );
-    
-    cout <<"\n"<<"create_Prism_Hexa_VSet: model 'Prism_Hexa': done."<< endl;
-    //vset.Out();
-
-} // end create_Prism_Hexa_VSet
-
-
-/* FOR WHEN THE XZ PLANE IS THE BASE PLANE OF THE HEXAHEDRON
-
-    // SKM adjustment according to CSMP_FEM_conventions.pdf (27/5/24)
-    deque<vector<int64_t> >    // first vertical plane (z=0)
-                               // --------------------------
-    deqElementNeighborsSKM = { {BOTTOM, 10, 1, BACK, LEFT, 3},   //  0
-                               {BOTTOM, 11, 2, BACK, 0, 4},      //  1
-                               {BOTTOM, 12, RIGHT, BACK, 1, 6},  //  2
-                               // row 2(back)
-                               {0,      13, 14, BACK, LEFT, 7},  //  3
-                               // prisms (elemts 4, 5)
-                               {BACK, 3, 1, 5, 14},              //  4
-                               {BACK, 4, 6, 8, 15},              //  5
-                               // hexahedra
-                               {2,  16, RIGHT, BACK, 5, 9},      //  6
-                               // top row
-                               {3, 17, 8, BACK, LEFT, TOP},      //  7
-                               {5, 18, 9, BACK, 7, TOP},         //  8
-                               {6, 19, RIGHT, BACK, 8, TOP},     //  9  (10 elmts because one hex is plit into 2 prisms)
-                               // ---------------------------
-                               // second plane (middle layer)
-                               // ---------------------------
-                               {BOTTOM, 20, 11, 0, LEFT, 13},    // 10
-                               {BOTTOM, 21, 12, 1, 10, 14},      // 11
-                               {BOTTOM, 22, RIGHT, 2, 11, 16},   // 12
-                               // middle row
-                               {10, 23, 14, 3, LEFT, 17},        // 13
-                               // prims 14, 15
-                               {4, 13, 11, 15, 24},              // 14
-                               {5, 14, 16, 18, 25},              // 14
-                               // ----------------
-                               {12, 26, RIGHT, 6, 15, 19},       // 16
-                               // top row (middle layer)
-                               {13, 27, 18, 7, LEFT, TOP},       // 17
-                               {15, 28, 19, 8, 17, TOP},         // 18
-                               {16, 29, RIGHT, 9, 18, TOP},      // 19
-                               // -------------------
-                               // third plane (front)
-                               // -------------------
-                               {BOTTOM, FRONT, 21, 10, LEFT, 23},
-                               {BOTTOM, FRONT, 22, 11, 20, 24},
-                               {BOTTOM, FRONT, RIGHT, 12, 21, 26},
-                               // row 2
-                               {20, FRONT, 24, 13, LEFT, 27},
-                               // prism elements 24, 25
-                               {14, 23, 21, 25, FRONT},
-                               {15, 24, 26, 28, FRONT},
-                               // -------------------
-                               {22, FRONT, RIGHT, 16, 25, 29},
-                               // top row
-                               {23, FRONT, 28, 17, LEFT, TOP},
-                               {25, FRONT, 29, 18, 27, TOP},
-                               {26, FRONT, RIGHT, 19, 28, TOP} };
-*/
-
-// SKM attempted adjustment to CSMP_FEM_conventions.pdf (27/5/24)
-// (assuming that the base plane of the hex is the xz plane)
- /*
-    deque<vector<int64_t> >    // first vertical plane (z=0)
-                               // --------------------------
-    deqElementNeighborsSKM = { {BOTTOM, 10, 1, BACK, LEFT, 3},   //  0
-                               {BOTTOM, 11, 2, BACK, 0, 4},      //  1
-                               {BOTTOM, 12, RIGHT, BACK, 1, 6},  //  2
-                               // row 2(back)
-                               {0,      13, 14, BACK, LEFT, 7},  //  3
-                               // prisms (elemts 4, 5)
-                               {BACK, 3, 1, 5, 14},              //  4
-                               {BACK, 4, 6, 8, 15},              //  5
-                               // hexahedra
-                               {2,  16, RIGHT, BACK, 5, 9},      //  6
-                               // top row
-                               {3, 17, 8, BACK, LEFT, TOP},      //  7
-                               {5, 18, 9, BACK, 7, TOP},         //  8
-                               {6, 19, RIGHT, BACK, 8, TOP},     //  9  (10 elmts because one hex is plit into 2 prisms)
-                               // ---------------------------
-                               // second plane (middle layer)
-                               // ---------------------------
-                               {BOTTOM, 20, 11, 0, LEFT, 13},    // 10
-                               {BOTTOM, 21, 12, 1, 10, 14},      // 11
-                               {BOTTOM, 22, RIGHT, 2, 11, 16},   // 12
-                               // middle row
-                               {10, 23, 14, 3, LEFT, 17},        // 13
-                               // prims 14, 15
-                               {4, 13, 11, 15, 24},              // 14
-                               {5, 14, 16, 18, 25},              // 14
-                               // ----------------
-                               {12, 26, RIGHT, 6, 15, 19},       // 16
-                               // top row (middle layer)
-                               {13, 27, 18, 7, LEFT, TOP},       // 17
-                               {15, 28, 19, 8, 17, TOP},         // 18
-                               {16, 29, RIGHT, 9, 18, TOP},      // 19
-                               // -------------------
-                               // third plane (front)
-                               // -------------------
-                               {BOTTOM, FRONT, 21, 10, LEFT, 23},
-                               {BOTTOM, FRONT, 22, 11, 20, 24},
-                               {BOTTOM, FRONT, RIGHT, 12, 21, 26},
-                               // row 2
-                               {20, FRONT, 24, 13, LEFT, 27},
-                               // prism elements 24, 25
-                               {14, 23, 21, 25, FRONT},
-                               {15, 24, 26, 28, FRONT},
-                               // -------------------
-                               {22, FRONT, RIGHT, 16, 25, 29},
-                               // top row
-                               {23, FRONT, 28, 17, LEFT, TOP},
-                               {25, FRONT, 29, 18, 27, TOP},
-                               {26, FRONT, RIGHT, 19, 28, TOP} };
-                               
-    // modify neighbor sequence because in Adriana's labelling the XY plane is the base plane of the hex
-    for ( auto& eit : deqElementNeighborsSKM ) {
-         // copy current entry
-         vector<int64_t> swapvec = eit;
-         // if it refers to hex, write it out in new order
-         if ( swapvec.size() == 6 ) {
-              eit[0] = swapvec[3];
-              eit[1] = swapvec[0];
-              // eit[2] = no change required
-              eit[3] = swapvec[5];
-              // eit[4] = no change required
-              eit[5] = swapvec[1];
-           }
-      }
-
-    assert( deqElementNeighborsSKM.size() == deqElementNeighbors.size() );
-    vset.AddPfverts( deqElementNeighborsSKM.begin(), deqElementNeighborsSKM.end() );
-  	
-*/
-
-
-
-
-
-
-
-
-void create_Prism_VSet(VSet<3U> & vset, bool bSkewed )
-{
-    const int iNrOfElements(54/*prisms*/);
-    
-  	IsoparametricLinearPrism iso_prism;
-  	
-  	//node dimensions of box
-  	const int iDim_k(4);//k - height
-  	const int iDim_j(4);//j - width
-  	const int iDim_i(4);//i - length
-  	const int iDim_k2(iDim_k*iDim_k);//k - height
-  	const int iDim_km1_2((iDim_k-1)*(iDim_k-1));//i - length
-  	
-  	//this is a 3D model, it is a cube of hexahedron with six pyramid elements in the middle
-  	
-  	//elements 0->53 are prisms
-    int nodes(iDim_i*iDim_j*iDim_k);  //number of nodes: 64 on a 4x4x4 grid
-
-    vset.SingleElementType( iso_prism.ElementType() );
-    vset.Resize( iso_prism.Nodes(),
-                 iso_prism.Neighbors(),
-                 iso_prism.ElementType(), 
-                 nodes, iNrOfElements );
-    
-  	//-----------------------NODES
-  	//define nodes
-  	deque<double> px(nodes);
-  	deque<double> py(nodes);
-  	deque<double> pz(nodes);
-  
-  	for( int k{0}; k < iDim_k; k++) //z
-  	for( int j{0}; j < iDim_j; j++) //y
-  	for( int i{0}; i < iDim_i; i++) //x
-  	{
-  	  //this unused inside node boolean stays, just in case, in the future, we only want to skew internal nodes
-//  	  const bool inside_node (!(i == 0 || j == 0 || k == 0 || i == iDim_i-1 || j == iDim_j-1 || k == iDim_k-1));
-      
-  	  if(bSkewed)
-  	  {
-  	    px[k*iDim_k2+(iDim_j)*j+i]=i + (rand()%2000)*PERTURBATION;
-  	    py[k*iDim_k2+(iDim_j)*j+i]=j + (rand()%2000)*PERTURBATION;
-  	    pz[k*iDim_k2+(iDim_j)*j+i]=k + (rand()%2000)*PERTURBATION;
-  	  }
-  	  else
-  	  {
-  	    px[k*iDim_k2+(iDim_j)*j+i]=i;
-  	    py[k*iDim_k2+(iDim_j)*j+i]=j;
-  	    pz[k*iDim_k2+(iDim_j)*j+i]=k;
-  	  }
-  	}
-  	
-  	//load nodes
-  	vset.AddXYZ( px, py, pz );
-    vset.ResizeBFlags();
-  	
-    
-    //--------------------------ELEMENTS
-    vector<int8_t> vecElementTypes(1,ISOPARAMETRIC_LINEAR_PRISM);
-  	vset.AddElementTypes( vecElementTypes.begin(), vecElementTypes.end() );
-
-    //define prism elements (elements 0->54), assign nodes per element
-    deque<vector<size_t> > deqElements(iNrOfElements);
-    for( int k{0}; k < iDim_k-1; k++) //z
-  	for( int j{0}; j < iDim_j-1; j++) //y
-  	for( int i{0}; i < iDim_i-1; i++) //x
-  	{
-  	 //lower element
-  	 size_t iElement(iDim_km1_2*k+(iDim_j-1)*j+i);
-      
-  	 deqElements[iElement].resize(6);
-	   deqElements[iElement][0]= iDim_k2*k+(iDim_j)*j+i;
-  	 deqElements[iElement][1]= iDim_k2*k+(iDim_j)*j+i+1;
-  	 deqElements[iElement][2]= iDim_k2*k+(iDim_j)*(j+1)+i+1;
-	   deqElements[iElement][3]= iDim_k2*(k+1)+(iDim_j)*j+i;
-  	 deqElements[iElement][4]= iDim_k2*(k+1)+(iDim_j)*j+i+1;
-  	 deqElements[iElement][5]= iDim_k2*(k+1)+(iDim_j)*(j+1)+i+1;
-
-     //upper element
-  	 iElement = iDim_km1_2*k+(iDim_j-1)*j+i+27;
-
-  	 deqElements[iElement].resize(6);
-  	 deqElements[iElement][0]= iDim_k2*k+(iDim_j)*(j+1)+i+1;
-  	 deqElements[iElement][1]= iDim_k2*k+(iDim_j)*(j+1)+i;
-  	 deqElements[iElement][2]= iDim_k2*k+(iDim_j)*j+i;
-  	 deqElements[iElement][3]= iDim_k2*(k+1)+(iDim_j)*(j+1)+i+1;
-  	 deqElements[iElement][4]= iDim_k2*(k+1)+(iDim_j)*(j+1)+i;
-  	 deqElements[iElement][5]= iDim_k2*(k+1)+(iDim_j)*j+i;
-  	 
+        if (onX0 && onY0 && onZ0) nodeFlag = CNR1;
+        else if (onX1 && onY0 && onZ0) nodeFlag = CNR2;
+        else if (onX1 && onY1 && onZ0) nodeFlag = CNR3;
+        else if (onX0 && onY1 && onZ0) nodeFlag = CNR4;
+        else if (onX0 && onY0 && onZ1) nodeFlag = CNR5;
+        else if (onX1 && onY0 && onZ1) nodeFlag = CNR6;
+        else if (onX1 && onY1 && onZ1) nodeFlag = CNR7;
+        else if (onX0 && onY1 && onZ1) nodeFlag = CNR8;
+        // Edges
+        else if (onZ0 && onY0) nodeFlag = EDGE1;
+        else if (onZ0 && onX1) nodeFlag = EDGE2;
+        else if (onZ0 && onY1) nodeFlag = EDGE3;
+        else if (onZ0 && onX0) nodeFlag = EDGE4;
+        else if (onY0 && onX0) nodeFlag = EDGE5;
+        else if (onY0 && onX1) nodeFlag = EDGE6;
+        else if (onY1 && onX1) nodeFlag = EDGE7;
+        else if (onY1 && onX0) nodeFlag = EDGE8;
+        else if (onZ1 && onY0) nodeFlag = EDGE9;
+        else if (onZ1 && onX1) nodeFlag = EDGE10;
+        else if (onZ1 && onY1) nodeFlag = EDGE11;
+        else if (onZ1 && onX0) nodeFlag = EDGE12;
+        // Faces
+        else if (onZ0) nodeFlag = BACK;
+        else if (onZ1) nodeFlag = FRONT;
+        else if (onX0) nodeFlag = LEFT;
+        else if (onX1) nodeFlag = RIGHT;
+        else if (onY0) nodeFlag = BOTTOM;
+        else if (onY1) nodeFlag = TOP;
+        else nodeFlag = NOT;
+        vset.BFlag( idx, nodeFlag );
     }
-  	
-  	vset.AddPlist( deqElements.begin(),deqElements.end());
 
-    //---------------------------------NEIGHBORS
-    //define neighbors
-    deque<vector<int64_t> > deqElementNeighbors(iNrOfElements);
-    for( int k{0}; k < iDim_k-1; k++) //z
-  	for( int j{0}; j < iDim_j-1; j++) //y
-  	for( int i{0}; i < iDim_i-1; i++) //x
-  	{
-  	 //lower element
-  	 int iElement(iDim_km1_2*k+(iDim_j-1)*j+i);
-     
-     deqElementNeighbors[iElement].resize(5);
-  
-     //face 0
-     size_t iNeighbor(iDim_km1_2*(k-1)+(iDim_j-1)*j+i);
-     deqElementNeighbors[iElement][0]= (k==0?BACK_OUTSIDE:iNeighbor);
-     //face 1
-     iNeighbor = iDim_km1_2*k+(iDim_j-1)*(j-1)+i +27;
-     deqElementNeighbors[iElement][1]= (j==0?BOTTOM_OUTSIDE:iNeighbor);
-     //face 2
-     iNeighbor = iDim_km1_2*k+(iDim_j-1)*j+i+1 +27;
-     deqElementNeighbors[iElement][2]= (i==iDim_i-2?RIGHT_OUTSIDE:iNeighbor);
-     //face 3
-     iNeighbor = iDim_km1_2*k+(iDim_j-1)*j+i+27;
-     deqElementNeighbors[iElement][3]= (iNeighbor);
-     //face 4
-     iNeighbor = iDim_km1_2*(k+1)+(iDim_j-1)*j+i;
-     deqElementNeighbors[iElement][4]= (k==iDim_k-2?FRONT_OUTSIDE:iNeighbor);
-     
-     //upper element
-     iElement = iDim_km1_2*k+(iDim_j-1)*j+i+27;
-     
-     deqElementNeighbors[iElement].resize(5);
+    // --- Elements (two prisms per brick) ---
+    std::deque<std::vector<size_t>> deqElements;
+    std::vector<int8_t> vecElementTypes;
+    for (size_t k=0;k<nz-1;++k)
+    for (size_t j=0;j<ny-1;++j)
+    for (size_t i=0;i<nx-1;++i)
+    {
+        size_t n000 = k*(nx*ny) + j*nx + i;
+        size_t n100 = n000 + 1;
+        size_t n010 = n000 + nx;
+        size_t n110 = n010 + 1;
+        size_t n001 = n000 + nx*ny;
+        size_t n101 = n001 + 1;
+        size_t n011 = n001 + nx;
+        size_t n111 = n011 + 1;
 
-     //face 0
-     iNeighbor = iDim_km1_2*(k-1)+(iDim_j-1)*j+i +27;
-     deqElementNeighbors[iElement][0]= (k==0?BACK_OUTSIDE:iNeighbor);
-     //face 1
-     iNeighbor = iDim_km1_2*k+(iDim_j-1)*(j+1)+i;
-     deqElementNeighbors[iElement][1]= (j==iDim_j-2?TOP_OUTSIDE:iNeighbor);
-     //face 2
-     iNeighbor = iDim_km1_2*k+(iDim_j-1)*j+(i-1);
-     deqElementNeighbors[iElement][2]= (i==0?LEFT_OUTSIDE:iNeighbor);
-     //face 3
-     iNeighbor = iDim_km1_2*k+(iDim_j-1)*j+i;
-     deqElementNeighbors[iElement][3]= (iNeighbor);
-     //face 4
-     iNeighbor = iDim_km1_2*(k+1)+(iDim_j-1)*j+i +27;
-     deqElementNeighbors[iElement][4]= (k==iDim_k-2?FRONT_OUTSIDE:iNeighbor);
-     
-     
+        deqElements.push_back({n000,n100,n010,n001,n101,n011}); // lower prism
+        deqElements.push_back({n100,n110,n010,n101,n111,n011}); // upper prism
+        vecElementTypes.push_back(ISOPARAMETRIC_LINEAR_PRISM);
+        vecElementTypes.push_back(ISOPARAMETRIC_LINEAR_PRISM);
     }
-    
-    vset.AddPfverts( deqElementNeighbors.begin(), deqElementNeighbors.end());
-  	
-  	//-----------------------------------------------------NODE BOUNDARIES
-  	//define node boundaries
-  	//nodes at corners:
-    //nodes at edges:
-  	//nodes at faces:
-  	for( int k{0}; k < iDim_k; k++) //z
-  	for( int j{0}; j < iDim_j; j++) //y
-  	for( int i{0}; i < iDim_i; i++) //x
-  	{
-  	  int8_t bBoundary = NOT;
-  	  
-  	  if(k==0)
-  	  {
-  	    if(j==0)
-  	    {
-          if(i==0) bBoundary=CNR1;
-          else if(i==(iDim_i-1)) bBoundary=CNR2;
-          else bBoundary=EDGE1;
-  	    }
-  	    else if(j==(iDim_j-1))
-  	    {
-          if(j==0) bBoundary=CNR4;
-          else if(j==(iDim_j-1)) bBoundary=CNR3;
-          else bBoundary=EDGE3;
-  	    }
-  	    else //j is in the middle
-  	    {
-  	      if(i==0) bBoundary=EDGE4;
-          else if(i==(iDim_i-1)) bBoundary=EDGE2;
-          else bBoundary=BACK_OUTSIDE;
-  	    }
-  	  }
-      else if(k==(iDim_k-1))
-  	  {
-  	    if(j==0)
-  	    {
-          if(i==0) bBoundary=CNR5;
-          else if(i==(iDim_i-1)) bBoundary=CNR6;
-          else bBoundary=EDGE9;
-  	    }
-  	    else if(j==(iDim_j-1))
-  	    {
-          if(i==0) bBoundary=CNR8;
-          else if(i==(iDim_i-1)) bBoundary=CNR7;
-          else bBoundary=EDGE11;
-  	    }
-  	    else //j in the middle
-  	    {
-  	      if(i==0) bBoundary=EDGE12;
-          else if(i==(iDim_i-1)) bBoundary=EDGE10;
-          else bBoundary=FRONT_OUTSIDE;
-  	    }
-  	  }
-  	  else //k is in the middle
-  	  {
-  	   if(j==0)
-  	    {
-          if(i==0) bBoundary=EDGE5;
-          else if(i==(iDim_i-1)) bBoundary=EDGE6;
-          else bBoundary=BOTTOM_OUTSIDE;
-  	    }
-  	    else if(j==(iDim_j-1))
-  	    {
-          if(i==0) bBoundary=EDGE8;
-          else if(i==(iDim_i-1)) bBoundary=EDGE7;
-          else bBoundary=TOP_OUTSIDE;
-  	    }
-  	    else //j in the middle
-  	    {
-  	      if(i==0) bBoundary=LEFT_OUTSIDE;
-          else if(i==(iDim_i-1)) bBoundary=RIGHT_OUTSIDE;
-          else ;//do nothing: no boundary
-  	    }
-  	  }
-  	
-      if(bBoundary!=NOT)
-      {
-        // SKM FIX: const size_t iNode((iDim_k2*k+(iDim_j)*j+i)+1);
-        const size_t iNode((iDim_k2*k+(iDim_j)*j+i));
-        vset.BFlag( iNode, bBoundary);
-      }
-  	}
-  	
-    vset.EstablishZeroBasedNumbering();
+    vset.AddPlist(deqElements.begin(), deqElements.end());
+    vset.AddElementTypes(vecElementTypes.begin(), vecElementTypes.end());
 
-    // SKM_FIX add ons
-    // ---------------
-    // adding corresponding materials to VSet
-    vector<int32_t> pmtrl(vset.Elements(),1); // matrix
-    // fill( next(pmtrl.begin(),42), pmtrl.end(), 7 );
-    vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
+    // --- Neighbor connectivity --- TODO: nbors of elmt 3, 4, and 5 are incorrect
+    std::deque<std::vector<int64_t>> deqNeighbors(deqElements.size(), std::vector<int64_t>(5,-1));
+    size_t nElX = nx-1, nElY = ny-1, nElZ = nz-1;
 
-    cout <<"\n"<<"create_Prism_VSet: model 'un-named': done."<< endl;
-//    vset.Out();
+    for (size_t k=0;k<nElZ;++k)
+    for (size_t j=0;j<nElY;++j)
+    for (size_t i=0;i<nElX;++i)
+    {
+        size_t base = (k*nElY*nElX + j*nElX + i) * 2;
+        size_t lower = base;
+        size_t upper = base + 1;
 
-} // end
+        // --- Lower prism neighbors ---
+        // face 0: back
+        deqNeighbors[lower][0] = (k==0) ? BACK_OUTSIDE : static_cast<int64_t>(lower - 2*nElX*nElY);
+        // face 1: bottom
+        deqNeighbors[lower][1] = (j==0) ? BOTTOM_OUTSIDE : static_cast<int64_t>(lower - 2*nElX);
+        // face 2: right
+        deqNeighbors[lower][2] = (i==nElX-1) ? RIGHT_OUTSIDE : static_cast<int64_t>(lower + 2);
+        // face 3: left
+        deqNeighbors[lower][3] = (i==0) ? LEFT_OUTSIDE : static_cast<int64_t>(lower - 2);
+        // face 4: front (top neighbor)
+        deqNeighbors[lower][4] = static_cast<int64_t>(upper);
 
-
-
-
-
-
-
-/**
-      Creates cube of 27 unit hexahedra, numbered from the back XY plane to the front.
-      Element number is increasing with x in the rows, and from the bottom to the top, then with the planes from the back to the front.
-      
-      @author SKM
-      @date 31/5/2024
-*/
-// TODO: nbor connectivity and node flags are inconsistent with CSMP conventions
-void create_RubikCube_VSet( VSet<3U>& vset )
-  {
-    // Rubik cube 3 x 3 x 3, starting element numbering from the origin in the back plane (XY), moving left to right, from bottom to top
-    deque<double>  px{ 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3,
-                       0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3,
-                       0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3,
-                       0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3 };
-            
-    deque<double>  py{ 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3,  // Bottom Layer (z = 0)
-                       0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3,  // Middle Layer (z = 1)
-                       0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3,  // Top Layer (z = 2)
-                       0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3 };  // Topmost Layer (z = 3)
-
-    deque<double>  pz{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  // Bottom Layer (z = 0)
-                       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  // Middle Layer (z = 1)
-                       2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,  // Top Layer (z = 2)
-                       3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 };  // Topmost Layer (z = 3)
-        
-    vector<int8_t> bflags{ // xy plane in the back
-                          CNR1, EDGE1, EDGE1, CNR2,
-                          EDGE4, NOT, NOT, EDGE2,
-                          EDGE4, NOT, NOT, EDGE2,
-                          CNR4, EDGE3, EDGE3, CNR3,
-                          // in midde layer (back)
-                          EDGE5, BOTTOM, BOTTOM, EDGE6,
-                          LEFT, NOT, NOT, RIGHT,
-                          LEFT, NOT, NOT, RIGHT,
-                          EDGE8, TOP, TOP, EDGE7,
-                          // middle layer (front)
-                          EDGE5, BOTTOM, BOTTOM, EDGE6,
-                          LEFT, NOT, NOT, RIGHT,
-                          LEFT, NOT, NOT, RIGHT,
-                          EDGE8, TOP, TOP, EDGE7,
-                          // front (z-max)
-                          CNR5, EDGE9, EDGE9, CNR6,
-                          EDGE12, NOT, NOT, EDGE11,
-                          EDGE12, NOT, NOT, EDGE11,
-                          CNR8, EDGE11, EDGE11, CNR7 };
-
-    assert( bflags.size() == px.size() ); // "boundary flag vector has a different size than node coordinate vector"
-
-    vector<int8_t> vecElementTypes(1,ISOPARAMETRIC_LINEAR_HEXAHEDRON);
-
-    deque<vector<size_t>> plist{ {0, 1, 4, 5, 16, 17, 20, 21}, {1, 2, 5, 6, 17, 18, 21, 22}, {2, 3, 6, 7, 18, 19, 22, 23},
-                                 {4, 5, 8, 9, 20, 21, 24, 25}, {5, 6, 9, 10, 21, 22, 25, 26}, {6, 7, 10, 11, 22, 23, 26, 27},
-                                 {8, 9, 12, 13, 24, 25, 28, 29}, {9, 10, 13, 14, 25, 26, 29, 30}, {10, 11, 14, 15, 26, 27, 30, 31},
-                                 {16, 17, 20, 21, 32, 33, 36, 37}, {17, 18, 21, 22, 33, 34, 37, 38}, {18, 19, 22, 23, 34, 35, 38, 39},
-                                 {20, 21, 24, 25, 36, 37, 40, 41}, {21, 22, 25, 26, 37, 38, 41, 42}, {22, 23, 26, 27, 38, 39, 42, 43},
-                                 {24, 25, 28, 29, 40, 41, 44, 45}, {25, 26, 29, 30, 41, 42, 45, 46}, {26, 27, 30, 31, 42, 43, 46, 47},
-                                 {32, 33, 36, 37, 48, 49, 52, 53}, {33, 34, 37, 38, 49, 50, 53, 54}, {34, 35, 38, 39, 50, 51, 54, 55},
-                                 {36, 37, 40, 41, 52, 53, 56, 57}, {37, 38, 41, 42, 53, 54, 57, 58}, {38, 39, 42, 43, 54, 55, 58, 59},
-                                 {40, 41, 44, 45, 56, 57, 60, 61}, {41, 42, 45, 46, 57, 58, 61, 62}, {42, 43, 46, 47, 58, 59, 62, 63} };
-
-    const auto BA{BACK}, BO{BOTTOM}, L{LEFT}, R{RIGHT}, T{TOP}, F{FRONT};
-    deque<vector<int64_t>> pfverts = { {BO,9,1,BA,L,3}, {BO,10,2,BA,0,4}, {BO,11,R,BA,1,5}, // backplane
-                                       {0,12,4,BA,L,6}, {1,13,5,BA,3,7}, {2,14,R,BA,4,8},
-                                       {3,15,7,BA,L,T}, {4,16,8,BA,6,T}, {5,17,R,BA,7,T},
-                                       {BO,18,10,0,L,12}, {BO,19,11,1,9,13}, {BO,20,R,2,10,14}, // middle plane
-                                       {9,21,13,3,L,15}, {10,22,14,4,12,16}, {11,23,R,5,13,17},
-                                       {12,24,16,6,L,T}, {13,25,17,7,15,T}, {14,26,R,8,16,T},
-                                       {9,F,19,0,L,21}, {10,F,20,1,18,22}, {11,F,R,2,19,23}, // front plane
-                                       {12,F,22,3,L,24}, {13,F,23,4,21,25}, {14,F,R,5,22,26},
-                                       {15,F,25,6,L,T}, {16,F,26,7,24,T}, {17,F,R,8,25,T} };
-
-    const size_t n_elements{plist.size()}, n_nodes{px.size()};
-    
-  	IsoparametricLinearHexahedron iso_hexahedron;
-  	
-    //------------------------CREATE VSET
-    //this is a 3D model, it is a cube of unit-cell hexahedra
-    vset.SingleElementType( iso_hexahedron.ElementType() );
-  	vset.Resize( iso_hexahedron.Nodes(),
-                 iso_hexahedron.Neighbors(),
-                 iso_hexahedron.ElementType(),
-                 n_nodes, n_elements );
-
- 	  vset.AddXYZ( px, py, pz );
-    vset.AddBFlags( bflags.begin(), bflags.end() );
-
-  	vset.AddElementTypes( vecElementTypes.begin(), vecElementTypes.end() );
-  	vset.AddPlist( plist.begin(), plist.end() );
-    vset.AddPfverts( pfverts.begin(), pfverts.end());
-
-    // all elements are of the same material labelled 1
-    vector<int32_t> pmtrl( vset.Elements(), 1 );
-    vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
-    
-    cout <<"\n"<<"create_RubikCube: model 'RubikCube': done."<< endl;
-//    vset.Out();
-
-} // end create_RubikCube
-
-
+        // --- Upper prism neighbors ---
+        // face 0: back
+        deqNeighbors[upper][0] = (k==0) ? BACK_OUTSIDE : static_cast<int64_t>(upper - 2*nElX*nElY);
+        // face 1: top
+        deqNeighbors[upper][1] = (j==nElY-1) ? TOP_OUTSIDE : static_cast<int64_t>(upper + 2*nElX);
+        // face 2: left
+        deqNeighbors[upper][2] = (i==0) ? LEFT_OUTSIDE : static_cast<int64_t>(upper - 2);
+        // face 3: right
+        deqNeighbors[upper][3] = (i==nElX-1) ? RIGHT_OUTSIDE : static_cast<int64_t>(upper + 2);
+        // face 4: bottom neighbor
+        deqNeighbors[upper][4] = static_cast<int64_t>(lower);
+    }
+    vset.AddPfverts(deqNeighbors.begin(), deqNeighbors.end());
+}
 
 
 
 /**
        Decomposition of a hexahedron into 6 tetrahedra.
        Only 6 elements!
+       Coordinate range from -1 - 1
        
-       @test is consistent with CSMP UG, SKM 3/6/2024
+       Model is suitable for testing neighbor connectivity and boundary node flagging.
+       
+       @test verified SKM 5/9/25
 */
 void create_Tetra_VSet( VSet<3U>& vset )
  {
@@ -3108,44 +2596,16 @@ void create_Tetra_VSet( VSet<3U>& vset )
 
   	//-----------------------NODES
   	//define nodes
-    const size_t n_nodes{8};
-  	deque<double> px(n_nodes);
-  	deque<double> py(n_nodes);
-  	deque<double> pz(n_nodes);
-
-    // node coordinates
-    px[0] =-1.0;
-    px[1] = 1.0;
-    px[2] = 1.0;
-    px[3] =-1.0;
-    px[4] =-1.0;
-    px[5] = 1.0;
-    px[6] = 1.0;
-    px[7] =-1.0;
-    // nodal y-coordinates
-    py[0] =-1.0;
-    py[1] =-1.0;
-    py[2] = 1.0;
-    py[3] = 1.0;
-    py[4] =-1.0;
-    py[5] =-1.0;
-    py[6] = 1.0;
-    py[7] = 1.0;
-    // nodal z-coordinates
-    pz[0] = -1.0;
-    pz[1] = -1.0;
-    pz[2] = -1.0;
-    pz[3] = -1.0;
-    pz[4] =  1.0;
-    pz[5] =  1.0;
-    pz[6] =  1.0;
-    pz[7] =  1.0;
+    // CSMP_FEM_conventions.pdf
+    //               CNR  1     2     3     4     5     6     7     8
+   	deque<double> px = {-1.0,  1.0,  1.0, -1.0, -1.0,  1.0,  1.0, -1.0};
+  	deque<double> py = {-1.0, -1.0,  1.0,  1.0, -1.0, -1.0,  1.0,  1.0};
+  	deque<double> pz = {-1.0, -1.0, -1.0, -1.0,  1.0,  1.0,  1.0,  1.0};
 
    	//load nodes
   	vset.AddXYZ( px, py, pz );
+ 
     vset.ResizeBFlags();
-    
-    // SKM 3/6/24 - made compliant with CSMP UG boundary flags (fig.5)
     vset.BFlag(0,CNR1);
     vset.BFlag(1,CNR2);
     vset.BFlag(2,CNR3);
@@ -3168,11 +2628,14 @@ void create_Tetra_VSet( VSet<3U>& vset )
   	vset.AddPlist( deqElements.begin(),deqElements.end());
 
 
-    //--------------------------ELEMENT NEIGHBORS          0                   1                  2
-    deque<vector<int64_t> >  deqElementNeighbors{ {1,LEFT,BOTTOM,BACK}, {4,0,2,BOTTOM}, {5,LEFT,FRONT,1},
-                                                 //        3                 4              5
-                                                  {TOP,4,RIGHT,BACK}, {RIGHT,5,1,3}, {TOP,2,FRONT,4} };
-
+    //--------------------------ELEMENT NEIGHBORS
+    deque<vector<int64_t>> deqElementNeighbors{ {1, LEFT_OUTSIDE, BOTTOM_OUTSIDE, BACK_OUTSIDE}, // Element 0
+                                                {4, 0, 2, BOTTOM_OUTSIDE},                       // Element 1
+                                                {5, LEFT_OUTSIDE, FRONT_OUTSIDE, 1},             // Element 2
+                                                {TOP_OUTSIDE, 4, RIGHT_OUTSIDE, BACK_OUTSIDE},   // Element 3
+                                                {RIGHT_OUTSIDE, 5, 1, 3},                        // Element 4
+                                                {TOP_OUTSIDE, 2, FRONT_OUTSIDE, 4}               // Element 5
+                                              };
     vset.AddPfverts( deqElementNeighbors.begin(), deqElementNeighbors.end());
 
     vector<int32_t> pmtrl( vset.Elements(), 1 );
@@ -3187,391 +2650,318 @@ void create_Tetra_VSet( VSet<3U>& vset )
 
 
 
-
-
-void create_Pyramid_VSet( VSet<3U>& vset, bool bSkewed )
+void create_Pyramid_VSet(VSet<3U>& vset, bool bSkewed)
 {
-  	IsoparametricLinearPyramid iso_pyramid;
-  	
-  	//node dimensions of box
-  	const int iDim_k(4);//k - height
-  	const int iDim_j(4);//j - width
-  	const int iDim_i(4);//i - length
-  	const int iDim_k2(iDim_k*iDim_k);//k - height
-  	const int iDim_km1_2((iDim_k-1)*(iDim_k-1));//i - length
+    IsoparametricLinearPyramid iso_pyramid;
     
-    const int iNrOfCells((iDim_i-1)*(iDim_j-1)*(iDim_k-1));
-    const int iNrOfElements(iNrOfCells*6U/*pyramids*/);
-     	
-  	//this is a 3D model, it is a cube of 27 sets of six pyramids glued by the apex
-  	
-  	//elements 0->161 are pyramids
-    size_t nodes(iDim_i*iDim_j*iDim_k+iNrOfCells);  //number of nodes: 64 on a 4x4x4 grid + one barycenter for each cell
-
-    vset.SingleElementType( iso_pyramid.ElementType() );
-    vset.Resize( iso_pyramid.Nodes(),
-                 iso_pyramid.Neighbors(),
-                 iso_pyramid.ElementType(),
-                 nodes, iNrOfElements );
+    // Node dimensions of box
+    const int iDim_k(4); // k - height
+    const int iDim_j(4); // j - width
+    const int iDim_i(4); // i - length
+    const int iDim_k2(iDim_k * iDim_k); // k^2
+    const int iDim_km1_2((iDim_k - 1) * (iDim_k - 1)); // (k-1)^2
     
-  	//-----------------------NODES
-  	//define nodes
-  	deque<double> px(nodes);
-  	deque<double> py(nodes);
-  	deque<double> pz(nodes);
-  
-  	for( int k{0}; k < iDim_k; k++) //z
-  	for( int j{0}; j < iDim_j; j++) //y
-  	for( int i{0}; i < iDim_i; i++) //x
-  	{
-  	  //this unused inside node boolean stays, just in case, in the future, we only want to skew internal nodes
-//  	  const bool inside_node (!(i == 0 || j == 0 || k == 0 || i == iDim_i-1 || j == iDim_j-1 || k == iDim_k-1));
-      
-      if(bSkewed)
-  	  {
-  	    px[k*iDim_k2+(iDim_j)*j+i]=i + (rand()%2000)*PERTURBATION;
-  	    py[k*iDim_k2+(iDim_j)*j+i]=j + (rand()%2000)*PERTURBATION;
-  	    pz[k*iDim_k2+(iDim_j)*j+i]=k + (rand()%2000)*PERTURBATION;
-  	  }
-  	  else
-  	  {
-  	    px[k*iDim_k2+(iDim_j)*j+i]=i;
-  	    py[k*iDim_k2+(iDim_j)*j+i]=j;
-  	    pz[k*iDim_k2+(iDim_j)*j+i]=k;
-  	  }
-  	}
-  	
-  	//add barycenters, one barycenter per cell
-  	for( int k{0}; k < iDim_k-1; k++) //z
-  	for( int j{0}; j < iDim_j-1; j++) //y
-  	for( int i{0}; i < iDim_i-1; i++) //x
-  	{
-  	  //this unused inside node boolean stays, just in case, in the future, we only want to skew internal nodes
-  	  //const bool inside_node (!(i == 0 || j == 0 || k == 0 || i == iDim_i-1 || j == iDim_j-1 || k == iDim_k-1));
-  	  
-  	  if(bSkewed)
-  	  {
-    	  px[k*iDim_km1_2+(iDim_j-1)*j+i +iDim_i*iDim_j*iDim_k]=i + 1./2. + (rand()%2000)*PERTURBATION;
-  	    py[k*iDim_km1_2+(iDim_j-1)*j+i +iDim_i*iDim_j*iDim_k]=j + 1./2. + (rand()%2000)*PERTURBATION;
-  	    pz[k*iDim_km1_2+(iDim_j-1)*j+i +iDim_i*iDim_j*iDim_k]=k + 1./2. + (rand()%2000)*PERTURBATION;
-      }
-      else
-      {
-        px[k*iDim_km1_2+(iDim_j-1)*j+i +iDim_i*iDim_j*iDim_k]=i + 1./2.;
-  	    py[k*iDim_km1_2+(iDim_j-1)*j+i +iDim_i*iDim_j*iDim_k]=j + 1./2.;
-  	    pz[k*iDim_km1_2+(iDim_j-1)*j+i +iDim_i*iDim_j*iDim_k]=k + 1./2.;
-      }
-    }  	
-  	
-  	//load nodes
-  	vset.AddXYZ( px, py, pz );
+    const int iNrOfCells((iDim_i - 1) * (iDim_j - 1) * (iDim_k - 1));
+    const int iNrOfElements(iNrOfCells * 6U); // 6 pyramids per cell
+    
+    // Total nodes: 64 (4x4x4 grid) + 27 barycenters (one per cell)
+    size_t nodes(iDim_i * iDim_j * iDim_k + iNrOfCells);
+    
+    // Initialize VSet
+    vset.SingleElementType(iso_pyramid.ElementType());
+    vset.Resize(iso_pyramid.Nodes(), // 5 nodes per pyramid
+                iso_pyramid.Neighbors(), // 5 neighbors per pyramid
+                iso_pyramid.ElementType(),
+                nodes, iNrOfElements);
+    
+    //-----------------------NODES
+    // Define node coordinates
+    deque<double> px(nodes);
+    deque<double> py(nodes);
+    deque<double> pz(nodes);
+    
+    // Initialize random number generator for perturbations
+    mt19937 rng(12345); // Fixed seed for reproducibility
+    uniform_real_distribution<double> dist(0.0, 1.0);
+    
+    // Grid nodes
+    for (size_t k{0}; k < iDim_k; k++) // z
+        for (size_t j{0}; j < iDim_j; j++) // y
+            for (size_t i{0}; i < iDim_i; i++) // x
+            {
+                size_t iNode = k * iDim_k2 + j * iDim_j + i;
+                if (bSkewed)
+                {
+                    px[iNode] = i + dist(rng) * PERTURBATION;
+                    py[iNode] = j + dist(rng) * PERTURBATION;
+                    pz[iNode] = k + dist(rng) * PERTURBATION;
+                }
+                else
+                {
+                    px[iNode] = i;
+                    py[iNode] = j;
+                    pz[iNode] = k;
+                }
+            }
+    
+    // Barycenter nodes
+    for (size_t k{0ul}; k < iDim_k - 1; k++) // z
+        for (size_t j{0ul}; j < iDim_j - 1; j++) // y
+            for (size_t i{0ul}; i < iDim_i - 1; i++) // x
+            {
+                size_t iNode = k * iDim_km1_2 + (iDim_j - 1) * j + i + iDim_i * iDim_j * iDim_k;
+                if (bSkewed)
+                {
+                    px[iNode] = i + 0.5 + dist(rng) * PERTURBATION;
+                    py[iNode] = j + 0.5 + dist(rng) * PERTURBATION;
+                    pz[iNode] = k + 0.5 + dist(rng) * PERTURBATION;
+                }
+                else
+                {
+                    px[iNode] = i + 0.5;
+                    py[iNode] = j + 0.5;
+                    pz[iNode] = k + 0.5;
+                }
+            }
+    
+    // Load nodes
+    vset.AddXYZ(px, py, pz);
     vset.ResizeBFlags();
-  	
+    
     //--------------------------ELEMENTS
     const bool verbose{false};
-    if ( verbose )
-      cout <<"\n"<<"create_Pyramid_VSet: printing coordinates of selected pyramid elements.";
-
-    //define pyramid elements (elements 0->54), assign nodes per element
-    deque<vector<size_t> > deqElements(iNrOfElements);
-    for( int k{0}; k < iDim_k-1; k++) //z
-  	for( int j{0}; j < iDim_j-1; j++) //y
-  	for( int i{0}; i < iDim_i-1; i++) //x
-  	{
-  	 //we have 6 pyramids per cell
-  	 
-  	 //pyramid 0
-  	 int iElement(iDim_km1_2*k+(iDim_j-1)*j+i);
-     
-  	 deqElements[iElement].resize(5);
-	   deqElements[iElement][0]= iDim_k2*k+(iDim_j)*j+i;
-  	 deqElements[iElement][1]= iDim_k2*k+(iDim_j)*j+i+1;
-  	 deqElements[iElement][2]= iDim_k2*k+(iDim_j)*(j+1)+i+1;
-	   deqElements[iElement][3]= iDim_k2*k+(iDim_j)*(j+1)+i;
-  	 deqElements[iElement][4]= iDim_km1_2*k+(iDim_j-1)*j+i+ iDim_i*iDim_j*iDim_k;
-
-  	 //pyramid 1
-  	 iElement = iDim_km1_2*k+(iDim_j-1)*j+i + iNrOfCells*1;
-     
-  	 deqElements[iElement].resize(5);
-	   deqElements[iElement][0]= iDim_k2*(k+1)+(iDim_j)*j+i;
-  	 deqElements[iElement][1]= iDim_k2*(k+1)+(iDim_j)*j+i+1;
-  	 deqElements[iElement][2]= iDim_k2*k+(iDim_j)*j+i+1;
-	   deqElements[iElement][3]= iDim_k2*k+(iDim_j)*j+i;
-  	 deqElements[iElement][4]= iDim_km1_2*k+(iDim_j-1)*j+i+ iDim_i*iDim_j*iDim_k;
-  	 
-  	 //pyramid 2
-  	 if ( verbose ) cout << "Element:(i="<<i<<",j="<<j<<",k="<<k<<")" << iDim_km1_2*k+(iDim_j-1)*j+i + 27*2 << endl;
-  	 iElement = iDim_km1_2*k+(iDim_j-1)*j+i + iNrOfCells*2;
-     
-  	 deqElements[iElement].resize(5);
-	   deqElements[iElement][0]= iDim_k2*k+(iDim_j)*j+i+1;
-	   if ( verbose ) cout << "\tCoord [" << iElement << "][0]: " << deqElements[iElement][0] << endl;
-  	 deqElements[iElement][1]= iDim_k2*(k+1)+(iDim_j)*j+i+1;
-	   if ( verbose ) cout << "\tCoord [" << iElement << "][1]: " << deqElements[iElement][1] << endl;
-  	 deqElements[iElement][2]= iDim_k2*(k+1)+(iDim_j)*(j+1)+i+1;
-	   if ( verbose ) cout << "\tCoord [" << iElement << "][2]: " << deqElements[iElement][2] << endl;
-	   deqElements[iElement][3]= iDim_k2*k+(iDim_j)*(j+1)+i+1;
-	   if ( verbose ) cout << "\tCoord [" << iElement << "][3]: " << deqElements[iElement][3] << endl;
-  	 deqElements[iElement][4]= iDim_km1_2*k+(iDim_j-1)*j+i+ iDim_i*iDim_j*iDim_k;
-	   if ( verbose ) cout << "\tCoord [" << iElement << "][4]: " << deqElements[iElement][4] << endl;
-  	 
-  	 //pyramid 3
-  	 iElement = iDim_km1_2*k+(iDim_j-1)*j+i + iNrOfCells*3;
-     
-  	 deqElements[iElement].resize(5);
-	   deqElements[iElement][0]= iDim_k2*k+(iDim_j)*(j+1)+i;
-  	 deqElements[iElement][1]= iDim_k2*k+(iDim_j)*(j+1)+i+1;
-  	 deqElements[iElement][2]= iDim_k2*(k+1)+(iDim_j)*(j+1)+i+1;
-	   deqElements[iElement][3]= iDim_k2*(k+1)+(iDim_j)*(j+1)+i;
-  	 deqElements[iElement][4]= iDim_km1_2*k+(iDim_j-1)*j+i+ iDim_i*iDim_j*iDim_k;
-
-  	 //pyramid 4
-  	 iElement = iDim_km1_2*k+(iDim_j-1)*j+i + iNrOfCells*4;
-     
-  	 deqElements[iElement].resize(5);
-	   deqElements[iElement][0]= iDim_k2*(k+1)+(iDim_j)*j+i;
-  	 deqElements[iElement][1]= iDim_k2*k+(iDim_j)*j+i;
-  	 deqElements[iElement][2]= iDim_k2*k+(iDim_j)*(j+1)+i;
-	   deqElements[iElement][3]= iDim_k2*(k+1)+(iDim_j)*(j+1)+i;
-  	 deqElements[iElement][4]= iDim_km1_2*k+(iDim_j-1)*j+i+ iDim_i*iDim_j*iDim_k;
-
-  	 //pyramid 5
-  	 iElement = iDim_km1_2*k+(iDim_j-1)*j+i + iNrOfCells*5;
-     
-  	 deqElements[iElement].resize(5);
-	   deqElements[iElement][0]= iDim_k2*(k+1)+(iDim_j)*j+i+1;
-  	 deqElements[iElement][1]= iDim_k2*(k+1)+(iDim_j)*j+i;
-  	 deqElements[iElement][2]= iDim_k2*(k+1)+(iDim_j)*(j+1)+i;
-	   deqElements[iElement][3]= iDim_k2*(k+1)+(iDim_j)*(j+1)+i+1;
-  	 deqElements[iElement][4]= iDim_km1_2*k+(iDim_j-1)*j+i+ iDim_i*iDim_j*iDim_k;
-
-    }
-  	
-  	vset.AddPlist( deqElements.begin(),deqElements.end());
-
+    if (verbose)
+        cout << "\n" << "create_Pyramid_VSet: printing coordinates of selected pyramid elements.";
+    
+    // Define element types
+    vector<int8_t> vecElementTypes(1, ISOPARAMETRIC_LINEAR_PYRAMID);
+    vset.AddElementTypes(vecElementTypes.begin(), vecElementTypes.end());
+    
+    // Define pyramid elements (0 to 161), assign nodes per element
+    deque<vector<size_t>> deqElements(iNrOfElements);
+    for (size_t k{0}; k < iDim_k - 1; k++) // z
+        for (size_t j{0}; j < iDim_j - 1; j++) // y
+            for (size_t i{0}; i < iDim_i - 1; i++) // x
+            {
+                // Pyramid 0
+                size_t iElement = iDim_km1_2 * k + (iDim_j - 1) * j + i;
+                deqElements[iElement].resize(5);
+                deqElements[iElement][0] = iDim_k2 * k + iDim_j * j + i; // (i,j,k)
+                deqElements[iElement][1] = iDim_k2 * k + iDim_j * j + i + 1; // (i+1,j,k)
+                deqElements[iElement][2] = iDim_k2 * k + iDim_j * (j + 1) + i + 1; // (i+1,j+1,k)
+                deqElements[iElement][3] = iDim_k2 * k + iDim_j * (j + 1) + i; // (i,j+1,k)
+                deqElements[iElement][4] = iDim_km1_2 * k + (iDim_j - 1) * j + i + iDim_i * iDim_j * iDim_k; // barycenter
+                
+                // Pyramid 1
+                iElement = iDim_km1_2 * k + (iDim_j - 1) * j + i + iNrOfCells * 1;
+                deqElements[iElement].resize(5);
+                deqElements[iElement][0] = iDim_k2 * (k + 1) + iDim_j * j + i; // (i,j,k+1)
+                deqElements[iElement][1] = iDim_k2 * (k + 1) + iDim_j * j + i + 1; // (i+1,j,k+1)
+                deqElements[iElement][2] = iDim_k2 * k + iDim_j * j + i + 1; // (i+1,j,k)
+                deqElements[iElement][3] = iDim_k2 * k + iDim_j * j + i; // (i,j,k)
+                deqElements[iElement][4] = iDim_km1_2 * k + (iDim_j - 1) * j + i + iDim_i * iDim_j * iDim_k; // barycenter
+                
+                // Pyramid 2
+                if (verbose) cout << "Element:(i=" << i << ",j=" << j << ",k=" << k << ")" << iDim_km1_2 * k + (iDim_j - 1) * j + i + 27 * 2 << endl;
+                iElement = iDim_km1_2 * k + (iDim_j - 1) * j + i + iNrOfCells * 2;
+                deqElements[iElement].resize(5);
+                deqElements[iElement][0] = iDim_k2 * k + iDim_j * j + i + 1; // (i+1,j,k)
+                if (verbose) cout << "\tCoord [" << iElement << "][0]: " << deqElements[iElement][0] << endl;
+                deqElements[iElement][1] = iDim_k2 * (k + 1) + iDim_j * j + i + 1; // (i+1,j,k+1)
+                if (verbose) cout << "\tCoord [" << iElement << "][1]: " << deqElements[iElement][1] << endl;
+                deqElements[iElement][2] = iDim_k2 * (k + 1) + iDim_j * (j + 1) + i + 1; // (i+1,j+1,k+1)
+                if (verbose) cout << "\tCoord [" << iElement << "][2]: " << deqElements[iElement][2] << endl;
+                deqElements[iElement][3] = iDim_k2 * k + iDim_j * (j + 1) + i + 1; // (i+1,j+1,k)
+                if (verbose) cout << "\tCoord [" << iElement << "][3]: " << deqElements[iElement][3] << endl;
+                deqElements[iElement][4] = iDim_km1_2 * k + (iDim_j - 1) * j + i + iDim_i * iDim_j * iDim_k; // barycenter
+                if (verbose) cout << "\tCoord [" << iElement << "][4]: " << deqElements[iElement][4] << endl;
+                
+                // Pyramid 3
+                iElement = iDim_km1_2 * k + (iDim_j - 1) * j + i + iNrOfCells * 3;
+                deqElements[iElement].resize(5);
+                deqElements[iElement][0] = iDim_k2 * k + iDim_j * (j + 1) + i; // (i,j+1,k)
+                deqElements[iElement][1] = iDim_k2 * k + iDim_j * (j + 1) + i + 1; // (i+1,j+1,k)
+                deqElements[iElement][2] = iDim_k2 * (k + 1) + iDim_j * (j + 1) + i + 1; // (i+1,j+1,k+1)
+                deqElements[iElement][3] = iDim_k2 * (k + 1) + iDim_j * (j + 1) + i; // (i,j+1,k+1)
+                deqElements[iElement][4] = iDim_km1_2 * k + (iDim_j - 1) * j + i + iDim_i * iDim_j * iDim_k; // barycenter
+                
+                // Pyramid 4
+                iElement = iDim_km1_2 * k + (iDim_j - 1) * j + i + iNrOfCells * 4;
+                deqElements[iElement].resize(5);
+                deqElements[iElement][0] = iDim_k2 * (k + 1) + iDim_j * j + i; // (i,j,k+1)
+                deqElements[iElement][1] = iDim_k2 * k + iDim_j * j + i; // (i,j,k)
+                deqElements[iElement][2] = iDim_k2 * k + iDim_j * (j + 1) + i; // (i,j+1,k)
+                deqElements[iElement][3] = iDim_k2 * (k + 1) + iDim_j * (j + 1) + i; // (i,j+1,k+1)
+                deqElements[iElement][4] = iDim_km1_2 * k + (iDim_j - 1) * j + i + iDim_i * iDim_j * iDim_k; // barycenter
+                
+                // Pyramid 5 (reoriented for correct face 1 and face 3)
+                iElement = iDim_km1_2 * k + (iDim_j - 1) * j + i + iNrOfCells * 5;
+                deqElements[iElement].resize(5);
+                deqElements[iElement][0] = iDim_k2 * (k + 1) + iDim_j * j + i; // (i,j,k+1)
+                deqElements[iElement][1] = iDim_k2 * (k + 1) + iDim_j * j + i + 1; // (i+1,j,k+1)
+                deqElements[iElement][2] = iDim_k2 * (k + 1) + iDim_j * (j + 1) + i + 1; // (i+1,j+1,k+1)
+                deqElements[iElement][3] = iDim_k2 * (k + 1) + iDim_j * (j + 1) + i; // (i,j+1,k+1)
+                deqElements[iElement][4] = iDim_km1_2 * k + (iDim_j - 1) * j + i + iDim_i * iDim_j * iDim_k; // barycenter
+            }
+    
+    vset.AddPlist(deqElements.begin(), deqElements.end());
+    
     //---------------------------------NEIGHBORS
-    //define neighbors
-    deque<vector<int64_t> > deqElementNeighbors(iNrOfElements);
-    for( int k{0}; k < iDim_k-1; k++) //z
-  	for( int j{0}; j < iDim_j-1; j++) //y
-  	for( int i{0}; i < iDim_i-1; i++) //x
-  	{
-  	 //pyramid 0
-  	 int iElement(iDim_km1_2*k+(iDim_j-1)*j+i);
-     
-     deqElementNeighbors[iElement].resize(5);
-     //face 0
-     size_t iNeighbor( iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*1);
-     deqElementNeighbors[iElement][0]= (iNeighbor);
-     //face 1
-     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*2;
-     deqElementNeighbors[iElement][1]= (iNeighbor);
-     //face 2
-     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*3;
-     deqElementNeighbors[iElement][2]= (iNeighbor);
-     //face 3
-     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*4;
-     deqElementNeighbors[iElement][3]= (iNeighbor);
-     //face 4
-     iNeighbor =  iDim_km1_2*(k-1)+(iDim_j-1)*j+i +iNrOfCells*5;
-     deqElementNeighbors[iElement][4]= (k==0?BACK_OUTSIDE:iNeighbor);
-     
-     //pyramid 1
-     iElement = iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*1;
-     
-     deqElementNeighbors[iElement].resize(5);
-     //face 0
-     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*5;
-     deqElementNeighbors[iElement][0]= (iNeighbor);
-     //face 1
-     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*2;
-     deqElementNeighbors[iElement][1]= (iNeighbor);
-     //face 2
-     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*0;
-     deqElementNeighbors[iElement][2]= (iNeighbor);
-     //face 3
-     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*4;
-     deqElementNeighbors[iElement][3]= (iNeighbor);
-     //face 4
-     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*(j-1)+i +iNrOfCells*3;
-     deqElementNeighbors[iElement][4]= (j==0?BOTTOM_OUTSIDE:iNeighbor);
-     
-      //pyramid 2
-     iElement = iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*2;
-     
-     deqElementNeighbors[iElement].resize(5);
-     //face 0
-     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*1;
-     deqElementNeighbors[iElement][0]= (iNeighbor);
-     //face 1
-     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*5;
-     deqElementNeighbors[iElement][1]= (iNeighbor);
-     //face 2
-     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*3;
-     deqElementNeighbors[iElement][2]= (iNeighbor);
-     //face 3
-     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*0;
-     deqElementNeighbors[iElement][3]= (iNeighbor);
-     //face 4
-     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i+1 +iNrOfCells*4;
-     deqElementNeighbors[iElement][4]= (i==iDim_i-2?RIGHT_OUTSIDE:iNeighbor);
-      
-      //pyramid 3
-     iElement = iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*3;
-     
-     deqElementNeighbors[iElement].resize(5);
-     //face 0
-     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*0;
-     deqElementNeighbors[iElement][0]= (iNeighbor);
-     //face 1
-     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*2;
-     deqElementNeighbors[iElement][1]= (iNeighbor);
-     //face 2
-     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*5;
-     deqElementNeighbors[iElement][2]= (iNeighbor);
-     //face 3
-     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*4;
-     deqElementNeighbors[iElement][3]= (iNeighbor);
-     //face 4
-     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*(j+1)+i +iNrOfCells*1;
-     deqElementNeighbors[iElement][4]= (j==iDim_j-2?TOP_OUTSIDE:iNeighbor);
-     
-     //pyramid 4
-     iElement = iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*4;
-     
-     deqElementNeighbors[iElement].resize(5);
-     //face 0
-     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*1;
-     deqElementNeighbors[iElement][0]= (iNeighbor);
-     //face 1
-     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*0;
-     deqElementNeighbors[iElement][1]= (iNeighbor);
-     //face 2
-     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*3;
-     deqElementNeighbors[iElement][2]= (iNeighbor);
-     //face 3
-     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*5;
-     deqElementNeighbors[iElement][3]= (iNeighbor);
-     //face 4
-     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i-1 +iNrOfCells*2;
-     deqElementNeighbors[iElement][4]= (i==0?LEFT_OUTSIDE:iNeighbor);
-     
-     //pyramid 5
-     iElement = iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*5;
-     
-     deqElementNeighbors[iElement].resize(5);
-     //face 0
-     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*1;
-     deqElementNeighbors[iElement][0]= (iNeighbor);
-     //face 1
-     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*2;
-     deqElementNeighbors[iElement][1]= (iNeighbor);
-     //face 2
-     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*3;
-     deqElementNeighbors[iElement][2]= (iNeighbor);
-     //face 3
-     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*4;
-     deqElementNeighbors[iElement][3]= (iNeighbor);
-     //face 4
-     iNeighbor =  iDim_km1_2*(k+1)+(iDim_j-1)*j+i +iNrOfCells*0;
-     deqElementNeighbors[iElement][4]= (k==iDim_k-2?FRONT_OUTSIDE:iNeighbor);
-     
+    // Define neighbors
+    deque<vector<int64_t>> deqElementNeighbors(iNrOfElements);
+    for (int64_t k{0}; k < iDim_k - 1; k++) // z
+        for (int64_t j{0}; j < iDim_j - 1; j++) // y
+            for (int64_t i{0}; i < iDim_i - 1; i++) // x
+            {
+                // Pyramid 0
+                size_t iElement = static_cast<size_t>(iDim_km1_2 * k + (iDim_j - 1) * j + i);
+                deqElementNeighbors[iElement].resize(5);
+                deqElementNeighbors[iElement][0] = iDim_km1_2 * k + (iDim_j - 1) * j + i + iNrOfCells * 1; // face 0
+                deqElementNeighbors[iElement][1] = iDim_km1_2 * k + (iDim_j - 1) * j + i + iNrOfCells * 2; // face 1
+                deqElementNeighbors[iElement][2] = iDim_km1_2 * k + (iDim_j - 1) * j + i + iNrOfCells * 3; // face 2
+                deqElementNeighbors[iElement][3] = iDim_km1_2 * k + (iDim_j - 1) * j + i + iNrOfCells * 4; // face 3
+                deqElementNeighbors[iElement][4] = (k == 0 ? BACK_OUTSIDE : iDim_km1_2 * (k - 1) + (iDim_j - 1) * j + i + iNrOfCells * 5); // face 4 (base)
+                
+                // Pyramid 1
+                iElement = static_cast<size_t>(iDim_km1_2 * k + (iDim_j - 1) * j + i + iNrOfCells * 1);
+                deqElementNeighbors[iElement].resize(5);
+                deqElementNeighbors[iElement][0] = iDim_km1_2 * k + (iDim_j - 1) * j + i + iNrOfCells * 5; // face 0
+                deqElementNeighbors[iElement][1] = iDim_km1_2 * k + (iDim_j - 1) * j + i + iNrOfCells * 2; // face 1
+                deqElementNeighbors[iElement][2] = iDim_km1_2 * k + (iDim_j - 1) * j + i + iNrOfCells * 0; // face 2
+                deqElementNeighbors[iElement][3] = iDim_km1_2 * k + (iDim_j - 1) * j + i + iNrOfCells * 4; // face 3
+                deqElementNeighbors[iElement][4] = (j == 0 ? BOTTOM_OUTSIDE : iDim_km1_2 * k + (iDim_j - 1) * (j - 1) + i + iNrOfCells * 3); // face 4 (base)
+                
+                // Pyramid 2
+                iElement = static_cast<size_t>(iDim_km1_2 * k + (iDim_j - 1) * j + i + iNrOfCells * 2);
+                deqElementNeighbors[iElement].resize(5);
+                deqElementNeighbors[iElement][0] = iDim_km1_2 * k + (iDim_j - 1) * j + i + iNrOfCells * 1; // face 0
+                deqElementNeighbors[iElement][1] = iDim_km1_2 * k + (iDim_j - 1) * j + i + iNrOfCells * 5; // face 1
+                deqElementNeighbors[iElement][2] = iDim_km1_2 * k + (iDim_j - 1) * j + i + iNrOfCells * 3; // face 2
+                deqElementNeighbors[iElement][3] = iDim_km1_2 * k + (iDim_j - 1) * j + i + iNrOfCells * 0; // face 3
+                deqElementNeighbors[iElement][4] = (i == iDim_i - 2 ? RIGHT_OUTSIDE : iDim_km1_2 * k + (iDim_j - 1) * j + i + 1 + iNrOfCells * 4); // face 4 (base)
+                
+                // Pyramid 3
+                iElement = static_cast<size_t>(iDim_km1_2 * k + (iDim_j - 1) * j + i + iNrOfCells * 3);
+                deqElementNeighbors[iElement].resize(5);
+                deqElementNeighbors[iElement][0] = iDim_km1_2 * k + (iDim_j - 1) * j + i + iNrOfCells * 0; // face 0
+                deqElementNeighbors[iElement][1] = iDim_km1_2 * k + (iDim_j - 1) * j + i + iNrOfCells * 2; // face 1
+                deqElementNeighbors[iElement][2] = iDim_km1_2 * k + (iDim_j - 1) * j + i + iNrOfCells * 5; // face 2
+                deqElementNeighbors[iElement][3] = iDim_km1_2 * k + (iDim_j - 1) * j + i + iNrOfCells * 4; // face 3
+                deqElementNeighbors[iElement][4] = (j == iDim_j - 2 ? TOP_OUTSIDE : iDim_km1_2 * k + (iDim_j - 1) * (j + 1) + i + iNrOfCells * 1); // face 4 (base)
+                
+                // Pyramid 4
+                iElement = static_cast<size_t>(iDim_km1_2 * k + (iDim_j - 1) * j + i + iNrOfCells * 4);
+                deqElementNeighbors[iElement].resize(5);
+                deqElementNeighbors[iElement][0] = iDim_km1_2 * k + (iDim_j - 1) * j + i + iNrOfCells * 1; // face 0
+                deqElementNeighbors[iElement][1] = iDim_km1_2 * k + (iDim_j - 1) * j + i + iNrOfCells * 0; // face 1
+                deqElementNeighbors[iElement][2] = iDim_km1_2 * k + (iDim_j - 1) * j + i + iNrOfCells * 3; // face 2
+                deqElementNeighbors[iElement][3] = iDim_km1_2 * k + (iDim_j - 1) * j + i + iNrOfCells * 5; // face 3
+                deqElementNeighbors[iElement][4] = (i == 0 ? LEFT_OUTSIDE : iDim_km1_2 * k + (iDim_j - 1) * j + i - 1 + iNrOfCells * 2); // face 4 (base)
+                
+                // Pyramid 5
+                iElement = static_cast<size_t>(iDim_km1_2 * k + (iDim_j - 1) * j + i + iNrOfCells * 5);
+                deqElementNeighbors[iElement].resize(5);
+                deqElementNeighbors[iElement][0] = iDim_km1_2 * k + (iDim_j - 1) * j + i + iNrOfCells * 1; // face 0
+                deqElementNeighbors[iElement][1] = iDim_km1_2 * k + (iDim_j - 1) * j + i + iNrOfCells * 2; // face 1
+                deqElementNeighbors[iElement][2] = iDim_km1_2 * k + (iDim_j - 1) * j + i + iNrOfCells * 3; // face 2
+                deqElementNeighbors[iElement][3] = iDim_km1_2 * k + (iDim_j - 1) * j + i + iNrOfCells * 4; // face 3
+                deqElementNeighbors[iElement][4] = (k == iDim_k - 2 ? FRONT_OUTSIDE : iDim_km1_2 * (k + 1) + (iDim_j - 1) * j + i + iNrOfCells * 0); // face 4 (base)
+            }
+    
+    vset.AddPfverts(deqElementNeighbors.begin(), deqElementNeighbors.end());
+    
+    //-----------------------------------------------------NODE BOUNDARIES
+    // Define boundary flags for nodes
+    for (int k{0}; k < iDim_k; k++) // z
+        for (int j{0}; j < iDim_j; j++) // y
+            for (int i{0}; i < iDim_i; i++) // x
+            {
+                int8_t bBoundary = NOT;
+                
+                if (k == 0)
+                {
+                    if (j == 0)
+                    {
+                        if (i == 0) bBoundary = CNR1;
+                        else if (i == (iDim_i - 1)) bBoundary = CNR2;
+                        else bBoundary = EDGE1;
+                    }
+                    else if (j == (iDim_j - 1))
+                    {
+                        if (i == 0) bBoundary = CNR4;
+                        else if (i == (iDim_i - 1)) bBoundary = CNR3;
+                        else bBoundary = EDGE3;
+                    }
+                    else
+                    {
+                        if (i == 0) bBoundary = EDGE4;
+                        else if (i == (iDim_i - 1)) bBoundary = EDGE2;
+                        else bBoundary = BACK_OUTSIDE;
+                    }
+                }
+                else if (k == (iDim_k - 1))
+                {
+                    if (j == 0)
+                    {
+                        if (i == 0) bBoundary = CNR5;
+                        else if (i == (iDim_i - 1)) bBoundary = CNR6;
+                        else bBoundary = EDGE9;
+                    }
+                    else if (j == (iDim_j - 1))
+                    {
+                        if (i == 0) bBoundary = CNR8;
+                        else if (i == (iDim_i - 1)) bBoundary = CNR7;
+                        else bBoundary = EDGE11;
+                    }
+                    else
+                    {
+                        if (i == 0) bBoundary = EDGE12;
+                        else if (i == (iDim_i - 1)) bBoundary = EDGE10;
+                        else bBoundary = FRONT_OUTSIDE;
+                    }
+                }
+                else
+                {
+                    if (j == 0)
+                    {
+                        if (i == 0) bBoundary = EDGE5;
+                        else if (i == (iDim_i - 1)) bBoundary = EDGE6;
+                        else bBoundary = BOTTOM_OUTSIDE;
+                    }
+                    else if (j == (iDim_j - 1))
+                    {
+                        if (i == 0) bBoundary = EDGE8;
+                        else if (i == (iDim_i - 1)) bBoundary = EDGE7;
+                        else bBoundary = TOP_OUTSIDE;
+                    }
+                    else
+                    {
+                        if (i == 0) bBoundary = LEFT_OUTSIDE;
+                        else if (i == (iDim_i - 1)) bBoundary = RIGHT_OUTSIDE;
+                        else ; // do nothing: no boundary
+                    }
+                }
+                
+                if (bBoundary != NOT)
+                {
+                    size_t iNode = iDim_k2 * k + iDim_j * j + i;
+                    vset.BFlag(iNode, bBoundary);
+                }
+            }
+    
+    // Explicitly set boundary flags for barycenter nodes
+    for (size_t iNode = iDim_i * iDim_j * iDim_k; iNode < nodes; ++iNode)
+    {
+        vset.BFlag(iNode, NOT);
     }
     
-    vset.AddPfverts( deqElementNeighbors.begin(), deqElementNeighbors.end());
-  	
-  	//-----------------------------------------------------NODE BOUNDARIES
-  	//define node boundaries
-  	//nodes at corners:
-    //nodes at edges:
-  	//nodes at faces:
-  	for( int k{0}; k < iDim_k; k++) //z
-  	for( int j{0}; j < iDim_j; j++) //y
-  	for( int i{0}; i < iDim_i; i++) //x
-  	{
-  	  int8_t bBoundary = NOT;
-  	  
-  	  if(k==0)
-  	  {
-  	    if(j==0)
-  	    {
-          if(i==0) bBoundary=CNR1;
-          else if(i==(iDim_i-1)) bBoundary=CNR2;
-          else bBoundary=EDGE1;
-  	    }
-  	    else if(j==(iDim_j-1))
-  	    {
-          if(j==0) bBoundary=CNR4;
-          else if(j==(iDim_j-1)) bBoundary=CNR3;
-          else bBoundary=EDGE3;
-  	    }
-  	    else //j is in the middle
-  	    {
-  	      if(i==0) bBoundary=EDGE4;
-          else if(i==(iDim_i-1)) bBoundary=EDGE2;
-          else bBoundary=BACK_OUTSIDE;
-  	    }
-  	  }
-      else if(k==(iDim_k-1))
-  	  {
-  	    if(j==0)
-  	    {
-          if(i==0) bBoundary=CNR5;
-          else if(i==(iDim_i-1)) bBoundary=CNR6;
-          else bBoundary=EDGE9;
-  	    }
-  	    else if(j==(iDim_j-1))
-  	    {
-          if(i==0) bBoundary=CNR8;
-          else if(i==(iDim_i-1)) bBoundary=CNR7;
-          else bBoundary=EDGE11;
-  	    }
-  	    else //j in the middle
-  	    {
-  	      if(i==0) bBoundary=EDGE12;
-          else if(i==(iDim_i-1)) bBoundary=EDGE10;
-          else bBoundary=FRONT_OUTSIDE;
-  	    }
-  	  }
-  	  else //k is in the middle
-  	  {
-  	   if(j==0)
-  	    {
-          if(i==0) bBoundary=EDGE5;
-          else if(i==(iDim_i-1)) bBoundary=EDGE6;
-          else bBoundary=BOTTOM_OUTSIDE;
-  	    }
-  	    else if(j==(iDim_j-1))
-  	    {
-          if(i==0) bBoundary=EDGE8;
-          else if(i==(iDim_i-1)) bBoundary=EDGE7;
-          else bBoundary=TOP_OUTSIDE;
-  	    }
-  	    else //j in the middle
-  	    {
-  	      if(i==0) bBoundary=LEFT_OUTSIDE;
-          else if(i==(iDim_i-1)) bBoundary=RIGHT_OUTSIDE;
-          else ;//do nothing: no boundary
-  	    }
-  	  }
-  	
-      if(bBoundary!=NOT)
-      {
-        // SKM FIX const size_t iNode((iDim_k2*k+(iDim_j)*j+i)+1);
-        const size_t iNode((iDim_k2*k+(iDim_j)*j+i));
-        vset.BFlag( iNode, bBoundary);
-      }
-  	}
- 
     //-------------------------MATERIALS
-    vector<int32_t> pmtrl( vset.Elements(), 1 );
-    vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
-
+    vector<int32_t> pmtrl(vset.Elements(), 1);
+    vset.AddPmtrl(pmtrl.begin(), pmtrl.end());
+    
     vset.EstablishZeroBasedNumbering();
     
-    cout <<"\n"<<"create_Pyramid_VSet: model 'Pyra': done."<< endl;
-//    vset.Out();
+    cout << "\n" << "create_Pyramid_VSet: model 'Pyra': done." << endl;
     
 } // end create_Pyramid_VSet
 
@@ -3619,8 +3009,11 @@ static  vector<array<Point<3U>,8>> generateCornerPointGrid( double dx, double dy
 
 /**
     Basic hexahedral grid for mesh-modifcation tests
+    
+    TODO: the VSet does not get initialised yet
+
 */
-static void create_CornerPointGrid_6i_8j_4k( VSet<3U>& vset )
+static void create_CornerPointGrid_6i_8j_4k( VSet<3U>&  )
  {
      // Define the cell dimensions
      double dx = 1.0;

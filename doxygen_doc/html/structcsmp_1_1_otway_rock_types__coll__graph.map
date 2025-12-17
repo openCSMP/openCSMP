@@ -1,0 +1,3 @@
+<map id="csmp::OtwayRockTypes" name="csmp::OtwayRockTypes">
+<area shape="rect" id="Node000001" title="Tuple container to return rocktype by number (std::get&lt;1&gt;(rocktypes_);." alt="" coords="5,5,160,112"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="csmp::normalOfTriangle" name="csmp::normalOfTriangle">
+<area shape="rect" id="Node000001" title="returns the normal of a triangle" alt="" coords="244,13,404,38"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_v_data.html#af1977be81364d2e40ced9b0ad206293d" title="computes the unit normals to the surfaces and then returns the angle between them" alt="" coords="5,5,196,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="228,28,196,28,196,23,228,23"/>
+</map>

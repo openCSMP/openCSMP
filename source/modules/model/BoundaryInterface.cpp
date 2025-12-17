@@ -271,19 +271,28 @@ template<uint32_t dim, template<uint32_t> class BOUNDARY_COMPLEX>
 string BoundaryInterface<dim, BOUNDARY_COMPLEX>::CreateBoundaryNameFrom( const FaceConstructionData<dim>& fdata,
                                                                          const vector<string>& region_names ) const
  {
-     assert( fdata.ElementMaterial() < region_names.size() );
-     string boundary_name( region_names[ fdata.ElementMaterial() ] );
+     if ( fdata.ElementMaterial() < 0 )
+       throw csmp::Exception( ERROR, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateBoundaryNameFrom",
+                             "ElementMaterial must have a positive value for this method to work.");
+     
+     assert( static_cast<size_t>(fdata.ElementMaterial()) < region_names.size() );
+     string boundary_name( region_names[ static_cast<size_t>(fdata.ElementMaterial()) ] );
      boundary_name += "_BOUNDARY";
      boundary_name += to_string(fdata.PatchNumber());
      boundary_name += '_';
      // inside/outside
      pair<long,long> materials{ fdata.Materials() };
-     assert( materials.first  < region_names.size() );
-     assert( materials.second < region_names.size() );
-     boundary_name += region_names[ materials.first ];
+     if ( materials.first < 0 or materials.second < 0 )
+       throw csmp::Exception( ERROR, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateBoundaryNameFrom",
+                             "the materials of the neighbor elements must have a positive value for this method to work.");
+
+   
+     assert( static_cast<size_t>(materials.first)  < region_names.size() );
+     assert( static_cast<size_t>(materials.second) < region_names.size() );
+     boundary_name += region_names[ static_cast<size_t>(materials.first) ];
      boundary_name += '_';
      if ( materials.first == materials.second ) boundary_name +="INTERSECTION";
-     else boundary_name += region_names[ materials.second ];
+     else boundary_name += region_names[ static_cast<size_t>(materials.second) ];
    
      return boundary_name;
  }
@@ -554,7 +563,7 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
       ErrorHandler::Instance().Note( INFO, "BoundaryInterface::CreateInternalBoundaryFrom:", region_tag.c_str(),
                                            "is single valued; so there is only one patch." );
     // assigning region names
-    region_names.reserve( distance( model.UniqueRegionsBegin(),model.UniqueRegionsEnd()) );
+    region_names.reserve( static_cast<size_t>(distance( model.UniqueRegionsBegin(),model.UniqueRegionsEnd())) );
     for ( auto rit=model.UniqueRegionsBegin(); rit!=model.UniqueRegionsEnd(); ++rit )
       region_names.push_back( (*rit).first );
  
@@ -657,7 +666,7 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
               // ------------------
               // storing pointers to the new faces in the vector from which the boundary will be constructed
               elmt_vector.push_back( pit.LowerDimElement() );
-              face_vector.push_back( model.Mesh().ReplaceElementByFace( next(elmt_vector.begin(),elmt_vector.size()-1ul),
+              face_vector.push_back( model.Mesh().ReplaceElementByFace( next(elmt_vector.begin(),static_cast<long>(elmt_vector.size()-1)),
                                                                         pit.InnerElement(),
                                                                         pit.OuterElement(),
                                                                         pit.InnerElementFace(),
@@ -779,6 +788,7 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
    Interior nodes that had a boundary specific BOX_BOUNDARY  flag are set back to NOT.
    
    @param boundary_name either one of the box boundaries or a name that contains the string BOUNDARY (case insentivite)
+   @param erase_faces deletes the Face objects that were defining the boundary
    
    @attention this does not remove the Face objects associated with the boundary; call MeshManager to do this.
    
@@ -1999,8 +2009,7 @@ for ( auto it=model->Mesh().ElementsBegin(); it!=model->Mesh().ElementsEnd(); ++
          cout << endl;
       }
       
-//model->Mesh().UpdateConnectivity();
-
+      
 	  // 4. removing the original regions from which the boundaries were created
     // ------------------------------------------------------------------------------------
     model->Region("Model").ScheduleForRebuild();
@@ -2084,7 +2093,8 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundariesFromOrientat
     const LocalVariables lvsFaces( boundaryComplex->Database().LocalVariablesAt(FACE) );
     const IntegrationPointVariables lvsIntegrationPoints( boundaryComplex->Database().IntegrationPointVariablesAt(FACE_INTEGRATION_POINT) );
 
-    // creating faces on the outside of the model
+    // 1. creating faces on the outside of the model
+    // ---------------------------------------------
     vector<Face<dim>*> face_ptrs;
     const csmp::Region<dim>& model_domain( boundaryComplex->Region("Model") );
     assert( model_domain.PerimeterCells() > 0 );
@@ -2099,15 +2109,13 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundariesFromOrientat
            //                   ----------------------------------------------------------------------------------------------------------
         }
     mesh.template BuildConnectivity<csmp::Face>( face_ptrs.begin(), face_ptrs.end() ); // between the faces
-
-    vector<string> eligibleRegions;
-    eligibleRegions.reserve( boundaryComplex->UniqueRegions() );
     
-    // 1. Grouping pointers to Face objects of 'Model' boundary according to their facing direction
+
+    // 2. Getting normals to standard boundaries of box-shaped model
     // -------------------------------------------------------------------------------------------------
-    vector<double>  nrml, nrml_right, nrml_left, nrml_top, nrml_bottom, nrml_front{0.,0.,1.}, nrml_back{0.,0.,-1};
+    vector<double>  nrml, nrml_right, nrml_left, nrml_top, nrml_bottom, nrml_front{0.,0.,1.}, nrml_back{0.,0.,-1.};
     Box             box;
-    double          minLength(0.71); // dot-product of 2 unit vectors at an angle >=45 degrees
+    const double    minLength(0.9); // minLength(0.71); // dot-product of 2 unit vectors at an angle >=45 degrees
    
     box.UnitNormalTo( BOTTOM, dim, nrml_bottom );
     box.UnitNormalTo( TOP,    dim, nrml_top );
@@ -2117,59 +2125,63 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundariesFromOrientat
          box.UnitNormalTo( FRONT,  dim, nrml_front );
          box.UnitNormalTo( BACK,   dim, nrml_back );
       }
+
+
+    // 3. Assigning the Face objects on the model boundary to Box boundaries according to their normal orientations
+    // ------------------------------------------------------------------------------------------------------------
     set<Face<dim>*>  top_faces, bottom_faces, left_faces, right_faces, front_faces, back_faces, irregular_faces;
-    
-    // for all Face objects on the model boundary (initial faces would normally be zero)
+
     for ( auto fit=next(mesh.FacesBegin(),static_cast<long>(n_initial_faces)); fit!=mesh.FacesEnd(); ++fit )
       {
          // getting the (outward) pointing unit normal to face
          (*fit).UnitNormal( nrml );
          // classifying the faces in terms of their facing direction
          // (projecting: perfect alignment would give dot-product equal 1, inclinations up to 37 degrees cos(37)~0.8 are tolerated)
-         if      ( dotProduct<dim>(nrml,nrml_bottom) >= minLength ) bottom_faces.insert(&(*fit)); // BOTTOM
-         else if ( dotProduct<dim>(nrml,nrml_top)    >= minLength ) top_faces.insert(&(*fit));    // TOP
-         else if ( dotProduct<dim>(nrml,nrml_left)   >= minLength ) left_faces.insert(&(*fit));   // LEFT
-         else if ( dotProduct<dim>(nrml,nrml_right)  >= minLength ) right_faces.insert(&(*fit));  // RIGHT
-         else if ( dotProduct<dim>(nrml,nrml_front)  >= minLength ) front_faces.insert(&(*fit));  // FRONT
-         else if ( dotProduct<dim>(nrml,nrml_back)   >= minLength ) back_faces.insert(&(*fit));   // BACK
+         if      ( dotProduct<dim>(nrml,nrml_bottom) >= minLength ) bottom_faces.emplace(&(*fit)); // BOTTOM
+         else if ( dotProduct<dim>(nrml,nrml_top)    >= minLength ) top_faces.emplace(&(*fit));    // TOP
+         else if ( dotProduct<dim>(nrml,nrml_left)   >= minLength ) left_faces.emplace(&(*fit));   // LEFT
+         else if ( dotProduct<dim>(nrml,nrml_right)  >= minLength ) right_faces.emplace(&(*fit));  // RIGHT
+         else if ( dotProduct<dim>(nrml,nrml_front)  >= minLength ) front_faces.emplace(&(*fit));  // FRONT
+         else if ( dotProduct<dim>(nrml,nrml_back)   >= minLength ) back_faces.emplace(&(*fit));   // BACK
          // deal with the remaining cases, distinguishing sides etc.
-         else irregular_faces.insert(&(*fit));
+         else irregular_faces.emplace(&(*fit));
       } // end perimeter faces
-    
-    // 2. Creating boundaries from the non-empty sets of faces
+
+
+    // 4. Creating boundaries from the non-empty sets of faces
     // -------------------------------------------------------------------------------------------------
-    // BOTTOM
+    //     BOTTOM
     if ( !bottom_faces.empty() ) {
-         vector<Face<dim>*> boundary_faces( bottom_faces.begin(), bottom_faces.end() );
+         vector<Face<dim>*> boundary_faces( make_move_iterator(bottom_faces.begin()), make_move_iterator(bottom_faces.end()) );
          boundaryComplex->AddBoundary( "BOTTOM", boundary_faces.begin(), boundary_faces.end(), BOTTOM );
       } // TOP
     if ( !top_faces.empty() ) {
-         vector<Face<dim>*> boundary_faces( top_faces.begin(), top_faces.end() );
+         vector<Face<dim>*> boundary_faces( make_move_iterator(top_faces.begin()), make_move_iterator(top_faces.end()) );
          boundaryComplex->AddBoundary( "TOP", boundary_faces.begin(), boundary_faces.end(), TOP );
       } // LEFT
     if ( !left_faces.empty() ) {
-         vector<Face<dim>*> boundary_faces( left_faces.begin(), left_faces.end() );
+         vector<Face<dim>*> boundary_faces( make_move_iterator(left_faces.begin()), make_move_iterator(left_faces.end()) );
          boundaryComplex->AddBoundary( "LEFT", boundary_faces.begin(), boundary_faces.end(), LEFT );
       } // RIGHT
     if ( !right_faces.empty() ) {
-         vector<Face<dim>*> boundary_faces( right_faces.begin(), right_faces.end() );
+         vector<Face<dim>*> boundary_faces( make_move_iterator(right_faces.begin()), make_move_iterator(right_faces.end()) );
          boundaryComplex->AddBoundary( "RIGHT", boundary_faces.begin(), boundary_faces.end(), RIGHT );
       } // FRONT
     if ( !front_faces.empty() ) {
-         vector<Face<dim>*> boundary_faces( front_faces.begin(), front_faces.end() );
+         vector<Face<dim>*> boundary_faces( make_move_iterator(front_faces.begin()), make_move_iterator(front_faces.end()) );
          boundaryComplex->AddBoundary( "FRONT", boundary_faces.begin(), boundary_faces.end(), FRONT );
       } // BACK
     if ( !back_faces.empty() ) {
-         vector<Face<dim>*> boundary_faces( back_faces.begin(), back_faces.end() );
+         vector<Face<dim>*> boundary_faces( make_move_iterator(back_faces.begin()), make_move_iterator(back_faces.end()) );
          boundaryComplex->AddBoundary( "BACK", boundary_faces.begin(), boundary_faces.end(), BACK );
       } // IRREGULAR (left-over faces)
     if ( !irregular_faces.empty() ) {
-         vector<Face<dim>*> boundary_faces( irregular_faces.begin(), irregular_faces.end() );
+         vector<Face<dim>*> boundary_faces( make_move_iterator(irregular_faces.begin()), make_move_iterator(irregular_faces.end()) );
          boundaryComplex->AddBoundary( "IRREGULAR", boundary_faces.begin(), boundary_faces.end(), IRREGULAR );
       }
 
     
-    // 4. checking whether faces remain that could not be assigned
+    // 5. checking whether faces remain that could not be assigned
     // -------------------------------------------------------------------------------------------------
     size_t n_faces_assigned = Boundary("BOTTOM").Cells() + Boundary("RIGHT").Cells() +
                               Boundary("TOP").Cells() + Boundary("LEFT").Cells();
@@ -2185,8 +2197,8 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundariesFromOrientat
       }
     
     
-    // 5. adjusting node flags for TOP or BOTTOM boundary nodes that were flagged as irregular
-    // ---------------------------------------------------------------------------------------
+    // 6. adjusting the node flags of TOP or BOTTOM boundary nodes if these boundaries were flagged as irregular
+    // ---------------------------------------------------------------------------------------------------------
     for ( auto it = boundaryComplex->BoundariesBegin(); it != boundaryComplex->BoundariesEnd(); ++it )
       if ( (*it).first == "TOP" or (*it).first == "BOTTOM" )
         {
@@ -2195,10 +2207,29 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundariesFromOrientat
                (*nit)->AtBoundary( parseBoundary( (*it).first ) );
         }
 
-    cout << "\n\nBoundaryInterface::EstablishBoxBoundariesFromOrientation: done!\n";
+    // 7. using the new Boundary objects to refine the get edge and corner node flags assigned correctly
+    // -------------------------------------------------------------------------------------------------
+    recreateBoxBoundaryFlags( *boundaryComplex );
+    cout << "\n"<<"BoundaryInterface::EstablishBoxBoundariesFromOrientation: done!\n";
     return true;
     
 } // end EstablishBoundaryFlagsFromOrientation
+
+// TESTING consistent face orientations - all good!
+/*
+cout <<"\nface parents:\n";
+for ( const auto& fit : face_ptrs ) {
+   assert( (*fit).InnerParent() != nullptr );
+   assert( (*fit).OuterParent() == nullptr );
+   cout <<"\nFace "<< (*fit).Idx() <<" normal: "<< (*fit).UnitNormal() << endl;
+}
+*/
+
+// TESTING face orientations OK
+//for ( const auto& fit : back_faces )
+//  cout <<"  "<< fit->UnitNormal();
+//cout << endl << endl;
+    
 
 
 
@@ -2275,6 +2306,21 @@ void BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundariesFromNodeFlag
   for ( size_t eid{model_domain.InteriorCells()}; eid < model_domain.Cells(); ++eid )
     for ( auto j{0U}; j < model_domain.PerimeterFaces(eid); ++j ) {
          const auto face_id{ model_domain.PerimeterFace(eid,j) };
+         // checking that we are dealing with a dim-1 element, nothing else
+         if constexpr ( dim == 3 ) {
+            if ( !isSurfaceElement( model_domain.E(eid)->FE()->ElementTypeOfFace(face_id) ) ) {
+                  cout <<"\n\t"<<"FE type of element face "<< face_id <<": "<< parseAbbreviated_FE_Type( model_domain.E(eid)->FE()->ElementTypeOfFace(face_id) );
+                  csmp_error.Note( ERROR, "BoundaryInterface::EstablishBoxBoundariesFromNodeFlags:",
+                                  "element on domain boundary must be a surface element.");
+              }
+         }
+         else if constexpr ( dim == 2 ) {
+            if ( !isLineElement( model_domain.E(eid)->FE()->ElementTypeOfFace(face_id) ) ) {
+                  cout <<"\n\t"<<"FE type of element face "<< face_id <<": "<< parseAbbreviated_FE_Type( model_domain.E(eid)->FE()->ElementTypeOfFace(face_id) );
+                  csmp_error.Note( ERROR, "BoundaryInterface::EstablishBoxBoundariesFromNodeFlags:",
+                                  "element on domain boundary must be a line element.");
+              }
+         }
          // getting the boundary flag of the face
          const BOX_BOUNDARY bflag = atBoundary( model_domain.E(eid), face_id );
          // storing the FaceInfo for the correct boundary
@@ -2364,7 +2410,7 @@ void BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundariesFromNodeFlag
 
 
 template<uint32_t dim, template<uint32_t> class BOUNDARY_COMPLEX>
-size_t BoundaryInterface<dim, BOUNDARY_COMPLEX>::BoundariesOut() const
+long BoundaryInterface<dim, BOUNDARY_COMPLEX>::BoundariesOut() const
  {
      cout <<"\nBoundaryInterface<"<< dim <<",Boundary<Face>>::BoundariesOut: ";
      if ( Boundaries() == 0U ) {
@@ -2388,7 +2434,7 @@ size_t BoundaryInterface<dim, BOUNDARY_COMPLEX>::BoundariesOut() const
                 else cout <<"length (m): "<< (*bit).second.Length();
              }
            if constexpr ( dim == 2U )
-             cout <<" length (m): "<< (*bit).second.Area();
+             cout <<" length (m): "<< (*bit).second.Length();
        }
      cout << endl << endl;
      cout.flush();

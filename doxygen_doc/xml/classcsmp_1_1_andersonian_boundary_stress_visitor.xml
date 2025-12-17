@@ -1,0 +1,427 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_andersonian_boundary_stress_visitor" kind="class" language="C++" prot="public">
+    <compoundname>csmp::AndersonianBoundaryStressVisitor</compoundname>
+    <basecompoundref refid="classcsmp_1_1_visitor" prot="public" virt="non-virtual">csmp::Visitor&lt; 3U &gt;</basecompoundref>
+    <includes refid="_andersonian_boundary_stress_visitor_8h" local="no">AndersonianBoundaryStressVisitor.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_andersonian_boundary_stress_visitor_1a1629a84574c52581f25147b7870aa06a" prot="private" static="no" mutable="no">
+        <type>const <ref refid="classcsmp_1_1_stress_regime" kindref="compound">StressRegime</ref> &amp;</type>
+        <definition>const StressRegime&amp; csmp::AndersonianBoundaryStressVisitor::stress_regime_</definition>
+        <argsstring></argsstring>
+        <name>stress_regime_</name>
+        <qualifiedname>csmp::AndersonianBoundaryStressVisitor::stress_regime_</qualifiedname>
+        <briefdescription>
+<para>input Andersonian stress state </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/AndersonianBoundaryStressVisitor.h" line="78" column="25" bodyfile="source/includes/thmc/mechanics/AndersonianBoundaryStressVisitor.h" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_andersonian_boundary_stress_visitor_1a256e75c754c35b7d041c77d020c103ef" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_stress_rotate" kindref="compound">StressRotate</ref></type>
+        <definition>StressRotate csmp::AndersonianBoundaryStressVisitor::Andersonian_stress_</definition>
+        <argsstring></argsstring>
+        <name>Andersonian_stress_</name>
+        <qualifiedname>csmp::AndersonianBoundaryStressVisitor::Andersonian_stress_</qualifiedname>
+        <briefdescription>
+<para>the full tensor constructed for the stress regimes </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/AndersonianBoundaryStressVisitor.h" line="79" column="26" bodyfile="source/includes/thmc/mechanics/AndersonianBoundaryStressVisitor.h" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_andersonian_boundary_stress_visitor_1a4f8eef70d0f0880d86414ec3f6442dbe" prot="private" static="no" mutable="no">
+        <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>const csmp::Index csmp::AndersonianBoundaryStressVisitor::Sv_key_</definition>
+        <argsstring></argsstring>
+        <name>Sv_key_</name>
+        <qualifiedname>csmp::AndersonianBoundaryStressVisitor::Sv_key_</qualifiedname>
+        <briefdescription>
+<para>vertical (overburden) stress (a scalar) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/AndersonianBoundaryStressVisitor.h" line="81" column="24" bodyfile="source/includes/thmc/mechanics/AndersonianBoundaryStressVisitor.h" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_andersonian_boundary_stress_visitor_1a51444e46a0ae43a251018197d44b22e8" prot="private" static="no" mutable="no">
+        <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>const csmp::Index csmp::AndersonianBoundaryStressVisitor::Sn_key_</definition>
+        <argsstring></argsstring>
+        <name>Sn_key_</name>
+        <qualifiedname>csmp::AndersonianBoundaryStressVisitor::Sn_key_</qualifiedname>
+        <briefdescription>
+<para>normal stress acting on boundary faces </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/AndersonianBoundaryStressVisitor.h" line="82" column="26" bodyfile="source/includes/thmc/mechanics/AndersonianBoundaryStressVisitor.h" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_andersonian_boundary_stress_visitor_1a0d7e42b8cb06daee55b5bac4ff6df97c" prot="private" static="no" mutable="no">
+        <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>const csmp::Index csmp::AndersonianBoundaryStressVisitor::Ss_key_</definition>
+        <argsstring></argsstring>
+        <name>Ss_key_</name>
+        <qualifiedname>csmp::AndersonianBoundaryStressVisitor::Ss_key_</qualifiedname>
+        <briefdescription>
+<para>shear stress acting on boundary faces </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/AndersonianBoundaryStressVisitor.h" line="83" column="26" bodyfile="source/includes/thmc/mechanics/AndersonianBoundaryStressVisitor.h" bodystart="83" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_andersonian_boundary_stress_visitor_1a344e66f92aac19d229f0b01437e26814" prot="private" static="no" mutable="no">
+        <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>const csmp::Index csmp::AndersonianBoundaryStressVisitor::F_key_</definition>
+        <argsstring></argsstring>
+        <name>F_key_</name>
+        <qualifiedname>csmp::AndersonianBoundaryStressVisitor::F_key_</qualifiedname>
+        <briefdescription>
+<para>(nodal) &apos;force&apos; (N) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/AndersonianBoundaryStressVisitor.h" line="84" column="24" bodyfile="source/includes/thmc/mechanics/AndersonianBoundaryStressVisitor.h" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_andersonian_boundary_stress_visitor_1a4d61646d25ec957a95f7d20e91ff5a75" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; 3U &gt;</type>
+        <definition>VectorVariable&lt;3U&gt; csmp::AndersonianBoundaryStressVisitor::vc_</definition>
+        <argsstring></argsstring>
+        <name>vc_</name>
+        <qualifiedname>csmp::AndersonianBoundaryStressVisitor::vc_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/AndersonianBoundaryStressVisitor.h" line="85" column="20" bodyfile="source/includes/thmc/mechanics/AndersonianBoundaryStressVisitor.h" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_andersonian_boundary_stress_visitor_1a38a1b8cc32ff0b2b50885e2493497396" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; 3U &gt;</type>
+        <definition>VectorVariable&lt;3U&gt; csmp::AndersonianBoundaryStressVisitor::force_</definition>
+        <argsstring></argsstring>
+        <name>force_</name>
+        <qualifiedname>csmp::AndersonianBoundaryStressVisitor::force_</qualifiedname>
+        <briefdescription>
+<para>forces read from the nodes </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/AndersonianBoundaryStressVisitor.h" line="85" column="24" bodyfile="source/includes/thmc/mechanics/AndersonianBoundaryStressVisitor.h" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_andersonian_boundary_stress_visitor_1a55d3f1003eaea6aca7b8d8399b52f3b0" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; 3U &gt;</type>
+        <definition>VectorVariable&lt;3U&gt; csmp::AndersonianBoundaryStressVisitor::nrml_</definition>
+        <argsstring></argsstring>
+        <name>nrml_</name>
+        <qualifiedname>csmp::AndersonianBoundaryStressVisitor::nrml_</qualifiedname>
+        <briefdescription>
+<para>outward-pointing unit normal to face </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/AndersonianBoundaryStressVisitor.h" line="86" column="20" bodyfile="source/includes/thmc/mechanics/AndersonianBoundaryStressVisitor.h" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_andersonian_boundary_stress_visitor_1a75dc43918f1f75205ce1fba4459332ee" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref>&lt; 3U &gt;</type>
+        <definition>TensorVariable&lt;3U&gt; csmp::AndersonianBoundaryStressVisitor::far_field_stress_</definition>
+        <argsstring></argsstring>
+        <name>far_field_stress_</name>
+        <qualifiedname>csmp::AndersonianBoundaryStressVisitor::far_field_stress_</qualifiedname>
+        <briefdescription>
+<para>as computed from stress regime </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/AndersonianBoundaryStressVisitor.h" line="87" column="20" bodyfile="source/includes/thmc/mechanics/AndersonianBoundaryStressVisitor.h" bodystart="87" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_andersonian_boundary_stress_visitor_1ad570cc3f52862a40692560b773ef4b25" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::AndersonianBoundaryStressVisitor::Sv_</definition>
+        <argsstring></argsstring>
+        <name>Sv_</name>
+        <qualifiedname>csmp::AndersonianBoundaryStressVisitor::Sv_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/AndersonianBoundaryStressVisitor.h" line="88" column="26" bodyfile="source/includes/thmc/mechanics/AndersonianBoundaryStressVisitor.h" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_andersonian_boundary_stress_visitor_1a8b788eebef09a3f11424815621cbd939" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::AndersonianBoundaryStressVisitor::Sn_</definition>
+        <argsstring></argsstring>
+        <name>Sn_</name>
+        <qualifiedname>csmp::AndersonianBoundaryStressVisitor::Sn_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/AndersonianBoundaryStressVisitor.h" line="88" column="30" bodyfile="source/includes/thmc/mechanics/AndersonianBoundaryStressVisitor.h" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_andersonian_boundary_stress_visitor_1a06fd0d092996bd90ced46fbd1493b350" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::AndersonianBoundaryStressVisitor::Ss_</definition>
+        <argsstring></argsstring>
+        <name>Ss_</name>
+        <qualifiedname>csmp::AndersonianBoundaryStressVisitor::Ss_</qualifiedname>
+        <briefdescription>
+<para>scalar vertical, normal and shear stresses </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/AndersonianBoundaryStressVisitor.h" line="88" column="34" bodyfile="source/includes/thmc/mechanics/AndersonianBoundaryStressVisitor.h" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_andersonian_boundary_stress_visitor_1a893bf8a4186ae866139e9838931baa33" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::AndersonianBoundaryStressVisitor::overwrite_previous_forces_</definition>
+        <argsstring></argsstring>
+        <name>overwrite_previous_forces_</name>
+        <qualifiedname>csmp::AndersonianBoundaryStressVisitor::overwrite_previous_forces_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/AndersonianBoundaryStressVisitor.h" line="89" column="24" bodyfile="source/includes/thmc/mechanics/AndersonianBoundaryStressVisitor.h" bodystart="89" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_andersonian_boundary_stress_visitor_1a072d3f2d03698fbb5164c370b5877a68" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::AndersonianBoundaryStressVisitor::AndersonianBoundaryStressVisitor</definition>
+        <argsstring>(const Model&lt; 3U &gt; &amp;, const StressRegime &amp;, const char *SV_variable=&quot;overburden pressure&quot;, bool overwrite_force_vector=false)</argsstring>
+        <name>AndersonianBoundaryStressVisitor</name>
+        <qualifiedname>csmp::AndersonianBoundaryStressVisitor::AndersonianBoundaryStressVisitor</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; 3U &gt; &amp;</type>
+          <defname>model</defname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_stress_regime" kindref="compound">StressRegime</ref> &amp;</type>
+          <defname>stress_regime</defname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>SV_variable</declname>
+          <defval>&quot;overburden pressure&quot;</defval>
+          <briefdescription><para>should vary with depth </para>
+</briefdescription>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>overwrite_force_vector</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>by default, any entries into the RHS force vectors will get overwritten </para>
+        </briefdescription>
+        <detaileddescription>
+<para>For the computation of the nodal &apos;gravity force&apos;</para>
+<para>Application level is model so that all boundaries are visited followed by a visitation of their faces.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>model</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>computation domain.</para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>SV_variable</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>denotes overburden = vertical stress calculated by integration of the sediment column dry density up to the earth&apos; surface.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+TODO: the assumption is that the vertical stress is the largest principal stress, relax this </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/AndersonianBoundaryStressVisitor.h" line="64" column="5" bodyfile="source/modules/thmc/mechanics/AndersonianBoundaryStressVisitor.cpp" bodystart="37" bodyend="76"/>
+        <references refid="classcsmp_1_1_andersonian_boundary_stress_visitor_1a072d3f2d03698fbb5164c370b5877a68" compoundref="_andersonian_boundary_stress_visitor_8cpp" startline="37" endline="76">AndersonianBoundaryStressVisitor</references>
+        <references refid="classcsmp_1_1_stress_rotate_1a92041531d717596096e8bbcdb46b001e" compoundref="_stress_rotate_8cpp" startline="165" endline="234">csmp::StressRotate::Rotate</references>
+        <references refid="classcsmp_1_1_stress_rotate_1ac8f368e4d09697a4843adc38a7a3cd6a" compoundref="_stress_rotate_8cpp" startline="18" endline="27">csmp::StressRotate::StressRotate</references>
+        <referencedby refid="classcsmp_1_1_andersonian_boundary_stress_visitor_1a072d3f2d03698fbb5164c370b5877a68" compoundref="_andersonian_boundary_stress_visitor_8cpp" startline="37" endline="76">AndersonianBoundaryStressVisitor</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_andersonian_boundary_stress_visitor_1aac70fef32c1d3ced65d4633e23b5e949" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>csmp::AndersonianBoundaryStressVisitor::~AndersonianBoundaryStressVisitor</definition>
+        <argsstring>()</argsstring>
+        <name>~AndersonianBoundaryStressVisitor</name>
+        <qualifiedname>csmp::AndersonianBoundaryStressVisitor::~AndersonianBoundaryStressVisitor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/AndersonianBoundaryStressVisitor.h" line="69" column="13" bodyfile="source/modules/thmc/mechanics/AndersonianBoundaryStressVisitor.cpp" bodystart="82" bodyend="84"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_andersonian_boundary_stress_visitor_1a939226e91739faa010163dcb6c0925b6" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::AndersonianBoundaryStressVisitor::Visit</definition>
+        <argsstring>(Boundary&lt; 3U &gt; *)</argsstring>
+        <name>Visit</name>
+        <qualifiedname>csmp::AndersonianBoundaryStressVisitor::Visit</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref>&lt; 3U &gt; *</type>
+          <defname>b</defname>
+        </param>
+        <briefdescription>
+<para>to zero out force vector if overwrite_force_vector=true, prior to accumulation of forces </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Collects the stress value placed on the boudary and (optionally) zeros out the initial force values assigned to this boundary. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/AndersonianBoundaryStressVisitor.h" line="72" column="18" bodyfile="source/modules/thmc/mechanics/AndersonianBoundaryStressVisitor.cpp" bodystart="94" bodyend="102"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_andersonian_boundary_stress_visitor_1a6310f82e116ce29d82a0b100f01f37a9" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::AndersonianBoundaryStressVisitor::Visit</definition>
+        <argsstring>(Face&lt; 3U &gt; *)</argsstring>
+        <name>Visit</name>
+        <qualifiedname>csmp::AndersonianBoundaryStressVisitor::Visit</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>&lt; 3U &gt; *</type>
+          <defname>f</defname>
+        </param>
+        <briefdescription>
+<para>computes nodal forces ensuing from stress and weighted by number of nodes of the boundary face </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Interpolates the applied element-centric forces to the nodes.</para>
+<para>An approach is used where the nodal contribution is weighted on the basis of the distance of the barycenter to the node.</para>
+<para><simplesect kind="attention"><para>this is an integration (for uniform nodal forces, see option, we get non-uniform stresses) </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/AndersonianBoundaryStressVisitor.h" line="75" column="18" bodyfile="source/modules/thmc/mechanics/AndersonianBoundaryStressVisitor.cpp" bodystart="120" bodyend="158"/>
+        <references refid="classcsmp_1_1_scalar_variable_1a7f0ab5431406d975d6e1de988f369176" compoundref="_scalar_variable_8cpp" startline="6" endline="6">csmp::ScalarVariable::operator()</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Apply stresses to the boundaries of a three-dimensional geomechanic model. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>SKM 29/9/2014</para>
+</simplesect>
+The stresses are entered via a <ref refid="classcsmp_1_1_stress_regime" kindref="compound">StressRegime</ref> object, but the variable &apos;overburden pressure&apos; storing the vertical stress Sv must be defined and initialised.</para>
+<para>The <ref refid="classcsmp_1_1_andersonian_boundary_stress_visitor" kindref="compound">AndersonianBoundaryStressVisitor</ref> accesses all <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> objects, and resolves the boundary normal stress and shear stresses using the normals of the boundary <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> objects which must be outward pointing.</para>
+<para>In the corresponding calculations body forces must be enabled.</para>
+<para><simplesect kind="note"><para>If a boundary is inclined or vertical, this is fine. In this case, the visitor takes the vertical variation in the boundary normal stress into account.</para>
+</simplesect>
+Input variables are the stress state supplied by the <ref refid="classcsmp_1_1_stress_regime" kindref="compound">StressRegime</ref> object.</para>
+<para>The visitor also computes the <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> variables &apos;normal stress&apos; and &apos;shear stress&apos; on the visited boundaries. The nodal forces that it will apply are computed from these.</para>
+<para><simplesect kind="attention"><para>by default all forces that were previously assigned are zeroed first.</para>
+</simplesect>
+<simplesect kind="attention"><para>Confining stresses are always compressive and result inward pointing forces.</para>
+</simplesect>
+<simplesect kind="attention"><para>this visitor assumes that the far-field stress regime is Andersonian, i.e. one of the principal stresses is oriented perpendicular to the earth surface, i.e. that one of the principal stress axes is aligned with the vertical (Y)-axis of the CSMP model.</para>
+</simplesect>
+<simplesect kind="note"><para>This visitor allows for a workaround for applying stress boundary conditions if one does not want to use the Neumann condition functionality of the <ref refid="classcsmp_1_1_p_d_e___integrator" kindref="compound">PDE_Integrator</ref>. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::AndersonianBoundaryStressVisitor</label>
+        <link refid="classcsmp_1_1_andersonian_boundary_stress_visitor"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::Visitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_visitor"/>
+      </node>
+      <node id="2">
+        <label>csmp::Visitor&lt; 3U &gt;</label>
+        <link refid="classcsmp_1_1_visitor"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; 3U &gt;</edgelabel>
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::AndersonianBoundaryStressVisitor</label>
+        <link refid="classcsmp_1_1_andersonian_boundary_stress_visitor"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::Visitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_visitor"/>
+      </node>
+      <node id="2">
+        <label>csmp::Visitor&lt; 3U &gt;</label>
+        <link refid="classcsmp_1_1_visitor"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; 3U &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/thmc/mechanics/AndersonianBoundaryStressVisitor.h" line="61" column="1" bodyfile="source/includes/thmc/mechanics/AndersonianBoundaryStressVisitor.h" bodystart="61" bodyend="90"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_andersonian_boundary_stress_visitor_1a256e75c754c35b7d041c77d020c103ef" prot="private" virt="non-virtual"><scope>csmp::AndersonianBoundaryStressVisitor</scope><name>Andersonian_stress_</name></member>
+      <member refid="classcsmp_1_1_andersonian_boundary_stress_visitor_1a072d3f2d03698fbb5164c370b5877a68" prot="public" virt="non-virtual"><scope>csmp::AndersonianBoundaryStressVisitor</scope><name>AndersonianBoundaryStressVisitor</name></member>
+      <member refid="classcsmp_1_1_visitor_1af785c6c9fdbe53d3edcb37e5eebf13ae" prot="protected" virt="non-virtual"><scope>csmp::AndersonianBoundaryStressVisitor</scope><name>application_level_</name></member>
+      <member refid="classcsmp_1_1_visitor_1a4ba2f25168d6531e7a850f5f2d0dc9bb" prot="protected" virt="non-virtual"><scope>csmp::AndersonianBoundaryStressVisitor</scope><name>application_target_</name></member>
+      <member refid="classcsmp_1_1_visitor_1a04cef3d343b9721c4d636f5496ccfa42" prot="public" virt="non-virtual"><scope>csmp::AndersonianBoundaryStressVisitor</scope><name>ApplicationLevel</name></member>
+      <member refid="classcsmp_1_1_visitor_1a05b9c8127e47ce0ca524e2804c14251a" prot="public" virt="non-virtual"><scope>csmp::AndersonianBoundaryStressVisitor</scope><name>ApplicationTarget</name></member>
+      <member refid="classcsmp_1_1_andersonian_boundary_stress_visitor_1a344e66f92aac19d229f0b01437e26814" prot="private" virt="non-virtual"><scope>csmp::AndersonianBoundaryStressVisitor</scope><name>F_key_</name></member>
+      <member refid="classcsmp_1_1_andersonian_boundary_stress_visitor_1a75dc43918f1f75205ce1fba4459332ee" prot="private" virt="non-virtual"><scope>csmp::AndersonianBoundaryStressVisitor</scope><name>far_field_stress_</name></member>
+      <member refid="classcsmp_1_1_andersonian_boundary_stress_visitor_1a38a1b8cc32ff0b2b50885e2493497396" prot="private" virt="non-virtual"><scope>csmp::AndersonianBoundaryStressVisitor</scope><name>force_</name></member>
+      <member refid="classcsmp_1_1_andersonian_boundary_stress_visitor_1a55d3f1003eaea6aca7b8d8399b52f3b0" prot="private" virt="non-virtual"><scope>csmp::AndersonianBoundaryStressVisitor</scope><name>nrml_</name></member>
+      <member refid="classcsmp_1_1_andersonian_boundary_stress_visitor_1a893bf8a4186ae866139e9838931baa33" prot="private" virt="non-virtual"><scope>csmp::AndersonianBoundaryStressVisitor</scope><name>overwrite_previous_forces_</name></member>
+      <member refid="classcsmp_1_1_visitor_1a005bb17978ed03376bc3f7c1c329c936" prot="public" virt="virtual"><scope>csmp::AndersonianBoundaryStressVisitor</scope><name>SetInitialProperties</name></member>
+      <member refid="classcsmp_1_1_andersonian_boundary_stress_visitor_1a8b788eebef09a3f11424815621cbd939" prot="private" virt="non-virtual"><scope>csmp::AndersonianBoundaryStressVisitor</scope><name>Sn_</name></member>
+      <member refid="classcsmp_1_1_andersonian_boundary_stress_visitor_1a51444e46a0ae43a251018197d44b22e8" prot="private" virt="non-virtual"><scope>csmp::AndersonianBoundaryStressVisitor</scope><name>Sn_key_</name></member>
+      <member refid="classcsmp_1_1_andersonian_boundary_stress_visitor_1a06fd0d092996bd90ced46fbd1493b350" prot="private" virt="non-virtual"><scope>csmp::AndersonianBoundaryStressVisitor</scope><name>Ss_</name></member>
+      <member refid="classcsmp_1_1_andersonian_boundary_stress_visitor_1a0d7e42b8cb06daee55b5bac4ff6df97c" prot="private" virt="non-virtual"><scope>csmp::AndersonianBoundaryStressVisitor</scope><name>Ss_key_</name></member>
+      <member refid="classcsmp_1_1_andersonian_boundary_stress_visitor_1a1629a84574c52581f25147b7870aa06a" prot="private" virt="non-virtual"><scope>csmp::AndersonianBoundaryStressVisitor</scope><name>stress_regime_</name></member>
+      <member refid="classcsmp_1_1_andersonian_boundary_stress_visitor_1ad570cc3f52862a40692560b773ef4b25" prot="private" virt="non-virtual"><scope>csmp::AndersonianBoundaryStressVisitor</scope><name>Sv_</name></member>
+      <member refid="classcsmp_1_1_andersonian_boundary_stress_visitor_1a4f8eef70d0f0880d86414ec3f6442dbe" prot="private" virt="non-virtual"><scope>csmp::AndersonianBoundaryStressVisitor</scope><name>Sv_key_</name></member>
+      <member refid="classcsmp_1_1_andersonian_boundary_stress_visitor_1a4d61646d25ec957a95f7d20e91ff5a75" prot="private" virt="non-virtual"><scope>csmp::AndersonianBoundaryStressVisitor</scope><name>vc_</name></member>
+      <member refid="classcsmp_1_1_visitor_1a5dc481fceb0110431c4d1d6cbcc9ceff" prot="public" virt="non-virtual"><scope>csmp::AndersonianBoundaryStressVisitor</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_andersonian_boundary_stress_visitor_1a939226e91739faa010163dcb6c0925b6" prot="public" virt="virtual"><scope>csmp::AndersonianBoundaryStressVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_andersonian_boundary_stress_visitor_1a6310f82e116ce29d82a0b100f01f37a9" prot="public" virt="virtual"><scope>csmp::AndersonianBoundaryStressVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a07433f464353062d91f21684b9378dec" prot="public" virt="virtual" ambiguityscope="csmp::Visitor&lt; 3U &gt;::"><scope>csmp::AndersonianBoundaryStressVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a1097abaa59d3a35d65c0cb6335e2719c" prot="public" virt="non-virtual"><scope>csmp::AndersonianBoundaryStressVisitor</scope><name>Visitor</name></member>
+      <member refid="classcsmp_1_1_andersonian_boundary_stress_visitor_1aac70fef32c1d3ced65d4633e23b5e949" prot="public" virt="virtual"><scope>csmp::AndersonianBoundaryStressVisitor</scope><name>~AndersonianBoundaryStressVisitor</name></member>
+      <member refid="classcsmp_1_1_visitor_1ab83b6d2b06153f5b7b1050bfffdb2707" prot="public" virt="virtual"><scope>csmp::AndersonianBoundaryStressVisitor</scope><name>~Visitor</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

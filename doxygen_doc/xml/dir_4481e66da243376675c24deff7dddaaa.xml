@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_4481e66da243376675c24deff7dddaaa" kind="dir">
+    <compoundname>source/modules/integration/finite_volumes</compoundname>
+    <innerdir refid="dir_a92eea439a09a62d129ec5711847667a">source/modules/integration/finite_volumes/DES_transport_scheme</innerdir>
+    <innerdir refid="dir_22ec5671597b121a1ce5b3faf7563471">source/modules/integration/finite_volumes/generic_transport_scheme</innerdir>
+    <innerdir refid="dir_b92ccff59f21b3c860aeee581c46f0b3">source/modules/integration/finite_volumes/legacy_transport_scheme</innerdir>
+    <innerfile refid="finite_volume_auxiliary_functions_8cpp">finiteVolumeAuxiliaryFunctions.cpp</innerfile>
+    <innerfile refid="_finite_volume_policy1_8cpp">FiniteVolumePolicy1.cpp</innerfile>
+    <innerfile refid="_finite_volume_policy2_8cpp">FiniteVolumePolicy2.cpp</innerfile>
+    <innerfile refid="_finite_volume_policy3_8cpp">FiniteVolumePolicy3.cpp</innerfile>
+    <innerfile refid="_finite_volume_stencil_8cpp">FiniteVolumeStencil.cpp</innerfile>
+    <innerfile refid="_finite_volume_stencil_manager_8cpp">FiniteVolumeStencilManager.cpp</innerfile>
+    <innerfile refid="_f_v___integration_points_and_weights_8cpp">FV_IntegrationPointsAndWeights.cpp</innerfile>
+    <innerfile refid="_generic_node_property_gradient_8cpp">GenericNodePropertyGradient.cpp</innerfile>
+    <innerfile refid="_generic_node_property_gradient_limiter_8cpp">GenericNodePropertyGradientLimiter.cpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="source/modules/integration/finite_volumes/"/>
+  </compounddef>
+</doxygen>

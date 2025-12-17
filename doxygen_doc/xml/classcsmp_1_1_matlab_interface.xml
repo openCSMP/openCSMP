@@ -1,0 +1,181 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_matlab_interface" kind="class" language="C++" prot="public">
+    <compoundname>csmp::MatlabInterface</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_matlab_interface_1a4c8bb62669d152d2370a0a7d6772aa3b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::MatlabInterface::MatlabInterface</definition>
+        <argsstring>()</argsstring>
+        <name>MatlabInterface</name>
+        <qualifiedname>csmp::MatlabInterface::MatlabInterface</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Matlab/MatlabInterface.h" line="10" column="5" bodyfile="source/modules/interfaces/Matlab/MatlabInterface.cpp" bodystart="9" bodyend="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matlab_interface_1a2bc45653af3a122202f7eb4cd40749bf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::MatlabInterface::~MatlabInterface</definition>
+        <argsstring>()</argsstring>
+        <name>~MatlabInterface</name>
+        <qualifiedname>csmp::MatlabInterface::~MatlabInterface</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Matlab/MatlabInterface.h" line="11" column="5" bodyfile="source/modules/interfaces/Matlab/MatlabInterface.cpp" bodystart="10" bodyend="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matlab_interface_1a1d8d9b9e638dc30728a7a2a51de4ef56" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::MatlabInterface::Write2DMatlabFile</definition>
+        <argsstring>(Model&lt; 2U &gt; &amp;, const char *file_name, const char *variable_name, long step, const char *region_name=&quot;Model&quot;)</argsstring>
+        <name>Write2DMatlabFile</name>
+        <qualifiedname>csmp::MatlabInterface::Write2DMatlabFile</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; 2U &gt; &amp;</type>
+          <defname>mdl</defname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>file_name</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>variable_name</declname>
+        </param>
+        <param>
+          <type>long</type>
+          <declname>step</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>region_name</declname>
+          <defval>&quot;Model&quot;</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Matlab/MatlabInterface.h" line="14" column="10" bodyfile="source/modules/interfaces/Matlab/MatlabInterface.cpp" bodystart="147" bodyend="237"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matlab_interface_1a2ef264c3cdfebb5062a51365640d3775" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::MatlabInterface::ExtractAndWrite1DVariableProfileAlongX</definition>
+        <argsstring>(Model&lt; 2U &gt; &amp;, double distance, const char *name, const char *variable, long step)</argsstring>
+        <name>ExtractAndWrite1DVariableProfileAlongX</name>
+        <qualifiedname>csmp::MatlabInterface::ExtractAndWrite1DVariableProfileAlongX</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; 2U &gt; &amp;</type>
+          <defname>mdl</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>distance</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>variable</declname>
+        </param>
+        <param>
+          <type>long</type>
+          <declname>step</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Matlab/MatlabInterface.h" line="15" column="10" bodyfile="source/modules/interfaces/Matlab/MatlabInterface.cpp" bodystart="13" bodyend="72"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matlab_interface_1a0165ddf388b3adcfefea3701d2beab6e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::MatlabInterface::ExtractAndWrite1DVariableProfileAlongY</definition>
+        <argsstring>(Model&lt; 2U &gt; &amp;, double distance, const char *name, const char *variable, long step)</argsstring>
+        <name>ExtractAndWrite1DVariableProfileAlongY</name>
+        <qualifiedname>csmp::MatlabInterface::ExtractAndWrite1DVariableProfileAlongY</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; 2U &gt; &amp;</type>
+          <defname>mdl</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>distance</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>variable</declname>
+        </param>
+        <param>
+          <type>long</type>
+          <declname>step</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Matlab/MatlabInterface.h" line="16" column="10" bodyfile="source/modules/interfaces/Matlab/MatlabInterface.cpp" bodystart="75" bodyend="136"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_matlab_interface_1ad45cf4a20ecf4b9b6c853d5b646eba06" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::MatlabInterface::WriteSavedTimeStepsFile</definition>
+        <argsstring>(long step, const char *name=&quot;saved_time_steps.txt&quot;)</argsstring>
+        <name>WriteSavedTimeStepsFile</name>
+        <qualifiedname>csmp::MatlabInterface::WriteSavedTimeStepsFile</qualifiedname>
+        <param>
+          <type>long</type>
+          <declname>step</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>name</declname>
+          <defval>&quot;saved_time_steps.txt&quot;</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Matlab/MatlabInterface.h" line="17" column="10" bodyfile="source/modules/interfaces/Matlab/MatlabInterface.cpp" bodystart="139" bodyend="145"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::MatlabInterface</label>
+        <link refid="classcsmp_1_1_matlab_interface"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/interfaces/Matlab/MatlabInterface.h" line="8" column="1" bodyfile="source/includes/interfaces/Matlab/MatlabInterface.h" bodystart="8" bodyend="18"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_matlab_interface_1a2ef264c3cdfebb5062a51365640d3775" prot="public" virt="non-virtual"><scope>csmp::MatlabInterface</scope><name>ExtractAndWrite1DVariableProfileAlongX</name></member>
+      <member refid="classcsmp_1_1_matlab_interface_1a0165ddf388b3adcfefea3701d2beab6e" prot="public" virt="non-virtual"><scope>csmp::MatlabInterface</scope><name>ExtractAndWrite1DVariableProfileAlongY</name></member>
+      <member refid="classcsmp_1_1_matlab_interface_1a4c8bb62669d152d2370a0a7d6772aa3b" prot="public" virt="non-virtual"><scope>csmp::MatlabInterface</scope><name>MatlabInterface</name></member>
+      <member refid="classcsmp_1_1_matlab_interface_1a1d8d9b9e638dc30728a7a2a51de4ef56" prot="public" virt="non-virtual"><scope>csmp::MatlabInterface</scope><name>Write2DMatlabFile</name></member>
+      <member refid="classcsmp_1_1_matlab_interface_1ad45cf4a20ecf4b9b6c853d5b646eba06" prot="public" virt="non-virtual"><scope>csmp::MatlabInterface</scope><name>WriteSavedTimeStepsFile</name></member>
+      <member refid="classcsmp_1_1_matlab_interface_1a2bc45653af3a122202f7eb4cd40749bf" prot="public" virt="non-virtual"><scope>csmp::MatlabInterface</scope><name>~MatlabInterface</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

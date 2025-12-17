@@ -1,0 +1,1428 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_corner_point_grid" kind="class" language="C++" prot="public">
+    <compoundname>csmp::CornerPointGrid</compoundname>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_corner_point_grid_1ac79190048eb0394c2c99dbd65b9c3851" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::CornerPointGrid::NX_</definition>
+        <argsstring></argsstring>
+        <name>NX_</name>
+        <qualifiedname>csmp::CornerPointGrid::NX_</qualifiedname>
+        <briefdescription>
+<para>max index of cell in x direction </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="136" column="10" bodyfile="source/includes/regular_grids/CornerPointGrid.h" bodystart="136" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_corner_point_grid_1a7e787268c4cff97c7a11b31258ac5ce7" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::CornerPointGrid::NY_</definition>
+        <argsstring></argsstring>
+        <name>NY_</name>
+        <qualifiedname>csmp::CornerPointGrid::NY_</qualifiedname>
+        <briefdescription>
+<para>max index of cell in y direction </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="137" column="10" bodyfile="source/includes/regular_grids/CornerPointGrid.h" bodystart="137" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_corner_point_grid_1aa7dae8987e32b4e9a7348264a3a219be" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::CornerPointGrid::NZ_</definition>
+        <argsstring></argsstring>
+        <name>NZ_</name>
+        <qualifiedname>csmp::CornerPointGrid::NZ_</qualifiedname>
+        <briefdescription>
+<para>max index of cell in z direction </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="138" column="10" bodyfile="source/includes/regular_grids/CornerPointGrid.h" bodystart="138" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_corner_point_grid_1a66b8d1b6b0bc54364ba79f37b01c1fee" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_pillar" kindref="compound">csmp::Pillar</ref> &gt;</type>
+        <definition>std::vector&lt;csmp::Pillar&gt; csmp::CornerPointGrid::pillars_</definition>
+        <argsstring></argsstring>
+        <name>pillars_</name>
+        <qualifiedname>csmp::CornerPointGrid::pillars_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="140" column="15" bodyfile="source/includes/regular_grids/CornerPointGrid.h" bodystart="140" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_corner_point_grid_1ad051eeef54c61583d613b98c1b3a2df5" prot="private" static="no" mutable="no">
+        <type>std::map&lt; std::pair&lt; uint32_t, uint32_t &gt;, <ref refid="structcsmp_1_1_column" kindref="compound">csmp::Column</ref> &gt;</type>
+        <definition>std::map&lt;std::pair&lt;uint32_t, uint32_t&gt;, csmp::Column&gt; csmp::CornerPointGrid::columns_</definition>
+        <argsstring></argsstring>
+        <name>columns_</name>
+        <qualifiedname>csmp::CornerPointGrid::columns_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="141" column="12" bodyfile="source/includes/regular_grids/CornerPointGrid.h" bodystart="141" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_corner_point_grid_1a9717e525cb7f400897e0b595de86c0a4" prot="private" static="no" mutable="no">
+        <type>std::multimap&lt; <ref refid="structijk" kindref="compound">ijk</ref>, size_t &gt;</type>
+        <definition>std::multimap&lt;ijk, size_t&gt; csmp::CornerPointGrid::elementMap</definition>
+        <argsstring></argsstring>
+        <name>elementMap</name>
+        <qualifiedname>csmp::CornerPointGrid::elementMap</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="142" column="17" bodyfile="source/includes/regular_grids/CornerPointGrid.h" bodystart="142" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_corner_point_grid_1ac78c247ac8ffbd8658feff63d481bae9" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_cell_generator" kindref="compound">CellGenerator</ref> *</type>
+        <definition>CellGenerator* csmp::CornerPointGrid::generator_</definition>
+        <argsstring></argsstring>
+        <name>generator_</name>
+        <qualifiedname>csmp::CornerPointGrid::generator_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="143" column="17" bodyfile="source/includes/regular_grids/CornerPointGrid.h" bodystart="143" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_corner_point_grid_1a963d4b708e1134b60b565fca79a25e94" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::CornerPointGrid::badHexahedra_</definition>
+        <argsstring></argsstring>
+        <name>badHexahedra_</name>
+        <qualifiedname>csmp::CornerPointGrid::badHexahedra_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="145" column="10" bodyfile="source/includes/regular_grids/CornerPointGrid.h" bodystart="145" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_corner_point_grid_1ae164c9b0b669f42e8173fb24a7dea046" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::CornerPointGrid::badPyramids_</definition>
+        <argsstring></argsstring>
+        <name>badPyramids_</name>
+        <qualifiedname>csmp::CornerPointGrid::badPyramids_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="146" column="10" bodyfile="source/includes/regular_grids/CornerPointGrid.h" bodystart="146" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_corner_point_grid_1af12c790d8721a6f1b5a6fc2ad0e60bd0" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::CornerPointGrid::badTetrahedra_</definition>
+        <argsstring></argsstring>
+        <name>badTetrahedra_</name>
+        <qualifiedname>csmp::CornerPointGrid::badTetrahedra_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="147" column="10" bodyfile="source/includes/regular_grids/CornerPointGrid.h" bodystart="147" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_corner_point_grid_1ad4359435a3f8fa55f728dab723b1bf5b" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::CornerPointGrid::badPrisms_</definition>
+        <argsstring></argsstring>
+        <name>badPrisms_</name>
+        <qualifiedname>csmp::CornerPointGrid::badPrisms_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="148" column="10" bodyfile="source/includes/regular_grids/CornerPointGrid.h" bodystart="148" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_corner_point_grid_1a8bce1d0684804414e1363005e20708f5" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::CornerPointGrid::badLines_</definition>
+        <argsstring></argsstring>
+        <name>badLines_</name>
+        <qualifiedname>csmp::CornerPointGrid::badLines_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="149" column="10" bodyfile="source/includes/regular_grids/CornerPointGrid.h" bodystart="149" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_corner_point_grid_1af7f3642a370caf02f079d4878ad1a24b" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::CornerPointGrid::active_elements_</definition>
+        <argsstring></argsstring>
+        <name>active_elements_</name>
+        <qualifiedname>csmp::CornerPointGrid::active_elements_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="174" column="10" bodyfile="source/includes/regular_grids/CornerPointGrid.h" bodystart="174" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_corner_point_grid_1ad6192ee94f12903a1656ea3a3437413f" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; uint8_t &gt;</type>
+        <definition>std::vector&lt;uint8_t&gt; csmp::CornerPointGrid::cell_activity_</definition>
+        <argsstring></argsstring>
+        <name>cell_activity_</name>
+        <qualifiedname>csmp::CornerPointGrid::cell_activity_</qualifiedname>
+        <briefdescription>
+<para>active/inactive cells </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="175" column="15" bodyfile="source/includes/regular_grids/CornerPointGrid.h" bodystart="175" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_corner_point_grid_1a8cee3349e18d22ad54577d3aa9d6c36e" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::CornerPointGrid::NX_x_NY_</definition>
+        <argsstring></argsstring>
+        <name>NX_x_NY_</name>
+        <qualifiedname>csmp::CornerPointGrid::NX_x_NY_</qualifiedname>
+        <briefdescription>
+<para>specifications of mesh derived from grid </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="179" column="10" bodyfile="source/includes/regular_grids/CornerPointGrid.h" bodystart="179" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_corner_point_grid_1a561adb8b377a61f31714303ffc205a35" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::CornerPointGrid::elements_</definition>
+        <argsstring></argsstring>
+        <name>elements_</name>
+        <qualifiedname>csmp::CornerPointGrid::elements_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="180" column="10" bodyfile="source/includes/regular_grids/CornerPointGrid.h" bodystart="180" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_corner_point_grid_1a0abf3b6e3b3cc9993f6b7121d2b6b951" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::CornerPointGrid::ordinaryNodes_</definition>
+        <argsstring></argsstring>
+        <name>ordinaryNodes_</name>
+        <qualifiedname>csmp::CornerPointGrid::ordinaryNodes_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="180" column="20" bodyfile="source/includes/regular_grids/CornerPointGrid.h" bodystart="180" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_corner_point_grid_1a75d306e4e4073e4c3e34d96517422805" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt; &gt;</type>
+        <definition>std::vector&lt;csmp::Point&lt;3U&gt; &gt; csmp::CornerPointGrid::axes_</definition>
+        <argsstring></argsstring>
+        <name>axes_</name>
+        <qualifiedname>csmp::CornerPointGrid::axes_</qualifiedname>
+        <briefdescription>
+<para>reservoir coordinate system </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="181" column="16" bodyfile="source/includes/regular_grids/CornerPointGrid.h" bodystart="181" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_grid_1aed900385ce6a71387396a64bb3a13280" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::CornerPointGrid::CornerPointGrid</definition>
+        <argsstring>()</argsstring>
+        <name>CornerPointGrid</name>
+        <qualifiedname>csmp::CornerPointGrid::CornerPointGrid</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="94" column="3" bodyfile="source/modules/regular_grids/CornerPointGrid.cpp" bodystart="30" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_grid_1a0a7abb6615b30b90327b78e567b87d67" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::CornerPointGrid::~CornerPointGrid</definition>
+        <argsstring>()</argsstring>
+        <name>~CornerPointGrid</name>
+        <qualifiedname>csmp::CornerPointGrid::~CornerPointGrid</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="95" column="3" bodyfile="source/modules/regular_grids/CornerPointGrid.cpp" bodystart="38" bodyend="40"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_grid_1a38c23e1bcbf434ac85f39cf70f7353da" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointGrid::CreateModel</definition>
+        <argsstring>(const std::string &amp;model_name, csmp::VSet&lt; 3U &gt; &amp;vset, csmp::ModelTopology &amp;model_topology, const std::vector&lt; double &gt; &amp;zcorn, std::set&lt; std::string &gt; &amp;regions, std::set&lt; std::string &gt; &amp;faults, std::set&lt; std::string &gt; &amp;wells, bool tetra_mesh, bool exclude_inactive_cells)</argsstring>
+        <name>CreateModel</name>
+        <qualifiedname>csmp::CornerPointGrid::CreateModel</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>model_name</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">csmp::VSet</ref>&lt; 3U &gt; &amp;</type>
+          <declname>vset</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_model_topology" kindref="compound">csmp::ModelTopology</ref> &amp;</type>
+          <declname>model_topology</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>zcorn</declname>
+        </param>
+        <param>
+          <type>std::set&lt; std::string &gt; &amp;</type>
+          <declname>regions</declname>
+        </param>
+        <param>
+          <type>std::set&lt; std::string &gt; &amp;</type>
+          <declname>faults</declname>
+        </param>
+        <param>
+          <type>std::set&lt; std::string &gt; &amp;</type>
+          <declname>wells</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>tetra_mesh</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>exclude_inactive_cells</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>MASTER METHOD for the creation of corner point grids from the original cell-centered grids read by the <ref refid="classcsmp_1_1_eclipse_interface" kindref="compound">EclipseInterface</ref>.</para>
+<para>The <ref refid="classcsmp_1_1_polygon_grid_manager" kindref="compound">PolygonGridManager</ref> is used to construct the pillars.</para>
+<para><xrefsect id="todo_1_todo000197"><xreftitle>Todo</xreftitle><xrefdescription><para>this is confused! - why should the corner point grid be responsible for building the CSMP model? - code should be in the <ref refid="classcsmp_1_1_eclipse_model" kindref="compound">EclipseModel</ref></para>
+</xrefdescription></xrefsect></para>
+<para><xrefsect id="todo_1_todo000198"><xreftitle>Todo</xreftitle><xrefdescription><para>regions are not recognised properly. </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="97" column="8" bodyfile="source/modules/regular_grids/CornerPointGrid.cpp" bodystart="1392" bodyend="1409"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_grid_1a44ec7c953c860ee5a47c9113ae5b32f5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class VarType</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::CornerPointGrid::WritePropertyToVSet</definition>
+        <argsstring>(csmp::VSet&lt; 3U &gt; &amp;vset, const std::vector&lt; VarType &gt; &amp;prop_data, const std::string &amp;prop_name, const csmp::PLACEMENT &amp;prop_place) const</argsstring>
+        <name>WritePropertyToVSet</name>
+        <qualifiedname>csmp::CornerPointGrid::WritePropertyToVSet</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">csmp::VSet</ref>&lt; 3U &gt; &amp;</type>
+          <declname>vset</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; VarType &gt; &amp;</type>
+          <declname>prop_data</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>prop_name</declname>
+        </param>
+        <param>
+          <type>const <ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">csmp::PLACEMENT</ref> &amp;</type>
+          <declname>prop_place</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="109" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_grid_1a47aca34bf9073f03b5acf91e548eb02a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::CornerPointGrid::DimensionI</definition>
+        <argsstring>() const</argsstring>
+        <name>DimensionI</name>
+        <qualifiedname>csmp::CornerPointGrid::DimensionI</qualifiedname>
+        <briefdescription>
+<para>return the number of blocks the grid has in the given direction </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="115" column="10" bodyfile="source/includes/regular_grids/CornerPointGrid.h" bodystart="115" bodyend="115"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_grid_1a533a1805a415a251aa9be30817e85861" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::CornerPointGrid::DimensionJ</definition>
+        <argsstring>() const</argsstring>
+        <name>DimensionJ</name>
+        <qualifiedname>csmp::CornerPointGrid::DimensionJ</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="116" column="10" bodyfile="source/includes/regular_grids/CornerPointGrid.h" bodystart="116" bodyend="116"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_grid_1ad4dff1520840023057755c436706d37d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::CornerPointGrid::DimensionK</definition>
+        <argsstring>() const</argsstring>
+        <name>DimensionK</name>
+        <qualifiedname>csmp::CornerPointGrid::DimensionK</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="117" column="10" bodyfile="source/includes/regular_grids/CornerPointGrid.h" bodystart="117" bodyend="117"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_grid_1a612ef3b4f7b5638ef830f5a0f98c01d6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointGrid::AssignDimensions</definition>
+        <argsstring>(uint32_t nx, uint32_t ny, uint32_t nz)</argsstring>
+        <name>AssignDimensions</name>
+        <qualifiedname>csmp::CornerPointGrid::AssignDimensions</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>nx</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>ny</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>nz</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="119" column="8" bodyfile="source/modules/regular_grids/CornerPointGrid.cpp" bodystart="43" bodyend="48"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_grid_1a312e88fa5e127f78eb85e8b938cd43c0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointGrid::Resize</definition>
+        <argsstring>(uint32_t nx, uint32_t ny)</argsstring>
+        <name>Resize</name>
+        <qualifiedname>csmp::CornerPointGrid::Resize</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>nx</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>ny</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="121" column="8" bodyfile="source/modules/regular_grids/CornerPointGrid.cpp" bodystart="1464" bodyend="1467"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_grid_1af736ac5c6b20968f9fa6cc2d266b4f28" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_pillar" kindref="compound">csmp::Pillar</ref> &amp;</type>
+        <definition>Pillar &amp; csmp::CornerPointGrid::operator()</definition>
+        <argsstring>(uint32_t i, uint32_t j)</argsstring>
+        <name>operator()</name>
+        <qualifiedname>csmp::CornerPointGrid::operator()</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>j</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>accessing the contained pillars </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="122" column="16" bodyfile="source/modules/regular_grids/CornerPointGrid.cpp" bodystart="1473" bodyend="1479"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_grid_1aceb386fb32892c1074fb817be2d2562c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::vector&lt; uint8_t &gt; &amp;</type>
+        <definition>vector&lt; uint8_t &gt; &amp; csmp::CornerPointGrid::GetCellActivity</definition>
+        <argsstring>()</argsstring>
+        <name>GetCellActivity</name>
+        <qualifiedname>csmp::CornerPointGrid::GetCellActivity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="124" column="15" bodyfile="source/modules/regular_grids/CornerPointGrid.cpp" bodystart="91" bodyend="94"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_grid_1a1c80364bebdb45c77fe502ec298fb7dd" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::CornerPointGrid::OrdinaryNodes</definition>
+        <argsstring>() const</argsstring>
+        <name>OrdinaryNodes</name>
+        <qualifiedname>csmp::CornerPointGrid::OrdinaryNodes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="126" column="10" bodyfile="source/includes/regular_grids/CornerPointGrid.h" bodystart="126" bodyend="126"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_grid_1a9516ea6015584611e5e5727c59aa80b6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::multimap&lt; <ref refid="structijk" kindref="compound">ijk</ref>, size_t &gt; &amp;</type>
+        <definition>std::multimap&lt; ijk, size_t &gt; &amp; csmp::CornerPointGrid::IJKMap</definition>
+        <argsstring>()</argsstring>
+        <name>IJKMap</name>
+        <qualifiedname>csmp::CornerPointGrid::IJKMap</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="128" column="17" bodyfile="source/includes/regular_grids/CornerPointGrid.h" bodystart="128" bodyend="128"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_grid_1a369907a8420b40bb54bc303d130c801a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointGrid::ConvertFromReservoirToCSMPcoordinateSystem</definition>
+        <argsstring>(csmp::Point&lt; 3U &gt; &amp;pt) const</argsstring>
+        <name>ConvertFromReservoirToCSMPcoordinateSystem</name>
+        <qualifiedname>csmp::CornerPointGrid::ConvertFromReservoirToCSMPcoordinateSystem</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt; &amp;</type>
+          <declname>pt</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>x stays, y = -z and z=y. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="130" column="8" bodyfile="source/modules/regular_grids/CornerPointGrid.cpp" bodystart="73" bodyend="79"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_grid_1a65a08601af3b24472186eb66c2925d3c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::CornerPointGrid::ConstructLineElement</definition>
+        <argsstring>(uint32_t &amp;i, uint32_t &amp;j, uint32_t &amp;k, size_t &amp;new_elemt_idx)</argsstring>
+        <name>ConstructLineElement</name>
+        <qualifiedname>csmp::CornerPointGrid::ConstructLineElement</qualifiedname>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>j</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>k</declname>
+        </param>
+        <param>
+          <type>size_t &amp;</type>
+          <declname>new_elemt_idx</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="131" column="8" bodyfile="source/modules/regular_grids/CornerPointGrid.cpp" bodystart="1326" bodyend="1356"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_grid_1a82ed0ada89a436752157b154f65462f2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::CornerPointGrid::ConstructLineElement</definition>
+        <argsstring>(csmp::ColumnCell &amp;cell, uint32_t &amp;i, uint32_t &amp;j, uint32_t &amp;k)</argsstring>
+        <name>ConstructLineElement</name>
+        <qualifiedname>csmp::CornerPointGrid::ConstructLineElement</qualifiedname>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> &amp;</type>
+          <declname>cell</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>j</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>k</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="132" column="8" bodyfile="source/modules/regular_grids/CornerPointGrid.cpp" bodystart="1359" bodyend="1378"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_grid_1a09f4caebb89b6d395d60200feb58b9f2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_cell_generator" kindref="compound">CellGenerator</ref> *</type>
+        <definition>CellGenerator * csmp::CornerPointGrid::GetCellGenerator</definition>
+        <argsstring>()</argsstring>
+        <name>GetCellGenerator</name>
+        <qualifiedname>csmp::CornerPointGrid::GetCellGenerator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="133" column="17" bodyfile="source/includes/regular_grids/CornerPointGrid.h" bodystart="133" bodyend="133"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_grid_1ab15514b1ae88d9fc42040cfa3b2e5315" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class VarType</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::CornerPointGrid::WritePropertyToVSet</definition>
+        <argsstring>(csmp::VSet&lt; 3U &gt; &amp;vset, const vector&lt; VarType &gt; &amp;prop_data, const string &amp;prop_name, const csmp::PLACEMENT &amp;prop_place) const</argsstring>
+        <name>WritePropertyToVSet</name>
+        <qualifiedname>csmp::CornerPointGrid::WritePropertyToVSet</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">csmp::VSet</ref>&lt; 3U &gt; &amp;</type>
+          <declname>vset</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classvector" kindref="compound">vector</ref>&lt; VarType &gt; &amp;</type>
+          <declname>prop_data</declname>
+        </param>
+        <param>
+          <type>const string &amp;</type>
+          <declname>prop_name</declname>
+        </param>
+        <param>
+          <type>const <ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">csmp::PLACEMENT</ref> &amp;</type>
+          <declname>prop_place</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para>correcting data cell id&apos;s due to existance of embedded cells</para>
+        </inbodydescription>
+        <location file="source/modules/regular_grids/CornerPointGrid.cpp" line="1419" column="6" bodyfile="source/modules/regular_grids/CornerPointGrid.cpp" bodystart="1419" bodyend="1455"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_grid_1a9bfbe46e108f503c06fb5e6e57e0c1ed" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointGrid::InitializeGridSpecs</definition>
+        <argsstring>()</argsstring>
+        <name>InitializeGridSpecs</name>
+        <qualifiedname>csmp::CornerPointGrid::InitializeGridSpecs</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="152" column="8" bodyfile="source/modules/regular_grids/CornerPointGrid.cpp" bodystart="52" bodyend="67"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_grid_1adb242d3ddb65c6cabb386777da4a8460" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointGrid::ConstructPillarsAndColumns</definition>
+        <argsstring>(const std::vector&lt; double &gt; &amp;zcorn)</argsstring>
+        <name>ConstructPillarsAndColumns</name>
+        <qualifiedname>csmp::CornerPointGrid::ConstructPillarsAndColumns</qualifiedname>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>zcorn</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Builds the pillars and columns. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="153" column="8" bodyfile="source/modules/regular_grids/CornerPointGrid.cpp" bodystart="101" bodyend="205"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_grid_1a55dd4442e1cfc6839d8881812b20617a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointGrid::ConstructFiniteElementsFromColumns</definition>
+        <argsstring>(VSet&lt; 3U &gt; &amp;vset)</argsstring>
+        <name>ConstructFiniteElementsFromColumns</name>
+        <qualifiedname>csmp::CornerPointGrid::ConstructFiniteElementsFromColumns</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; 3U &gt; &amp;</type>
+          <declname>vset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para>referred to the classifications of the cell above and the cell beneath <linebreak/>
+</para>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="154" column="8" bodyfile="source/modules/regular_grids/CornerPointGrid.cpp" bodystart="210" bodyend="456"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_grid_1a4646e11458523da4e4b6d5f9628dcb8e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::CornerPointGrid::ConstructEclipseCell0000</definition>
+        <argsstring>(csmp::ColumnCell &amp;cell, uint32_t &amp;i, uint32_t &amp;j, uint32_t &amp;k, csmp::ColumnCell *cellAbove, csmp::ColumnCell *cellBeneath)</argsstring>
+        <name>ConstructEclipseCell0000</name>
+        <qualifiedname>csmp::CornerPointGrid::ConstructEclipseCell0000</qualifiedname>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> &amp;</type>
+          <declname>cell</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>j</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>k</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> *</type>
+          <declname>cellAbove</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> *</type>
+          <declname>cellBeneath</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="155" column="8" bodyfile="source/modules/regular_grids/CornerPointGrid.cpp" bodystart="461" bodyend="1008"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_grid_1a4fcc98081fceacb992b5c0a2c9ead0a2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::CornerPointGrid::ConstructEclipseCell0001</definition>
+        <argsstring>(csmp::ColumnCell &amp;cell, uint32_t &amp;i, uint32_t &amp;j, uint32_t &amp;k, csmp::ColumnCell *cellAbove, csmp::ColumnCell *cellBeneath)</argsstring>
+        <name>ConstructEclipseCell0001</name>
+        <qualifiedname>csmp::CornerPointGrid::ConstructEclipseCell0001</qualifiedname>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> &amp;</type>
+          <declname>cell</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>j</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>k</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> *</type>
+          <declname>cellAbove</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> *</type>
+          <declname>cellBeneath</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="156" column="8" bodyfile="source/modules/regular_grids/CornerPointGrid.cpp" bodystart="1011" bodyend="1038"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_grid_1a6ac5dd77bbfb5d9a0eb99ad305f3f23a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::CornerPointGrid::ConstructEclipseCell0010</definition>
+        <argsstring>(csmp::ColumnCell &amp;cell, uint32_t &amp;i, uint32_t &amp;j, uint32_t &amp;k, csmp::ColumnCell *cellAbove, csmp::ColumnCell *cellBeneath)</argsstring>
+        <name>ConstructEclipseCell0010</name>
+        <qualifiedname>csmp::CornerPointGrid::ConstructEclipseCell0010</qualifiedname>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> &amp;</type>
+          <declname>cell</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>j</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>k</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> *</type>
+          <declname>cellAbove</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> *</type>
+          <declname>cellBeneath</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="157" column="8" bodyfile="source/modules/regular_grids/CornerPointGrid.cpp" bodystart="1040" bodyend="1069"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_grid_1a4e2de4a4bda099b69b199b6264252eb8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::CornerPointGrid::ConstructEclipseCell0011</definition>
+        <argsstring>(csmp::ColumnCell &amp;cell, uint32_t &amp;i, uint32_t &amp;j, uint32_t &amp;k, csmp::ColumnCell *cellAbove, csmp::ColumnCell *cellBeneath)</argsstring>
+        <name>ConstructEclipseCell0011</name>
+        <qualifiedname>csmp::CornerPointGrid::ConstructEclipseCell0011</qualifiedname>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> &amp;</type>
+          <declname>cell</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>j</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>k</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> *</type>
+          <declname>cellAbove</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> *</type>
+          <declname>cellBeneath</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="158" column="8" bodyfile="source/modules/regular_grids/CornerPointGrid.cpp" bodystart="1071" bodyend="1079"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_grid_1a9722e1f6c69b27ea221706fa8cb86f31" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::CornerPointGrid::ConstructEclipseCell0100</definition>
+        <argsstring>(csmp::ColumnCell &amp;cell, uint32_t &amp;i, uint32_t &amp;j, uint32_t &amp;k, csmp::ColumnCell *cellAbove, csmp::ColumnCell *cellBeneath)</argsstring>
+        <name>ConstructEclipseCell0100</name>
+        <qualifiedname>csmp::CornerPointGrid::ConstructEclipseCell0100</qualifiedname>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> &amp;</type>
+          <declname>cell</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>j</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>k</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> *</type>
+          <declname>cellAbove</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> *</type>
+          <declname>cellBeneath</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="159" column="8" bodyfile="source/modules/regular_grids/CornerPointGrid.cpp" bodystart="1081" bodyend="1108"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_grid_1a521e21c0fbeb72349b315e339d867cdd" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::CornerPointGrid::ConstructEclipseCell0101</definition>
+        <argsstring>(csmp::ColumnCell &amp;cell, uint32_t &amp;i, uint32_t &amp;j, uint32_t &amp;k, csmp::ColumnCell *cellAbove, csmp::ColumnCell *cellBeneath)</argsstring>
+        <name>ConstructEclipseCell0101</name>
+        <qualifiedname>csmp::CornerPointGrid::ConstructEclipseCell0101</qualifiedname>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> &amp;</type>
+          <declname>cell</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>j</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>k</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> *</type>
+          <declname>cellAbove</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> *</type>
+          <declname>cellBeneath</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="160" column="8" bodyfile="source/modules/regular_grids/CornerPointGrid.cpp" bodystart="1110" bodyend="1123"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_grid_1afec29e23c4e415ae29d7f1d7a6375450" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::CornerPointGrid::ConstructEclipseCell0110</definition>
+        <argsstring>(csmp::ColumnCell &amp;cell, uint32_t &amp;i, uint32_t &amp;j, uint32_t &amp;k, csmp::ColumnCell *cellAbove, csmp::ColumnCell *cellBeneath)</argsstring>
+        <name>ConstructEclipseCell0110</name>
+        <qualifiedname>csmp::CornerPointGrid::ConstructEclipseCell0110</qualifiedname>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> &amp;</type>
+          <declname>cell</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>j</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>k</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> *</type>
+          <declname>cellAbove</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> *</type>
+          <declname>cellBeneath</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="161" column="8" bodyfile="source/modules/regular_grids/CornerPointGrid.cpp" bodystart="1125" bodyend="1145"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_grid_1af4ea2dd3834e749d37c61802b4e38df7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::CornerPointGrid::ConstructEclipseCell0111</definition>
+        <argsstring>(csmp::ColumnCell &amp;cell, uint32_t &amp;i, uint32_t &amp;j, uint32_t &amp;k, csmp::ColumnCell *cellAbove, csmp::ColumnCell *cellBeneath)</argsstring>
+        <name>ConstructEclipseCell0111</name>
+        <qualifiedname>csmp::CornerPointGrid::ConstructEclipseCell0111</qualifiedname>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> &amp;</type>
+          <declname>cell</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>j</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>k</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> *</type>
+          <declname>cellAbove</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> *</type>
+          <declname>cellBeneath</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="162" column="8" bodyfile="source/modules/regular_grids/CornerPointGrid.cpp" bodystart="1148" bodyend="1168"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_grid_1a253488f90e96ac89e099378781f1528d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::CornerPointGrid::ConstructEclipseCell1000</definition>
+        <argsstring>(csmp::ColumnCell &amp;cell, uint32_t &amp;i, uint32_t &amp;j, uint32_t &amp;k, csmp::ColumnCell *cellAbove, csmp::ColumnCell *cellBeneath)</argsstring>
+        <name>ConstructEclipseCell1000</name>
+        <qualifiedname>csmp::CornerPointGrid::ConstructEclipseCell1000</qualifiedname>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> &amp;</type>
+          <declname>cell</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>j</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>k</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> *</type>
+          <declname>cellAbove</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> *</type>
+          <declname>cellBeneath</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="163" column="8" bodyfile="source/modules/regular_grids/CornerPointGrid.cpp" bodystart="1170" bodyend="1199"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_grid_1a5777ffea1c913ffb82c990b4073e79da" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::CornerPointGrid::ConstructEclipseCell1001</definition>
+        <argsstring>(csmp::ColumnCell &amp;cell, uint32_t &amp;i, uint32_t &amp;j, uint32_t &amp;k, csmp::ColumnCell *cellAbove, csmp::ColumnCell *cellBeneath)</argsstring>
+        <name>ConstructEclipseCell1001</name>
+        <qualifiedname>csmp::CornerPointGrid::ConstructEclipseCell1001</qualifiedname>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> &amp;</type>
+          <declname>cell</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>j</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>k</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> *</type>
+          <declname>cellAbove</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> *</type>
+          <declname>cellBeneath</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="164" column="8" bodyfile="source/modules/regular_grids/CornerPointGrid.cpp" bodystart="1202" bodyend="1210"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_grid_1ae2c31af68908bcc0ff761bde4408370b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::CornerPointGrid::ConstructEclipseCell1010</definition>
+        <argsstring>(csmp::ColumnCell &amp;cell, uint32_t &amp;i, uint32_t &amp;j, uint32_t &amp;k, csmp::ColumnCell *cellAbove, csmp::ColumnCell *cellBeneath)</argsstring>
+        <name>ConstructEclipseCell1010</name>
+        <qualifiedname>csmp::CornerPointGrid::ConstructEclipseCell1010</qualifiedname>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> &amp;</type>
+          <declname>cell</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>j</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>k</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> *</type>
+          <declname>cellAbove</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> *</type>
+          <declname>cellBeneath</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="165" column="8" bodyfile="source/modules/regular_grids/CornerPointGrid.cpp" bodystart="1213" bodyend="1226"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_grid_1a2bdc2c244ef36a4403b6445d4db77afa" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::CornerPointGrid::ConstructEclipseCell1011</definition>
+        <argsstring>(csmp::ColumnCell &amp;cell, uint32_t &amp;i, uint32_t &amp;j, uint32_t &amp;k, csmp::ColumnCell *cellAbove, csmp::ColumnCell *cellBeneath)</argsstring>
+        <name>ConstructEclipseCell1011</name>
+        <qualifiedname>csmp::CornerPointGrid::ConstructEclipseCell1011</qualifiedname>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> &amp;</type>
+          <declname>cell</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>j</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>k</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> *</type>
+          <declname>cellAbove</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> *</type>
+          <declname>cellBeneath</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="166" column="8" bodyfile="source/modules/regular_grids/CornerPointGrid.cpp" bodystart="1229" bodyend="1249"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_grid_1a777f6ed2cd4bcd63bda1451026d9e189" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::CornerPointGrid::ConstructEclipseCell1100</definition>
+        <argsstring>(csmp::ColumnCell &amp;cell, uint32_t &amp;i, uint32_t &amp;j, uint32_t &amp;k, csmp::ColumnCell *cellAbove, csmp::ColumnCell *cellBeneath)</argsstring>
+        <name>ConstructEclipseCell1100</name>
+        <qualifiedname>csmp::CornerPointGrid::ConstructEclipseCell1100</qualifiedname>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> &amp;</type>
+          <declname>cell</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>j</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>k</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> *</type>
+          <declname>cellAbove</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> *</type>
+          <declname>cellBeneath</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="167" column="8" bodyfile="source/modules/regular_grids/CornerPointGrid.cpp" bodystart="1251" bodyend="1271"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_grid_1a1954b8c01a50e9781169c541f0b4ec36" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::CornerPointGrid::ConstructEclipseCell1101</definition>
+        <argsstring>(csmp::ColumnCell &amp;cell, uint32_t &amp;i, uint32_t &amp;j, uint32_t &amp;k, csmp::ColumnCell *cellAbove, csmp::ColumnCell *cellBeneath)</argsstring>
+        <name>ConstructEclipseCell1101</name>
+        <qualifiedname>csmp::CornerPointGrid::ConstructEclipseCell1101</qualifiedname>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> &amp;</type>
+          <declname>cell</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>j</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>k</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> *</type>
+          <declname>cellAbove</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> *</type>
+          <declname>cellBeneath</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="168" column="8" bodyfile="source/modules/regular_grids/CornerPointGrid.cpp" bodystart="1274" bodyend="1294"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_grid_1adadc53f074ef62ac2e6b370fa7a08b71" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::CornerPointGrid::ConstructEclipseCell1110</definition>
+        <argsstring>(csmp::ColumnCell &amp;cell, uint32_t &amp;i, uint32_t &amp;j, uint32_t &amp;k, csmp::ColumnCell *cellAbove, csmp::ColumnCell *cellBeneath)</argsstring>
+        <name>ConstructEclipseCell1110</name>
+        <qualifiedname>csmp::CornerPointGrid::ConstructEclipseCell1110</qualifiedname>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> &amp;</type>
+          <declname>cell</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>j</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>k</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> *</type>
+          <declname>cellAbove</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_column_cell" kindref="compound">csmp::ColumnCell</ref> *</type>
+          <declname>cellBeneath</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="169" column="8" bodyfile="source/modules/regular_grids/CornerPointGrid.cpp" bodystart="1297" bodyend="1324"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_grid_1a893d578a5c3bd53d1123af68d682865b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CornerPointGrid::AddElementToMap</definition>
+        <argsstring>(uint32_t i, uint32_t j, uint32_t k, size_t elementID)</argsstring>
+        <name>AddElementToMap</name>
+        <qualifiedname>csmp::CornerPointGrid::AddElementToMap</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>j</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>k</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>elementID</declname>
+        </param>
+        <briefdescription>
+<para>To add the degenerated elements into the map storage. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="172" column="8" bodyfile="source/modules/regular_grids/CornerPointGrid.cpp" bodystart="1412" bodyend="1415"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_corner_point_grid_1a7daea66da4ba6ab959fcd9be3ed42b8d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>uint8_t &amp;</type>
+        <definition>uint8_t &amp; csmp::CornerPointGrid::CellActivity</definition>
+        <argsstring>(uint32_t i, uint32_t j, uint32_t k)</argsstring>
+        <name>CellActivity</name>
+        <qualifiedname>csmp::CornerPointGrid::CellActivity</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>j</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>k</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="177" column="11" bodyfile="source/modules/regular_grids/CornerPointGrid.cpp" bodystart="83" bodyend="87"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>A.J. Bromage </para>
+</simplesect>
+<simplesect kind="date"><para>2018 </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::CornerPointGrid</label>
+        <link refid="classcsmp_1_1_corner_point_grid"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/regular_grids/CornerPointGrid.h" line="92" column="1" bodyfile="source/includes/regular_grids/CornerPointGrid.h" bodystart="92" bodyend="182"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_corner_point_grid_1af7f3642a370caf02f079d4878ad1a24b" prot="private" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>active_elements_</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1a893d578a5c3bd53d1123af68d682865b" prot="private" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>AddElementToMap</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1a612ef3b4f7b5638ef830f5a0f98c01d6" prot="public" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>AssignDimensions</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1a75d306e4e4073e4c3e34d96517422805" prot="private" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>axes_</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1a963d4b708e1134b60b565fca79a25e94" prot="private" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>badHexahedra_</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1a8bce1d0684804414e1363005e20708f5" prot="private" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>badLines_</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1ad4359435a3f8fa55f728dab723b1bf5b" prot="private" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>badPrisms_</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1ae164c9b0b669f42e8173fb24a7dea046" prot="private" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>badPyramids_</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1af12c790d8721a6f1b5a6fc2ad0e60bd0" prot="private" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>badTetrahedra_</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1ad6192ee94f12903a1656ea3a3437413f" prot="private" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>cell_activity_</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1a7daea66da4ba6ab959fcd9be3ed42b8d" prot="private" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>CellActivity</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1ad051eeef54c61583d613b98c1b3a2df5" prot="private" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>columns_</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1a4646e11458523da4e4b6d5f9628dcb8e" prot="private" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>ConstructEclipseCell0000</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1a4fcc98081fceacb992b5c0a2c9ead0a2" prot="private" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>ConstructEclipseCell0001</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1a6ac5dd77bbfb5d9a0eb99ad305f3f23a" prot="private" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>ConstructEclipseCell0010</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1a4e2de4a4bda099b69b199b6264252eb8" prot="private" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>ConstructEclipseCell0011</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1a9722e1f6c69b27ea221706fa8cb86f31" prot="private" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>ConstructEclipseCell0100</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1a521e21c0fbeb72349b315e339d867cdd" prot="private" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>ConstructEclipseCell0101</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1afec29e23c4e415ae29d7f1d7a6375450" prot="private" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>ConstructEclipseCell0110</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1af4ea2dd3834e749d37c61802b4e38df7" prot="private" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>ConstructEclipseCell0111</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1a253488f90e96ac89e099378781f1528d" prot="private" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>ConstructEclipseCell1000</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1a5777ffea1c913ffb82c990b4073e79da" prot="private" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>ConstructEclipseCell1001</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1ae2c31af68908bcc0ff761bde4408370b" prot="private" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>ConstructEclipseCell1010</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1a2bdc2c244ef36a4403b6445d4db77afa" prot="private" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>ConstructEclipseCell1011</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1a777f6ed2cd4bcd63bda1451026d9e189" prot="private" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>ConstructEclipseCell1100</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1a1954b8c01a50e9781169c541f0b4ec36" prot="private" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>ConstructEclipseCell1101</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1adadc53f074ef62ac2e6b370fa7a08b71" prot="private" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>ConstructEclipseCell1110</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1a55dd4442e1cfc6839d8881812b20617a" prot="private" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>ConstructFiniteElementsFromColumns</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1a65a08601af3b24472186eb66c2925d3c" prot="public" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>ConstructLineElement</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1a82ed0ada89a436752157b154f65462f2" prot="public" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>ConstructLineElement</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1adb242d3ddb65c6cabb386777da4a8460" prot="private" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>ConstructPillarsAndColumns</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1a369907a8420b40bb54bc303d130c801a" prot="public" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>ConvertFromReservoirToCSMPcoordinateSystem</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1aed900385ce6a71387396a64bb3a13280" prot="public" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>CornerPointGrid</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1a38c23e1bcbf434ac85f39cf70f7353da" prot="public" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>CreateModel</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1a47aca34bf9073f03b5acf91e548eb02a" prot="public" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>DimensionI</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1a533a1805a415a251aa9be30817e85861" prot="public" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>DimensionJ</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1ad4dff1520840023057755c436706d37d" prot="public" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>DimensionK</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1a9717e525cb7f400897e0b595de86c0a4" prot="private" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>elementMap</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1a561adb8b377a61f31714303ffc205a35" prot="private" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>elements_</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1ac78c247ac8ffbd8658feff63d481bae9" prot="private" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>generator_</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1aceb386fb32892c1074fb817be2d2562c" prot="public" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>GetCellActivity</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1a09f4caebb89b6d395d60200feb58b9f2" prot="public" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>GetCellGenerator</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1a9516ea6015584611e5e5727c59aa80b6" prot="public" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>IJKMap</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1a9bfbe46e108f503c06fb5e6e57e0c1ed" prot="private" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>InitializeGridSpecs</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1ac79190048eb0394c2c99dbd65b9c3851" prot="private" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>NX_</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1a8cee3349e18d22ad54577d3aa9d6c36e" prot="private" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>NX_x_NY_</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1a7e787268c4cff97c7a11b31258ac5ce7" prot="private" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>NY_</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1aa7dae8987e32b4e9a7348264a3a219be" prot="private" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>NZ_</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1af736ac5c6b20968f9fa6cc2d266b4f28" prot="public" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>operator()</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1a1c80364bebdb45c77fe502ec298fb7dd" prot="public" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>OrdinaryNodes</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1a0abf3b6e3b3cc9993f6b7121d2b6b951" prot="private" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>ordinaryNodes_</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1a66b8d1b6b0bc54364ba79f37b01c1fee" prot="private" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>pillars_</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1a312e88fa5e127f78eb85e8b938cd43c0" prot="public" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>Resize</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1a44ec7c953c860ee5a47c9113ae5b32f5" prot="public" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>WritePropertyToVSet</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1ab15514b1ae88d9fc42040cfa3b2e5315" prot="public" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>WritePropertyToVSet</name></member>
+      <member refid="classcsmp_1_1_corner_point_grid_1a0a7abb6615b30b90327b78e567b87d67" prot="public" virt="non-virtual"><scope>csmp::CornerPointGrid</scope><name>~CornerPointGrid</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

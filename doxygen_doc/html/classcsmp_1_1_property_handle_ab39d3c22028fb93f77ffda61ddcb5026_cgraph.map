@@ -1,0 +1,9 @@
+<map id="csmp::PropertyHandle::Cos" name="csmp::PropertyHandle::Cos">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,78,189,104"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_property_handle.html#a2eda2263970fa36bcfc1ad6a03949469" title=" " alt="" coords="237,5,388,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="141,75,227,49,229,54,143,80"/>
+<area shape="rect" id="Node000003" href="$classcsmp_1_1_scalar_variable.html#a7f0ab5431406d975d6e1de988f369176" title="assignment as an lvalue" alt="" coords="240,71,384,111"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="189,88,225,88,225,94,189,94"/>
+<area shape="rect" id="Node000004" href="$classcsmp_1_1_property_handle.html#a01ea8480651da5462789dce112d34fb6" title=" " alt="" coords="237,136,388,177"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="143,102,229,128,227,133,141,107"/>
+</map>

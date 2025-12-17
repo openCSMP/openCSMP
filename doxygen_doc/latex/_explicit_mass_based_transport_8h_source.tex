@@ -1,0 +1,53 @@
+\doxysection{Explicit\+Mass\+Based\+Transport.\+h}
+\hypertarget{_explicit_mass_based_transport_8h_source}{}\label{_explicit_mass_based_transport_8h_source}\index{source/includes/integration/finite\_volumes/legacy\_transport\_scheme/ExplicitMassBasedTransport.h@{source/includes/integration/finite\_volumes/legacy\_transport\_scheme/ExplicitMassBasedTransport.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{EXPLICIT\_MASS\_BASED\_TRANSPORT\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{EXPLICIT\_MASS\_BASED\_TRANSPORT\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_explicit_node_centered_finite_volume_transport_8h}{"{}ExplicitNodeCenteredFiniteVolumeTransport.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{template}<uint32\_t\ dim,\textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ STP>}
+\DoxyCodeLine{00009\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_explicit_mass_based_transport}{ExplicitMassBasedTransport}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_explicit_mass_based_transport}{ExplicitNodeCenteredFiniteVolumeTransport}}<\mbox{\hyperlink{classcsmp_1_1_explicit_mass_based_transport}{dim}},\ \mbox{\hyperlink{classcsmp_1_1_explicit_mass_based_transport}{STP}}>\ \{}
+\DoxyCodeLine{00010\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{comment}{//\ single\ phase\ solute\ advection-\/only\ constructor\ for\ a\ subregion\ identified\ as\ a\ group,\ }}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{comment}{//\ with\ different\ lhs\ and\ rhs}}
+\DoxyCodeLine{00014\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_explicit_mass_based_transport_a2c324355b0fe2198443138c8e438774e}{ExplicitMassBasedTransport}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ group,}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ sg,\ \textcolor{comment}{//\ not\ constant\ since\ FV's\ are\ created}}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ porosity,}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ advected\_prop\_lhs,}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ advected\_prop\_rhs,}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ transp\_velocity,}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ nodal\_source,}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ second\_order\_accuracy,}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ second\_order\_in\_time=\textcolor{keyword}{false},}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ thickness=\mbox{\hyperlink{classcsmp_1_1_explicit_mass_based_transport_a2c324355b0fe2198443138c8e438774e}{NULL}});}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_explicit_mass_based_transport_a08f3e8cacd4fee1595b4ff127cef6d6e}{AnisotropicCourantIncrement}}()\ \mbox{\hyperlink{classcsmp_1_1_explicit_mass_based_transport_a08f3e8cacd4fee1595b4ff127cef6d6e}{override}};}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ AdvectVariable(\ \textcolor{keywordtype}{double}\ time\_interval\ );\ \textcolor{comment}{//\ different\ function\ than\ in\ the\ base\ class!}}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{comment}{///\ single-\/phase\ passive\ advection,\ does\ NOT\ return\ courant\ increment,\ single\ timestep\ calculation}}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{comment}{///\ no\ checks\ are\ made\ for\ courant\ condition.\ \ Assumes\ external\ checks.}}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_explicit_mass_based_transport_a62a2c0350e00192d72d09998ea451915}{AdvectVariableSingleStep}}(\ \textcolor{keywordtype}{double}\ time\_increment,}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ apply\_flux\_balance\_correction,}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ update\_pore\_volumes)\ \mbox{\hyperlink{classcsmp_1_1_explicit_mass_based_transport_a62a2c0350e00192d72d09998ea451915}{override}}\ \mbox{\hyperlink{classcsmp_1_1_explicit_mass_based_transport_a62a2c0350e00192d72d09998ea451915}{final}};}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_explicit_mass_based_transport_ade13923ca393f4ddfb8cb0d45e98c3b6}{AdvectVariable1stOrder}}(\ \textcolor{keywordtype}{double}\ time\_interval,\ \textcolor{keywordtype}{bool}\ output\_result\_range\ );}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_explicit_mass_based_transport_a94bdc44eda4bea2f6f2b7398512e0d35}{AccumulateFluxUpwindProducts}}()\ \mbox{\hyperlink{classcsmp_1_1_explicit_mass_based_transport_a94bdc44eda4bea2f6f2b7398512e0d35}{override}};}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{void}\ AccumulateFluxUpwindProductsOMP(std::vector<\textcolor{keywordtype}{double}>\&\ RESULT);}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_explicit_mass_based_transport_ab009cf162e322b36c1575c8799719102}{AssignFluxBoundaryConditions}}(\ uint32\_t\ var\_comp\_nr=0\ )\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_explicit_mass_based_transport_abc580668215583fccad498be0bcd6e06}{ComposeSolution}}(\ \textcolor{keywordtype}{double}\ time\_interval,\ uint32\_t\ var\_comp\_nr=0\ )\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \mbox{\hyperlink{classcsmp_1_1_explicit_mass_based_transport_abd2b1255646a6035b851bb4eb61fe3dc}{ad\_rhs\_key\_}};\ \ \ \ \ \ \ \textcolor{comment}{///<\ transported\ variable}}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \};}
+\DoxyCodeLine{00046\ \}}
+\DoxyCodeLine{00047\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{//EXPLICIT\_MASS\_BASED\_TRANSPORT\_H}}
+
+\end{DoxyCode}

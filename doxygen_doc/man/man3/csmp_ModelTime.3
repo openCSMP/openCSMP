@@ -1,0 +1,70 @@
+.TH "csmp::ModelTime" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::ModelTime \- The only "global" variable in CSMP computations that is used to store simulated (as opposed to computation) time so that it can be accessed across classes and processors\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <ModelTime\&.h>\fP
+.PP
+Inherits \fBcsmp::GenericSingleton< ModelTime >\fP\&.
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "double \fBmodelTime\fP"
+.br
+.in -1c
+.SS "Friends"
+
+.in +1c
+.ti -1c
+.RI "class \fBGenericSingleton< ModelTime >\fP"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Static Public Member Functions inherited from \fBcsmp::GenericSingleton< ModelTime >\fP
+.in +1c
+.ti -1c
+.RI "static \fBSingletonType\fP & \fBInstance\fP ()"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+The only "global" variable in CSMP computations that is used to store simulated (as opposed to computation) time so that it can be accessed across classes and processors\&. 
+
+
+.PP
+\fBAuthor\fP
+.RS 4
+P\&. Lang 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+Aug 2011
+.RE
+.PP
+To improve global status of the verbose variable\&. No explicit instantiation required any more\&.
+
+.PP
+Usage:
+
+.PP
+.PP
+.nf
+#include "ModelTime\&.h"
+\&.\&.\&.
+bool& model_time( ModelTime::Instance()\&.modelTime );
+.fi
+.PP
+ 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

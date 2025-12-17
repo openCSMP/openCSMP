@@ -1,0 +1,72 @@
+\doxysection{CVFEM\+\_\+\+Math\+Operator\+RHS.\+h}
+\hypertarget{_c_v_f_e_m___math_operator_r_h_s_8h_source}{}\label{_c_v_f_e_m___math_operator_r_h_s_8h_source}\index{source/includes/integration/cvfe\_hydrothermal/CVFEM\_MathOperatorRHS.h@{source/includes/integration/cvfe\_hydrothermal/CVFEM\_MathOperatorRHS.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CVFEM\_MATHOPERATOR\_RHS\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CVFEM\_MATHOPERATOR\_RHS\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_math_operator_r_h_s_8h}{"{}MathOperatorRHS.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{comment}{/*\ \ \ Changelog}}
+\DoxyCodeLine{00007\ \textcolor{comment}{\ \ \ \ \ November\ 2014,\ Philipp\ Weis:}}
+\DoxyCodeLine{00008\ \textcolor{comment}{\ \ \ \ \ -\/\ initial\ port\ to\ CSMP++.}}
+\DoxyCodeLine{00009\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_element}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}};}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ \ \ \ Base\ class\ for\ CVFEM\ Math\ Operators\ (RHS)\ that\ enable\ the\ use\ for\ control\ volume\ calculations\ as\ a\ post-\/processing\ step.}}
+\DoxyCodeLine{00017\ \textcolor{comment}{}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ \ \ \ \ @class\ CVFEM\_MathOperatorRHS\ CVFEM\_MathOperatorRHS.h}}
+\DoxyCodeLine{00019\ \textcolor{comment}{}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ \ \ \ \ @author\ Philipp\ Weis,\ ETH\ Zuerich}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ \ \ \ \ @section\ contact\ Contact}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ \ \ \ \ philipp.weis@erdw.ethz.ch}}
+\DoxyCodeLine{00023\ \textcolor{comment}{}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ \ \ \ \ @changes\ changes\ Latest\ Changes}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ }}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ \ \ \ \ @section\ motivation\ Motivation}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ \ \ \ \ \ In\ the\ development\ for\ the\ CVFEM\ scheme,\ we\ tested\ the\ consistency\ of\ the\ pressure\ equation\ and\ mass\ advection.}}
+\DoxyCodeLine{00028\ \textcolor{comment}{}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ \ \ \ \ @section\ usage\ Usage}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ \ \ \ \ \ Can\ be\ used\ within\ the\ CVFEM\ scheme\ (Weis\ et\ al.,\ Geofluids,\ 2014).}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ \ \ \ \ \ PDE\ Operators\ that\ use\ these\ Math\ Operators\ as\ base\ classes\ can\ be\ used\ with\ the\ CVFEM\_Visitor.}}
+\DoxyCodeLine{00032\ \textcolor{comment}{}}
+\DoxyCodeLine{00033\ \textcolor{comment}{}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ \ @code}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ \ \ \ \ Usage\ and\ functionality\ as\ the\ MathOperatorLHS\ with\ the\ addition\ of\ access\ functions\ that\ are\ used\ by\ the\ CVFEM\_Visitor.}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ \ \ \ \ @endcode}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ \ \ \ \ @section\ dependencies\ Dependencies}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00041\ \textcolor{comment}{\ \ \ \ \ @section\ issues\ Known\ issues}}
+\DoxyCodeLine{00042\ \textcolor{comment}{\ \ \ \ \ This\ construct\ is\ redundant\ if\ CVFEM\_Visitors\ are\ not\ used.}}
+\DoxyCodeLine{00043\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ \ \ \ \ @section\ testing\ Testing}}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ \ \ \ \ testing\ was\ done\ in\ the\ period\ before\ publication\ in\ 2014.}}
+\DoxyCodeLine{00046\ \textcolor{comment}{}}
+\DoxyCodeLine{00047\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00048\ \textcolor{keyword}{template}<uint32\_t\ dim,\ \textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ CELL=\mbox{\hyperlink{classcsmp_1_1_element}{Element}}>}
+\DoxyCodeLine{00049\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___math_operator_r_h_s}{CVFEM\_MathOperatorRHS}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___math_operator_r_h_s}{MathOperatorRHS}}<\mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___math_operator_r_h_s}{dim}},\mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___math_operator_r_h_s}{CELL}}>\ \{}
+\DoxyCodeLine{00050\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00051\ \ \ \ \ CVFEM\_MathOperatorRHS()\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00052\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___math_operator_r_h_s_a7a23a1a0c811701d3e89a2d5e774f0cc}{CVFEM\_MathOperatorRHS}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ test\ );}
+\DoxyCodeLine{00053\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___math_operator_r_h_s_a34591e5bf743bcad96dc1646f1695137}{CVFEM\_MathOperatorRHS}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ oper,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ test\ );}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~\mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___math_operator_r_h_s_a9937558b4372e02bcfb15ccf34699b4a}{CVFEM\_MathOperatorRHS}}();}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___math_operator_r_h_s_a77b86ee439d4e31e005dd4b49345f0fe}{GetOperandsCVFEM}}(\ \textcolor{keyword}{const}\ CELL<dim>\&,\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ upwind\_var\_key\ );}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___math_operator_r_h_s_a38940155d712dd9a69b3d5500bbf8a4d}{std}}::\mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___math_operator_r_h_s_a38940155d712dd9a69b3d5500bbf8a4d}{vector}}<\textcolor{keywordtype}{double}>\ \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___math_operator_r_h_s_a38940155d712dd9a69b3d5500bbf8a4d}{GetContribution}}();}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keyword}{virtual}\ CVFEM\_MathOperatorRHS<dim,CELL>*\ clone()\ \textcolor{keyword}{const}\ \textcolor{keyword}{override}\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{new}\ CVFEM\_MathOperatorRHS<dim,CELL>(*\textcolor{keyword}{this});\ \}}
+\DoxyCodeLine{00062\ \};}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

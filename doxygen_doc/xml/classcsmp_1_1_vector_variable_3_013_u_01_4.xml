@@ -1,0 +1,1321 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_vector_variable_3_013_u_01_4" kind="class" language="C++" prot="public">
+    <compoundname>csmp::VectorVariable&lt; 3U &gt;</compoundname>
+    <includes refid="_vector_variable_8h" local="no">VectorVariable.h</includes>
+    <templateparamlist>
+    </templateparamlist>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1ad86913b94f62b9bb81b6ac4cad3706c4" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1gacbf62c758c46dc45b3f024638bb89274" kindref="member">VARIABLE_TYPE</ref></type>
+        <definition>VARIABLE_TYPE csmp::VectorVariable&lt; 3U &gt;::VariableType</definition>
+        <argsstring></argsstring>
+        <name>VariableType</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::VariableType</qualifiedname>
+        <initializer>= VECTOR</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="80" column="36" bodyfile="source/includes/model/VectorVariable.h" bodystart="80" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="friend">
+      <memberdef kind="friend" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1aeb3e922d3ad4dbb215302734d34b7c76" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class TensorVariable&lt; 3U &gt;</definition>
+        <argsstring></argsstring>
+        <name>TensorVariable&lt; 3U &gt;</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::TensorVariable&lt; 3U &gt;</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref>&lt; 3U &gt;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="193" column="21" bodyfile="source/includes/model/VectorVariable.h" bodystart="195" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1a931db3d6c9da2666bac70402b48d05bd" prot="private" static="no" mutable="no">
+        <type>std::array&lt; <ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref>, 3U &gt;</type>
+        <definition>std::array&lt;VARIABLE_FLAG,3U&gt; csmp::VectorVariable&lt; 3U &gt;::flag</definition>
+        <argsstring></argsstring>
+        <name>flag</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::flag</qualifiedname>
+        <briefdescription>
+<para>flags that specify the treatment of the values in computations </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="198" column="17" bodyfile="source/includes/model/VectorVariable.h" bodystart="198" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1a0aba57bcce5878a81d715066014df53f" prot="private" static="no" mutable="no">
+        <type>std::array&lt; double, 3U &gt;</type>
+        <definition>std::array&lt;double,3U&gt; csmp::VectorVariable&lt; 3U &gt;::data</definition>
+        <argsstring></argsstring>
+        <name>data</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::data</qualifiedname>
+        <briefdescription>
+<para>values of the vector components </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="199" column="24" bodyfile="source/includes/model/VectorVariable.h" bodystart="199" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1a27a22bb80077fba9d82bbf03f5afdd13" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::VectorVariable&lt; 3U &gt;::VectorVariable</definition>
+        <argsstring>()</argsstring>
+        <name>VectorVariable</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::VectorVariable</qualifiedname>
+        <briefdescription>
+<para>default constructor initialising values to NaN </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="82" column="5" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="8" bodyend="12"/>
+        <references refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a27a22bb80077fba9d82bbf03f5afdd13" compoundref="_vector_variable_8cpp" startline="8" endline="12">VectorVariable</references>
+        <referencedby refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a27a22bb80077fba9d82bbf03f5afdd13" compoundref="_vector_variable_8cpp" startline="8" endline="12">VectorVariable</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1a8d4a67b7abec61c75d67f4341399f24f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::VectorVariable&lt; 3U &gt;::VectorVariable</definition>
+        <argsstring>(VARIABLE_FLAG, double)</argsstring>
+        <name>VectorVariable</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::VectorVariable</qualifiedname>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref></type>
+          <defname>f</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+<para>sets all elements to fl, val </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="85" column="5" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="18" bodyend="22"/>
+        <references refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a8d4a67b7abec61c75d67f4341399f24f" compoundref="_vector_variable_8cpp" startline="18" endline="22">VectorVariable</references>
+        <referencedby refid="classcsmp_1_1_permeability_tensor___example_1adb8049909b705a05d837f5f900afb753" compoundref="_permeability_tensor___example_8cpp" startline="32" endline="89">csmp::PermeabilityTensor_Example::Run</referencedby>
+        <referencedby refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a8d4a67b7abec61c75d67f4341399f24f" compoundref="_vector_variable_8cpp" startline="18" endline="22">VectorVariable</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1a9f25b6eea3e09c5afd9dabac74240040" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::VectorVariable&lt; 3U &gt;::VectorVariable</definition>
+        <argsstring>(VARIABLE_FLAG f1, VARIABLE_FLAG f2, VARIABLE_FLAG f3, double val1, double val2, double val3)</argsstring>
+        <name>VectorVariable</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::VectorVariable</qualifiedname>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref></type>
+          <declname>f1</declname>
+        </param>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref></type>
+          <declname>f2</declname>
+        </param>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref></type>
+          <declname>f3</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>val1</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>val2</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>val3</declname>
+        </param>
+        <briefdescription>
+<para>constructor for 3D version </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="88" column="5" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="27" bodyend="32"/>
+        <references refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a9f25b6eea3e09c5afd9dabac74240040" compoundref="_vector_variable_8cpp" startline="27" endline="32">VectorVariable</references>
+        <referencedby refid="classcsmp_1_1_finite_volume_stencil_speed___test_1afbcc5a193ceea973fc00fcfd5f0f1eac" compoundref="_finite_volume_stencil_speed___test_8cpp" startline="95" endline="130">csmp::FiniteVolumeStencilSpeed_Test::AssignFlowProperties</referencedby>
+        <referencedby refid="classcsmp_1_1_generic_finite_volume_transport___test_1aa9fc8d25083cf7d65cc49b5afff05c43" compoundref="_generic_finite_volume_transport___test_8cpp" startline="330" endline="636">csmp::GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegration</referencedby>
+        <referencedby refid="classcsmp_1_1_isoparametric_quadratic_tetrahedron___test_1a594ee9a1048e23678788960b1fcb1ead" compoundref="_isoparametric_quadratic_tetrahedron___test_8cpp" startline="568" endline="606">csmp::IsoparametricQuadraticTetrahedron_Test::CheckElementFaceConsistency</referencedby>
+        <referencedby refid="classcsmp_1_1_sneddon_crack_coupled3_d___v_v_case_1a0d937acbe56c08088311275bc8db378d" compoundref="_sneddon_crack_coupled3_d___v_v_case_8cpp" startline="94" endline="321">csmp::SneddonCrackCoupled3D_VVCase::run</referencedby>
+        <referencedby refid="classcsmp_1_1_c_f_l___test_case_1a8ddfa19df1cd7a3155a3b0114007bd4b" compoundref="_c_f_l___v_v_case_8cpp" startline="114" endline="150">csmp::CFL_TestCase::SetModel</referencedby>
+        <referencedby refid="classcsmp_1_1_t_p_i_n_c_f_v_t3_d___v_v_case_1ad374dab0f8d9b6a8626fdfc53fdcf250" compoundref="_t_p_i_n_c_f_v_t3_d___v_v_case_8cpp" startline="789" endline="828">csmp::TPINCFVT3D_VVCase::SetModel</referencedby>
+        <referencedby refid="classcsmp_1_1_finite_volume_stencil_speed___test_1a5641c71658839637ad4d7bf323a3aa80" compoundref="_finite_volume_stencil_speed___test_8cpp" startline="204" endline="290">csmp::FiniteVolumeStencilSpeed_Test::TestFlowThroughModel</referencedby>
+        <referencedby refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a9f25b6eea3e09c5afd9dabac74240040" compoundref="_vector_variable_8cpp" startline="27" endline="32">VectorVariable</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1afccea844f22d111d4ae4eab4b0f02954" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::VectorVariable&lt; 3U &gt;::VectorVariable</definition>
+        <argsstring>(const std::vector&lt; double &gt; &amp;)</argsstring>
+        <name>VectorVariable</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::VectorVariable</qualifiedname>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <defname>v</defname>
+        </param>
+        <briefdescription>
+<para>initialize with an STL vector </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="92" column="14" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="155" bodyend="159"/>
+        <references refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1afccea844f22d111d4ae4eab4b0f02954" compoundref="_vector_variable_8cpp" startline="155" endline="159">VectorVariable</references>
+        <referencedby refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1afccea844f22d111d4ae4eab4b0f02954" compoundref="_vector_variable_8cpp" startline="155" endline="159">VectorVariable</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1ad69a2d0737d5a458f5bb8524ae759c6a" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::VectorVariable&lt; 3U &gt;::VectorVariable</definition>
+        <argsstring>(const csmp::Point&lt; 3U &gt; &amp;)</argsstring>
+        <name>VectorVariable</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::VectorVariable</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt; &amp;</type>
+          <defname>p</defname>
+        </param>
+        <briefdescription>
+<para>initialize with a <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="95" column="14" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="162" bodyend="166"/>
+        <references refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1ad69a2d0737d5a458f5bb8524ae759c6a" compoundref="_vector_variable_8cpp" startline="162" endline="166">VectorVariable</references>
+        <referencedby refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1ad69a2d0737d5a458f5bb8524ae759c6a" compoundref="_vector_variable_8cpp" startline="162" endline="166">VectorVariable</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1a494f3aaa44bd17d139462d08578fc60f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double &amp;</type>
+        <definition>double &amp; csmp::VectorVariable&lt; 3U &gt;::operator()</definition>
+        <argsstring>(uint32_t)</argsstring>
+        <name>operator()</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::operator()</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <defname>i</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="98" column="19" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="71" bodyend="80"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1a2c69afdc62a4130d883be739e0400a71" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>const double &amp;</type>
+        <definition>const double &amp; csmp::VectorVariable&lt; 3U &gt;::operator()</definition>
+        <argsstring>(uint32_t) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::operator()</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <defname>i</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="99" column="19" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="82" bodyend="91"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1acb5da595113719ac8209b9c75a1d4ef9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::VectorVariable&lt; 3U &gt;::operator[]</definition>
+        <argsstring>(uint32_t) const</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::operator[]</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <defname>i</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="100" column="20" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="94" bodyend="103"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1a76f3f8b89ac4b56be78da63b78f56e0e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VectorVariable&lt; 3U &gt;::Component</definition>
+        <argsstring>(uint32_t, double)</argsstring>
+        <name>Component</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::Component</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="101" column="20" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="107" bodyend="111"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1a8997a37a04a5600eb4465f8c79f00c31" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::VectorVariable&lt; 3U &gt;::Component</definition>
+        <argsstring>(uint32_t) const</argsstring>
+        <name>Component</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::Component</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <defname>i</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="102" column="20" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="116" bodyend="120"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1a7fd5c285ec95c0e3a70ce883f55241ab" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref> &amp;</type>
+        <definition>VectorVariable&lt; 3U &gt; &amp; csmp::VectorVariable&lt; 3U &gt;::operator=</definition>
+        <argsstring>(double)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::operator=</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="105" column="21" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="319" bodyend="326"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1a14d2f00de91c09a4cdc7c0f135ad2ee3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref> &amp;</type>
+        <definition>VectorVariable&lt; 3U &gt; &amp; csmp::VectorVariable&lt; 3U &gt;::operator=</definition>
+        <argsstring>(const Point&lt; 3U &gt; &amp;)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 3U &gt; &amp;</type>
+          <defname>pt</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="106" column="21" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="341" bodyend="348"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1a32dada37748909187829c909da8c3097" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref> &amp;</type>
+        <definition>VectorVariable&lt; 3U &gt; &amp; csmp::VectorVariable&lt; 3U &gt;::operator=</definition>
+        <argsstring>(const ScalarVariable &amp;)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &amp;</type>
+          <defname>sc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="107" column="21" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="331" bodyend="337"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1a315df57f218f5ccb68ded6416ab01f49" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref></type>
+        <definition>VectorVariable&lt; 3U &gt; csmp::VectorVariable&lt; 3U &gt;::operator+</definition>
+        <argsstring>(double) const</argsstring>
+        <name>operator+</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::operator+</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="110" column="22" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="590" bodyend="594"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1a3e76286919729c00d937ddd6e41f99f3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref></type>
+        <definition>VectorVariable&lt; 3U &gt; csmp::VectorVariable&lt; 3U &gt;::operator-</definition>
+        <argsstring>(double) const</argsstring>
+        <name>operator-</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::operator-</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="111" column="22" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="598" bodyend="602"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1a6aef6274884ce580cc8790d13fca4d12" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref></type>
+        <definition>VectorVariable&lt; 3U &gt; csmp::VectorVariable&lt; 3U &gt;::operator*</definition>
+        <argsstring>(double) const</argsstring>
+        <name>operator*</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::operator*</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="112" column="22" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="606" bodyend="610"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1adcdb19656a7efb643815c30218d3f487" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref></type>
+        <definition>VectorVariable&lt; 3U &gt; csmp::VectorVariable&lt; 3U &gt;::operator/</definition>
+        <argsstring>(double) const</argsstring>
+        <name>operator/</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::operator/</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="113" column="22" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="614" bodyend="618"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1a80058be885dee1a59d232d72a74b9dac" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref></type>
+        <definition>VectorVariable&lt; 3U &gt; csmp::VectorVariable&lt; 3U &gt;::operator^</definition>
+        <argsstring>(double) const</argsstring>
+        <name>operator^</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::operator^</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+<para>squares all elements of the vector </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="116" column="22" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="623" bodyend="627"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1a6b5a61d2256c7decab31eab573ad4438" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref></type>
+        <definition>VectorVariable csmp::VectorVariable&lt; 3U &gt;::operator+</definition>
+        <argsstring>(const VectorVariable &amp;) const</argsstring>
+        <name>operator+</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::operator+</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="119" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1ac55556d8a94dc06928ea5994267f33e6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref></type>
+        <definition>VectorVariable csmp::VectorVariable&lt; 3U &gt;::operator-</definition>
+        <argsstring>(const VectorVariable &amp;) const</argsstring>
+        <name>operator-</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::operator-</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="120" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1ae9d8ee5116b9c43d2ad9ae0903c91a73" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref></type>
+        <definition>VectorVariable csmp::VectorVariable&lt; 3U &gt;::operator*</definition>
+        <argsstring>(const VectorVariable &amp;) const</argsstring>
+        <name>operator*</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::operator*</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="121" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1aa009f1b97fd489db29668ef9b330452c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref></type>
+        <definition>VectorVariable csmp::VectorVariable&lt; 3U &gt;::operator/</definition>
+        <argsstring>(const VectorVariable &amp;) const</argsstring>
+        <name>operator/</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::operator/</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="122" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1a48c6e5de4e75f37212e92dc1b4fd093e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref> &amp;</type>
+        <definition>VectorVariable&lt; 3U &gt; &amp; csmp::VectorVariable&lt; 3U &gt;::operator+=</definition>
+        <argsstring>(double)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::operator+=</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+<para>vec1 += vec2 enables shorthand for vec1 = vec1 + vec2 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="125" column="21" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="171" bodyend="178"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1a5dcd1562507b67e9106dd1bbc2c9d0eb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref> &amp;</type>
+        <definition>VectorVariable&lt; 3U &gt; &amp; csmp::VectorVariable&lt; 3U &gt;::operator-=</definition>
+        <argsstring>(double)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::operator-=</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="126" column="21" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="183" bodyend="190"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1a3c985f8c6124fdf15fe28b066aac553d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref> &amp;</type>
+        <definition>VectorVariable&lt; 3U &gt; &amp; csmp::VectorVariable&lt; 3U &gt;::operator*=</definition>
+        <argsstring>(double)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::operator*=</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="127" column="21" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="195" bodyend="202"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1a04b52e9d8e0914b677b287c961bc3ec0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref> &amp;</type>
+        <definition>VectorVariable&lt; 3U &gt; &amp; csmp::VectorVariable&lt; 3U &gt;::operator/=</definition>
+        <argsstring>(double)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::operator/=</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="128" column="21" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="207" bodyend="214"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1a60d99d85e1bcedc11d6a35e1ebf6426b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref> &amp;</type>
+        <definition>VectorVariable&lt; 3U &gt; &amp; csmp::VectorVariable&lt; 3U &gt;::operator+=</definition>
+        <argsstring>(const ScalarVariable &amp;)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::operator+=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &amp;</type>
+          <defname>sc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="130" column="21" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="219" bodyend="226"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1aaf63144eed28645bb77ee58d0bcd9966" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref> &amp;</type>
+        <definition>VectorVariable&lt; 3U &gt; &amp; csmp::VectorVariable&lt; 3U &gt;::operator-=</definition>
+        <argsstring>(const ScalarVariable &amp;)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::operator-=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &amp;</type>
+          <defname>sc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="131" column="21" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="231" bodyend="238"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1ae0eb32927955bdfa242ce30b945a37ec" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref> &amp;</type>
+        <definition>VectorVariable&lt; 3U &gt; &amp; csmp::VectorVariable&lt; 3U &gt;::operator*=</definition>
+        <argsstring>(const ScalarVariable &amp;)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::operator*=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &amp;</type>
+          <defname>sc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="132" column="21" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="243" bodyend="250"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1a1099d44615f1527f8478ee66ce9900d1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref> &amp;</type>
+        <definition>VectorVariable&lt; 3U &gt; &amp; csmp::VectorVariable&lt; 3U &gt;::operator/=</definition>
+        <argsstring>(const ScalarVariable &amp;)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::operator/=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &amp;</type>
+          <defname>sc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="133" column="21" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="255" bodyend="262"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1a8f606b0fd48628c8cdf24a8ee2259ea6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref> &amp;</type>
+        <definition>VectorVariable &amp; csmp::VectorVariable&lt; 3U &gt;::operator+=</definition>
+        <argsstring>(const VectorVariable &amp;)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::operator+=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="135" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1a99d7808e671f9e9350f7b1c8610d5b87" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref> &amp;</type>
+        <definition>VectorVariable &amp; csmp::VectorVariable&lt; 3U &gt;::operator-=</definition>
+        <argsstring>(const VectorVariable &amp;)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::operator-=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="136" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1a8b77fe47a1c93cd5a647ffc09ed01b05" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref> &amp;</type>
+        <definition>VectorVariable &amp; csmp::VectorVariable&lt; 3U &gt;::operator*=</definition>
+        <argsstring>(const VectorVariable &amp;)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::operator*=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="137" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1acfd2de3b79e2e2807473c7b01b2c70b5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref> &amp;</type>
+        <definition>VectorVariable &amp; csmp::VectorVariable&lt; 3U &gt;::operator/=</definition>
+        <argsstring>(const VectorVariable &amp;)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::operator/=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="138" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1a191c4e8ea7f3ad0d96cccf377eeaf482" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::VectorVariable&lt; 3U &gt;::operator==</definition>
+        <argsstring>(const VectorVariable &amp;) const</argsstring>
+        <name>operator==</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::operator==</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref> &amp;</type>
+        </param>
+        <briefdescription>
+<para>comparison of flags and values </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="141" column="22" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="351" bodyend="354"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1ac291cf0835a57b653d3e05a4a6bfe64a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::VectorVariable&lt; 3U &gt;::operator!=</definition>
+        <argsstring>(const VectorVariable &amp;) const</argsstring>
+        <name>operator!=</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::operator!=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="142" column="22" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="357" bodyend="360"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1a450ba24209bffeee149e2e842c2b1aab" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::VectorVariable&lt; 3U &gt;::operator&lt;</definition>
+        <argsstring>(const VectorVariable &amp;) const</argsstring>
+        <name>operator&lt;</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::operator&lt;</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref> &amp;</type>
+        </param>
+        <briefdescription>
+<para>comparison by length (to allow ordering in containers) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>compare the length of two vectors </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="145" column="5" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="364" bodyend="367"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1ab66095fee680a3edde3a12aa03e210fb" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::VectorVariable&lt; 3U &gt;::operator&amp;</definition>
+        <argsstring>(const VectorVariable &amp;) const</argsstring>
+        <name>operator&amp;</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::operator&amp;</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref> &amp;</type>
+        </param>
+        <briefdescription>
+<para>dot product = scalar product </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="148" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1a7c66e8a6bd9b17c3c37d4981dfd54607" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref></type>
+        <definition>VectorVariable&lt; 3U &gt; csmp::VectorVariable&lt; 3U &gt;::operator%</definition>
+        <argsstring>(const VectorVariable &amp;) const</argsstring>
+        <name>operator%</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::operator%</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref> &amp;</type>
+        </param>
+        <briefdescription>
+<para>cross product (vector perpendicular to input vectors </para>
+        </briefdescription>
+        <detaileddescription>
+<para>cross product &apos; % &apos; of two vectors </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="151" column="22" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="633" bodyend="639"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1a7dfae6eb1c258c64840396955b018fe5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::VectorVariable&lt; 3U &gt;::Length</definition>
+        <argsstring>() const</argsstring>
+        <name>Length</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::Length</qualifiedname>
+        <briefdescription>
+<para>returns spatial i-th dimension </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="154" column="22" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="415" bodyend="418"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1abb5efe2f3ee46697ea91d0b1f0cc3a43" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::VectorVariable&lt; 3U &gt;::AngleTo</definition>
+        <argsstring>(const VectorVariable &amp;v) const</argsstring>
+        <name>AngleTo</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::AngleTo</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref> &amp;</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+<para>return angle in degrees </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="155" column="22" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="645" bodyend="661"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1abb402ef20ae54317293a542bfa94b5b0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 3U &gt;</type>
+        <definition>Point&lt; 3U &gt; csmp::VectorVariable&lt; 3U &gt;::P</definition>
+        <argsstring>() const</argsstring>
+        <name>P</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::P</qualifiedname>
+        <briefdescription>
+<para>returns <ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref> initialised with vector values; </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="note"><para>name avoids GNU clash </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="158" column="17" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="422" bodyend="425"/>
+        <referencedby refid="classcsmp_1_1_generic_finite_volume_transport___test_1aa9fc8d25083cf7d65cc49b5afff05c43" compoundref="_generic_finite_volume_transport___test_8cpp" startline="330" endline="636">csmp::GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegration</referencedby>
+        <referencedby refid="classcsmp_1_1_stress_rotate_1a92041531d717596096e8bbcdb46b001e" compoundref="_stress_rotate_8cpp" startline="165" endline="234">csmp::StressRotate::Rotate</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1a3cae5b91e5027f594cd1aebe847a132a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::VectorVariable&lt; 3U &gt;::IsWithinRange</definition>
+        <argsstring>(double vmin, double vmax) const</argsstring>
+        <name>IsWithinRange</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::IsWithinRange</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>vmin</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>vmax</declname>
+        </param>
+        <briefdescription>
+<para>checks vector length against the value range supplied as arguments </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="161" column="21" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="429" bodyend="436"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1ad10763b301634d1fb155c2d284b4cb57" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::VectorVariable&lt; 3U &gt;::Has_NaN_Values</definition>
+        <argsstring>() const</argsstring>
+        <name>Has_NaN_Values</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::Has_NaN_Values</qualifiedname>
+        <briefdescription>
+<para>tests whether variable contains NaN value(s) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="162" column="21" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="441" bodyend="446"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1a423399d3492f4c3d4837b9dbbb6b1c4e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref></type>
+        <definition>VARIABLE_FLAG csmp::VectorVariable&lt; 3U &gt;::Flag</definition>
+        <argsstring>(uint32_t i=0) const</argsstring>
+        <name>Flag</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::Flag</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>i</declname>
+          <defval>0</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="164" column="21" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="137" bodyend="146"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1a8dd6fa449372c74ae631ba91d266bb2f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref> &amp;</type>
+        <definition>VARIABLE_FLAG &amp; csmp::VectorVariable&lt; 3U &gt;::Flag</definition>
+        <argsstring>(uint32_t i=0)</argsstring>
+        <name>Flag</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::Flag</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>i</declname>
+          <defval>0</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="165" column="20" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="125" bodyend="134"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1a91039770e57426e419f655bd197efd46" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::VectorVariable&lt; 3U &gt;::Size</definition>
+        <argsstring>() const</argsstring>
+        <name>Size</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::Size</qualifiedname>
+        <briefdescription>
+<para>for the PropertyStorage </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="168" column="21" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="148" bodyend="151"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1acf946412a6afd97bea418e6c3dce3133" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::VectorVariable&lt; 3U &gt;::DotProduct</definition>
+        <argsstring>(const csmp::Point&lt; 3U &gt; &amp;) const</argsstring>
+        <name>DotProduct</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::DotProduct</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt; &amp;</type>
+          <defname>p</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="171" column="21" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="389" bodyend="392"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1aa2a8f973979f4c148c465cf708fd71df" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::VectorVariable&lt; 3U &gt;::DotProduct</definition>
+        <argsstring>(const VectorVariable &amp;) const</argsstring>
+        <name>DotProduct</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::DotProduct</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref> &amp;</type>
+          <defname>v</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="172" column="21" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="394" bodyend="397"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1af8ad3a8dabd7f25317a9627a17d50bb8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref></type>
+        <definition>VectorVariable&lt; 3U &gt; csmp::VectorVariable&lt; 3U &gt;::CrossProduct</definition>
+        <argsstring>(const csmp::Point&lt; 3U &gt; &amp;) const</argsstring>
+        <name>CrossProduct</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::CrossProduct</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt; &amp;</type>
+          <defname>p</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="173" column="21" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="399" bodyend="405"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1ab9a1e27695b862e4d0822cc86efbdcb3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref></type>
+        <definition>VectorVariable&lt; 3U &gt; csmp::VectorVariable&lt; 3U &gt;::CrossProduct</definition>
+        <argsstring>(const VectorVariable &amp;) const</argsstring>
+        <name>CrossProduct</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::CrossProduct</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref> &amp;</type>
+          <defname>v</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="174" column="21" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="407" bodyend="413"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1a4901f7c4a4704cfd27f0dde681574fe3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref></type>
+        <definition>VectorVariable&lt; 3U &gt; csmp::VectorVariable&lt; 3U &gt;::ProjectOnto</definition>
+        <argsstring>(const std::vector&lt; double &gt; &amp;) const</argsstring>
+        <name>ProjectOnto</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::ProjectOnto</qualifiedname>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <defname>v</defname>
+        </param>
+        <briefdescription>
+<para>projects this vector variable onto the supplied vector v and returns the projection vector </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="175" column="21" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="693" bodyend="698"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1ad61e8d33e2412b0a2de0397c164eb7ff" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref></type>
+        <definition>VectorVariable csmp::VectorVariable&lt; 3U &gt;::ProjectOnto</definition>
+        <argsstring>(const VectorVariable &amp;) const</argsstring>
+        <name>ProjectOnto</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::ProjectOnto</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="176" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1a0d6e62130f7a5bb473cfc2778736a289" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref></type>
+        <definition>VectorVariable&lt; 3U &gt; csmp::VectorVariable&lt; 3U &gt;::Flip</definition>
+        <argsstring>()</argsstring>
+        <name>Flip</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::Flip</qualifiedname>
+        <briefdescription>
+<para>Multiplies by negative unity vector. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="181" column="21" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="665" bodyend="677"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1a076b8b8b701db89172c267c47fc83392" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VectorVariable&lt; 3U &gt;::Invert</definition>
+        <argsstring>()</argsstring>
+        <name>Invert</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::Invert</qualifiedname>
+        <briefdescription>
+<para>reverts the sequence of entries </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Multiplies by negative unity vector. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="184" column="21" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="681" bodyend="686"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1a1d69d50797a81ddc146071aec74f2ceb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VectorVariable&lt; 3U &gt;::EuclideanNormalize</definition>
+        <argsstring>()</argsstring>
+        <name>EuclideanNormalize</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::EuclideanNormalize</qualifiedname>
+        <briefdescription>
+<para>normalizes the vector variable by its length given the unit normal </para>
+        </briefdescription>
+        <detaileddescription>
+<para>normalize L2</para>
+<para><xrefsect id="todo_1_todo000031"><xreftitle>Todo</xreftitle><xrefdescription><para>replace with more generic function </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="187" column="21" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="377" bodyend="386"/>
+        <referencedby refid="classcsmp_1_1_finite_volume_stencil_speed___test_1afbcc5a193ceea973fc00fcfd5f0f1eac" compoundref="_finite_volume_stencil_speed___test_8cpp" startline="95" endline="130">csmp::FiniteVolumeStencilSpeed_Test::AssignFlowProperties</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1a982f47e1231e60a3e31c1e0fe5edcfc6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VectorVariable&lt; 3U &gt;::In</definition>
+        <argsstring>()</argsstring>
+        <name>In</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::In</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="190" column="21" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="724" bodyend="741"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1aa4ffa7baa2f4b585535b0dc456baff9a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VectorVariable&lt; 3U &gt;::Out</definition>
+        <argsstring>() const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::Out</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="191" column="21" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="745" bodyend="754"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1aa487bb47ef4fbbc0814dd645ea21c2d9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::VectorVariable&lt; 3U &gt;::In</definition>
+        <argsstring>(std::fstream &amp;)</argsstring>
+        <name>In</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::In</qualifiedname>
+        <param>
+          <type>std::fstream &amp;</type>
+          <defname>fp</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="192" column="21" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="466" bodyend="477"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable_3_013_u_01_4_1a3ad63ba9bc01c1b6af7b11d7a3477791" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::VectorVariable&lt; 3U &gt;::Out</definition>
+        <argsstring>(std::fstream &amp;) const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::VectorVariable&lt; 3U &gt;::Out</qualifiedname>
+        <param>
+          <type>std::fstream &amp;</type>
+          <defname>fp</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VectorVariable.h" line="193" column="21" bodyfile="source/modules/model/VectorVariable.cpp" bodystart="450" bodyend="464"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>3D full specialization of vector-type variable template (2D vectors are declared in files #1, #2) </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>S.K. Matthai </para>
+</simplesect>
+<simplesect kind="author"><para>Stephen G. Roberts </para>
+</simplesect>
+<simplesect kind="author"><para>S. Geiger </para>
+</simplesect>
+<simplesect kind="date"><para>2001</para>
+</simplesect>
+3D full specialization of vector-type variable template (2D vectors are in files #1, #2).</para>
+<para>Implements basic vector variable type that consists of dim=spatial dimensions entries (options are 2 x 1 and 3 x 1 for 2D and 3D models, respectively) plus as many variable flags as vector elements. The flags are of type enum <ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref>. <linebreak/>
+ <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref> is defined as a C++ template for the 2D and 3D cases (In 1D you should use <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> to represent vector type properties). <linebreak/>
+</para>
+<para>NOTE: The definitions of the 2D constructors are in the file <ref refid="_vector_variable2_8h_source" kindref="compound">VectorVariable2.h</ref>. <linebreak/>
+</para>
+<sect1 id="compare_floats_8h_1motivation">
+<title>Motivation</title><para>A plain STL vector cannot be used to implement this datatype since there is a need to flag each vector entry so that it can receive a special treatment in a finite element computation, i.e. as a fixed (Dirichlet) boundary value or the like. Also there is a need to make vector operations as efficient as possible. This has been done by unrolling all loops.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_visitor_1applicability">
+<title>Applicability</title><para>Any kind of computations that involve Scalar-, Vector-, or <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> objects in CSMP. For standard element-by-element calculations, operators are provided. This includes special operators like &apos;^&apos; which will calculate the power of each vector element for the user-specified value. Slightly odd is the use of the operators &amp; and % for the scalar and the cross products of vectors, respectively (there are no better options, try maybe templatized enums, suggestions are welcome).</para>
+<para>All vector operations are already unrolled to give best performance. Temporaries are eliminated as far as is possible and all *=, /=, +=, -=, dot and cross product, and <ref refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a7dfae6eb1c258c64840396955b018fe5" kindref="member">Length()</ref> operators / member functions have no overhead due to assigments of flags. Hence there is nothing to be gained from additional handcoding of such operations.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_visitor_1examples">
+<title>Application Examples</title><para>Operations of the following types are possible:</para>
+<para><programlisting><codeline><highlight class="normal"><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable&lt;3U&gt;</ref><sp/><sp/><ref refid="classcsmp_1_1_vector_variable" kindref="compound">v1</ref>(<ref refid="classcsmp_1_1_vector_variable" kindref="compound">PLAIN</ref>,<ref refid="classcsmp_1_1_vector_variable" kindref="compound">PLAIN</ref>,<ref refid="classcsmp_1_1_vector_variable" kindref="compound">PLAIN</ref>,1.,1.,1.);</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="classcsmp_1_1_vector_variable" kindref="compound">cout</ref><sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;\main:<sp/>Length<sp/>of<sp/>&quot;</highlight><highlight class="normal">&lt;&lt;<sp/><ref refid="classcsmp_1_1_vector_variable" kindref="compound">v1</ref><sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;<sp/>is<sp/>&quot;</highlight><highlight class="normal">&lt;&lt;<sp/><ref refid="classcsmp_1_1_vector_variable" kindref="compound">v1</ref>.Length()<sp/>&lt;&lt;<sp/><ref refid="classcsmp_1_1_vector_variable" kindref="compound">endl</ref>;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable&lt;3U&gt;</ref><sp/><sp/><ref refid="classcsmp_1_1_vector_variable" kindref="compound">v2</ref>;</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="classcsmp_1_1_vector_variable" kindref="compound">v2</ref><sp/>=<sp/><ref refid="classcsmp_1_1_vector_variable" kindref="compound">sqrt</ref>(3.);</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable&lt;3U&gt;</ref><sp/><sp/><ref refid="classcsmp_1_1_vector_variable" kindref="compound">v3</ref><sp/>=<sp/><ref refid="classcsmp_1_1_vector_variable" kindref="compound">v2</ref><sp/>&amp;<sp/><ref refid="classcsmp_1_1_vector_variable" kindref="compound">v1</ref>;<sp/></highlight><highlight class="comment">//<sp/>dot<sp/>product</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="classcsmp_1_1_vector_variable" kindref="compound">v3</ref>.Out();</highlight></codeline>
+</programlisting> </para>
+</sect1>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>csmp::VectorVariable&lt; uint32_t &gt;</label>
+        <link refid="classcsmp_1_1_vector_variable"/>
+      </node>
+      <node id="1">
+        <label>csmp::VectorVariable&lt; 3U &gt;</label>
+        <link refid="classcsmp_1_1_vector_variable_3_013_u_01_4"/>
+        <childnode refid="2" relation="template-instance">
+          <edgelabel>&lt; 3U &gt;</edgelabel>
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>csmp::VectorVariable&lt; uint32_t &gt;</label>
+        <link refid="classcsmp_1_1_vector_variable"/>
+      </node>
+      <node id="1">
+        <label>csmp::VectorVariable&lt; 3U &gt;</label>
+        <link refid="classcsmp_1_1_vector_variable_3_013_u_01_4"/>
+        <childnode refid="2" relation="template-instance">
+          <edgelabel>&lt; 3U &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/model/VectorVariable.h" line="78" column="1" bodyfile="source/includes/model/VectorVariable.h" bodystart="78" bodyend="200"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1abb5efe2f3ee46697ea91d0b1f0cc3a43" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>AngleTo</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a76f3f8b89ac4b56be78da63b78f56e0e" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>Component</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a8997a37a04a5600eb4465f8c79f00c31" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>Component</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1af8ad3a8dabd7f25317a9627a17d50bb8" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>CrossProduct</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1ab9a1e27695b862e4d0822cc86efbdcb3" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>CrossProduct</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a0aba57bcce5878a81d715066014df53f" prot="private" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>data</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1acf946412a6afd97bea418e6c3dce3133" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>DotProduct</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1aa2a8f973979f4c148c465cf708fd71df" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>DotProduct</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a1d69d50797a81ddc146071aec74f2ceb" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>EuclideanNormalize</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a423399d3492f4c3d4837b9dbbb6b1c4e" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>Flag</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a8dd6fa449372c74ae631ba91d266bb2f" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>Flag</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a931db3d6c9da2666bac70402b48d05bd" prot="private" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>flag</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a0d6e62130f7a5bb473cfc2778736a289" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>Flip</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1ad10763b301634d1fb155c2d284b4cb57" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>Has_NaN_Values</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a982f47e1231e60a3e31c1e0fe5edcfc6" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>In</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1aa487bb47ef4fbbc0814dd645ea21c2d9" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>In</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a076b8b8b701db89172c267c47fc83392" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>Invert</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a3cae5b91e5027f594cd1aebe847a132a" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>IsWithinRange</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a7dfae6eb1c258c64840396955b018fe5" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>Length</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1ac291cf0835a57b653d3e05a4a6bfe64a" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>operator!=</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a7c66e8a6bd9b17c3c37d4981dfd54607" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>operator%</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1ab66095fee680a3edde3a12aa03e210fb" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>operator&amp;</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a494f3aaa44bd17d139462d08578fc60f" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>operator()</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a2c69afdc62a4130d883be739e0400a71" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>operator()</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a6aef6274884ce580cc8790d13fca4d12" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>operator*</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1ae9d8ee5116b9c43d2ad9ae0903c91a73" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>operator*</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a3c985f8c6124fdf15fe28b066aac553d" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>operator*=</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1ae0eb32927955bdfa242ce30b945a37ec" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>operator*=</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a8b77fe47a1c93cd5a647ffc09ed01b05" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>operator*=</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a315df57f218f5ccb68ded6416ab01f49" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>operator+</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a6b5a61d2256c7decab31eab573ad4438" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>operator+</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a48c6e5de4e75f37212e92dc1b4fd093e" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>operator+=</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a60d99d85e1bcedc11d6a35e1ebf6426b" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>operator+=</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a8f606b0fd48628c8cdf24a8ee2259ea6" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>operator+=</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a3e76286919729c00d937ddd6e41f99f3" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>operator-</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1ac55556d8a94dc06928ea5994267f33e6" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>operator-</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a5dcd1562507b67e9106dd1bbc2c9d0eb" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>operator-=</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1aaf63144eed28645bb77ee58d0bcd9966" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>operator-=</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a99d7808e671f9e9350f7b1c8610d5b87" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>operator-=</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1adcdb19656a7efb643815c30218d3f487" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>operator/</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1aa009f1b97fd489db29668ef9b330452c" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>operator/</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a04b52e9d8e0914b677b287c961bc3ec0" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>operator/=</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a1099d44615f1527f8478ee66ce9900d1" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>operator/=</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1acfd2de3b79e2e2807473c7b01b2c70b5" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>operator/=</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a450ba24209bffeee149e2e842c2b1aab" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>operator&lt;</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a7fd5c285ec95c0e3a70ce883f55241ab" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a14d2f00de91c09a4cdc7c0f135ad2ee3" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a32dada37748909187829c909da8c3097" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a191c4e8ea7f3ad0d96cccf377eeaf482" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>operator==</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1acb5da595113719ac8209b9c75a1d4ef9" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>operator[]</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a80058be885dee1a59d232d72a74b9dac" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>operator^</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1aa4ffa7baa2f4b585535b0dc456baff9a" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a3ad63ba9bc01c1b6af7b11d7a3477791" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1abb402ef20ae54317293a542bfa94b5b0" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>P</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a4901f7c4a4704cfd27f0dde681574fe3" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>ProjectOnto</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1ad61e8d33e2412b0a2de0397c164eb7ff" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>ProjectOnto</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a91039770e57426e419f655bd197efd46" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>Size</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1aeb3e922d3ad4dbb215302734d34b7c76" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>TensorVariable&lt; 3U &gt;</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1ad86913b94f62b9bb81b6ac4cad3706c4" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>VariableType</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a27a22bb80077fba9d82bbf03f5afdd13" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>VectorVariable</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a8d4a67b7abec61c75d67f4341399f24f" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>VectorVariable</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1a9f25b6eea3e09c5afd9dabac74240040" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>VectorVariable</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1afccea844f22d111d4ae4eab4b0f02954" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>VectorVariable</name></member>
+      <member refid="classcsmp_1_1_vector_variable_3_013_u_01_4_1ad69a2d0737d5a458f5bb8524ae759c6a" prot="public" virt="non-virtual"><scope>csmp::VectorVariable&lt; 3U &gt;</scope><name>VectorVariable</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

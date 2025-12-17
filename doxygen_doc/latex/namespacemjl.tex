@@ -1,0 +1,257 @@
+\doxysection{mjl Namespace Reference}
+\hypertarget{namespacemjl}{}\label{namespacemjl}\index{mjl@{mjl}}
+
+
+Lazlo p. 88.  
+
+
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}
+\item 
+class \mbox{\hyperlink{classmjl_1_1_edge3_d}{Edge3D}}
+\item 
+class \mbox{\hyperlink{classmjl_1_1_node}{Node}}
+\item 
+class \mbox{\hyperlink{classmjl_1_1_plane3_d}{Plane3D}}
+\item 
+class \mbox{\hyperlink{classmjl_1_1_point}{Point}}
+\item 
+class \mbox{\hyperlink{classmjl_1_1_point3_d}{Point3D}}
+\item 
+class \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}
+\item 
+class \mbox{\hyperlink{classmjl_1_1_triangle3_d}{Triangle3D}}
+\item 
+class \mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{group___c_s_m_pglobal_enums_gab8e4d76cab7155b1fb3861b500982a07}\label{group___c_s_m_pglobal_enums_gab8e4d76cab7155b1fb3861b500982a07} 
+enum {\bfseries LOCATION} \{ \newline
+{\bfseries LEFT}
+, {\bfseries RIGHT}
+, {\bfseries BEYOND}
+, {\bfseries BEHIND}
+, \newline
+{\bfseries BETWEEN}
+, {\bfseries ORIGIN}
+, {\bfseries DESTINATION}
+ \}
+\item 
+\Hypertarget{group___c_s_m_pglobal_enums_gac8265877c1006595e75c1820e2fac316}\label{group___c_s_m_pglobal_enums_gac8265877c1006595e75c1820e2fac316} 
+enum {\bfseries INTERSECTION} \{ \newline
+{\bfseries COLLINEAR}
+, {\bfseries PARALLEL}
+, {\bfseries SKEW}
+, {\bfseries SKEW\+\_\+\+CROSS}
+, \newline
+{\bfseries SKEW\+\_\+\+NO\+\_\+\+CROSS}
+ \}
+\item 
+\Hypertarget{group___c_s_m_pglobal_enums_gaea5d35bacf652ad3d225763d01c90155}\label{group___c_s_m_pglobal_enums_gaea5d35bacf652ad3d225763d01c90155} 
+enum {\bfseries POINT\+\_\+\+CLASSIFICATION} \{ {\bfseries OUTSIDE}
+, {\bfseries INSIDE}
+, {\bfseries BOUNDARY}
+ \}
+\item 
+\Hypertarget{group___c_s_m_pglobal_enums_gae3f2bc8786a9fb6f325976a842e1d8dc}\label{group___c_s_m_pglobal_enums_gae3f2bc8786a9fb6f325976a842e1d8dc} 
+enum {\bfseries EDGE\+\_\+\+CLASSIFICATION} \{ {\bfseries TOUCHING}
+, {\bfseries CROSSING}
+, {\bfseries INESSENTIAL}
+ \}
+\item 
+\Hypertarget{group___c_s_m_pglobal_enums_gaf5ed7c6fa578fb7b86b3042de149fc5e}\label{group___c_s_m_pglobal_enums_gaf5ed7c6fa578fb7b86b3042de149fc5e} 
+enum {\bfseries POLYGON\+\_\+\+CLASSIFICATION} \{ {\bfseries UNKNOWN}
+, {\bfseries P\+\_\+\+IS\+\_\+\+INSIDE}
+, {\bfseries Q\+\_\+\+IS\+\_\+\+INSIDE}
+ \}
+\item 
+\Hypertarget{namespacemjl_a4c167791020c0eea8e14755808ee7557}\label{namespacemjl_a4c167791020c0eea8e14755808ee7557} 
+enum \{ {\bfseries POSITIVE}
+, {\bfseries NEGATIVE}
+, {\bfseries ON}
+ \}
+\item 
+\Hypertarget{namespacemjl_af929dd6a45b7a5da549fa956c56ae1d4}\label{namespacemjl_af929dd6a45b7a5da549fa956c56ae1d4} 
+enum \{ {\bfseries UPPER}
+, {\bfseries LOWER}
+ \}
+\item 
+\Hypertarget{namespacemjl_a4c3b7be813333418b1725c40a8483f0d}\label{namespacemjl_a4c3b7be813333418b1725c40a8483f0d} 
+enum {\bfseries ORIENTATION} \{ {\bfseries CLOCKWISE}
+, {\bfseries COUNTER\+\_\+\+CLOCKWISE}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{namespacemjl_a3e4c9816fd6836783b2d2ee709e7aa21}\label{namespacemjl_a3e4c9816fd6836783b2d2ee709e7aa21} 
+\mbox{\hyperlink{classmjl_1_1_point3_d}{Point3D}} {\bfseries cross\+Product} (const \mbox{\hyperlink{classmjl_1_1_point3_d}{Point3D}} \&, const \mbox{\hyperlink{classmjl_1_1_point3_d}{Point3D}} \&)
+\item 
+\Hypertarget{namespacemjl_a8eae082a654d61bef19eac9cf702b4f6}\label{namespacemjl_a8eae082a654d61bef19eac9cf702b4f6} 
+\mbox{\hyperlink{classmjl_1_1_point3_d}{Point3D}} {\bfseries operator\texorpdfstring{$\ast$}{*}} (double s, const \mbox{\hyperlink{classmjl_1_1_point3_d}{Point3D}} \&p)
+\item 
+bool \mbox{\hyperlink{namespacemjl_a46b4a82bced4640cc11268d65ea81ed5}{aims\+At}} (const \mbox{\hyperlink{classmjl_1_1_edge}{mjl\+::\+Edge}} \&a, const \mbox{\hyperlink{classmjl_1_1_edge}{mjl\+::\+Edge}} \&b, LOCATION a\+Class, mjl\+::\+INTERSECTION cross\+Type)
+\item 
+double \mbox{\hyperlink{namespacemjl_a24fe914e67952eeec27fab5d5265a692}{signed\+Angle}} (const \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} \&a, const \mbox{\hyperlink{classmjl_1_1_edge}{mjl\+::\+Edge}} \&e)
+\item 
+INTERSECTION \mbox{\hyperlink{namespacemjl_a32b3a8d58f823cb167c3f3c499f56224}{crossing\+Point}} (double tolerance, const \mbox{\hyperlink{classmjl_1_1_edge}{mjl\+::\+Edge}} \&e, const \mbox{\hyperlink{classmjl_1_1_edge}{mjl\+::\+Edge}} \&f, \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} \&p)
+\item 
+\Hypertarget{namespacemjl_a01541bb9449c7d2bae817f6476dd408f}\label{namespacemjl_a01541bb9449c7d2bae817f6476dd408f} 
+EDGE\+\_\+\+CLASSIFICATION {\bfseries edge\+Type} (const \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} \&a, const \mbox{\hyperlink{classmjl_1_1_edge}{Edge}} \&e)
+\item 
+bool \mbox{\hyperlink{group___c_s_m_pglobal_functions_ga053d54563be9acde49470bd3f6b915fa}{point\+In\+Convex\+Polygon}} (const \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} \&s, \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}} \&p)
+\begin{DoxyCompactList}\small\item\em Laszlo, p. 87. \end{DoxyCompactList}\item 
+POINT\+\_\+\+CLASSIFICATION {\bfseries point\+In\+Polygon\+RS} (const \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} a, const \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}} \&p)
+\begin{DoxyCompactList}\small\item\em Ray shooting method for arbitrary polygons. \end{DoxyCompactList}\item 
+POINT\+\_\+\+CLASSIFICATION \mbox{\hyperlink{group___c_s_m_pglobal_functions_gaefc5a7c57cb80172558eced9b844ee8f}{point\+In\+Polygon\+SA}} (const \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} a, const \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}} \&p)
+\begin{DoxyCompactList}\small\item\em signed angle method for arbitrary polygons \end{DoxyCompactList}\item 
+bool {\bfseries first\+Contains\+Second\+RS} (const \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}} \&first, const \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}} \&second)
+\item 
+INTERSECTION {\bfseries line\+Triangle3\+DIntersect} (const \mbox{\hyperlink{classmjl_1_1_edge3_d}{Edge3D}} \&e, const \mbox{\hyperlink{classmjl_1_1_triangle3_d}{Triangle3D}} \&p, double \&t)
+\begin{DoxyCompactList}\small\item\em Lazlo, p. 102. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{group___c_s_m_pglobal_functions_ga3842086f8e9c889fda20ec752eb9521e}{project}} (const \mbox{\hyperlink{classmjl_1_1_triangle3_d}{Triangle3D}} \&p, int \mbox{\hyperlink{class_h2_o_na_cl_thermal_equilibrator_1_1h}{h}}, int v)
+\item 
+\mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}} \texorpdfstring{$\ast$}{*} {\bfseries star\+Shaped\+Polygon} (const std\+::vector$<$ \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} $>$ \&pts)
+\begin{DoxyCompactList}\small\item\em builds star-\/shaped polygon around vector which must contain its first point \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}} \texorpdfstring{$\ast$}{*} {\bfseries insertion\+Hull} (const std\+::vector$<$ \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} $>$ \&)
+\begin{DoxyCompactList}\small\item\em convex hull around a point cloud \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}} \texorpdfstring{$\ast$}{*} {\bfseries convex\+Polygon\+Intersect} (\mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}} \&P, \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}} \&Q)
+\begin{DoxyCompactList}\small\item\em Laszlo, p. 158. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{group___c_s_m_pglobal_functions_ga4c5b0d0e367b95ba94568213ac285891}{merge}} (\mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}} \&L, \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}} \&R)
+\item 
+void {\bfseries bridge} (\mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}} \&L, \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}} \&R, \mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}} \texorpdfstring{$\ast$}{*}vl, \mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}} \texorpdfstring{$\ast$}{*}vr, int type)
+\item 
+void {\bfseries supporting\+Line} (const \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} \&s, \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}} \texorpdfstring{$\ast$}{*}p, LOCATION side)
+\item 
+bool {\bfseries clip\+Polygon\+To\+Edge} (const \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}} \&s, const \mbox{\hyperlink{classmjl_1_1_edge}{Edge}} \&e, \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}} \&result)
+\item 
+bool \mbox{\hyperlink{group___c_s_m_pglobal_functions_ga85e8aa8dcc3d8d4c0dd5040561c42762}{clip\+Edge\+To\+Polygon}} (const \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}} \&, \mbox{\hyperlink{classmjl_1_1_edge}{Edge}} \&)
+\begin{DoxyCompactList}\small\item\em variation of clip\+Polygon\+To\+Edge(), MJL, p. 127 \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group___c_s_m_pglobal_functions_gacd8af910a04c305310a5c4604717022c}{advance}} (const \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}} \&, \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}} \&, bool)
+\item 
+INTERSECTION \mbox{\hyperlink{namespacemjl_a348040fdb4ce16d483f82390665a1741}{crossing\+Point}} (double tolerance, const \mbox{\hyperlink{classmjl_1_1_edge3_d}{mjl\+::\+Edge3D}} \&e, const \mbox{\hyperlink{classmjl_1_1_plane3_d}{mjl\+::\+Plane3D}} \&pl, \mbox{\hyperlink{classmjl_1_1_point3_d}{mjl\+::\+Point3D}} \&p)
+\item 
+int \mbox{\hyperlink{namespacemjl_a443051f9c1d069b20f9367efe234472b}{polar\+Cmp}} (const \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} \&p, const \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} \&a, const \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} \&b)
+\item 
+\Hypertarget{namespacemjl_a638205c927679c5d77aaf37087bbb984}\label{namespacemjl_a638205c927679c5d77aaf37087bbb984} 
+\mbox{\hyperlink{classmjl_1_1_point}{Point}} {\bfseries operator\texorpdfstring{$\ast$}{*}} (double s, const \mbox{\hyperlink{classmjl_1_1_point}{Point}} \&p)
+\item 
+\Hypertarget{namespacemjl_a9c82947a5e15786d5107fb1e146ff9c0}\label{namespacemjl_a9c82947a5e15786d5107fb1e146ff9c0} 
+int {\bfseries left\+To\+Right\+Cmp} (const \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} \&a, const \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} \&b)
+\item 
+\Hypertarget{namespacemjl_adc42ffab5c38d6337724fc3665f63162}\label{namespacemjl_adc42ffab5c38d6337724fc3665f63162} 
+int {\bfseries right\+To\+Left\+Cmp} (const \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} \&a, const \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} \&b)
+\item 
+\Hypertarget{namespacemjl_a1979b1c0b4667a253aa54c89a7e6fdd2}\label{namespacemjl_a1979b1c0b4667a253aa54c89a7e6fdd2} 
+int {\bfseries closest\+To\+Polygon\+Cmp} (const \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} \&a, const \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} \&b)
+\item 
+\Hypertarget{namespacemjl_a4ec0fcac0d5a20470e42d60d0a6e193e}\label{namespacemjl_a4ec0fcac0d5a20470e42d60d0a6e193e} 
+bool {\bfseries adjacent} (const \mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}} \texorpdfstring{$\ast$}{*}, const \mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}} \texorpdfstring{$\ast$}{*})
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{namespacemjl_a71fe4c088fbeac6f1d7037e003476702}\label{namespacemjl_a71fe4c088fbeac6f1d7037e003476702} 
+\mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} {\bfseries some\+Point}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Lazlo p. 88. 
+
+Mathematical Library(\+Lazlo) 
+
+\label{doc-func-members}
+\Hypertarget{namespacemjl_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{namespacemjl_a46b4a82bced4640cc11268d65ea81ed5}\index{mjl@{mjl}!aimsAt@{aimsAt}}
+\index{aimsAt@{aimsAt}!mjl@{mjl}}
+\doxysubsubsection{\texorpdfstring{aimsAt()}{aimsAt()}}
+{\footnotesize\ttfamily \label{namespacemjl_a46b4a82bced4640cc11268d65ea81ed5} 
+bool mjl\+::aims\+At (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classmjl_1_1_edge}{mjl\+::\+Edge}} \&}]{a}{, }\item[{const \mbox{\hyperlink{classmjl_1_1_edge}{mjl\+::\+Edge}} \&}]{b}{, }\item[{LOCATION}]{a\+Class}{, }\item[{mjl\+::\+INTERSECTION}]{cross\+Type}{}\end{DoxyParamCaption})}
+
+examines the orientation of 2 edges relative to one-\/another. Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=321pt]{namespacemjl_a46b4a82bced4640cc11268d65ea81ed5_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{namespacemjl_a32b3a8d58f823cb167c3f3c499f56224}\index{mjl@{mjl}!crossingPoint@{crossingPoint}}
+\index{crossingPoint@{crossingPoint}!mjl@{mjl}}
+\doxysubsubsection{\texorpdfstring{crossingPoint()}{crossingPoint()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{namespacemjl_a32b3a8d58f823cb167c3f3c499f56224} 
+INTERSECTION mjl\+::crossing\+Point (\begin{DoxyParamCaption}\item[{double}]{tolerance}{, }\item[{const \mbox{\hyperlink{classmjl_1_1_edge}{mjl\+::\+Edge}} \&}]{e}{, }\item[{const \mbox{\hyperlink{classmjl_1_1_edge}{mjl\+::\+Edge}} \&}]{f}{, }\item[{\mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} \&}]{p}{}\end{DoxyParamCaption})}
+
+Laszlo, p. 162 Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=312pt]{namespacemjl_a32b3a8d58f823cb167c3f3c499f56224_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacemjl_a32b3a8d58f823cb167c3f3c499f56224_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{namespacemjl_a348040fdb4ce16d483f82390665a1741}\index{mjl@{mjl}!crossingPoint@{crossingPoint}}
+\index{crossingPoint@{crossingPoint}!mjl@{mjl}}
+\doxysubsubsection{\texorpdfstring{crossingPoint()}{crossingPoint()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{namespacemjl_a348040fdb4ce16d483f82390665a1741} 
+INTERSECTION mjl\+::crossing\+Point (\begin{DoxyParamCaption}\item[{double}]{tolerance}{, }\item[{const \mbox{\hyperlink{classmjl_1_1_edge3_d}{mjl\+::\+Edge3D}} \&}]{e}{, }\item[{const \mbox{\hyperlink{classmjl_1_1_plane3_d}{mjl\+::\+Plane3D}} \&}]{pl}{, }\item[{\mbox{\hyperlink{classmjl_1_1_point3_d}{mjl\+::\+Point3D}} \&}]{p}{}\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em e} & = a segment \\
+\hline
+{\em pl} & = a plane \{\doxylink{classmjl_1_1_point}{Point} p; Vector vc;\} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the intersect point (so it exists) 
+
+0 = disjoint (no intersection) 
+
+1 = intersection in the unique point \texorpdfstring{$\ast$}{*}\+I0 
+
+2 = the segment lies in the plane 
+\end{DoxyReturn}
+\Hypertarget{namespacemjl_a443051f9c1d069b20f9367efe234472b}\index{mjl@{mjl}!polarCmp@{polarCmp}}
+\index{polarCmp@{polarCmp}!mjl@{mjl}}
+\doxysubsubsection{\texorpdfstring{polarCmp()}{polarCmp()}}
+{\footnotesize\ttfamily \label{namespacemjl_a443051f9c1d069b20f9367efe234472b} 
+int mjl\+::polar\+Cmp (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} \&}]{p}{, }\item[{const \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} \&}]{a}{, }\item[{const \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} \&}]{b}{}\end{DoxyParamCaption})}
+
+compares points a, b with regard to their radial ordering around p. polar\+Cmp\+:
+
+\begin{DoxyReturn}{Returns}
+-\/1 if a \texorpdfstring{$>$}{>} b 
+
+1 if a \texorpdfstring{$<$}{<} b 
+
+0 if a = b 
+\end{DoxyReturn}
+\Hypertarget{namespacemjl_a24fe914e67952eeec27fab5d5265a692}\index{mjl@{mjl}!signedAngle@{signedAngle}}
+\index{signedAngle@{signedAngle}!mjl@{mjl}}
+\doxysubsubsection{\texorpdfstring{signedAngle()}{signedAngle()}}
+{\footnotesize\ttfamily \label{namespacemjl_a24fe914e67952eeec27fab5d5265a692} 
+double mjl\+::signed\+Angle (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} \&}]{a}{, }\item[{const \mbox{\hyperlink{classmjl_1_1_edge}{mjl\+::\+Edge}} \&}]{e}{}\end{DoxyParamCaption})}
+
+Returns the signed angle (0-\/180o) between an \doxylink{classmjl_1_1_edge}{Edge} and the \doxylink{classmjl_1_1_edge}{Edge} from the beginning point of the \doxylink{classmjl_1_1_edge}{Edge} and the supplied point. Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=342pt]{namespacemjl_a24fe914e67952eeec27fab5d5265a692_icgraph}
+\end{center}
+\end{figure}

@@ -1,0 +1,7 @@
+<map id="csmp::canBeIRREGULAR" name="csmp::canBeIRREGULAR">
+<area shape="rect" id="Node000001" title="returns true also for edges and corners" alt="" coords="5,31,183,56"/>
+<area shape="rect" id="Node000002" href="$group___c_s_m_pglobal_functions.html#ga6b970c9a34abf2a9150140f4fd91e833" title="returns whether flag is a corner" alt="" coords="231,5,341,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="183,29,215,25,216,30,184,34"/>
+<area shape="rect" id="Node000003" href="$group___c_s_m_pglobal_functions.html#ga86d9cf3c88a730a881254cbd98f8c9eb" title="returns whether supplied boundary flag refers to a model edge" alt="" coords="235,55,336,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="184,52,220,57,220,62,183,57"/>
+</map>

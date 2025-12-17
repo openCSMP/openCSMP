@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="_model_time_8h" kind="file" language="C++">
+    <compoundname>ModelTime.h</compoundname>
+    <includes refid="_generic_singleton_8h" local="yes">GenericSingleton.h</includes>
+    <includedby refid="_effective_stress_dilatation2_d___example_8cpp" local="yes">examples/source/EffectiveStressDilatation2D_Example.cpp</includedby>
+    <includedby refid="_geothermal___example_8cpp" local="yes">examples/source/Geothermal_Example.cpp</includedby>
+    <includedby refid="_parallel_plate_fracture___example_8cpp" local="yes">examples/source/ParallelPlateFracture_Example.cpp</includedby>
+    <includedby refid="_pressure_diffusion___example_8cpp" local="yes">examples/source/PressureDiffusion_Example.cpp</includedby>
+    <includedby refid="_s_k_u_a___example_8cpp" local="yes">examples/source/SKUA_Example.cpp</includedby>
+    <includedby refid="_stream_function___example_8cpp" local="yes">examples/source/StreamFunction_Example.cpp</includedby>
+    <includedby refid="_thermal_convection_e_t_h_z___example_8cpp" local="yes">examples/source/ThermalConvectionETHZ_Example.cpp</includedby>
+    <includedby refid="_time_stepping_approaches___example_8cpp" local="yes">examples/source/TimeSteppingApproaches_Example.cpp</includedby>
+    <includedby refid="_transient_pressure___example_8cpp" local="yes">examples/source/TransientPressure_Example.cpp</includedby>
+    <includedby refid="_tutorial1___example_8cpp" local="yes">examples/source/Tutorial1_Example.cpp</includedby>
+    <includedby refid="_node_centered_finite_volume_monitor_8cpp" local="yes">source/modules/analysis/NodeCenteredFiniteVolumeMonitor.cpp</includedby>
+    <includedby refid="_transient_diffusor_8cpp" local="yes">source/modules/integration/pde_integrators/TransientDiffusor.cpp</includedby>
+    <includedby refid="_solver_8cpp" local="yes">source/modules/integration/solver/Solver.cpp</includedby>
+    <includedby refid="_a_n_s_y_s___model3_d_8cpp" local="yes">source/modules/interfaces/ANSYS/ANSYS_Model3D.cpp</includedby>
+    <includedby refid="_c_g_n_s___model_8cpp" local="yes">source/modules/interfaces/CGNS/CGNS_Model.cpp</includedby>
+    <includedby refid="_eclipse_model_8cpp" local="yes">source/modules/interfaces/Eclipse/EclipseModel.cpp</includedby>
+    <includedby refid="_s_k_u_a___model_8cpp" local="yes">source/modules/interfaces/gOcad_SKUA/SKUA_Model.cpp</includedby>
+    <includedby refid="_model_8cpp" local="yes">source/modules/model/Model.cpp</includedby>
+    <includedby refid="_model_time_8cpp" local="yes">source/modules/model/ModelTime.cpp</includedby>
+    <includedby refid="_c_s_m_p__high_level_utilities_8cpp" local="yes">source/modules/utilities/CSMP_highLevelUtilities.cpp</includedby>
+    <includedby refid="_p_d_e___integrator___transient___test_8cpp" local="yes">tests/unit/PDE_Integrator_Transient_Test.cpp</includedby>
+    <incdepgraph>
+      <node id="2">
+        <label>GenericSingleton.h</label>
+        <link refid="_generic_singleton_8h_source"/>
+      </node>
+      <node id="1">
+        <label>source/includes/model/ModelTime.h</label>
+        <link refid="_model_time_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+    </incdepgraph>
+    <innerclass refid="classcsmp_1_1_model_time" prot="public">csmp::ModelTime</innerclass>
+    <innernamespace refid="namespacecsmp">csmp</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#ifndef<sp/>MODELTIME_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>MODELTIME_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;GenericSingleton.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacecsmp" kindref="compound">csmp</ref><sp/>{</highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight></codeline>
+<codeline lineno="27" refid="classcsmp_1_1_model_time" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal">ModelTime<sp/><sp/>:<sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/>GenericSingleton&lt;ModelTime&gt;{</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">friend</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal">GenericSingleton&lt;ModelTime&gt;;</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/>~ModelTime();</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>modelTime;</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/>ModelTime()<sp/>:<sp/>modelTime(<sp/>0.<sp/>)<sp/>{}</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/>};</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/></highlight></codeline>
+<codeline lineno="41"><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>csmp</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="43"><highlight class="normal"></highlight></codeline>
+<codeline lineno="44"><highlight class="normal"></highlight><highlight class="preprocessor">#endif<sp/></highlight><highlight class="comment">//<sp/>MODELTIME_H</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="source/includes/model/ModelTime.h"/>
+  </compounddef>
+</doxygen>

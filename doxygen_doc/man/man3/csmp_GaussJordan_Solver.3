@@ -1,0 +1,101 @@
+.TH "csmp::GaussJordan_Solver" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::GaussJordan_Solver
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <GaussJordan_Solver\&.h>\fP
+.PP
+Inherits \fBcsmp::Solver\fP\&.
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual void \fBSolveMatrixEquation\fP (\fBSparseMatrix\fP &A, std::vector< double > &b, std::vector< double > &x, size_t no_unknowns)"
+.br
+.ti -1c
+.RI "virtual void \fBSolveMatrixEquation\fP (\fBCompressedRowMatrix\fP &A, std::vector< double > &b, std::vector< double > &x, size_t no_unknowns)"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Public Member Functions inherited from \fBcsmp::Solver\fP
+.in +1c
+.ti -1c
+.RI "\fBSolver\fP ()"
+.br
+.ti -1c
+.RI "\fBSolver\fP (\fBSolverSettings\fP *settings)"
+.br
+.ti -1c
+.RI "void \fBVerbose\fP (bool verb)"
+.br
+.ti -1c
+.RI "bool \fBVerbose\fP () const"
+.br
+.ti -1c
+.RI "void \fBSolve\fP (\fBSparseMatrix\fP &G, std::vector< double > &rh, std::vector< double > &x, size_t no_unknowns=1U)"
+.br
+.ti -1c
+.RI "void \fBSolve\fP (\fBCompressedRowMatrix\fP &G, std::vector< double > &rh, std::vector< double > &x, size_t no_unknowns=1U)"
+.br
+.ti -1c
+.RI "void \fBOut\fP (const \fBSparseMatrix\fP &mat, const char *fname='SparseMatrix') const"
+.br
+.ti -1c
+.RI "void \fBOut\fP (const std::vector< double > &vec, const char *fname='CSP_Vec') const"
+.br
+.ti -1c
+.RI "double \fBCalculateResidual\fP (const \fBSparseMatrix\fP &A, const std::vector< double > &b, const std::vector< double > &x) const"
+.br
+.ti -1c
+.RI "virtual void \fBInputSolverSettings\fP (\fBSolverSettings\fP &settings)"
+.br
+.ti -1c
+.RI "virtual \fBSolverSettings\fP * \fBGetSolverSettings\fP ()"
+.br
+.in -1c
+
+Protected Attributes inherited from \fBcsmp::Solver\fP
+.in +1c
+.ti -1c
+.RI "\fBSolverSettings\fP * \fBsolver_settings_\fP = nullptr"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Trivial Gauss \fBSolver\fP
+
+.PP
+Basic Gauss-Jordan solver adapted to comply with \fBcsmp::SparseMatrix\fP, STL and according functionality
+
+.PP
+\fBAuthor\fP
+.RS 4
+P\&. Lang 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2010 
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "void csmp::GaussJordan_Solver::SolveMatrixEquation (\fBCompressedRowMatrix\fP & A, std::vector< double > & b, std::vector< double > & x, size_t no_unknowns)\fR [protected]\fP, \fR [virtual]\fP"
+
+.PP
+Implements \fBcsmp::Solver\fP\&.
+.SS "void csmp::GaussJordan_Solver::SolveMatrixEquation (\fBSparseMatrix\fP & A, std::vector< double > & b, std::vector< double > & x, size_t no_unknowns)\fR [protected]\fP, \fR [virtual]\fP"
+Function to solve Ax = b with single column RHS 
+.PP
+Implements \fBcsmp::Solver\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

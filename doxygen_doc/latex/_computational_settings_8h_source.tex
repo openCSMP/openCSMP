@@ -1,0 +1,146 @@
+\doxysection{Computational\+Settings.\+h}
+\hypertarget{_computational_settings_8h_source}{}\label{_computational_settings_8h_source}\index{source/includes/run\_control/ComputationalSettings.h@{source/includes/run\_control/ComputationalSettings.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{COMPUTATIONAL\_SETTINGS\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{COMPUTATIONAL\_SETTINGS\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{enum}\ TIME\_STEPPING\ \{\ BACKWARD\_EULER,\ CRANK\_NICHOLSON,\ FORWARD\ \};}
+\DoxyCodeLine{00009\ \textcolor{keyword}{enum}\ TIME\_STRATEGY\ \{\ PEDANTIC,\ CONSERVATIVE,\ MODERATE,\ AGGRESSIVE,\ DARING,\ PRESCRIBED,\ CAREFUL,\ ASYNCHRONOUS\};}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ TIME\_STRATEGY\ \mbox{\hyperlink{namespacecsmp_ad69c8db1b6465b61a129a0a5941e4ed4}{parseTimeStrategy}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ );}
+\DoxyCodeLine{00012\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \ \ \mbox{\hyperlink{namespacecsmp_ab7660628fe095b5892a425abcdbb06de}{parseTimeStrategy}}(\ TIME\_STRATEGY\ );}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_model}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}};}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{comment}{///\ base\ class\ for\ generic\ configurations}}
+\DoxyCodeLine{00017\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_computational_settings}{ComputationalSettings}}\ \{}
+\DoxyCodeLine{00018\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00019\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_computational_settings_a12432c0a322077c376d77e570c821875}{ComputationalSettings}}();}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~ComputationalSettings();}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{comment}{//\ for\ output\ of\ results}}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_computational_settings_a1ee281cb98c0a2ec31c2eef0c9965aeb}{SetOutputTimes}}(\ \textcolor{keyword}{const}\ std::set<\textcolor{keywordtype}{double}>\&\ times,\ \textcolor{keywordtype}{bool}\ overwrite=\textcolor{keyword}{true}\ );}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_computational_settings_af6aaf26c0a9a442aa63d16a09d5663a2}{AddOutputTime}}(\ \textcolor{keywordtype}{double}\ time\ );}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_computational_settings_adabeb6b980392b0121a459c2fc05cc82}{IsOutputTime}}(\ \textcolor{keywordtype}{double}\ time,\ \textcolor{keywordtype}{double}\ tolerance\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_computational_settings_a8ebbe897d7b71bc6edfb7a214c661a43}{TimeToNearestOutputTime}}(\ \textcolor{keywordtype}{double}\ current\_time\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_computational_settings_ad4f69210543817b7c0b7035a84ffd8ac}{NearestOutputTime}}(\ \textcolor{keywordtype}{double}\ current\_time\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00031\ \ \ \ \ size\_t\ \ \ \ \ \ \ \ \ OutputTimePosition(\textcolor{keywordtype}{double}\ time);}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{comment}{//\ For\ output\ of\ monitoring\ data}}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_computational_settings_af66379a14ee87ed9d59ac2b278538c34}{SetMonitorTimes}}(\ \textcolor{keyword}{const}\ std::set<\textcolor{keywordtype}{double}>\&\ times,\ \textcolor{keywordtype}{bool}\ overwrite=\textcolor{keyword}{true}\ );}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_computational_settings_a9654443048f310e185311bdaa3edc501}{AddMonitorTime}}(\ \textcolor{keywordtype}{double}\ time\ );}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_computational_settings_a490ba48b863f7f89d4f8cbf17f66e405}{IsMonitorTime}}(\ \textcolor{keywordtype}{double}\ time,\ \textcolor{keywordtype}{double}\ tolerance\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_computational_settings_a45b096af4dd72548f54aac426cf88a4f}{TimeToNearestMonitorTime}}(\ \textcolor{keywordtype}{double}\ current\_time\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_computational_settings_a4633428d5ff28e431f193d74d8ba7452}{NearestMonitorTime}}(\ \textcolor{keywordtype}{double}\ current\_time\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00042\ \ \ \ \ size\_t\ \ \ \ \ \ \ \ \ MonitorTimePosition(\textcolor{keywordtype}{double}\ time);}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{comment}{//\ Time\ control}}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_computational_settings_a6b2579e094e9148fd5371aa383228c2d}{Duration}}(\ \textcolor{keywordtype}{double}\ duration\ );}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_computational_settings_ae3b5cbf8d6be6fb4c14c9e9928139ba4}{Duration}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_computational_settings_a4a13f7402fca02e085c6c3d209bff58d}{TimeSteppingApproach}}(\ TIME\_STRATEGY\ time\_stepping\_approach\ );}
+\DoxyCodeLine{00050\ \ \ \ \ TIME\_STRATEGY\ \ \mbox{\hyperlink{classcsmp_1_1_computational_settings_a6a85b6cd49ef3a9d0510836dd14d1440}{TimeSteppingApproach}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ TimeIncrement(\ \textcolor{keywordtype}{double}\ );}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ TimeIncrement()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{comment}{///\ based\ on\ the\ time-\/stepping\ strategy,\ pressure-\/step\ and\ saturation\ step\ multipliers\ are\ suggested\ }}
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_computational_settings_a1f03f42ee0f7b9e15f6aeab1eae38b07}{EstablishMultipliers}}(\ \textcolor{keywordtype}{double}\&\ pf\_multiplier,}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\&\ adv\_multiplier\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{comment}{///\ algorithm\ that\ monitors\ the\ flow\ velocity\ change\ from\ timestep\ to\ timestep\ and\ suggests\ a\ timeincrement\ on\ this\ basis}}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_computational_settings_abdde6c2e9424ffb90a2e78f8ce213558}{TimeIncrementFromVelocityChange}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ sg,}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ log\_velocity\_change,}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ current\_delta\_t,}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ max\_delta\_t\ );}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ RemoveAllOutputtimes()\ \{\ output\_times\_.clear();\ \}}
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ RemoveAllMonitortimes()\{\ output\_times\_.clear();\ \}}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{comment}{///\ step\ through\ output\ times}}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_computational_settings_a98e7b2e006f44615e6ed5e1736cf176f}{PopOutputTime}}();}
+\DoxyCodeLine{00071\ \ \ \ \ std::set<\textcolor{keywordtype}{double}>::const\_iterator\ \mbox{\hyperlink{classcsmp_1_1_computational_settings}{OutputTimesBegin}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00072\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_computational_settings}{std}}::\mbox{\hyperlink{classcsmp_1_1_computational_settings}{set}}<\textcolor{keywordtype}{double}>::\mbox{\hyperlink{classcsmp_1_1_computational_settings}{const\_iterator}}\ \mbox{\hyperlink{classcsmp_1_1_computational_settings}{OutputTimesEnd}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{comment}{///\ step\ through\ monitor\ times}}
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_computational_settings_acaf2f85103fe60bb058b8c5962da335c}{PopMonitorTime}}();}
+\DoxyCodeLine{00076\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_computational_settings}{std}}::\mbox{\hyperlink{classcsmp_1_1_computational_settings}{set}}<\textcolor{keywordtype}{double}>::\mbox{\hyperlink{classcsmp_1_1_computational_settings}{const\_iterator}}\ \mbox{\hyperlink{classcsmp_1_1_computational_settings}{MonitorTimesBegin}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00077\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_computational_settings}{std}}::\mbox{\hyperlink{classcsmp_1_1_computational_settings}{set}}<\textcolor{keywordtype}{double}>::\mbox{\hyperlink{classcsmp_1_1_computational_settings}{const\_iterator}}\ \mbox{\hyperlink{classcsmp_1_1_computational_settings}{MonitorTimesEnd}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \mbox{\hyperlink{classcsmp_1_1_computational_settings_a06d9f769dfe83f9f64526b0144f0d35d}{Out}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \mbox{\hyperlink{classcsmp_1_1_computational_settings_ad29c8fd2b389cbc8e6a9ede0ced12efb}{Out}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ filename\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00083\ \ \ \ \ TIME\_STRATEGY\ \ \ \ \ \ \ time\_strategy\_;}
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ run\_duration\_;}
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ time\_increment\_;}
+\DoxyCodeLine{00086\ \ \ \ \ std::set<\textcolor{keywordtype}{double}>\ \ output\_times\_;}
+\DoxyCodeLine{00087\ \ \ \ \ std::set<\textcolor{keywordtype}{double}>\ \ monitor\_times\_;}
+\DoxyCodeLine{00088\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_computational_settings}{std}}::\mbox{\hyperlink{classcsmp_1_1_computational_settings}{set}}<\textcolor{keywordtype}{double}>::\mbox{\hyperlink{classcsmp_1_1_computational_settings}{const\_iterator}}\ \ \mbox{\hyperlink{classcsmp_1_1_computational_settings}{it\_}};\ \textcolor{comment}{//\ points\ to\ next\ output\ time}}
+\DoxyCodeLine{00089\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_computational_settings}{std}}::\mbox{\hyperlink{classcsmp_1_1_computational_settings}{set}}<\textcolor{keywordtype}{double}>::\mbox{\hyperlink{classcsmp_1_1_computational_settings}{const\_iterator}}\ \ \mbox{\hyperlink{classcsmp_1_1_computational_settings}{itm\_}};\ \textcolor{comment}{//\ points\ to\ next\ monitor\ time}}
+\DoxyCodeLine{00090\ \};}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \}\ \textcolor{comment}{//\ end\ namespace\ csmp}}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00095\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00096\ \textcolor{comment}{@class\ ComputationalSettings\ ComputationalSettings\ "{}utilities/CommandLineParser.h"{}}}
+\DoxyCodeLine{00097\ \textcolor{comment}{@author\ S.K.\ Matthaei}}
+\DoxyCodeLine{00098\ \textcolor{comment}{@date\ 2003}}
+\DoxyCodeLine{00099\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00100\ \textcolor{comment}{@section\ motivation\ Motivation}}
+\DoxyCodeLine{00101\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00102\ \textcolor{comment}{Record\ run\ configuration\ and\ parameters\ for\ later\ use\ to\ steer\ the\ }}
+\DoxyCodeLine{00103\ \textcolor{comment}{simulation\ as\ it\ runs.\ \ }}
+\DoxyCodeLine{00104\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00105\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00106\ \textcolor{comment}{@section\ design\ Design\ Intent}}
+\DoxyCodeLine{00107\ \textcolor{comment}{}}
+\DoxyCodeLine{00108\ \textcolor{comment}{To\ have\ everything\ that\ concerns\ the\ time-\/stepping\ control\ for\ a\ }}
+\DoxyCodeLine{00109\ \textcolor{comment}{run\ in\ a\ single\ object.\ \ }}
+\DoxyCodeLine{00110\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00111\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00112\ \textcolor{comment}{@section\ applicability\ Applicability}}
+\DoxyCodeLine{00113\ \textcolor{comment}{}}
+\DoxyCodeLine{00114\ \textcolor{comment}{Any\ CSMP\ model.}}
+\DoxyCodeLine{00115\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00116\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00117\ \textcolor{comment}{@section\ consequences\ Consequences}}
+\DoxyCodeLine{00118\ \textcolor{comment}{}}
+\DoxyCodeLine{00119\ \textcolor{comment}{You\ can\ inherit\ from\ this\ baseclass.}}
+\DoxyCodeLine{00120\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00121\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00122\ \textcolor{comment}{@section\ examples\ Application\ Examples}}
+\DoxyCodeLine{00123\ \textcolor{comment}{}}
+\DoxyCodeLine{00124\ \textcolor{comment}{Set\ the\ object\ up\ from\ an\ input\ file\ and\ use\ it\ to\ control\ the\ }}
+\DoxyCodeLine{00125\ \textcolor{comment}{time\ stepping\ and\ output\ of\ data\ from\ a\ run:\ \ }}
+\DoxyCodeLine{00126\ \textcolor{comment}{}}
+\DoxyCodeLine{00127\ \textcolor{comment}{\ @code}}
+\DoxyCodeLine{00128\ \textcolor{comment}{\ \ ComputationalSettings\ \ run\_settings;}}
+\DoxyCodeLine{00129\ \textcolor{comment}{\ \ }}
+\DoxyCodeLine{00130\ \textcolor{comment}{\ \ double\ \ \ \ \ \ \ \ duration(run\_settings.Duration());}}
+\DoxyCodeLine{00131\ \textcolor{comment}{\ \ }}
+\DoxyCodeLine{00132\ \textcolor{comment}{\ \ double\ time\_until\_output\ =\ run\_settings.NearestOutputTime(\ model\_time\ );}}
+\DoxyCodeLine{00133\ \textcolor{comment}{\ \ }}
+\DoxyCodeLine{00134\ \textcolor{comment}{\ \ if\ (\ run\_settings.IsOutputTime(\ model\_time,\ 1.\ )\ \ )\ \{}}
+\DoxyCodeLine{00135\ \textcolor{comment}{\ \ \ \ ...}}
+\DoxyCodeLine{00136\ \textcolor{comment}{\ \ \ \ \}}}
+\DoxyCodeLine{00137\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00138\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00140\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

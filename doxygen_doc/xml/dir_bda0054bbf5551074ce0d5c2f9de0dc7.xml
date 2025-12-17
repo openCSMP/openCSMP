@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_bda0054bbf5551074ce0d5c2f9de0dc7" kind="dir">
+    <compoundname>source/includes/integration/solver</compoundname>
+    <innerfile refid="_dune_i_s_t_l___solver_8h">DuneISTL_Solver.h</innerfile>
+    <innerfile refid="_eigen_solver_8h">EigenSolver.h</innerfile>
+    <innerfile refid="_gauss___solver_8h">Gauss_Solver.h</innerfile>
+    <innerfile refid="_gauss_jordan___solver_8h">GaussJordan_Solver.h</innerfile>
+    <innerfile refid="_linear_solver_8h">LinearSolver.h</innerfile>
+    <innerfile refid="_l_udcmp___solver_8h">LUdcmp_Solver.h</innerfile>
+    <innerfile refid="meschach_8h">meschach.h</innerfile>
+    <innerfile refid="_meschach___solver_8h">Meschach_Solver.h</innerfile>
+    <innerfile refid="_p_a_r_d_i_s_o___solver_8h">PARDISO_Solver.h</innerfile>
+    <innerfile refid="_s_a_m_g___configurator_8h">SAMG_Configurator.h</innerfile>
+    <innerfile refid="_s_a_m_g___exception_8h">SAMG_Exception.h</innerfile>
+    <innerfile refid="_s_a_m_g___settings_8h">SAMG_Settings.h</innerfile>
+    <innerfile refid="_s_a_m_g___solver_8h">SAMG_Solver.h</innerfile>
+    <innerfile refid="_solver_8h">Solver.h</innerfile>
+    <innerfile refid="_solver_settings_8h">SolverSettings.h</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="source/includes/integration/solver/"/>
+  </compounddef>
+</doxygen>

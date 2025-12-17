@@ -73,6 +73,11 @@ public:
   ScalarVariable();
   ScalarVariable( VARIABLE_FLAG f, double val );
 
+  ScalarVariable&  operator+=( double );
+  ScalarVariable&  operator-=( double );
+  ScalarVariable&  operator*=( double );
+  ScalarVariable&  operator/=( double );
+
   ScalarVariable&  operator+=( const ScalarVariable& );
   ScalarVariable&  operator-=( const ScalarVariable& );
   ScalarVariable&  operator*=( const ScalarVariable& );
@@ -80,10 +85,6 @@ public:
 
   // for conformance with the interfaces of the other CSMP variables
   ScalarVariable&  operator=( double val ) { data_ = val; return *this; }
-  ScalarVariable&  operator+=( double val ) { data_ += val; return *this; }
-  ScalarVariable&  operator-=( double val ) { data_ -= val; return *this; }
-  ScalarVariable&  operator*=( double val ) { data_ *= val; return *this; }
-  ScalarVariable&  operator/=( double val ) { data_ /= val; return *this; }
 
   /// comparitor that is used by less<> predicate in STL
   bool             operator<( const ScalarVariable& ) const;
@@ -143,14 +144,16 @@ ScalarVariable  operator+( const ScalarVariable&, const ScalarVariable& );
 ScalarVariable  operator-( const ScalarVariable&, const ScalarVariable& );
 ScalarVariable  operator*( const ScalarVariable&, const ScalarVariable& );
 ScalarVariable  operator/( const ScalarVariable&, const ScalarVariable& );
+
 ScalarVariable  operator+( const ScalarVariable&, const double& );
 ScalarVariable  operator-( const ScalarVariable&, const double& );
 ScalarVariable  operator*( const ScalarVariable&, const double& );
 ScalarVariable  operator/( const ScalarVariable&, const double& );
-ScalarVariable  operator+( const double&, const ScalarVariable& );
-ScalarVariable  operator-( const double&, const ScalarVariable& );
-ScalarVariable  operator*( const double&, const ScalarVariable& );
-ScalarVariable  operator/( const double&, const ScalarVariable& );
+
+ScalarVariable  operator+( double, const ScalarVariable& );
+ScalarVariable  operator-( double, const ScalarVariable& );
+ScalarVariable  operator*( double, const ScalarVariable& );
+ScalarVariable  operator/( double, const ScalarVariable& );
 
 /// multiplies each element of vector variable with scalar
 template<uint32_t dim>

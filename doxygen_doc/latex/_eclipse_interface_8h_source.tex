@@ -1,0 +1,590 @@
+\doxysection{Eclipse\+Interface.\+h}
+\hypertarget{_eclipse_interface_8h_source}{}\label{_eclipse_interface_8h_source}\index{source/includes/interfaces/Eclipse/EclipseInterface.h@{source/includes/interfaces/Eclipse/EclipseInterface.h}}
+\mbox{\hyperlink{_eclipse_interface_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{ECLIPSE\_INTERFACE\_UOM\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{ECLIPSE\_INTERFACE\_UOM\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_corner_point_cell_8h}{"{}CornerPointCell.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_corner_point_grid_8h}{"{}CornerPointGrid.h"{}}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_parameter_8h}{"{}Parameter.h"{}}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model_topology}{ModelTopology}};}
+\DoxyCodeLine{00011\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_v_set}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}};}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{comment}{///\ @file\ EclipseInterface.h\ -\/\ glue\ that\ creates\ a\ file-\/based\ interface\ between\ CSMP\ and\ Eclipse}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00018\ \textcolor{comment}{Full\ specifications\ of\ the\ run\ are\ in\ the\ RUNSPEC\ (run\ specification\ data)\ (first)\ section\ of\ the\ input\ file.}}
+\DoxyCodeLine{00019\ \textcolor{comment}{Some\ properties\ will\ appear\ only\ if\ invoked\ by\ keywords}}
+\DoxyCodeLine{00020\ \textcolor{comment}{}}
+\DoxyCodeLine{00021\ \textcolor{comment}{RUNSPEC}}
+\DoxyCodeLine{00022\ \textcolor{comment}{GRID}}
+\DoxyCodeLine{00023\ \textcolor{comment}{PROPS(material\ and\ fluid\ properties,\ PVT\ data\ etc.),\ PHASES,\ UNIT\ SYSTEM\ ....\ grid\ definition}}
+\DoxyCodeLine{00024\ \textcolor{comment}{it\ is\ followed\ by:}}
+\DoxyCodeLine{00025\ \textcolor{comment}{}}
+\DoxyCodeLine{00026\ \textcolor{comment}{REGIONS\ satnum,\ PVTNUM\ etc.}}
+\DoxyCodeLine{00027\ \textcolor{comment}{SOLUTION\ methods\ like\ IMPES}}
+\DoxyCodeLine{00028\ \textcolor{comment}{SUMMARY}}
+\DoxyCodeLine{00029\ \textcolor{comment}{SCHEDULE\ well\ management,\ time\ stepping,\ convergence\ control}}
+\DoxyCodeLine{00030\ \textcolor{comment}{OUTPUT}}
+\DoxyCodeLine{00031\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \textcolor{comment}{///\ Eclipse\ integer\ tags\ needed\ to\ interpret\ properties\ and\ constitutive\ relations\ applied\ to\ grid\ cells}}
+\DoxyCodeLine{00034\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{namespacecsmp_a30865546ddd14ef50961fab5f970f10e}{ECLIPSE\_PROPERTY}}}
+\DoxyCodeLine{00035\ \{}
+\DoxyCodeLine{00036\ \ \ \mbox{\hyperlink{namespacecsmp_a30865546ddd14ef50961fab5f970f10ead2829948cdeead17024d1807f2ab9346}{ECLIPSE\_FIPNUM}}\ =\ -\/5,\ \textcolor{comment}{///<\ how\ many\ fluid-\/in-\/place\ regions\ the\ model\ contains}}
+\DoxyCodeLine{00037\ \ \ \mbox{\hyperlink{namespacecsmp_a30865546ddd14ef50961fab5f970f10eaac00e2c2a0269fd2c2bbc57671d32ecc}{ECLIPSE\_ROCKNUM}}\ =\ -\/4,\ \textcolor{comment}{///<\ number\ of\ different\ rocktypes\ assigned\ to\ regions\ (defined\ in\ conjuction\ with\ ROCKTAB\ and\ ROCKTABH)}}
+\DoxyCodeLine{00038\ \ \ \mbox{\hyperlink{namespacecsmp_a30865546ddd14ef50961fab5f970f10eaa3f6ac51085edd8ba2aa5f0d000cd0f0}{ECLIPSE\_EQLNUM}}\ =\ -\/3,\ \textcolor{comment}{///<\ number\ of\ PVT\ equilibrium\ regions\ to\ be\ equilibrated\ separately}}
+\DoxyCodeLine{00039\ \ \ \mbox{\hyperlink{namespacecsmp_a30865546ddd14ef50961fab5f970f10eafeb82fc88c4208f9eb74ad7d059b7a31}{ECLIPSE\_PVTNUM}}\ =\ -\/2,\ \textcolor{comment}{///<\ number\ of\ regions\ with\ different\ PVT\ property\ data}}
+\DoxyCodeLine{00040\ \ \ \mbox{\hyperlink{namespacecsmp_a30865546ddd14ef50961fab5f970f10ea24fc7b85eaeeb9b6150fd8d98e600e45}{ECLIPSE\_SATNUM}}\ =\ -\/1,\ \textcolor{comment}{///<\ number\ of\ saturation\ functions\ tabulated\ in\ RUNSPEC\ section}}
+\DoxyCodeLine{00041\ \ \ \mbox{\hyperlink{namespacecsmp_a30865546ddd14ef50961fab5f970f10ea48fa3342608e8616b6b73cca79370553}{ECLIPSE\_NTG}}\ =\ 1,\ \ \textcolor{comment}{///<\ value\ of\ Net-\/to-\/Gross\ ratio\ for\ specific\ simulation\ cell}}
+\DoxyCodeLine{00042\ \ \ \mbox{\hyperlink{namespacecsmp_a30865546ddd14ef50961fab5f970f10ea1534551eaa728eb622db994324cbb893}{ECLIPSE\_PORO}}\ =\ 2,\ \ \textcolor{comment}{///<\ porosity\ value\ of\ cell}}
+\DoxyCodeLine{00043\ \ \ \mbox{\hyperlink{namespacecsmp_a30865546ddd14ef50961fab5f970f10ea7a0672b7d0b656a4ef812bb7ca78ce13}{ECLIPSE\_PERM}}\ =\ 3,\ \ \textcolor{comment}{///<\ permeability}}
+\DoxyCodeLine{00044\ \ \ \mbox{\hyperlink{namespacecsmp_a30865546ddd14ef50961fab5f970f10ea9bc1de8a47070164285d7bed955d60c6}{ECLIPSE\_PRESSURE}}\ =\ 4,\ \ \textcolor{comment}{///<\ pressure}}
+\DoxyCodeLine{00045\ \ \ \mbox{\hyperlink{namespacecsmp_a30865546ddd14ef50961fab5f970f10ea1cd0fa8267143cb1101b84fb37615806}{ECLIPSE\_SWAT}}\ =\ 5,\ \ \textcolor{comment}{///<\ water\ saturation}}
+\DoxyCodeLine{00046\ \ \ \mbox{\hyperlink{namespacecsmp_a30865546ddd14ef50961fab5f970f10eabf884e6c88cbcea538dd4dcfc2bbaf1e}{ECLIPSE\_SOIL}}\ =\ 6,\ \ \textcolor{comment}{///<\ oil\ saturation}}
+\DoxyCodeLine{00047\ \ \ \mbox{\hyperlink{namespacecsmp_a30865546ddd14ef50961fab5f970f10eae3def555f65abdf9038183a9b71ad554}{ECLIPSE\_SGAS}}\ =\ 7,\ \ \textcolor{comment}{///<\ gas\ saturation}}
+\DoxyCodeLine{00048\ \ \ \mbox{\hyperlink{namespacecsmp_a30865546ddd14ef50961fab5f970f10ea0628df38434d6917a7151ca18ed8a141}{ECLIPSE\_MULTFLT}}\ =\ 8,\ \ \textcolor{comment}{///<\ multi-\/fault\ segment\ definition\ (FAULTS\ block)}}
+\DoxyCodeLine{00049\ \ \ \mbox{\hyperlink{namespacecsmp_a30865546ddd14ef50961fab5f970f10ead2b45fbf8e4936667a26f53c6a735e69}{ECLIPSE\_MULT}}\ =\ 9,\ \ \textcolor{comment}{///<\ generic\ multipliers\ for\ individual\ cells}}
+\DoxyCodeLine{00050\ \ \ \mbox{\hyperlink{namespacecsmp_a30865546ddd14ef50961fab5f970f10eaaa18eab65410ee63a2f951bfe3b4685a}{ECLIPSE\_TRAN}}\ =\ 10\ \ \textcolor{comment}{///<\ transmissibility\ multiplier\ (RUNSPEC\ file)}}
+\DoxyCodeLine{00051\ \};}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \textcolor{comment}{///\ ACTNUM\ active\ region\ number;\ in\ definition\ of\ regions?}}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \textcolor{comment}{///\ phase\ definitions\ for\ RUNSPEC\ section\ (how\ many\ and\ which\ phases\ are\ present\ in\ run)}}
+\DoxyCodeLine{00058\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{namespacecsmp_a40d85c0ab83093db05f2496777de2611}{ECLIPSE\_PHASE}}}
+\DoxyCodeLine{00059\ \{}
+\DoxyCodeLine{00060\ \ \ ECLIPSE\_OIL\ =\ 0,\ \textcolor{comment}{///<}}
+\DoxyCodeLine{00061\ \ \ ECLIPSE\_WATER\ =\ 1,\ \textcolor{comment}{///<}}
+\DoxyCodeLine{00062\ \ \ ECLIPSE\_GAS\ =\ 2,\ \textcolor{comment}{///<}}
+\DoxyCodeLine{00063\ \ \ ECLIPSE\_LIQ\ =\ 3\ \ \textcolor{comment}{///<}}
+\DoxyCodeLine{00064\ \};}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcsmp_1_1_eclipse_well_completion}{EclipseWellCompletion}}}
+\DoxyCodeLine{00069\ \{}
+\DoxyCodeLine{00070\ \ \ EclipseWellCompletion();}
+\DoxyCodeLine{00071\ \ \ \string~EclipseWellCompletion();}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \ \ size\_t\ ic\_;\ \ \ \ \ \ \textcolor{comment}{///<}}
+\DoxyCodeLine{00074\ \ \ size\_t\ jc\_;\ \ \ \ \ \ \textcolor{comment}{///<}}
+\DoxyCodeLine{00075\ \ \ size\_t\ k\_top\_;\ \ \ \textcolor{comment}{///<}}
+\DoxyCodeLine{00076\ \ \ size\_t\ k\_bot\_;\ \ \ \textcolor{comment}{///<}}
+\DoxyCodeLine{00077\ \ \ size\_t\ w\_start\_;\ \textcolor{comment}{///<}}
+\DoxyCodeLine{00078\ \ \ size\_t\ w\_end\_;\ \ \ \textcolor{comment}{///<}}
+\DoxyCodeLine{00079\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structcsmp_1_1_eclipse_well_completion_aa8b16486b7c31cc8f5340df3ab968e9b}{is\_open\_}};\ \ \ \textcolor{comment}{///<\ connected\ with\ the\ reservoir\ or\ not}}
+\DoxyCodeLine{00080\ \};}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcsmp_1_1_eclipse_well}{EclipseWell}}}
+\DoxyCodeLine{00085\ \{}
+\DoxyCodeLine{00086\ \ \ EclipseWell();}
+\DoxyCodeLine{00087\ \ \ \string~EclipseWell();}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \ \ std::string\ well\_name\_;}
+\DoxyCodeLine{00090\ \ \ std::string\ group\_name\_;}
+\DoxyCodeLine{00091\ \ \ size\_t\ i\_start\_;}
+\DoxyCodeLine{00092\ \ \ size\_t\ j\_start\_;}
+\DoxyCodeLine{00093\ \ \ \textcolor{keywordtype}{double}\ z\_bhp\_;}
+\DoxyCodeLine{00094\ \ \ \mbox{\hyperlink{namespacecsmp_a40d85c0ab83093db05f2496777de2611}{ECLIPSE\_PHASE}}\ phase\_;}
+\DoxyCodeLine{00095\ \ \ \textcolor{keywordtype}{double}\ drainage\_radius\_;}
+\DoxyCodeLine{00096\ \ \ size\_t\ inflow\_type\_;}
+\DoxyCodeLine{00097\ \ \ \textcolor{keywordtype}{bool}\ stop\_or\_shut\_in\_;\ \textcolor{comment}{//\ true\ -\/\ stop,\ false\ -\/\ shut\ in}}
+\DoxyCodeLine{00098\ \ \ \textcolor{keywordtype}{bool}\ cross\_flow\_;\ \ \ \ \ \ \textcolor{comment}{//\ true\ -\/\ crossflow\ allowed,\ false\ -\/\ crossflow\ is\ not\ allowed}}
+\DoxyCodeLine{00099\ \ \ std::vector<EclipseWellCompletion>\ well\_data\_;}
+\DoxyCodeLine{00100\ \};}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcsmp_1_1_eclipse_well_path_entry}{EclipseWellPathEntry}}}
+\DoxyCodeLine{00104\ \{}
+\DoxyCodeLine{00105\ \ \ \mbox{\hyperlink{structijk}{ijk}}\ cell;}
+\DoxyCodeLine{00106\ \ \ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{namespacecsmp_ae8bbaf7555417ec6195d15112682a43d}{CORNER\_POINT\_CELL\_FACE\_INDEX}}\ from,\ to;}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \ \ EclipseWellPathEntry(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structijk}{ijk}}\&\ cell,\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{namespacecsmp_ae8bbaf7555417ec6195d15112682a43d}{CORNER\_POINT\_CELL\_FACE\_INDEX}}\ from,\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{namespacecsmp_ae8bbaf7555417ec6195d15112682a43d}{CORNER\_POINT\_CELL\_FACE\_INDEX}}\ to\ )}
+\DoxyCodeLine{00109\ \ \ \ \ :\ cell(\ cell\ ),\ from(\ from\ ),\ to(\ to\ )}
+\DoxyCodeLine{00110\ \ \ \{}
+\DoxyCodeLine{00111\ \ \ \}}
+\DoxyCodeLine{00112\ \};}
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcsmp_1_1_eclipse_well_path}{EclipseWellPath}}}
+\DoxyCodeLine{00116\ \{}
+\DoxyCodeLine{00117\ \ \ std::vector<EclipseWellPathEntry>\ path;}
+\DoxyCodeLine{00118\ \};}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00120\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcsmp_1_1_eclipse_fault}{EclipseFault}}}
+\DoxyCodeLine{00121\ \{}
+\DoxyCodeLine{00122\ \ \ \mbox{\hyperlink{structcsmp_1_1_eclipse_fault}{std}}::\mbox{\hyperlink{structcsmp_1_1_eclipse_fault}{vector}}<\ \mbox{\hyperlink{structcsmp_1_1_eclipse_fault}{std}}::\mbox{\hyperlink{structcsmp_1_1_eclipse_fault}{pair}}<\mbox{\hyperlink{structcsmp_1_1_eclipse_fault}{ijk}},\ ::\mbox{\hyperlink{structcsmp_1_1_eclipse_fault}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_eclipse_fault}{CORNER\_POINT\_CELL\_FACE\_INDEX}}>\ >\ \mbox{\hyperlink{structcsmp_1_1_eclipse_fault}{fault}};}
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ \ \ \textcolor{keywordtype}{void}\ Reserve(\ size\_t\ count\ )}
+\DoxyCodeLine{00125\ \ \ \{}
+\DoxyCodeLine{00126\ \ \ \ \ fault.reserve(\ count\ );}
+\DoxyCodeLine{00127\ \ \ \}}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00129\ \ \ \textcolor{keywordtype}{void}\ Add(\ uint32\_t\ i,\ uint32\_t\ j,\ uint32\_t,\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{namespacecsmp_ae8bbaf7555417ec6195d15112682a43d}{CORNER\_POINT\_CELL\_FACE\_INDEX}}\ face\ )}
+\DoxyCodeLine{00130\ \ \ \{}
+\DoxyCodeLine{00131\ \ \ \ \ fault.emplace\_back(\ std::make\_pair(\ ijk(\ i,\ j,\ j\ ),\ face\ )\ );}
+\DoxyCodeLine{00132\ \ \ \}}
+\DoxyCodeLine{00133\ \};}
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00135\ }
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00137\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00138\ \textcolor{comment}{Contains\ the\ CornerPointGrid.}}
+\DoxyCodeLine{00139\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00140\ \textcolor{keyword}{class}\ \ \mbox{\hyperlink{classcsmp_1_1_eclipse_interface}{EclipseInterface}}}
+\DoxyCodeLine{00141\ \{}
+\DoxyCodeLine{00142\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00143\ \ \ EclipseInterface();}
+\DoxyCodeLine{00144\ \ \ \string~EclipseInterface();}
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00146\ \ \ \textcolor{comment}{///\ MASTER\ METHOD\ not\ only\ reads\ the\ Eclipse\ input\ files,\ but\ also\ creates\ grid\ objects\ and\ converts\ them\ into\ CSMP\ cells\ /\ mesh}}
+\DoxyCodeLine{00147\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_eclipse_interface_aabf8d47808d51036640e4e1df71d237b}{ReadFile}}(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<3U>\&\ vset,}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_topology}{ModelTopology}}\&\ model\_topology,}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ fname,}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ exclude\_inactive\_cells,}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ tetra\_mesh\ );}
+\DoxyCodeLine{00152\ }
+\DoxyCodeLine{00153\ \ \ \textcolor{comment}{///\ configures\ reader\ for\ the\ case\ where\ INCLUDE\ is\ set\ so\ that\ instructions\ are\ spread\ across\ multiple\ files}}
+\DoxyCodeLine{00154\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_eclipse_interface_a2b3ca52df8246c9fcb86286733f3a730}{ReadFile}}(\ std::ifstream\&\ ifs,\ size\_t\ line\_length\ );}
+\DoxyCodeLine{00155\ }
+\DoxyCodeLine{00156\ \ \ \textcolor{comment}{///\ assigns\ CSMP\ parameter\ specifications\ to\ the\ interface\ so\ that\ corresponding\ variables\ can\ be\ read}}
+\DoxyCodeLine{00157\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_eclipse_interface_a595a01f986fd0f61888dff68abf7cab4}{SetProperties}}(\ \textcolor{keyword}{const}\ std::map<\textcolor{keywordtype}{int},\ csmp::Parameter>\&\ );}
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00159\ \ \ \textcolor{comment}{///\ inserts\ wells\ in\ the\ Eclipse\ data}}
+\DoxyCodeLine{00160\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_eclipse_interface_a6fa057d3cad82b5112916627b969fa7f}{AddWell}}();}
+\DoxyCodeLine{00161\ }
+\DoxyCodeLine{00162\ \ \ \textcolor{comment}{///\ inserts\ a\ well\ from\ its\ start\ and\ end\ points}}
+\DoxyCodeLine{00163\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_eclipse_interface_ab69f45d7d86340547123977c44f1e0cc}{AddWell}}(\ \textcolor{keyword}{const}\ std::string\&\ well\_name,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<3U>\&\ well\_start\_point,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<3U>\&\ well\_end\_point\ );}
+\DoxyCodeLine{00164\ }
+\DoxyCodeLine{00165\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{if}\ 0}
+\DoxyCodeLine{00166\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_eclipse_interface}{AddWellFacePath}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_eclipse_interface}{std}}::\mbox{\hyperlink{classcsmp_1_1_eclipse_interface}{string}}\&\ \mbox{\hyperlink{classcsmp_1_1_eclipse_interface}{well\_name}},\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_eclipse_interface}{std}}::\mbox{\hyperlink{classcsmp_1_1_eclipse_interface}{vector}}<\mbox{\hyperlink{classcsmp_1_1_eclipse_interface}{uint32\_t}}>\&\ \mbox{\hyperlink{classcsmp_1_1_eclipse_interface}{cell\_ids}}\ );}
+\DoxyCodeLine{00167\ }
+\DoxyCodeLine{00168\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_eclipse_interface}{AddWellFacePath}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_eclipse_interface}{std}}::\mbox{\hyperlink{classcsmp_1_1_eclipse_interface}{string}}\&\ \mbox{\hyperlink{classcsmp_1_1_eclipse_interface}{well\_name}},\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_eclipse_interface}{std}}::\mbox{\hyperlink{classcsmp_1_1_eclipse_interface}{vector}}<\mbox{\hyperlink{classcsmp_1_1_eclipse_interface}{uint32\_t}}>\&\ \mbox{\hyperlink{classcsmp_1_1_eclipse_interface}{cell\_ids}},}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_eclipse_interface}{std}}::\mbox{\hyperlink{classcsmp_1_1_eclipse_interface}{vector}}<\mbox{\hyperlink{classcsmp_1_1_eclipse_interface}{std}}::\mbox{\hyperlink{classcsmp_1_1_eclipse_interface}{pair}}<\mbox{\hyperlink{classcsmp_1_1_eclipse_interface}{size\_t}},\ \mbox{\hyperlink{classcsmp_1_1_eclipse_interface}{size\_t}}>\ >\&\ \mbox{\hyperlink{classcsmp_1_1_eclipse_interface}{face\_ids}}\ );}
+\DoxyCodeLine{00170\ }
+\DoxyCodeLine{00171\ \ \ \textcolor{comment}{///\ inserts\ a\ well\ path\ that\ penetrates\ the\ edges\ following\ the\ sides\ of\ the\ supplied\ cells}}
+\DoxyCodeLine{00172\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_eclipse_interface}{AddWellEdgePath}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_eclipse_interface}{std}}::\mbox{\hyperlink{classcsmp_1_1_eclipse_interface}{string}}\&\ \mbox{\hyperlink{classcsmp_1_1_eclipse_interface}{well\_name}},\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_eclipse_interface}{std}}::\mbox{\hyperlink{classcsmp_1_1_eclipse_interface}{vector}}<\mbox{\hyperlink{classcsmp_1_1_eclipse_interface}{uint32\_t}}>\&\ \mbox{\hyperlink{classcsmp_1_1_eclipse_interface}{cell\_ids}},}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_eclipse_interface}{std}}::\mbox{\hyperlink{classcsmp_1_1_eclipse_interface}{vector}}<\mbox{\hyperlink{classcsmp_1_1_eclipse_interface}{std}}::\mbox{\hyperlink{classcsmp_1_1_eclipse_interface}{pair}}<\mbox{\hyperlink{classcsmp_1_1_eclipse_interface}{size\_t}},\ \mbox{\hyperlink{classcsmp_1_1_eclipse_interface}{size\_t}}>\ >\&\ \mbox{\hyperlink{classcsmp_1_1_eclipse_interface}{edge\_ids}}\ );}
+\DoxyCodeLine{00174\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00175\ }
+\DoxyCodeLine{00176\ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ Container>\ \ \textcolor{keywordtype}{void}\ GetRegions(\ Container\&\ data\ );}
+\DoxyCodeLine{00177\ }
+\DoxyCodeLine{00178\ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ Container>\ \ \textcolor{keywordtype}{void}\ GetFaults(\ Container\&\ data\ );}
+\DoxyCodeLine{00179\ }
+\DoxyCodeLine{00180\ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ Container>\ \ \textcolor{keywordtype}{void}\ GetWells(\ Container\&\ wells\ );}
+\DoxyCodeLine{00181\ }
+\DoxyCodeLine{00182\ \ \ \textcolor{comment}{//\ SKM's\ replacement\ functions\ created\ in\ the\ debugging\ process}}
+\DoxyCodeLine{00183\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00184\ \ \ \textcolor{comment}{///\ ReadPillarCoordinates\ -\/>\ Read\_COORD}}
+\DoxyCodeLine{00185\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_eclipse_interface_aa21c38ffc68fc115f696d9fa9f50b132}{Read\_COORD}}(\ std::ifstream\&\ ifs,\ \textcolor{keywordtype}{char}*\ text\_line,\ size\_t\ line\_length\ );}
+\DoxyCodeLine{00186\ }
+\DoxyCodeLine{00187\ \ \ \textcolor{comment}{///\ ReadCornerDepths\ -\/>\ Read\_ZCORN}}
+\DoxyCodeLine{00188\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_eclipse_interface_aad99acbcb163015e7df8d85ad3da2a43}{Read\_ZCORN}}(\ std::ifstream\&\ ifs,\ \textcolor{keywordtype}{char}*\ text\_line,\ size\_t\ line\_length\ );}
+\DoxyCodeLine{00189\ }
+\DoxyCodeLine{00190\ \ \ std::multimap<ijk,size\_t>\&\ \ IJKMap();}
+\DoxyCodeLine{00191\ }
+\DoxyCodeLine{00192\ }
+\DoxyCodeLine{00193\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00194\ }
+\DoxyCodeLine{00195\ \ \ \textcolor{comment}{//\ Read\ different\ blocks\ of\ data\ from\ file}}
+\DoxyCodeLine{00196\ \ \ \textcolor{keywordtype}{bool}\ ReadBlock(\ std::ifstream\&\ ifs,\ \textcolor{keywordtype}{char}*\ text\_line,\ size\_t\ line\_length\ );}
+\DoxyCodeLine{00197\ \ \ \textcolor{keywordtype}{bool}\ ReadIncludeFile(\ std::ifstream\&\ ifs,\ \textcolor{keywordtype}{char}*\ text\_line,\ size\_t\ line\_length\ );}
+\DoxyCodeLine{00198\ \ \ \textcolor{keywordtype}{bool}\ ReadUnknownBlock(\ std::ifstream\&\ ifs,\ \textcolor{keywordtype}{char}*\ text\_line,\ size\_t\ line\_length\ );}
+\DoxyCodeLine{00199\ \ \ \textcolor{keywordtype}{bool}\ ReadDimensions(\ std::ifstream\&\ ifs,\ \textcolor{keywordtype}{char}*\ text\_line,\ size\_t\ line\_length\ );}
+\DoxyCodeLine{00200\ \ \ \textcolor{keywordtype}{bool}\ ReadCellSizes(\ std::ifstream\&\ ifs,\ \textcolor{keywordtype}{char}*\ text\_line,\ size\_t\ line\_length\ );}
+\DoxyCodeLine{00201\ \ \ \textcolor{keywordtype}{bool}\ ReadCellDepths(\ std::ifstream\&\ ifs,\ \textcolor{keywordtype}{char}*\ text\_line,\ size\_t\ line\_length\ );}
+\DoxyCodeLine{00202\ \ \ \textcolor{keywordtype}{bool}\ ReadGridSpecs(\ std::ifstream\&\ ifs,\ \textcolor{keywordtype}{char}*\ text\_line,\ size\_t\ line\_length\ );}
+\DoxyCodeLine{00203\ \ \ \textcolor{keywordtype}{bool}\ ReadPillarCoordinates(\ std::ifstream\&\ ifs,\ \textcolor{keywordtype}{char}*\ text\_line,\ size\_t\ line\_length\ );}
+\DoxyCodeLine{00204\ \ \ \textcolor{keywordtype}{bool}\ ReadCornerDepths(\ std::ifstream\&\ ifs,\ \textcolor{keywordtype}{char}*\ text\_line,\ size\_t\ line\_length\ );}
+\DoxyCodeLine{00205\ \ \ \textcolor{keywordtype}{bool}\ ReadActiveCells(\ std::ifstream\&\ ifs,\ \textcolor{keywordtype}{char}*\ text\_line,\ size\_t\ line\_length\ );}
+\DoxyCodeLine{00206\ \ \ \textcolor{keywordtype}{bool}\ ReadWellSpecs(\ std::ifstream\&\ ifs,\ \textcolor{keywordtype}{char}*\ text\_line,\ size\_t\ line\_length\ );}
+\DoxyCodeLine{00207\ \ \ \textcolor{keywordtype}{bool}\ ReadWellCompletionsData(\ std::ifstream\&\ ifs,\ \textcolor{keywordtype}{char}*\ text\_line,\ size\_t\ line\_length\ );}
+\DoxyCodeLine{00208\ \ \ \textcolor{keywordtype}{bool}\ ReadExplicitFaceWellCompletionsData(\ std::ifstream\&\ ifs,\ \textcolor{keywordtype}{char}*\ text\_line,\ size\_t\ line\_length\ );}
+\DoxyCodeLine{00209\ \ \ \textcolor{keywordtype}{bool}\ ReadExplicitNodeWellCompletionsData(\ std::ifstream\&\ ifs,\ \textcolor{keywordtype}{char}*\ text\_line,\ size\_t\ line\_length\ );}
+\DoxyCodeLine{00210\ \ \ \textcolor{keywordtype}{bool}\ ReadFaultsData(\ std::ifstream\&\ ifs,\ \textcolor{keywordtype}{char}*\ text\_line,\ size\_t\ line\_length\ );}
+\DoxyCodeLine{00211\ \ \ \textcolor{keywordtype}{bool}\ ReadFaultTransmissibilityMultipliers(\ std::ifstream\&\ ifs,\ \textcolor{keywordtype}{char}*\ text\_line,\ size\_t\ line\_length\ );}
+\DoxyCodeLine{00212\ \ \ \textcolor{keywordtype}{bool}\ ReadBoxData(\ std::ifstream\&\ ifs,\ \textcolor{keywordtype}{char}*\ text\_line,\ size\_t\ line\_length\ );}
+\DoxyCodeLine{00213\ \ \ \textcolor{keywordtype}{bool}\ ReadScalarProperty(\ std::ifstream\&\ ifs,\ \textcolor{keywordtype}{char}*\ text\_line,\ size\_t\ line\_length,\ std::vector<csmp::ScalarVariable>\&\ prop\_data\ );}
+\DoxyCodeLine{00214\ \ \ \textcolor{keywordtype}{bool}\ ReadTensorProperty(\ std::ifstream\&\ ifs,\ \textcolor{keywordtype}{char}*\ text\_line,\ size\_t\ line\_length,\ std::vector<::csmp::TensorVariable<3U>\ >\&\ prop\_data,}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ compx\_name,\ \textcolor{keyword}{const}\ std::string\&\ compy\_name,\ \textcolor{keyword}{const}\ std::string\&\ compz\_name\ );}
+\DoxyCodeLine{00216\ }
+\DoxyCodeLine{00217\ \ \ \textcolor{comment}{//\ Properties\ operations}}
+\DoxyCodeLine{00218\ }
+\DoxyCodeLine{00219\ \ \ \textcolor{keywordtype}{void}\ WritePropertiesToVSet();}
+\DoxyCodeLine{00220\ }
+\DoxyCodeLine{00221\ \ \ \textcolor{keywordtype}{void}\ WriteScalarPropertyToVSet(\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<3U>\&\ vset,}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_corner_point_grid}{CornerPointGrid}}\&\ grid,}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<csmp::ScalarVariable>\&\ scalar\_data,}
+\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ property\_name,}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}\&\ place\ );}
+\DoxyCodeLine{00226\ }
+\DoxyCodeLine{00227\ \ \ \textcolor{keywordtype}{void}\ WriteScalarPropertyToVSet(\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<3U>\&\ vset,}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_corner_point_grid}{CornerPointGrid}}\&\ grid,}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<::csmp::VectorVariable<3U>\ >\&\ vector\_data,}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ property\_name,}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}\&\ place\ );}
+\DoxyCodeLine{00232\ }
+\DoxyCodeLine{00233\ \ \ \textcolor{keywordtype}{void}\ WriteScalarPropertyToVSet(\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<3U>\&\ vset,}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_corner_point_grid}{CornerPointGrid}}\&\ grid,}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<::csmp::TensorVariable<3U>\ >\&\ tensor\_data,}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ property\_name,}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}\&\ place\ );}
+\DoxyCodeLine{00238\ }
+\DoxyCodeLine{00239\ \ \ \textcolor{keywordtype}{void}\ WriteVectorPropertyToVSet(\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<3U>\&\ vset,}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_corner_point_grid}{CornerPointGrid}}\&\ grid,}
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<::csmp::VectorVariable<3U>\ >\&\ vector\_data,}
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ property\_name,}
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}\&\ place\ );}
+\DoxyCodeLine{00244\ }
+\DoxyCodeLine{00245\ \ \ \textcolor{keywordtype}{void}\ WriteTensorPropertyToVSet(\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<3U>\&\ vset,}
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_corner_point_grid}{CornerPointGrid}}\&\ grid,}
+\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<::csmp::TensorVariable<3U>\ >\&\ tensor\_data,}
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ property\_name,}
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}\&\ place\ );}
+\DoxyCodeLine{00250\ }
+\DoxyCodeLine{00251\ \ \ \textcolor{keywordtype}{void}\ SaveVectorProperty(\ uint32\_t\ component,}
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<csmp::ScalarVariable>\&\ scalar\_data,}
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<::csmp::VectorVariable<3U>\ >\&\ \ vector\_data\ );}
+\DoxyCodeLine{00254\ }
+\DoxyCodeLine{00255\ \ \ \textcolor{keywordtype}{void}\ SaveTensorProperty(\ uint32\_t\ component,}
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<csmp::ScalarVariable>\&\ scalar\_data,}
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<::csmp::TensorVariable<3U>\ >\&\ \ vector\_data\ );}
+\DoxyCodeLine{00258\ \ \ \textcolor{keywordtype}{void}\ ClearBefore();}
+\DoxyCodeLine{00259\ \ \ \textcolor{keywordtype}{void}\ ClearAfter();}
+\DoxyCodeLine{00260\ }
+\DoxyCodeLine{00261\ \ \ \textcolor{keywordtype}{void}\ AssignGridDimensions();}
+\DoxyCodeLine{00262\ }
+\DoxyCodeLine{00263\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00264\ }
+\DoxyCodeLine{00265\ \ \ \textcolor{comment}{//\ reading\ process\ related}}
+\DoxyCodeLine{00266\ \ \ \textcolor{comment}{//\ text\ file\ interface}}
+\DoxyCodeLine{00267\ \ \ std::string\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ keyword\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ current\ keyword}}
+\DoxyCodeLine{00268\ \ \ std::vector<std::string>\ \ \ \ keyword\_parameters\_;\ \ \ \textcolor{comment}{//\ current\ keyword\ parameters}}
+\DoxyCodeLine{00269\ }
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ csmp\ model}}
+\DoxyCodeLine{00271\ \ \ std::string\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ model\_name\_;}
+\DoxyCodeLine{00272\ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_model_topology}{ModelTopology}}*\ \ \ \ \ \ \ \ model\_topology\_;}
+\DoxyCodeLine{00273\ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<3U>*\ \ \ \ \ \ \ \ \ \ \ \ \ vset\_;}
+\DoxyCodeLine{00274\ }
+\DoxyCodeLine{00275\ \ \ \textcolor{comment}{//\ specific\ regions}}
+\DoxyCodeLine{00276\ \ \ std::set<std::string>\ \ \ \ \ \ \ regions\_;}
+\DoxyCodeLine{00277\ \ \ std::set<std::string>\ \ \ \ \ \ \ faults\_;}
+\DoxyCodeLine{00278\ \ \ std::set<std::string>\ \ \ \ \ \ \ wells\_;}
+\DoxyCodeLine{00279\ }
+\DoxyCodeLine{00280\ \ \ \textcolor{comment}{//\ temporal\ grid\ data}}
+\DoxyCodeLine{00281\ \ \ uint32\_t\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NX\_;}
+\DoxyCodeLine{00282\ \ \ uint32\_t\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NY\_;}
+\DoxyCodeLine{00283\ \ \ uint32\_t\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NZ\_;}
+\DoxyCodeLine{00284\ \ \ std::vector<\textcolor{keywordtype}{double}>\ \ \ \ \ \ \ \ \ zcorn\_;}
+\DoxyCodeLine{00285\ \ \ \mbox{\hyperlink{classcsmp_1_1_corner_point_grid}{CornerPointGrid}}\ \ \ \ \ \ \ \ \ \ \ \ \ grid\_;}
+\DoxyCodeLine{00286\ \ \ \mbox{\hyperlink{classcsmp_1_1_cell_centered_grid}{CellCenteredGrid}}\ \ \ \ \ \ \ \ \ \ \ \ block\_grid\_;}
+\DoxyCodeLine{00287\ }
+\DoxyCodeLine{00288\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{if}\ 0}
+\DoxyCodeLine{00289\ \ \ \textcolor{comment}{//\ local\ mesh\ block}}
+\DoxyCodeLine{00290\ \ \ \mbox{\hyperlink{classcsmp_1_1_eclipse_interface}{std}}::\mbox{\hyperlink{classcsmp_1_1_eclipse_interface}{vector}}<\mbox{\hyperlink{classcsmp_1_1_eclipse_interface}{uint32\_t}}>\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_eclipse_interface}{box\_}};}
+\DoxyCodeLine{00291\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00292\ }
+\DoxyCodeLine{00293\ \ \ \textcolor{comment}{//\ properties\ data}}
+\DoxyCodeLine{00294\ \ \ std::map<\textcolor{keywordtype}{int},\ csmp::Parameter>\ \ \ \ \ \ \ \ \ \ properties\_;}
+\DoxyCodeLine{00295\ \ \ std::vector<csmp::ScalarVariable>\ \ \ \ \ \ \ ntg\_;}
+\DoxyCodeLine{00296\ \ \ std::vector<csmp::ScalarVariable>\ \ \ \ \ \ \ poro\_;}
+\DoxyCodeLine{00297\ \ \ std::vector<csmp::ScalarVariable>\ \ \ \ \ \ \ perm\_;}
+\DoxyCodeLine{00298\ \ \ std::vector<::csmp::TensorVariable<3U>>\ \ \ permxyz\_;}
+\DoxyCodeLine{00299\ \ \ std::map<std::string,\ \textcolor{keywordtype}{double}>\ \ \ \ \ \ \ \ \ \ \ multflt\_;}
+\DoxyCodeLine{00300\ \ \ std::vector<csmp::ScalarVariable>\ \ \ \ \ \ \ pressure\_;}
+\DoxyCodeLine{00301\ \ \ std::vector<csmp::ScalarVariable>\ \ \ \ \ \ \ swat\_;}
+\DoxyCodeLine{00302\ \ \ std::vector<csmp::ScalarVariable>\ \ \ \ \ \ \ soil\_;}
+\DoxyCodeLine{00303\ \ \ std::vector<csmp::ScalarVariable>\ \ \ \ \ \ \ sgas\_;}
+\DoxyCodeLine{00304\ }
+\DoxyCodeLine{00305\ \ \ \textcolor{comment}{//\ regions\ data}}
+\DoxyCodeLine{00306\ \ \ std::vector<csmp::ScalarVariable>\ \ \ \ \ \ \ satnum\_;}
+\DoxyCodeLine{00307\ \ \ std::vector<csmp::ScalarVariable>\ \ \ \ \ \ \ pvtnum\_;}
+\DoxyCodeLine{00308\ \ \ std::vector<csmp::ScalarVariable>\ \ \ \ \ \ \ rocknum\_;}
+\DoxyCodeLine{00309\ \ \ std::vector<csmp::ScalarVariable>\ \ \ \ \ \ \ eqlnum\_;}
+\DoxyCodeLine{00310\ \ \ std::vector<csmp::ScalarVariable>\ \ \ \ \ \ \ fipnum\_;}
+\DoxyCodeLine{00311\ }
+\DoxyCodeLine{00312\ \ \ std::map<std::string,\ EclipseFault>\ \ \ \ \ faults\_data\_;}
+\DoxyCodeLine{00313\ }
+\DoxyCodeLine{00314\ \ \ \textcolor{comment}{//\ well\ specific\ data}}
+\DoxyCodeLine{00315\ \ \ std::map<std::string,\ EclipseWell>\ \ \ \ \ \ well\_data\_;}
+\DoxyCodeLine{00316\ \ \ std::map<std::string,\ EclipseWellPath>\ \ well\_face\_path\_;}
+\DoxyCodeLine{00317\ \};}
+\DoxyCodeLine{00318\ }
+\DoxyCodeLine{00319\ }
+\DoxyCodeLine{00320\ }
+\DoxyCodeLine{00321\ }
+\DoxyCodeLine{00322\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00323\ \textcolor{comment}{@brief\ PROPS\ and\ several\ other\ specifications\ from\ the\ RUNSPECS\ file\ record}}
+\DoxyCodeLine{00324\ \textcolor{comment}{}}
+\DoxyCodeLine{00325\ \textcolor{comment}{@author\ R.\ Manasipov}}
+\DoxyCodeLine{00326\ \textcolor{comment}{@date\ 2014-\/2015}}
+\DoxyCodeLine{00327\ \textcolor{comment}{}}
+\DoxyCodeLine{00328\ \textcolor{comment}{ASCII\ file\ interface\ to\ read\ corner\ point\ grid\ from\ (\ *.GRDECL,\ *.grdecl\ )\ file.}}
+\DoxyCodeLine{00329\ \textcolor{comment}{In\ order\ to\ build\ a\ native\ CSMP\ Model\ the\ provided\ grid\ information\ is\ assigned\ to}}
+\DoxyCodeLine{00330\ \textcolor{comment}{VSet\ and\ ModelTopology\ objects.}}
+\DoxyCodeLine{00331\ \textcolor{comment}{The\ regions\ that\ are\ constructed\ by\ default\ are:}}
+\DoxyCodeLine{00332\ \textcolor{comment}{\%\ regions\ which\ include\ all\ the\ cells}}
+\DoxyCodeLine{00333\ \textcolor{comment}{MATRIX}}
+\DoxyCodeLine{00334\ \textcolor{comment}{MATRIX\_ACTIVE}}
+\DoxyCodeLine{00335\ \textcolor{comment}{MATRIX\_INACTIVE}}
+\DoxyCodeLine{00336\ \textcolor{comment}{\%\ and\ specific\ fault\ regions}}
+\DoxyCodeLine{00337\ \textcolor{comment}{}}
+\DoxyCodeLine{00338\ \textcolor{comment}{In\ addition\ to\ grid\ information\ the\ properties\ such\ as:}}
+\DoxyCodeLine{00339\ \textcolor{comment}{'permeability',\ 'porosity',\ 'pressure',\ 'saturation'\ can\ be\ readed\ as\ well.}}
+\DoxyCodeLine{00340\ \textcolor{comment}{User\ is\ able\ to\ control\ property\ type\ and\ placement.}}
+\DoxyCodeLine{00341\ \textcolor{comment}{For\ example\ one\ can\ create\ tensor\ or\ scalar\ permeability\ variables\ or}}
+\DoxyCodeLine{00342\ \textcolor{comment}{to\ place\ 'pressure'\ at\ the\ nodes\ or\ elements.}}
+\DoxyCodeLine{00343\ \textcolor{comment}{}}
+\DoxyCodeLine{00344\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00345\ \textcolor{comment}{KEYWORDS\ that\ can\ be\ currently\ handled:}}
+\DoxyCodeLine{00346\ \textcolor{comment}{}}
+\DoxyCodeLine{00347\ \textcolor{comment}{-\/-\/-\/\ Grid}}
+\DoxyCodeLine{00348\ \textcolor{comment}{DIMENS}}
+\DoxyCodeLine{00349\ \textcolor{comment}{DX}}
+\DoxyCodeLine{00350\ \textcolor{comment}{DY}}
+\DoxyCodeLine{00351\ \textcolor{comment}{DZ}}
+\DoxyCodeLine{00352\ \textcolor{comment}{SPECGRID}}
+\DoxyCodeLine{00353\ \textcolor{comment}{TOPS}}
+\DoxyCodeLine{00354\ \textcolor{comment}{COORD}}
+\DoxyCodeLine{00355\ \textcolor{comment}{ZCORN}}
+\DoxyCodeLine{00356\ \textcolor{comment}{FAULTS}}
+\DoxyCodeLine{00357\ \textcolor{comment}{}}
+\DoxyCodeLine{00358\ \textcolor{comment}{-\/-\/-\/\ Regions}}
+\DoxyCodeLine{00359\ \textcolor{comment}{ACTNUM}}
+\DoxyCodeLine{00360\ \textcolor{comment}{SATNUM}}
+\DoxyCodeLine{00361\ \textcolor{comment}{PVTNUM}}
+\DoxyCodeLine{00362\ \textcolor{comment}{ROCKNUM}}
+\DoxyCodeLine{00363\ \textcolor{comment}{EQLNUM}}
+\DoxyCodeLine{00364\ \textcolor{comment}{}}
+\DoxyCodeLine{00365\ \textcolor{comment}{-\/-\/-\/\ Props}}
+\DoxyCodeLine{00366\ \textcolor{comment}{NTG}}
+\DoxyCodeLine{00367\ \textcolor{comment}{PORO}}
+\DoxyCodeLine{00368\ \textcolor{comment}{PERMX\ \ \ \ \ \ \ \ \ \ \ \ ///\ 3.\ assign\ well\ data}}
+\DoxyCodeLine{00369\ \textcolor{comment}{well.well\_data\_.push\_back(\ wellcomp\ );}}
+\DoxyCodeLine{00370\ \textcolor{comment}{PERMY}}
+\DoxyCodeLine{00371\ \textcolor{comment}{PERMZ}}
+\DoxyCodeLine{00372\ \textcolor{comment}{PRESSURE}}
+\DoxyCodeLine{00373\ \textcolor{comment}{SWAT}}
+\DoxyCodeLine{00374\ \textcolor{comment}{SOIL}}
+\DoxyCodeLine{00375\ \textcolor{comment}{SGAS}}
+\DoxyCodeLine{00376\ \textcolor{comment}{}}
+\DoxyCodeLine{00377\ \textcolor{comment}{-\/-\/-\/\ Runspec}}
+\DoxyCodeLine{00378\ \textcolor{comment}{WELSPECS}}
+\DoxyCodeLine{00379\ \textcolor{comment}{COMPDAT\ (relies\ on\ WELLSPECS\ and\ can\ therefore\ not\ be\ defined\ in\ isolation)}}
+\DoxyCodeLine{00380\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00381\ \textcolor{comment}{}}
+\DoxyCodeLine{00382\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00383\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_eclipse_model_settings}{EclipseModelSettings}}\ \{}
+\DoxyCodeLine{00384\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00385\ }
+\DoxyCodeLine{00386\ \ \ \textcolor{keyword}{explicit}\ EclipseModelSettings(\ \textcolor{keyword}{const}\ std::string\&\ mesh\_file\_prefix\ );}
+\DoxyCodeLine{00387\ \ \ \string~EclipseModelSettings();}
+\DoxyCodeLine{00388\ }
+\DoxyCodeLine{00389\ \ \ \textcolor{keywordtype}{void}\ MeshSetup(\ \textcolor{keywordtype}{bool}\ exclude\_inactive\_cells,}
+\DoxyCodeLine{00390\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ tetra\_mesh,}
+\DoxyCodeLine{00391\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ create\_boundaries\ =\ \textcolor{keyword}{true}\ );}
+\DoxyCodeLine{00392\ }
+\DoxyCodeLine{00393\ \ \ \textcolor{keywordtype}{void}\ MeshSetup(\ \textcolor{keyword}{const}\ std::string\&\ regions\_file\_prefix,}
+\DoxyCodeLine{00394\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ exclude\_inactive\_cells,}
+\DoxyCodeLine{00395\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ tetra\_mesh,}
+\DoxyCodeLine{00396\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ create\_boundaries\ =\ \textcolor{keyword}{true}\ );}
+\DoxyCodeLine{00397\ }
+\DoxyCodeLine{00398\ \ \ \textcolor{keywordtype}{void}\ MeshSetup(\ \textcolor{keyword}{const}\ std::set<std::string>\&\ regions,}
+\DoxyCodeLine{00399\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ exclude\_inactive\_cells,}
+\DoxyCodeLine{00400\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ tetra\_mesh,}
+\DoxyCodeLine{00401\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ create\_boundaries\ =\ \textcolor{keyword}{true}\ );}
+\DoxyCodeLine{00402\ }
+\DoxyCodeLine{00403\ \ \ \textcolor{comment}{///\ properties\ setup}}
+\DoxyCodeLine{00404\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_eclipse_model_settings_aca12634026596d92997010f8a979c74d}{SatNumPropertySetup}}(\ \textcolor{keyword}{const}\ std::string\&\ prop\_name\ =\ \textcolor{stringliteral}{"{}satnum"{}},}
+\DoxyCodeLine{00405\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\_TYPE}}\&\ prop\_type\ =\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::SCALAR,}
+\DoxyCodeLine{00406\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}\&\ prop\_place\ =\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::ELEMENT\ );}
+\DoxyCodeLine{00407\ }
+\DoxyCodeLine{00408\ \ \ \textcolor{keywordtype}{void}\ PvtNumPropertySetup(\ \textcolor{keyword}{const}\ std::string\&\ prop\_name\ =\ \textcolor{stringliteral}{"{}ptvnum"{}},}
+\DoxyCodeLine{00409\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\_TYPE}}\&\ prop\_type\ =\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::SCALAR,}
+\DoxyCodeLine{00410\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}\&\ prop\_place\ =\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::ELEMENT\ );}
+\DoxyCodeLine{00411\ }
+\DoxyCodeLine{00412\ \ \ \textcolor{comment}{///\ usually\ this\ is\ called\ "{}rocknum"{}}}
+\DoxyCodeLine{00413\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_eclipse_model_settings_a1f636851033f5bd3193fac0f6c2bd7ee}{RockNumPropertySetup}}(\ \textcolor{keyword}{const}\ std::string\&\ prop\_name\ =\ \textcolor{stringliteral}{"{}rocktype"{}},}
+\DoxyCodeLine{00414\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\_TYPE}}\&\ prop\_type\ =\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::SCALAR,}
+\DoxyCodeLine{00415\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}\&\ prop\_place\ =\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::ELEMENT\ );}
+\DoxyCodeLine{00416\ }
+\DoxyCodeLine{00417\ \ \ \textcolor{keywordtype}{void}\ EqlNumPropertySetup(\ \textcolor{keyword}{const}\ std::string\&\ prop\_name\ =\ \textcolor{stringliteral}{"{}eqlnum"{}},}
+\DoxyCodeLine{00418\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\_TYPE}}\&\ prop\_type\ =\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::SCALAR,}
+\DoxyCodeLine{00419\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}\&\ prop\_place\ =\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::ELEMENT\ );}
+\DoxyCodeLine{00420\ }
+\DoxyCodeLine{00421\ \ \ \textcolor{keywordtype}{void}\ FipNumPropertySetup(\ \textcolor{keyword}{const}\ std::string\&\ prop\_name\ =\ \textcolor{stringliteral}{"{}fipnum"{}},}
+\DoxyCodeLine{00422\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\_TYPE}}\&\ prop\_type\ =\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::SCALAR,}
+\DoxyCodeLine{00423\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}\&\ prop\_place\ =\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::ELEMENT\ );}
+\DoxyCodeLine{00424\ }
+\DoxyCodeLine{00425\ \ \ \textcolor{keywordtype}{void}\ NtgPropertySetup(\ \textcolor{keyword}{const}\ std::string\&\ prop\_name\ =\ \textcolor{stringliteral}{"{}ntg"{}},}
+\DoxyCodeLine{00426\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\_TYPE}}\&\ prop\_type\ =\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::SCALAR,}
+\DoxyCodeLine{00427\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}\&\ prop\_place\ =\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::ELEMENT\ );}
+\DoxyCodeLine{00428\ }
+\DoxyCodeLine{00429\ \ \ \textcolor{keywordtype}{void}\ PoroPropertySetup(\ \textcolor{keyword}{const}\ std::string\&\ prop\_name\ =\ \textcolor{stringliteral}{"{}porosity"{}},}
+\DoxyCodeLine{00430\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\_TYPE}}\&\ prop\_type\ =\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::SCALAR,}
+\DoxyCodeLine{00431\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}\&\ prop\_place\ =\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::ELEMENT\ );}
+\DoxyCodeLine{00432\ }
+\DoxyCodeLine{00433\ \ \ \textcolor{keywordtype}{void}\ PermPropertySetup(\ \textcolor{keyword}{const}\ std::string\&\ prop\_name\ =\ \textcolor{stringliteral}{"{}permeability"{}},}
+\DoxyCodeLine{00434\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\_TYPE}}\&\ prop\_type\ =\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::SCALAR,}
+\DoxyCodeLine{00435\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}\&\ prop\_place\ =\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::ELEMENT,}
+\DoxyCodeLine{00436\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ prop\_unit\ =\ \textcolor{stringliteral}{"{}m2"{}}\ );}
+\DoxyCodeLine{00437\ }
+\DoxyCodeLine{00438\ \ \ \textcolor{keywordtype}{void}\ PressurePropertySetup(\ \textcolor{keyword}{const}\ std::string\&\ prop\_name\ =\ \textcolor{stringliteral}{"{}pressure"{}},}
+\DoxyCodeLine{00439\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\_TYPE}}\&\ prop\_type\ =\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::SCALAR,}
+\DoxyCodeLine{00440\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}\&\ prop\_place\ =\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::NODE,}
+\DoxyCodeLine{00441\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ prop\_unit\ =\ \textcolor{stringliteral}{"{}Pa"{}}\ );}
+\DoxyCodeLine{00442\ }
+\DoxyCodeLine{00443\ \ \ \textcolor{keywordtype}{void}\ SwatPropertySetup(\ \textcolor{keyword}{const}\ std::string\&\ prop\_name\ =\ \textcolor{stringliteral}{"{}saturation\ water"{}},}
+\DoxyCodeLine{00444\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\_TYPE}}\&\ prop\_type\ =\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::SCALAR,}
+\DoxyCodeLine{00445\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}\&\ prop\_place\ =\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::NODE\ );}
+\DoxyCodeLine{00446\ }
+\DoxyCodeLine{00447\ \ \ \textcolor{keywordtype}{void}\ SoilPropertySetup(\ \textcolor{keyword}{const}\ std::string\&\ prop\_name\ =\ \textcolor{stringliteral}{"{}saturation\ oil"{}},}
+\DoxyCodeLine{00448\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\_TYPE}}\&\ prop\_type\ =\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::SCALAR,}
+\DoxyCodeLine{00449\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}\&\ prop\_place\ =\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::NODE\ );}
+\DoxyCodeLine{00450\ }
+\DoxyCodeLine{00451\ \ \ \textcolor{keywordtype}{void}\ SgasPropertySetup(\ \textcolor{keyword}{const}\ std::string\&\ prop\_name\ =\ \textcolor{stringliteral}{"{}saturation\ gas"{}},}
+\DoxyCodeLine{00452\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\_TYPE}}\&\ prop\_type\ =\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::SCALAR,}
+\DoxyCodeLine{00453\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}\&\ prop\_place\ =\ ::\mbox{\hyperlink{namespacecsmp}{csmp}}::NODE\ );}
+\DoxyCodeLine{00454\ }
+\DoxyCodeLine{00455\ \ \ \textcolor{comment}{///\ mesh\ setting}}
+\DoxyCodeLine{00456\ \ \ \mbox{\hyperlink{classcsmp_1_1_eclipse_model_settings_adb8fff5d02875e047d70bcb50b4b3182}{std}}::\mbox{\hyperlink{classcsmp_1_1_eclipse_model_settings_adb8fff5d02875e047d70bcb50b4b3182}{string}}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_eclipse_model_settings_adb8fff5d02875e047d70bcb50b4b3182}{mesh\_file\_prefix\_}};\ \ \ \ \ \ \ \textcolor{comment}{///<\ name\ of\ model\ or\ main\ mesh\ file}}
+\DoxyCodeLine{00457\ \ \ \mbox{\hyperlink{classcsmp_1_1_eclipse_model_settings_a2022fd4ac2dcc34527523bd0e45f5164}{std}}::\mbox{\hyperlink{classcsmp_1_1_eclipse_model_settings_a2022fd4ac2dcc34527523bd0e45f5164}{string}}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_eclipse_model_settings_a2022fd4ac2dcc34527523bd0e45f5164}{regions\_file\_prefix\_}};\ \ \ \ \textcolor{comment}{///<\ regions\ file\ prefix}}
+\DoxyCodeLine{00458\ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_eclipse_model_settings_a008ef5ebf0d178104d0917b63ad60dc2}{create\_boundaries\_}};\ \ \ \ \ \ \textcolor{comment}{///<\ true\ =\ create\ boundaries\ around\ model,\ false\ =\ do\ not\ create\ boundaries}}
+\DoxyCodeLine{00459\ \ \ \mbox{\hyperlink{classcsmp_1_1_eclipse_model_settings_aba5d3fafb649fb9fa053d66f13f50d3e}{std}}::\mbox{\hyperlink{classcsmp_1_1_eclipse_model_settings_aba5d3fafb649fb9fa053d66f13f50d3e}{set}}<\mbox{\hyperlink{classcsmp_1_1_eclipse_model_settings_aba5d3fafb649fb9fa053d66f13f50d3e}{std}}::\mbox{\hyperlink{classcsmp_1_1_eclipse_model_settings_aba5d3fafb649fb9fa053d66f13f50d3e}{string}}>\ \mbox{\hyperlink{classcsmp_1_1_eclipse_model_settings_aba5d3fafb649fb9fa053d66f13f50d3e}{regions\_}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ name\ of\ regions\ to\ be\ used}}
+\DoxyCodeLine{00460\ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_eclipse_model_settings_a4f962604b698fdcf4f770084ab2d2a32}{tetra\_mesh\_}};\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ tetrahedral\ mesh}}
+\DoxyCodeLine{00461\ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_eclipse_model_settings_a6dfb38ceccafb88c961c54c8e8ecda97}{exclude\_inactive\_cells\_}};\ \textcolor{comment}{///<\ do\ not\ consider\ inactive\ cells}}
+\DoxyCodeLine{00462\ }
+\DoxyCodeLine{00463\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///\ property\ settings}}
+\DoxyCodeLine{00464\ \ \ \mbox{\hyperlink{classcsmp_1_1_eclipse_model_settings_a4c83fe322f9b63ce9b9b192d8d0bae77}{std}}::\mbox{\hyperlink{classcsmp_1_1_eclipse_model_settings_a4c83fe322f9b63ce9b9b192d8d0bae77}{map}}<\textcolor{keywordtype}{int},\ \mbox{\hyperlink{classcsmp_1_1_eclipse_model_settings_a4c83fe322f9b63ce9b9b192d8d0bae77}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_eclipse_model_settings_a4c83fe322f9b63ce9b9b192d8d0bae77}{Parameter}}>\ \ \ \mbox{\hyperlink{classcsmp_1_1_eclipse_model_settings_a4c83fe322f9b63ce9b9b192d8d0bae77}{properties\_}};\ \ \textcolor{comment}{//\ eclipse\ properties\ (\ porosity,\ permeability,\ transmissibility,\ etc.\ )}}
+\DoxyCodeLine{00465\ }
+\DoxyCodeLine{00466\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00467\ \ \ EclipseModelSettings()\ \{\};\ \textcolor{comment}{//\ should\ not\ be\ used}}
+\DoxyCodeLine{00468\ \};}
+\DoxyCodeLine{00469\ }
+\DoxyCodeLine{00470\ }
+\DoxyCodeLine{00471\ }
+\DoxyCodeLine{00472\ \textcolor{comment}{//\ common\ reading\ functinality}}
+\DoxyCodeLine{00473\ \textcolor{keywordtype}{bool}\ isEclipseCommentLine(\ \textcolor{keywordtype}{char}*\ text\_line\ );}
+\DoxyCodeLine{00474\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp_af8c2740a4e6be30bdfb4207bf22e8609}{isEclipseEndOfBlock}}(\ \textcolor{keywordtype}{char}*\ text\_line\ );}
+\DoxyCodeLine{00475\ \textcolor{keywordtype}{bool}\ isEclipseLineWithEndOfBlock(\ \textcolor{keywordtype}{char}*\ text\_line\ );}
+\DoxyCodeLine{00476\ }
+\DoxyCodeLine{00477\ \textcolor{keywordtype}{bool}\ readEclipseKeyword(\ std::ifstream\&\ ifs,\ \textcolor{keywordtype}{char}*\ text\_line,\ size\_t\ line\_length,}
+\DoxyCodeLine{00478\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::string\&\ keyword,\ std::vector<std::string>\&\ keyword\_parameters\ );}
+\DoxyCodeLine{00479\ }
+\DoxyCodeLine{00480\ \textcolor{keywordtype}{bool}\ readEclipseNonBlankLine(\ std::ifstream\&\ ifs,\ \textcolor{keywordtype}{char}*\ text\_line,\ size\_t\ line\_length,}
+\DoxyCodeLine{00481\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\&\ endOfblock\ );}
+\DoxyCodeLine{00482\ }
+\DoxyCodeLine{00483\ \textcolor{keywordtype}{int}\ \ readEclipseFirstLineInBlock(\ std::ifstream\&\ ifs,\ \textcolor{keywordtype}{char}*\ text\_line,\ size\_t\ line\_length,\ \textcolor{keywordtype}{bool}\&\ endOfblock\ );}
+\DoxyCodeLine{00484\ }
+\DoxyCodeLine{00485\ \textcolor{keywordtype}{int}\ \ readEclipseIncludeFileName(\ std::ifstream\&\ ifs,\ \textcolor{keywordtype}{char}*\ text\_line,\ size\_t\ line\_length,}
+\DoxyCodeLine{00486\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::string\&\ fname\ );}
+\DoxyCodeLine{00487\ }
+\DoxyCodeLine{00488\ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ VarType>}
+\DoxyCodeLine{00489\ \textcolor{keywordtype}{bool}\ readEclipseValue(\ \textcolor{keyword}{const}\ std::string\&\ text\_line,\ \textcolor{keywordtype}{bool}\&\ default\_value,\ size\_t\&\ num,\ VarType\&\ value\ );}
+\DoxyCodeLine{00490\ }
+\DoxyCodeLine{00491\ \textcolor{comment}{//\ reading\ specific\ block's\ of\ data}}
+\DoxyCodeLine{00492\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{namespacecsmp_a9d22ef4a608c2b90b5eee88ae1f02e15}{readEclipseDimensions}}(\ uint32\_t\&\ NX,\ uint32\_t\&\ NY,\ uint32\_t\&\ NZ,}
+\DoxyCodeLine{00493\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::ifstream\&\ ifs,\ \textcolor{keywordtype}{char}*\ text\_line,\ size\_t\ line\_length,\ \textcolor{keywordtype}{bool}\ verbose\ );}
+\DoxyCodeLine{00494\ }
+\DoxyCodeLine{00495\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{namespacecsmp_ae429b1e6ecc8de4d912e5bca025fe1d5}{readEclipseGridSpecs}}(\ uint32\_t\&\ NX,\ uint32\_t\&\ NY,\ uint32\_t\&\ NZ,}
+\DoxyCodeLine{00496\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::ifstream\&\ ifs,\ \textcolor{keywordtype}{char}*\ text\_line,\ size\_t\ line\_length,\ \textcolor{keywordtype}{bool}\ verbose\ );}
+\DoxyCodeLine{00497\ }
+\DoxyCodeLine{00498\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{namespacecsmp_a0691514de28078f1d329aa1c250d56d8}{readEclipsePillarCoordinates}}(\ uint32\_t\&\ NX,\ uint32\_t\&\ NY,}
+\DoxyCodeLine{00499\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_corner_point_grid}{CornerPointGrid}}\&\ grid,}
+\DoxyCodeLine{00500\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::ifstream\&\ ifs,\ \textcolor{keywordtype}{char}*\ text\_line,\ size\_t\ line\_length,\ \textcolor{keywordtype}{bool}\ verbose}
+\DoxyCodeLine{00501\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00502\ }
+\DoxyCodeLine{00503\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{namespacecsmp_a6ca0d86eabc470e1a00849627bc08364}{readEclipseCornerDepths}}(\ uint32\_t\ NX,\ uint32\_t\ NY,\ uint32\_t\&\ NZ,}
+\DoxyCodeLine{00504\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_corner_point_grid}{CornerPointGrid}}\&\ grid,}
+\DoxyCodeLine{00505\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::ifstream\&\ ifs,\ \textcolor{keywordtype}{char}*\ text\_line,\ size\_t\ line\_length,\ \textcolor{keywordtype}{bool}\ verbose}
+\DoxyCodeLine{00506\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00507\ }
+\DoxyCodeLine{00508\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{namespacecsmp_af95d876cae3f9abf38a624f4c4a20597}{readEclipseActiveCells}}(\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{uint8\_t}}>\&\ \mbox{\hyperlink{namespacecsmp}{cell\_activity}},}
+\DoxyCodeLine{00509\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{ifstream}}\&\ \mbox{\hyperlink{namespacecsmp}{ifs}},\ \textcolor{keywordtype}{char}*\ \mbox{\hyperlink{namespacecsmp}{text\_line}},\ \mbox{\hyperlink{namespacecsmp}{size\_t}}\ \mbox{\hyperlink{namespacecsmp}{line\_length}},\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp}{verbose}}}
+\DoxyCodeLine{00510\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00511\ }
+\DoxyCodeLine{00512\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{namespacecsmp_a0ce81ad34ea8cc62aae7b1301090e1b0}{readEclipseCellData}}(\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{namespacecsmp}{ScalarVariable}}>\&\ \mbox{\hyperlink{namespacecsmp}{values}},}
+\DoxyCodeLine{00513\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{ifstream}}\&\ \mbox{\hyperlink{namespacecsmp}{ifs}},\ \textcolor{keywordtype}{char}*\ \mbox{\hyperlink{namespacecsmp}{text\_line}},\ \mbox{\hyperlink{namespacecsmp}{size\_t}}\ \mbox{\hyperlink{namespacecsmp}{line\_length}},\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp}{verbose}}}
+\DoxyCodeLine{00514\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00515\ }
+\DoxyCodeLine{00516\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{namespacecsmp_ac4404f667a9a10aabaf16f4cdbd41da6}{readEclipseWellSpecs}}(\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{map}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{string}},\ \mbox{\hyperlink{namespacecsmp}{EclipseWell}}>\ \&\mbox{\hyperlink{namespacecsmp}{well\_data}},}
+\DoxyCodeLine{00517\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{ifstream}}\&\ \mbox{\hyperlink{namespacecsmp}{ifs}},\ \textcolor{keywordtype}{char}*\ \mbox{\hyperlink{namespacecsmp}{text\_line}},\ \mbox{\hyperlink{namespacecsmp}{size\_t}}\ \mbox{\hyperlink{namespacecsmp}{line\_length}},\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp}{verbose}}}
+\DoxyCodeLine{00518\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00519\ }
+\DoxyCodeLine{00520\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{namespacecsmp_aedf8c0dd2bf969f3fad6c5b891fb5555}{readEclipseWellCompletionsData}}(\ uint32\_t\ NX,\ uint32\_t\ NY,\ uint32\_t\ NZ,}
+\DoxyCodeLine{00521\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::map<std::string,\ EclipseWell>\&\ well\_data,}
+\DoxyCodeLine{00522\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::map<std::string,\ EclipseWellPath>\&\ well\_path,}
+\DoxyCodeLine{00523\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::ifstream\&\ ifs,\ \textcolor{keywordtype}{char}*\ text\_line,\ size\_t\ line\_length,\ \textcolor{keywordtype}{bool}\ verbose}
+\DoxyCodeLine{00524\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00525\ }
+\DoxyCodeLine{00526\ \textcolor{keywordtype}{int}\ readEclipseExplicitFaceWellCompletionsData(\ uint32\_t\ NX,\ uint32\_t\ NY,\ uint32\_t\ NZ,}
+\DoxyCodeLine{00527\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::map<std::string,\ EclipseWell>\&\ well\_data,}
+\DoxyCodeLine{00528\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::map<std::string,\ EclipseWellPath>\&\ well\_path,}
+\DoxyCodeLine{00529\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::ifstream\&\ ifs,\ \textcolor{keywordtype}{char}*\ text\_line,\ size\_t\ line\_length,\ \textcolor{keywordtype}{bool}\ verbose}
+\DoxyCodeLine{00530\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00531\ }
+\DoxyCodeLine{00532\ \textcolor{keywordtype}{int}\ readEclipseExplicitNodeWellCompletionsData(\ uint32\_t\ NX,\ uint32\_t\ NY,\ uint32\_t\ NZ,}
+\DoxyCodeLine{00533\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::map<std::string,\ EclipseWell>\&\ well\_data,}
+\DoxyCodeLine{00534\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::map<std::string,\ EclipseWellPath>\&\ well\_path,}
+\DoxyCodeLine{00535\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::ifstream\&\ ifs,\ \textcolor{keywordtype}{char}*\ text\_line,\ size\_t\ line\_length,\ \textcolor{keywordtype}{bool}\ verbose}
+\DoxyCodeLine{00536\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00537\ }
+\DoxyCodeLine{00538\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{namespacecsmp_ad1a4451bf8846892b86795b1c8445d2d}{readEclipseFaultData}}(\ uint32\_t\ NX,\ uint32\_t\ NY,\ uint32\_t\ NZ,}
+\DoxyCodeLine{00539\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::map<std::string,\ EclipseFault>\&\ faults\_data,}
+\DoxyCodeLine{00540\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::ifstream\&\ ifs,\ \textcolor{keywordtype}{char}*\ text\_line,\ size\_t\ line\_length,\ \textcolor{keywordtype}{bool}\ verbose}
+\DoxyCodeLine{00541\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00542\ }
+\DoxyCodeLine{00543\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{namespacecsmp_a0fbbde530c425bc8529f43e9dd795d6c}{readEclipseFaultTransmissibilityMultipliers}}(\ uint32\_t\ NX,\ uint32\_t\ NY,\ uint32\_t\ NZ,}
+\DoxyCodeLine{00544\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::map<std::string,\ \textcolor{keywordtype}{double}>\&\ multflt,}
+\DoxyCodeLine{00545\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::ifstream\&\ ifs,\ \textcolor{keywordtype}{char}*\ text\_line,\ size\_t\ line\_length,\ \textcolor{keywordtype}{bool}\ verbose}
+\DoxyCodeLine{00546\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00547\ }
+\DoxyCodeLine{00548\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{namespacecsmp_a8078debe56fa5c51e7c0041a72e67907}{readEclipseBoxData}}(\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{uint32\_t}}>\&\ \mbox{\hyperlink{namespacecsmp}{box\_data}},}
+\DoxyCodeLine{00549\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{ifstream}}\&\ \mbox{\hyperlink{namespacecsmp}{ifs}},\ \textcolor{keywordtype}{char}*\ \mbox{\hyperlink{namespacecsmp}{text\_line}},\ \mbox{\hyperlink{namespacecsmp}{size\_t}}\ \mbox{\hyperlink{namespacecsmp}{line\_length}},\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp}{verbose}}}
+\DoxyCodeLine{00550\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00551\ }
+\DoxyCodeLine{00552\ \textcolor{keywordtype}{int}\ skipEclipseBlock(\ std::ifstream\&\ ifs,\ \textcolor{keywordtype}{char}*\ text\_line,\ size\_t\ line\_length,\ \textcolor{keywordtype}{bool}\ verbose\ );}
+\DoxyCodeLine{00553\ }
+\DoxyCodeLine{00554\ \textcolor{keywordtype}{void}\ removeSymbolsFromString(\ std::string\ \&str,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ symbolsToRemove\ );}
+\DoxyCodeLine{00555\ }
+\DoxyCodeLine{00556\ }
+\DoxyCodeLine{00557\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp_a6fd3be6e898c165a32b7c5e3207da106}{addWellPath}}(\ uint32\_t\ NX,\ uint32\_t\ NY,\ uint32\_t\ NZ,}
+\DoxyCodeLine{00558\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ well\_name,}
+\DoxyCodeLine{00559\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<ijk>\&\ cell\_ids,}
+\DoxyCodeLine{00560\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::map<std::string,\ EclipseWellPath>\&\ well\_path\ );}
+\DoxyCodeLine{00561\ }
+\DoxyCodeLine{00562\ \textcolor{keywordtype}{void}\ addWellPath(\ \textcolor{keyword}{const}\ std::string\&\ well\_name,}
+\DoxyCodeLine{00563\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<ijk>\&\ cell\_ids,}
+\DoxyCodeLine{00564\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<std::pair<ijk,\ ::csmp::CORNER\_POINT\_CELL\_FACE\_INDEX>\ >\&\ face\_ids,}
+\DoxyCodeLine{00565\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::map<std::string,\ EclipseWellPath>\&\ well\_path\ );}
+\DoxyCodeLine{00566\ }
+\DoxyCodeLine{00567\ \textcolor{keywordtype}{void}\ addWellPath(\ \textcolor{keyword}{const}\ std::string\&\ well\_name,}
+\DoxyCodeLine{00568\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<ijk>\&\ cell\_ids,}
+\DoxyCodeLine{00569\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::pair<ijk,\ ::csmp::CORNER\_POINT\_CELL\_FACE\_INDEX>\ face\_ids,}
+\DoxyCodeLine{00570\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::map<std::string,\ EclipseWellPath>\&\ well\_path\ );}
+\DoxyCodeLine{00571\ }
+\DoxyCodeLine{00572\ \textcolor{keywordtype}{void}\ addWellPath(\ \textcolor{keyword}{const}\ std::string\&\ well\_name,}
+\DoxyCodeLine{00573\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<ijk>\&\ cell\_ids,}
+\DoxyCodeLine{00574\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::pair<::csmp::CORNER\_POINT\_CELL\_FACE\_INDEX,\ ::csmp::CORNER\_POINT\_CELL\_FACE\_INDEX>\ face\_ids,}
+\DoxyCodeLine{00575\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::map<std::string,\ std::vector<std::pair<size\_t,\ std::pair<size\_t,\ size\_t>\ >\ >\ >\&\ well\_path\ );}
+\DoxyCodeLine{00576\ }
+\DoxyCodeLine{00577\ \textcolor{keywordtype}{void}\ addWellPath(\ \textcolor{keyword}{const}\ std::string\&\ well\_name,}
+\DoxyCodeLine{00578\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structijk}{ijk}}\&\ cell\_ids,}
+\DoxyCodeLine{00579\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::pair<ijk,\ ::csmp::CORNER\_POINT\_CELL\_FACE\_INDEX>\ face\_id,}
+\DoxyCodeLine{00580\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::map<std::string,\ EclipseWellPath>\&\ well\_path\ );}
+\DoxyCodeLine{00581\ }
+\DoxyCodeLine{00582\ \}\textcolor{comment}{//\ end\ namespace\ csmp}}
+\DoxyCodeLine{00583\ }
+\DoxyCodeLine{00584\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

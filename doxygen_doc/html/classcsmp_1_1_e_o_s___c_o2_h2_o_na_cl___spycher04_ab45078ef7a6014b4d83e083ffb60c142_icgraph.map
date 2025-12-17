@@ -1,0 +1,9 @@
+<map id="csmp::EOS_CO2H2ONaCl_Spycher04::viscosityBrine" name="csmp::EOS_CO2H2ONaCl_Spycher04::viscosityBrine">
+<area shape="rect" id="Node000001" title="Viscosity of aqueos phase." alt="" coords="493,39,673,79"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#af38f1f35dfc4b15bb051d404a66c17dd" title="molecular diffusion coefficient of CO2 in brine" alt="" coords="265,5,445,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="477,46,445,41,446,36,478,41"/>
+<area shape="rect" id="Node000003" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#ac66917c0087ac490ff645d3f7f80d549" title="viscosity brine" alt="" coords="265,71,445,111"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="478,76,446,81,445,76,477,71"/>
+<area shape="rect" id="Node000004" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a3107a22407e034cb904c5df8343fee20" title="viscosity of aqueous phase with contain dissolved CO2" alt="" coords="5,71,217,111"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="249,94,217,94,217,88,249,88"/>
+</map>

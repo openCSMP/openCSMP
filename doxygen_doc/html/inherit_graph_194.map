@@ -1,0 +1,7 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" href="$classcsmp_1_1_local_variable_storage.html" title=" " alt="" coords="5,5,189,46"/>
+<area shape="rect" id="Node000001" href="$classcsmp_1_1_split_boundary.html" title="Representation of a model boundary across which the elements are node&#45;matching, but have unique nodes..." alt="" coords="237,39,379,79"/>
+<area shape="poly" id="edge248_Node000000_Node000001" title=" " alt="" coords="204,40,237,45,236,50,203,45"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_model_sub_domain.html" title=" " alt="" coords="15,71,179,111"/>
+<area shape="poly" id="edge249_Node000002_Node000001" title=" " alt="" coords="194,74,236,67,237,72,195,79"/>
+</map>

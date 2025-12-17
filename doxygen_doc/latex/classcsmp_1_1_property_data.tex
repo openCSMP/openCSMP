@@ -1,0 +1,328 @@
+\doxysection{csmp\+::Property\+Data Class Reference}
+\hypertarget{classcsmp_1_1_property_data}{}\label{classcsmp_1_1_property_data}\index{csmp::PropertyData@{csmp::PropertyData}}
+
+
+flexible-\/size container for CSMP data types, providing range-\/check and conversion functions  
+
+
+
+
+{\ttfamily \#include $<$Property\+Data.\+h$>$}
+
+
+
+Collaboration diagram for csmp\+::Property\+Data\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=176pt]{classcsmp_1_1_property_data__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_property_data_a865879f690f42d28e1236f5801d4e89a}\label{classcsmp_1_1_property_data_a865879f690f42d28e1236f5801d4e89a} 
+{\bfseries Property\+Data} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}}, uint32\+\_\+t dim, uint32\+\_\+t array\+\_\+length=0U)
+\begin{DoxyCompactList}\small\item\em custom constructor (but not initializer) for csmp variable types; array length gives the number of elements in array or flagged array variable \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_property_data_a00c6240da40e2e9306445284a3f85905}\label{classcsmp_1_1_property_data_a00c6240da40e2e9306445284a3f85905} 
+bool {\bfseries operator==} (const \mbox{\hyperlink{classcsmp_1_1_property_data}{Property\+Data}} \&) const
+\begin{DoxyCompactList}\small\item\em compare to another dataset of this sort \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_property_data_a57669f2017d273611b931e3ae0b1ef32}\label{classcsmp_1_1_property_data_a57669f2017d273611b931e3ae0b1ef32} 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Placement} () const
+\item 
+\Hypertarget{classcsmp_1_1_property_data_ae36f4493b4a106c299185d90ac07d638}\label{classcsmp_1_1_property_data_ae36f4493b4a106c299185d90ac07d638} 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}} {\bfseries Type} () const
+\item 
+\Hypertarget{classcsmp_1_1_property_data_a1f9a96512c9baad47b20e99f15299d25}\label{classcsmp_1_1_property_data_a1f9a96512c9baad47b20e99f15299d25} 
+uint32\+\_\+t {\bfseries Dim} () const
+\item 
+\Hypertarget{classcsmp_1_1_property_data_ab067d96291a61fb451e9e41d1faff125}\label{classcsmp_1_1_property_data_ab067d96291a61fb451e9e41d1faff125} 
+size\+\_\+t {\bfseries Size} () const
+\item 
+\Hypertarget{classcsmp_1_1_property_data_a13d2570bdc4a02ac3d49490429794d47}\label{classcsmp_1_1_property_data_a13d2570bdc4a02ac3d49490429794d47} 
+uint32\+\_\+t {\bfseries Components} () const
+\begin{DoxyCompactList}\small\item\em number of value entries stored in the variable (=size of array) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_property_data_a6677a39d83f72a7d878cda244351e036}{Clear}} ()
+\begin{DoxyCompactList}\small\item\em changing container size \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_property_data_a6b3ac048510eb250adb510040f99ab8f}{Reserve}} (size\+\_\+t n\+\_\+objects)
+\begin{DoxyCompactList}\small\item\em for a user-\/defined number of objects of the type the property data was constructed for \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_property_data_a0613f79874149630ce5f198a8c07150b}{Reserve}} (size\+\_\+t flag\+\_\+capacity, size\+\_\+t value\+\_\+capacity)
+\begin{DoxyCompactList}\small\item\em sheer storage not considering types of variables \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_property_data_a89e8485e10066602dbc876f7843efa06}{Resize}} (size\+\_\+t n\+\_\+objects)
+\begin{DoxyCompactList}\small\item\em for a user-\/defined number of objects of the type the property data was constructed for \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_property_data_a4b47f4fb493dee7381b82b2899db953f}{Resize}} (size\+\_\+t n\+\_\+flags, size\+\_\+t n\+\_\+values)
+\begin{DoxyCompactList}\small\item\em sheer storage size not considering types of variables \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_property_data_a3d47ce3a5c14576b43c08310494faafe}{Reduce\+To}} (const std\+::map$<$ size\+\_\+t, size\+\_\+t $>$ \&o\+\_\+n\+\_\+elmt\+\_\+ids)
+\begin{DoxyCompactList}\small\item\em change the size if this required by parent container, e.\+g., \doxylink{classcsmp_1_1_v_set}{VSet} \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_property_data_ac744a416927ff51be7cfe4636fc1ec4e}{Push\+Back}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}})
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}raw\textquotesingle{} inserter for flags (user must ascertain that stride is correct); use \doxylink{namespacecsmp_ae8b31696d9894a90cc531500d1088572}{push\+Back()} for objects \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_property_data_ab7debc3c38d32ccccd943ca61c42d024}\label{classcsmp_1_1_property_data_ab7debc3c38d32ccccd943ca61c42d024} 
+void {\bfseries Push\+Back} (double)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}raw\textquotesingle{} inserter for values (user must ascertain that stride is correct); use \doxylink{namespacecsmp_ae8b31696d9894a90cc531500d1088572}{push\+Back()} for objects \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_property_data_a46a23d9e0bf89c073a69d0ef7e3a1316}\label{classcsmp_1_1_property_data_a46a23d9e0bf89c073a69d0ef7e3a1316} 
+void {\bfseries Push\+Back\+From} (const \mbox{\hyperlink{classcsmp_1_1_property_data}{Property\+Data}} \&data, size\+\_\+t nth\+\_\+value)
+\begin{DoxyCompactList}\small\item\em inserter from another \doxylink{classcsmp_1_1_property_data}{Property\+Data} \end{DoxyCompactList}\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} \& \mbox{\hyperlink{classcsmp_1_1_property_data_a7b4d6cda76a21d4fc09f69ef1c7c7acd}{Flag}} (size\+\_\+t nth\+\_\+value)
+\begin{DoxyCompactList}\small\item\em scalars \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_property_data_aa1074f383697f4bf2ea379d7aecc8951}\label{classcsmp_1_1_property_data_aa1074f383697f4bf2ea379d7aecc8951} 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} {\bfseries Flag} (size\+\_\+t nth\+\_\+value) const
+\begin{DoxyCompactList}\small\item\em scalars \end{DoxyCompactList}\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} \& \mbox{\hyperlink{classcsmp_1_1_property_data_afef58fdb70341e997f2d2d7cc3f20a41}{Flag}} (size\+\_\+t nth\+\_\+value, uint32\+\_\+t ith\+\_\+dim)
+\begin{DoxyCompactList}\small\item\em vectors and array variables \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_property_data_ae57154253ada7526df9c04e1bb6e2ebd}\label{classcsmp_1_1_property_data_ae57154253ada7526df9c04e1bb6e2ebd} 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} {\bfseries Flag} (size\+\_\+t nth\+\_\+value, uint32\+\_\+t ith\+\_\+dim) const
+\begin{DoxyCompactList}\small\item\em read flags\+: vectors and array variables \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_property_data_af53bd010f3cad7f23fc3b863826826b8}\label{classcsmp_1_1_property_data_af53bd010f3cad7f23fc3b863826826b8} 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} \& {\bfseries Flag} (size\+\_\+t nth\+\_\+value, uint32\+\_\+t ith\+\_\+row, uint32\+\_\+t jth\+\_\+col)
+\begin{DoxyCompactList}\small\item\em tensors \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_property_data_a81deef1b096e45cbbf03bd23416528a1}\label{classcsmp_1_1_property_data_a81deef1b096e45cbbf03bd23416528a1} 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} {\bfseries Flag} (size\+\_\+t nth\+\_\+value, uint32\+\_\+t ith\+\_\+row, uint32\+\_\+t jth\+\_\+col) const
+\begin{DoxyCompactList}\small\item\em tensors (only their diagonal elements have flags) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_property_data_a890b42c600b15f43dd3e84b362a13e00}\label{classcsmp_1_1_property_data_a890b42c600b15f43dd3e84b362a13e00} 
+double \& {\bfseries Value} (size\+\_\+t nth\+\_\+value)
+\begin{DoxyCompactList}\small\item\em scalars \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_property_data_a9134d6bcafeeabfd4573e6865ae6c8bb}\label{classcsmp_1_1_property_data_a9134d6bcafeeabfd4573e6865ae6c8bb} 
+double {\bfseries Value} (size\+\_\+t nth\+\_\+value) const
+\item 
+double \& \mbox{\hyperlink{classcsmp_1_1_property_data_a1ed5e1a202e7686c624a7504bbb6711e}{Value}} (size\+\_\+t nth\+\_\+value, uint32\+\_\+t ith\+\_\+dim)
+\begin{DoxyCompactList}\small\item\em vectors and array variables \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_property_data_a18d9ec5a488d740fa6149d3eff5ea26e}\label{classcsmp_1_1_property_data_a18d9ec5a488d740fa6149d3eff5ea26e} 
+double {\bfseries Value} (size\+\_\+t nth\+\_\+value, uint32\+\_\+t ith\+\_\+dim) const
+\begin{DoxyCompactList}\small\item\em retrieve values\+: vectors and array variables \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_property_data_a80320046cf21d1c86a8dd80401f5116f}\label{classcsmp_1_1_property_data_a80320046cf21d1c86a8dd80401f5116f} 
+double \& {\bfseries Value} (size\+\_\+t nth\+\_\+value, uint32\+\_\+t ith\+\_\+row, uint32\+\_\+t jth\+\_\+col)
+\begin{DoxyCompactList}\small\item\em tensors \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_property_data_af888ee5b4edde51390a4bf2b435a61f1}\label{classcsmp_1_1_property_data_af888ee5b4edde51390a4bf2b435a61f1} 
+double {\bfseries Value} (size\+\_\+t nth\+\_\+value, uint32\+\_\+t ith\+\_\+row, uint32\+\_\+t jth\+\_\+col) const
+\item 
+\Hypertarget{classcsmp_1_1_property_data_a400079960fab770440da35d102d1d3e7}\label{classcsmp_1_1_property_data_a400079960fab770440da35d102d1d3e7} 
+void {\bfseries Min\+Max\+Of} (double \&tmin, double \&tmax) const
+\begin{DoxyCompactList}\small\item\em checks range; all values included \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_property_data_a6126b9ecb9ad1426b85b679cb0bedd50}\label{classcsmp_1_1_property_data_a6126b9ecb9ad1426b85b679cb0bedd50} 
+void {\bfseries Scale\+Range\+To} (double tmin, double tmax)
+\begin{DoxyCompactList}\small\item\em scales the current variable range to the new one; all values are scaled \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_property_data_a43730b1cb8f1d6870e16ead968ee8979}{Offset\+Range\+By}} (double offset\+\_\+value)
+\begin{DoxyCompactList}\small\item\em add supplied value to all entries (look at conventions for vectors and tensors in the doc of these classes) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_property_data_a7ca06e800e251f0cd15df40f05c38557}{Transform\+Values}} (double(\texorpdfstring{$\ast$}{*}f)(double))
+\begin{DoxyCompactList}\small\item\em takes a pointer to a typical math function like double sqrt(double) as argument; applied this function to all values \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_property_data_a45ad6ffda2416e4dce7b82b929284781}{Out\+Binary}} (std\+::fstream \&fp) const
+\begin{DoxyCompactList}\small\item\em writing stored flag and data values to file \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_property_data_a018100a269162fd6a8085784c6542735}\label{classcsmp_1_1_property_data_a018100a269162fd6a8085784c6542735} 
+void {\bfseries Out} () const
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+flexible-\/size container for CSMP data types, providing range-\/check and conversion functions 
+
+\begin{DoxyAuthor}{Author}
+S.\+K. Matthai 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+8/4/2016
+\end{DoxyDate}
+\hypertarget{compare_floats_8h_motivation}{}\doxysubsection{\texorpdfstring{Motivation}{Motivation}}\label{compare_floats_8h_motivation}
+Efficient data transfer object with an efficient binary interface to store variables to disk.\hypertarget{classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_design}{}\doxysubsection{\texorpdfstring{Design Intent}{Design Intent}}\label{classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_design}
+More disk storage-\/size efficient alternative to \doxylink{classcsmp_1_1_f_e_m___data}{FEM\+\_\+\+Data} in \doxylink{classcsmp_1_1_v_set}{VSet} to streamline variable exchange and storage to disk; make it possible to read variables selectively from file.\hypertarget{classcsmp_1_1_visitor_examples}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{classcsmp_1_1_visitor_examples}
+Create contained for 1000 arrays, initialize it and write it to disk, for example\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{classcsmp_1_1_property_data_a865879f690f42d28e1236f5801d4e89a}{PropertyData}}\ data(\ NODE,\ ARRAY,\ DIM3,\ 21\ );}
+\DoxyCodeLine{data.Reserve(1000);}
+\DoxyCodeLine{ArrayVariable\ \ array(1000);}
+\DoxyCodeLine{...}
+\DoxyCodeLine{for(\ a\ :\ 1000\ )\ \ data.PushBack(\ array\ );}
+\DoxyCodeLine{data.OutBinary(\ FILE\ );\ \ }
+
+\end{DoxyCode}
+
+
+\begin{DoxyAttention}{Attention}
+use \doxylink{namespacecsmp_ac76d03a8153fa83afdc1758b9bdc9507}{read()} and \doxylink{namespacecsmp_a7e1fb631510192d4a0bb05c36cbf14ec}{store()} from above to retrieve entire csmp variables, there are no member accessors Read() or Store() 
+\end{DoxyAttention}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_property_data_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_property_data_a6677a39d83f72a7d878cda244351e036}\index{csmp::PropertyData@{csmp::PropertyData}!Clear@{Clear}}
+\index{Clear@{Clear}!csmp::PropertyData@{csmp::PropertyData}}
+\doxysubsubsection{\texorpdfstring{Clear()}{Clear()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_data_a6677a39d83f72a7d878cda244351e036} 
+void csmp\+::\+Property\+Data\+::\+Clear (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+changing container size 
+
+you may only reset using a key of the same (i.\+e., ELEMENT ) Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=324pt]{classcsmp_1_1_property_data_a6677a39d83f72a7d878cda244351e036_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_property_data_a7b4d6cda76a21d4fc09f69ef1c7c7acd}\index{csmp::PropertyData@{csmp::PropertyData}!Flag@{Flag}}
+\index{Flag@{Flag}!csmp::PropertyData@{csmp::PropertyData}}
+\doxysubsubsection{\texorpdfstring{Flag()}{Flag()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_data_a7b4d6cda76a21d4fc09f69ef1c7c7acd} 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} \& csmp\+::\+Property\+Data\+::\+Flag (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{nth\+\_\+value}{}\end{DoxyParamCaption})}
+
+
+
+scalars 
+
+accessors / mutators for flags scalars \Hypertarget{classcsmp_1_1_property_data_afef58fdb70341e997f2d2d7cc3f20a41}\index{csmp::PropertyData@{csmp::PropertyData}!Flag@{Flag}}
+\index{Flag@{Flag}!csmp::PropertyData@{csmp::PropertyData}}
+\doxysubsubsection{\texorpdfstring{Flag()}{Flag()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_data_afef58fdb70341e997f2d2d7cc3f20a41} 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} \& csmp\+::\+Property\+Data\+::\+Flag (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{nth\+\_\+value}{, }\item[{uint32\+\_\+t}]{ith\+\_\+dim}{}\end{DoxyParamCaption})}
+
+
+
+vectors and array variables 
+
+set flags\+: vectors and array variables \Hypertarget{classcsmp_1_1_property_data_a43730b1cb8f1d6870e16ead968ee8979}\index{csmp::PropertyData@{csmp::PropertyData}!OffsetRangeBy@{OffsetRangeBy}}
+\index{OffsetRangeBy@{OffsetRangeBy}!csmp::PropertyData@{csmp::PropertyData}}
+\doxysubsubsection{\texorpdfstring{OffsetRangeBy()}{OffsetRangeBy()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_data_a43730b1cb8f1d6870e16ead968ee8979} 
+void csmp\+::\+Property\+Data\+::\+Offset\+Range\+By (\begin{DoxyParamCaption}\item[{double}]{offset}{}\end{DoxyParamCaption})}
+
+
+
+add supplied value to all entries (look at conventions for vectors and tensors in the doc of these classes) 
+
+Adds offset to all data values in the container
+
+TODO\+: make sure that this is done only where it makes sense! Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=324pt]{classcsmp_1_1_property_data_a43730b1cb8f1d6870e16ead968ee8979_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_property_data_a45ad6ffda2416e4dce7b82b929284781}\index{csmp::PropertyData@{csmp::PropertyData}!OutBinary@{OutBinary}}
+\index{OutBinary@{OutBinary}!csmp::PropertyData@{csmp::PropertyData}}
+\doxysubsubsection{\texorpdfstring{OutBinary()}{OutBinary()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_data_a45ad6ffda2416e4dce7b82b929284781} 
+bool csmp\+::\+Property\+Data\+::\+Out\+Binary (\begin{DoxyParamCaption}\item[{std\+::fstream \&}]{fp}{}\end{DoxyParamCaption}) const}
+
+
+
+writing stored flag and data values to file 
+
+Out binary.
+
+const \doxylink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT} place\+\_\+; ///\texorpdfstring{$<$}{<} placement of variable const \doxylink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE} type\+\_\+; ///\texorpdfstring{$<$}{<} any of scalar..flagged array const size\+\_\+t dim\+\_\+; ///\texorpdfstring{$<$}{<} spatial dimension const size\+\_\+t flag\+\_\+stride\+\_\+; ///\texorpdfstring{$<$}{<} variable to variable offset (e.\+g. dim in a vector var) const size\+\_\+t data\+\_\+stride\+\_\+; ///\texorpdfstring{$<$}{<} variable to variable offset (e.\+g. dim in a vector var) std\+::vector$<$\+VARIABLE\+\_\+\+FLAG$>$ flags\+\_\+; ///\texorpdfstring{$<$}{<} variable flags std\+::vector$<$double$>$ data\+\_\+; ///\texorpdfstring{$<$}{<} variable values \Hypertarget{classcsmp_1_1_property_data_ac744a416927ff51be7cfe4636fc1ec4e}\index{csmp::PropertyData@{csmp::PropertyData}!PushBack@{PushBack}}
+\index{PushBack@{PushBack}!csmp::PropertyData@{csmp::PropertyData}}
+\doxysubsubsection{\texorpdfstring{PushBack()}{PushBack()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_data_ac744a416927ff51be7cfe4636fc1ec4e} 
+void csmp\+::\+Property\+Data\+::\+Push\+Back (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}}}]{flag}{}\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}raw\textquotesingle{} inserter for flags (user must ascertain that stride is correct); use \doxylink{namespacecsmp_ae8b31696d9894a90cc531500d1088572}{push\+Back()} for objects 
+
+\begin{DoxyAttention}{Attention}
+use \doxylink{namespacecsmp_ac76d03a8153fa83afdc1758b9bdc9507}{read()} and \doxylink{namespacecsmp_a7e1fb631510192d4a0bb05c36cbf14ec}{store()} from above to retrieve entire csmp variables 
+\end{DoxyAttention}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_property_data_ac744a416927ff51be7cfe4636fc1ec4e_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_property_data_a3d47ce3a5c14576b43c08310494faafe}\index{csmp::PropertyData@{csmp::PropertyData}!ReduceTo@{ReduceTo}}
+\index{ReduceTo@{ReduceTo}!csmp::PropertyData@{csmp::PropertyData}}
+\doxysubsubsection{\texorpdfstring{ReduceTo()}{ReduceTo()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_data_a3d47ce3a5c14576b43c08310494faafe} 
+void csmp\+::\+Property\+Data\+::\+Reduce\+To (\begin{DoxyParamCaption}\item[{const std\+::map$<$ size\+\_\+t, size\+\_\+t $>$ \&}]{o\+\_\+n\+\_\+elmt\+\_\+ids}{}\end{DoxyParamCaption})}
+
+
+
+change the size if this required by parent container, e.\+g., \doxylink{classcsmp_1_1_v_set}{VSet} 
+
+keeps only those values with the indices stored in the map
+
+indices are assumed to range between 0..n-\/1 Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=324pt]{classcsmp_1_1_property_data_a3d47ce3a5c14576b43c08310494faafe_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_property_data_a0613f79874149630ce5f198a8c07150b}\index{csmp::PropertyData@{csmp::PropertyData}!Reserve@{Reserve}}
+\index{Reserve@{Reserve}!csmp::PropertyData@{csmp::PropertyData}}
+\doxysubsubsection{\texorpdfstring{Reserve()}{Reserve()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_data_a0613f79874149630ce5f198a8c07150b} 
+void csmp\+::\+Property\+Data\+::\+Reserve (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{flag\+\_\+capacity}{, }\item[{size\+\_\+t}]{value\+\_\+capacity}{}\end{DoxyParamCaption})}
+
+
+
+sheer storage not considering types of variables 
+
+if extra values are created they will be initialised to ANY and not-\/a-\/number (NaN) \Hypertarget{classcsmp_1_1_property_data_a6b3ac048510eb250adb510040f99ab8f}\index{csmp::PropertyData@{csmp::PropertyData}!Reserve@{Reserve}}
+\index{Reserve@{Reserve}!csmp::PropertyData@{csmp::PropertyData}}
+\doxysubsubsection{\texorpdfstring{Reserve()}{Reserve()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_data_a6b3ac048510eb250adb510040f99ab8f} 
+void csmp\+::\+Property\+Data\+::\+Reserve (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{n\+\_\+objects}{}\end{DoxyParamCaption})}
+
+
+
+for a user-\/defined number of objects of the type the property data was constructed for 
+
+reserves storage for n-\/objects as opposed to determining the size of the sheer storage which is what the \doxylink{classcsmp_1_1_property_data_a6b3ac048510eb250adb510040f99ab8f}{Reserve()} method with 2 arguments does. \Hypertarget{classcsmp_1_1_property_data_a4b47f4fb493dee7381b82b2899db953f}\index{csmp::PropertyData@{csmp::PropertyData}!Resize@{Resize}}
+\index{Resize@{Resize}!csmp::PropertyData@{csmp::PropertyData}}
+\doxysubsubsection{\texorpdfstring{Resize()}{Resize()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_data_a4b47f4fb493dee7381b82b2899db953f} 
+void csmp\+::\+Property\+Data\+::\+Resize (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{n\+\_\+flags}{, }\item[{size\+\_\+t}]{n\+\_\+values}{}\end{DoxyParamCaption})}
+
+
+
+sheer storage size not considering types of variables 
+
+if extra values are created they will be initialised to ANY and not-\/a-\/number (NaN) \Hypertarget{classcsmp_1_1_property_data_a89e8485e10066602dbc876f7843efa06}\index{csmp::PropertyData@{csmp::PropertyData}!Resize@{Resize}}
+\index{Resize@{Resize}!csmp::PropertyData@{csmp::PropertyData}}
+\doxysubsubsection{\texorpdfstring{Resize()}{Resize()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_data_a89e8485e10066602dbc876f7843efa06} 
+void csmp\+::\+Property\+Data\+::\+Resize (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{n\+\_\+objects}{}\end{DoxyParamCaption})}
+
+
+
+for a user-\/defined number of objects of the type the property data was constructed for 
+
+reserves storage for n-\/objects as opposed to determining the size of the sheer storage which is what the \doxylink{classcsmp_1_1_property_data_a6b3ac048510eb250adb510040f99ab8f}{Reserve()} method with 2 arguments does. \Hypertarget{classcsmp_1_1_property_data_a7ca06e800e251f0cd15df40f05c38557}\index{csmp::PropertyData@{csmp::PropertyData}!TransformValues@{TransformValues}}
+\index{TransformValues@{TransformValues}!csmp::PropertyData@{csmp::PropertyData}}
+\doxysubsubsection{\texorpdfstring{TransformValues()}{TransformValues()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_data_a7ca06e800e251f0cd15df40f05c38557} 
+void csmp\+::\+Property\+Data\+::\+Transform\+Values (\begin{DoxyParamCaption}\item[{double(\texorpdfstring{$\ast$}{*}}]{f~}{)(double)}\end{DoxyParamCaption})}
+
+
+
+takes a pointer to a typical math function like double sqrt(double) as argument; applied this function to all values 
+
+Applies any kind of function with the syntax double f(double) to the double entries of the stored data.
+
+TODO\+: make sure that this is done only where it makes sense! \Hypertarget{classcsmp_1_1_property_data_a1ed5e1a202e7686c624a7504bbb6711e}\index{csmp::PropertyData@{csmp::PropertyData}!Value@{Value}}
+\index{Value@{Value}!csmp::PropertyData@{csmp::PropertyData}}
+\doxysubsubsection{\texorpdfstring{Value()}{Value()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_data_a1ed5e1a202e7686c624a7504bbb6711e} 
+double \& csmp\+::\+Property\+Data\+::\+Value (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{nth\+\_\+value}{, }\item[{uint32\+\_\+t}]{ith\+\_\+dim}{}\end{DoxyParamCaption})}
+
+
+
+vectors and array variables 
+
+assign values\+: vectors and array variables 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/model/Property\+Data.\+h\item 
+source/modules/model/Property\+Data.\+cpp\end{DoxyCompactItemize}

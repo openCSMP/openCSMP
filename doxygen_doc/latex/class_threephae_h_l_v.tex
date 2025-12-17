@@ -1,0 +1,33 @@
+\doxysection{Threephae\+HLV Class Reference}
+\hypertarget{class_threephae_h_l_v}{}\label{class_threephae_h_l_v}\index{ThreephaeHLV@{ThreephaeHLV}}
+
+
+Collaboration diagram for Threephae\+HLV\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=153pt]{class_threephae_h_l_v__coll__graph}
+\end{center}
+\end{figure}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyAuthor}{Author}
+\+: Thomas Driesner, ETH Zuerich, \href{mailto:thomas.driesner@erdw.ethz.ch}{\texttt{thomas.\+driesner@erdw.\+ethz.\+ch}}
+\end{DoxyAuthor}
+\hypertarget{compare_floats_8h_motivation}{}\doxysubsection{\texorpdfstring{Motivation}{Motivation}}\label{compare_floats_8h_motivation}
+"{}\+Threephase\+HLV"{} computes the temperature-\/pressure-\/composition \mbox{[}Celsius, bar\mbox{]} coordinates of the vapor-\/liquid-\/halite threephase-\/coexistence surface of the system H2\+O-\/\+Na\+Cl, according to the paper
+
+Driesner T. and Heinrich C.\+A. (2007)\+: The system H2\+O-\/\+Na\+Cl. Part I\+: Correlation formulae for phase relations in temperature-\/pressure-\/composition space from 0 to 1000oC, 0 to 5000 bar, and 0 to 1 XNa\+Cl. Geochimica et Cosmochimica Acta 71, 4880-\/4901.
+
+Other porperties such as density etc. are NOT provided.
+
+"{}\+Threephase\+HLV"{} is legacy code coming from Thomas Driesner\textquotesingle{}s developments for the H2\+O-\/\+Na\+Cl system. It is REQUIRED to build accurate lookup tables for the H2\+O-\/\+Na\+Cl system.\hypertarget{classcsmp_1_1_upwind_control_visitor_usage}{}\doxysubsection{\texorpdfstring{Usage}{Usage}}\label{classcsmp_1_1_upwind_control_visitor_usage}
+Construct an instance of "{}\+Threephase\+HLV"{} with the temperature (in C) as constructor variable. "{}\+Threephase\+HLV"{} has an internal mechanism to make sure that it always uses the current value of that temperature. Public member names should be self-\/explanatory, I hope.\hypertarget{class_threephae_h_l_v_requirements}{}\doxysubsection{\texorpdfstring{Requirements\+:}{Requirements\+:}}\label{class_threephae_h_l_v_requirements}
+"{}\+Threephase\+HLV"{} needs "{}\+Triple\+Point\+Na\+Cl"{}\hypertarget{compare_floats_8h_testing}{}\doxysubsection{\texorpdfstring{Testing}{Testing}}\label{compare_floats_8h_testing}
+Manually tested against CSMP version 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/eos/Threephase\+HLV.\+h\end{DoxyCompactItemize}

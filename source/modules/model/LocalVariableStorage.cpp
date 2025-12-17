@@ -693,12 +693,9 @@ void LocalVariableStorage<dim,STOREE>::Store( const csmp::Index& idx, const Arra
   assert( (idx.dataOffset+idx.dataDepth-1) < data_.data.size() );
   assert( (idx.flagOffset) < data_.flags.size() );
 
-    const uint32_t data_offset( idx.dataOffset );
-    const uint32_t flags_offset( idx.flagOffset );
-    const uint32_t arraySize( idx.dataDepth );
-    for( uint32_t i{0u}; i < arraySize; ++i )
-      data_.data[ data_offset   + i ] = av[i];
-    data_.flags[ flags_offset] = av.Flag();
+    // Use std::copy for better performance
+    std::copy(av.Begin(), av.End(), &data_.data[idx.dataOffset]);
+    data_.flags[idx.flagOffset] = av.Flag();
   }
 
 
@@ -715,13 +712,12 @@ void LocalVariableStorage<dim,STOREE>::Read( const csmp::Index& idx, ArrayVariab
   assert( (idx.dataOffset+idx.dataDepth-1) < data_.data.size() );
   assert( (idx.flagOffset) < data_.flags.size() );
 
-    const uint32_t data_offset( idx.dataOffset );
-    const uint32_t flags_offset( idx.flagOffset );
-    const uint32_t arraySize( idx.dataDepth );
-    for( uint32_t i{0u}; i < arraySize; ++i )
-      av(i)     = data_.data[ data_offset +  i ];
-    av.Flag()= data_.flags[ flags_offset];
-}
+    // Use a loop for assignment to avoid const_iterator issues
+    for (uint32_t i = 0; i < av.Size(); ++i) {
+        av(i) = data_.data[idx.dataOffset + i];
+    }
+    av.Flag() = data_.flags[idx.flagOffset];
+  }
 
 /// FlaggedArray variable
 template<uint32_t dim, template<uint32_t> class STOREE>
@@ -735,13 +731,11 @@ void LocalVariableStorage<dim,STOREE>::Store( const csmp::Index& idx, const Flag
   assert( (idx.dataOffset+idx.dataDepth-1) < data_.data.size() );
   assert( (idx.flagOffset+idx.dataDepth-1) < data_.flags.size() );
 
-    const uint32_t data_offset( idx.dataOffset );
-    const uint32_t flags_offset( idx.flagOffset );
-    const uint32_t arraySize( idx.dataDepth );
-    for( uint32_t i(0); i < arraySize; ++i )
-    {
-      data_.data[ data_offset   + i ] = av[i];
-      data_.flags[ flags_offset + i ] = av.Flag(i);
+    // Use std::copy for better performance
+    std::copy(av.Begin(), av.End(), &data_.data[idx.dataOffset]);
+    // Store flags one by one
+    for (uint32_t i = 0; i < av.Size(); ++i) {
+        data_.flags[idx.flagOffset + i] = av.Flag(i);
     }
   }
 
@@ -759,15 +753,12 @@ void LocalVariableStorage<dim,STOREE>::Read( const csmp::Index& idx, FlaggedArra
   assert( (idx.dataOffset+idx.dataDepth-1) < data_.data.size() );
   assert( (idx.flagOffset+idx.dataDepth-1) < data_.flags.size() );
 
-    const uint32_t data_offset( idx.dataOffset );
-    const uint32_t flags_offset( idx.flagOffset );
-    const uint32_t arraySize( idx.dataDepth );
-    for( uint32_t i{0u}; i < arraySize; ++i )
-    {
-      av(i)     = data_.data[ data_offset +  i ];
-      av.Flag(i)= data_.flags[ flags_offset + i ];
+    // Use a loop for assignment to avoid const_iterator issues
+    for (uint32_t i = 0; i < av.Size(); ++i) {
+        av(i) = data_.data[idx.dataOffset + i];
+        av.Flag(i) = data_.flags[idx.flagOffset + i];
     }
-}
+  }
 
 
 /**
@@ -1113,7 +1104,7 @@ void LocalVariableStorage<dim,STOREE>::Read( uint32_t ip, const csmp::Index& idx
 
     for( uint32_t i(0); i < arraySize; ++i )
     {
-      av(i) = data_.data[ offset+i ];
+      av(i) = data_.data[ offset + i ];
       av.Flag( i, data_.flags[flagOffset+i] );
     }
   }
@@ -1154,6 +1145,10 @@ bool LocalVariableStorage<dim,STOREE>::IsWithinRange( uint32_t ip, const csmp::I
     cout <<"\nLocalVariableStorage<dim,STOREE>::IsWithinRange: range check could not be performed."<< endl;
     return false;
   }
+
+
+
+
 
 
 

@@ -47,9 +47,7 @@ void ErrorMetric_Example::Run()
 
     /*
     const string model_name("prism_test");
-    const bool irregular_mesh(false);
-    const bool binary_file(true);
-    ANSYS_Model3D  model( model_name.c_str(), "example25.txt", irregular_mesh, binary_file );
+    ANSYS_Model3D  model( model_name.c_str(), "example25.txt" );
     */
 
     // ------------------------------------------------------------
@@ -67,6 +65,7 @@ void ErrorMetric_Example::Run()
     string config_file = model_name;
     //create of directory with current example name, go into this directory, and copy input files into it.
     CreateWorkingDirectoryAndCopyInputModelFiles(file_name, model_name, variable_file, config_file);
+
     //reads model from CSMP's native binary files, but creating (additional) storage based on supplied variable file
     Model<3U>  model( model_name, variable_file );
 

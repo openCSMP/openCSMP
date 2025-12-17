@@ -1,0 +1,160 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_shape" kind="class" language="C++" prot="public">
+    <compoundname>csmp::Shape</compoundname>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_shape_1aaaf23bd6b44fd15f7822076671495e71" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Shape::surface_area_</definition>
+        <argsstring></argsstring>
+        <name>surface_area_</name>
+        <qualifiedname>csmp::Shape::surface_area_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Experimental_Example.cpp" line="60" column="12" bodyfile="examples/source/Experimental_Example.cpp" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_shape_1a1dbd3536bb487a91003e7ae3cf74f4e5" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Shape::volume_</definition>
+        <argsstring></argsstring>
+        <name>volume_</name>
+        <qualifiedname>csmp::Shape::volume_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Experimental_Example.cpp" line="61" column="12" bodyfile="examples/source/Experimental_Example.cpp" bodystart="61" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_shape_1a906a75a29709701084afdc7c5629435f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Shape::Shape</definition>
+        <argsstring>()</argsstring>
+        <name>Shape</name>
+        <qualifiedname>csmp::Shape::Shape</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Experimental_Example.cpp" line="52" column="5" bodyfile="examples/source/Experimental_Example.cpp" bodystart="64" bodyend="64"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_shape_1abe94913059a9b9bcaa99f1a7db3a9eec" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Shape::Shape</definition>
+        <argsstring>(double, double)</argsstring>
+        <name>Shape</name>
+        <qualifiedname>csmp::Shape::Shape</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>s</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <defname>v</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Experimental_Example.cpp" line="53" column="5" bodyfile="examples/source/Experimental_Example.cpp" bodystart="66" bodyend="69"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_shape_1af34f2c3f270c019e6b5de86ad427c66d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Shape::Shape</definition>
+        <argsstring>(const Shape &amp;s)</argsstring>
+        <name>Shape</name>
+        <qualifiedname>csmp::Shape::Shape</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_shape" kindref="compound">Shape</ref> &amp;</type>
+          <declname>s</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Experimental_Example.cpp" line="54" column="5" bodyfile="examples/source/Experimental_Example.cpp" bodystart="71" bodyend="74"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_shape_1ac4f37d155a32a323b5b4f31b6b34aa83" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Shape::~Shape</definition>
+        <argsstring>()</argsstring>
+        <name>~Shape</name>
+        <qualifiedname>csmp::Shape::~Shape</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Experimental_Example.cpp" line="55" column="5" bodyfile="examples/source/Experimental_Example.cpp" bodystart="76" bodyend="76"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_shape_1aee18408000ff2e715ebb0ecc0e857626" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_shape" kindref="compound">Shape</ref> &amp;</type>
+        <definition>Shape &amp; csmp::Shape::operator=</definition>
+        <argsstring>(const Shape &amp;s)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::Shape::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_shape" kindref="compound">Shape</ref> &amp;</type>
+          <declname>s</declname>
+        </param>
+        <briefdescription>
+<para><ref refid="classcsmp_1_1_shape" kindref="compound">Shape</ref> a = b;. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Experimental_Example.cpp" line="56" column="11" bodyfile="examples/source/Experimental_Example.cpp" bodystart="79" bodyend="86"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_shape_1ae8a0dad871d6e3fc5c49aba71fe2d06c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Shape::Out</definition>
+        <argsstring>() const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::Shape::Out</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/Experimental_Example.cpp" line="57" column="10" bodyfile="examples/source/Experimental_Example.cpp" bodystart="88" bodyend="92"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::Shape</label>
+        <link refid="classcsmp_1_1_shape"/>
+      </node>
+    </collaborationgraph>
+    <location file="examples/source/Experimental_Example.cpp" line="50" column="1" bodyfile="examples/source/Experimental_Example.cpp" bodystart="50" bodyend="62"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_shape_1aee18408000ff2e715ebb0ecc0e857626" prot="public" virt="non-virtual"><scope>csmp::Shape</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_shape_1ae8a0dad871d6e3fc5c49aba71fe2d06c" prot="public" virt="non-virtual"><scope>csmp::Shape</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_shape_1a906a75a29709701084afdc7c5629435f" prot="public" virt="non-virtual"><scope>csmp::Shape</scope><name>Shape</name></member>
+      <member refid="classcsmp_1_1_shape_1abe94913059a9b9bcaa99f1a7db3a9eec" prot="public" virt="non-virtual"><scope>csmp::Shape</scope><name>Shape</name></member>
+      <member refid="classcsmp_1_1_shape_1af34f2c3f270c019e6b5de86ad427c66d" prot="public" virt="non-virtual"><scope>csmp::Shape</scope><name>Shape</name></member>
+      <member refid="classcsmp_1_1_shape_1aaaf23bd6b44fd15f7822076671495e71" prot="private" virt="non-virtual"><scope>csmp::Shape</scope><name>surface_area_</name></member>
+      <member refid="classcsmp_1_1_shape_1a1dbd3536bb487a91003e7ae3cf74f4e5" prot="private" virt="non-virtual"><scope>csmp::Shape</scope><name>volume_</name></member>
+      <member refid="classcsmp_1_1_shape_1ac4f37d155a32a323b5b4f31b6b34aa83" prot="public" virt="non-virtual"><scope>csmp::Shape</scope><name>~Shape</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

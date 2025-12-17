@@ -1,0 +1,353 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_linear_cuboid___test" kind="class" language="C++" prot="public">
+    <compoundname>csmp::LinearCuboid_Test</compoundname>
+    <basecompoundref refid="classcsmp_1_1_test" prot="public" virt="non-virtual">csmp::Test</basecompoundref>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_linear_cuboid___test_1a9ef5be1d8d12c26c013e1152eecf6704" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_linear_cuboid" kindref="compound">LinearCuboid</ref></type>
+        <definition>LinearCuboid csmp::LinearCuboid_Test::lcuboid_</definition>
+        <argsstring></argsstring>
+        <name>lcuboid_</name>
+        <qualifiedname>csmp::LinearCuboid_Test::lcuboid_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/LinearCuboid_Test.h" line="38" column="17" bodyfile="tests/unit/LinearCuboid_Test.h" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_linear_cuboid___test_1a1f231719ae2470fae86dcecee072ea45" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; 3U &gt;</type>
+        <definition>Element&lt;3U&gt; csmp::LinearCuboid_Test::element_</definition>
+        <argsstring></argsstring>
+        <name>element_</name>
+        <qualifiedname>csmp::LinearCuboid_Test::element_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/LinearCuboid_Test.h" line="39" column="13" bodyfile="tests/unit/LinearCuboid_Test.h" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_linear_cuboid___test_1ab0c55dd4e64107e93d64ffdf5dcee67c" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; 3U &gt;</type>
+        <definition>Node&lt;3U&gt; csmp::LinearCuboid_Test::n0</definition>
+        <argsstring></argsstring>
+        <name>n0</name>
+        <qualifiedname>csmp::LinearCuboid_Test::n0</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/LinearCuboid_Test.h" line="40" column="13" bodyfile="tests/unit/LinearCuboid_Test.h" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_linear_cuboid___test_1a4de24dff44bff8c34c112ca372951f17" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; 3U &gt;</type>
+        <definition>Node&lt;3U&gt; csmp::LinearCuboid_Test::n1</definition>
+        <argsstring></argsstring>
+        <name>n1</name>
+        <qualifiedname>csmp::LinearCuboid_Test::n1</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/LinearCuboid_Test.h" line="40" column="16" bodyfile="tests/unit/LinearCuboid_Test.h" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_linear_cuboid___test_1a11990f3ed058517ab28992b91a4d7dd3" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; 3U &gt;</type>
+        <definition>Node&lt;3U&gt; csmp::LinearCuboid_Test::n2</definition>
+        <argsstring></argsstring>
+        <name>n2</name>
+        <qualifiedname>csmp::LinearCuboid_Test::n2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/LinearCuboid_Test.h" line="40" column="19" bodyfile="tests/unit/LinearCuboid_Test.h" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_linear_cuboid___test_1aedaac3fe5fbff8ba7d6a6aedd4c03355" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; 3U &gt;</type>
+        <definition>Node&lt;3U&gt; csmp::LinearCuboid_Test::n3</definition>
+        <argsstring></argsstring>
+        <name>n3</name>
+        <qualifiedname>csmp::LinearCuboid_Test::n3</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/LinearCuboid_Test.h" line="40" column="22" bodyfile="tests/unit/LinearCuboid_Test.h" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_linear_cuboid___test_1a70c74bc3c2e63bd71556787f8acb44a3" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; 3U &gt;</type>
+        <definition>Node&lt;3U&gt; csmp::LinearCuboid_Test::n4</definition>
+        <argsstring></argsstring>
+        <name>n4</name>
+        <qualifiedname>csmp::LinearCuboid_Test::n4</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/LinearCuboid_Test.h" line="40" column="25" bodyfile="tests/unit/LinearCuboid_Test.h" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_linear_cuboid___test_1ad3c64192bb8e1b28fe520dad549e34ae" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; 3U &gt;</type>
+        <definition>Node&lt;3U&gt; csmp::LinearCuboid_Test::n5</definition>
+        <argsstring></argsstring>
+        <name>n5</name>
+        <qualifiedname>csmp::LinearCuboid_Test::n5</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/LinearCuboid_Test.h" line="40" column="28" bodyfile="tests/unit/LinearCuboid_Test.h" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_linear_cuboid___test_1a8cd32304189f4fa3649f43785c282c92" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; 3U &gt;</type>
+        <definition>Node&lt;3U&gt; csmp::LinearCuboid_Test::n6</definition>
+        <argsstring></argsstring>
+        <name>n6</name>
+        <qualifiedname>csmp::LinearCuboid_Test::n6</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/LinearCuboid_Test.h" line="40" column="31" bodyfile="tests/unit/LinearCuboid_Test.h" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_linear_cuboid___test_1a2bd4fd97ed7ffa249bb8312c9c303fbf" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; 3U &gt;</type>
+        <definition>Node&lt;3U&gt; csmp::LinearCuboid_Test::n7</definition>
+        <argsstring></argsstring>
+        <name>n7</name>
+        <qualifiedname>csmp::LinearCuboid_Test::n7</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/LinearCuboid_Test.h" line="40" column="34" bodyfile="tests/unit/LinearCuboid_Test.h" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_linear_cuboid___test_1aa5c1f176e91d433ed9ef8a964205b494" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::LinearCuboid_Test::tolerance_factor_</definition>
+        <argsstring></argsstring>
+        <name>tolerance_factor_</name>
+        <qualifiedname>csmp::LinearCuboid_Test::tolerance_factor_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/LinearCuboid_Test.h" line="41" column="15" bodyfile="tests/unit/LinearCuboid_Test.h" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_linear_cuboid___test_1a678db6c30e15099bb2e63ded52dd9edf" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::LinearCuboid_Test::verbose_</definition>
+        <argsstring></argsstring>
+        <name>verbose_</name>
+        <qualifiedname>csmp::LinearCuboid_Test::verbose_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/LinearCuboid_Test.h" line="42" column="17" bodyfile="tests/unit/LinearCuboid_Test.h" bodystart="42" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_linear_cuboid___test_1a815287e98cb58f517706fe932edbcd36" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>LinearCuboid_Test::LinearCuboid_Test</definition>
+        <argsstring>(bool verbose)</argsstring>
+        <name>LinearCuboid_Test</name>
+        <qualifiedname>csmp::LinearCuboid_Test::LinearCuboid_Test</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>verbose</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/LinearCuboid_Test.h" line="30" column="10" bodyfile="tests/unit/LinearCuboid_Test.cpp" bodystart="8" bodyend="46"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_cuboid___test_1a3726cae0f1e072adc646e1e2befd91a8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>LinearCuboid_Test::~LinearCuboid_Test</definition>
+        <argsstring>()</argsstring>
+        <name>~LinearCuboid_Test</name>
+        <qualifiedname>csmp::LinearCuboid_Test::~LinearCuboid_Test</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/LinearCuboid_Test.h" line="31" column="1" bodyfile="tests/unit/LinearCuboid_Test.cpp" bodystart="49" bodyend="51"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_cuboid___test_1a898f329f41e700ba367a2ab58f2905a5" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void LinearCuboid_Test::run</definition>
+        <argsstring>()</argsstring>
+        <name>run</name>
+        <qualifiedname>csmp::LinearCuboid_Test::run</qualifiedname>
+        <reimplements refid="classcsmp_1_1_test_1af63cd2af47d8d03819b05cf8bfb27eac">run</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/LinearCuboid_Test.h" line="32" column="14" bodyfile="tests/unit/LinearCuboid_Test.cpp" bodystart="54" bodyend="90"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_cuboid___test_1afe4bd280ac087d3eef471d31316e3ac0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void LinearCuboid_Test::TestInterpolationFunctionValues</definition>
+        <argsstring>(const Element&lt; 3U &gt; &amp;e)</argsstring>
+        <name>TestInterpolationFunctionValues</name>
+        <qualifiedname>csmp::LinearCuboid_Test::TestInterpolationFunctionValues</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; 3U &gt; &amp;</type>
+          <declname>e</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/LinearCuboid_Test.h" line="33" column="6" bodyfile="tests/unit/LinearCuboid_Test.cpp" bodystart="94" bodyend="109"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_cuboid___test_1a13e30d080529f2256a1813ca5cac48f1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void LinearCuboid_Test::TestSumShapesAtBaryCenter</definition>
+        <argsstring>(const Element&lt; 3U &gt; &amp;e)</argsstring>
+        <name>TestSumShapesAtBaryCenter</name>
+        <qualifiedname>csmp::LinearCuboid_Test::TestSumShapesAtBaryCenter</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; 3U &gt; &amp;</type>
+          <declname>e</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/LinearCuboid_Test.h" line="34" column="6" bodyfile="tests/unit/LinearCuboid_Test.cpp" bodystart="112" bodyend="119"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_cuboid___test_1a17d9d122b0acc239e365b21a1aaead5d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool LinearCuboid_Test::_equalTest</definition>
+        <argsstring>(double a, double b, double tol) const</argsstring>
+        <name>_equalTest</name>
+        <qualifiedname>csmp::LinearCuboid_Test::_equalTest</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>b</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>tol</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/LinearCuboid_Test.h" line="35" column="6" bodyfile="tests/unit/LinearCuboid_Test.cpp" bodystart="121" bodyend="126"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::LinearCuboid_Test</label>
+        <link refid="classcsmp_1_1_linear_cuboid___test"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Test</label>
+        <link refid="classcsmp_1_1_test"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::LinearCuboid_Test</label>
+        <link refid="classcsmp_1_1_linear_cuboid___test"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Test</label>
+        <link refid="classcsmp_1_1_test"/>
+      </node>
+    </collaborationgraph>
+    <location file="tests/unit/LinearCuboid_Test.h" line="28" column="1" bodyfile="tests/unit/LinearCuboid_Test.h" bodystart="28" bodyend="43"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_linear_cuboid___test_1a17d9d122b0acc239e365b21a1aaead5d" prot="public" virt="non-virtual"><scope>csmp::LinearCuboid_Test</scope><name>_equalTest</name></member>
+      <member refid="classcsmp_1_1_test_1ad3346b23b36fbe34ac5f306a2a5d0e28" prot="protected" virt="non-virtual"><scope>csmp::LinearCuboid_Test</scope><name>do_equal</name></member>
+      <member refid="classcsmp_1_1_test_1aee0da28e82775ce7d1ebd3b9fae9bf7d" prot="protected" virt="non-virtual"><scope>csmp::LinearCuboid_Test</scope><name>do_fail</name></member>
+      <member refid="classcsmp_1_1_test_1a9976e7601c20a057d2f0ed2f8318c862" prot="public" virt="non-virtual"><scope>csmp::LinearCuboid_Test</scope><name>do_succeed</name></member>
+      <member refid="classcsmp_1_1_test_1a0bf5d355d1455b2bc113ba2572e95ad8" prot="protected" virt="non-virtual"><scope>csmp::LinearCuboid_Test</scope><name>do_test</name></member>
+      <member refid="classcsmp_1_1_linear_cuboid___test_1a1f231719ae2470fae86dcecee072ea45" prot="private" virt="non-virtual"><scope>csmp::LinearCuboid_Test</scope><name>element_</name></member>
+      <member refid="classcsmp_1_1_test_1ab8d7cbdfd0588aa57d7ce4d2574d665b" prot="public" virt="non-virtual"><scope>csmp::LinearCuboid_Test</scope><name>getName</name></member>
+      <member refid="classcsmp_1_1_test_1a47920cfd13f92f0860ca62ade4f2e150" prot="public" virt="non-virtual"><scope>csmp::LinearCuboid_Test</scope><name>getNumFailed</name></member>
+      <member refid="classcsmp_1_1_test_1af0f3b897ba4ff0cb7c94cde8be1fb32b" prot="public" virt="non-virtual"><scope>csmp::LinearCuboid_Test</scope><name>getNumPassed</name></member>
+      <member refid="classcsmp_1_1_test_1ac340370a07ff5fd4bd85bae93f0a3dac" prot="public" virt="non-virtual"><scope>csmp::LinearCuboid_Test</scope><name>getStream</name></member>
+      <member refid="classcsmp_1_1_test_1adfad3f1f85aa766958ffcc59070e2d2d" prot="public" virt="non-virtual"><scope>csmp::LinearCuboid_Test</scope><name>hasName</name></member>
+      <member refid="classcsmp_1_1_linear_cuboid___test_1a9ef5be1d8d12c26c013e1152eecf6704" prot="private" virt="non-virtual"><scope>csmp::LinearCuboid_Test</scope><name>lcuboid_</name></member>
+      <member refid="classcsmp_1_1_linear_cuboid___test_1a815287e98cb58f517706fe932edbcd36" prot="public" virt="non-virtual"><scope>csmp::LinearCuboid_Test</scope><name>LinearCuboid_Test</name></member>
+      <member refid="classcsmp_1_1_linear_cuboid___test_1ab0c55dd4e64107e93d64ffdf5dcee67c" prot="private" virt="non-virtual"><scope>csmp::LinearCuboid_Test</scope><name>n0</name></member>
+      <member refid="classcsmp_1_1_linear_cuboid___test_1a4de24dff44bff8c34c112ca372951f17" prot="private" virt="non-virtual"><scope>csmp::LinearCuboid_Test</scope><name>n1</name></member>
+      <member refid="classcsmp_1_1_linear_cuboid___test_1a11990f3ed058517ab28992b91a4d7dd3" prot="private" virt="non-virtual"><scope>csmp::LinearCuboid_Test</scope><name>n2</name></member>
+      <member refid="classcsmp_1_1_linear_cuboid___test_1aedaac3fe5fbff8ba7d6a6aedd4c03355" prot="private" virt="non-virtual"><scope>csmp::LinearCuboid_Test</scope><name>n3</name></member>
+      <member refid="classcsmp_1_1_linear_cuboid___test_1a70c74bc3c2e63bd71556787f8acb44a3" prot="private" virt="non-virtual"><scope>csmp::LinearCuboid_Test</scope><name>n4</name></member>
+      <member refid="classcsmp_1_1_linear_cuboid___test_1ad3c64192bb8e1b28fe520dad549e34ae" prot="private" virt="non-virtual"><scope>csmp::LinearCuboid_Test</scope><name>n5</name></member>
+      <member refid="classcsmp_1_1_linear_cuboid___test_1a8cd32304189f4fa3649f43785c282c92" prot="private" virt="non-virtual"><scope>csmp::LinearCuboid_Test</scope><name>n6</name></member>
+      <member refid="classcsmp_1_1_linear_cuboid___test_1a2bd4fd97ed7ffa249bb8312c9c303fbf" prot="private" virt="non-virtual"><scope>csmp::LinearCuboid_Test</scope><name>n7</name></member>
+      <member refid="classcsmp_1_1_test_1a73afdd22caa8aac000b0d07fb3ae42e5" prot="protected" virt="non-virtual"><scope>csmp::LinearCuboid_Test</scope><name>prefix_</name></member>
+      <member refid="classcsmp_1_1_test_1aa241dcb3adf0ec6716ed08739bd3f79b" prot="public" virt="non-virtual"><scope>csmp::LinearCuboid_Test</scope><name>report</name></member>
+      <member refid="classcsmp_1_1_test_1a5d334e867a3de4afd434dd9b0034234c" prot="public" virt="virtual"><scope>csmp::LinearCuboid_Test</scope><name>reset</name></member>
+      <member refid="classcsmp_1_1_linear_cuboid___test_1a898f329f41e700ba367a2ab58f2905a5" prot="public" virt="virtual"><scope>csmp::LinearCuboid_Test</scope><name>run</name></member>
+      <member refid="classcsmp_1_1_test_1a3e006cad54b35d9e20561f4a64843b4e" prot="public" virt="non-virtual"><scope>csmp::LinearCuboid_Test</scope><name>setName</name></member>
+      <member refid="classcsmp_1_1_test_1a20ba6ab18fcaaf806df6348a3b2e032b" prot="public" virt="non-virtual"><scope>csmp::LinearCuboid_Test</scope><name>setStream</name></member>
+      <member refid="classcsmp_1_1_test_1aa4e274174d16215448eab6198bdb5979" prot="public" virt="non-virtual"><scope>csmp::LinearCuboid_Test</scope><name>Test</name></member>
+      <member refid="classcsmp_1_1_linear_cuboid___test_1afe4bd280ac087d3eef471d31316e3ac0" prot="public" virt="non-virtual"><scope>csmp::LinearCuboid_Test</scope><name>TestInterpolationFunctionValues</name></member>
+      <member refid="classcsmp_1_1_linear_cuboid___test_1a13e30d080529f2256a1813ca5cac48f1" prot="public" virt="non-virtual"><scope>csmp::LinearCuboid_Test</scope><name>TestSumShapesAtBaryCenter</name></member>
+      <member refid="classcsmp_1_1_linear_cuboid___test_1aa5c1f176e91d433ed9ef8a964205b494" prot="private" virt="non-virtual"><scope>csmp::LinearCuboid_Test</scope><name>tolerance_factor_</name></member>
+      <member refid="classcsmp_1_1_linear_cuboid___test_1a678db6c30e15099bb2e63ded52dd9edf" prot="private" virt="non-virtual"><scope>csmp::LinearCuboid_Test</scope><name>verbose_</name></member>
+      <member refid="classcsmp_1_1_linear_cuboid___test_1a3726cae0f1e072adc646e1e2befd91a8" prot="public" virt="non-virtual"><scope>csmp::LinearCuboid_Test</scope><name>~LinearCuboid_Test</name></member>
+      <member refid="classcsmp_1_1_test_1ac154a16a5e086fe52e032c30722f5060" prot="public" virt="virtual"><scope>csmp::LinearCuboid_Test</scope><name>~Test</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

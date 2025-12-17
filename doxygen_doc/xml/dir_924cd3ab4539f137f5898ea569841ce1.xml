@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_924cd3ab4539f137f5898ea569841ce1" kind="dir">
+    <compoundname>build/CMakeFiles/open-csmp-core.dir/source/modules/eos/h2o_nacl</compoundname>
+    <innerfile refid="_brine_8cpp_8o_8d">Brine.cpp.o.d</innerfile>
+    <innerfile refid="_critical_curve_8cpp_8o_8d">CriticalCurve.cpp.o.d</innerfile>
+    <innerfile refid="_halite_8cpp_8o_8d">Halite.cpp.o.d</innerfile>
+    <innerfile refid="_halite_liquidus_8cpp_8o_8d">HaliteLiquidus.cpp.o.d</innerfile>
+    <innerfile refid="_na_cl_boiling_curve_8cpp_8o_8d">NaClBoilingCurve.cpp.o.d</innerfile>
+    <innerfile refid="_na_cl_melting_curve_8cpp_8o_8d">NaClMeltingCurve.cpp.o.d</innerfile>
+    <innerfile refid="_na_cl_saturated_vapor_8cpp_8o_8d">NaClSaturatedVapor.cpp.o.d</innerfile>
+    <innerfile refid="_na_cl_sublimation_curve_8cpp_8o_8d">NaClSublimationCurve.cpp.o.d</innerfile>
+    <innerfile refid="_threephase_h_l_v_8cpp_8o_8d">ThreephaseHLV.cpp.o.d</innerfile>
+    <innerfile refid="_triple_point_h2_o_8cpp_8o_8d">TriplePointH2O.cpp.o.d</innerfile>
+    <innerfile refid="_triple_point_na_cl_8cpp_8o_8d">TriplePointNaCl.cpp.o.d</innerfile>
+    <innerfile refid="_twophase_liquid_8cpp_8o_8d">TwophaseLiquid.cpp.o.d</innerfile>
+    <innerfile refid="_twophase_vapor_8cpp_8o_8d">TwophaseVapor.cpp.o.d</innerfile>
+    <innerfile refid="_water_8cpp_8o_8d">Water.cpp.o.d</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="build/CMakeFiles/open-csmp-core.dir/source/modules/eos/h2o_nacl/"/>
+  </compounddef>
+</doxygen>

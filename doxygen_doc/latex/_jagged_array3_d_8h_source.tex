@@ -1,0 +1,153 @@
+\doxysection{Jagged\+Array3\+D.\+h}
+\hypertarget{_jagged_array3_d_8h_source}{}\label{_jagged_array3_d_8h_source}\index{source/includes/math/JaggedArray3D.h@{source/includes/math/JaggedArray3D.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ \ JaggedArray3D.h}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ \ Open\ CSMP++}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ \ Created\ by\ Stephan\ Matthai\ on\ 25/11/2024.}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_JAGGED\_ARRAY\_3D\_H}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_JAGGED\_ARRAY\_3D\_H}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cmath}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{iostream}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{unordered\_map}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{tuple}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{limits}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{functional}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{comment}{/**\ custom\ hash\ for\ std::tuple<int,\ int,\ int>}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ \ \ \ The\ STL\ uses\ just\ uses\ the\ function}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ \ \ \ @code}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ \ \ \ std::size\_t\ operator()(const\ std::tuple<int,\ int,\ int>\&\ t)\ const\ \{}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ \ \ \ \ \ \ std::size\_t\ h1\ =\ std::hash<int>\{\}(std::get<0>(t));\ //\ Hash\ of\ the\ first\ element}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ \ \ \ \ \ \ \ std::size\_t\ h2\ =\ std::hash<int>\{\}(std::get<1>(t));\ //\ Hash\ of\ the\ second\ element}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ \ \ \ \ \ \ \ std::size\_t\ h3\ =\ std::hash<int>\{\}(std::get<2>(t));\ //\ Hash\ of\ the\ third\ element}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ \ \ \ \ \ \ \ //\ Combine\ the\ hashes\ using\ XOR\ and\ bit-\/shifting}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ \ \ \ \ \ \ \ return\ h1\ \string^\ (h2\ <<\ 1)\ \string^\ (h3\ <<\ 2);}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ \ \ \ \ \ \}}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ \ \ \ @endcode}}
+\DoxyCodeLine{00032\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00033\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcsmp_1_1_tuple_hash}{TupleHash}}\ \{}
+\DoxyCodeLine{00034\ \ \ \ \ std::size\_t\ operator()(\ \textcolor{keyword}{const}\ std::tuple<uint32\_t,\ uint32\_t,\ uint32\_t>\&\ t\ )\ \textcolor{keyword}{const}\ \{}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ std::size\_t\ h1\ =\ std::hash<uint32\_t>\{\}(std::get<0>(t));}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ std::size\_t\ h2\ =\ std::hash<uint32\_t>\{\}(std::get<1>(t));}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ std::size\_t\ h3\ =\ std::hash<uint32\_t>\{\}(std::get<2>(t));}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ combine\ the\ hashes\ using\ XOR\ and\ bit-\/shifting}}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ h1\ \string^\ (h2\ <<\ 1)\ \string^\ (h3\ <<\ 2);}
+\DoxyCodeLine{00040\ \ \ \ \ \}}
+\DoxyCodeLine{00041\ \};}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ \ \ \ Three-\/dimensional\ jagged\ array\ (where\ the\ number\ of\ columns\ can\ vary),\ \ implemented\ via\ an\ unordered\_map\ plus\ hashing\ function\ 'TupleHash'}}
+\DoxyCodeLine{00046\ \textcolor{comment}{\ \ \ \ Tested\ and\ compared\ in\ 'JaggedArray3D\_Comparison\_Test'.}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ \ \ \ For\ dense\ regularly\ shaped\ matrix,\ JaggedArray3D\ is\ slower\ than\ DynamicArray3D\ and\ a\ vector\ of\ vecto\ of\ vectors.}}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ \ \ \ Good\ uses\ are\ for\ sparse\ 3D\ matrices\ the\ entries\ of\ which\ are\ in\ a\ flux\ (changing\ rapidly\ during\ a\ computation).}}
+\DoxyCodeLine{00049\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00050\ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ T>}
+\DoxyCodeLine{00051\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_jagged_array3_d}{JaggedArray3D}}\ \{}
+\DoxyCodeLine{00052\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keyword}{using}\ \mbox{\hyperlink{classcsmp_1_1_jagged_array3_d}{key}}\ =\ \mbox{\hyperlink{classcsmp_1_1_jagged_array3_d}{std}}::\mbox{\hyperlink{classcsmp_1_1_jagged_array3_d}{tuple}}<\mbox{\hyperlink{classcsmp_1_1_jagged_array3_d}{uint32\_t}},\ \mbox{\hyperlink{classcsmp_1_1_jagged_array3_d}{uint32\_t}},\ \mbox{\hyperlink{classcsmp_1_1_jagged_array3_d}{uint32\_t}}>;}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keyword}{using}\ \mbox{\hyperlink{classcsmp_1_1_jagged_array3_d}{umap}}\ =\ \mbox{\hyperlink{classcsmp_1_1_jagged_array3_d}{std}}::\mbox{\hyperlink{classcsmp_1_1_jagged_array3_d}{unordered\_map}}<\mbox{\hyperlink{classcsmp_1_1_jagged_array3_d}{key}},\mbox{\hyperlink{classcsmp_1_1_jagged_array3_d}{T}},\mbox{\hyperlink{classcsmp_1_1_jagged_array3_d}{TupleHash}}>;}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{comment}{//\ ref}}
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keyword}{using}\ \mbox{\hyperlink{classcsmp_1_1_jagged_array3_d}{reference}}\ \ \ \ \ \ \ =\ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_jagged_array3_d}{std}}::\mbox{\hyperlink{classcsmp_1_1_jagged_array3_d}{unordered\_map}}<\mbox{\hyperlink{classcsmp_1_1_jagged_array3_d}{key}},\mbox{\hyperlink{classcsmp_1_1_jagged_array3_d}{T}}>::\mbox{\hyperlink{classcsmp_1_1_jagged_array3_d}{reference}};}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keyword}{using}\ \mbox{\hyperlink{classcsmp_1_1_jagged_array3_d}{const\_reference}}\ =\ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_jagged_array3_d}{std}}::\mbox{\hyperlink{classcsmp_1_1_jagged_array3_d}{unordered\_map}}<\mbox{\hyperlink{classcsmp_1_1_jagged_array3_d}{key}},\mbox{\hyperlink{classcsmp_1_1_jagged_array3_d}{T}}>::\mbox{\hyperlink{classcsmp_1_1_jagged_array3_d}{const\_reference}};}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{comment}{//\ iter}}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keyword}{using}\ \mbox{\hyperlink{classcsmp_1_1_jagged_array3_d}{iterator}}\ \ \ \ \ \ \ =\ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_jagged_array3_d}{std}}::\mbox{\hyperlink{classcsmp_1_1_jagged_array3_d}{unordered\_map}}<\mbox{\hyperlink{classcsmp_1_1_jagged_array3_d}{key}},\mbox{\hyperlink{classcsmp_1_1_jagged_array3_d}{T}}>::\mbox{\hyperlink{classcsmp_1_1_jagged_array3_d}{iterator}};}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keyword}{using}\ \mbox{\hyperlink{classcsmp_1_1_jagged_array3_d}{const\_iterator}}\ =\ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_jagged_array3_d}{std}}::\mbox{\hyperlink{classcsmp_1_1_jagged_array3_d}{unordered\_map}}<\mbox{\hyperlink{classcsmp_1_1_jagged_array3_d}{key}},\mbox{\hyperlink{classcsmp_1_1_jagged_array3_d}{T}}>::\mbox{\hyperlink{classcsmp_1_1_jagged_array3_d}{const\_iterator}};}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{comment}{///\ default\ constructor\ constructs\ an\ empty\ array}}
+\DoxyCodeLine{00063\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_jagged_array3_d_a334201c84646b1e9e0437cf79004937b}{JaggedArray3D}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{comment}{///\ construction\ using\ initialiser\ list\ (which\ must\ be\ known\ at\ compile\ time)}}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classcsmp_1_1_jagged_array3_d_abe0a97475216e6a522a43d18adf1bd26}{JaggedArray3D}}(\ \mbox{\hyperlink{classcsmp_1_1_jagged_array3_d_abe0a97475216e6a522a43d18adf1bd26}{std}}::\mbox{\hyperlink{classcsmp_1_1_jagged_array3_d_abe0a97475216e6a522a43d18adf1bd26}{initializer\_list}}<\mbox{\hyperlink{classcsmp_1_1_jagged_array3_d_abe0a97475216e6a522a43d18adf1bd26}{std}}::\mbox{\hyperlink{classcsmp_1_1_jagged_array3_d_abe0a97475216e6a522a43d18adf1bd26}{initializer\_list}}<\mbox{\hyperlink{classcsmp_1_1_jagged_array3_d_abe0a97475216e6a522a43d18adf1bd26}{std}}::\mbox{\hyperlink{classcsmp_1_1_jagged_array3_d_abe0a97475216e6a522a43d18adf1bd26}{initializer\_list}}<\mbox{\hyperlink{classcsmp_1_1_jagged_array3_d_abe0a97475216e6a522a43d18adf1bd26}{T}}>>>\ );}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{comment}{///\ construct\ from\ a\ monster\ vector\ of\ vector\ of\ vectors}}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classcsmp_1_1_jagged_array3_d_abe0a97475216e6a522a43d18adf1bd26}{JaggedArray3D}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_jagged_array3_d_abe0a97475216e6a522a43d18adf1bd26}{std}}::\mbox{\hyperlink{classcsmp_1_1_jagged_array3_d_abe0a97475216e6a522a43d18adf1bd26}{vector}}<\mbox{\hyperlink{classcsmp_1_1_jagged_array3_d_abe0a97475216e6a522a43d18adf1bd26}{std}}::\mbox{\hyperlink{classcsmp_1_1_jagged_array3_d_abe0a97475216e6a522a43d18adf1bd26}{vector}}<\mbox{\hyperlink{classcsmp_1_1_jagged_array3_d_abe0a97475216e6a522a43d18adf1bd26}{std}}::\mbox{\hyperlink{classcsmp_1_1_jagged_array3_d_abe0a97475216e6a522a43d18adf1bd26}{vector}}<\mbox{\hyperlink{classcsmp_1_1_jagged_array3_d_abe0a97475216e6a522a43d18adf1bd26}{T}}>>>\&\ );}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{comment}{//\ ACCESSORS}}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{comment}{///\ iterators}}
+\DoxyCodeLine{00074\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_jagged_array3_d_a8d3df1584dd4690e2f8f2e6d49a48dd4}{iterator}}\ \mbox{\hyperlink{classcsmp_1_1_jagged_array3_d_a8d3df1584dd4690e2f8f2e6d49a48dd4}{begin}}()\ \{\ \textcolor{keywordflow}{return}\ data\_.begin();\ \}}
+\DoxyCodeLine{00075\ \ \ \ \ iterator\ end()\ \{\ \textcolor{keywordflow}{return}\ data\_.end();\ \}}
+\DoxyCodeLine{00076\ \ \ \ \ const\_iterator\ begin()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ data\_.begin();\ \}}
+\DoxyCodeLine{00077\ \ \ \ \ const\_iterator\ end()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ data\_.end();\ \}}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{comment}{///\ Insert\ or\ modify\ elements}}
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_jagged_array3_d_a13ad52b1df6a37f9a4d811a920c6669f}{set}}(\ uint32\_t\ k,\ uint32\_t\ i,\ uint32\_t\ j,\ T\ value\ )\ \{}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ data\_[\{k,\ i,\ j\}]\ =\ value;}
+\DoxyCodeLine{00082\ \ \ \ \ \}}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{comment}{///\ read\ elements\ using\ operator()\ return\ NaN\ if\ they\ don't\ exist}}
+\DoxyCodeLine{00085\ \ \ \ \ T\ \mbox{\hyperlink{classcsmp_1_1_jagged_array3_d_a22e76aed450e5780d208408c72f3bdec}{operator}}()(\ uint32\_t\ k,\ uint32\_t\ i,\ uint32\_t\ j\ )\ \textcolor{keyword}{const}\ \{}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ key\ index\ =\ \{k,\ i,\ j\};}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ it\ =\ data\_.find(index);}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (it\ !=\ data\_.end())\ \{}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ it-\/>second;\ \ \textcolor{comment}{//\ Element\ exists,\ return\ its\ value}}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::numeric\_limits<T>::quiet\_NaN();\ \ \textcolor{comment}{//\ Element\ does\ not\ exist}}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00093\ \ \ \ \ \}}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{comment}{///\ read/modify\ elements\ (slower)}}
+\DoxyCodeLine{00096\ \ \ \ \ T\&\ \mbox{\hyperlink{classcsmp_1_1_jagged_array3_d_af1791c4f48c1d3234400eede09a5ea36}{operator}}()(\ uint32\_t\ k,\ uint32\_t\ i,\ uint32\_t\ j\ )\ \{}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ key\ index\ =\ \{k,\ i,\ j\};}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_[\ index\ ];}
+\DoxyCodeLine{00099\ \ \ \ \ \}}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{comment}{///\ quickest\ way\ to\ test\ for\ element\ existance\ with\ a\ predefined\ tuple\ (use\ std::make\_tuple)}}
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_jagged_array3_d_ad8570a27b92076394c40405ce350a5e6}{contains}}(\ \textcolor{keyword}{const}\ std::tuple<uint32\_t,\ uint32\_t,\ uint32\_t>\&\ index\ )\ \{}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\ data\_.find(index)\ !=\ data\_.end()\ )\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00105\ \ \ \ \ \}}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \ \ \ \textcolor{comment}{///\ erase\ an\ element\ at\ a\ specific\ location}}
+\DoxyCodeLine{00108\ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_jagged_array3_d_a69f882a310490fff9f77f7f02d795c6e}{erase}}(\ uint32\_t\ k,\ uint32\_t\ i,\ uint32\_t\ j\ )\ \{}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ key\ index\ =\ \{k,\ i,\ j\};}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ key\ index\ =\ std::make\_tuple(k,\ i,\ j\ );\ //\ slower}}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ check\ if\ the\ key\ exists\ in\ the\ map}}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ it\ =\ data\_.find(index);}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (it\ !=\ data\_.end())\ \{}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ key\ found,\ erase\ the\ element}}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ data\_.erase(it);}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Key\ not\ found,\ throw\ an\ exception\ or\ silently\ ignore}}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::out\_of\_range(\textcolor{stringliteral}{"{}JaggedArray3D::erase::\ array\ element\ does\ not\ exist\ at\ the\ specified\ indices."{}});}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00120\ \ \ \ \ \}}
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00122\ \ \ \ \textcolor{comment}{//\ DIAGNOSTICS}}
+\DoxyCodeLine{00123\ \ \ \ uint32\_t\ slices()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ \ \ \ uint32\_t\ rows()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ \ \ \ \textcolor{comment}{///\ max\ because\ the\ number\ of\ columns\ can\ vary\ in\ a\ jagged\ array}}
+\DoxyCodeLine{00128\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_jagged_array3_d_a99bdb2464bce923096a117926b738fa3}{uint32\_t}}\ \mbox{\hyperlink{classcsmp_1_1_jagged_array3_d_a99bdb2464bce923096a117926b738fa3}{max\_cols}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ \ \ \ \textcolor{comment}{///\ returns\ the\ \ numbers\ of\ slices,\ rows,\ and\ maximum\ number\ of\ columns}}
+\DoxyCodeLine{00131\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_jagged_array3_d_a043dc4593aae4dc64e3952184ef4a76c}{std}}::\mbox{\hyperlink{classcsmp_1_1_jagged_array3_d_a043dc4593aae4dc64e3952184ef4a76c}{tuple}}<\mbox{\hyperlink{classcsmp_1_1_jagged_array3_d_a043dc4593aae4dc64e3952184ef4a76c}{uint32\_t}},\ \mbox{\hyperlink{classcsmp_1_1_jagged_array3_d_a043dc4593aae4dc64e3952184ef4a76c}{uint32\_t}},\ \mbox{\hyperlink{classcsmp_1_1_jagged_array3_d_a043dc4593aae4dc64e3952184ef4a76c}{uint32\_t}}>\ \mbox{\hyperlink{classcsmp_1_1_jagged_array3_d_a043dc4593aae4dc64e3952184ef4a76c}{max\_kij}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ \ \ \ \ \textcolor{comment}{///\ print\ all\ elements\ to\ std\ out}}
+\DoxyCodeLine{00134\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_jagged_array3_d_a22b796a654645f0e636174c320588353}{Out}}()\ \textcolor{keyword}{const}\ \{}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ [index,\ value]\ :\ data\_)\ \{}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ [k,\ i,\ j]\ =\ index;}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}Value\ at\ ("{}}\ <<\ k\ <<\ \textcolor{stringliteral}{"{},\ "{}}\ <<\ i\ <<\ \textcolor{stringliteral}{"{},\ "{}}\ <<\ j\ <<\ \textcolor{stringliteral}{"{})\ =\ "{}}\ <<\ value\ <<\ std::endl;}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00139\ \ \ \ \ \}}
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00141\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00142\ \ \ \ \ umap\ data\_;}
+\DoxyCodeLine{00143\ \};}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ \}\ \textcolor{comment}{//\ end\ csmp}}
+\DoxyCodeLine{00146\ }
+\DoxyCodeLine{00147\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{/*\ CSMP\_JAGGED\_ARRAY\_3D\_H\ */}}
+
+\end{DoxyCode}

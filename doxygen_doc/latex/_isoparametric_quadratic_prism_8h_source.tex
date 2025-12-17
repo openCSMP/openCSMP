@@ -1,0 +1,99 @@
+\doxysection{Isoparametric\+Quadratic\+Prism.\+h}
+\hypertarget{_isoparametric_quadratic_prism_8h_source}{}\label{_isoparametric_quadratic_prism_8h_source}\index{source/includes/integration/finite\_elements/IsoparametricQuadraticPrism.h@{source/includes/integration/finite\_elements/IsoparametricQuadraticPrism.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{ISOPARAMETRIC\_QUADRATIC\_PRISM\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{ISOPARAMETRIC\_QUADRATIC\_PRISM\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_finite_element_8h}{"{}FiniteElement.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism}{IsoparametricQuadraticPrism}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_finite_element}{FiniteElement}}\ \{}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \ \ \ \ IsoparametricQuadraticPrism();}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a77d5a171812c77102a0ae6cec7b46121}{Volume}}();}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a79a41bc74d4066bacc173052d79647d2}{AspectRatio}}();}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a81d24a04fa8efe9c3ddf99819e9cca89}{InnerRadius}}();}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a52adbc34d62f09adced740e5b70ed128}{EdgeLengths}}(\ std::vector<\textcolor{keywordtype}{double}>\&\ vec\ );}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a8ef2406b7e151ed97fe6e77b33957cd2}{CornerNodes}}(\ std::vector<uint32\_t>\&\ ids\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{virtual}\ uint32\_t\ \ CornerNodes()\ \textcolor{keyword}{const}\ \ \{\ \textcolor{keywordflow}{return}\ 8;\ \}}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a5ebc18ef7eea2baf0167abee4be29942}{MidSideNodes}}(\ std::vector<uint32\_t>\&\ ids\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{virtual}\ uint32\_t\ \ MidSideNodes()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ 12;\ \}}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a28e0ed1c417e912e8c48e4e48c127eb2}{uint32\_t}}\ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a28e0ed1c417e912e8c48e4e48c127eb2}{NodesPerFace}}(\ uint32\_t\ face\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_ab31f97622036469448bc2b4a213340f3}{ExtrapolateIntegrationPointVariableToNodes}}(\ uint32\_t\ nvars,}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ IVAR,}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\&\ \ \ \ \ \ \ NVAR\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\_FEM\_TYPE}}\ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a554c1d1879a7524106931c16b0fcf8fd}{ElementTypeOfFace}}(\ uint32\_t\ face\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\_FEM\_TYPE}}\ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_adf982b6af5901f91eaf588748a7c8f34}{ElementTypeOfSegment}}(\ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_adf982b6af5901f91eaf588748a7c8f34}{uint32\_t}}\ \textcolor{comment}{/*\ segment\ */}\ )\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ ISOPARAMETRIC\_QUADRATIC\_BAR;\ \};}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_afd4d6b7b02072aab2a7fcaa6c8c2d73b}{NodesOfSegment}}(\ uint32\_t\ segm\_id,\ std::vector<uint32\_t>\&\ snids\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_aeebcbe39dbd27d436b6e9444e0c2adbd}{std}}::\mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_aeebcbe39dbd27d436b6e9444e0c2adbd}{vector}}<\mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_aeebcbe39dbd27d436b6e9444e0c2adbd}{uint32\_t}}>\ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_aeebcbe39dbd27d436b6e9444e0c2adbd}{NodesOfFace}}(\ uint32\_t\ face\_id\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a4d63ca749f7e7bb41a03b724785279d7}{std}}::\mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a4d63ca749f7e7bb41a03b724785279d7}{vector}}<\mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a4d63ca749f7e7bb41a03b724785279d7}{uint32\_t}}>\ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a4d63ca749f7e7bb41a03b724785279d7}{CornerNodesOfFace}}(\ uint32\_t\ face\_id\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a7a163ac97a0936ee9ea20e43f1f08ba3}{std}}::\mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a7a163ac97a0936ee9ea20e43f1f08ba3}{vector}}<\mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a7a163ac97a0936ee9ea20e43f1f08ba3}{uint32\_t}}>\ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a7a163ac97a0936ee9ea20e43f1f08ba3}{NodesConnectedTo}}(\ uint32\_t\ node\_id\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{comment}{//\ TODO:\ virtual\ void\ \ \ \ \ \ \ \ UnitNormalToFace(\ uint32\_t\ face,\ std::vector<double>\&\ unrml\ )\ const;}}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{virtual}\ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_ad7372aa242a270713b85a80f790295ab}{N}}(std::vector<\textcolor{keywordtype}{double}>\&\ N,\ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ xyz\ );}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{virtual}\ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a843002ade7869c386e5743ef096c2205}{N\_AtIntegrationPoint}}(\ uint32\_t\ ip,\ std::vector<\textcolor{keywordtype}{double}>\&\ N\ );}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keyword}{virtual}\ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a7cc118c625b16c783159b03a3029581f}{N\_AtBaryCenter}}(\ std::vector<\textcolor{keywordtype}{double}>\&\ N\ );}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keyword}{virtual}\ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a6fde3659b0f09747b09d9d4e3649bf1b}{JacobianAtIntegrationPoint}}(\ uint32\_t\ ip\ );}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_ae580475c435f63aef5781b59e04f0b18}{dN\_At}}(\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ dn,\ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ xyz\ \ );}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a86ca2ffee047d2bc4f3040e5e2af8ede}{dN}}(\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ DN8\ );}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_adcff2efa1aec7c9c3e851a1c02105b53}{dN\_AtNode}}(\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ M,\ uint32\_t\ node\ );}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_aa0186f938b29c14e5a53e056035025e2}{dN\_AtIntegrationPoint}}(\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ M,\ uint32\_t\ gauss\_point\ );}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_af04285d753b54356da3d2fe8e80e2df4}{dN\_AtBarycenter}}(\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ M\ );}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a3121f2d6b0999c4cfedc55a0274cf524}{Nrst}}(\ \textcolor{keywordtype}{double}\ r,\ \textcolor{keywordtype}{double}\ s,\ \textcolor{keywordtype}{double}\ t,\ std::vector<\textcolor{keywordtype}{double}>\&\ nrst\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ Nrst(\ \textcolor{keywordtype}{double}\ r,\ \textcolor{keywordtype}{double}\ s,\ \textcolor{keywordtype}{double}\ t,\ \textcolor{keywordtype}{double}*\ nrst\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_aa1103aa792e971a43046706c97ec0343}{dNr}}(\ \textcolor{keywordtype}{double}\ r,\ \textcolor{keywordtype}{double}\ s,\ \textcolor{keywordtype}{double}\ t,\ std::vector<\textcolor{keywordtype}{double}>\&\ dNr\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a20cbdc2294a01bf9e9fa3fa2dc203655}{dNs}}(\ \textcolor{keywordtype}{double}\ r,\ \textcolor{keywordtype}{double}\ s,\ \textcolor{keywordtype}{double}\ t,\ std::vector<\textcolor{keywordtype}{double}>\&\ dNs\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a5b1bd6b614deed31382bd74e8b33af3f}{dNt}}(\ \textcolor{keywordtype}{double}\ r,\ \textcolor{keywordtype}{double}\ s,\ \textcolor{keywordtype}{double}\ t,\ std::vector<\textcolor{keywordtype}{double}>\&\ dNt\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a0eb89dd35e7fbba1789dfa45d429fb9f}{IntegralNN}}(\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ M\ );}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a1ee503a297a92f3e1ad9affb17f496f8}{WeightAtIntegrationPoint}}(\ uint32\_t\ i\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a857901bdac71486331ad66d8ab2994e4}{IntegrationPoint}}(\ uint32\_t\ i,\ std::vector<\textcolor{keywordtype}{double}>\&\ xyz\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a122adf0f6b3c1ea7a66de590c13cdff4}{ReferenceCoordinates}}(\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\ \&\ matCoords)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism_a6e8c5d05f45b46aeb00723031391d26f}{OutputNodeDataToVTK}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file\_name,}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ var\_name,}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ DATA\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00065\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\ \ \ W;}
+\DoxyCodeLine{00068\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\ \ \ \ \ DN,NXYZ,IP,PROP;}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keywordtype}{void}\ ExtrapolateNodalValToIntegrationPoints(}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ NumOfVariables,}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\ \&Ni,}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\ \&IpValues}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keywordtype}{void}\ GenerateIntegrationPoints(\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\ \&Ip,\ std::vector<\textcolor{keywordtype}{double}>\&\ We);}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{comment}{//Local\ \&\ \ Global\ coordinates}}
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keywordtype}{void}\ ParametricToPhysical(std::vector<\textcolor{keywordtype}{double}>\ \&rst,\ std::vector<\textcolor{keywordtype}{double}>\ \&xyz);}
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keywordtype}{void}\ PhysicalToParametric(std::vector<\textcolor{keywordtype}{double}>\&\ rst,\textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ xyz);}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \};}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00085\ \textcolor{comment}{}}
+\DoxyCodeLine{00086\ \textcolor{comment}{@class\ IsoparametricQuadraticPrism\ \ IsoparametricQuadraticPrism\ "{}finite\_elements/IsoparametricQuadraticPrism.h"{}}}
+\DoxyCodeLine{00087\ \textcolor{comment}{@date\ 1998}}
+\DoxyCodeLine{00088\ \textcolor{comment}{@author\ S.K.\ Matthai}}
+\DoxyCodeLine{00089\ \textcolor{comment}{@author\ Stephen\ G.\ Roberts\ */}}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ \}\ \textcolor{comment}{//\ end\ namespace\ csmp}}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

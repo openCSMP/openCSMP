@@ -1,0 +1,70 @@
+.TH "csmp::ElementGrid" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::ElementGrid \- mapping from triangular finite elements to regular grid  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <ElementGrid\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBElementGrid\fP (const \fBElementGrid\fP &)"
+.br
+.ti -1c
+.RI "\fBElementGrid\fP & \fBoperator=\fP (const \fBElementGrid\fP &)"
+.br
+.ti -1c
+.RI "void \fBAddPoint\fP (int32_t i, int32_t j, double val)"
+.br
+.ti -1c
+.RI "std::map< std::pair< int32_t, int32_t >, double >::iterator \fBBegin\fP ()"
+.br
+.ti -1c
+.RI "std::map< std::pair< int32_t, int32_t >, double >::iterator \fBEnd\fP ()"
+.br
+.ti -1c
+.RI "double \fBValue\fP (int32_t i, int32_t j) const"
+.br
+.ti -1c
+.RI "double \fBGridAverage\fP () const"
+.br
+.ti -1c
+.RI "double \fBSum\fP () const"
+.br
+.ti -1c
+.RI "void \fBMinMax\fP (double &dmin, double &dmax) const"
+.br
+.ti -1c
+.RI "void \fBTransferDataToGrid\fP (\fBFiniteDifferenceGrid\fP &) const"
+.br
+.ti -1c
+.RI "bool \fBEmpty\fP () const"
+.br
+.ti -1c
+.RI "int32_t \fBSize\fP () const"
+.br
+.ti -1c
+.RI "void \fBOut\fP () const"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+mapping from triangular finite elements to regular grid 
+
+
+.PP
+\fBCopyright\fP
+.RS 4
+(c) SKM (1996) 
+.RE
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

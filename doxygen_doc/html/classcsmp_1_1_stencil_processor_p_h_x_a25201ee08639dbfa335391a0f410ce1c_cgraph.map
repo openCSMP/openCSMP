@@ -1,0 +1,5 @@
+<map id="csmp::StencilProcessorPHX::StencilProcessorPHX" name="csmp::StencilProcessorPHX::StencilProcessorPHX">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,194,46"/>
+<area shape="rect" id="Node000002" href="$group___c_s_m_pglobal_functions.html#gaf74e7967f030170c3046146f7b5fc229" title="finding the x value, in the range [xmin,xmax], where function the &quot;df(x)/dx=(f(x)&#45;f(x1))/(x&#45;x1)&quot;...." alt="" coords="242,13,310,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,23,226,23,226,28,194,28"/>
+</map>

@@ -1,0 +1,427 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_face_data" kind="class" language="C++" prot="public">
+    <compoundname>csmp::FaceData</compoundname>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_face_data_1a26147dbd8fc2543c4222cbd34e1bcc31" prot="private" static="no" mutable="no">
+        <type>std::set&lt; uint32_t &gt;</type>
+        <definition>std::set&lt;uint32_t&gt; csmp::FaceData::key</definition>
+        <argsstring></argsstring>
+        <name>key</name>
+        <qualifiedname>csmp::FaceData::key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FaceData.h" line="37" column="23" bodyfile="source/includes/utilities/FaceData.h" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_face_data_1a7c5c0855ba9e5f51e344b32b13bfa71b" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; uint32_t &gt;</type>
+        <definition>std::vector&lt;uint32_t&gt; csmp::FaceData::nodes</definition>
+        <argsstring></argsstring>
+        <name>nodes</name>
+        <qualifiedname>csmp::FaceData::nodes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FaceData.h" line="38" column="23" bodyfile="source/includes/utilities/FaceData.h" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_face_data_1a5b43e8587107d62de29f77eba268a5b0" prot="private" static="no" mutable="no">
+        <type>std::pair&lt; size_t, size_t &gt;</type>
+        <definition>std::pair&lt;size_t,size_t&gt; csmp::FaceData::efnumber</definition>
+        <argsstring></argsstring>
+        <name>efnumber</name>
+        <qualifiedname>csmp::FaceData::efnumber</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FaceData.h" line="39" column="16" bodyfile="source/includes/utilities/FaceData.h" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_face_data_1ad40e9ea4c73c2da35b0d9bbb1cf48089" prot="private" static="no" mutable="no">
+        <type>std::pair&lt; int32_t, int32_t &gt;</type>
+        <definition>std::pair&lt;int32_t,int32_t&gt; csmp::FaceData::nbors</definition>
+        <argsstring></argsstring>
+        <name>nbors</name>
+        <qualifiedname>csmp::FaceData::nbors</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FaceData.h" line="40" column="18" bodyfile="source/includes/utilities/FaceData.h" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_face_data_1a8da04d0dc102786ddeda602e5861f422" prot="private" static="no" mutable="no">
+        <type><ref refid="group___c_s_m_pglobal_enums_1ga182d1fe97a0151d464d8170c0fafa872" kindref="member">CSMP_FEM_TYPE</ref></type>
+        <definition>CSMP_FEM_TYPE csmp::FaceData::etype</definition>
+        <argsstring></argsstring>
+        <name>etype</name>
+        <qualifiedname>csmp::FaceData::etype</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FaceData.h" line="41" column="31" bodyfile="source/includes/utilities/FaceData.h" bodystart="41" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_face_data_1abbd2745987022f48c716ba869687903a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::FaceData::FaceData</definition>
+        <argsstring>()</argsstring>
+        <name>FaceData</name>
+        <qualifiedname>csmp::FaceData::FaceData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FaceData.h" line="12" column="5" bodyfile="source/includes/utilities/FaceData.h" bodystart="12" bodyend="12"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_data_1aca14eb6df7e100699a89f074d4b35311" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::FaceData::~FaceData</definition>
+        <argsstring>()</argsstring>
+        <name>~FaceData</name>
+        <qualifiedname>csmp::FaceData::~FaceData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FaceData.h" line="13" column="5" bodyfile="source/includes/utilities/FaceData.h" bodystart="13" bodyend="13"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_data_1a36a65147dab840ddfb935288d505bde7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::FaceData::FaceData</definition>
+        <argsstring>(const FaceData &amp;)</argsstring>
+        <name>FaceData</name>
+        <qualifiedname>csmp::FaceData::FaceData</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_face_data" kindref="compound">FaceData</ref> &amp;</type>
+          <defname>fd</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FaceData.h" line="14" column="5" bodyfile="source/includes/utilities/FaceData.h" bodystart="48" bodyend="55"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_data_1a565f8d211fc6c4db50b07ee7f8c1588d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_face_data" kindref="compound">FaceData</ref> &amp;</type>
+        <definition>FaceData &amp; csmp::FaceData::operator=</definition>
+        <argsstring>(const FaceData &amp;)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::FaceData::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_face_data" kindref="compound">FaceData</ref> &amp;</type>
+          <defname>fd</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FaceData.h" line="15" column="14" bodyfile="source/modules/utilities/FaceData.cpp" bodystart="10" bodyend="20"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_data_1a89f3f11895a83cd59620c95028686687" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::FaceData::operator&lt;</definition>
+        <argsstring>(const FaceData &amp;) const</argsstring>
+        <name>operator&lt;</name>
+        <qualifiedname>csmp::FaceData::operator&lt;</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_face_data" kindref="compound">FaceData</ref> &amp;</type>
+          <defname>fd</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FaceData.h" line="16" column="5" bodyfile="source/includes/utilities/FaceData.h" bodystart="57" bodyend="60"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_data_1a0a7c4a6c0a20cd335da4b8c1499c991c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::FaceData::operator[]</definition>
+        <argsstring>(size_t) const</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>csmp::FaceData::operator[]</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <defname>i</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FaceData.h" line="17" column="15" bodyfile="source/includes/utilities/FaceData.h" bodystart="63" bodyend="66"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_data_1a6a78b3cdd044a3d5dfec863ccc6869c4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FaceData::AssignKey</definition>
+        <argsstring>(const std::vector&lt; uint32_t &gt; &amp;)</argsstring>
+        <name>AssignKey</name>
+        <qualifiedname>csmp::FaceData::AssignKey</qualifiedname>
+        <param>
+          <type>const std::vector&lt; uint32_t &gt; &amp;</type>
+          <defname>nids</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FaceData.h" line="19" column="15" bodyfile="source/includes/utilities/FaceData.h" bodystart="69" bodyend="74"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_data_1aa6959999949120d525646c254726e04c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FaceData::AssignNodeIDs</definition>
+        <argsstring>(const std::vector&lt; uint32_t &gt; &amp;)</argsstring>
+        <name>AssignNodeIDs</name>
+        <qualifiedname>csmp::FaceData::AssignNodeIDs</qualifiedname>
+        <param>
+          <type>const std::vector&lt; uint32_t &gt; &amp;</type>
+          <defname>nids</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FaceData.h" line="20" column="15" bodyfile="source/includes/utilities/FaceData.h" bodystart="77" bodyend="80"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_data_1adf223bacdc14616a749bb4fc6d3ff4d7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FaceData::AssignFirstNeighbor</definition>
+        <argsstring>(int32_t)</argsstring>
+        <name>AssignFirstNeighbor</name>
+        <qualifiedname>csmp::FaceData::AssignFirstNeighbor</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <defname>nbor1</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FaceData.h" line="21" column="15" bodyfile="source/includes/utilities/FaceData.h" bodystart="95" bodyend="98"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_data_1ad6576e941d69add70b5a0fe836400899" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FaceData::AssignSecondNeighbor</definition>
+        <argsstring>(int32_t)</argsstring>
+        <name>AssignSecondNeighbor</name>
+        <qualifiedname>csmp::FaceData::AssignSecondNeighbor</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <defname>nbor2</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FaceData.h" line="22" column="15" bodyfile="source/includes/utilities/FaceData.h" bodystart="101" bodyend="104"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_data_1ac676045d7718551a6705cffa67e81a95" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FaceData::AssignFirstNeighborFaceNumber</definition>
+        <argsstring>(size_t)</argsstring>
+        <name>AssignFirstNeighborFaceNumber</name>
+        <qualifiedname>csmp::FaceData::AssignFirstNeighborFaceNumber</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <defname>e1face_n</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FaceData.h" line="23" column="15" bodyfile="source/includes/utilities/FaceData.h" bodystart="82" bodyend="85"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_data_1afa390fb58c5d1d9cd0d55c29329cf880" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FaceData::AssignSecondNeighborFaceNumber</definition>
+        <argsstring>(size_t)</argsstring>
+        <name>AssignSecondNeighborFaceNumber</name>
+        <qualifiedname>csmp::FaceData::AssignSecondNeighborFaceNumber</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <defname>e2face_n</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FaceData.h" line="24" column="15" bodyfile="source/includes/utilities/FaceData.h" bodystart="88" bodyend="91"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_data_1ad76f1c377a9a69eb838022effbf49a30" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>int32_t</type>
+        <definition>int32_t csmp::FaceData::FirstNeighbor</definition>
+        <argsstring>() const</argsstring>
+        <name>FirstNeighbor</name>
+        <qualifiedname>csmp::FaceData::FirstNeighbor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FaceData.h" line="26" column="17" bodyfile="source/includes/utilities/FaceData.h" bodystart="119" bodyend="119"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_data_1a1a69a060ac07d812873957965a0b4a84" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>int32_t</type>
+        <definition>int32_t csmp::FaceData::SecondNeighbor</definition>
+        <argsstring>() const</argsstring>
+        <name>SecondNeighbor</name>
+        <qualifiedname>csmp::FaceData::SecondNeighbor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FaceData.h" line="27" column="17" bodyfile="source/includes/utilities/FaceData.h" bodystart="120" bodyend="120"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_data_1a2dc6bdb5a5aafee56388e8cc034a584a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::FaceData::FirstNeighborFaceNumber</definition>
+        <argsstring>() const</argsstring>
+        <name>FirstNeighborFaceNumber</name>
+        <qualifiedname>csmp::FaceData::FirstNeighborFaceNumber</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FaceData.h" line="28" column="15" bodyfile="source/includes/utilities/FaceData.h" bodystart="121" bodyend="121"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_data_1a1552abcc235bd3c82f26984d27b28460" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::FaceData::SecondNeighborFaceNumber</definition>
+        <argsstring>() const</argsstring>
+        <name>SecondNeighborFaceNumber</name>
+        <qualifiedname>csmp::FaceData::SecondNeighborFaceNumber</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FaceData.h" line="29" column="15" bodyfile="source/includes/utilities/FaceData.h" bodystart="122" bodyend="122"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_data_1ae44762d14bc0a302954d4293ce38aad2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FaceData::SetFiniteElementType</definition>
+        <argsstring>(const CSMP_FEM_TYPE &amp;fetype)</argsstring>
+        <name>SetFiniteElementType</name>
+        <qualifiedname>csmp::FaceData::SetFiniteElementType</qualifiedname>
+        <param>
+          <type>const <ref refid="group___c_s_m_pglobal_enums_1ga182d1fe97a0151d464d8170c0fafa872" kindref="member">CSMP_FEM_TYPE</ref> &amp;</type>
+          <declname>fetype</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FaceData.h" line="31" column="20" bodyfile="source/includes/utilities/FaceData.h" bodystart="107" bodyend="110"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_data_1a706ad31e618ebe8cd76b93f004f7eaa1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="group___c_s_m_pglobal_enums_1ga182d1fe97a0151d464d8170c0fafa872" kindref="member">CSMP_FEM_TYPE</ref></type>
+        <definition>CSMP_FEM_TYPE csmp::FaceData::FiniteElementType</definition>
+        <argsstring>() const</argsstring>
+        <name>FiniteElementType</name>
+        <qualifiedname>csmp::FaceData::FiniteElementType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FaceData.h" line="32" column="20" bodyfile="source/includes/utilities/FaceData.h" bodystart="113" bodyend="116"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_data_1a9fe2f7b31ca96272a370a80173290d1b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FaceData::Reset</definition>
+        <argsstring>()</argsstring>
+        <name>Reset</name>
+        <qualifiedname>csmp::FaceData::Reset</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/FaceData.h" line="34" column="15" bodyfile="source/modules/utilities/FaceData.cpp" bodystart="24" bodyend="33"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::FaceData</label>
+        <link refid="classcsmp_1_1_face_data"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/utilities/FaceData.h" line="10" column="1" bodyfile="source/includes/utilities/FaceData.h" bodystart="10" bodyend="42"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_face_data_1adf223bacdc14616a749bb4fc6d3ff4d7" prot="public" virt="non-virtual"><scope>csmp::FaceData</scope><name>AssignFirstNeighbor</name></member>
+      <member refid="classcsmp_1_1_face_data_1ac676045d7718551a6705cffa67e81a95" prot="public" virt="non-virtual"><scope>csmp::FaceData</scope><name>AssignFirstNeighborFaceNumber</name></member>
+      <member refid="classcsmp_1_1_face_data_1a6a78b3cdd044a3d5dfec863ccc6869c4" prot="public" virt="non-virtual"><scope>csmp::FaceData</scope><name>AssignKey</name></member>
+      <member refid="classcsmp_1_1_face_data_1aa6959999949120d525646c254726e04c" prot="public" virt="non-virtual"><scope>csmp::FaceData</scope><name>AssignNodeIDs</name></member>
+      <member refid="classcsmp_1_1_face_data_1ad6576e941d69add70b5a0fe836400899" prot="public" virt="non-virtual"><scope>csmp::FaceData</scope><name>AssignSecondNeighbor</name></member>
+      <member refid="classcsmp_1_1_face_data_1afa390fb58c5d1d9cd0d55c29329cf880" prot="public" virt="non-virtual"><scope>csmp::FaceData</scope><name>AssignSecondNeighborFaceNumber</name></member>
+      <member refid="classcsmp_1_1_face_data_1a5b43e8587107d62de29f77eba268a5b0" prot="private" virt="non-virtual"><scope>csmp::FaceData</scope><name>efnumber</name></member>
+      <member refid="classcsmp_1_1_face_data_1a8da04d0dc102786ddeda602e5861f422" prot="private" virt="non-virtual"><scope>csmp::FaceData</scope><name>etype</name></member>
+      <member refid="classcsmp_1_1_face_data_1abbd2745987022f48c716ba869687903a" prot="public" virt="non-virtual"><scope>csmp::FaceData</scope><name>FaceData</name></member>
+      <member refid="classcsmp_1_1_face_data_1a36a65147dab840ddfb935288d505bde7" prot="public" virt="non-virtual"><scope>csmp::FaceData</scope><name>FaceData</name></member>
+      <member refid="classcsmp_1_1_face_data_1a706ad31e618ebe8cd76b93f004f7eaa1" prot="public" virt="non-virtual"><scope>csmp::FaceData</scope><name>FiniteElementType</name></member>
+      <member refid="classcsmp_1_1_face_data_1ad76f1c377a9a69eb838022effbf49a30" prot="public" virt="non-virtual"><scope>csmp::FaceData</scope><name>FirstNeighbor</name></member>
+      <member refid="classcsmp_1_1_face_data_1a2dc6bdb5a5aafee56388e8cc034a584a" prot="public" virt="non-virtual"><scope>csmp::FaceData</scope><name>FirstNeighborFaceNumber</name></member>
+      <member refid="classcsmp_1_1_face_data_1a26147dbd8fc2543c4222cbd34e1bcc31" prot="private" virt="non-virtual"><scope>csmp::FaceData</scope><name>key</name></member>
+      <member refid="classcsmp_1_1_face_data_1ad40e9ea4c73c2da35b0d9bbb1cf48089" prot="private" virt="non-virtual"><scope>csmp::FaceData</scope><name>nbors</name></member>
+      <member refid="classcsmp_1_1_face_data_1a7c5c0855ba9e5f51e344b32b13bfa71b" prot="private" virt="non-virtual"><scope>csmp::FaceData</scope><name>nodes</name></member>
+      <member refid="classcsmp_1_1_face_data_1a89f3f11895a83cd59620c95028686687" prot="public" virt="non-virtual"><scope>csmp::FaceData</scope><name>operator&lt;</name></member>
+      <member refid="classcsmp_1_1_face_data_1a565f8d211fc6c4db50b07ee7f8c1588d" prot="public" virt="non-virtual"><scope>csmp::FaceData</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_face_data_1a0a7c4a6c0a20cd335da4b8c1499c991c" prot="public" virt="non-virtual"><scope>csmp::FaceData</scope><name>operator[]</name></member>
+      <member refid="classcsmp_1_1_face_data_1a9fe2f7b31ca96272a370a80173290d1b" prot="public" virt="non-virtual"><scope>csmp::FaceData</scope><name>Reset</name></member>
+      <member refid="classcsmp_1_1_face_data_1a1a69a060ac07d812873957965a0b4a84" prot="public" virt="non-virtual"><scope>csmp::FaceData</scope><name>SecondNeighbor</name></member>
+      <member refid="classcsmp_1_1_face_data_1a1552abcc235bd3c82f26984d27b28460" prot="public" virt="non-virtual"><scope>csmp::FaceData</scope><name>SecondNeighborFaceNumber</name></member>
+      <member refid="classcsmp_1_1_face_data_1ae44762d14bc0a302954d4293ce38aad2" prot="public" virt="non-virtual"><scope>csmp::FaceData</scope><name>SetFiniteElementType</name></member>
+      <member refid="classcsmp_1_1_face_data_1aca14eb6df7e100699a89f074d4b35311" prot="public" virt="non-virtual"><scope>csmp::FaceData</scope><name>~FaceData</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

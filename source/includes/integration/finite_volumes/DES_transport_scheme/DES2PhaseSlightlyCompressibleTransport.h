@@ -45,9 +45,9 @@ class DES2PhaseSlightlyCompressibleTransport : public DES2PhaseTransport<dim,FLO
     void ComputeSaturationGradient (Event<dim>* event );
 
     void AdvectVariable_TDS_serial( double time_interval );
-    void AdvectVariable_TDS_parallel ( double time_interval, size_t num_threads );
+    // TODO: implement: void AdvectVariable_TDS_parallel ( double time_interval, size_t num_threads );
     void AdvectVariable_DES_serial( double time_increment, double model_time );
-    void AdvectVariable_DES_parallel ( double time_increment, double model_time, size_t num_threads );
+    // TODO: implement: void AdvectVariable_DES_parallel ( double time_increment, double model_time, size_t num_threads );
 
     //splitboundary/interface transfer functions
     bool UpdateManifold(NodeManifold<dim>* md, double t_clock, bool use_DES);

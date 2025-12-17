@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_6a1e743c76d7dc960b4222e09a99e107" kind="dir">
+    <compoundname>source/modules/interfaces/JPEG</compoundname>
+    <innerfile refid="_j_p_e_g___interface_8cpp">JPEG_Interface.cpp</innerfile>
+    <innerfile refid="_j_p_e_g___region_interface_8cpp">JPEG_RegionInterface.cpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="source/modules/interfaces/JPEG/"/>
+  </compounddef>
+</doxygen>

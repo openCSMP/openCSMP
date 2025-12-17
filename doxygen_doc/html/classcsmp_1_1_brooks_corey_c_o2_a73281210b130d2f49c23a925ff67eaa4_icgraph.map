@@ -1,0 +1,7 @@
+<map id="csmp::BrooksCoreyCO2::krn_Phase" name="csmp::BrooksCoreyCO2::krn_Phase">
+<area shape="rect" id="Node000001" title="as in Helmig 97, eqn.2.57, p. 75" alt="" coords="218,39,382,79"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_brooks_corey_c_o2.html#a0a97ddbdd4987c941e20d9b46ef543b6" title=" " alt="" coords="5,5,170,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="202,46,170,41,170,36,203,41"/>
+<area shape="rect" id="Node000003" href="$classcsmp_1_1_brooks_corey_c_o2.html#a0b9a287256e9039e20c19f9d6bf48965" title="derivatives of gravitational flow (advection multipliers)" alt="" coords="5,71,170,111"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="203,76,170,81,170,76,202,71"/>
+</map>

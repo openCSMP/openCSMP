@@ -1,0 +1,218 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="structcsmp_1_1_eclipse_well" kind="struct" language="C++" prot="public">
+    <compoundname>csmp::EclipseWell</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcsmp_1_1_eclipse_well_1a5567a9313123dcb36b79a67937134d9a" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::EclipseWell::well_name_</definition>
+        <argsstring></argsstring>
+        <name>well_name_</name>
+        <qualifiedname>csmp::EclipseWell::well_name_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="89" column="15" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="89" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_eclipse_well_1a2c67320636cdca6c8908173e093f5a8d" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::EclipseWell::group_name_</definition>
+        <argsstring></argsstring>
+        <name>group_name_</name>
+        <qualifiedname>csmp::EclipseWell::group_name_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="90" column="15" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="90" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_eclipse_well_1a278a50e71f3be1bef5f77fea6be33662" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::EclipseWell::i_start_</definition>
+        <argsstring></argsstring>
+        <name>i_start_</name>
+        <qualifiedname>csmp::EclipseWell::i_start_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="91" column="10" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_eclipse_well_1aa35f0fa24264d94d06b6701d0f60424d" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::EclipseWell::j_start_</definition>
+        <argsstring></argsstring>
+        <name>j_start_</name>
+        <qualifiedname>csmp::EclipseWell::j_start_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="92" column="10" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_eclipse_well_1a6d03d6259dfab53a09ff2b277733da6a" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::EclipseWell::z_bhp_</definition>
+        <argsstring></argsstring>
+        <name>z_bhp_</name>
+        <qualifiedname>csmp::EclipseWell::z_bhp_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="93" column="10" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="93" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_eclipse_well_1ad01d5ab8616ea4c4066b3aa51c8e2209" prot="public" static="no" mutable="no">
+        <type><ref refid="namespacecsmp_1a40d85c0ab83093db05f2496777de2611" kindref="member">ECLIPSE_PHASE</ref></type>
+        <definition>ECLIPSE_PHASE csmp::EclipseWell::phase_</definition>
+        <argsstring></argsstring>
+        <name>phase_</name>
+        <qualifiedname>csmp::EclipseWell::phase_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="94" column="17" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="94" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_eclipse_well_1a66a459f1e8a8ae4d409532080cc6bf76" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::EclipseWell::drainage_radius_</definition>
+        <argsstring></argsstring>
+        <name>drainage_radius_</name>
+        <qualifiedname>csmp::EclipseWell::drainage_radius_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="95" column="10" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="95" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_eclipse_well_1a107502029b534b10eda8ab22168b6ae7" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::EclipseWell::inflow_type_</definition>
+        <argsstring></argsstring>
+        <name>inflow_type_</name>
+        <qualifiedname>csmp::EclipseWell::inflow_type_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="96" column="10" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="96" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_eclipse_well_1a896976ff1a91ab256105cca2974f59d1" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::EclipseWell::stop_or_shut_in_</definition>
+        <argsstring></argsstring>
+        <name>stop_or_shut_in_</name>
+        <qualifiedname>csmp::EclipseWell::stop_or_shut_in_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="97" column="8" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="97" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_eclipse_well_1a5ade5c5dbec8077af937b0dff89ade7d" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::EclipseWell::cross_flow_</definition>
+        <argsstring></argsstring>
+        <name>cross_flow_</name>
+        <qualifiedname>csmp::EclipseWell::cross_flow_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="98" column="8" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="98" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_eclipse_well_1a2383aa0fb2d1491af31a6ea50be34d3a" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="structcsmp_1_1_eclipse_well_completion" kindref="compound">EclipseWellCompletion</ref> &gt;</type>
+        <definition>std::vector&lt;EclipseWellCompletion&gt; csmp::EclipseWell::well_data_</definition>
+        <argsstring></argsstring>
+        <name>well_data_</name>
+        <qualifiedname>csmp::EclipseWell::well_data_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="99" column="15" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="99" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structcsmp_1_1_eclipse_well_1a494218d7e9ac47399048f12f2f8a47d0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::EclipseWell::EclipseWell</definition>
+        <argsstring>()</argsstring>
+        <name>EclipseWell</name>
+        <qualifiedname>csmp::EclipseWell::EclipseWell</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="86" column="3" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="2439" bodyend="2450"/>
+      </memberdef>
+      <memberdef kind="function" id="structcsmp_1_1_eclipse_well_1ae825891600f68465b9aa9ca3346c7008" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::EclipseWell::~EclipseWell</definition>
+        <argsstring>()</argsstring>
+        <name>~EclipseWell</name>
+        <qualifiedname>csmp::EclipseWell::~EclipseWell</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="87" column="3" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="2453" bodyend="2455"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::EclipseWell</label>
+        <link refid="structcsmp_1_1_eclipse_well"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="84" column="1" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="85" bodyend="100"/>
+    <listofallmembers>
+      <member refid="structcsmp_1_1_eclipse_well_1a5ade5c5dbec8077af937b0dff89ade7d" prot="public" virt="non-virtual"><scope>csmp::EclipseWell</scope><name>cross_flow_</name></member>
+      <member refid="structcsmp_1_1_eclipse_well_1a66a459f1e8a8ae4d409532080cc6bf76" prot="public" virt="non-virtual"><scope>csmp::EclipseWell</scope><name>drainage_radius_</name></member>
+      <member refid="structcsmp_1_1_eclipse_well_1a494218d7e9ac47399048f12f2f8a47d0" prot="public" virt="non-virtual"><scope>csmp::EclipseWell</scope><name>EclipseWell</name></member>
+      <member refid="structcsmp_1_1_eclipse_well_1a2c67320636cdca6c8908173e093f5a8d" prot="public" virt="non-virtual"><scope>csmp::EclipseWell</scope><name>group_name_</name></member>
+      <member refid="structcsmp_1_1_eclipse_well_1a278a50e71f3be1bef5f77fea6be33662" prot="public" virt="non-virtual"><scope>csmp::EclipseWell</scope><name>i_start_</name></member>
+      <member refid="structcsmp_1_1_eclipse_well_1a107502029b534b10eda8ab22168b6ae7" prot="public" virt="non-virtual"><scope>csmp::EclipseWell</scope><name>inflow_type_</name></member>
+      <member refid="structcsmp_1_1_eclipse_well_1aa35f0fa24264d94d06b6701d0f60424d" prot="public" virt="non-virtual"><scope>csmp::EclipseWell</scope><name>j_start_</name></member>
+      <member refid="structcsmp_1_1_eclipse_well_1ad01d5ab8616ea4c4066b3aa51c8e2209" prot="public" virt="non-virtual"><scope>csmp::EclipseWell</scope><name>phase_</name></member>
+      <member refid="structcsmp_1_1_eclipse_well_1a896976ff1a91ab256105cca2974f59d1" prot="public" virt="non-virtual"><scope>csmp::EclipseWell</scope><name>stop_or_shut_in_</name></member>
+      <member refid="structcsmp_1_1_eclipse_well_1a2383aa0fb2d1491af31a6ea50be34d3a" prot="public" virt="non-virtual"><scope>csmp::EclipseWell</scope><name>well_data_</name></member>
+      <member refid="structcsmp_1_1_eclipse_well_1a5567a9313123dcb36b79a67937134d9a" prot="public" virt="non-virtual"><scope>csmp::EclipseWell</scope><name>well_name_</name></member>
+      <member refid="structcsmp_1_1_eclipse_well_1a6d03d6259dfab53a09ff2b277733da6a" prot="public" virt="non-virtual"><scope>csmp::EclipseWell</scope><name>z_bhp_</name></member>
+      <member refid="structcsmp_1_1_eclipse_well_1ae825891600f68465b9aa9ca3346c7008" prot="public" virt="non-virtual"><scope>csmp::EclipseWell</scope><name>~EclipseWell</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

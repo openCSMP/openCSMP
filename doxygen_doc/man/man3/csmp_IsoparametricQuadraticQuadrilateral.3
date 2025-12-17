@@ -1,0 +1,798 @@
+.TH "csmp::IsoparametricQuadraticQuadrilateral" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::IsoparametricQuadraticQuadrilateral
+.SH SYNOPSIS
+.br
+.PP
+.PP
+Inherits \fBcsmp::FiniteElement\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBIsoparametricQuadraticQuadrilateral\fP (uint32_t dimensions=3U)"
+.br
+.ti -1c
+.RI "virtual double \fBVolume\fP ()"
+.br
+.ti -1c
+.RI "virtual double \fBAspectRatio\fP ()"
+.br
+.ti -1c
+.RI "virtual double \fBInnerRadius\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBEdgeLengths\fP (std::vector< double > &vec)"
+.br
+.ti -1c
+.RI "virtual void \fBNodesOfSegment\fP (uint32_t segm_id, std::vector< uint32_t > &snids) const"
+.br
+.RI "reports the egde nodes (0\&.\&.nodes-1) which can be more than 2 in higher-order elements "
+.ti -1c
+.RI "virtual std::vector< uint32_t > \fBNodesOfFace\fP (uint32_t face_id) const"
+.br
+.ti -1c
+.RI "virtual std::vector< uint32_t > \fBCornerNodesOfFace\fP (uint32_t face_id) const"
+.br
+.RI "returns the local numbers of the corner nodes of the face "
+.ti -1c
+.RI "virtual std::vector< uint32_t > \fBNodesConnectedTo\fP (uint32_t node_id) const"
+.br
+.RI "returns the local numbers of the nodes at the other end of the sgment that the argument node is on "
+.ti -1c
+.RI "virtual void \fBCornerNodes\fP (std::vector< uint32_t > &ids) const"
+.br
+.ti -1c
+.RI "virtual void \fBMidSideNodes\fP (std::vector< uint32_t > &ids) const"
+.br
+.ti -1c
+.RI "virtual uint32_t \fBMidSideNodes\fP () const"
+.br
+.ti -1c
+.RI "virtual uint32_t \fBCornerNodes\fP () const"
+.br
+.ti -1c
+.RI "virtual std::vector< double > \fBUnitNormal\fP () const"
+.br
+.ti -1c
+.RI "virtual \fBCSMP_FEM_TYPE\fP \fBElementTypeOfFace\fP (uint32_t face) const"
+.br
+.RI "reports the element type that would match that of its corresponding face "
+.ti -1c
+.RI "virtual \fBCSMP_FEM_TYPE\fP \fBElementTypeOfSegment\fP (uint32_t) const"
+.br
+.RI "reports the element type that would match that of its corresponding segment "
+.ti -1c
+.RI "virtual void \fBN\fP (std::vector< double > &N, const std::vector< double > &xyz)"
+.br
+.ti -1c
+.RI "virtual void \fBN_AtIntegrationPoint\fP (uint32_t ip, std::vector< double > &\fBN\fP)"
+.br
+.ti -1c
+.RI "virtual void \fBN_AtBaryCenter\fP (std::vector< double > &\fBN\fP)"
+.br
+.RI "reports the values of the interpolation functions at the center of gravity of the element "
+.ti -1c
+.RI "virtual void \fBJacobianAtIntegrationPoint\fP (uint32_t ip)"
+.br
+.RI "initialises JAC = DN*XY (intpl\&. derivative * coordinate matrix) parametric-to-physical space transformation matrix for given quadrature point "
+.ti -1c
+.RI "virtual double \fBJacobianInverse\fP ()"
+.br
+.RI "overwrites the base class method in order to get 2D to 3D mapping functionality "
+.ti -1c
+.RI "virtual double \fBdN_At\fP (\fBDenseMatrix\fP< DM_MIN > &dn, const std::vector< double > &xyz)"
+.br
+.ti -1c
+.RI "virtual void \fBdN\fP (\fBDenseMatrix\fP< DM_MIN > &\fBM\fP)"
+.br
+.ti -1c
+.RI "virtual double \fBdN_AtIntegrationPoint\fP (\fBDenseMatrix\fP< DM_MIN > &\fBM\fP, uint32_t gauss_point)"
+.br
+.ti -1c
+.RI "virtual double \fBdN_AtNode\fP (\fBDenseMatrix\fP< DM_MIN > &\fBM\fP, uint32_t node)"
+.br
+.ti -1c
+.RI "virtual double \fBdN_AtBarycenter\fP (\fBDenseMatrix\fP< DM_MIN > &\fBM\fP)"
+.br
+.RI "returns first derivative of interpolaton functions at center of gravity; determinant of the Jacobian is returned as well "
+.ti -1c
+.RI "virtual void \fBNrs\fP (double r, double s, std::vector< double > &\fBN\fP) const"
+.br
+.ti -1c
+.RI "virtual void \fBNrs\fP (double r, double s, double *\fBN\fP) const"
+.br
+.ti -1c
+.RI "virtual void \fBdNr\fP (double r, double s, std::vector< double > &dNr) const"
+.br
+.ti -1c
+.RI "virtual void \fBdNs\fP (double r, double s, std::vector< double > &dNs) const"
+.br
+.RI "2D element interpolation functions derivatives N(r,s)/ds "
+.ti -1c
+.RI "virtual void \fBExtrapolateIntegrationPointVariableToNodes\fP (uint32_t nvars, const std::vector< double > &IVAR, std::vector< double > &NVAR) const"
+.br
+.ti -1c
+.RI "virtual double \fBWeightAtIntegrationPoint\fP (uint32_t i) const"
+.br
+.RI "returns the integration weight of the desired quadrature point "
+.ti -1c
+.RI "virtual void \fBIntegrationPoint\fP (uint32_t i, std::vector< double > &xyz) const"
+.br
+.ti -1c
+.RI "virtual void \fBOutputNodeDataToVTK\fP (const char *file_name, const char *var_name, \fBDenseMatrix\fP< DM_MIN > &DATA) const"
+.br
+.ti -1c
+.RI "virtual void \fBReferenceCoordinates\fP (\fBDenseMatrix\fP< DM_MIN > &matCoords) const"
+.br
+.RI "for element types defined using a local coordinate system, returns the node coordinates into the argument matrix "
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::FiniteElement\fP
+.in +1c
+.ti -1c
+.RI "\fBFiniteElement\fP (\fBCSMP_FEM_TYPE\fP csp_fem_type, bool isoparametric, bool uses_local_coordinates, uint32_t order_of_shape_functions)"
+.br
+.ti -1c
+.RI "void \fBCurrentID\fP (size_t id)"
+.br
+.RI "assigns integer value used to avoid repeating the same operation "
+.ti -1c
+.RI "size_t \fBCurrentID\fP () const"
+.br
+.RI "returns integer value for comparison to avoid repeating the same operation "
+.ti -1c
+.RI "uint32_t \fBDim\fP () const"
+.br
+.RI "return minimum spatial dimension in which this element can exist "
+.ti -1c
+.RI "uint32_t \fBNodes\fP () const"
+.br
+.ti -1c
+.RI "uint32_t \fBSegments\fP () const"
+.br
+.RI "returns the number of edges of the FE, i\&.e\&. the number of connections between nodes "
+.ti -1c
+.RI "uint32_t \fBFaces\fP () const"
+.br
+.RI "returns the number of sides the finite element has "
+.ti -1c
+.RI "uint32_t \fBNeighbors\fP () const"
+.br
+.RI "neighbor elements that may be connected to this FE in its characteristic space "
+.ti -1c
+.RI "virtual uint32_t \fBNodesPerFace\fP (uint32_t face) const"
+.br
+.RI "returns how many nodes make up a particular face; some elements have different numbers "
+.ti -1c
+.RI "uint32_t \fBIntegrationPoints\fP () const"
+.br
+.RI "returns number of quadrature points used by current integration scheme "
+.ti -1c
+.RI "uint32_t \fBInterpolation\fP () const"
+.br
+.RI "returns order of interpolation scheme: linear=1, quadratic=2, cubic=3 "
+.ti -1c
+.RI "bool \fBIsoparametric\fP () const"
+.br
+.RI "for numerically integrated elements, reports whether the order of the interpolation functions is the same as that of the shape functions "
+.ti -1c
+.RI "bool \fBUsesLocalCoordinates\fP () const"
+.br
+.RI "reports whether element is defined in a local (r,s,t) coordinate system; analytically integrated elements are not "
+.ti -1c
+.RI "uint32_t \fBOrderOfShapeFunctions\fP () const"
+.br
+.RI "returns the interpolation order of the shape functions as opposed to the interpolation (basis) functions "
+.ti -1c
+.RI "bool \fBIsLine\fP () const"
+.br
+.ti -1c
+.RI "bool \fBIsSurface\fP () const"
+.br
+.ti -1c
+.RI "bool \fBIsVolume\fP () const"
+.br
+.ti -1c
+.RI "bool \fBIsSimplex\fP () const"
+.br
+.RI "true for linear line-, triangle- or tetrahedral elements for which the Jacobian matrix is constant throughout "
+.ti -1c
+.RI "\fBCSMP_FEM_TYPE\fP \fBElementType\fP () const"
+.br
+.ti -1c
+.RI "virtual void \fBInteriorNodes\fP (std::vector< uint32_t > &ids) const"
+.br
+.RI "reports the nodes (0\&.\&.nodes-1) of the element which are not shared with any other element "
+.ti -1c
+.RI "virtual uint32_t \fBInteriorNodes\fP () const"
+.br
+.ti -1c
+.RI "virtual void \fBUnitNormalToFace\fP (uint32_t face, std::vector< double > &unrml) const"
+.br
+.RI "returns the unit normal to element face (for planar elements, normal lies in that plane; expects XY matrix to be initialised with node coordinates "
+.ti -1c
+.RI "virtual void \fBUnitNormalAtFaceBarycenter\fP (uint32_t face, std::vector< double > &nrml)"
+.br
+.RI "computes unit normal to face using a parametric to physical space transformation available in elements with a local coordinate framework "
+.ti -1c
+.RI "double \fBXYZ\fP (uint32_t i, uint32_t j) const"
+.br
+.RI "accessor for coordinate matrix which is associated with the element "
+.ti -1c
+.RI "void \fBXYZ\fP (uint32_t i, uint32_t j, double val)"
+.br
+.RI "mutator for coordinate matrix which is associated with the element "
+.ti -1c
+.RI "virtual void \fBJacobianAt\fP (const std::vector< double > &rst)"
+.br
+.RI "initialises JAC = DN*XY (intpl\&. derivative * coordinate matrix) parametric-to-physical space transformation matrix for given quadrature point defined in parametric space (r,s,t) "
+.ti -1c
+.RI "virtual void \fBJacobian\fP (const std::vector< double > &dnr)"
+.br
+.RI "initialises JAC = DN*XY (intpl\&. derivative * coordinate matrix) parametric-to-physical space transformation matrix for 1D element using the supplied intpol\&.f\&.derivatives "
+.ti -1c
+.RI "virtual void \fBJacobian\fP (const std::vector< double > &dnr, const std::vector< double > &dns)"
+.br
+.RI "initialises JAC = DN*XY (intpl\&. derivative * coordinate matrix) parametric-to-physical space transformation matrix for 2D element using the supplied intpol\&.f\&.derivatives "
+.ti -1c
+.RI "virtual void \fBJacobian\fP (const std::vector< double > &dnr, const std::vector< double > &dns, const std::vector< double > &dnt)"
+.br
+.RI "initialises JAC = DN*XY (intpl\&. derivative * coordinate matrix) parametric-to-physical space transformation matrix for 3D element using the supplied intpol\&.f\&.derivatives "
+.ti -1c
+.RI "virtual double \fBJacobianDeterminant\fP ()"
+.br
+.RI "returns the determinant of the member Jacobian matrix JAC that must have been initialised before "
+.ti -1c
+.RI "virtual void \fBIntegralNN\fP (\fBDenseMatrix\fP< DM_MIN > &)"
+.br
+.RI "initialises interpolation function product matrix N^T x N for analytically integrated elements "
+.ti -1c
+.RI "virtual void \fBIntegraldNdN\fP (\fBDenseMatrix\fP< DM_MIN > &)"
+.br
+.RI "initialises interpolation function derivatives product matrix DN^T x DN for element where derivatives are constant "
+.ti -1c
+.RI "virtual void \fBIntegral_dNT_K_dN\fP (\fBDenseMatrix\fP< DM_MIN > &\fBM\fP, \fBDenseMatrix\fP< DM_MIN > &K)"
+.br
+.ti -1c
+.RI "virtual void \fBNr\fP (double r, std::vector< double > &\fBNRST\fP) const"
+.br
+.RI "1D element interpolation functions N(r) "
+.ti -1c
+.RI "virtual void \fBdNr\fP (double r, std::vector< double > &\fBDNR\fP) const"
+.br
+.RI "1D element interpolation functions derivatives N(r)/dr "
+.ti -1c
+.RI "virtual void \fBNrst\fP (double r, double s, double t, std::vector< double > &\fBNRST\fP) const"
+.br
+.RI "3D element interpolation functions N(r,s,t) "
+.ti -1c
+.RI "virtual void \fBdNr\fP (double r, double s, double t, std::vector< double > &\fBDNR\fP) const"
+.br
+.RI "2D element interpolation functions derivatives N(r,s,t)/dr "
+.ti -1c
+.RI "virtual void \fBdNs\fP (double r, double s, double t, std::vector< double > &\fBDNS\fP) const"
+.br
+.RI "2D element interpolation functions derivatives N(r,s,t)/ds "
+.ti -1c
+.RI "virtual void \fBdNt\fP (double r, double s, double t, std::vector< double > &\fBDNT\fP) const"
+.br
+.RI "2D element interpolation functions derivatives N(r,s,t)/dt "
+.ti -1c
+.RI "virtual void \fBOut\fP () const"
+.br
+.RI "prints finite element properties to screen "
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Static Public Member Functions inherited from \fBcsmp::FiniteElement\fP
+.in +1c
+.ti -1c
+.RI "static size_t \fBInitialID\fP ()"
+.br
+.RI "returns ID value set to FEM during construction "
+.in -1c
+
+Public Attributes inherited from \fBcsmp::FiniteElement\fP
+.in +1c
+.ti -1c
+.RI "\fBDenseMatrix\fP< DM_MIN > \fBXY\fP"
+.br
+.ti -1c
+.RI "\fBDenseMatrix\fP< DM_MIN > \fBJAC\fP"
+.br
+.ti -1c
+.RI "\fBDenseMatrix\fP< DM_MIN > \fBJINV\fP"
+.br
+.ti -1c
+.RI "std::vector< double > \fBNRST\fP"
+.br
+.RI "convenience storage for interpolation function values "
+.ti -1c
+.RI "std::vector< double > \fBDNR\fP"
+.br
+.RI "convenience storage for interpolation function derivatives "
+.ti -1c
+.RI "std::vector< double > \fBDNS\fP"
+.br
+.RI "convenience storage for interpolation function derivatives "
+.ti -1c
+.RI "std::vector< double > \fBDNT\fP"
+.br
+.RI "convenience storage for interpolation function derivatives "
+.ti -1c
+.RI "std::vector< uint32_t > \fBIDX\fP"
+.br
+.RI "convenience storage for integer vectors "
+.in -1c
+
+Protected Member Functions inherited from \fBcsmp::FiniteElement\fP
+.in +1c
+.ti -1c
+.RI "\fBFiniteElement\fP (const \fBFiniteElement\fP &)=default"
+.br
+.ti -1c
+.RI "\fBFiniteElement\fP (\fBFiniteElement\fP &&)=default"
+.br
+.ti -1c
+.RI "\fBFiniteElement\fP & \fBoperator=\fP (const \fBFiniteElement\fP &)=default"
+.br
+.ti -1c
+.RI "\fBFiniteElement\fP & \fBoperator=\fP (\fBFiniteElement\fP &&)=default"
+.br
+.ti -1c
+.RI "void \fBIsoparametric\fP (bool isoparam)"
+.br
+.ti -1c
+.RI "void \fBUsesLocalCoordinates\fP (bool uses)"
+.br
+.ti -1c
+.RI "void \fBLineElement\fP ()"
+.br
+.ti -1c
+.RI "void \fBSurfaceElement\fP ()"
+.br
+.ti -1c
+.RI "void \fBVolumeElement\fP ()"
+.br
+.ti -1c
+.RI "void \fBElementType\fP (\fBCSMP_FEM_TYPE\fP etype)"
+.br
+.in -1c
+
+Protected Attributes inherited from \fBcsmp::FiniteElement\fP
+.in +1c
+.ti -1c
+.RI "uint32_t \fBdim\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBitp\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBnpf\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBnpe\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBspe\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBfpe\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBepe\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBnne\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBcne\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBgpe\fP"
+.br
+.ti -1c
+.RI "\fBDenseMatrix\fP< DM_MIN > \fBM\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.PP
+\fBDate\fP
+.RS 4
+2002 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+S\&.K\&. Matthaei 
+
+.PP
+S\&. Geiger
+.RE
+.PP
+.SH "Motivation"
+.PP
+Quadratic Quadrilateral finite-element with local interpolation function and Jacobian transformation capability\&. \fBElement\fP numbering:
+
+.PP
+.PP
+.nf
+       / s-axis (of local coordinate system)
+     /
+.fi
+.PP
+ 4o---7o---o3 | | 8 9o 6 | | o---5o---o -----> r-axis 1 2
+
+.PP
+The segment nodes are represented by IntegrationPoint variables\&. The local coordinates of the integration points are stored in the array objects 'ri' and 'si'\&.
+.SH "Implementation"
+.PP
+Since the quadratic triangle uses local shape functions, the integration procedure is as follows\&.
+
+.PP
+The weights of the interpolation functions always must add up to 1\&. Thus, since there are 4 integration points, each weight is 1\&.0 \&.\&.\&. 
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "csmp::IsoparametricQuadraticQuadrilateral::IsoparametricQuadraticQuadrilateral (uint32_t dimensions = \fR3U\fP)\fR [explicit]\fP"
+Default constructor initializes quadrilateral to use local coordinates and a four-point integration scheme where the Gauss points are located inside quad at convergence points\&. The weights of the integration points are set to 1 such that the integrated contributions add up to 1\&. \&. 
+.SH "Member Function Documentation"
+.PP 
+.SS "double csmp::IsoparametricQuadraticQuadrilateral::AspectRatio ()\fR [virtual]\fP"
+Computes the element aspect ratio as the ratio between the longest and the shortest boundary segment\&.
+.SH "Input Arguments"
+.PP
+The \fBElement\fP is consulted for its global coordinates\&. 
+.PP
+Reimplemented from \fBcsmp::FiniteElement\fP\&.
+.SS "virtual uint32_t csmp::IsoparametricQuadraticQuadrilateral::CornerNodes () const\fR [inline]\fP, \fR [virtual]\fP"
+
+.PP
+Reimplemented from \fBcsmp::FiniteElement\fP\&.
+.SS "void csmp::IsoparametricQuadraticQuadrilateral::CornerNodes (std::vector< uint32_t > & ids) const\fR [virtual]\fP"
+Returns local node ids of the nodes which sit on the corner of the quadratic triagular element\&.
+
+.PP
+Returns a Meschpp integer vector with the 3 local corner node ID numbers for the element (These integers are germane to all quadratic triangular elements in the mesh)\&. 
+.PP
+Reimplemented from \fBcsmp::FiniteElement\fP\&.
+.SS "\fBvector\fP< uint32_t > csmp::IsoparametricQuadraticQuadrilateral::CornerNodesOfFace (uint32_t face_id) const\fR [virtual]\fP"
+
+.PP
+returns the local numbers of the corner nodes of the face 
+.PP
+Reimplemented from \fBcsmp::FiniteElement\fP\&.
+.SS "void csmp::IsoparametricQuadraticQuadrilateral::dN (\fBDenseMatrix\fP< DM_MIN > & DN9)\fR [virtual]\fP"
+Compute derivatives of interpolation functions at corresponding nodes with respect to the global coordinate system\&. If a transformation from 2D local to 3D global space is applied, the function Jacobi is called\&.
+.SH "Input Arguments"
+.PP
+The element is used to obtain the global interpolation of the triangle and the interpolation function derivatives at each node are returned into the matrix M of dimensions rows = spatial dimensions x columns = nodes\&.
+
+.PP
+The interpolation-function derivative matrix is returned into the second method argument\&. 
+.PP
+Reimplemented from \fBcsmp::FiniteElement\fP\&.
+.SS "double csmp::IsoparametricQuadraticQuadrilateral::dN_At (\fBDenseMatrix\fP< DM_MIN > & DN2, const std::vector< double > & xyz)\fR [virtual]\fP"
+Computes derivatives of shape functions at a point XY given in global coordinates within the element (also given in global coordinates)\&.
+.SH "Input Arguments"
+.PP
+The element is used to obtain the global shape of the triangle and the interpolation function derivatives at the point XY are returned into the matrix M of dimensions rows = spatial dimensions x columns = nodes\&.
+
+.PP
+\fBReturns\fP
+.RS 4
+The interpolation-function derivative matrix is returned into the second method argument\&. 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBcsmp::FiniteElement\fP\&.
+.SS "double csmp::IsoparametricQuadraticQuadrilateral::dN_AtBarycenter (\fBDenseMatrix\fP< DM_MIN > & DM)\fR [virtual]\fP"
+
+.PP
+returns first derivative of interpolaton functions at center of gravity; determinant of the Jacobian is returned as well 
+.PP
+Reimplemented from \fBcsmp::FiniteElement\fP\&.
+.SS "double csmp::IsoparametricQuadraticQuadrilateral::dN_AtIntegrationPoint (\fBDenseMatrix\fP< DM_MIN > & B, uint32_t gauss_point)\fR [virtual]\fP"
+
+.IP "1." 4
+Pre-multiplies local interpolation function derivative matrix, B, with node coordinates to obtain the Jacobian matrix, J\&.
+.IP "2." 4
+The Jacobian matrix J is inverted and multiplied with B to obtain the global interpolation function derivative matrix at the gauss point i (i=0\&.\&.\&.i=gauss points-1)\&. If a transformation from 2D local to 3D global space is applied, the function Jacobi is called\&.
+.PP
+.SH "Input Arguments"
+.PP
+The first argument is a reference to the parent \fBElement\fP object, the second argument is the result matrix, the third argument indicates the gauss point at which the derivative matrix is computed and the fourth argument specifies the degrees of freedom per node, for which the B matrix shall be transformed\&.
+
+.PP
+\fBReturns\fP
+.RS 4
+The global interpolation function derivative matrix is returned into the second method argument\&. The method also returns the determinant of the Jacobian matrix since it is often needed in integration procedures\&. 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBcsmp::FiniteElement\fP\&.
+.SS "double csmp::IsoparametricQuadraticQuadrilateral::dN_AtNode (\fBDenseMatrix\fP< DM_MIN > & B, uint32_t nd)\fR [virtual]\fP"
+
+.IP "1." 4
+Pre-multiplies local interpolation function derivative matrix, B, with node coordinates to obtain the Jacobian matrix, J at the desired node point\&.
+.IP "2." 4
+The Jacobian matrix J is inverted and multiplied with B to obtain the global interpolation function derivative matrix at the point i (i=0\&.\&.\&.i=gauss points-1)\&. If a transformation from 2D local to 3D global space is applied, the function Jacobi is called\&.
+.PP
+.SH "Input Arguments"
+.PP
+The first argument is a reference to the parent \fBElement\fP object, the second argument is the result matrix, the third argument indicates the gauss point at which the derivative matrix is computed and the fourth argument specifies the degrees of freedom per node, for which the B matrix shall be transformed\&.
+
+.PP
+\fBReturns\fP
+.RS 4
+The global interpolation function derivative matrix is returned into the second method argument\&. The method also returns the determinant of the Jacobian matrix since it is often needed in integration procedures\&. 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBcsmp::FiniteElement\fP\&.
+.SS "void csmp::IsoparametricQuadraticQuadrilateral::dNr (double r, double s, std::vector< double > & DNR) const\fR [virtual]\fP"
+This method and the complementary method \fBdNs()\fP compute the shape function derivates with respect to the local coordinate axis 'r', and 's'\&.
+.SH "Input Arguments"
+.PP
+The method takes the local coordinates of the point at which the shape function derivatives shall be evaluated as third argument\&.
+
+.PP
+The shape function derivatives are returned into the second method argument which is a floating point vector of the size n=nodes per element\&.
+.SH "Implementation"
+.PP
+see inlined source code in the header file\&.
+.SH "Application Examples"
+.PP
+The shape function derivatives are needed in most integration procedures for elements\&. 
+.PP
+Reimplemented from \fBcsmp::FiniteElement\fP\&.
+.SS "void csmp::IsoparametricQuadraticQuadrilateral::dNs (double r, double s, std::vector< double > & DNS) const\fR [virtual]\fP"
+
+.PP
+2D element interpolation functions derivatives N(r,s)/ds 
+.PP
+Reimplemented from \fBcsmp::FiniteElement\fP\&.
+.SS "void csmp::IsoparametricQuadraticQuadrilateral::EdgeLengths (std::vector< double > & len)\fR [virtual]\fP"
+Segment length is approximated as the sum of the length of two linear segments making up each face of the quadratic triangle\&. The first segment connects corner node 1 with midpoint node 3 and midpoint node 3 with corner node 2 and so forth\&.
+
+.PP
+The lengths of the segments will be returned into the vector which is the second method argument\&.
+.SH "Implementation"
+.PP
+The segment lengths are computed as the sum of the straight line segments which make up the element face\&.
+.SH "Application Examples"
+.PP
+For example, when stresses are to be applied at the element side, the (area=length at unit thickness) must be taken into account\&. 
+.PP
+Reimplemented from \fBcsmp::FiniteElement\fP\&.
+.SS "\fBCSMP_FEM_TYPE\fP csmp::IsoparametricQuadraticQuadrilateral::ElementTypeOfFace (uint32_t face) const\fR [virtual]\fP"
+
+.PP
+reports the element type that would match that of its corresponding face 
+.PP
+\fBTodo\fP
+.RS 4
+(2-P) Remove typid by name fct 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBcsmp::FiniteElement\fP\&.
+.SS "virtual \fBCSMP_FEM_TYPE\fP csmp::IsoparametricQuadraticQuadrilateral::ElementTypeOfSegment (uint32_t segment) const\fR [inline]\fP, \fR [virtual]\fP"
+
+.PP
+reports the element type that would match that of its corresponding segment 
+.PP
+\fBTodo\fP
+.RS 4
+(2-P) Remove typid by name fct 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBcsmp::FiniteElement\fP\&.
+.SS "void csmp::IsoparametricQuadraticQuadrilateral::ExtrapolateIntegrationPointVariableToNodes (uint32_t nvars, const std::vector< double > & IVAR, std::vector< double > & NVAR) const\fR [virtual]\fP"
+Because, in the local coordinate system, the quadrilateral is always straight sided, and the derivatives of the interpolation functions are bilinear, variable values computed at integration points can simply be extrapolated to the nodes\&. This involves the steps:
+
+.PP
+.IP "1." 4
+Compute the interpolation function coefficients for the quad which is defined by the four integration points\&.
+.IP "2." 4
+For each node point compute the values of the interpolation functions and use these to extrapolate the values of the variables at the nodes\&. 
+.PP
+
+.PP
+Reimplemented from \fBcsmp::FiniteElement\fP\&.
+.SS "double csmp::IsoparametricQuadraticQuadrilateral::InnerRadius ()\fR [virtual]\fP"
+This method attempts to calculate the inner radius of the curved-sided triangle by talking 1/2 of the perimeter and dividing this measure by the area of the quad\&.
+
+.PP
+The procedure is empirically based giving a good match if quads are relatively even-sided and have straight edges\&.
+.SH "Input Arguments"
+.PP
+The parent element is queried for its node coordinates\&. 
+.PP
+Reimplemented from \fBcsmp::FiniteElement\fP\&.
+.SS "void csmp::IsoparametricQuadraticQuadrilateral::IntegrationPoint (uint32_t ip, std::vector< double > & xyz) const\fR [virtual]\fP"
+integration point location transformed into global coordinates 
+.PP
+\fBWarning\fP
+.RS 4
+the matrix XYZ must be uptodate 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBcsmp::FiniteElement\fP\&.
+.SS "void csmp::IsoparametricQuadraticQuadrilateral::JacobianAtIntegrationPoint (uint32_t ip)\fR [virtual]\fP"
+
+.PP
+initialises JAC = DN*XY (intpl\&. derivative * coordinate matrix) parametric-to-physical space transformation matrix for given quadrature point 
+.PP
+Reimplemented from \fBcsmp::FiniteElement\fP\&.
+.SS "double csmp::IsoparametricQuadraticQuadrilateral::JacobianInverse ()\fR [virtual]\fP"
+
+.PP
+overwrites the base class method in order to get 2D to 3D mapping functionality 
+.PP
+Reimplemented from \fBcsmp::FiniteElement\fP\&.
+.SS "virtual uint32_t csmp::IsoparametricQuadraticQuadrilateral::MidSideNodes () const\fR [inline]\fP, \fR [virtual]\fP"
+
+.PP
+Reimplemented from \fBcsmp::FiniteElement\fP\&.
+.SS "void csmp::IsoparametricQuadraticQuadrilateral::MidSideNodes (std::vector< uint32_t > & ids) const\fR [virtual]\fP"
+Returns local node ids of the nodes which sit on the midsides of the quadratic triagular element\&.
+
+.PP
+This is an integer vector with the 3 local midside-node ID numbers for the element (These integers are germane to all quadratic triangular elements in the mesh)\&. 
+.PP
+Reimplemented from \fBcsmp::FiniteElement\fP\&.
+.SS "void csmp::IsoparametricQuadraticQuadrilateral::N (std::vector< double > & N, const std::vector< double > & xyz)\fR [virtual]\fP"
+Computes the values of the interpolation functions at the global coordinate 'xy'\&. Since a Jacobian matrix can only be obtained for points which lie inside the local triangle, such a transformation cannot be performed here\&. Because of this reason global area-coordinate functions are employed to obtain the interpolation function values at the global point\&. These functions are borrowed from the NaturalQuadratic triangle\&.
+
+.PP
+Note, that the use of global interpolation functions implies that the method only gives highly accurate results if the element boundaries are not curved\&.
+.SH "Input Arguments"
+.PP
+The parent \fBElement\fP, the vector which will hold the interpolation function values, and the coordinate vector 'xy' in the global coordinate system\&. Note that if the global coordinates given by 'xy' do not lie within the global extent of the quadratic triangular element, the interpolation function values will no longer add to one and the interpolation will then be erroneous\&.
+
+.PP
+The second method argument, the vector FN, will hold the interpolation function values as computed at the point 'xy'\&.
+.SH "Implementation"
+.PP
+The inverse of the Jacobian matrix is found for the global point 'xy'\&. Then 'xy' transposed is pre-multiplied with the Jacobian to find the local coordinate pair 'rs' corresponding to 'xy'\&. Using these local coordinates the interpolation function values are found\&.
+.SH "Application Examples"
+.PP
+To interpolate a property value withing the quadratic triangular element\&. 
+.PP
+Reimplemented from \fBcsmp::FiniteElement\fP\&.
+.SS "void csmp::IsoparametricQuadraticQuadrilateral::N_AtBaryCenter (std::vector< double > & N)\fR [virtual]\fP"
+
+.PP
+reports the values of the interpolation functions at the center of gravity of the element 
+.PP
+Reimplemented from \fBcsmp::FiniteElement\fP\&.
+.SS "void csmp::IsoparametricQuadraticQuadrilateral::N_AtIntegrationPoint (uint32_t ip, std::vector< double > & N)\fR [virtual]\fP"
+Computes the interpolation function values at the specified integration point 'ip'\&.
+.SH "Input Arguments"
+.PP
+A reference to the parent \fBElement\fP, the number of the integration point\&.
+
+.PP
+The interpolation function values are returned into the third argument\&. 
+.PP
+Reimplemented from \fBcsmp::FiniteElement\fP\&.
+.SS "\fBvector\fP< uint32_t > csmp::IsoparametricQuadraticQuadrilateral::NodesConnectedTo (uint32_t node) const\fR [virtual]\fP"
+
+.PP
+returns the local numbers of the nodes at the other end of the sgment that the argument node is on 
+.PP
+Reimplemented from \fBcsmp::FiniteElement\fP\&.
+.SS "\fBvector\fP< uint32_t > csmp::IsoparametricQuadraticQuadrilateral::NodesOfFace (uint32_t face_id) const\fR [virtual]\fP"
+Gives the local node numbers (0\&.\&.\&.5) of the nodes which make up the requested face of the element (possible numbers 0, 1, 2)\&. For this element, the faces are numbered such that face 0 lies opposite of node 0, face 1 node 1 etc\&.
+.SH "Input Arguments"
+.PP
+The number of the desired face (0, 1, or 2)\&.
+
+.PP
+The local node numbers are returned into the integer vector 'fnids'\&.
+.SH "Application Examples"
+.PP
+When boundary conditions shall be applied it is necessary to determine the properties associated with the nodes of that element face\&. 
+.PP
+Reimplemented from \fBcsmp::FiniteElement\fP\&.
+.SS "void csmp::IsoparametricQuadraticQuadrilateral::NodesOfSegment (uint32_t segm_id, std::vector< uint32_t > & snids) const\fR [virtual]\fP"
+
+.PP
+reports the egde nodes (0\&.\&.nodes-1) which can be more than 2 in higher-order elements 
+.PP
+Reimplemented from \fBcsmp::FiniteElement\fP\&.
+.SS "void csmp::IsoparametricQuadraticQuadrilateral::Nrs (double r, double s, std::vector< double > & N) const\fR [virtual]\fP"
+Returns the value of the element interpolation functions at the point 'rst' in local coordinates\&.
+.SH "Input Arguments"
+.PP
+The floating point coordinates 'r', 's' and 't' of the point at which the interpolation shall be carried out\&.
+
+.PP
+The fourth method argument is the vector into which the values of the n=nodes interpolation functions at the point 'rst' will be returned\&.
+.SH "Implementation"
+.PP
+See in source code header file\&.
+.SH "Application Examples"
+.PP
+Method is used to compute property values at the integration points of the element\&. 
+.PP
+Reimplemented from \fBcsmp::FiniteElement\fP\&.
+.SS "void csmp::IsoparametricQuadraticQuadrilateral::OutputNodeDataToVTK (const char * file_name, const char * var_name, \fBDenseMatrix\fP< DM_MIN > & DATA) const\fR [virtual]\fP"
+Method returns a vector with a size of 3, containing the consecutively ordered local node numbers of the side of the element which lies at the indicated model boundary\&. If the element is not on the model boundary an error is reported and the vector is initialized to unspecified\&.
+.SH "Input Arguments"
+.PP
+The parent \fBElement\fP, the target boundary of the the \fBModel\fP of elements, and a Meschach vector which will hold the the local indices of the identified nodes (0\&.\&.\&.5)\&.
+
+.PP
+The resulting local node id's are returned into the third method argument\&.
+.SH "Implementation"
+.PP
+While only the element knows which nodes are located at the mode boundary, the \fBFiniteElement\fP knows in which order these appear\&.
+.SH "Application Examples"
+.PP
+To assign Neumann boundary conditions with a PDE operator for surface integrals\&.
+
+.PP
+\fBTodo\fP
+.RS 4
+(3) Check index of bnodes 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBcsmp::FiniteElement\fP\&.
+.SS "void csmp::IsoparametricQuadraticQuadrilateral::ReferenceCoordinates (\fBDenseMatrix\fP< DM_MIN > & matCoords) const\fR [virtual]\fP"
+
+.PP
+for element types defined using a local coordinate system, returns the node coordinates into the argument matrix Returns the reference coordinates of the element\&.
+
+.PP
+\fBDenseMatrix<DM_MIN>\fP & matCoords; -> Holds the reference coordinates of the finite element\&. 
+.PP
+Reimplemented from \fBcsmp::FiniteElement\fP\&.
+.SS "\fBvector\fP< double > csmp::IsoparametricQuadraticQuadrilateral::UnitNormal () const\fR [virtual]\fP"
+Computes the normal to the triangle surface assuming that the quad is perfectly planar, based on 3 points definition of plane\&.
+.SH "Implementation"
+.PP
+Method assumes that the quad is planar\&. For the case that the quad is warped, normals must be calculated for each integration point\&. 
+.PP
+Reimplemented from \fBcsmp::FiniteElement\fP\&.
+.SS "double csmp::IsoparametricQuadraticQuadrilateral::Volume ()\fR [virtual]\fP"
+Computes Integral N dA = 1/2 sum_1\&.\&.\&.n Wi Ji Ni\&. This formulation also gives a meaningful area if the element boundaries are curved\&. For a description of numerical integration of isoparametric quadratic elements, refer to Cook et al\&. (1989) 3rd Ed\&., p\&. 183\&.
+.SH "Input Arguments"
+.PP
+The finite element which supplies the nodal coordinates from which the area is computed\&.
+
+.PP
+\fBReturns\fP
+.RS 4
+The area (m2) of the finite element\&. 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBcsmp::FiniteElement\fP\&.
+.SS "double csmp::IsoparametricQuadraticQuadrilateral::WeightAtIntegrationPoint (uint32_t i) const\fR [virtual]\fP"
+
+.PP
+returns the integration weight of the desired quadrature point 
+.PP
+Reimplemented from \fBcsmp::FiniteElement\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

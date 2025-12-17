@@ -1,0 +1,5 @@
+<map id="csmp::PVTX_Calculator_H2O_CO2_NaCl::WaterSaturation" name="csmp::PVTX_Calculator_H2O_CO2_NaCl::WaterSaturation">
+<area shape="rect" id="Node000001" title="computes water saturation from the mass balance;" alt="" coords="249,5,476,46"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_p_v_t_x___calculator___h2_o___c_o2___na_cl.html#adf3ad54f6c8ae13a6c03e0de7b751eb7" title=" " alt="" coords="5,5,201,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="233,28,201,28,201,23,233,23"/>
+</map>

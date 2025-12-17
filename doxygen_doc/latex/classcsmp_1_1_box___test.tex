@@ -1,0 +1,180 @@
+\doxysection{csmp\+::Box\+\_\+\+Test Class Reference}
+\hypertarget{classcsmp_1_1_box___test}{}\label{classcsmp_1_1_box___test}\index{csmp::Box\_Test@{csmp::Box\_Test}}
+
+
+Inheritance diagram for csmp\+::Box\+\_\+\+Test\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_box___test__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Box\+\_\+\+Test\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_box___test__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_box___test_a50915f921ce09486f6b3d1702b1ffe96}\label{classcsmp_1_1_box___test_a50915f921ce09486f6b3d1702b1ffe96} 
+{\bfseries Box\+\_\+\+Test} (const char \texorpdfstring{$\ast$}{*}name="{}cube\+\_\+flag"{})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_box___test_aee3d8adfb35c424244b249a987dcfe4e}{run}} ()
+\item 
+\Hypertarget{classcsmp_1_1_box___test_a9d23a5c83c8bf0c211b387f0eabebc74}\label{classcsmp_1_1_box___test_a9d23a5c83c8bf0c211b387f0eabebc74} 
+bool {\bfseries Test\+Boundary\+Flag\+Assigment2D} ()
+\item 
+\Hypertarget{classcsmp_1_1_box___test_a5eae0beeeb6f70f7e3bea93a6620a932}\label{classcsmp_1_1_box___test_a5eae0beeeb6f70f7e3bea93a6620a932} 
+bool {\bfseries Test\+Whether\+Side\+Boundary\+Flags\+Are\+Present} ()
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_box___test_a67c64795c8263e581457769b428a6449}{Test\+Whether\+All\+Box\+Flags\+Are\+Present}} ()
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_box___test_aaccb51793d2e2da485758a7f2d11aced}{Test\+Boundary\+Flagging}} ()
+\item 
+\Hypertarget{classcsmp_1_1_box___test_a9e89cde22432444607a136347a2830eb}\label{classcsmp_1_1_box___test_a9e89cde22432444607a136347a2830eb} 
+bool {\bfseries Test\+Boundary\+Versus\+BOX\+\_\+\+BOUNDARY\+\_\+\+Flagging} ()
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_box___test_a4a366d9580585431601e077d7a75bcea}{Test\+Boundary\+Flag\+Recreation}} ()
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_box___test_a3742e324aaa234b568e3da98a577d7bc}{Test\+Whether\+Boundary\+Flags\+Are\+Preserved\+In\+Binary\+File}} ()
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_box___test_af67adfafed2c01a3356f39a56aaac46f}{Test\+Whether\+Boundary\+Flags\+Are\+Preserved\+In\+Binary\+File1}} ()
+\item 
+\Hypertarget{classcsmp_1_1_box___test_a6f432faf697c5859134449357842e1c4}\label{classcsmp_1_1_box___test_a6f432faf697c5859134449357842e1c4} 
+bool {\bfseries Test\+Consistency\+Of\+Box\+Flagging\+With\+Boundary\+Identification} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_box___test_a03f7dd2bdb0d73899abd2e5340b054db}{Test\+Whether\+Element\+Normals\+Are\+Outward\+Pointing}} ()
+\begin{DoxyCompactList}\small\item\em testing the normals of the volumetric elements and the boundary faces \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Test} (std\+::ostream \texorpdfstring{$\ast$}{*}osptr=0)
+\item 
+long {\bfseries get\+Num\+Passed} () const
+\item 
+long {\bfseries get\+Num\+Failed} () const
+\item 
+const std\+::ostream \texorpdfstring{$\ast$}{*} {\bfseries get\+Stream} () const
+\item 
+void {\bfseries set\+Stream} (std\+::ostream \texorpdfstring{$\ast$}{*}osptr)
+\item 
+void {\bfseries set\+Name} (std\+::string test\+Name)
+\item 
+std\+::string {\bfseries get\+Name} () const
+\item 
+bool {\bfseries has\+Name} () const
+\item 
+void {\bfseries do\+\_\+succeed} ()
+\item 
+long {\bfseries report} () const
+\item 
+virtual void {\bfseries reset} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}}
+\begin{DoxyCompactItemize}
+\item 
+void {\bfseries do\+\_\+equal} (double expr, double value, double tol, const std\+::string \&lbl, const char \texorpdfstring{$\ast$}{*}fname, long lineno)
+\item 
+void {\bfseries do\+\_\+test} (bool cond, const std\+::string \&lbl, const char \texorpdfstring{$\ast$}{*}fname, long lineno)
+\item 
+void {\bfseries do\+\_\+fail} (const std\+::string \&lbl, const char \texorpdfstring{$\ast$}{*}fname, long lineno)
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}}
+\begin{DoxyCompactItemize}
+\item 
+const char \texorpdfstring{$\ast$}{*} {\bfseries prefix\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_box___test_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_box___test_aee3d8adfb35c424244b249a987dcfe4e}\index{csmp::Box\_Test@{csmp::Box\_Test}!run@{run}}
+\index{run@{run}!csmp::Box\_Test@{csmp::Box\_Test}}
+\doxysubsubsection{\texorpdfstring{run()}{run()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_box___test_aee3d8adfb35c424244b249a987dcfe4e} 
+void csmp\+::\+Box\+\_\+\+Test\+::run (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Tests the functionality of \doxylink{classcsmp_1_1_box}{Box} class and the flagging of related box-\/shaped models
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000257}{Todo}}]SKM add testing in 2D \end{DoxyRefDesc}
+
+
+Implements \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_box___test_aee3d8adfb35c424244b249a987dcfe4e_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_box___test_aaccb51793d2e2da485758a7f2d11aced}\index{csmp::Box\_Test@{csmp::Box\_Test}!TestBoundaryFlagging@{TestBoundaryFlagging}}
+\index{TestBoundaryFlagging@{TestBoundaryFlagging}!csmp::Box\_Test@{csmp::Box\_Test}}
+\doxysubsubsection{\texorpdfstring{TestBoundaryFlagging()}{TestBoundaryFlagging()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_box___test_aaccb51793d2e2da485758a7f2d11aced} 
+bool csmp\+::\+Box\+\_\+\+Test\+::\+Test\+Boundary\+Flagging (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+converts flags to scalar variables that are subsequently tested using node numbers. \Hypertarget{classcsmp_1_1_box___test_a4a366d9580585431601e077d7a75bcea}\index{csmp::Box\_Test@{csmp::Box\_Test}!TestBoundaryFlagRecreation@{TestBoundaryFlagRecreation}}
+\index{TestBoundaryFlagRecreation@{TestBoundaryFlagRecreation}!csmp::Box\_Test@{csmp::Box\_Test}}
+\doxysubsubsection{\texorpdfstring{TestBoundaryFlagRecreation()}{TestBoundaryFlagRecreation()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_box___test_a4a366d9580585431601e077d7a75bcea} 
+bool csmp\+::\+Box\+\_\+\+Test\+::\+Test\+Boundary\+Flag\+Recreation (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+tests whether method \doxylink{group___c_s_m_pglobal_functions_ga20ee477d00c1041c66b394b9acb5d15b}{recreate\+Box\+Boundary\+Flags()} which allows to recreate boundary flags works correctly
+
+\begin{DoxyNote}{Note}
+also tests Establish\+Box\+Boundaries\+From\+Node\+Flags() 
+\end{DoxyNote}
+\Hypertarget{classcsmp_1_1_box___test_a67c64795c8263e581457769b428a6449}\index{csmp::Box\_Test@{csmp::Box\_Test}!TestWhetherAllBoxFlagsArePresent@{TestWhetherAllBoxFlagsArePresent}}
+\index{TestWhetherAllBoxFlagsArePresent@{TestWhetherAllBoxFlagsArePresent}!csmp::Box\_Test@{csmp::Box\_Test}}
+\doxysubsubsection{\texorpdfstring{TestWhetherAllBoxFlagsArePresent()}{TestWhetherAllBoxFlagsArePresent()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_box___test_a67c64795c8263e581457769b428a6449} 
+bool csmp\+::\+Box\+\_\+\+Test\+::\+Test\+Whether\+All\+Box\+Flags\+Are\+Present (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+All flags for 3D model including edges and corners \Hypertarget{classcsmp_1_1_box___test_a3742e324aaa234b568e3da98a577d7bc}\index{csmp::Box\_Test@{csmp::Box\_Test}!TestWhetherBoundaryFlagsArePreservedInBinaryFile@{TestWhetherBoundaryFlagsArePreservedInBinaryFile}}
+\index{TestWhetherBoundaryFlagsArePreservedInBinaryFile@{TestWhetherBoundaryFlagsArePreservedInBinaryFile}!csmp::Box\_Test@{csmp::Box\_Test}}
+\doxysubsubsection{\texorpdfstring{TestWhetherBoundaryFlagsArePreservedInBinaryFile()}{TestWhetherBoundaryFlagsArePreservedInBinaryFile()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_box___test_a3742e324aaa234b568e3da98a577d7bc} 
+bool csmp\+::\+Box\+\_\+\+Test\+::\+Test\+Whether\+Boundary\+Flags\+Are\+Preserved\+In\+Binary\+File (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+writes model to CSMP binary and then re-\/reads it to see whether the box flags survive \Hypertarget{classcsmp_1_1_box___test_af67adfafed2c01a3356f39a56aaac46f}\index{csmp::Box\_Test@{csmp::Box\_Test}!TestWhetherBoundaryFlagsArePreservedInBinaryFile1@{TestWhetherBoundaryFlagsArePreservedInBinaryFile1}}
+\index{TestWhetherBoundaryFlagsArePreservedInBinaryFile1@{TestWhetherBoundaryFlagsArePreservedInBinaryFile1}!csmp::Box\_Test@{csmp::Box\_Test}}
+\doxysubsubsection{\texorpdfstring{TestWhetherBoundaryFlagsArePreservedInBinaryFile1()}{TestWhetherBoundaryFlagsArePreservedInBinaryFile1()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_box___test_af67adfafed2c01a3356f39a56aaac46f} 
+bool csmp\+::\+Box\+\_\+\+Test\+::\+Test\+Whether\+Boundary\+Flags\+Are\+Preserved\+In\+Binary\+File1 (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+Tests new output functionality. \Hypertarget{classcsmp_1_1_box___test_a03f7dd2bdb0d73899abd2e5340b054db}\index{csmp::Box\_Test@{csmp::Box\_Test}!TestWhetherElementNormalsAreOutwardPointing@{TestWhetherElementNormalsAreOutwardPointing}}
+\index{TestWhetherElementNormalsAreOutwardPointing@{TestWhetherElementNormalsAreOutwardPointing}!csmp::Box\_Test@{csmp::Box\_Test}}
+\doxysubsubsection{\texorpdfstring{TestWhetherElementNormalsAreOutwardPointing()}{TestWhetherElementNormalsAreOutwardPointing()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_box___test_a03f7dd2bdb0d73899abd2e5340b054db} 
+void csmp\+::\+Box\+\_\+\+Test\+::\+Test\+Whether\+Element\+Normals\+Are\+Outward\+Pointing (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+testing the normals of the volumetric elements and the boundary faces 
+
+Comparing the unit normals with the those of the sides of the box-\/shaped model. The expectation is that are are pointing in the direction as the normals of the elements or faces on the outside boundary of the model. Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_box___test_a03f7dd2bdb0d73899abd2e5340b054db_icgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+tests/unit/Box\+\_\+\+Test.\+h\item 
+tests/unit/Box\+\_\+\+Test.\+cpp\end{DoxyCompactItemize}

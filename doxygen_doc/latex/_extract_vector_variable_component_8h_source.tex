@@ -1,0 +1,55 @@
+\doxysection{Extract\+Vector\+Variable\+Component.\+h}
+\hypertarget{_extract_vector_variable_component_8h_source}{}\label{_extract_vector_variable_component_8h_source}\index{source/includes/property\_manipulation/ExtractVectorVariableComponent.h@{source/includes/property\_manipulation/ExtractVectorVariableComponent.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{EXTRACT\_VECTOR\_VARIABLE\_COMPONENT\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{EXTRACT\_VECTOR\_VARIABLE\_COMPONENT\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_interrelation_8h}{"{}Interrelation.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00010\ \textcolor{comment}{}}
+\DoxyCodeLine{00011\ \textcolor{comment}{\ \ Interrelation\ which\ maps\ the\ user-\/specified\ component\ of\ a\ vector\ variable}}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ \ into\ the\ user-\/supplied\ scalar\ variable.}}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ \ This\ may\ be\ useful\ for\ instance\ if\ one\ wants\ to\ output\ and\ display\ the}}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ \ variable\ using\ a\ color\ scheme\ rather\ than\ vectors.}}
+\DoxyCodeLine{00015\ \textcolor{comment}{}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ \ @author\ S.K.\ Matthaei}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ \ @date\ 6/2000}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ \ */}}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00021\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_extract_vector_variable_component}{ExtractVectorVariableComponent}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_interrelation}{Interrelation}}<dim>\ \{}
+\DoxyCodeLine{00022\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ \ \ \ \ \ \ V;}
+\DoxyCodeLine{00023\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ \ \ \ \ \ \ S;}
+\DoxyCodeLine{00024\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\ \ vc;}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{const}\ uint32\_t\ \ \ \ \ \ \ component;}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00028\ \ \ \ \ ExtractVectorVariableComponent(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&\ p,}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ vec\_var,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ scalar\_var,}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ comp\ );}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ \string~ExtractVectorVariableComponent();}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_extract_vector_variable_component_ab8bf5ccc000021d9ecfad246e9997eb4}{Calculate}}();}
+\DoxyCodeLine{00035\ \};}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00041\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_extract_vector_variable_component}{ExtractVectorVariableComponent}}<dim>::\mbox{\hyperlink{classcsmp_1_1_extract_vector_variable_component_ab8bf5ccc000021d9ecfad246e9997eb4}{Calculate}}()}
+\DoxyCodeLine{00042\ \ \{}
+\DoxyCodeLine{00043\ \ \ \ \ V.AssignTo(\ vc\ );}
+\DoxyCodeLine{00044\ \ \ \ \ S\ =\ vc(component);}
+\DoxyCodeLine{00045\ \ \}}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

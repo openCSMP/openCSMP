@@ -1,0 +1,103 @@
+\doxysection{Frac\+Man\+\_\+\+Fracture.\+h}
+\hypertarget{_frac_man___fracture_8h_source}{}\label{_frac_man___fracture_8h_source}\index{source/includes/interfaces/Fracman/FracMan\_Fracture.h@{source/includes/interfaces/Fracman/FracMan\_Fracture.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{FRACMAN\_FRACTURE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{FRACMAN\_FRACTURE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_m_j_l___point3_d_8h}{"{}MJL\_Point3D.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_m_j_l___edge3_d_8h}{"{}MJL\_Edge3D.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_f_r_a_c_m_a_n___fracture}{FRACMAN\_Fracture}}\ \{}
+\DoxyCodeLine{00012\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00013\ \ \ \ \ FRACMAN\_Fracture();}
+\DoxyCodeLine{00014\ \ \ \ \ FRACMAN\_Fracture(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_f_r_a_c_m_a_n___fracture}{FRACMAN\_Fracture}}\&\ ffr\ );}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \ \ FRACMAN\_Fracture(\ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ ap,}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ compr,}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ perm,}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::list<\textcolor{keywordtype}{double}>\&\ properties,}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::list<mjl::Point3D>\&\ boundary\ );}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ \string~FRACMAN\_Fracture();}
+\DoxyCodeLine{00023\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_f_r_a_c_m_a_n___fracture}{FRACMAN\_Fracture}}\&\ operator=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_f_r_a_c_m_a_n___fracture}{FRACMAN\_Fracture}}\&\ ffr\ );}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_f_r_a_c_m_a_n___fracture_a49910ebbe821668c1209c9c248978267}{InitializeFrom}}(\ \textcolor{keywordtype}{long}\ nprops,\ std::ifstream\&\ ifs\ );}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{comment}{///\ compare\ perimeter\ length}}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_f_r_a_c_m_a_n___fracture_a5d578a7b552e4dce8c5f2e68cef29238}{operator}}<(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_f_r_a_c_m_a_n___fracture}{FRACMAN\_Fracture}}\&\ ffr\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ uint32\_t\ \ \ \ ID()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00031\ \ \ \ \ std::string\ \ TextID()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ SetID()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00033\ \ \ \ \ std::string\ \ TextSetID()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ BaryCenter(\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point3_d}{Point3D}}\&\ ctr\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ BaryCenter(\ \textcolor{keywordtype}{double}\&\ x,\ \textcolor{keywordtype}{double}\&\ y,\ \textcolor{keywordtype}{double}\&\ z\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordtype}{double}\ \ Perimeter()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keywordtype}{double}\ \ Diameter()\ \textcolor{keyword}{const};\ \textcolor{comment}{//\ from\ perimeter\ assuming\ circle}}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ BoundingBox(\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point3_d}{Point3D}}\&\ cnr1,\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point3_d}{Point3D}}\&\ cnr8\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ Move(\ \textcolor{keywordtype}{double}\ dx,\ \textcolor{keywordtype}{double}\ dy,\ \textcolor{keywordtype}{double}\ dz\ );}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ Scale(\ \textcolor{keywordtype}{double}\ xfac,\ \textcolor{keywordtype}{double}\ dfac,\ \textcolor{keywordtype}{double}\ zfac\ );}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ std::list<mjl::Point3D>::const\_iterator\ \ \mbox{\hyperlink{classcsmp_1_1_f_r_a_c_m_a_n___fracture}{Begin}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00043\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_f_r_a_c_m_a_n___fracture}{std}}::\mbox{\hyperlink{classcsmp_1_1_f_r_a_c_m_a_n___fracture}{list}}<\mbox{\hyperlink{classcsmp_1_1_f_r_a_c_m_a_n___fracture}{mjl}}::\mbox{\hyperlink{classcsmp_1_1_f_r_a_c_m_a_n___fracture}{Point3D}}>::\mbox{\hyperlink{classcsmp_1_1_f_r_a_c_m_a_n___fracture}{const\_iterator}}\ \ \mbox{\hyperlink{classcsmp_1_1_f_r_a_c_m_a_n___fracture}{End}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00044\ \ \ \ \ size\_t\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PolygonPoints()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00045\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_f_r_a_c_m_a_n___fracture}{std}}::\mbox{\hyperlink{classcsmp_1_1_f_r_a_c_m_a_n___fracture}{list}}<\textcolor{keywordtype}{double}>::\mbox{\hyperlink{classcsmp_1_1_f_r_a_c_m_a_n___fracture}{const\_iterator}}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_f_r_a_c_m_a_n___fracture}{PropertiesBegin}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00046\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_f_r_a_c_m_a_n___fracture}{std}}::\mbox{\hyperlink{classcsmp_1_1_f_r_a_c_m_a_n___fracture}{list}}<\textcolor{keywordtype}{double}>::\mbox{\hyperlink{classcsmp_1_1_f_r_a_c_m_a_n___fracture}{const\_iterator}}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_f_r_a_c_m_a_n___fracture}{PropertiesEnd}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ Erase();}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ Out()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keywordtype}{double}\ \ aperture;\ \ \ \ \ \ \ \ \textcolor{comment}{//\ always\ present\ default\ properties}}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordtype}{double}\ \ compressibility;}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordtype}{double}\ \ permeability;}
+\DoxyCodeLine{00056\ \ \ \ \ uint32\_t\ \ \ \ id;}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ fracture\_set\_id;}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keyword}{static}\ \ uint32\_t\ global\_id;}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \ \ std::list<\textcolor{keywordtype}{double}>\ \ \ \ \ props;}
+\DoxyCodeLine{00061\ \ \ \ \ std::list<mjl::Point3D>\ \ boundary;}
+\DoxyCodeLine{00062\ \ \ \ \ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_edge3_d}{Edge3D}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ unit\_normal;}
+\DoxyCodeLine{00063\ \};}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \textcolor{keyword}{inline}\ \ std::list<mjl::Point3D>::const\_iterator\ \ \mbox{\hyperlink{namespacecsmp}{FRACMAN\_Fracture}}::\mbox{\hyperlink{namespacecsmp}{Begin}}()\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00067\ \ \{}
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{namespacecsmp}{boundary}}.\mbox{\hyperlink{namespacecsmp}{begin}}();}
+\DoxyCodeLine{00069\ \ \}}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \textcolor{keyword}{inline}\ \ std::list<mjl::Point3D>::const\_iterator\ \ \mbox{\hyperlink{namespacecsmp}{FRACMAN\_Fracture}}::\mbox{\hyperlink{namespacecsmp}{End}}()\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00073\ \ \{}
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{namespacecsmp}{boundary}}.\mbox{\hyperlink{namespacecsmp}{end}}();}
+\DoxyCodeLine{00075\ \ \}}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \textcolor{keyword}{inline}\ \ size\_t\ \ \mbox{\hyperlink{classcsmp_1_1_f_r_a_c_m_a_n___fracture}{FRACMAN\_Fracture}}::PolygonPoints()\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00079\ \ \{}
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keywordflow}{return}\ boundary.size();}
+\DoxyCodeLine{00081\ \ \}}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \textcolor{keyword}{inline}\ \ std::list<\textcolor{keywordtype}{double}>::const\_iterator\ \ \mbox{\hyperlink{namespacecsmp}{FRACMAN\_Fracture}}::\mbox{\hyperlink{namespacecsmp}{PropertiesBegin}}()\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00085\ \ \{}
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{namespacecsmp}{props}}.\mbox{\hyperlink{namespacecsmp}{begin}}();}
+\DoxyCodeLine{00087\ \ \}}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \textcolor{keyword}{inline}\ \ std::list<\textcolor{keywordtype}{double}>::const\_iterator\ \ \mbox{\hyperlink{namespacecsmp}{FRACMAN\_Fracture}}::\mbox{\hyperlink{namespacecsmp}{PropertiesEnd}}()\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00091\ \ \{}
+\DoxyCodeLine{00092\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{namespacecsmp}{props}}.\mbox{\hyperlink{namespacecsmp}{end}}();}
+\DoxyCodeLine{00093\ \ \}}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \}\ \textcolor{comment}{//\ namespace\ csmp}}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

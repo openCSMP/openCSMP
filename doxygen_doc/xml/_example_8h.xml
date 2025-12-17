@@ -1,0 +1,862 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="_example_8h" kind="file" language="C++">
+    <compoundname>Example.h</compoundname>
+    <includes refid="_c_s_m_p__definitions_8h" local="yes">CSMP_definitions.h</includes>
+    <includedby refid="_averaging___example_8h" local="yes">examples/source/Averaging_Example.h</includedby>
+    <includedby refid="_curiously_recurring_template___example_8h" local="yes">examples/source/CuriouslyRecurringTemplate_Example.h</includedby>
+    <includedby refid="_d_e_s2_phase_flow_with_split_boundary___example_8h" local="yes">examples/source/DES2PhaseFlowWithSplitBoundary_Example.h</includedby>
+    <includedby refid="_d_e_s2_phase_slightly_compressible_flow___example_8h" local="yes">examples/source/DES2PhaseSlightlyCompressibleFlow_Example.h</includedby>
+    <includedby refid="_d_e_s_advection_diffusion2_d___example_8h" local="yes">examples/source/DESAdvectionDiffusion2D_Example.h</includedby>
+    <includedby refid="_d_e_s_advection_diffusion3_d___example_8h" local="yes">examples/source/DESAdvectionDiffusion3D_Example.h</includedby>
+    <includedby refid="_dense_matrix___example_8h" local="yes">examples/source/DenseMatrix_Example.h</includedby>
+    <includedby refid="_eclipse_mesh_interface___example_8h" local="yes">examples/source/EclipseMeshInterface_Example.h</includedby>
+    <includedby refid="_effective_stress_dilatation2_d___example_8h" local="yes">examples/source/EffectiveStressDilatation2D_Example.h</includedby>
+    <includedby refid="_error_metric___example_8h" local="yes">examples/source/ErrorMetric_Example.h</includedby>
+    <includedby refid="_example_8cpp" local="yes">examples/source/Example.cpp</includedby>
+    <includedby refid="_example_suite_8h" local="yes">examples/source/ExampleSuite.h</includedby>
+    <includedby refid="_experimental___example_8h" local="yes">examples/source/Experimental_Example.h</includedby>
+    <includedby refid="_field_variable___example_8h" local="yes">examples/source/FieldVariable_Example.h</includedby>
+    <includedby refid="_geothermal___example_8h" local="yes">examples/source/Geothermal_Example.h</includedby>
+    <includedby refid="_interfaces___example_8h" local="yes">examples/source/Interfaces_Example.h</includedby>
+    <includedby refid="_intrepid___example_8h" local="yes">examples/source/Intrepid_Example.h</includedby>
+    <includedby refid="_linear_elasticity___example_8h" local="yes">examples/source/LinearElasticity_Example.h</includedby>
+    <includedby refid="_linear_solver___example_8h" local="yes">examples/source/LinearSolver_Example.h</includedby>
+    <includedby refid="_mechanics_and_multiphase_flow___example_8h" local="yes">examples/source/MechanicsAndMultiphaseFlow_Example.h</includedby>
+    <includedby refid="_model_a_n_s_y_s___example_8h" local="yes">examples/source/ModelANSYS_Example.h</includedby>
+    <includedby refid="_parallel_plate_fracture___example_8h" local="yes">examples/source/ParallelPlateFracture_Example.h</includedby>
+    <includedby refid="_passive_advection_of_tracer___example_8h" local="yes">examples/source/PassiveAdvectionOfTracer_Example.h</includedby>
+    <includedby refid="_permeability_tensor___example_8h" local="yes">examples/source/PermeabilityTensor_Example.h</includedby>
+    <includedby refid="_policy_based___example_8h" local="yes">examples/source/PolicyBased_Example.h</includedby>
+    <includedby refid="_pressure_diffusion___example_8h" local="yes">examples/source/PressureDiffusion_Example.h</includedby>
+    <includedby refid="_quadratic_pressure__parallel_plate_permeability___example_8h" local="yes">examples/source/QuadraticPressure_parallelPlatePermeability_Example.h</includedby>
+    <includedby refid="_quadrilaterator_to_c_s_m_pbinary___example_8h" local="yes">examples/source/QuadrilateratorToCSMPbinary_Example.h</includedby>
+    <includedby refid="_region_properties___example_8h" local="yes">examples/source/RegionProperties_Example.h</includedby>
+    <includedby refid="_region___example_8h" local="yes">examples/source/Region_Example.h</includedby>
+    <includedby refid="_rhino_mesh___example_8h" local="yes">examples/source/RhinoMesh_Example.h</includedby>
+    <includedby refid="_s_k_u_a___example_8h" local="yes">examples/source/SKUA_Example.h</includedby>
+    <includedby refid="_slope_mechanics___example_8h" local="yes">examples/source/SlopeMechanics_Example.h</includedby>
+    <includedby refid="_split_boundary___example_8h" local="yes">examples/source/SplitBoundary_Example.h</includedby>
+    <includedby refid="_statistical_analyzer___example_8h" local="yes">examples/source/StatisticalAnalyzer_Example.h</includedby>
+    <includedby refid="_stokes_discrepancy_measure_quadratic___example_8h" local="yes">examples/source/StokesDiscrepancyMeasureQuadratic_Example.h</includedby>
+    <includedby refid="_stokes_discrepancy_measure___example_8h" local="yes">examples/source/StokesDiscrepancyMeasure_Example.h</includedby>
+    <includedby refid="_stream_function___example_8h" local="yes">examples/source/StreamFunction_Example.h</includedby>
+    <includedby refid="_t_d_d_unit_test___example_8h" local="yes">examples/source/TDDUnitTest_Example.h</includedby>
+    <includedby refid="_temperature_density_pressure___example_8h" local="yes">examples/source/TemperatureDensityPressure_Example.h</includedby>
+    <includedby refid="_templatized_index___example_8h" local="yes">examples/source/TemplatizedIndex_Example.h</includedby>
+    <includedby refid="_thermal_convection_e_t_h_z___example_8h" local="yes">examples/source/ThermalConvectionETHZ_Example.h</includedby>
+    <includedby refid="_time_stepping_approaches___example_8h" local="yes">examples/source/TimeSteppingApproaches_Example.h</includedby>
+    <includedby refid="_topography_driven_flow___example_8h" local="yes">examples/source/TopographyDrivenFlow_Example.h</includedby>
+    <includedby refid="_transient_pressure___example_8h" local="yes">examples/source/TransientPressure_Example.h</includedby>
+    <includedby refid="_triangulator___example_8h" local="yes">examples/source/Triangulator_Example.h</includedby>
+    <includedby refid="_tutorial1___example_8h" local="yes">examples/source/Tutorial1_Example.h</includedby>
+    <includedby refid="_tutorial2___example_8h" local="yes">examples/source/Tutorial2_Example.h</includedby>
+    <includedby refid="_tutorial3___example_8h" local="yes">examples/source/Tutorial3_Example.h</includedby>
+    <includedby refid="_tutorial4___example_8h" local="yes">examples/source/Tutorial4_Example.h</includedby>
+    <includedby refid="_u_g4___pro_mesh_output___example_8h" local="yes">examples/source/UG4_ProMeshOutput_Example.h</includedby>
+    <includedby refid="_variable_management___example_8h" local="yes">examples/source/VariableManagement_Example.h</includedby>
+    <includedby refid="_variable_placement___example_8h" local="yes">examples/source/VariablePlacement_Example.h</includedby>
+    <includedby refid="_variables_basic___example_8h" local="yes">examples/source/VariablesBasic_Example.h</includedby>
+    <includedby refid="_variables___example_8h" local="yes">examples/source/Variables_Example.h</includedby>
+    <includedby refid="_visitor___example_8h" local="yes">examples/source/Visitor_Example.h</includedby>
+    <includedby refid="_tutorial4___example__original_8h" local="yes">examples/source/deprecated/Tutorial4_Example_original.h</includedby>
+    <incdepgraph>
+      <node id="1">
+        <label>examples/source/Example.h</label>
+        <link refid="_example_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>CSMP_definitions.h</label>
+        <link refid="_c_s_m_p__definitions_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="43" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+      </node>
+      <node id="44">
+        <label>CSMP_global_enumerations.h</label>
+        <link refid="_c_s_m_p__global__enumerations_8h_source"/>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+      </node>
+      <node id="43">
+        <label>Index.h</label>
+        <link refid="_index_8h_source"/>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
+      </node>
+      <node id="47">
+        <label>IntegrationPointVariables.h</label>
+        <link refid="_integration_point_variables_8h_source"/>
+        <childnode refid="46" relation="include">
+        </childnode>
+      </node>
+      <node id="46">
+        <label>LocalVariables.h</label>
+        <link refid="_local_variables_8h_source"/>
+      </node>
+      <node id="14">
+        <label>algorithm</label>
+      </node>
+      <node id="15">
+        <label>array</label>
+      </node>
+      <node id="13">
+        <label>cassert</label>
+      </node>
+      <node id="8">
+        <label>cctype</label>
+      </node>
+      <node id="11">
+        <label>cfloat</label>
+      </node>
+      <node id="16">
+        <label>chrono</label>
+      </node>
+      <node id="12">
+        <label>climits</label>
+      </node>
+      <node id="3">
+        <label>cmath</label>
+      </node>
+      <node id="7">
+        <label>cstdarg</label>
+      </node>
+      <node id="6">
+        <label>cstddef</label>
+      </node>
+      <node id="45">
+        <label>cstdint</label>
+      </node>
+      <node id="4">
+        <label>cstdio</label>
+      </node>
+      <node id="5">
+        <label>cstdlib</label>
+      </node>
+      <node id="9">
+        <label>cstring</label>
+      </node>
+      <node id="10">
+        <label>ctime</label>
+      </node>
+      <node id="17">
+        <label>deque</label>
+      </node>
+      <node id="18">
+        <label>exception</label>
+      </node>
+      <node id="19">
+        <label>filesystem</label>
+      </node>
+      <node id="20">
+        <label>fstream</label>
+      </node>
+      <node id="21">
+        <label>functional</label>
+      </node>
+      <node id="22">
+        <label>iomanip</label>
+      </node>
+      <node id="23">
+        <label>iostream</label>
+      </node>
+      <node id="24">
+        <label>istream</label>
+      </node>
+      <node id="25">
+        <label>iterator</label>
+      </node>
+      <node id="26">
+        <label>limits</label>
+      </node>
+      <node id="27">
+        <label>list</label>
+      </node>
+      <node id="28">
+        <label>map</label>
+      </node>
+      <node id="29">
+        <label>memory</label>
+      </node>
+      <node id="30">
+        <label>numeric</label>
+      </node>
+      <node id="31">
+        <label>ostream</label>
+      </node>
+      <node id="32">
+        <label>random</label>
+      </node>
+      <node id="33">
+        <label>set</label>
+      </node>
+      <node id="34">
+        <label>sstream</label>
+      </node>
+      <node id="35">
+        <label>stdexcept</label>
+      </node>
+      <node id="36">
+        <label>string</label>
+      </node>
+      <node id="38">
+        <label>type_traits</label>
+      </node>
+      <node id="37">
+        <label>typeinfo</label>
+      </node>
+      <node id="42">
+        <label>unordered_map</label>
+      </node>
+      <node id="41">
+        <label>unordered_set</label>
+      </node>
+      <node id="39">
+        <label>utility</label>
+      </node>
+      <node id="40">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="2">
+        <label>examples/source/Averaging_Example.h</label>
+        <link refid="_averaging___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>examples/source/CuriouslyRecurringTemplate_Example.h</label>
+        <link refid="_curiously_recurring_template___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>examples/source/DES2PhaseFlowWithSplitBoundary_Example.h</label>
+        <link refid="_d_e_s2_phase_flow_with_split_boundary___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>examples/source/DES2PhaseSlightlyCompressibleFlow_Example.h</label>
+        <link refid="_d_e_s2_phase_slightly_compressible_flow___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>examples/source/DESAdvectionDiffusion2D_Example.h</label>
+        <link refid="_d_e_s_advection_diffusion2_d___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>examples/source/DESAdvectionDiffusion3D_Example.h</label>
+        <link refid="_d_e_s_advection_diffusion3_d___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>examples/source/DenseMatrix_Example.h</label>
+        <link refid="_dense_matrix___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>examples/source/EclipseMeshInterface_Example.h</label>
+        <link refid="_eclipse_mesh_interface___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>examples/source/EffectiveStressDilatation2D_Example.h</label>
+        <link refid="_effective_stress_dilatation2_d___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>examples/source/ErrorMetric_Example.h</label>
+        <link refid="_error_metric___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>examples/source/Example.h</label>
+        <link refid="_example_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="43" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+        <childnode refid="49" relation="include">
+        </childnode>
+        <childnode refid="50" relation="include">
+        </childnode>
+        <childnode refid="51" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="54" relation="include">
+        </childnode>
+        <childnode refid="55" relation="include">
+        </childnode>
+        <childnode refid="56" relation="include">
+        </childnode>
+        <childnode refid="57" relation="include">
+        </childnode>
+        <childnode refid="58" relation="include">
+        </childnode>
+        <childnode refid="59" relation="include">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>examples/source/ExampleSuite.h</label>
+        <link refid="_example_suite_8h_source"/>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>examples/source/ExampleSuiteMainWindow.h</label>
+        <link refid="_example_suite_main_window_8h_source"/>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>examples/source/Examples.h</label>
+        <link refid="_examples_8h_source"/>
+      </node>
+      <node id="15">
+        <label>examples/source/Experimental_Example.h</label>
+        <link refid="_experimental___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="16">
+        <label>examples/source/FieldVariable_Example.h</label>
+        <link refid="_field_variable___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="17">
+        <label>examples/source/Geothermal_Example.h</label>
+        <link refid="_geothermal___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="18">
+        <label>examples/source/Interfaces_Example.h</label>
+        <link refid="_interfaces___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="19">
+        <label>examples/source/Intrepid_Example.h</label>
+        <link refid="_intrepid___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="20">
+        <label>examples/source/LinearElasticity_Example.h</label>
+        <link refid="_linear_elasticity___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="21">
+        <label>examples/source/LinearSolver_Example.h</label>
+        <link refid="_linear_solver___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="22">
+        <label>examples/source/MechanicsAndMultiphaseFlow_Example.h</label>
+        <link refid="_mechanics_and_multiphase_flow___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="23">
+        <label>examples/source/ModelANSYS_Example.h</label>
+        <link refid="_model_a_n_s_y_s___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="24">
+        <label>examples/source/ParallelPlateFracture_Example.h</label>
+        <link refid="_parallel_plate_fracture___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="25">
+        <label>examples/source/PassiveAdvectionOfTracer_Example.h</label>
+        <link refid="_passive_advection_of_tracer___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="26">
+        <label>examples/source/PermeabilityTensor_Example.h</label>
+        <link refid="_permeability_tensor___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="27">
+        <label>examples/source/PolicyBased_Example.h</label>
+        <link refid="_policy_based___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="28">
+        <label>examples/source/PressureDiffusion_Example.h</label>
+        <link refid="_pressure_diffusion___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="29">
+        <label>examples/source/QuadraticPressure_parallelPlatePermeability_Example.h</label>
+        <link refid="_quadratic_pressure__parallel_plate_permeability___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="30">
+        <label>examples/source/QuadrilateratorToCSMPbinary_Example.h</label>
+        <link refid="_quadrilaterator_to_c_s_m_pbinary___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="31">
+        <label>examples/source/RegionProperties_Example.h</label>
+        <link refid="_region_properties___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="32">
+        <label>examples/source/Region_Example.h</label>
+        <link refid="_region___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="33">
+        <label>examples/source/RhinoMesh_Example.h</label>
+        <link refid="_rhino_mesh___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="34">
+        <label>examples/source/SKUA_Example.h</label>
+        <link refid="_s_k_u_a___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="35">
+        <label>examples/source/SlopeMechanics_Example.h</label>
+        <link refid="_slope_mechanics___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="36">
+        <label>examples/source/SplitBoundary_Example.h</label>
+        <link refid="_split_boundary___example_8h_source"/>
+      </node>
+      <node id="37">
+        <label>examples/source/StatisticalAnalyzer_Example.h</label>
+        <link refid="_statistical_analyzer___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="38">
+        <label>examples/source/StokesDiscrepancyMeasureQuadratic_Example.h</label>
+        <link refid="_stokes_discrepancy_measure_quadratic___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="39">
+        <label>examples/source/StokesDiscrepancyMeasure_Example.h</label>
+        <link refid="_stokes_discrepancy_measure___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="40">
+        <label>examples/source/StreamFunction_Example.h</label>
+        <link refid="_stream_function___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="41">
+        <label>examples/source/TDDUnitTest_Example.h</label>
+        <link refid="_t_d_d_unit_test___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="42">
+        <label>examples/source/TemperatureDensityPressure_Example.h</label>
+        <link refid="_temperature_density_pressure___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="43">
+        <label>examples/source/TemplatizedIndex_Example.h</label>
+        <link refid="_templatized_index___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="44">
+        <label>examples/source/ThermalConvectionETHZ_Example.h</label>
+        <link refid="_thermal_convection_e_t_h_z___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="45">
+        <label>examples/source/TimeSteppingApproaches_Example.h</label>
+        <link refid="_time_stepping_approaches___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="46">
+        <label>examples/source/TopographyDrivenFlow_Example.h</label>
+        <link refid="_topography_driven_flow___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="47">
+        <label>examples/source/TransientPressure_Example.h</label>
+        <link refid="_transient_pressure___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="48">
+        <label>examples/source/Triangulator_Example.h</label>
+        <link refid="_triangulator___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="49">
+        <label>examples/source/Tutorial1_Example.h</label>
+        <link refid="_tutorial1___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="50">
+        <label>examples/source/Tutorial2_Example.h</label>
+        <link refid="_tutorial2___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="51">
+        <label>examples/source/Tutorial3_Example.h</label>
+        <link refid="_tutorial3___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="52">
+        <label>examples/source/Tutorial4_Example.h</label>
+        <link refid="_tutorial4___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="53">
+        <label>examples/source/UG4_ProMeshOutput_Example.h</label>
+        <link refid="_u_g4___pro_mesh_output___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="54">
+        <label>examples/source/VariableManagement_Example.h</label>
+        <link refid="_variable_management___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="55">
+        <label>examples/source/VariablePlacement_Example.h</label>
+        <link refid="_variable_placement___example_8h_source"/>
+      </node>
+      <node id="56">
+        <label>examples/source/VariablesBasic_Example.h</label>
+        <link refid="_variables_basic___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="57">
+        <label>examples/source/Variables_Example.h</label>
+        <link refid="_variables___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="58">
+        <label>examples/source/Visitor_Example.h</label>
+        <link refid="_visitor___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="59">
+        <label>examples/source/deprecated/Tutorial4_Example_original.h</label>
+        <link refid="_tutorial4___example__original_8h_source"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="classcsmp_1_1_example" prot="public">csmp::Example</innerclass>
+    <innernamespace refid="namespacecsmp">csmp</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#ifndef<sp/>EXAMPLE_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>EXAMPLE_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="_c_s_m_p__definitions_8h" kindref="compound">CSMP_definitions.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacecsmp" kindref="compound">csmp</ref><sp/>{</highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classcsmp_1_1_example_suite" kindref="compound">ExampleSuite</ref>;</highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal">Example</highlight></codeline>
+<codeline lineno="64"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"></highlight></codeline>
+<codeline lineno="66"><highlight class="normal"></highlight><highlight class="keyword">friend</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal">ExampleSuite;</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"></highlight></codeline>
+<codeline lineno="68"><highlight class="normal"></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/>Example(<sp/>std::ostream<sp/>*osptr<sp/>=<sp/>0<sp/>);</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/>~Example(){}</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"></highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Run<sp/>Function</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>Run()<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Describe<sp/>your<sp/>example</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>Specifications()<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"></highlight></codeline>
+<codeline lineno="78" refid="classcsmp_1_1_example_1adce5953feb4828ee24fb935d416a045b" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_example_1adce5953feb4828ee24fb935d416a045b" kindref="member">SetTitle</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string&amp;<sp/>text<sp/>)<sp/>{<sp/>title_<sp/>=<sp/>text;<sp/>}</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>SetCategory(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string&amp;<sp/>text<sp/>)<sp/>{<sp/>category_<sp/>=<sp/>text;<sp/>}</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_example_1a4909bbd859ca62d273c259d1b8b6657a" kindref="member">SetDifficulty</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">&amp;<sp/>difficulty<sp/>);</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_example_1a460febdef7c98c40ba774ba6670ff786" kindref="member">AddDescription</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string&amp;<sp/>text<sp/>);</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_example_1a246f075bb8bf802ca5b9e49096f6a1ca" kindref="member">AddRequirement</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string&amp;<sp/>text<sp/>);<sp/></highlight><highlight class="comment">//<sp/>use<sp/>this<sp/>to<sp/>tell<sp/>which<sp/>source<sp/>file<sp/>is<sp/>used</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_example_1a7a2776d1a529fdc5185d24804e249fa4" kindref="member">AddAuthor</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string&amp;<sp/>text<sp/>);</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"></highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Return<sp/>functions</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/>std::string<sp/><sp/><ref refid="classcsmp_1_1_example_1ab6d059e048b82444c3fcbc36880d70b6" kindref="member">GetTitle</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_example_1af575e4786aca651596ed454ed6d262f6" kindref="member">GetDifficulty</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/>std::string<sp/><sp/><ref refid="classcsmp_1_1_example_1afbbe7869b870b19bcd16dc6a98ee2b2f" kindref="member">GetCategory</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"></highlight></codeline>
+<codeline lineno="90"><highlight class="normal"></highlight><highlight class="keyword">protected</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="91"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_example_1a69f06458486c7a3a3669739a2039c4ed" kindref="member">Initialize</ref>();</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Stream<sp/>interface</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/>std::ostream<sp/>*GetStream()<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>ostream_;<sp/>}</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>SetStream(<sp/>std::ostream<sp/>*ostream<sp/>)<sp/>{<sp/>ostream_<sp/>=<sp/>ostream;<sp/>}</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"><sp/><sp/>std::string<sp/>GetExampleFileName(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>path);</highlight></codeline>
+<codeline lineno="96"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_example_1ac926ad8eb6de45710b9076c8f6304880" kindref="member">CreateWorkingDirectoryAndCopyInputModelFiles</ref>(std::string&amp;<sp/>example_name,<sp/>std::string&amp;<sp/>model_name,</highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::string&amp;<sp/>variable_file,<sp/>std::string<sp/>config_file<sp/>=<sp/></highlight><highlight class="stringliteral">&quot;&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="98"><highlight class="normal"></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="99"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>DB</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/>std::list&lt;std::string&gt;::const_iterator<sp/><ref refid="classcsmp_1_1_example_1a3fd636e079c1b09631a480c3cc5861fc" kindref="member">GetDescriptionsBegin</ref>();</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"><sp/><sp/>std::list&lt;std::string&gt;::const_iterator<sp/><ref refid="classcsmp_1_1_example_1a23eee344b701096cfe20784858b490b8" kindref="member">GetDescriptionsEnd</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="102"><highlight class="normal"><sp/><sp/>std::list&lt;std::string&gt;::const_iterator<sp/><ref refid="classcsmp_1_1_example_1a6ea7892372f1ed54bd66fbc93ed4c1e1" kindref="member">GetAuthorsBegin</ref>();</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/>std::list&lt;std::string&gt;::const_iterator<sp/><ref refid="classcsmp_1_1_example_1a1381ce20fa12dc1168f422ab348bb7d4" kindref="member">GetAuthorsEnd</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="104"><highlight class="normal"><sp/><sp/>std::list&lt;std::string&gt;::const_iterator<sp/><ref refid="classcsmp_1_1_example_1afb4453025180082963850cd7b86ab7e5" kindref="member">GetRequirementsBegin</ref>();</highlight></codeline>
+<codeline lineno="105"><highlight class="normal"><sp/><sp/>std::list&lt;std::string&gt;::const_iterator<sp/><ref refid="classcsmp_1_1_example_1a63d42dff58fdfd642d842a74bb609e1d" kindref="member">GetRequirementsEnd</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="106"><highlight class="normal"></highlight></codeline>
+<codeline lineno="107"><highlight class="normal"></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="108"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>output<sp/>stream</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="109"><highlight class="normal"><sp/><sp/>std::ostream<sp/>*ostream_;</highlight></codeline>
+<codeline lineno="110"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>db</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="111"><highlight class="normal"><sp/><sp/>std::string<sp/>title_;</highlight></codeline>
+<codeline lineno="112"><highlight class="normal"><sp/><sp/>std::string<sp/>category_;</highlight></codeline>
+<codeline lineno="113"><highlight class="normal"><sp/><sp/>std::list&lt;std::string&gt;<sp/>descriptions_;</highlight></codeline>
+<codeline lineno="114"><highlight class="normal"><sp/><sp/>std::list&lt;std::string&gt;<sp/>requirements_;</highlight></codeline>
+<codeline lineno="115"><highlight class="normal"><sp/><sp/>std::list&lt;std::string&gt;<sp/>authors_;</highlight></codeline>
+<codeline lineno="116"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>difficulty_;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="117"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>disabled</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="118"><highlight class="normal"><sp/><sp/>Example(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Example&amp;<sp/>);</highlight></codeline>
+<codeline lineno="119"><highlight class="normal"><sp/><sp/>Example&amp;<sp/>operator<sp/>=<sp/>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Example&amp;<sp/>);</highlight></codeline>
+<codeline lineno="120"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="121"><highlight class="normal"></highlight></codeline>
+<codeline lineno="122"><highlight class="normal"></highlight></codeline>
+<codeline lineno="123"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>csmp</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="124"><highlight class="normal"></highlight></codeline>
+<codeline lineno="125"><highlight class="normal"></highlight><highlight class="preprocessor">#endif<sp/></highlight><highlight class="comment">//<sp/>EXAMPLE_H</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="examples/source/Example.h"/>
+  </compounddef>
+</doxygen>

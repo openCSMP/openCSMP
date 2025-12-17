@@ -1,0 +1,110 @@
+\doxysection{Element\+Policy\+Integrity\+\_\+\+Test.\+h}
+\hypertarget{_element_policy_integrity___test_8h_source}{}\label{_element_policy_integrity___test_8h_source}\index{tests/unit/ElementPolicyIntegrity\_Test.h@{tests/unit/ElementPolicyIntegrity\_Test.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ \ ElementPolicyIntegrity\_Test.h}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ \ CSMP\_GitHub\_UnitTests}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ \ Created\ by\ Stephan\ Matthai\ on\ 9/02/2017.}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//\ \ Copyright\ ©\ 2017\ Stephan\ Matthai.\ All\ rights\ reserved.}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{ELEMENT\_POLICY\_INTEGRITY\_TEST\_H}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{ELEMENT\_POLICY\_INTEGRITY\_TEST\_H}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00013\ \textcolor{comment}{}}
+\DoxyCodeLine{00014\ \textcolor{comment}{Can\ the\ Element\ class\ be\ used\ without\ finite\ volumes?\ -\/\ does\ it\ contain\ too\ much\ in\ this\ case.}}
+\DoxyCodeLine{00015\ \textcolor{comment}{Can\ we\ build\ a\ purely\ geometry\ element\ without\ finite\ element\ functionality.}}
+\DoxyCodeLine{00016\ \textcolor{comment}{}}
+\DoxyCodeLine{00017\ \textcolor{comment}{This\ test\ distangles\ the\ cross\ dependencies\ of\ the\ policies\ of\ the\ Element\ class.}}
+\DoxyCodeLine{00018\ \textcolor{comment}{}}
+\DoxyCodeLine{00019\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_element_8h}{"{}Element.h"{}}}}
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_test_8h}{"{}Test.h"{}}}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_box_8h}{"{}Box.h"{}}}}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ \ \ \ Building\ an\ Element\ only\ element}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ \ \ \ with\ only\ the\ functionality\ that\ is\ stand-\/alone.}}
+\DoxyCodeLine{00030\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00031\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00032\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_element_only}{ElementOnly}}\ \{}
+\DoxyCodeLine{00033\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00034\ \ \ \ \ ElementOnly(\ size\_t\ id,\ size\_t\ nodes,\ size\_t\ nbors\ )}
+\DoxyCodeLine{00035\ \ \ \ \ \ :\ idx\_(0),\ at\_boundary\_(\mbox{\hyperlink{group___c_s_m_pglobal_enums_gga8e4421c3cd02f67e535bceb2dc74bfb6aa75032f56e77653ffaa7e2eb85566858}{NOT}}),}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ elmt\_connector\_(nbors,\textcolor{keywordtype}{nullptr}),\ \textcolor{comment}{///<\ a\ triangle}}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ node\_connector\_(nodes,\textcolor{keywordtype}{nullptr})}
+\DoxyCodeLine{00038\ \ \ \ \ \ \{\}}
+\DoxyCodeLine{00039\ \ \ \textcolor{comment}{//\ which\ member\ functions\ make\ sense\ here}}
+\DoxyCodeLine{00040\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_element_only}{ElementOnly}}\&\ \ operator=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element_only}{ElementOnly}}\&\ );}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{void}\ Accept(\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_visitor}{Visitor}}<dim>\&\ );}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keywordtype}{void}\ Assign(\ size\_t\ nbor,\ \mbox{\hyperlink{classcsmp_1_1_element_only}{ElementOnly}}<dim>*\ \textcolor{keyword}{const}\ e\_ptr\ )\ \{\ elmt\_connector\_[nbor]\ =\ e\_ptr;\ \}}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordtype}{void}\ Assign(\ size\_t\ node,\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>*\ \textcolor{keyword}{const}\ n\_ptr\ )\ \{\ node\_connector\_[node]\ =\ n\_ptr;\ \}}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{comment}{//\ iterators}}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{comment}{//\ accessors}}
+\DoxyCodeLine{00046\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>*\ \ \ \ \ \ \ \ \ N(\ size\_t\ n\_local\ )\ \ \ \ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ node\_connector\_[n\_local];\ \}}
+\DoxyCodeLine{00047\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_element_only}{ElementOnly}}<dim>*\ \ Neighbor(\ size\_t\ nbor\ )\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ elmt\_connector\_[nbor];\ \};}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ Idx(\ size\_t\ idx\ )\ \textcolor{keyword}{const}\ \{\ idx\_=idx;\ \}}
+\DoxyCodeLine{00050\ \ \ \ \ size\_t\ \ \ \ \ \ \ Idx()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ idx\_;\ \}}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ AtBoundary(\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}}\ b\ )\ \{\ at\_boundary\_=b;\ \}}
+\DoxyCodeLine{00052\ \ \ \ \ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}}\ AtBoundary()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ at\_boundary\_;\ \}}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{comment}{//\ can\ we\ do\ these?}}
+\DoxyCodeLine{00055\ \ \ \ \ size\_t\ \ \ \ \ Nodes()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ node\_connector\_.size();\ \}}
+\DoxyCodeLine{00056\ \ \ \ \ size\_t\ \ \ \ \ Neighbors()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ elmt\_connector\_.size();\ \}}
+\DoxyCodeLine{00057\ \ \ \ \ size\_t\ \ \ \ \ Faces()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ elmt\_connector\_.size();\ \}}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ CoordinateMatrix()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ CoordinateMatrix(\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ XY\ )\ \ \textcolor{keyword}{const};}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{comment}{//\ maybe?\ \ \ \ double\ \ \ AspectRatio()\ const;}}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ LengthInDirection(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\&\ vecDirection\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00063\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\ BaryCenter()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00064\ \ \ \ \ size\_t\ \ \ \ \ Segments()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ 3U;\ \textcolor{comment}{/*\ type\ dependent\ number,\ static\ FEM\_specifications\ class?\ */}\ \}}
+\DoxyCodeLine{00065\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\ SegmentMidPoint(\ size\_t\ segm\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ SegmentLength(\ size\_t\ segm\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ SegmentLengths(\ std::vector<\textcolor{keywordtype}{double}>\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ AspectRatio()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ InnerRadius()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keyword}{mutable}\ size\_t\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ idx\_;}
+\DoxyCodeLine{00073\ \ \ \ \ std::vector<ElementOnly<dim>*>\ \ elmt\_connector\_;\ \textcolor{comment}{///<\ neighbors}}
+\DoxyCodeLine{00074\ \ \ \ \ std::vector<csmp::Node<dim>*>\ \ \ node\_connector\_;\ \textcolor{comment}{///<\ nodes}}
+\DoxyCodeLine{00075\ \ \ \ \ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ at\_boundary\_;}
+\DoxyCodeLine{00076\ \};}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00080\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_element_with_variable_storage}{ElementWithVariableStorage}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_element_with_variable_storage}{LocalVariableStorage}}<\mbox{\hyperlink{classcsmp_1_1_element_with_variable_storage}{dim}},\mbox{\hyperlink{classcsmp_1_1_element_with_variable_storage}{Element}}>\ \{}
+\DoxyCodeLine{00081\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{comment}{//\ as\ above?}}
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{comment}{///\ returns\ property\ values\ at\ the\ nodes}}
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ Var>}
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_element_with_variable_storage_a4cd2b862f69104f81c71d1eda78f9478}{NodePropertyVector}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\&,\ std::vector<Var>\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00086\ \};}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00089\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_element_with_storage_and_f_e_m}{ElementWithStorageAndFEM}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_element_with_storage_and_f_e_m}{LocalVariableStorage}}<\mbox{\hyperlink{classcsmp_1_1_element_with_storage_and_f_e_m}{dim}},\mbox{\hyperlink{classcsmp_1_1_element_with_storage_and_f_e_m}{Element}}>,}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_element_with_storage_and_f_e_m}{FiniteElementPolicy}}<\mbox{\hyperlink{classcsmp_1_1_element_with_storage_and_f_e_m}{dim}},\mbox{\hyperlink{classcsmp_1_1_element_with_storage_and_f_e_m}{Element}}>\ \{}
+\DoxyCodeLine{00091\ \};}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \textcolor{comment}{/**\ Testing}}
+\DoxyCodeLine{00094\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00095\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_element_policy_integrity___test}{ElementPolicyIntegrity\_Test}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_test}{Test}}\ \{}
+\DoxyCodeLine{00096\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ run();}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \};}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \}\ \textcolor{comment}{//\ end\ csmp}}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{/*\ ELEMENT\_POLICY\_INTEGRITY\_TEST\_H\ */}}
+
+\end{DoxyCode}

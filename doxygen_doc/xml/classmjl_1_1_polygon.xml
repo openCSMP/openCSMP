@@ -1,0 +1,719 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classmjl_1_1_polygon" kind="class" language="C++" prot="public">
+    <compoundname>mjl::Polygon</compoundname>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classmjl_1_1_polygon_1a1cf42a658562a4157bd53f06c9d2cfe2" prot="private" static="no" mutable="yes">
+        <type><ref refid="classmjl_1_1_vertex" kindref="compound">mjl::Vertex</ref> *</type>
+        <definition>mjl::Vertex* mjl::Polygon::v_</definition>
+        <argsstring></argsstring>
+        <name>v_</name>
+        <qualifiedname>mjl::Polygon::v_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Polygon.h" line="56" column="25" bodyfile="source/includes/discretisation/MJL_Polygon.h" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classmjl_1_1_polygon_1a812dfdb4dc26b9ac1cf89ad57d8fe7cc" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t mjl::Polygon::size_</definition>
+        <argsstring></argsstring>
+        <name>size_</name>
+        <qualifiedname>mjl::Polygon::size_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Polygon.h" line="57" column="13" bodyfile="source/includes/discretisation/MJL_Polygon.h" bodystart="57" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classmjl_1_1_polygon_1a1710dc819d32d74cd42aa34513a0396e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>mjl::Polygon::Polygon</definition>
+        <argsstring>(std::list&lt; mjl::Point &gt;::const_iterator, std::list&lt; mjl::Point &gt;::const_iterator)</argsstring>
+        <name>Polygon</name>
+        <qualifiedname>mjl::Polygon::Polygon</qualifiedname>
+        <param>
+          <type>std::list&lt; <ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &gt;::const_iterator</type>
+        </param>
+        <param>
+          <type>std::list&lt; <ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &gt;::const_iterator</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Polygon.h" line="14" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_polygon_1a1a54078fa8fcd0c218b9a9087ce0b918" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>mjl::Polygon::Polygon</definition>
+        <argsstring>(mjl::Vertex *)</argsstring>
+        <name>Polygon</name>
+        <qualifiedname>mjl::Polygon::Polygon</qualifiedname>
+        <param>
+          <type><ref refid="classmjl_1_1_vertex" kindref="compound">mjl::Vertex</ref> *</type>
+          <defname>v</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Polygon.h" line="16" column="14" bodyfile="source/includes/discretisation/MJL_Polygon.h" bodystart="84" bodyend="88"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_polygon_1a7ab24dfbca135ae7c2201472f379b2f9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>mjl::Polygon::Polygon</definition>
+        <argsstring>()</argsstring>
+        <name>Polygon</name>
+        <qualifiedname>mjl::Polygon::Polygon</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Polygon.h" line="17" column="5" bodyfile="source/includes/discretisation/MJL_Polygon.h" bodystart="71" bodyend="74"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_polygon_1a3632346a195295b68d9c7aa238c687c2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>mjl::Polygon::Polygon</definition>
+        <argsstring>(const Polygon &amp;)</argsstring>
+        <name>Polygon</name>
+        <qualifiedname>mjl::Polygon::Polygon</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_polygon" kindref="compound">Polygon</ref> &amp;</type>
+          <defname>p</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Polygon.h" line="18" column="5" bodyfile="source/includes/discretisation/MJL_Polygon.h" bodystart="77" bodyend="80"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_polygon_1a41ab8063f6544a2c9c6096ce1c0bd476" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>mjl::Polygon::~Polygon</definition>
+        <argsstring>()</argsstring>
+        <name>~Polygon</name>
+        <qualifiedname>mjl::Polygon::~Polygon</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Polygon.h" line="19" column="13" bodyfile="source/modules/discretisation/MJL_Polygon.cpp" bodystart="49" bodyend="60"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_polygon_1ab3ddc99404fe966208ed30e6167a8c25" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classmjl_1_1_polygon" kindref="compound">Polygon</ref> &amp;</type>
+        <definition>Polygon &amp; mjl::Polygon::operator=</definition>
+        <argsstring>(const Polygon &amp;p)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>mjl::Polygon::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_polygon" kindref="compound">Polygon</ref> &amp;</type>
+          <declname>p</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>advances the argument polygon until its back to where it was initially </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Polygon.h" line="20" column="18" bodyfile="source/modules/discretisation/MJL_Polygon.cpp" bodystart="29" bodyend="45"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_polygon_1a49172e883ca989751b645c1e3ed38109" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classmjl_1_1_vertex" kindref="compound">mjl::Vertex</ref> *</type>
+        <definition>mjl::Vertex * mjl::Polygon::SetV</definition>
+        <argsstring>(mjl::Vertex *)</argsstring>
+        <name>SetV</name>
+        <qualifiedname>mjl::Polygon::SetV</qualifiedname>
+        <param>
+          <type><ref refid="classmjl_1_1_vertex" kindref="compound">mjl::Vertex</ref> *</type>
+          <defname>v</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Polygon.h" line="21" column="18" bodyfile="source/includes/discretisation/MJL_Polygon.h" bodystart="149" bodyend="152"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_polygon_1ad4a9484f663497d068f5b17ea143f6f3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classmjl_1_1_vertex" kindref="compound">mjl::Vertex</ref> *</type>
+        <definition>mjl::Vertex * mjl::Polygon::V</definition>
+        <argsstring>() const</argsstring>
+        <name>V</name>
+        <qualifiedname>mjl::Polygon::V</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Polygon.h" line="22" column="18" bodyfile="source/includes/discretisation/MJL_Polygon.h" bodystart="91" bodyend="94"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_polygon_1a999e66b441fce3cc1227f6995cdff678" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t mjl::Polygon::Size</definition>
+        <argsstring>() const</argsstring>
+        <name>Size</name>
+        <qualifiedname>mjl::Polygon::Size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Polygon.h" line="23" column="19" bodyfile="source/includes/discretisation/MJL_Polygon.h" bodystart="97" bodyend="98"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_polygon_1ac9803b3412e846b371aa095613aac5a9" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool mjl::Polygon::Empty</definition>
+        <argsstring>() const</argsstring>
+        <name>Empty</name>
+        <qualifiedname>mjl::Polygon::Empty</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Polygon.h" line="24" column="19" bodyfile="source/includes/discretisation/MJL_Polygon.h" bodystart="101" bodyend="102"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_polygon_1a411996ccbefa6702b15f37194b81cbfb" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref></type>
+        <definition>mjl::Point mjl::Polygon::Point</definition>
+        <argsstring>() const</argsstring>
+        <name>Point</name>
+        <qualifiedname>mjl::Polygon::Point</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Polygon.h" line="25" column="19" bodyfile="source/includes/discretisation/MJL_Polygon.h" bodystart="105" bodyend="108"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_polygon_1aca29ad2bd815d3328f49623ce964148a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classmjl_1_1_edge" kindref="compound">mjl::Edge</ref></type>
+        <definition>Edge mjl::Polygon::Edge</definition>
+        <argsstring>() const</argsstring>
+        <name>Edge</name>
+        <qualifiedname>mjl::Polygon::Edge</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Polygon.h" line="26" column="19" bodyfile="source/includes/discretisation/MJL_Polygon.h" bodystart="111" bodyend="114"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_polygon_1a60d02a09517d791ccc0252730ddc1ac5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classmjl_1_1_vertex" kindref="compound">mjl::Vertex</ref> *</type>
+        <definition>mjl::Vertex * mjl::Polygon::Cw</definition>
+        <argsstring>() const</argsstring>
+        <name>Cw</name>
+        <qualifiedname>mjl::Polygon::Cw</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>vertex successor </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Polygon.h" line="27" column="18" bodyfile="source/includes/discretisation/MJL_Polygon.h" bodystart="118" bodyend="121"/>
+        <referencedby refid="classmjl_1_1_polygon_1a487220e1e6659b5e090ecaf5de2e4bc5" compoundref="_m_j_l___polygon_8cpp" startline="301" endline="326">CheckAngles</referencedby>
+        <referencedby refid="group___c_s_m_pglobal_functions_1ga85e8aa8dcc3d8d4c0dd5040561c42762" compoundref="_m_j_l__functions_8cpp" startline="377" endline="400">mjl::clipEdgeToPolygon</referencedby>
+        <referencedby refid="classmjl_1_1_polygon_1a346b36cfb94c8e6906b74f7f634a57a8" compoundref="_m_j_l___polygon_8cpp" startline="330" endline="354">InsidePointSA</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_polygon_1abda65416ceabdf25bdef0ac5193c714b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classmjl_1_1_vertex" kindref="compound">mjl::Vertex</ref> *</type>
+        <definition>mjl::Vertex * mjl::Polygon::Ccw</definition>
+        <argsstring>() const</argsstring>
+        <name>Ccw</name>
+        <qualifiedname>mjl::Polygon::Ccw</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>predecessor of vertex </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Polygon.h" line="28" column="18" bodyfile="source/includes/discretisation/MJL_Polygon.h" bodystart="125" bodyend="128"/>
+        <referencedby refid="classmjl_1_1_polygon_1a487220e1e6659b5e090ecaf5de2e4bc5" compoundref="_m_j_l___polygon_8cpp" startline="301" endline="326">CheckAngles</referencedby>
+        <referencedby refid="classmjl_1_1_polygon_1a346b36cfb94c8e6906b74f7f634a57a8" compoundref="_m_j_l___polygon_8cpp" startline="330" endline="354">InsidePointSA</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_polygon_1ad2700e330a5a342a4f95eb7d5075dcbe" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classmjl_1_1_vertex" kindref="compound">mjl::Vertex</ref> *</type>
+        <definition>mjl::Vertex * mjl::Polygon::Neighbor</definition>
+        <argsstring>(ORIENTATION)</argsstring>
+        <name>Neighbor</name>
+        <qualifiedname>mjl::Polygon::Neighbor</qualifiedname>
+        <param>
+          <type>ORIENTATION</type>
+          <defname>rotation</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Polygon.h" line="29" column="18" bodyfile="source/includes/discretisation/MJL_Polygon.h" bodystart="131" bodyend="134"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_polygon_1aa8c7e34c4b27ff514467bc80d0706554" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classmjl_1_1_vertex" kindref="compound">mjl::Vertex</ref> *</type>
+        <definition>mjl::Vertex * mjl::Polygon::Advance</definition>
+        <argsstring>(ORIENTATION)</argsstring>
+        <name>Advance</name>
+        <qualifiedname>mjl::Polygon::Advance</qualifiedname>
+        <param>
+          <type>ORIENTATION</type>
+          <defname>rotation</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Polygon.h" line="30" column="18" bodyfile="source/includes/discretisation/MJL_Polygon.h" bodystart="137" bodyend="140"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_polygon_1aa1cf675ce14ae182718aab7613bc1b6c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>const <ref refid="classmjl_1_1_vertex" kindref="compound">mjl::Vertex</ref> *</type>
+        <definition>const mjl::Vertex * mjl::Polygon::Advance</definition>
+        <argsstring>(ORIENTATION) const</argsstring>
+        <name>Advance</name>
+        <qualifiedname>mjl::Polygon::Advance</qualifiedname>
+        <param>
+          <type>ORIENTATION</type>
+          <defname>rotation</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Polygon.h" line="31" column="23" bodyfile="source/includes/discretisation/MJL_Polygon.h" bodystart="142" bodyend="145"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_polygon_1a75573565ed0c2dd20339ae2042683f07" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classmjl_1_1_vertex" kindref="compound">mjl::Vertex</ref> *</type>
+        <definition>mjl::Vertex * mjl::Polygon::Insert</definition>
+        <argsstring>(const mjl::Point &amp;)</argsstring>
+        <name>Insert</name>
+        <qualifiedname>mjl::Polygon::Insert</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &amp;</type>
+          <defname>p</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Polygon.h" line="32" column="18" bodyfile="source/includes/discretisation/MJL_Polygon.h" bodystart="156" bodyend="162"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_polygon_1ad9798ad41cb7ed4d6b7760bf9795a7a9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void mjl::Polygon::Erase</definition>
+        <argsstring>()</argsstring>
+        <name>Erase</name>
+        <qualifiedname>mjl::Polygon::Erase</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Polygon.h" line="33" column="19" bodyfile="source/modules/discretisation/MJL_Polygon.cpp" bodystart="63" bodyend="77"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_polygon_1a09fb5b1e1c2e068bbc4dd8df69a1a526" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void mjl::Polygon::Remove</definition>
+        <argsstring>()</argsstring>
+        <name>Remove</name>
+        <qualifiedname>mjl::Polygon::Remove</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Polygon.h" line="34" column="19" bodyfile="source/includes/discretisation/MJL_Polygon.h" bodystart="165" bodyend="170"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_polygon_1ae445bf250e397ccd6f4b785eef19d69d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void mjl::Polygon::Revert</definition>
+        <argsstring>()</argsstring>
+        <name>Revert</name>
+        <qualifiedname>mjl::Polygon::Revert</qualifiedname>
+        <briefdescription>
+<para>rebuilds itself in reverse order </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Polygon.h" line="35" column="19" bodyfile="source/modules/discretisation/MJL_Polygon.cpp" bodystart="208" bodyend="226"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_polygon_1a3410d32dd3a332b34f177b43c2601bad" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classmjl_1_1_polygon" kindref="compound">Polygon</ref> *</type>
+        <definition>Polygon * mjl::Polygon::Split</definition>
+        <argsstring>(mjl::Vertex *)</argsstring>
+        <name>Split</name>
+        <qualifiedname>mjl::Polygon::Split</qualifiedname>
+        <param>
+          <type><ref refid="classmjl_1_1_vertex" kindref="compound">mjl::Vertex</ref> *</type>
+          <defname>b</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Polygon.h" line="36" column="18" bodyfile="source/includes/discretisation/MJL_Polygon.h" bodystart="174" bodyend="179"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_polygon_1adcfa5ccbfda20abe01d6662ff02772a6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classmjl_1_1_vertex" kindref="compound">mjl::Vertex</ref> *</type>
+        <definition>mjl::Vertex * mjl::Polygon::LeastVertex</definition>
+        <argsstring>(int(*cmp)(const mjl::Point &amp;a, const mjl::Point &amp;b))</argsstring>
+        <name>LeastVertex</name>
+        <qualifiedname>mjl::Polygon::LeastVertex</qualifiedname>
+        <param>
+          <type>int(*)(const <ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &amp;a, const <ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &amp;b)</type>
+          <declname>cmp</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Polygon.h" line="38" column="18" bodyfile="source/modules/discretisation/MJL_Polygon.cpp" bodystart="230" bodyend="242"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_polygon_1a33c9ffd76c61c24c2ef2934df0df5442" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref></type>
+        <definition>mjl::Point mjl::Polygon::CenterOfGravity</definition>
+        <argsstring>() const</argsstring>
+        <name>CenterOfGravity</name>
+        <qualifiedname>mjl::Polygon::CenterOfGravity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Polygon.h" line="39" column="19" bodyfile="source/includes/discretisation/MJL_Polygon.h" bodystart="187" bodyend="194"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_polygon_1a4f8ae8554cb2d87a04abaa9d15d268bd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void mjl::Polygon::CenterOfGravity</definition>
+        <argsstring>(double &amp;, double &amp;) const</argsstring>
+        <name>CenterOfGravity</name>
+        <qualifiedname>mjl::Polygon::CenterOfGravity</qualifiedname>
+        <param>
+          <type>double &amp;</type>
+          <defname>x</defname>
+        </param>
+        <param>
+          <type>double &amp;</type>
+          <defname>y</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Polygon.h" line="40" column="19" bodyfile="source/modules/discretisation/MJL_Polygon.cpp" bodystart="247" bodyend="259"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_polygon_1a51d07b858ec05edc128f3819142f29b3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double mjl::Polygon::Perimeter</definition>
+        <argsstring>() const</argsstring>
+        <name>Perimeter</name>
+        <qualifiedname>mjl::Polygon::Perimeter</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Polygon.h" line="41" column="19" bodyfile="source/modules/discretisation/MJL_Polygon.cpp" bodystart="263" bodyend="273"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_polygon_1a487220e1e6659b5e090ecaf5de2e4bc5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool mjl::Polygon::CheckAngles</definition>
+        <argsstring>(double tolerated_bound) const</argsstring>
+        <name>CheckAngles</name>
+        <qualifiedname>mjl::Polygon::CheckAngles</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>tolerated_bound</declname>
+          <defname>min_angle_permitted</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Loops around polygons and tests whether convex or concave angles between Edges along the polygon boundary are smaller than &apos;tolerated_bound&apos;. If so, method returns false and prints the angle. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Polygon.h" line="42" column="19" bodyfile="source/modules/discretisation/MJL_Polygon.cpp" bodystart="301" bodyend="326"/>
+        <references refid="classmjl_1_1_polygon_1abda65416ceabdf25bdef0ac5193c714b" compoundref="_m_j_l___polygon_8h" startline="125" endline="128">Ccw</references>
+        <references refid="classmjl_1_1_polygon_1a60d02a09517d791ccc0252730ddc1ac5" compoundref="_m_j_l___polygon_8h" startline="118" endline="121">Cw</references>
+        <references refid="namespacemjl_1a24fe914e67952eeec27fab5d5265a692" compoundref="_m_j_l___edge_8cpp" startline="219" endline="232">mjl::signedAngle</references>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_polygon_1a346b36cfb94c8e6906b74f7f634a57a8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref></type>
+        <definition>mjl::Point mjl::Polygon::InsidePointSA</definition>
+        <argsstring>()</argsstring>
+        <name>InsidePointSA</name>
+        <qualifiedname>mjl::Polygon::InsidePointSA</qualifiedname>
+        <briefdescription>
+<para>uses signed angle &gt; and returns edge midpoint </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Polygon.h" line="43" column="19" bodyfile="source/modules/discretisation/MJL_Polygon.cpp" bodystart="330" bodyend="354"/>
+        <references refid="classmjl_1_1_polygon_1abda65416ceabdf25bdef0ac5193c714b" compoundref="_m_j_l___polygon_8h" startline="125" endline="128">Ccw</references>
+        <references refid="classmjl_1_1_polygon_1a60d02a09517d791ccc0252730ddc1ac5" compoundref="_m_j_l___polygon_8h" startline="118" endline="121">Cw</references>
+        <references refid="namespacemjl_1a24fe914e67952eeec27fab5d5265a692" compoundref="_m_j_l___edge_8cpp" startline="219" endline="232">mjl::signedAngle</references>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_polygon_1afbf8a8e74654294a4703c0b8a791683a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void mjl::Polygon::Scale</definition>
+        <argsstring>(double factor)</argsstring>
+        <name>Scale</name>
+        <qualifiedname>mjl::Polygon::Scale</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>factor</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Polygon.h" line="44" column="19" bodyfile="source/modules/discretisation/MJL_Polygon.cpp" bodystart="277" bodyend="281"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_polygon_1a94f1b32179ff461f358aa60c99ac41e9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void mjl::Polygon::Move</definition>
+        <argsstring>(double dx, double dy)</argsstring>
+        <name>Move</name>
+        <qualifiedname>mjl::Polygon::Move</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>dx</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>dy</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Polygon.h" line="45" column="19" bodyfile="source/modules/discretisation/MJL_Polygon.cpp" bodystart="284" bodyend="290"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_polygon_1a90d83ef183fa5d6b4dd15506b8bdd4db" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void mjl::Polygon::BoundingRectangle</definition>
+        <argsstring>(mjl::Point &amp;cnr_min, mjl::Point &amp;cnr_max) const</argsstring>
+        <name>BoundingRectangle</name>
+        <qualifiedname>mjl::Polygon::BoundingRectangle</qualifiedname>
+        <param>
+          <type><ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &amp;</type>
+          <declname>cnr_min</declname>
+        </param>
+        <param>
+          <type><ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &amp;</type>
+          <declname>cnr_max</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Polygon.h" line="46" column="19" bodyfile="source/modules/discretisation/MJL_Polygon.cpp" bodystart="94" bodyend="103"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_polygon_1ad931ccedd6125d9273a6b7f366d60d0e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool mjl::Polygon::IsPositivelyOriented</definition>
+        <argsstring>() const</argsstring>
+        <name>IsPositivelyOriented</name>
+        <qualifiedname>mjl::Polygon::IsPositivelyOriented</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Polygon.h" line="48" column="19" bodyfile="source/modules/discretisation/MJL_Polygon.cpp" bodystart="115" bodyend="134"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_polygon_1acd4c8b55b65107155012a892aea479c2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void mjl::Polygon::OrientPositively</definition>
+        <argsstring>()</argsstring>
+        <name>OrientPositively</name>
+        <qualifiedname>mjl::Polygon::OrientPositively</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Polygon.h" line="49" column="19" bodyfile="source/modules/discretisation/MJL_Polygon.cpp" bodystart="146" bodyend="150"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_polygon_1afb9a33e6dd8dd2df5a51838c4d2626e7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void mjl::Polygon::Out</definition>
+        <argsstring>() const</argsstring>
+        <name>Out</name>
+        <qualifiedname>mjl::Polygon::Out</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Polygon.h" line="51" column="19" bodyfile="source/modules/discretisation/MJL_Polygon.cpp" bodystart="157" bodyend="166"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_polygon_1a827c786cfa579fcb927ee46ecf1a6e2f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void mjl::Polygon::Out</definition>
+        <argsstring>(const char *) const</argsstring>
+        <name>Out</name>
+        <qualifiedname>mjl::Polygon::Out</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <defname>file_txt</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>writes to file with extension .txt point x,y,z are komma separated </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Polygon.h" line="52" column="19" bodyfile="source/modules/discretisation/MJL_Polygon.cpp" bodystart="172" bodyend="192"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_polygon_1a0b0de6dfe796dc003d07e09693130fcc" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void mjl::Polygon::OutputCoordinatesTo</definition>
+        <argsstring>(std::list&lt; mjl::Point &gt; &amp;) const</argsstring>
+        <name>OutputCoordinatesTo</name>
+        <qualifiedname>mjl::Polygon::OutputCoordinatesTo</qualifiedname>
+        <param>
+          <type>std::list&lt; <ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &gt; &amp;</type>
+          <defname>points</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Polygon.h" line="53" column="19" bodyfile="source/modules/discretisation/MJL_Polygon.cpp" bodystart="198" bodyend="204"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classmjl_1_1_polygon_1a5b20dd978d34f10e995d78ccdfe053be" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void mjl::Polygon::Resize</definition>
+        <argsstring>()</argsstring>
+        <name>Resize</name>
+        <qualifiedname>mjl::Polygon::Resize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Polygon.h" line="59" column="10" bodyfile="source/modules/discretisation/MJL_Polygon.cpp" bodystart="81" bodyend="89"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>mjl::Polygon</label>
+        <link refid="classmjl_1_1_polygon"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/discretisation/MJL_Polygon.h" line="12" column="1" bodyfile="source/includes/discretisation/MJL_Polygon.h" bodystart="12" bodyend="60"/>
+    <listofallmembers>
+      <member refid="classmjl_1_1_polygon_1aa8c7e34c4b27ff514467bc80d0706554" prot="public" virt="non-virtual"><scope>mjl::Polygon</scope><name>Advance</name></member>
+      <member refid="classmjl_1_1_polygon_1aa1cf675ce14ae182718aab7613bc1b6c" prot="public" virt="non-virtual"><scope>mjl::Polygon</scope><name>Advance</name></member>
+      <member refid="classmjl_1_1_polygon_1a90d83ef183fa5d6b4dd15506b8bdd4db" prot="public" virt="non-virtual"><scope>mjl::Polygon</scope><name>BoundingRectangle</name></member>
+      <member refid="classmjl_1_1_polygon_1abda65416ceabdf25bdef0ac5193c714b" prot="public" virt="non-virtual"><scope>mjl::Polygon</scope><name>Ccw</name></member>
+      <member refid="classmjl_1_1_polygon_1a33c9ffd76c61c24c2ef2934df0df5442" prot="public" virt="non-virtual"><scope>mjl::Polygon</scope><name>CenterOfGravity</name></member>
+      <member refid="classmjl_1_1_polygon_1a4f8ae8554cb2d87a04abaa9d15d268bd" prot="public" virt="non-virtual"><scope>mjl::Polygon</scope><name>CenterOfGravity</name></member>
+      <member refid="classmjl_1_1_polygon_1a487220e1e6659b5e090ecaf5de2e4bc5" prot="public" virt="non-virtual"><scope>mjl::Polygon</scope><name>CheckAngles</name></member>
+      <member refid="classmjl_1_1_polygon_1a60d02a09517d791ccc0252730ddc1ac5" prot="public" virt="non-virtual"><scope>mjl::Polygon</scope><name>Cw</name></member>
+      <member refid="classmjl_1_1_polygon_1aca29ad2bd815d3328f49623ce964148a" prot="public" virt="non-virtual"><scope>mjl::Polygon</scope><name>Edge</name></member>
+      <member refid="classmjl_1_1_polygon_1ac9803b3412e846b371aa095613aac5a9" prot="public" virt="non-virtual"><scope>mjl::Polygon</scope><name>Empty</name></member>
+      <member refid="classmjl_1_1_polygon_1ad9798ad41cb7ed4d6b7760bf9795a7a9" prot="public" virt="non-virtual"><scope>mjl::Polygon</scope><name>Erase</name></member>
+      <member refid="classmjl_1_1_polygon_1a75573565ed0c2dd20339ae2042683f07" prot="public" virt="non-virtual"><scope>mjl::Polygon</scope><name>Insert</name></member>
+      <member refid="classmjl_1_1_polygon_1a346b36cfb94c8e6906b74f7f634a57a8" prot="public" virt="non-virtual"><scope>mjl::Polygon</scope><name>InsidePointSA</name></member>
+      <member refid="classmjl_1_1_polygon_1ad931ccedd6125d9273a6b7f366d60d0e" prot="public" virt="non-virtual"><scope>mjl::Polygon</scope><name>IsPositivelyOriented</name></member>
+      <member refid="classmjl_1_1_polygon_1adcfa5ccbfda20abe01d6662ff02772a6" prot="public" virt="non-virtual"><scope>mjl::Polygon</scope><name>LeastVertex</name></member>
+      <member refid="classmjl_1_1_polygon_1a94f1b32179ff461f358aa60c99ac41e9" prot="public" virt="non-virtual"><scope>mjl::Polygon</scope><name>Move</name></member>
+      <member refid="classmjl_1_1_polygon_1ad2700e330a5a342a4f95eb7d5075dcbe" prot="public" virt="non-virtual"><scope>mjl::Polygon</scope><name>Neighbor</name></member>
+      <member refid="classmjl_1_1_polygon_1ab3ddc99404fe966208ed30e6167a8c25" prot="public" virt="non-virtual"><scope>mjl::Polygon</scope><name>operator=</name></member>
+      <member refid="classmjl_1_1_polygon_1acd4c8b55b65107155012a892aea479c2" prot="public" virt="non-virtual"><scope>mjl::Polygon</scope><name>OrientPositively</name></member>
+      <member refid="classmjl_1_1_polygon_1afb9a33e6dd8dd2df5a51838c4d2626e7" prot="public" virt="non-virtual"><scope>mjl::Polygon</scope><name>Out</name></member>
+      <member refid="classmjl_1_1_polygon_1a827c786cfa579fcb927ee46ecf1a6e2f" prot="public" virt="non-virtual"><scope>mjl::Polygon</scope><name>Out</name></member>
+      <member refid="classmjl_1_1_polygon_1a0b0de6dfe796dc003d07e09693130fcc" prot="public" virt="non-virtual"><scope>mjl::Polygon</scope><name>OutputCoordinatesTo</name></member>
+      <member refid="classmjl_1_1_polygon_1a51d07b858ec05edc128f3819142f29b3" prot="public" virt="non-virtual"><scope>mjl::Polygon</scope><name>Perimeter</name></member>
+      <member refid="classmjl_1_1_polygon_1a411996ccbefa6702b15f37194b81cbfb" prot="public" virt="non-virtual"><scope>mjl::Polygon</scope><name>Point</name></member>
+      <member refid="classmjl_1_1_polygon_1a1710dc819d32d74cd42aa34513a0396e" prot="public" virt="non-virtual"><scope>mjl::Polygon</scope><name>Polygon</name></member>
+      <member refid="classmjl_1_1_polygon_1a1a54078fa8fcd0c218b9a9087ce0b918" prot="public" virt="non-virtual"><scope>mjl::Polygon</scope><name>Polygon</name></member>
+      <member refid="classmjl_1_1_polygon_1a7ab24dfbca135ae7c2201472f379b2f9" prot="public" virt="non-virtual"><scope>mjl::Polygon</scope><name>Polygon</name></member>
+      <member refid="classmjl_1_1_polygon_1a3632346a195295b68d9c7aa238c687c2" prot="public" virt="non-virtual"><scope>mjl::Polygon</scope><name>Polygon</name></member>
+      <member refid="classmjl_1_1_polygon_1a09fb5b1e1c2e068bbc4dd8df69a1a526" prot="public" virt="non-virtual"><scope>mjl::Polygon</scope><name>Remove</name></member>
+      <member refid="classmjl_1_1_polygon_1a5b20dd978d34f10e995d78ccdfe053be" prot="private" virt="non-virtual"><scope>mjl::Polygon</scope><name>Resize</name></member>
+      <member refid="classmjl_1_1_polygon_1ae445bf250e397ccd6f4b785eef19d69d" prot="public" virt="non-virtual"><scope>mjl::Polygon</scope><name>Revert</name></member>
+      <member refid="classmjl_1_1_polygon_1afbf8a8e74654294a4703c0b8a791683a" prot="public" virt="non-virtual"><scope>mjl::Polygon</scope><name>Scale</name></member>
+      <member refid="classmjl_1_1_polygon_1a49172e883ca989751b645c1e3ed38109" prot="public" virt="non-virtual"><scope>mjl::Polygon</scope><name>SetV</name></member>
+      <member refid="classmjl_1_1_polygon_1a999e66b441fce3cc1227f6995cdff678" prot="public" virt="non-virtual"><scope>mjl::Polygon</scope><name>Size</name></member>
+      <member refid="classmjl_1_1_polygon_1a812dfdb4dc26b9ac1cf89ad57d8fe7cc" prot="private" virt="non-virtual"><scope>mjl::Polygon</scope><name>size_</name></member>
+      <member refid="classmjl_1_1_polygon_1a3410d32dd3a332b34f177b43c2601bad" prot="public" virt="non-virtual"><scope>mjl::Polygon</scope><name>Split</name></member>
+      <member refid="classmjl_1_1_polygon_1ad4a9484f663497d068f5b17ea143f6f3" prot="public" virt="non-virtual"><scope>mjl::Polygon</scope><name>V</name></member>
+      <member refid="classmjl_1_1_polygon_1a1cf42a658562a4157bd53f06c9d2cfe2" prot="private" virt="non-virtual"><scope>mjl::Polygon</scope><name>v_</name></member>
+      <member refid="classmjl_1_1_polygon_1a41ab8063f6544a2c9c6096ce1c0bd476" prot="public" virt="virtual"><scope>mjl::Polygon</scope><name>~Polygon</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,3 +1,4 @@
+
 //
 //  Experimental_Example.cpp
 //  CSMP_API_library2014
@@ -11,24 +12,34 @@
 #ifdef CSMP_WITH_SAMG_SOLVER
 #include "SAMG_Solver.h"
 #include "SAMG_Settings.h"
-#endif
-#ifdef CSMP_WITH_MESCHACH
-#include "Gauss_Solver.h"
+#else
+#include "LinearSolver.h"
 #endif
 
+// TODO: include the declarations that you need here !
 #include "ErrorHandler.h"
+#include "Standard_IO_Handler.h"
+
 #include "ANSYS_Model2D.h"
-#include "InputDataManager.h"
-#include "NumIntegral_dNT_op_dN_dV.h"
-#include "NumIntegral_dNT_op_dV.h"
-#include "NumIntegral_NT_op_N_dV.h"
-#include "VelocityAndVolumeFlux.h"
-#include "PDE_Integrator.h"
-#include "SteadyStateDiffusor.h"
-#include "LinearSolver.h"
+#include "Model.h"
 #include "Region.h"
-#include "VTK_Interface.h"
+#include "RegionMonitor.h"
+
+#include "InputDataManager.h"
+#include "ComputationalSettings.h"
+#include "ConstantFactor.h"            // interrelation to calculate hydraulic conductivity
+
+#include "LinearSolver.h"
+#include "PDE_Integrator.h"
+#include "NumIntegral_dNT_op_dN_dV.h"  // conductance matrix (LHS)
+#include "NumIntegral_NT_op_N_dS.h"    // boundary integral
+#include "NumIntegral_NT_lhsop_N_dV.h" // capacitance matrix LHS
+#include "NumIntegral_NT_op_N_dV.h"    // capacitance matrix (lumped) RHS
+
+#include "VelocityAndVolumeFlux.h"     // post-processing of Darcy velocity
+
 #include "VTU_Interface.h"
+
 
 using namespace std;
 
@@ -38,72 +49,198 @@ void Experimental_Example::Specifications()
   {
      SetTitle( "Experimental_Example" );
      SetDifficulty( 1 );
-     SetCategory( "Software Functionality" );
+     SetCategory( "CSMP for Beginners" );
      AddAuthor( "You!" );
      AddDescription( "source in: Experimental_Example.cpp" );
-     AddDescription( "Empty example for the user to experiment with" );
      AddRequirement( "none" );
      AddRequirement( "no predefined model or variables file" );
   }
 
 
-class Shape {
-  public:
-    Shape();
-    Shape( double, double );
-    Shape( const Shape& s );
-    ~Shape();
-    Shape& operator=( const Shape& s );
-    void Out() const;
-
-  private:
-    double surface_area_;
-    double volume_;
-};
-
-Shape::Shape() : surface_area_(0), volume_(0) { cout <<"\nShape: called default ctor"<< endl; }
-
-Shape::Shape( double s, double v ) 
- : surface_area_(s), 
-   volume_(v)
- { cout <<"\nShape: called custom ctor"<< endl; }
-
-Shape::Shape( const Shape& s ) 
- : surface_area_(s.surface_area_), 
-   volume_(s.volume_)
- { cout <<"\nShape: called copy ctor"<< endl; }
-
-Shape::~Shape() { cout <<"\nShape: called destructor"<< endl; }
-
-/// Shape a = b;
-Shape& Shape::operator=( const Shape& s ) {
-    if ( this != &s ) {
-         surface_area_ = s.surface_area_; 
-         volume_       = s.volume_;
-      }
-    cout <<"\nShape: called operator="<< endl;  
-    return *this;
- }
-
-void Shape::Out() const
- {
-    cout<<"\nShape: area: "<< surface_area_;
-    cout<<" volume: "<< volume_ << endl;
- }
-
-
+/**
+       TODO: use Experimental_Example  to experiment with the functionality of csmp
+       TODO: write your code into the following member function of 'Example'
+ */
 void Experimental_Example::Run()
  {
-    Shape a(20,10), b;
+  constexpr uint32_t dim{2};
+  const string       model_name("Frewens3");
+  ANSYS_Model2D      model( model_name.c_str(), "TransientPressure_Example-variables.txt");
+
+
+  // 1. Properties from file and hydraulic conductivity from permeability via Interrelation
+  // --------------------------------------------------------------------------------------
+  const bool region_specifications{false},      // regionname from parameter range
+             default_property_values{true},     // default property values
+             region_property_values{true},      // regional property values
+             box_boundary_conditions{true},     // boundary conditions for box-shaped model
+             region_property_conditions{true},  // regional property conditions
+             boundary_conditions{false};        // boundary conditions for arbitrary-shaped model
+  
+  ComputationalSettings settings;
+             
+  InputDataManager<dim>  model_configuration;
+  model_configuration.ConfigureFromFile( model, model.Name(),
+                                         region_specifications,       // regionname from parameter range
+                                         default_property_values,     // default property values
+                                         region_property_values,      // regional property values
+                                         box_boundary_conditions,     // boundary conditions for box-shaped model
+                                         region_property_conditions,  // regional property conditions
+                                         boundary_conditions,         // boundary conditions for arbitrary-shaped model
+                                         settings );
+  
+  const double fluid_viscosity(1.0e-03);
+  ConstantFactor<dim,divides>  conductivity( model.Database(),
+                                           "conductivity", "permeability",
+                                            fluid_viscosity );
+  model.Apply( conductivity );
+  printRangeOfVariable( model, "conductivity" );
+
+
+
+  // 2. Build a transient fluid pressure algorithm using Backward-Euler time-stepping
+  // ------------------------------------------------------------------------------------
+  // ([C] + dt[K]){p}t+dt = [C]{p}t + dt {Q}t+dt
+  PDE_Integrator<2,Element>  transient_pressure;
+#ifdef CSMP_WITH_SAMG_SOLVER
+  SAMG_Solver  samg_solver;
+  transient_pressure.SetSolver( samg_solver );
+#else
+  CSMP_DEFAULT_LINEAR_SOLVER  linear_solver;
+  transient_pressure.SetSolver( linear_solver );
+#endif
+
+  NumIntegral_dNT_op_dN_dV<dim> conductance( model.Database(), "conductivity",  "fluid pressure", "fluid pressure" );
+                                            conductance.MultiplyWithTimeIncrement(true);
+
+  NumIntegral_NT_lhsop_N_dV<dim> capacitance_lhs( model.Database(), "storativity",  "fluid pressure", "fluid pressure" );
+                                             capacitance_lhs.LumpedFormulation(true);
+
+  NumIntegral_NT_op_N_dV<dim> capacitance_rhs( model.Database(), "storativity",  "fluid pressure" );
+                                          capacitance_rhs.LumpedFormulation(true);
+
+  NumIntegral_NT_op_N_dV<dim> source( model.Database(), "fluid volume source",  "fluid pressure" );
+                                          source.MultiplyWithTimeIncrement(true);
+                                          source.AddAccumulateLater();
+                                          source.LumpedFormulation(true);
+
+  VelocityAndVolumeFlux<2U>  velocity( model,  "conductivity", "porosity", "fluid pressure", false );
+
+  transient_pressure.Add( &conductance );
+  transient_pressure.Add( &capacitance_lhs );
+  transient_pressure.Add( &capacitance_rhs );
+  transient_pressure.Add( &source );
+  transient_pressure.AddPostProcess( &velocity );
+  
+  
+  // TODO: turn line-element regions called "SHALE_CURVES" into a split boundaries
+  // const bool retain_elmts_as_intervening_elements{false};
+  // auto new_split_boundaries =  model.CreateSplitBoundaryFrom( "SHALE_CURVES", retain_elmts_as_intervening_elements );
+  
+  
+  // 3.   Variables for transient loop
+  // ---------------------------------
+  list<string> material_props{"porosity","permeability","storativity"};
+  list<string> runtime_variables{"fluid pressure","velocity","volume flux"};
+  
+  VTU_Interface<dim>  vtu_output( model );
+  // initial state of the model // vtu_output.OutputDataToVTU( "Model", "hydraulic-conductivity", "conductivity", 0 );
+  vtu_output.OutputDataToVTU( (string(model.Name()) + "_mtrl_properties").c_str(), material_props, model.Region( "Model" ), 0 );
+  
+  // TODO: loop over the regions and output them individually
+  model.RegionsOut();
+  model.BoundariesOut();
+  cout <<"\ncurrent model regions: "<< endl;
+  for ( auto it=model.UniqueRegionsBegin(); it!=model.UniqueRegionsEnd(); ++it ) {
+    cout <<"\n\t"<< (*it).first;
+    vtu_output.OutputDataToVTU( model.Name(), material_props, (*it).first, 0 );
+  }
+
+  Standard_IO_Handler stdio;
+  const double day(86400.);  // 1 day in seconds
+  double       model_time{0.}, maxtime{20. * day}, time_increment{5.}, well_pressure{0.};
+  size_t       timestep{1}, save_counter{0}, save_frequency{5};
+
+  cout << "\nExperimentalExample: enter after how many steps you would like to save the results (1 = every step): " << endl;
+  cin  >> save_frequency;
+
+  // TODO: set up monitoring of 'Region' objects
+  string first_integral_property{"volume flux"};
+  string first_range_property{"fluid pressure"};
+  RegionMonitor<dim> monitor( model, first_integral_property, first_range_property );
+
+
+  // TODO: change this output loop so that output is created exactly at those times enlisted in configuration file
+  
+  // 4. Transient loop: Compute fluid pressure during each time-step and output the results for each time step
+  // ----------------------------------------------------------------------------------------------------------
+  while ( model_time <= maxtime )
+    {
+      cout << "\n\nmain: COMPUTING TIMESTEP " << timestep << endl;
+
+      // transient pressure
+      transient_pressure.TimeIncrement( time_increment );
+      model.Apply( transient_pressure );
+
+      // output variables screen
+      printRangeOfVariable( model, "fluid pressure" );
+      printRangeOfVariable( model, "velocity" );
+      printRangeOfVariable( model, "pore velocity" );
+      printRangeOfVariable( model, "volume flux" );
+      
+      monitor.ScalarPropertyIntegrals( model, model_time );
+      monitor.ScalarPropertyRanges( model, model_time );
+
+      // pressure in the well
+      well_pressure = model.Region("WELL").Average( "fluid pressure" );
+      cout << "\nWell pressure: " << well_pressure << " Pa " << endl;
+
+      // if well pressure is negative, prompt user to continue the simulation
+      if ( well_pressure <= 0. )
+        if ( (stdio.YesNo("Do you want to continue")) == false ) terminate();
+
+
+      // output variables file every x steps (defined by user)
+      if ( save_counter == save_frequency ) {
+           vtu_output.OutputDataToVTU( (string(model.Name()) + "_simu_output").c_str(), runtime_variables, model.Region( "Model" ), model_time/day );
+           save_counter = 0;
+        }
+
+      // Preparing next Time Step
+      model_time += time_increment;
+      timestep++;
+      save_counter++;
+      
+      // gradually increasing the time increment
+      time_increment *= 1.2;
+
+      // writing the fluid pressure to the txt file
+      cout << model_time << "\t" << well_pressure << endl;
+      cout << "\nmain: ELAPSED TIME " << model_time / day << " days " << endl;
+    }
+
+    monitor.Out( model.Name() );
+    cout <<"\nmain: That's it..."<< endl;
+
+    // 9.  Output the initial range of the variables
+    // ---------------------------------------------
+    printRangeOfVariable( model, "fluid pressure" );
+    printRangeOfVariable( model, "velocity" );
+    printRangeOfVariable( model, "pore velocity" );
+    printRangeOfVariable( model, "volume flux" );
     
-    a.Out();
-    b.Out();
-    
-    vector<Shape> vec(2,a);
-    vec.push_back( b );
-    vec[2] = a;
+    cout <<"\n end of program"<< endl;
  
-} // end run
+ } // end run
+
+
+
+
+
+
+
+
+
 
 
 
@@ -190,6 +327,56 @@ void Experimental_Example::Run() {
 
     cout << endl << endl << "Run finished" << endl;
 } // end Run
+
+
+
+
+class Shape {
+  public:
+    Shape();
+    Shape( double, double );
+    Shape( const Shape& s );
+    ~Shape();
+    Shape& operator=( const Shape& s );
+    void Out() const;
+
+  private:
+    double surface_area_;
+    double volume_;
+};
+
+Shape::Shape() : surface_area_(0), volume_(0) { cout <<"\nShape: called default ctor"<< endl; }
+
+Shape::Shape( double s, double v ) 
+ : surface_area_(s), 
+   volume_(v)
+ { cout <<"\nShape: called custom ctor"<< endl; }
+
+Shape::Shape( const Shape& s ) 
+ : surface_area_(s.surface_area_), 
+   volume_(s.volume_)
+ { cout <<"\nShape: called copy ctor"<< endl; }
+
+Shape::~Shape() { cout <<"\nShape: called destructor"<< endl; }
+
+/// Shape a = b;
+Shape& Shape::operator=( const Shape& s ) {
+    if ( this != &s ) {
+         surface_area_ = s.surface_area_; 
+         volume_       = s.volume_;
+      }
+    cout <<"\nShape: called operator="<< endl;  
+    return *this;
+ }
+
+void Shape::Out() const
+ {
+    cout<<"\nShape: area: "<< surface_area_;
+    cout<<" volume: "<< volume_ << endl;
+ }
+
+
+
 
 
 

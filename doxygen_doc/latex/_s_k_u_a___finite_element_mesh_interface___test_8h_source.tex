@@ -1,0 +1,83 @@
+\doxysection{SKUA\+\_\+\+Finite\+Element\+Mesh\+Interface\+\_\+\+Test.\+h}
+\hypertarget{_s_k_u_a___finite_element_mesh_interface___test_8h_source}{}\label{_s_k_u_a___finite_element_mesh_interface___test_8h_source}\index{tests/unit/SKUA\_FiniteElementMeshInterface\_Test.h@{tests/unit/SKUA\_FiniteElementMeshInterface\_Test.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ \ SKUA\_FiniteElementMeshInterface\_Test.hpp}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ \ CSMP\_GitHub\_UnitTests}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ \ Created\ by\ Stephan\ Matthai\ on\ 2/12/20.}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//\ \ Copyright\ ©\ 2020\ Stephan\ Matthai.\ All\ rights\ reserved.}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{SKUA\_FINITE\_ELEMENT\_MESH\_INTERFACE\_TEST\_H}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{SKUA\_FINITE\_ELEMENT\_MESH\_INTERFACE\_TEST\_H}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_test_8h}{"{}Test.h"{}}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_s_k_u_a___finite_element_mesh_interface_8h}{"{}SKUA\_FiniteElementMeshInterface.h"{}}}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_v_data}{VData}};}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{comment}{/**\ @brief\ Tests\ SKUA\ models\ from\ basic\ to\ more\ advanced.}}
+\DoxyCodeLine{00020\ \textcolor{comment}{}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ \ \ \ ///\ consecutive\ numbering\ of\ nodes\ and\ elements}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ \ \ \ ///\ mesh\ consistency\ (Jacobians,\ element\ volume\ range,\ non-\/manifold\ vertices,\ triangle\ boxes}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ \ \ ///\ pfverts,\ disambiguated\ neighbors\ of\ lower-\/dimensional\ elements}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ \ \ \ ///\ consistent\ facing\ directions\ of\ surface\ elements}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ \ \ \ ///\ consecutive\ numbering\ of\ series\ of\ line\ elements}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ \ \ \ ///\ material\ IDs}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ \ \ \ ///\ test\ assignment\ of\ box\ boundary\ flags\ (sides,\ edges,\ corners)}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ \ \ \ ///\ property\ assignment}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ \ \ \ ///\ use\ of\ regions\ file\ (is\ this\ still\ needed?)}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ \ \ \ //\ ADVANCED}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ \ \ \ ///\ generation\ of\ boundaries}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ ///\ generation\ of\ split\ boundaries}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00036\ \textcolor{comment}{}}
+\DoxyCodeLine{00037\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00038\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_s_k_u_a___finite_element_mesh_interface___test}{SKUA\_FiniteElementMeshInterface\_Test}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_test}{Test}}\ \{}
+\DoxyCodeLine{00039\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_k_u_a___finite_element_mesh_interface___test_a6dba46746407e05b88824d226c348598}{run}}();}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ verbose\_\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{comment}{///\ test\ that\ poperty\ values\ are\ assigned\ in\ the\ correct\ order\ using\ variables\ 'node\ number'\ and\ 'number'}}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{bool}\ TestNodePropertyAssignment(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<3U>\&\ );}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keywordtype}{bool}\ Test\_Boundary\_BoxBoundary\_FlagConsistency(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<3U>\&\ model,}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ boundary\_name\ );}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keywordtype}{bool}\ Test\_BoxBoundaryFlags();}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keywordtype}{bool}\ TestElementNeighborConnectivity(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<3U>\&\ model\ );}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \textcolor{comment}{//\ SPLIT-\/BOUNDARY\ SPECIFIC\ TESTS}}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{comment}{///\ tests\ whether\ the\ number\ of\ nodes\ in\ InterFace\ cells\ is\ consistent\ with\ their\ parent\ tetrahedral\ Element\ cells}}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordtype}{void}\ Test\_NodeNumberingConsistencyBetweenTetrahedraAndInterFaces(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_v_data}{VData}}\&\ );}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{comment}{///\ Manifolds:\ 1)\ are\ they\ present\ at\ all\ split\ boundaries,\ 2)\ do\ they\ have\ the\ right\ number\ of\ entries}}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keywordtype}{void}\ Test\_NodesAndTheirManifolds(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<3U>\&\ );}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{comment}{///\ Tests\ nodes\ on\ opposite\ sides\ of\ InterFaces:\ 1)\ are\ they\ collocated,\ 2)\ do\ they\ have\ the\ right\ mapping}}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keywordtype}{void}\ Test\_InterfaceNodes(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<3U>\&\ );}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \textcolor{comment}{//\ HELPER\ METHODS}}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{comment}{///\ for\ the\ elements\ in\ original\ order,\ prints\ original\ IDs\ of\ neighbor\ elements\ or\ boundary\ flag\ values\ where\ there\ is\ no\ neighbor}}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keywordtype}{void}\ PrintOriginalNeighborIDs(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<3U>\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keywordtype}{void}\ OutputRegionsToVTK(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<3U>\&,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ var\_name\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00073\ \};}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \}\ \textcolor{comment}{//\ end\ csmp}}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{/*\ SKUA\_FINITE\_ELEMENT\_MESH\_INTERFACE\_TEST\_H\ */}}
+
+\end{DoxyCode}

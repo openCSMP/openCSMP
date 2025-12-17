@@ -1,0 +1,60 @@
+.TH "ComputationalSettings" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+ComputationalSettings
+.SH SYNOPSIS
+.br
+.PP
+.SH "Detailed Description"
+.PP 
+
+.PP
+\fBAuthor\fP
+.RS 4
+S\&.K\&. Matthaei 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2003
+.RE
+.PP
+.SH "Motivation"
+.PP
+Record run configuration and parameters for later use to steer the simulation as it runs\&. 
+.br
+.SH "Design Intent"
+.PP
+To have everything that concerns the time-stepping control for a run in a single object\&. 
+.br
+.SH "Applicability"
+.PP
+Any CSMP model\&.
+.SH "Consequences"
+.PP
+You can inherit from this baseclass\&.
+.SH "Application Examples"
+.PP
+Set the object up from an input file and use it to control the time stepping and output of data from a run: 
+.br
+
+.PP
+.PP
+.nf
+ComputationalSettings  run_settings;
+
+double        duration(run_settings\&.Duration());
+
+double time_until_output = run_settings\&.NearestOutputTime( model_time );
+
+if ( run_settings\&.IsOutputTime( model_time, 1\&. )  ) {
+  \&.\&.\&.
+  }
+.fi
+.PP
+ 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

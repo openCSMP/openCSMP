@@ -1,0 +1,148 @@
+\doxysection{Halite\+Lookup.\+h}
+\hypertarget{_halite_lookup_8h_source}{}\label{_halite_lookup_8h_source}\index{source/includes/eos/HaliteLookup.h@{source/includes/eos/HaliteLookup.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{HALITELOOKUP\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{HALITELOOKUP\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cmath}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_na_cl_melting_curve_halite_lookup_8h}{"{}NaClMeltingCurveHaliteLookup.h"{}}}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}}
+\DoxyCodeLine{00010\ \{}
+\DoxyCodeLine{00011\ \ \ \textcolor{comment}{///\ Build\ and/or\ query\ lookup\ tables\ for\ thermodynamic\ properties\ of\ halite\ (crystalline\ NaCl)}}
+\DoxyCodeLine{00012\ \ \ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_halite_lookup}{HaliteLookup}}}
+\DoxyCodeLine{00013\ \ \ \{}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00016\ \ \ \ \ HaliteLookup(\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ externaltemperature,}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ externalpressure);}
+\DoxyCodeLine{00018\ \ \ \ \ \string~HaliteLookup();}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ MassFractionNaCl();\textcolor{comment}{//\ [mass\ fraction\ NaCl]}}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ Density();\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ [kg\ m-\/3]}}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ Enthalpy();\ \ \ \ \ \ \ \ \textcolor{comment}{//\ [J\ kg-\/3]}}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ HeatCapacity();\ \ \ \ \textcolor{comment}{//\ [J\ kg-\/1\ K-\/1]}}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ Compressibility();\ \textcolor{comment}{//\ [Pa-\/1]}}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ Viscosity();\ \ \ \ \ \ \ \textcolor{comment}{//\ [Pa-\/1],\ dummy\ for\ completeness}}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ ValueOf(\textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\&\ property\_index);}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ temperature\_;\ \ \ \ \ \textcolor{comment}{///<\ reference\ to\ temperature\ [C]\ in\ flow\ code}}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ pressure\_;\ \ \ \ \ \ \ \ \textcolor{comment}{///<\ reference\ to\ pressure\ [Pa]\ in\ flow\ code}}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ tcurrent\_;\ \ \ \ \ \ \ \ \textcolor{comment}{///<\ temperature\ [C]\ for\ internal\ use\ }}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ pcurrent\_;\ \ \ \ \ \ \ \ \textcolor{comment}{///<\ pressure\ [Pa],\ internal\ use}}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ tdummy\_;\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ another\ temperature\ variable\ [C]\ for\ internal\ use\ }}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ pdummy\_;\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ another\ pressure\ variable\ [Pa]\ for\ internal\ use}}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ t\_res\_;\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ temperature\ interval\ [C]\ in\ lookup\ table}}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ p\_res\_;\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ pressure\ interval\ [bar]\ in\ lookup\ table}}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ tnorm\_;\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ normalized\ temperature\ inside\ lookup\ cell}}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ pnorm\_;\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ normalized\ pressure\ inside\ lookup\ cell}}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ t\_iA\_;\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ temperature\ at\ low-\/T,\ low-\/P\ corner\ of\ lookup\ cell}}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ t\_iB\_;\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ temperature\ at\ high-\/T,\ low-\/P\ corner\ of\ lookup\ cell}}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ t\_iC\_;\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ temperature\ at\ high-\/T,\ high-\/P\ corner\ of\ lookup\ cell}}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ t\_iD\_;\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ temperature\ at\ low-\/T,\ high-\/P\ left\ corner\ of\ lookup\ cell}}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ p\_iA\_;\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ pressure\ at\ low-\/T,\ low-\/P\ corner\ of\ lookup\ cell}}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ p\_iB\_;\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ pressure\ at\ high-\/T,\ low-\/P\ corner\ of\ lookup\ cell}}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ p\_iC\_;\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ pressure\ at\ high-\/T,\ high-\/P\ corner\ of\ lookup\ cell}}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ p\_iD\_;\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ pressure\ at\ low-\/T,\ high-\/P\ left\ corner\ of\ lookup\ cell}}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ v\_bottom\_;\ \ \ \ \ \ \ \ \textcolor{comment}{///<\ value\ of\ interest\ at\ low-\/P\ endpoint\ of\ isothermal\ interpolation}}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ v\_top\_;\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ value\ of\ interest\ at\ high-\/P\ endpoint\ of\ isothermal\ interpolation}}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ v\_interpolated\_;\ \ \textcolor{comment}{///<\ interpolated\ value\ of\ interest\ in\ lookup\ cell}}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ v\_iA\_;\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ pressure\ at\ low-\/T,\ low-\/P\ corner\ of\ lookup\ cell}}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ v\_iB\_;\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ pressure\ at\ high-\/T,\ low-\/P\ corner\ of\ lookup\ cell}}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ v\_iC\_;\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ pressure\ at\ high-\/T,\ high-\/P\ corner\ of\ lookup\ cell}}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ v\_iD\_;\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ pressure\ at\ low-\/T,\ high-\/P\ left\ corner\ of\ lookup\ cell}}
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ v\_before\_;\ \ \ \ \ \ \ \ \textcolor{comment}{///<\ value\ of\ interest\ at\ low-\/T\ endpoint\ of\ isobaric\ interpolation}}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ v\_behind\_;\ \ \ \ \ \ \ \ \textcolor{comment}{///<\ value\ of\ interest\ at\ high-\/T\ endpoint\ of\ isobaric\ interpolation}}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ v\_vlh\_;\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ value\ of\ interest\ on\ intersection\ with\ Vapor-\/Halite-\/Liquid\ coexistence\ surface}}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ v\_vlh\_behind\_;\ \ \ \ \textcolor{comment}{///<\ value\ of\ interest\ on\ intersection\ with\ Vapor-\/Halite-\/Liquid\ coexistence\ surface\ if\ higher\ T}}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ v\_vlh\_before\_;\ \ \ \ \textcolor{comment}{///<\ value\ of\ interest\ on\ intersection\ with\ Vapor-\/Halite-\/Liquid\ coexistence\ surface\ if\ lower\ T}}
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ tvlh\_;\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ temperature\ at\ intersection\ with\ Vapor-\/Halite-\/Liquid\ coexistence\ surface}}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keywordtype}{long}\ \ \ \ \ \ \ \ \ \ \ \ it\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ lookup\ grid\ line\ index\ along\ temperature\ axis}}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keywordtype}{long}\ \ \ \ \ \ \ \ \ \ \ \ ip\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ lookup\ grid\ line\ index\ along\ pressure\ axis}}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keywordtype}{long}\ \ \ \ \ \ \ \ \ \ \ \ t\_dim\_;\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ number\ of\ T-\/gridlines\ =\ maximum\ value\ of\ it\_\ +\ 1}}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keywordtype}{long}\ \ \ \ \ \ \ \ \ \ \ \ p\_dim\_;\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ number\ of\ P-\/gridlines\ =\ maximum\ value\ of\ ip\_\ +\ 1}}
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keywordtype}{long}\ \ \ \ \ \ \ \ \ \ \ \ iA\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ lookup\ index\ of\ low-\/T,\ low-\/P\ corner\ of\ lookup\ cell}}
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keywordtype}{long}\ \ \ \ \ \ \ \ \ \ \ \ iB\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ lookup\ index\ of\ high-\/T,\ low-\/P\ corner\ of\ lookup\ cell\ \ }}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keywordtype}{long}\ \ \ \ \ \ \ \ \ \ \ \ iC\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ lookup\ index\ of\ high-\/T,\ high-\/P\ corner\ of\ lookup\ cell}}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keywordtype}{long}\ \ \ \ \ \ \ \ \ \ \ \ iD\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ lookup\ index\ of\ low-\/T,\ high-\/P\ left\ corner\ of\ lookup\ cell}}
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keywordtype}{long}\ \ \ \ \ \ \ \ \ \ \ \ i\_dummy\_;\ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ dummy\ index\ variable}}
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \ \ \ \ \ state\_;\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ phase\ state\ of\ system\ (always\ H\ for\ halite)}}
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \ \ \ \ \ state\_iA\_;\ \ \ \ \ \ \ \ \textcolor{comment}{///<\ phase\ state\ of\ system\ at\ low-\/T,\ low-\/P\ corner\ of\ lookup\ cell\ (always\ H\ for\ halite)}}
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \ \ \ \ \ state\_iB\_;\ \ \ \ \ \ \ \ \textcolor{comment}{///<\ phase\ state\ of\ system\ at\ high-\/T,\ low-\/P\ corner\ of\ lookup\ cell\ (always\ H\ for\ halite)}}
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \ \ \ \ \ state\_iC\_;\ \ \ \ \ \ \ \ \textcolor{comment}{///<\ phase\ state\ of\ system\ at\ high-\/T,\ high-\/P\ corner\ of\ lookup\ cell\ (always\ H\ for\ halite)}}
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \ \ \ \ \ state\_iD\_;\ \ \ \ \ \ \ \ \textcolor{comment}{///<\ phase\ state\ of\ system\ at\ low-\/T,\ high-\/P\ left\ corner\ of\ lookup\ cell\ (always\ H\ for\ halite)}}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\ storage\_vector;\ \textcolor{comment}{///<\ stores\ lookup\ data\ in\ sequence\ t-\/p-\/x-\/rho-\/h\ at\ each\ Lookup\ point}}
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{comment}{//\ should\ the\ next\ one\ be\ <uint32\_t>\ or\ <uint>\ rather\ than\ <int>?}}
+\DoxyCodeLine{00080\ \ \ \ \ std::vector<\textcolor{keywordtype}{int}>\ \ \ \ \ \ state\_vector;\ \ \ \textcolor{comment}{///<\ stores\ phase\ state\ at\ each\ Lookup\ point}}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keywordtype}{double}\ NormalInterpolation(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\&\ property\_index\ );}
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keywordtype}{double}\ NearVLHInterpolationLowT(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\&\ property\_index\ );}
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keywordtype}{double}\ NearVLHInterpolationHighT(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\&\ property\_index\ );}
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keywordtype}{double}\ NearNaClMeltInterpolation(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\&\ property\_index\ );}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ SetTemperatureAndPressure();}
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ GetIndex\_iA(\textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\&\ property\_index);}
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ GetTemperatureIndex(\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ t);}
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ GetPressureIndex(\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ p);}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_na_cl_melting_curve_halite_lookup}{NaClMeltingCurveHaliteLookup}}\ \ \ \ naclmelt\_h\_lookup;}
+\DoxyCodeLine{00093\ \ \ \};}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00096\ \textcolor{comment}{\ \ \ \ \ @class\ HaliteLookup\ HaliteLookup.h\ "{}eos/h2o\_nacl/HaliteLookup.h"{}}}
+\DoxyCodeLine{00097\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00098\ \textcolor{comment}{\ \ \ \ \ @author\ Thomas\ Driesner,\ ETH\ Zuerich}}
+\DoxyCodeLine{00099\ \textcolor{comment}{\ \ \ \ \ @section\ contact\ Contact}}
+\DoxyCodeLine{00100\ \textcolor{comment}{\ \ \ \ \ thomas.driesner@erdw.ethz.ch}}
+\DoxyCodeLine{00101\ \textcolor{comment}{}}
+\DoxyCodeLine{00102\ \textcolor{comment}{\ \ \ \ \ @changes\ changes\ Latest\ Changes}}
+\DoxyCodeLine{00103\ \textcolor{comment}{\ \ \ \ \ Jan\ 28,\ 2013:\ ported\ to\ CSMP++,\ changed\ all\ pressure\ units\ to\ Pa.}}
+\DoxyCodeLine{00104\ \textcolor{comment}{\ \ \ \ \ Sep\ 10,\ 2014:\ adapted\ to\ CSMP++\ coding\ style,\ updated\ doxygen\ comments}}
+\DoxyCodeLine{00105\ \textcolor{comment}{}}
+\DoxyCodeLine{00106\ \textcolor{comment}{\ \ \ \ \ @section\ motivation\ Motivation}}
+\DoxyCodeLine{00107\ \textcolor{comment}{\ \ \ \ \ "{}HaliteLookup"{}\ stores\ various\ properties\ of\ the\ mineral\ halite\ (solid\ crystalline\ salt,\ NaCl)\ in\ lookup\ tables,\ as\ a\ function\ of\ temperature-\/pressure-\/composition\ [Celsius,\ Pa,\ mole\ fraction\ NaCl]\ according\ to\ the\ papers}}
+\DoxyCodeLine{00108\ \textcolor{comment}{}}
+\DoxyCodeLine{00109\ \textcolor{comment}{\ \ \ \ \ Driesner\ T.\ and\ Heinrich\ C.A.\ (2007):\ The\ system\ H2O-\/NaCl.\ Part\ I:\ Correlation\ formulae\ for\ phase\ relations\ in\ temperature-\/pressure-\/composition\ space\ from\ 0\ to\ 1000oC,\ 0\ to\ 5000\ bar,\ and\ 0\ to\ 1\ XNaCl.\ Geochimica\ et\ Cosmochimica\ Acta\ 71,\ 4880-\/4901.}}
+\DoxyCodeLine{00110\ \textcolor{comment}{}}
+\DoxyCodeLine{00111\ \textcolor{comment}{\ \ \ \ \ Driesner\ T.\ (2007):\ The\ system\ H2O-\/NaCl.\ Part\ II:\ Correlations\ for\ molar\ volume,\ enthalpy,\ and\ isobaric\ heat\ capacity\ from\ 0\ to\ 1000oC,\ 1\ to\ 5000\ bar,\ and\ 0\ to\ 1\ XNaCl.\ Geochimica\ et\ Cosmochimica\ Acta\ 71,\ 4902-\/4919.}}
+\DoxyCodeLine{00112\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00113\ \textcolor{comment}{\ \ \ \ \ @section\ usage\ Usage\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00114\ \textcolor{comment}{\ \ \ \ \ Construct\ an\ instance\ of\ "{}HaliteLookup"{}\ with\ temperature\ (in\ C)\ and\ pressure\ (in\ Pa)\ as\ they\ exist\ in\ the\ code\ that\ is\ supposed\ to\ use\ "{}HaliteLookup"{}\ as\ constructor\ variables.\ "{}HaliteLookup"{}\ has\ an\ internal\ mechanism\ to\ make\ sure\ that\ it\ always\ uses\ the\ current\ values\ of\ temperature\ and\ pressure\ .\ Public\ member\ names\ should\ be\ self-\/explanatory,\ I\ hope.}}
+\DoxyCodeLine{00115\ \textcolor{comment}{}}
+\DoxyCodeLine{00116\ \textcolor{comment}{\ \ \ \ \ Upon\ construction,\ HaliteLookup\ will\ check\ if\ the\ lookup\ tables\ do\ already\ exist.\ If\ not,\ they\ will\ be\ re-\/computed\ and\ written.\ The\ respective\ files\ are\ "{}HalitePropertiesLookupTable.bin"{}\ and\ "{}HaliteStateLookupTable.bin"{}.}}
+\DoxyCodeLine{00117\ \textcolor{comment}{}}
+\DoxyCodeLine{00118\ \textcolor{comment}{\ \ \ \ \ @code\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00119\ \textcolor{comment}{\ \ \ \ \ double\ t;\ //\ temperature\ [C]\ in\ user's\ application}}
+\DoxyCodeLine{00120\ \textcolor{comment}{\ \ \ \ \ double\ p;\ //\ pressure\ [Pa]\ in\ user's\ application\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00121\ \textcolor{comment}{\ \ \ \ \ HaliteLookup\ haliteLookup(t,p);}}
+\DoxyCodeLine{00122\ \textcolor{comment}{\ \ \ \ \ ...}}
+\DoxyCodeLine{00123\ \textcolor{comment}{\ \ \ \ \ t\ =\ some\_value;}}
+\DoxyCodeLine{00124\ \textcolor{comment}{\ \ \ \ \ p\ =\ some\_other\_value;}}
+\DoxyCodeLine{00125\ \textcolor{comment}{\ \ \ \ \ cout\ <<\ haliteLookup.Density()\ <<\ endl;\ //\ will\ return\ density\ at\ the\ new\ t\ and\ p\ conditions}}
+\DoxyCodeLine{00126\ \textcolor{comment}{\ \ \ \ \ @endcode\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00127\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00128\ \textcolor{comment}{\ \ \ \ \ @section\ dependencies\ Dependencies\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00129\ \textcolor{comment}{\ \ \ \ \ requires\ "{}ConvertConcentrationUnitsNaCl.h"{}\ to\ ensure\ consistent\ unit\ conversions\ \ \ }}
+\DoxyCodeLine{00130\ \textcolor{comment}{}}
+\DoxyCodeLine{00131\ \textcolor{comment}{\ \ \ \ \ @section\ issues\ Known\ issues}}
+\DoxyCodeLine{00132\ \textcolor{comment}{\ \ \ \ \ Composition()\ is\ in\ mole\ fraction\ NaCl,\ to\ convert\ to\ other\ units,\ the\ functions\ in\ "{}ConvertConcentrationUnitsNaCl.h"{}\ may\ be\ useful.}}
+\DoxyCodeLine{00133\ \textcolor{comment}{}}
+\DoxyCodeLine{00134\ \textcolor{comment}{\ \ \ \ \ To\ do:\ interpolation\ near\ the\ halite\ melting\ curve\ has\ not\ been\ coded\ optimally.\ Hence\ at\ extreme\ conditions\ (t\ >\ 800.7\ C\ and\ salinities\ very\ close\ to\ 100\%)\ tiny\ mismatches\ in\ fluid\ properties\ may\ appear\ and\ cause\ problems.\ }}
+\DoxyCodeLine{00135\ \textcolor{comment}{}}
+\DoxyCodeLine{00136\ \textcolor{comment}{\ \ \ \ \ @section\ testing\ Testing}}
+\DoxyCodeLine{00137\ \textcolor{comment}{\ \ */}}
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00141\ \}\textcolor{comment}{//\ namespace\ csmp}}
+\DoxyCodeLine{00142\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

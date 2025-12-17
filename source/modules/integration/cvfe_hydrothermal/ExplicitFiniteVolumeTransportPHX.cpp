@@ -70,7 +70,7 @@ ExplicitFiniteVolumeTransportPHX<dim>::ExplicitFiniteVolumeTransportPHX( Model<d
 
    }     
 
-    cout <<"\n\ExplicitFiniteVolumeTransportPHX<"<< typeid(double).name() <<","<< dim;
+    cout <<"\nExplicitFiniteVolumeTransportPHX<"<< typeid(double).name() <<","<< dim;
     cout <<">: Constructed successfully."<< endl;
     
  } // end constructor 

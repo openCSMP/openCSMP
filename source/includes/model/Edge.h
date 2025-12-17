@@ -103,8 +103,8 @@ class Edge : public FiniteElementPolicy<dim,Edge>,
     Face<dim>*               outerParent_;    ///< higher-dimensional neighbor element in direction of interface normal
     std::vector<Node<dim>*>  node_connector_; ///< pointers to the nodes of the face
     mutable size_t  idx_;
-    uint32_t   inner_parent_face_id_ = UNSPECIFIED; ///< face number of inside higher-dimensional parent Face
-    uint32_t   outer_parent_face_id_ = UNSPECIFIED; ///< face number of outside higher-dimensional parent Face
+    uint32_t   inner_parent_face_id_ = std::numeric_limits<uint32_t>::max(); ///< face number of inside higher-dimensional parent Face
+    uint32_t   outer_parent_face_id_ = std::numeric_limits<uint32_t>::max(); ///< face number of outside higher-dimensional parent Face
     Edge<dim>* nbor_edge0_=nullptr;
     Edge<dim>* nbor_edge1_=nullptr;  ///< the neighbors of the edge
 };

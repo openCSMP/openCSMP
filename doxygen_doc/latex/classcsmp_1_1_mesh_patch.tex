@@ -1,0 +1,100 @@
+\doxysection{csmp\+::Mesh\+Patch\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_mesh_patch}{}\label{classcsmp_1_1_mesh_patch}\index{csmp::MeshPatch$<$ dim $>$@{csmp::MeshPatch$<$ dim $>$}}
+
+
+{\ttfamily \#include $<$Mesh\+Patch.\+h$>$}
+
+
+
+Collaboration diagram for csmp\+::Mesh\+Patch\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=201pt]{classcsmp_1_1_mesh_patch__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_mesh_patch_a72de8a95992b3e14d60b9137d9c96073}\label{classcsmp_1_1_mesh_patch_a72de8a95992b3e14d60b9137d9c96073} 
+{\bfseries Mesh\+Patch} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gae70f4082919c7730a8934bfcac658ea2}{CELL\+\_\+\+SHAPE}} cs)
+\begin{DoxyCompactList}\small\item\em specify whether this is a volume, surface or line element patch \end{DoxyCompactList}\item 
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_mesh_patch_a59427cdb469c501b7d31b64cf1bee212}{Build\+Intervening\+Patch}} (const std\+::vector$<$ std\+::pair$<$ std\+::pair$<$ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}, uint32\+\_\+t $>$, std\+::pair$<$ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}, uint32\+\_\+t $>$ $>$ $>$ \&, bool copy\+\_\+nodes, std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$ perimeter\+\_\+node\+\_\+ptrs)
+\begin{DoxyCompactList}\small\item\em creates an interconnected element patch from the shared faces of the supplied elements; replicates nodes upon request, and returns perimeter nodes and size of patch \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_mesh_patch_a91b2cd56af3c4eb464d0162b59672efa}\label{classcsmp_1_1_mesh_patch_a91b2cd56af3c4eb464d0162b59672efa} 
+size\+\_\+t {\bfseries Cell\+Types} () const
+\begin{DoxyCompactList}\small\item\em how many different finite element types the patch contains \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_mesh_patch_a2dfff4371950d90cdc211709a429d6ac}\label{classcsmp_1_1_mesh_patch_a2dfff4371950d90cdc211709a429d6ac} 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gae70f4082919c7730a8934bfcac658ea2}{CELL\+\_\+\+SHAPE}} {\bfseries Cell\+Geometry} () const
+\begin{DoxyCompactList}\small\item\em whether this is a LINE, SURFACE or VOLUME mesh \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_mesh_patch_a1a0897e4bea65ac79db7ce93b28a7ef4}\label{classcsmp_1_1_mesh_patch_a1a0897e4bea65ac79db7ce93b28a7ef4} 
+size\+\_\+t {\bfseries Cells} () const
+\item 
+\Hypertarget{classcsmp_1_1_mesh_patch_a4b33dcfa7ea9234269b81cc8cf146c3b}\label{classcsmp_1_1_mesh_patch_a4b33dcfa7ea9234269b81cc8cf146c3b} 
+size\+\_\+t {\bfseries Nodes} () const
+\item 
+\Hypertarget{classcsmp_1_1_mesh_patch_a8ef6c145f6535426e9d99dfe448da858}\label{classcsmp_1_1_mesh_patch_a8ef6c145f6535426e9d99dfe448da858} 
+plf\+::colony$<$ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ $>$\+::iterator {\bfseries Elements\+Begin} ()
+\item 
+\Hypertarget{classcsmp_1_1_mesh_patch_a30b6e8c55caf467f67114f9a7743a232}\label{classcsmp_1_1_mesh_patch_a30b6e8c55caf467f67114f9a7743a232} 
+plf\+::colony$<$ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ $>$\+::iterator {\bfseries Elements\+End} ()
+\item 
+\Hypertarget{classcsmp_1_1_mesh_patch_a467129f3fa702bbc95c108d79351334e}\label{classcsmp_1_1_mesh_patch_a467129f3fa702bbc95c108d79351334e} 
+plf\+::colony$<$ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ $>$\+::iterator {\bfseries Nodes\+Begin} ()
+\item 
+\Hypertarget{classcsmp_1_1_mesh_patch_a41e5014286c0542da0c7ec11a9e6d0ad}\label{classcsmp_1_1_mesh_patch_a41e5014286c0542da0c7ec11a9e6d0ad} 
+plf\+::colony$<$ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ $>$\+::iterator {\bfseries Nodes\+End} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim$>$\newline
+class csmp\+::\+Mesh\+Patch$<$ dim $>$}
+Contiguous mesh patch that can, but does not have to be integrated into a \doxylink{classcsmp_1_1_model}{Model}. The idea is to temporarily store parts of a mesh during rebuilding operations; Size info is used also to keep number information uptodate.
+
+\begin{DoxyAuthor}{Author}
+SKM 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+23/5/21 
+\end{DoxyDate}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_mesh_patch_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_mesh_patch_a59427cdb469c501b7d31b64cf1bee212}\index{csmp::MeshPatch$<$ dim $>$@{csmp::MeshPatch$<$ dim $>$}!BuildInterveningPatch@{BuildInterveningPatch}}
+\index{BuildInterveningPatch@{BuildInterveningPatch}!csmp::MeshPatch$<$ dim $>$@{csmp::MeshPatch$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{BuildInterveningPatch()}{BuildInterveningPatch()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_mesh_patch_a59427cdb469c501b7d31b64cf1bee212} 
+template$<$uint32\+\_\+t dim$>$ \\
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_mesh_patch}{csmp\+::\+Mesh\+Patch}}$<$ dim $>$\+::\+Build\+Intervening\+Patch (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ std\+::pair$<$ std\+::pair$<$ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}, uint32\+\_\+t $>$, std\+::pair$<$ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}, uint32\+\_\+t $>$ $>$ $>$ \&}]{}{, }\item[{bool}]{copy\+\_\+nodes}{, }\item[{std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$}]{perimeter\+\_\+node\+\_\+ptrs}{}\end{DoxyParamCaption})}
+
+
+
+creates an interconnected element patch from the shared faces of the supplied elements; replicates nodes upon request, and returns perimeter nodes and size of patch 
+
+\texorpdfstring{$<$}{<} inside element and its outside face number outside element and inside face number
+
+Creates an interconnected element patch from the shared faces of the supplied elements. There is no property storage associated with these elements from the start. The elements are rather barebone.
+
+
+\begin{DoxyParams}{Parameters}
+{\em input\+\_\+elmts} & pairs of highest-\/dim elements that share a face that will be turned into a new lower-\/dimensional element \\
+\hline
+{\em copy\+\_\+nodes} & the Elements already share nodes, but light copies of these are made when true \\
+\hline
+{\em perimeter\+\_\+node\+\_\+ptrs} & whether copies are made or not, the method returns vector of pointers of the perimeter nodes of the new element patch \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the number of new elements in the patch 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/model/mesh\+Management\+Utilities.\+h\item 
+source/includes/model/Mesh\+Patch.\+h\item 
+source/modules/model/Mesh\+Patch.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,504 @@
+\doxysection{csmp\+::Finite\+Volume\+Stencil\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_finite_volume_stencil}{}\label{classcsmp_1_1_finite_volume_stencil}\index{csmp::FiniteVolumeStencil$<$ dim $>$@{csmp::FiniteVolumeStencil$<$ dim $>$}}
+
+
+Finite-\/element specific finite volume stencil (partition into facets and sectors) of the finite element for which the stencil was initialized.  
+
+
+
+
+{\ttfamily \#include $<$Finite\+Volume\+Stencil.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Finite\+Volume\+Stencil\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_finite_volume_stencil__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Finite\+Volume\+Stencil\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=209pt]{classcsmp_1_1_finite_volume_stencil__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_finite_volume_stencil_a4cdc0ccaa1e12c3a0d04cc8d6d404af2}\label{classcsmp_1_1_finite_volume_stencil_a4cdc0ccaa1e12c3a0d04cc8d6d404af2} 
+{\bfseries Finite\+Volume\+Stencil} (const char \texorpdfstring{$\ast$}{*}csp\+\_\+finite\+\_\+element\+\_\+type)
+\item 
+\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a4decf12242cd92779cfc166f6b64019d}{Finite\+Volume\+Stencil}} (const \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{Finite\+Volume\+Stencil}} \&)
+\item 
+\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{Finite\+Volume\+Stencil}} \& \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a7846969e282b0cde61c9f0967e6e696d}{operator=}} (const \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{Finite\+Volume\+Stencil}} \&)
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a1ece48d9c8874da39b8986a39331d376}{Facets\+Per\+Sector}} (uint32\+\_\+t i\+Sector) const
+\begin{DoxyCompactList}\small\item\em number of facets that delimited the FV sector on the insider of the parent finite element \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_volume_stencil_acb4ae4ab39ee401464ba5f5204846596}\label{classcsmp_1_1_finite_volume_stencil_acb4ae4ab39ee401464ba5f5204846596} 
+uint32\+\_\+t {\bfseries Facet\+Surrounding\+Sector} (uint32\+\_\+t i\+Sector, uint32\+\_\+t n) const
+\begin{DoxyCompactList}\small\item\em n-\/th facet that delimits the FV sector in the inside of the finite element \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_volume_stencil_a07449cd581adbec2f413261db31ab766}\label{classcsmp_1_1_finite_volume_stencil_a07449cd581adbec2f413261db31ab766} 
+FV\+\_\+\+FACET\+\_\+\+TYPE {\bfseries Facet\+Type} (uint32\+\_\+t i\+Facet) const
+\begin{DoxyCompactList}\small\item\em reports the type of a facet \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_volume_stencil_af68ad19c114be8b0e5f3ad3617552d1d}\label{classcsmp_1_1_finite_volume_stencil_af68ad19c114be8b0e5f3ad3617552d1d} 
+double {\bfseries Facet\+Integration\+Point} (uint32\+\_\+t i\+Facet, uint32\+\_\+t ip, uint32\+\_\+t r\+\_\+or\+\_\+s\+\_\+or\+\_\+t) const
+\begin{DoxyCompactList}\small\item\em choice of rst-\/integration point coordinate of the facet integration point \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_volume_stencil_a05cf0a31b57acfeb29dfcf10cc465fe0}\label{classcsmp_1_1_finite_volume_stencil_a05cf0a31b57acfeb29dfcf10cc465fe0} 
+void {\bfseries Facet\+Integration\+Point} (uint32\+\_\+t i\+Facet, uint32\+\_\+t ip, std\+::vector$<$ double $>$ \&rst) const
+\begin{DoxyCompactList}\small\item\em rst coordinate of facet integration point in parametric space \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a551133d9719a9a86ed328c191f42b055}{Facet\+Integration\+Point}} (uint32\+\_\+t i\+Facet, uint32\+\_\+t ip) const
+\begin{DoxyCompactList}\small\item\em returns rst coordinate of facet integration point in parametric space \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_ac5328db21a4e3d8eac37c5ffafadad1e}{Facet\+Integration\+Weight}} (uint32\+\_\+t i\+Facet, uint32\+\_\+t ip) const
+\begin{DoxyCompactList}\small\item\em integration weight of given integration point correlated with facet area and number of facet integration points \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a4e2b2012dca4be0a494ff6f8d01a1c5e}{Facet\+Projection\+Weight}} (uint32\+\_\+t i\+Facet, uint32\+\_\+t ip) const
+\begin{DoxyCompactList}\small\item\em scale factor to match sector integration weights between adjacent finite elements that have a different volume in rst space \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a5d31104dba1a424a8e641f4d97cbb1c0}{Facet\+Edge\+Nodes}} (uint32\+\_\+t i\+Facet, uint32\+\_\+t \&inside\+\_\+node, uint32\+\_\+t \&outside\+\_\+node) const
+\begin{DoxyCompactList}\small\item\em nodes that sit on the opposite sides of the facet; outside is direction into which facet normal points \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_volume_stencil_addc86558828d8ec39b3970ff924d21b1}\label{classcsmp_1_1_finite_volume_stencil_addc86558828d8ec39b3970ff924d21b1} 
+uint32\+\_\+t {\bfseries Inside\+Node} (uint32\+\_\+t i\+Facet) const
+\begin{DoxyCompactList}\small\item\em opposite side of the outward pointing normal of the facet \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_volume_stencil_a9e1b1a49bfc3b859c1c3f91dde8f0a64}\label{classcsmp_1_1_finite_volume_stencil_a9e1b1a49bfc3b859c1c3f91dde8f0a64} 
+uint32\+\_\+t {\bfseries Outside\+Node} (uint32\+\_\+t i\+Facet) const
+\begin{DoxyCompactList}\small\item\em same side as the outward pointing normal of the facet \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_volume_stencil_a274c8514d980cc865d6b53046b80c61a}\label{classcsmp_1_1_finite_volume_stencil_a274c8514d980cc865d6b53046b80c61a} 
+const \mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ {\bfseries Facet\+Edge\+Mid\+Point} (uint32\+\_\+t i\+Facet) const
+\begin{DoxyCompactList}\small\item\em point on the finite-\/element edge that is touched by the facet \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_volume_stencil_ac730c56262ae42f423860db3bd07f35c}\label{classcsmp_1_1_finite_volume_stencil_ac730c56262ae42f423860db3bd07f35c} 
+const \mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ {\bfseries Barycenter} () const
+\begin{DoxyCompactList}\small\item\em of finite element in parametric space \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_volume_stencil_ab12680eb4c61c0f6e5d5b7ec36df874c}\label{classcsmp_1_1_finite_volume_stencil_ab12680eb4c61c0f6e5d5b7ec36df874c} 
+double {\bfseries Sector\+Integration\+Point} (uint32\+\_\+t i\+Sector, uint32\+\_\+t ip, uint32\+\_\+t r\+\_\+or\+\_\+s\+\_\+or\+\_\+t) const
+\item 
+\Hypertarget{classcsmp_1_1_finite_volume_stencil_a1347ee804233a067b9138770bba8e9a8}\label{classcsmp_1_1_finite_volume_stencil_a1347ee804233a067b9138770bba8e9a8} 
+void {\bfseries Sector\+Integration\+Point} (uint32\+\_\+t i\+Sector, uint32\+\_\+t ip, std\+::vector$<$ double $>$ \&rst) const
+\item 
+const \mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_aebbd142b86049686d23aaa36d7af5abf}{Sector\+Integration\+Point}} (uint32\+\_\+t i\+Sector, uint32\+\_\+t ip) const
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_aa4664f3c3d268a131bbd074f18a2f930}{Sector\+Integration\+Weight}} (uint32\+\_\+t i\+Sector, uint32\+\_\+t ip) const
+\item 
+\Hypertarget{classcsmp_1_1_finite_volume_stencil_a6956488cc517d90b89f804f955dc491c}\label{classcsmp_1_1_finite_volume_stencil_a6956488cc517d90b89f804f955dc491c} 
+const \mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ {\bfseries Facet\+Point} (uint32\+\_\+t i\+Facet, uint32\+\_\+t i\+Point) const
+\item 
+\Hypertarget{classcsmp_1_1_finite_volume_stencil_a7e12aac43fba97ce4a2be5a128b3ef03}\label{classcsmp_1_1_finite_volume_stencil_a7e12aac43fba97ce4a2be5a128b3ef03} 
+uint32\+\_\+t {\bfseries Facet\+Points} (uint32\+\_\+t i\+Facet) const
+\item 
+\Hypertarget{classcsmp_1_1_finite_volume_stencil_a7a4028dcef8785a9b7738fd374350dcb}\label{classcsmp_1_1_finite_volume_stencil_a7a4028dcef8785a9b7738fd374350dcb} 
+const \mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ {\bfseries Sector\+Point} (uint32\+\_\+t i\+Sector, uint32\+\_\+t i\+Point) const
+\begin{DoxyCompactList}\small\item\em corner points of the (hexahedral) sector in parametric space \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_volume_stencil_a42f7f72118ee9fee35c502706ac498e2}\label{classcsmp_1_1_finite_volume_stencil_a42f7f72118ee9fee35c502706ac498e2} 
+std\+::pair$<$ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$, \mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ $>$ {\bfseries Sector\+Edge\+Points} (uint32\+\_\+t i\+Sector, uint32\+\_\+t i\+Edge) const
+\begin{DoxyCompactList}\small\item\em pairs of sector edge points definining the intersection lines of the sector with the finite element faces \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_volume_stencil_a9833a165fd48971b4d351e5a56d29fb8}\label{classcsmp_1_1_finite_volume_stencil_a9833a165fd48971b4d351e5a56d29fb8} 
+const std\+::pair$<$ uint32\+\_\+t, uint32\+\_\+t $>$ {\bfseries Sector\+Edge} (uint32\+\_\+t i\+Sector, uint32\+\_\+t i\+Edge) const
+\begin{DoxyCompactList}\small\item\em pairs of the ids (0..n-\/1) of the sector edge point definining the intersection lines of the sector with the finite element faces \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_volume_stencil_a06f1fb84272a78d93e79b2303be88502}\label{classcsmp_1_1_finite_volume_stencil_a06f1fb84272a78d93e79b2303be88502} 
+uint32\+\_\+t {\bfseries Sector\+Points} (uint32\+\_\+t i\+Sector) const
+\begin{DoxyCompactList}\small\item\em number of corner points of the finite volume sector \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_volume_stencil_a5ddd2f15a3da926021974f7499277123}\label{classcsmp_1_1_finite_volume_stencil_a5ddd2f15a3da926021974f7499277123} 
+uint32\+\_\+t {\bfseries Sector\+Edges} (uint32\+\_\+t i\+Sector) const
+\begin{DoxyCompactList}\small\item\em number of edges of the finite volume sector \end{DoxyCompactList}\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_ac87ff8389f2145a08c6891458e234ef1}{Facets}} () const
+\begin{DoxyCompactList}\small\item\em number of finite-\/volume facets in the parent finite element \end{DoxyCompactList}\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a02bd458618612c5732e56ebf1724c5c8}{Sectors}} () const
+\begin{DoxyCompactList}\small\item\em number of finite-\/volume sectors in the parent finite element \end{DoxyCompactList}\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a4bd1557f5b13650df786ba19e50689eb}{Integration\+Points\+Per\+Facet}} (uint32\+\_\+t i\+Facet=0U) const
+\begin{DoxyCompactList}\small\item\em number of quadrature points of the finite volume facet i \end{DoxyCompactList}\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a337f1ad3ea29be8d8667440d885b0ff0}{Integration\+Points\+Per\+Sector}} (uint32\+\_\+t i\+Sector=0U) const
+\begin{DoxyCompactList}\small\item\em number of quadrature points of the finite volume sector i \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a52b5c8c1b868c910001696aa4433394c}{Unit\+Parametric\+Normal\+To}} (uint32\+\_\+t i\+Facet) const
+\begin{DoxyCompactList}\small\item\em returns unit normal to facet in parametric space \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_volume_stencil_a3a0eae76387ecec0ca445c0ed3f90f71}\label{classcsmp_1_1_finite_volume_stencil_a3a0eae76387ecec0ca445c0ed3f90f71} 
+double {\bfseries Unit\+Parametric\+Normal\+Component} (uint32\+\_\+t i\+Facet, uint32\+\_\+t x\+\_\+or\+\_\+y\+\_\+or\+\_\+z) const
+\begin{DoxyCompactList}\small\item\em returns x,y or z component of unit normal in parametric space \end{DoxyCompactList}\item 
+std\+::pair$<$ double, double $>$ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a78ea2fa1408e1205df9b59130d605aa8}{Facet\+Normal\+Transformation\+Node\+Weights}} (uint32\+\_\+t i\+Facet, uint32\+\_\+t i\+Node) const
+\item 
+\Hypertarget{classcsmp_1_1_finite_volume_stencil_a153d13e212432290ac349df265325a7d}\label{classcsmp_1_1_finite_volume_stencil_a153d13e212432290ac349df265325a7d} 
+const std\+::string {\bfseries Parent\+Element} () const
+\begin{DoxyCompactList}\small\item\em returns the parent element of the finite volume stencil \end{DoxyCompactList}\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gae70f4082919c7730a8934bfcac658ea2}{CELL\+\_\+\+SHAPE}} \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_ae1738e77437b48e631425ee36359ff34}{Geometry}} () const
+\begin{DoxyCompactList}\small\item\em reports whether the parent element of the stencil is a line, surface or volume \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_volume_stencil_a87a4e8e2904cc707aa8a849ff67d7ebe}\label{classcsmp_1_1_finite_volume_stencil_a87a4e8e2904cc707aa8a849ff67d7ebe} 
+void {\bfseries Out} () const
+\begin{DoxyCompactList}\small\item\em returns the data (private members) stored in this finite volume stencil \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_finite_volume_stencil_af95bafce06b67c1e2a23c7e7024384ca}\label{classcsmp_1_1_finite_volume_stencil_af95bafce06b67c1e2a23c7e7024384ca} 
+class {\bfseries Finite\+Volume\+Stencil\+Manager$<$ dim $>$}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim$>$\newline
+class csmp\+::\+Finite\+Volume\+Stencil$<$ dim $>$}
+Finite-\/element specific finite volume stencil (partition into facets and sectors) of the finite element for which the stencil was initialized. 
+
+\begin{DoxyAuthor}{Author}
+S.\+K. Matthai 
+
+A.\+Paluszny 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2003
+\end{DoxyDate}
+\hypertarget{compare_floats_8h_motivation}{}\doxysubsection{\texorpdfstring{Motivation}{Motivation}}\label{compare_floats_8h_motivation}
+Class provides a whole set of functionality, related to construction of the node-\/centered FV virtual cells for realisation of the CVPEM in CSP.
+
+Tesarius\+: sector -\/ sector part of the finite element (FE), attributed to the FE node. Number of sectors corresponds to the number of nodes. Sector is a topological hexahedron and is defined in physical and parametric spaces of the FE. Physical and parametric spaces of the FE are related by the mapping, characterized by Jacobian transformation.
+
+facet -\/ four-\/side face inside the FE, dividing it to volumetric sectors.
+
+Other set of methods here is providing accessors for the stencil dynamic data\+: integration points in the parametric space of the finite element, integration weights, normals and correction multiplies for unification of the parametric paces of different elements.\hypertarget{classcsmp_1_1_visitor_applicability}{}\doxysubsection{\texorpdfstring{Applicability}{Applicability}}\label{classcsmp_1_1_visitor_applicability}
+Class is applicable to any FE model, containing isoparametric linear elements. It can work on the mono-\/ and poly-\/element type meshes, containing tetrahedrons, hexahedrons, prisms and pyramids.\hypertarget{classcsmp_1_1_solver_participants}{}\doxysubsection{\texorpdfstring{Participants}{Participants}}\label{classcsmp_1_1_solver_participants}
+Gets it data from Integration\+Points\+And\+Weights.\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+Class provides facet / sector integration methods for finite volumes associated with specific finite elements. For tabulation of the points and weights if uses class \doxylink{classcsmp_1_1_f_v___integration_points_and_weights}{FV\+\_\+\+Integration\+Points\+And\+Weights} (). 
+
+\label{doc-constructors}
+\Hypertarget{classcsmp_1_1_finite_volume_stencil_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcsmp_1_1_finite_volume_stencil_a4decf12242cd92779cfc166f6b64019d}\index{csmp::FiniteVolumeStencil$<$ dim $>$@{csmp::FiniteVolumeStencil$<$ dim $>$}!FiniteVolumeStencil@{FiniteVolumeStencil}}
+\index{FiniteVolumeStencil@{FiniteVolumeStencil}!csmp::FiniteVolumeStencil$<$ dim $>$@{csmp::FiniteVolumeStencil$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{FiniteVolumeStencil()}{FiniteVolumeStencil()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_volume_stencil_a4decf12242cd92779cfc166f6b64019d} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{csmp\+::\+Finite\+Volume\+Stencil}}$<$ dim $>$\+::\+Finite\+Volume\+Stencil (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{Finite\+Volume\+Stencil}}$<$ dim $>$ \&}]{fvs}{}\end{DoxyParamCaption})}
+
+Parametrised constructor for the \doxylink{classcsmp_1_1_finite_volume_stencil}{Finite\+Volume\+Stencil} classpoints.
+
+const Finite\+Volume\+Stencil$<$dim$>$\& fvs -\/ reference to the \doxylink{classcsmp_1_1_finite_volume_stencil}{Finite\+Volume\+Stencil} object. ~\newline
+\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+Standard as for any parametrised constructor. Method parametr should be previously initialised as well. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=213pt]{classcsmp_1_1_finite_volume_stencil_a4decf12242cd92779cfc166f6b64019d_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=213pt]{classcsmp_1_1_finite_volume_stencil_a4decf12242cd92779cfc166f6b64019d_icgraph}
+\end{center}
+\end{figure}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_finite_volume_stencil_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_finite_volume_stencil_a5d31104dba1a424a8e641f4d97cbb1c0}\index{csmp::FiniteVolumeStencil$<$ dim $>$@{csmp::FiniteVolumeStencil$<$ dim $>$}!FacetEdgeNodes@{FacetEdgeNodes}}
+\index{FacetEdgeNodes@{FacetEdgeNodes}!csmp::FiniteVolumeStencil$<$ dim $>$@{csmp::FiniteVolumeStencil$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{FacetEdgeNodes()}{FacetEdgeNodes()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_volume_stencil_a5d31104dba1a424a8e641f4d97cbb1c0} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{csmp\+::\+Finite\+Volume\+Stencil}}$<$ dim $>$\+::\+Facet\+Edge\+Nodes (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{i\+Facet}{, }\item[{uint32\+\_\+t \&}]{estart}{, }\item[{uint32\+\_\+t \&}]{eend}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+nodes that sit on the opposite sides of the facet; outside is direction into which facet normal points 
+
+Defines FE edge, associated with that facet of interest. For a given facet method returns local indices of the FE start node and the end node. The end node is the one on the side of the facet into which the outward pointing normal points. ~\newline
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em i\+Facet} & index of the internal dividing facet in the FE. \\
+\hline
+{\em estart} & local index of the FE edge start node \\
+\hline
+{\em eend} & local index of the FE edge end node\\
+\hline
+\end{DoxyParams}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+Accesses the private pair of nodes, associated with the facet. \Hypertarget{classcsmp_1_1_finite_volume_stencil_a551133d9719a9a86ed328c191f42b055}\index{csmp::FiniteVolumeStencil$<$ dim $>$@{csmp::FiniteVolumeStencil$<$ dim $>$}!FacetIntegrationPoint@{FacetIntegrationPoint}}
+\index{FacetIntegrationPoint@{FacetIntegrationPoint}!csmp::FiniteVolumeStencil$<$ dim $>$@{csmp::FiniteVolumeStencil$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{FacetIntegrationPoint()}{FacetIntegrationPoint()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_volume_stencil_a551133d9719a9a86ed328c191f42b055} 
+template$<$uint32\+\_\+t dim$>$ \\
+const \mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{csmp\+::\+Finite\+Volume\+Stencil}}$<$ dim $>$\+::\+Facet\+Integration\+Point (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{i\+Facet}{, }\item[{uint32\+\_\+t}]{ip}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+returns rst coordinate of facet integration point in parametric space 
+
+Returns to argument rst the reference to STL vector of the parametric coordinates of the given facet integration point.
+
+
+\begin{DoxyParams}{Parameters}
+{\em i\+Facet} & index (No) of the internal facet isnside the FE \\
+\hline
+{\em ip} & index (No) of the integration point on the facet\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+reference to STL vector of the parametric coordinates of the given facet integration point
+\end{DoxyReturn}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+Accesses the private data of the tabulated points, associated with the facet.\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+For current implementation index ip is constrained to 0 only, i.\+e. the FVPEM method is working with 1 facet integration point only. \Hypertarget{classcsmp_1_1_finite_volume_stencil_ac5328db21a4e3d8eac37c5ffafadad1e}\index{csmp::FiniteVolumeStencil$<$ dim $>$@{csmp::FiniteVolumeStencil$<$ dim $>$}!FacetIntegrationWeight@{FacetIntegrationWeight}}
+\index{FacetIntegrationWeight@{FacetIntegrationWeight}!csmp::FiniteVolumeStencil$<$ dim $>$@{csmp::FiniteVolumeStencil$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{FacetIntegrationWeight()}{FacetIntegrationWeight()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_volume_stencil_ac5328db21a4e3d8eac37c5ffafadad1e} 
+template$<$uint32\+\_\+t dim$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{csmp\+::\+Finite\+Volume\+Stencil}}$<$ dim $>$\+::\+Facet\+Integration\+Weight (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{i\+Facet}{, }\item[{uint32\+\_\+t}]{ip}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+integration weight of given integration point correlated with facet area and number of facet integration points 
+
+Returns for the given facet integration point integration weight, associated with given facet "{}facet"{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em i\+Facet} & index (No) of the internal facet isnside the FE \\
+\hline
+{\em ip} & index (No) of the integration point on the facet\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the value of the facet integration weight.
+\end{DoxyReturn}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+Accesses the private data of the tabulated points, associated with the facet.\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+For current implementation index ip is constrained to 0 only, i.\+e. the FVPEM method is working with 1 facet integration point only. \Hypertarget{classcsmp_1_1_finite_volume_stencil_a78ea2fa1408e1205df9b59130d605aa8}\index{csmp::FiniteVolumeStencil$<$ dim $>$@{csmp::FiniteVolumeStencil$<$ dim $>$}!FacetNormalTransformationNodeWeights@{FacetNormalTransformationNodeWeights}}
+\index{FacetNormalTransformationNodeWeights@{FacetNormalTransformationNodeWeights}!csmp::FiniteVolumeStencil$<$ dim $>$@{csmp::FiniteVolumeStencil$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{FacetNormalTransformationNodeWeights()}{FacetNormalTransformationNodeWeights()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_volume_stencil_a78ea2fa1408e1205df9b59130d605aa8} 
+template$<$uint32\+\_\+t dim$>$ \\
+std\+::pair$<$ double, double $>$ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{csmp\+::\+Finite\+Volume\+Stencil}}$<$ dim $>$\+::\+Facet\+Normal\+Transformation\+Node\+Weights (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{i\+Facet}{, }\item[{uint32\+\_\+t}]{i\+Node}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns the component of the transformation from nodes to normals in physical space.
+
+
+\begin{DoxyParams}{Parameters}
+{\em i\+Facet} & is the number 0..n-\/1 of the internal facet inside of the FE \\
+\hline
+{\em i\+Node} & is the number 0..n-\/1 of the FE node\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+a pair of weights, one for each tangent vector
+\end{DoxyReturn}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+Accesses the private data of the class, retreiving tabulated vector. \Hypertarget{classcsmp_1_1_finite_volume_stencil_a4e2b2012dca4be0a494ff6f8d01a1c5e}\index{csmp::FiniteVolumeStencil$<$ dim $>$@{csmp::FiniteVolumeStencil$<$ dim $>$}!FacetProjectionWeight@{FacetProjectionWeight}}
+\index{FacetProjectionWeight@{FacetProjectionWeight}!csmp::FiniteVolumeStencil$<$ dim $>$@{csmp::FiniteVolumeStencil$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{FacetProjectionWeight()}{FacetProjectionWeight()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_volume_stencil_a4e2b2012dca4be0a494ff6f8d01a1c5e} 
+template$<$uint32\+\_\+t dim$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{csmp\+::\+Finite\+Volume\+Stencil}}$<$ dim $>$\+::\+Facet\+Projection\+Weight (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{i\+Facet}{, }\item[{uint32\+\_\+t}]{ip}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+scale factor to match sector integration weights between adjacent finite elements that have a different volume in rst space 
+
+Returns for the given sector integration point projection weight, associated with given facet "{}facet"{}. Projection weight is an extra multiplier, which is bringing to the same scale the size of the unit parametric spaces of different element types.
+
+
+\begin{DoxyParams}{Parameters}
+{\em i\+Facet} & index (No) of the internal facet isnside the FE \\
+\hline
+{\em ip} & index (No) of the integration point on the facet\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the value of the facet projection weight.
+\end{DoxyReturn}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+Accesses the private data of the tabulated points, associated with the facet.\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+For current implementation index ip is constrained to 0 only, i.\+e. the FVPEM method is working with 1 facet integration point only. \Hypertarget{classcsmp_1_1_finite_volume_stencil_ac87ff8389f2145a08c6891458e234ef1}\index{csmp::FiniteVolumeStencil$<$ dim $>$@{csmp::FiniteVolumeStencil$<$ dim $>$}!Facets@{Facets}}
+\index{Facets@{Facets}!csmp::FiniteVolumeStencil$<$ dim $>$@{csmp::FiniteVolumeStencil$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Facets()}{Facets()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_volume_stencil_ac87ff8389f2145a08c6891458e234ef1} 
+template$<$uint32\+\_\+t dim$>$ \\
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{csmp\+::\+Finite\+Volume\+Stencil}}$<$ dim $>$\+::\+Facets (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+number of finite-\/volume facets in the parent finite element 
+
+Returns the number of internal facets -\/ division walls inside the FE.
+
+\begin{DoxyReturn}{Returns}
+Returns the number of the internal facets.
+\end{DoxyReturn}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+Accesses the private data of the class, retreiving the value. \Hypertarget{classcsmp_1_1_finite_volume_stencil_a1ece48d9c8874da39b8986a39331d376}\index{csmp::FiniteVolumeStencil$<$ dim $>$@{csmp::FiniteVolumeStencil$<$ dim $>$}!FacetsPerSector@{FacetsPerSector}}
+\index{FacetsPerSector@{FacetsPerSector}!csmp::FiniteVolumeStencil$<$ dim $>$@{csmp::FiniteVolumeStencil$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{FacetsPerSector()}{FacetsPerSector()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_volume_stencil_a1ece48d9c8874da39b8986a39331d376} 
+template$<$uint32\+\_\+t dim$>$ \\
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{csmp\+::\+Finite\+Volume\+Stencil}}$<$ dim $>$\+::\+Facets\+Per\+Sector (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{i\+Sector}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+number of facets that delimited the FV sector on the insider of the parent finite element 
+
+Returns number of facets, opposite to the given node -\/ this corresponds to the number of facets, adding flux to the given node.
+
+\begin{DoxyReturn}{Returns}
+the number of the facets in front of the node of given element type.
+\end{DoxyReturn}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+Accesses the private data of the class, retrieving the value. \Hypertarget{classcsmp_1_1_finite_volume_stencil_ae1738e77437b48e631425ee36359ff34}\index{csmp::FiniteVolumeStencil$<$ dim $>$@{csmp::FiniteVolumeStencil$<$ dim $>$}!Geometry@{Geometry}}
+\index{Geometry@{Geometry}!csmp::FiniteVolumeStencil$<$ dim $>$@{csmp::FiniteVolumeStencil$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Geometry()}{Geometry()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_volume_stencil_ae1738e77437b48e631425ee36359ff34} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gae70f4082919c7730a8934bfcac658ea2}{CELL\+\_\+\+SHAPE}} \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{csmp\+::\+Finite\+Volume\+Stencil}}$<$ dim $>$\+::\+Geometry (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+reports whether the parent element of the stencil is a line, surface or volume 
+
+Irrespective of the dimension of the model, this method reports whether the stencil corresponds to a line, surface or volumetric finite element. \Hypertarget{classcsmp_1_1_finite_volume_stencil_a4bd1557f5b13650df786ba19e50689eb}\index{csmp::FiniteVolumeStencil$<$ dim $>$@{csmp::FiniteVolumeStencil$<$ dim $>$}!IntegrationPointsPerFacet@{IntegrationPointsPerFacet}}
+\index{IntegrationPointsPerFacet@{IntegrationPointsPerFacet}!csmp::FiniteVolumeStencil$<$ dim $>$@{csmp::FiniteVolumeStencil$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{IntegrationPointsPerFacet()}{IntegrationPointsPerFacet()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_volume_stencil_a4bd1557f5b13650df786ba19e50689eb} 
+template$<$uint32\+\_\+t dim$>$ \\
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{csmp\+::\+Finite\+Volume\+Stencil}}$<$ dim $>$\+::\+Integration\+Points\+Per\+Facet (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{i\+Facet}{ = {\ttfamily 0U}}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+number of quadrature points of the finite volume facet i 
+
+Returns number of integration points per facet.
+
+\begin{DoxyReturn}{Returns}
+the number of integration points per facet.
+\end{DoxyReturn}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+Accesses the private data of the class, retreiving the value. For current implementation this value is 1.
+
+\begin{DoxyAttention}{Attention}
+assumes that the number of integration points per facet is the same for all facets 
+\end{DoxyAttention}
+\Hypertarget{classcsmp_1_1_finite_volume_stencil_a337f1ad3ea29be8d8667440d885b0ff0}\index{csmp::FiniteVolumeStencil$<$ dim $>$@{csmp::FiniteVolumeStencil$<$ dim $>$}!IntegrationPointsPerSector@{IntegrationPointsPerSector}}
+\index{IntegrationPointsPerSector@{IntegrationPointsPerSector}!csmp::FiniteVolumeStencil$<$ dim $>$@{csmp::FiniteVolumeStencil$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{IntegrationPointsPerSector()}{IntegrationPointsPerSector()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_volume_stencil_a337f1ad3ea29be8d8667440d885b0ff0} 
+template$<$uint32\+\_\+t dim$>$ \\
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{csmp\+::\+Finite\+Volume\+Stencil}}$<$ dim $>$\+::\+Integration\+Points\+Per\+Sector (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{i\+Sector}{ = {\ttfamily 0U}}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+number of quadrature points of the finite volume sector i 
+
+Returns number of integration points per sectortric sector of given FE type.
+
+\begin{DoxyReturn}{Returns}
+the number of integration points per volumetric sector.
+\end{DoxyReturn}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+Accesses the private data of the class, retreiving the value. For current implementation this value is 1. \Hypertarget{classcsmp_1_1_finite_volume_stencil_a7846969e282b0cde61c9f0967e6e696d}\index{csmp::FiniteVolumeStencil$<$ dim $>$@{csmp::FiniteVolumeStencil$<$ dim $>$}!operator=@{operator=}}
+\index{operator=@{operator=}!csmp::FiniteVolumeStencil$<$ dim $>$@{csmp::FiniteVolumeStencil$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_volume_stencil_a7846969e282b0cde61c9f0967e6e696d} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{Finite\+Volume\+Stencil}}$<$ dim $>$ \& \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{csmp\+::\+Finite\+Volume\+Stencil}}$<$ dim $>$\+::operator= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{Finite\+Volume\+Stencil}}$<$ dim $>$ \&}]{fvs}{}\end{DoxyParamCaption})}
+
+Operator "{}="{} for \doxylink{classcsmp_1_1_finite_volume_stencil}{Finite\+Volume\+Stencil} object.
+
+const Finite\+Volume\+Stencil$<$dim$>$\& fvs -\/ reference to the \doxylink{classcsmp_1_1_finite_volume_stencil}{Finite\+Volume\+Stencil} object. ~\newline
+\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+Standard as for any "{}equals"{} operator. \Hypertarget{classcsmp_1_1_finite_volume_stencil_aebbd142b86049686d23aaa36d7af5abf}\index{csmp::FiniteVolumeStencil$<$ dim $>$@{csmp::FiniteVolumeStencil$<$ dim $>$}!SectorIntegrationPoint@{SectorIntegrationPoint}}
+\index{SectorIntegrationPoint@{SectorIntegrationPoint}!csmp::FiniteVolumeStencil$<$ dim $>$@{csmp::FiniteVolumeStencil$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{SectorIntegrationPoint()}{SectorIntegrationPoint()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_volume_stencil_aebbd142b86049686d23aaa36d7af5abf} 
+template$<$uint32\+\_\+t dim$>$ \\
+const \mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{csmp\+::\+Finite\+Volume\+Stencil}}$<$ dim $>$\+::\+Sector\+Integration\+Point (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{i\+Sector}{, }\item[{uint32\+\_\+t}]{ip}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns to argument rst the reference to STL vector of the parametric coordinates of the given sector integration point, associated with given sector "{}volume"{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em i\+Sector} & number of the internal sector isnside the FE \\
+\hline
+{\em ip} & index (No) of the integration point on the facet\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+reference to STL vector of the parametric coordinates of the given facet integration point
+\end{DoxyReturn}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+Accesses the private data of the tabulated points, associated with the sector.\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+For current implementation index ip is constrained to 0 only, i.\+e. the FVPEM method is working with 1 facet integration point only. \Hypertarget{classcsmp_1_1_finite_volume_stencil_aa4664f3c3d268a131bbd074f18a2f930}\index{csmp::FiniteVolumeStencil$<$ dim $>$@{csmp::FiniteVolumeStencil$<$ dim $>$}!SectorIntegrationWeight@{SectorIntegrationWeight}}
+\index{SectorIntegrationWeight@{SectorIntegrationWeight}!csmp::FiniteVolumeStencil$<$ dim $>$@{csmp::FiniteVolumeStencil$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{SectorIntegrationWeight()}{SectorIntegrationWeight()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_volume_stencil_aa4664f3c3d268a131bbd074f18a2f930} 
+template$<$uint32\+\_\+t dim$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{csmp\+::\+Finite\+Volume\+Stencil}}$<$ dim $>$\+::\+Sector\+Integration\+Weight (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{i\+Sector}{, }\item[{uint32\+\_\+t}]{ip}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns for the given sector integration point integration weight, associated with given sector "{}volume"{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em i\+Sector} & corresponding to the finite element node with the same number \\
+\hline
+{\em ip} & represents the n-\/th integration point on the facet\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the value of the sector integration weight=volume in parametric space.
+\end{DoxyReturn}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+Accesses the private data of the tabulated points, associated with the sector.\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+For current implementation index ip is constrained to 0 only, i.\+e. the FVPEM method is working with 1 facet integration point only. \Hypertarget{classcsmp_1_1_finite_volume_stencil_a02bd458618612c5732e56ebf1724c5c8}\index{csmp::FiniteVolumeStencil$<$ dim $>$@{csmp::FiniteVolumeStencil$<$ dim $>$}!Sectors@{Sectors}}
+\index{Sectors@{Sectors}!csmp::FiniteVolumeStencil$<$ dim $>$@{csmp::FiniteVolumeStencil$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Sectors()}{Sectors()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_volume_stencil_a02bd458618612c5732e56ebf1724c5c8} 
+template$<$uint32\+\_\+t dim$>$ \\
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{csmp\+::\+Finite\+Volume\+Stencil}}$<$ dim $>$\+::\+Sectors (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+number of finite-\/volume sectors in the parent finite element 
+
+Returns number of internal FV sectors, given FE is divided to.
+
+\begin{DoxyReturn}{Returns}
+the number of sectors.
+\end{DoxyReturn}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+Accesses the private data of the class, retreiving the value. \Hypertarget{classcsmp_1_1_finite_volume_stencil_a52b5c8c1b868c910001696aa4433394c}\index{csmp::FiniteVolumeStencil$<$ dim $>$@{csmp::FiniteVolumeStencil$<$ dim $>$}!UnitParametricNormalTo@{UnitParametricNormalTo}}
+\index{UnitParametricNormalTo@{UnitParametricNormalTo}!csmp::FiniteVolumeStencil$<$ dim $>$@{csmp::FiniteVolumeStencil$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{UnitParametricNormalTo()}{UnitParametricNormalTo()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_volume_stencil_a52b5c8c1b868c910001696aa4433394c} 
+template$<$uint32\+\_\+t dim$>$ \\
+const \mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{csmp\+::\+Finite\+Volume\+Stencil}}$<$ dim $>$\+::\+Unit\+Parametric\+Normal\+To (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{i\+Facet}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+returns unit normal to facet in parametric space 
+
+Returns the normal vector in parametric space of the FE.
+
+
+\begin{DoxyParams}{Parameters}
+{\em i\+Facet} & is the number 0..n-\/1 of the internal facet inside of the FE\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+to argument "{}nrml"{} reference to STL vector of the normal vector coordinates in parametric space of the FE.
+\end{DoxyReturn}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+Accesses the private data of the class, retreiving tabulated vector.
+
+\begin{DoxyAttention}{Attention}
+here parametric space has same dimensions as physical space, but third dimension may be zero 
+\end{DoxyAttention}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/model/Element.\+h\item 
+source/includes/integration/finite\+\_\+volumes/Finite\+Volume\+Stencil.\+h\item 
+source/modules/integration/finite\+\_\+volumes/Finite\+Volume\+Stencil.\+cpp\end{DoxyCompactItemize}

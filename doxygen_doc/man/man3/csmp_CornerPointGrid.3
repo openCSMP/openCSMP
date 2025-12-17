@@ -1,0 +1,108 @@
+.TH "csmp::CornerPointGrid" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::CornerPointGrid
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBCreateModel\fP (const std::string &model_name, \fBcsmp::VSet\fP< 3U > &vset, \fBcsmp::ModelTopology\fP &model_topology, const std::vector< double > &zcorn, std::set< std::string > &regions, std::set< std::string > &faults, std::set< std::string > &wells, bool tetra_mesh, bool exclude_inactive_cells)"
+.br
+.ti -1c
+.RI "template<class VarType> void \fBWritePropertyToVSet\fP (\fBcsmp::VSet\fP< 3U > &vset, const std::vector< VarType > &prop_data, const std::string &prop_name, const \fBcsmp::PLACEMENT\fP &prop_place) const"
+.br
+.ti -1c
+.RI "size_t \fBDimensionI\fP () const"
+.br
+.RI "return the number of blocks the grid has in the given direction "
+.ti -1c
+.RI "size_t \fBDimensionJ\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBDimensionK\fP () const"
+.br
+.ti -1c
+.RI "void \fBAssignDimensions\fP (uint32_t nx, uint32_t ny, uint32_t nz)"
+.br
+.ti -1c
+.RI "void \fBResize\fP (uint32_t nx, uint32_t ny)"
+.br
+.ti -1c
+.RI "\fBcsmp::Pillar\fP & \fBoperator()\fP (uint32_t i, uint32_t j)"
+.br
+.ti -1c
+.RI "std::vector< uint8_t > & \fBGetCellActivity\fP ()"
+.br
+.ti -1c
+.RI "size_t \fBOrdinaryNodes\fP () const"
+.br
+.ti -1c
+.RI "std::multimap< \fBijk\fP, size_t > & \fBIJKMap\fP ()"
+.br
+.ti -1c
+.RI "void \fBConvertFromReservoirToCSMPcoordinateSystem\fP (\fBcsmp::Point\fP< 3U > &pt) const"
+.br
+.ti -1c
+.RI "bool \fBConstructLineElement\fP (uint32_t &i, uint32_t &j, uint32_t &k, size_t &new_elemt_idx)"
+.br
+.ti -1c
+.RI "bool \fBConstructLineElement\fP (\fBcsmp::ColumnCell\fP &cell, uint32_t &i, uint32_t &j, uint32_t &k)"
+.br
+.ti -1c
+.RI "\fBCellGenerator\fP * \fBGetCellGenerator\fP ()"
+.br
+.ti -1c
+.RI "template<class VarType> void \fBWritePropertyToVSet\fP (\fBcsmp::VSet\fP< 3U > &vset, const \fBvector\fP< VarType > &prop_data, const string &prop_name, const \fBcsmp::PLACEMENT\fP &prop_place) const"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.PP
+\fBAuthor\fP
+.RS 4
+A\&.J\&. Bromage 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2018 
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "void csmp::CornerPointGrid::ConvertFromReservoirToCSMPcoordinateSystem (\fBcsmp::Point\fP< 3U > & pt) const"
+x stays, y = -z and z=y\&. 
+.SS "void csmp::CornerPointGrid::CreateModel (const std::string & model_name, \fBcsmp::VSet\fP< 3U > & vset, \fBcsmp::ModelTopology\fP & model_topology, const std::vector< double > & zcorn, std::set< std::string > & regions, std::set< std::string > & faults, std::set< std::string > & wells, bool tetra_mesh, bool exclude_inactive_cells)"
+MASTER METHOD for the creation of corner point grids from the original cell-centered grids read by the \fBEclipseInterface\fP\&.
+
+.PP
+The \fBPolygonGridManager\fP is used to construct the pillars\&.
+
+.PP
+\fBTodo\fP
+.RS 4
+this is confused! - why should the corner point grid be responsible for building the CSMP model? - code should be in the \fBEclipseModel\fP
+.RE
+.PP
+
+.PP
+\fBTodo\fP
+.RS 4
+regions are not recognised properly\&. 
+.RE
+.PP
+
+.SS "\fBPillar\fP & csmp::CornerPointGrid::operator() (uint32_t i, uint32_t j)"
+accessing the contained pillars 
+.SS "template<class VarType> void csmp::CornerPointGrid::WritePropertyToVSet (\fBcsmp::VSet\fP< 3U > & vset, const \fBvector\fP< VarType > & prop_data, const string & prop_name, const \fBcsmp::PLACEMENT\fP & prop_place) const"
+correcting data cell id's due to existance of embedded cells
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

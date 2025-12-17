@@ -1,0 +1,275 @@
+\doxysection{csmp\+::Generic\+Node\+Property\+Gradient\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_generic_node_property_gradient}{}\label{classcsmp_1_1_generic_node_property_gradient}\index{csmp::GenericNodePropertyGradient$<$ dim $>$@{csmp::GenericNodePropertyGradient$<$ dim $>$}}
+
+
+Computes the gradient of a node variable at the node using a least-\/squares approach.  
+
+
+
+
+{\ttfamily \#include $<$Generic\+Node\+Property\+Gradient.\+h$>$}
+
+
+
+Collaboration diagram for csmp\+::Generic\+Node\+Property\+Gradient\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_generic_node_property_gradient__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_generic_node_property_gradient_a246ee80a5818101faec60712de18d48b}{Generic\+Node\+Property\+Gradient}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&, const char \texorpdfstring{$\ast$}{*}region, const char \texorpdfstring{$\ast$}{*}prop="{}node property gradient"{})
+\item 
+\mbox{\hyperlink{classcsmp_1_1_generic_node_property_gradient_a3fa9f61a53762544fe6e68c331253576}{Generic\+Node\+Property\+Gradient}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&, const char \texorpdfstring{$\ast$}{*}region, std\+::vector$<$ char \texorpdfstring{$\ast$}{*} $>$ advected\+\_\+props)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_generic_node_property_gradient_a3ab938dd8ea00e451b65ec5bd0c9e573}{Generic\+Center\+Of\+Mass}} (size\+\_\+t global\+\_\+node\+\_\+id, \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&mass\+\_\+center) const
+\begin{DoxyCompactList}\small\item\em provide public access to center of mass of fv\+: \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_generic_node_property_gradient_af70738bb7053819a89163f9525f66e67}\label{classcsmp_1_1_generic_node_property_gradient_af70738bb7053819a89163f9525f66e67} 
+void {\bfseries Generic\+Distance\+Facet\+FVBarycenter} (size\+\_\+t global\+\_\+el\+\_\+id, uint32\+\_\+t local\+\_\+facet\+\_\+id, uint32\+\_\+t local\+\_\+node\+\_\+id, \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&\mbox{\hyperlink{namespacecsmp_a334daf042414b6738e71234a8db0c687}{distance}}) const
+\begin{DoxyCompactList}\small\item\em provide public access to distance between facet and mass centre\+: \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_generic_node_property_gradient_af04278d524fc24f97cb1a1444446d2e9}\label{classcsmp_1_1_generic_node_property_gradient_af04278d524fc24f97cb1a1444446d2e9} 
+void {\bfseries Calculate\+Generic\+Least\+Square\+Sums} ()
+\begin{DoxyCompactList}\small\item\em computation of property gradient \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_generic_node_property_gradient_ad65311d488ad864b2674a36aa8fe364d}\label{classcsmp_1_1_generic_node_property_gradient_ad65311d488ad864b2674a36aa8fe364d} 
+void {\bfseries Calculate\+Generic\+Nodal\+Gradient} ()
+\begin{DoxyCompactList}\small\item\em computation of property gradient \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_generic_node_property_gradient_a0bc1f401ed5a390173cc4d8c4306e1ad}\label{classcsmp_1_1_generic_node_property_gradient_a0bc1f401ed5a390173cc4d8c4306e1ad} 
+void {\bfseries Set\+Property\+Key} (\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&key)
+\begin{DoxyCompactList}\small\item\em initializing the property key \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_generic_node_property_gradient_adfda516597c8fab9b18af36476b9056b}{Size\+Of}} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_generic_node_property_gradient_a6c069515d0b09dbf4c04e86760cfb8ac}{Calculate\+Generic\+Least\+Square\+Sums}} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_generic_node_property_gradient_a0d39897acf8b9ce920b9cbca076fc8e8}{Calculate\+Generic\+Nodal\+Gradient}} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_generic_node_property_gradient_a2249149847ad852d533dac20d9943936}{Calculate\+Generic\+Least\+Square\+Sums}} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_generic_node_property_gradient_a1246efe91224d1be5102d3d5acaf7d8e}{Calculate\+Generic\+Nodal\+Gradient}} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_generic_node_property_gradient_a118b5146507b4dd773b8cf990ca6062d}{Calculate\+Generic\+Least\+Square\+Sums}} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_generic_node_property_gradient_a0b2e6c53eaf8d02465fd5bb23b6dc318}{Calculate\+Generic\+Nodal\+Gradient}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_generic_node_property_gradient_a8a2c74e4bbad9b012fb51432447f3475}\label{classcsmp_1_1_generic_node_property_gradient_a8a2c74e4bbad9b012fb51432447f3475} 
+\mbox{\hyperlink{classcsmp_1_1_region}{Region}}$<$ dim $>$ \& {\bfseries gref\+\_\+}
+\item 
+\Hypertarget{classcsmp_1_1_generic_node_property_gradient_a895be12379ef43068416f02003dc0c8e}\label{classcsmp_1_1_generic_node_property_gradient_a895be12379ef43068416f02003dc0c8e} 
+double {\bfseries tolerance}
+\item 
+\Hypertarget{classcsmp_1_1_generic_node_property_gradient_a1123a8e75ce03bad250d4d865c5ce183}\label{classcsmp_1_1_generic_node_property_gradient_a1123a8e75ce03bad250d4d865c5ce183} 
+\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} {\bfseries u\+\_\+key}
+\item 
+\Hypertarget{classcsmp_1_1_generic_node_property_gradient_ade8deb6ecd590b0f3cd10ed9fcf5db7f}\label{classcsmp_1_1_generic_node_property_gradient_ade8deb6ecd590b0f3cd10ed9fcf5db7f} 
+const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} {\bfseries grad\+\_\+key}
+\item 
+\Hypertarget{classcsmp_1_1_generic_node_property_gradient_a8e345d657574f0325b6095baa88e7a0b}\label{classcsmp_1_1_generic_node_property_gradient_a8e345d657574f0325b6095baa88e7a0b} 
+const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} {\bfseries mctr\+\_\+key}
+\item 
+\Hypertarget{classcsmp_1_1_generic_node_property_gradient_a29ea665a0f386fd009f98da583195e11}\label{classcsmp_1_1_generic_node_property_gradient_a29ea665a0f386fd009f98da583195e11} 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_property_handle}{Property\+Handle}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$ {\bfseries gradient}
+\item 
+\Hypertarget{classcsmp_1_1_generic_node_property_gradient_a1706f4eb7fb0e132ab6d9f2d34743803}\label{classcsmp_1_1_generic_node_property_gradient_a1706f4eb7fb0e132ab6d9f2d34743803} 
+\mbox{\hyperlink{classcsmp_1_1_property_handle}{Property\+Handle}}$<$ dim $>$ {\bfseries mass\+\_\+center}
+\item 
+\Hypertarget{classcsmp_1_1_generic_node_property_gradient_ab1feca62d51b81033dc3d26e4d50c279}\label{classcsmp_1_1_generic_node_property_gradient_ab1feca62d51b81033dc3d26e4d50c279} 
+std\+::vector$<$ double $>$ {\bfseries det}
+\item 
+\Hypertarget{classcsmp_1_1_generic_node_property_gradient_ad6902f4983d0667eb7ee8c4e457b929d}\label{classcsmp_1_1_generic_node_property_gradient_ad6902f4983d0667eb7ee8c4e457b929d} 
+std\+::vector$<$ double $>$ {\bfseries sum\+\_\+x2}
+\item 
+\Hypertarget{classcsmp_1_1_generic_node_property_gradient_a2f741ad58eff76f9d6abea35363d3c1a}\label{classcsmp_1_1_generic_node_property_gradient_a2f741ad58eff76f9d6abea35363d3c1a} 
+std\+::vector$<$ double $>$ {\bfseries sum\+\_\+y2}
+\item 
+\Hypertarget{classcsmp_1_1_generic_node_property_gradient_ace3d9247a87ec19b940a15b67692c732}\label{classcsmp_1_1_generic_node_property_gradient_ace3d9247a87ec19b940a15b67692c732} 
+std\+::vector$<$ double $>$ {\bfseries sum\+\_\+z2}
+\item 
+\Hypertarget{classcsmp_1_1_generic_node_property_gradient_a8822a1c68747f6ba06acffdb401a9458}\label{classcsmp_1_1_generic_node_property_gradient_a8822a1c68747f6ba06acffdb401a9458} 
+std\+::vector$<$ double $>$ {\bfseries sum\+\_\+xy}
+\item 
+\Hypertarget{classcsmp_1_1_generic_node_property_gradient_adc46354ce281fa6a22aa44d74890bf07}\label{classcsmp_1_1_generic_node_property_gradient_adc46354ce281fa6a22aa44d74890bf07} 
+std\+::vector$<$ double $>$ {\bfseries sum\+\_\+xz}
+\item 
+\Hypertarget{classcsmp_1_1_generic_node_property_gradient_a57f4a15c36ab9f553d0901a1a87b02c8}\label{classcsmp_1_1_generic_node_property_gradient_a57f4a15c36ab9f553d0901a1a87b02c8} 
+std\+::vector$<$ double $>$ {\bfseries sum\+\_\+yz}
+\item 
+\Hypertarget{classcsmp_1_1_generic_node_property_gradient_a351ed3e5c4360fe153a55f21f152459c}\label{classcsmp_1_1_generic_node_property_gradient_a351ed3e5c4360fe153a55f21f152459c} 
+std\+::vector$<$ uint32\+\_\+t $>$ {\bfseries zero\+\_\+grad\+\_\+index\+\_\+}
+\item 
+\Hypertarget{classcsmp_1_1_generic_node_property_gradient_a0e47ef6da90cdc684b7a53b7f5c8fdb3}\label{classcsmp_1_1_generic_node_property_gradient_a0e47ef6da90cdc684b7a53b7f5c8fdb3} 
+std\+::vector$<$ std\+::vector$<$ size\+\_\+t $>$ $>$ {\bfseries neighbors\+\_\+}
+\begin{DoxyCompactList}\small\item\em global indices of parent nodes; \mbox{[}node\+\_\+id\mbox{]} -\/\texorpdfstring{$>$}{>} vector with id\textquotesingle{}s \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_generic_node_property_gradient_a3f049e18d4cd7da417fc2bd1f892de8e}\label{classcsmp_1_1_generic_node_property_gradient_a3f049e18d4cd7da417fc2bd1f892de8e} 
+std\+::vector$<$ std\+::vector$<$ std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ $>$ $>$ $>$ {\bfseries distance\+\_\+facet\+\_\+\+FVBarycenter\+\_\+}
+\begin{DoxyCompactList}\small\item\em \mbox{[}EL\+\_\+\+Id\mbox{]} \mbox{[}local\+\_\+facet\+\_\+id\mbox{]} \mbox{[}local\+\_\+node\+\_\+id\mbox{]}, distance between facet with ID local\+\_\+facet\+\_\+id and node with ID local\+\_\+node\+\_\+id \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim$>$\newline
+class csmp\+::\+Generic\+Node\+Property\+Gradient$<$ dim $>$}
+Computes the gradient of a node variable at the node using a least-\/squares approach. 
+
+The Node\+Property\+Gradient object can be used to compute the nodal gradient of a property (solute concentration, fluid phase volume fraction, etc...) such that the property can be advected with second order accuarcy. It is used by the Node\+Property\+Gradient\+Limiter as well in second order accurate advection schemes to avoid spurious oscillations.
+
+The resulting gradient is stored at the node. 
+
+\label{doc-constructors}
+\Hypertarget{classcsmp_1_1_generic_node_property_gradient_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcsmp_1_1_generic_node_property_gradient_a246ee80a5818101faec60712de18d48b}\index{csmp::GenericNodePropertyGradient$<$ dim $>$@{csmp::GenericNodePropertyGradient$<$ dim $>$}!GenericNodePropertyGradient@{GenericNodePropertyGradient}}
+\index{GenericNodePropertyGradient@{GenericNodePropertyGradient}!csmp::GenericNodePropertyGradient$<$ dim $>$@{csmp::GenericNodePropertyGradient$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{GenericNodePropertyGradient()}{GenericNodePropertyGradient()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_generic_node_property_gradient_a246ee80a5818101faec60712de18d48b} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_generic_node_property_gradient}{csmp\+::\+Generic\+Node\+Property\+Gradient}}$<$ dim $>$\+::\+Generic\+Node\+Property\+Gradient (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&}]{sg}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{region}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{prop}{ = {\ttfamily "{}node~property~gradient"{}}}\end{DoxyParamCaption})}
+
+Sets the calculator up for computation on the entire model (a throughgoing node numbering is assumed. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_generic_node_property_gradient_a246ee80a5818101faec60712de18d48b_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=269pt]{classcsmp_1_1_generic_node_property_gradient_a246ee80a5818101faec60712de18d48b_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_generic_node_property_gradient_a3fa9f61a53762544fe6e68c331253576}\index{csmp::GenericNodePropertyGradient$<$ dim $>$@{csmp::GenericNodePropertyGradient$<$ dim $>$}!GenericNodePropertyGradient@{GenericNodePropertyGradient}}
+\index{GenericNodePropertyGradient@{GenericNodePropertyGradient}!csmp::GenericNodePropertyGradient$<$ dim $>$@{csmp::GenericNodePropertyGradient$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{GenericNodePropertyGradient()}{GenericNodePropertyGradient()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_generic_node_property_gradient_a3fa9f61a53762544fe6e68c331253576} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_generic_node_property_gradient}{csmp\+::\+Generic\+Node\+Property\+Gradient}}$<$ dim $>$\+::\+Generic\+Node\+Property\+Gradient (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&}]{sg}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{region}{, }\item[{std\+::vector$<$ char \texorpdfstring{$\ast$}{*} $>$}]{advected\+\_\+props}{}\end{DoxyParamCaption})}
+
+Constructor for several variables. This is needed if, e.\+g. several components and fluid phases need to be limited. The name of the properties to be limited needs to be passed on in the vector of characters \doxylink{classvector}{vector$<$char\texorpdfstring{$\ast$}{*} $>$} properties. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_generic_node_property_gradient_a3fa9f61a53762544fe6e68c331253576_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=269pt]{classcsmp_1_1_generic_node_property_gradient_a3fa9f61a53762544fe6e68c331253576_icgraph}
+\end{center}
+\end{figure}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_generic_node_property_gradient_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_generic_node_property_gradient_a6c069515d0b09dbf4c04e86760cfb8ac}\index{csmp::GenericNodePropertyGradient$<$ dim $>$@{csmp::GenericNodePropertyGradient$<$ dim $>$}!CalculateGenericLeastSquareSums@{CalculateGenericLeastSquareSums}}
+\index{CalculateGenericLeastSquareSums@{CalculateGenericLeastSquareSums}!csmp::GenericNodePropertyGradient$<$ dim $>$@{csmp::GenericNodePropertyGradient$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{CalculateGenericLeastSquareSums()}{CalculateGenericLeastSquareSums()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_generic_node_property_gradient_a6c069515d0b09dbf4c04e86760cfb8ac} 
+void \mbox{\hyperlink{classcsmp_1_1_generic_node_property_gradient}{csmp\+::\+Generic\+Node\+Property\+Gradient}}$<$ 1U $>$\+::\+Calculate\+Generic\+Least\+Square\+Sums (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+A private method that computes the least squares sums, i.\+e., the sum of the distances between the center of mass of a finite volume to the centers of mass of all neighboring finite volumes. The sums are needed for the subseqent finite volume computations and are stored in STL vectors.
+
+If the mesh doesn\textquotesingle{}t change, this only needs to be calculated once for this class.
+
+This computation is done automatically during the construction of the object.
+
+A message states the successful computation of the least squares sums. \Hypertarget{classcsmp_1_1_generic_node_property_gradient_a2249149847ad852d533dac20d9943936}\index{csmp::GenericNodePropertyGradient$<$ dim $>$@{csmp::GenericNodePropertyGradient$<$ dim $>$}!CalculateGenericLeastSquareSums@{CalculateGenericLeastSquareSums}}
+\index{CalculateGenericLeastSquareSums@{CalculateGenericLeastSquareSums}!csmp::GenericNodePropertyGradient$<$ dim $>$@{csmp::GenericNodePropertyGradient$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{CalculateGenericLeastSquareSums()}{CalculateGenericLeastSquareSums()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_generic_node_property_gradient_a2249149847ad852d533dac20d9943936} 
+void \mbox{\hyperlink{classcsmp_1_1_generic_node_property_gradient}{csmp\+::\+Generic\+Node\+Property\+Gradient}}$<$ 2U $>$\+::\+Calculate\+Generic\+Least\+Square\+Sums (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+A private method that computes the least squares sums, i.\+e., the sum of the distances between the center of mass of a finite volume to the centers of mass of all neighboring finite volumes. The sums are needed for the subseqent finite volume computations and are stored in STL vectors.
+
+If the mesh doesn\textquotesingle{}t change, this only needs to be calculated once for this class.
+
+This computation is done automatically during the construction of the object.
+
+A message states the successful computation of the least squares sums \Hypertarget{classcsmp_1_1_generic_node_property_gradient_a118b5146507b4dd773b8cf990ca6062d}\index{csmp::GenericNodePropertyGradient$<$ dim $>$@{csmp::GenericNodePropertyGradient$<$ dim $>$}!CalculateGenericLeastSquareSums@{CalculateGenericLeastSquareSums}}
+\index{CalculateGenericLeastSquareSums@{CalculateGenericLeastSquareSums}!csmp::GenericNodePropertyGradient$<$ dim $>$@{csmp::GenericNodePropertyGradient$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{CalculateGenericLeastSquareSums()}{CalculateGenericLeastSquareSums()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_generic_node_property_gradient_a118b5146507b4dd773b8cf990ca6062d} 
+void \mbox{\hyperlink{classcsmp_1_1_generic_node_property_gradient}{csmp\+::\+Generic\+Node\+Property\+Gradient}}$<$ 3U $>$\+::\+Calculate\+Generic\+Least\+Square\+Sums (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+void Generic\+Node\+Property\+Gradient$<$dim$>$\+::\+Calculate\+Least\+Square\+Sums()\hypertarget{classcsmp_1_1_generic_node_property_gradient_Description}{}\doxysubsection{\texorpdfstring{Description}{Description}}\label{classcsmp_1_1_generic_node_property_gradient_Description}
+A private method that computes the least squares sums, i.\+e., the sum of the distances between the center of mass of a finite volume to the centers of mass of all neighboring finite volumes. The sums are needed for the subseqent finite volume computations and are stored in STL vectors.
+
+If the mesh doesn\textquotesingle{}t change, this only needs to be calculated once for this class.\Hypertarget{classcsmp_1_1_generic_node_property_gradient_a0d39897acf8b9ce920b9cbca076fc8e8}\index{csmp::GenericNodePropertyGradient$<$ dim $>$@{csmp::GenericNodePropertyGradient$<$ dim $>$}!CalculateGenericNodalGradient@{CalculateGenericNodalGradient}}
+\index{CalculateGenericNodalGradient@{CalculateGenericNodalGradient}!csmp::GenericNodePropertyGradient$<$ dim $>$@{csmp::GenericNodePropertyGradient$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{CalculateGenericNodalGradient()}{CalculateGenericNodalGradient()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_generic_node_property_gradient_a0d39897acf8b9ce920b9cbca076fc8e8} 
+void \mbox{\hyperlink{classcsmp_1_1_generic_node_property_gradient}{csmp\+::\+Generic\+Node\+Property\+Gradient}}$<$ 1U $>$\+::\+Calculate\+Generic\+Nodal\+Gradient (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+Generic\+Node\+Property\+Gradient$<$dim$>$\+::\+Calculate\+Nodal\+Gradient()\hypertarget{classcsmp_1_1_generic_node_property_gradient_Description}{}\doxysubsection{\texorpdfstring{Description}{Description}}\label{classcsmp_1_1_generic_node_property_gradient_Description}
+Computes the gradient of a property (concentration, saturation, etc.), by summing up the difference in the property value in a single finite volume and all its neighbors times the according least square sum. Those gradients are needed for the higher order finite volume methods and are stored in STL vectors.
+
+Note\+: For both the case where just one gradient is needed as for the one where several ones are needed\+: The user has to set the Property Key to the respective value!\hypertarget{classcsmp_1_1_o_d_e___stiff_solver_Implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{classcsmp_1_1_o_d_e___stiff_solver_Implementation}
+The method is implemented from the various Finite\+Volume$<$f\+T, dim$>$Visitors and the STL vectors that store the x and y components of the gradients can be accessed through the interfaces Gradient\+Component\+X() and Gradient\+Component\+Y()
+
+\begin{DoxyRefDesc}{Test}
+\item[\mbox{\hyperlink{test__test000026}{Test}}]tested OK \end{DoxyRefDesc}
+\Hypertarget{classcsmp_1_1_generic_node_property_gradient_a1246efe91224d1be5102d3d5acaf7d8e}\index{csmp::GenericNodePropertyGradient$<$ dim $>$@{csmp::GenericNodePropertyGradient$<$ dim $>$}!CalculateGenericNodalGradient@{CalculateGenericNodalGradient}}
+\index{CalculateGenericNodalGradient@{CalculateGenericNodalGradient}!csmp::GenericNodePropertyGradient$<$ dim $>$@{csmp::GenericNodePropertyGradient$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{CalculateGenericNodalGradient()}{CalculateGenericNodalGradient()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_generic_node_property_gradient_a1246efe91224d1be5102d3d5acaf7d8e} 
+void \mbox{\hyperlink{classcsmp_1_1_generic_node_property_gradient}{csmp\+::\+Generic\+Node\+Property\+Gradient}}$<$ 2U $>$\+::\+Calculate\+Generic\+Nodal\+Gradient (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+Computes the gradient of a property (concentration, saturation, etc.), by summing up the difference in the property value in a single finite volume and all its neighbors times the according least square sum. Those gradients are needed for the higher order finite volume methods and are stored in STL vectors.
+
+Note\+: For both the case where just one gradient is needed as for the one where several ones are needed\+: The user has to set the Property Key to the respective value!
+
+The method is implemented from the various Finite\+Volume$<$f\+T, dim$>$Visitors and the STL vectors that store the x and y components of the gradients can be accessed through the interfaces Gradient\+Component\+X() and Gradient\+Component\+Y() \Hypertarget{classcsmp_1_1_generic_node_property_gradient_a0b2e6c53eaf8d02465fd5bb23b6dc318}\index{csmp::GenericNodePropertyGradient$<$ dim $>$@{csmp::GenericNodePropertyGradient$<$ dim $>$}!CalculateGenericNodalGradient@{CalculateGenericNodalGradient}}
+\index{CalculateGenericNodalGradient@{CalculateGenericNodalGradient}!csmp::GenericNodePropertyGradient$<$ dim $>$@{csmp::GenericNodePropertyGradient$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{CalculateGenericNodalGradient()}{CalculateGenericNodalGradient()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_generic_node_property_gradient_a0b2e6c53eaf8d02465fd5bb23b6dc318} 
+void \mbox{\hyperlink{classcsmp_1_1_generic_node_property_gradient}{csmp\+::\+Generic\+Node\+Property\+Gradient}}$<$ 3U $>$\+::\+Calculate\+Generic\+Nodal\+Gradient (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+Computes the gradient of a property (concentration, saturation, etc.), by summing up the difference in the property value in a single finite volume and all its neighbors times the according least square sum. Those gradients are needed for the higher order finite volume methods and are stored in STL vectors.
+
+Note\+: For both the case where just one gradient is needed as for the one where several ones are needed\+: The user has to set the Property Key to the respective value!
+
+The method is implemented from the various Finite\+Volume$<$f\+T, dim$>$Visitors and the STL vectors that store the x and y components of the gradients can be accessed through the interfaces Gradient\+Component\+X() and Gradient\+Component\+Y() \Hypertarget{classcsmp_1_1_generic_node_property_gradient_a3ab938dd8ea00e451b65ec5bd0c9e573}\index{csmp::GenericNodePropertyGradient$<$ dim $>$@{csmp::GenericNodePropertyGradient$<$ dim $>$}!GenericCenterOfMass@{GenericCenterOfMass}}
+\index{GenericCenterOfMass@{GenericCenterOfMass}!csmp::GenericNodePropertyGradient$<$ dim $>$@{csmp::GenericNodePropertyGradient$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{GenericCenterOfMass()}{GenericCenterOfMass()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_generic_node_property_gradient_a3ab938dd8ea00e451b65ec5bd0c9e573} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_generic_node_property_gradient}{csmp\+::\+Generic\+Node\+Property\+Gradient}}$<$ dim $>$\+::\+Generic\+Center\+Of\+Mass (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{global\+\_\+node\+\_\+id}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&}]{mass\+\_\+center\+\_\+out}{}\end{DoxyParamCaption}) const}
+
+
+
+provide public access to center of mass of fv\+: 
+
+Returns the calculated centers of mass of generic finite volumes in 2d.
+
+
+\begin{DoxyParams}{Parameters}
+{\em global\+\_\+node\+\_\+id} & the node id of the corresponding FV\\
+\hline
+{\em mass\+\_\+center\+\_\+out} & the Vector onto which the xyz-\/coordinates of the mass center of the FV that belongs to the the node are written \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classcsmp_1_1_generic_node_property_gradient_adfda516597c8fab9b18af36476b9056b}\index{csmp::GenericNodePropertyGradient$<$ dim $>$@{csmp::GenericNodePropertyGradient$<$ dim $>$}!SizeOf@{SizeOf}}
+\index{SizeOf@{SizeOf}!csmp::GenericNodePropertyGradient$<$ dim $>$@{csmp::GenericNodePropertyGradient$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{SizeOf()}{SizeOf()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_generic_node_property_gradient_adfda516597c8fab9b18af36476b9056b} 
+template$<$uint32\+\_\+t dim$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_generic_node_property_gradient}{csmp\+::\+Generic\+Node\+Property\+Gradient}}$<$ dim $>$\+::\+Size\+Of (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+Returns the storage required by the \doxylink{classcsmp_1_1_generic_node_property_gradient}{Generic\+Node\+Property\+Gradient} object 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/integration/finite\+\_\+volumes/Generic\+Node\+Property\+Gradient.\+h\item 
+source/modules/integration/finite\+\_\+volumes/Generic\+Node\+Property\+Gradient.\+cpp\end{DoxyCompactItemize}

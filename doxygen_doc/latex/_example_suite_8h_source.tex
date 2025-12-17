@@ -1,0 +1,105 @@
+\doxysection{Example\+Suite.\+h}
+\hypertarget{_example_suite_8h_source}{}\label{_example_suite_8h_source}\index{examples/source/ExampleSuite.h@{examples/source/ExampleSuite.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{EXAMPLESUITE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{EXAMPLESUITE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{map}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{vector}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{ostream}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_example_8h}{"{}Example.h"{}}}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\{}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{comment}{///\ A\ suite\ to\ contain\ a\ number\ of\ examples\ with\ UI}}
+\DoxyCodeLine{00014\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_example_suite}{ExampleSuite}}}
+\DoxyCodeLine{00015\ \{}
+\DoxyCodeLine{00016\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00017\ \ \ ExampleSuite(\ \textcolor{keyword}{const}\ std::string\ \&title,\ std::ostream\ *ostream\ =\ \&std::cout\ );}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \textcolor{comment}{//\ Property\ interface}}
+\DoxyCodeLine{00020\ \ \ std::string\ GetTitle()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ title\_;\ \}}
+\DoxyCodeLine{00021\ \ \ \textcolor{keyword}{const}\ std::ostream*\ GetStream()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ ostream\_;\ \}}
+\DoxyCodeLine{00022\ \ \ \textcolor{keywordtype}{void}\ SetStream(\ std::ostream*\ ostream)\ \{\ ostream\_\ =\ ostream;\ \}}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \textcolor{comment}{//\ User\ interface}}
+\DoxyCodeLine{00025\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_example_suite_af18ede7ff8365370f600f3c4e6f94f57}{Run}}();\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ runs\ listing\ and\ user\ choice}}
+\DoxyCodeLine{00026\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_example_suite_abf1c8f252a5f3c6c3802cb76923d629c}{Free}}();\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ removes\ examples}}
+\DoxyCodeLine{00027\ \ \ \mbox{\hyperlink{classcsmp_1_1_example_suite_abafb0a007ac2ca12bc38300e23efb10d}{size\_t}}\ \mbox{\hyperlink{classcsmp_1_1_example_suite_abafb0a007ac2ca12bc38300e23efb10d}{RegisterExample}}(\ \mbox{\hyperlink{classcsmp_1_1_example}{Example}}\ *example\ );\ \ \ \textcolor{comment}{//\ register\ new\ example}}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \textcolor{comment}{//\ GUI\ interface}}
+\DoxyCodeLine{00030\ \ \ \textcolor{keyword}{typedef}\ \mbox{\hyperlink{classcsmp_1_1_example_suite}{std}}::\mbox{\hyperlink{classcsmp_1_1_example_suite}{map}}<\mbox{\hyperlink{classcsmp_1_1_example_suite}{std}}::\mbox{\hyperlink{classcsmp_1_1_example_suite}{string}},\mbox{\hyperlink{classcsmp_1_1_example_suite}{std}}::\mbox{\hyperlink{classcsmp_1_1_example_suite}{vector}}<\mbox{\hyperlink{classcsmp_1_1_example_suite}{Example}}*>*\ >::\mbox{\hyperlink{classcsmp_1_1_example_suite}{iterator}}\ \mbox{\hyperlink{classcsmp_1_1_example_suite}{category\_iterator}};}
+\DoxyCodeLine{00031\ \ \ category\_iterator\ GetCategoriesBegin()\ \{\ \textcolor{keywordflow}{return}\ categories\_.begin();\ \}}
+\DoxyCodeLine{00032\ \ \ category\_iterator\ GetCategoriesEnd()\ \{\ \textcolor{keywordflow}{return}\ categories\_.end();\ \}}
+\DoxyCodeLine{00033\ \ \ \mbox{\hyperlink{classcsmp_1_1_example_suite_ae58deee2f0ca6516ca216f0213cc40f1}{std}}::\mbox{\hyperlink{classcsmp_1_1_example_suite_ae58deee2f0ca6516ca216f0213cc40f1}{string}}\ \mbox{\hyperlink{classcsmp_1_1_example_suite_ae58deee2f0ca6516ca216f0213cc40f1}{StripExampleTitle}}(\ std::string\ title\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00034\ \ \ \textcolor{keywordtype}{void}\ \ \ OstreamDoubleUnderlined(\ std::string\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00038\ \ \ \textcolor{comment}{//\ IO}}
+\DoxyCodeLine{00039\ \ \ \textcolor{keywordtype}{void}\ \ \ UIMenu()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00040\ \ \ \textcolor{keywordtype}{void}\ \ \ UICategoryMenu()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00041\ \ \ \textcolor{keywordtype}{void}\ \ \ UIExampleDetailsMenu(\ \textcolor{keywordtype}{int}\ exampleIndex,}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::map<std::string,std::vector<Example*>*\ >::const\_iterator\ \ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00043\ \ \ \textcolor{keywordtype}{void}\ \ \ UIExamplesMenu(\ std::map<std::string,std::vector<Example*>*\ >::const\_iterator\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00044\ \ \ \textcolor{keywordtype}{void}\ \ \ Initialize();}
+\DoxyCodeLine{00045\ \ \ \textcolor{keywordtype}{void}\ \ \ CategoriesList()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00046\ \ \ \textcolor{keywordtype}{void}\ \ \ SuiteHeader()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00047\ \ \ \textcolor{keywordtype}{int}\ \ \ \ ChoiceWithinRange(\ \textcolor{keywordtype}{double}\ min,\ \textcolor{keywordtype}{double}\ max\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00048\ \ \ \textcolor{keywordtype}{void}\ \ \ ExampleDetails(\ \mbox{\hyperlink{classcsmp_1_1_example}{Example}}*\ example\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00049\ \ \ \textcolor{keywordtype}{bool}\ \ \ ChooseExampleAction()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00050\ \ \ \textcolor{keywordtype}{void}\ \ \ SortExampleVector(\ std::vector<Example*>\&\ examples\ );}
+\DoxyCodeLine{00051\ \ \ \textcolor{keywordtype}{void}\ \ \ ExamplesList(\ std::map<std::string,std::vector<Example*>*\ >::const\_iterator\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00052\ \ \ \textcolor{keywordtype}{void}\ \ \ OstreamUnderlined(\ std::string\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00053\ \ \ \textcolor{keywordtype}{int}\ \ \ \ ChooseExample(\ \textcolor{keyword}{const}\ std::vector<Example*>*\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00054\ \ \ \textcolor{keywordtype}{void}\ \ \ WriteExamplesFile();}
+\DoxyCodeLine{00055\ \ \ \mbox{\hyperlink{classcsmp_1_1_example_suite}{std}}::\mbox{\hyperlink{classcsmp_1_1_example_suite}{map}}<\mbox{\hyperlink{classcsmp_1_1_example_suite}{std}}::\mbox{\hyperlink{classcsmp_1_1_example_suite}{string}},\mbox{\hyperlink{classcsmp_1_1_example_suite}{std}}::\mbox{\hyperlink{classcsmp_1_1_example_suite}{vector}}<\mbox{\hyperlink{classcsmp_1_1_example_suite}{Example}}*>*\ >::\mbox{\hyperlink{classcsmp_1_1_example_suite}{const\_iterator}}\ \mbox{\hyperlink{classcsmp_1_1_example_suite}{ChooseCategory}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00056\ \ \ \textcolor{comment}{//\ DB}}
+\DoxyCodeLine{00057\ \ \ std::string\ title\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ Title\ of\ suite}}
+\DoxyCodeLine{00058\ \ \ std::ostream*\ ostream\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ output\ stream\ suite\ writes\ messages\ to}}
+\DoxyCodeLine{00059\ \ \ \mbox{\hyperlink{classcsmp_1_1_example_suite}{std}}::\mbox{\hyperlink{classcsmp_1_1_example_suite}{map}}<\mbox{\hyperlink{classcsmp_1_1_example_suite}{std}}::\mbox{\hyperlink{classcsmp_1_1_example_suite}{string}},\mbox{\hyperlink{classcsmp_1_1_example_suite}{std}}::\mbox{\hyperlink{classcsmp_1_1_example_suite}{vector}}<\mbox{\hyperlink{classcsmp_1_1_example_suite}{Example}}*>*\ >\ \mbox{\hyperlink{classcsmp_1_1_example_suite}{categories\_}};\ \ \textcolor{comment}{///<\ registerd\ examples\ of\ different\ categories}}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \textcolor{comment}{//\ Disabled}}
+\DoxyCodeLine{00062\ \ \ ExampleSuite(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_example_suite}{ExampleSuite}}\&\ );}
+\DoxyCodeLine{00063\ \ \ \mbox{\hyperlink{classcsmp_1_1_example_suite}{ExampleSuite}}\ \&operator\ =\ (\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_example_suite}{ExampleSuite}}\&\ );}
+\DoxyCodeLine{00064\ \};}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00067\ \textcolor{comment}{@class\ ExampleSuite\ ExampleSuite\ "{}examples/ExampleSuite.h"{}}}
+\DoxyCodeLine{00068\ \textcolor{comment}{}}
+\DoxyCodeLine{00069\ \textcolor{comment}{@author\ P.\ Lang}}
+\DoxyCodeLine{00070\ \textcolor{comment}{@date\ 2010}}
+\DoxyCodeLine{00071\ \textcolor{comment}{}}
+\DoxyCodeLine{00072\ \textcolor{comment}{@section\ implementation\ Implementation}}
+\DoxyCodeLine{00073\ \textcolor{comment}{}}
+\DoxyCodeLine{00074\ \textcolor{comment}{Contains\ a\ map\ which\ holds\ one\ entry\ for\ each\ example\ category\ (Example.h\ -\/-\/>\ category\_)}}
+\DoxyCodeLine{00075\ \textcolor{comment}{This\ map\ entry\ holds\ a\ pointer\ to\ a\ vector\ which\ in\ turn\ contains\ pointers\ to\ all}}
+\DoxyCodeLine{00076\ \textcolor{comment}{examples\ registered\ to\ the\ suite\ of\ the\ respective\ category.}}
+\DoxyCodeLine{00077\ \textcolor{comment}{}}
+\DoxyCodeLine{00078\ \textcolor{comment}{@section\ examples\ Application\ Examples}}
+\DoxyCodeLine{00079\ \textcolor{comment}{}}
+\DoxyCodeLine{00080\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00081\ \textcolor{comment}{...}}
+\DoxyCodeLine{00082\ \textcolor{comment}{//\ instantiating\ ExampleSuite}}
+\DoxyCodeLine{00083\ \textcolor{comment}{ExampleSuite\ exampleSuite(\ "{}CSMP\ EXAMPLES"{},\ \&cout\ );}}
+\DoxyCodeLine{00084\ \textcolor{comment}{}}
+\DoxyCodeLine{00085\ \textcolor{comment}{//\ register\ new\ example}}
+\DoxyCodeLine{00086\ \textcolor{comment}{exampleSuite.RegisterExample(\ new\ Example1ForSuite()\ );}}
+\DoxyCodeLine{00087\ \textcolor{comment}{...}}
+\DoxyCodeLine{00088\ \textcolor{comment}{exampleSuite.RegisterExample\ (\ new\ YourExampleClass()\ );}}
+\DoxyCodeLine{00089\ \textcolor{comment}{}}
+\DoxyCodeLine{00090\ \textcolor{comment}{//\ execute\ examples\ in\ order\ of\ registration}}
+\DoxyCodeLine{00091\ \textcolor{comment}{exampleSuite.Execute();}}
+\DoxyCodeLine{00092\ \textcolor{comment}{...}}
+\DoxyCodeLine{00093\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00094\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{//\ EXAMPLESUITE\_H}}
+
+\end{DoxyCode}

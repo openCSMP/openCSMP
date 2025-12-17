@@ -1,0 +1,173 @@
+.TH "csmp::NaClH2OPropertiesVisitorPHX< dim >" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::NaClH2OPropertiesVisitorPHX< dim >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <NaClH2OPropertiesVisitorPHX\&.h>\fP
+.PP
+Inherits \fBcsmp::Visitor< dim >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBNaClH2OPropertiesVisitorPHX\fP (\fBModel\fP< dim > &)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBNode\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBRegion\fP< dim > *)"
+.br
+.ti -1c
+.RI "void \fBSetTimeIncrement\fP (double time_increment)"
+.br
+.ti -1c
+.RI "void \fBInitialPropertiesFromPTX\fP (\fBModel\fP< dim > &)"
+.br
+.ti -1c
+.RI "void \fBTopBoundaryHandling\fP (bool TB)"
+.br
+.ti -1c
+.RI "void \fBTemperatureDependentHeatCapacityRock\fP (double cpr_min_ext, double t_min_ext, double cpr_max_ext, double t_max_ext)"
+.br
+.ti -1c
+.RI "void \fBWithOpenBoundaries\fP (double reference_specific_enthalpy, double reference_salinity)"
+.br
+.ti -1c
+.RI "void \fBWithOpenBoundaries\fP (double reference_salinity)"
+.br
+.ti -1c
+.RI "void \fBSetAdjustCompressibilityAfterPhaseChangeBoolTo\fP (bool adjust)"
+.br
+.ti -1c
+.RI "void \fBSetMaximumCompressibilityCyclesAfterPhaseChange\fP (double max)"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::Visitor< dim >\fP
+.in +1c
+.ti -1c
+.RI "\fBVisitor\fP (\fBPLACEMENT\fP level=MODEL, \fBPLACEMENT\fP target=ELEMENT)"
+.br
+.ti -1c
+.RI "void \fBApplicationLevel\fP (\fBPLACEMENT\fP p)"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBApplicationLevel\fP () const"
+.br
+.ti -1c
+.RI "void \fBApplicationTarget\fP (\fBPLACEMENT\fP p)"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBApplicationTarget\fP () const"
+.br
+.ti -1c
+.RI "virtual void \fBSetInitialProperties\fP (\fBModel\fP< dim > *model)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBModel\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBBoundary\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBSplitBoundary\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBElement\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBFace\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBInterFace\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBEdge\fP< dim > *)"
+.br
+.ti -1c
+.RI "bool \fBVerbose\fP ()"
+.br
+.ti -1c
+.RI "void \fBVerbose\fP (bool verbose)"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Attributes inherited from \fBcsmp::Visitor< dim >\fP
+.in +1c
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBapplication_level_\fP"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBapplication_target_\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim>
+.br
+class csmp::NaClH2OPropertiesVisitorPHX< dim >"
+.SH "\fBNaClH2OPropertiesVisitorPHX\fP"
+.PP
+
+.PP
+.SS "MOTIVATION"
+
+.PP
+In simulations of multiphase fluid flow involving heat and mass transport, fluid properties are typically stored at nodes, and heat and mass transport via diffusion and advection is done in a decoupled manner\&. This ultimately means that after the diffusion and advection steps, the fluid phase state may have changed and, even worse, very likely means that fluid and rock are not in thermal equilibrium\&. \fBNaClH2OPropertiesVisitorPHX\fP will perform a thermal equilibration between fluid and rock (using class \fBH2ONaClThermalEquilibrator\fP) at a given pressure, total enthalpy and salinity and update fluid properties for the equilibrated state\&.
+
+.PP
+.SS "DESIGN INTENT"
+
+.PP
+\fBNaClH2OPropertiesVisitorPHX\fP is an FEM_Visitor within the CSMP framework, see also documentation there\&. It applies to nodes only\&.
+
+.PP
+.SS "APPLICABILITY"
+
+.PP
+\fBNaClH2OPropertiesVisitorPHX\fP can be applied in simulations with pure H2O fluids in combination with heat and mass transport\&. Simpler simulations should use other tools in the CSMP++ package\&. A fundamental assumption is that of thermal equilibrium between fluid and rock is requested, otherwise using \fBNaClH2OPropertiesVisitorPHX\fP makes no sense at all\&.
+
+.PP
+\fBNaClH2OPropertiesVisitorPHX\fP also assumes that fluid properties are stored on the nodes (i\&.e\&., it relates to a node-centered finite volume schemes for solving the advection equations) and that rock properties discretized on the element are uniquely defined such that their interpolated nodal values can meaningfully be used (*** is that fully correct? ***)\&.
+
+.PP
+.SS "STRUCTURE"
+
+.PP
+.SS "PARTICIPANTS"
+
+.PP
+\fBNaClH2OPropertiesVisitorPHX\fP uses \fBH2ONaClThermalEquilibrator\fP, which itself calls a number of classes related to fluid properties, in particular FluidLookup and the specialized classes for phases in the H2O system (see documentation for FluidLookup etc\&.)\&.
+
+.PP
+During
+
+.PP
+\fBCopyright\fP
+.RS 4
+(c) 2004-2009 by Drs\&. Thomas Driesner, Sebastian Geiger, Dim Coumou 
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim> void \fBcsmp::NaClH2OPropertiesVisitorPHX\fP< dim >::Visit (\fBNode\fP< dim > * n)\fR [virtual]\fP"
+
+.PP
+Reimplemented from \fBcsmp::Visitor< dim >\fP\&.
+.SS "template<uint32_t dim> void \fBcsmp::NaClH2OPropertiesVisitorPHX\fP< dim >::Visit (\fBRegion\fP< dim > * n)\fR [virtual]\fP"
+
+.PP
+Reimplemented from \fBcsmp::Visitor< dim >\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

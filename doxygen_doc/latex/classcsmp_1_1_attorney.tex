@@ -1,0 +1,83 @@
+\doxysection{csmp\+::Attorney\texorpdfstring{$<$}{<} Client \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_attorney}{}\label{classcsmp_1_1_attorney}\index{csmp::Attorney$<$ Client $>$@{csmp::Attorney$<$ Client $>$}}
+
+
+\doxylink{classcsmp_1_1_attorney}{Attorney} design pattern gives access to protected / private member variables and methods.  
+
+
+
+
+{\ttfamily \#include $<$Attorney.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Attorney\texorpdfstring{$<$}{<} Client \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=249pt]{classcsmp_1_1_attorney__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Attorney\texorpdfstring{$<$}{<} Client \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=198pt]{classcsmp_1_1_attorney__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_attorney_abec6039589142cdcf63b9077bc665a51}\label{classcsmp_1_1_attorney_abec6039589142cdcf63b9077bc665a51} 
+{\bfseries Attorney} (Client \&client)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$class Client$>$\newline
+class csmp\+::\+Attorney$<$ Client $>$}
+\doxylink{classcsmp_1_1_attorney}{Attorney} design pattern gives access to protected / private member variables and methods. 
+
+\hypertarget{compare_floats_8h_motivation}{}\doxysubsection{\texorpdfstring{Motivation}{Motivation}}\label{compare_floats_8h_motivation}
+Unit tests may require access to internal variables and methods to test the basic internal works of a class.\hypertarget{classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_design}{}\doxysubsection{\texorpdfstring{Design Intent}{Design Intent}}\label{classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_design}
+This version is templated to
+\begin{DoxyEnumerate}
+\item avoid friend declaration in the class being tested. Cluttering a class with friend declarations which are not relevant to the way the class is used in the code is not helpful to the user.
+\item give selective access to members and methods. A friend declaration gives access to all protected and private members and methods. This templated version requires explicit declaration of which members become accessible.
+\end{DoxyEnumerate}\hypertarget{classcsmp_1_1_flow_functions_module1_example}{}\doxysubsection{\texorpdfstring{Example}{Example}}\label{classcsmp_1_1_flow_functions_module1_example}
+Declare an \doxylink{classcsmp_1_1_attorney}{Attorney} of the class to be tested and declare members and methods to be made accessible like so\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{template}<u\textcolor{keywordtype}{int}32\_t\ dim>}
+\DoxyCodeLine{\textcolor{keyword}{class\ }PDE\_Integrator\_Attorney\ :\ \textcolor{keyword}{public}\ Attorney<class\ PDE\_Integrator<dim>>\ \{}
+\DoxyCodeLine{\textcolor{keyword}{public}:}
+\DoxyCodeLine{\ \ \ \ \textcolor{keyword}{using\ }Attorney<PDE\_Integrator<dim>>::Attorney;\ \textcolor{comment}{//\ Inherit\ Attorney\ constructor}}
+\DoxyCodeLine{\ \ \ \ \textcolor{keyword}{using\ }PDE\_Integrator<dim>::EstablishMatrixSetup;}
+\DoxyCodeLine{\ \ \ \ \textcolor{keyword}{using\ }PDE\_Integrator<dim>::lhs\_operators\_;}
+\DoxyCodeLine{\};}
+
+\end{DoxyCode}
+
+
+Then, in your test, create an \doxylink{classcsmp_1_1_attorney}{Attorney} and use it like so\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{PDE\_Integrator<2U,Element>\ pde\_integrator(\ ...\ );}
+\DoxyCodeLine{PDE\_Integrator\_Attorney<2U>\ attorney(\ pde\_integrator\ );}
+\DoxyCodeLine{LHS\_FixedValueMatrix<2U>\ \ lhs(\ ...\ );}
+\DoxyCodeLine{attorney.Add(\&lhs);}
+\DoxyCodeLine{attorney.EstablishMatrixSetup(\ ...\ );\ \textcolor{comment}{//\ <-\/\ Accessing\ protected\ method}}
+\DoxyCodeLine{\_test(\ attorney.lhs\_operators\_.size()\ ==\ 1\ );\ \textcolor{comment}{//\ <-\/\ Accessing\ protected\ member\ variable}}
+
+\end{DoxyCode}
+ 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/utilities/Attorney.\+h\end{DoxyCompactItemize}

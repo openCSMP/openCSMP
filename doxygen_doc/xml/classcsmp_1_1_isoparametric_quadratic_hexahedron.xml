@@ -1,0 +1,1309 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_isoparametric_quadratic_hexahedron" kind="class" language="C++" prot="public">
+    <compoundname>csmp::IsoparametricQuadraticHexahedron</compoundname>
+    <basecompoundref refid="classcsmp_1_1_finite_element" prot="public" virt="non-virtual">csmp::FiniteElement</basecompoundref>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_isoparametric_quadratic_hexahedron_1ab06a57d336ba3cf61d1e309a340d7b9e" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::IsoparametricQuadraticHexahedron::W</definition>
+        <argsstring></argsstring>
+        <name>W</name>
+        <qualifiedname>csmp::IsoparametricQuadraticHexahedron::W</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" line="63" column="19" bodyfile="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a85473c01ddc630b23b978b456764e97f" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt;</type>
+        <definition>DenseMatrix&lt;DM_MIN&gt; csmp::IsoparametricQuadraticHexahedron::DN</definition>
+        <argsstring></argsstring>
+        <name>DN</name>
+        <qualifiedname>csmp::IsoparametricQuadraticHexahedron::DN</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" line="64" column="21" bodyfile="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_isoparametric_quadratic_hexahedron_1af3a0714b1d5372536bd0f8bce9ac89a4" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt;</type>
+        <definition>DenseMatrix&lt;DM_MIN&gt; csmp::IsoparametricQuadraticHexahedron::NXYZ</definition>
+        <argsstring></argsstring>
+        <name>NXYZ</name>
+        <qualifiedname>csmp::IsoparametricQuadraticHexahedron::NXYZ</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" line="64" column="24" bodyfile="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_isoparametric_quadratic_hexahedron_1ace972e45ccbe5b506d62ec5ec209a1ed" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt;</type>
+        <definition>DenseMatrix&lt;DM_MIN&gt; csmp::IsoparametricQuadraticHexahedron::IP</definition>
+        <argsstring></argsstring>
+        <name>IP</name>
+        <qualifiedname>csmp::IsoparametricQuadraticHexahedron::IP</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" line="64" column="29" bodyfile="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a733a1abe68576a1b7fc452b187a4857f" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt;</type>
+        <definition>DenseMatrix&lt;DM_MIN&gt; csmp::IsoparametricQuadraticHexahedron::JETAL</definition>
+        <argsstring></argsstring>
+        <name>JETAL</name>
+        <qualifiedname>csmp::IsoparametricQuadraticHexahedron::JETAL</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" line="64" column="32" bodyfile="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" bodystart="64" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a4c47440ef9188aedbe35856fa44432f3" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::IsoparametricQuadraticHexahedron::IsoparametricQuadraticHexahedron</definition>
+        <argsstring>(uint32_t integrationPoints=8)</argsstring>
+        <name>IsoparametricQuadraticHexahedron</name>
+        <qualifiedname>csmp::IsoparametricQuadraticHexahedron::IsoparametricQuadraticHexahedron</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>integrationPoints</declname>
+          <defval>8</defval>
+        </param>
+        <briefdescription>
+<para>4, 6 or 8 integration points are possible </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="warning"><para>there seems to be problem with derivative at nodes 13 and 14, 13 - singular JACINV, 14 - orientation </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" line="12" column="14" bodyfile="source/modules/integration/finite_elements/IsoparametricQuadraticHexahedron.cpp" bodystart="19" bodyend="179"/>
+        <references refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a4c47440ef9188aedbe35856fa44432f3" compoundref="_isoparametric_quadratic_hexahedron_8cpp" startline="19" endline="179">IsoparametricQuadraticHexahedron</references>
+        <referencedby refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a4c47440ef9188aedbe35856fa44432f3" compoundref="_isoparametric_quadratic_hexahedron_8cpp" startline="19" endline="179">IsoparametricQuadraticHexahedron</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_quadratic_hexahedron_1af24ae3e61fda39bed0379894f2980bc2" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::IsoparametricQuadraticHexahedron::Volume</definition>
+        <argsstring>()</argsstring>
+        <name>Volume</name>
+        <qualifiedname>csmp::IsoparametricQuadraticHexahedron::Volume</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a16025c5d7f2ac217d2dbedad5d561a06">Volume</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Computes Integral N dA = sum_1...n Wi Ji Ni. This formulation also gives a meaningful area if the element boundaries are curved. For a description of numerical integration of isoparametric quadratic triangular elements, refer to Cook et al. (1989) 3rd Ed., p. 183.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The finite element which supplies the nodal coordinates from which the area is computed.</para>
+<para><simplesect kind="return"><para>The area (m2) of the finite element. </para>
+</simplesect>
+</para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" line="14" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricQuadraticHexahedron.cpp" bodystart="1493" bodyend="1514"/>
+        <referencedby refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a29e3cc0230a2f21db9c4ce389eda55ed" compoundref="_isoparametric_quadratic_hexahedron_8cpp" startline="1713" endline="1726">InnerRadius</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a6516e03f0b76ff34a7137b4b11bd8ae8" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::IsoparametricQuadraticHexahedron::AspectRatio</definition>
+        <argsstring>()</argsstring>
+        <name>AspectRatio</name>
+        <qualifiedname>csmp::IsoparametricQuadraticHexahedron::AspectRatio</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a6c6148f7a38b639b721013dbd8f8d3f5">AspectRatio</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Computes the element aspect ratio as the ratio between the longest and the shortest boundary segment.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> is consulted for its global coordinates. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" line="15" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricQuadraticHexahedron.cpp" bodystart="1381" bodyend="1396"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a29e3cc0230a2f21db9c4ce389eda55ed" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::IsoparametricQuadraticHexahedron::InnerRadius</definition>
+        <argsstring>()</argsstring>
+        <name>InnerRadius</name>
+        <qualifiedname>csmp::IsoparametricQuadraticHexahedron::InnerRadius</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a3ad8c30e7136d47df5ca95907647c538">InnerRadius</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>This method attempts to calculate the inner radius of the curved-sided quad by talking 1/6 of the perimeter and dividing this measure by the area of the quad.</para>
+<para>The procedure is empirically based giving a good match if the quadss are relatively even-sided and have straight edges.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The parent element is queried for its node coordinates. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" line="16" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricQuadraticHexahedron.cpp" bodystart="1713" bodyend="1726"/>
+        <references refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1af24ae3e61fda39bed0379894f2980bc2" compoundref="_isoparametric_quadratic_hexahedron_8cpp" startline="1493" endline="1514">Volume</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a26bb52f43ca79987156b9f18c5cc0ddb" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricQuadraticHexahedron::EdgeLengths</definition>
+        <argsstring>(std::vector&lt; double &gt; &amp;vec)</argsstring>
+        <name>EdgeLengths</name>
+        <qualifiedname>csmp::IsoparametricQuadraticHexahedron::EdgeLengths</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1ac2348fa774457d4adde9354189277d9e">EdgeLengths</reimplements>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>vec</declname>
+          <defname>len</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Segment length is calculated directly as the length of linear segments.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>len</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The lengths of the 12 segments will be returned into the vector which is the second method argument.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>The segment lengths are computed as simple Euclidian distance between corner vertices of the edge. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" line="17" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricQuadraticHexahedron.cpp" bodystart="1410" bodyend="1475"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a5b236db1d304c78aac83fc4df345b252" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricQuadraticHexahedron::CornerNodes</definition>
+        <argsstring>(std::vector&lt; uint32_t &gt; &amp;ids) const</argsstring>
+        <name>CornerNodes</name>
+        <qualifiedname>csmp::IsoparametricQuadraticHexahedron::CornerNodes</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1ae3f0ae4a9ad3424ccc4553ff270b155e">CornerNodes</reimplements>
+        <param>
+          <type>std::vector&lt; uint32_t &gt; &amp;</type>
+          <declname>ids</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns local node ids of the 4 nodes located at the corners of the quadratic tetrahedral element.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ids</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Returns an unsigned integer vector with the 4 local corner node ID numbers for the element </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" line="18" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricQuadraticHexahedron.cpp" bodystart="210" bodyend="221"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_quadratic_hexahedron_1af996460fe40b8285f622bb26873d5a69" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type>uint32_t</type>
+        <definition>virtual uint32_t csmp::IsoparametricQuadraticHexahedron::CornerNodes</definition>
+        <argsstring>() const</argsstring>
+        <name>CornerNodes</name>
+        <qualifiedname>csmp::IsoparametricQuadraticHexahedron::CornerNodes</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1abf2597e5cf0563435169689ee94d57a1">CornerNodes</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" line="19" column="27" bodyfile="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" bodystart="19" bodyend="19"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a0bac667641efb79f4c3397cd2f3e61e5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricQuadraticHexahedron::MidSideNodes</definition>
+        <argsstring>(std::vector&lt; uint32_t &gt; &amp;ids) const</argsstring>
+        <name>MidSideNodes</name>
+        <qualifiedname>csmp::IsoparametricQuadraticHexahedron::MidSideNodes</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a8149423046e10426a7eb520164ad3a38">MidSideNodes</reimplements>
+        <param>
+          <type>std::vector&lt; uint32_t &gt; &amp;</type>
+          <declname>ids</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Method returns a vector with a size of 8, containing the consecutively ordered local node numbers of the side of the element which lies at the indicated model boundary. If the element is not on the model boundary an error is reported and the vector is initialized to unspecified.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The parent <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>, the target boundary of the the <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> of elements, and a vector which will hold the the local indices of the identified nodes (0...8).</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>fnids</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The resulting local node id&apos;s are returned into the third method argument.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>While only the element knows which nodes are located at the mode boundary, the <ref refid="classcsmp_1_1_finite_element" kindref="compound">FiniteElement</ref> knows in which order these appear.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>To assign Neumann boundary conditions with a PDE operator for surface integrals. Returns 4 local node ids of the nodes 4-9 located at the midsides of the quadratic tetrahedral element.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ids</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Returns an unsigned integer vector with the 4 local midside-node ID numbers for the element. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" line="20" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricQuadraticHexahedron.cpp" bodystart="1650" bodyend="1665"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_quadratic_hexahedron_1aa8e3a4dca9863762a969c8954df01498" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type>uint32_t</type>
+        <definition>virtual uint32_t csmp::IsoparametricQuadraticHexahedron::MidSideNodes</definition>
+        <argsstring>() const</argsstring>
+        <name>MidSideNodes</name>
+        <qualifiedname>csmp::IsoparametricQuadraticHexahedron::MidSideNodes</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1aec5a871df4af8c883e496f6283872780">MidSideNodes</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" line="21" column="27" bodyfile="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" bodystart="21" bodyend="21"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a8ac839486cc8508eb6785f56f12e6849" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricQuadraticHexahedron::CounterClockwiseNodes</definition>
+        <argsstring>(std::vector&lt; uint32_t &gt; &amp;ids) const</argsstring>
+        <name>CounterClockwiseNodes</name>
+        <qualifiedname>csmp::IsoparametricQuadraticHexahedron::CounterClockwiseNodes</qualifiedname>
+        <param>
+          <type>std::vector&lt; uint32_t &gt; &amp;</type>
+          <declname>ids</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns the counter-clockwise local node numbering for the element.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ids</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Returns the counter-clockwise local node numbering for the element. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" line="22" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricQuadraticHexahedron.cpp" bodystart="231" bodyend="261"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_quadratic_hexahedron_1aec2dd1f4854c79777cfe2d5ce715bb52" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricQuadraticHexahedron::ExtrapolateIntegrationPointVariableToNodes</definition>
+        <argsstring>(uint32_t nvars, const std::vector&lt; double &gt; &amp;IVAR, std::vector&lt; double &gt; &amp;NVAR) const</argsstring>
+        <name>ExtrapolateIntegrationPointVariableToNodes</name>
+        <qualifiedname>csmp::IsoparametricQuadraticHexahedron::ExtrapolateIntegrationPointVariableToNodes</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1ae7ea6940dcaa8403c7c35e70db4ba21c">ExtrapolateIntegrationPointVariableToNodes</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>nvars</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>IVAR</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>NVAR</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Method uses the four integration points of the element to define linear interpolation functions (just like in the linear tetrahedron). With these functions variable values specified for the integration points are linearily extrapolated to the elements nodes. Since the extrapolation functions are linear and the distance between the integration points and the nodes (in the local coordinate system which is used) is small, the extrapolation is exact to numerical precision.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The first argument specifies how many variable values are supplied by the IVAR vector for each integration point. This allows, for instance, to extrapolate vector or tensor variables with this method which are put into IVAR sequentially. Thus, IVAR has the dimensions 4 x vars-per- integration point. The third method argument NVAR will hold the extrapolated values for each node. Thus, its size should be 10 x vars-per-integration point.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>NVAR</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The extrapolated values for each node of the element are returned into the third method argument NVAR.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Sometimes, property values calculated at integration points are more exact than if one calculates them at the nodes. In this case the method offers the possibility to linearily extrapolate the exact values to the nodes. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" line="24" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricQuadraticHexahedron.cpp" bodystart="1767" bodyend="1859"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a3ffc79b58de382ca83395139e335e5f2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="group___c_s_m_pglobal_enums_1ga182d1fe97a0151d464d8170c0fafa872" kindref="member">CSMP_FEM_TYPE</ref></type>
+        <definition>CSMP_FEM_TYPE csmp::IsoparametricQuadraticHexahedron::ElementTypeOfFace</definition>
+        <argsstring>(uint32_t face) const</argsstring>
+        <name>ElementTypeOfFace</name>
+        <qualifiedname>csmp::IsoparametricQuadraticHexahedron::ElementTypeOfFace</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a066cbd92cd983a3c2e73859286280587">ElementTypeOfFace</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>face</declname>
+        </param>
+        <briefdescription>
+<para>reports the element type that would match that of its corresponding face </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para><xrefsect id="todo_1_todo000069"><xreftitle>Todo</xreftitle><xrefdescription><para>(2-P) Remove typid by name fct </para>
+</xrefdescription></xrefsect></para>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" line="28" column="28" bodyfile="source/modules/integration/finite_elements/IsoparametricQuadraticHexahedron.cpp" bodystart="483" bodyend="486"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a5aaf6ebbfd09dcd62771d8c52d2fe6f5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="group___c_s_m_pglobal_enums_1ga182d1fe97a0151d464d8170c0fafa872" kindref="member">CSMP_FEM_TYPE</ref></type>
+        <definition>virtual CSMP_FEM_TYPE csmp::IsoparametricQuadraticHexahedron::ElementTypeOfSegment</definition>
+        <argsstring>(uint32_t) const</argsstring>
+        <name>ElementTypeOfSegment</name>
+        <qualifiedname>csmp::IsoparametricQuadraticHexahedron::ElementTypeOfSegment</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a136f53aa9d4cd295a984ca46c0864ff7">ElementTypeOfSegment</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>segment</declname>
+        </param>
+        <briefdescription>
+<para>reports the element type that would match that of its corresponding segment </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para><xrefsect id="todo_1_todo000070"><xreftitle>Todo</xreftitle><xrefdescription><para>(2-P) Remove typid by name fct </para>
+</xrefdescription></xrefsect></para>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" line="29" column="28" bodyfile="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" bodystart="29" bodyend="29"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a6be32f7d1225b32856ffb060866bbf6e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricQuadraticHexahedron::NodesOfSegment</definition>
+        <argsstring>(uint32_t segm_id, std::vector&lt; uint32_t &gt; &amp;snids) const</argsstring>
+        <name>NodesOfSegment</name>
+        <qualifiedname>csmp::IsoparametricQuadraticHexahedron::NodesOfSegment</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a443213e98dc0cc9692bd3eef5a168295">NodesOfSegment</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>segm_id</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; uint32_t &gt; &amp;</type>
+          <declname>snids</declname>
+        </param>
+        <briefdescription>
+<para>reports the egde nodes (0..nodes-1) which can be more than 2 in higher-order elements </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" line="31" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricQuadraticHexahedron.cpp" bodystart="267" bodyend="332"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_quadratic_hexahedron_1aab69b5ed6bd1681e1ed582af2ec1b94e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>std::vector&lt; uint32_t &gt;</type>
+        <definition>vector&lt; uint32_t &gt; csmp::IsoparametricQuadraticHexahedron::NodesOfFace</definition>
+        <argsstring>(uint32_t face_id) const</argsstring>
+        <name>NodesOfFace</name>
+        <qualifiedname>csmp::IsoparametricQuadraticHexahedron::NodesOfFace</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a32fc14575277846326041fe914209f9a">NodesOfFace</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>face_id</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>For this element, the faces are numbered such that the lower left closest is 1 -&gt;4 </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" line="33" column="26" bodyfile="source/modules/integration/finite_elements/IsoparametricQuadraticHexahedron.cpp" bodystart="418" bodyend="430"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a9a98945591081a41cb7757ff1142a784" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>std::vector&lt; uint32_t &gt;</type>
+        <definition>vector&lt; uint32_t &gt; csmp::IsoparametricQuadraticHexahedron::CornerNodesOfFace</definition>
+        <argsstring>(uint32_t face_id) const</argsstring>
+        <name>CornerNodesOfFace</name>
+        <qualifiedname>csmp::IsoparametricQuadraticHexahedron::CornerNodesOfFace</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a9614d03193a707898a0b26336a61d9d9">CornerNodesOfFace</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>face_id</declname>
+        </param>
+        <briefdescription>
+<para>returns the local numbers of the corner nodes of the face </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" line="34" column="26" bodyfile="source/modules/integration/finite_elements/IsoparametricQuadraticHexahedron.cpp" bodystart="433" bodyend="445"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a06594c47eed35792ed1a10ff7a621551" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>std::vector&lt; uint32_t &gt;</type>
+        <definition>std::vector&lt; uint32_t &gt; csmp::IsoparametricQuadraticHexahedron::NodesConnectedTo</definition>
+        <argsstring>(uint32_t node_id) const</argsstring>
+        <name>NodesConnectedTo</name>
+        <qualifiedname>csmp::IsoparametricQuadraticHexahedron::NodesConnectedTo</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1ab7196476d9fb740d91384c6c4521b0f5">NodesConnectedTo</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>node_id</declname>
+        </param>
+        <briefdescription>
+<para>returns the local numbers of the nodes at the other end of the sgment that the argument node is on </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" line="35" column="26" bodyfile="source/modules/integration/finite_elements/IsoparametricQuadraticHexahedron.cpp" bodystart="449" bodyend="478"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a91bc613b5653344fbbc1cd10e41e7ab0" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricQuadraticHexahedron::N</definition>
+        <argsstring>(std::vector&lt; double &gt; &amp;N, const std::vector&lt; double &gt; &amp;xyz)</argsstring>
+        <name>N</name>
+        <qualifiedname>csmp::IsoparametricQuadraticHexahedron::N</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1aac8b400d7e198282e0b8196df3338858">N</reimplements>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>N</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>xyz</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Outputs the shape functions at the point &apos;xyz&apos; which must lie within the Hexahedron. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" line="37" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricQuadraticHexahedron.cpp" bodystart="1073" bodyend="1083"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_quadratic_hexahedron_1abc8031fd0e0ff4b481c8c1397c9d3c2b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricQuadraticHexahedron::N_AtIntegrationPoint</definition>
+        <argsstring>(uint32_t ip, std::vector&lt; double &gt; &amp;N)</argsstring>
+        <name>N_AtIntegrationPoint</name>
+        <qualifiedname>csmp::IsoparametricQuadraticHexahedron::N_AtIntegrationPoint</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1ac1168c0c1cc280d1a1ecba676877d13b">N_AtIntegrationPoint</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>ip</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>N</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Computes the interpolation function values at the specified integration point &apos;ip&apos;.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>A reference to the parent <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>, the number of the integration point.</para>
+<para>The interpolation function values are returned into the third argument. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" line="38" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricQuadraticHexahedron.cpp" bodystart="1531" bodyend="1537"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a6ab6e79dbafeb7cb7c26d9f8d9394e30" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricQuadraticHexahedron::N_AtBaryCenter</definition>
+        <argsstring>(std::vector&lt; double &gt; &amp;N)</argsstring>
+        <name>N_AtBaryCenter</name>
+        <qualifiedname>csmp::IsoparametricQuadraticHexahedron::N_AtBaryCenter</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a6df28d2a7b4bcaff49cb726d6ef0890b">N_AtBaryCenter</reimplements>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>N</declname>
+        </param>
+        <briefdescription>
+<para>reports the values of the interpolation functions at the center of gravity of the element </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" line="39" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricQuadraticHexahedron.cpp" bodystart="1729" bodyend="1734"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_quadratic_hexahedron_1af0164b784a9f422745d98dc2025ddffa" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricQuadraticHexahedron::JacobianAtIntegrationPoint</definition>
+        <argsstring>(uint32_t ip)</argsstring>
+        <name>JacobianAtIntegrationPoint</name>
+        <qualifiedname>csmp::IsoparametricQuadraticHexahedron::JacobianAtIntegrationPoint</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1ac6a31722bbf25abad86ccea3b653953e">JacobianAtIntegrationPoint</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>ip</declname>
+        </param>
+        <briefdescription>
+<para>initialises JAC = DN*XY (intpl. derivative * coordinate matrix) parametric-to-physical space transformation matrix for given quadrature point </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" line="40" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricQuadraticHexahedron.cpp" bodystart="184" bodyend="193"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_quadratic_hexahedron_1ae306fc1d6af2f082b6941c2bd590aba3" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::IsoparametricQuadraticHexahedron::dN</definition>
+        <argsstring>(DenseMatrix&lt; DM_MIN &gt; &amp;dn, const std::vector&lt; double &gt; &amp;xyz)</argsstring>
+        <name>dN</name>
+        <qualifiedname>csmp::IsoparametricQuadraticHexahedron::dN</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <declname>dn</declname>
+          <defname>DN2</defname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>xyz</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Computes derivatives of shape functions at a point XY given in global coordinates within the element (also given in global coordinates).</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The element is used to obtain the global shape of the triangle and the interpolation function derivatives at the point XY are returned into the matrix M of dimensions rows = spatial dimensions x columns = nodes.</para>
+<para><simplesect kind="return"><para>The interpolation-function derivative matrix is returned into the second method argument. </para>
+</simplesect>
+</para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" line="42" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricQuadraticHexahedron.cpp" bodystart="1039" bodyend="1067"/>
+        <references refid="classcsmp_1_1_finite_element_1a3639fc962596899333d6a65cb1ef66ce" compoundref="_finite_element_8cpp" startline="893" endline="975">csmp::FiniteElement::JacobianInverse</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a60102743fb30fb0dd8a3f6cec1138398" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricQuadraticHexahedron::dN</definition>
+        <argsstring>(DenseMatrix&lt; DM_MIN &gt; &amp;DN8)</argsstring>
+        <name>dN</name>
+        <qualifiedname>csmp::IsoparametricQuadraticHexahedron::dN</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a3bf543b54ba24535aced15598495730f">dN</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <declname>DN8</declname>
+          <defname>DN27</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Compute derivatives of shape functions at corresponding nodes with respect to the global coordinate system.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The element is used to obtain the global shape of the triangle and the interpolation function derivatives at each node are returned into the matrix M of dimensions rows = spatial dimensions x columns = nodes.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>DN27</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The interpolation-function derivative matrix is returned into the second method argument. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" line="43" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricQuadraticHexahedron.cpp" bodystart="944" bodyend="1019"/>
+        <references refid="classcsmp_1_1_finite_element_1a3639fc962596899333d6a65cb1ef66ce" compoundref="_finite_element_8cpp" startline="893" endline="975">csmp::FiniteElement::JacobianInverse</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a11214bdff57f6894fb4484c38a700b53" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::IsoparametricQuadraticHexahedron::dN_AtNode</definition>
+        <argsstring>(DenseMatrix&lt; DM_MIN &gt; &amp;M, uint32_t node)</argsstring>
+        <name>dN_AtNode</name>
+        <qualifiedname>csmp::IsoparametricQuadraticHexahedron::dN_AtNode</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a89d6f320e17b4cfe1f9ddbeade1c9255">dN_AtNode</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <declname>M</declname>
+          <defname>B</defname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>node</declname>
+          <defname>nd</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><orderedlist>
+<listitem><para>Pre-multiplies local interpolation function derivative matrix, B, with node coordinates to obtain the Jacobian matrix, J at the desired node point.</para>
+</listitem><listitem><para>The Jacobian matrix J is inverted and multiplied with B to obtain the global interpolation function derivative matrix at the point i (i=0...i=gauss points-1).</para>
+</listitem></orderedlist>
+</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The first argument is a reference to the parent <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> object, the second argument is the result matrix, the third argument indicates the gauss point at which the derivative matrix is computed and the fourth argument specifies the degrees of freedom per node, for which the B matrix shall be transformed.</para>
+<para><simplesect kind="return"><para>The global interpolation function derivative matrix is returned into the second method argument. The method also returns the determinant of the Jacobian matrix since it is often needed in integration procedures. </para>
+</simplesect>
+</para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" line="44" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricQuadraticHexahedron.cpp" bodystart="1109" bodyend="1129"/>
+        <references refid="classcsmp_1_1_finite_element_1a3639fc962596899333d6a65cb1ef66ce" compoundref="_finite_element_8cpp" startline="893" endline="975">csmp::FiniteElement::JacobianInverse</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_quadratic_hexahedron_1ac148069758146bc3c7827966d0b9bcde" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::IsoparametricQuadraticHexahedron::dN_AtIntegrationPoint</definition>
+        <argsstring>(DenseMatrix&lt; DM_MIN &gt; &amp;M, uint32_t gauss_point)</argsstring>
+        <name>dN_AtIntegrationPoint</name>
+        <qualifiedname>csmp::IsoparametricQuadraticHexahedron::dN_AtIntegrationPoint</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a885bb35784705f295c5f8ad9aa47f227">dN_AtIntegrationPoint</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <declname>M</declname>
+          <defname>B</defname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>gauss_point</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><orderedlist>
+<listitem><para>Pre-multiplies local interpolation function derivative matrix, B, with node coordinates to obtain the Jacobian matrix, J.</para>
+</listitem><listitem><para>The Jacobian matrix J is inverted and multiplied with B to obtain the global interpolation function derivative matrix at the gauss point i (i=0...i=gauss points-1).</para>
+</listitem></orderedlist>
+</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The first argument is a reference to the parent <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> object, the second argument is the result matrix, the third argument indicates the gauss point at which the derivative matrix is computed and the fourth argument specifies the degrees of freedom per node, for which the B matrix shall be transformed.</para>
+<para><simplesect kind="return"><para>The global interpolation function derivative matrix is returned into the second method argument (matrix d of Akin, p420). The method also returns the determinantof the Jacobian matrix since it is often needed in integration procedures. </para>
+</simplesect>
+</para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" line="45" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricQuadraticHexahedron.cpp" bodystart="1569" bodyend="1594"/>
+        <references refid="classcsmp_1_1_finite_element_1a3639fc962596899333d6a65cb1ef66ce" compoundref="_finite_element_8cpp" startline="893" endline="975">csmp::FiniteElement::JacobianInverse</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_quadratic_hexahedron_1abf3d708933f93fdf4c62345e245128fb" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::IsoparametricQuadraticHexahedron::dN_AtBarycenter</definition>
+        <argsstring>(DenseMatrix&lt; DM_MIN &gt; &amp;M)</argsstring>
+        <name>dN_AtBarycenter</name>
+        <qualifiedname>csmp::IsoparametricQuadraticHexahedron::dN_AtBarycenter</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a703b7ce9d818248bbd9864dffee30b7c">dN_AtBarycenter</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <defname>DM</defname>
+        </param>
+        <briefdescription>
+<para>returns first derivative of interpolaton functions at center of gravity; determinant of the Jacobian is returned as well </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" line="46" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricQuadraticHexahedron.cpp" bodystart="1669" bodyend="1692"/>
+        <references refid="classcsmp_1_1_finite_element_1a3639fc962596899333d6a65cb1ef66ce" compoundref="_finite_element_8cpp" startline="893" endline="975">csmp::FiniteElement::JacobianInverse</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a607fbe398d357a618c26e107f84e8465" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricQuadraticHexahedron::Nrst</definition>
+        <argsstring>(double r, double s, double t, std::vector&lt; double &gt; &amp;nrst) const</argsstring>
+        <name>Nrst</name>
+        <qualifiedname>csmp::IsoparametricQuadraticHexahedron::Nrst</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a34bd4d39b1a026b1de15f028e9692bd8">Nrst</reimplements>
+        <param>
+          <type>double</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>s</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>t</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>nrst</declname>
+          <defname>N</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns the value of the element interpolation functions at the point &apos;rst&apos; in local coordinates.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The floating point coordinates &apos;r&apos;, &apos;s&apos; and &apos;t&apos; of the point at which the interpolation shall be carried out.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>N</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The fourth method argument is the vector into which the values of the n=nodes interpolation functions at the point &apos;rst&apos; will be returned.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>See in source code header file.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Method is used to compute property values at the integration points of the element. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" line="48" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricQuadraticHexahedron.cpp" bodystart="626" bodyend="679"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a6201a7b67fc172440837f1fce3ede28a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricQuadraticHexahedron::Nrst</definition>
+        <argsstring>(double r, double s, double t, double *nrst) const</argsstring>
+        <name>Nrst</name>
+        <qualifiedname>csmp::IsoparametricQuadraticHexahedron::Nrst</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>s</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>t</declname>
+        </param>
+        <param>
+          <type>double *</type>
+          <declname>nrst</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" line="49" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricQuadraticHexahedron.cpp" bodystart="681" bodyend="733"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a20412c5eec1b3cc50af69ee5c14b7d39" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricQuadraticHexahedron::dNr</definition>
+        <argsstring>(double r, double s, double t, std::vector&lt; double &gt; &amp;dNr) const</argsstring>
+        <name>dNr</name>
+        <qualifiedname>csmp::IsoparametricQuadraticHexahedron::dNr</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a5b77ad8925c75b096867822e83bed7cd">dNr</reimplements>
+        <param>
+          <type>double</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>s</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>t</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>dNr</declname>
+          <defname>DNR</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>This method and the complementary method <ref refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1afd635c46e6da292e672de9a2dec174d5" kindref="member">dNs()</ref> compute the shape function derivates with respect to the local coordinate axis &apos;r&apos;, and &apos;s&apos;.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The method takes the local coordinates of the point at which the shape function derivatives shall be evaluated as third argument.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>DNR</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The shape function derivatives are returned into the second method argument which is a floating point vector of the size n=nodes per element.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>see inlined source code in the header file.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>The shape function derivatives are needed in most integration procedures for elements. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" line="50" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricQuadraticHexahedron.cpp" bodystart="761" bodyend="821"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_quadratic_hexahedron_1afd635c46e6da292e672de9a2dec174d5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricQuadraticHexahedron::dNs</definition>
+        <argsstring>(double r, double s, double t, std::vector&lt; double &gt; &amp;dNs) const</argsstring>
+        <name>dNs</name>
+        <qualifiedname>csmp::IsoparametricQuadraticHexahedron::dNs</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a1c5cfe76807ea0d685c8e22d74c5582e">dNs</reimplements>
+        <param>
+          <type>double</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>s</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>t</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>DNS</declname>
+        </param>
+        <briefdescription>
+<para>2D element interpolation functions derivatives N(r,s,t)/ds </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" line="51" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricQuadraticHexahedron.cpp" bodystart="826" bodyend="874"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a001e5ede66c30cbf757ed6ee0b17411e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricQuadraticHexahedron::dNt</definition>
+        <argsstring>(double r, double s, double t, std::vector&lt; double &gt; &amp;dNt) const</argsstring>
+        <name>dNt</name>
+        <qualifiedname>csmp::IsoparametricQuadraticHexahedron::dNt</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a6c22543bd89563413954beb8697fa914">dNt</reimplements>
+        <param>
+          <type>double</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>s</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>t</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>DNT</declname>
+        </param>
+        <briefdescription>
+<para>2D element interpolation functions derivatives N(r,s,t)/dt </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" line="52" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricQuadraticHexahedron.cpp" bodystart="877" bodyend="923"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a6002903ac45bd8507422753e2b432550" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricQuadraticHexahedron::IntegrationPoint</definition>
+        <argsstring>(uint32_t i, std::vector&lt; double &gt; &amp;xyz) const</argsstring>
+        <name>IntegrationPoint</name>
+        <qualifiedname>csmp::IsoparametricQuadraticHexahedron::IntegrationPoint</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1aef00dcb02705580693988e47924a055d">IntegrationPoint</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>i</declname>
+          <defname>ip</defname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>xyz</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>integration point location transformed into global coordinates <simplesect kind="warning"><para>the matrix XYZ must be uptodate </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" line="54" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricQuadraticHexahedron.cpp" bodystart="1932" bodyend="1946"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a17e5123ba37c9479d0cc6fbf7439194a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::IsoparametricQuadraticHexahedron::WeightAtIntegrationPoint</definition>
+        <argsstring>(uint32_t i) const</argsstring>
+        <name>WeightAtIntegrationPoint</name>
+        <qualifiedname>csmp::IsoparametricQuadraticHexahedron::WeightAtIntegrationPoint</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1ac224265aa216deebfcf44b54d2689d1d">WeightAtIntegrationPoint</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+<para>returns the integration weight of the desired quadrature point </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" line="55" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricQuadraticHexahedron.cpp" bodystart="488" bodyend="488"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a93454cbe5c933e7337e1e59b0ec5a526" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricQuadraticHexahedron::ReferenceCoordinates</definition>
+        <argsstring>(DenseMatrix&lt; DM_MIN &gt; &amp;matCoords) const</argsstring>
+        <name>ReferenceCoordinates</name>
+        <qualifiedname>csmp::IsoparametricQuadraticHexahedron::ReferenceCoordinates</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a34a5c030987c7e9842af332f5ed0d61b">ReferenceCoordinates</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <declname>matCoords</declname>
+        </param>
+        <briefdescription>
+<para>for element types defined using a local coordinate system, returns the node coordinates into the argument matrix </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns the reference coordinates of the element.</para>
+<para><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix&lt;DM_MIN&gt;</ref> &amp; matCoords; -&gt; Holds the reference coordinates of the finite element. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" line="56" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricQuadraticHexahedron.cpp" bodystart="1951" bodyend="1956"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a69acb73ac1eb9eca394963c3591b6acd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricQuadraticHexahedron::OutputNodeDataToVTK</definition>
+        <argsstring>(const char *file_name, const char *var_name, DenseMatrix&lt; DM_MIN &gt; &amp;DATA) const</argsstring>
+        <name>OutputNodeDataToVTK</name>
+        <qualifiedname>csmp::IsoparametricQuadraticHexahedron::OutputNodeDataToVTK</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a67341585f83bc9d941c67e7a84801248">OutputNodeDataToVTK</reimplements>
+        <param>
+          <type>const char *</type>
+          <declname>file_name</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>var_name</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <declname>DATA</declname>
+        </param>
+        <briefdescription>
+<para>prints the current finite element into a visualisation toolkit (VTK) textfile for visual examination </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" line="58" column="10" bodyfile="source/modules/integration/finite_elements/IsoparametricQuadraticHexahedron.cpp" bodystart="492" bodyend="599"/>
+        <references refid="group___c_s_m_p__global__enumerations_1ga8413f7c3b4f238c5a98a846198d49469">csmp::NAME_STRING</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a69e41a49d59bda53f6cffc113dec9007" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricQuadraticHexahedron::ExtrapolateNodalValToIntegrationPoints</definition>
+        <argsstring>(uint32_t NumOfVariables, std::vector&lt; double &gt; &amp;Ni, DenseMatrix&lt; DM_MIN &gt; &amp;IpValues)</argsstring>
+        <name>ExtrapolateNodalValToIntegrationPoints</name>
+        <qualifiedname>csmp::IsoparametricQuadraticHexahedron::ExtrapolateNodalValToIntegrationPoints</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>NumOfVariables</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>Ni</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <declname>IpValues</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" line="66" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_quadratic_hexahedron_1ac512610445a8e76879629ad2298d032c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricQuadraticHexahedron::ParametricToPhysical</definition>
+        <argsstring>(std::vector&lt; double &gt; &amp;rst, std::vector&lt; double &gt; &amp;xyz)</argsstring>
+        <name>ParametricToPhysical</name>
+        <qualifiedname>csmp::IsoparametricQuadraticHexahedron::ParametricToPhysical</qualifiedname>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>rst</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>xyz</declname>
+        </param>
+        <briefdescription>
+<para>transformations of coordinatea: local-&gt;global directly, global-&gt;local iteratively </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Projection function from rst-&gt;xyz </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" line="71" column="10" bodyfile="source/modules/integration/finite_elements/IsoparametricQuadraticHexahedron.cpp" bodystart="1134" bodyend="1146"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_quadratic_hexahedron_1ac88bdf8ace8118b2176b7c2f8e2eb210" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricQuadraticHexahedron::PhysicalToParametric</definition>
+        <argsstring>(std::vector&lt; double &gt; &amp;rst, const std::vector&lt; double &gt; &amp;xyz)</argsstring>
+        <name>PhysicalToParametric</name>
+        <qualifiedname>csmp::IsoparametricQuadraticHexahedron::PhysicalToParametric</qualifiedname>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>rst</declname>
+          <defname>rSt</defname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>xyz</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Projection function from xyz-&gt;rst </para>
+        </detaileddescription>
+        <inbodydescription>
+<para>Newton-Raphson iterations</para>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" line="72" column="10" bodyfile="source/modules/integration/finite_elements/IsoparametricQuadraticHexahedron.cpp" bodystart="1151" bodyend="1371"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="date"><para>1998 </para>
+</simplesect>
+<simplesect kind="author"><para>S.K. Matthaei </para>
+</simplesect>
+<simplesect kind="author"><para>Stephen G. Roberts </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>csmp::FiniteElement</label>
+        <link refid="classcsmp_1_1_finite_element"/>
+      </node>
+      <node id="1">
+        <label>csmp::IsoparametricQuadraticHexahedron</label>
+        <link refid="classcsmp_1_1_isoparametric_quadratic_hexahedron"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="4">
+        <label>csmp::DenseMatrix&lt; mn_max &gt;</label>
+        <link refid="classcsmp_1_1_dense_matrix"/>
+      </node>
+      <node id="3">
+        <label>csmp::DenseMatrix&lt; DM_MIN &gt;</label>
+        <link refid="classcsmp_1_1_dense_matrix"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; DM_MIN &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::FiniteElement</label>
+        <link refid="classcsmp_1_1_finite_element"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>#M</edgelabel>
+          <edgelabel>+JAC</edgelabel>
+          <edgelabel>+JINV</edgelabel>
+          <edgelabel>+XY</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::IsoparametricQuadraticHexahedron</label>
+        <link refid="classcsmp_1_1_isoparametric_quadratic_hexahedron"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" line="8" column="1" bodyfile="source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h" bodystart="8" bodyend="73"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a6516e03f0b76ff34a7137b4b11bd8ae8" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>AspectRatio</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ab4ad41c705b9691a4d01ee979b6214cc" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>cne</name></member>
+      <member refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a5b236db1d304c78aac83fc4df345b252" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>CornerNodes</name></member>
+      <member refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1af996460fe40b8285f622bb26873d5a69" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>CornerNodes</name></member>
+      <member refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a9a98945591081a41cb7757ff1142a784" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>CornerNodesOfFace</name></member>
+      <member refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a8ac839486cc8508eb6785f56f12e6849" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>CounterClockwiseNodes</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a9831bfb64a8fa07f20eb7024fc5a22f2" prot="public" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>CurrentID</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ab44758c4df00ff2cac338fbf7580b8d0" prot="public" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>CurrentID</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a93be3242020acc01e32f26ee56c5d487" prot="public" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>Dim</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ab749771eccc931e112125efe7bf8252c" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>dim</name></member>
+      <member refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a85473c01ddc630b23b978b456764e97f" prot="private" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>DN</name></member>
+      <member refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1ae306fc1d6af2f082b6941c2bd590aba3" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>dN</name></member>
+      <member refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a60102743fb30fb0dd8a3f6cec1138398" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>dN</name></member>
+      <member refid="classcsmp_1_1_finite_element_1adb4103981ca8a56bbea237ef71c0cdc1" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>dN_At</name></member>
+      <member refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1abf3d708933f93fdf4c62345e245128fb" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>dN_AtBarycenter</name></member>
+      <member refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1ac148069758146bc3c7827966d0b9bcde" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>dN_AtIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a11214bdff57f6894fb4484c38a700b53" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>dN_AtNode</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a8602e2b2682d1734501fa44da5f4a230" prot="public" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>DNR</name></member>
+      <member refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a20412c5eec1b3cc50af69ee5c14b7d39" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>dNr</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a84befa0a4da0b4b8469ec5e7be89860e" prot="public" virt="virtual" ambiguityscope="csmp::FiniteElement::"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>dNr</name></member>
+      <member refid="classcsmp_1_1_finite_element_1af159e5f99a0281ae603ca6ddde9bf6bf" prot="public" virt="virtual" ambiguityscope="csmp::FiniteElement::"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>dNr</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a1a9d9ee7a3326164b35a523273dc54c9" prot="public" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>DNS</name></member>
+      <member refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1afd635c46e6da292e672de9a2dec174d5" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>dNs</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a6d2fb4557b0681959501365138c9d3c3" prot="public" virt="virtual" ambiguityscope="csmp::FiniteElement::"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>dNs</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a203a9d019620abee39fdbe7847ee8df0" prot="public" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>DNT</name></member>
+      <member refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a001e5ede66c30cbf757ed6ee0b17411e" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>dNt</name></member>
+      <member refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a26bb52f43ca79987156b9f18c5cc0ddb" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>EdgeLengths</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ac2a37f7440f83acbcda169280fcb84b0" prot="public" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>ElementType</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ac0a98e18654722a181c17a7e01b67e56" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>ElementType</name></member>
+      <member refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a3ffc79b58de382ca83395139e335e5f2" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>ElementTypeOfFace</name></member>
+      <member refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a5aaf6ebbfd09dcd62771d8c52d2fe6f5" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>ElementTypeOfSegment</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a5684660784d3f15adffb485e8f47d9f3" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>epe</name></member>
+      <member refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1aec2dd1f4854c79777cfe2d5ce715bb52" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>ExtrapolateIntegrationPointVariableToNodes</name></member>
+      <member refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a69e41a49d59bda53f6cffc113dec9007" prot="private" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>ExtrapolateNodalValToIntegrationPoints</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a9666661fa30a04d97f6c04a059a6bba6" prot="public" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>Faces</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a746f7ba1b4acf8dd74f39e3962f0707f" prot="public" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>FiniteElement</name></member>
+      <member refid="classcsmp_1_1_finite_element_1aa7a383bc5d1c0ee8f71ecb6c604db2ec" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>FiniteElement</name></member>
+      <member refid="classcsmp_1_1_finite_element_1aa61e202519a3523f70da1f1854170c64" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>FiniteElement</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a36972113f6f8351c891431038f8514bd" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>fpe</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a0729a0486b6febb96160f3e184c3f33f" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>gpe</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a564e0da11c00c28430fb146d5597c6ce" prot="public" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>IDX</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ad4aaeb22c3a8da44a33361057ef2097f" prot="public" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>InitialID</name></member>
+      <member refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a29e3cc0230a2f21db9c4ce389eda55ed" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>InnerRadius</name></member>
+      <member refid="classcsmp_1_1_finite_element_1aa5c7e3d4b60cdaa863b70edad755b09a" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>Integral_dNT_K_dN</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a5d79c3309e261dd0939e5b733aac83d9" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>IntegraldNdN</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a84a69958fd3567565d4dc83037664d97" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>IntegralNN</name></member>
+      <member refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a6002903ac45bd8507422753e2b432550" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>IntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a35ee85b7635207926c97d4bf0bec7d1d" prot="public" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>IntegrationPoints</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a8439ec45c22a2741b8782de67de98862" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>InteriorNodes</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a2d45ffc4fd8598af124125bfe93a2597" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>InteriorNodes</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ae2d5d559efe7f2b27dc5ec5e271c9b68" prot="public" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>Interpolation</name></member>
+      <member refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1ace972e45ccbe5b506d62ec5ec209a1ed" prot="private" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>IP</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a4390186773409c6a5e30feb449e55f17" prot="public" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>IsLine</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a5d0543e1e432fdf65177495d72e4d51c" prot="public" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>Isoparametric</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ac57108260f93ab6ef491448def2e9c50" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>Isoparametric</name></member>
+      <member refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a4c47440ef9188aedbe35856fa44432f3" prot="public" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>IsoparametricQuadraticHexahedron</name></member>
+      <member refid="classcsmp_1_1_finite_element_1aca610ffda39cad1d959db0ec403c3019" prot="public" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>IsSimplex</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a09d0c59e19d2cd5a6e46b7dc60fd5f07" prot="public" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>IsSurface</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a7ffd856e7bb1b9c1009d572775925c8d" prot="public" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>IsVolume</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ac8f4f6ea8649710e01ea018c61d93a30" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>itp</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a5de71dcc5e56c2e814d31d798969f437" prot="public" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>JAC</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ae62e0c447141f0e2b7f7a4eb8412278b" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>Jacobian</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a81d93860f25ffe781837581f45caac4c" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>Jacobian</name></member>
+      <member refid="classcsmp_1_1_finite_element_1af63fe74d4b20b02d72574d8380f5e41a" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>Jacobian</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a246043f81c66c9f65e08c6a5190ea381" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>JacobianAt</name></member>
+      <member refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1af0164b784a9f422745d98dc2025ddffa" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>JacobianAtIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ae758e82d3b214e9f9c5bda10cd20b515" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>JacobianDeterminant</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a3639fc962596899333d6a65cb1ef66ce" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>JacobianInverse</name></member>
+      <member refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a733a1abe68576a1b7fc452b187a4857f" prot="private" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>JETAL</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a5c3fd117b986587599dcb441feeb000a" prot="public" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>JINV</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ac3204e22e57b8658797037802003c490" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>LineElement</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a64381c8d0e2f4840551c2da986fb9a25" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>M</name></member>
+      <member refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a0bac667641efb79f4c3397cd2f3e61e5" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>MidSideNodes</name></member>
+      <member refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1aa8e3a4dca9863762a969c8954df01498" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>MidSideNodes</name></member>
+      <member refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a91bc613b5653344fbbc1cd10e41e7ab0" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>N</name></member>
+      <member refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a6ab6e79dbafeb7cb7c26d9f8d9394e30" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>N_AtBaryCenter</name></member>
+      <member refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1abc8031fd0e0ff4b481c8c1397c9d3c2b" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>N_AtIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ad75cb0ef9bea852c900e58b74662b0d4" prot="public" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>Neighbors</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a2509e6d8ab556b6a65a9036a62485df4" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>nne</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ad1e29de6aed41fb434a485b875d7d8d4" prot="public" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>Nodes</name></member>
+      <member refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a06594c47eed35792ed1a10ff7a621551" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>NodesConnectedTo</name></member>
+      <member refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1aab69b5ed6bd1681e1ed582af2ec1b94e" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>NodesOfFace</name></member>
+      <member refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a6be32f7d1225b32856ffb060866bbf6e" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>NodesOfSegment</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a3cb7bc938ad00c9f4dbfbfa94c13e781" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>NodesPerFace</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a329300ec856aa91bfe492daf93556b04" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>npe</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a9d9ced72fa35fd6a9fc755a219590820" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>npf</name></member>
+      <member refid="classcsmp_1_1_finite_element_1af583becda82f4fef39bbe2d4c3b41cea" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>Nr</name></member>
+      <member refid="classcsmp_1_1_finite_element_1adb2baab01a52b040d73c10623a0605b2" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>Nrs</name></member>
+      <member refid="classcsmp_1_1_finite_element_1aa13754bef9eb502c77561f216d0258e7" prot="public" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>NRST</name></member>
+      <member refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a607fbe398d357a618c26e107f84e8465" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>Nrst</name></member>
+      <member refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a6201a7b67fc172440837f1fce3ede28a" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>Nrst</name></member>
+      <member refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1af3a0714b1d5372536bd0f8bce9ac89a4" prot="private" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>NXYZ</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a1aa0c4f0fabe88be0c254f121d5a483b" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a698633a6c268ac88c82929093cd65cc1" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a94820d970b7a970757c91dac9934b424" prot="public" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>OrderOfShapeFunctions</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ae963674dc3ef25ce0e7bd8d2937c75ee" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a69acb73ac1eb9eca394963c3591b6acd" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>OutputNodeDataToVTK</name></member>
+      <member refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1ac512610445a8e76879629ad2298d032c" prot="private" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>ParametricToPhysical</name></member>
+      <member refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1ac88bdf8ace8118b2176b7c2f8e2eb210" prot="private" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>PhysicalToParametric</name></member>
+      <member refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a93454cbe5c933e7337e1e59b0ec5a526" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>ReferenceCoordinates</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a7f488b707067cb6d1ee0b25a97c883a2" prot="public" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>Segments</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a609a2f0f70b086a278d112761c07c9de" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>spe</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a930e53402dc4847a3084e38853d3bfd6" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>SurfaceElement</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a1dedbd91a6e8765f57dfdaf999494b76" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>UnitNormal</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ae600307171225f53a2615aaffd5afb18" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>UnitNormalAtFaceBarycenter</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a39eb6d5a1827783a679870277b4c68b8" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>UnitNormalToFace</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ad4d20a792255fd2b0984b255ec3e6817" prot="public" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>UsesLocalCoordinates</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a8211ac6a7c8734f142eaa51f459d25af" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>UsesLocalCoordinates</name></member>
+      <member refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1af24ae3e61fda39bed0379894f2980bc2" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>Volume</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ad92268835407ea5fc1df04583a754637" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>VolumeElement</name></member>
+      <member refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1ab06a57d336ba3cf61d1e309a340d7b9e" prot="private" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>W</name></member>
+      <member refid="classcsmp_1_1_isoparametric_quadratic_hexahedron_1a17e5123ba37c9479d0cc6fbf7439194a" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>WeightAtIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" prot="public" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>XY</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ae4bd0bcbccb811f852c26668f6959f14" prot="public" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>XYZ</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a56c5bc7db73c50f4448380eeee48fa3f" prot="public" virt="non-virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>XYZ</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a4e65701c3dcf1f2c98688d3204bccb6d" prot="public" virt="virtual"><scope>csmp::IsoparametricQuadraticHexahedron</scope><name>~FiniteElement</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

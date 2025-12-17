@@ -12,7 +12,7 @@ PropertyStorageSpeed_Test::PropertyStorageSpeed_Test( ostream* osptr )
  {
  }
  
-// TODO:  fix tests for the different variable types; tensor does not work with random matrix entries
+// TODO:  fix test for the different variable types; tensor does not work with random matrix entries
 void PropertyStorageSpeed_Test::run()
  {
    cout <<"******************************************************************************************\n";

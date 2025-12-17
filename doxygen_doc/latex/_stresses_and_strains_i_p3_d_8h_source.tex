@@ -1,0 +1,162 @@
+\doxysection{Stresses\+And\+Strains\+IP3\+D.\+h}
+\hypertarget{_stresses_and_strains_i_p3_d_8h_source}{}\label{_stresses_and_strains_i_p3_d_8h_source}\index{source/includes/thmc/mechanics/StressesAndStrainsIP3D.h@{source/includes/thmc/mechanics/StressesAndStrainsIP3D.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{STRESSES\_AND\_STRAINS\_IP3D\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{STRESSES\_AND\_STRAINS\_IP3D\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_math_operator_l_h_s_8h}{"{}MathOperatorLHS.h"{}}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_dense_matrix_8h}{"{}DenseMatrix.h"{}}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_tensor_variable_8h}{"{}TensorVariable.h"{}}}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_element}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}};}
+\DoxyCodeLine{00012\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_model}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}};}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{comment}{//\ TODO:\ add\ Biot\ constraints\ as\ a\ post-\/processing\ step,\ Biot-\/Willis\ coefficient\ alpha\ or\ drained\ and\ undrained\ moduli\ are\ needed}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{comment}{///\ 3D\ stress\ \&\ strain\ tensor\ variables\ placed\ at\ integration\ points}}
+\DoxyCodeLine{00017\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_stresses_and_strains_i_p3_d}{StressesAndStrainsIP3D}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_stresses_and_strains_i_p3_d}{MathOperatorLHS}}<3U>\ \{}
+\DoxyCodeLine{00018\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{comment}{///\ 3D\ constructor:\ note\ that\ -\/\ in\ contrast\ with\ civil\ engineering\ -\/\ in\ geomechanics\ compressive\ stresses\ are\ positive}}
+\DoxyCodeLine{00020\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_stresses_and_strains_i_p3_d_a0b4adf4caca4a317c9c83d27418b6627}{StressesAndStrainsIP3D}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<3U>\&,}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ oper,\ \ \ \textcolor{comment}{//\ Young's\ modulus}}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ basic,\ \ \textcolor{comment}{//\ Poisson's\ ratio}}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ test,\ \ \ \textcolor{comment}{//\ displacement}}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \ principal\_vectors,}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ geomechanics\_conventions=\textcolor{keyword}{true}\ \ );}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{comment}{///\ get\ displacement\ values\ to\ compute\ \{d\}\ vector}}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_stresses_and_strains_i_p3_d_ad251595258372ddc6d89e514421e33dc}{GetOperands}}(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<3U>\&\ );}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{comment}{///\ \{e\}\ =\ [B]\{d\},\ \{s\}\ =\ [D]\{e\}\ at\ integration\ points}}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_stresses_and_strains_i_p3_d_ab7e26ea0dc2b334e3518ffe550d35b44}{ComputeContribution}}(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<3U>\&\ );}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{comment}{///\ write\ \{e\}\ to\ each\ elements}}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_stresses_and_strains_i_p3_d_a64b66243af52707bb8279aa067b76cc1}{WriteOperands}}(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<3U>\&\ );}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordtype}{void}\ PrincipalStrainsAndStresses(\ \textcolor{keywordtype}{bool}\ yes\_no\ );}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{const}\ size\_t\ \ components\_;\ \ \textcolor{comment}{//\ stress\ strain\ components}}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ strain\_key\_,\ stress\_key\_,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ tensor\ variables}}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ strain1\_key\_,\ strain2\_key\_,\ strain3\_key\_,\ \ \textcolor{comment}{///<\ vector<double>\ variables\ (Eigenvectors)}}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sigma1\_key\_,\ sigma2\_key\_,\ sigma3\_key\_,}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ means\_key\_,\ dilat\_key\_,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ mean\ stress\ (scalar),\ dilatation\ (scalar)}}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ shear\_key\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ maximum\ shear\ stress\ (scalar)}}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DISPL\_,}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ STRESS\_,\ STRAIN\_,}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ EGP\_,\ SGP\_,\ PEGP\_,\ PSGP\_;}
+\DoxyCodeLine{00050\ \ \ \ \ std::vector<DenseMatrix<DM\_MIN>\ >\ \ \ \ \ STIFF\_;}
+\DoxyCodeLine{00051\ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ IPSTRAIN\_,\ IPSTRESS\_,\ \textcolor{comment}{///<\ stresses\ and\ strains\ at\ the\ element\ integration\ points}}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NSTRAIN\_,\ \ NSTRESS\_,}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ eps\_,\ sigma\_,\ sum\_;}
+\DoxyCodeLine{00054\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<3U>\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ts\_,\ evecs\_;}
+\DoxyCodeLine{00055\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<3U>\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ IP\_STRAIN\_TENSOR\_;\ \ \ \textcolor{comment}{///<\ for\ averaging\ of\ integration\ point\ variables\ to\ barycentre}}
+\DoxyCodeLine{00056\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<3U>\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ IP\_STRESS\_TENSOR\_;\ \ \ \textcolor{comment}{///<\ for\ averaging\ of\ integration\ point\ variables\ to\ barycentre}}
+\DoxyCodeLine{00057\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<3U>\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ vc\_,\ evals\_;\ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ some\ universally\ useful\ vector\ variable,\ \ eigen\ values}}
+\DoxyCodeLine{00058\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<3U>\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ IP\_e1\_,\ IP\_e2\_,\ IP\_e3\_,}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ IP\_s1\_,\ IP\_s2\_,\ IP\_s3\_;}
+\DoxyCodeLine{00060\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sc\_;}
+\DoxyCodeLine{00061\ \ \ \ \ std::vector<ScalarVariable>\ \ \ \ \ \ \ \ \ \ \ youngs\_,\ pratio\_;}
+\DoxyCodeLine{00062\ \ \ \ \ std::vector<VectorVariable<3U>\ >\ \ \ \ \ \ NVAR\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ temporary\ container\ for\ nodal\ displacements}}
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ verbose\_,}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ principal\_e\_and\_sigma\_,}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ geomechanics\_conventions\_;\ \textcolor{comment}{///<\ as\ opposed\ to\ civil\ engineering\ where\ tensile\ stresses\ are\ positive\ }}
+\DoxyCodeLine{00066\ \};}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00071\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00072\ \textcolor{comment}{@class\ StressesAndStrainsIP3D<3U>\ StressesAndStrainsIP3D<3U>\ "{}mechanics/StressesAndStrainsIP3D.h"{}}}
+\DoxyCodeLine{00073\ \textcolor{comment}{@author\ S.K.\ Matthaei}}
+\DoxyCodeLine{00074\ \textcolor{comment}{@date\ 2000}}
+\DoxyCodeLine{00075\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00076\ \textcolor{comment}{@section\ motivation\ Motivation}}
+\DoxyCodeLine{00077\ \textcolor{comment}{}}
+\DoxyCodeLine{00078\ \textcolor{comment}{Post-\/Processing:\ Use\ this\ operator\ to\ compute\ strains\ and\ stresses\ from\ nodal\ }}
+\DoxyCodeLine{00079\ \textcolor{comment}{displacements\ using\ the\ matrix\ equation:}}
+\DoxyCodeLine{00080\ \textcolor{comment}{}}
+\DoxyCodeLine{00081\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00082\ \textcolor{comment}{\{e\}\ =\ [B]\{d\}}}
+\DoxyCodeLine{00083\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00084\ \textcolor{comment}{}}
+\DoxyCodeLine{00085\ \textcolor{comment}{In\ full\ form\ for\ two-\/dimensional\ analysis\ this\ is:}}
+\DoxyCodeLine{00086\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00087\ \textcolor{comment}{}}
+\DoxyCodeLine{00088\ \textcolor{comment}{e\_x\ \ \ \ \ \ \ \ \ \ \ \ |\ d\ \ \ \ \ \ \ |}}
+\DoxyCodeLine{00089\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ |\ -\/\ \ \ \ 0\ \ |}}
+\DoxyCodeLine{00090\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ |\ dx\ \ \ \ \ \ |}}
+\DoxyCodeLine{00091\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ |\ \ \ \ \ \ \ \ \ |}}
+\DoxyCodeLine{00092\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ |\ \ \ \ \ \ d\ \ |\ \ \ \ u}}
+\DoxyCodeLine{00093\ \textcolor{comment}{\{\ e\_y\ \}\ \ \ \ \ \ =\ |\ 0\ \ \ \ -\/\ \ |\ \ \{\ \ \ \}}}
+\DoxyCodeLine{00094\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ |\ \ \ \ \ \ dy\ |\ \ \ \ v}}
+\DoxyCodeLine{00095\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ |\ \ \ \ \ \ \ \ \ |}}
+\DoxyCodeLine{00096\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ |\ d\ \ \ \ d\ \ |\ }}
+\DoxyCodeLine{00097\ \textcolor{comment}{gamma\_xy\ \ \ \ \ \ \ |\ -\/\ \ \ \ -\/\ \ |}}
+\DoxyCodeLine{00098\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ |\ dy\ \ \ dx\ |}}
+\DoxyCodeLine{00099\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00100\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00101\ \textcolor{comment}{or\ for\ the\ quadratic\ triangular\ element\ and\ the\ shape\ function\ derivatives\ at}}
+\DoxyCodeLine{00102\ \textcolor{comment}{each\ node\ point:}}
+\DoxyCodeLine{00103\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00104\ \textcolor{comment}{}}
+\DoxyCodeLine{00105\ \textcolor{comment}{\ \ \ \ |\ dN0dx\ \ \ 0\ \ \ dN1dx\ \ \ 0\ \ \ dN2dx\ \ \ 0\ \ \ dN3dx\ \ \ 0\ \ \ dN4dx\ \ \ 0\ \ \ dN5dx\ \ \ 0\ \ \ |}}
+\DoxyCodeLine{00106\ \textcolor{comment}{B\ =\ |\ \ \ 0\ \ \ dN0dy\ \ \ 0\ \ \ dN1dy\ \ \ 0\ \ \ dN2dy\ \ \ 0\ \ \ dN3dy\ \ \ 0\ \ \ dN4dy\ \ \ 0\ \ \ dN5dy\ |}}
+\DoxyCodeLine{00107\ \textcolor{comment}{\ \ \ \ |\ dN0dx\ dN0dy\ dN1dx\ dN1dy\ dN2dx\ dN2dy\ dN3dx\ dN3dy\ dN4dx\ dN4dy\ dN5dx\ dN5dy\ |\ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00108\ \textcolor{comment}{}}
+\DoxyCodeLine{00109\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00110\ \textcolor{comment}{which\ must\ be\ computed\ at\ each\ node\ for\ higher\ order\ elements.\ \ \ \ \ \ \ }}
+\DoxyCodeLine{00111\ \textcolor{comment}{}}
+\DoxyCodeLine{00112\ \textcolor{comment}{The\ strains\ and\ stresses\ are\ computed\ at\ the\ elements\ integration\ points\ and}}
+\DoxyCodeLine{00113\ \textcolor{comment}{then\ back\ extrapolated\ to\ the\ nodes.\ For\ this\ extrapolation\ linear\ functions}}
+\DoxyCodeLine{00114\ \textcolor{comment}{are\ used\ which\ use\ the\ integration\ points\ as\ constraint\ points.\ \ }}
+\DoxyCodeLine{00115\ \textcolor{comment}{}}
+\DoxyCodeLine{00116\ \textcolor{comment}{In\ addition\ to\ the\ computation\ of\ the\ tensor\ variables\ 'strain'\ and\ 'stress'}}
+\DoxyCodeLine{00117\ \textcolor{comment}{one\ has\ the\ option\ to\ compute\ the\ principal\ stresses\ and\ strains\ as\ well.}}
+\DoxyCodeLine{00118\ \textcolor{comment}{The\ method\ then\ finds\ the\ vectors\ which\ correspond\ to\ the\ sigma1,\ 2,\ and\ 3}}
+\DoxyCodeLine{00119\ \textcolor{comment}{directions\ which\ correspond\ to\ the\ Eigenvectors\ of\ the\ stress\ tensors.}}
+\DoxyCodeLine{00120\ \textcolor{comment}{It\ also\ calculates\ the\ mean\ stress\ and\ the\ dilation\ as\ nodal\ properties.}}
+\DoxyCodeLine{00121\ \textcolor{comment}{The\ Eigenvalues\ which\ correspond\ to\ the\ magnitudes\ of\ the\ principal}}
+\DoxyCodeLine{00122\ \textcolor{comment}{strains\ and\ stresses\ are\ stored\ in\ the\ variables\ 'principal\ strain'\ and}}
+\DoxyCodeLine{00123\ \textcolor{comment}{'principal\ stress'.\ \ }}
+\DoxyCodeLine{00124\ \textcolor{comment}{}}
+\DoxyCodeLine{00125\ \textcolor{comment}{The\ strains\ and\ stresses\ are\ averaged\ at\ the\ nodes\ among\ the\ elements\ }}
+\DoxyCodeLine{00126\ \textcolor{comment}{which\ share\ each\ node\ since\ they\ diverge\ from\ element\ to\ element\ but}}
+\DoxyCodeLine{00127\ \textcolor{comment}{VTK\ needs\ nodal\ properties.\ This\ has\ the\ disadvantage\ that\ stresses}}
+\DoxyCodeLine{00128\ \textcolor{comment}{on\ material\ boundaries\ are\ somewhat\ unrealistic\ mixes.\ \ }}
+\DoxyCodeLine{00129\ \textcolor{comment}{}}
+\DoxyCodeLine{00130\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00131\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00132\ \textcolor{comment}{@section\ implementation\ Implementation}}
+\DoxyCodeLine{00133\ \textcolor{comment}{}}
+\DoxyCodeLine{00134\ \textcolor{comment}{Procedure:\ In\ several\ post-\/processing\ application\ cycles\ of\ this\ class\ }}
+\DoxyCodeLine{00135\ \textcolor{comment}{object\ the\ following\ is\ performed:\ }}
+\DoxyCodeLine{00136\ \textcolor{comment}{}}
+\DoxyCodeLine{00137\ \textcolor{comment}{1.\ From\ the\ nodal\ displacements\ and\ the\ shape\ function\ derivatives,\ at\ the}}
+\DoxyCodeLine{00138\ \textcolor{comment}{\ \ \ integration\ points\ the\ strain\ and\ stress\ tensors\ at\ these\ locations\ are\ }}
+\DoxyCodeLine{00139\ \textcolor{comment}{\ \ \ computed\ (=optimal\ locations,\ see\ Barlow,\ 1977).\ \ }}
+\DoxyCodeLine{00140\ \textcolor{comment}{}}
+\DoxyCodeLine{00141\ \textcolor{comment}{2.\ Linearly\ extrapolate\ the\ strains\ back\ from\ the\ integration\ points\ }}
+\DoxyCodeLine{00142\ \textcolor{comment}{\ \ \ to\ the\ nodes.\ In\ this\ step,\ bilinear\ extrapolation\ is\ carried\ out}}
+\DoxyCodeLine{00143\ \textcolor{comment}{\ \ \ by\ the\ specific\ finite\ element\ used.\ Only\ linear\ variations\ in\ strain}}
+\DoxyCodeLine{00144\ \textcolor{comment}{\ \ \ over\ the\ element\ are\ supported\ at\ this\ stage.\ The\ nodal\ strains\ are\ }}
+\DoxyCodeLine{00145\ \textcolor{comment}{\ \ \ averaged\ among\ the\ adjacent\ elements\ since\ they\ diverge\ at\ these\ locations}}
+\DoxyCodeLine{00146\ \textcolor{comment}{\ \ \ from\ one-\/another.\ \ }}
+\DoxyCodeLine{00147\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00148\ \textcolor{comment}{3.\ From\ the\ nodally\ averaged\ strains\ and\ stresses\ all\ other\ variables\ are}}
+\DoxyCodeLine{00149\ \textcolor{comment}{\ \ \ calculated.\ \ }}
+\DoxyCodeLine{00150\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00151\ \textcolor{comment}{Steps\ 1\ and\ 2\ are\ accomplished\ in\ the\ first\ application\ cycle\ of\ the\ }}
+\DoxyCodeLine{00152\ \textcolor{comment}{post-\/processing\ operator.\ The\ nodal\ averaging\ and\ following\ operations}}
+\DoxyCodeLine{00153\ \textcolor{comment}{are\ done\ in\ a\ second\ cycle.\ \ }}
+\DoxyCodeLine{00154\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00155\ }
+\DoxyCodeLine{00156\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

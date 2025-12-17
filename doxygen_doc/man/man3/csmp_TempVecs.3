@@ -1,0 +1,78 @@
+.TH "csmp::TempVecs< dim >" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::TempVecs< dim >
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::vector< std::vector< \fBPoint\fP< dim > > > \fBfacet_integration_points\fP"
+.br
+.RI "[isrf][spts][dim] "
+.ti -1c
+.RI "std::vector< std::vector< double > > \fBfacet_integration_weights\fP"
+.br
+.RI "[isrf][spts] "
+.ti -1c
+.RI "std::vector< \fBPoint\fP< dim > > \fBfacet_normals\fP"
+.br
+.RI "[isrf][dim] //[node*3][dim] -3d "
+.ti -1c
+.RI "std::vector< std::vector< std::pair< double, double > > > \fBfacet_normal_xforms\fP"
+.br
+.RI "[isrf][node] "
+.ti -1c
+.RI "std::vector< \fBPoint\fP< dim > > \fBfacet_parametric_normals\fP"
+.br
+.RI "[isrf][dim] //[node*3][dim] -3d "
+.ti -1c
+.RI "std::vector< std::vector< double > > \fBfacet_projection_weights\fP"
+.br
+.RI "[isrf][spts] "
+.ti -1c
+.RI "std::vector< std::vector< uint32_t > > \fBfacets_surrounding_node\fP"
+.br
+.RI "[node][facet] "
+.ti -1c
+.RI "std::vector< \fBPoint\fP< dim > > \fBfacet_edge_midpoints\fP"
+.br
+.ti -1c
+.RI "std::vector< std::vector< \fBPoint\fP< dim > > > \fBfacet_points\fP"
+.br
+.ti -1c
+.RI "std::vector< FV_FACET_TYPE > \fBfacet_types\fP"
+.br
+.RI "[isrf] "
+.ti -1c
+.RI "std::vector< std::pair< uint32_t, uint32_t > > \fBedges_of_element\fP"
+.br
+.RI "= facets "
+.ti -1c
+.RI "std::vector< std::vector< \fBPoint\fP< dim > > > \fBsector_integration_points\fP"
+.br
+.RI "[ivol][vpts][dim] "
+.ti -1c
+.RI "std::vector< std::vector< double > > \fBsector_integration_weights\fP"
+.br
+.RI "[ivol][vpts] "
+.ti -1c
+.RI "std::vector< std::vector< \fBPoint\fP< dim > > > \fBsector_points\fP"
+.br
+.ti -1c
+.RI "std::vector< std::vector< std::pair< uint32_t, uint32_t > > > \fBsector_edges\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim>
+.br
+struct csmp::TempVecs< dim >"Temporary storage used to convert vectors of vectors to the dynamic array based storage 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

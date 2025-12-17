@@ -1,0 +1,39 @@
+\doxysection{Fracture\+Brooks\+Corey\+Parameter\+Visitor.\+h}
+\hypertarget{_fracture_brooks_corey_parameter_visitor_8h_source}{}\label{_fracture_brooks_corey_parameter_visitor_8h_source}\index{source/includes/thmc/fractures/FractureBrooksCoreyParameterVisitor.h@{source/includes/thmc/fractures/FractureBrooksCoreyParameterVisitor.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{FRACTUREBROOKSCOREYPARAMETERVISITOR\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{FRACTUREBROOKSCOREYPARAMETERVISITOR\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_visitor_8h}{"{}Visitor.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_scalar_variable_8h}{"{}ScalarVariable.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\{}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \ \ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcsmp_1_1_index}{Index}};}
+\DoxyCodeLine{00011\ \ \ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_model}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}};}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00015\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_fracture_brooks_corey_parameter_visitor}{FractureBrooksCoreyParameterVisitor}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_fracture_brooks_corey_parameter_visitor}{Visitor}}<\mbox{\hyperlink{classcsmp_1_1_fracture_brooks_corey_parameter_visitor}{dim}}>}
+\DoxyCodeLine{00016\ \ \ \{}
+\DoxyCodeLine{00017\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00018\ \ \ \ \ FractureBrooksCoreyParameterVisitor(\mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ model,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ frapTag,}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ brooksCoreyLambdaTag,\ \textcolor{keywordtype}{double}\ meanPoreRadius\ );}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~FractureBrooksCoreyParameterVisitor()\ \{\}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ Visit(Element<dim>*\ element);}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00025\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ model\_;}
+\DoxyCodeLine{00026\ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ frapKey\_,\ brooksCoreyLambdaKey\_;}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ meanPoreRadius\_;}
+\DoxyCodeLine{00028\ \ \ \};}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \}\ \textcolor{comment}{//csmp}}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{//\ FRACTUREBROOKSCOREYPARAMETERVISITOR\_H}}
+
+\end{DoxyCode}

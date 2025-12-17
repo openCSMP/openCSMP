@@ -1,0 +1,267 @@
+\doxysection{csmp\+::Field\+Variable\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_field_variable}{}\label{classcsmp_1_1_field_variable}\index{csmp::FieldVariable$<$ dim $>$@{csmp::FieldVariable$<$ dim $>$}}
+
+
+\doxylink{classcsmp_1_1_field_variable}{Field\+Variable} class for accessing distributed variables in the model.  
+
+
+
+
+{\ttfamily \#include $<$Field\+Variable.\+h$>$}
+
+
+
+Collaboration diagram for csmp\+::Field\+Variable\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=174pt]{classcsmp_1_1_field_variable__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_field_variable_a52d0e7d0e5cf858d51279817a8e509ca}\label{classcsmp_1_1_field_variable_a52d0e7d0e5cf858d51279817a8e509ca} 
+using {\bfseries Subdomain\+Type} = \mbox{\hyperlink{classcsmp_1_1_model_sub_domain}{Model\+Sub\+Domain}}$<$dim, CELL$>$
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_field_variable_a365f4a2cdbd3d2dee30fe230b248d191}{Field\+Variable}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&model, const std\+::string \&variable\+\_\+name)
+\begin{DoxyCompactList}\small\item\em Construct a new \doxylink{classcsmp_1_1_field_variable}{Field\+Variable} object. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_field_variable_a10f90a0e4b7fc4ce15d5fa6bc473ebd5}\label{classcsmp_1_1_field_variable_a10f90a0e4b7fc4ce15d5fa6bc473ebd5} 
+{\bfseries Field\+Variable} (const \mbox{\hyperlink{classcsmp_1_1_field_variable}{Field\+Variable}} \&other)=default
+\item 
+\Hypertarget{classcsmp_1_1_field_variable_ab381496ff449aea5ef287e2834eeab7e}\label{classcsmp_1_1_field_variable_ab381496ff449aea5ef287e2834eeab7e} 
+{\bfseries Field\+Variable} (\mbox{\hyperlink{classcsmp_1_1_field_variable}{Field\+Variable}} \&\&other)=default
+\item 
+\Hypertarget{classcsmp_1_1_field_variable_a1209f69cdf6f417856f62024fd7876d0}\label{classcsmp_1_1_field_variable_a1209f69cdf6f417856f62024fd7876d0} 
+\mbox{\hyperlink{classcsmp_1_1_field_variable}{Field\+Variable}} \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_field_variable}{Field\+Variable}} \&other)=default
+\item 
+\Hypertarget{classcsmp_1_1_field_variable_a67d6454b7a265838be0ffb0c617c930f}\label{classcsmp_1_1_field_variable_a67d6454b7a265838be0ffb0c617c930f} 
+\mbox{\hyperlink{classcsmp_1_1_field_variable}{Field\+Variable}} \& {\bfseries operator=} (\mbox{\hyperlink{classcsmp_1_1_field_variable}{Field\+Variable}} \&\&other)=default
+\item 
+{\footnotesize template$<$typename T$>$ }\\void \mbox{\hyperlink{classcsmp_1_1_field_variable_a2a11dee75cb0070408cb512627113d72}{Store}} (const T \&value)
+\begin{DoxyCompactList}\small\item\em Store a value in the variable. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T$>$ }\\void \mbox{\hyperlink{classcsmp_1_1_field_variable_abc7c8cec361a60be054a8ff4661dccc3}{Read}} (T \&value) const
+\begin{DoxyCompactList}\small\item\em Read a value from the variable. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_field_variable_ab9612362bf0ca851b6276b2b0fb0cf4c}{Status}} (bool status)
+\begin{DoxyCompactList}\small\item\em Set the status flag for the variable. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_field_variable_a9ccd2d3734b840324a5f19639c588ad6}\label{classcsmp_1_1_field_variable_a9ccd2d3734b840324a5f19639c588ad6} 
+{\footnotesize template$<$typename T$>$ }\\\mbox{\hyperlink{classcsmp_1_1_field_variable}{Field\+Variable}} \& {\bfseries operator=} (const T \&value)
+\item 
+\Hypertarget{classcsmp_1_1_field_variable_a194b0c8089891a91297ffc72b77c572f}\label{classcsmp_1_1_field_variable_a194b0c8089891a91297ffc72b77c572f} 
+{\footnotesize template$<$typename T$>$ }\\\mbox{\hyperlink{classcsmp_1_1_field_variable}{Field\+Variable}} \& {\bfseries operator+=} (const T \&value)
+\item 
+\Hypertarget{classcsmp_1_1_field_variable_a5ce1f4f10db42aa9beb062bfb3365549}\label{classcsmp_1_1_field_variable_a5ce1f4f10db42aa9beb062bfb3365549} 
+{\footnotesize template$<$typename T$>$ }\\\mbox{\hyperlink{classcsmp_1_1_field_variable}{Field\+Variable}} \& {\bfseries operator-\/=} (const T \&value)
+\item 
+\Hypertarget{classcsmp_1_1_field_variable_a3a2e75d200ade01f6a2ae2461578f6a5}\label{classcsmp_1_1_field_variable_a3a2e75d200ade01f6a2ae2461578f6a5} 
+{\footnotesize template$<$typename T$>$ }\\\mbox{\hyperlink{classcsmp_1_1_field_variable}{Field\+Variable}} \& {\bfseries operator\texorpdfstring{$\ast$}{*}=} (const T \&value)
+\item 
+\Hypertarget{classcsmp_1_1_field_variable_a8df0b9014cbcfd1facd69a38915dad34}\label{classcsmp_1_1_field_variable_a8df0b9014cbcfd1facd69a38915dad34} 
+{\footnotesize template$<$typename T$>$ }\\\mbox{\hyperlink{classcsmp_1_1_field_variable}{Field\+Variable}} \& {\bfseries operator/=} (const T \&value)
+\item 
+\Hypertarget{classcsmp_1_1_field_variable_a5676d30300bff13d35ff15c10cd774ad}\label{classcsmp_1_1_field_variable_a5676d30300bff13d35ff15c10cd774ad} 
+{\footnotesize template$<$typename T$>$ }\\auto {\bfseries operator+} (const T \&other) const
+\item 
+\Hypertarget{classcsmp_1_1_field_variable_a8cb0d1e059926773eb83134829a475cc}\label{classcsmp_1_1_field_variable_a8cb0d1e059926773eb83134829a475cc} 
+{\footnotesize template$<$typename T$>$ }\\auto {\bfseries operator-\/} (const T \&other) const
+\item 
+\Hypertarget{classcsmp_1_1_field_variable_acdd11f491cbd326dcde0aef67586b1ba}\label{classcsmp_1_1_field_variable_acdd11f491cbd326dcde0aef67586b1ba} 
+{\footnotesize template$<$typename T$>$ }\\auto {\bfseries operator\texorpdfstring{$\ast$}{*}} (const T \&other) const
+\item 
+\Hypertarget{classcsmp_1_1_field_variable_af4140066b2ad2c9bc27d90e02a3e0254}\label{classcsmp_1_1_field_variable_af4140066b2ad2c9bc27d90e02a3e0254} 
+{\footnotesize template$<$typename T$>$ }\\auto {\bfseries operator/} (const T \&other) const
+\item 
+\Hypertarget{classcsmp_1_1_field_variable_ada7d1d93975b5145e860faad0e45eb17}\label{classcsmp_1_1_field_variable_ada7d1d93975b5145e860faad0e45eb17} 
+{\bfseries Field\+Variable} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&model, const std\+::string \&subdomain\+\_\+name, const std\+::string \&var\+\_\+name)
+\begin{DoxyCompactList}\small\item\em Constructor\+: binds to an existing variable in the model\textquotesingle{}s property database. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_field_variable_a87664d0fc3bf294d816b8d0ad9cb0510}\label{classcsmp_1_1_field_variable_a87664d0fc3bf294d816b8d0ad9cb0510} 
+{\bfseries Field\+Variable} (const \mbox{\hyperlink{classcsmp_1_1_field_variable}{Field\+Variable}} \&)=default
+\begin{DoxyCompactList}\small\item\em Defaulted copy constructor and assignment. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_field_variable_a26b358089e8cfec29e735074b09cb863}\label{classcsmp_1_1_field_variable_a26b358089e8cfec29e735074b09cb863} 
+\mbox{\hyperlink{classcsmp_1_1_field_variable}{Field\+Variable}} \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_field_variable}{Field\+Variable}} \&)=default
+\item 
+\Hypertarget{classcsmp_1_1_field_variable_a3c4827dd12fd6807d822971619aa5447}\label{classcsmp_1_1_field_variable_a3c4827dd12fd6807d822971619aa5447} 
+\mbox{\hyperlink{classcsmp_1_1_field_variable}{Field\+Variable}} \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&s)
+\begin{DoxyCompactList}\small\item\em Assignment from scalar, vector, or tensor constants. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_field_variable_a8cda9fce435d462689930595c00ee76e}\label{classcsmp_1_1_field_variable_a8cda9fce435d462689930595c00ee76e} 
+\mbox{\hyperlink{classcsmp_1_1_field_variable}{Field\+Variable}} \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&v)
+\item 
+\Hypertarget{classcsmp_1_1_field_variable_a169fee71109b60e826db4e1852ab0903}\label{classcsmp_1_1_field_variable_a169fee71109b60e826db4e1852ab0903} 
+\mbox{\hyperlink{classcsmp_1_1_field_variable}{Field\+Variable}} \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ dim $>$ \&t)
+\item 
+\Hypertarget{classcsmp_1_1_field_variable_ac235cc2f5c25aa16eebd7cb5df36ecb2}\label{classcsmp_1_1_field_variable_ac235cc2f5c25aa16eebd7cb5df36ecb2} 
+void {\bfseries Add} (const \mbox{\hyperlink{classcsmp_1_1_field_variable}{Field\+Variable}} \&other)
+\item 
+\Hypertarget{classcsmp_1_1_field_variable_afea4706341b58c85e8e648775866ed8c}\label{classcsmp_1_1_field_variable_afea4706341b58c85e8e648775866ed8c} 
+void {\bfseries Subtract} (const \mbox{\hyperlink{classcsmp_1_1_field_variable}{Field\+Variable}} \&other)
+\item 
+\Hypertarget{classcsmp_1_1_field_variable_a2725ae0929d16bdfcf56b19b252deff5}\label{classcsmp_1_1_field_variable_a2725ae0929d16bdfcf56b19b252deff5} 
+void {\bfseries Multiply} (const \mbox{\hyperlink{classcsmp_1_1_field_variable}{Field\+Variable}} \&other)
+\item 
+\Hypertarget{classcsmp_1_1_field_variable_a919900514871a224c50f599e2d73b79a}\label{classcsmp_1_1_field_variable_a919900514871a224c50f599e2d73b79a} 
+void {\bfseries Divide} (const \mbox{\hyperlink{classcsmp_1_1_field_variable}{Field\+Variable}} \&other)
+\item 
+\Hypertarget{classcsmp_1_1_field_variable_ab1cc5285f31e4edc0ec8f8225c528d36}\label{classcsmp_1_1_field_variable_ab1cc5285f31e4edc0ec8f8225c528d36} 
+{\footnotesize template$<$typename Var$>$ }\\void {\bfseries Add} (const Var \&value)
+\item 
+\Hypertarget{classcsmp_1_1_field_variable_aa66893b17f99eaf297be7555e807c72c}\label{classcsmp_1_1_field_variable_aa66893b17f99eaf297be7555e807c72c} 
+{\footnotesize template$<$typename Var$>$ }\\void {\bfseries Subtract} (const Var \&value)
+\item 
+\Hypertarget{classcsmp_1_1_field_variable_a07a907ed57975e4677d38687ca3460bb}\label{classcsmp_1_1_field_variable_a07a907ed57975e4677d38687ca3460bb} 
+{\footnotesize template$<$typename Var$>$ }\\void {\bfseries Multiply} (const Var \&value)
+\item 
+\Hypertarget{classcsmp_1_1_field_variable_a15c40c8d20f559394830445471170116}\label{classcsmp_1_1_field_variable_a15c40c8d20f559394830445471170116} 
+{\footnotesize template$<$typename Var$>$ }\\void {\bfseries Divide} (const Var \&value)
+\item 
+\Hypertarget{classcsmp_1_1_field_variable_a7e9d62659df4599a5d8c0adb4fd224c3}\label{classcsmp_1_1_field_variable_a7e9d62659df4599a5d8c0adb4fd224c3} 
+const \mbox{\hyperlink{classcsmp_1_1_model_sub_domain}{Subdomain\+Type}} \& {\bfseries Subdomain} () const
+\begin{DoxyCompactList}\small\item\em Access the associated subdomain. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_field_variable_ae08b256a5d65a74fad5a41a3689b4b5e}\label{classcsmp_1_1_field_variable_ae08b256a5d65a74fad5a41a3689b4b5e} 
+const \mbox{\hyperlink{structcsmp_1_1_index}{Index}} \& {\bfseries Var\+Key} () const
+\begin{DoxyCompactList}\small\item\em Access the variable key (index) \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$size\+\_\+t dim$>$\newline
+class csmp\+::\+Field\+Variable$<$ dim $>$}
+\doxylink{classcsmp_1_1_field_variable}{Field\+Variable} class for accessing distributed variables in the model. 
+
+\doxylink{classcsmp_1_1_field_variable}{Field\+Variable} represents a handle to a distributed variable (scalar, vector, tensor) in the model.
+
+This class provides a clean interface for accessing variables that are distributed across the model hierarchy (\doxylink{classcsmp_1_1_model}{Model} \texorpdfstring{$>$}{>} \doxylink{classcsmp_1_1_region}{Region} \texorpdfstring{$>$}{>} \doxylink{classcsmp_1_1_element}{Element} \texorpdfstring{$>$}{>} \doxylink{classcsmp_1_1_node}{Node}). It uses the \doxylink{classcsmp_1_1_property_database}{Property\+Database} to look up variable indices and \doxylink{classcsmp_1_1_local_variable_storage}{Local\+Variable\+Storage} for actual variable access.
+
+The class supports expression templates and operator overloading for mathematical operations.
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em dim} & The dimension of the model (2 or 3)\\
+\hline
+\end{DoxyTemplParams}
+The \doxylink{classcsmp_1_1_field_variable}{Field\+Variable} provides access to variable values across a subdomain (e.\+g., \doxylink{classcsmp_1_1_region}{Region}, \doxylink{classcsmp_1_1_boundary}{Boundary}) and supports arithmetic operations and expression templates.
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em dim} & Spatial dimension \\
+\hline
+{\em CELL} & cell type used in the subdomain, i.\+e. \doxylink{classcsmp_1_1_element}{Element} for \doxylink{classcsmp_1_1_region}{Region}, \doxylink{classcsmp_1_1_face}{Face} for \doxylink{classcsmp_1_1_boundary}{Boundary} and \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} for \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} \\
+\hline
+\end{DoxyTemplParams}
+
+
+\label{doc-constructors}
+\Hypertarget{classcsmp_1_1_field_variable_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcsmp_1_1_field_variable_a365f4a2cdbd3d2dee30fe230b248d191}\index{csmp::FieldVariable$<$ dim $>$@{csmp::FieldVariable$<$ dim $>$}!FieldVariable@{FieldVariable}}
+\index{FieldVariable@{FieldVariable}!csmp::FieldVariable$<$ dim $>$@{csmp::FieldVariable$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{FieldVariable()}{FieldVariable()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_field_variable_a365f4a2cdbd3d2dee30fe230b248d191} 
+template$<$size\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_field_variable}{csmp\+::\+Field\+Variable}}$<$ dim $>$\+::\+Field\+Variable (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&}]{model}{, }\item[{const std\+::string \&}]{variable\+\_\+name}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct a new \doxylink{classcsmp_1_1_field_variable}{Field\+Variable} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em model} & Reference to the model containing the variable \\
+\hline
+{\em variable\+\_\+name} & Name of the variable to access \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::runtime\+\_\+error} & if variable doesn\textquotesingle{}t exist in database \\
+\hline
+\end{DoxyExceptions}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=182pt]{classcsmp_1_1_field_variable_a365f4a2cdbd3d2dee30fe230b248d191_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=182pt]{classcsmp_1_1_field_variable_a365f4a2cdbd3d2dee30fe230b248d191_icgraph}
+\end{center}
+\end{figure}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_field_variable_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_field_variable_abc7c8cec361a60be054a8ff4661dccc3}\index{csmp::FieldVariable$<$ dim $>$@{csmp::FieldVariable$<$ dim $>$}!Read@{Read}}
+\index{Read@{Read}!csmp::FieldVariable$<$ dim $>$@{csmp::FieldVariable$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Read()}{Read()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_field_variable_abc7c8cec361a60be054a8ff4661dccc3} 
+template$<$size\+\_\+t dim$>$ \\
+template$<$typename T$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_field_variable}{csmp\+::\+Field\+Variable}}$<$ dim $>$\+::\+Read (\begin{DoxyParamCaption}\item[{T \&}]{value}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Read a value from the variable. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & The type of variable to read \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em value} & The value to read into \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classcsmp_1_1_field_variable_ab9612362bf0ca851b6276b2b0fb0cf4c}\index{csmp::FieldVariable$<$ dim $>$@{csmp::FieldVariable$<$ dim $>$}!Status@{Status}}
+\index{Status@{Status}!csmp::FieldVariable$<$ dim $>$@{csmp::FieldVariable$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Status()}{Status()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_field_variable_ab9612362bf0ca851b6276b2b0fb0cf4c} 
+template$<$size\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_field_variable}{csmp\+::\+Field\+Variable}}$<$ dim $>$\+::\+Status (\begin{DoxyParamCaption}\item[{bool}]{status}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Set the status flag for the variable. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em status} & The status to set \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classcsmp_1_1_field_variable_a2a11dee75cb0070408cb512627113d72}\index{csmp::FieldVariable$<$ dim $>$@{csmp::FieldVariable$<$ dim $>$}!Store@{Store}}
+\index{Store@{Store}!csmp::FieldVariable$<$ dim $>$@{csmp::FieldVariable$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Store()}{Store()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_field_variable_a2a11dee75cb0070408cb512627113d72} 
+template$<$size\+\_\+t dim$>$ \\
+template$<$typename T$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_field_variable}{csmp\+::\+Field\+Variable}}$<$ dim $>$\+::\+Store (\begin{DoxyParamCaption}\item[{const T \&}]{value}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Store a value in the variable. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & The type of variable to store \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em value} & The value to store \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/model/Field\+Variable.\+h\item 
+source/includes/property\+\_\+manipulation/Field\+Variable.\+h\end{DoxyCompactItemize}

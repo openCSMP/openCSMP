@@ -1,0 +1,179 @@
+.TH "csmp::PDE_Integrator_Test" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::PDE_Integrator_Test
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <PDE_Integrator_Test\&.h>\fP
+.PP
+Inherits \fBcsmp::Test\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPDE_Integrator_Test\fP ()"
+.br
+.ti -1c
+.RI "\fBPDE_Integrator_Test\fP (\fBModel\fP< 2U > &model)"
+.br
+.ti -1c
+.RI "void \fBrun\fP ()"
+.br
+.ti -1c
+.RI "template<uint32_t dim> void \fBTestMatrix\fP (const \fBPDE_Integrator_Attorney\fP< dim > &attorney, const \fBMeshManager\fP< dim > &mesh, const set< \fBBOX_BOUNDARY\fP > &dirich, const \fBVARIABLE_TYPE\fP variable_type)"
+.br
+.ti -1c
+.RI "template<uint32_t dim> void \fBTestRHSVector\fP (const \fBPDE_Integrator_Attorney\fP< dim > &attorney, const \fBMeshManager\fP< dim > &mesh, const double val, const set< \fBBOX_BOUNDARY\fP > &dirich, const \fBVARIABLE_TYPE\fP variable_type)"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::Test\fP
+.in +1c
+.ti -1c
+.RI "\fBTest\fP (std::ostream *osptr=0)"
+.br
+.ti -1c
+.RI "long \fBgetNumPassed\fP () const"
+.br
+.ti -1c
+.RI "long \fBgetNumFailed\fP () const"
+.br
+.ti -1c
+.RI "const std::ostream * \fBgetStream\fP () const"
+.br
+.ti -1c
+.RI "void \fBsetStream\fP (std::ostream *osptr)"
+.br
+.ti -1c
+.RI "void \fBsetName\fP (std::string testName)"
+.br
+.ti -1c
+.RI "std::string \fBgetName\fP () const"
+.br
+.ti -1c
+.RI "bool \fBhasName\fP () const"
+.br
+.ti -1c
+.RI "void \fBdo_succeed\fP ()"
+.br
+.ti -1c
+.RI "long \fBreport\fP () const"
+.br
+.ti -1c
+.RI "virtual void \fBreset\fP ()"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Member Functions inherited from \fBcsmp::Test\fP
+.in +1c
+.ti -1c
+.RI "void \fBdo_equal\fP (double expr, double value, double tol, const std::string &lbl, const char *fname, long lineno)"
+.br
+.ti -1c
+.RI "void \fBdo_test\fP (bool cond, const std::string &lbl, const char *fname, long lineno)"
+.br
+.ti -1c
+.RI "void \fBdo_fail\fP (const std::string &lbl, const char *fname, long lineno)"
+.br
+.in -1c
+
+Protected Attributes inherited from \fBcsmp::Test\fP
+.in +1c
+.ti -1c
+.RI "const char * \fBprefix_\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+TODO
+
+.PP
+\fBTodo\fP
+.RS 4
+test that the PDE operators are accumulated into the right places in the lefthand matrix 
+
+.PP
+test that late accumulate methods do the right things 
+
+.PP
+test accumulation of boundary integrals 
+
+.PP
+test coupling of domains by \fBSplitBoundary\fP integrals 
+
+.PP
+test accumulation of a coupled system 
+
+.PP
+test that the contacts between domain and boundaries are identified correctly for the accumulation of surface integrals at the boundary 
+
+.PP
+move all the testing that relates to matrix inversion into Solver_Test and specific subclasses 
+
+.PP
+test repeated use of integrator in a time-dependent problem: matrix retention vs\&. reconstruction, test change of DOF from step to step
+.RE
+.PP
+
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "csmp::PDE_Integrator_Test::PDE_Integrator_Test ()"
+Constructor of \fBPDE_Integrator_Test\fP without input \fBModel\fP\&.
+
+.PP
+This creates a simple test model and stores it in \fImodel_\fP\&. 
+.SS "csmp::PDE_Integrator_Test::PDE_Integrator_Test (\fBModel\fP< 2U > & model)\fR [explicit]\fP"
+Constructor of \fBPDE_Integrator_Test\fP with input \fBModel\fP\&. 
+.SH "Member Function Documentation"
+.PP 
+.SS "void csmp::PDE_Integrator_Test::run ()\fR [virtual]\fP"
+
+.PP
+Implements \fBcsmp::Test\fP\&.
+.SS "template<uint32_t dim> void csmp::PDE_Integrator_Test::TestMatrix (const \fBPDE_Integrator_Attorney\fP< dim > & attorney, const \fBMeshManager\fP< dim > & mesh, const set< \fBBOX_BOUNDARY\fP > & dirich, const \fBVARIABLE_TYPE\fP variable_type)"
+Generic function to test the matrix accumulated in \fBPDE_Integrator\fP from \fBLHS_FixedValueMatrix\fP 
+.PP
+\fBParameters\fP
+.RS 4
+\fIattorney\fP \fBAttorney\fP to the \fBPDE_Integrator\fP being tested 
+.br
+\fImesh\fP Mesh of the model used in this test 
+.br
+\fIdirich\fP \fBBOX_BOUNDARY\fP codes on which Dirichlet conditions are set 
+.br
+\fIvariable_type\fP Type of \fBTest\fP variable (currently SCALAR or VECTOR only)
+.RE
+.PP
+This function tests that
+.IP "1." 4
+diagonal terms are positive
+.IP "2." 4
+off-diagonal terms for nodes belonging to the same \fBElement\fP are negative
+.IP "3." 4
+all other terms are zero 
+.PP
+
+.SS "template<uint32_t dim> void csmp::PDE_Integrator_Test::TestRHSVector (const \fBPDE_Integrator_Attorney\fP< dim > & attorney, const \fBMeshManager\fP< dim > & mesh, const double val, const set< \fBBOX_BOUNDARY\fP > & dirich, const \fBVARIABLE_TYPE\fP variable_type)"
+Generic function to test the RHS vector accumulated in \fBPDE_Integrator\fP from \fBRHS_FixedValueMatrix\fP 
+.PP
+\fBParameters\fP
+.RS 4
+\fIattorney\fP \fBAttorney\fP to the \fBPDE_Integrator\fP being tested 
+.br
+\fImesh\fP Mesh of the model used in this test 
+.br
+\fIdirich\fP \fBBOX_BOUNDARY\fP codes on which Dirichlet conditions are set 
+.br
+\fIvariable_type\fP Type of \fBTest\fP variable (currently SCALAR or VECTOR only)
+.RE
+.PP
+This function tests that RHS value for a given non-Dirichlet node is the value input in the constructor times the number of parent elements for this node\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

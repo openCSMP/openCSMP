@@ -32,9 +32,6 @@ PARDISO_Solver::PARDISO_Solver( PARDISO_SolverSettings& settings )
  :  settings_(settings)
 {}
 
-PARDISO_Solver::~PARDISO_Solver()
-{}
-
 
 
 
@@ -63,7 +60,7 @@ PARDISO_Solver::~PARDISO_Solver()
 void PARDISO_Solver::SolveMatrixEquation( SparseMatrix& A,
                                           vector<double>& b,
                                           vector<double>& x,
-                                          double tolerance )
+                                          size_t no_unknowns )
 {
     if (Verbose()) {
         cout <<"\nPARDISO_Solver::SolveMatrixEquation: Allocating memory..." << endl;

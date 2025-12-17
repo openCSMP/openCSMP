@@ -1,0 +1,29 @@
+<map id="csmp::BrittleFailureVisitor::Visit" name="csmp::BrittleFailureVisitor::Visit">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,204,177,245"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_brittle_failure.html#aef7c8a0ec1a31e92c7d2cfbb4dddb113" title="evaluates failure criteria &#45;1 to 4 with consideration of pore pressure" alt="" coords="230,171,364,212"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="177,208,214,202,215,207,178,214"/>
+<area shape="rect" id="Node000011" href="$classcsmp_1_1_scalar_variable.html#a7f0ab5431406d975d6e1de988f369176" title="assignment as an lvalue" alt="" coords="225,236,369,277"/>
+<area shape="poly" id="edge16_Node000001_Node000011" title=" " alt="" coords="178,236,210,241,209,246,177,241"/>
+<area shape="rect" id="Node000003" href="$group___c_s_m_pglobal_functions.html#ga7325b4afa7076aa33147b2c5aef9230c" title="all trigonomic functions in C++ take arguments in radians" alt="" coords="452,5,621,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="308,169,350,109,380,76,416,48,443,34,445,39,418,52,384,80,354,112,312,172"/>
+<area shape="rect" id="Node000004" href="$classcsmp_1_1_stress_invariants.html#a5b794e6806aacb2e16f83fd775b40c2f" title="maximum of the deviatoric stresses = nonisostatic stresses" alt="" coords="703,106,860,146"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="313,169,356,127,385,107,416,92,453,81,491,75,568,75,641,84,705,99,703,104,640,89,568,80,491,81,454,87,418,97,388,111,360,131,317,173"/>
+<area shape="rect" id="Node000005" href="$namespacecsmp.html#a13b5d55bb94700f5ade9c043610c14f5" title="returns arctan(mu) in degrees," alt="" coords="470,287,603,312"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="349,210,371,223,394,245,404,255,418,265,456,281,454,286,416,270,401,259,391,249,367,227,346,215"/>
+<area shape="rect" id="Node000007" href="$classcsmp_1_1_stress_invariants.html#aa47e11e0bb3f2e3a76253bcea9d35d57" title="sigma3" alt="" coords="458,106,614,146"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="363,171,444,149,445,154,365,176"/>
+<area shape="rect" id="Node000008" href="$classcsmp_1_1_stress_invariants.html#a2d6612f682bd924d1cfce7b5a6f2cad8" title="mean stress = average of principal stresses" alt="" coords="703,171,860,212"/>
+<area shape="poly" id="edge14_Node000002_Node000008" title=" " alt="" coords="364,210,417,221,484,229,536,231,588,228,655,221,696,213,697,219,656,226,589,234,536,236,484,234,417,226,363,215"/>
+<area shape="rect" id="Node000009" href="$classcsmp_1_1_stress_invariants.html#a19f00e2483ac3f5cec31dfc9e37776fe" title="sigma1 = maximum principal stress (Pa)" alt="" coords="446,171,627,212"/>
+<area shape="poly" id="edge10_Node000002_Node000009" title=" " alt="" coords="364,189,430,189,430,194,364,194"/>
+<area shape="rect" id="Node000010" href="$classcsmp_1_1_stress_invariants.html#a6987bd7b54773bda8788883ac9c4b9b9" title="K(theta), see Zienkiewitz, volume 2, chapter 4.5.11, alpha is in degrees." alt="" coords="417,336,655,377"/>
+<area shape="poly" id="edge15_Node000002_Node000010" title=" " alt="" coords="355,210,371,223,388,250,395,275,401,300,408,311,419,323,423,326,419,330,415,327,403,315,396,302,389,277,383,252,367,227,351,215"/>
+<area shape="rect" id="Node000006" href="$namespacecsmp.html#a7eb608f94da6c10db811e730fb014d89" title="pi (m) perimeter of circle with a diameter of 1" alt="" coords="721,236,842,262"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="601,283,706,262,707,267,602,289"/>
+<area shape="poly" id="edge8_Node000007_Node000004" title=" " alt="" coords="615,124,688,124,688,129,615,129"/>
+<area shape="poly" id="edge7_Node000007_Node000006" title=" " alt="" coords="616,138,657,157,673,173,682,190,690,206,705,221,713,226,710,231,702,226,686,209,677,192,669,177,654,162,614,143"/>
+<area shape="poly" id="edge9_Node000007_Node000008" title=" " alt="" coords="616,144,689,164,688,169,614,150"/>
+<area shape="poly" id="edge12_Node000009_Node000004" title=" " alt="" coords="615,168,687,148,689,154,616,173"/>
+<area shape="poly" id="edge11_Node000009_Node000006" title=" " alt="" coords="627,210,709,229,708,234,626,215"/>
+<area shape="poly" id="edge13_Node000009_Node000008" title=" " alt="" coords="627,189,688,189,688,194,627,194"/>
+</map>

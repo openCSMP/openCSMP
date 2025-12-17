@@ -1,0 +1,60 @@
+.TH "csmp::GocadHeader" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::GocadHeader
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBGocadHeader\fP (const char *gocad_type, const char *name, const char *geological_name, bool issolid=true)"
+.br
+.ti -1c
+.RI "\fBGocadHeader\fP (const \fBGocadHeader\fP &\fBh\fP)"
+.br
+.ti -1c
+.RI "\fBGocadHeader\fP (std::ifstream &ifn)"
+.br
+.ti -1c
+.RI "\fBGocadHeader\fP & \fBoperator=\fP (const \fBGocadHeader\fP &\fBh\fP)"
+.br
+.ti -1c
+.RI "bool \fBoperator<\fP (const \fBGocadHeader\fP &\fBh\fP) const"
+.br
+.RI "name string length comparison "
+.ti -1c
+.RI "std::string \fBName\fP () const"
+.br
+.ti -1c
+.RI "void \fBName\fP (const std::string &s)"
+.br
+.ti -1c
+.RI "void \fBName\fP (char *s)"
+.br
+.ti -1c
+.RI "bool \fBInitializeFrom\fP (std::ifstream &ifs)"
+.br
+.ti -1c
+.RI "void \fBWriteToText\fP (std::ofstream &ofs) const"
+.br
+.ti -1c
+.RI "void \fBAddProperty\fP (const char *pname, double loclip, double hiclip, int32_t pclip=99, int32_t comp=1)"
+.br
+.ti -1c
+.RI "void \fBOut\fP () const"
+.br
+.in -1c
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "csmp::GocadHeader::GocadHeader (const char * gocad_name, const char * name, const char * geo_type, bool issolid = \fRtrue\fP)"
+Checks header for specifications\&.
+
+.PP
+'gocad_type' is the specific gocad type name, e\&.g\&. TSolid or so\&. 'geological_type' is user-defined special name 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

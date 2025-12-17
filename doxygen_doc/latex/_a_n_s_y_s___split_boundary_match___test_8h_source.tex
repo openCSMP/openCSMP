@@ -1,0 +1,47 @@
+\doxysection{ANSYS\+\_\+\+Split\+Boundary\+Match\+\_\+\+Test.\+h}
+\hypertarget{_a_n_s_y_s___split_boundary_match___test_8h_source}{}\label{_a_n_s_y_s___split_boundary_match___test_8h_source}\index{tests/unit/ANSYS\_SplitBoundaryMatch\_Test.h@{tests/unit/ANSYS\_SplitBoundaryMatch\_Test.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{ANSYS\_SPLIT\_BOUNDARY\_MATCH\_TEST\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{ANSYS\_SPLIT\_BOUNDARY\_MATCH\_TEST\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_test_8h}{"{}Test.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{class}\ \mbox{\hyperlink{structcsmp_1_1_index}{Index}};}
+\DoxyCodeLine{00010\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_node}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}};}
+\DoxyCodeLine{00011\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_split_boundary}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_split_boundary}{SplitBoundary}};}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ \ \ \ Tests\ high\ level\ utility\ function\ that\ matches\ node-\/matched\ elements}}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ \ \ \ across\ SplitBoundaries\ created\ in\ ANSYS.}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ \ \ \ @todo\ insert\ \_test()\ macros\ into\ the\ two\ test\ functions\ deciding\ on\ quantities\ to\ analyse}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ \ \ \ @todo\ function\ that\ matches\ node\ coordinates\ across\ interfaces\ fails\ in\ some\ cases\ although\ the\ interfaces\ themselves\ were\ matched\ before;\ fix}}
+\DoxyCodeLine{00019\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00020\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___split_boundary_match___test}{ANSYS\_SplitBoundaryMatch\_Test}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_test}{Test}}\ \{}
+\DoxyCodeLine{00021\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___split_boundary_match___test_a909a4706a47d99100459b64b863f506c}{run}}();}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ verbose\_\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{bool}\ TestForContiguousModel(\ \textcolor{comment}{/*\ "{}Split\_Edges"{}\ */}\ );}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{bool}\ TestForDiscontiguousModel();}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{comment}{///\ for\ testing\ how\ the\ nodes\ are\ organised\ in\ the\ node\ vector}}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordtype}{void}\ PrintSplitBoundaryNodeVariableVector(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\&\ var\_key,}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<Node<3U>*>::const\_iterator\ begin,}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<Node<3U>*>::const\_iterator\ end,}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ INTERFACE\_SIDE\ );}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordtype}{void}\ TestThatManifoldNodesAreCollocated(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_split_boundary}{SplitBoundary}}<3U>\&\ );}
+\DoxyCodeLine{00037\ \};}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{//\ ANSYS\_SPLIT\_BOUNDARY\_MATCH\_TEST\_H}}
+
+\end{DoxyCode}

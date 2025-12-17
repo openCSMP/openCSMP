@@ -1,0 +1,117 @@
+\doxysection{csmp\+::Jagged\+Array3D\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_jagged_array3_d}{}\label{classcsmp_1_1_jagged_array3_d}\index{csmp::JaggedArray3D$<$ T $>$@{csmp::JaggedArray3D$<$ T $>$}}
+
+
+{\ttfamily \#include $<$Jagged\+Array3\+D.\+h$>$}
+
+
+
+Collaboration diagram for csmp\+::Jagged\+Array3D\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=210pt]{classcsmp_1_1_jagged_array3_d__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_jagged_array3_d_af0d5298fd65725017f51e37cb6c1818a}\label{classcsmp_1_1_jagged_array3_d_af0d5298fd65725017f51e37cb6c1818a} 
+using {\bfseries key} = std\+::tuple$<$uint32\+\_\+t, uint32\+\_\+t, uint32\+\_\+t$>$
+\item 
+\Hypertarget{classcsmp_1_1_jagged_array3_d_a3e9b99a7bc5de138a25cde7194eae976}\label{classcsmp_1_1_jagged_array3_d_a3e9b99a7bc5de138a25cde7194eae976} 
+using {\bfseries umap} = std\+::unordered\+\_\+map$<$key,T,\mbox{\hyperlink{structcsmp_1_1_tuple_hash}{Tuple\+Hash}}$>$
+\item 
+\Hypertarget{classcsmp_1_1_jagged_array3_d_ac46e4d9b62b24e0e0fc9fb67669e83a2}\label{classcsmp_1_1_jagged_array3_d_ac46e4d9b62b24e0e0fc9fb67669e83a2} 
+using {\bfseries reference} = typename std\+::unordered\+\_\+map$<$key,T$>$\+::reference
+\item 
+\Hypertarget{classcsmp_1_1_jagged_array3_d_aa870971a1d3e76be2be09f9a7a536256}\label{classcsmp_1_1_jagged_array3_d_aa870971a1d3e76be2be09f9a7a536256} 
+using {\bfseries const\+\_\+reference} = typename std\+::unordered\+\_\+map$<$key,T$>$\+::const\+\_\+reference
+\item 
+\Hypertarget{classcsmp_1_1_jagged_array3_d_a10622a5ee00970191ff27211db5720ee}\label{classcsmp_1_1_jagged_array3_d_a10622a5ee00970191ff27211db5720ee} 
+using {\bfseries iterator} = typename std\+::unordered\+\_\+map$<$key,T$>$\+::iterator
+\item 
+\Hypertarget{classcsmp_1_1_jagged_array3_d_a3a7b98eb17df5634c16696c290bb5302}\label{classcsmp_1_1_jagged_array3_d_a3a7b98eb17df5634c16696c290bb5302} 
+using {\bfseries const\+\_\+iterator} = typename std\+::unordered\+\_\+map$<$key,T$>$\+::const\+\_\+iterator
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_jagged_array3_d_a334201c84646b1e9e0437cf79004937b}\label{classcsmp_1_1_jagged_array3_d_a334201c84646b1e9e0437cf79004937b} 
+{\bfseries Jagged\+Array3D} ()=default
+\begin{DoxyCompactList}\small\item\em default constructor constructs an empty array \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_jagged_array3_d_abe0a97475216e6a522a43d18adf1bd26}\label{classcsmp_1_1_jagged_array3_d_abe0a97475216e6a522a43d18adf1bd26} 
+{\bfseries Jagged\+Array3D} (std\+::initializer\+\_\+list$<$ std\+::initializer\+\_\+list$<$ std\+::initializer\+\_\+list$<$ T $>$ $>$ $>$)
+\begin{DoxyCompactList}\small\item\em construction using initialiser list (which must be known at compile time) \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_jagged_array3_d_a3bd224827b96685e741f3b5ce2e3001c}{Jagged\+Array3D}} (const std\+::vector$<$ std\+::vector$<$ std\+::vector$<$ T $>$ $>$ $>$ \&)
+\begin{DoxyCompactList}\small\item\em construct from a monster vector of vector of vectors \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_jagged_array3_d_a8d3df1584dd4690e2f8f2e6d49a48dd4}\label{classcsmp_1_1_jagged_array3_d_a8d3df1584dd4690e2f8f2e6d49a48dd4} 
+iterator {\bfseries begin} ()
+\begin{DoxyCompactList}\small\item\em iterators \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_jagged_array3_d_ab252bba98ba2e5d4061d8a68c88e1307}\label{classcsmp_1_1_jagged_array3_d_ab252bba98ba2e5d4061d8a68c88e1307} 
+iterator {\bfseries end} ()
+\item 
+\Hypertarget{classcsmp_1_1_jagged_array3_d_a65ad34904478b9a08dfbb4f75761d729}\label{classcsmp_1_1_jagged_array3_d_a65ad34904478b9a08dfbb4f75761d729} 
+const\+\_\+iterator {\bfseries begin} () const
+\item 
+\Hypertarget{classcsmp_1_1_jagged_array3_d_a49f84f968640ca4dfffcbc3f5cd99b7a}\label{classcsmp_1_1_jagged_array3_d_a49f84f968640ca4dfffcbc3f5cd99b7a} 
+const\+\_\+iterator {\bfseries end} () const
+\item 
+\Hypertarget{classcsmp_1_1_jagged_array3_d_a13ad52b1df6a37f9a4d811a920c6669f}\label{classcsmp_1_1_jagged_array3_d_a13ad52b1df6a37f9a4d811a920c6669f} 
+void {\bfseries set} (uint32\+\_\+t k, uint32\+\_\+t i, uint32\+\_\+t j, T value)
+\begin{DoxyCompactList}\small\item\em Insert or modify elements. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_jagged_array3_d_a22e76aed450e5780d208408c72f3bdec}\label{classcsmp_1_1_jagged_array3_d_a22e76aed450e5780d208408c72f3bdec} 
+T {\bfseries operator()} (uint32\+\_\+t k, uint32\+\_\+t i, uint32\+\_\+t j) const
+\begin{DoxyCompactList}\small\item\em read elements using operator() return NaN if they don\textquotesingle{}t exist \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_jagged_array3_d_af1791c4f48c1d3234400eede09a5ea36}\label{classcsmp_1_1_jagged_array3_d_af1791c4f48c1d3234400eede09a5ea36} 
+T \& {\bfseries operator()} (uint32\+\_\+t k, uint32\+\_\+t i, uint32\+\_\+t j)
+\begin{DoxyCompactList}\small\item\em read/modify elements (slower) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_jagged_array3_d_ad8570a27b92076394c40405ce350a5e6}\label{classcsmp_1_1_jagged_array3_d_ad8570a27b92076394c40405ce350a5e6} 
+bool {\bfseries contains} (const std\+::tuple$<$ uint32\+\_\+t, uint32\+\_\+t, uint32\+\_\+t $>$ \&index)
+\begin{DoxyCompactList}\small\item\em quickest way to test for element existance with a predefined tuple (use std\+::make\+\_\+tuple) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_jagged_array3_d_a69f882a310490fff9f77f7f02d795c6e}\label{classcsmp_1_1_jagged_array3_d_a69f882a310490fff9f77f7f02d795c6e} 
+void {\bfseries erase} (uint32\+\_\+t k, uint32\+\_\+t i, uint32\+\_\+t j)
+\begin{DoxyCompactList}\small\item\em erase an element at a specific location \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_jagged_array3_d_a18bf3931b735cd0645b0e7c3ccdf0663}\label{classcsmp_1_1_jagged_array3_d_a18bf3931b735cd0645b0e7c3ccdf0663} 
+uint32\+\_\+t {\bfseries slices} () const
+\item 
+\Hypertarget{classcsmp_1_1_jagged_array3_d_a0f93189cff0caefd4d13bf4908b4874b}\label{classcsmp_1_1_jagged_array3_d_a0f93189cff0caefd4d13bf4908b4874b} 
+uint32\+\_\+t {\bfseries rows} () const
+\item 
+\Hypertarget{classcsmp_1_1_jagged_array3_d_a99bdb2464bce923096a117926b738fa3}\label{classcsmp_1_1_jagged_array3_d_a99bdb2464bce923096a117926b738fa3} 
+uint32\+\_\+t {\bfseries max\+\_\+cols} () const
+\begin{DoxyCompactList}\small\item\em max because the number of columns can vary in a jagged array \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_jagged_array3_d_a043dc4593aae4dc64e3952184ef4a76c}\label{classcsmp_1_1_jagged_array3_d_a043dc4593aae4dc64e3952184ef4a76c} 
+std\+::tuple$<$ uint32\+\_\+t, uint32\+\_\+t, uint32\+\_\+t $>$ {\bfseries max\+\_\+kij} () const
+\begin{DoxyCompactList}\small\item\em returns the numbers of slices, rows, and maximum number of columns \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_jagged_array3_d_a22b796a654645f0e636174c320588353}\label{classcsmp_1_1_jagged_array3_d_a22b796a654645f0e636174c320588353} 
+void {\bfseries Out} () const
+\begin{DoxyCompactList}\small\item\em print all elements to std out \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$class T$>$\newline
+class csmp\+::\+Jagged\+Array3\+D$<$ T $>$}
+Three-\/dimensional jagged array (where the number of columns can vary), implemented via an unordered\+\_\+map plus hashing function \textquotesingle{}\doxylink{structcsmp_1_1_tuple_hash}{Tuple\+Hash}\textquotesingle{} Tested and compared in \textquotesingle{}\doxylink{classcsmp_1_1_jagged_array3_d___comparison___test}{Jagged\+Array3\+D\+\_\+\+Comparison\+\_\+\+Test}\textquotesingle{}. For dense regularly shaped matrix, \doxylink{classcsmp_1_1_jagged_array3_d}{Jagged\+Array3D} is slower than \doxylink{class_dynamic_array3_d}{Dynamic\+Array3D} and a vector of vecto of vectors. Good uses are for sparse 3D matrices the entries of which are in a flux (changing rapidly during a computation). 
+
+\label{doc-constructors}
+\Hypertarget{classcsmp_1_1_jagged_array3_d_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcsmp_1_1_jagged_array3_d_a3bd224827b96685e741f3b5ce2e3001c}\index{csmp::JaggedArray3D$<$ T $>$@{csmp::JaggedArray3D$<$ T $>$}!JaggedArray3D@{JaggedArray3D}}
+\index{JaggedArray3D@{JaggedArray3D}!csmp::JaggedArray3D$<$ T $>$@{csmp::JaggedArray3D$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{JaggedArray3D()}{JaggedArray3D()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_jagged_array3_d_a3bd224827b96685e741f3b5ce2e3001c} 
+template$<$class T$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_jagged_array3_d}{csmp\+::\+Jagged\+Array3D}}$<$ T $>$\+::\+Jagged\+Array3D (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ std\+::vector$<$ std\+::vector$<$ T $>$ $>$ $>$ \&}]{vec}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+construct from a monster vector of vector of vectors 
+
+construct from a monster of vector of vector of vectors 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/math/Jagged\+Array3\+D.\+h\item 
+source/modules/math/Jagged\+Array3\+D.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,73 @@
+\doxysection{Brooks\+Corey\+With\+Hysteresis.\+h}
+\hypertarget{_brooks_corey_with_hysteresis_8h_source}{}\label{_brooks_corey_with_hysteresis_8h_source}\index{source/includes/thmc/two\_phase\_flow/BrooksCoreyWithHysteresis.h@{source/includes/thmc/two\_phase\_flow/BrooksCoreyWithHysteresis.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{BROOKS\_COREY\_WITH\_HYSTERESIS\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{BROOKS\_COREY\_WITH\_HYSTERESIS\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_two_phase_model_8h}{"{}TwoPhaseModel.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{comment}{//\ for\ lambda=0,\ this\ implementation\ of\ Brooks-\/Corey\ model\ switches\ to\ linear}}
+\DoxyCodeLine{00009\ \textcolor{comment}{//\ base\ class\ pm1\ and\ pm2\ are\ used\ for\ pd\ and\ lambda,\ respectively}}
+\DoxyCodeLine{00010\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00011\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_brooks_corey_with_hysteresis}{BrooksCoreyWithHysteresis}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_model}{TwoPhaseModel}}<dim>\ \{}
+\DoxyCodeLine{00012\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00013\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_brooks_corey_with_hysteresis_aa13355dfc0e2120c9ffa906533205d66}{BrooksCoreyWithHysteresis}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&\ database,}
+\DoxyCodeLine{00014\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ permeability,}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ viscosity\_nw,\ \textcolor{keywordtype}{double}\ viscosity\_w,}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ density\_nw,\ \textcolor{keywordtype}{double}\ density\_w,}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ lamda,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ pc\_entry\ );}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \ \ BrooksCoreyWithHysteresis(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&\ database,}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ lamda,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ pc\_entry\ );}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~BrooksCoreyWithHysteresis()\ \{\}}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{comment}{///\ not\ constant\ as\ it\ sets\ the\ saturation\ inflection\ point}}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_brooks_corey_with_hysteresis_a27745e30768368b7083a70bfd28bdcae}{InitializeAndStore}}(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&\ );}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{comment}{//\ relative\ permeabilities}}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_brooks_corey_with_hysteresis_abc734fa838f07b7e8fa16af1397d3af1}{krn\_Phase}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_brooks_corey_with_hysteresis_ab54c84bc5d9ff5c7e4808ed53ffa64e3}{krw\_Phase}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{comment}{//\ derivative\ of\ fractional\ flow\ (advection\ multipliers)}}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_brooks_corey_with_hysteresis_a2ff25fd52a4b9df31b45184c91c02c46}{dfds}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{comment}{//\ maximum\ absolute\ value\ returned\ by\ dfdS\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_brooks_corey_with_hysteresis_a00d35bf31ea946e0b71ca390f989e79b}{MaxFractionalFlowDerivative}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{comment}{//\ derivatives\ of\ gravitational\ flow\ (advection\ multipliers)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_brooks_corey_with_hysteresis_ae65fc8fbd41df5f100417f2f4c8c5c5d}{dGds}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{comment}{//\ capillary\ pressure}}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ pc\_Phase(\ size\_t\ phase\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{comment}{//\ capillary\ pressure\ derivatives}}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ dpcds\_Phase(\ size\_t\ phase\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{comment}{//\ linearized\ fractional\ flow\ derivative}}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_brooks_corey_with_hysteresis_ab8ccb8d69f03cd42de881dc2cbace3d0}{ShockSpeed}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ ShockHeight()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_brooks_corey_with_hysteresis_a1b66c7c73f47f31d5a1db353756aa0f9}{Out}}(\ uint32\_t\ phase\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00053\ \ \ \ \ BrooksCoreyWithHysteresis();}
+\DoxyCodeLine{00054\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ pd\_key,\ lamda\_key,\ sormax\_key,}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sat\_previous\_key,\ sat\_inflection\_key;}
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ acc\_gravity\_;}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ sat\_previous,\ \textcolor{comment}{//\ previous\ timestep\ water\ saturation}}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sat\_inflection,\ \textcolor{comment}{//\ brancing\ point\ to\ scaning\ curve}}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sormax;\ \textcolor{comment}{//maximum\ residual\ oil\ saturation}}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ imbibing,\ \textcolor{comment}{//True\ when\ wetting\ phase\ increases}}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ on\_scaning\_curve;\ \textcolor{comment}{//True\ when\ it\ is\ on\ scaning\ curve\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keywordtype}{double}\ CC,\ CK,\ Sot,\ Snorm,\ kroDswinflection,\ Sof\_1\_Snorm,\ kroI\_1\_Snorm,\ pm1,\ pm2;\ \textcolor{comment}{//temporary\ values\ for\ calculating\ krn()}}
+\DoxyCodeLine{00063\ \};}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \}\ \textcolor{comment}{//\ end\ namespace\ csmp}}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

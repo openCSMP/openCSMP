@@ -1,0 +1,653 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v" kind="class" language="C++" prot="public">
+    <compoundname>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</compoundname>
+    <basecompoundref refid="classcsmp_1_1_c_v_f_e_m___math_operator_r_h_s" prot="public" virt="non-virtual">csmp::CVFEM_MathOperatorRHS&lt; dim &gt;</basecompoundref>
+    <includes refid="_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_8h" local="no">CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+      <param>
+        <type>template&lt; uint32_t &gt; class</type>
+        <declname>CELL</declname>
+        <defname>CELL</defname>
+        <defval><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref></defval>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1a5b31a01f4d84fb0010573b3bb3ea562c" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_upwind_control_visitor" kindref="compound">UpwindControlVisitor</ref>&lt; dim &gt; &amp;</type>
+        <definition>UpwindControlVisitor&lt;dim&gt;&amp; csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV&lt; dim, CELL &gt;::UpwindVisitor</definition>
+        <argsstring></argsstring>
+        <name>UpwindVisitor</name>
+        <qualifiedname>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV::UpwindVisitor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h" line="73" column="26" bodyfile="source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1a16c815c4d5eeab399330a91ad21080b1" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_explicit_finite_volume_transport_p_h_x" kindref="compound">ExplicitFiniteVolumeTransportPHX</ref>&lt; dim &gt; &amp;</type>
+        <definition>ExplicitFiniteVolumeTransportPHX&lt;dim&gt;&amp; csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV&lt; dim, CELL &gt;::finite_volume</definition>
+        <argsstring></argsstring>
+        <name>finite_volume</name>
+        <qualifiedname>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV::finite_volume</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h" line="74" column="38" bodyfile="source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1a6a4aafad990aeabf6e1655310023e90a" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt;</type>
+        <definition>DenseMatrix&lt;DM_MIN&gt; csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV&lt; dim, CELL &gt;::B</definition>
+        <argsstring></argsstring>
+        <name>B</name>
+        <qualifiedname>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV::B</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h" line="76" column="18" bodyfile="source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h" bodystart="76" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1a05e2754c64df0f31d36fb7e03ed9fa35" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt;</type>
+        <definition>DenseMatrix&lt;DM_MIN&gt; csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV&lt; dim, CELL &gt;::upwind</definition>
+        <argsstring></argsstring>
+        <name>upwind</name>
+        <qualifiedname>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV::upwind</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h" line="76" column="20" bodyfile="source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h" bodystart="76" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1a598be7584f24226bcd815e23f6e76ca8" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV&lt; dim, CELL &gt;::area</definition>
+        <argsstring></argsstring>
+        <name>area</name>
+        <qualifiedname>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV::area</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h" line="78" column="12" bodyfile="source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1a34f80567977be258b091b05c4d076b98" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV&lt; dim, CELL &gt;::normal_component</definition>
+        <argsstring></argsstring>
+        <name>normal_component</name>
+        <qualifiedname>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV::normal_component</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h" line="78" column="17" bodyfile="source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1a70510d6f37c1dce64ef857319a6f6762" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV&lt; dim, CELL &gt;::contribution</definition>
+        <argsstring></argsstring>
+        <name>contribution</name>
+        <qualifiedname>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV::contribution</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h" line="79" column="12" bodyfile="source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1ad4f0e7f9f7bce2cdc30bb2a336a7fd45" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV&lt; dim, CELL &gt;::operand</definition>
+        <argsstring></argsstring>
+        <name>operand</name>
+        <qualifiedname>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV::operand</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h" line="79" column="25" bodyfile="source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1ad159ae27dfc0e8cb8e1b3411b5040429" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV&lt; dim, CELL &gt;::grav</definition>
+        <argsstring></argsstring>
+        <name>grav</name>
+        <qualifiedname>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV::grav</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h" line="79" column="33" bodyfile="source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1a5447e7a8a9ad22f714677084f2a918fb" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV&lt; dim, CELL &gt;::inside_node_</definition>
+        <argsstring></argsstring>
+        <name>inside_node_</name>
+        <qualifiedname>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV::inside_node_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h" line="80" column="14" bodyfile="source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1a27b86c19384d4eef39eddffbd69b8cbb" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV&lt; dim, CELL &gt;::outside_node_</definition>
+        <argsstring></argsstring>
+        <name>outside_node_</name>
+        <qualifiedname>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV::outside_node_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h" line="80" column="27" bodyfile="source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1a509fcaca1a17ce84c8e06bd8c9532760" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV&lt; dim, CELL &gt;::gravity</definition>
+        <argsstring></argsstring>
+        <name>gravity</name>
+        <qualifiedname>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV::gravity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h" line="82" column="12" bodyfile="source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1a0917294df381398d6919766e67d9f9f6" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV&lt; dim, CELL &gt;::xyz</definition>
+        <argsstring></argsstring>
+        <name>xyz</name>
+        <qualifiedname>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV::xyz</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h" line="83" column="12" bodyfile="source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h" bodystart="83" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1a887c5e093dd2e70c49c6db431188ded5" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV&lt; dim, CELL &gt;::rho_key</definition>
+        <argsstring></argsstring>
+        <name>rho_key</name>
+        <qualifiedname>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV::rho_key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h" line="85" column="17" bodyfile="source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1ac5956694c8bae273099ae61eb3d7f41e" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref>&lt; dim &gt;</type>
+        <definition>Operand&lt;dim&gt; csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV&lt; dim, CELL &gt;::upwind_</definition>
+        <argsstring></argsstring>
+        <name>upwind_</name>
+        <qualifiedname>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV::upwind_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h" line="87" column="13" bodyfile="source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h" bodystart="87" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1a84b00619ae89365094ddceee99edef09" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &gt;</type>
+        <definition>std::vector&lt;ScalarVariable&gt; csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV&lt; dim, CELL &gt;::upwind_var_</definition>
+        <argsstring></argsstring>
+        <name>upwind_var_</name>
+        <qualifiedname>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV::upwind_var_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h" line="88" column="17" bodyfile="source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1a9d8cd9cbaf2c4b1aacdfb3fa274d7f1f" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &gt;</type>
+        <definition>std::vector&lt;ScalarVariable&gt; csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV&lt; dim, CELL &gt;::upwind_var_multiplier</definition>
+        <argsstring></argsstring>
+        <name>upwind_var_multiplier</name>
+        <qualifiedname>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV::upwind_var_multiplier</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h" line="88" column="29" bodyfile="source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h" bodystart="88" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1ae70d717d20a851394a42288496cc203f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV&lt; dim, CELL &gt;::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</definition>
+        <argsstring>(const PropertyDatabase&lt; dim &gt; &amp;, UpwindControlVisitor&lt; dim &gt; &amp;upwind_visitor, ExplicitFiniteVolumeTransportPHX&lt; dim &gt; &amp;fv_transport, const char *oper, const char *test, const char *upwind, const char *grav_trigger)</argsstring>
+        <name>CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</name>
+        <qualifiedname>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>&lt; dim &gt; &amp;</type>
+          <defname>pref</defname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_upwind_control_visitor" kindref="compound">UpwindControlVisitor</ref>&lt; dim &gt; &amp;</type>
+          <declname>upwind_visitor</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_explicit_finite_volume_transport_p_h_x" kindref="compound">ExplicitFiniteVolumeTransportPHX</ref>&lt; dim &gt; &amp;</type>
+          <declname>fv_transport</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>oper</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>test</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>upwind</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>grav_trigger</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>custom constructor </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h" line="54" column="5" bodyfile="source/modules/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.cpp" bodystart="15" bodyend="57"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1a8bd570700910a9781bc308c0c23587a5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV&lt; dim, CELL &gt;::~CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</definition>
+        <argsstring>()</argsstring>
+        <name>~CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</name>
+        <qualifiedname>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV::~CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>default destructor </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h" line="62" column="5" bodyfile="source/modules/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.cpp" bodystart="10" bodyend="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1a05e952d7fe8191d00ef159e94f53b6c9" prot="public" static="no" const="no" explicit="no" inline="no" final="yes" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV&lt; dim, CELL &gt;::GetOperands</definition>
+        <argsstring>(const CELL&lt; dim &gt; &amp;) override final</argsstring>
+        <name>GetOperands</name>
+        <qualifiedname>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV::GetOperands</qualifiedname>
+        <reimplements refid="classcsmp_1_1_math_operator_r_h_s_1ad5614fa4de569146a684d28635eb9ff7">GetOperands</reimplements>
+        <param>
+          <type>const CELL&lt; dim &gt; &amp;</type>
+          <defname>e_ref</defname>
+        </param>
+        <briefdescription>
+<para>getting data from the <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>, <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>, <ref refid="classcsmp_1_1_inter_face" kindref="compound">InterFace</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+<para>GetOperands fills a vector of material property matrices with the required values for later computation. These matrices always have the dimensions spatial-dimension^2 and they will hold either scalar, vector or tensor properties, depending on what kind of property the <ref refid="classcsmp_1_1_operand" kindref="compound">Operand</ref> is.</para>
+<para>When the property is an element property, it will be put into the first vector entry MTRL[0]. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h" line="64" column="10" bodyfile="source/modules/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.cpp" bodystart="63" bodyend="68"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1a1baedc8f2bd17a17e17abcca5cb2d862" prot="public" static="no" const="no" explicit="no" inline="no" final="yes" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV&lt; dim, CELL &gt;::GetOperandsCVFEM</definition>
+        <argsstring>(const CELL&lt; dim &gt; &amp;, csmp::Index upwind_var_key) override final</argsstring>
+        <name>GetOperandsCVFEM</name>
+        <qualifiedname>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV::GetOperandsCVFEM</qualifiedname>
+        <reimplements refid="classcsmp_1_1_c_v_f_e_m___math_operator_r_h_s_1a77b86ee439d4e31e005dd4b49345f0fe">GetOperandsCVFEM</reimplements>
+        <param>
+          <type>const CELL&lt; dim &gt; &amp;</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+          <declname>upwind_var_key</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>virtual function for <ref refid="classcsmp_1_1_c_v_f_e_m___visitor" kindref="compound">CVFEM_Visitor</ref> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h" line="65" column="10" bodyfile="source/modules/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.cpp" bodystart="74" bodyend="83"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1a2b39c82936c676cb4944dd98fe047263" prot="public" static="no" const="no" explicit="no" inline="no" final="yes" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV&lt; dim, CELL &gt;::ComputeContribution</definition>
+        <argsstring>(const CELL&lt; dim &gt; &amp;) override final</argsstring>
+        <name>ComputeContribution</name>
+        <qualifiedname>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV::ComputeContribution</qualifiedname>
+        <reimplements refid="classcsmp_1_1_math_operator_r_h_s_1ab77b3c1f4f078290ec9330a916482ed7">ComputeContribution</reimplements>
+        <param>
+          <type>const CELL&lt; dim &gt; &amp;</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+<para>integration performed on <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>, <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>, <ref refid="classcsmp_1_1_inter_face" kindref="compound">InterFace</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h" line="66" column="10" bodyfile="source/modules/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.cpp" bodystart="89" bodyend="122"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1ab216986cdf92f078657acc49dbd4d873" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV&lt; dim, CELL &gt;::GetUpwindMatrix</definition>
+        <argsstring>(const CELL&lt; dim &gt; &amp;)</argsstring>
+        <name>GetUpwindMatrix</name>
+        <qualifiedname>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV::GetUpwindMatrix</qualifiedname>
+        <param>
+          <type>const CELL&lt; dim &gt; &amp;</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h" line="67" column="10" bodyfile="source/modules/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.cpp" bodystart="127" bodyend="131"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1ae4ca2177043ecbae26a29757792e7eab" prot="public" static="no" const="yes" explicit="no" inline="yes" final="yes" virt="virtual">
+        <type><ref refid="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v" kindref="compound">CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</ref>&lt; dim &gt; *</type>
+        <definition>CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV&lt; dim &gt; * csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV&lt; dim, CELL &gt;::clone</definition>
+        <argsstring>() const override final</argsstring>
+        <name>clone</name>
+        <qualifiedname>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV::clone</qualifiedname>
+        <reimplements refid="classcsmp_1_1_c_v_f_e_m___math_operator_r_h_s_1acd5b4a0599a0ca9ac5ec57cf87757fd2">clone</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h" line="69" column="45" bodyfile="source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h" bodystart="69" bodyend="69"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>Philipp Weis, ETH Zuerich </para>
+</simplesect>
+</para>
+<sect1 id="compare_floats_8h_1contact">
+<title>Contact</title><para><ulink url="mailto:philipp.weis@erdw.ethz.ch">philipp.weis@erdw.ethz.ch</ulink></para>
+<para>@changes changes Latest Changes</para>
+</sect1>
+<sect1 id="compare_floats_8h_1motivation">
+<title>Motivation</title><para>Gravity component for fluid pressure calculations using pre-defined upwind nodes.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_upwind_control_visitor_1usage">
+<title>Usage</title><para>Used within the CVFEM scheme (Weis et al., Geofluids, 2014).</para>
+<para><programlisting><codeline><highlight class="normal">Calculates<sp/>gravity<sp/>component<sp/>with<sp/>pre-defined<sp/>upwind<sp/>nodes.</highlight></codeline>
+<codeline><highlight class="normal">All<sp/>fluid<sp/>properties<sp/>are<sp/>used<sp/>at<sp/>the<sp/>upstream<sp/>nodes.</highlight></codeline>
+</programlisting></para>
+</sect1>
+<sect1 id="classcsmp_1_1_upwind_control_visitor_1dependencies">
+<title>Dependencies</title><para><ref refid="classcsmp_1_1_c_v_f_e_m___math_operator_r_h_s" kindref="compound">CVFEM_MathOperatorRHS</ref> <ref refid="classcsmp_1_1_upwind_control_visitor" kindref="compound">UpwindControlVisitor</ref> <ref refid="classcsmp_1_1_explicit_finite_volume_transport_p_h_x" kindref="compound">ExplicitFiniteVolumeTransportPHX</ref></para>
+</sect1>
+<sect1 id="classcsmp_1_1_upwind_control_visitor_1issues">
+<title>Known issues</title></sect1>
+<sect1 id="compare_floats_8h_1testing">
+<title>Testing</title><para>testing was done in the period before publication in 2014. </para>
+</sect1>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>csmp::CVFEM_MathOperatorRHS&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_c_v_f_e_m___math_operator_r_h_s"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>csmp::MathOperatorRHS&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_math_operator_r_h_s"/>
+      </node>
+      <node id="3">
+        <label>csmp::MathOperatorRHS&lt; dim, Element &gt;</label>
+        <link refid="classcsmp_1_1_math_operator_r_h_s"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; dim, Element &gt;</edgelabel>
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>csmp::CVFEM_MathOperatorRHS&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_c_v_f_e_m___math_operator_r_h_s"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>csmp::DenseMatrix&lt; mn_max &gt;</label>
+        <link refid="classcsmp_1_1_dense_matrix"/>
+      </node>
+      <node id="9">
+        <label>csmp::DenseMatrix&lt; DM_MIN &gt;</label>
+        <link refid="classcsmp_1_1_dense_matrix"/>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; DM_MIN &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>csmp::Index</label>
+        <link refid="structcsmp_1_1_index"/>
+        <childnode refid="6" relation="usage">
+          <edgelabel>+localVariables</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>+integrationPointVariables</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>+indexTracker</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>csmp::IndexTracker</label>
+        <link refid="classcsmp_1_1_index_tracker"/>
+      </node>
+      <node id="7">
+        <label>csmp::IntegrationPointVariables</label>
+        <link refid="structcsmp_1_1_integration_point_variables"/>
+        <childnode refid="6" relation="usage">
+          <edgelabel>+ipvCell</edgelabel>
+          <edgelabel>+ipvFacet</edgelabel>
+          <edgelabel>+ipvSector</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>csmp::LocalVariables</label>
+        <link refid="structcsmp_1_1_local_variables"/>
+      </node>
+      <node id="11">
+        <label>csmp::MathOperatorRHS&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_math_operator_r_h_s"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>#op</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>#DERIV</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::MathOperatorRHS&lt; dim, Element &gt;</label>
+        <link refid="classcsmp_1_1_math_operator_r_h_s"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>#op</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>#DERIV</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; dim, Element &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>csmp::Parameter</label>
+        <link refid="structcsmp_1_1_parameter"/>
+        <childnode refid="5" relation="usage">
+          <edgelabel>+key</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h" line="52" column="1" bodyfile="source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h" bodystart="52" bodyend="89"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1af950a8b9a3d4ea2229f60d27ab6a69c2" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>Add</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1abeae2ec15ba22135c4c5b3098b6b3537" prot="protected" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>add_accumulate_</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a0ca505f93c401b561990e652ddeba037" prot="protected" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>add_accumulate_later_</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a95426d12ae7f3a6eb1bf10c036505e7b" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>AddAccumulate</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a7d3039e3ef140aabc09b14fd9c0f52a6" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>AddAccumulateLater</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1abdc618c15c875eef18858655fb345090" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>AddLater</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a5b96da9a81a4d11ac04946c44c89e72a" prot="protected" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>application_cycle_</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a8158abc37b41cdd02469b9d18fb83337" prot="protected" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>application_cycles_</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a51d50bbbd4f27aca48243f24f7fb92e0" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>ApplicationCycle</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a14fff508439c520f875dfd77d117489f" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>ApplicationCycles</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1a598be7584f24226bcd815e23f6e76ca8" prot="private" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>area</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1ad9c03f1d3138a22e0bc40778d0032f6a" prot="public" virt="virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>AssignToGlobal</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1a6a4aafad990aeabf6e1655310023e90a" prot="private" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>B</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1ac571c4c7d3f98ecd2c34d1cd6d75fa36" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>BasicOperand</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a4d75aa984bee30ef4b78b59f9892bb15" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>BasicOperandDataDepth</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1aee095a41b5ac8a32ee6dc703a4314b50" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>BasicOperandKey</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a41c990f110ad162091910ee8bcbda6cf" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>BasicOperandName</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a6c0a7d5e5796aa4e028f4479a808cfb0" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>BasicOperandOffset</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1ab7c8384f6e49d9d81fe4f7ff41a18e41" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>BasicOperandPlacement</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a22231a19221e8cd8651167a4e2f0f483" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>BasicOperandType</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1ae4ca2177043ecbae26a29757792e7eab" prot="public" virt="virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>clone</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1a2b39c82936c676cb4944dd98fe047263" prot="public" virt="virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>ComputeContribution</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1a70510d6f37c1dce64ef857319a6f6762" prot="private" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>contribution</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m___math_operator_r_h_s_1aef660274ae658b3e4eaff298ddbed152" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>CVFEM_MathOperatorRHS</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m___math_operator_r_h_s_1a7a23a1a0c811701d3e89a2d5e774f0cc" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>CVFEM_MathOperatorRHS</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m___math_operator_r_h_s_1a34591e5bf743bcad96dc1646f1695137" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>CVFEM_MathOperatorRHS</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1ae70d717d20a851394a42288496cc203f" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1ab1b5fad18c56f4849f9ded0940711ad2" prot="protected" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>DERIV</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1aa6bb4a6c6a96c3e3951433004d0de15b" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>DivideByTimeIncrement</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a7b85528afe467c2ef91668ff0dcab968" prot="protected" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>factor_</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1a16c815c4d5eeab399330a91ad21080b1" prot="private" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>finite_volume</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m___math_operator_r_h_s_1a38940155d712dd9a69b3d5500bbf8a4d" prot="public" virt="virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>GetContribution</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1a05e952d7fe8191d00ef159e94f53b6c9" prot="public" virt="virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>GetOperands</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1ad5614fa4de569146a684d28635eb9ff7" prot="public" virt="virtual" ambiguityscope="csmp::CVFEM_MathOperatorRHS::"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>GetOperands</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1a1baedc8f2bd17a17e17abcca5cb2d862" prot="public" virt="virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>GetOperandsCVFEM</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1ab216986cdf92f078657acc49dbd4d873" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>GetUpwindMatrix</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1ad159ae27dfc0e8cb8e1b3411b5040429" prot="private" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>grav</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1a509fcaca1a17ce84c8e06bd8c9532760" prot="private" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>gravity</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1a5447e7a8a9ad22f714677084f2a918fb" prot="private" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>inside_node_</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1ad789282bfcaf0300e8912174871f5e6f" prot="protected" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>IPOL</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a3d1907ed1b36a73c7591653b0965323e" prot="protected" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>lump_matrices_</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a91445273130ae00f5188a9991dbffaa6" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>LumpedFormulation</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1ac839f56b47b3732ae505b79843841401" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>MaterialOperand</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a00b31b95962f4495178242201c92cfcd" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>MaterialOperandDataDepth</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a52d354d9bbfc6fd037f70b401cfc2289" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>MaterialOperandKey</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1ad9193c44bf7efa489009fce52afd3d0d" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>MaterialOperandName</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a706cf0840efb0d27a828c5d018335ba9" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>MaterialOperandPlacement</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1af230ea6195bab299ee9e77f217f0d0bc" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>MaterialOperandType</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1aad7e46e90d59322926ae92e98198a706" prot="protected" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>MTRL</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a4ce7b610b2ed3470e4d159846d03ddeb" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>Multiply</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a2cf305524d12d1bf73302bc00cab0503" prot="protected" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>multiply_accumulate_</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1aae6e621f2b1ad8b8189282007a87ad58" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>MultiplyAccumulate</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a5cb6c0bce5427dbb968492b49021b138" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>MultiplyBy</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a5a6138f5b4e123f88a9115e1d9315871" prot="public" virt="virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>MultiplyWithTimeFactor</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a2fae8dab461a98afdd5bb376ffab59d0" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>MultiplyWithTimeIncrement</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1aa700d71b384204010a5514f046b30daf" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>Name</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a0bf5eca393d0470696ddc1f68c49c33a" prot="protected" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>name_</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1a34f80567977be258b091b05c4d076b98" prot="private" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>normal_component</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1aeebb771d18fad508b89bab6ba3fdc9e8" prot="protected" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>op</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1ad4f0e7f9f7bce2cdc30bb2a336a7fd45" prot="private" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>operand</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a8daf2f4ba7583b116d5c496d81e4cbc0" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a7b331a8a17ea8dee88ebb05f50233649" prot="public" virt="virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1a27b86c19384d4eef39eddffbd69b8cbb" prot="private" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>outside_node_</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a4ac9c3b2f60149cd6cc4a35681b29e0d" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>PropertyAtIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1a887c5e093dd2e70c49c6db431188ded5" prot="private" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>rho_key</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a4075835995bb9932c4d7c257547e66de" prot="protected" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>RHS</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a23b92f3ebeee4a6e1673706f740566b4" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>Subtract</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1af76a808d235d684bcc507ea0a9bdac18" prot="protected" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>subtract_accumulate_</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1ae05aed4df946d473651b5ad4873e7786" prot="protected" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>subtract_accumulate_later_</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a44292090da69cef35e58f612bf9a82e9" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>SubtractAccumulate</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1aab0a4b47807bdafb917c4683aac6d270" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>SubtractAccumulateLater</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a04a0443ea4ccd22e563baa9b49a2a813" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>SubtractLater</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a22dc4521ebc649242eacb41f1ab8e260" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>TestOperand</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1af4c6867b7a59a8dbd0db7bad48cd2c3d" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>TestOperandDataDepth</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a8e21ef3752c7956c83dd55a033d66353" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>TestOperandKey</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1af7842dfe6f55c020253018e1371450f0" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>TestOperandName</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1ae6df026b0ecf14dd9a4cfa9a08e792b2" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>TestOperandOffset</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a73fb944e6a4f1aeb6566867eb4894b7b" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>TestOperandPlacement</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a9ab51c99368137c5cb79bcf6e7e01296" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>TestOperandType</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a666bb360540f0ed1fad82c821109fc91" prot="protected" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>time_divide_</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1a4bc59dd56b98bb076deada3e1b222627" prot="protected" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>time_multiply_</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1aea6bcf22aa25daa01f53b49cd16bca24" prot="protected" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>top</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1a05e2754c64df0f31d36fb7e03ed9fa35" prot="private" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>upwind</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1ac5956694c8bae273099ae61eb3d7f41e" prot="private" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>upwind_</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1a84b00619ae89365094ddceee99edef09" prot="private" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>upwind_var_</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1a9d8cd9cbaf2c4b1aacdfb3fa274d7f1f" prot="private" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>upwind_var_multiplier</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1a5b31a01f4d84fb0010573b3bb3ea562c" prot="private" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>UpwindVisitor</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1ad1c90df52dbb10f0c9eefd445758fc02" prot="public" virt="virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>WriteOperands</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1a0917294df381398d6919766e67d9f9f6" prot="private" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>xyz</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m___math_operator_r_h_s_1a9937558b4372e02bcfb15ccf34699b4a" prot="public" virt="virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>~CVFEM_MathOperatorRHS</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_1a8bd570700910a9781bc308c0c23587a5" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>~CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</name></member>
+      <member refid="classcsmp_1_1_math_operator_r_h_s_1ab0f58bc4d43c0f20e003467bfe536157" prot="public" virt="virtual"><scope>csmp::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV</scope><name>~MathOperatorRHS</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

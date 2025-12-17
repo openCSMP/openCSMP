@@ -1,0 +1,370 @@
+\doxysection{SKUA\+\_\+\+Finite\+Element\+Mesh\+Interface.\+h}
+\hypertarget{_s_k_u_a___finite_element_mesh_interface_8h_source}{}\label{_s_k_u_a___finite_element_mesh_interface_8h_source}\index{source/includes/interfaces/gOcad\_SKUA/SKUA\_FiniteElementMeshInterface.h@{source/includes/interfaces/gOcad\_SKUA/SKUA\_FiniteElementMeshInterface.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{SKUA\_FINITE\_ELEMENT\_MESH\_INTERFACE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{SKUA\_FINITE\_ELEMENT\_MESH\_INTERFACE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p___element_specifications_8h}{"{}CSMP\_ElementSpecifications.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model_topology}{ModelTopology}};}
+\DoxyCodeLine{00010\ \textcolor{keyword}{class}\ SKUA\_ElementSpecifications;}
+\DoxyCodeLine{00011\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_v_set}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}};}
+\DoxyCodeLine{00012\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_model}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}};}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00016\ \textcolor{comment}{@brief\ File\ based\ interface\ between\ SKUA\ and\ CSMP.}}
+\DoxyCodeLine{00017\ \textcolor{comment}{}}
+\DoxyCodeLine{00018\ \textcolor{comment}{To\ provide\ a\ direct\ file-\/based\ interface\ between\ the\ SKUA's\ \ FiniteElementMesher\ and\ CSMP,}}
+\DoxyCodeLine{00019\ \textcolor{comment}{allowing\ to\ read\ parts\ of\ the\ input\ mesh\ selectively,\ assign\ material\ properties,\ boundary\ conditions}}
+\DoxyCodeLine{00020\ \textcolor{comment}{and\ to\ rigorously\ test\ the\ incorporated\ mesh\ for\ its\ compliance\ with}}
+\DoxyCodeLine{00021\ \textcolor{comment}{CSMP\ requirements.}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00023\ \textcolor{comment}{@author\ S.K.\ Matthai}}
+\DoxyCodeLine{00024\ \textcolor{comment}{@author\ Thomas\ Jerome}}
+\DoxyCodeLine{00025\ \textcolor{comment}{@date\ 2020}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00027\ \textcolor{comment}{@section\ participants\ Participants}}
+\DoxyCodeLine{00028\ \textcolor{comment}{}}
+\DoxyCodeLine{00029\ \textcolor{comment}{Part\ of\ \ the\ file\ format\ of\ this\ interface\ is\ modelled\ on\ the\ SKUA\ interface\ using\ the\ classes\ VSet,\ FEM\_Primitive\ and\ }}
+\DoxyCodeLine{00030\ \textcolor{comment}{ModelTopology\ to\ store\ the\ information\ retrieved\ from\ file.\ }}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00033\ \textcolor{comment}{@section\ implementation\ Implementation}}
+\DoxyCodeLine{00034\ \textcolor{comment}{}}
+\DoxyCodeLine{00035\ \textcolor{comment}{Two\ files:\ one\ human\ readable\ text\ (.asc\ =\ ASCII)\ file\ and\ a\ binary\ (.dat)\ file}}
+\DoxyCodeLine{00036\ \textcolor{comment}{that\ can\ be\ transferred\ across\ platforms\ (Windows\ OSX,\ linux\ etc/).}}
+\DoxyCodeLine{00037\ \textcolor{comment}{Both\ files\ have\ the\ same\ name\ (model\ name)\ and\ are\ distinguished\ only\ by\ their\ extension.}}
+\DoxyCodeLine{00038\ \textcolor{comment}{}}
+\DoxyCodeLine{00039\ \textcolor{comment}{The\ regions\ and\ material\ file\ ('*.asc'):}}
+\DoxyCodeLine{00040\ \textcolor{comment}{}}
+\DoxyCodeLine{00041\ \textcolor{comment}{-\/\ model\ name\ (line\ break)}}
+\DoxyCodeLine{00042\ \textcolor{comment}{}}
+\DoxyCodeLine{00043\ \textcolor{comment}{-\/\ Comment\ line\ (header):\ 1.\ filename,\ 2.\ date\ of\ generaton}}
+\DoxyCodeLine{00044\ \textcolor{comment}{}}
+\DoxyCodeLine{00045\ \textcolor{comment}{-\/\ Number\ of\ labelled\ objects}}
+\DoxyCodeLine{00046\ \textcolor{comment}{}}
+\DoxyCodeLine{00047\ \textcolor{comment}{-\/\ Table\ with\ objects,\ element\ types,\ material\ ID\ values\ (rock\ types),\ number\ of\ elements\ (cells)}}
+\DoxyCodeLine{00048\ \textcolor{comment}{}}
+\DoxyCodeLine{00049\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00050\ \textcolor{comment}{\ \ Object\ \ \ element-\/type\ \ \ material\ ID\ \ \ number-\/of-\/elements}}
+\DoxyCodeLine{00051\ \textcolor{comment}{\ \ LIV\ \ \ \ \ \ \ \ \ \ TETRA\_4\ \ \ \ \ \ 3\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 760}}
+\DoxyCodeLine{00052\ \textcolor{comment}{\ \ BOXS\ \ \ \ \ \ \ \ \ TRI\_3\ \ \ \ \ \ \ \ 0\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 2030}}
+\DoxyCodeLine{00053\ \textcolor{comment}{\ \ CURVES\ \ \ \ \ \ \ BAR\_2\ \ \ \ \ \ \ \ 0\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 20}}
+\DoxyCodeLine{00054\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00055\ \textcolor{comment}{}}
+\DoxyCodeLine{00056\ \textcolor{comment}{The\ material\ ID\ facilitates\ the\ association\ of\ 'rock\ types'\ with\ model\ regions.}}
+\DoxyCodeLine{00057\ \textcolor{comment}{\ \ }}
+\DoxyCodeLine{00058\ \textcolor{comment}{-\/\ List\ of\ elements\ making\ up\ each\ region\ (numbered\ 0...n-\/1),\ \ preceded\ by\ region\ name\ and\ }}
+\DoxyCodeLine{00059\ \textcolor{comment}{number\ of\ elements\ of\ region.}}
+\DoxyCodeLine{00060\ \textcolor{comment}{}}
+\DoxyCodeLine{00061\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00062\ \textcolor{comment}{\ \ UNIT\_1\ 6}}
+\DoxyCodeLine{00063\ \textcolor{comment}{\ \ 12\ 13\ 14\ 15\ 16\ 17}}
+\DoxyCodeLine{00064\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00065\ \textcolor{comment}{}}
+\DoxyCodeLine{00066\ \textcolor{comment}{The\ binary\ file\ ('*.dat')\ contains:\ }}
+\DoxyCodeLine{00067\ \textcolor{comment}{}}
+\DoxyCodeLine{00068\ \textcolor{comment}{1.\ NODE\ COORDINATE\ DATA\ (double):}}
+\DoxyCodeLine{00069\ \textcolor{comment}{}}
+\DoxyCodeLine{00070\ \textcolor{comment}{PX,\ PY,\ PZ\ records:\ preceded\ by\ a\ single\ unsigned\ long\ indicating\ the\ size\ of}}
+\DoxyCodeLine{00071\ \textcolor{comment}{these\ records\ which\ (individually)\ contain\ (with\ or\ without\ line\ breaks):}}
+\DoxyCodeLine{00072\ \textcolor{comment}{}}
+\DoxyCodeLine{00073\ \textcolor{comment}{px:\ -\/>\ x-\/coordinates\ of\ the\ nodes\ \ }}
+\DoxyCodeLine{00074\ \textcolor{comment}{py:\ -\/>\ y-\/coordinates\ of\ the\ nodes}}
+\DoxyCodeLine{00075\ \textcolor{comment}{pz:\ -\/>\ z-\/coordinates\ of\ the\ nodes}}
+\DoxyCodeLine{00076\ \textcolor{comment}{}}
+\DoxyCodeLine{00077\ \textcolor{comment}{(all\ entries\ in\ these\ records\ have\ the\ format\ double\ and}}
+\DoxyCodeLine{00078\ \textcolor{comment}{the\ node-\/IDs\ are\ implicit\ from\ 0\ to\ nodes-\/1):}}
+\DoxyCodeLine{00079\ \textcolor{comment}{}}
+\DoxyCodeLine{00080\ \textcolor{comment}{Such\ records\ could\ be\ written\ as\ shown\ in\ the\ C++\ code\ example}}
+\DoxyCodeLine{00081\ \textcolor{comment}{below:}}
+\DoxyCodeLine{00082\ \textcolor{comment}{}}
+\DoxyCodeLine{00083\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00084\ \textcolor{comment}{double*\ \ \ \ \ \ \ \ ptr;\ //\ data\ pointer}}
+\DoxyCodeLine{00085\ \textcolor{comment}{...}}
+\DoxyCodeLine{00086\ \textcolor{comment}{unsigned\ long\ \ n0(0),\ n1(1);}}
+\DoxyCodeLine{00087\ \textcolor{comment}{}}
+\DoxyCodeLine{00088\ \textcolor{comment}{if\ (\ (records=px.size())\ >\ 0\ \&\&\ (ptr=const\_cast<double*>(px.Data()))\ !=\ NULL\ )\ }}
+\DoxyCodeLine{00089\ \textcolor{comment}{\ \ \{}}
+\DoxyCodeLine{00090\ \textcolor{comment}{\ \ \ \ \ fwrite(\ (void*)\ \&records,\ sizeof(unsigned\ long),\ 1,\ fp\ );}}
+\DoxyCodeLine{00091\ \textcolor{comment}{\ \ \ \ \ fwrite(\ (void*)\ ptr,\ sizeof(double),\ records,\ fp\ );}}
+\DoxyCodeLine{00092\ \textcolor{comment}{\ \ \}}}
+\DoxyCodeLine{00093\ \textcolor{comment}{else\ fwrite(\ (void*)\ \&n0,\ sizeof(unsigned\ long),\ 1,\ fp\ );}}
+\DoxyCodeLine{00094\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00095\ \textcolor{comment}{}}
+\DoxyCodeLine{00096\ \textcolor{comment}{2.\ NODE\ FLAGS\ (int)}}
+\DoxyCodeLine{00097\ \textcolor{comment}{}}
+\DoxyCodeLine{00098\ \textcolor{comment}{PBFLAGS:\ Same\ record\ length\ as\ the\ record\ set\ above\ but\ in\ int32\_t\ format.}}
+\DoxyCodeLine{00099\ \textcolor{comment}{}}
+\DoxyCodeLine{00100\ \textcolor{comment}{-\/\ if\ a\ node\ lies\ on\ a\ model\ boundary,\ a\ negative\ integer\ value}}
+\DoxyCodeLine{00101\ \textcolor{comment}{\ \ is\ assigned\ to\ identify\ that\ boundary\ uniquely\ in\ terms\ of\ the\ }}
+\DoxyCodeLine{00102\ \textcolor{comment}{\ \ named\ surface\ it\ belongs\ to.\ If\ the\ node\ is\ not\ located\ on\ a\ }}
+\DoxyCodeLine{00103\ \textcolor{comment}{\ \ model\ boundary,\ its\ int\ value\ is\ set\ to\ zero.\ If\ lines\ or\ curves\ were\ }}
+\DoxyCodeLine{00104\ \textcolor{comment}{\ \ specified\ on\ the\ model\ boundaries,\ edge\ nodes\ along\ these\ lines\ are\ }}
+\DoxyCodeLine{00105\ \textcolor{comment}{\ \ flagged\ by\ unique\ negative\ integers\ by\ analogy\ to\ the\ identifiers\ for}}
+\DoxyCodeLine{00106\ \textcolor{comment}{\ \ the\ edges\ in\ the\ SKUA\ topology.}}
+\DoxyCodeLine{00107\ \textcolor{comment}{\ \ }}
+\DoxyCodeLine{00108\ \textcolor{comment}{\ \ A\ boundary\ and\ edge\ numbering\ scheme\ for\ box-\/shaped\ models\ in\ CSP\ has}}
+\DoxyCodeLine{00109\ \textcolor{comment}{\ \ the\ following\ values\ (adhering\ to\ a\ righthand-\/rule\ coordinate\ system}}
+\DoxyCodeLine{00110\ \textcolor{comment}{\ \ where\ x\ points\ to\ the\ right,\ y\ points\ upward\ and\ z\ points\ to\ the\ front:}}
+\DoxyCodeLine{00111\ \textcolor{comment}{}}
+\DoxyCodeLine{00112\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00113\ \textcolor{comment}{\#define\ BACK\_BOTTOM\ \ \ \ \ \ \ -\/16\ //\ BACK\ and\ BOTTOM}}
+\DoxyCodeLine{00114\ \textcolor{comment}{\#define\ BACK\_RIGHT\ \ \ \ \ \ \ \ -\/17\ //\ BACK\ and\ RIGHT}}
+\DoxyCodeLine{00115\ \textcolor{comment}{\#define\ BACK\_TOP\ \ \ \ \ \ \ \ \ \ -\/18\ //\ BACK\ and\ TOP}}
+\DoxyCodeLine{00116\ \textcolor{comment}{\#define\ BACK\_LEFT\ \ \ \ \ \ \ \ \ -\/19\ //\ BACK\ and\ LEFT}}
+\DoxyCodeLine{00117\ \textcolor{comment}{\#define\ BOTTOM\_RIGHT\ \ \ \ \ \ -\/20\ //\ BOTTOM\ and\ RIGHT}}
+\DoxyCodeLine{00118\ \textcolor{comment}{\#define\ TOP\_RIGHT\ \ \ \ \ \ \ \ \ -\/21\ //\ TOP\ and\ RIGHT}}
+\DoxyCodeLine{00119\ \textcolor{comment}{\#define\ TOP\_LEFT\ \ \ \ \ \ \ \ \ \ -\/22\ //\ TOP\ and\ LEFT}}
+\DoxyCodeLine{00120\ \textcolor{comment}{\#define\ BOTTOM\_LEFT\ \ \ \ \ \ \ -\/23\ //\ BOTTOM\ and\ LEFT}}
+\DoxyCodeLine{00121\ \textcolor{comment}{\#define\ FRONT\_BOTTOM\ \ \ \ \ \ -\/24\ //\ FRONT\ and\ BOTTOM}}
+\DoxyCodeLine{00122\ \textcolor{comment}{\#define\ FRONT\_RIGHT\ \ \ \ \ \ \ -\/25\ //\ FRONT\ and\ RIGHT}}
+\DoxyCodeLine{00123\ \textcolor{comment}{\#define\ FRONT\_TOP\ \ \ \ \ \ \ \ \ -\/26\ //\ FRONT\ and\ TOP}}
+\DoxyCodeLine{00124\ \textcolor{comment}{\#define\ FRONT\_LEFT\ \ \ \ \ \ \ \ -\/27\ //\ FRONT\ and\ LEFT}}
+\DoxyCodeLine{00125\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00126\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00127\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00128\ \textcolor{comment}{3.\ BOUNDARY\ CONDITIONS\ APPLIED\ TO\ NODES\ (double)}}
+\DoxyCodeLine{00129\ \textcolor{comment}{}}
+\DoxyCodeLine{00130\ \textcolor{comment}{PBVALS:\ Analogous\ to\ the\ record\ sets\ above\ but\ in\ double\ format:}}
+\DoxyCodeLine{00131\ \textcolor{comment}{}}
+\DoxyCodeLine{00132\ \textcolor{comment}{-\/\ Corresponding\ to\ the\ non-\/zero\ flags\ from\ above,\ where\ a\ node\ is\ }}
+\DoxyCodeLine{00133\ \textcolor{comment}{\ \ located\ at\ a\ model\ boundary,\ a\ boundary\ value\ as\ previously\ assigned\ }}
+\DoxyCodeLine{00134\ \textcolor{comment}{\ \ to\ the\ SKUA\ topological\ model\ can\ be\ stored\ in\ this\ data\ record.\ }}
+\DoxyCodeLine{00135\ \textcolor{comment}{\ \ If\ no\ value\ was\ assigned,\ this\ record\ will\ just\ hold\ zeroes.}}
+\DoxyCodeLine{00136\ \textcolor{comment}{}}
+\DoxyCodeLine{00137\ \textcolor{comment}{}}
+\DoxyCodeLine{00138\ \textcolor{comment}{4.\ TYPE\ OF\ FINITE\ ELEMENTS\ (enum\ -\/>\ unsigned\ int)}}
+\DoxyCodeLine{00139\ \textcolor{comment}{}}
+\DoxyCodeLine{00140\ \textcolor{comment}{PELMT\ (0...e-\/1):\ Record\ is\ preceded\ by\ an\ unsigned\ long\ indicating\ }}
+\DoxyCodeLine{00141\ \textcolor{comment}{record\ size\ (=number\ of\ finite\ elements\ in\ the\ mesh).\ 'pelmt'}}
+\DoxyCodeLine{00142\ \textcolor{comment}{consists\ of\ a\ single\ record\ of\ (all\ as\ unsigned\ longs):}}
+\DoxyCodeLine{00143\ \textcolor{comment}{}}
+\DoxyCodeLine{00144\ \textcolor{comment}{-\/\ element-\/type\ identifiers\ (unsigned\ int)\ for\ each\ }}
+\DoxyCodeLine{00145\ \textcolor{comment}{\ \ finite\ element\ in\ the\ mesh.\ How\ they\ correspond\ to\ element}}
+\DoxyCodeLine{00146\ \textcolor{comment}{\ \ type\ strings\ is\ specified\ further\ below.\ }}
+\DoxyCodeLine{00147\ \textcolor{comment}{\ \ }}
+\DoxyCodeLine{00148\ \textcolor{comment}{\ \ Dieser\ Eintrag\ vermeidet\ Doppeldeutigkeiten,\ die\ dadurch\ entstehen}}
+\DoxyCodeLine{00149\ \textcolor{comment}{\ \ koennten,\ dass\ es\ verschiedene\ Elementtypen\ mit\ der\ gleichen\ Anzahl}}
+\DoxyCodeLine{00150\ \textcolor{comment}{\ \ von\ Knotenpunkten\ gibt.\ \ \ }}
+\DoxyCodeLine{00151\ \textcolor{comment}{}}
+\DoxyCodeLine{00152\ \textcolor{comment}{}}
+\DoxyCodeLine{00153\ \textcolor{comment}{5.\ MESH\ CONNECTIVITY\ (unsigned\ long)\ }}
+\DoxyCodeLine{00154\ \textcolor{comment}{}}
+\DoxyCodeLine{00155\ \textcolor{comment}{PLIST:\ Record\ preceded\ by\ an\ unsigned\ long\ indicating\ record\ size,}}
+\DoxyCodeLine{00156\ \textcolor{comment}{a\ single\ record\ follows\ containing\ (all\ as\ unsigned\ longs):}}
+\DoxyCodeLine{00157\ \textcolor{comment}{}}
+\DoxyCodeLine{00158\ \textcolor{comment}{-\/\ node\ ids\ of\ each\ element\ in}}
+\DoxyCodeLine{00159\ \textcolor{comment}{\ \ counter-\/clockwise\ order\ (according\ to\ node\ numbering\ on\ reference\ elements).\ }}
+\DoxyCodeLine{00160\ \textcolor{comment}{\ \ The\ enlisted\ node\ numbers\ range\ from\ 0...nodes-\/1\ as\ above.}}
+\DoxyCodeLine{00161\ \textcolor{comment}{}}
+\DoxyCodeLine{00162\ \textcolor{comment}{The\ elements\ are\ numbered\ implicitly\ and\ continuously\ by\ their\ position\ }}
+\DoxyCodeLine{00163\ \textcolor{comment}{in\ the\ plist\ (there\ must\ be\ no\ jumps\ in\ the\ element\ ids).}}
+\DoxyCodeLine{00164\ \textcolor{comment}{}}
+\DoxyCodeLine{00165\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00166\ \textcolor{comment}{PFVERTS:\ Record\ preceded\ by\ unsigned\ long\ indicating\ record\ size,\ then\ a}}
+\DoxyCodeLine{00167\ \textcolor{comment}{single\ record\ (all\ long,\ where\ negative\ numbers\ denote\ model\ boundaries):}}
+\DoxyCodeLine{00168\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00169\ \textcolor{comment}{-\/\ neighbour\ elements}}
+\DoxyCodeLine{00170\ \textcolor{comment}{\ \ of\ each\ element\ in\ an\ order\ defined\ for\ each\ existing\ element\ }}
+\DoxyCodeLine{00171\ \textcolor{comment}{\ \ type\ (see\ further\ below,\ for\ tetrahedra\ and\ triangles,\ neighbors\ are}}
+\DoxyCodeLine{00172\ \textcolor{comment}{\ \ those\ elements\ touching\ the\ element's\ faces\ opposite\ of\ its\ corner\ nodes).\ }}
+\DoxyCodeLine{00173\ \textcolor{comment}{\ \ Neighbor\ elements\ are\ denoted\ 0...element-\/1.\ Where\ there\ are\ no\ neighbour\ }}
+\DoxyCodeLine{00174\ \textcolor{comment}{\ \ elements\ adjacent\ to\ the\ element's\ faces\ because\ the\ element\ lies\ on\ a\ model\ }}
+\DoxyCodeLine{00175\ \textcolor{comment}{\ \ boundary,\ a\ negative\ long\ is\ used\ to\ identify\ this\ boundary\ surface.\ \ }}
+\DoxyCodeLine{00176\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00177\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00178\ \textcolor{comment}{6.\ MATERIAL\ IDENTIFIER\ FOR\ EACH\ ELEMENT\ =\ ROCK\ TYPE}}
+\DoxyCodeLine{00179\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00180\ \textcolor{comment}{PMTRL:\ preceded\ by\ number\ of\ elements,\ associates\ each\ element\ with\ the\ }}
+\DoxyCodeLine{00181\ \textcolor{comment}{material\ flag\ from\ the\ '*.asc'\ file\ such\ that\ properties\ can\ be\ assigned.\ \ }}
+\DoxyCodeLine{00182\ \textcolor{comment}{}}
+\DoxyCodeLine{00183\ \textcolor{comment}{Comments:\ leading\ hash\ key\ (\#\ everything\ thereafter\ is\ ignored)\ }}
+\DoxyCodeLine{00184\ \textcolor{comment}{}}
+\DoxyCodeLine{00185\ \textcolor{comment}{}}
+\DoxyCodeLine{00186\ \textcolor{comment}{7.\ ELEMENT\ AND\ NODE\ PROPERTIES}}
+\DoxyCodeLine{00187\ \textcolor{comment}{}}
+\DoxyCodeLine{00188\ \textcolor{comment}{Following\ the\ material\ ID\ record\ of\ integers,\ the\ property\ data\ block\ starts.}}
+\DoxyCodeLine{00189\ \textcolor{comment}{Since\ the\ properties\ have\ different\ placements\ (element,\ node\ etc.)\ and\ types\ (scalar,\ vector,\ tensor,\ array,\ flagged-\/array),}}
+\DoxyCodeLine{00190\ \textcolor{comment}{this\ information\ must\ be\ specified\ alongside\ with\ the\ property\ name.}}
+\DoxyCodeLine{00191\ \textcolor{comment}{Furthermore,\ by\ contrast\ with\ VectorVariable\ (dim)\ and\ TensorVariable\ (dim\ x\ dim),\ the\ size\ of\ which\ is\ defined\ by\ the\ model\ dimension,\ dim,}}
+\DoxyCodeLine{00192\ \textcolor{comment}{ArrayVariable\ and\ FlaggedArrayVariable\ have\ a\ length\ (number\ of\ entries)\ that\ is\ defined\ at\ runtime}}
+\DoxyCodeLine{00193\ \textcolor{comment}{and\ therefore\ has\ to\ be\ specified.}}
+\DoxyCodeLine{00194\ \textcolor{comment}{While\ each\ ArrayVariable\ has\ only\ one\ flag,\ each\ FlaggedArrayVariable\ has\ one\ flag\ per\ value.}}
+\DoxyCodeLine{00195\ \textcolor{comment}{For\ this\ reason,\ flag\ strides\ and\ data\ strides\ are\ provided\ for\ all\ variables.}}
+\DoxyCodeLine{00196\ \textcolor{comment}{}}
+\DoxyCodeLine{00197\ \textcolor{comment}{In\ summary,\ a\ complete\ record\ for\ a\ CSMP\ variable\ consists\ of:}}
+\DoxyCodeLine{00198\ \textcolor{comment}{}}
+\DoxyCodeLine{00199\ \textcolor{comment}{name(string)\ \ \ \ placement(enum\ PLACEMENT)\ \ \ type\ (VARIABLE\_TYPE)\ \ \ \ (array\ length\ (int32))}}
+\DoxyCodeLine{00200\ \textcolor{comment}{number\ of\ data\ entries\ (int32)}}
+\DoxyCodeLine{00201\ \textcolor{comment}{flag\ values\ (int32)}}
+\DoxyCodeLine{00202\ \textcolor{comment}{property\ values\ (double)}}
+\DoxyCodeLine{00203\ \textcolor{comment}{}}
+\DoxyCodeLine{00204\ \textcolor{comment}{Since\ the\ names\ can\ contain\ whitespace,\ they\ are\ placed\ in\ quotation\ marks.}}
+\DoxyCodeLine{00205\ \textcolor{comment}{}}
+\DoxyCodeLine{00206\ \textcolor{comment}{@section\ examples\ Application\ Examples}}
+\DoxyCodeLine{00207\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00208\ \textcolor{comment}{Human\ readable\ geometry\ descrition\ file\ (*.asc):\ }}
+\DoxyCodeLine{00209\ \textcolor{comment}{}}
+\DoxyCodeLine{00210\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00211\ \textcolor{comment}{example1}}
+\DoxyCodeLine{00212\ \textcolor{comment}{'icem1.asc'\ generated\ by\ SKM\ on\ 8/6/2001}}
+\DoxyCodeLine{00213\ \textcolor{comment}{7\ \#\ number\ of\ regions\ that\ make\ up\ the\ simulation\ model}}
+\DoxyCodeLine{00214\ \textcolor{comment}{\#\ region\_name\ \ \ element\_type\ \ \ material\_ID\ \ \ number-\/of-\/elements-\/in-\/region}}
+\DoxyCodeLine{00215\ \textcolor{comment}{soil\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ TRI\_3\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 1\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 6}}
+\DoxyCodeLine{00216\ \textcolor{comment}{rock\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ TRI\_3\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 2\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 1}}
+\DoxyCodeLine{00217\ \textcolor{comment}{air\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ TRI\_3\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 3\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 5}}
+\DoxyCodeLine{00218\ \textcolor{comment}{left\_boundary\ \ \ \ BAR\_2\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 1\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 2}}
+\DoxyCodeLine{00219\ \textcolor{comment}{right\_boundary\ BAR\_2\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 3\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 2}}
+\DoxyCodeLine{00220\ \textcolor{comment}{top\_boundary\ \ \ \ \ BAR\_2\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 3\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 2}}
+\DoxyCodeLine{00221\ \textcolor{comment}{bottom\_boundary\ BAR\_2\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 1\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 2}}
+\DoxyCodeLine{00222\ \textcolor{comment}{\#\ now\ the\ elements\ which\ make\ up\ each\ object\ are\ listed\ in\ sequence}}
+\DoxyCodeLine{00223\ \textcolor{comment}{soil\ 6}}
+\DoxyCodeLine{00224\ \textcolor{comment}{2\ 4\ 7\ 8\ 9\ 10}}
+\DoxyCodeLine{00225\ \textcolor{comment}{rock\ 1}}
+\DoxyCodeLine{00226\ \textcolor{comment}{5}}
+\DoxyCodeLine{00227\ \textcolor{comment}{air\ 5}}
+\DoxyCodeLine{00228\ \textcolor{comment}{0\ 1\ 3\ 6\ 11}}
+\DoxyCodeLine{00229\ \textcolor{comment}{left\_boundary\ 2}}
+\DoxyCodeLine{00230\ \textcolor{comment}{12\ 13}}
+\DoxyCodeLine{00231\ \textcolor{comment}{right\_boundary\ 2}}
+\DoxyCodeLine{00232\ \textcolor{comment}{18\ 19}}
+\DoxyCodeLine{00233\ \textcolor{comment}{top\_boundary\ 2}}
+\DoxyCodeLine{00234\ \textcolor{comment}{14\ 15}}
+\DoxyCodeLine{00235\ \textcolor{comment}{bottom\_boundary\ 2}}
+\DoxyCodeLine{00236\ \textcolor{comment}{16\ 17}}
+\DoxyCodeLine{00237\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00238\ \textcolor{comment}{}}
+\DoxyCodeLine{00239\ \textcolor{comment}{Mesh\ connectivity\ file\ (*.dat)\ in\ text\ ASCII\ version:\ }}
+\DoxyCodeLine{00240\ \textcolor{comment}{}}
+\DoxyCodeLine{00241\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00242\ \textcolor{comment}{11\ \#\ px,\ py,\ pz}}
+\DoxyCodeLine{00243\ \textcolor{comment}{0.\ 5.\ 10.\ 0.\ 5.\ 10.\ 2.5\ 7.5\ 0.\ 5.\ 10.}}
+\DoxyCodeLine{00244\ \textcolor{comment}{10.\ 10.\ 10.\ 6.\ 7.\ 5.\ 4.\ 4.\ 0.\ 0.\ 0.}}
+\DoxyCodeLine{00245\ \textcolor{comment}{0.\ 0.\ 0.\ 0.\ 0.\ 0.\ 0.\ 0.\ 0.\ 0.\ 0.}}
+\DoxyCodeLine{00246\ \textcolor{comment}{\#\ pbflags}}
+\DoxyCodeLine{00247\ \textcolor{comment}{-\/13\ -\/5\ -\/14\ -\/2\ 0\ -\/3\ 0\ 0\ -\/8\ -\/4\ -\/10}}
+\DoxyCodeLine{00248\ \textcolor{comment}{\#\ pbvals}}
+\DoxyCodeLine{00249\ \textcolor{comment}{0.\ 5.\ 10.\ 0.\ 0.\ 10.\ 0.\ 0.\ 0.\ 5.\ 10.}}
+\DoxyCodeLine{00250\ \textcolor{comment}{20\ \#\ pelements}}
+\DoxyCodeLine{00251\ \textcolor{comment}{3\ 3\ 3\ 3\ 3\ 3\ 3\ 3\ 3\ 3\ 3\ 3\ 2\ 2\ 2\ 2\ 2\ 2\ 2\ 2}}
+\DoxyCodeLine{00252\ \textcolor{comment}{42\ \#\ plist}}
+\DoxyCodeLine{00253\ \textcolor{comment}{0\ 4\ 1\ \ 1\ 4\ 2\ \ 0\ 3\ 4\ \ 3\ 6\ 4\ \ 4\ 6\ 7\ \ 4\ 7\ 5\ \ 3\ 8\ 6}}
+\DoxyCodeLine{00254\ \textcolor{comment}{6\ 8\ 9\ \ 6\ 9\ 7\ \ 7\ 9\ 10\ \ 7\ 10\ 5\ \ 0\ 3\ \ 3\ 8\ \ 0\ 1\ \ 1\ 2}}
+\DoxyCodeLine{00255\ \textcolor{comment}{8\ 9\ \ 9\ 10\ \ 2\ 5\ \ 5\ 10}}
+\DoxyCodeLine{00256\ \textcolor{comment}{42\ \#\ pfverts}}
+\DoxyCodeLine{00257\ \textcolor{comment}{1\ -\/5\ 2\ \ 3\ -\/5\ 0\ \ 4\ 0\ -\/2\ \ 5\ 2\ 7\ \ 9\ 6\ 4\ \ 11\ 3\ 5\ \ -\/3\ 1\ 6}}
+\DoxyCodeLine{00258\ \textcolor{comment}{8\ 4\ -\/2\ \ -\/4\ 9\ 7\ \ 10\ 5\ 8\ \ 11\ 9\ -\/4\ \ -\/3\ 6\ 10}}
+\DoxyCodeLine{00259\ \textcolor{comment}{-\/2\ 2\ \ -\/2\ 7\ \ 0\ -\/5\ \ 1\ -\/5\ \ -\/4\ 8\ \ -\/4\ 10\ \ 3\ -\/3\ \ 11\ -\/3}}
+\DoxyCodeLine{00260\ \textcolor{comment}{20\ \#\ pmaterial}}
+\DoxyCodeLine{00261\ \textcolor{comment}{3\ 3\ 1\ 3\ 1\ 2\ 3\ 1\ 1\ 1\ 1\ 3\ 1\ 1\ 3\ 3\ 1\ 1\ 3\ 3}}
+\DoxyCodeLine{00262\ \textcolor{comment}{1\ \#\ element\ and\ node\ properties}}
+\DoxyCodeLine{00263\ \textcolor{comment}{"{}permeability"{}\ \ "{}element"{}\ "{}scalar"{}}}
+\DoxyCodeLine{00264\ \textcolor{comment}{1\ 1}}
+\DoxyCodeLine{00265\ \textcolor{comment}{20}}
+\DoxyCodeLine{00266\ \textcolor{comment}{1\ (ANY)\ 1\ 1\ 1\ 1\ 1\ 1\ 1\ 1\ 1\ 1\ 1\ 1\ 1\ 1\ 1\ 1\ 1\ 1\ 1}}
+\DoxyCodeLine{00267\ \textcolor{comment}{20}}
+\DoxyCodeLine{00268\ \textcolor{comment}{1.0e-\/12\ 1.0e-\/12\ 1.0e-\/12\ 1.0e-\/12\ 1.0e-\/12\ 1.0e-\/12\ 1.0e-\/12\ 1.0e-\/12\ 1.0e-\/12\ 1.0e-\/12\ }}
+\DoxyCodeLine{00269\ \textcolor{comment}{1.0e-\/12\ 1.0e-\/12\ 1.0e-\/12\ 1.0e-\/12\ 1.0e-\/12\ 1.0e-\/12\ 1.0e-\/12\ 1.0e-\/12\ 1.0e-\/12\ 1.0e-\/12\ \ }}
+\DoxyCodeLine{00270\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00271\ \textcolor{comment}{}}
+\DoxyCodeLine{00272\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00273\ \textcolor{comment}{//\ TODO:\ get\ this\ to\ work\ in\ a\ way\ where\ it\ does\ not\ matter\ whether\ the\ ASCII\ files\ are\ MSDOS\ or\ UNIX}}
+\DoxyCodeLine{00274\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_s_k_u_a___finite_element_mesh_interface}{SKUA\_FiniteElementMeshInterface}}\ \{}
+\DoxyCodeLine{00275\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_ad69ba9effa2e8c2fbf2cc73dc4537d17}{SKUA\_FiniteElementMeshInterface}}(\ \textcolor{keywordtype}{bool}\ create\_isoparametric\_element\_mesh=\textcolor{keyword}{true}\ );}
+\DoxyCodeLine{00277\ \ \ \ \ \ \ \string~SKUA\_FiniteElementMeshInterface();}
+\DoxyCodeLine{00278\ }
+\DoxyCodeLine{00279\ \ \ \ \ \ \ \textcolor{comment}{///\ Reading\ SKUA\ mesh\ from\ .asc\ and\ .dat\ files;\ deduces\ irregular\ if\ more\ than\ the\ top\ surface\ is\ warped\ (IRREGULAR)}}
+\DoxyCodeLine{00280\ \ \ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_ac0a21d2796e40f9b6bf60fc76e67bfe9}{Read\_SKUA\_Mesh}}(\ \textcolor{keyword}{const}\ std::string\&\ mesh\_file\_set,}
+\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&,}
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_topology}{ModelTopology}}\&,}
+\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ binary\_input\_file\ );}
+\DoxyCodeLine{00285\ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00286\ \ \ \ \ \textcolor{comment}{///\ ascii\ format}}
+\DoxyCodeLine{00287\ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00288\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_aff14876ade4a8728f52f47b14ce9f9f3}{ReadMeshASCII}}(\ \textcolor{keyword}{const}\ std::string\&\ meshfile,}
+\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&,}
+\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_topology}{ModelTopology}}\&\ );}
+\DoxyCodeLine{00291\ }
+\DoxyCodeLine{00292\ \ \ \ \ \textcolor{comment}{///\ binary\ format\ -\/\ use\ \ binary\ interfaces\ for\ efficient\ reading\ of\ large\ files}}
+\DoxyCodeLine{00293\ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00294\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_a4b7847b74b87fede1fb498260c5a949c}{ReadMeshBinary}}(\ \textcolor{keyword}{const}\ std::string\&\ meshfile,}
+\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&,}
+\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_topology}{ModelTopology}}\&\ );}
+\DoxyCodeLine{00297\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00298\ \ \ \ \ \textcolor{comment}{///\ reading\ comments}}
+\DoxyCodeLine{00299\ \ \ \ \ \textcolor{keywordtype}{bool}\ IsCommentLine(\ \textcolor{keywordtype}{char}*\ str\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00300\ \ \ \ \ \textcolor{keywordtype}{bool}\ SkipPotentialComment(\ std::ifstream\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00301\ \ \ \ \ \textcolor{keywordtype}{void}\ AdvancePastCommentLine(\ std::ifstream\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00302\ }
+\DoxyCodeLine{00303\ \ \ \ \ \textcolor{comment}{///\ ASCII\ file\ (\ regions\ and\ corresponding\ element\ id's\ )}}
+\DoxyCodeLine{00304\ \ \ \ \ \textcolor{keywordtype}{bool}\ ReadTitleASCII(\ std::ifstream\&\ ifs,\ std::string\&\ title\ );}
+\DoxyCodeLine{00305\ \ \ \ \ \textcolor{keywordtype}{bool}\ ReadRegionsAndElementTypesASCII(\ std::ifstream\&\ ifs\ );}
+\DoxyCodeLine{00306\ }
+\DoxyCodeLine{00307\ \ \ \ \ \textcolor{comment}{///\ ASCI\ data\ file}}
+\DoxyCodeLine{00308\ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00309\ \ \ \ \ \textcolor{keywordtype}{bool}\ ReadNodeCoordinatesASCII(\ std::ifstream\&\ ifs,\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ );}
+\DoxyCodeLine{00310\ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00311\ \ \ \ \ \textcolor{keywordtype}{bool}\ ReadBoundaryFlagsAndConditionsASCII(\ std::ifstream\&\ ifs,\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ );}
+\DoxyCodeLine{00312\ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00313\ \ \ \ \ \textcolor{keywordtype}{bool}\ ReadPelementASCII(\ std::ifstream\&,\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ );}
+\DoxyCodeLine{00314\ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00315\ \ \ \ \ \textcolor{keywordtype}{bool}\ ReadPlistASCII(\ std::ifstream\&,\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&,\ \textcolor{keywordtype}{bool}\ test\_for\_consecutive\_node\_numbering=\textcolor{keyword}{true}\ );}
+\DoxyCodeLine{00316\ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00317\ \ \ \ \ \textcolor{keywordtype}{bool}\ ReadPfvertsASCII(\ std::ifstream\&,\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ );}
+\DoxyCodeLine{00318\ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00319\ \ \ \ \ \textcolor{keywordtype}{bool}\ ReadPmaterialASCII(\ std::ifstream\&,\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ );}
+\DoxyCodeLine{00320\ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00321\ \ \ \ \ \textcolor{keywordtype}{bool}\ ReadPropertyRecordsASCII(\ std::ifstream\&,\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ );}
+\DoxyCodeLine{00322\ }
+\DoxyCodeLine{00323\ \ \ \ \ \textcolor{comment}{///\ Binary\ data\ file}}
+\DoxyCodeLine{00324\ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00325\ \ \ \ \ \textcolor{keywordtype}{bool}\ ReadNodeCoordinatesBinary(\ FILE*,\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ );}
+\DoxyCodeLine{00326\ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00327\ \ \ \ \ \textcolor{keywordtype}{bool}\ ReadBoundaryFlagsAndConditionsBinary(\ FILE*,\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ );}
+\DoxyCodeLine{00328\ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00329\ \ \ \ \ \textcolor{keywordtype}{bool}\ ReadPelementBinary(\ FILE*,\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ );}
+\DoxyCodeLine{00330\ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00331\ \ \ \ \ \textcolor{keywordtype}{bool}\ ReadPlistBinary(\ FILE*,\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ );}
+\DoxyCodeLine{00332\ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00333\ \ \ \ \ \textcolor{keywordtype}{bool}\ ReadPfvertsBinary(\ FILE*,\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ );}
+\DoxyCodeLine{00334\ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00335\ \ \ \ \ \textcolor{keywordtype}{bool}\ ReadPmaterialBinary(\ FILE*,\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ );}
+\DoxyCodeLine{00336\ \textcolor{comment}{//\ \ \ \ TODO:\ template<uint32\_t\ dim>}}
+\DoxyCodeLine{00337\ \textcolor{comment}{//\ \ \ \ bool\ ReadPropertyRecordBinary(\ FILE*,\ VSet<dim>\&\ );}}
+\DoxyCodeLine{00338\ }
+\DoxyCodeLine{00339\ \ \ \ \ \textcolor{comment}{///\ removes\ any\ object\ and\ data\ records\ potentially\ held\ in\ the\ interface}}
+\DoxyCodeLine{00340\ \ \ \ \ \textcolor{keywordtype}{void}\ Clear();}
+\DoxyCodeLine{00341\ }
+\DoxyCodeLine{00342\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00343\ \ \ \ \ \textcolor{comment}{//\ storage\ for\ geometric\ objects\ and\ their\ element\ types}}
+\DoxyCodeLine{00344\ \ \ \ \ \textcolor{comment}{//\ \ objectname\ \ elmttype\ \ identifier\ (volumes,\ surfaces,\ curves\ in\ file)\ }}
+\DoxyCodeLine{00345\ \ \ \ \ std::string\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ file\_header\_;}
+\DoxyCodeLine{00346\ \ \ \ \ std::string\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ boundary\_tag\_;}
+\DoxyCodeLine{00347\ \ \ \ \ \textcolor{keyword}{typedef}\ \mbox{\hyperlink{classcsmp_1_1_c_s_m_p___element_specifications}{CSMP\_ElementSpecifications}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ csmp\_elmt\_specs;}
+\DoxyCodeLine{00348\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ region\ name\ \ \ type\ of\ elements}}
+\DoxyCodeLine{00349\ \ \ \ \ std::multimap<std::string,std::string>\ \ \ \ \ \ \ \ \ \ \ object\_specs\_;}
+\DoxyCodeLine{00350\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ region\ name\ \ \ element\ ids}}
+\DoxyCodeLine{00351\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_s_k_u_a___finite_element_mesh_interface}{std}}::\mbox{\hyperlink{classcsmp_1_1_s_k_u_a___finite_element_mesh_interface}{multimap}}<\mbox{\hyperlink{classcsmp_1_1_s_k_u_a___finite_element_mesh_interface}{std}}::\mbox{\hyperlink{classcsmp_1_1_s_k_u_a___finite_element_mesh_interface}{string}},\mbox{\hyperlink{classcsmp_1_1_s_k_u_a___finite_element_mesh_interface}{std}}::\mbox{\hyperlink{classcsmp_1_1_s_k_u_a___finite_element_mesh_interface}{vector}}<\mbox{\hyperlink{classcsmp_1_1_s_k_u_a___finite_element_mesh_interface}{size\_t}}>\ >\ \ \mbox{\hyperlink{classcsmp_1_1_s_k_u_a___finite_element_mesh_interface}{object\_elements\_}};}
+\DoxyCodeLine{00352\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ isoparametric\_;}
+\DoxyCodeLine{00353\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ extra\_checks\_on\_binary\_file\_\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00354\ \};}
+\DoxyCodeLine{00355\ }
+\DoxyCodeLine{00356\ }
+\DoxyCodeLine{00357\ \textcolor{comment}{///\ returns\ the\ corresponding\ CSMP\ element\ type,\ taking\ into\ account\ whether\ an\ isoparametric\ FEM\ formulation\ is\ used}}
+\DoxyCodeLine{00358\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\_FEM\_TYPE}}\ \mbox{\hyperlink{namespacecsmp_aa669e905416f4cf14388f5b4dae3c904}{convertSKUA\_ElementType}}(\ int32\_t\ etype,\ \textcolor{keywordtype}{bool}\ isoparametric\ );}
+\DoxyCodeLine{00359\ }
+\DoxyCodeLine{00360\ }
+\DoxyCodeLine{00361\ }
+\DoxyCodeLine{00362\ \}\ \textcolor{comment}{//\ end\ namespace\ csmp}}
+\DoxyCodeLine{00363\ }
+\DoxyCodeLine{00364\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

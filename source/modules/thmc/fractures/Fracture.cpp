@@ -1110,13 +1110,13 @@ double Fracture<dim>::AnalyticalPressure(double t, double x){
     //  throw csmp::Exception(ERROR, "Fracture<dim>::AnalyticalPressure()",
     //                        "Pressure solution implemented only with x = 0");
 
-    double p_star   = std::pow( Ep * Ep * mup / t , 1.0/3.0);
+   double p_star   = std::pow( Ep * Ep * mup / t , 1.0/3.0);
     //double Pi_0     = 0.5469 ;      //lecampion code in wolfram alpha with x = 0
     //double Pi_0_G   = 0.5450; //garagash approximation
 
-    double b01 = 0.475449, b02 = -0.061178, b03 = 0.066322;
-    double b11 = 0.170654, b12 = 0.017132,  b13 = -0.039015, b14 = -0.045476;
-    double c11 = 0.36133,  c12 = -1.63867,  c13 = -0.638673;
+   constexpr double b01 = 0.475449, b02 = -0.061178, b03 = 0.066322;
+   constexpr double b11 = 0.170654, b12 = 0.017132,  b13 = -0.039015, b14 = -0.045476;
+   constexpr double c11 = 0.36133,  c12 = -1.63867,  c13 = -0.638673;
 
 
     //std::cout << "x: " << x << "\tl: " << AnalyticalLength(t) << "\tx/l: " << xi << std::endl;
@@ -1125,7 +1125,7 @@ double Fracture<dim>::AnalyticalPressure(double t, double x){
                   + b02 * gsl_sf_hyperg_2F1(-7.0/6.0, 1.0, 0.5, xi*xi)
                   + b03 * (2.0 - M_PI * std::fabs(xi) );
 
-    //std::cout << "PI0: " <<  PI_0 << std::endl;
+    std::cout << "PI0: " <<  PI_0 << std::endl;
 
 
     double PI_1 = b11 * gsl_sf_hyperg_2F1(c11, 1.0, 0.5, xi*xi)
@@ -1133,14 +1133,14 @@ double Fracture<dim>::AnalyticalPressure(double t, double x){
                   + b13 * gsl_sf_hyperg_2F1(c13, 2.0, 1.5, xi*xi)
                   + b14 * (2.0 - M_PI * std::fabs(xi) );
 
-    //std::cout << "PI1: " <<  PI_1 << std::endl;
+    std::cout << "PI1: " <<  PI_1 << std::endl;
 
 
     double epsi_K  = 0.1076 * std::pow(DimensionlessToughness(), 3.16796 ) ;
 
 
     //check only correction
-    //assert( PI_0 > epsi_K*PI_1);
+    assert( PI_0 > epsi_K*PI_1);
 
     double pressure = p_star * ( PI_0 + epsi_K * PI_1);
 

@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_a1f4776db5768d413448f15d9a70ba18" kind="dir">
+    <compoundname>source/modules/eos/h2o_nacl_co2</compoundname>
+    <innerfile refid="_e_o_s___c_o2_h2_o_na_cl___spycher2004_8cpp">EOS_CO2H2ONaCl_Spycher2004.cpp</innerfile>
+    <innerfile refid="_phase_state_finder___h2_o___c_o2___na_cl_8cpp">PhaseStateFinder_H2O_CO2_NaCl.cpp</innerfile>
+    <innerfile refid="_p_v_t_x___calculator___h2_o___c_o2___na_cl_8cpp">PVTX_Calculator_H2O_CO2_NaCl.cpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="source/modules/eos/h2o_nacl_co2/"/>
+  </compounddef>
+</doxygen>

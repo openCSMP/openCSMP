@@ -1,0 +1,274 @@
+\doxysection{csmp\+::CVFEM\+\_\+\+Upwind\+\_\+\+Num\+Integral\+\_\+d\+NT\+\_\+op\+\_\+d\+N\+\_\+dV\texorpdfstring{$<$}{<} dim, CELL \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__op__d_n__d_v}{}\label{classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__op__d_n__d_v}\index{csmp::CVFEM\_Upwind\_NumIntegral\_dNT\_op\_dN\_dV$<$ dim, CELL $>$@{csmp::CVFEM\_Upwind\_NumIntegral\_dNT\_op\_dN\_dV$<$ dim, CELL $>$}}
+
+
+{\ttfamily \#include $<$CVFEM\+\_\+\+Upwind\+\_\+\+Num\+Integral\+\_\+d\+NT\+\_\+op\+\_\+d\+N\+\_\+d\+V.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::CVFEM\+\_\+\+Upwind\+\_\+\+Num\+Integral\+\_\+d\+NT\+\_\+op\+\_\+d\+N\+\_\+dV\texorpdfstring{$<$}{<} dim, CELL \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__op__d_n__d_v__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::CVFEM\+\_\+\+Upwind\+\_\+\+Num\+Integral\+\_\+d\+NT\+\_\+op\+\_\+d\+N\+\_\+dV\texorpdfstring{$<$}{<} dim, CELL \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__op__d_n__d_v__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__op__d_n__d_v_a8b75b69924747eb6941a4909f1f9960f}\label{classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__op__d_n__d_v_a8b75b69924747eb6941a4909f1f9960f} 
+{\bfseries CVFEM\+\_\+\+Upwind\+\_\+\+Num\+Integral\+\_\+d\+NT\+\_\+op\+\_\+d\+N\+\_\+dV} (const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&, \mbox{\hyperlink{classcsmp_1_1_upwind_control_visitor}{Upwind\+Control\+Visitor}}$<$ dim $>$ \&upwind\+\_\+visitor, \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{Explicit\+Finite\+Volume\+Transport\+PHX}}$<$ dim $>$ \&fv\+\_\+transport, const char \texorpdfstring{$\ast$}{*}oper, const char \texorpdfstring{$\ast$}{*}basic, const char \texorpdfstring{$\ast$}{*}test, const char \texorpdfstring{$\ast$}{*}upwind, const char \texorpdfstring{$\ast$}{*}grav\+\_\+trigger)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__op__d_n__d_v_a5ee7a427d29245aae778a3a4e35a5313}{Compute\+Contribution}} (const CELL$<$ dim $>$ \&) override final
+\begin{DoxyCompactList}\small\item\em integration performed on \doxylink{classcsmp_1_1_element}{Element}, \doxylink{classcsmp_1_1_face}{Face}, \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__op__d_n__d_v_ab62d515a1291bfde4fb9ec052ad02d1c}{Get\+Operands}} (const CELL$<$ dim $>$ \&) override final
+\begin{DoxyCompactList}\small\item\em getting data from the \doxylink{classcsmp_1_1_element}{Element}, \doxylink{classcsmp_1_1_face}{Face}, \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__op__d_n__d_v_a33b503cb1a11a3fb946637387bbab928}{Get\+Operands\+CVFEM}} (const CELL$<$ dim $>$ \&, \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} upwind\+\_\+var\+\_\+key) override final
+\item 
+\Hypertarget{classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__op__d_n__d_v_a4c57d90997e14806fc5b71b2eab39961}\label{classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__op__d_n__d_v_a4c57d90997e14806fc5b71b2eab39961} 
+void {\bfseries Get\+Upwind\+Matrix} (const CELL$<$ dim $>$ \&)
+\item 
+\mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__op__d_n__d_v}{CVFEM\+\_\+\+Upwind\+\_\+\+Num\+Integral\+\_\+d\+NT\+\_\+op\+\_\+d\+N\+\_\+dV}}$<$ dim, CELL $>$ \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__op__d_n__d_v_a39acc8ec812415d2faa8c6564da33ff4}{clone}} () const override final
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___math_operator_l_h_s}{csmp\+::\+CVFEM\+\_\+\+Math\+Operator\+LHS$<$ dim, Element $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___math_operator_l_h_s_a7590eaaf241c5a8be564d252fe5cf1f7}{CVFEM\+\_\+\+Math\+Operator\+LHS}} (const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&, const char \texorpdfstring{$\ast$}{*}basic, const char \texorpdfstring{$\ast$}{*}test)
+\item 
+virtual \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___math_operator_l_h_s_a05d5f4a2d0ba812bc69e0ac490d1fc83}{\texorpdfstring{$\sim$}{\string~}\+CVFEM\+\_\+\+Math\+Operator\+LHS}} ()
+\item 
+virtual \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___math_operator_l_h_s_a770bb95dc95841d78847702578e3814c}{Get\+Contribution}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_math_operator_l_h_s}{csmp\+::\+Math\+Operator\+LHS$<$ dim, Element $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Math\+Operator\+LHS} (const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&, const char \texorpdfstring{$\ast$}{*}basic, const char \texorpdfstring{$\ast$}{*}test)
+\item 
+\mbox{\hyperlink{classcsmp_1_1_math_operator_l_h_s}{Math\+Operator\+LHS}} \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_math_operator_l_h_s}{Math\+Operator\+LHS}} \&)
+\item 
+std\+::string {\bfseries Name} () const
+\begin{DoxyCompactList}\small\item\em \doxylink{classcsmp_1_1_operand}{Operand} Functions. \end{DoxyCompactList}\item 
+virtual void {\bfseries Out} () const
+\item 
+const \mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}} \& {\bfseries Material\+Operand} () const
+\item 
+const \mbox{\hyperlink{structcsmp_1_1_index}{Index}} \& {\bfseries Material\+Operand\+Key} () const
+\item 
+std\+::string {\bfseries Material\+Operand\+Name} () const
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}} {\bfseries Material\+Operand\+Type} () const
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Material\+Operand\+Placement} () const
+\item 
+uint32\+\_\+t {\bfseries Material\+Operand\+Data\+Depth} () const
+\item 
+const \mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}} \& {\bfseries Basic\+Operand} () const
+\item 
+const \mbox{\hyperlink{structcsmp_1_1_index}{Index}} \& {\bfseries Basic\+Operand\+Key} () const
+\item 
+std\+::string {\bfseries Basic\+Operand\+Name} () const
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}} {\bfseries Basic\+Operand\+Type} () const
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Basic\+Operand\+Placement} () const
+\item 
+uint32\+\_\+t {\bfseries Basic\+Operand\+Data\+Depth} () const
+\item 
+size\+\_\+t {\bfseries Basic\+Operand\+Offset} () const
+\item 
+const \mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}} \& {\bfseries Test\+Operand} () const
+\item 
+const \mbox{\hyperlink{structcsmp_1_1_index}{Index}} \& {\bfseries Test\+Operand\+Key} () const
+\item 
+std\+::string {\bfseries Test\+Operand\+Name} () const
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}} {\bfseries Test\+Operand\+Type} () const
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Test\+Operand\+Placement} () const
+\item 
+uint32\+\_\+t {\bfseries Test\+Operand\+Data\+Depth} () const
+\item 
+size\+\_\+t {\bfseries Test\+Operand\+Offset} () const
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_math_operator_l_h_s_a071174805944988e79eb90d220825fc6}{Add}} () const
+\begin{DoxyCompactList}\small\item\em Accumulation Process Settings. \end{DoxyCompactList}\item 
+bool {\bfseries Subtract} () const
+\item 
+bool {\bfseries Add\+Later} () const
+\item 
+bool {\bfseries Subtract\+Later} () const
+\item 
+bool {\bfseries Multiply} () const
+\item 
+bool {\bfseries Lumped\+Formulation} () const
+\item 
+uint32\+\_\+t {\bfseries Application\+Cycle} () const
+\item 
+uint32\+\_\+t {\bfseries Application\+Cycles} () const
+\item 
+double {\bfseries Multiply\+By} () const
+\item 
+bool {\bfseries Multiply\+With\+Time\+Increment} () const
+\item 
+bool {\bfseries Divide\+By\+Time\+Increment} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_math_operator_l_h_s_a656e2058fe8befd10867c14daf913fb4}{Add\+Accumulate}} ()
+\begin{DoxyCompactList}\small\item\em Set flags and properties. \end{DoxyCompactList}\item 
+void {\bfseries Subtract\+Accumulate} ()
+\item 
+void {\bfseries Add\+Accumulate\+Later} ()
+\item 
+void {\bfseries Subtract\+Accumulate\+Later} ()
+\item 
+void {\bfseries Multiply\+Accumulate} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_math_operator_l_h_s_a3e0f634988ada2fc5655833a1d0b8ded}{Property\+At\+Integration\+Point}} (const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, uint32\+\_\+t ip, \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&)
+\begin{DoxyCompactList}\small\item\em interpolation of property if isoparametric elements are used \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_math_operator_l_h_s_a0972c226f26ae57084c7d22343560e3e}{Write\+Operands}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em writing data to the \doxylink{classcsmp_1_1_element}{Element}, \doxylink{classcsmp_1_1_face}{Face}, \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} \end{DoxyCompactList}\item 
+virtual void {\bfseries Multiply\+With\+Time\+Factor} (double dt)
+\begin{DoxyCompactList}\small\item\em multiply with time increment if this is desired \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_math_operator_l_h_s_ab63fa0d4cdd2e842a7bd9e72cad20760}{Assign\+To\+Global}} (const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&, \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{Sparse\+Matrix}} \&)
+\begin{DoxyCompactList}\small\item\em assigment to the left hand side global matrix (after everything was calculated ) \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_math_operator_l_h_s}{csmp\+::\+Math\+Operator\+LHS$<$ dim, Element $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string {\bfseries name\+\_\+}
+\begin{DoxyCompactList}\small\item\em name of operator \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}} {\bfseries op}
+\begin{DoxyCompactList}\small\item\em material property operand \end{DoxyCompactList}\item 
+std\+::pair$<$ \mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}}, size\+\_\+t $>$ {\bfseries bop}
+\begin{DoxyCompactList}\small\item\em basic function operand and calculation offset \end{DoxyCompactList}\item 
+std\+::pair$<$ \mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}}, size\+\_\+t $>$ {\bfseries top}
+\begin{DoxyCompactList}\small\item\em test function operand and calculation offset \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ {\bfseries LHS}
+\begin{DoxyCompactList}\small\item\em solution matrix to be accumulated \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ $>$ {\bfseries MTRL}
+\begin{DoxyCompactList}\small\item\em material property matrix(es) needed for PDE operand \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ {\bfseries DERIV}
+\begin{DoxyCompactList}\small\item\em shape function derivative matrix \end{DoxyCompactList}\item 
+std\+::vector$<$ double $>$ {\bfseries IPOL}
+\begin{DoxyCompactList}\small\item\em shape function vector \end{DoxyCompactList}\item 
+double {\bfseries factor\+\_\+}
+\begin{DoxyCompactList}\small\item\em constant scaling factor \end{DoxyCompactList}\item 
+bool {\bfseries add\+\_\+accumulate\+\_\+}
+\item 
+bool {\bfseries subtract\+\_\+accumulate\+\_\+}
+\item 
+bool {\bfseries add\+\_\+accumulate\+\_\+later\+\_\+}
+\item 
+bool {\bfseries subtract\+\_\+accumulate\+\_\+later\+\_\+}
+\item 
+bool {\bfseries multiply\+\_\+accumulate\+\_\+}
+\item 
+bool {\bfseries lump\+\_\+matrices\+\_\+}
+\item 
+uint32\+\_\+t {\bfseries application\+\_\+cycles\+\_\+}
+\item 
+uint32\+\_\+t {\bfseries application\+\_\+cycle\+\_\+}
+\item 
+bool {\bfseries time\+\_\+multiply\+\_\+}
+\item 
+bool {\bfseries time\+\_\+divide\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL = Element$>$\newline
+class csmp\+::\+CVFEM\+\_\+\+Upwind\+\_\+\+Num\+Integral\+\_\+d\+NT\+\_\+op\+\_\+d\+N\+\_\+d\+V$<$ dim, CELL $>$}
+\begin{DoxyAuthor}{Author}
+Philipp Weis, ETH Zuerich 
+\end{DoxyAuthor}
+\hypertarget{compare_floats_8h_contact}{}\doxysubsection{\texorpdfstring{Contact}{Contact}}\label{compare_floats_8h_contact}
+\href{mailto:philipp.weis@erdw.ethz.ch}{\texttt{philipp.\+weis@erdw.\+ethz.\+ch}}
+
+@changes changes Latest Changes\hypertarget{compare_floats_8h_motivation}{}\doxysubsection{\texorpdfstring{Motivation}{Motivation}}\label{compare_floats_8h_motivation}
+Conductance matrix for fluid pressure calculations using pre-\/defined upwind nodes.\hypertarget{classcsmp_1_1_upwind_control_visitor_usage}{}\doxysubsection{\texorpdfstring{Usage}{Usage}}\label{classcsmp_1_1_upwind_control_visitor_usage}
+Used within the CVFEM scheme (Weis et al., Geofluids, 2014).
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{Calculates\ conductance\ matrix\ with\ pre-\/defined\ upwind\ nodes.}
+\DoxyCodeLine{All\ fluid\ properties\ are\ used\ at\ the\ upstream\ nodes.}
+
+\end{DoxyCode}
+\hypertarget{classcsmp_1_1_upwind_control_visitor_dependencies}{}\doxysubsection{\texorpdfstring{Dependencies}{Dependencies}}\label{classcsmp_1_1_upwind_control_visitor_dependencies}
+\doxylink{classcsmp_1_1_c_v_f_e_m___math_operator_l_h_s}{CVFEM\+\_\+\+Math\+Operator\+LHS} \doxylink{classcsmp_1_1_upwind_control_visitor}{Upwind\+Control\+Visitor} \doxylink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{Explicit\+Finite\+Volume\+Transport\+PHX}\hypertarget{classcsmp_1_1_upwind_control_visitor_issues}{}\doxysubsection{\texorpdfstring{Known issues}{Known issues}}\label{classcsmp_1_1_upwind_control_visitor_issues}
+\hypertarget{compare_floats_8h_testing}{}\doxysubsection{\texorpdfstring{Testing}{Testing}}\label{compare_floats_8h_testing}
+testing was done in the period before publication in 2014. 
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__op__d_n__d_v_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__op__d_n__d_v_a39acc8ec812415d2faa8c6564da33ff4}\index{csmp::CVFEM\_Upwind\_NumIntegral\_dNT\_op\_dN\_dV$<$ dim, CELL $>$@{csmp::CVFEM\_Upwind\_NumIntegral\_dNT\_op\_dN\_dV$<$ dim, CELL $>$}!clone@{clone}}
+\index{clone@{clone}!csmp::CVFEM\_Upwind\_NumIntegral\_dNT\_op\_dN\_dV$<$ dim, CELL $>$@{csmp::CVFEM\_Upwind\_NumIntegral\_dNT\_op\_dN\_dV$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{clone()}{clone()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__op__d_n__d_v_a39acc8ec812415d2faa8c6564da33ff4} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL = Element$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__op__d_n__d_v}{CVFEM\+\_\+\+Upwind\+\_\+\+Num\+Integral\+\_\+d\+NT\+\_\+op\+\_\+d\+N\+\_\+dV}}$<$ dim, CELL $>$ \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__op__d_n__d_v}{csmp\+::\+CVFEM\+\_\+\+Upwind\+\_\+\+Num\+Integral\+\_\+d\+NT\+\_\+op\+\_\+d\+N\+\_\+dV}}$<$ dim, CELL $>$\+::clone (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [final]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___math_operator_l_h_s}{csmp\+::\+CVFEM\+\_\+\+Math\+Operator\+LHS$<$ dim, Element $>$}}.
+
+\Hypertarget{classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__op__d_n__d_v_a5ee7a427d29245aae778a3a4e35a5313}\index{csmp::CVFEM\_Upwind\_NumIntegral\_dNT\_op\_dN\_dV$<$ dim, CELL $>$@{csmp::CVFEM\_Upwind\_NumIntegral\_dNT\_op\_dN\_dV$<$ dim, CELL $>$}!ComputeContribution@{ComputeContribution}}
+\index{ComputeContribution@{ComputeContribution}!csmp::CVFEM\_Upwind\_NumIntegral\_dNT\_op\_dN\_dV$<$ dim, CELL $>$@{csmp::CVFEM\_Upwind\_NumIntegral\_dNT\_op\_dN\_dV$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{ComputeContribution()}{ComputeContribution()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__op__d_n__d_v_a5ee7a427d29245aae778a3a4e35a5313} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__op__d_n__d_v}{csmp\+::\+CVFEM\+\_\+\+Upwind\+\_\+\+Num\+Integral\+\_\+d\+NT\+\_\+op\+\_\+d\+N\+\_\+dV}}$<$ dim, CELL $>$\+::\+Compute\+Contribution (\begin{DoxyParamCaption}\item[{const CELL$<$ dim $>$ \&}]{e}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [final]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+integration performed on \doxylink{classcsmp_1_1_element}{Element}, \doxylink{classcsmp_1_1_face}{Face}, \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_math_operator_l_h_s_ad218c9a90bfa910a988f540a8fe802ea}{csmp\+::\+Math\+Operator\+LHS$<$ dim, Element $>$}}.
+
+\Hypertarget{classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__op__d_n__d_v_ab62d515a1291bfde4fb9ec052ad02d1c}\index{csmp::CVFEM\_Upwind\_NumIntegral\_dNT\_op\_dN\_dV$<$ dim, CELL $>$@{csmp::CVFEM\_Upwind\_NumIntegral\_dNT\_op\_dN\_dV$<$ dim, CELL $>$}!GetOperands@{GetOperands}}
+\index{GetOperands@{GetOperands}!csmp::CVFEM\_Upwind\_NumIntegral\_dNT\_op\_dN\_dV$<$ dim, CELL $>$@{csmp::CVFEM\_Upwind\_NumIntegral\_dNT\_op\_dN\_dV$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{GetOperands()}{GetOperands()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__op__d_n__d_v_ab62d515a1291bfde4fb9ec052ad02d1c} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__op__d_n__d_v}{csmp\+::\+CVFEM\+\_\+\+Upwind\+\_\+\+Num\+Integral\+\_\+d\+NT\+\_\+op\+\_\+d\+N\+\_\+dV}}$<$ dim, CELL $>$\+::\+Get\+Operands (\begin{DoxyParamCaption}\item[{const CELL$<$ dim $>$ \&}]{e\+\_\+ref}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [final]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+getting data from the \doxylink{classcsmp_1_1_element}{Element}, \doxylink{classcsmp_1_1_face}{Face}, \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} 
+
+Get\+Operands fills a vector of material property matrices with the required values for later computation. These matrices always have the dimensions spatial-\/dimension\texorpdfstring{$^\wedge$}{\string^}2 and they will hold either scalar, vector or tensor properties, depending on what kind of property the \doxylink{classcsmp_1_1_operand}{Operand} is.
+
+When the property is an element property, it will be put into the first vector entry MTRL\mbox{[}0\mbox{]}. 
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_math_operator_l_h_s_acaaa0a607351dfb0c857249573a26e47}{csmp\+::\+Math\+Operator\+LHS$<$ dim, Element $>$}}.
+
+\Hypertarget{classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__op__d_n__d_v_a33b503cb1a11a3fb946637387bbab928}\index{csmp::CVFEM\_Upwind\_NumIntegral\_dNT\_op\_dN\_dV$<$ dim, CELL $>$@{csmp::CVFEM\_Upwind\_NumIntegral\_dNT\_op\_dN\_dV$<$ dim, CELL $>$}!GetOperandsCVFEM@{GetOperandsCVFEM}}
+\index{GetOperandsCVFEM@{GetOperandsCVFEM}!csmp::CVFEM\_Upwind\_NumIntegral\_dNT\_op\_dN\_dV$<$ dim, CELL $>$@{csmp::CVFEM\_Upwind\_NumIntegral\_dNT\_op\_dN\_dV$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{GetOperandsCVFEM()}{GetOperandsCVFEM()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__op__d_n__d_v_a33b503cb1a11a3fb946637387bbab928} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__op__d_n__d_v}{csmp\+::\+CVFEM\+\_\+\+Upwind\+\_\+\+Num\+Integral\+\_\+d\+NT\+\_\+op\+\_\+d\+N\+\_\+dV}}$<$ dim, CELL $>$\+::\+Get\+Operands\+CVFEM (\begin{DoxyParamCaption}\item[{const CELL$<$ dim $>$ \&}]{}{, }\item[{\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}}}]{upwind\+\_\+var\+\_\+key}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [final]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+virtual function for \doxylink{classcsmp_1_1_c_v_f_e_m___visitor}{CVFEM\+\_\+\+Visitor} 
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___math_operator_l_h_s_af66e2a19d8df3b26d8aa586ecde672bc}{csmp\+::\+CVFEM\+\_\+\+Math\+Operator\+LHS$<$ dim, Element $>$}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/integration/cvfe\+\_\+hydrothermal/CVFEM\+\_\+\+Upwind\+\_\+\+Num\+Integral\+\_\+d\+NT\+\_\+op\+\_\+d\+N\+\_\+d\+V.\+h\item 
+source/modules/integration/cvfe\+\_\+hydrothermal/CVFEM\+\_\+\+Upwind\+\_\+\+Num\+Integral\+\_\+d\+NT\+\_\+op\+\_\+d\+N\+\_\+d\+V.\+cpp\end{DoxyCompactItemize}

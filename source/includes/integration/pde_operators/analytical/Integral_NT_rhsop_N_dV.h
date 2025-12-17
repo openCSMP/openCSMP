@@ -15,8 +15,8 @@ class Integral_NT_rhsop_N_dV : public MathOperatorRHS<dim,CELL> {
                             const char* basic,
                             const char* test );
     
-    virtual void GetOperands( const CELL<dim>& );
-    virtual void ComputeContribution( const CELL<dim>& );
+    void GetOperands( const CELL<dim>& ) override final;
+    void ComputeContribution( const CELL<dim>& ) override final;
   
   private:
     DenseMatrix<DM_MIN>           INN;

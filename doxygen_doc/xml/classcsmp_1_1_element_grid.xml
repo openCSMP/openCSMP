@@ -1,0 +1,308 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_element_grid" kind="class" language="C++" prot="public">
+    <compoundname>csmp::ElementGrid</compoundname>
+    <includes refid="_element_grid_8h" local="no">ElementGrid.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_element_grid_1a9e9045464105f86fe1d457aae375e9c4" prot="private" static="no" mutable="no">
+        <type>std::map&lt; std::pair&lt; int32_t, int32_t &gt;, double &gt;</type>
+        <definition>std::map&lt;std::pair&lt;int32_t,int32_t&gt;,double&gt; csmp::ElementGrid::grid</definition>
+        <argsstring></argsstring>
+        <name>grid</name>
+        <qualifiedname>csmp::ElementGrid::grid</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/ElementGrid.h" line="34" column="15" bodyfile="source/includes/regular_grids/ElementGrid.h" bodystart="34" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_element_grid_1a436afce3532c5b21d3b1bcb831ff9ecb" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::ElementGrid::ElementGrid</definition>
+        <argsstring>()</argsstring>
+        <name>ElementGrid</name>
+        <qualifiedname>csmp::ElementGrid::ElementGrid</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/ElementGrid.h" line="16" column="5" bodyfile="source/includes/regular_grids/ElementGrid.h" bodystart="16" bodyend="16"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_element_grid_1ab8bea1b43f258240d8584dd76c2e6287" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::ElementGrid::ElementGrid</definition>
+        <argsstring>(const ElementGrid &amp;)</argsstring>
+        <name>ElementGrid</name>
+        <qualifiedname>csmp::ElementGrid::ElementGrid</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_element_grid" kindref="compound">ElementGrid</ref> &amp;</type>
+          <defname>g</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/ElementGrid.h" line="17" column="5" bodyfile="source/modules/regular_grids/ElementGrid.cpp" bodystart="48" bodyend="51"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_element_grid_1aecc9abeb679e41a2be8a9f5295469a1d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::ElementGrid::~ElementGrid</definition>
+        <argsstring>()</argsstring>
+        <name>~ElementGrid</name>
+        <qualifiedname>csmp::ElementGrid::~ElementGrid</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/ElementGrid.h" line="18" column="5" bodyfile="source/includes/regular_grids/ElementGrid.h" bodystart="18" bodyend="18"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_element_grid_1ad4b9e018094b3d7697ab5ac026be5852" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_element_grid" kindref="compound">ElementGrid</ref> &amp;</type>
+        <definition>ElementGrid &amp; csmp::ElementGrid::operator=</definition>
+        <argsstring>(const ElementGrid &amp;)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::ElementGrid::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_element_grid" kindref="compound">ElementGrid</ref> &amp;</type>
+          <defname>g</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/ElementGrid.h" line="19" column="17" bodyfile="source/modules/regular_grids/ElementGrid.cpp" bodystart="39" bodyend="43"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_element_grid_1a9ea49f2399276a3ee1810c4b4ebf9cc9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ElementGrid::AddPoint</definition>
+        <argsstring>(int32_t i, int32_t j, double val)</argsstring>
+        <name>AddPoint</name>
+        <qualifiedname>csmp::ElementGrid::AddPoint</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>int32_t</type>
+          <declname>j</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/ElementGrid.h" line="20" column="10" bodyfile="source/modules/regular_grids/ElementGrid.cpp" bodystart="22" bodyend="25"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_element_grid_1a74e0fd8b9b699bfa22f576ff99974a93" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::map&lt; std::pair&lt; int32_t, int32_t &gt;, double &gt;::iterator</type>
+        <definition>EGridIterator csmp::ElementGrid::Begin</definition>
+        <argsstring>()</argsstring>
+        <name>Begin</name>
+        <qualifiedname>csmp::ElementGrid::Begin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/ElementGrid.h" line="21" column="26" bodyfile="source/modules/regular_grids/ElementGrid.cpp" bodystart="8" bodyend="11"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_element_grid_1aecab45f1c5893ebabaffbe159216c05a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::map&lt; std::pair&lt; int32_t, int32_t &gt;, double &gt;::iterator</type>
+        <definition>EGridIterator csmp::ElementGrid::End</definition>
+        <argsstring>()</argsstring>
+        <name>End</name>
+        <qualifiedname>csmp::ElementGrid::End</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/ElementGrid.h" line="22" column="26" bodyfile="source/modules/regular_grids/ElementGrid.cpp" bodystart="14" bodyend="17"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_element_grid_1a35eeb63bf5bd7d2d826e2d14de42d812" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ElementGrid::Value</definition>
+        <argsstring>(int32_t i, int32_t j) const</argsstring>
+        <name>Value</name>
+        <qualifiedname>csmp::ElementGrid::Value</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>int32_t</type>
+          <declname>j</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/ElementGrid.h" line="23" column="12" bodyfile="source/modules/regular_grids/ElementGrid.cpp" bodystart="30" bodyend="34"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_element_grid_1abf3e69ff1cf7c5017f4ee0c1911e4c1e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ElementGrid::GridAverage</definition>
+        <argsstring>() const</argsstring>
+        <name>GridAverage</name>
+        <qualifiedname>csmp::ElementGrid::GridAverage</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/ElementGrid.h" line="24" column="12" bodyfile="source/modules/regular_grids/ElementGrid.cpp" bodystart="54" bodyend="64"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_element_grid_1ab5362e10623749513af36ccaf17523d2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ElementGrid::Sum</definition>
+        <argsstring>() const</argsstring>
+        <name>Sum</name>
+        <qualifiedname>csmp::ElementGrid::Sum</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/ElementGrid.h" line="25" column="12" bodyfile="source/modules/regular_grids/ElementGrid.cpp" bodystart="68" bodyend="75"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_element_grid_1aa7d75c0389a8f5d2a3b3e31f885ff776" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ElementGrid::MinMax</definition>
+        <argsstring>(double &amp;dmin, double &amp;dmax) const</argsstring>
+        <name>MinMax</name>
+        <qualifiedname>csmp::ElementGrid::MinMax</qualifiedname>
+        <param>
+          <type>double &amp;</type>
+          <declname>dmin</declname>
+        </param>
+        <param>
+          <type>double &amp;</type>
+          <declname>dmax</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/ElementGrid.h" line="26" column="14" bodyfile="source/modules/regular_grids/ElementGrid.cpp" bodystart="79" bodyend="90"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_element_grid_1ae9834671bf4f2d03f45c977eb06f95a8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ElementGrid::TransferDataToGrid</definition>
+        <argsstring>(FiniteDifferenceGrid &amp;) const</argsstring>
+        <name>TransferDataToGrid</name>
+        <qualifiedname>csmp::ElementGrid::TransferDataToGrid</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_finite_difference_grid" kindref="compound">FiniteDifferenceGrid</ref> &amp;</type>
+          <defname>g</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/ElementGrid.h" line="27" column="14" bodyfile="source/modules/regular_grids/ElementGrid.cpp" bodystart="92" bodyend="97"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_element_grid_1a26e67324ca6ee1ddd55234aa69d85a93" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::ElementGrid::Empty</definition>
+        <argsstring>() const</argsstring>
+        <name>Empty</name>
+        <qualifiedname>csmp::ElementGrid::Empty</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/ElementGrid.h" line="28" column="14" bodyfile="source/modules/regular_grids/ElementGrid.cpp" bodystart="100" bodyend="103"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_element_grid_1a5f863eb7a1f782f8f23ac1d9fd36afb6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>int32_t</type>
+        <definition>int32_t csmp::ElementGrid::Size</definition>
+        <argsstring>() const</argsstring>
+        <name>Size</name>
+        <qualifiedname>csmp::ElementGrid::Size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/ElementGrid.h" line="29" column="16" bodyfile="source/modules/regular_grids/ElementGrid.cpp" bodystart="106" bodyend="109"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_element_grid_1ac587d84251c8c1c4bea9411a8a256068" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ElementGrid::Out</definition>
+        <argsstring>() const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::ElementGrid::Out</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/ElementGrid.h" line="31" column="14" bodyfile="source/modules/regular_grids/ElementGrid.cpp" bodystart="112" bodyend="123"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>mapping from triangular finite elements to regular grid </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="copyright"><para>(c) SKM (1996) </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::ElementGrid</label>
+        <link refid="classcsmp_1_1_element_grid"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/regular_grids/ElementGrid.h" line="14" column="1" bodyfile="source/includes/regular_grids/ElementGrid.h" bodystart="14" bodyend="35"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_element_grid_1a9ea49f2399276a3ee1810c4b4ebf9cc9" prot="public" virt="non-virtual"><scope>csmp::ElementGrid</scope><name>AddPoint</name></member>
+      <member refid="classcsmp_1_1_element_grid_1a74e0fd8b9b699bfa22f576ff99974a93" prot="public" virt="non-virtual"><scope>csmp::ElementGrid</scope><name>Begin</name></member>
+      <member refid="classcsmp_1_1_element_grid_1a436afce3532c5b21d3b1bcb831ff9ecb" prot="public" virt="non-virtual"><scope>csmp::ElementGrid</scope><name>ElementGrid</name></member>
+      <member refid="classcsmp_1_1_element_grid_1ab8bea1b43f258240d8584dd76c2e6287" prot="public" virt="non-virtual"><scope>csmp::ElementGrid</scope><name>ElementGrid</name></member>
+      <member refid="classcsmp_1_1_element_grid_1a26e67324ca6ee1ddd55234aa69d85a93" prot="public" virt="non-virtual"><scope>csmp::ElementGrid</scope><name>Empty</name></member>
+      <member refid="classcsmp_1_1_element_grid_1aecab45f1c5893ebabaffbe159216c05a" prot="public" virt="non-virtual"><scope>csmp::ElementGrid</scope><name>End</name></member>
+      <member refid="classcsmp_1_1_element_grid_1a9e9045464105f86fe1d457aae375e9c4" prot="private" virt="non-virtual"><scope>csmp::ElementGrid</scope><name>grid</name></member>
+      <member refid="classcsmp_1_1_element_grid_1abf3e69ff1cf7c5017f4ee0c1911e4c1e" prot="public" virt="non-virtual"><scope>csmp::ElementGrid</scope><name>GridAverage</name></member>
+      <member refid="classcsmp_1_1_element_grid_1aa7d75c0389a8f5d2a3b3e31f885ff776" prot="public" virt="non-virtual"><scope>csmp::ElementGrid</scope><name>MinMax</name></member>
+      <member refid="classcsmp_1_1_element_grid_1ad4b9e018094b3d7697ab5ac026be5852" prot="public" virt="non-virtual"><scope>csmp::ElementGrid</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_element_grid_1ac587d84251c8c1c4bea9411a8a256068" prot="public" virt="non-virtual"><scope>csmp::ElementGrid</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_element_grid_1a5f863eb7a1f782f8f23ac1d9fd36afb6" prot="public" virt="non-virtual"><scope>csmp::ElementGrid</scope><name>Size</name></member>
+      <member refid="classcsmp_1_1_element_grid_1ab5362e10623749513af36ccaf17523d2" prot="public" virt="non-virtual"><scope>csmp::ElementGrid</scope><name>Sum</name></member>
+      <member refid="classcsmp_1_1_element_grid_1ae9834671bf4f2d03f45c977eb06f95a8" prot="public" virt="non-virtual"><scope>csmp::ElementGrid</scope><name>TransferDataToGrid</name></member>
+      <member refid="classcsmp_1_1_element_grid_1a35eeb63bf5bd7d2d826e2d14de42d812" prot="public" virt="non-virtual"><scope>csmp::ElementGrid</scope><name>Value</name></member>
+      <member refid="classcsmp_1_1_element_grid_1aecc9abeb679e41a2be8a9f5295469a1d" prot="public" virt="non-virtual"><scope>csmp::ElementGrid</scope><name>~ElementGrid</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

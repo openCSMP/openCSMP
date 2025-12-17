@@ -1,7 +1,5 @@
-
-
-#ifndef VDATA_TEST_H
-#define VDATA_TEST_H
+#ifndef CSMP_VDATA_TEST_H
+#define CSMP_VDATA_TEST_H
 
 #include "Test.h"
 
@@ -10,11 +8,16 @@ namespace csmp {
 template<uint32_t> class VSet;
 
 // MISSING
-// TODO: test all the functionality that recreates neighbors etc.
 // TODO: test read / write of VSet/VData with faces and interfaces
 // TODO: test extraction of manifolds
 
-/// PL Nov 2010 & SKM 23/12022
+/**
+      Tests file I/O and VSet repair / rectification methods, especially the creation of neighbor connectivity that is broken in ANSYS.
+
+    @note Test uses utilities/vsetMakers.h to check the recreation of inter-element connectivity
+        
+    @author PL Nov 2010 & SKM 23/12022
+*/
 class VData_Test : public Test {
   public:
     virtual void run();
@@ -29,16 +32,23 @@ class VData_Test : public Test {
     /// for vsetMaker vset 'MeshPatchWithLineElements' tests whether the handcoded neighbor connectivity is reproduced
     void Test_EstablishElementConnectivity2D();
 
-    /* checks whether a neighbor-based traversal of line elements is possible after calling this method
+    /**
+       checks whether a neighbor-based traversal of line elements is possible after calling this method
        inside of EstablishElementConnectivity2D()
     */
     void Test_CreateConsistentLineElementOrientations2D();
+    
+    void Test_RecreateConnectivityOfTriangularMesh();
+
+    void Test_RecreateConnectivityOfQuadrilateralMesh();
     
     /// reestablishes neighbor connectivity for 3D model Tetra (6 tets created from one hex)
     void Test_RecreateConnectivityOfTetrahedralMesh();
 
     /// reestablishes neighbor connectivity for 3D model Rubik cube
     void Test_RecreateConnectivityOfHexahedralMesh();
+    
+    void Test_RecreateConnectivityOfPrismMesh();
 
     void Test_InitialiseNodeTopologyIdentifiers();
     

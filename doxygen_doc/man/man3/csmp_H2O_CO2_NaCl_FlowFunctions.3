@@ -1,0 +1,501 @@
+.TH "csmp::H2O_CO2_NaCl_FlowFunctions< dim, USER >" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::H2O_CO2_NaCl_FlowFunctions< dim, USER > \- \fBH2O_CO2_NaCl_FlowFunctions\fP: Saturation functions and fluid properties combined into flow functions for the H2O + CO2+ NaCl system\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <H2O_CO2_NaCl_FlowFunctions\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "bool \fBInterpolateAqueousPhase\fP (\fBElement\fP< dim > *const, double &sw, double &rhow, double &muw) const"
+.br
+.RI "returns aqueous phase properties at element barycentre, if there is a value at at least a single node, else returns false "
+.ti -1c
+.RI "bool \fBInterpolateCarbonicPhase\fP (\fBElement\fP< dim > *const, double &snw, double &rhon, double &mun) const"
+.br
+.RI "returns carbonic phase properties at element barycentre, if there is a value at at least a single node, else returns false "
+.ti -1c
+.RI "double \fBSw\fP (\fBElement\fP< dim > *const e) const"
+.br
+.RI "water saturation interpolated to element barycentre; use Read( key_sH2O ) to get nodal value "
+.ti -1c
+.RI "double \fBSnw\fP (\fBElement\fP< dim > *const e) const"
+.br
+.RI "non-wetting phase saturation interpolated to element barycentre; use Read( key_sCO2 ) to get nodal value "
+.ti -1c
+.RI "double \fBMobility\fP (\fBElement\fP< dim > *const, uint32_t phase) const"
+.br
+.RI "density * lambda = kri(sw)/mu_i of the phase i: 0 for water, 1 for the non-wetting phase "
+.ti -1c
+.RI "double \fBMobility_at\fP (\fBElement\fP< dim > *const, uint32_t phase, double sw) const"
+.br
+.RI "density * lambda_i: i=0 for water, 1 for the non-wetting phase (using prescribed sw) "
+.ti -1c
+.RI "double \fBMobilityDerivative\fP (\fBElement\fP< dim > *const, uint32_t phase) const"
+.br
+.RI "d lambda_i / dsw "
+.ti -1c
+.RI "double \fBMobilityDerivative_at\fP (\fBElement\fP< dim > *const, uint32_t phase, double sw) const"
+.br
+.RI "d lambda_i / dsw "
+.ti -1c
+.RI "double \fBTotalMobility\fP (\fBElement\fP< dim > *const) const"
+.br
+.RI "lambda_t: sum of phase-mobility * density products "
+.ti -1c
+.RI "double \fBTotalMobility_at\fP (\fBElement\fP< dim > *const, double sw) const"
+.br
+.RI "lambda_t: sum of phase-mobility * density products "
+.ti -1c
+.RI "double \fBMobilityProduct\fP (\fBElement\fP< dim > *const) const"
+.br
+.RI "lambda overbar: mobility product l_overbar = (li * rhow * lj * rhonw) / (li*rhow + lj*rhonw), also known as G "
+.ti -1c
+.RI "double \fBMobilityProduct_at\fP (\fBElement\fP< dim > *const, double sw) const"
+.br
+.RI "lambda overbar: mobility product l_overbar = (li * rhow * lj * rhonw) / (li*rhow + lj*rhonw), also known as G "
+.ti -1c
+.RI "double \fBMobilityProductDerivative\fP (\fBElement\fP< dim > *const, bool evaluate_numerically=false) const"
+.br
+.RI "d lambda overbar / dsw also known as dGds "
+.ti -1c
+.RI "double \fBMobilityProductDerivative_at\fP (\fBElement\fP< dim > *const, double sw) const"
+.br
+.ti -1c
+.RI "double \fBf\fP (\fBElement\fP< dim > *const, uint32_t phase) const"
+.br
+.RI "fractional mass flow; 0=water, 1=non-wetting phase "
+.ti -1c
+.RI "double \fBf_at\fP (\fBElement\fP< dim > *const, uint32_t phase, double sw) const"
+.br
+.RI "fractional mass flow; 0=water, 1=non-wetting phase (using prescribed sw) "
+.ti -1c
+.RI "double \fBPermeability\fP (\fBElement\fP< dim > *const) const"
+.br
+.RI "permeability "
+.ti -1c
+.RI "double \fBdfds\fP (\fBElement\fP< dim > *const, uint32_t phase) const"
+.br
+.RI "derivative of fractional flow w\&.r\&.t water saturation (used in advection multiplier); note that fw+fn=1, dfw_dsw=dfn_dsn "
+.ti -1c
+.RI "double \fBdfds_at\fP (\fBElement\fP< dim > *const, uint32_t phase, double sw) const"
+.br
+.ti -1c
+.RI "double \fBMaxFractionalFlowDerivative\fP (\fBElement\fP< dim > *const, uint32_t phase) const"
+.br
+.RI "maximum value of fractional flow / saturation derivative "
+.ti -1c
+.RI "double \fBAdvectionMultiplier\fP (\fBElement\fP< dim > *const) const"
+.br
+.RI "multiplier for advection viscosity coefficient in the case of non-linear advection "
+.ti -1c
+.RI "double \fBShockSpeed\fP (\fBElement\fP< dim > *const) const"
+.br
+.RI "outputs the shock wave celerity for mass flow "
+.ti -1c
+.RI "double \fBShockHeight\fP (\fBElement\fP< dim > *const) const"
+.br
+.RI "outputs the characteristic water saturation at the shock (tied to rock properties in viscous dominated flow) "
+.ti -1c
+.RI "void \fBShockSpeedAndHeight\fP (\fBElement\fP< dim > *const, double &speed, double &height) const"
+.br
+.RI "calculated shock height and mass flow rate (all-in-one function) "
+.ti -1c
+.RI "double \fBShockFrontVelocity\fP (\fBElement\fP< dim > *const) const"
+.br
+.RI "speed (m/s) of the shock front in current cell "
+.ti -1c
+.RI "void \fBGravityTerm\fP (\fBElement\fP< dim > *const, \fBVectorVariable\fP< dim > &dip_vec) const"
+.br
+.RI "k * kri(sw)/mi * rho_i^2 projected onto the dip vector of the current element; writes result to dip vector "
+.ti -1c
+.RI "void \fBGravityMultiplier_phase\fP (\fBElement\fP< dim > *const, \fBVectorVariable\fP< dim > &dip_vec, uint32_t phase) const"
+.br
+.ti -1c
+.RI "void \fBGravityMultiplier_G\fP (\fBElement\fP< dim > *const, \fBVectorVariable\fP< dim > &dip_vec) const"
+.br
+.RI "gravity multiplier, gmult = k * kri(sw)/mi * rho_i^2 * G (=mobility product); writes result on dip vector "
+.ti -1c
+.RI "void \fBGravityMultiplier_dGds\fP (\fBElement\fP< dim > *const, \fBVectorVariable\fP< dim > &dip_vec) const"
+.br
+.RI "gravity multiplier, gmult = k * kri(sw)/mi * rho_i^2 * saturation derivative of the mobility product dG/ds, writes result on dip vectpor "
+.ti -1c
+.RI "double \fBDiffusionMultiplier\fP (\fBElement\fP< dim > *const, uint32_t phase) const"
+.br
+.RI "mass diffusion coefficient for CO2 in water saturated porous medium; use phase=1 "
+.ti -1c
+.RI "double \fBCapillaryDiffusionMultiplier\fP (\fBElement\fP< dim > *const) const"
+.br
+.RI "mass diffusion coefficient for the non-linear diffusion of saturation due to the saturation dependent dpc/ds "
+.ti -1c
+.RI "double \fBCapillaryDiffusionMultiplier_at\fP (\fBElement\fP< dim > *const, double sw) const"
+.br
+.RI "k * dpds(sw) * mobility_product(sw), "
+.ti -1c
+.RI "double \fBDpcds_at\fP (\fBElement\fP< dim > *const, double sw) const"
+.br
+.ti -1c
+.RI "double \fBMobility\fP (\fBElement\fP< dim > *const, uint32_t phase, uint32_t node) const"
+.br
+.RI "density * lambda = kri(sw)/mu_i of the phase i: 0 for water, 1 for the non-wetting phase "
+.ti -1c
+.RI "double \fBMobilityDerivative\fP (\fBElement\fP< dim > *const, uint32_t phase, uint32_t node) const"
+.br
+.RI "d lambda_i / dsw "
+.ti -1c
+.RI "double \fBTotalMobility\fP (\fBElement\fP< dim > *const, uint32_t node) const"
+.br
+.RI "lambda_t: sum of phase-mobility * density products "
+.ti -1c
+.RI "double \fBMobilityProduct\fP (\fBElement\fP< dim > *const, uint32_t node) const"
+.br
+.RI "lambda overbar: mobility product l_overbar = (li * rhow * lj * rhonw) / (li*rhow + lj*rhonw), also known as G "
+.ti -1c
+.RI "double \fBMobilityProductDerivative\fP (\fBElement\fP< dim > *const, uint32_t node, bool evaluate_numerically=false) const"
+.br
+.RI "d lambda overbar / dsw also known as dGds "
+.ti -1c
+.RI "double \fBf\fP (\fBElement\fP< dim > *const, uint32_t phase, uint32_t node) const"
+.br
+.RI "fractional mass flow; 0=water, 1=non-wetting phase "
+.ti -1c
+.RI "double \fBdfds\fP (\fBElement\fP< dim > *const, uint32_t phase, uint32_t node) const"
+.br
+.RI "derivative of fractional flow w\&.r\&.t water saturation (used in advection multiplier); note that fw+fn=1, dfw_dsw=dfn_dsn "
+.ti -1c
+.RI "double \fBAdvectionMultiplier\fP (\fBElement\fP< dim > *const, uint32_t node) const"
+.br
+.RI "multiplier for advection viscosity coefficient in the case of non-linear advection "
+.ti -1c
+.RI "void \fBGravityTerm\fP (\fBElement\fP< dim > *const, uint32_t node, \fBVectorVariable\fP< dim > &dip_vec) const"
+.br
+.RI "k * kri(sw)/mi * rho_i^2 projected onto the dip vector of the current element; writes result to dip vector "
+.ti -1c
+.RI "double \fBCapillaryDiffusionMultiplier\fP (\fBElement\fP< dim > *const, uint32_t node) const"
+.br
+.RI "mass diffusion coefficient for CO2 in water saturated porous medium; use phase=1 and get from \fBElement\fP "
+.ti -1c
+.RI "double \fBdfds_Numerical\fP (\fBElement\fP< dim > *const, uint32_t phase, double delta_s=0\&.001) const"
+.br
+.ti -1c
+.RI "double \fBdfds_at_Numerical\fP (\fBElement\fP< dim > *const, double sw, double delta_s=0\&.001) const"
+.br
+.ti -1c
+.RI "double \fBdGds_Numerical\fP (\fBElement\fP< dim > *const, double delta_s=0\&.000001) const"
+.br
+.ti -1c
+.RI "double \fBdlwds_Numerical\fP (\fBElement\fP< dim > *const, double delta_s=0\&.001) const"
+.br
+.RI "derivative of wetting phase mobility "
+.ti -1c
+.RI "double \fBdlnds_Numerical\fP (\fBElement\fP< dim > *const, double delta_s=0\&.001) const"
+.br
+.RI "derivative of non-wetting phase mobility "
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim, template< uint32_t > class USER>
+.br
+class csmp::H2O_CO2_NaCl_FlowFunctions< dim, USER >"\fBH2O_CO2_NaCl_FlowFunctions\fP: Saturation functions and fluid properties combined into flow functions for the H2O + CO2+ NaCl system\&. 
+
+Use in conjunction with the \fBPhaseStateFinder_H2O_CO2_NaCl\fP for compositional simulation in a mass-based transport framework\&. Plugs into a suitable FlowFunctionsModule within the Colleoli class framework for a multiphase-multicomponent transport scheme\&.
+
+.PP
+Generate all relevant input values for transport scheme from SaturationFunctions and \fBFluid\fP modules, using the constitutive relationships specified therein\&. Gets the fluid properties by interpolation from the \fBElement\fP nodes to its barycentre\&.
+
+.PP
+Expects that the water saturation, the fluid densities and viscosities to be placed on the element nodes, while all material (k, phi, bcp etc\&.), and rocktype related parameters are placed on the element\&.
+
+.PP
+\fBNote\fP
+.RS 4
+all parameters are weighted by the element thickness which is 1 for iso-dimensional elements\&.
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Stephan Matthai 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+7/1/2019
+.RE
+.PP
+@discussion Phase state cannot be interpolated between nodes ! If we read the system state from the element, in the case of an element-based phase state calculation, it may be entirely different from that computed at the nodes and therefore, we may try to fetch densities and viscosities which do not exist ?! 
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::H2O_CO2_NaCl_FlowFunctions\fP< dim, USER >::AdvectionMultiplier (\fBElement\fP< dim > * const e) const"
+
+.PP
+multiplier for advection viscosity coefficient in the case of non-linear advection fractional flow derivative for wetting phase = 0\&.
+
+.PP
+If not overloaded, this returns the derivative of the fractional flow function at the current saturation of the wetting phase (see Helmig, 1997, p\&. 108, eqn\&. 3\&.74, term 2 (first part)\&. 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::H2O_CO2_NaCl_FlowFunctions\fP< dim, USER >::CapillaryDiffusionMultiplier (\fBElement\fP< dim > * const e) const"
+
+.PP
+mass diffusion coefficient for the non-linear diffusion of saturation due to the saturation dependent dpc/ds When capillary spreading is simulated using the FE method, it can be modelled as a nonlinear diffusion process\&. Nonlinear because the driving gradient varies with saturation\&.
+
+.PP
+qm_capillary = rhon * k * lambda_overbar * dpc/dsw * grad_sw ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ diffusion multiplier
+
+.PP
+See Helmig, 1997, p\&. 108, eqn\&. 3\&.74, term 1\&. This takes into account the permeability in direction of flow x lambda_overbar x pc-gradient\&.
+
+.PP
+\fBNote\fP
+.RS 4
+lambda overbar contains the fluid densities and viscosities\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::H2O_CO2_NaCl_FlowFunctions\fP< dim, USER >::CapillaryDiffusionMultiplier (\fBElement\fP< dim > * const eptr, uint32_t n) const"
+
+.PP
+mass diffusion coefficient for CO2 in water saturated porous medium; use phase=1 and get from \fBElement\fP mass-based coefficient for non-linear diffusion of saturation due to saturation-dependent dpc/ds, 
+.PP
+\fBAttention\fP
+.RS 4
+value can be zero
+.RE
+.PP
+Saturation dependent mass diffusion coefficient for capillary spreading as a non-linear diffusion process\&. The nonlinearity stems from the saturation dependent dpc/ds\&. 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::H2O_CO2_NaCl_FlowFunctions\fP< dim, USER >::CapillaryDiffusionMultiplier_at (\fBElement\fP< dim > * const e, double sw) const"
+
+.PP
+k * dpds(sw) * mobility_product(sw), 
+.PP
+\fBAttention\fP
+.RS 4
+value can be zero\&.
+.RE
+.PP
+Same as \fBCapillaryDiffusionMultiplier()\fP, but for a user-specified aqueous phase saturation\&. 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::H2O_CO2_NaCl_FlowFunctions\fP< dim, USER >::dfds (\fBElement\fP< dim > * const e, uint32_t phase) const"
+
+.PP
+derivative of fractional flow w\&.r\&.t water saturation (used in advection multiplier); note that fw+fn=1, dfw_dsw=dfn_dsn Derivative of fractional flow function with regard to the water saturation\&. Positivie if phase=aqueous, negative otherwise\&.
+
+.PP
+\fBTodo\fP
+.RS 4
+TODO: test whether this produces plausible results 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::H2O_CO2_NaCl_FlowFunctions\fP< dim, USER >::dfds (\fBElement\fP< dim > * const e, uint32_t phase, uint32_t n) const"
+
+.PP
+derivative of fractional flow w\&.r\&.t water saturation (used in advection multiplier); note that fw+fn=1, dfw_dsw=dfn_dsn Derivative of fractional flow function w\&.r\&.t water saturation; note that fw+fn=1, dfw_dsw = -dfn_dsn\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+In the absence of gravitational forces dfds is positive for the derivative w\&.r\&.t\&. the fractional flow of the aqueous phase and negative with regard to the fractional flow of the carbonic phase\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::H2O_CO2_NaCl_FlowFunctions\fP< dim, USER >::dfds_at (\fBElement\fP< dim > * const e, uint32_t phase, double sw) const"
+Derivative of fractional flow function at specific sw, for wetting phase 0
+
+.PP
+\fBTodo\fP
+.RS 4
+check whether code for end-member cases has to be reinstated\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::H2O_CO2_NaCl_FlowFunctions\fP< dim, USER >::dfds_at_Numerical (\fBElement\fP< dim > * const e, double sw, double h = \fR0\&.001\fP) const"
+Derivative of fractional flow function at specific sw, for a particular phase (0 = wetting, 1 = non-wetting)
+
+.PP
+\fBTodo\fP
+.RS 4
+check whether code for end-member cases has to be reinstated\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::H2O_CO2_NaCl_FlowFunctions\fP< dim, USER >::DiffusionMultiplier (\fBElement\fP< dim > * const e, uint32_t phase) const"
+
+.PP
+mass diffusion coefficient for CO2 in water saturated porous medium; use phase=1 Returns the diffusivity of CO2 in the porous medium saturated with water, using the diffusivity calculated by the PhaseStateFinder as an input\&. The calculation of the diffusivity of water in CO2 (phase == 0) is not implemented yet\&.
+
+.PP
+The scaling of the diffusivity is done with the porosity, not the permeability\&.
+
+.PP
+\fBNote\fP
+.RS 4
+For phase=1 this coefficient is defined only for aq, aq_carb and aq_carb_salt phase states, else zero is returned\&.
+.RE
+.PP
+@discussion Diffusion caclulations make sense only for a higher order accurate transport scheme because the first-order scheme already is more diffusive than is physically realistic\&. 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::H2O_CO2_NaCl_FlowFunctions\fP< dim, USER >::f (\fBElement\fP< dim > * const e, uint32_t phase) const"
+
+.PP
+fractional mass flow; 0=water, 1=non-wetting phase Computes the fractional mass flow of the wetting (phase=0) or non-wetting (phase=1) phases using the relative k's\&. and viscosities\&. Note that Initialize() must be called first\&. 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::H2O_CO2_NaCl_FlowFunctions\fP< dim, USER >::f_at (\fBElement\fP< dim > * const e, uint32_t phase, double sw) const"
+
+.PP
+fractional mass flow; 0=water, 1=non-wetting phase (using prescribed sw) Computes the fractional flow of the wetting (phase=0) and non-wetting (phase=1) phases using the prescribed water saturation value, in stead of the intepolated value\&. 
+.SS "template<uint32_t dim, template< uint32_t > class USER> void \fBcsmp::H2O_CO2_NaCl_FlowFunctions\fP< dim, USER >::GravityMultiplier_dGds (\fBElement\fP< dim > * const e, \fBVectorVariable\fP< dim > & dip_vc) const"
+
+.PP
+gravity multiplier, gmult = k * kri(sw)/mi * rho_i^2 * saturation derivative of the mobility product dG/ds, writes result on dip vectpor Computes multiplier for advection gravity coefficient\&. The divergence lamda_ div k g (rhw-rhn) must be dealt with separately, see Helmig, 1997, p\&. 108, eqn\&. 3\&.74, term 2 (second part)\&. 
+.SS "template<uint32_t dim, template< uint32_t > class USER> void \fBcsmp::H2O_CO2_NaCl_FlowFunctions\fP< dim, USER >::GravityMultiplier_G (\fBElement\fP< dim > * const e, \fBVectorVariable\fP< dim > & dip_vc) const"
+
+.PP
+gravity multiplier, gmult = k * kri(sw)/mi * rho_i^2 * G (=mobility product); writes result on dip vector Gravity term multiplied with lambda_overbar for the mass-based transport scheme\&. 
+.SS "template<uint32_t dim, template< uint32_t > class USER> void \fBcsmp::H2O_CO2_NaCl_FlowFunctions\fP< dim, USER >::GravityMultiplier_phase (\fBElement\fP< dim > * const e, \fBVectorVariable\fP< dim > & dip_vc, uint32_t phase) const"
+Mass-based formulation for transport equation: k * (kri/mui * rho_i^2) g grad_Y
+
+.PP
+\fBNote\fP
+.RS 4
+Since the gravity term is a vector variable in the case of lower dimensional elements it is written back to the model\&.
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIdip_vc\fP the resulting gravity term is returned into the supplied vector\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class USER> void \fBcsmp::H2O_CO2_NaCl_FlowFunctions\fP< dim, USER >::GravityTerm (\fBElement\fP< dim > * const eptr, uint32_t n, \fBVectorVariable\fP< dim > & dip_vc) const"
+
+.PP
+k * kri(sw)/mi * rho_i^2 projected onto the dip vector of the current element; writes result to dip vector Computes kV * kri(sw)/mi * rho_i^2 projected onto the dip vector of the current element; writes result to dip vector The value of the vertical permeability is used only if k is a tensor property\&. 
+.SS "template<uint32_t dim, template< uint32_t > class USER> void \fBcsmp::H2O_CO2_NaCl_FlowFunctions\fP< dim, USER >::GravityTerm (\fBElement\fP< dim > * const eptr, \fBVectorVariable\fP< dim > & dip_vc) const"
+
+.PP
+k * kri(sw)/mi * rho_i^2 projected onto the dip vector of the current element; writes result to dip vector Mass-based formulation for pressure equation: k * (kri/mui * rho_i^2 + kri/muj * rhoj^2) g grad_Y
+
+.PP
+\fBNote\fP
+.RS 4
+Since the gravity term is a vector variable in the case of lower dimensional elements it is written back to the model\&.
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIdip_vc\fP the resulting gravity term is returned into the supplied vector\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class USER> bool \fBcsmp::H2O_CO2_NaCl_FlowFunctions\fP< dim, USER >::InterpolateAqueousPhase (\fBElement\fP< dim > * const e, double & sw, double & rhow, double & muw) const"
+
+.PP
+returns aqueous phase properties at element barycentre, if there is a value at at least a single node, else returns false Interpolates the properties of the aqueous phase, if there is any, else returns false\&.
+
+.PP
+\fBReturns\fP
+.RS 4
+true if method was able to interpolate a density and false if it was not\&.
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+TODO: check whether this could be improved by reading the element phase state\&.
+.RE
+.PP
+
+.PP
+\fBNote\fP
+.RS 4
+compared to NEITHER as a state where no phase is continous across the nodes, looking at the saturations offers more information ? 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class USER> bool \fBcsmp::H2O_CO2_NaCl_FlowFunctions\fP< dim, USER >::InterpolateCarbonicPhase (\fBElement\fP< dim > * const e, double & snw, double & rhon, double & mun) const"
+
+.PP
+returns carbonic phase properties at element barycentre, if there is a value at at least a single node, else returns false 
+.PP
+\fBReturns\fP
+.RS 4
+true if method was able to interpolate a density and false if it was not\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::H2O_CO2_NaCl_FlowFunctions\fP< dim, USER >::MaxFractionalFlowDerivative (\fBElement\fP< dim > * const e, uint32_t phase) const"
+
+.PP
+maximum value of fractional flow / saturation derivative @attension: Generally "MaxFractionalqFlowDerivative" is not speed\&. It is after Buckley-Leverett problem 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::H2O_CO2_NaCl_FlowFunctions\fP< dim, USER >::Mobility (\fBElement\fP< dim > * const e, uint32_t phase) const"
+
+.PP
+density * lambda = kri(sw)/mu_i of the phase i: 0 for water, 1 for the non-wetting phase Mobility of phase i, lambda_i = rho_i * kri(sw) / mu_i\&. 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::H2O_CO2_NaCl_FlowFunctions\fP< dim, USER >::Mobility_at (\fBElement\fP< dim > * const e, uint32_t phase, double sw) const"
+
+.PP
+density * lambda_i: i=0 for water, 1 for the non-wetting phase (using prescribed sw) Mobility of phase i, lambda_i = rho_i * kri(sw) / mu_i\&.
+
+.PP
+Using prescribed sw value, instead of value intepolated to element barycentre\&. 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::H2O_CO2_NaCl_FlowFunctions\fP< dim, USER >::MobilityDerivative (\fBElement\fP< dim > * const e, uint32_t phase) const"
+
+.PP
+d lambda_i / dsw Mobility saturation derivative for phase i\&. 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::H2O_CO2_NaCl_FlowFunctions\fP< dim, USER >::MobilityDerivative (\fBElement\fP< dim > * const eptr, uint32_t phase, uint32_t n) const"
+
+.PP
+d lambda_i / dsw d lambda_i / dsw
+
+.PP
+@discussion as currently implemented, the mobility derivative is zero outside of the range where both phases are mobile\&. Is this what we want? 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::H2O_CO2_NaCl_FlowFunctions\fP< dim, USER >::MobilityDerivative_at (\fBElement\fP< dim > * const e, uint32_t phase, double sw) const"
+
+.PP
+d lambda_i / dsw Mobility saturation derivative for aqueous (i=0) or carbonic (i=1) phase\&. 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::H2O_CO2_NaCl_FlowFunctions\fP< dim, USER >::MobilityProduct (\fBElement\fP< dim > * const e) const"
+
+.PP
+lambda overbar: mobility product l_overbar = (li * rhow * lj * rhonw) / (li*rhow + lj*rhonw), also known as G G - parameter known as mobility product, lambda overbar\&.
+
+.PP
+Computes G = lamdba_w * lambda_n / (lambda_w + lambda_n), cf\&., van Duijn and de Neef (1998)\&. Note that Initialize() must be called first\&. 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::H2O_CO2_NaCl_FlowFunctions\fP< dim, USER >::MobilityProduct_at (\fBElement\fP< dim > * const e, double sw) const"
+
+.PP
+lambda overbar: mobility product l_overbar = (li * rhow * lj * rhonw) / (li*rhow + lj*rhonw), also known as G Mobility product evaluated at the users supplied water saturation\&. 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::H2O_CO2_NaCl_FlowFunctions\fP< dim, USER >::MobilityProductDerivative (\fBElement\fP< dim > * const e, bool evaluate_numerically = \fRfalse\fP) const"
+
+.PP
+d lambda overbar / dsw also known as dGds Saturation derivative of mobility product\&.
+
+.PP
+rhow*rhon*((diff(lw(sw), sw))*ln(sw)^2*rhon*sw+lw(sw)^2*rhow)/((rhow*lw(sw)+rhon*ln(sw))^2*sw); 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::H2O_CO2_NaCl_FlowFunctions\fP< dim, USER >::MobilityProductDerivative_at (\fBElement\fP< dim > * const e, double sw) const"
+Saturation derivative of mobility product\&. 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::H2O_CO2_NaCl_FlowFunctions\fP< dim, USER >::ShockFrontVelocity (\fBElement\fP< dim > * const e) const"
+
+.PP
+speed (m/s) of the shock front in current cell The Shock front wave calculated after estimation of tangent Saturation point\&. 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::H2O_CO2_NaCl_FlowFunctions\fP< dim, USER >::ShockSpeed (\fBElement\fP< dim > * const e) const"
+
+.PP
+outputs the shock wave celerity for mass flow shock speed base on Buckley Leverett theory 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::H2O_CO2_NaCl_FlowFunctions\fP< dim, USER >::Sw (\fBElement\fP< dim > *const e) const"
+
+.PP
+water saturation interpolated to element barycentre; use Read( key_sH2O ) to get nodal value Saturation is always expected to have a value between 0\&.\&.1\&. 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::H2O_CO2_NaCl_FlowFunctions\fP< dim, USER >::TotalMobility (\fBElement\fP< dim > * const e) const"
+
+.PP
+lambda_t: sum of phase-mobility * density products Sum of mass mobilities (not multiplied with permeability)\&. 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::H2O_CO2_NaCl_FlowFunctions\fP< dim, USER >::TotalMobility_at (\fBElement\fP< dim > * const e, double sw) const"
+
+.PP
+lambda_t: sum of phase-mobility * density products Sum of mobilities (not multiplied with permeability)\&. Using prescribed sw value, instead of intepolated value\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

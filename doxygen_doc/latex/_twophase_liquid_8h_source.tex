@@ -1,0 +1,135 @@
+\doxysection{Twophase\+Liquid.\+h}
+\hypertarget{_twophase_liquid_8h_source}{}\label{_twophase_liquid_8h_source}\index{source/includes/eos/TwophaseLiquid.h@{source/includes/eos/TwophaseLiquid.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{TWOPHASELIQUID\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{TWOPHASELIQUID\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_triple_point_na_cl_8h}{"{}TriplePointNaCl.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_na_cl_boiling_curve_8h}{"{}NaClBoilingCurve.h"{}}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_threephase_h_l_v_8h}{"{}ThreephaseHLV.h"{}}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_critical_curve_8h}{"{}CriticalCurve.h"{}}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_critical_point_h2_o_8h}{"{}CriticalPointH2O.h"{}}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_halite_liquidus_8h}{"{}HaliteLiquidus.h"{}}}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{comment}{/*\ Changelog}}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ \ \ October\ 16,\ 2014,\ Thomas\ Driesner}}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ \ \ -\/\ re-\/ported\ to\ CSMP++}}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ \ \ -\/\ cleaned\ up\ interface,\ eliminating\ functionaility\ that\ is\ currently\ not\ being\ used\ anymore}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ \ \ -\/\ changed\ units\ in\ interface\ to\ [Pa]\ for\ pressure\ and\ [mass\ fraction\ NaCl]\ for\ composition}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ \ \ -\/\ added\ basic\ doxygen\ documentation}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ \ \ -\/\ changed\ coding\ style\ towrads\ CSMP++\ style\ guide\ recommendations}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ \ \ -\/\ performed\ manual\ testing\ against\ CSP\ version\ -\/\ OK}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00021\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}}
+\DoxyCodeLine{00022\ \{}
+\DoxyCodeLine{00023\ \ \ \textcolor{comment}{///\ Composition\ of\ liquid\ phase\ on\ twophase\ vapor+liquid\ envelope}}
+\DoxyCodeLine{00024\ \ \ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_twophase_liquid}{TwophaseLiquid}}}
+\DoxyCodeLine{00025\ \ \ \{}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00028\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_twophase_liquid_acbc78de0d42d3c379186195beb7672a2}{TwophaseLiquid}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ externaltemperature,\ \textcolor{comment}{//\ [C]}}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ externalpressure,\ \ \ \ \textcolor{comment}{//\ [Pa]}}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ ph2o);\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ [Pa]}}
+\DoxyCodeLine{00031\ \ \ \ \ \string~\mbox{\hyperlink{classcsmp_1_1_twophase_liquid_a9715a14bb7f7747abb763f48d7f42210}{TwophaseLiquid}}();}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_twophase_liquid_a0ba5d2a696f39d6bf88760c9b90c5f1c}{MassFractionNaCl}}();\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ [mass\ fraction\ NaCl]}}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ TwophaseLiquid();}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ \ \ \ \ \ \ \ temperature\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ internal\ reference\ to\ temperature\ [C]\ in\ flow\ code}}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ \ \ \ \ \ \ \ pressure\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ internal\ reference\ to\ fluid\ pressure\ [P]\ in\ flow\ code}}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ \ \ \ \ \ \ \ ph2o\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ internal\ reference\ to\ water\ boiling\ pressure\ (from\ Water\ object,\ which\ must\ have\ been\ constructed\ with\ the\ same\ temperature\ and\ fluid\ pressure\ variables\ as\ constructor\ arguments)}}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ h1\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ h1\ of\ equation\ 11\ of\ Driesner\ \&\ Heinrich,\ GCA,\ 2007}}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ h2\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ h2\ of\ equation\ 11\ of\ Driesner\ \&\ Heinrich,\ GCA,\ 2007}}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ h3\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ h3\ of\ equation\ 11\ of\ Driesner\ \&\ Heinrich,\ GCA,\ 2007}}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ h4\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ h4\ of\ equation\ 11\ of\ Driesner\ \&\ Heinrich,\ GCA,\ 2007}}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ h5\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ h5\ of\ equation\ 11\ of\ Driesner\ \&\ Heinrich,\ GCA,\ 2007}}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ h6\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ h6\ of\ equation\ 11\ of\ Driesner\ \&\ Heinrich,\ GCA,\ 2007}}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ h7\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ h7\ of\ equation\ 11\ of\ Driesner\ \&\ Heinrich,\ GCA,\ 2007}}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ h8\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ h8\ of\ equation\ 11\ of\ Driesner\ \&\ Heinrich,\ GCA,\ 2007}}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ h9\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ h9\ of\ equation\ 11\ of\ Driesner\ \&\ Heinrich,\ GCA,\ 2007}}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ h10\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ h10\ of\ equation\ 11\ of\ Driesner\ \&\ Heinrich,\ GCA,\ 2007}}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ h11\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ h11\ of\ equation\ 11\ of\ Driesner\ \&\ Heinrich,\ GCA,\ 2007}}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pdummy\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ internal\ pressure\ variable\ [Pa]\ for\ interfacing\ with\ HaliteLiquidus}}
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tdummy\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ internal\ temperature\ variable\ [C]\ for\ interfacing\ with\ HaliteLiquidus}}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tcurrent\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ internal\ temperature\ variable\ [C]}}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pcurrent\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ internal\ pressure\ variable\ [bar]}}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ massfractionnacl\_;\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ internal\ variable\ for\ composition\ }}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ xsat\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ internal\ variable\ for\ liquidus\ composition\ [mole\ fraction\ NaCl]}}
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ xl\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ internal\ variable\ for\ liquid\ composition\ [mole\ fraction\ NaCl]}}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pcrit\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ pressure\ on\ critical\ curve\ [bar]}}
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ xcrit\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ composition\ on\ critical\ curve\ [mole\ fraction\ NaCl]}}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pnacl\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ NaCl\ boiling\ pressure\ [bar]}}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ psat\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ pressure\ of\ threephase\ vapor+liquid+halite\ coexistence\ [bar]}}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ph2obar\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ water\ boiling\ pressure\ [bar]}}
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pcritminph2o\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ pcrit\_-\/ph2o\_}}
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ psatsq\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ psat\_*psat\_}}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ph2osq\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ ph2obar\_*ph2obar\_}}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ g1\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ g1\ of\ equation\ 11\ of\ Driesner\ \&\ Heinrich,\ GCA,\ 2007}}
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ g2\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ g2\ of\ equation\ 11\ of\ Driesner\ \&\ Heinrich,\ GCA,\ 2007}}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CheckState();}
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UpdateParameters();}
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ MassFractionNaCl(\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ t,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ p);}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_triple_point_na_cl}{TriplePointNaCl}}\ \ \ \ \ \ \ \ nacl\_triple;}
+\DoxyCodeLine{00078\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_na_cl_boiling_curve}{NaClBoilingCurve}}\ \ \ \ \ \ \ naclboil;}
+\DoxyCodeLine{00079\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_threephase_h_l_v}{ThreephaseHLV}}\ \ \ \ \ \ \ \ \ \ hlv;}
+\DoxyCodeLine{00080\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_critical_curve}{CriticalCurve}}\ \ \ \ \ \ \ \ \ \ critcurve;}
+\DoxyCodeLine{00081\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_critical_point_h2_o}{CriticalPointH2O}}\ \ \ \ \ \ \ cp\_h2o;}
+\DoxyCodeLine{00082\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_halite_liquidus}{HaliteLiquidus}}\ \ \ \ \ \ \ \ \ liquidus;}
+\DoxyCodeLine{00083\ \ \ \};}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00086\ \textcolor{comment}{\ \ \ \ \ @class\ TwophaseLiquid\ TwophaseLiquid.h\ "{}eos/h2o\_nacl/TwophaseLiquid.h"{}}}
+\DoxyCodeLine{00087\ \textcolor{comment}{}}
+\DoxyCodeLine{00088\ \textcolor{comment}{\ \ \ \ \ @author\ Thomas\ Driesner,\ ETH\ Zuerich,\ thomas.driesner@erdw.ethz.ch}}
+\DoxyCodeLine{00089\ \textcolor{comment}{}}
+\DoxyCodeLine{00090\ \textcolor{comment}{\ \ \ \ \ @section\ motivation\ Motivation}}
+\DoxyCodeLine{00091\ \textcolor{comment}{}}
+\DoxyCodeLine{00092\ \textcolor{comment}{\ \ \ \ \ "{}TwophaseLiquid"{}\ is\ legacy\ code\ from\ Thomas\ Driesner's\ developments\ for\ the\ H2O-\/NaCl\ system,\ and\ computes\ the\ composition\ of\ liquid\ on\ the\ twophase\ liquid+vapor\ envelope\ as\ a\ function\ of\ temperature\ and\ pressure.\ It\ can\ be\ used\ standalone\ if\ only\ this\ information\ is\ needed.\ Otherwise,\ it\ is\ only\ used\ in\ the\ CSMP++\ context\ for\ building\ accurate\ lookup\ tables\ for\ the\ H2O-\/NaCl\ system,\ which\ are\ significantly\ faster\ if\ the\ full\ system\ properties\ are\ needed.\ }}
+\DoxyCodeLine{00093\ \textcolor{comment}{}}
+\DoxyCodeLine{00094\ \textcolor{comment}{\ \ \ \ \ Details\ of\ the\ underlying\ formulation\ can\ be\ found\ in}}
+\DoxyCodeLine{00095\ \textcolor{comment}{}}
+\DoxyCodeLine{00096\ \textcolor{comment}{\ \ \ \ \ Driesner\ T.\ and\ Heinrich\ C.A.\ (2007):\ The\ system\ H2O-\/NaCl.\ Part\ I:\ Correlation\ formulae\ for\ phase\ relations\ in\ temperature-\/pressure-\/molefraction\ space\ from\ 0\ to\ 1000oC,\ 0\ to\ 5000\ bar,\ and\ 0\ to\ 1\ XNaCl.\ Geochimica\ et\ Cosmochimica\ Acta\ 71,\ 4880-\/4901.}}
+\DoxyCodeLine{00097\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00098\ \textcolor{comment}{\ \ \ \ \ @section\ usage\ Usage}}
+\DoxyCodeLine{00099\ \textcolor{comment}{\ \ \ \ \ Construct\ an\ instance\ of\ "{}TwophaseLiquid"{}\ with\ the\ temperature\ ("{}externaltemperature"{},\ in\ C),\ fluid\ pressure\ ("{}externalpressure"{},\ in\ Pa)\ and\ water\ boiling\ pressure\ ("{}ph2o"{},\ in\ Pa,\ see\ attention\ remark\ below)\ as\ constructor\ arguments.}}
+\DoxyCodeLine{00100\ \textcolor{comment}{}}
+\DoxyCodeLine{00101\ \textcolor{comment}{\ \ \ \ \ "{}TwophaseLiquid"{}\ has\ an\ internal\ mechanism\ to\ make\ sure\ that\ it\ always\ uses\ the\ current\ value\ of\ temperature,\ fluid\ pressure,\ and\ water\ boiling\ pressure\ as\ they\ exist\ in\ your\ code.\ Public\ member\ names\ should\ be\ self-\/explanatory,\ I\ hope.}}
+\DoxyCodeLine{00102\ \textcolor{comment}{}}
+\DoxyCodeLine{00103\ \textcolor{comment}{\ \ \ \ \ The\ NaCl\ concentration\ can\ be\ retrieved\ in\ units\ of\ mass\ fraction.\ If\ you\ want\ to\ convert\ these\ or\ need\ values\ for\ molar\ masses\ of\ NaCl\ and\ H2O,\ please\ use\ ConvertConcentrationUnitsNaCl.h\ to\ stay\ consistent.}}
+\DoxyCodeLine{00104\ \textcolor{comment}{}}
+\DoxyCodeLine{00105\ \textcolor{comment}{\ \ \ \ \ @attention\ The\ water\ boling\ pressure\ as\ constructor\ argument\ requires\ that\ a\ Water\ object\ is\ being\ instantiated\ before\ twophase\ liquid,\ with\ the\ same\ temperature\ and\ fluid\ pressure\ as\ its\ constructor\ arguments.\ Also,\ before\ querying\ TwophaseLiquid::MassFractionNaCl(),\ one\ has\ to\ makie\ sure\ that\ ph2o\ has\ been\ updated.\ See\ code\ example.\ I\ apologize\ for\ this\ odd\ design\ but\ for\ performance\ reasons\ it\ made\ sense\ when\ created\ originally.}}
+\DoxyCodeLine{00106\ \textcolor{comment}{}}
+\DoxyCodeLine{00107\ \textcolor{comment}{\ \ \ \ \ @code}}
+\DoxyCodeLine{00108\ \textcolor{comment}{\ \ \ \ \ double\ t(somevalue);\ \ \ \ \ \ \ \ \ \ //\ temperature\ [C]\ in\ user's\ application}}
+\DoxyCodeLine{00109\ \textcolor{comment}{\ \ \ \ \ double\ p(anothervalue);\ \ \ \ \ \ \ //\ fluid\ pressure\ [in\ Pa]\ in\ user's\ application}}
+\DoxyCodeLine{00110\ \textcolor{comment}{\ \ \ \ \ double\ ph2o(yetanothervalue);\ //\ water\ boling\ pressure\ [in\ Pa]\ in\ user's\ application}}
+\DoxyCodeLine{00111\ \textcolor{comment}{\ \ \ \ \ ...}}
+\DoxyCodeLine{00112\ \textcolor{comment}{\ \ \ \ \ Water\ \ \ \ \ \ \ \ \ \ water(t,p);}}
+\DoxyCodeLine{00113\ \textcolor{comment}{\ \ \ \ \ TwophaseLiquid\ twophase\_liquid(t,p,ph2o);\ }}
+\DoxyCodeLine{00114\ \textcolor{comment}{\ \ \ \ \ ...}}
+\DoxyCodeLine{00115\ \textcolor{comment}{\ \ \ \ \ //\ Updating\ t,p,ph2o:}}
+\DoxyCodeLine{00116\ \textcolor{comment}{\ \ \ \ \ t\ \ \ \ =\ my\_new\_t\_value;}}
+\DoxyCodeLine{00117\ \textcolor{comment}{\ \ \ \ \ p\ \ \ \ =\ my\_new\_p\_value;}}
+\DoxyCodeLine{00118\ \textcolor{comment}{\ \ \ \ \ ph2o\ =\ water.SaturationPressure();}}
+\DoxyCodeLine{00119\ \textcolor{comment}{\ \ \ \ \ //\ And\ retrieving\ the\ new\ value\ of\ mass\ fraction\ NaCl\ in\ TwophaseLiquid:}}
+\DoxyCodeLine{00120\ \textcolor{comment}{\ \ \ \ \ x\ =\ twophase\_liquid.MassFractionNaCl();\ //\ compute\ and\ assign\ to\ x\ the\ mass\ fraction\ of\ NaCl\ of\ TwophaseLiquid\ at\ t\ and\ p}}
+\DoxyCodeLine{00121\ \textcolor{comment}{\ \ \ \ \ ...}}
+\DoxyCodeLine{00122\ \textcolor{comment}{\ \ \ \ \ @endcode}}
+\DoxyCodeLine{00123\ \textcolor{comment}{}}
+\DoxyCodeLine{00124\ \textcolor{comment}{\ \ \ \ \ @section\ testing\ Testing}}
+\DoxyCodeLine{00125\ \textcolor{comment}{\ \ \ \ \ Tested\ manually\ against\ CSP\ version\ OK}}
+\DoxyCodeLine{00126\ \textcolor{comment}{\ \ */}}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ \}\textcolor{comment}{//csmp}}
+\DoxyCodeLine{00129\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

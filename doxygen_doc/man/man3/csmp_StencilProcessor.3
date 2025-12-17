@@ -1,0 +1,322 @@
+.TH "csmp::StencilProcessor< dim >" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::StencilProcessor< dim >
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fB~StencilProcessor\fP ()"
+.br
+.ti -1c
+.RI "\fBStencilProcessor\fP (const \fBcsmp::Index\fP &adv1_key, const \fBcsmp::Index\fP &velo_key, const \fBcsmp::Index\fP &src_key, const \fBcsmp::Index\fP &velo_mult_key)"
+.br
+.RI "advection only "
+.ti -1c
+.RI "\fBStencilProcessor\fP (const \fBcsmp::Index\fP &adv1_key, const \fBcsmp::Index\fP &velo_key, const \fBcsmp::Index\fP &diffusivity_key, const \fBcsmp::Index\fP &src_key, const \fBcsmp::Index\fP &velo_mult_key)"
+.br
+.RI "advection and diffusion "
+.ti -1c
+.RI "\fBStencilProcessor\fP (const \fBStencilProcessor\fP &tfs)"
+.br
+.ti -1c
+.RI "void \fBInitializeFirstOrder\fP (const \fBFV_Parameter\fP &param, const \fBElement\fP< dim > &e, const \fBVARIABLE_TYPE\fP &vt=SCALAR, uint32_t var_comp_nr=0)"
+.br
+.RI "Advection Diffusion Equation\&. "
+.ti -1c
+.RI "void \fBComputeBoundaryFluxMismatch\fP (const \fBFV_Parameter\fP &param, const \fBElement\fP< dim > &e)"
+.br
+.RI "Computes Flux Mismatch for FVs at the Boundaries\&. "
+.ti -1c
+.RI "void \fBInitializeSecondOrder\fP (const \fBFV_Parameter\fP &param, const \fBElement\fP< dim > &e)"
+.br
+.RI "second-order scheme for advection-diffusion equation: sector volumes, advected variable values, facet fluxes, and facet advected variable values "
+.ti -1c
+.RI "void \fBInitializeAdvectedVariableValues\fP (const \fBElement\fP< dim > &e)"
+.br
+.RI "second-order in time scheme for advection-diffusion equation: advected variable values at nodes and interpolated to facets "
+.ti -1c
+.RI "void \fBIsotropicallyLimitTransportProperties\fP (const \fBElement\fP< dim > &e, const std::vector< std::pair< double, double > > &SMINMAX)"
+.br
+.RI "for advection (isat1) "
+.ti -1c
+.RI "void \fBApplyLeastSquareMethodToLimitTransportProperties\fP (const \fBElement\fP< dim > &e, const std::vector< std::pair< double, double > > &SMINMAX, const \fBcsmp::Index\fP &mass_center_key, const \fBcsmp::Index\fP &grad_sn_key, const \fBcsmp::Index\fP &grad_sn_limiter_key)"
+.br
+.ti -1c
+.RI "double \fBLimitExplicitSourceTerm\fP (const \fBElement\fP< dim > &e, const std::vector< std::pair< double, double > > &SMINMAX, double inside_var_value, double outside_var_value, double psi_dash_f, double flux)"
+.br
+.RI "second-order version "
+.ti -1c
+.RI "void \fBEvaluateThetaValues\fP (const \fBElement\fP< dim > &e, const std::vector< double > &FVPOREVOL, const std::vector< double > &SAT0, const std::vector< std::vector< double > > &FACETFLUXES0, const std::vector< std::vector< double > > &LTDSATS0, double time_increment, bool use_max_theta)"
+.br
+.RI "theta-limiting (in time) "
+.ti -1c
+.RI "void \fBAccumulateImplicitTwoPhaseSolution1\fP (const \fBFV_Parameter\fP &param, const \fBElement\fP< dim > &e, \fBTwoPhaseModel\fP< dim > &relperm)"
+.br
+.RI "Incompressible Two Phase Flow Equation\&. "
+.ti -1c
+.RI "void \fBAccumulateImplicitTwoPhaseSolution2\fP (const \fBFV_Parameter\fP &param, const \fBElement\fP< dim > &e, \fBTwoPhaseModel\fP< dim > &relperm)"
+.br
+.RI "second-order scheme for two phase flow ( linearized form ): as in InitializeSecondOrder for single phase "
+.ti -1c
+.RI "void \fBAccumulateImplicitTwoPhaseSolution1_NonlinearNewtonRaphson\fP (const \fBFV_Parameter\fP &param, const \fBElement\fP< dim > &e, \fBTwoPhaseModel\fP< dim > &relperm, bool with_gravity_forces, bool with_capillary_spreading)"
+.br
+.RI "first-order scheme for two-phase flow ( nonlinear Newton Raphson approach ): "
+.ti -1c
+.RI "void \fBAccumulateImplicitTwoPhaseSolution2_NonlinearNewtonRaphson\fP (const std::vector< std::pair< double, double > > &SMINMAX, const \fBFV_Parameter\fP &param, const \fBElement\fP< dim > &e, \fBTwoPhaseModel\fP< dim > &relperm, bool with_gravity_forces, bool with_capillary_spreading)"
+.br
+.RI "second-order scheme for two-phase flow ( nonlinear Newton Raphson approach, standart limiter ): "
+.ti -1c
+.RI "void \fBAccumulateImplicitTwoPhaseSolution2_NonlinearNewtonRaphson\fP (const std::vector< std::pair< double, double > > &SMINMAX, const \fBFV_Parameter\fP &param, const \fBElement\fP< dim > &e, \fBTwoPhaseModel\fP< dim > &relperm, bool with_gravity_forces, bool with_capillary_spreading, const \fBcsmp::Index\fP &mass_center_key, const \fBcsmp::Index\fP &grad_sn_key, const \fBcsmp::Index\fP &grad_sn_limiter_key)"
+.br
+.RI "second-order scheme for two-phase flow ( nonlinear Newton Raphson approach, lsm gradient limiter ): "
+.ti -1c
+.RI "void \fBCorrectImplicitTwoPhaseSolutionAtBoundary_NonlinearNewtonRaphson\fP (const \fBFV_Parameter\fP &param, const \fBElement\fP< dim > &e, \fBTwoPhaseModel\fP< dim > &relperm, uint32_t pnid, double &flux, bool with_gravity_forces, bool with_capillary_spreading)"
+.br
+.RI "inflow & outflow boundary correction for two-phase flow "
+.ti -1c
+.RI "void \fBOut\fP () const"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "size_t \fBeidx_\fP"
+.br
+.RI "local array index for the stencil "
+.ti -1c
+.RI "double \fBdiff_coeff_\fP"
+.br
+.ti -1c
+.RI "double \fBvelo_mult_\fP"
+.br
+.ti -1c
+.RI "std::vector< double > \fBsector_pore_volume_\fP"
+.br
+.RI "the volume of each finite-volume sector multiplied by its porosity "
+.ti -1c
+.RI "std::vector< double > \fBfacet_flux_\fP"
+.br
+.RI "scalar volume flux across finite-volume facets "
+.ti -1c
+.RI "std::vector< double > \fBfacet_flux_rhs_\fP"
+.br
+.ti -1c
+.RI "std::vector< uint32_t > \fBupstream_node_\fP"
+.br
+.RI "inside or outside node local index "
+.ti -1c
+.RI "std::vector< double > \fBpsi1_\fP"
+.br
+.RI "transported variable at t+dt "
+.ti -1c
+.RI "std::vector< double > \fBipsi1_\fP"
+.br
+.RI "interpolated transported variable (t+dt) (can be limited) "
+.ti -1c
+.RI "std::vector< double > \fBtheta_\fP"
+.br
+.RI "limiter values for each FV facet "
+.ti -1c
+.RI "std::vector< double > \fBnodal_src_\fP"
+.br
+.RI "nodal source/sink term "
+.ti -1c
+.RI "std::vector< double > \fBsrc_\fP"
+.br
+.RI "sector / divergece related sources for lhs "
+.ti -1c
+.RI "std::vector< double > \fBrhs_src_\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBinside_node_\fP"
+.br
+.RI "node position w\&.r\&.t\&. the finite volume facet normal "
+.ti -1c
+.RI "uint32_t \fBoutside_node_\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBadv1_key_\fP"
+.br
+.RI "advected nodal quantity at t + dt "
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBvel_key_\fP"
+.br
+.RI "transport velocity at t "
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBdiff_key_\fP"
+.br
+.RI "diffusivity of advected nodal quantity "
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBsrc_key_\fP"
+.br
+.RI "nodal source "
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBvelo_mult_key_\fP"
+.br
+.RI "velocity multiplier key "
+.ti -1c
+.RI "\fBDenseMatrix\fP< DM_MIN > \fBDN_\fP"
+.br
+.ti -1c
+.RI "\fBDenseMatrix\fP< DM_MIN > \fBDNT_\fP"
+.br
+.ti -1c
+.RI "\fBDenseMatrix\fP< DM_MIN > \fBdpcds_grad_\fP"
+.br
+.ti -1c
+.RI "std::vector< double > \fBdpcdsn_\fP"
+.br
+.ti -1c
+.RI "std::vector< double > \fBdsdn_\fP"
+.br
+.RI "capillary pressure and saturation gradients "
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim>
+.br
+class csmp::StencilProcessor< dim >"
+.PP
+\fBAuthor\fP
+.RS 4
+S\&.K\&. Matthaei 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2004
+.RE
+.PP
+.SH "Motivation"
+.PP
+When visiting the edges of each finite element, this object deals with the accumulation of the fluxes, saturations etc\&. for the transport schemes\&. 
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<uint32_t dim> \fBcsmp::StencilProcessor\fP< dim >::~\fBStencilProcessor\fP ()"
+Destructor is used to write theta limiter values (if accumulated) to a text file named "spatial-limiter-values" if the flag write_out_limiter has been set\&. 
+.SS "template<uint32_t dim> \fBcsmp::StencilProcessor\fP< dim >::StencilProcessor (const \fBStencilProcessor\fP< dim > & tfs)"
+Standard assignment operator\&. 
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim> void \fBcsmp::StencilProcessor\fP< dim >::AccumulateImplicitTwoPhaseSolution1 (const \fBFV_Parameter\fP & param, const \fBElement\fP< dim > & e, \fBTwoPhaseModel\fP< dim > & relperm)"
+
+.PP
+Incompressible Two Phase Flow Equation\&. first-order scheme for two phase flow ( linearazed form ): as in reference documentation
+
+.PP
+Computes all the terms necessary to solve in the saturation equation\&.
+
+.PP
+The gravitational segregation of the phases is taken care via 
+.br
+ the second term in:
+
+.PP
+dfds vt - d lambda_overbar / ds k (rho1 - rho2) g
+
+.PP
+This requires the analytically found derivative of the lambda overbar function\&. 
+.br
+.SH "Implementation"
+.PP
+All flow properties are computed at the element barycenter\&. 
+.br
+
+.PP
+Capillary spreading is modelled with the FEM, so it is not included here\&. 
+.br
+
+.PP
+MAYBE FACET INTEGRATION POINT INTERPOLATION WORKS BETTER in multidimensional case:
+
+.PP
+.PP
+.nf
+relperm\&.InitializeForFacetIntegrationPoint( i, 0U, pmem_, e );  
+relperm\&.EffectiveSaturation(); 
+facet_flux_[i] = param\&.FacetNormalVelocity(i) * param\&.FacetArea(i) * relperm\&.dfds();
+.fi
+.PP
+ 
+.SS "template<uint32_t dim> void \fBcsmp::StencilProcessor\fP< dim >::ComputeBoundaryFluxMismatch (const \fBFV_Parameter\fP & param, const \fBElement\fP< dim > & e)"
+
+.PP
+Computes Flux Mismatch for FVs at the Boundaries\&. Computes Flux Mismatch for FVs at the Boundaries 
+.SS "template<uint32_t dim> void \fBcsmp::StencilProcessor\fP< dim >::EvaluateThetaValues (const \fBElement\fP< dim > & e, const std::vector< double > & FVPOREVOL, const std::vector< double > & SAT0, const std::vector< std::vector< double > > & FACETFLUXES0, const std::vector< std::vector< double > > & LTDSATS0, double time_increment, bool use_max_theta)"
+
+.PP
+theta-limiting (in time) See Matthai et al\&. 2009, TIPM for the explanation of the theta- time-level balancing method\&. 
+.SS "template<uint32_t dim> void \fBcsmp::StencilProcessor\fP< dim >::InitializeAdvectedVariableValues (const \fBElement\fP< dim > & e)"
+
+.PP
+second-order in time scheme for advection-diffusion equation: advected variable values at nodes and interpolated to facets Like 'Initialize()' but without the calculation of the facet fluxes\&. Depending on whether bijective mapping is used or not either variable is interpolated to the facet integration points\&. 
+.br
+.SH "Input Arguments"
+.PP
+The FACETFLUXES at time-level t+dt are used to find the upstream saturation values\&. 
+.SH "Application Examples"
+.PP
+This method is used in the non-linear iteration loops to avoid unnecessary floating point operations\&. 
+.SS "template<uint32_t dim> void \fBcsmp::StencilProcessor\fP< dim >::InitializeFirstOrder (const \fBFV_Parameter\fP & param, const \fBElement\fP< dim > & e, const \fBVARIABLE_TYPE\fP & vt = \fRSCALAR\fP, uint32_t var_comp_nr = \fR0\fP)"
+
+.PP
+Advection Diffusion Equation\&. first-order scheme for advection-diffusion equation: sector volumes, advected variable values, and facet fluxes
+
+.PP
+Initializes sector pore volume and facet flux vectors for current finite element = finite volume stencil\&. 
+.br
+ It is implied that advected variable and nodal source are always of the same type (both SCALAR, both ARRAY or both FLAGGEDARRAY ) 
+.SS "template<uint32_t dim> void \fBcsmp::StencilProcessor\fP< dim >::InitializeSecondOrder (const \fBFV_Parameter\fP & param, const \fBElement\fP< dim > & e)"
+
+.PP
+second-order scheme for advection-diffusion equation: sector volumes, advected variable values, facet fluxes, and facet advected variable values Initializes sector pore volume, facet flux, and facet advected variable vectors for current finite element = finite volume stencil\&. 
+.SS "template<uint32_t dim> void \fBcsmp::StencilProcessor\fP< dim >::IsotropicallyLimitTransportProperties (const \fBElement\fP< dim > & e, const std::vector< std::pair< double, double > > & SMINMAX)"
+
+.PP
+for advection (isat1) Limiting the value of the interpolated variable using the NVD approach (see Matthai et al\&. 2009, TIPM)\&.
+.SH "Input Arguments"
+.PP
+SMINMAX stores the min/max values of the transport variable in the v vicinity of and including the upstream node\&.
+.SH "Implementation"
+.PP
+If the facet is located at the model boundary the limiter automatically sets the flux to first order\&.
+.SH "Application Examples"
+.PP
+To avoid numerical oscillations in higher-order transport schemes\&. 
+.SS "template<uint32_t dim> double \fBcsmp::StencilProcessor\fP< dim >::LimitExplicitSourceTerm (const \fBElement\fP< dim > & e, const std::vector< std::pair< double, double > > & SMINMAX, double inside_var_value, double outside_var_value, double psi_dash_f, double flux)"
+
+.PP
+second-order version Limits advected variable values averaged onto the current facet so that it can be used to compute a non-oscillatory source term\&.
+.SH "Input Arguments"
+.PP
+Methods expects the \fBStencilProcessor\fP to be initialized\&. It needs the private variables:
+
+.PP
+inside and outside node and a flux that is positive if aligned with the facet normal and negative if flow is into the facet\&.
+
+.PP
+\fBReturns\fP
+.RS 4
+The method returns the limited value of the variable at the facet integration point\&.
+.RE
+.PP
+.SH "Application Examples"
+.PP
+Limiting of source terms for explicit (for instance as in IMPES) calculations\&. 
+.SS "template<uint32_t dim> void \fBcsmp::StencilProcessor\fP< dim >::Out () const"
+Outputs the current internal variables of the FV sector to screen\&. 
+.SH "Member Data Documentation"
+.PP 
+.SS "template<uint32_t dim> std::vector<double> \fBcsmp::StencilProcessor\fP< dim >::rhs_src_"
+sector / divergece related sources for rhs 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

@@ -382,7 +382,7 @@ void LinearCuboid::OutputNodeDataToVTK( const char* file_name, const char* var_n
 	{
 		char  outfile[NAME_STRING], elmt[30];
 		strcpy(outfile, file_name);
-    snprintf( elmt, sizeof(elmt), "%lu", CurrentID() );
+    snprintf( elmt, sizeof(elmt), "%zu", CurrentID() );
 		strcat(outfile, elmt);
 		strcat(outfile, ".vtk");
 

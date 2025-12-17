@@ -1,0 +1,51 @@
+.TH "csmp::ModelPreProcessor2D" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::ModelPreProcessor2D
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <ModelPreProcessor2D\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBModelPreProcessor2D\fP (const std::string &csmp_model)"
+.br
+.RI "reads CSMP native model from file to perform the preprocessing on "
+.ti -1c
+.RI "void \fBModelToMatrix\fP (const std::string &output_file_name, size_t rows, size_t columns) const"
+.br
+.RI "writes log10 of permeability to regular grid; works only or quadrilateral (regular) meshes "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Preparation of input models so that they have all the facilities (boundaries, splitboundaries, neighbor information etc\&. to perform standard CSMP computations\&.
+
+.PP
+Output of CSMP native models into different formats for comparison runs with other software\&.
+
+.PP
+TODO: use VTK mesh and contouring of variables to perform a flux-adapted gridding\&. 
+.SH "Member Function Documentation"
+.PP 
+.SS "void csmp::ModelPreProcessor2D::ModelToMatrix (const std::string & output_file_name, size_t rows, size_t columns) const"
+
+.PP
+writes log10 of permeability to regular grid; works only or quadrilateral (regular) meshes writes log10 of permeability to regular grid; works only or quadrilateral (regular) meshes 
+.PP
+.nf
+Uses file format that can be read by Quadrilaterator or Triangulator or
+the function VSet<2U> readTextPixelData();
+
+TODO: what checks can be imposed to verify that the grid is indeed regular?
+
+.fi
+.PP
+ 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

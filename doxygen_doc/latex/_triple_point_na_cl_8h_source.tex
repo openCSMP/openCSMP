@@ -1,0 +1,68 @@
+\doxysection{Triple\+Point\+Na\+Cl.\+h}
+\hypertarget{_triple_point_na_cl_8h_source}{}\label{_triple_point_na_cl_8h_source}\index{source/includes/eos/TriplePointNaCl.h@{source/includes/eos/TriplePointNaCl.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{TRIPLEPOINTNACL\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{TRIPLEPOINTNACL\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{comment}{/*\ Changelog}}
+\DoxyCodeLine{00006\ \textcolor{comment}{}}
+\DoxyCodeLine{00007\ \textcolor{comment}{\ \ \ \ \ Jan\ 29,\ 2013,\ Thomas\ Driesner:\ ported\ to\ CSMP++;\ disabled\ all\ functionality\ for\ volumetric\ and\ thermal\ properties\ as\ those\ are\ computed\ from\ functions\ that\ rather\ reside\ in\ Brine,\ Halite,\ etc.;}}
+\DoxyCodeLine{00008\ \textcolor{comment}{\ \ \ \ \ September\ 9,\ 2014,\ Thomas\ Driesner:\ minor\ polishing,\ updated\ documentation\ and\ coding\ style\ to\ better\ match\ csmp++\ conventions,\ converted\ pressure\ to\ output\ [Pa]}}
+\DoxyCodeLine{00009\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}}
+\DoxyCodeLine{00012\ \{}
+\DoxyCodeLine{00013\ \ \ \textcolor{comment}{///\ Temperature-\/Pressure-\/Composition\ coordinates\ of\ NaCl\ Triple\ Point\ \ }}
+\DoxyCodeLine{00014\ \ \ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_triple_point_na_cl}{TriplePointNaCl}}}
+\DoxyCodeLine{00015\ \ \ \{}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \ \ \textcolor{keyword}{public}\ :}
+\DoxyCodeLine{00018\ \ \ \ \ TriplePointNaCl();}
+\DoxyCodeLine{00019\ \ \ \ \ \string~TriplePointNaCl();}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{double}\ Temperature()\ \ \ \ \ \ \ \textcolor{keyword}{const};}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{double}\ Pressure()\ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const};}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{double}\ CompositionVapor()\ \ \textcolor{keyword}{const};}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{double}\ CompositionLiquid()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{double}\ CompositionHalite()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \textcolor{keyword}{private}\ :}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ ttriple\_nacl;}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ ptriple\_nacl;}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ xtriple\_nacl;}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \};}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_triple_point_na_cl}{TriplePointNaCl}}::Temperature()\ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ ttriple\_nacl;\ \}}
+\DoxyCodeLine{00037\ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_triple_point_na_cl}{TriplePointNaCl}}::Pressure()\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ ptriple\_nacl;\ \}}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_triple_point_na_cl}{TriplePointNaCl}}::CompositionVapor()\ \ \ \ \ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ xtriple\_nacl;\ \}}
+\DoxyCodeLine{00040\ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_triple_point_na_cl}{TriplePointNaCl}}::CompositionLiquid()\ \ \ \ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ xtriple\_nacl;\ \}}
+\DoxyCodeLine{00041\ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_triple_point_na_cl}{TriplePointNaCl}}::CompositionHalite()\ \ \ \ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ xtriple\_nacl;\ \}}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ \ \ \ \ @class\ CriticalPointH2O\ CriticalPointH2O.h\ "{}eos/h2o\_nacl/CriticalPointH2O.h"{}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00046\ \textcolor{comment}{\ \ \ \ \ @author\ Thomas\ Driesner,\ ETH\ Zuerich\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ \ \ \ \ @section\ contact\ Contact\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ \ \ \ \ thomas.driesner@erdw.ethz.ch\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00049\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00050\ \textcolor{comment}{\ \ \ \ \ @section\ motivation\ Motivation\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00051\ \textcolor{comment}{\ \ \ \ \ TriplePointNaCl\ contains\ the\ triple\ point\ parameters\ (temperature,\ pressure,\ and\ composition)\ of\ the\ pure\ NaCl\ phase\ halite,\ liquid,\ and\ vapor\ at\ its\ triple\ point\ according\ to\ the\ fits\ obtained\ in\ the\ paper}}
+\DoxyCodeLine{00052\ \textcolor{comment}{}}
+\DoxyCodeLine{00053\ \textcolor{comment}{\ \ \ \ \ Driesner\ T.\ and\ Heinrich\ C.A.\ (2007):\ The\ system\ H2O-\/NaCl.\ Part\ I:\ Correlation\ formulae\ for\ phase\ relations\ in\ temperature-\/pressure-\/composition\ space\ from\ 0\ to\ 1000oC,\ 0\ to\ 5000\ bar,\ and\ 0\ to\ 1\ XNaCl.\ Geochimica\ et\ Cosmochimica\ Acta\ 71,\ 4880-\/4901.}}
+\DoxyCodeLine{00054\ \textcolor{comment}{}}
+\DoxyCodeLine{00055\ \textcolor{comment}{\ \ \ \ \ @section\ dependencies\ Dependencies\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00056\ \textcolor{comment}{}}
+\DoxyCodeLine{00057\ \textcolor{comment}{\ \ \ \ \ @section\ testing\ Testing\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00058\ \textcolor{comment}{\ \ */}}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \}\textcolor{comment}{//csmp}}
+\DoxyCodeLine{00062\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

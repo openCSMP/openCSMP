@@ -106,15 +106,6 @@ class VectorVariable<3U> {
     VectorVariable&  operator=( const Point<3U>& );
     VectorVariable&  operator=( const ScalarVariable& );
 
-    // standard operators
-    VectorVariable   operator+( double ) const;
-    VectorVariable   operator-( double ) const;
-    VectorVariable   operator*( double ) const;
-    VectorVariable   operator/( double ) const;
-  
-    /// squares all elements of the vector
-    VectorVariable   operator^( double ) const;
-
     // element-by-element operations
     VectorVariable   operator+(  const VectorVariable& ) const;
     VectorVariable   operator-(  const VectorVariable& ) const;
@@ -140,6 +131,11 @@ class VectorVariable<3U> {
     /// comparison of flags and values
     bool             operator==( const VectorVariable& ) const;
     bool             operator!=( const VectorVariable& ) const;
+
+    // unary operators
+  
+    /// raises all elements of the vector to a certain power
+    VectorVariable   operator^( double exponent ) const;
 
     /// comparison by length (to allow ordering in containers)
     bool             operator<(  const VectorVariable& ) const;
@@ -210,43 +206,63 @@ VectorVariable<3U> makeVector( const std::vector<VARIABLE_FLAG>&, const std::vec
 template<uint32_t dim>
 std::ostream&  operator<<( std::ostream&, const VectorVariable<dim>& );
 
+
+// binary operators: interaction with scalar
+
+VectorVariable<1U> operator+( const VectorVariable<1U>&, const ScalarVariable& );
+VectorVariable<1U> operator-( const VectorVariable<1U>&, const ScalarVariable&  );
+VectorVariable<1U> operator*( const VectorVariable<1U>&, const ScalarVariable&  );
+VectorVariable<1U> operator/( const VectorVariable<1U>&, const ScalarVariable&  );
+
+VectorVariable<2U> operator+( const VectorVariable<2U>&, const ScalarVariable&  );
+VectorVariable<2U> operator-( const VectorVariable<2U>&, const ScalarVariable&  );
+VectorVariable<2U> operator*( const VectorVariable<2U>&, const ScalarVariable&  );
+VectorVariable<2U> operator/( const VectorVariable<2U>&, const ScalarVariable&  );
+
+VectorVariable<3U> operator+( const VectorVariable<3U>&, const ScalarVariable& );
+VectorVariable<3U> operator-( const VectorVariable<3U>&, const ScalarVariable& );
+VectorVariable<3U> operator*( const VectorVariable<3U>&, const ScalarVariable& );
+VectorVariable<3U> operator/( const VectorVariable<3U>&, const ScalarVariable& );
+
+// binary operators: interaction with double
+
+VectorVariable<1U> operator+( const VectorVariable<1U>&, double );
+VectorVariable<1U> operator-( const VectorVariable<1U>&, double );
+VectorVariable<1U> operator*( const VectorVariable<1U>&, double );
+VectorVariable<1U> operator/( const VectorVariable<1U>&, double );
+
+VectorVariable<2U> operator+( const VectorVariable<2U>&, double );
+VectorVariable<2U> operator-( const VectorVariable<2U>&, double );
+VectorVariable<2U> operator*( const VectorVariable<2U>&, double );
+VectorVariable<2U> operator/( const VectorVariable<2U>&, double );
+
+VectorVariable<3U> operator+( const VectorVariable<3U>&, double );
+VectorVariable<3U> operator-( const VectorVariable<3U>&, double );
+VectorVariable<3U> operator*( const VectorVariable<3U>&, double );
+VectorVariable<3U> operator/( const VectorVariable<3U>&, double );
+
+
+// interoperation with Point
+
 // 1D
 
 Point<1U> operator+( const Point<1U>&, const VectorVariable<1U>& );
-
-
 Point<1U> operator-( const Point<1U>&, const VectorVariable<1U>& );
-
-
 Point<1U> operator*( const Point<1U>&, const VectorVariable<1U>& );
-
-
 Point<1U> operator/( const Point<1U>&, const VectorVariable<1U>& );
 
 // 2D
 
 Point<2U> operator+( const Point<2U>&, const VectorVariable<2U>& );
-
-
 Point<2U> operator-( const Point<2U>&, const VectorVariable<2U>& );
-
-
 Point<2U> operator*( const Point<2U>&, const VectorVariable<2U>& );
-
-
 Point<2U> operator/( const Point<2U>&, const VectorVariable<2U>& );
 
 // 3D
 
 Point<3U> operator+( const Point<3U>&, const VectorVariable<3U>& );
-
-
 Point<3U> operator-( const Point<3U>&, const VectorVariable<3U>& );
-
-
 Point<3U> operator*( const Point<3U>&, const VectorVariable<3U>& );
-
-
 Point<3U> operator/( const Point<3U>&, const VectorVariable<3U>& );
 
 

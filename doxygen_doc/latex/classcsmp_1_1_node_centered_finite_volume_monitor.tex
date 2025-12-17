@@ -1,0 +1,69 @@
+\doxysection{csmp\+::Node\+Centered\+Finite\+Volume\+Monitor\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_node_centered_finite_volume_monitor}{}\label{classcsmp_1_1_node_centered_finite_volume_monitor}\index{csmp::NodeCenteredFiniteVolumeMonitor$<$ dim $>$@{csmp::NodeCenteredFiniteVolumeMonitor$<$ dim $>$}}
+
+
+monitoring of variables stored on the nodes, integrating them over the finite volumes  
+
+
+
+
+{\ttfamily \#include $<$Node\+Centered\+Finite\+Volume\+Monitor.\+h$>$}
+
+
+
+Collaboration diagram for csmp\+::Node\+Centered\+Finite\+Volume\+Monitor\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=218pt]{classcsmp_1_1_node_centered_finite_volume_monitor__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_node_centered_finite_volume_monitor_af896286730600eeaf18629c931cbba04}\label{classcsmp_1_1_node_centered_finite_volume_monitor_af896286730600eeaf18629c931cbba04} 
+{\bfseries Node\+Centered\+Finite\+Volume\+Monitor} (const char \texorpdfstring{$\ast$}{*}output\+\_\+file, const char \texorpdfstring{$\ast$}{*}prop, bool monitor\+\_\+regions)
+\begin{DoxyCompactList}\small\item\em text-\/file based monitoring of user-\/specified target variable on either, entire model or its unique regions \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_monitor_a6f867d2b4797614b6bcadae3c29efb6b}{Monitor\+Property\+Integrals}} (const \mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&, bool consider\+\_\+porosity, bool normalize\+\_\+by\+\_\+initial\+\_\+integral, bool write\+\_\+output)
+\begin{DoxyCompactList}\small\item\em triggering monitoring with the option to write to the file specified during class construction \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_monitor_adb8361c3325b21489c3cd2bb59145c9b}{Out}} (const \mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&, bool normalize\+\_\+values=false) const
+\begin{DoxyCompactList}\small\item\em file output of variable values monitored up to current point of time and without normalization \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim$>$\newline
+class csmp\+::\+Node\+Centered\+Finite\+Volume\+Monitor$<$ dim $>$}
+monitoring of variables stored on the nodes, integrating them over the finite volumes 
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_node_centered_finite_volume_monitor_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_node_centered_finite_volume_monitor_a6f867d2b4797614b6bcadae3c29efb6b}\index{csmp::NodeCenteredFiniteVolumeMonitor$<$ dim $>$@{csmp::NodeCenteredFiniteVolumeMonitor$<$ dim $>$}!MonitorPropertyIntegrals@{MonitorPropertyIntegrals}}
+\index{MonitorPropertyIntegrals@{MonitorPropertyIntegrals}!csmp::NodeCenteredFiniteVolumeMonitor$<$ dim $>$@{csmp::NodeCenteredFiniteVolumeMonitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{MonitorPropertyIntegrals()}{MonitorPropertyIntegrals()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_node_centered_finite_volume_monitor_a6f867d2b4797614b6bcadae3c29efb6b} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_monitor}{csmp\+::\+Node\+Centered\+Finite\+Volume\+Monitor}}$<$ dim $>$\+::\+Monitor\+Property\+Integrals (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&}]{sg}{, }\item[{bool}]{consider\+\_\+porosity}{, }\item[{bool}]{normalize\+\_\+by\+\_\+initial\+\_\+integral}{, }\item[{bool}]{write\+\_\+output}{}\end{DoxyParamCaption})}
+
+
+
+triggering monitoring with the option to write to the file specified during class construction 
+
+Integrating current values of the target variables over the entire model domain. If region by region approach is chosen, only the unique regions are considered. \Hypertarget{classcsmp_1_1_node_centered_finite_volume_monitor_adb8361c3325b21489c3cd2bb59145c9b}\index{csmp::NodeCenteredFiniteVolumeMonitor$<$ dim $>$@{csmp::NodeCenteredFiniteVolumeMonitor$<$ dim $>$}!Out@{Out}}
+\index{Out@{Out}!csmp::NodeCenteredFiniteVolumeMonitor$<$ dim $>$@{csmp::NodeCenteredFiniteVolumeMonitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Out()}{Out()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_node_centered_finite_volume_monitor_adb8361c3325b21489c3cd2bb59145c9b} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_monitor}{csmp\+::\+Node\+Centered\+Finite\+Volume\+Monitor}}$<$ dim $>$\+::\+Out (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&}]{model}{, }\item[{bool}]{normalize\+\_\+values}{ = {\ttfamily false}}\end{DoxyParamCaption}) const}
+
+
+
+file output of variable values monitored up to current point of time and without normalization 
+
+updates the values one more time and then writes output to file specified in constructor 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/analysis/Node\+Centered\+Finite\+Volume\+Monitor.\+h\item 
+source/modules/analysis/Node\+Centered\+Finite\+Volume\+Monitor.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,201 @@
+\doxysection{SAMG\+\_\+\+Settings.\+h}
+\hypertarget{_s_a_m_g___settings_8h_source}{}\label{_s_a_m_g___settings_8h_source}\index{source/includes/integration/solver/SAMG\_Settings.h@{source/includes/integration/solver/SAMG\_Settings.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{SAMG\_SETTINGS\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{SAMG\_SETTINGS\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_solver_settings_8h}{"{}SolverSettings.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \ \ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings}{SAMG\_Settings}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_solver_settings}{SolverSettings}}\ \{}
+\DoxyCodeLine{00010\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00011\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a395c7c2bbe9dac79150d8b0fa9a89d24}{SAMG\_Settings}}();}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a875a5d34c0445d4a109707e93777efcd}{int32\_t}}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a875a5d34c0445d4a109707e93777efcd}{Get\_matrix}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00014\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a4df3d1468d1da6eeb0735853f5487fa0}{int32\_t}}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a4df3d1468d1da6eeb0735853f5487fa0}{Get\_ifirst}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_aef019fe4871af64ad18045b7a5af4cda}{Get\_eps}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a5cabe2962708504865237759f11fe2b8}{Get\_rel\_eps}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_af8a615e3c94b76cd21340175e8511512}{int32\_t}}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_af8a615e3c94b76cd21340175e8511512}{Get\_nsolve}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_aee44168121d5bf2838a6934eb2ad258d}{int32\_t}}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_aee44168121d5bf2838a6934eb2ad258d}{Get\_ncyc}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_ae990026044c19faf0ac9884473bd298c}{int32\_t}}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_ae990026044c19faf0ac9884473bd298c}{Get\_iswit}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_ace60c434ddcf1c9d9305adc1fc2ccfa4}{int32\_t}}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_ace60c434ddcf1c9d9305adc1fc2ccfa4}{Get\_iswtch}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a4fbdd2f1a26fd2455c1ed857ebdc0ee5}{Get\_chktol}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a9fb7dcfe246be60f65704e1233f8a5e6}{int32\_t}}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a9fb7dcfe246be60f65704e1233f8a5e6}{Get\_idump}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ int32\_t\ Get\_idmp()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a9ff42ee1d2530ea98e1e9cc6f762628f}{int32\_t}}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a9ff42ee1d2530ea98e1e9cc6f762628f}{Get\_iout}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a7228f05b416fff914d63d3acb93e64bf}{Get\_a\_cmplx}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_ab8a19be3953546a3f9614753abfba4ca}{Get\_g\_cmplx}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a6665da74b5be8915fe23b0cffa7950cc}{Get\_p\_cmplx}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a3e8e96fa86944079bbbfa0ade2571ae3}{Get\_w\_avrge}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a336c079053df9ae15af4af32d886036d}{int32\_t}}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a336c079053df9ae15af4af32d886036d}{Get\_ncg}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a99346d7fe45700a8dd4d511f60391e19}{int32\_t}}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a99346d7fe45700a8dd4d511f60391e19}{Get\_ncyc\_done}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_aba47058088e1b76e0e91a3d1c8ce873e}{int32\_t}}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_aba47058088e1b76e0e91a3d1c8ce873e}{Get\_ncyc\_best}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a65f091e77d409ebd463d3290a845c87b}{int32\_t}}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a65f091e77d409ebd463d3290a845c87b}{Get\_levelx}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_aa6807b1ec83b0c08fa26c86107097a6a}{int32\_t}}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_aa6807b1ec83b0c08fa26c86107097a6a}{Get\_ioform}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a6e1b10d7a21a7b23f38a2fbda038e445}{int32\_t}}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a6e1b10d7a21a7b23f38a2fbda038e445}{Get\_ioform\_length}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a793f1f9a197f8bcacf740ac312fed9ca}{int32\_t}}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a793f1f9a197f8bcacf740ac312fed9ca}{Get\_iter\_pre}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \textcolor{keywordtype}{int}*\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_ae20db7c97fab82850b71cc83ed688eb0}{Get\_filnam\_dump}}();}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a804d145933ca01882c19975903940ad2}{int32\_t}}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a804d145933ca01882c19975903940ad2}{Get\_filnam\_dump\_length}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a4e8ff1270735cc2c8f400695761d0eea}{ExplicitSecondary}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_ad9378e650f7998f76c951fe4b5c34fa1}{UsePointBasedApproach}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a28f0ed70d67c89fd1b27ad431ee8ac4b}{int32\_t}}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a28f0ed70d67c89fd1b27ad431ee8ac4b}{GetSolverInstance}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a2e98f76daedb4fcee2f4aa56889942fc}{int32\_t}}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a2e98f76daedb4fcee2f4aa56889942fc}{Get\_mode\_mess}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ int32\_t\ Get\_nxtyp()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ int32\_t\ Get\_nrd()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ int32\_t\ Get\_nru()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_ad37c20f2c0f4a43c8e1b0e2b36277f55}{Set\_isym}}(\ int32\_t\ isym\ );}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_afbc068c31732a3b57905cb4918fb8977}{Set\_irow}}(\ int32\_t\ irow\ );}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a5cd58b5684f2fedc69b4288bc97ea116}{Set\_itypu}}(\ int32\_t\ itypu\ );}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a72fa17aa2de68cab81d8ff5d5903cdc6}{Set\_eps}}(\ \textcolor{keywordtype}{double}\ eps\ );}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_ab34c6c11d96839b2ab48530ef5d6815b}{Set\_rel\_eps}}(\ \textcolor{keywordtype}{double}\ rel\_eps\ );}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_ac6cf9828b7e596ef57bdb0bb9ca4d64e}{Set\_napproach}}(\ int32\_t\ napproach\ );}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a261061368b1c44405cdab02c150a8ff1}{Set\_nxtyp}}(\ int32\_t\ nxtyp\ );}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ Set\_nrd(\ int32\_t\ nrd\ );}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ Set\_nru(\ int32\_t\ nrd\ );}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a3992138ef2c48828c943acc5f750c24e}{Set\_internal}}(\ int32\_t\ internal\ );}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_ab574bef8e15a5c8459065a02b84c6b6d}{Set\_nprim}}(\ int32\_t\ nprim\ );}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a90c2e0a940cf6ba9dc72511f7f9d61e3}{Set\_npr\_is\_dummy}}(\ int32\_t\ npr\_is\_dummy\ );}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a2b8f4a65962059fcd32685370dbae613}{Set\_nint\_weights}}(\ int32\_t\ nint\_weights\ );}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a5ede318d5de8bf863c893d14b4879574}{Set\_nint\_pat}}(\ int32\_t\ nint\_pat\ );}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a3ed327f5a5ede7ecf3f542caf259ac69}{Set\_igam}}(\ int32\_t\ igam\ );}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_ab40aa8b15154aa63297430e9414136f2}{Set\_ncgrad}}(\ int32\_t\ ncgrad\ );}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a8d4b19c9e2c580faad43522c76d70ae2}{Set\_nkdim}}(\ int32\_t\ nkdim\ );}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a600d9118ee183f13def64aed07e0dab0}{Set\_ncycle}}(\ int32\_t\ ncycle\ );}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a367c47eb36a9805de631897c7c5d3242}{Set\_ncyc\_done}}(\ int32\_t\ ncyc\_done\ );}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a783ff22f6b82749e3e22cab89818fae6}{Set\_ncyc\_best}}(\ int32\_t\ ncyc\_best\ );}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a74369a853f16f6db93fa0355913fd1e8}{Set\_iswit}}(\ int32\_t\ iswit\ );}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a615c8ab146f10718cd986b8d27ef1d32}{Set\_iextent}}(\ int32\_t\ iextent\ );}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a72bb4df4e140054d81e2a846c6609f74}{Set\_ndefault}}(\ int32\_t\ ndefault\ );}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a0b97e6da76b0e91dff71ad78096ce29c}{Set\_norm\_typ}}(\ int32\_t\ norm\_typ\ );}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a9f3d0e9bff5132ae041c3a25f8eb8794}{Set\_ioscratch}}(\ int32\_t\ ioscratch\ );}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_aba60e860252688f01bfbffdebc07cce4}{Set\_chktol}}(\ \textcolor{keywordtype}{double}\ chktol\ );}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_aba88a0651dc8006158379069f69afaaa}{Set\_idmp}}(\ int32\_t\ idmp\ );}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a48fb75259090aa74d98a54d33b078893}{Set\_igdp}}(\ int32\_t\ igdp\ );}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a097169a647170ddb972bf30c02920a1b}{Set\_iadp}}(\ int32\_t\ iadp\ );}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a9c90ecd4249ab38feff01f4b2dacdb34}{Set\_iwdp}}(\ int32\_t\ iwdp\ );}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a427236e642c2f321b779bcfc0432a895}{Set\_iout1}}(\ int32\_t\ iout1\ );}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a7a1c8be2718439fe1572f0b7db5911b3}{Set\_iout2}}(\ int32\_t\ iout2\ );}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_aab7a9d7f169ae9df3b8eb9002982202e}{Set\_a\_cmplx}}(\ \textcolor{keywordtype}{double}\ a\_cmplx\ );}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_ad522dabc38cc716b089702053faea1d7}{Set\_g\_cmplx}}(\ \textcolor{keywordtype}{double}\ g\_cmplx\ );}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_abda817a3347f03ae20a4443684c35571}{Set\_p\_cmplx}}(\ \textcolor{keywordtype}{double}\ p\_cmplx\ );}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a276ea5b079d7a48ca000f90bebdbb44d}{Set\_w\_avrge}}(\ \textcolor{keywordtype}{double}\ w\_avrge\ );}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_ad5a9a06b1fd1a9a2e5d9fa7b562a5dec}{Set\_ncgtyp}}(\ int32\_t\ ncgtyp\ );}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_aa6299bb67ec4883ff4db4defccebcd8c}{Set\_nred}}(\ int32\_t\ nred\ );}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a0da0980c072c08e8a66a68336157a77c}{Set\_nredlev}}(\ int32\_t\ nredlev\ );}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_aa3d1496e2c9790212928d3f89a3443b9}{Set\_nxf\_clean}}(\ int32\_t\ nxf\_clean\ );}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a23ff34598faacbf31e1dce66b82d37e7}{Set\_neg\_diag}}(\ \textcolor{keywordtype}{int}\ neg\_diag\ );}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a535dbf4a13da94c7e990ac8a385b115e}{Set\_npcol}}(\ int32\_t\ npcol\ );}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a33676b3573b025b256a7577eb911d798}{Set\_levelx}}(\ int32\_t\ levelx\ );}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_aafb2aae21f46593832d045e9f5861c99}{Set\_ioform}}(\ std::string\ ioform\ );}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a5cdaf4c233167fb35059b0d1d33d62d6}{Set\_filnam\_dump}}(\ \ \textcolor{keyword}{const}\ std::string\&\ filnam\_dump\ );}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a2615319866163d0c4de8b43a4ac003f9}{Set\_iter\_pre}}(int32\_t\ iter\_pre);}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ Set\_mode\_mess(int32\_t);}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ SetNegative\_nsolve(\ \textcolor{keywordtype}{bool}\ negative\_nsolve\ );}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ SetNegative\_ncyc(\ \textcolor{keywordtype}{bool}\ negative\_ncyc\ );}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ SetNegative\_idump(\ \textcolor{keywordtype}{bool}\ negative\_idump\ );}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ SetNegative\_iout(\ \textcolor{keywordtype}{bool}\ negative\_iout\ );}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \textcolor{comment}{///\ if\ this\ is\ not\ set\ 'true'\ all\ attempts\ to\ set\ secondary\ parameters\ will\ fail\ (default=false)}}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings_a2b169597e6d88b23a8ae6da35494e15d}{ExplicitSecondary}}(\ \textcolor{keywordtype}{bool}\ explicit\_secondary\ );}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ SetSolverInstance(\ \ int32\_t\ instance\ \ );}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ isym\_;}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ irow\_;}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ itypu\_;}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ eps\_;}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ rel\_eps\_;}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ napproach\_;}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ nxtyp\_;}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ nrd\_;}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ nru\_;}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ internal\_;}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ nprim\_;}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ npr\_is\_dummy\_;}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ nint\_weights\_;}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ nint\_pat\_;}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ igam\_;}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ ncgrad\_;}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ nkdim\_;}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ ncycle\_;}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ ncyc\_done\_;\ \ \ \ \textcolor{comment}{///\ <\ total\ number\ of\ cycles\ (iterations)\ performed}}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ ncyc\_best\_;\ \ \ \ \textcolor{comment}{///\ <\ stores\ lowest\ number\ of\ cycles\ achieved}}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ iswit\_;}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ iextent\_;}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ ndefault\_;}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ norm\_typ\_;}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ ioscratch\_;}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ chktol\_;}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ idmp\_;}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ igdp\_;}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ iadp\_;}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ iwdp\_;}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ iout1\_;}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ iout2\_;}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ a\_cmplx\_;}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ g\_cmplx\_;}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ p\_cmplx\_;}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ w\_avrge\_;}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ ncgtyp\_;}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ ioform\_;}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ ioform\_length\_;}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ levelx\_;}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ std::string\ filnam\_dump\_;}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ filnam\_dump\_length\_;}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \ filnam\_dump\_Array\_[50];}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \ neg\_diag\_;}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ nred\_;}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ nredlev\_;}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ nxf\_clean\_;}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ npcol\_;}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ solver\_instance\_;}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ iter\_pre\_;}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ mode\_mess\_;}
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ negative\_nsolve\_;}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ negative\_ncyc\_;}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ negative\_idump\_;}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ negative\_iout\_;}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ explicit\_secondary\_;}
+\DoxyCodeLine{00160\ \ \ \};}
+\DoxyCodeLine{00161\ }
+\DoxyCodeLine{00162\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00163\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00164\ \textcolor{comment}{@class\ SAMG\_Settings\ SAMG\_Settings\ "{}solver/SAMG\_Settings.h"{}}}
+\DoxyCodeLine{00165\ \textcolor{comment}{@author\ S.K.\ Matthaei}}
+\DoxyCodeLine{00166\ \textcolor{comment}{@author\ S.\ Geiger}}
+\DoxyCodeLine{00167\ \textcolor{comment}{@author\ G.\ Roberts}}
+\DoxyCodeLine{00168\ \textcolor{comment}{@date\ 2001}}
+\DoxyCodeLine{00169\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00170\ \textcolor{comment}{@section\ motivation\ Motivation}}
+\DoxyCodeLine{00171\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00172\ \textcolor{comment}{Factoring\ out\ SAMG\ tuning\ parameter\ in\ a\ separate\ class\ so\ that\ they}}
+\DoxyCodeLine{00173\ \textcolor{comment}{can\ be\ changed\ indepently\ of\ the\ solver\ object.}}
+\DoxyCodeLine{00174\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00175\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00176\ \textcolor{comment}{@section\ design\ Design\ Intent}}
+\DoxyCodeLine{00177\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00178\ \textcolor{comment}{SAMG\_Settings\ objects\ store\ SAMG\ tuning\ parameter.\ These\ tuning\ parameter}}
+\DoxyCodeLine{00179\ \textcolor{comment}{are\ divided\ into\ switches\ and\ their\ subswitches.}}
+\DoxyCodeLine{00180\ \textcolor{comment}{}}
+\DoxyCodeLine{00181\ \textcolor{comment}{Each\ switch\ can\ be\ accessed\ by\ its\ respective\ Get-\/method\ and\ its\ subswitches}}
+\DoxyCodeLine{00182\ \textcolor{comment}{can\ be\ set\ using\ the\ respective\ Set-\/methods.}}
+\DoxyCodeLine{00183\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00184\ \textcolor{comment}{Every\ Set-\/method\ checks\ if\ the\ input\ data\ conforms\ to\ the\ restrictions}}
+\DoxyCodeLine{00185\ \textcolor{comment}{imposed\ by\ the\ SAMG\ solver.\ If\ the\ input\ value\ is\ invald,\ a\ domain\_error}}
+\DoxyCodeLine{00186\ \textcolor{comment}{exception\ is\ thrown.}}
+\DoxyCodeLine{00187\ \textcolor{comment}{}}
+\DoxyCodeLine{00188\ \textcolor{comment}{@warning\ Only\ the\ rules\ for\ the\ subswitch\ itself\ are\ checked!\ Interdependencies}}
+\DoxyCodeLine{00189\ \textcolor{comment}{between\ subswitches\ are\ NOT\ checked!\ The\ user\ is\ responsible\ to\ guarantee\ that}}
+\DoxyCodeLine{00190\ \textcolor{comment}{all\ subswitches\ together\ form\ a\ meaniful\ parametrization\ for\ the\ SAMG\ solver.}}
+\DoxyCodeLine{00191\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00192\ }
+\DoxyCodeLine{00193\ \}\ \textcolor{comment}{//\ end\ namespace\ csp}}
+\DoxyCodeLine{00194\ }
+\DoxyCodeLine{00195\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

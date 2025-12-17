@@ -1,0 +1,44 @@
+.TH "TokenIterator< InputIter, Pred >" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+TokenIterator< InputIter, Pred >
+.SH SYNOPSIS
+.br
+.PP
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBCaptureState\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBTokenIterator\fP (InputIter begin, InputIter end, Pred pred=Pred())"
+.br
+.ti -1c
+.RI "\fBTokenIterator\fP & \fBoperator++\fP ()"
+.br
+.ti -1c
+.RI "\fBCaptureState\fP \fBoperator++\fP (int)"
+.br
+.ti -1c
+.RI "std::string \fBoperator*\fP () const"
+.br
+.ti -1c
+.RI "const std::string * \fBoperator\->\fP () const"
+.br
+.ti -1c
+.RI "bool \fBoperator==\fP (const \fBTokenIterator\fP &)"
+.br
+.ti -1c
+.RI "bool \fBoperator!=\fP (const \fBTokenIterator\fP &rv)"
+.br
+.in -1c
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

@@ -1,0 +1,5 @@
+<map id="csmp::ANSYS_SplitBoundaryMatch_Test" name="csmp::ANSYS_SplitBoundaryMatch_Test">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,425,190,506"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_test.html" title=" " alt="" coords="37,5,159,377"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="100,392,100,425,95,425,95,392"/>
+</map>

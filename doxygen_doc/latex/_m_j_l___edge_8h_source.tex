@@ -1,0 +1,263 @@
+\doxysection{MJL\+\_\+\+Edge.\+h}
+\hypertarget{_m_j_l___edge_8h_source}{}\label{_m_j_l___edge_8h_source}\index{source/includes/discretisation/MJL\_Edge.h@{source/includes/discretisation/MJL\_Edge.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{MJL\_EDGE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{MJL\_EDGE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_m_j_l___point_8h}{"{}MJL\_Point.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{comment}{///\ Lazlo\ p.\ 88}}
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacemjl}{mjl}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}\ \{}
+\DoxyCodeLine{00010\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00011\ \ \ \ \ Edge();}
+\DoxyCodeLine{00012\ \ \ \ \ Edge(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\&\ );}
+\DoxyCodeLine{00013\ \ \ \ \ Edge(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_edge}{Edge}}\&\ );}
+\DoxyCodeLine{00014\ \ \ \ \ \string~Edge()\ \{\};}
+\DoxyCodeLine{00015\ \ \ \ \ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}\&\ \ operator=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_edge}{Edge}}\&\ m\ );}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ Set(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\&\ );}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ Set(\ \textcolor{keywordtype}{double}\ x1,\ \textcolor{keywordtype}{double}\ y1,\ \textcolor{keywordtype}{double}\ x2,\ \textcolor{keywordtype}{double}\ y2\ );}
+\DoxyCodeLine{00018\ \ \ \ \ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}\&\ \ \ \ \ \ \mbox{\hyperlink{classmjl_1_1_edge_aa096f2213bacb2ee22c408a94a0f19ff}{Rot}}();}
+\DoxyCodeLine{00019\ \ \ \ \ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}\&\ \ \ \ \ \ \mbox{\hyperlink{classmjl_1_1_edge_a1b896c136d9135197195c914cb5dd410}{Flip}}();}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ Move(\ \textcolor{keywordtype}{double}\ dx,\ \textcolor{keywordtype}{double}\ dy\ );}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ Scale(\ \textcolor{keywordtype}{double}\ xfac,\ \textcolor{keywordtype}{double}\ yfac\ );}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ NormalizeTo(\ \textcolor{keywordtype}{double}\ n\ );}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ IfCloserThanMerge(\ \textcolor{keywordtype}{double}\ tolerance,\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\&\ );}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ operator==(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_edge}{Edge}}\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ operator!=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_edge}{Edge}}\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ operator<(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_edge}{Edge}}\&\ )\ \ \textcolor{keyword}{const};}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\ Point(\ \textcolor{keywordtype}{double}\ t\ )\ \textcolor{keyword}{const};\ \ \textcolor{comment}{//\ gives\ xy-\/coordinates\ of\ parametric\ value\ t\ along\ line}}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \mbox{\hyperlink{classmjl_1_1_edge_ab25f2c3f909a72b7dc69cefeb2e72726}{Y}}(\ \textcolor{keywordtype}{double}\ x\ )\ \textcolor{keyword}{const};\ \ \ \ \ \ \textcolor{comment}{//\ gives\ y-\/coordinate\ for\ an\ x-\/coordinate\ along\ infinite\ line}}
+\DoxyCodeLine{00031\ \ \ \ \ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\ Origin()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00032\ \ \ \ \ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\ Destination()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ MidPoint(\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00034\ \ \ \ \ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\ MidPoint()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ IsVertical()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ Slope()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ DistanceFrom(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ Length()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ LOCATION\ \ \ \ \ \ Classify(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00041\ \ \ \ \ INTERSECTION\ \ \mbox{\hyperlink{classmjl_1_1_edge_a977fdbbbeae30e368545c71835aa7fd9}{Intersect}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}\&,\ \textcolor{keywordtype}{double}\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00042\ \ \ \ \ INTERSECTION\ \ \mbox{\hyperlink{classmjl_1_1_edge_a95c95b8e922e8f7c2605df1906342dca}{Cross}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}\&,\ \textcolor{keywordtype}{double}\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00043\ \ \ \ \ INTERSECTION\ \ \mbox{\hyperlink{classmjl_1_1_edge_ac8bf9ec6d584ddc112f3c8b9ecff4cc4}{CrossingPoint}}(\ \textcolor{keywordtype}{double}\ tolerance,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}\&,\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00044\ \ \ \ \ INTERSECTION\ \ \mbox{\hyperlink{classmjl_1_1_edge_a2eb063c4229dbbcb316e776ba7cc5b4e}{SKM\_CrossingPoint}}(\ \textcolor{keywordtype}{double}\ tolerance,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}\&,\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00045\ \ \ \ \ EDGE\_CLASSIFICATION\ \ \mbox{\hyperlink{classmjl_1_1_edge_a3f5aaefd4ce06b1c5ac0d1ce01df4310}{Type}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classmjl_1_1_edge_af5d187a055ed2e533e2fbe6a135e1d88}{AngleTo}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordtype}{double}\ \ DotProduct(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keywordtype}{void}\ Out()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\ org\_,\ dest\_;}
+\DoxyCodeLine{00052\ \};}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemjl_a46b4a82bced4640cc11268d65ea81ed5}{aimsAt}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}\&,\ LOCATION,\ INTERSECTION\ );\ \textcolor{comment}{//\ MJL,\ p.\ 156}}
+\DoxyCodeLine{00056\ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemjl_a24fe914e67952eeec27fab5d5265a692}{signedAngle}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_point}{Point}}\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}\&\ );\ \textcolor{comment}{//\ MJL,\ p.\ 120}}
+\DoxyCodeLine{00057\ INTERSECTION\ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemjl_a32b3a8d58f823cb167c3f3c499f56224}{crossingPoint}}(\ \textcolor{keywordtype}{double}\ tolerance,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}\&,\ \mbox{\hyperlink{classmjl_1_1_point}{Point}}\&\ );\ \textcolor{comment}{//\ MJL,\ p.\ 162}}
+\DoxyCodeLine{00058\ EDGE\_CLASSIFICATION\ edgeType(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}\&\ );\ \textcolor{comment}{//\ MJL,\ p.\ 119}}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \textcolor{comment}{//\ inlined\ methods}}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}::Edge()}
+\DoxyCodeLine{00064\ \ \ :\ \ org\_(0.,0.),\ dest\_(0.,0.)}
+\DoxyCodeLine{00065\ \ \{}
+\DoxyCodeLine{00066\ \ \}}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}\&\ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}::operator=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}\&\ m\ )}
+\DoxyCodeLine{00070\ \ \{}
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keywordflow}{if}\ (\ \&m\ ==\ \textcolor{keyword}{this}\ )\ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00072\ \ \ \ \ org\_\ \ =\ m.org\_;}
+\DoxyCodeLine{00073\ \ \ \ \ dest\_\ =\ m.dest\_;}
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00075\ \ \}}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \textcolor{keyword}{inline}\ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}::operator==(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}\&\ m\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00079\ \ \{}
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keywordflow}{return}\ ((org\_==m.org\_)\ \&\&\ (dest\_==m.dest\_));}
+\DoxyCodeLine{00081\ \ \}}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \textcolor{keyword}{inline}\ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}::operator!=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}\&\ m\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00084\ \ \{}
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keywordflow}{return}\ ((org\_!=m.org\_)\ \&\&\ (dest\_!=m.dest\_));}
+\DoxyCodeLine{00086\ \ \}}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \textcolor{keyword}{inline}\ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}::operator<(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}\&\ m\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00090\ \ \{}
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{keywordflow}{return}\ ((org\_<m.org\_)\ ||\ (org\_==m.org\_\ \&\&\ (dest\_<m.dest\_))\ );}
+\DoxyCodeLine{00092\ \ \}}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}::Edge(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\&\ org,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\&\ dest\ )}
+\DoxyCodeLine{00097\ \ \ :\ \ org\_(org),\ dest\_(dest)}
+\DoxyCodeLine{00098\ \ \{}
+\DoxyCodeLine{00099\ \ \}}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}::Edge(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}\&\ m\ )}
+\DoxyCodeLine{00103\ \ \ \ :\ org\_(m.org\_),\ dest\_(m.dest\_)}
+\DoxyCodeLine{00104\ \ \{}
+\DoxyCodeLine{00105\ \ \}}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}::Set(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\&\ org,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\&\ dest\ )}
+\DoxyCodeLine{00109\ \ \{}
+\DoxyCodeLine{00110\ \ \ \ \ org\_\ \ =\ org;}
+\DoxyCodeLine{00111\ \ \ \ \ dest\_\ =\ dest;}
+\DoxyCodeLine{00112\ \ \}}
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}::Set(\ \textcolor{keywordtype}{double}\ x1,\ \textcolor{keywordtype}{double}\ y1,\ \textcolor{keywordtype}{double}\ x2,\ \textcolor{keywordtype}{double}\ y2\ )}
+\DoxyCodeLine{00116\ \ \{}
+\DoxyCodeLine{00117\ \ \ \ \ org\_(0)\ \ =\ x1;}
+\DoxyCodeLine{00118\ \ \ \ \ org\_(1)\ \ =\ y1;}
+\DoxyCodeLine{00119\ \ \ \ \ dest\_(0)\ =\ x2;}
+\DoxyCodeLine{00120\ \ \ \ \ dest\_(1)\ =\ y2;}
+\DoxyCodeLine{00121\ \ \}}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}::DotProduct(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\&\ p,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\&\ q\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00126\ \ \{}
+\DoxyCodeLine{00127\ \ \ \ \ \textcolor{keywordflow}{return}(\ p[0]\ *\ q[0]\ +\ p[1]\ *\ q[1]\ );}
+\DoxyCodeLine{00128\ \ \}}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00132\ \textcolor{comment}{///\ flip\ the\ direction\ of\ an\ edge}}
+\DoxyCodeLine{00133\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}\&\ \ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}::\mbox{\hyperlink{classmjl_1_1_edge_a1b896c136d9135197195c914cb5dd410}{Flip}}()}
+\DoxyCodeLine{00134\ \ \{}
+\DoxyCodeLine{00135\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classmjl_1_1_edge_aa096f2213bacb2ee22c408a94a0f19ff}{Rot}}\mbox{\hyperlink{classmjl_1_1_edge_aa096f2213bacb2ee22c408a94a0f19ff}{(}}\mbox{\hyperlink{classmjl_1_1_edge_aa096f2213bacb2ee22c408a94a0f19ff}{)}}\mbox{\hyperlink{classmjl_1_1_edge_aa096f2213bacb2ee22c408a94a0f19ff}{.}}\mbox{\hyperlink{classmjl_1_1_edge_aa096f2213bacb2ee22c408a94a0f19ff}{Rot}}\mbox{\hyperlink{classmjl_1_1_edge_aa096f2213bacb2ee22c408a94a0f19ff}{(}}\mbox{\hyperlink{classmjl_1_1_edge_aa096f2213bacb2ee22c408a94a0f19ff}{)}};}
+\DoxyCodeLine{00136\ \ \}}
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00140\ \textcolor{keyword}{inline}\ \ \mbox{\hyperlink{namespacemjl}{mjl}}::LOCATION\ \ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}::Classify(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\&\ p\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00141\ \ \{}
+\DoxyCodeLine{00142\ \ \ \ \ \textcolor{keywordflow}{return}\ p.Classify(\ org\_,\ dest\_\ );}
+\DoxyCodeLine{00143\ \ \}}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00146\ }
+\DoxyCodeLine{00147\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\ \ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}::Point(\ \textcolor{keywordtype}{double}\ t\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00148\ \ \{}
+\DoxyCodeLine{00149\ \ \ \ \ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\ tmp(\ dest\_\ -\/\ org\_\ );}
+\DoxyCodeLine{00150\ \ \ \ \ tmp\ *=\ t;}
+\DoxyCodeLine{00151\ \ \ \ \ \textcolor{keywordflow}{return}\ \ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}(\ org\_\ +\ tmp\ );}
+\DoxyCodeLine{00152\ \ \}}
+\DoxyCodeLine{00153\ }
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00155\ }
+\DoxyCodeLine{00156\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\ \ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}::Origin()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ org\_;\ \}}
+\DoxyCodeLine{00157\ }
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00159\ }
+\DoxyCodeLine{00160\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\ \ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}::Destination()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ dest\_;\ \}}
+\DoxyCodeLine{00161\ }
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00164\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}::MidPoint(\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\&\ mp\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00165\ \ \{}
+\DoxyCodeLine{00166\ \ \ \ \ mp.Set(\ (org\_[0]+dest\_[0])/2.,\ (org\_[1]+dest\_[1])/2.\ );}
+\DoxyCodeLine{00167\ \ \}}
+\DoxyCodeLine{00168\ }
+\DoxyCodeLine{00169\ }
+\DoxyCodeLine{00170\ }
+\DoxyCodeLine{00171\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\ \ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}::MidPoint()\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00172\ \ \{}
+\DoxyCodeLine{00173\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}(\ (org\_[0]+dest\_[0])/2.,\ (org\_[1]+dest\_[1])/2.\ );}
+\DoxyCodeLine{00174\ \ \}}
+\DoxyCodeLine{00175\ }
+\DoxyCodeLine{00176\ }
+\DoxyCodeLine{00177\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00178\ \textcolor{comment}{}}
+\DoxyCodeLine{00179\ \textcolor{comment}{@return\ SKEW\_CROSS\ if\ the\ line\ segments\ intersect\ (in\ constrast\ with\ the\ infinite\ lines)}}
+\DoxyCodeLine{00180\ \textcolor{comment}{COLLINEAR,\ PARALLEL}}
+\DoxyCodeLine{00181\ \textcolor{comment}{SKEW\_NO\_CROSS\ as\ appropriate}}
+\DoxyCodeLine{00182\ \textcolor{comment}{t\ =\ x\ value\ of\ intersection\ if\ intersection\ occurs}}
+\DoxyCodeLine{00183\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00184\ \textcolor{keyword}{inline}\ \ INTERSECTION\ \ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}::\mbox{\hyperlink{classmjl_1_1_edge_a95c95b8e922e8f7c2605df1906342dca}{Cross}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}\&\ e,\ \textcolor{keywordtype}{double}\&\ t\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00185\ \ \{}
+\DoxyCodeLine{00186\ \ \ \ \ \textcolor{keywordtype}{double}\ s;}
+\DoxyCodeLine{00187\ \ \ \ \ INTERSECTION\ crossType\ =\ e\mbox{\hyperlink{classmjl_1_1_edge_a977fdbbbeae30e368545c71835aa7fd9}{.}}\mbox{\hyperlink{classmjl_1_1_edge_a977fdbbbeae30e368545c71835aa7fd9}{Intersect}}\mbox{\hyperlink{classmjl_1_1_edge_a977fdbbbeae30e368545c71835aa7fd9}{(}}\ *\textcolor{keyword}{this}\mbox{\hyperlink{classmjl_1_1_edge_a977fdbbbeae30e368545c71835aa7fd9}{,}}\ s\ \mbox{\hyperlink{classmjl_1_1_edge_a977fdbbbeae30e368545c71835aa7fd9}{)}};}
+\DoxyCodeLine{00188\ \ \ \ \ \textcolor{keywordflow}{if}\ ((crossType\ ==\ COLLINEAR\ ||\ crossType\ ==\ PARALLEL))\ \textcolor{keywordflow}{return}\ crossType;}
+\DoxyCodeLine{00189\ \ \ \ \ \textcolor{keywordflow}{if}\ ((s\ <\ 0.)\ ||\ (s\ >\ 1.))\ \textcolor{keywordflow}{return}\ SKEW\_NO\_CROSS;}
+\DoxyCodeLine{00190\ \ \ \ \ \mbox{\hyperlink{classmjl_1_1_edge_a977fdbbbeae30e368545c71835aa7fd9}{Intersect}}\mbox{\hyperlink{classmjl_1_1_edge_a977fdbbbeae30e368545c71835aa7fd9}{(}}\ e\mbox{\hyperlink{classmjl_1_1_edge_a977fdbbbeae30e368545c71835aa7fd9}{,}}\ t\ \mbox{\hyperlink{classmjl_1_1_edge_a977fdbbbeae30e368545c71835aa7fd9}{)}};}
+\DoxyCodeLine{00191\ \ \ \ \ \textcolor{keywordflow}{if}\ ((0.\ <=\ t)\ \&\&\ (t\ <=\ 1.))\ \textcolor{keywordflow}{return}\ SKEW\_CROSS;}
+\DoxyCodeLine{00192\ \ \ \ \ \textcolor{keywordflow}{return}\ SKEW\_NO\_CROSS;}
+\DoxyCodeLine{00193\ \ \}}
+\DoxyCodeLine{00194\ }
+\DoxyCodeLine{00195\ }
+\DoxyCodeLine{00196\ \textcolor{keyword}{inline}\ \ \textcolor{keywordtype}{bool}\ \ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}::IsVertical()\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00197\ \ \{}
+\DoxyCodeLine{00198\ \ \ \ \ \textcolor{keywordflow}{return}(\ org\_[0]\ ==\ dest\_[0]\ );}
+\DoxyCodeLine{00199\ \ \}}
+\DoxyCodeLine{00200\ }
+\DoxyCodeLine{00201\ }
+\DoxyCodeLine{00202\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}::Slope()\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00203\ \ \{}
+\DoxyCodeLine{00204\ \ \ \ \ \textcolor{keywordflow}{if}\ (\ org\_[0]\ !=\ dest\_[0]\ )}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (dest\_[1]\ -\/\ org\_[1])\ /\ (dest\_[0]\ -\/\ org\_[0]);}
+\DoxyCodeLine{00206\ }
+\DoxyCodeLine{00207\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{_m_j_l__geometry_8h_af78670ee54c1203d613f8fb0e022d214}{DBL\_MAX}};}
+\DoxyCodeLine{00208\ \ \}}
+\DoxyCodeLine{00209\ }
+\DoxyCodeLine{00210\ }
+\DoxyCodeLine{00211\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}::NormalizeTo(\ \textcolor{keywordtype}{double}\ n\ )}
+\DoxyCodeLine{00212\ \ \{}
+\DoxyCodeLine{00213\ \ \ \ \ \ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\ pn(\ dest\_\ -\/\ org\_\ );}
+\DoxyCodeLine{00214\ \ \ \ \ \ pn\ =\ (n\ /\ pn.Length())\ *\ pn;}
+\DoxyCodeLine{00215\ \ \ \ \ \ org\_.Set(\ 0.,\ 0.\ );}
+\DoxyCodeLine{00216\ \ \ \ \ \ dest\_\ =\ pn;}
+\DoxyCodeLine{00217\ \ \}}
+\DoxyCodeLine{00218\ }
+\DoxyCodeLine{00219\ }
+\DoxyCodeLine{00220\ \textcolor{comment}{/**\ for\ a\ given\ x\ value\ Y()\ returns\ the\ corresponding\ y\ value}}
+\DoxyCodeLine{00221\ \textcolor{comment}{on\ the\ line\ defined\ by\ the\ Edge*/}}
+\DoxyCodeLine{00222\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}::\mbox{\hyperlink{classmjl_1_1_edge_ab25f2c3f909a72b7dc69cefeb2e72726}{Y}}(\ \textcolor{keywordtype}{double}\ x\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00223\ \ \{}
+\DoxyCodeLine{00224\ \ \ \ \ \textcolor{keywordflow}{return}\ Slope()\ *\ (x\ -\/\ org\_[0])\ +\ org\_[1];}
+\DoxyCodeLine{00225\ \ \}}
+\DoxyCodeLine{00226\ }
+\DoxyCodeLine{00227\ }
+\DoxyCodeLine{00228\ }
+\DoxyCodeLine{00229\ }
+\DoxyCodeLine{00230\ \textcolor{keyword}{inline}\ \ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}::Move(\ \textcolor{keywordtype}{double}\ dx,\ \textcolor{keywordtype}{double}\ dy\ )}
+\DoxyCodeLine{00231\ \ \{}
+\DoxyCodeLine{00232\ \ \ \ \ org\_.Move(\ dx,\ dy\ );}
+\DoxyCodeLine{00233\ \ \ \ \ dest\_.Move(\ dx,\ dy\ );}
+\DoxyCodeLine{00234\ \ \}}
+\DoxyCodeLine{00235\ }
+\DoxyCodeLine{00236\ }
+\DoxyCodeLine{00237\ \textcolor{keyword}{inline}\ \ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}::Scale(\ \textcolor{keywordtype}{double}\ xfac,\ \textcolor{keywordtype}{double}\ yfac\ )}
+\DoxyCodeLine{00238\ \ \{}
+\DoxyCodeLine{00239\ \ \ \ \ org\_.Scale(\ xfac,\ yfac\ );}
+\DoxyCodeLine{00240\ \ \ \ \ dest\_.Scale(\ xfac,\ yfac\ );}
+\DoxyCodeLine{00241\ \ \}}
+\DoxyCodeLine{00242\ }
+\DoxyCodeLine{00243\ }
+\DoxyCodeLine{00244\ }
+\DoxyCodeLine{00245\ }
+\DoxyCodeLine{00246\ \textcolor{keyword}{inline}\ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}::Length()\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00247\ \ \{}
+\DoxyCodeLine{00248\ \ \ \ \ \ \textcolor{keywordtype}{double}\ dx\ =\ dest\_[0]\ -\/\ org\_[0];}
+\DoxyCodeLine{00249\ \ \ \ \ \ \textcolor{keywordtype}{double}\ dy\ =\ dest\_[1]\ -\/\ org\_[1];}
+\DoxyCodeLine{00250\ }
+\DoxyCodeLine{00251\ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::hypot(\ dx,\ dy\ );}
+\DoxyCodeLine{00252\ \ \}}
+\DoxyCodeLine{00253\ }
+\DoxyCodeLine{00254\ }
+\DoxyCodeLine{00255\ \}}
+\DoxyCodeLine{00256\ }
+\DoxyCodeLine{00257\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

@@ -1,0 +1,46 @@
+\doxysection{Compressed\+Row\+Matrix\+Parallel.\+h}
+\hypertarget{_compressed_row_matrix_parallel_8h_source}{}\label{_compressed_row_matrix_parallel_8h_source}\index{source/includes/math/CompressedRowMatrixParallel.h@{source/includes/math/CompressedRowMatrixParallel.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{COMPRESSED\_ROW\_MATRIX\_PARALLEL\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{COMPRESSED\_ROW\_MATRIX\_PARALLEL\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_compressed_row_matrix_8h}{"{}CompressedRowMatrix.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_sparse_matrix_8h}{"{}SparseMatrix.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_compressed_row_matrix_parallel}{CompressedRowMatrixParallel}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_compressed_row_matrix}{CompressedRowMatrix}}}
+\DoxyCodeLine{00010\ \{}
+\DoxyCodeLine{00011\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00012\ \ \ \ \ CompressedRowMatrixParallel();}
+\DoxyCodeLine{00013\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keywordtype}{void}\ RemoveHalo(\ int32\_t\&\ );\ \textcolor{comment}{//\ TODO:\ check\ whether\ we\ do\ need\ int64\_t\ here}}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keywordtype}{void}\ CreatePartitions(\ uint32\_t\ n\_blocks,\ std::vector<std::pair<std::pair<uint32\_t,uint32\_t>,std::vector<\textcolor{keywordtype}{bool}>\ >\ >\&\ \ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{comment}{//\ vector\ mu\ st\ be\ initialized\ with\ the\ partition\ ranges}}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keywordtype}{void}\ ScanHaloOfPartition(\ uint32\_t,\ std::vector<std::pair<std::pair<uint32\_t,uint32\_t>,std::vector<\textcolor{keywordtype}{bool}>\ >\ >\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{comment}{//\ returns\ those\ rows\ as\ true\ in\ the\ corresponding\ boolean\ vector}}
+\DoxyCodeLine{00021\ \ \ \ \ uint32\_t\ RowsWithHaloElements(\ int32\_t,\ std::vector<std::pair<std::pair<uint32\_t,uint32\_t>,std::vector<\textcolor{keywordtype}{bool}>\ >\ >\&\ \ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{void}\ ComputeVariableIndicesForBroadcast(\ uint32\_t,\ \textcolor{keyword}{const}\ std::vector<std::pair<std::pair<uint32\_t,uint32\_t>,std::vector<\textcolor{keywordtype}{bool}>\ >\ >\&,}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<int32\_t>\&,\ std::vector<int32\_t>\&,\ std::vector<int32\_t>\&\ \ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{void}\ CreateReceiveList(\ uint32\_t,\ \textcolor{keyword}{const}\ std\ \ ::vector<std::pair<std::pair<uint32\_t,uint32\_t>,std::vector<\textcolor{keywordtype}{bool}>\ >\ >\&,}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<int32\_t>\&,\ std::vector<int32\_t>\&,\ std::vector<int32\_t>\&\ \ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordtype}{void}\ CreateIpts(\ int32\_t,\ \textcolor{keyword}{const}\ std::vector<std::pair<std::pair<uint32\_t,uint32\_t>,std::vector<\textcolor{keywordtype}{bool}>\ >\ >\&,}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<int32\_t>\&,\ std::vector<int32\_t>\&,\ std::vector<int32\_t>\&\ \ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordtype}{void}\ CreateIptr(int32\_t,\ \textcolor{keyword}{const}\ std::vector<std::pair<std::pair<uint32\_t,uint32\_t>,std::vector<\textcolor{keywordtype}{bool}>\ >\ >\&,}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<int32\_t>\&,\ std::vector<int32\_t>\&,\ std::vector<int32\_t>\&\ \ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordtype}{void}\ Renumber(\ uint32\_t,\ \textcolor{keyword}{const}\ std::vector<std::pair<std::pair<uint32\_t,uint32\_t>,std::vector<\textcolor{keywordtype}{bool}>\ >\ >\&,}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<int32\_t>\&,\ std::vector<int32\_t>\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00038\ \};}
+\DoxyCodeLine{00039\ \}}
+\DoxyCodeLine{00040\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{//\ COMPRESSEDROWMATRIXPARALLEL\_H}}
+
+\end{DoxyCode}

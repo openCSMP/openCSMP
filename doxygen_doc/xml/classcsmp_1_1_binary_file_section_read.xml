@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_binary_file_section_read" kind="class" language="C++" prot="public">
+    <compoundname>csmp::BinaryFileSectionRead</compoundname>
+    <includes refid="binary_read_write_8h" local="no">binaryReadWrite.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_binary_file_section_read_1a7786a0bdec899f5dfbe3d5839f7c0b81" prot="private" static="no" mutable="no">
+        <type>char</type>
+        <definition>char csmp::BinaryFileSectionRead::hdr_[CSMP_BINARY_FILE_HDR_SIZE]</definition>
+        <argsstring>[CSMP_BINARY_FILE_HDR_SIZE]</argsstring>
+        <name>hdr_</name>
+        <qualifiedname>csmp::BinaryFileSectionRead::hdr_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/binaryReadWrite.h" line="63" column="10" bodyfile="source/includes/model/binaryReadWrite.h" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_binary_file_section_read_1a5e5fcdb83adfa83922403d772b08c3aa" prot="private" static="no" mutable="no">
+        <type>std::fstream &amp;</type>
+        <definition>std::fstream&amp; csmp::BinaryFileSectionRead::fp_</definition>
+        <argsstring></argsstring>
+        <name>fp_</name>
+        <qualifiedname>csmp::BinaryFileSectionRead::fp_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/binaryReadWrite.h" line="64" column="18" bodyfile="source/includes/model/binaryReadWrite.h" bodystart="64" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_binary_file_section_read_1a314b4701377e2c7ab973deab07a5cb79" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::BinaryFileSectionRead::BinaryFileSectionRead</definition>
+        <argsstring>(std::fstream &amp;fp, const char *header)</argsstring>
+        <name>BinaryFileSectionRead</name>
+        <qualifiedname>csmp::BinaryFileSectionRead::BinaryFileSectionRead</qualifiedname>
+        <param>
+          <type>std::fstream &amp;</type>
+          <declname>fp</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>header</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/binaryReadWrite.h" line="60" column="5" bodyfile="source/modules/model/binaryReadWrite.cpp" bodystart="29" bodyend="50"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Helper class for reading fixed-size strings from binary files</para>
+<para>defines strings that are used to read the possible datablocks that are abbreviated as VSETCORD VSETPELT VSETPLST VSETPFVT VSETBFLG VSETHEDR VSETCONN VSETFOTR VSETMTRL - new for pmtrl record</para>
+<para><ref refid="classcsmp_1_1_boundary_interface" kindref="compound">BoundaryInterface</ref> BNDFHEDR - file header BOUNDARY - object description ONE_BDRY BOUNDVAR - variable datablock BNDFFOTR - file footer</para>
+<para><ref refid="classcsmp_1_1_split_boundary_interface" kindref="compound">SplitBoundaryInterface</ref> SBDFHEDR SPLITBDRY ONE_BDRY SBDRYVAR SBDFFOTR</para>
+<para><ref refid="classcsmp_1_1_region_interface" kindref="compound">RegionInterface</ref> REGGHEDR UNIQREGN ONE_REGN NONUREGN MODELVARS REGFFOTR</para>
+<para>NodeManifolds NDMFHEDR MANIFLDS </para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::BinaryFileSectionRead</label>
+        <link refid="classcsmp_1_1_binary_file_section_read"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/model/binaryReadWrite.h" line="57" column="1" bodyfile="source/includes/model/binaryReadWrite.h" bodystart="58" bodyend="65"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_binary_file_section_read_1a314b4701377e2c7ab973deab07a5cb79" prot="public" virt="non-virtual"><scope>csmp::BinaryFileSectionRead</scope><name>BinaryFileSectionRead</name></member>
+      <member refid="classcsmp_1_1_binary_file_section_read_1a5e5fcdb83adfa83922403d772b08c3aa" prot="private" virt="non-virtual"><scope>csmp::BinaryFileSectionRead</scope><name>fp_</name></member>
+      <member refid="classcsmp_1_1_binary_file_section_read_1a7786a0bdec899f5dfbe3d5839f7c0b81" prot="private" virt="non-virtual"><scope>csmp::BinaryFileSectionRead</scope><name>hdr_</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

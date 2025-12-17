@@ -54,9 +54,9 @@ class NodeCenteredFiniteVolumeTransport {
 
     /// single-phase passive advection, returns Courant increment
     virtual double AdvectVariable( double time_interval,
-                                     double cfl_multiplication_factor=1.,
-                                     bool apply_flux_balance_correction=true, // if there are poro-elastic sources or sinks
-                                     bool update_pore_volumes=false);
+                                   double cfl_multiplication_factor=1.,
+                                   bool apply_flux_balance_correction=true, // if there are poro-elastic sources or sinks
+                                   bool update_pore_volumes=false);
   
     /// single-phase passive advection, does NOT return courant increment, single timestep calculation
     /// no checks are made for courant condition.  Assumes external checks.
@@ -70,18 +70,12 @@ class NodeCenteredFiniteVolumeTransport {
     // bijective mapping
     // void MapFiniteVolumeVariableToFiniteElementSpace( const char* variable );
 
-    /// evaluation of Courant-Friedrich-Levy condition, i.e., grid Courant number
-    //virtual double CourantIncrement();
-
     /// single phase, takes into account element shape in 3D
     virtual double AnisotropicCourantIncrement();
 
-    /// advection, capillary diffusion and gravitational flow
-    //virtual double CourantIncrement( TwoPhaseModel<dim>& );
-
     /// two-phase, takes into account element shape in 3D
     virtual double AnisotropicCourantIncrement( TwoPhaseModel<dim>&,
-                                                  double max_time_increment=3153600000. ); // 100 years
+                                                 double max_time_increment=3153600000. ); // 100 years
 
     /// to set scaling (default=1)
     void     CFL_Multiplier( double desired_value );

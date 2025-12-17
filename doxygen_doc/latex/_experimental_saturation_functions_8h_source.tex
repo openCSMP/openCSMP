@@ -1,0 +1,166 @@
+\doxysection{Experimental\+Saturation\+Functions.\+h}
+\hypertarget{_experimental_saturation_functions_8h_source}{}\label{_experimental_saturation_functions_8h_source}\index{source/includes/thmc/two\_phase\_flow/ExperimentalSaturationFunctions.h@{source/includes/thmc/two\_phase\_flow/ExperimentalSaturationFunctions.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{EXPERIMENTAL\_SATURATION\_FUNCTIONS\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{EXPERIMENTAL\_SATURATION\_FUNCTIONS\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_cubic_spline_8h}{"{}CubicSpline.h"{}}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_element_8h}{"{}Element.h"{}}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00011\ \textcolor{comment}{\ \ \ Saturation\ functions\ parameterised\ with\ experimental\ data,\ including}}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ \ \ relperm-\/\ and\ pc-\/s\ relations\ read\ from\ user-\/specified\ data\ (ASCII-\/text)\ }}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ \ \ files\ are\ interpolated\ with\ cubic\ splines.}}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ \ \ Each\ curve\ is\ indentified\ by\ a\ unique\ integer\ code\ that\ represents\ the\ rocktype}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ \ \ of\ interest.}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ \ \ Input\ file\ format:}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ \ \ @code}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ \ \ \ \ \ To\ use\ experimental\ data\ for\ rock\ types\ you\ need\ to\ define}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ \ \ \ \ \ RELPERM\_MODEL\ in\ Numerical.txt\ file\ as\ EXPERIMENTAL}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ \ \ \ \ \ Input\ file\ for\ rock\ types\ should\ be\ put\ in\ the\ execution\ folder}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ \ \ \ \ \ and\ the\ file\ name\ that\ contains\ relative\ permeability\ data\ and}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ \ \ \ \ capillary\ values\ should\ be\ 'rock\ type.txt'}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ \ \ \ \ \ File\ structure\ is\ as\ follow:}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ \ \ \ \ 2\ -\/>number\ of\ tables}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ \ \ \ \ 1\ -\/>rocktype}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ \ \ \ \ 21\ -\/>number\ of\ entries\ for\ table\ 0\ (first\ table)\ excluding\ the\ first\ row}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ \ \ \ \ -\/1.99513\ \ \ -\/0.00488\ \ \ \ 0.000125\ \ \ \ 3.709875\ \ \ \ -\/10557.3\ \ \ \ -\/519.567\ -\/>derivatives\ at\ start\ and\ end\ for\ kro,\ krw\ and\ pc}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ \ \ \ \ 0\ \ 1\ \ \ 0\ \ \ 5000\ -\/>\ data\ (sw\ \ kro\ krw\ pc)}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ \ \ \ \ 0.05\ \ \ 0.90024375\ \ 0.00000625\ \ 4472.135955}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ \ \ \ \ 0.1\ \ \ \ 0.8019\ \ 0.0001\ \ 3162.27766}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ \ 0.15\ \ \ 0.70624375\ \ 0.00050625\ \ 2581.988897}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ \ \ \ \ 0.2\ \ \ \ 0.6144\ \ 0.0016\ \ 2236.067977}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ \ 0.25\ \ \ 0.52734375\ \ 0.00390625\ \ 2000}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ \ \ \ \ 0.3\ \ \ \ 0.4459\ \ 0.0081\ \ 1825.741858}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ \ \ \ \ 0.35\ \ \ 0.37074375\ \ 0.01500625\ \ 1690.308509}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ \ \ \ \ 0.4\ \ \ \ 0.3024\ \ 0.0256\ \ 1581.13883}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ \ \ \ \ 0.45\ \ \ 0.24124375\ \ 0.04100625\ \ 1490.711985}}
+\DoxyCodeLine{00041\ \textcolor{comment}{\ \ \ \ \ 0.5\ \ \ \ 0.1875\ \ 0.0625\ \ 1414.213562}}
+\DoxyCodeLine{00042\ \textcolor{comment}{\ \ \ \ \ 0.55\ \ \ 0.14124375\ \ 0.09150625\ \ 1348.399725}}
+\DoxyCodeLine{00043\ \textcolor{comment}{\ \ \ \ \ 0.6\ \ \ \ 0.1024\ \ 0.1296\ \ 1290.994449}}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ \ \ \ \ 0.65\ \ \ 0.07074375\ \ 0.17850625\ \ 1240.347346}}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ \ \ \ \ 0.7\ \ \ \ 0.0459\ \ 0.2401\ \ 1195.228609}}
+\DoxyCodeLine{00046\ \textcolor{comment}{\ \ \ \ \ 0.75\ \ \ 0.02734375\ \ 0.31640625\ \ 1154.700538}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ \ \ \ \ 0.8\ \ \ \ 0.0144\ \ 0.4096\ \ 1118.033989}}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ \ \ \ \ 0.85\ \ \ 0.00624375\ \ 0.52200625\ \ 1084.652289}}
+\DoxyCodeLine{00049\ \textcolor{comment}{\ \ \ \ \ 0.9\ \ \ \ 0.0019\ \ 0.6561\ \ 1054.092553}}
+\DoxyCodeLine{00050\ \textcolor{comment}{\ \ \ \ \ 0.95\ \ \ 0.00024375\ \ 0.81450625\ \ 1025.978352}}
+\DoxyCodeLine{00051\ \textcolor{comment}{\ \ \ \ \ 1\ \ 0\ \ \ 1\ \ \ 1000}}
+\DoxyCodeLine{00052\ \textcolor{comment}{\ \ \ \ \ 2\ -\/>rocktype}}
+\DoxyCodeLine{00053\ \textcolor{comment}{\ \ \ \ \ 6\ -\/>number\ of\ entries\ for\ table\ 1\ (second\ table)\ excluding\ the\ first\ row}}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ \ \ \ \ -\/1\ -\/1\ \ 1\ \ \ 1\ \ \ 0\ \ \ 0\ -\/>derivatives}}
+\DoxyCodeLine{00055\ \textcolor{comment}{\ \ \ \ \ 0\ \ 1\ \ \ 0\ \ \ 0\ -\/>data}}
+\DoxyCodeLine{00056\ \textcolor{comment}{\ \ \ \ \ 0.2\ \ \ \ 0.8\ 0.2\ 0}}
+\DoxyCodeLine{00057\ \textcolor{comment}{\ \ \ \ \ 0.4\ \ \ \ 0.6\ 0.4\ 0}}
+\DoxyCodeLine{00058\ \textcolor{comment}{\ \ \ \ \ 0.6\ \ \ \ 0.4\ 0.6\ 0}}
+\DoxyCodeLine{00059\ \textcolor{comment}{\ \ \ \ \ 0.8\ \ \ \ 0.2\ 0.8\ 0}}
+\DoxyCodeLine{00060\ \textcolor{comment}{\ \ \ \ \ 1\ \ 0\ \ \ 1\ \ \ 0}}
+\DoxyCodeLine{00061\ \textcolor{comment}{\ \ @endcode}}
+\DoxyCodeLine{00062\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00063\ \textcolor{comment}{\ \ @attention\ DO\ NOT\ SET\ ANY\ SATURATION\ ENDPOINTS\ (swr\ or\ snr)\ when\ using\ experimentally\ determined\ saturation\ functions}}
+\DoxyCodeLine{00064\ \textcolor{comment}{\ \ as\ these\ will\ naturally\ emerge\ from\ the\ curves.}}
+\DoxyCodeLine{00065\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00066\ \textcolor{comment}{\ \ @attention\ consequently,\ effective\ saturation\ also\ is\ already\ accounted\ for\ in\ terms\ of\ the\ spline\ values}}
+\DoxyCodeLine{00067\ \textcolor{comment}{\ \ negative\ values\ are\ avoided\ by\ returning\ 0\ or\ 1\ at\ saturations\ below\ and\ above\ the\ end-\/point\ saturations.}}
+\DoxyCodeLine{00068\ \textcolor{comment}{}}
+\DoxyCodeLine{00069\ \textcolor{comment}{\ \ \ @author\ SKM\ }}
+\DoxyCodeLine{00070\ \textcolor{comment}{\ \ \ @date\ 14/1/2007}}
+\DoxyCodeLine{00071\ \textcolor{comment}{\ \ \ @update\ 9/2/2019}}
+\DoxyCodeLine{00072\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00073\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00074\ \textcolor{keyword}{template}<uint32\_t\ dim,\ \textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ USER>}
+\DoxyCodeLine{00075\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions}{ExperimentalSaturationFunctions}}\ \{}
+\DoxyCodeLine{00076\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{comment}{///\ reads\ capillary\ preessure\ and\ saturation\ functions\ from\ "{}rocktype"{}\ file}}
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions_a32a3ef3b21379fcc16f7b6d762818dcf}{ExperimentalSaturationFunctions}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ filename\ );}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{comment}{///\ TODO:\ revise\ to\ extract\ this\ from\ the\ curves\ in\ a\ consistent\ fashion:\ (sw-\/swr)\ /\ (1-\/swr-\/snr);\ use\ only\ in\ 2-\/phase\ flow\ simulations}}
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions_a6b96bce5cf5e3060fbc27b0431c8ac28}{EffectiveSaturation}}(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{comment}{///\ TODO:\ revise\ to\ extract\ this\ from\ the\ curves\ in\ a\ consistent\ fashion:\ (sw-\/swr)\ /\ (1-\/swr-\/snr);\ use\ only\ in\ 2-\/phase\ flow\ simulations}}
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions_a2abcd769a16f6f7fd09b65327d7e4aeb}{EffectiveSaturation\_at}}(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const},\ \textcolor{keywordtype}{double}\ sw\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{comment}{//\ pc,\ kri,\ and\ derivative\ methods\ that\ use\ a\ user\ supplied\ saturation\ value}}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keywordtype}{double}\ pc\_at(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const},\ \textcolor{keywordtype}{double}\ sw\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keywordtype}{double}\ dpcds\_at(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const},\ \textcolor{keywordtype}{double}\ sw\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \ \ \ \ \textcolor{keywordtype}{double}\ krw\_at(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const},\ \textcolor{keywordtype}{double}\ sw\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keywordtype}{double}\ krn\_at(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const},\ \textcolor{keywordtype}{double}\ sw\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keywordtype}{double}\ dkrwds\_at(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const},\ \textcolor{keywordtype}{double}\ sw\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions_a77c0a31bc9293ac3855522f2ea327d5b}{dkrnds\_at}}(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const},\ \textcolor{keywordtype}{double}\ sw\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{keywordtype}{double}\ dpcdsw\_at\_Numerical(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const}\ p,\ \textcolor{keywordtype}{double}\ sw,\ \textcolor{keywordtype}{double}\ h\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keywordtype}{double}\ dkrwds\_at\_Numerical(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const}\ p,\ \textcolor{keywordtype}{double}\ sw,\ \textcolor{keywordtype}{double}\ h\ )\ \textcolor{keyword}{const}\ ;}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keywordtype}{double}\ dkrnds\_at\_Numerical(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const}\ p,\ \textcolor{keywordtype}{double}\ sw,\ \textcolor{keywordtype}{double}\ h\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \ \ \ \ \textcolor{comment}{//\ pc,\ kri,\ and\ derivative\ methods\ that\ use\ saturation\ values\ at\ the\ element\ barycentre\ (for\ FE\ mobility\ calculations\ etc.)}}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions_a048a5e101c1a11e96cc9e0e1d34ca0a7}{pc}}(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions_acdd4f1b02a9874c44d194a9e3d60d20d}{dpcds}}(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \ \ \ \ \textcolor{keywordtype}{double}\ krw(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \ \ \ \ \textcolor{keywordtype}{double}\ krn(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00117\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions_a67e07d1300648e7e8bb47a3ff561e862}{dkrwds}}(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions_a790f0dd9d431cfa397b73df9539c8430}{dkrnds}}(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ \ \ \ \ \textcolor{keywordtype}{double}\ dpcdsw\_Numerical(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const}\ p,\ \textcolor{keywordtype}{double}\ h\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions_a24d5c57a9286fca6d7827b28e514e983}{dkrwds\_Numerical}}(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const}\ p,\ \textcolor{keywordtype}{double}\ h\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ \ \ \ \ \textcolor{keywordtype}{double}\ dkrnds\_Numerical(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const}\ p,\ \textcolor{keywordtype}{double}\ h\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ \ \ \ \ \textcolor{comment}{///\ @return\ number\ of\ RRTs\ (reservoir\ rock\ types)\ for\ which\ saturation\ function\ values\ are\ stored}}
+\DoxyCodeLine{00128\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions_aea5e94a43634a350ef2fd890f02074ee}{size\_t}}\ \mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions_aea5e94a43634a350ef2fd890f02074ee}{RockTypes}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ \ \ \ \ \textcolor{keywordtype}{void}\ Out()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00132\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions_ab2bfa2d9127fc8b42631db4f7067181f}{initialiseResidualSaturations}}(\mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ model);}
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00134\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions_a13cc8a97ae251dd04504d8a94c27f8c3}{seff\_to\_sw}}(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const}\ e,\ \textcolor{keywordtype}{double}\ seff\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00135\ }
+\DoxyCodeLine{00136\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions_acb50fd5b105ac0039d8adc3acfb346a4}{sw\_from\_pc\_at}}(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const}\ e,\ \textcolor{keywordtype}{double}\ pc,\ \textcolor{keywordtype}{double}\ sw\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00138\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00139\ \ \ \ \ USER<dim>*\ User()\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<USER<dim>*>(\textcolor{keyword}{this});\ \}}
+\DoxyCodeLine{00140\ \ \ \ \ USER<dim>\ \textcolor{keyword}{const}*\ User()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<\textcolor{keyword}{const}\ USER<dim>*>(\textcolor{keyword}{this});\ \}}
+\DoxyCodeLine{00141\ }
+\DoxyCodeLine{00142\ \ \ \ \ \textcolor{comment}{///\ reads\ rock\ types\ from\ file,\ establishing\ how\ many\ there\ are\ and\ returning\ this\ value}}
+\DoxyCodeLine{00143\ \ \ \ \ size\_t\ InitialiseReservoirRockTypes(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ rt\_file\_name\ );}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ \ \ \ \ \textcolor{comment}{///\ converts\ the\ floating-\/point\ rocktype\ identifier\ into\ a\ positive\ integer\ 0..254}}
+\DoxyCodeLine{00146\ \ \ \ \ size\_t\ RockType(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00147\ }
+\DoxyCodeLine{00148\ \ \ \ \ \textcolor{keywordtype}{double}\ MaxCapillaryPressure()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ max\_capillary\_pressure\_;\ \}}
+\DoxyCodeLine{00149\ }
+\DoxyCodeLine{00150\ \ \ \ \ std::map<size\_t,\ csmp::CubicSpline>\ kr1\_,\ kr2\_,\ pc\_;}
+\DoxyCodeLine{00151\ \ \ \ \ std::map<size\_t,\ \textcolor{keywordtype}{double}>\ swr\_,\ snr\_;}
+\DoxyCodeLine{00152\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions}{std}}::\mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions}{map}}<\mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions}{size\_t}},\ \mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions}{std}}::\mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions}{vector}}<\textcolor{keywordtype}{double}>>\ \mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions}{input\_sw\_}},\ \mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions}{input\_pc\_}};}
+\DoxyCodeLine{00153\ \ \ \ \ \textcolor{comment}{//\ semi-\/log\ extension\ (Webb,\ 2000,\ WRR)}}
+\DoxyCodeLine{00154\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ max\_derivative\_\ \ \ \ \ \ \ \ \ =\ 1.0e+9;\ \textcolor{comment}{///<\ the\ absolute\ value\ of\ any\ derivative\ calculated\ herein\ must\ be\ less\ than\ this\ value}}
+\DoxyCodeLine{00155\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ max\_capillary\_pressure\_\ =\ 3.0e+7;\ \textcolor{comment}{///<\ tensile\ strength\ of\ the\ rock}}
+\DoxyCodeLine{00156\ \};}
+\DoxyCodeLine{00157\ }
+\DoxyCodeLine{00158\ \}\ \textcolor{comment}{//\ end\ namespace\ csmp}}
+\DoxyCodeLine{00159\ }
+\DoxyCodeLine{00160\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{/*\ CSMP\_EXPERIMENTAL\_SATURATION\_FUNCTIONS\_H\ */}}
+
+\end{DoxyCode}

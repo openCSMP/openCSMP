@@ -1,0 +1,264 @@
+.TH "csmp::ElementWithStorageAndFEM< dim >" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::ElementWithStorageAndFEM< dim >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+Inherits \fBcsmp::LocalVariableStorage< dim, Element >\fP, and \fBcsmp::FiniteElementPolicy< dim, Element >\fP\&.
+.SS "Additional Inherited Members"
+
+
+Public Member Functions inherited from \fBcsmp::LocalVariableStorage< dim, Element >\fP
+.in +1c
+.ti -1c
+.RI "bool \fBoperator==\fP (const \fBLocalVariableStorage\fP< dim, \fBElement\fP > &) const"
+.br
+.RI "Goto overload for storees without \fBIntegrationPointVariables\fP\&. "
+.ti -1c
+.RI "void \fBResizePropertyStorage\fP (const \fBLocalVariables\fP &)"
+.br
+.RI "Goto overload for storees without \fBIntegrationPointVariables\fP\&. "
+.ti -1c
+.RI "void \fBAddProperty\fP (const \fBcsmp::Index\fP &)"
+.br
+.RI "Creates an empty space in the storage preserving the original variable values\&. \fBLocalVariables\fP in \fBIndex\fP have to reflect NEW state (incl added) "
+.ti -1c
+.RI "void \fBDeleteProperty\fP (const \fBcsmp::Index\fP &)"
+.br
+.RI "Deletes data and flags of property \fBLocalVariables\fP in \fBIndex\fP have to reflect CURRENT state (incl property to be removed) "
+.ti -1c
+.RI "bool \fBIsWithinRange\fP (const \fBcsmp::Index\fP &, double, double) const"
+.br
+.ti -1c
+.RI "double \fBRead\fP (const \fBcsmp::Index\fP &) const"
+.br
+.RI "Scalar variable value\&. "
+.ti -1c
+.RI "void \fBStore\fP (const \fBcsmp::Index\fP &, const \fBScalarVariable\fP &)"
+.br
+.RI "Scalar variable\&. "
+.ti -1c
+.RI "\fBVARIABLE_FLAG\fP \fBStatus\fP (const \fBcsmp::Index\fP &) const"
+.br
+.RI "Scalar & Array variable flag\&. "
+.ti -1c
+.RI "void \fBStoreArrayEntry\fP (const \fBcsmp::Index\fP &, double array_elmt_value, int_type)"
+.br
+.ti -1c
+.RI "double \fBReadArrayEntry\fP (const \fBcsmp::Index\fP &, int_type array_elmt) const"
+.br
+.RI "reads single double element inside of the target array "
+.ti -1c
+.RI "bool \fBEmptyLVS\fP () const"
+.br
+.ti -1c
+.RI "void \fBOutLVS\fP () const"
+.br
+.ti -1c
+.RI "void \fBAssertPlacement\fP (const \fBcsmp::Index\fP &) const"
+.br
+.RI "We check in debug only\&. "
+.ti -1c
+.RI "void \fBAssertIntegrationPointPlacement\fP (const \fBcsmp::Index\fP &) const"
+.br
+.RI "We check in debug only\&. "
+.ti -1c
+.RI "void \fBAssertFiniteVolumeIntegrationPointPlacement\fP (const \fBcsmp::Index\fP &) const"
+.br
+.RI "We check in debug only\&. "
+.ti -1c
+.RI "void \fBStoreLocalState\fP (const \fBLocalVariables\fP &lv)"
+.br
+.RI "We store in debug only\&. "
+.ti -1c
+.RI "void \fBLVS\fP (const Data &data)"
+.br
+.RI "copy or move supplied data into storage "
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::FiniteElementPolicy< dim, Element >\fP
+.in +1c
+.ti -1c
+.RI "\fBFiniteElementPolicy\fP (const \fBElement\fP< dim > &) noexcept"
+.br
+.ti -1c
+.RI "\fBFiniteElementPolicy\fP & \fBoperator=\fP (const \fBFiniteElementPolicy\fP &p) noexcept"
+.br
+.ti -1c
+.RI "void \fBAssign\fP (\fBFiniteElement\fP *fe_ptr)"
+.br
+.RI "for deferred assignment or changing the element at runtime "
+.ti -1c
+.RI "void \fBAssignFiniteElementNullPtr\fP () noexcept"
+.br
+.ti -1c
+.RI "\fBCSMP_FEM_TYPE\fP \fBFE_Type\fP () const noexcept"
+.br
+.RI "the type is an enumeration that is used in the generation of finite elements "
+.ti -1c
+.RI "\fBFiniteElement\fP * \fBFE\fP () const noexcept"
+.br
+.RI "you are allowed to switch the element at runtime and modifies the volatile data it stores "
+.ti -1c
+.RI "bool \fBIsEquidimensional\fP () const"
+.br
+.RI "true for volumes in 3D, surfaces in 2D, and line elements in 1D, else this is a lower dimensional element "
+.ti -1c
+.RI "bool \fBIsLine\fP () const"
+.br
+.ti -1c
+.RI "bool \fBIsSurface\fP () const"
+.br
+.ti -1c
+.RI "bool \fBIsVolume\fP () const"
+.br
+.ti -1c
+.RI "uint32_t \fBInterpolation\fP () const"
+.br
+.ti -1c
+.RI "bool \fBUsesLocalCoordinates\fP () const"
+.br
+.ti -1c
+.RI "uint32_t \fBIntegrationPoints\fP () const"
+.br
+.RI "number of element integration points for current quadrature scheme "
+.ti -1c
+.RI "\fBPoint\fP< dim > \fBIntegrationPoint\fP (uint32_t ip) const"
+.br
+.RI "returns the location of the integration point in global coordinates "
+.ti -1c
+.RI "double \fBWeightAtIntegrationPoint\fP (uint32_t i) const"
+.br
+.ti -1c
+.RI "\fBPoint\fP< dim > \fBRstToXYZ\fP (\fBPoint\fP< dim > rst) const"
+.br
+.RI "mapping of local points from local to global coordinates "
+.ti -1c
+.RI "void \fBN_At\fP (const \fBPoint\fP< dim > &rst) const"
+.br
+.RI "interpolation function values at local points "
+.ti -1c
+.RI "void \fBN_AtGlobalPoint\fP (std::vector< double > &N, const std::vector< double > &xyz) const"
+.br
+.RI "for elements with local coordinates, this method uses an iterative approach to find the correspoding location in parametric space "
+.ti -1c
+.RI "void \fBN_AtBaryCenter\fP (std::vector< double > &N) const"
+.br
+.ti -1c
+.RI "void \fBN_AtIntegrationPoint\fP (uint32_t ipoint, std::vector< double > &N) const"
+.br
+.ti -1c
+.RI "void \fBIntegral_dNT_K_dN\fP (\fBDenseMatrix\fP< DM_MIN > &M, \fBDenseMatrix\fP< DM_MIN > &K) const"
+.br
+.RI "first (constant) derivatives of linear interpolation functions of analytically integrated simplex "
+.ti -1c
+.RI "void \fBdN\fP (\fBDenseMatrix\fP< DM_MIN > &) const"
+.br
+.ti -1c
+.RI "double \fBdN_AtNode\fP (\fBDenseMatrix\fP< DM_MIN > &, uint32_t nd, uint32_t dof=1) const"
+.br
+.RI "first derivatives of interpolation functions at the given node (returned is determinant of Jacobian matrix at i,j) "
+.ti -1c
+.RI "double \fBdN_AtBaryCenter\fP (\fBDenseMatrix\fP< DM_MIN > &, uint32_t dof=1) const"
+.br
+.RI "first derivatives of interpolation functions at the (returned is determinant of Jacobian matrix at i,j) "
+.ti -1c
+.RI "double \fBdN_AtIntegrationPoint\fP (\fBDenseMatrix\fP< DM_MIN > &, uint32_t gp, uint32_t dof=1) const"
+.br
+.RI "first derivatives of interpolation functions at Gauss point gp (returned is determinant of Jacobian matrix at i,j) "
+.ti -1c
+.RI "double \fBdet_JINV_AtIntegrationPoint\fP (uint32_t ipoint) const"
+.br
+.RI "returned is determinant of Jacobian matrix at given Gauss point "
+.ti -1c
+.RI "void \fBIntegralNN\fP (\fBDenseMatrix\fP< DM_MIN > &M) const"
+.br
+.RI "interpolation function products matrix for analytically integrated element "
+.ti -1c
+.RI "void \fBCoordinateMatrix\fP () const"
+.br
+.RI "initialises the nodes x dim matrix XY stored in the connected finite element class "
+.ti -1c
+.RI "double \fBPropertyIntegral\fP (const \fBcsmp::Index\fP &scalar_property) const"
+.br
+.RI "integrates a scalar property over the element and returns this value "
+.ti -1c
+.RI "void \fBPropertyValueAt\fP (const \fBcsmp::Index\fP &, const std::vector< double > &xyz, Var &) const"
+.br
+.RI "interpolates node property values to the point of interest (in global coordinates); "
+.ti -1c
+.RI "void \fBPropertyValueAtBaryCenter\fP (const \fBcsmp::Index\fP &, Var &) const"
+.br
+.RI "returns the value of any property interpolated to the element's center of gravity "
+.ti -1c
+.RI "void \fBPropertyValueAtIntegrationPoint\fP (const \fBcsmp::Index\fP &node_prop, uint32_t integration_point, Var &) const"
+.br
+.RI "returns the value of any property interpolated to the integration point of interest "
+.ti -1c
+.RI "void \fBIntegrationPointPropertyVector\fP (const \fBcsmp::Index\fP &, std::vector< Var > &) const"
+.br
+.RI "returns property values at the integration points "
+.ti -1c
+.RI "void \fBExtrapolateIntegrationPointVariableToNodes\fP (uint32_t nvars, const std::vector< double > &integration_point_var, std::vector< double > &node_variable) const"
+.br
+.RI "uses linear extrapolation of property values from the integration points to the nodes "
+.ti -1c
+.RI "double \fBVolume\fP () const"
+.br
+.RI "reports volume, area*1, and length*1*1 products for volumetric, surfacic and line elements respectively "
+.ti -1c
+.RI "double \fBAspectRatio\fP () const"
+.br
+.RI "ratio of longest to shortest edge=segment "
+.ti -1c
+.RI "double \fBInnerRadius\fP () const"
+.br
+.RI "the radius of an inscribed circle / sphere "
+.ti -1c
+.RI "uint32_t \fBSegments\fP () const"
+.br
+.RI "number of edges = segments in the finite element of interest "
+.ti -1c
+.RI "\fBPoint\fP< dim > \fBSegmentMidPoint\fP (uint32_t segm) const"
+.br
+.RI "retrieve position of the segment (element edge) mid-points "
+.ti -1c
+.RI "double \fBSegmentLength\fP (uint32_t segm) const"
+.br
+.RI "returns the length of the nth segment=edge of the finite element "
+.ti -1c
+.RI "void \fBSegmentLengths\fP (std::vector< double > &) const"
+.br
+.RI "returns a vector with the lengths of all finite element segments = edges "
+.ti -1c
+.RI "std::set< \fBNode\fP< dim > * > \fBCornerNodesOfFace\fP (uint32_t face_id) const"
+.br
+.RI "returns search key to match element faces; pointers in order so that they can be searched "
+.ti -1c
+.RI "std::set< \fBNode\fP< dim > * > \fBCornerNodesConnectedTo\fP (uint32_t node_id) const"
+.br
+.RI "returns set of nodes that are neighbors of the target node in this element "
+.ti -1c
+.RI "\fBPoint\fP< dim > \fBFaceBaryCenter\fP (uint32_t face) const"
+.br
+.RI "retrieve barycenter of element face "
+.ti -1c
+.RI "\fBPoint\fP< dim > \fBUnitNormalToFace\fP (uint32_t face) const"
+.br
+.RI "returns unit normal to face of element i "
+.ti -1c
+.RI "\fBPoint\fP< dim > \fBUnitNormal\fP () const"
+.br
+.RI "computes unit normal to element if it is planar (3D) or linear (2D); vector components are returned into point "
+.ti -1c
+.RI "void \fBOutputPropertyToVTK\fP (const \fBcsmp::Index\fP &, const char *file_name, const char *var_name) const"
+.br
+.RI "outputs finite element and discretised variable to VTK file "
+.in -1c
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

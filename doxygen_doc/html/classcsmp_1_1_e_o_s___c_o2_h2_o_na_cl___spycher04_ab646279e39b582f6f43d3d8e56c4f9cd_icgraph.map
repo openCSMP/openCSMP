@@ -1,0 +1,15 @@
+<map id="csmp::EOS_CO2H2ONaCl_Spycher04::molarFracH2oBrine" name="csmp::EOS_CO2H2ONaCl_Spycher04::molarFracH2oBrine">
+<area shape="rect" id="Node000001" title=" " alt="" coords="973,78,1183,119"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a58113b7bebf766b3743f2aeb5c42faa3" title="mole fraction (0..1) of H20 in aqueous phase (the rest is CO2)" alt="" coords="744,78,925,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="957,101,925,101,925,96,957,96"/>
+<area shape="rect" id="Node000003" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#af89ad2329b147952b788d3f5ed8948aa" title="mass fraction of CO2 in aqueous phase (weight percent)" alt="" coords="516,13,696,54"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="746,76,679,57,681,52,748,71"/>
+<area shape="rect" id="Node000006" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#af21616a2c3e9edfcb3a1311e8fd19a0d" title="mass fraction H2O in aqueous phase (weight percent)" alt="" coords="516,78,696,119"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="729,101,697,101,697,96,729,96"/>
+<area shape="rect" id="Node000007" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a07262e56a0f3346bcc9cb639df5b7ff1" title="mass fraction (0..1) of salt in aqueous phase (weight percent)" alt="" coords="516,144,696,184"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="748,126,681,145,679,140,746,121"/>
+<area shape="rect" id="Node000004" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#aa179fe804c5befddba70f6a789ce205f" title=" " alt="" coords="234,5,468,61"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="500,36,468,36,468,30,500,30"/>
+<area shape="rect" id="Node000005" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a26252ff434ea32a5d5dfa66e4031dd04" title="water formation volume factor, Bw" alt="" coords="5,13,186,54"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="218,36,186,36,186,30,218,30"/>
+</map>

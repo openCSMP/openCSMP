@@ -19,8 +19,8 @@ class Integral_NT_M_dV_Triangle : public MathOperatorRHS<dim,CELL> {
   public:
     Integral_NT_M_dV_Triangle( const PropertyDatabase<dim>&, const char* mapped_property );
     
-    virtual void GetOperands( const CELL<dim>& );
-    virtual void ComputeContribution( const CELL<dim>& );
+    void GetOperands( const CELL<dim>& ) override final;
+    void ComputeContribution( const CELL<dim>& ) override final;
   
   private:
     std::vector<ScalarVariable > NPROP;

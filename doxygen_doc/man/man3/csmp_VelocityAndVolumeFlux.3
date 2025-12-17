@@ -1,0 +1,373 @@
+.TH "csmp::VelocityAndVolumeFlux< dim, CELL >" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::VelocityAndVolumeFlux< dim, CELL > \- Post-processes flow "velocity" & "volume flux" that are output as \fBvector<double>\fP and scalar variables, respectively upon request these properties are extrapolated to the nodes and averaged between adjacent elements\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <VelocityAndVolumeFlux\&.h>\fP
+.PP
+Inherits \fBcsmp::MathOperatorLHS< dim, Element >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBVelocityAndVolumeFlux\fP (const \fBModel\fP< dim > &, const char *oper, const char *basic, const char *test, bool node_averaging=false, const char *velocity='velocity', const char *pore_velocity='pore velocity', const char *volume_flux='volume flux', const char *nodal_velocity='nodal velocity', const char *nodal_pore_velocity='nodal pore velocity', const char *nodal_volume_flux='nodal volume flux')"
+.br
+.ti -1c
+.RI "\fBVelocityAndVolumeFlux\fP (const \fBModel\fP< dim > &, const char *oper, const char *basic, const char *test, const char *relative_density, bool node_averaging=false, const char *velocity='velocity', const char *pore_velocity='pore velocity', const char *volume_flux='volume flux', const char *nodal_velocity='nodal velocity', const char *nodal_pore_velocity='nodal pore velocity', const char *nodal_volume_flux='nodal volume flux')"
+.br
+.ti -1c
+.RI "\fBVelocityAndVolumeFlux\fP (const \fBModel\fP< dim > &, const char *oper, const char *basic, const char *test, const char *relative_density, const char *prop_multiplier, bool node_averaging=false, const char *velocity='velocity', const char *pore_velocity='pore velocity', const char *volume_flux='volume flux', const char *nodal_velocity='nodal velocity', const char *nodal_pore_velocity='nodal pore velocity', const char *nodal_volume_flux='nodal volume flux')"
+.br
+.RI "as previous but offering possibility to multiply operand by a distributed variable "
+.ti -1c
+.RI "void \fBVerbose\fP (bool stdoutput)"
+.br
+.ti -1c
+.RI "void \fBGetOperands\fP (const CELL< dim > &) override final"
+.br
+.ti -1c
+.RI "void \fBComputeContribution\fP (const CELL< dim > &) override final"
+.br
+.RI "{V} = [grad P]{k} "
+.ti -1c
+.RI "void \fBWriteOperands\fP (CELL< dim > &) override final"
+.br
+.ti -1c
+.RI "\fBVelocityAndVolumeFlux\fP< dim, CELL > * \fBclone\fP () const override final"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::MathOperatorLHS< dim, Element >\fP
+.in +1c
+.ti -1c
+.RI "\fBMathOperatorLHS\fP (const \fBPropertyDatabase\fP< dim > &, const char *basic, const char *test)"
+.br
+.ti -1c
+.RI "\fBMathOperatorLHS\fP & \fBoperator=\fP (const \fBMathOperatorLHS\fP &)"
+.br
+.ti -1c
+.RI "std::string \fBName\fP () const"
+.br
+.RI "\fBOperand\fP Functions\&. "
+.ti -1c
+.RI "virtual void \fBOut\fP () const"
+.br
+.ti -1c
+.RI "const \fBParameter\fP & \fBMaterialOperand\fP () const"
+.br
+.ti -1c
+.RI "const \fBIndex\fP & \fBMaterialOperandKey\fP () const"
+.br
+.ti -1c
+.RI "std::string \fBMaterialOperandName\fP () const"
+.br
+.ti -1c
+.RI "\fBVARIABLE_TYPE\fP \fBMaterialOperandType\fP () const"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBMaterialOperandPlacement\fP () const"
+.br
+.ti -1c
+.RI "uint32_t \fBMaterialOperandDataDepth\fP () const"
+.br
+.ti -1c
+.RI "const \fBParameter\fP & \fBBasicOperand\fP () const"
+.br
+.ti -1c
+.RI "const \fBIndex\fP & \fBBasicOperandKey\fP () const"
+.br
+.ti -1c
+.RI "std::string \fBBasicOperandName\fP () const"
+.br
+.ti -1c
+.RI "\fBVARIABLE_TYPE\fP \fBBasicOperandType\fP () const"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBBasicOperandPlacement\fP () const"
+.br
+.ti -1c
+.RI "uint32_t \fBBasicOperandDataDepth\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBBasicOperandOffset\fP () const"
+.br
+.ti -1c
+.RI "const \fBParameter\fP & \fBTestOperand\fP () const"
+.br
+.ti -1c
+.RI "const \fBIndex\fP & \fBTestOperandKey\fP () const"
+.br
+.ti -1c
+.RI "std::string \fBTestOperandName\fP () const"
+.br
+.ti -1c
+.RI "\fBVARIABLE_TYPE\fP \fBTestOperandType\fP () const"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBTestOperandPlacement\fP () const"
+.br
+.ti -1c
+.RI "uint32_t \fBTestOperandDataDepth\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBTestOperandOffset\fP () const"
+.br
+.ti -1c
+.RI "bool \fBAdd\fP () const"
+.br
+.RI "Accumulation Process Settings\&. "
+.ti -1c
+.RI "bool \fBSubtract\fP () const"
+.br
+.ti -1c
+.RI "bool \fBAddLater\fP () const"
+.br
+.ti -1c
+.RI "bool \fBSubtractLater\fP () const"
+.br
+.ti -1c
+.RI "bool \fBMultiply\fP () const"
+.br
+.ti -1c
+.RI "bool \fBLumpedFormulation\fP () const"
+.br
+.ti -1c
+.RI "uint32_t \fBApplicationCycle\fP () const"
+.br
+.ti -1c
+.RI "uint32_t \fBApplicationCycles\fP () const"
+.br
+.ti -1c
+.RI "double \fBMultiplyBy\fP () const"
+.br
+.ti -1c
+.RI "bool \fBMultiplyWithTimeIncrement\fP () const"
+.br
+.ti -1c
+.RI "bool \fBDivideByTimeIncrement\fP () const"
+.br
+.ti -1c
+.RI "void \fBAddAccumulate\fP ()"
+.br
+.RI "Set flags and properties\&. "
+.ti -1c
+.RI "void \fBSubtractAccumulate\fP ()"
+.br
+.ti -1c
+.RI "void \fBAddAccumulateLater\fP ()"
+.br
+.ti -1c
+.RI "void \fBSubtractAccumulateLater\fP ()"
+.br
+.ti -1c
+.RI "void \fBMultiplyAccumulate\fP ()"
+.br
+.ti -1c
+.RI "void \fBPropertyAtIntegrationPoint\fP (const \fBElement\fP< dim > &, const \fBcsmp::Index\fP &, uint32_t ip, \fBDenseMatrix\fP< DM_MIN > &)"
+.br
+.RI "interpolation of property if isoparametric elements are used "
+.ti -1c
+.RI "virtual void \fBGetOperands\fP (const \fBElement\fP< dim > &)"
+.br
+.RI "getting data from the \fBElement\fP, \fBFace\fP, \fBInterFace\fP "
+.ti -1c
+.RI "virtual void \fBMultiplyWithTimeFactor\fP (double dt)"
+.br
+.RI "multiply with time increment if this is desired "
+.ti -1c
+.RI "virtual void \fBAssignToGlobal\fP (const \fBElement\fP< dim > &, \fBSparseMatrix\fP &)"
+.br
+.RI "assigment to the left hand side global matrix (after everything was calculated ) "
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Attributes inherited from \fBcsmp::MathOperatorLHS< dim, Element >\fP
+.in +1c
+.ti -1c
+.RI "std::string \fBname_\fP"
+.br
+.RI "name of operator "
+.ti -1c
+.RI "\fBParameter\fP \fBop\fP"
+.br
+.RI "material property operand "
+.ti -1c
+.RI "std::pair< \fBParameter\fP, size_t > \fBbop\fP"
+.br
+.RI "basic function operand and calculation offset "
+.ti -1c
+.RI "std::pair< \fBParameter\fP, size_t > \fBtop\fP"
+.br
+.RI "test function operand and calculation offset "
+.ti -1c
+.RI "\fBDenseMatrix\fP< DM_MIN > \fBLHS\fP"
+.br
+.RI "solution matrix to be accumulated "
+.ti -1c
+.RI "std::vector< \fBDenseMatrix\fP< DM_MIN > > \fBMTRL\fP"
+.br
+.RI "material property matrix(es) needed for PDE operand "
+.ti -1c
+.RI "\fBDenseMatrix\fP< DM_MIN > \fBDERIV\fP"
+.br
+.RI "shape function derivative matrix "
+.ti -1c
+.RI "std::vector< double > \fBIPOL\fP"
+.br
+.RI "shape function vector "
+.ti -1c
+.RI "double \fBfactor_\fP"
+.br
+.RI "constant scaling factor "
+.ti -1c
+.RI "bool \fBadd_accumulate_\fP"
+.br
+.ti -1c
+.RI "bool \fBsubtract_accumulate_\fP"
+.br
+.ti -1c
+.RI "bool \fBadd_accumulate_later_\fP"
+.br
+.ti -1c
+.RI "bool \fBsubtract_accumulate_later_\fP"
+.br
+.ti -1c
+.RI "bool \fBmultiply_accumulate_\fP"
+.br
+.ti -1c
+.RI "bool \fBlump_matrices_\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBapplication_cycles_\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBapplication_cycle_\fP"
+.br
+.ti -1c
+.RI "bool \fBtime_multiply_\fP"
+.br
+.ti -1c
+.RI "bool \fBtime_divide_\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim, template< uint32_t > class CELL = Element>
+.br
+class csmp::VelocityAndVolumeFlux< dim, CELL >"Post-processes flow "velocity" & "volume flux" that are output as \fBvector<double>\fP and scalar variables, respectively upon request these properties are extrapolated to the nodes and averaged between adjacent elements\&. 
+
+
+.PP
+\fBAuthor\fP
+.RS 4
+S\&.K\&. Matthai 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2005
+.RE
+.PP
+.SH "Motivation"
+.PP
+Post-Processing: Compute flow velocities and their magnitudes from the fluid pressure field, the conductivity, and the porosity of the medium\&. The flow velocities are computed at the element centers or integration points but they can be extrapolated to the nodes if this option is chosen\&. The variable names which are hardwired into this math operator are:
+
+.PP
+.PP
+.nf
+"velocity"            element   vector
+"pore velocity"           element       vector
+"volume flux"         element       scalar
+"nodal velocity"      node      vector
+"nodal pore velocity"   node      vector
+"nodal volume flux"     element     scalar
+.fi
+.PP
+
+.PP
+Those with a the "nodal" prefix are used only when the option for output to the nodes is chosen\&. 
+.br
+.SH "Implementation"
+.PP
+Procedure: In 2 post-processing application cycles of this class object the following is performed:
+
+.PP
+.IP "1." 4
+From the nodal "fluid pressure" and the shape function derivatives, the "fluid pressure gradient" at the element center (for elements with linear interpolation functions), or at the integration points is computed\&. For higher order elements these locations are optimal locations, see Barlow, 1977)\&. 
+.br
+
+.IP "2." 4
+The product of the fluid pressure gradient, the conductivity, and the porosity (in case of the interstitial velocity) and -1\&.0, gives the flow velocity\&. The volume flux, as a scalar property, is given by the magnitude of the Darcy velocity vector\&. 
+.br
+
+.IP "3." 4
+If the properties shall be mapped to the nodes, they are linearly extrapolated to these from the element center or the integration points\&. In the case of linear elements, nodal velocities represent the averages of adjacent elements\&. These are not weighted by element area !
+
+.PP
+For quadratic elements, bilinear extrapolation is carried out by the specific finite element used\&. Only linear variations in the velocity over the element are supported at this stage\&. The nodal velocities are averaged among the adjacent elements since they diverge at these locations from one-another\&. 
+.br
+
+.PP
+
+.PP
+Steps 1 and 2 are accomplished in the first application cycle of the post-processing operator\&. The nodal averaging and following operations are done in a second cycle\&. 
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> \fBcsmp::VelocityAndVolumeFlux\fP< dim, CELL >::VelocityAndVolumeFlux (const \fBModel\fP< dim > & sg, const char * oper, const char * basic, const char * test, bool node_averaging = \fRfalse\fP, const char * velocity = \fR'velocity'\fP, const char * pore_velocity = \fR'pore velocity'\fP, const char * volume_flux = \fR'volume flux'\fP, const char * nodal_velocity = \fR'nodal velocity'\fP, const char * nodal_pore_velocity = \fR'nodal pore velocity'\fP, const char * nodal_volume_flux = \fR'nodal volume flux'\fP)"
+Constructs the post-processing math operator for velocity/ flux calculations\&.
+.SH "Input Arguments"
+.PP
+Three character strings for the input variables of the calculation 'conductivity', 'porosity', and 'fluid pressure', a boolean variable to toggle node averaging on in which case the velocities and fluxes are extrapolated to the nodes\&. 
+.br
+.SH "Messages"
+.PP
+The names of the output variables are hard-wired in this operator\&. Thus, checks are performed whether these variables actually exist in the variable database and errors are reported if they don't or if they have the wrong placement or type\&. 
+.br
+
+.PP
+tested: 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> \fBcsmp::VelocityAndVolumeFlux\fP< dim, CELL >::VelocityAndVolumeFlux (const \fBModel\fP< dim > & sg, const char * oper, const char * basic, const char * test, const char * relative_density, bool node_averaging = \fRfalse\fP, const char * velocity = \fR'velocity'\fP, const char * pore_velocity = \fR'pore velocity'\fP, const char * volume_flux = \fR'volume flux'\fP, const char * nodal_velocity = \fR'nodal velocity'\fP, const char * nodal_pore_velocity = \fR'nodal pore velocity'\fP, const char * nodal_volume_flux = \fR'nodal volume flux'\fP)"
+Like in first case, but considering buoyancy forces\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIrelative_density\fP 'relative density' is the fluid density - a reference density, for instance 1000 kg/m3 
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim, template< uint32_t > class CELL = Element> \fBVelocityAndVolumeFlux\fP< dim, CELL > * \fBcsmp::VelocityAndVolumeFlux\fP< dim, CELL >::clone () const\fR [inline]\fP, \fR [final]\fP, \fR [override]\fP, \fR [virtual]\fP"
+
+.PP
+Implements \fBcsmp::MathOperatorLHS< dim, Element >\fP\&.
+.SS "template<uint32_t dim, template< uint32_t > class CELL> void \fBcsmp::VelocityAndVolumeFlux\fP< dim, CELL >::ComputeContribution (const CELL< dim > & e)\fR [final]\fP, \fR [override]\fP, \fR [virtual]\fP"
+
+.PP
+{V} = [grad P]{k} 
+.SH "Input Arguments"
+.PP
+A reference to the \fBElement\fP for which the post-processing is done\&. 
+.PP
+Reimplemented from \fBcsmp::MathOperatorLHS< dim, Element >\fP\&.
+.SS "template<uint32_t dim, template< uint32_t > class CELL> void \fBcsmp::VelocityAndVolumeFlux\fP< dim, CELL >::Verbose (bool stdoutput)"
+Switch to verbose mode (results are reported to stdout)\&. 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> void \fBcsmp::VelocityAndVolumeFlux\fP< dim, CELL >::WriteOperands (CELL< dim > & e)\fR [final]\fP, \fR [override]\fP, \fR [virtual]\fP"
+Outputs the computed velocities and fluxes to the \fBModel\fP storage checking the range of each variable using the ranges associated with each of the Operands\&.
+.SH "Input Arguments"
+.PP
+A reference to the property memory manager and the \fBElement\fP for which the variables are output\&. 
+.PP
+Reimplemented from \fBcsmp::MathOperatorLHS< dim, Element >\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

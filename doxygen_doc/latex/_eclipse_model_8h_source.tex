@@ -1,0 +1,91 @@
+\doxysection{Eclipse\+Model.\+h}
+\hypertarget{_eclipse_model_8h_source}{}\label{_eclipse_model_8h_source}\index{source/includes/interfaces/Eclipse/EclipseModel.h@{source/includes/interfaces/Eclipse/EclipseModel.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{ECLIPSE\_MODEL\_UOM\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{ECLIPSE\_MODEL\_UOM\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_eclipse_interface_8h}{"{}EclipseInterface.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_model_8h}{"{}Model.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00010\ \textcolor{comment}{}}
+\DoxyCodeLine{00011\ \textcolor{comment}{@brief\ Input\ interface\ which\ converts\ a\ standard\ corner-\/point\ (hexahedral\ cell)\ grid\ from}}
+\DoxyCodeLine{00012\ \textcolor{comment}{Schlumberger's\ reservoir\ simulator\ Eclipse\ into\ a\ CSMP\ model\ object\ in\ which}}
+\DoxyCodeLine{00013\ \textcolor{comment}{the\ cells\ are\ represented\ by\ hexahedra.\ Degenerate\ cells\ are\ converted\ to\ other}}
+\DoxyCodeLine{00014\ \textcolor{comment}{element\ types\ like\ prisms\ and\ tetrahedra.}}
+\DoxyCodeLine{00015\ \textcolor{comment}{}}
+\DoxyCodeLine{00016\ \textcolor{comment}{@attention\ do\ not\ apply\ to\ Eclipse\ grids\ with\ non-\/standard\ (partially\ overlapping)\ connections\ with\ grid\ cells.}}
+\DoxyCodeLine{00017\ \textcolor{comment}{}}
+\DoxyCodeLine{00018\ \textcolor{comment}{@author\ R.\ Manasipov}}
+\DoxyCodeLine{00019\ \textcolor{comment}{@author\ Stephan\ Matthai\ (done\ some\ refactoring,\ but\ still\ needs\ much\ work)}}
+\DoxyCodeLine{00020\ \textcolor{comment}{@date\ 2014,\ 2016,\ 2018}}
+\DoxyCodeLine{00021\ \textcolor{comment}{@revised\ SKM\ 12/04/2018}}
+\DoxyCodeLine{00022\ \textcolor{comment}{}}
+\DoxyCodeLine{00023\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00024\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_eclipse_model}{EclipseModel}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_eclipse_model}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_eclipse_model}{Model}}<3U>\ \{}
+\DoxyCodeLine{00025\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \textcolor{comment}{///\ CSMP\ model\ construction\ from\ Eclipse\ files;\ property\ database\ is\ created\ from\ "{}variables\_file.txt"{}}}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_eclipse_model_a25b282fdf9de65e9cdaadf351e94a6fb}{EclipseModel}}(\ \mbox{\hyperlink{classcsmp_1_1_eclipse_model_settings}{EclipseModelSettings}}\&\ settings,}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ model\_name,}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ variables\_file\ );}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \textcolor{comment}{///\ CSMP\ model\ construction\ from\ mesh\ files;\ empty\ property\ database}}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_eclipse_model_a521a84a0620c16e0d80feeda960dff3f}{EclipseModel}}(\ \mbox{\hyperlink{classcsmp_1_1_eclipse_model_settings}{EclipseModelSettings}}\&\ settings,\ \textcolor{keyword}{const}\ std::string\&\ model\_name\ );}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \string~EclipseModel();}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \textcolor{comment}{///\ volumetric\ model\ subdomains\ if\ any}}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ Container>\ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_eclipse_model_a8b83a0b6df4e6b640d9e8a06bc564a45}{GetRegions}}(\ Container\&\ data\ );}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \textcolor{comment}{///\ lower-\/dimensional\ element\ regions\ representing\ geological\ faults}}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ Container>\ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_eclipse_model_a619a663cf64cb58801dff4721cf0c6c4}{GetFaults}}(\ Container\&\ data\ );}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \textcolor{comment}{///\ wells\ which\ do\ not\ have\ a\ discrete\ representation\ inside\ of\ Eclipse}}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ Container>\ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_eclipse_model_a6c79047fd6b8410fe003193a444ebf10}{GetWells}}(\ Container\&\ data\ );}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \textcolor{comment}{///\ JC:\ remove\ it\ later\ -\/\ processing\ special\ regions}}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_eclipse_model_a77a5f95f5f7af96ec8953f255d7cb908}{CreateBoundariesAroundFaults}}(\ \textcolor{keywordtype}{bool}\ keep\_fault\_regions\ =\ \textcolor{keyword}{false}\ );}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \textcolor{comment}{///\ JC:\ remove\ it\ later\ -\/\ TODO:\ not\ implemented\ yet}}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_eclipse_model_aa30c50d84068a079dc74fc023713b46c}{CreateSplitBoundariesAroundFaults}}(\ \textcolor{keywordtype}{bool}\ delete\_fault\_regions\ =\ \textcolor{keyword}{false}\ );}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \textcolor{comment}{///\ JC:\ remove\ it\ later\ -\/\ \ BOX\ flag\ nodes\ and\ elements\ of\ volumetric\ target\ region}}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_eclipse_model_affd70fe23cb3244a2b9b2e1e4f8c6a58}{AssignBoxBoundaryFlagsWherePossible}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ target\_region\ );}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \textcolor{comment}{///\ Get\ ijk\ coordinates\ of\ corner-\/point\ grid\ cell\ that\ corresponds\ to\ csmp::Element}}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \mbox{\hyperlink{structijk}{ijk}}\ \mbox{\hyperlink{classcsmp_1_1_eclipse_model_a694073cca375de10759b7c6710cf4bca}{EclipseCoordinates}}(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<3u>*\ e\ )\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ elmt\_to\_ijk\_.find(e)-\/>second;\ \}}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \textcolor{comment}{///\ inserts\ a\ well\ path\ that\ penetrates\ the\ centers\ of\ the\ faces\ of\ the\ supplied\ cells}}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_eclipse_model_a3bcaadbc8fc2436a30e43b6748ff4f6d}{AddWell}}(\textcolor{keyword}{const}\ std::string\&\ well\_name,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<3U>\&\ well\_start\_point,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<3U>\&\ well\_end\_point);}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \textcolor{keyword}{public}:\ \textcolor{comment}{//\ SKM\ accessors}}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \textcolor{comment}{///\ the\ dimensions\ of\ the\ original\ corner-\/point\ grid}}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_eclipse_model_a707640c77a9a4ffe1560078edb41c1e4}{GridDimensions}}(\ size\_t\&\ max\_I,\ size\_t\&\ max\_J,\ size\_t\&\ max\_K\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \{\ max\_I=grid\_dim\_I\_;\ max\_J=grid\_dim\_J\_;\ max\_K=grid\_dim\_K\_;\ \}}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{comment}{///\ Master\ method\ to\ build\ the\ model}}
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keywordtype}{void}\ Initialize();}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{comment}{//\ PROPS\ and\ other\ specs\ from\ RUNSPECS\ file}}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_eclipse_interface}{EclipseInterface}}\ \ \ \ \ \ \ \ \ \ \ mesh\_interface;}
+\DoxyCodeLine{00071\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_eclipse_model_settings}{EclipseModelSettings}}\ \ \ eclipse\_model\_settings\_;}
+\DoxyCodeLine{00072\ \ \ \ \ std::set<std::string>\ \ regions\_;}
+\DoxyCodeLine{00073\ \ \ \ \ std::set<std::string>\ \ faults\_;}
+\DoxyCodeLine{00074\ \ \ \ \ std::set<std::string>\ \ wells\_;}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{comment}{//\ Eclipse\ grid\ dimensions}}
+\DoxyCodeLine{00077\ \ \ \ \ size\_t\ \ grid\_dim\_I\_,\ grid\_dim\_J\_,\ grid\_dim\_K\_;}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{comment}{//\ TODO:\ while\ fast,\ unordered\ map\ might\ be\ extremely\ costly\ in\ this\ context}}
+\DoxyCodeLine{00080\ \ \ \ \ std::unordered\_multimap<ijk,Element<3u>*>\ \ ijk\_to\_elmt\_;\ \textcolor{comment}{///<\ stores\ mapping\ from\ i,j,k\ to\ elements}}
+\DoxyCodeLine{00081\ \ \ \ \ std::unordered\_map<Element<3u>*,ijk>\ \ \ \ \ \ \ elmt\_to\_ijk\_;\ \textcolor{comment}{///<\ stores\ mapping\ from\ elements\ to\ i,j,k}}
+\DoxyCodeLine{00082\ \};}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00085\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

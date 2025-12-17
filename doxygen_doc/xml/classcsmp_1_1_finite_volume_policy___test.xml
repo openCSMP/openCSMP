@@ -1,0 +1,620 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_finite_volume_policy___test" kind="class" language="C++" prot="public">
+    <compoundname>csmp::FiniteVolumePolicy_Test</compoundname>
+    <basecompoundref refid="classcsmp_1_1_test" prot="public" virt="non-virtual">csmp::Test</basecompoundref>
+    <includes refid="_finite_volume_policy___test_8h" local="no">FiniteVolumePolicy_Test.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_finite_volume_policy___test_1ae8ecc6754ccd83d59dfb7d0ff684f12c" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::FiniteVolumePolicy_Test::m_bTestFacetAreas</definition>
+        <argsstring></argsstring>
+        <name>m_bTestFacetAreas</name>
+        <qualifiedname>csmp::FiniteVolumePolicy_Test::m_bTestFacetAreas</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/FiniteVolumePolicy_Test.h" line="46" column="6" bodyfile="tests/unit/FiniteVolumePolicy_Test.h" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_finite_volume_policy___test_1a219030c1820c8160fce0ceb32adc9883" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::FiniteVolumePolicy_Test::m_bTestParametricFacetArea</definition>
+        <argsstring></argsstring>
+        <name>m_bTestParametricFacetArea</name>
+        <qualifiedname>csmp::FiniteVolumePolicy_Test::m_bTestParametricFacetArea</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/FiniteVolumePolicy_Test.h" line="47" column="6" bodyfile="tests/unit/FiniteVolumePolicy_Test.h" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_finite_volume_policy___test_1a5b685127540394b950cc342aab0d9e7f" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::FiniteVolumePolicy_Test::m_bTestFacetNormals</definition>
+        <argsstring></argsstring>
+        <name>m_bTestFacetNormals</name>
+        <qualifiedname>csmp::FiniteVolumePolicy_Test::m_bTestFacetNormals</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/FiniteVolumePolicy_Test.h" line="48" column="6" bodyfile="tests/unit/FiniteVolumePolicy_Test.h" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_finite_volume_policy___test_1ad26c66fced4c1e30002b1f0daefb611d" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::FiniteVolumePolicy_Test::m_bTestSectorVolumes</definition>
+        <argsstring></argsstring>
+        <name>m_bTestSectorVolumes</name>
+        <qualifiedname>csmp::FiniteVolumePolicy_Test::m_bTestSectorVolumes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/FiniteVolumePolicy_Test.h" line="49" column="6" bodyfile="tests/unit/FiniteVolumePolicy_Test.h" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_finite_volume_policy___test_1a500fa64fc9df89ac747d48770157a93b" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::FiniteVolumePolicy_Test::m_bTestParametricFacetNormals</definition>
+        <argsstring></argsstring>
+        <name>m_bTestParametricFacetNormals</name>
+        <qualifiedname>csmp::FiniteVolumePolicy_Test::m_bTestParametricFacetNormals</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/FiniteVolumePolicy_Test.h" line="50" column="6" bodyfile="tests/unit/FiniteVolumePolicy_Test.h" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_finite_volume_policy___test_1ac95a51e1b6a3775a1384657c103f1080" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::FiniteVolumePolicy_Test::m_bProjectionOnFacetNormal</definition>
+        <argsstring></argsstring>
+        <name>m_bProjectionOnFacetNormal</name>
+        <qualifiedname>csmp::FiniteVolumePolicy_Test::m_bProjectionOnFacetNormal</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/FiniteVolumePolicy_Test.h" line="51" column="6" bodyfile="tests/unit/FiniteVolumePolicy_Test.h" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_finite_volume_policy___test_1a74491c00340b94a98f5c4aa2e1b6be7e" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::FiniteVolumePolicy_Test::m_bPropertyValueAt</definition>
+        <argsstring></argsstring>
+        <name>m_bPropertyValueAt</name>
+        <qualifiedname>csmp::FiniteVolumePolicy_Test::m_bPropertyValueAt</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/FiniteVolumePolicy_Test.h" line="52" column="6" bodyfile="tests/unit/FiniteVolumePolicy_Test.h" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_finite_volume_policy___test_1ad2e1b27a46bffb06479aaae94720d91b" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::FiniteVolumePolicy_Test::m_bRSTToXYZ</definition>
+        <argsstring></argsstring>
+        <name>m_bRSTToXYZ</name>
+        <qualifiedname>csmp::FiniteVolumePolicy_Test::m_bRSTToXYZ</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/FiniteVolumePolicy_Test.h" line="53" column="6" bodyfile="tests/unit/FiniteVolumePolicy_Test.h" bodystart="53" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy___test_1a117d995867d865c34b58a1f09505d641" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::FiniteVolumePolicy_Test::FiniteVolumePolicy_Test</definition>
+        <argsstring>()</argsstring>
+        <name>FiniteVolumePolicy_Test</name>
+        <qualifiedname>csmp::FiniteVolumePolicy_Test::FiniteVolumePolicy_Test</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Method:</para>
+<para><ref refid="classcsmp_1_1_finite_volume_policy___test_1a117d995867d865c34b58a1f09505d641" kindref="member">FiniteVolumePolicy_Test&lt;dim&gt;::FiniteVolumePolicy_Test()</ref></para>
+<para>Description: Constructor. This function specifies which specific modalities of the test are on. </para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title></sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>The idea of this function is to control the test functionality in one place, in an easy, fast way.</para>
+<para>tested: is a test function </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/FiniteVolumePolicy_Test.h" line="29" column="5" bodyfile="tests/unit/FiniteVolumePolicy_Test.cpp" bodystart="67" bodyend="82"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy___test_1a107c4e5c879f1f172247aa295fe1d2cd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::FiniteVolumePolicy_Test::~FiniteVolumePolicy_Test</definition>
+        <argsstring>()</argsstring>
+        <name>~FiniteVolumePolicy_Test</name>
+        <qualifiedname>csmp::FiniteVolumePolicy_Test::~FiniteVolumePolicy_Test</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Method:</para>
+<para><ref refid="classcsmp_1_1_finite_volume_policy___test_1a107c4e5c879f1f172247aa295fe1d2cd" kindref="member">FiniteVolumePolicy_Test&lt;dim&gt;::~FiniteVolumePolicy_Test()</ref></para>
+<para>Description: Destructor. </para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>None. </para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Nothing to destroy.</para>
+<para>tested: is a test function </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/FiniteVolumePolicy_Test.h" line="30" column="5" bodyfile="tests/unit/FiniteVolumePolicy_Test.cpp" bodystart="211" bodyend="213"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy___test_1a0ee1977159a6d4a80260c7796b1d97fc" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::FiniteVolumePolicy_Test::run</definition>
+        <argsstring>()</argsstring>
+        <name>run</name>
+        <qualifiedname>csmp::FiniteVolumePolicy_Test::run</qualifiedname>
+        <reimplements refid="classcsmp_1_1_test_1af63cd2af47d8d03819b05cf8bfb27eac">run</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Method:</para>
+<para>void <ref refid="classcsmp_1_1_finite_volume_policy___test_1a0ee1977159a6d4a80260c7796b1d97fc" kindref="member">FiniteVolumePolicy_Test&lt;dim&gt;::run()</ref></para>
+<para>Description: Specifies the procedure of the test. </para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>None. </para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Runs the tests.</para>
+<para>tested: is a test function </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/FiniteVolumePolicy_Test.h" line="31" column="10" bodyfile="tests/unit/FiniteVolumePolicy_Test.cpp" bodystart="230" bodyend="254"/>
+        <references refid="classcsmp_1_1_finite_volume_policy___test_1ac6937acdcdfe5c824704987ef6164aea" compoundref="_finite_volume_policy___test_8cpp" startline="288" endline="452">IsoparametricLinearLineElement_Test</references>
+        <references refid="classcsmp_1_1_finite_volume_policy___test_1a77e32b0d279d62d900c9eb16c7503d3f" compoundref="_finite_volume_policy___test_8cpp" startline="4088" endline="4473">IsoparametricLinearPrism_Test</references>
+        <references refid="classcsmp_1_1_finite_volume_policy___test_1ad198c4533c92cfb1d04f30770cde71d6" compoundref="_finite_volume_policy___test_8cpp" startline="1833" endline="2568">IsoparametricLinearPyramid_Test</references>
+        <references refid="classcsmp_1_1_finite_volume_policy___test_1abb69b92bd5ecf1525f5934fa167b5233" compoundref="_finite_volume_policy___test_8cpp" startline="1364" endline="1796">IsoparametricLinearTetrahedron_Test</references>
+        <references refid="classcsmp_1_1_finite_volume_policy___test_1a1ec4844665d80de3ec389312a695ad80" compoundref="_finite_volume_policy___test_8cpp" startline="2609" endline="3069">Test_UnitaryIsoparametricLinearHexahedron</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy___test_1ac6937acdcdfe5c824704987ef6164aea" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FiniteVolumePolicy_Test::IsoparametricLinearLineElement_Test</definition>
+        <argsstring>(double fTolerance, double fToleranceInternal)</argsstring>
+        <name>IsoparametricLinearLineElement_Test</name>
+        <qualifiedname>csmp::FiniteVolumePolicy_Test::IsoparametricLinearLineElement_Test</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>fTolerance</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>fToleranceInternal</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Method:</para>
+<para>void <ref refid="classcsmp_1_1_finite_volume_policy___test_1ac6937acdcdfe5c824704987ef6164aea" kindref="member">FiniteVolumePolicy_Test&lt;dim&gt;::IsoparametricLinearLineElement_Test(double fTolerance, double fToleranceInternal)</ref></para>
+<para>Description: Specifies the procedure of the test.</para>
+<para>The tested element is supposed to be a uniform transformation of the original object by: Translate(-3,0,0) Rotate(N0, 40degrees) -2D Shear(N0, N1, 35degrees)</para>
+<para>This test does the following: -construct the element. -test the facet area, to the one measured in rhino -test the parametric facet area -test the volume of the sector, and check if it corresponds to the measured one -test the sum of the volumes -test the projection on the facet normal of a given property -convert the facet integration points to physical space and check if they correspond to the measured values -convert the sector integration points to physical space and check if they correspond to the measured values</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>double fTolerance - specifies the tolerance of the test </para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Runs the test for the Isoparametric Linear Bar element, for all dimensions.</para>
+<para>tested: is a test function </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/FiniteVolumePolicy_Test.h" line="32" column="10" bodyfile="tests/unit/FiniteVolumePolicy_Test.cpp" bodystart="288" bodyend="452"/>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6" compoundref="_c_s_m_p__global__enumerations_8h" startline="58">csmp::PLAIN</references>
+        <referencedby refid="classcsmp_1_1_finite_volume_policy___test_1a0ee1977159a6d4a80260c7796b1d97fc" compoundref="_finite_volume_policy___test_8cpp" startline="230" endline="254">run</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy___test_1a524f21948635cb88100493ef7710f1bf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::FiniteVolumePolicy_Test::IsoparametricLinearTriangle_Test</definition>
+        <argsstring>(double fTolerance, double fToleranceInternal)</argsstring>
+        <name>IsoparametricLinearTriangle_Test</name>
+        <qualifiedname>csmp::FiniteVolumePolicy_Test::IsoparametricLinearTriangle_Test</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>fTolerance</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>fToleranceInternal</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Method:</para>
+<para>void <ref refid="classcsmp_1_1_finite_volume_policy___test_1a524f21948635cb88100493ef7710f1bf" kindref="member">FiniteVolumePolicy_Test&lt;dim&gt;::IsoparametricLinearTriangle_Test(
+                     double fTolerance, double fToleranceInternal)</ref></para>
+<para>Description:</para>
+<para>Specifies the procedure of the test.</para>
+<para>The tested element is supposed to be a uniform transformation of the original object by: Translate(-3,0,0) Rotate(N0, 40degrees) -2D Shear(N0, N1, 35degrees)</para>
+<para>This test does the following: -construct the element. -test the facet area, to the one measured in rhino -test the facet normals -test the parametric facet area -test the volume of the sector, and check if it corresponds to the measured one -test the sum of the volumes -test the projection on the facet normal of a given property -convert the facet integration points to physical space and check if they correspond to the measured values -convert the sector integration points to physical space and check if they correspond to the measured values</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>double fTolerance - specifies the tolerance of the test</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Runs the test for the Isoparametric Linear Triangle element, for all dimensions != 1.</para>
+<para>tested: is a test function </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/FiniteVolumePolicy_Test.h" line="33" column="21" bodyfile="tests/unit/FiniteVolumePolicy_Test.cpp" bodystart="494" bodyend="857"/>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6" compoundref="_c_s_m_p__global__enumerations_8h" startline="58">csmp::PLAIN</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy___test_1ad0da207203520678941087b2637d3dcf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::FiniteVolumePolicy_Test::IsoparametricLinearQuadrilateral_Test</definition>
+        <argsstring>(double fTolerance, double fToleranceInternal)</argsstring>
+        <name>IsoparametricLinearQuadrilateral_Test</name>
+        <qualifiedname>csmp::FiniteVolumePolicy_Test::IsoparametricLinearQuadrilateral_Test</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>fTolerance</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>fToleranceInternal</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Method:</para>
+<para>void <ref refid="classcsmp_1_1_finite_volume_policy___test_1ad0da207203520678941087b2637d3dcf" kindref="member">FiniteVolumePolicy_Test&lt;dim&gt;::IsoparametricLinearQuadrilateral_Test(double fTolerance, double fToleranceInternal)</ref></para>
+<para>Description: Specifies the procedure of the test.</para>
+<para>The tested element is supposed to be a uniform transformation of the original object by: Translate(-3,0,0) Rotate(N0, 40degrees) -2D Shear(N0, N1, 35degrees)</para>
+<para>This test does the following: -construct the element. -test the facet area, to the one measured in rhino -test the facet normals -test the parametric facet area -test the volume of the sector, and check if it corresponds to the measured one -test the sum of the volumes -test the projection on the facet normal of a given property -convert the facet integration points to physical space and check if they correspond to the measured values -convert the sector integration points to physical space and check if they correspond to the measured values</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>double fTolerance - specifies the tolerance of the test </para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Runs the test for the Isoparametric Linear Quadrilateral element, for all dimensions != 1.</para>
+<para>tested: is a test function </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/FiniteVolumePolicy_Test.h" line="34" column="21" bodyfile="tests/unit/FiniteVolumePolicy_Test.cpp" bodystart="895" bodyend="1327"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy___test_1abb69b92bd5ecf1525f5934fa167b5233" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FiniteVolumePolicy_Test::IsoparametricLinearTetrahedron_Test</definition>
+        <argsstring>(double fTolerance, double fToleranceInternal)</argsstring>
+        <name>IsoparametricLinearTetrahedron_Test</name>
+        <qualifiedname>csmp::FiniteVolumePolicy_Test::IsoparametricLinearTetrahedron_Test</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>fTolerance</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>fToleranceInternal</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Method:</para>
+<para>void <ref refid="classcsmp_1_1_finite_volume_policy___test_1abb69b92bd5ecf1525f5934fa167b5233" kindref="member">FiniteVolumePolicy_Test&lt;3&gt;::IsoparametricLinearTetrahedron_Test(double fTolerance, double fToleranceInternal)</ref></para>
+<para>Description: Specifies the procedure of the test.</para>
+<para>The tested element is supposed to be a uniform transformation of the original object by: Translate(-3,0,0) Rotate(N0, 40degrees) -3D Shear(N0, N1, 35degrees)</para>
+<para>This test does the following: -construct the element. -test the facet area, to the one measured in rhino -test the facet normals -test the parametric facet area -test the volume of the sector, and check if it corresponds to the measured one -test the sum of the volumes -test the projection on the facet normal of a given property -convert the facet integration points to physical space and check if they correspond to the measured values -convert the sector integration points to physical space and check if they correspond to the measured values</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>double fTolerance - specifies the tolerance of the test </para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Runs the test for the Isoparametric Linear Tetrahedron element, for 3D.</para>
+<para>tested: is a test function </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/FiniteVolumePolicy_Test.h" line="35" column="10" bodyfile="tests/unit/FiniteVolumePolicy_Test.cpp" bodystart="1364" bodyend="1796"/>
+        <referencedby refid="classcsmp_1_1_finite_volume_policy___test_1a0ee1977159a6d4a80260c7796b1d97fc" compoundref="_finite_volume_policy___test_8cpp" startline="230" endline="254">run</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy___test_1ad198c4533c92cfb1d04f30770cde71d6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FiniteVolumePolicy_Test::IsoparametricLinearPyramid_Test</definition>
+        <argsstring>(double fTolerance, double fToleranceInternal)</argsstring>
+        <name>IsoparametricLinearPyramid_Test</name>
+        <qualifiedname>csmp::FiniteVolumePolicy_Test::IsoparametricLinearPyramid_Test</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>fTolerance</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>fToleranceInternal</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Method:</para>
+<para>void <ref refid="classcsmp_1_1_finite_volume_policy___test_1ad198c4533c92cfb1d04f30770cde71d6" kindref="member">FiniteVolumePolicy_Test&lt;3&gt;::IsoparametricLinearPyramid_Test(double fTolerance, double fToleranceInternal)</ref></para>
+<para>Description: Specifies the procedure of the test.</para>
+<para>The tested element is supposed to be a uniform transformation of the original object by: Translate(-3,0,0) Rotate(N0, 40degrees) -3D Shear(N0, N1, 35degrees)</para>
+<para>This test does the following: -construct the element. -test the facet area, to the one measured in rhino -test the facet normals -test the parametric facet area -test the volume of the sector, and check if it corresponds to the measured one -test the sum of the volumes -test the projection on the facet normal of a given property -convert the facet integration points to physical space and check if they correspond to the measured values -convert the sector integration points to physical space and check if they correspond to the measured values</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>double fTolerance - specifies the tolerance of the test </para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Runs the test for the Isoparametric Linear Pyramid element, for 3D.</para>
+<para>tested: is a test function </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/FiniteVolumePolicy_Test.h" line="36" column="10" bodyfile="tests/unit/FiniteVolumePolicy_Test.cpp" bodystart="1833" bodyend="2568"/>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6" compoundref="_c_s_m_p__global__enumerations_8h" startline="58">csmp::PLAIN</references>
+        <referencedby refid="classcsmp_1_1_finite_volume_policy___test_1a0ee1977159a6d4a80260c7796b1d97fc" compoundref="_finite_volume_policy___test_8cpp" startline="230" endline="254">run</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy___test_1a77e32b0d279d62d900c9eb16c7503d3f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FiniteVolumePolicy_Test::IsoparametricLinearPrism_Test</definition>
+        <argsstring>(double fTolerance, double fToleranceInternal)</argsstring>
+        <name>IsoparametricLinearPrism_Test</name>
+        <qualifiedname>csmp::FiniteVolumePolicy_Test::IsoparametricLinearPrism_Test</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>fTolerance</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>fToleranceInternal</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Method:</para>
+<para>void FiniteVolumePolicy_Test&lt;3&gt;::IsoparametricLinearPrism_Test(double fTolerance)</para>
+<para>Description: Specifies the procedure of the test.</para>
+<para>The tested element is supposed to be a uniform transformation of the original object by: Translate(-3,0,0) Rotate(N0, 40degrees) -3D Shear(N0, N1, 35degrees)</para>
+<para>This test does the following: -construct the element. -test the facet area, to the one measured in rhino -test the facet normals -test the parametric facet area -test the volume of the sector, and check if it corresponds to the measured one -test the sum of the volumes -test the projection on the facet normal of a given property -convert the facet integration points to physical space and check if they correspond to the measured values -convert the sector integration points to physical space and check if they correspond to the measured values</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>double fTolerance - specifies the tolerance of the test </para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Runs the test for the Isoparametric Linear Prism element, for 3D.</para>
+<para>tested: is a test function </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/FiniteVolumePolicy_Test.h" line="37" column="10" bodyfile="tests/unit/FiniteVolumePolicy_Test.cpp" bodystart="4088" bodyend="4473"/>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6" compoundref="_c_s_m_p__global__enumerations_8h" startline="58">csmp::PLAIN</references>
+        <referencedby refid="classcsmp_1_1_finite_volume_policy___test_1a0ee1977159a6d4a80260c7796b1d97fc" compoundref="_finite_volume_policy___test_8cpp" startline="230" endline="254">run</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy___test_1a1ec4844665d80de3ec389312a695ad80" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FiniteVolumePolicy_Test::Test_UnitaryIsoparametricLinearHexahedron</definition>
+        <argsstring>(double fTolerance, double fToleranceInternal)</argsstring>
+        <name>Test_UnitaryIsoparametricLinearHexahedron</name>
+        <qualifiedname>csmp::FiniteVolumePolicy_Test::Test_UnitaryIsoparametricLinearHexahedron</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>fTolerance</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>fToleranceInternal</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Method:</para>
+<para>void FiniteVolumePolicy_Test&lt;3&gt;::IsoparametricLinearHexahedron_Test(double fTolerance, double fToleranceInternal)</para>
+<para>Description: Specifies the procedure of the test.</para>
+<para>The tested element is supposed to be a uniform transformation of the original object by: Translate(-3,0,0) Rotate(N0, 40degrees) -3D Shear(N0, N1, 35degrees)</para>
+<para>This test does the following: -construct the element. -test the facet area, to the one measured in rhino -test the facet normals -test the parametric facet area -test the volume of the sector, and check if it corresponds to the measured one -test the sum of the volumes -test the projection on the facet normal of a given property -convert the facet integration points to physical space and check if they correspond to the measured values -convert the sector integration points to physical space and check if they correspond to the measured values</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>double fTolerance - specifies the tolerance of the test </para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Runs the test for the Isoparametric Linear Hexahedron element, for 3D.</para>
+<para><simplesect kind="note"><para>This set of tests uses a unit iso parametric hexahedron. That means that it is a Hexahedron with sides 2a*2b*2c where a,b, and c are the sides in each coordinate direction. The volumetric center of this hexahedron is the origin 0,0,0. </para>
+</simplesect>
+</para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/FiniteVolumePolicy_Test.h" line="40" column="10" bodyfile="tests/unit/FiniteVolumePolicy_Test.cpp" bodystart="2609" bodyend="3069"/>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6" compoundref="_c_s_m_p__global__enumerations_8h" startline="58">csmp::PLAIN</references>
+        <referencedby refid="classcsmp_1_1_finite_volume_policy___test_1a0ee1977159a6d4a80260c7796b1d97fc" compoundref="_finite_volume_policy___test_8cpp" startline="230" endline="254">run</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy___test_1a104741cb0bc8315a3ba7b2f87a15e302" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron1</definition>
+        <argsstring>(double fTolerance, double fToleranceInternal)</argsstring>
+        <name>Test_IsoparametricLinearHexahedron1</name>
+        <qualifiedname>csmp::FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron1</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>fTolerance</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>fToleranceInternal</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/FiniteVolumePolicy_Test.h" line="41" column="10" bodyfile="tests/unit/FiniteVolumePolicy_Test.cpp" bodystart="3075" bodyend="3546"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy___test_1aa59ce36800d80a11f2659c5a7d513af0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron2</definition>
+        <argsstring>(double fTolerance, double fToleranceInternal)</argsstring>
+        <name>Test_IsoparametricLinearHexahedron2</name>
+        <qualifiedname>csmp::FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron2</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>fTolerance</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>fToleranceInternal</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/FiniteVolumePolicy_Test.h" line="42" column="10" bodyfile="tests/unit/FiniteVolumePolicy_Test.cpp" bodystart="3551" bodyend="4048"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy___test_1a8eedd45606251f32b1cc64b3abdbd6ba" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FiniteVolumePolicy_Test::Test_CreateVSet</definition>
+        <argsstring>()</argsstring>
+        <name>Test_CreateVSet</name>
+        <qualifiedname>csmp::FiniteVolumePolicy_Test::Test_CreateVSet</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Method:</para>
+<para>void <ref refid="classcsmp_1_1_finite_volume_policy___test_1a8eedd45606251f32b1cc64b3abdbd6ba" kindref="member">FiniteVolumePolicy_Test&lt;dim&gt;::Test_CreateVSet()</ref></para>
+<para>Description: This function tests the creation of a <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref> (not related to the class).</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>tested: is a test function </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/FiniteVolumePolicy_Test.h" line="43" column="10" bodyfile="tests/unit/FiniteVolumePolicy_Test.cpp" bodystart="98" bodyend="193"/>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6" compoundref="_c_s_m_p__global__enumerations_8h" startline="58">csmp::PLAIN</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>extension of <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> interface for FV computations for all elements we need to test:</para>
+<para><itemizedlist>
+<listitem><para>*build the element by applying the following transformation to the orginal reference element:<itemizedlist>
+<listitem><para>Translate(-3,0,0)</para>
+</listitem><listitem><para>Rotate(N0, 40degrees)</para>
+</listitem><listitem><para>Shear(N0, N1, 35degrees)</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para>*facet and sector weights are as calculated in Rhino<itemizedlist>
+<listitem><para>*normals are correct</para>
+</listitem><listitem><para>*FacetArea() and SectorVolume() give correct results</para>
+</listitem><listitem><para>*Sector volumes add to volume of element</para>
+</listitem><listitem><para>*projection of vector variable in physical space gives the same result as the more efficient projection (ParametricProjection)</para>
+</listitem><listitem><para>(checked)interpolation functions at sector and facet integration points are correct</para>
+</listitem><listitem><para>(checked)PropertyValues are interpolated to the correct integration points</para>
+</listitem><listitem><para>(used in reimpl of FacetArea heavily)rst to xyz conversion is correct </para>
+</listitem></itemizedlist>
+</para>
+</listitem></itemizedlist>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::FiniteVolumePolicy_Test</label>
+        <link refid="classcsmp_1_1_finite_volume_policy___test"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Test</label>
+        <link refid="classcsmp_1_1_test"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::FiniteVolumePolicy_Test</label>
+        <link refid="classcsmp_1_1_finite_volume_policy___test"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Test</label>
+        <link refid="classcsmp_1_1_test"/>
+      </node>
+    </collaborationgraph>
+    <location file="tests/unit/FiniteVolumePolicy_Test.h" line="27" column="1" bodyfile="tests/unit/FiniteVolumePolicy_Test.h" bodystart="27" bodyend="54"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_test_1ad3346b23b36fbe34ac5f306a2a5d0e28" prot="protected" virt="non-virtual"><scope>csmp::FiniteVolumePolicy_Test</scope><name>do_equal</name></member>
+      <member refid="classcsmp_1_1_test_1aee0da28e82775ce7d1ebd3b9fae9bf7d" prot="protected" virt="non-virtual"><scope>csmp::FiniteVolumePolicy_Test</scope><name>do_fail</name></member>
+      <member refid="classcsmp_1_1_test_1a9976e7601c20a057d2f0ed2f8318c862" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy_Test</scope><name>do_succeed</name></member>
+      <member refid="classcsmp_1_1_test_1a0bf5d355d1455b2bc113ba2572e95ad8" prot="protected" virt="non-virtual"><scope>csmp::FiniteVolumePolicy_Test</scope><name>do_test</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy___test_1a117d995867d865c34b58a1f09505d641" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy_Test</scope><name>FiniteVolumePolicy_Test</name></member>
+      <member refid="classcsmp_1_1_test_1ab8d7cbdfd0588aa57d7ce4d2574d665b" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy_Test</scope><name>getName</name></member>
+      <member refid="classcsmp_1_1_test_1a47920cfd13f92f0860ca62ade4f2e150" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy_Test</scope><name>getNumFailed</name></member>
+      <member refid="classcsmp_1_1_test_1af0f3b897ba4ff0cb7c94cde8be1fb32b" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy_Test</scope><name>getNumPassed</name></member>
+      <member refid="classcsmp_1_1_test_1ac340370a07ff5fd4bd85bae93f0a3dac" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy_Test</scope><name>getStream</name></member>
+      <member refid="classcsmp_1_1_test_1adfad3f1f85aa766958ffcc59070e2d2d" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy_Test</scope><name>hasName</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy___test_1ac6937acdcdfe5c824704987ef6164aea" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy_Test</scope><name>IsoparametricLinearLineElement_Test</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy___test_1a77e32b0d279d62d900c9eb16c7503d3f" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy_Test</scope><name>IsoparametricLinearPrism_Test</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy___test_1ad198c4533c92cfb1d04f30770cde71d6" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy_Test</scope><name>IsoparametricLinearPyramid_Test</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy___test_1ad0da207203520678941087b2637d3dcf" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy_Test</scope><name>IsoparametricLinearQuadrilateral_Test</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy___test_1abb69b92bd5ecf1525f5934fa167b5233" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy_Test</scope><name>IsoparametricLinearTetrahedron_Test</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy___test_1a524f21948635cb88100493ef7710f1bf" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy_Test</scope><name>IsoparametricLinearTriangle_Test</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy___test_1ac95a51e1b6a3775a1384657c103f1080" prot="private" virt="non-virtual"><scope>csmp::FiniteVolumePolicy_Test</scope><name>m_bProjectionOnFacetNormal</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy___test_1a74491c00340b94a98f5c4aa2e1b6be7e" prot="private" virt="non-virtual"><scope>csmp::FiniteVolumePolicy_Test</scope><name>m_bPropertyValueAt</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy___test_1ad2e1b27a46bffb06479aaae94720d91b" prot="private" virt="non-virtual"><scope>csmp::FiniteVolumePolicy_Test</scope><name>m_bRSTToXYZ</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy___test_1ae8ecc6754ccd83d59dfb7d0ff684f12c" prot="private" virt="non-virtual"><scope>csmp::FiniteVolumePolicy_Test</scope><name>m_bTestFacetAreas</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy___test_1a5b685127540394b950cc342aab0d9e7f" prot="private" virt="non-virtual"><scope>csmp::FiniteVolumePolicy_Test</scope><name>m_bTestFacetNormals</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy___test_1a219030c1820c8160fce0ceb32adc9883" prot="private" virt="non-virtual"><scope>csmp::FiniteVolumePolicy_Test</scope><name>m_bTestParametricFacetArea</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy___test_1a500fa64fc9df89ac747d48770157a93b" prot="private" virt="non-virtual"><scope>csmp::FiniteVolumePolicy_Test</scope><name>m_bTestParametricFacetNormals</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy___test_1ad26c66fced4c1e30002b1f0daefb611d" prot="private" virt="non-virtual"><scope>csmp::FiniteVolumePolicy_Test</scope><name>m_bTestSectorVolumes</name></member>
+      <member refid="classcsmp_1_1_test_1a73afdd22caa8aac000b0d07fb3ae42e5" prot="protected" virt="non-virtual"><scope>csmp::FiniteVolumePolicy_Test</scope><name>prefix_</name></member>
+      <member refid="classcsmp_1_1_test_1aa241dcb3adf0ec6716ed08739bd3f79b" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy_Test</scope><name>report</name></member>
+      <member refid="classcsmp_1_1_test_1a5d334e867a3de4afd434dd9b0034234c" prot="public" virt="virtual"><scope>csmp::FiniteVolumePolicy_Test</scope><name>reset</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy___test_1a0ee1977159a6d4a80260c7796b1d97fc" prot="public" virt="virtual"><scope>csmp::FiniteVolumePolicy_Test</scope><name>run</name></member>
+      <member refid="classcsmp_1_1_test_1a3e006cad54b35d9e20561f4a64843b4e" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy_Test</scope><name>setName</name></member>
+      <member refid="classcsmp_1_1_test_1a20ba6ab18fcaaf806df6348a3b2e032b" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy_Test</scope><name>setStream</name></member>
+      <member refid="classcsmp_1_1_test_1aa4e274174d16215448eab6198bdb5979" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy_Test</scope><name>Test</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy___test_1a8eedd45606251f32b1cc64b3abdbd6ba" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy_Test</scope><name>Test_CreateVSet</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy___test_1a104741cb0bc8315a3ba7b2f87a15e302" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy_Test</scope><name>Test_IsoparametricLinearHexahedron1</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy___test_1aa59ce36800d80a11f2659c5a7d513af0" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy_Test</scope><name>Test_IsoparametricLinearHexahedron2</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy___test_1a1ec4844665d80de3ec389312a695ad80" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy_Test</scope><name>Test_UnitaryIsoparametricLinearHexahedron</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy___test_1a107c4e5c879f1f172247aa295fe1d2cd" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy_Test</scope><name>~FiniteVolumePolicy_Test</name></member>
+      <member refid="classcsmp_1_1_test_1ac154a16a5e086fe52e032c30722f5060" prot="public" virt="virtual"><scope>csmp::FiniteVolumePolicy_Test</scope><name>~Test</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

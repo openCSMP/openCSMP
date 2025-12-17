@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_sub" kind="class" language="C++" prot="public">
+    <compoundname>csmp::Sub</compoundname>
+    <basecompoundref refid="classcsmp_1_1_base" prot="public" virt="non-virtual">csmp::Base&lt; Sub &gt;</basecompoundref>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_sub_1a92a726a4ed547e60edd714898e614171" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Sub::ThisIsTheCatch</definition>
+        <argsstring>()</argsstring>
+        <name>ThisIsTheCatch</name>
+        <qualifiedname>csmp::Sub::ThisIsTheCatch</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/CuriouslyRecurringTemplate_Example.cpp" line="18" column="10" bodyfile="examples/source/CuriouslyRecurringTemplate_Example.cpp" bodystart="18" bodyend="18"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>sub class (demonstrating compile time polymorphism) </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>Policy</label>
+      </node>
+      <node id="4">
+        <label>csmp::Base&lt; T &gt;</label>
+        <link refid="classcsmp_1_1_base"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Base&lt; Sub &gt;</label>
+        <link refid="classcsmp_1_1_base"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; Sub &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::Sub</label>
+        <link refid="classcsmp_1_1_sub"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3">
+        <label>Policy</label>
+      </node>
+      <node id="4">
+        <label>csmp::Base&lt; T &gt;</label>
+        <link refid="classcsmp_1_1_base"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Base&lt; Sub &gt;</label>
+        <link refid="classcsmp_1_1_base"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; Sub &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::Sub</label>
+        <link refid="classcsmp_1_1_sub"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="examples/source/CuriouslyRecurringTemplate_Example.cpp" line="16" column="1" bodyfile="examples/source/CuriouslyRecurringTemplate_Example.cpp" bodystart="16" bodyend="19"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_base_1ae40e61bdd0a277520157520af6eed898" prot="public" virt="non-virtual"><scope>csmp::Sub</scope><name>CallChildClass</name></member>
+      <member refid="classcsmp_1_1_sub_1a92a726a4ed547e60edd714898e614171" prot="public" virt="non-virtual"><scope>csmp::Sub</scope><name>ThisIsTheCatch</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

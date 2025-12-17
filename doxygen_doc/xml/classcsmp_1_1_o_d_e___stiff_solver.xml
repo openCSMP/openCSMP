@@ -1,0 +1,2661 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_o_d_e___stiff_solver" kind="class" language="C++" prot="public">
+    <compoundname>csmp::ODE_StiffSolver</compoundname>
+    <includes refid="_o_d_e___stiff_solver_8h" local="no">ODE_StiffSolver.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1abe836a3601dd1ee07f04401dce97d068" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ODE_StiffSolver::SAFETY</definition>
+        <argsstring></argsstring>
+        <name>SAFETY</name>
+        <qualifiedname>csmp::ODE_StiffSolver::SAFETY</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="221" column="18" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="221" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1a5030a5d30826e5294a6b710773606f02" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ODE_StiffSolver::GROW</definition>
+        <argsstring></argsstring>
+        <name>GROW</name>
+        <qualifiedname>csmp::ODE_StiffSolver::GROW</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="222" column="18" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="222" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1a8072a8bc16ddaa8feeb766f4d8ca2256" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ODE_StiffSolver::PGROW</definition>
+        <argsstring></argsstring>
+        <name>PGROW</name>
+        <qualifiedname>csmp::ODE_StiffSolver::PGROW</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="223" column="18" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="223" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1a83aca27a26cd2318465299578654fb07" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ODE_StiffSolver::SHRNK</definition>
+        <argsstring></argsstring>
+        <name>SHRNK</name>
+        <qualifiedname>csmp::ODE_StiffSolver::SHRNK</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="224" column="18" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="224" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1a80676597eef779600f224ae4fb6949a9" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ODE_StiffSolver::PSHRNK</definition>
+        <argsstring></argsstring>
+        <name>PSHRNK</name>
+        <qualifiedname>csmp::ODE_StiffSolver::PSHRNK</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="225" column="18" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="225" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1a5162cff920dbbb92350027bd3838563a" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ODE_StiffSolver::ERRCON</definition>
+        <argsstring></argsstring>
+        <name>ERRCON</name>
+        <qualifiedname>csmp::ODE_StiffSolver::ERRCON</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="226" column="18" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="226" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1af3f330674509ec07db17d8b9d99b0770" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ODE_StiffSolver::MAXTRY</definition>
+        <argsstring></argsstring>
+        <name>MAXTRY</name>
+        <qualifiedname>csmp::ODE_StiffSolver::MAXTRY</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="227" column="18" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="227" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1aae881c0ea9f34c1fba46195956fddeea" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ODE_StiffSolver::GAM</definition>
+        <argsstring></argsstring>
+        <name>GAM</name>
+        <qualifiedname>csmp::ODE_StiffSolver::GAM</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="228" column="18" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="228" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1a868e17f36e208ed8ac3ed67d2b9a6082" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ODE_StiffSolver::TINY</definition>
+        <argsstring></argsstring>
+        <name>TINY</name>
+        <qualifiedname>csmp::ODE_StiffSolver::TINY</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="229" column="18" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="229" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1af86103e3c516c48b0ac121cd951e73cb" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ODE_StiffSolver::MAXSTP</definition>
+        <argsstring></argsstring>
+        <name>MAXSTP</name>
+        <qualifiedname>csmp::ODE_StiffSolver::MAXSTP</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="230" column="18" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="230" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1a8f3aad1867f43b157f7403c8b17d7d00" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ODE_StiffSolver::A21</definition>
+        <argsstring></argsstring>
+        <name>A21</name>
+        <qualifiedname>csmp::ODE_StiffSolver::A21</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="231" column="18" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="231" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1a519fafadcc48afb309a34237e786a546" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ODE_StiffSolver::A31</definition>
+        <argsstring></argsstring>
+        <name>A31</name>
+        <qualifiedname>csmp::ODE_StiffSolver::A31</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="231" column="35" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="231" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1a6e1cbdd8a06524da84fde08fa6f809bd" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ODE_StiffSolver::A32</definition>
+        <argsstring></argsstring>
+        <name>A32</name>
+        <qualifiedname>csmp::ODE_StiffSolver::A32</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="231" column="52" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="231" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1a5c260abef7f083100c2b7f7eb6efced9" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ODE_StiffSolver::C21</definition>
+        <argsstring></argsstring>
+        <name>C21</name>
+        <qualifiedname>csmp::ODE_StiffSolver::C21</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="232" column="18" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="232" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1a83241b47d8892dbd4ba159433af71b15" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ODE_StiffSolver::C31</definition>
+        <argsstring></argsstring>
+        <name>C31</name>
+        <qualifiedname>csmp::ODE_StiffSolver::C31</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="232" column="35" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="232" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1a55ebeaaede5c76b1778704d5047dab29" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ODE_StiffSolver::C32</definition>
+        <argsstring></argsstring>
+        <name>C32</name>
+        <qualifiedname>csmp::ODE_StiffSolver::C32</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="232" column="52" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="232" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1a600529c0bfdc4deb00fe8fce8b648262" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ODE_StiffSolver::C41</definition>
+        <argsstring></argsstring>
+        <name>C41</name>
+        <qualifiedname>csmp::ODE_StiffSolver::C41</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="232" column="69" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="232" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1a8fcec189995df9badab729d82cc839c9" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ODE_StiffSolver::C42</definition>
+        <argsstring></argsstring>
+        <name>C42</name>
+        <qualifiedname>csmp::ODE_StiffSolver::C42</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="232" column="86" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="232" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1a643a1df7e0c432339c880aed23c44c29" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ODE_StiffSolver::C43</definition>
+        <argsstring></argsstring>
+        <name>C43</name>
+        <qualifiedname>csmp::ODE_StiffSolver::C43</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="232" column="103" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="232" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1ac4ae8edb5308605ede0a7308244f69f4" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ODE_StiffSolver::B1</definition>
+        <argsstring></argsstring>
+        <name>B1</name>
+        <qualifiedname>csmp::ODE_StiffSolver::B1</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="233" column="18" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="233" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1a7c1b8a478b75ba8d5cd863ea041db3be" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ODE_StiffSolver::B2</definition>
+        <argsstring></argsstring>
+        <name>B2</name>
+        <qualifiedname>csmp::ODE_StiffSolver::B2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="233" column="35" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="233" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1a4d74cf466906f45bb2adcffd2c266ae0" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ODE_StiffSolver::B3</definition>
+        <argsstring></argsstring>
+        <name>B3</name>
+        <qualifiedname>csmp::ODE_StiffSolver::B3</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="233" column="52" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="233" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1a68847235cea79380ef8d54d5e53c4021" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ODE_StiffSolver::B4</definition>
+        <argsstring></argsstring>
+        <name>B4</name>
+        <qualifiedname>csmp::ODE_StiffSolver::B4</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="233" column="69" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="233" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1a7d0115e2a2c525ddbf477310b782ba9f" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ODE_StiffSolver::E1</definition>
+        <argsstring></argsstring>
+        <name>E1</name>
+        <qualifiedname>csmp::ODE_StiffSolver::E1</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="234" column="18" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="234" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1aaf77d6f0c2ceb85eaa29caec57a50f3a" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ODE_StiffSolver::E2</definition>
+        <argsstring></argsstring>
+        <name>E2</name>
+        <qualifiedname>csmp::ODE_StiffSolver::E2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="234" column="35" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="234" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1aca94497edb0d180bfe63202666bd8c16" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ODE_StiffSolver::E3</definition>
+        <argsstring></argsstring>
+        <name>E3</name>
+        <qualifiedname>csmp::ODE_StiffSolver::E3</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="234" column="52" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="234" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1a5f9cdfa8c0f1834bc427033ae299d0c6" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ODE_StiffSolver::E4</definition>
+        <argsstring></argsstring>
+        <name>E4</name>
+        <qualifiedname>csmp::ODE_StiffSolver::E4</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="234" column="69" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="234" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1a01b935d0473eb573f7722c543c1cd324" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ODE_StiffSolver::C1X</definition>
+        <argsstring></argsstring>
+        <name>C1X</name>
+        <qualifiedname>csmp::ODE_StiffSolver::C1X</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="235" column="18" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="235" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1a5319904358d57ac685156b115250bf57" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ODE_StiffSolver::C2X</definition>
+        <argsstring></argsstring>
+        <name>C2X</name>
+        <qualifiedname>csmp::ODE_StiffSolver::C2X</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="235" column="35" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="235" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1a7b51debbbbdd973d88a9e68461fa77c6" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ODE_StiffSolver::C3X</definition>
+        <argsstring></argsstring>
+        <name>C3X</name>
+        <qualifiedname>csmp::ODE_StiffSolver::C3X</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="235" column="52" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="235" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1ab10a2fae34c0c23a5c6df616a2662dcf" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ODE_StiffSolver::C4X</definition>
+        <argsstring></argsstring>
+        <name>C4X</name>
+        <qualifiedname>csmp::ODE_StiffSolver::C4X</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="235" column="69" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="235" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1a2da5d7707261c9a2f2e8e23e7581aaad" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ODE_StiffSolver::A2X</definition>
+        <argsstring></argsstring>
+        <name>A2X</name>
+        <qualifiedname>csmp::ODE_StiffSolver::A2X</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="236" column="18" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="236" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1ab64f5e94b7513024568177d2b8822a64" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ODE_StiffSolver::A3X</definition>
+        <argsstring></argsstring>
+        <name>A3X</name>
+        <qualifiedname>csmp::ODE_StiffSolver::A3X</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="236" column="35" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="236" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1a70bf6decdf8640e6018433159324a02b" prot="private" static="no" mutable="no">
+        <type>const int32_t</type>
+        <definition>const int32_t csmp::ODE_StiffSolver::NR_END</definition>
+        <argsstring></argsstring>
+        <name>NR_END</name>
+        <qualifiedname>csmp::ODE_StiffSolver::NR_END</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="237" column="23" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="237" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1a2ca3459ea3e5a64d88457e6a925e3d63" prot="private" static="no" mutable="no">
+        <type>const size_t</type>
+        <definition>const size_t csmp::ODE_StiffSolver::KMAXX</definition>
+        <argsstring></argsstring>
+        <name>KMAXX</name>
+        <qualifiedname>csmp::ODE_StiffSolver::KMAXX</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="240" column="19" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="240" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1aa328bd5fa1f26530a7048f65b672266f" prot="private" static="no" mutable="no">
+        <type>const size_t</type>
+        <definition>const size_t csmp::ODE_StiffSolver::IMAXX</definition>
+        <argsstring></argsstring>
+        <name>IMAXX</name>
+        <qualifiedname>csmp::ODE_StiffSolver::IMAXX</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="241" column="19" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="241" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1aec2029ccc8fe77f8e02839a36c89e1c4" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ODE_StiffSolver::SAFE1</definition>
+        <argsstring></argsstring>
+        <name>SAFE1</name>
+        <qualifiedname>csmp::ODE_StiffSolver::SAFE1</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="242" column="22" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="242" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1a9935cc132c22511ed491964b7708e90a" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ODE_StiffSolver::SAFE2</definition>
+        <argsstring></argsstring>
+        <name>SAFE2</name>
+        <qualifiedname>csmp::ODE_StiffSolver::SAFE2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="243" column="22" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="243" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1ad3855b858259820f9aeefadaded2ed9a" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ODE_StiffSolver::REDMAX</definition>
+        <argsstring></argsstring>
+        <name>REDMAX</name>
+        <qualifiedname>csmp::ODE_StiffSolver::REDMAX</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="244" column="22" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="244" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1ac365e5c3e87a2c962ced5829c4b0fac0" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ODE_StiffSolver::REDMIN</definition>
+        <argsstring></argsstring>
+        <name>REDMIN</name>
+        <qualifiedname>csmp::ODE_StiffSolver::REDMIN</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="245" column="22" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="245" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1a9eca343af3cce7e0dfed9f764a31a9fd" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ODE_StiffSolver::SCALMX</definition>
+        <argsstring></argsstring>
+        <name>SCALMX</name>
+        <qualifiedname>csmp::ODE_StiffSolver::SCALMX</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="246" column="22" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="246" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1a0b8b989e419173798fdee973db5d995d" prot="private" static="no" mutable="no">
+        <type>const bool</type>
+        <definition>const bool csmp::ODE_StiffSolver::correct_interpretation</definition>
+        <argsstring></argsstring>
+        <name>correct_interpretation</name>
+        <qualifiedname>csmp::ODE_StiffSolver::correct_interpretation</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="247" column="22" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="247" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1af32f0d00e37b928abe311f9657788121" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::ODE_StiffSolver::eps</definition>
+        <argsstring></argsstring>
+        <name>eps</name>
+        <qualifiedname>csmp::ODE_StiffSolver::eps</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="249" column="38" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="249" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1a54a703d28c31d611d55687bcf8e72fd1" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::ODE_StiffSolver::dof</definition>
+        <argsstring></argsstring>
+        <name>dof</name>
+        <qualifiedname>csmp::ODE_StiffSolver::dof</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="250" column="38" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="250" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1a0b3832e54d9709a174991222181e2af1" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_sum_of_products_with_exponents" kindref="compound">SumOfProductsWithExponents</ref> &gt;</type>
+        <definition>std::vector&lt;SumOfProductsWithExponents&gt; csmp::ODE_StiffSolver::odes</definition>
+        <argsstring></argsstring>
+        <name>odes</name>
+        <qualifiedname>csmp::ODE_StiffSolver::odes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="251" column="18" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="251" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1ac73e79bfa77c618f8a5db55b65ec9cf8" prot="private" static="no" mutable="no">
+        <type>double **</type>
+        <definition>double** csmp::ODE_StiffSolver::pzextr_d</definition>
+        <argsstring></argsstring>
+        <name>pzextr_d</name>
+        <qualifiedname>csmp::ODE_StiffSolver::pzextr_d</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="254" column="13" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="254" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1a4702e9da04684f03ab16ddfa5ff485d7" prot="private" static="no" mutable="no">
+        <type>double *</type>
+        <definition>double * csmp::ODE_StiffSolver::pzextr_x</definition>
+        <argsstring></argsstring>
+        <name>pzextr_x</name>
+        <qualifiedname>csmp::ODE_StiffSolver::pzextr_x</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="254" column="22" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="254" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1ad902cecf3d10d59db79796d5d1dc4267" prot="private" static="no" mutable="no">
+        <type>double *</type>
+        <definition>double* csmp::ODE_StiffSolver::odeint_yscal</definition>
+        <argsstring></argsstring>
+        <name>odeint_yscal</name>
+        <qualifiedname>csmp::ODE_StiffSolver::odeint_yscal</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="256" column="12" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="256" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1ae1e8049bf274863b5d569c0cbc64ef61" prot="private" static="no" mutable="no">
+        <type>double *</type>
+        <definition>double * csmp::ODE_StiffSolver::odeint_y</definition>
+        <argsstring></argsstring>
+        <name>odeint_y</name>
+        <qualifiedname>csmp::ODE_StiffSolver::odeint_y</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="256" column="25" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="256" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1a8cd21224c88f18b85708715228782aed" prot="private" static="no" mutable="no">
+        <type>double *</type>
+        <definition>double * csmp::ODE_StiffSolver::odeint_dydx</definition>
+        <argsstring></argsstring>
+        <name>odeint_dydx</name>
+        <qualifiedname>csmp::ODE_StiffSolver::odeint_dydx</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="256" column="34" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="256" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1a67eb7dc29f15ececaf00e29728528026" prot="private" static="no" mutable="no">
+        <type>double *</type>
+        <definition>double* csmp::ODE_StiffSolver::stifbs_dfdx</definition>
+        <argsstring></argsstring>
+        <name>stifbs_dfdx</name>
+        <qualifiedname>csmp::ODE_StiffSolver::stifbs_dfdx</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="258" column="12" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="258" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1ac8d556a33f82db2ff473bd68ab3ebdfb" prot="private" static="no" mutable="no">
+        <type>double **</type>
+        <definition>double ** csmp::ODE_StiffSolver::stifbs_dfdy</definition>
+        <argsstring></argsstring>
+        <name>stifbs_dfdy</name>
+        <qualifiedname>csmp::ODE_StiffSolver::stifbs_dfdy</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="258" column="23" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="258" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1ac784ff7b43b8df56e4336dd6e53a50d6" prot="private" static="no" mutable="no">
+        <type>double *</type>
+        <definition>double * csmp::ODE_StiffSolver::stifbs_err</definition>
+        <argsstring></argsstring>
+        <name>stifbs_err</name>
+        <qualifiedname>csmp::ODE_StiffSolver::stifbs_err</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="258" column="34" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="258" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1a6481f9b2cb34c1956f1f46273b6342fa" prot="private" static="no" mutable="no">
+        <type>double *</type>
+        <definition>double * csmp::ODE_StiffSolver::stifbs_yerr</definition>
+        <argsstring></argsstring>
+        <name>stifbs_yerr</name>
+        <qualifiedname>csmp::ODE_StiffSolver::stifbs_yerr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="258" column="44" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="258" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1a3f5246c0b004d0ce7278aac6202eb470" prot="private" static="no" mutable="no">
+        <type>double *</type>
+        <definition>double * csmp::ODE_StiffSolver::stifbs_ysav</definition>
+        <argsstring></argsstring>
+        <name>stifbs_ysav</name>
+        <qualifiedname>csmp::ODE_StiffSolver::stifbs_ysav</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="258" column="55" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="258" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1abca511c83e71f023311a7635b9397778" prot="private" static="no" mutable="no">
+        <type>double *</type>
+        <definition>double * csmp::ODE_StiffSolver::stifbs_yseq</definition>
+        <argsstring></argsstring>
+        <name>stifbs_yseq</name>
+        <qualifiedname>csmp::ODE_StiffSolver::stifbs_yseq</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="258" column="66" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="258" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1a5a55106ae6bc1a3a02e2f38a639bfe5c" prot="private" static="no" mutable="no">
+        <type>double *</type>
+        <definition>double* csmp::ODE_StiffSolver::init_cond</definition>
+        <argsstring></argsstring>
+        <name>init_cond</name>
+        <qualifiedname>csmp::ODE_StiffSolver::init_cond</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="260" column="12" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="260" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1a85e8b8e7949b43be4f18de49bbd0f106" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::ODE_StiffSolver::dxsav</definition>
+        <argsstring></argsstring>
+        <name>dxsav</name>
+        <qualifiedname>csmp::ODE_StiffSolver::dxsav</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="262" column="40" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="262" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1a62e828f681b5cb031ac2ecb45a9d99d0" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::ODE_StiffSolver::kmax</definition>
+        <argsstring></argsstring>
+        <name>kmax</name>
+        <qualifiedname>csmp::ODE_StiffSolver::kmax</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="263" column="40" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="263" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1ae4eafbd91f8cc054b117439353b73d9c" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::ODE_StiffSolver::kount</definition>
+        <argsstring></argsstring>
+        <name>kount</name>
+        <qualifiedname>csmp::ODE_StiffSolver::kount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="263" column="45" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="263" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1a05448c28cc38e8c5c3a7324f6b04ca22" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::ODE_StiffSolver::result_xp</definition>
+        <argsstring></argsstring>
+        <name>result_xp</name>
+        <qualifiedname>csmp::ODE_StiffSolver::result_xp</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="264" column="32" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="264" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1acd023445f1bd1dffa81fed3d784bf55c" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::vector&lt; double &gt; &gt;</type>
+        <definition>std::vector&lt;std::vector&lt;double&gt; &gt; csmp::ODE_StiffSolver::result_yp</definition>
+        <argsstring></argsstring>
+        <name>result_yp</name>
+        <qualifiedname>csmp::ODE_StiffSolver::result_yp</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="265" column="18" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="265" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1a0d61ae442a11868c7c109502f8f0618f" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_sum_of_products" kindref="compound">SumOfProducts</ref> &gt;</type>
+        <definition>std::vector&lt;SumOfProducts&gt; csmp::ODE_StiffSolver::eqns</definition>
+        <argsstring></argsstring>
+        <name>eqns</name>
+        <qualifiedname>csmp::ODE_StiffSolver::eqns</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="268" column="29" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="268" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1aee16822ac9ef3d22f492c03e38dc7036" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::pair&lt; int32_t, std::string &gt; &gt;</type>
+        <definition>std::vector&lt;std::pair&lt;int32_t,std::string&gt; &gt; csmp::ODE_StiffSolver::independent_terms</definition>
+        <argsstring></argsstring>
+        <name>independent_terms</name>
+        <qualifiedname>csmp::ODE_StiffSolver::independent_terms</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="269" column="18" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="269" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_o_d_e___stiff_solver_1ac2311cb2e705e38e600934025c882e85" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::ODE_StiffSolver::independent_values</definition>
+        <argsstring></argsstring>
+        <name>independent_values</name>
+        <qualifiedname>csmp::ODE_StiffSolver::independent_values</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="270" column="33" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="270" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1a2f8b60e5fc892ffca9993e52614b19c4" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::ODE_StiffSolver::ODE_StiffSolver</definition>
+        <argsstring>(const std::vector&lt; SumOfProductsWithExponents &gt; &amp;equations)</argsstring>
+        <name>ODE_StiffSolver</name>
+        <qualifiedname>csmp::ODE_StiffSolver::ODE_StiffSolver</qualifiedname>
+        <param>
+          <type>const std::vector&lt; <ref refid="classcsmp_1_1_sum_of_products_with_exponents" kindref="compound">SumOfProductsWithExponents</ref> &gt; &amp;</type>
+          <declname>equations</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Builds the ODE solver, initializing the Kaps-Rentrop parameters for the adaptive stepsize algorithm and a number of other constants used by the solver. GROW and SHRNK define by how much the stepsize can increase or decrease in one step, and TINY defines a threshold value below which entries in the solution matrix will be zeroed. Memory is allocated for the solution and jacobian matrices and vectors which store temporary variables. The system of equations is build.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>equations</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A vector of ordinary differential equations which define system to be integrated by the solver. The equations are stored as STL maps inside of the &apos;<ref refid="classcsmp_1_1_sum_of_products_with_exponents" kindref="compound">SumOfProductsWithExponents</ref>&apos; class objects.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>The constructor calls the private method AllocateSolverMemory() to allocate the matrices and vectors.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Standard constructor for the ODE solver. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="175" column="14" bodyfile="source/modules/math/ODE_StiffSolver.cpp" bodystart="31" bodyend="82"/>
+        <references refid="classcsmp_1_1_o_d_e___stiff_solver_1a2f8b60e5fc892ffca9993e52614b19c4" compoundref="_o_d_e___stiff_solver_8cpp" startline="31" endline="82">ODE_StiffSolver</references>
+        <referencedby refid="classcsmp_1_1_o_d_e___stiff_solver_1a2f8b60e5fc892ffca9993e52614b19c4" compoundref="_o_d_e___stiff_solver_8cpp" startline="31" endline="82">ODE_StiffSolver</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1aa588db5508c1c2ec97d839475708ad03" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::ODE_StiffSolver::~ODE_StiffSolver</definition>
+        <argsstring>()</argsstring>
+        <name>~ODE_StiffSolver</name>
+        <qualifiedname>csmp::ODE_StiffSolver::~ODE_StiffSolver</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="176" column="5" bodyfile="source/modules/math/ODE_StiffSolver.cpp" bodystart="87" bodyend="90"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1a24e3a2fb073d71bbeaeca272e2a773de" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>double &amp;</type>
+        <definition>double &amp; csmp::ODE_StiffSolver::operator()</definition>
+        <argsstring>(size_t i)</argsstring>
+        <name>operator()</name>
+        <qualifiedname>csmp::ODE_StiffSolver::operator()</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+<para>assign initial conditions and read computed values (equations 1...n) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="179" column="12" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="309" bodyend="313"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1a15a809222872cf68d4a85664aac1f399" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ODE_StiffSolver::operator[]</definition>
+        <argsstring>(size_t i) const</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>csmp::ODE_StiffSolver::operator[]</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+<para>retrieve the time derivatives from the last step before the solver quit </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="181" column="13" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="316" bodyend="320"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1a2551bd0f03b890b515309b243668a00b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ODE_StiffSolver::Tolerance</definition>
+        <argsstring>(double epsilon)</argsstring>
+        <name>Tolerance</name>
+        <qualifiedname>csmp::ODE_StiffSolver::Tolerance</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>epsilon</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="183" column="16" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="323" bodyend="323"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1a94465bb3371a99c7c09a26c9d4de5bea" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ODE_StiffSolver::Tolerance</definition>
+        <argsstring>() const</argsstring>
+        <name>Tolerance</name>
+        <qualifiedname>csmp::ODE_StiffSolver::Tolerance</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="184" column="13" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="324" bodyend="324"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1a6bb0bc3987e51940e1528bf57ef0155e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::ODE_StiffSolver::Equations</definition>
+        <argsstring>() const</argsstring>
+        <name>Equations</name>
+        <qualifiedname>csmp::ODE_StiffSolver::Equations</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="185" column="13" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="325" bodyend="325"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1a856241b03713d65682f084f599042af3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ODE_StiffSolver::IntermediateStepsToSave</definition>
+        <argsstring>(size_t s)</argsstring>
+        <name>IntermediateStepsToSave</name>
+        <qualifiedname>csmp::ODE_StiffSolver::IntermediateStepsToSave</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>s</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Defines the number of intermediate solution steps which shall be saved before the integration interval is covered. The storage for these steps is allocated correspondingly. The solver attempts to distribute the save steps evenly over the timespan of interest. <linebreak/>
+</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>s</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of steps which shall be saved. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="186" column="16" bodyfile="source/modules/math/ODE_StiffSolver.cpp" bodystart="208" bodyend="221"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1a3a18575161e0419af853f46c62eb8adf" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::ODE_StiffSolver::IntermediateStepsToSave</definition>
+        <argsstring>() const</argsstring>
+        <name>IntermediateStepsToSave</name>
+        <qualifiedname>csmp::ODE_StiffSolver::IntermediateStepsToSave</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="187" column="13" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="326" bodyend="326"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1a96ab3b72cdd686b0c56748ff1402190b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ODE_StiffSolver::InitialConditions</definition>
+        <argsstring>(const std::vector&lt; double &gt; &amp;init)</argsstring>
+        <name>InitialConditions</name>
+        <qualifiedname>csmp::ODE_StiffSolver::InitialConditions</qualifiedname>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>init</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Sets the initial values of the dependent variables for the starting step of the calculation. In the case of a chemical rate-dependent speciation calculation with the ODE solver, initial conditions are the starting activities of the aqueous species and minerals.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>init</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A constant reference to an STL vector with the initial dependent variable values. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="188" column="16" bodyfile="source/modules/math/ODE_StiffSolver.cpp" bodystart="422" bodyend="426"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1a2b49904fb2de07d9e0e3a34abe176663" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ODE_StiffSolver::ReadODEsFrom</definition>
+        <argsstring>(const char *file)</argsstring>
+        <name>ReadODEsFrom</name>
+        <qualifiedname>csmp::ODE_StiffSolver::ReadODEsFrom</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Initializes the system of ordinary differential equations maintained by the ODE solver from a textfile with the format specified in the documentation of the ODE solver object (<simplesect kind="par"><title>ApplicationExample section). </title><para></para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>file</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the name of the textfile which contains the definition of the system of differential equations.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+The textfile itself consists of 5 text blocks always starting with an underlined heading and separated by blank lines. The blocks are: the file header (1), the independent variables (2), the dependent variables (3), the equation coefficients (4), and the equations themselves (5). Text after the blank line following the last equation is ignored. This gives the user the possibility to add comments.</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>The method uses STL functionality to parse the textfile and store the interpreted equations into a vector of <ref refid="classcsmp_1_1_sum_of_products_with_exponents" kindref="compound">SumOfProductsWithExponents</ref> objects.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>The method tries to analyze the reasons for parsing mistakes and reports corresponding messages to the user. Common mistakes include missing blank lines between definition blocks or mispelled independent or dependent variable names or the use of reserved &apos;+,-&apos; notation in variable names. An error is reported also when the number of differential equations does not correspond to the number of dependent variables. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="190" column="13" bodyfile="source/modules/math/ODE_StiffSolver.cpp" bodystart="1239" bodyend="1477"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1ab39d6346960f6b06993caabe94be7d8f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ODE_StiffSolver::ReadODEsFrom</definition>
+        <argsstring>(const char *file, std::vector&lt; std::pair&lt; int32_t, std::string &gt; &gt; &amp;coefs, std::vector&lt; std::pair&lt; int32_t, std::string &gt; &gt; &amp;dependent_comps, std::vector&lt; std::pair&lt; int32_t, std::string &gt; &gt; &amp;independent_comps)</argsstring>
+        <name>ReadODEsFrom</name>
+        <qualifiedname>csmp::ODE_StiffSolver::ReadODEsFrom</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>file</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; std::pair&lt; int32_t, std::string &gt; &gt; &amp;</type>
+          <declname>coefs</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; std::pair&lt; int32_t, std::string &gt; &gt; &amp;</type>
+          <declname>dependent_comps</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; std::pair&lt; int32_t, std::string &gt; &gt; &amp;</type>
+          <declname>independent_comps</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="192" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1a6c0b5900d596870a228a27e9370b0572" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::ODE_StiffSolver::Solve</definition>
+        <argsstring>(double time, double init_stepsize, size_t n_savesteps, double tolerance=1.0e-10, bool print_step_numbers=false)</argsstring>
+        <name>Solve</name>
+        <qualifiedname>csmp::ODE_StiffSolver::Solve</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>time</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>init_stepsize</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>n_savesteps</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>tolerance</declname>
+          <defval>1.0e-10</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>print_step_numbers</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Evolves the system of equations from the starting time (t=0) over a user-specified period of time and returns the dependent variable values at the end of the timespan, as well as intermediate values if this is requested. <linebreak/>
+</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The first argument defines the timespan over which the system shall be evolved and the second argument sets the size of the first timestep which shall be calculated. If this initial timestep is too large and it already bridges pronounced changes which would normally occur in the system, no solution may be obtained. <linebreak/>
+</para>
+<para>The third argument gives the number of intermediate steps which shall be saved in the solution process. The default value is zero since one is usually only interested in the final solution. In this case the solver will perform significantly faster. <linebreak/>
+</para>
+<para>The fourth argument defines the precision to which the dependent variable values shall be approximated to at each timestep. This parameter strongly influences the number of iterations which the solver must perform to find a solutions.</para>
+<para><simplesect kind="return"><para>a boolean variable indicating whether a solution was found or not. The solution can be retrieved simply with the () operator of the ODE-solver object.</para>
+</simplesect>
+</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>The method relies on the Numerical Recipes C functions odeint(), stifbs(), simpr(), and pzextr() as documented on p. 744ff in the book. The results will be saved into a file with the same name as the equation systems file but with the extension &apos;.results&apos;.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>For practical purposes the initial step size and tolerance which can be obtained varies considerable with the type of OD equations which shall be integrated over time. For the chemical reaction calculations carried out so far, an initial step size of 1.0e-17 and a tolerance of 1.0e-10 has proved useful. The solver will rapidly increase the stepsize if it is too small, but it will fail to converge if the first step was too large. It seems impossible to achieve convergence at a tolerance smaller than 1.0e-12 in most of the examined systems.</para>
+<para>Before using a system of equations in a finite-element model, a series of tests for a host of initial values is recommended to get a feel for the time-characteristics of the system behaviour and to tune the <ref refid="classcsmp_1_1_o_d_e___stiff_solver_1a6c0b5900d596870a228a27e9370b0572" kindref="member">Solve()</ref> arguments accordingly. This is best achieved by saving about 100 steps and examining these with a plot program to understand system behaviour.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>Upon completion, the solver returns the number of successful and bad solution steps which were performed. Other messages may include those issued by methods which are called internally, for instance, when the matrix inversion routine failed to find a solution. Usually, a large percentage of bad steps indicates a problem with the system of equations. The most common problem may be that the system is too stiff, i.e. that the dependent variable coefficients diverge by more than 16 orders of magnitude (about the limit for this double-precision implementation of the solver). </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="196" column="13" bodyfile="source/modules/math/ODE_StiffSolver.cpp" bodystart="498" bodyend="539"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1a2704ba9e53517f5abf80b0126eb4539a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ODE_StiffSolver::Out</definition>
+        <argsstring>() const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::ODE_StiffSolver::Out</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Prints the defined differential and potential algebraic equations involving independent variables to screen. The differential equation are stored as <ref refid="classcsmp_1_1_sum_of_products_with_exponents" kindref="compound">SumOfProductsWithExponents</ref> objects and the algebraic equations as <ref refid="classcsmp_1_1_sum_of_products" kindref="compound">SumOfProducts</ref> objects. The <ref refid="classcsmp_1_1_o_d_e___stiff_solver_1a2704ba9e53517f5abf80b0126eb4539a" kindref="member">Out()</ref> methods of these classes are used to obtain the output. <linebreak/>
+</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>Calls the <ref refid="classcsmp_1_1_o_d_e___stiff_solver_1a2704ba9e53517f5abf80b0126eb4539a" kindref="member">Out()</ref> interfaces of the <ref refid="classcsmp_1_1_sum_of_products_with_exponents" kindref="compound">SumOfProductsWithExponents</ref> and <ref refid="classcsmp_1_1_sum_of_products" kindref="compound">SumOfProducts</ref> class objects.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>To externalize the state of the solver to examine whether the system of equations has been correctly parsed from the input file. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="199" column="13" bodyfile="source/modules/math/ODE_StiffSolver.cpp" bodystart="1090" bodyend="1112"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1a21f9b1ac4e0691d26f2c79c6b6d8e3e6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ODE_StiffSolver::OutputResults</definition>
+        <argsstring>() const</argsstring>
+        <name>OutputResults</name>
+        <qualifiedname>csmp::ODE_StiffSolver::OutputResults</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Prints the results including intermediate steps to the screen. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="200" column="13" bodyfile="source/modules/math/ODE_StiffSolver.cpp" bodystart="546" bodyend="570"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1af0779321112fc3151e3815a1cba2fd34" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ODE_StiffSolver::OutputResultsTo</definition>
+        <argsstring>(const char *textfile) const</argsstring>
+        <name>OutputResultsTo</name>
+        <qualifiedname>csmp::ODE_StiffSolver::OutputResultsTo</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>textfile</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Writes the results of a calculation to a user-defined textfile with the extension &apos;.txt&apos;. Each line will give the timestep and the values of each dependent variable. The output may be corrupted when not enough savesteps were specified to accurately portray the system behaviour.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>textfile</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The name of the textfile to which the results shall be written to. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="201" column="13" bodyfile="source/modules/math/ODE_StiffSolver.cpp" bodystart="585" bodyend="623"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1a0bd828f2b46ccb5d141ae5be1801d711" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ODE_StiffSolver::OutputLastDerivatives</definition>
+        <argsstring>() const</argsstring>
+        <name>OutputLastDerivatives</name>
+        <qualifiedname>csmp::ODE_StiffSolver::OutputLastDerivatives</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="202" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1ac51e021a34564405cd4e92c41810c94f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ODE_StiffSolver::EvaluateIndependentProductTerms</definition>
+        <argsstring>(const double dependent_vals[], std::vector&lt; double &gt; &amp;indep_vals)</argsstring>
+        <name>EvaluateIndependentProductTerms</name>
+        <qualifiedname>csmp::ODE_StiffSolver::EvaluateIndependentProductTerms</qualifiedname>
+        <param>
+          <type>const double</type>
+          <declname>dependent_vals</declname>
+          <array>[]</array>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>indep_vals</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>A change of the coefficients in the system of equations, for instance by <ref refid="classcsmp_1_1_o_d_e___stiff_solver_1a48f9e3fbd26801e8bf29ea3b8a568a87" kindref="member">ResetIndependentProductTerms()</ref> necessitates a reavaluation of the product terms as done in derivs(). <ref refid="classcsmp_1_1_o_d_e___stiff_solver_1ac51e021a34564405cd4e92c41810c94f" kindref="member">EvaluateIndependentProductTerms()</ref> was written for this purpose and is called inside odeint(). <linebreak/>
+</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The methods requires the values of the dependent variables as first argument.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>vals</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the new derivatives (righthand sides of the ODEs) are returned into the STL vector which is supplied as second argument.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>The righthand side values are calculated using the Sum() method of the <ref refid="classcsmp_1_1_sum_of_products" kindref="compound">SumOfProducts</ref> class object. The terms are added in the output vector at the locations 1...n.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>The method is called inside of odeint(), after <ref refid="classcsmp_1_1_o_d_e___stiff_solver_1a48f9e3fbd26801e8bf29ea3b8a568a87" kindref="member">ResetIndependentProductTerms()</ref>, if and only if independent parameters were modified between solution steps.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>Currently, the method reports the calculated values for each product term. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="204" column="13" bodyfile="source/modules/math/ODE_StiffSolver.cpp" bodystart="2075" bodyend="2085"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1a48f9e3fbd26801e8bf29ea3b8a568a87" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ODE_StiffSolver::ResetIndependentProductTerms</definition>
+        <argsstring>(std::vector&lt; std::pair&lt; int32_t, std::string &gt; &gt; &amp;ind, std::vector&lt; double &gt; &amp;vals)</argsstring>
+        <name>ResetIndependentProductTerms</name>
+        <qualifiedname>csmp::ODE_StiffSolver::ResetIndependentProductTerms</qualifiedname>
+        <param>
+          <type>std::vector&lt; std::pair&lt; int32_t, std::string &gt; &gt; &amp;</type>
+          <declname>ind</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>vals</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The need to change independent equation coefficients (such as activity coefficients) as the values of dependent variables change in an evolution of a system is accounted for by this method.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ind</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The method takes vector arguments which define the new product coefficients. The individual products in the equations are identified by integers (e.g. product 1, product 2, etc.) and negative integers denote independent product coefficients (those that are not calculated by ODEs). The values correspond to the exponents of the terms.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>The SumOfProductWithExpondents is defined as pairs of c.idx/coefficient and e.idx/exponents. The method performs on all independent variables in the ODEs, on every ODE, in every product which the ODE contains, if the tested independent variable is part of this product. Also, for all independent variables in algebraic equations, in every algebraic equation, in every product which the equation contains, if the independent variable is part of this product, the coefficient will be modified. The correct index is abs(idx-1) since all independent var indices are set as negative (-1...-n). The exponents stay untouched.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>The method is called inside of odeint() if independent variables are part of the system of differential equations. The capability to change coefficients while the ODE solver converges to a solution allows to modify, for instance, the activities of chemical species as their concentrations change over time. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="207" column="13" bodyfile="source/modules/math/ODE_StiffSolver.cpp" bodystart="1991" bodyend="2039"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1aa359371c064d134d43e4959d7d989338" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ODE_StiffSolver::AssignIndependentProductTerms</definition>
+        <argsstring>(std::vector&lt; std::pair&lt; int32_t, std::string &gt; &gt; &amp;ind, std::vector&lt; double &gt; &amp;vals)</argsstring>
+        <name>AssignIndependentProductTerms</name>
+        <qualifiedname>csmp::ODE_StiffSolver::AssignIndependentProductTerms</qualifiedname>
+        <param>
+          <type>std::vector&lt; std::pair&lt; int32_t, std::string &gt; &gt; &amp;</type>
+          <declname>ind</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>vals</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The method uses position integers and new values to change independent product terms in a system of differential equations which was already defined earlier.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ind</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>An STL vector of integer - string pairs defines the name of the independent variables/coefficient, its position index in the equation and its numerical value.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>The method first calls <ref refid="classcsmp_1_1_o_d_e___stiff_solver_1a48f9e3fbd26801e8bf29ea3b8a568a87" kindref="member">ResetIndependentProductTerms()</ref> and then re-assigns new values using STL vector assignment.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>To change independent variables in equations without redefining the system of equations. This may apply for instance if PT-dependent equilibrium constants are used in a model in which the temperature varies. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="210" column="13" bodyfile="source/modules/math/ODE_StiffSolver.cpp" bodystart="1944" bodyend="1952"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1a4bc9c1390ae07cff8e26672257d1c38a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ODE_StiffSolver::Out</definition>
+        <argsstring>(const std::vector&lt; int32_t &gt; &amp;vec) const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::ODE_StiffSolver::Out</qualifiedname>
+        <param>
+          <type>const std::vector&lt; int32_t &gt; &amp;</type>
+          <declname>vec</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Prints an stl vector, or a C 1- or 2D-array indexed from 1...n to screen.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>vec</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The template object to be printed.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>All of these output routines assume an indexing from 1...n. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="213" column="13" bodyfile="source/modules/math/ODE_StiffSolver.cpp" bodystart="1124" bodyend="1129"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1a753476ef89532f7e9af185d336f72a3b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ODE_StiffSolver::Out</definition>
+        <argsstring>(const std::vector&lt; double &gt; &amp;vec) const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::ODE_StiffSolver::Out</qualifiedname>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>vec</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="214" column="13" bodyfile="source/modules/math/ODE_StiffSolver.cpp" bodystart="1160" bodyend="1165"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1a2c1cef75b6a0db34e8814cd03591c1c2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ODE_StiffSolver::Out</definition>
+        <argsstring>(const std::vector&lt; std::vector&lt; double &gt; &gt; &amp;vec) const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::ODE_StiffSolver::Out</qualifiedname>
+        <param>
+          <type>const std::vector&lt; std::vector&lt; double &gt; &gt; &amp;</type>
+          <declname>vec</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="215" column="13" bodyfile="source/modules/math/ODE_StiffSolver.cpp" bodystart="1169" bodyend="1178"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1a7d0013e28fd31f7cf1fe584f8615d89e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ODE_StiffSolver::Out</definition>
+        <argsstring>(int32_t *vec, int32_t n)</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::ODE_StiffSolver::Out</qualifiedname>
+        <param>
+          <type>int32_t *</type>
+          <declname>vec</declname>
+        </param>
+        <param>
+          <type>int32_t</type>
+          <declname>n</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="216" column="13" bodyfile="source/modules/math/ODE_StiffSolver.cpp" bodystart="1132" bodyend="1137"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1a27f229fd812d21e25e498be85dbf77f1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ODE_StiffSolver::Out</definition>
+        <argsstring>(double *vec, int32_t n)</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::ODE_StiffSolver::Out</qualifiedname>
+        <param>
+          <type>double *</type>
+          <declname>vec</declname>
+        </param>
+        <param>
+          <type>int32_t</type>
+          <declname>n</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="217" column="13" bodyfile="source/modules/math/ODE_StiffSolver.cpp" bodystart="1140" bodyend="1145"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1a481edf02430e5b18a45c675b7b01471f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ODE_StiffSolver::Out</definition>
+        <argsstring>(double **vec, int32_t m, int32_t n)</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::ODE_StiffSolver::Out</qualifiedname>
+        <param>
+          <type>double **</type>
+          <declname>vec</declname>
+        </param>
+        <param>
+          <type>int32_t</type>
+          <declname>m</declname>
+        </param>
+        <param>
+          <type>int32_t</type>
+          <declname>n</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="218" column="13" bodyfile="source/modules/math/ODE_StiffSolver.cpp" bodystart="1148" bodyend="1157"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1aec61b7caf17ecb4d5a9f369f58cf8e66" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int32_t *</type>
+        <definition>int32_t * csmp::ODE_StiffSolver::ivector</definition>
+        <argsstring>(size_t nl, size_t nh)</argsstring>
+        <name>ivector</name>
+        <qualifiedname>csmp::ODE_StiffSolver::ivector</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>nl</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>nh</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="273" column="17" bodyfile="source/modules/math/ODE_StiffSolver.cpp" bodystart="972" bodyend="977"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1a907c1a3a491a3288c2f973605ab65db1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double *</type>
+        <definition>double * csmp::ODE_StiffSolver::dvector</definition>
+        <argsstring>(size_t nl, size_t nh)</argsstring>
+        <name>dvector</name>
+        <qualifiedname>csmp::ODE_StiffSolver::dvector</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>nl</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>nh</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="274" column="13" bodyfile="source/modules/math/ODE_StiffSolver.cpp" bodystart="981" bodyend="986"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1ad041b8eb5409fcd2375a6200180f4e55" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int32_t **</type>
+        <definition>int32_t ** csmp::ODE_StiffSolver::imatrix</definition>
+        <argsstring>(size_t nrl, size_t nrh, size_t ncl, size_t nch)</argsstring>
+        <name>imatrix</name>
+        <qualifiedname>csmp::ODE_StiffSolver::imatrix</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>nrl</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>nrh</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>ncl</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>nch</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="275" column="16" bodyfile="source/modules/math/ODE_StiffSolver.cpp" bodystart="1014" bodyend="1035"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1ad0abf45bd6fbdcae2c3f70f24a0d317c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double **</type>
+        <definition>double ** csmp::ODE_StiffSolver::dmatrix</definition>
+        <argsstring>(size_t nrl, size_t nrh, size_t ncl, size_t nch)</argsstring>
+        <name>dmatrix</name>
+        <qualifiedname>csmp::ODE_StiffSolver::dmatrix</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>nrl</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>nrh</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>ncl</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>nch</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="276" column="12" bodyfile="source/modules/math/ODE_StiffSolver.cpp" bodystart="990" bodyend="1010"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1aa9072e0d8feb7459a3a1e7d079ee2707" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ODE_StiffSolver::free_ivector</definition>
+        <argsstring>(int32_t *v, size_t nl)</argsstring>
+        <name>free_ivector</name>
+        <qualifiedname>csmp::ODE_StiffSolver::free_ivector</qualifiedname>
+        <param>
+          <type>int32_t *</type>
+          <declname>v</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>nl</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="277" column="14" bodyfile="source/modules/math/ODE_StiffSolver.cpp" bodystart="1039" bodyend="1042"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1a10d7e2385322162cee7e5a5a0c9fc199" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ODE_StiffSolver::free_dvector</definition>
+        <argsstring>(double *v, size_t nl)</argsstring>
+        <name>free_dvector</name>
+        <qualifiedname>csmp::ODE_StiffSolver::free_dvector</qualifiedname>
+        <param>
+          <type>double *</type>
+          <declname>v</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>nl</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="278" column="14" bodyfile="source/modules/math/ODE_StiffSolver.cpp" bodystart="1046" bodyend="1049"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1a77393a4cc624824ca72486855ba92e79" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ODE_StiffSolver::free_imatrix</definition>
+        <argsstring>(int32_t **m, size_t nrl, size_t ncl)</argsstring>
+        <name>free_imatrix</name>
+        <qualifiedname>csmp::ODE_StiffSolver::free_imatrix</qualifiedname>
+        <param>
+          <type>int32_t **</type>
+          <declname>m</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>nrl</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>ncl</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="279" column="14" bodyfile="source/modules/math/ODE_StiffSolver.cpp" bodystart="1061" bodyend="1065"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1a6a29b98db58fc3bf7f27d81f36347f8d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ODE_StiffSolver::free_dmatrix</definition>
+        <argsstring>(double **m, size_t nrl, size_t ncl)</argsstring>
+        <name>free_dmatrix</name>
+        <qualifiedname>csmp::ODE_StiffSolver::free_dmatrix</qualifiedname>
+        <param>
+          <type>double **</type>
+          <declname>m</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>nrl</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>ncl</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="280" column="14" bodyfile="source/modules/math/ODE_StiffSolver.cpp" bodystart="1053" bodyend="1057"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1a8066bec99bd388f26e9309fb296801ae" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ODE_StiffSolver::derivs</definition>
+        <argsstring>(double y[], double dydx[])</argsstring>
+        <name>derivs</name>
+        <qualifiedname>csmp::ODE_StiffSolver::derivs</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>y</declname>
+          <array>[]</array>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>dydx</declname>
+          <array>[]</array>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Sums the righthand sides of each ordinary differential equation in the system given the current values of the dependent variable and returns the results. This procedure is also illustrated in Numerical Recipes 2nd edition p. 742. <linebreak/>
+</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>y</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>a C-array which supplies the values of the dependent variables in the system.</para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dydx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The second argument is a C-array into which the current sums over the ODEs will be returned.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>The method calls the Sum() method of each of the <ref refid="classcsmp_1_1_sum_of_products_with_exponents" kindref="compound">SumOfProductsWithExponents</ref> objects which hold the ODEs.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Called at each step which the ODE solver takes. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="282" column="14" bodyfile="source/modules/math/ODE_StiffSolver.cpp" bodystart="247" bodyend="255"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1aaa092d2116e0d14172daa8a64692d731" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ODE_StiffSolver::jacobn</definition>
+        <argsstring>(double y[], double dfdx[], double **dfdy)</argsstring>
+        <name>jacobn</name>
+        <qualifiedname>csmp::ODE_StiffSolver::jacobn</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>y</declname>
+          <array>[]</array>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>dfdx</declname>
+          <array>[]</array>
+        </param>
+        <param>
+          <type>double **</type>
+          <declname>dfdy</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Fills the jacobian matrix with the current derivatives of the ODEs. The jacobian matrix has one row for each ordinary differential equation. This row contains the derivatives of this ODE with regard to each dependent variable in the system in the same order as the differential equations describe these. See example in Numerical Recipes p. 742. <linebreak/>
+</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The first and the second C-style array arguments supply the current values of the dependent variable and the time-derivatives thereof to jacobn(). The time derivatives are simply set to an initial guess of zero. <linebreak/>
+</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>dfdy</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The jacobian matrix is returned into the third C-style 2D array argument.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>Calls the DerivativeWithRespectTo() method of the <ref refid="classcsmp_1_1_sum_of_products_with_exponents" kindref="compound">SumOfProductsWithExponents</ref> class to obtain the specific derivative entries for the jacobian matrix.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Called at each step of the ODE solver. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="283" column="14" bodyfile="source/modules/math/ODE_StiffSolver.cpp" bodystart="284" bodyend="294"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1a0d0652a68e4b8b3e453a5ddbe944c335" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ODE_StiffSolver::LU_Decomposition</definition>
+        <argsstring>(double **a, size_t n, int32_t *indx, double &amp;d)</argsstring>
+        <name>LU_Decomposition</name>
+        <qualifiedname>csmp::ODE_StiffSolver::LU_Decomposition</qualifiedname>
+        <param>
+          <type>double **</type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>n</declname>
+        </param>
+        <param>
+          <type>int32_t *</type>
+          <declname>indx</declname>
+        </param>
+        <param>
+          <type>double &amp;</type>
+          <declname>d</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Performs an LU decomposition of the global solution matrix as is described in section 2.3 of Numerical Recipes (p. 43).</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>The method is described in detail in Numerical Recipes p. 46.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Is used together with lubksb() to invert the system of ODEs at each solution step.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>The method may print a warning if the solution matrix becomes singular in the diagonalization process. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="284" column="14" bodyfile="source/modules/math/ODE_StiffSolver.cpp" bodystart="319" bodyend="368"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1ac8125689040d35a90c4494d9c496adbb" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ODE_StiffSolver::LU_BackSubstitution</definition>
+        <argsstring>(double **a, size_t n, int32_t *indx, double b[])</argsstring>
+        <name>LU_BackSubstitution</name>
+        <qualifiedname>csmp::ODE_StiffSolver::LU_BackSubstitution</qualifiedname>
+        <param>
+          <type>double **</type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>n</declname>
+        </param>
+        <param>
+          <type>int32_t *</type>
+          <declname>indx</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>b</declname>
+          <array>[]</array>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns the solution vector of the system Ax = b given an LU decomposition of the solution matrix A, a righthand vector b and an indicator whether an even or an odd number of partial pivots were performed. <linebreak/>
+</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>The method is documented in Numerical Recipes p. 47.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>LU_BackSubstitution() is called once for each step of the solver. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="285" column="14" bodyfile="source/modules/math/ODE_StiffSolver.cpp" bodystart="386" bodyend="406"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1a702c005609f137b07e06e0a5a1ea1f74" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ODE_StiffSolver::simpr</definition>
+        <argsstring>(double y[], double dydx[], double dfdx[], double **dfdy, size_t n, double xs, double htot, int32_t nstep, double yout[])</argsstring>
+        <name>simpr</name>
+        <qualifiedname>csmp::ODE_StiffSolver::simpr</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>y</declname>
+          <array>[]</array>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>dydx</declname>
+          <array>[]</array>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>dfdx</declname>
+          <array>[]</array>
+        </param>
+        <param>
+          <type>double **</type>
+          <declname>dfdy</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>n</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>xs</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>htot</declname>
+        </param>
+        <param>
+          <type>int32_t</type>
+          <declname>nstep</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>yout</declname>
+          <array>[]</array>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Performs semi-implicit midpoint-rule based timestepping inside of odeint(). See documentation p. 743 in Numerical Recipes.</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>See documentation p. 743 in Numerical Recipes.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Called by odeint(). </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="287" column="14" bodyfile="source/modules/math/ODE_StiffSolver.cpp" bodystart="926" bodyend="968"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1afe02a2392bfcb45b402d03d8df88565b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ODE_StiffSolver::pzextr</definition>
+        <argsstring>(int32_t iest, double xest, double yest[], double yz[], double dy[], size_t nv)</argsstring>
+        <name>pzextr</name>
+        <qualifiedname>csmp::ODE_StiffSolver::pzextr</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>iest</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>xest</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>yest</declname>
+          <array>[]</array>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>yz</declname>
+          <array>[]</array>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>dy</declname>
+          <array>[]</array>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>nv</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Polynomial extrapolation method used by the stiff Burlisch-Stoer method. See Numerical Recipes p. 731 for documentation.</para>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>See Numerical Recipes p. 731 for documentation.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Used by StiffBulirschStoer(). </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="290" column="14" bodyfile="source/modules/math/ODE_StiffSolver.cpp" bodystart="880" bodyend="909"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1a2171039a91bcaa8469cfd65cf39c9872" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ODE_StiffSolver::odeint</definition>
+        <argsstring>(double ystart[], size_t nvar, double x1, double x2, double eps, double h1, double hmin, size_t &amp;nok, size_t &amp;nbad)</argsstring>
+        <name>odeint</name>
+        <qualifiedname>csmp::ODE_StiffSolver::odeint</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>ystart</declname>
+          <array>[]</array>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>nvar</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>x1</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>x2</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>eps</declname>
+          <defname>input_eps</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>h1</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>hmin</declname>
+        </param>
+        <param>
+          <type>size_t &amp;</type>
+          <declname>nok</declname>
+        </param>
+        <param>
+          <type>size_t &amp;</type>
+          <declname>nbad</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>odeint() is the integration routine which is used in most of the Numerical Recipe algorithms for differential equations. It is basically a scheme that uses LU decomposition and back substitution to invert the system of equations and to implement timestepping on the basis of criteria which are established by sub-functions. The method is documented in Numerical Recipes p. 721.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ystart</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>starting values to integrate over (starting concentrations) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>nvar</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>number of equations </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>input_eps</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>tolerance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>h1</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>guess of initial stepsize </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>hmin</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>minimum permitted stepsize </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>nok</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>good steps taken </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>nbad</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>unecessary steps taken but fixed</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>See numerical recipes pages 721 and 744ff.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Used by <ref refid="classcsmp_1_1_o_d_e___stiff_solver_1a6c0b5900d596870a228a27e9370b0572" kindref="member">Solve()</ref> to evolve the system of ODEs.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>The method will exit and issue a warning if the limit of steps has been reached without finding a solution. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="293" column="14" bodyfile="source/modules/math/ODE_StiffSolver.cpp" bodystart="662" bodyend="717"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1a522b7e1a265f25e8fe0dd2597dd42940" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ODE_StiffSolver::StiffBulirschStoer</definition>
+        <argsstring>(double y[], double dydx[], size_t nv, double &amp;xx, double htry, double eps, double yscal[], double &amp;hdid, double &amp;hnext)</argsstring>
+        <name>StiffBulirschStoer</name>
+        <qualifiedname>csmp::ODE_StiffSolver::StiffBulirschStoer</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>y</declname>
+          <array>[]</array>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>dydx</declname>
+          <array>[]</array>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>nv</declname>
+        </param>
+        <param>
+          <type>double &amp;</type>
+          <declname>xx</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>htry</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>eps</declname>
+          <defname>input_eps</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>yscal</declname>
+          <array>[]</array>
+        </param>
+        <param>
+          <type>double &amp;</type>
+          <declname>hdid</declname>
+        </param>
+        <param>
+          <type>double &amp;</type>
+          <declname>hnext</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Semi-implicit extrapolation method by Bader and Deuflhard (1986) for stiff systems of ordinary differential equations. See Numerical Recipes pages 742ff for documentation.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>y</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>array of dependent variables </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dydx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>array of (time)derivatives of dep. vars </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>nv</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>number of equations </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>xx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>starting value of independent variable, e.g., t=0 </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>htry</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>initial try of stepsize </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>input_eps</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>tolerance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>yscal</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>vector of values to scale error against </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>hdid</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>accomplished stepsize </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>hnext</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>stepsize if a new step was to follow</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+New values of x(time) and y(derivatives) are returned into respective arguments.</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>See Numerical Recipes p. 742ff.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Called by odeint().</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>If the stepsize reaches zero, the method has failed and a stepsize underflow is reported. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="296" column="14" bodyfile="source/modules/math/ODE_StiffSolver.cpp" bodystart="756" bodyend="863"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1a248afedcca0cf2d7a1217723d8ff9df8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ODE_StiffSolver::AllocateSolverMemory</definition>
+        <argsstring>()</argsstring>
+        <name>AllocateSolverMemory</name>
+        <qualifiedname>csmp::ODE_StiffSolver::AllocateSolverMemory</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Allocates matrix and vector memory using the auxiliary routines of the numerical recipes &apos;nrutil.c&apos; source. The size of these arrays is determined by the solverinternal parameters &apos;dof&apos; and &apos;KMAXX&apos;. The first refers to the number of equations (degrees of freedom). The second denotes how many intermediate steps of the solution shall be saved. <linebreak/>
+</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>Method uses the Numerical Recipes functions dvector() and dmatrix(). <linebreak/>
+</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Called by the constructor of the ODE solver. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="299" column="14" bodyfile="source/modules/math/ODE_StiffSolver.cpp" bodystart="109" bodyend="128"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1a72caae7444d1af41cefdd0c78df36b75" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ODE_StiffSolver::FreeSolverMemory</definition>
+        <argsstring>()</argsstring>
+        <name>FreeSolverMemory</name>
+        <qualifiedname>csmp::ODE_StiffSolver::FreeSolverMemory</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>De-allocates the temporary storage vectors and matrices used by the solver.</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>Calls the Numerical Recipes functions free_dvector() and free_dmatrix().</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Called by the destructor of the ODE solver. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="300" column="14" bodyfile="source/modules/math/ODE_StiffSolver.cpp" bodystart="142" bodyend="161"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1abf85e60246998ee493a671e4e5f75e4a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ODE_StiffSolver::ZeroAllStorage</definition>
+        <argsstring>()</argsstring>
+        <name>ZeroAllStorage</name>
+        <qualifiedname>csmp::ODE_StiffSolver::ZeroAllStorage</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Initializes all the values of the temporary storage arrays to zero. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="301" column="14" bodyfile="source/modules/math/ODE_StiffSolver.cpp" bodystart="166" bodyend="196"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1aa5adfdddd26b4895cd7abd28457cc113" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ODE_StiffSolver::TokenizeString</definition>
+        <argsstring>(char *s, const char *delim, std::list&lt; std::string &gt; &amp;li) const</argsstring>
+        <name>TokenizeString</name>
+        <qualifiedname>csmp::ODE_StiffSolver::TokenizeString</qualifiedname>
+        <param>
+          <type>char *</type>
+          <declname>s</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>delim</declname>
+        </param>
+        <param>
+          <type>std::list&lt; std::string &gt; &amp;</type>
+          <declname>li</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Creates an STL list of tokens from the input string using user-defined token delimiters.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>s</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>name of the string to be tokenized (separated into segments) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>delim</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>a list of single character delimters (&quot;_,+,\0&quot; for instance).</para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>li</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the list of tokens supplied as third argument. If this list already contains tokens, these are erased before new tokens are added. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="302" column="14" bodyfile="source/modules/math/ODE_StiffSolver.cpp" bodystart="1194" bodyend="1204"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_o_d_e___stiff_solver_1a555e2be27291c96189e1366f34f46d99" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ODE_StiffSolver::DSQR</definition>
+        <argsstring>(double a) const</argsstring>
+        <name>DSQR</name>
+        <qualifiedname>csmp::ODE_StiffSolver::DSQR</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>a</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/ODE_StiffSolver.h" line="304" column="14" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="328" bodyend="328"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Burlisch-Stoer solver for a stiff systemof ordinary differential equations. </para>
+    </briefdescription>
+    <detaileddescription>
+<sect1 id="compare_floats_8h_1motivation">
+<title>Motivation</title><para>A great variety of physical processes are best described by non-linear systems of ordinary differential equations (ODEs) which describe the change of the system. Typically, these ODEs can only be integrated (solved) numerically as is the case for rate-dependent chemical reactions. If the rate coefficients differ among the equations by many orders of magnitude, the systems are called stiff. The main numerical problem imposed by the &apos;stiffness&apos; is that, for instance in a time-dependent system, some equilibria described by individual ODE equations are obtained very fast while other equations evolve very slowly. Coupling such different equations together, therefore requires very small time steps to limit the change in each step over periods where rapid changes occur. Large timesteps are however essential in periods of minor change to obtain a solution in a reasonable amount of time. <linebreak/>
+</para>
+<para>Solution methods which provide the necessary adaptive timestepping are known as stiff ODE solvers, and the motivation for the design of the class <ref refid="classcsmp_1_1_o_d_e___stiff_solver" kindref="compound">ODE_StiffSolver</ref> is to make a robust solver of this kind available to CSP. <linebreak/>
+</para>
+</sect1>
+<sect1 id="classcsmp_1_1_o_d_e___stiff_solver_1Design">
+<title>Intent</title><para>The class <ref refid="classcsmp_1_1_o_d_e___stiff_solver" kindref="compound">ODE_StiffSolver</ref> encapsulates a semi-implicit form of a Burlisch-Stoer method as described by Bader and Deuflhard (1983) into a code module which is also capable of the house keeping and analytical differentiation of the actual ordinary differential equations. Textfile input provides an interface for the definition and description of the system of equations in human-readable form. The equations are linked in a matrix scheme which uses LU decomposition and back substitution of the results after the inversion of the matrix in each timestep. The integration routine &apos;odeint&apos; controls the timestep size using the cross derivatives of all of the individual ODEs. For this purpose, the derivatives are assembled into a Jacobian matrix. Additional methods are provided to change coefficients in individual equations without having to redine them. This capability is useful, for instance, if activities or surface area changes in an equilibration calculation. <linebreak/>
+</para>
+</sect1>
+<sect1 id="classcsmp_1_1_o_d_e___stiff_solver_1Applicability">
+<title>Applicability</title><para>The class <ref refid="classcsmp_1_1_o_d_e___stiff_solver" kindref="compound">ODE_StiffSolver</ref> is useful only for relatively small systems of ODEs (&lt;50 degrees of freedom). Runtime scales with number of ODEs which is also readily explained on a physical basis. Since the ODE coefficients will influence the condition number of the solution matrix, these must not differ from one-another by more than the numerical (double) precision. Otherwise the matrix will become singular. The solution speed also limits the applicability of the stiff ODE integration algorithm in serial application in a finite-element model.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_o_d_e___stiff_solver_1Implementation">
+<title>Implementation</title><para>The implementation of the ODE solver stems from the second edition of Numerical Recipes in C by Press et al. 1996 (p. 742ff) which also provides detailed documentation of functions included. The original names of the functions which have been integrated as private methods of the class <ref refid="classcsmp_1_1_o_d_e___stiff_solver" kindref="compound">ODE_StiffSolver</ref> are derivs(), jacobn(), ludcmp(), lubksb(), simpr() pzextr(), odeint(), and stifbs(). Additional auxiliary methods manage storage in the peculiar numerical recipe way.</para>
+<para>The method implemented herein goes back to Bader, G. and Deuflhard, P. 1983, Numerische Mathematik 41, 373-398.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_o_d_e___stiff_solver_1Participants">
+<title>Participants</title><para>The objects <ref refid="classcsmp_1_1_sum_of_products_with_exponents" kindref="compound">SumOfProductsWithExponents</ref> and <ref refid="classcsmp_1_1_sum_of_products" kindref="compound">SumOfProducts</ref> are used to represent individual OD equations in the stiff solver object.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_o_d_e___stiff_solver_1Collaboration">
+<title>Collaboration</title><para>Inside the CSP framework the class <ref refid="classcsmp_1_1_o_d_e___stiff_solver" kindref="compound">ODE_StiffSolver</ref> is used by the ReactionVisitor object. This object uses the solver to find fluid-rock equilibria in individual finite elements.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_o_d_e___stiff_solver_1Consequences">
+<title>Consequences</title><para>The <ref refid="classcsmp_1_1_o_d_e___stiff_solver" kindref="compound">ODE_StiffSolver</ref> form a sequentially applied reaction module in the object-oriented implementation of an decoupled incremental transport followed by reaction scheme for reactive transport calculations with CSP.</para>
+</sect1>
+<sect1 id="namespacecsmp_1Application">
+<title>Examples</title><para>The <ref refid="classcsmp_1_1_o_d_e___stiff_solver" kindref="compound">ODE_StiffSolver</ref> can be applied using its <ref refid="classcsmp_1_1_o_d_e___stiff_solver_1a6c0b5900d596870a228a27e9370b0572" kindref="member">Solve()</ref> method inside of other CSP objects or it can be used as a stand-alone tool to solve non-linear ODEs. The system of equations is defined in a textfile starting with an underlined headline followed by a blank line, e.g.:</para>
+<para><programlisting><codeline><highlight class="normal">carbonate<sp/>-<sp/>dissolution<sp/>example</highlight></codeline>
+<codeline><highlight class="normal">===============================</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">independent<sp/>variables</highlight></codeline>
+<codeline><highlight class="normal">---------------------</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">dependent<sp/>variable<sp/>definitions<sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>which<sp/>is<sp/>solved<sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(aqueous,<sp/>gaseous,<sp/>and<sp/>solid)</highlight></codeline>
+<codeline><highlight class="normal">------------------------------------------------------------------------------------</highlight></codeline>
+<codeline><highlight class="normal">OH_1m<sp/><sp/>CO2_aq<sp/><sp/>CC<sp/><sp/>Ca_2p<sp/><sp/>H_1p<sp/><sp/>H2O_aq<sp/><sp/>HCO3_1m<sp/><sp/></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">equilibrium<sp/>constants<sp/>(in<sp/>sequence<sp/>of<sp/>listed<sp/>reactions,<sp/>same<sp/>number)</highlight></codeline>
+<codeline><highlight class="normal">--------------------------------------------------------------------</highlight></codeline>
+<codeline><highlight class="normal">KF=4.37e-2<sp/><sp/>KB1=3.4593938e-12<sp/><sp/>KB2=8.336811e+10<sp/><sp/>KB3=9727.4722</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">reactions<sp/>(odes)<sp/>A<sp/>+<sp/>B<sp/>-&gt;<sp/>C<sp/>(K):<sp/><sp/>dA/dt<sp/>=<sp/>-kf<sp/>[A][B]<sp/>+<sp/>kf<sp/>[C]<sp/>/<sp/>K</highlight></codeline>
+<codeline><highlight class="normal">--------------------------------------------------------------&amp;mdash;</highlight></codeline>
+<codeline><highlight class="normal">OH_1m<sp/><sp/><sp/><sp/>=<sp/>-KF<sp/>H_1p<sp/>OH_1m<sp/><sp/><sp/><sp/>+<sp/><sp/>KB1<sp/>H2O_aq</highlight></codeline>
+<codeline><highlight class="normal">CO2_aq<sp/><sp/><sp/>=<sp/>-KF<sp/>CO2_aq<sp/>H2O_aq<sp/>+<sp/><sp/>KB2<sp/>HCO3_1m<sp/>H_1p</highlight></codeline>
+<codeline><highlight class="normal">CC<sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>-KF<sp/>CC<sp/>H_1p<sp/><sp/><sp/><sp/><sp/><sp/><sp/>+<sp/><sp/>KB3<sp/>HCO3_1m<sp/>Ca_2p</highlight></codeline>
+<codeline><highlight class="normal">Ca_2p<sp/><sp/><sp/><sp/>=<sp/><sp/>KF<sp/>CC<sp/>H_1p<sp/><sp/><sp/><sp/><sp/><sp/><sp/>+<sp/>-KB3<sp/>HCO3_1m<sp/>Ca_2p</highlight></codeline>
+<codeline><highlight class="normal">H_1p<sp/><sp/><sp/><sp/><sp/>=<sp/><sp/>KF<sp/>CO2_aq<sp/>H2O_aq<sp/>+<sp/>-KB2<sp/>HCO3_1m<sp/>H_1p<sp/>+<sp/>-KF<sp/>CC<sp/>H_1p<sp/>+<sp/>KB3<sp/>HCO3_1m<sp/>Ca_2p<sp/>+<sp/>-KF<sp/>H_1p<sp/>OH_1m<sp/>+<sp/>KB1<sp/>H2O_aq</highlight></codeline>
+<codeline><highlight class="normal">H2O_aq<sp/><sp/><sp/>=<sp/><sp/>KF<sp/>H_1p<sp/>OH_1m<sp/><sp/><sp/><sp/>+<sp/>-KB1<sp/>H2O_aq</highlight></codeline>
+<codeline><highlight class="normal">HCO3_1m<sp/><sp/>=<sp/><sp/>KF<sp/>CO2_aq<sp/>H2O_aq<sp/>+<sp/>-KB2<sp/>HCO3_1m<sp/>H_1p<sp/>+<sp/>KF<sp/>CC<sp/>H_1p<sp/>+<sp/>-KB3<sp/>HCO3_1m<sp/>Ca_2p</highlight></codeline>
+</programlisting></para>
+<para>Independent variables are specified next (such as constant coefficients). In this example, there are no independent variables. Again there is an underlined headline followed by the data and a blank line.</para>
+<para>The next block defines the names of the dependent variables in the equations (i.e., those variables which shall be calculated as a function of time). Importantly, no &apos;+&apos; or &apos;-&apos; signs must be used here since these symbols are reserved by the equation parser for algebraic operations. A similar block follows, specifying the numerical values of the equation coefficients using the assigment operator without blank space. In the example, forward and backward reaction rates are specified in terms of dissolution data and the equilibrium constants. This first order kinetic approach is described by Carl Steefel in the Min. Soc. America volume on reactive transport processes. <linebreak/>
+</para>
+<para>A following &apos;reaction&apos; block defines the actual ordinary differential equations in terms of the notation established above. Importantly, the ODEs must be listed in exactly the same order in which the dependent variables were defined before. There must be exactly one equation for each dependent variable and the stochiometry of the aqueous species/minerals determines the exponents and multipliers of the equation coefficients. This derives directly from the related mass-action expressions. <linebreak/>
+</para>
+<para>Everything which follows after the blank line below the equation block is ignored. Here the user can insert comments and a discussion of the system he defined and its time-dependent behaviour.</para>
+<para>Of course, the described syntax can also be used to define arbitrary ODE systems other than sets of reaction equations.</para>
+<para>copyright (c) 1999 by Dr. Stephan K. Matthaei &amp; Stephen G. Roberts </para>
+</sect1>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::ODE_StiffSolver</label>
+        <link refid="classcsmp_1_1_o_d_e___stiff_solver"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/math/ODE_StiffSolver.h" line="173" column="1" bodyfile="source/includes/math/ODE_StiffSolver.h" bodystart="173" bodyend="305"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a8f3aad1867f43b157f7403c8b17d7d00" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>A21</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a2da5d7707261c9a2f2e8e23e7581aaad" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>A2X</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a519fafadcc48afb309a34237e786a546" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>A31</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a6e1cbdd8a06524da84fde08fa6f809bd" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>A32</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1ab64f5e94b7513024568177d2b8822a64" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>A3X</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a248afedcca0cf2d7a1217723d8ff9df8" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>AllocateSolverMemory</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1aa359371c064d134d43e4959d7d989338" prot="public" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>AssignIndependentProductTerms</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1ac4ae8edb5308605ede0a7308244f69f4" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>B1</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a7c1b8a478b75ba8d5cd863ea041db3be" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>B2</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a4d74cf466906f45bb2adcffd2c266ae0" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>B3</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a68847235cea79380ef8d54d5e53c4021" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>B4</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a01b935d0473eb573f7722c543c1cd324" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>C1X</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a5c260abef7f083100c2b7f7eb6efced9" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>C21</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a5319904358d57ac685156b115250bf57" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>C2X</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a83241b47d8892dbd4ba159433af71b15" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>C31</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a55ebeaaede5c76b1778704d5047dab29" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>C32</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a7b51debbbbdd973d88a9e68461fa77c6" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>C3X</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a600529c0bfdc4deb00fe8fce8b648262" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>C41</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a8fcec189995df9badab729d82cc839c9" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>C42</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a643a1df7e0c432339c880aed23c44c29" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>C43</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1ab10a2fae34c0c23a5c6df616a2662dcf" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>C4X</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a0b8b989e419173798fdee973db5d995d" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>correct_interpretation</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a8066bec99bd388f26e9309fb296801ae" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>derivs</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1ad0abf45bd6fbdcae2c3f70f24a0d317c" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>dmatrix</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a54a703d28c31d611d55687bcf8e72fd1" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>dof</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a555e2be27291c96189e1366f34f46d99" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>DSQR</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a907c1a3a491a3288c2f973605ab65db1" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>dvector</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a85e8b8e7949b43be4f18de49bbd0f106" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>dxsav</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a7d0115e2a2c525ddbf477310b782ba9f" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>E1</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1aaf77d6f0c2ceb85eaa29caec57a50f3a" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>E2</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1aca94497edb0d180bfe63202666bd8c16" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>E3</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a5f9cdfa8c0f1834bc427033ae299d0c6" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>E4</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1af32f0d00e37b928abe311f9657788121" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>eps</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a0d61ae442a11868c7c109502f8f0618f" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>eqns</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a6bb0bc3987e51940e1528bf57ef0155e" prot="public" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>Equations</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a5162cff920dbbb92350027bd3838563a" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>ERRCON</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1ac51e021a34564405cd4e92c41810c94f" prot="public" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>EvaluateIndependentProductTerms</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a6a29b98db58fc3bf7f27d81f36347f8d" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>free_dmatrix</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a10d7e2385322162cee7e5a5a0c9fc199" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>free_dvector</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a77393a4cc624824ca72486855ba92e79" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>free_imatrix</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1aa9072e0d8feb7459a3a1e7d079ee2707" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>free_ivector</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a72caae7444d1af41cefdd0c78df36b75" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>FreeSolverMemory</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1aae881c0ea9f34c1fba46195956fddeea" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>GAM</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a5030a5d30826e5294a6b710773606f02" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>GROW</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1ad041b8eb5409fcd2375a6200180f4e55" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>imatrix</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1aa328bd5fa1f26530a7048f65b672266f" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>IMAXX</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1aee16822ac9ef3d22f492c03e38dc7036" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>independent_terms</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1ac2311cb2e705e38e600934025c882e85" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>independent_values</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a5a55106ae6bc1a3a02e2f38a639bfe5c" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>init_cond</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a96ab3b72cdd686b0c56748ff1402190b" prot="public" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>InitialConditions</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a856241b03713d65682f084f599042af3" prot="public" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>IntermediateStepsToSave</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a3a18575161e0419af853f46c62eb8adf" prot="public" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>IntermediateStepsToSave</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1aec61b7caf17ecb4d5a9f369f58cf8e66" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>ivector</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1aaa092d2116e0d14172daa8a64692d731" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>jacobn</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a62e828f681b5cb031ac2ecb45a9d99d0" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>kmax</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a2ca3459ea3e5a64d88457e6a925e3d63" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>KMAXX</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1ae4eafbd91f8cc054b117439353b73d9c" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>kount</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1ac8125689040d35a90c4494d9c496adbb" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>LU_BackSubstitution</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a0d0652a68e4b8b3e453a5ddbe944c335" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>LU_Decomposition</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1af86103e3c516c48b0ac121cd951e73cb" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>MAXSTP</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1af3f330674509ec07db17d8b9d99b0770" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>MAXTRY</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a70bf6decdf8640e6018433159324a02b" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>NR_END</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a2f8b60e5fc892ffca9993e52614b19c4" prot="public" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>ODE_StiffSolver</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a2171039a91bcaa8469cfd65cf39c9872" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>odeint</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a8cd21224c88f18b85708715228782aed" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>odeint_dydx</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1ae1e8049bf274863b5d569c0cbc64ef61" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>odeint_y</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1ad902cecf3d10d59db79796d5d1dc4267" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>odeint_yscal</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a0b3832e54d9709a174991222181e2af1" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>odes</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a24e3a2fb073d71bbeaeca272e2a773de" prot="public" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>operator()</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a15a809222872cf68d4a85664aac1f399" prot="public" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>operator[]</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a2704ba9e53517f5abf80b0126eb4539a" prot="public" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a4bc9c1390ae07cff8e26672257d1c38a" prot="public" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a753476ef89532f7e9af185d336f72a3b" prot="public" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a2c1cef75b6a0db34e8814cd03591c1c2" prot="public" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a7d0013e28fd31f7cf1fe584f8615d89e" prot="public" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a27f229fd812d21e25e498be85dbf77f1" prot="public" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a481edf02430e5b18a45c675b7b01471f" prot="public" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a0bd828f2b46ccb5d141ae5be1801d711" prot="public" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>OutputLastDerivatives</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a21f9b1ac4e0691d26f2c79c6b6d8e3e6" prot="public" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>OutputResults</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1af0779321112fc3151e3815a1cba2fd34" prot="public" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>OutputResultsTo</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a8072a8bc16ddaa8feeb766f4d8ca2256" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>PGROW</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a80676597eef779600f224ae4fb6949a9" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>PSHRNK</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1afe02a2392bfcb45b402d03d8df88565b" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>pzextr</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1ac73e79bfa77c618f8a5db55b65ec9cf8" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>pzextr_d</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a4702e9da04684f03ab16ddfa5ff485d7" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>pzextr_x</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a2b49904fb2de07d9e0e3a34abe176663" prot="public" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>ReadODEsFrom</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1ab39d6346960f6b06993caabe94be7d8f" prot="public" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>ReadODEsFrom</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1ad3855b858259820f9aeefadaded2ed9a" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>REDMAX</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1ac365e5c3e87a2c962ced5829c4b0fac0" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>REDMIN</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a48f9e3fbd26801e8bf29ea3b8a568a87" prot="public" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>ResetIndependentProductTerms</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a05448c28cc38e8c5c3a7324f6b04ca22" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>result_xp</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1acd023445f1bd1dffa81fed3d784bf55c" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>result_yp</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1aec2029ccc8fe77f8e02839a36c89e1c4" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>SAFE1</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a9935cc132c22511ed491964b7708e90a" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>SAFE2</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1abe836a3601dd1ee07f04401dce97d068" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>SAFETY</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a9eca343af3cce7e0dfed9f764a31a9fd" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>SCALMX</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a83aca27a26cd2318465299578654fb07" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>SHRNK</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a702c005609f137b07e06e0a5a1ea1f74" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>simpr</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a6c0b5900d596870a228a27e9370b0572" prot="public" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>Solve</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a67eb7dc29f15ececaf00e29728528026" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>stifbs_dfdx</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1ac8d556a33f82db2ff473bd68ab3ebdfb" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>stifbs_dfdy</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1ac784ff7b43b8df56e4336dd6e53a50d6" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>stifbs_err</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a6481f9b2cb34c1956f1f46273b6342fa" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>stifbs_yerr</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a3f5246c0b004d0ce7278aac6202eb470" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>stifbs_ysav</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1abca511c83e71f023311a7635b9397778" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>stifbs_yseq</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a522b7e1a265f25e8fe0dd2597dd42940" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>StiffBulirschStoer</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a868e17f36e208ed8ac3ed67d2b9a6082" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>TINY</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1aa5adfdddd26b4895cd7abd28457cc113" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>TokenizeString</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a2551bd0f03b890b515309b243668a00b" prot="public" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>Tolerance</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1a94465bb3371a99c7c09a26c9d4de5bea" prot="public" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>Tolerance</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1abf85e60246998ee493a671e4e5f75e4a" prot="private" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>ZeroAllStorage</name></member>
+      <member refid="classcsmp_1_1_o_d_e___stiff_solver_1aa588db5508c1c2ec97d839475708ad03" prot="public" virt="non-virtual"><scope>csmp::ODE_StiffSolver</scope><name>~ODE_StiffSolver</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

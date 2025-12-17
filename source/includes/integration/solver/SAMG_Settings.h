@@ -37,11 +37,25 @@ namespace csmp {
       int32_t Get_filnam_dump_length() const;
       bool ExplicitSecondary() const;
       bool UsePointBasedApproach() const;
+#if defined( LEGACY_SAMG )
       int32_t GetSolverInstance() const;
+#endif
       int32_t Get_mode_mess() const;
       int32_t Get_nxtyp() const;
       int32_t Get_nrd() const;
       int32_t Get_nru() const;
+      
+      // from ETHZ solver version
+      int32_t Get_clsolver_finest() const;
+      int32_t Get_nptmax() const;
+      std::string Get_filnam_dump_str() const;
+
+#if defined(_OPENMP )
+      int32_t Get_icolor_omp() const;
+      int32_t Get_iordered_omp() const;
+      int32_t Get_irestriction_openmp() const;
+      int32_t Get_samg_omp_num_threads_external() const;
+#endif
       
       void Set_isym( int32_t isym );
       void Set_irow( int32_t irow );
@@ -97,14 +111,25 @@ namespace csmp {
       void SetNegative_iout( bool negative_iout );
       /// if this is not set 'true' all attempts to set secondary parameters will fail (default=false)
       void ExplicitSecondary( bool explicit_secondary );
+#if defined( LEGACY_SAMG )
       void SetSolverInstance(  int32_t instance  );
+#endif
+
+     // from ETHZ SAMG solver implementation
+#if defined(_OPENMP )
+      void Set_icolor_omp( int32_t icolor_omp );
+      void Set_iordered_omp( int32_t iordered_omp );
+      void Set_irestriction_openmp( int32_t irestriction_openmp );
+#endif
+      void Set_clsolver_finest( int32_t clsolver_finest );
+      void Set_nptmax( int32_t nptmax );
 
     private:
       int32_t       isym_;
       int32_t       irow_;
       int32_t       itypu_;
-      double    eps_;
-      double    rel_eps_;
+      double        eps_;
+      double        rel_eps_;
       int32_t       napproach_;
       int32_t       nxtyp_;
       int32_t       nrd_;
@@ -125,33 +150,51 @@ namespace csmp {
       int32_t       ndefault_;
       int32_t       norm_typ_;
       int32_t       ioscratch_;
-      double    chktol_;
+      double        chktol_;
       int32_t       idmp_;
       int32_t       igdp_;
       int32_t       iadp_;
       int32_t       iwdp_;
       int32_t       iout1_;
       int32_t       iout2_;
-      double    a_cmplx_;
-      double    g_cmplx_;
-      double    p_cmplx_;
-      double    w_avrge_;
+      double        a_cmplx_;
+      double        g_cmplx_;
+      double        p_cmplx_;
+      double        w_avrge_;
       int32_t       ncgtyp_;
       int32_t       ioform_;
       int32_t       ioform_length_;
       int32_t       levelx_;
-      std::string filnam_dump_;
+      std::string   filnam_dump_;
       int32_t       filnam_dump_length_;
-      int         filnam_dump_Array_[50];
-      int         neg_diag_;
+      int           filnam_dump_Array_[50];
+      int           neg_diag_;
       int32_t       nred_;
       int32_t       nredlev_;
       int32_t       nxf_clean_;
       int32_t       npcol_;
-      int32_t       solver_instance_;
+#if defined( LEGACY_SAMG )
+      int32_t       solver_instance_ = 0;
+#endif
       int32_t       iter_pre_;
       int32_t       mode_mess_;
-
+      
+      // from ETHZ version of solver
+      int32_t      clsolver_finest_ = 0;
+      int32_t      nptmax_ = 200;
+#ifdef _OPENMP
+  #ifndef HAVE_MPI_CXX
+      int32_t     icolor_omp_ = 2; ///< // default switch in serial samg, for samgp is zero
+  #else
+      int32_t     icolor_omp_ = 0; ///< // default switch in serial samg, for samgp is zero
+  #endif
+      int32_t     iordered_omp_ = 1;
+      int32_t     samg_omp_num_threads_external_ = 0;
+      int32_t     irestriction_openmp_ = 2;
+      int32_t     samg_omp_num_threads_external_ = 0;
+#else
+    int32_t       iordered_omp_ = 0;
+#endif
       bool negative_nsolve_;
       bool negative_ncyc_;
       bool negative_idump_;

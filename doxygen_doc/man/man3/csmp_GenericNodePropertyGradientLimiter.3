@@ -1,0 +1,78 @@
+.TH "csmp::GenericNodePropertyGradientLimiter< dim >" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::GenericNodePropertyGradientLimiter< dim > \- \fBGenericNodePropertyGradientLimiter\fP - limits the nodal (finite-volume) gradient of target variable\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <GenericNodePropertyGradientLimiter\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBGenericNodePropertyGradientLimiter\fP (\fBModel\fP< dim > &, const char *region, const char *prop='node property gradient')"
+.br
+.ti -1c
+.RI "\fBGenericNodePropertyGradientLimiter\fP (\fBModel\fP< dim > &, const char *region, std::vector< char * > prop_names)"
+.br
+.ti -1c
+.RI "void \fBCalculateGenericNodalGradient\fP ()"
+.br
+.ti -1c
+.RI "void \fBCalculateSlopeLimiter\fP (const \fBRegion\fP< dim > &, const std::vector< std::pair< double, double > > &MINMAX, int counter=1)"
+.br
+.ti -1c
+.RI "void \fBSetPropertyKey\fP (\fBcsmp::Index\fP &key)"
+.br
+.RI "provide the \fBcsmp::Index\fP for the gradient variable "
+.ti -1c
+.RI "double \fBSizeOf\fP () const"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim>
+.br
+class csmp::GenericNodePropertyGradientLimiter< dim >"\fBGenericNodePropertyGradientLimiter\fP - limits the nodal (finite-volume) gradient of target variable\&. 
+
+If a property (saturation, solute concentration, etc\&.\&.\&.) is advected with second order accuarcy, some sort of slope limiting is required to avoid spurious oscillations\&. This objects computes the slope limiting factor phi using the MINMOD limiter for the nodal gradients that were computed employing the object NodePropertyGradient\&. This procedure is usually carreid out automatically int the various FiniteVolume<fT, dim>\fBVisitor\fP objects\&. The resulting gradient limiter is stored automatically in the CSP_PropertyDatabase using the CSP_Operands\&.
+
+.PP
+The FiniteVolumeManager<fT, dim> and the FiniteVolume<fT, dim> classes are participants\&.
+
+.PP
+The \fBGenericNodePropertyGradientLimiter\fP object collaborates with the FiniteVolume<fT, dim>AdvectionVisitor, the FiniteVolume<fT, dim>GradientVisitor, and the FiniteVolume<fT, dim>FluidPhaseVisitor
+
+.PP
+A single \fBGenericNodePropertyGradientLimiter\fP object is automatically constructed when one of the above-mentioned visitors is constructed\&. The \fBGenericNodePropertyGradientLimiter\fP object should not be constructed from the main() file
+
+.PP
+copyright (c) 2001 by Sebastian Geiger, Stephan K\&. Matthaei & Stephen G\&. Roberts 
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim> void \fBcsmp::GenericNodePropertyGradientLimiter\fP< dim >::CalculateSlopeLimiter (const \fBRegion\fP< dim > & , const std::vector< std::pair< double, double > > & MINMAX, int counter = \fR1\fP)"
+Computes the 2d slope limiter for all generic finite volumes if a higher order finite volume method is used\&. The slope limiting factor is stored in an automatically at the property database\&.
+
+.PP
+The method is implemented from the various FiniteVolume<fT, dim>Visitors 
+.IP "\(bu" 2
+
+.PP
+
+.SS "template<uint32_t dim> double \fBcsmp::GenericNodePropertyGradientLimiter\fP< dim >::SizeOf () const"
+
+.PP
+\fBReturns\fP
+.RS 4
+double Returns the storage in bytes required by the \fBGenericNodePropertyGradientLimiter\fP object 
+.RE
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

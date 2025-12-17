@@ -1,0 +1,734 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_edge" kind="class" language="C++" prot="public">
+    <compoundname>csmp::Edge</compoundname>
+    <basecompoundref refid="classcsmp_1_1_finite_element_policy" prot="public" virt="non-virtual">csmp::FiniteElementPolicy&lt; dim, Edge &gt;</basecompoundref>
+    <basecompoundref refid="classcsmp_1_1_finite_volume_policy" prot="public" virt="non-virtual">csmp::FiniteVolumePolicy&lt; dim, Edge &gt;</basecompoundref>
+    <basecompoundref refid="classcsmp_1_1_local_variable_storage" prot="public" virt="non-virtual">csmp::LocalVariableStorage&lt; dim, Edge &gt;</basecompoundref>
+    <includes refid="_edge_8h" local="no">Edge.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_edge_1aa73d51722a1f6575c9d473786b4c4042" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>&lt; dim &gt; *</type>
+        <definition>Face&lt;dim&gt;* csmp::Edge&lt; dim &gt;::innerParent_</definition>
+        <argsstring></argsstring>
+        <name>innerParent_</name>
+        <qualifiedname>csmp::Edge::innerParent_</qualifiedname>
+        <briefdescription>
+<para>higher-dimensional neighbor in opposite direction of unit normal (always there) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Edge.h" line="102" column="24" bodyfile="source/includes/model/Edge.h" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_edge_1abcf93ff1874882be75359d36b33376bc" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>&lt; dim &gt; *</type>
+        <definition>Face&lt;dim&gt;* csmp::Edge&lt; dim &gt;::outerParent_</definition>
+        <argsstring></argsstring>
+        <name>outerParent_</name>
+        <qualifiedname>csmp::Edge::outerParent_</qualifiedname>
+        <briefdescription>
+<para>higher-dimensional neighbor element in direction of interface normal </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Edge.h" line="103" column="24" bodyfile="source/includes/model/Edge.h" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_edge_1a6b910941da22895bfd8098af14f5afef" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; dim &gt; * &gt;</type>
+        <definition>std::vector&lt;Node&lt;dim&gt;*&gt; csmp::Edge&lt; dim &gt;::node_connector_</definition>
+        <argsstring></argsstring>
+        <name>node_connector_</name>
+        <qualifiedname>csmp::Edge::node_connector_</qualifiedname>
+        <briefdescription>
+<para>pointers to the nodes of the face </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Edge.h" line="104" column="18" bodyfile="source/includes/model/Edge.h" bodystart="104" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_edge_1a8694445bffc54c90a3d4790a008981f0" prot="private" static="no" mutable="yes">
+        <type>size_t</type>
+        <definition>size_t csmp::Edge&lt; dim &gt;::idx_</definition>
+        <argsstring></argsstring>
+        <name>idx_</name>
+        <qualifiedname>csmp::Edge::idx_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Edge.h" line="105" column="21" bodyfile="source/includes/model/Edge.h" bodystart="105" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_edge_1a597495afd1c70fc89bcc24de3556ba14" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::Edge&lt; dim &gt;::inner_parent_face_id_</definition>
+        <argsstring></argsstring>
+        <name>inner_parent_face_id_</name>
+        <qualifiedname>csmp::Edge::inner_parent_face_id_</qualifiedname>
+        <initializer>= UNSPECIFIED</initializer>
+        <briefdescription>
+<para>face number of inside higher-dimensional parent <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Edge.h" line="106" column="16" bodyfile="source/includes/model/Edge.h" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_edge_1ae0627491f3db3a2e8b37c6f5da0e060a" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::Edge&lt; dim &gt;::outer_parent_face_id_</definition>
+        <argsstring></argsstring>
+        <name>outer_parent_face_id_</name>
+        <qualifiedname>csmp::Edge::outer_parent_face_id_</qualifiedname>
+        <initializer>= UNSPECIFIED</initializer>
+        <briefdescription>
+<para>face number of outside higher-dimensional parent <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Edge.h" line="107" column="16" bodyfile="source/includes/model/Edge.h" bodystart="107" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_edge_1a50e9af53ecddf13a1b17dd43ab75f73c" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_edge" kindref="compound">Edge</ref>&lt; dim &gt; *</type>
+        <definition>Edge&lt;dim&gt;* csmp::Edge&lt; dim &gt;::nbor_edge0_</definition>
+        <argsstring></argsstring>
+        <name>nbor_edge0_</name>
+        <qualifiedname>csmp::Edge::nbor_edge0_</qualifiedname>
+        <initializer>=nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Edge.h" line="108" column="10" bodyfile="source/includes/model/Edge.h" bodystart="108" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_edge_1ae761d5c9bc15a21e422e5c0e49ccef03" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_edge" kindref="compound">Edge</ref>&lt; dim &gt; *</type>
+        <definition>Edge&lt;dim&gt;* csmp::Edge&lt; dim &gt;::nbor_edge1_</definition>
+        <argsstring></argsstring>
+        <name>nbor_edge1_</name>
+        <qualifiedname>csmp::Edge::nbor_edge1_</qualifiedname>
+        <initializer>=nullptr</initializer>
+        <briefdescription>
+<para>the neighbors of the edge </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Edge.h" line="109" column="10" bodyfile="source/includes/model/Edge.h" bodystart="109" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_edge_1a4ac7410e8588cb9fd9639536247a2e7b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Edge&lt; dim &gt;::Edge</definition>
+        <argsstring>(FiniteElement *, const FiniteVolumeStencil&lt; dim &gt; *, Face&lt; dim &gt; *const inner_parent, Face&lt; dim &gt; *const outer_parent, const LocalVariables &amp;, const IntegrationPointVariables &amp;)</argsstring>
+        <name>Edge</name>
+        <qualifiedname>csmp::Edge::Edge</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_finite_element" kindref="compound">FiniteElement</ref> *</type>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_finite_volume_stencil" kindref="compound">FiniteVolumeStencil</ref>&lt; dim &gt; *</type>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>&lt; dim &gt; *const</type>
+          <declname>inner_parent</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>&lt; dim &gt; *const</type>
+          <declname>outer_parent</declname>
+          <briefdescription><para>if any </para>
+</briefdescription>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_local_variables" kindref="compound">LocalVariables</ref> &amp;</type>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_integration_point_variables" kindref="compound">IntegrationPointVariables</ref> &amp;</type>
+        </param>
+        <briefdescription>
+<para>custom constructor, finds face ids and assigns nodes automatically </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Edge.h" line="38" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_edge_1a1976364370ea84a571787bd7aab42f52" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Edge&lt; dim &gt;::~Edge</definition>
+        <argsstring>()</argsstring>
+        <name>~Edge</name>
+        <qualifiedname>csmp::Edge::~Edge</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Edge.h" line="45" column="5" bodyfile="source/includes/model/Edge.h" bodystart="45" bodyend="45"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_edge_1a9a9ece1f71df460ae569528a19f23209" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">PLACEMENT</ref></type>
+        <definition>PLACEMENT csmp::Edge&lt; dim &gt;::Placement</definition>
+        <argsstring>() const</argsstring>
+        <name>Placement</name>
+        <qualifiedname>csmp::Edge::Placement</qualifiedname>
+        <briefdescription>
+<para>Local variable storage interface. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Edge.h" line="48" column="15" bodyfile="source/includes/model/Edge.h" bodystart="48" bodyend="48"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_edge_1a75b6120346c6599212491eb62ed6e7c3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::Edge&lt; dim &gt;::Nodes</definition>
+        <argsstring>() const</argsstring>
+        <name>Nodes</name>
+        <qualifiedname>csmp::Edge::Nodes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Edge.h" line="50" column="15" bodyfile="source/includes/model/Edge.h" bodystart="50" bodyend="50"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_edge_1a713d771988b65fa3b3f083b71cce486b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::Edge&lt; dim &gt;::Neighbors</definition>
+        <argsstring>() const</argsstring>
+        <name>Neighbors</name>
+        <qualifiedname>csmp::Edge::Neighbors</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Edge.h" line="51" column="15" bodyfile="source/includes/model/Edge.h" bodystart="51" bodyend="51"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_edge_1a7e3fb176144a1b90ab1ebd476a96aaf8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::Edge&lt; DIM &gt;::ConnectedNeighbors</definition>
+        <argsstring>() const</argsstring>
+        <name>ConnectedNeighbors</name>
+        <qualifiedname>csmp::Edge::ConnectedNeighbors</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Edge.h" line="52" column="13" bodyfile="source/modules/model/Edge.cpp" bodystart="104" bodyend="109"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_edge_1aaa007ebe66b285cefef42c7ced30b7d9" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::Edge&lt; dim &gt;::Faces</definition>
+        <argsstring>() const</argsstring>
+        <name>Faces</name>
+        <qualifiedname>csmp::Edge::Faces</qualifiedname>
+        <briefdescription>
+<para>sides of <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> object by analogy with <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Edge.h" line="55" column="15" bodyfile="source/includes/model/Edge.h" bodystart="55" bodyend="55"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_edge_1a6e1650e9a4b204222c6267e5f8bb5233" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; dim &gt; * &gt;::const_iterator</type>
+        <definition>vector&lt; Node&lt; DIM &gt; * &gt;::const_iterator csmp::Edge&lt; DIM &gt;::NodesBegin</definition>
+        <argsstring>() const</argsstring>
+        <name>NodesBegin</name>
+        <qualifiedname>csmp::Edge::NodesBegin</qualifiedname>
+        <briefdescription>
+<para>only constant iterators are provided because the user is not supposed to change the node pr neighbor connectivity (done by <ref refid="classcsmp_1_1_mesh_manager" kindref="compound">MeshManager</ref>) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Edge.h" line="58" column="43" bodyfile="source/modules/model/Edge.cpp" bodystart="115" bodyend="117"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_edge_1ad45a4bec5f2b7e7a4af8a4272805dd33" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; dim &gt; * &gt;::const_iterator</type>
+        <definition>vector&lt; Node&lt; DIM &gt; * &gt;::const_iterator csmp::Edge&lt; DIM &gt;::NodesEnd</definition>
+        <argsstring>() const</argsstring>
+        <name>NodesEnd</name>
+        <qualifiedname>csmp::Edge::NodesEnd</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Edge.h" line="59" column="43" bodyfile="source/modules/model/Edge.cpp" bodystart="122" bodyend="124"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_edge_1af19d103c97a0e160b7312f9bf31f444c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Edge&lt; DIM &gt;::Accept</definition>
+        <argsstring>(Visitor&lt; dim &gt; &amp;)</argsstring>
+        <name>Accept</name>
+        <qualifiedname>csmp::Edge::Accept</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_visitor" kindref="compound">Visitor</ref>&lt; dim &gt; &amp;</type>
+        </param>
+        <briefdescription>
+<para>to apply visitors whose application level is <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> and target is <ref refid="classcsmp_1_1_edge" kindref="compound">Edge</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Edge.h" line="62" column="10" bodyfile="source/modules/model/Edge.cpp" bodystart="147" bodyend="161"/>
+        <references refid="group___c_s_m_p__global__enumerations_1ggac35734252a71b0a9768a54a364137cf8afcf74dbe3531508fda0a5f01ceab3b4a" compoundref="_c_s_m_p__global__enumerations_8h" startline="84">csmp::EDGE</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_edge_1a9d56fa14fea862bcbd4663cfaf3c8d3d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; dim &gt; *const</type>
+        <definition>Node&lt; DIM &gt; *const csmp::Edge&lt; DIM &gt;::N</definition>
+        <argsstring>(uint32_t n_local) const</argsstring>
+        <name>N</name>
+        <qualifiedname>csmp::Edge::N</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>n_local</declname>
+        </param>
+        <briefdescription>
+<para>access the nodes that are connected to the <ref refid="classcsmp_1_1_edge" kindref="compound">Edge</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Edge.h" line="65" column="16" bodyfile="source/modules/model/Edge.cpp" bodystart="129" bodyend="133"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_edge_1ab1d441bdc7a4fd020c87f46bc9542265" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_edge" kindref="compound">Edge</ref>&lt; dim &gt; *const</type>
+        <definition>Edge&lt; DIM &gt; *const csmp::Edge&lt; DIM &gt;::Neighbor</definition>
+        <argsstring>(uint32_t) const</argsstring>
+        <name>Neighbor</name>
+        <qualifiedname>csmp::Edge::Neighbor</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <defname>n</defname>
+        </param>
+        <briefdescription>
+<para>access the neighbor faces of this face </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Edge.h" line="68" column="16" bodyfile="source/modules/model/Edge.cpp" bodystart="138" bodyend="142"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_edge_1afd35568c2036e13985b8320717a2eca0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Edge&lt; DIM &gt;::NodeCoordinateMatrix</definition>
+        <argsstring>(DenseMatrix&lt; DM_MIN &gt; &amp;) const</argsstring>
+        <name>NodeCoordinateMatrix</name>
+        <qualifiedname>csmp::Edge::NodeCoordinateMatrix</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <defname>XY</defname>
+        </param>
+        <briefdescription>
+<para>initialisation of nodes x dim matrix with the coordinates of the <ref refid="classcsmp_1_1_edge" kindref="compound">Edge</ref>&apos;s nodes </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Edge.h" line="71" column="10" bodyfile="source/modules/model/Edge.cpp" bodystart="220" bodyend="227"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_edge_1a82a4804920748319c272292bdd7f975c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Edge&lt; DIM &gt;::Idx</definition>
+        <argsstring>(size_t) const</argsstring>
+        <name>Idx</name>
+        <qualifiedname>csmp::Edge::Idx</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <defname>id</defname>
+        </param>
+        <briefdescription>
+<para>on-the-fly 0..n-1 numbering stored in a mutable local variable (therefore const) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Edge.h" line="74" column="12" bodyfile="source/modules/model/Edge.cpp" bodystart="170" bodyend="170"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_edge_1acb8cfefd9a9108b4989992bbd813531d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::Edge&lt; DIM &gt;::Idx</definition>
+        <argsstring>() const</argsstring>
+        <name>Idx</name>
+        <qualifiedname>csmp::Edge::Idx</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Edge.h" line="75" column="12" bodyfile="source/modules/model/Edge.cpp" bodystart="173" bodyend="173"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_edge_1ac731bd41ebb8630187984fa01b5b0e09" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>&lt; dim &gt; *const</type>
+        <definition>Face&lt; DIM &gt; *const csmp::Edge&lt; DIM &gt;::InnerParent</definition>
+        <argsstring>() const</argsstring>
+        <name>InnerParent</name>
+        <qualifiedname>csmp::Edge::InnerParent</qualifiedname>
+        <briefdescription>
+<para>higher-dimensional <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> located on side opposite to where the unit normal points; will always be present </para>
+        </briefdescription>
+        <detaileddescription>
+<para>higher-dimensional element located on the side of the face to which the unit normal points;</para>
+<para><simplesect kind="attention"><para>does not exist on model boundary </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Edge.h" line="78" column="16" bodyfile="source/modules/model/Edge.cpp" bodystart="188" bodyend="188"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_edge_1a98d05221893aa36c73fc1bcff6747f71" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>&lt; dim &gt; *const</type>
+        <definition>Face&lt; DIM &gt; *const csmp::Edge&lt; DIM &gt;::OuterParent</definition>
+        <argsstring>() const</argsstring>
+        <name>OuterParent</name>
+        <qualifiedname>csmp::Edge::OuterParent</qualifiedname>
+        <briefdescription>
+<para>higher-dimensional <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> located on the side of the face to which the unit normal points; </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="attention"><para>does not exist on model boundary </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Edge.h" line="81" column="16" bodyfile="source/modules/model/Edge.cpp" bodystart="191" bodyend="191"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_edge_1ae6f11113d75c349f108b99c9b02967fd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>&lt; dim &gt; *const</type>
+        <definition>Face&lt; DIM &gt; *const csmp::Edge&lt; DIM &gt;::Parent</definition>
+        <argsstring>(INTERFACE_SIDE) const</argsstring>
+        <name>Parent</name>
+        <qualifiedname>csmp::Edge::Parent</qualifiedname>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1ga5d179634969d40eee2a383f783d570cb" kindref="member">INTERFACE_SIDE</ref></type>
+          <defname>side</defname>
+        </param>
+        <briefdescription>
+<para>access the higher dimensional elements on either side of face; </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="attention"><para>returns nullptr if outside is not present </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Edge.h" line="83" column="16" bodyfile="source/modules/model/Edge.cpp" bodystart="179" bodyend="183"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_edge_1adb6d9273e5d15b9eb3b02e03bca95e53" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::Edge&lt; DIM &gt;::InnerParentFaceID</definition>
+        <argsstring>() const</argsstring>
+        <name>InnerParentFaceID</name>
+        <qualifiedname>csmp::Edge::InnerParentFaceID</qualifiedname>
+        <briefdescription>
+<para>returns which <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> of the higher dimensional inner neighbor <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> this <ref refid="classcsmp_1_1_edge" kindref="compound">Edge</ref> shares its nodes with </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Edge.h" line="86" column="14" bodyfile="source/modules/model/Edge.cpp" bodystart="195" bodyend="195"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_edge_1abb5118e1a670f4131c8c8a77e378a88a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::Edge&lt; DIM &gt;::OuterParentFaceID</definition>
+        <argsstring>() const</argsstring>
+        <name>OuterParentFaceID</name>
+        <qualifiedname>csmp::Edge::OuterParentFaceID</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Edge.h" line="87" column="14" bodyfile="source/modules/model/Edge.cpp" bodystart="198" bodyend="198"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_edge_1abd8794f3384513027c30bfe7e306d15e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Edge&lt; DIM &gt;::Length</definition>
+        <argsstring>() const</argsstring>
+        <name>Length</name>
+        <qualifiedname>csmp::Edge::Length</qualifiedname>
+        <briefdescription>
+<para>returns length of the <ref refid="classcsmp_1_1_edge" kindref="compound">Edge</ref>; method assumes same role as <ref refid="classcsmp_1_1_finite_element_policy_1ad8f1ad92fc4e66b0ccb44191228b0b45" kindref="member">Volume()</ref> for the element </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Edge.h" line="94" column="17" bodyfile="source/modules/model/Edge.cpp" bodystart="204" bodyend="207"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_edge_1a7c1598b22f1ae18cc430881cd7a42c34" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt;</type>
+        <definition>Point&lt; DIM &gt; csmp::Edge&lt; DIM &gt;::BaryCenter</definition>
+        <argsstring>() const</argsstring>
+        <name>BaryCenter</name>
+        <qualifiedname>csmp::Edge::BaryCenter</qualifiedname>
+        <briefdescription>
+<para>the centre of gravity of the element </para>
+        </briefdescription>
+        <detaileddescription>
+<para>the centre of gravity of the element as determined from the corner nodes </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Edge.h" line="97" column="12" bodyfile="source/modules/model/Edge.cpp" bodystart="212" bodyend="216"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_edge_1a3dcd25c8a1ebebfd04e6efd83ad327be" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Edge&lt; DIM &gt;::Out</definition>
+        <argsstring>() const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::Edge::Out</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Edge.h" line="99" column="10" bodyfile="source/modules/model/Edge.cpp" bodystart="231" bodyend="249"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Line &quot;face&quot; that knows its surface <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> neighbors. Supports computations on the boundaries of 3D models. Variable placement is FACE. Can be a manifold.</para>
+<para><xrefsect id="todo_1_todo000071"><xreftitle>Todo</xreftitle><xrefdescription><para>design issue: edges should only exist only in 3D models because, only there, they can have <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> neighbors. </para>
+<para>remove templatisation, making this a 3D only entity </para>
+</xrefdescription></xrefsect></para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::Edge&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_edge"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::FiniteElementPolicy&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_finite_element_policy"/>
+      </node>
+      <node id="2">
+        <label>csmp::FiniteElementPolicy&lt; dim, Edge &gt;</label>
+        <link refid="classcsmp_1_1_finite_element_policy"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; dim, Edge &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>csmp::FiniteVolumePolicy&lt; uint32_t, CELL &gt;</label>
+        <link refid="classcsmp_1_1_finite_volume_policy"/>
+      </node>
+      <node id="4">
+        <label>csmp::FiniteVolumePolicy&lt; dim, Edge &gt;</label>
+        <link refid="classcsmp_1_1_finite_volume_policy"/>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; dim, Edge &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>csmp::LocalVariableStorage&lt; dim, STOREE &gt;</label>
+        <link refid="classcsmp_1_1_local_variable_storage"/>
+      </node>
+      <node id="6">
+        <label>csmp::LocalVariableStorage&lt; dim, Edge &gt;</label>
+        <link refid="classcsmp_1_1_local_variable_storage"/>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; dim, Edge &gt;</edgelabel>
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::Edge&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_edge"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::FiniteElementPolicy&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_finite_element_policy"/>
+      </node>
+      <node id="2">
+        <label>csmp::FiniteElementPolicy&lt; dim, Edge &gt;</label>
+        <link refid="classcsmp_1_1_finite_element_policy"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; dim, Edge &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>csmp::FiniteVolumePolicy&lt; uint32_t, CELL &gt;</label>
+        <link refid="classcsmp_1_1_finite_volume_policy"/>
+      </node>
+      <node id="4">
+        <label>csmp::FiniteVolumePolicy&lt; dim, Edge &gt;</label>
+        <link refid="classcsmp_1_1_finite_volume_policy"/>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; dim, Edge &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>csmp::LocalVariableStorage&lt; dim, STOREE &gt;</label>
+        <link refid="classcsmp_1_1_local_variable_storage"/>
+      </node>
+      <node id="6">
+        <label>csmp::LocalVariableStorage&lt; dim, Edge &gt;</label>
+        <link refid="classcsmp_1_1_local_variable_storage"/>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; dim, Edge &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/model/Edge.h" line="33" column="1" bodyfile="source/includes/model/Edge.h" bodystart="35" bodyend="110"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_edge_1af19d103c97a0e160b7312f9bf31f444c" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>Accept</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1ae81c2b297f4166821bc3de2856e055ae" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>AddProperty</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a098d98840070560812b4983f70e3e3ee" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>AspectRatio</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a0f98d57cdb8354375492e1ecab895b05" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>AssertFiniteVolumeIntegrationPointPlacement</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a5143bb03ae0bda92a0c01260dee54615" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>AssertIntegrationPointPlacement</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a4cc75be181f8519badea275810fe8275" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>AssertPlacement</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a8a6b224d1d3482c35e577ffc3b9a1230" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>Assign</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a77c9cbf8fea9ea9683280d459a384347" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>AssignFiniteElementNullPtr</name></member>
+      <member refid="classcsmp_1_1_edge_1a7c1598b22f1ae18cc430881cd7a42c34" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>BaryCenter</name></member>
+      <member refid="classcsmp_1_1_edge_1a7e3fb176144a1b90ab1ebd476a96aaf8" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>ConnectedNeighbors</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a8f08eac65fbebe1bf083a13e507d20d1" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>CoordinateMatrix</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1acdaccbd7a5d2c7414b7313e73f29dd78" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>CornerNodesConnectedTo</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a060eafe8a4ad9ba2317bed9340c68b3a" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>CornerNodesOfFace</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a3b56bab7bc4a1db37bfc4d4176457349" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>DeleteProperty</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a60755a7783f5fa3e148bdebbc262e313" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>det_JINV_AtIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a56a0f54fe5711fd30028e7aab917ac61" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>dN</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1ace23ba2a8014a0cf2608c57ff23971ca" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>dN_AtBaryCenter</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a687f5a139fe956d5e4f77a395888665a" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>dN_AtIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a020acd46aa1d08723694e6999ecbf355" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>dN_AtNode</name></member>
+      <member refid="classcsmp_1_1_edge_1a4ac7410e8588cb9fd9639536247a2e7b" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>Edge</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a110040be6c3f197163729b7c4ea81069" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>EmptyLVS</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a1499c9885a547d55b3749ccf3321195f" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>ExtrapolateIntegrationPointVariableToNodes</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1af6c030a937fbfecd002756d67353271e" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>FaceBaryCenter</name></member>
+      <member refid="classcsmp_1_1_edge_1aaa007ebe66b285cefef42c7ced30b7d9" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>Faces</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1aa15ab6c8637cfc881bba2a5068034fa1" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>FE</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a37cbda0c98719c47bbf4104117b026f3" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>FE_Type</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1ac67ae122f6fc20e8e3b9a6dc1bb864e0" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>FiniteElementPolicy</name></member>
+      <member refid="classcsmp_1_1_edge_1a82a4804920748319c272292bdd7f975c" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>Idx</name></member>
+      <member refid="classcsmp_1_1_edge_1acb8cfefd9a9108b4989992bbd813531d" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>Idx</name></member>
+      <member refid="classcsmp_1_1_edge_1a8694445bffc54c90a3d4790a008981f0" prot="private" virt="non-virtual"><scope>csmp::Edge</scope><name>idx_</name></member>
+      <member refid="classcsmp_1_1_edge_1a597495afd1c70fc89bcc24de3556ba14" prot="private" virt="non-virtual"><scope>csmp::Edge</scope><name>inner_parent_face_id_</name></member>
+      <member refid="classcsmp_1_1_edge_1ac731bd41ebb8630187984fa01b5b0e09" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>InnerParent</name></member>
+      <member refid="classcsmp_1_1_edge_1aa73d51722a1f6575c9d473786b4c4042" prot="private" virt="non-virtual"><scope>csmp::Edge</scope><name>innerParent_</name></member>
+      <member refid="classcsmp_1_1_edge_1adb6d9273e5d15b9eb3b02e03bca95e53" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>InnerParentFaceID</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1aedac4e85507af8472d150919bbdcd596" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>InnerRadius</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1adb0e04d0ca6e1d778c7d661c712d8489" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>Integral_dNT_K_dN</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1ae0d1e7bd37d3df2466c6b19d19104861" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>IntegralNN</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1ab081bcacc1a48b61826173e6457d2de1" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>IntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a4e01522e7321abe783521bb9720134ee" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>IntegrationPointPropertyVector</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1ac5f3d16eb6043c3009d924142f10dc43" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>IntegrationPoints</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a9eb9b6e65e131b645fd24a69d85bf882" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>Interpolation</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1aa2437e1836f4fa229a5e24f71b5e6a3e" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>IsEquidimensional</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a2fe99256fef0cd21787f1d1dbeffc88f" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>IsLine</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a6191121afc6f9bf442f7fcc1dd24d901" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>IsSurface</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1abcab5f98eb7b23a5c94e508dfc7a236f" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>IsVolume</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1aa8f995011429356bfd7e7744794c9b9b" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>IsWithinRange</name></member>
+      <member refid="classcsmp_1_1_edge_1abd8794f3384513027c30bfe7e306d15e" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>Length</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1aa711649557c9cd84c0a69e7e1ffe301b" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>LocalVariableStorage</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a3568b1d87af863a457f038ca8982bcea" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>LVS</name></member>
+      <member refid="classcsmp_1_1_edge_1a9d56fa14fea862bcbd4663cfaf3c8d3d" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>N</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a59be5ecef2c9588aee1dd0948b81b471" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>N_At</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1aa967d6caae742df669ff92562519c060" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>N_AtBaryCenter</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a6a65623b4219d8f3da0aa5a33272ebea" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>N_AtGlobalPoint</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a59c801ea0a73c350dfba1c62e8adee18" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>N_AtIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_edge_1a50e9af53ecddf13a1b17dd43ab75f73c" prot="private" virt="non-virtual"><scope>csmp::Edge</scope><name>nbor_edge0_</name></member>
+      <member refid="classcsmp_1_1_edge_1ae761d5c9bc15a21e422e5c0e49ccef03" prot="private" virt="non-virtual"><scope>csmp::Edge</scope><name>nbor_edge1_</name></member>
+      <member refid="classcsmp_1_1_edge_1ab1d441bdc7a4fd020c87f46bc9542265" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>Neighbor</name></member>
+      <member refid="classcsmp_1_1_edge_1a713d771988b65fa3b3f083b71cce486b" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>Neighbors</name></member>
+      <member refid="classcsmp_1_1_edge_1a6b910941da22895bfd8098af14f5afef" prot="private" virt="non-virtual"><scope>csmp::Edge</scope><name>node_connector_</name></member>
+      <member refid="classcsmp_1_1_edge_1afd35568c2036e13985b8320717a2eca0" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>NodeCoordinateMatrix</name></member>
+      <member refid="classcsmp_1_1_edge_1a75b6120346c6599212491eb62ed6e7c3" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>Nodes</name></member>
+      <member refid="classcsmp_1_1_edge_1a6e1650e9a4b204222c6267e5f8bb5233" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>NodesBegin</name></member>
+      <member refid="classcsmp_1_1_edge_1ad45a4bec5f2b7e7a4af8a4272805dd33" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>NodesEnd</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1afd8da63bf06786e9891316717ef7c11e" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1add3acd9ec49db71e0e5bf4f8dda13744" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>operator==</name></member>
+      <member refid="classcsmp_1_1_edge_1a3dcd25c8a1ebebfd04e6efd83ad327be" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_edge_1ae0627491f3db3a2e8b37c6f5da0e060a" prot="private" virt="non-virtual"><scope>csmp::Edge</scope><name>outer_parent_face_id_</name></member>
+      <member refid="classcsmp_1_1_edge_1a98d05221893aa36c73fc1bcff6747f71" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>OuterParent</name></member>
+      <member refid="classcsmp_1_1_edge_1abcf93ff1874882be75359d36b33376bc" prot="private" virt="non-virtual"><scope>csmp::Edge</scope><name>outerParent_</name></member>
+      <member refid="classcsmp_1_1_edge_1abb5118e1a670f4131c8c8a77e378a88a" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>OuterParentFaceID</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1ade5ec5a8e9afb482c1619924cf8259b2" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>OutLVS</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a8ce0b33bbc4b521ed938adffd77cdd55" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>OutputPropertyToVTK</name></member>
+      <member refid="classcsmp_1_1_edge_1ae6f11113d75c349f108b99c9b02967fd" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>Parent</name></member>
+      <member refid="classcsmp_1_1_edge_1a9a9ece1f71df460ae569528a19f23209" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>Placement</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a1a3f3d3a4ab8c43e54b64f7491453d15" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>PropertyIntegral</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a97425cbfdb7e21eaa48d9fc455c73cb5" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>PropertyValueAt</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a765acd90b4a49d2f309b31451f347bd2" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>PropertyValueAtBaryCenter</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a9bb80abd0181bcc607f9fe6f76207b10" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>PropertyValueAtIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a4387c2c28afd79c9142834fc4a976b48" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>Read</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a15454666d6c782ff34dc7cbcd5654881" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>ReadArrayEntry</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a7a7f6185d60844c2f5acc1bcf475e215" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>ResizePropertyStorage</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a77e05282a77bb85927eb55bdaaa68d2a" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>RstToXYZ</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a20aa7fe21942056f9ef670b28bfadfa8" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>SegmentLength</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a39e2379c97598a8e6f33be8a6bfcf035" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>SegmentLengths</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a043f97fcd42926600cb944592e40f075" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>SegmentMidPoint</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1ab1ecfed7e08324946dc91638abde4d0a" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>Segments</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a13c8a3dae3a8ba916f712f7e96d000d1" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>Status</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a8642fe6f83bb6981e7c0d6ab5b2c0248" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>Store</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a0e9b7ddb382ce5e6bbb03158289dd5d4" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>StoreArrayEntry</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a482c445697287f2ae4d8b76319725d7a" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>StoreLocalState</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a27fe90e4049b19e610807f4e15186c78" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>UnitNormal</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a202387b7bb52a9ff75f00ae354ba8ef2" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>UnitNormalToFace</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a48a4fcb34ff6390dce61d7bdb3f29f95" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>UsesLocalCoordinates</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1ad8f1ad92fc4e66b0ccb44191228b0b45" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>Volume</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a0de66f788ab5a4f42f68918243a2c993" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>WeightAtIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_edge_1a1976364370ea84a571787bd7aab42f52" prot="public" virt="non-virtual"><scope>csmp::Edge</scope><name>~Edge</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

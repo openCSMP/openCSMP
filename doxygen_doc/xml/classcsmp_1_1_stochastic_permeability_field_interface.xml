@@ -1,0 +1,181 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_stochastic_permeability_field_interface" kind="class" language="C++" prot="public">
+    <compoundname>csmp::StochasticPermeabilityFieldInterface</compoundname>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_stochastic_permeability_field_interface_1a0df83f863b1834cfed5200b89aca4c24" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref>&lt; dim &gt;</type>
+        <definition>PropertyHandle&lt;dim&gt; csmp::StochasticPermeabilityFieldInterface&lt; dim &gt;::nodal_perm</definition>
+        <argsstring></argsstring>
+        <name>nodal_perm</name>
+        <qualifiedname>csmp::StochasticPermeabilityFieldInterface::nodal_perm</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/StochasticPermeabilityFieldInterface.h" line="23" column="20" bodyfile="source/includes/interfaces/StochasticPermeabilityFieldInterface.h" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stochastic_permeability_field_interface_1a6e7457f3e6f970dc9a6c00b26743fa6c" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_property_handle" kindref="compound">PropertyHandle</ref>&lt; dim &gt;</type>
+        <definition>PropertyHandle&lt;dim&gt; csmp::StochasticPermeabilityFieldInterface&lt; dim &gt;::log_perm</definition>
+        <argsstring></argsstring>
+        <name>log_perm</name>
+        <qualifiedname>csmp::StochasticPermeabilityFieldInterface::log_perm</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/StochasticPermeabilityFieldInterface.h" line="23" column="31" bodyfile="source/includes/interfaces/StochasticPermeabilityFieldInterface.h" bodystart="23" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_stochastic_permeability_field_interface_1a16a7bc43a5380ccd031fcb13b99b0a55" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::StochasticPermeabilityFieldInterface&lt; dim &gt;::StochasticPermeabilityFieldInterface</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;)</argsstring>
+        <name>StochasticPermeabilityFieldInterface</name>
+        <qualifiedname>csmp::StochasticPermeabilityFieldInterface::StochasticPermeabilityFieldInterface</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <defname>sg</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/StochasticPermeabilityFieldInterface.h" line="16" column="5" bodyfile="source/modules/interfaces/StochasticPermeabilityFieldInterface.cpp" bodystart="17" bodyend="20"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_stochastic_permeability_field_interface_1a6bdf7003f2b9dcdd233c949276c8d785" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::StochasticPermeabilityFieldInterface&lt; dim &gt;::~StochasticPermeabilityFieldInterface</definition>
+        <argsstring>()</argsstring>
+        <name>~StochasticPermeabilityFieldInterface</name>
+        <qualifiedname>csmp::StochasticPermeabilityFieldInterface::~StochasticPermeabilityFieldInterface</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/StochasticPermeabilityFieldInterface.h" line="17" column="5" bodyfile="source/modules/interfaces/StochasticPermeabilityFieldInterface.cpp" bodystart="23" bodyend="23"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_stochastic_permeability_field_interface_1aef200217723991702ed44b5887326330" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::StochasticPermeabilityFieldInterface&lt; dim &gt;::Read2DStochasticPermeabilityFieldOnRegularGrid</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;, const char *fname)</argsstring>
+        <name>Read2DStochasticPermeabilityFieldOnRegularGrid</name>
+        <qualifiedname>csmp::StochasticPermeabilityFieldInterface::Read2DStochasticPermeabilityFieldOnRegularGrid</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <defname>sg</defname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>fname</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Reads in a HYDROGEN (Bellin and Rubin, 1996; Fortran source code in folder /csp/varia/hydrogen) generated stochastic permeability field for a regular 2D finite element grid where the node-spacing in x and y direction is constant and the elements have the same volume. HYDRO_GEN input file must have the ending &apos;*.perm&apos; and be in x-y-z column format. Permeability values are assigned to the nodes of the FE mesh and the nodal permeability values are interpolated to the element center. If node coordinates and stochastic permeability coordinates do not coincide, the method terminates without mapping the stochastic permeability field to the <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>. A variable &apos;nodal logarithmic permeability&apos; is created such that the log values of the permeability at the nodes can be visualized from the main() file. <linebreak/>
+</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>A reference to the <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> and the name of the HYDROGEN file that stores the permeability field.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Call the function from your main() file to assing the stochastic permeability values to the <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>. <linebreak/>
+</para>
+<para><xrefsect id="test_1_test000029"><xreftitle>Test</xreftitle><xrefdescription><para>tested: O.K. </para>
+</xrefdescription></xrefsect></para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/StochasticPermeabilityFieldInterface.h" line="18" column="10" bodyfile="source/modules/interfaces/StochasticPermeabilityFieldInterface.cpp" bodystart="53" bodyend="166"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_stochastic_permeability_field_interface_1ad6941bbf713af021e318681e208d13fe" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::StochasticPermeabilityFieldInterface&lt; dim &gt;::Read2DStochasticPermeabilityField</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;, const char *fname)</argsstring>
+        <name>Read2DStochasticPermeabilityField</name>
+        <qualifiedname>csmp::StochasticPermeabilityFieldInterface::Read2DStochasticPermeabilityField</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <defname>sg</defname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>fname</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Same as above bu maps the stochastic permeability field to an irregular finite element mesh. A <ref refid="classcsmp_1_1_finite_difference_grid" kindref="compound">FiniteDifferenceGrid</ref> that holds the stochastic permeability values is created and the <ref refid="classcsmp_1_1_fem_from_grid_visitor" kindref="compound">FemFromGridVisitor</ref> is employed to transfer the grid data to the finite element mesh. If the stochastic permeability field extend and the dimensions of the <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> do not coincide, the field is rescaled, in which case some of the accuracy of the stochastic field is lost. Further, if finite elements are smaller than the grid resolution of the <ref refid="classcsmp_1_1_finite_difference_grid" kindref="compound">FiniteDifferenceGrid</ref> such that no new permeability values can be assigned to these elements, the values of their connected neighbor elements are averaged to compute the new element permeability. In this case, accuracy of the stochastic permeability field is lost too. If more than 1/3 of the finite elements have no new permeability assigned, the method terminates and the original permeability field is retained. <linebreak/>
+</para>
+<para><xrefsect id="test_1_test000030"><xreftitle>Test</xreftitle><xrefdescription><para>tested: O.K. </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/StochasticPermeabilityFieldInterface.h" line="19" column="10" bodyfile="source/modules/interfaces/StochasticPermeabilityFieldInterface.cpp" bodystart="188" bodyend="361"/>
+        <references refid="classcsmp_1_1_scalar_variable_1a7f0ab5431406d975d6e1de988f369176" compoundref="_scalar_variable_8cpp" startline="6" endline="6">csmp::ScalarVariable::operator()</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_stochastic_permeability_field_interface_1ac9be69786d06343c43de217548f7d15c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::StochasticPermeabilityFieldInterface&lt; dim &gt;::Tokenize</definition>
+        <argsstring>(const std::string &amp;str, std::vector&lt; std::string &gt; &amp;tkns)</argsstring>
+        <name>Tokenize</name>
+        <qualifiedname>csmp::StochasticPermeabilityFieldInterface::Tokenize</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>str</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; std::string &gt; &amp;</type>
+          <declname>tkns</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/StochasticPermeabilityFieldInterface.h" line="22" column="10" bodyfile="source/modules/interfaces/StochasticPermeabilityFieldInterface.cpp" bodystart="364" bodyend="370"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::StochasticPermeabilityFieldInterface&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_stochastic_permeability_field_interface"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/interfaces/StochasticPermeabilityFieldInterface.h" line="13" column="1" bodyfile="source/includes/interfaces/StochasticPermeabilityFieldInterface.h" bodystart="13" bodyend="24"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_stochastic_permeability_field_interface_1a6e7457f3e6f970dc9a6c00b26743fa6c" prot="private" virt="non-virtual"><scope>csmp::StochasticPermeabilityFieldInterface</scope><name>log_perm</name></member>
+      <member refid="classcsmp_1_1_stochastic_permeability_field_interface_1a0df83f863b1834cfed5200b89aca4c24" prot="private" virt="non-virtual"><scope>csmp::StochasticPermeabilityFieldInterface</scope><name>nodal_perm</name></member>
+      <member refid="classcsmp_1_1_stochastic_permeability_field_interface_1ad6941bbf713af021e318681e208d13fe" prot="public" virt="non-virtual"><scope>csmp::StochasticPermeabilityFieldInterface</scope><name>Read2DStochasticPermeabilityField</name></member>
+      <member refid="classcsmp_1_1_stochastic_permeability_field_interface_1aef200217723991702ed44b5887326330" prot="public" virt="non-virtual"><scope>csmp::StochasticPermeabilityFieldInterface</scope><name>Read2DStochasticPermeabilityFieldOnRegularGrid</name></member>
+      <member refid="classcsmp_1_1_stochastic_permeability_field_interface_1a16a7bc43a5380ccd031fcb13b99b0a55" prot="public" virt="non-virtual"><scope>csmp::StochasticPermeabilityFieldInterface</scope><name>StochasticPermeabilityFieldInterface</name></member>
+      <member refid="classcsmp_1_1_stochastic_permeability_field_interface_1ac9be69786d06343c43de217548f7d15c" prot="private" virt="non-virtual"><scope>csmp::StochasticPermeabilityFieldInterface</scope><name>Tokenize</name></member>
+      <member refid="classcsmp_1_1_stochastic_permeability_field_interface_1a6bdf7003f2b9dcdd233c949276c8d785" prot="public" virt="non-virtual"><scope>csmp::StochasticPermeabilityFieldInterface</scope><name>~StochasticPermeabilityFieldInterface</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

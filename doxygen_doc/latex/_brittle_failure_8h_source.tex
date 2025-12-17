@@ -1,0 +1,48 @@
+\doxysection{Brittle\+Failure.\+h}
+\hypertarget{_brittle_failure_8h_source}{}\label{_brittle_failure_8h_source}\index{source/includes/thmc/mechanics/BrittleFailure.h@{source/includes/thmc/mechanics/BrittleFailure.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ \ BrittleFailure.h}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ \ CSMP\_ReservoirSimulator}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ \ Created\ by\ Stephan\ Matthai\ on\ 10/25/14.}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//\ \ Copyright\ (c)\ 2014\ Stephan\ K.\ Matthai.\ All\ rights\ reserved.}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{BRITTLE\_FAILURE\_H}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{BRITTLE\_FAILURE\_H}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_stress_invariants_8h}{"{}StressInvariants.h"{}}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_mechanical_properties_8h}{"{}MechanicalProperties.h"{}}}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{enum}\ FAILURE\ :\ std::int8\_t\ \{\ COMPRESSIVE=-\/1,}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NONE=0,}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FRICTIONAL\_SLIDING=1,}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SHEAR\_FRACTURE=2,}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ TENSILE\_OPENING=3,}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ MODE1\_FRACTURE=4\ \};}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{comment}{///\ converts\ enum\ to\ string\ to\ make\ it\ printable}}
+\DoxyCodeLine{00025\ \mbox{\hyperlink{namespacecsmp_a68620258b7b9aa07db6cda9d1ae16ee1}{std}}::\mbox{\hyperlink{namespacecsmp_a68620258b7b9aa07db6cda9d1ae16ee1}{string}}\ \ \mbox{\hyperlink{namespacecsmp_a68620258b7b9aa07db6cda9d1ae16ee1}{parseFailure}}(\ FAILURE\ );}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \textcolor{comment}{///\ if\ the\ failure\ mode\ is\ not\ recognized,\ none\ is\ returned}}
+\DoxyCodeLine{00028\ FAILURE\ \mbox{\hyperlink{namespacecsmp_aa806625683dae487420fbbc893982719}{parseFailure}}(\ \textcolor{keyword}{const}\ std::string\&\ failure\ );}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_brittle_failure}{BrittleFailure}}\ \ \{}
+\DoxyCodeLine{00032\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{comment}{///\ evaluates\ failure\ criteria\ -\/1\ to\ 4\ without\ explicit\ consideration\ of\ pore\ pressure}}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{static}\ FAILURE\ \mbox{\hyperlink{classcsmp_1_1_brittle_failure_ae425db83e4bf557fdd129ed251988fbf}{Evaluate}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcsmp_1_1_mechanical_properties}{MechanicalProperties}}\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_stress_invariants}{StressInvariants}}\&\ );}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{comment}{///\ evaluates\ failure\ criteria\ -\/1\ to\ 4\ with\ consideration\ of\ pore\ pressure}}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{static}\ FAILURE\ \mbox{\hyperlink{classcsmp_1_1_brittle_failure_aef7c8a0ec1a31e92c7d2cfbb4dddb113}{Evaluate}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcsmp_1_1_mechanical_properties}{MechanicalProperties}}\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_stress_invariants}{StressInvariants}}\&,\ \textcolor{keywordtype}{double}\ pf\ );}
+\DoxyCodeLine{00038\ \};}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{/*\ defined(BRITTLE\_FAILURE\_H)\ */}}
+
+\end{DoxyCode}

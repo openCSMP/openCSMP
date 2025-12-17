@@ -1,0 +1,9 @@
+<map id="csmp::SteadyStateDiffusor&lt; dim, CELLTYPE &gt;" name="csmp::SteadyStateDiffusor&lt; dim, CELLTYPE &gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="37,1639,206,2005"/>
+<area shape="rect" id="Node000004" href="$classcsmp_1_1_steady_state_diffusor.html" title=" " alt="" coords="37,2076,206,2340"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="124,2020,124,2076,119,2076,119,2020"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_p_d_e___integrator.html" title=" " alt="" coords="5,833,237,1590"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="124,1605,124,1639,119,1639,119,1605"/>
+<area shape="rect" id="Node000003" href="$classcsmp_1_1_p_d_e___integrator.html" title="Accumulator and integrator for FEM or FVM&#45;derived integral forms of PDEs and their solution by solvin..." alt="" coords="18,5,225,762"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="124,777,124,833,119,833,119,777"/>
+</map>

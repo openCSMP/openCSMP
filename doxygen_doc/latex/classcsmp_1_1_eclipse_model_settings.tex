@@ -1,0 +1,170 @@
+\doxysection{csmp\+::Eclipse\+Model\+Settings Class Reference}
+\hypertarget{classcsmp_1_1_eclipse_model_settings}{}\label{classcsmp_1_1_eclipse_model_settings}\index{csmp::EclipseModelSettings@{csmp::EclipseModelSettings}}
+
+
+PROPS and several other specifications from the RUNSPECS file record.  
+
+
+
+
+{\ttfamily \#include $<$Eclipse\+Interface.\+h$>$}
+
+
+
+Collaboration diagram for csmp\+::Eclipse\+Model\+Settings\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=213pt]{classcsmp_1_1_eclipse_model_settings__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_eclipse_model_settings_a4060ecc6bcd5b8d55fecef07b514c674}\label{classcsmp_1_1_eclipse_model_settings_a4060ecc6bcd5b8d55fecef07b514c674} 
+{\bfseries Eclipse\+Model\+Settings} (const std\+::string \&mesh\+\_\+file\+\_\+prefix)
+\item 
+\Hypertarget{classcsmp_1_1_eclipse_model_settings_a447778570c33dcc62e736b79aaab8bf0}\label{classcsmp_1_1_eclipse_model_settings_a447778570c33dcc62e736b79aaab8bf0} 
+void {\bfseries Mesh\+Setup} (bool exclude\+\_\+inactive\+\_\+cells, bool tetra\+\_\+mesh, bool create\+\_\+boundaries=true)
+\item 
+\Hypertarget{classcsmp_1_1_eclipse_model_settings_a1d238739ca1484d9cf0d1303e44850ec}\label{classcsmp_1_1_eclipse_model_settings_a1d238739ca1484d9cf0d1303e44850ec} 
+void {\bfseries Mesh\+Setup} (const std\+::string \&regions\+\_\+file\+\_\+prefix, bool exclude\+\_\+inactive\+\_\+cells, bool tetra\+\_\+mesh, bool create\+\_\+boundaries=true)
+\item 
+\Hypertarget{classcsmp_1_1_eclipse_model_settings_a8bb79b4067c9b9cf8c1e11b2c0fc6ad7}\label{classcsmp_1_1_eclipse_model_settings_a8bb79b4067c9b9cf8c1e11b2c0fc6ad7} 
+void {\bfseries Mesh\+Setup} (const std\+::set$<$ std\+::string $>$ \&regions, bool exclude\+\_\+inactive\+\_\+cells, bool tetra\+\_\+mesh, bool create\+\_\+boundaries=true)
+\item 
+\Hypertarget{classcsmp_1_1_eclipse_model_settings_aca12634026596d92997010f8a979c74d}\label{classcsmp_1_1_eclipse_model_settings_aca12634026596d92997010f8a979c74d} 
+void {\bfseries Sat\+Num\+Property\+Setup} (const std\+::string \&prop\+\_\+name="{}satnum"{}, const \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{\+::csmp\+::\+VARIABLE\+\_\+\+TYPE}} \&prop\+\_\+type=\+::csmp\+::\+SCALAR, const \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{\+::csmp\+::\+PLACEMENT}} \&prop\+\_\+place=\+::csmp\+::\+ELEMENT)
+\begin{DoxyCompactList}\small\item\em properties setup \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_eclipse_model_settings_af187066228a60ea5743a96527f248aae}\label{classcsmp_1_1_eclipse_model_settings_af187066228a60ea5743a96527f248aae} 
+void {\bfseries Pvt\+Num\+Property\+Setup} (const std\+::string \&prop\+\_\+name="{}ptvnum"{}, const \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{\+::csmp\+::\+VARIABLE\+\_\+\+TYPE}} \&prop\+\_\+type=\+::csmp\+::\+SCALAR, const \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{\+::csmp\+::\+PLACEMENT}} \&prop\+\_\+place=\+::csmp\+::\+ELEMENT)
+\item 
+\Hypertarget{classcsmp_1_1_eclipse_model_settings_a1f636851033f5bd3193fac0f6c2bd7ee}\label{classcsmp_1_1_eclipse_model_settings_a1f636851033f5bd3193fac0f6c2bd7ee} 
+void {\bfseries Rock\+Num\+Property\+Setup} (const std\+::string \&prop\+\_\+name="{}rocktype"{}, const \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{\+::csmp\+::\+VARIABLE\+\_\+\+TYPE}} \&prop\+\_\+type=\+::csmp\+::\+SCALAR, const \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{\+::csmp\+::\+PLACEMENT}} \&prop\+\_\+place=\+::csmp\+::\+ELEMENT)
+\begin{DoxyCompactList}\small\item\em usually this is called "{}rocknum"{} \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_eclipse_model_settings_ae53f446d547bdcd66acb2386f4a5555c}\label{classcsmp_1_1_eclipse_model_settings_ae53f446d547bdcd66acb2386f4a5555c} 
+void {\bfseries Eql\+Num\+Property\+Setup} (const std\+::string \&prop\+\_\+name="{}eqlnum"{}, const \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{\+::csmp\+::\+VARIABLE\+\_\+\+TYPE}} \&prop\+\_\+type=\+::csmp\+::\+SCALAR, const \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{\+::csmp\+::\+PLACEMENT}} \&prop\+\_\+place=\+::csmp\+::\+ELEMENT)
+\item 
+\Hypertarget{classcsmp_1_1_eclipse_model_settings_aee45e38924867bce4dcaf34d829f6549}\label{classcsmp_1_1_eclipse_model_settings_aee45e38924867bce4dcaf34d829f6549} 
+void {\bfseries Fip\+Num\+Property\+Setup} (const std\+::string \&prop\+\_\+name="{}fipnum"{}, const \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{\+::csmp\+::\+VARIABLE\+\_\+\+TYPE}} \&prop\+\_\+type=\+::csmp\+::\+SCALAR, const \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{\+::csmp\+::\+PLACEMENT}} \&prop\+\_\+place=\+::csmp\+::\+ELEMENT)
+\item 
+\Hypertarget{classcsmp_1_1_eclipse_model_settings_a35c4fb3be8b926ea8202900b9d806990}\label{classcsmp_1_1_eclipse_model_settings_a35c4fb3be8b926ea8202900b9d806990} 
+void {\bfseries Ntg\+Property\+Setup} (const std\+::string \&prop\+\_\+name="{}ntg"{}, const \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{\+::csmp\+::\+VARIABLE\+\_\+\+TYPE}} \&prop\+\_\+type=\+::csmp\+::\+SCALAR, const \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{\+::csmp\+::\+PLACEMENT}} \&prop\+\_\+place=\+::csmp\+::\+ELEMENT)
+\item 
+\Hypertarget{classcsmp_1_1_eclipse_model_settings_aa36ff94b27415f7b976c8a832442f8f3}\label{classcsmp_1_1_eclipse_model_settings_aa36ff94b27415f7b976c8a832442f8f3} 
+void {\bfseries Poro\+Property\+Setup} (const std\+::string \&prop\+\_\+name="{}porosity"{}, const \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{\+::csmp\+::\+VARIABLE\+\_\+\+TYPE}} \&prop\+\_\+type=\+::csmp\+::\+SCALAR, const \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{\+::csmp\+::\+PLACEMENT}} \&prop\+\_\+place=\+::csmp\+::\+ELEMENT)
+\item 
+\Hypertarget{classcsmp_1_1_eclipse_model_settings_afa8969bac8dbb554696150021e92ad09}\label{classcsmp_1_1_eclipse_model_settings_afa8969bac8dbb554696150021e92ad09} 
+void {\bfseries Perm\+Property\+Setup} (const std\+::string \&prop\+\_\+name="{}permeability"{}, const \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{\+::csmp\+::\+VARIABLE\+\_\+\+TYPE}} \&prop\+\_\+type=\+::csmp\+::\+SCALAR, const \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{\+::csmp\+::\+PLACEMENT}} \&prop\+\_\+place=\+::csmp\+::\+ELEMENT, const std\+::string \&prop\+\_\+unit="{}m2"{})
+\item 
+\Hypertarget{classcsmp_1_1_eclipse_model_settings_a8ba0200374b54537750d46f3864e3817}\label{classcsmp_1_1_eclipse_model_settings_a8ba0200374b54537750d46f3864e3817} 
+void {\bfseries Pressure\+Property\+Setup} (const std\+::string \&prop\+\_\+name="{}pressure"{}, const \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{\+::csmp\+::\+VARIABLE\+\_\+\+TYPE}} \&prop\+\_\+type=\+::csmp\+::\+SCALAR, const \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{\+::csmp\+::\+PLACEMENT}} \&prop\+\_\+place=\+::csmp\+::\+NODE, const std\+::string \&prop\+\_\+unit="{}Pa"{})
+\item 
+\Hypertarget{classcsmp_1_1_eclipse_model_settings_a31ca5a99c340bd08b53e47e14e5ad514}\label{classcsmp_1_1_eclipse_model_settings_a31ca5a99c340bd08b53e47e14e5ad514} 
+void {\bfseries Swat\+Property\+Setup} (const std\+::string \&prop\+\_\+name="{}saturation water"{}, const \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{\+::csmp\+::\+VARIABLE\+\_\+\+TYPE}} \&prop\+\_\+type=\+::csmp\+::\+SCALAR, const \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{\+::csmp\+::\+PLACEMENT}} \&prop\+\_\+place=\+::csmp\+::\+NODE)
+\item 
+\Hypertarget{classcsmp_1_1_eclipse_model_settings_a514441a3973f6019e8699e6d61312e2b}\label{classcsmp_1_1_eclipse_model_settings_a514441a3973f6019e8699e6d61312e2b} 
+void {\bfseries Soil\+Property\+Setup} (const std\+::string \&prop\+\_\+name="{}saturation oil"{}, const \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{\+::csmp\+::\+VARIABLE\+\_\+\+TYPE}} \&prop\+\_\+type=\+::csmp\+::\+SCALAR, const \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{\+::csmp\+::\+PLACEMENT}} \&prop\+\_\+place=\+::csmp\+::\+NODE)
+\item 
+\Hypertarget{classcsmp_1_1_eclipse_model_settings_a534b2e2794a752d75a3298ca9189af28}\label{classcsmp_1_1_eclipse_model_settings_a534b2e2794a752d75a3298ca9189af28} 
+void {\bfseries Sgas\+Property\+Setup} (const std\+::string \&prop\+\_\+name="{}saturation gas"{}, const \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{\+::csmp\+::\+VARIABLE\+\_\+\+TYPE}} \&prop\+\_\+type=\+::csmp\+::\+SCALAR, const \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{\+::csmp\+::\+PLACEMENT}} \&prop\+\_\+place=\+::csmp\+::\+NODE)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string \mbox{\hyperlink{classcsmp_1_1_eclipse_model_settings_adb8fff5d02875e047d70bcb50b4b3182}{mesh\+\_\+file\+\_\+prefix\+\_\+}}
+\begin{DoxyCompactList}\small\item\em mesh setting \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_eclipse_model_settings_a2022fd4ac2dcc34527523bd0e45f5164}\label{classcsmp_1_1_eclipse_model_settings_a2022fd4ac2dcc34527523bd0e45f5164} 
+std\+::string {\bfseries regions\+\_\+file\+\_\+prefix\+\_\+}
+\begin{DoxyCompactList}\small\item\em regions file prefix \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_eclipse_model_settings_a008ef5ebf0d178104d0917b63ad60dc2}\label{classcsmp_1_1_eclipse_model_settings_a008ef5ebf0d178104d0917b63ad60dc2} 
+bool {\bfseries create\+\_\+boundaries\+\_\+}
+\begin{DoxyCompactList}\small\item\em true = create boundaries around model, false = do not create boundaries \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_eclipse_model_settings_aba5d3fafb649fb9fa053d66f13f50d3e}\label{classcsmp_1_1_eclipse_model_settings_aba5d3fafb649fb9fa053d66f13f50d3e} 
+std\+::set$<$ std\+::string $>$ {\bfseries regions\+\_\+}
+\begin{DoxyCompactList}\small\item\em name of regions to be used \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_eclipse_model_settings_a4f962604b698fdcf4f770084ab2d2a32}\label{classcsmp_1_1_eclipse_model_settings_a4f962604b698fdcf4f770084ab2d2a32} 
+bool {\bfseries tetra\+\_\+mesh\+\_\+}
+\begin{DoxyCompactList}\small\item\em tetrahedral mesh \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_eclipse_model_settings_a6dfb38ceccafb88c961c54c8e8ecda97}\label{classcsmp_1_1_eclipse_model_settings_a6dfb38ceccafb88c961c54c8e8ecda97} 
+bool {\bfseries exclude\+\_\+inactive\+\_\+cells\+\_\+}
+\begin{DoxyCompactList}\small\item\em do not consider inactive cells \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_eclipse_model_settings_a4c83fe322f9b63ce9b9b192d8d0bae77}\label{classcsmp_1_1_eclipse_model_settings_a4c83fe322f9b63ce9b9b192d8d0bae77} 
+std\+::map$<$ int, \mbox{\hyperlink{structcsmp_1_1_parameter}{csmp\+::\+Parameter}} $>$ {\bfseries properties\+\_\+}
+\begin{DoxyCompactList}\small\item\em property settings \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+PROPS and several other specifications from the RUNSPECS file record. 
+
+\begin{DoxyAuthor}{Author}
+R. Manasipov 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2014-\/2015
+\end{DoxyDate}
+ASCII file interface to read corner point grid from ( \texorpdfstring{$\ast$}{*}.GRDECL, \texorpdfstring{$\ast$}{*}.grdecl ) file. In order to build a native CSMP \doxylink{classcsmp_1_1_model}{Model} the provided grid information is assigned to \doxylink{classcsmp_1_1_v_set}{VSet} and \doxylink{classcsmp_1_1_model_topology}{Model\+Topology} objects. The regions that are constructed by default are\+: \% regions which include all the cells MATRIX MATRIX\+\_\+\+ACTIVE MATRIX\+\_\+\+INACTIVE \% and specific fault regions
+
+In addition to grid information the properties such as\+: \textquotesingle{}permeability\textquotesingle{}, \textquotesingle{}porosity\textquotesingle{}, \textquotesingle{}pressure\textquotesingle{}, \textquotesingle{}saturation\textquotesingle{} can be readed as well. User is able to control property type and placement. For example one can create tensor or scalar permeability variables or to place \textquotesingle{}pressure\textquotesingle{} at the nodes or elements.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{KEYWORDS\ that\ can\ be\ currently\ handled:}
+\DoxyCodeLine{}
+\DoxyCodeLine{-\/-\/-\/\ Grid}
+\DoxyCodeLine{DIMENS}
+\DoxyCodeLine{DX}
+\DoxyCodeLine{DY}
+\DoxyCodeLine{DZ}
+\DoxyCodeLine{SPECGRID}
+\DoxyCodeLine{TOPS}
+\DoxyCodeLine{COORD}
+\DoxyCodeLine{ZCORN}
+\DoxyCodeLine{FAULTS}
+\DoxyCodeLine{}
+\DoxyCodeLine{-\/-\/-\/\ Regions}
+\DoxyCodeLine{ACTNUM}
+\DoxyCodeLine{SATNUM}
+\DoxyCodeLine{PVTNUM}
+\DoxyCodeLine{ROCKNUM}
+\DoxyCodeLine{EQLNUM}
+\DoxyCodeLine{}
+\DoxyCodeLine{-\/-\/-\/\ Props}
+\DoxyCodeLine{NTG}
+\DoxyCodeLine{PORO}
+\DoxyCodeLine{PERMX\ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{well.well\_data\_.push\_back(\ wellcomp\ );}
+\DoxyCodeLine{PERMY}
+\DoxyCodeLine{PERMZ}
+\DoxyCodeLine{PRESSURE}
+\DoxyCodeLine{SWAT}
+\DoxyCodeLine{SOIL}
+\DoxyCodeLine{SGAS}
+\DoxyCodeLine{}
+\DoxyCodeLine{-\/-\/-\/\ Runspec}
+\DoxyCodeLine{WELSPECS}
+\DoxyCodeLine{COMPDAT\ (relies\ on\ WELLSPECS\ and\ can\ therefore\ not\ be\ defined\ in\ isolation)}
+
+\end{DoxyCode}
+ 
+
+\label{doc-variable-members}
+\Hypertarget{classcsmp_1_1_eclipse_model_settings_doc-variable-members}
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classcsmp_1_1_eclipse_model_settings_adb8fff5d02875e047d70bcb50b4b3182}\index{csmp::EclipseModelSettings@{csmp::EclipseModelSettings}!mesh\_file\_prefix\_@{mesh\_file\_prefix\_}}
+\index{mesh\_file\_prefix\_@{mesh\_file\_prefix\_}!csmp::EclipseModelSettings@{csmp::EclipseModelSettings}}
+\doxysubsubsection{\texorpdfstring{mesh\_file\_prefix\_}{mesh\_file\_prefix\_}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_eclipse_model_settings_adb8fff5d02875e047d70bcb50b4b3182} 
+std\+::string csmp\+::\+Eclipse\+Model\+Settings\+::mesh\+\_\+file\+\_\+prefix\+\_\+}
+
+
+
+mesh setting 
+
+name of model or main mesh file 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/interfaces/\+Eclipse/\mbox{\hyperlink{_eclipse_interface_8h}{Eclipse\+Interface.\+h}}\item 
+source/modules/interfaces/\+Eclipse/Eclipse\+Interface.\+cpp\end{DoxyCompactItemize}

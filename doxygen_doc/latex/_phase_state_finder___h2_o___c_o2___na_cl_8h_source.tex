@@ -1,0 +1,166 @@
+\doxysection{Phase\+State\+Finder\+\_\+\+H2\+O\+\_\+\+CO2\+\_\+\+Na\+Cl.\+h}
+\hypertarget{_phase_state_finder___h2_o___c_o2___na_cl_8h_source}{}\label{_phase_state_finder___h2_o___c_o2___na_cl_8h_source}\index{source/includes/eos/PhaseStateFinder\_H2O\_CO2\_NaCl.h@{source/includes/eos/PhaseStateFinder\_H2O\_CO2\_NaCl.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{PHASESTATEFINDER\_H2O\_CO2\_NACL\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{PHASESTATEFINDER\_H2O\_CO2\_NACL\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_halite_liquidus_8h}{"{}HaliteLiquidus.h"{}}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_e_o_s___c_o2_h2_o_na_cl___spycher2004_8h}{"{}EOS\_CO2H2ONaCl\_Spycher2004.h"{}}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00011\ \textcolor{comment}{\ \ \ \ Diagnostics\ on\ the\ co-\/existance\ of\ phases\ captured\ by\ an\ enumeration\ class.}}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ \ \ \ 'aq'\ is\ the\ default,\ 'full'\ allows\ to\ calculate\ a\ state\ in\ the\ full\ compositional\ triangle\ for\ testing\ purposes}}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ \ \ \ and\ will\ not\ occur\ in\ an\ actual\ application.}}
+\DoxyCodeLine{00014\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00015\ \textcolor{keyword}{enum}\ \textcolor{keyword}{class}\ \mbox{\hyperlink{namespacecsmp_a61836a78073a95dc9667046e679869d0}{SYSTEM\_STATE}}\ \{aq=0,carb=1,salt=2,aq\_salt=3,aq\_carb=4,carb\_salt=5,aq\_carb\_salt=6,full=7,undefined=8\};}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \mbox{\hyperlink{namespacecsmp_a9d5995f8c2371fd272675a8605bc6886}{std}}::\mbox{\hyperlink{namespacecsmp_a9d5995f8c2371fd272675a8605bc6886}{string}}\ \mbox{\hyperlink{namespacecsmp_a9d5995f8c2371fd272675a8605bc6886}{parseState}}(\ \mbox{\hyperlink{namespacecsmp_a61836a78073a95dc9667046e679869d0}{SYSTEM\_STATE}}\ );}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00020\ \textcolor{comment}{}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ \ \ \ @attention\ the\ mass\ fractions\ of\ non\ existing\ phases\ are\ set\ to\ zero.}}
+\DoxyCodeLine{00022\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00023\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl}{PhaseStateFinder\_H2O\_CO2\_NaCl}}}
+\DoxyCodeLine{00024\ \{}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{comment}{//\ enum\ corner\ uses\ a\ convention\ similar\ to\ csmp\ for\ the\ corners\ of\ a\ triangle}}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{enum}\ corner\{a=0,b=1,c=2\};}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{comment}{//\ sorry\ for\ all\ the\ "{}publicity"{}}}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{comment}{//\ this\ is\ a\ result\ of\ the\ way\ I\ developed\ it,\ will\ be\ cleaned}}
+\DoxyCodeLine{00030\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00031\ \ \ \ \ PhaseStateFinder\_H2O\_CO2\_NaCl(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ t,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ p,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ total\_mass,}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ massfraction\_h2o,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ massfraction\_co2,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ massfraction\_nacl\ );}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{comment}{//\ \ Equilibrate\ is\ almost\ all\ you\ need\ -\/\ will\ find\ the\ correct\ \ phase\ state\ and\ compute\ all\ fluid\ properties}}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{comment}{//\ \ that\ come\ directly\ from\ eos}}
+\DoxyCodeLine{00036\ \ \ \ \ \mbox{\hyperlink{namespacecsmp_a61836a78073a95dc9667046e679869d0}{SYSTEM\_STATE}}\ Equilibrate();}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{comment}{//\ Access\ to\ results,\ always\ run\ Equilibrate\ before}}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordtype}{double}\ massCarbonicPhase()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{double}\ rho\_carb()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{double}\ mu\_carb()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keywordtype}{double}\ beta\_carb()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordtype}{double}\ Y\_h2o()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keywordtype}{double}\ Y\_co2()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{double}\ massAqueousPhase()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordtype}{double}\ rho\_aq()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keywordtype}{double}\ mu\_aq()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keywordtype}{double}\ beta\_aq()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keywordtype}{double}\ X\_h2o()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keywordtype}{double}\ X\_co2()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordtype}{double}\ X\_nacl()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keywordtype}{double}\ D\_Co2()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordtype}{double}\ massHalite()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{comment}{//\ i/o\ for\ debugging,\ can\ later\ be\ abandoned}}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordtype}{void}\ DisplayFractions(\ \mbox{\hyperlink{namespacecsmp_a61836a78073a95dc9667046e679869d0}{SYSTEM\_STATE}}\ );}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordtype}{void}\ InputComposition();}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keywordtype}{void}\ InputXcompYcomp();}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \ \ \mbox{\hyperlink{namespacecsmp_a61836a78073a95dc9667046e679869d0}{SYSTEM\_STATE}}\ State()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{comment}{///\ output\ the\ current\ state\ in\ as\ much\ as\ it\ is\ of\ interest\ to\ user}}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_aa4245dc31800a0a452437e098f60c2a1}{Out}}(\ \textcolor{keywordtype}{bool}\ print\_private\_state\_as\_well=\textcolor{keyword}{false}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00068\ \ \ \ \ PhaseStateFinder\_H2O\_CO2\_NaCl();}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{comment}{//\ tracking\ the\ outside\ world}}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ t;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ temperature\ [Celsius]}}
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ p;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ pressure\ [Pascal]}}
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ total\_mass;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ total\ mass\ of\ H2O+CO2+NaCl\ in\ fluid\ phase\ and\ NaCl\ crystalline\ salt\ in\ the\ control\ volume\ [kg]}}
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ bulk\_massfraction\_h2o;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ fraction\ of\ total\_mass\ that\ is\ H2O\ [-\/]}}
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ bulk\_massfraction\_co2;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ fraction\ of\ total\_mass\ that\ is\ CO2\ [-\/]}}
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ bulk\_massfraction\_nacl;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ fraction\ of\ total\ mass\ that\ is\ NaCl\ (dissolved\ and\ solid)\ [-\/]}}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{comment}{//\ constants\ used}}
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{double}\ PI\ =\ 3.14159265358979323846;\ \ \textcolor{comment}{///<\ the\ number\ PI}}
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{double}\ h2o\_x\ =\ 0.;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ cartesian\ x-\/coordinate\ of\ the\ H2O\ corner\ of\ the\ triangular\ phase\ diagram}}
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{double}\ h2o\_y\ =\ 0.;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ cartesian\ y-\/coordinate\ of\ the\ H2O\ corner\ of\ the\ triangular\ phase\ diagram}}
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{double}\ co2\_x\ =\ 1.;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ cartesian\ x-\/coordinate\ of\ the\ CO2\ corner\ of\ the\ triangular\ phase\ diagram}}
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{double}\ co2\_y\ =\ 0.;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ cartesian\ y-\/coordinate\ of\ the\ CO2\ corner\ of\ the\ triangular\ phase\ diagram}}
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{double}\ nacl\_x\ =\ 0.5;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ cartesian\ x-\/coordinate\ of\ the\ NaCl\ corner\ of\ the\ triangular\ phase\ diagram}}
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ nacl\_y\ =\ sin(60./180.*PI);\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ cartesian\ y-\/coordinate\ of\ the\ NaCl\ corner\ of\ the\ triangular\ phase\ diagram}}
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{double}\ molar\_mass\_h2o\ \ =\ 18.015e-\/3;\ \ \textcolor{comment}{///<\ [kg\ mol-\/1]}}
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{double}\ molar\_mass\_co2\ \ =\ 44.010e-\/3;\ \ \textcolor{comment}{///<\ [kg\ mol-\/1]}}
+\DoxyCodeLine{00087\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{double}\ molar\_mass\_nacl\ =\ 58.443e-\/3;\ \ \textcolor{comment}{///<\ [kg\ mol-\/1]}}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{comment}{//\ private\ variables}}
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keywordtype}{double}\ weight\_phase\_a,weight\_phase\_b,weight\_phase\_c;\ \ \textcolor{comment}{///<\ weights\ (mole-\/based)\ of\ phases\ on\ corner\ points\ in\ triangular\ regions}}
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{keywordtype}{double}\ bulk\_xh2o,bulk\_xco2,bulk\_xnacl;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ mole\ fractions\ of\ bulk\ composition}}
+\DoxyCodeLine{00092\ \ \ \ \ \textcolor{keywordtype}{double}\ x\_bulkcomp,y\_bulkcomp;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ cartesian\ coordinates\ of\ bulk\ composition}}
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{keywordtype}{double}\ x[3],y[3];\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ corner\ points\ of\ triangular\ regions\ within\ phase\ diagram}}
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keywordtype}{double}\ xsat;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ mole\ fraction\ of\ NaCl\ in\ salt-\/saturated\ but\ CO2-\/free\ water}}
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keywordtype}{double}\ msat;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ molality\ of\ NaCl\ in\ salt-\/saturated\ aqueous\ phase\ (this\ does\ not\ depend\ on\ CO2)\ [mole\ NaCl\ /\ kg\ H2O]}}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{keywordtype}{double}\ massCarbonicPhase\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ [kg]}}
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keywordtype}{double}\ rho\_carb\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ Density\ of\ carbonic\ phase\ [kg\ m-\/3]}}
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{keywordtype}{double}\ mu\_carb\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ dynamic\ viscosity\ of\ carbonic\ phase\ [Pa\ s]}}
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{keywordtype}{double}\ beta\_carb\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ isothermal\ compressibility\ of\ carbonic\ phase\ [Pa-\/1]}}
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{keywordtype}{double}\ Y\_h2o\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ mass\ fraction\ of\ H2O\ in\ carbonic\ phase\ [-\/]}}
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keywordtype}{double}\ Y\_co2\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ mass\ fraction\ of\ CO2\ in\ carbonic\ phase\ [-\/]}}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keywordtype}{double}\ massAqueousPhase\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ [kg]}}
+\DoxyCodeLine{00105\ \ \ \ \ \textcolor{keywordtype}{double}\ rho\_aq\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ Density\ of\ aqueous\ phase\ [kg\ m-\/3]}}
+\DoxyCodeLine{00106\ \ \ \ \ \textcolor{keywordtype}{double}\ mu\_aq\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ dynamic\ viscosity\ of\ aqueous\ phase\ [Pa\ s]}}
+\DoxyCodeLine{00107\ \ \ \ \ \textcolor{keywordtype}{double}\ beta\_aq\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ isothermal\ compressibility\ of\ aqueous\ phase\ [Pa-\/1]}}
+\DoxyCodeLine{00108\ \ \ \ \ \textcolor{keywordtype}{double}\ X\_h2o\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ mass\ fraction\ of\ H2O\ in\ aqueous\ phase\ [-\/]}}
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{keywordtype}{double}\ X\_co2\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ mass\ fraction\ of\ CO2\ in\ aqueous\ phase\ [-\/]}}
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{keywordtype}{double}\ X\_nacl\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ mass\ fraction\ of\ NaCl\ in\ aqueous\ phase\ [-\/]}}
+\DoxyCodeLine{00111\ \ \ \ \ \textcolor{keywordtype}{double}\ D\_Co2\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ Diffusivity\ of\ CO2\ in\ the\ aqueous\ phase\ (just\ copy/pasted\ from\ SKM's\ code,\ no\ further\ info)}}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \ \ \ \ \textcolor{keywordtype}{double}\ massHalite\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ [kg]}}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \ \ \ \ \mbox{\hyperlink{namespacecsmp_a61836a78073a95dc9667046e679869d0}{SYSTEM\_STATE}}\ \ \ mystate;}
+\DoxyCodeLine{00116\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_halite_liquidus}{HaliteLiquidus}}\ liquidus;}
+\DoxyCodeLine{00117\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04}{EOS\_CO2H2ONaCl\_Spycher04}}\ eos;}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \ \ \ \ \textcolor{comment}{//\ mole\ fraction\ composition\ of\ phases\ in\ triangular\ or\ lower\ dimensional\ order\ phase\ regions,\ order\ as\ "{}corner"{}\ enum}}
+\DoxyCodeLine{00120\ \ \ \ \ \textcolor{keywordtype}{double}\ corner\_xh2o[3];}
+\DoxyCodeLine{00121\ \ \ \ \ \textcolor{keywordtype}{double}\ corner\_xco2[3];}
+\DoxyCodeLine{00122\ \ \ \ \ \textcolor{keywordtype}{double}\ corner\_xnacl[3];}
+\DoxyCodeLine{00123\ \ \ \ \ \textcolor{comment}{//\ same\ thing\ in\ mass\ fraction}}
+\DoxyCodeLine{00124\ \ \ \ \ \textcolor{keywordtype}{double}\ corner\_massfraction\_h2o[3];}
+\DoxyCodeLine{00125\ \ \ \ \ \textcolor{keywordtype}{double}\ corner\_massfraction\_co2[3];}
+\DoxyCodeLine{00126\ \ \ \ \ \textcolor{keywordtype}{double}\ corner\_massfraction\_nacl[3];}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00129\ \ \ \ \ \textcolor{comment}{//\ helper\ functions}}
+\DoxyCodeLine{00130\ \ \ \ \ \textcolor{keywordtype}{void}\ MoleToMassfractionAtTriangularCorners();}
+\DoxyCodeLine{00131\ \ \ \ \ \textcolor{keywordtype}{void}\ ConvertMolefractionTriangularCornersToCartesian(corner\textcolor{comment}{/*,double\ xh2o,\ double\ xco2,\ double\ xnacl*/});}
+\DoxyCodeLine{00132\ \ \ \ \ \textcolor{keywordtype}{void}\ ConvertMolefractionToCartesian(\textcolor{keywordtype}{double}\&\ x,\ \textcolor{keywordtype}{double}\&\ y,\ \textcolor{keywordtype}{double}\ xh2o,\ \textcolor{keywordtype}{double}\ xco2,\ \textcolor{keywordtype}{double}\ xnacl);}
+\DoxyCodeLine{00133\ \ \ \ \ \textcolor{keywordtype}{bool}\ EvaluateFractionsInTriangularRegion();}
+\DoxyCodeLine{00134\ \ \ \ \ \textcolor{keywordtype}{void}\ EvaluateSaltyAqCarb();}
+\DoxyCodeLine{00135\ \ \ \ \ \textcolor{keywordtype}{void}\ SetCornerPointsTriangularRegions(\ \mbox{\hyperlink{namespacecsmp_a61836a78073a95dc9667046e679869d0}{SYSTEM\_STATE}}\ );}
+\DoxyCodeLine{00136\ \};}
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00138\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl}{PhaseStateFinder\_H2O\_CO2\_NaCl}}::massCarbonicPhase()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ massCarbonicPhase\_;\ \}}
+\DoxyCodeLine{00139\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl}{PhaseStateFinder\_H2O\_CO2\_NaCl}}::rho\_carb()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ rho\_carb\_;\}}
+\DoxyCodeLine{00140\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl}{PhaseStateFinder\_H2O\_CO2\_NaCl}}::mu\_carb()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ mu\_carb\_;\}}
+\DoxyCodeLine{00141\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl}{PhaseStateFinder\_H2O\_CO2\_NaCl}}::beta\_carb()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ beta\_carb\_;\}}
+\DoxyCodeLine{00142\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl}{PhaseStateFinder\_H2O\_CO2\_NaCl}}::Y\_h2o()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ Y\_h2o\_;\}}
+\DoxyCodeLine{00143\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl}{PhaseStateFinder\_H2O\_CO2\_NaCl}}::Y\_co2()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ Y\_co2\_;\}}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl}{PhaseStateFinder\_H2O\_CO2\_NaCl}}::massAqueousPhase()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ massAqueousPhase\_;\}}
+\DoxyCodeLine{00146\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl}{PhaseStateFinder\_H2O\_CO2\_NaCl}}::rho\_aq()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ rho\_aq\_;\}}
+\DoxyCodeLine{00147\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl}{PhaseStateFinder\_H2O\_CO2\_NaCl}}::mu\_aq()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ mu\_aq\_;\}}
+\DoxyCodeLine{00148\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl}{PhaseStateFinder\_H2O\_CO2\_NaCl}}::beta\_aq()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ beta\_aq\_;\}}
+\DoxyCodeLine{00149\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl}{PhaseStateFinder\_H2O\_CO2\_NaCl}}::X\_h2o()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ X\_h2o\_;\}}
+\DoxyCodeLine{00150\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl}{PhaseStateFinder\_H2O\_CO2\_NaCl}}::X\_co2()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ X\_co2\_;\}}
+\DoxyCodeLine{00151\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl}{PhaseStateFinder\_H2O\_CO2\_NaCl}}::X\_nacl()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ X\_nacl\_;\}}
+\DoxyCodeLine{00152\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl}{PhaseStateFinder\_H2O\_CO2\_NaCl}}::D\_Co2()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ D\_Co2\_;\ \}}
+\DoxyCodeLine{00153\ }
+\DoxyCodeLine{00154\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{namespacecsmp_a61836a78073a95dc9667046e679869d0}{SYSTEM\_STATE}}\ \ \mbox{\hyperlink{classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl}{PhaseStateFinder\_H2O\_CO2\_NaCl}}::State()\ \textcolor{keyword}{const}\ \{\textcolor{keywordflow}{return}\ mystate;\}}
+\DoxyCodeLine{00155\ }
+\DoxyCodeLine{00156\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl}{PhaseStateFinder\_H2O\_CO2\_NaCl}}::massHalite()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ massHalite\_;\}}
+\DoxyCodeLine{00157\ }
+\DoxyCodeLine{00158\ \}\ \textcolor{comment}{//\ end\ csmp}}
+\DoxyCodeLine{00159\ }
+\DoxyCodeLine{00160\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{//\ PHASESTATEFINDER\_H2O\_CO2\_NACL\_H}}
+
+\end{DoxyCode}

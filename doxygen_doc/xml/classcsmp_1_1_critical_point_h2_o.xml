@@ -1,0 +1,205 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_critical_point_h2_o" kind="class" language="C++" prot="public">
+    <compoundname>csmp::CriticalPointH2O</compoundname>
+    <includes refid="_critical_point_h2_o_8h" local="yes">eos/h2o_nacl/CriticalPointH2O.h</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_critical_point_h2_o_1a96734ba57029a8fd88b2c83d554ba1d0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::CriticalPointH2O::CriticalPointH2O</definition>
+        <argsstring>()</argsstring>
+        <name>CriticalPointH2O</name>
+        <qualifiedname>csmp::CriticalPointH2O::CriticalPointH2O</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalPointH2O.h" line="12" column="5" bodyfile="source/modules/eos/h2o/CriticalPointH2O.cpp" bodystart="9" bodyend="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_critical_point_h2_o_1ab2b4d218e283eb2914c407c62653c683" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::CriticalPointH2O::~CriticalPointH2O</definition>
+        <argsstring>()</argsstring>
+        <name>~CriticalPointH2O</name>
+        <qualifiedname>csmp::CriticalPointH2O::~CriticalPointH2O</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalPointH2O.h" line="13" column="5" bodyfile="source/modules/eos/h2o/CriticalPointH2O.cpp" bodystart="10" bodyend="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_critical_point_h2_o_1a1652bf05fabc9ddd0e638a5fadf23e14" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::CriticalPointH2O::Temperature</definition>
+        <argsstring>() const</argsstring>
+        <name>Temperature</name>
+        <qualifiedname>csmp::CriticalPointH2O::Temperature</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalPointH2O.h" line="15" column="12" bodyfile="source/modules/eos/h2o/CriticalPointH2O.cpp" bodystart="13" bodyend="13"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_critical_point_h2_o_1afbb83271629b0c89f12947e644a624f7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::CriticalPointH2O::Pressure</definition>
+        <argsstring>() const</argsstring>
+        <name>Pressure</name>
+        <qualifiedname>csmp::CriticalPointH2O::Pressure</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalPointH2O.h" line="16" column="12" bodyfile="source/modules/eos/h2o/CriticalPointH2O.cpp" bodystart="14" bodyend="14"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_critical_point_h2_o_1ab4561e025c9d3f1842efc8e95c5564d2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::CriticalPointH2O::MassFractionNaCl</definition>
+        <argsstring>() const</argsstring>
+        <name>MassFractionNaCl</name>
+        <qualifiedname>csmp::CriticalPointH2O::MassFractionNaCl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalPointH2O.h" line="17" column="12" bodyfile="source/modules/eos/h2o/CriticalPointH2O.cpp" bodystart="15" bodyend="15"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_critical_point_h2_o_1a66a982e5f6423995db9d8c3fb63d691e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::CriticalPointH2O::Density</definition>
+        <argsstring>() const</argsstring>
+        <name>Density</name>
+        <qualifiedname>csmp::CriticalPointH2O::Density</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalPointH2O.h" line="18" column="12" bodyfile="source/modules/eos/h2o/CriticalPointH2O.cpp" bodystart="16" bodyend="16"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_critical_point_h2_o_1aedc3c6aad4670bf041dccb867da81683" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::CriticalPointH2O::MolarVolume</definition>
+        <argsstring>() const</argsstring>
+        <name>MolarVolume</name>
+        <qualifiedname>csmp::CriticalPointH2O::MolarVolume</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalPointH2O.h" line="19" column="12" bodyfile="source/modules/eos/h2o/CriticalPointH2O.cpp" bodystart="17" bodyend="17"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_critical_point_h2_o_1ad47da9b13880bf598f2ce0e69226d609" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::CriticalPointH2O::Enthalpy</definition>
+        <argsstring>() const</argsstring>
+        <name>Enthalpy</name>
+        <qualifiedname>csmp::CriticalPointH2O::Enthalpy</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/CriticalPointH2O.h" line="20" column="12" bodyfile="source/modules/eos/h2o/CriticalPointH2O.cpp" bodystart="18" bodyend="18"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><linebreak/>
+</para>
+<para><simplesect kind="author"><para>Thomas Driesner, ETH Zuerich <linebreak/>
+ </para>
+</simplesect>
+</para>
+<sect1 id="compare_floats_8h_1contact">
+<title>Contact</title><para><linebreak/>
+ <ulink url="mailto:thomas.driesner@erdw.ethz.ch">thomas.driesner@erdw.ethz.ch</ulink> <linebreak/>
+</para>
+<para>@changes changes Latest Changes <linebreak/>
+ Oct. 6, 2012: ported to CSMP++, changed Pressure() to Pa. <linebreak/>
+</para>
+</sect1>
+<sect1 id="compare_floats_8h_1motivation">
+<title>Motivation</title><para><linebreak/>
+ <ref refid="classcsmp_1_1_critical_point_h2_o" kindref="compound">CriticalPointH2O</ref> contains the critical parameters (temperature, pressure, composition, density, molar volume, and specific enthalpy) of pure H2O according the 1984 IAPS or Haar-Gallagher-Kell equation of state (check www.iapws.org for more information).</para>
+</sect1>
+<sect1 id="classcsmp_1_1_upwind_control_visitor_1dependencies">
+<title>Dependencies</title><para><linebreak/>
+ requires &quot;ConvertConcentrationUnitsNaCl.h&quot;</para>
+</sect1>
+<sect1 id="compare_floats_8h_1testing">
+<title>Testing</title><para><linebreak/>
+ testing was done in the period before publication in 2007, prior to writing this documentation, no details are a\ vailable anymore</para>
+<para><linebreak/>
+</para>
+<para><simplesect kind="author"><para>Thomas Driesner, ETH Zuerich <linebreak/>
+ </para>
+</simplesect>
+</para>
+</sect1>
+<sect1 id="compare_floats_8h_1contact">
+<title>Contact</title><para><linebreak/>
+ <ulink url="mailto:thomas.driesner@erdw.ethz.ch">thomas.driesner@erdw.ethz.ch</ulink> <linebreak/>
+</para>
+</sect1>
+<sect1 id="compare_floats_8h_1motivation">
+<title>Motivation</title><para><linebreak/>
+ <ref refid="classcsmp_1_1_triple_point_h2_o" kindref="compound">TriplePointH2O</ref> contains the triple point parameters (temperature, pressure) of pure H2O.</para>
+<para><linebreak/>
+</para>
+<para><simplesect kind="author"><para>Thomas Driesner, ETH Zuerich <linebreak/>
+ </para>
+</simplesect>
+</para>
+</sect1>
+<sect1 id="compare_floats_8h_1contact">
+<title>Contact</title><para><linebreak/>
+ <ulink url="mailto:thomas.driesner@erdw.ethz.ch">thomas.driesner@erdw.ethz.ch</ulink> <linebreak/>
+</para>
+</sect1>
+<sect1 id="compare_floats_8h_1motivation">
+<title>Motivation</title><para><linebreak/>
+ <ref refid="classcsmp_1_1_triple_point_na_cl" kindref="compound">TriplePointNaCl</ref> contains the triple point parameters (temperature, pressure, and composition) of the pure NaCl phase halite, liquid, and vapor at its triple point according to the fits obtained in the paper</para>
+<para>Driesner T. and Heinrich C.A. (2007): The system H2O-NaCl. Part I: Correlation formulae for phase relations in temperature-pressure-composition space from 0 to 1000oC, 0 to 5000 bar, and 0 to 1 XNaCl. Geochimica et Cosmochimica Acta 71, 4880-4901.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_upwind_control_visitor_1dependencies">
+<title>Dependencies</title><para><linebreak/>
+</para>
+</sect1>
+<sect1 id="compare_floats_8h_1testing">
+<title>Testing</title></sect1>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::CriticalPointH2O</label>
+        <link refid="classcsmp_1_1_critical_point_h2_o"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/eos/CriticalPointH2O.h" line="8" column="3" bodyfile="source/includes/eos/CriticalPointH2O.h" bodystart="9" bodyend="21"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_critical_point_h2_o_1a96734ba57029a8fd88b2c83d554ba1d0" prot="public" virt="non-virtual"><scope>csmp::CriticalPointH2O</scope><name>CriticalPointH2O</name></member>
+      <member refid="classcsmp_1_1_critical_point_h2_o_1a66a982e5f6423995db9d8c3fb63d691e" prot="public" virt="non-virtual"><scope>csmp::CriticalPointH2O</scope><name>Density</name></member>
+      <member refid="classcsmp_1_1_critical_point_h2_o_1ad47da9b13880bf598f2ce0e69226d609" prot="public" virt="non-virtual"><scope>csmp::CriticalPointH2O</scope><name>Enthalpy</name></member>
+      <member refid="classcsmp_1_1_critical_point_h2_o_1ab4561e025c9d3f1842efc8e95c5564d2" prot="public" virt="non-virtual"><scope>csmp::CriticalPointH2O</scope><name>MassFractionNaCl</name></member>
+      <member refid="classcsmp_1_1_critical_point_h2_o_1aedc3c6aad4670bf041dccb867da81683" prot="public" virt="non-virtual"><scope>csmp::CriticalPointH2O</scope><name>MolarVolume</name></member>
+      <member refid="classcsmp_1_1_critical_point_h2_o_1afbb83271629b0c89f12947e644a624f7" prot="public" virt="non-virtual"><scope>csmp::CriticalPointH2O</scope><name>Pressure</name></member>
+      <member refid="classcsmp_1_1_critical_point_h2_o_1a1652bf05fabc9ddd0e638a5fadf23e14" prot="public" virt="non-virtual"><scope>csmp::CriticalPointH2O</scope><name>Temperature</name></member>
+      <member refid="classcsmp_1_1_critical_point_h2_o_1ab2b4d218e283eb2914c407c62653c683" prot="public" virt="non-virtual"><scope>csmp::CriticalPointH2O</scope><name>~CriticalPointH2O</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

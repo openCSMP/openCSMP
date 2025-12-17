@@ -1,0 +1,160 @@
+.TH "csmp::TimeStepEvaluator< dim, USER >" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::TimeStepEvaluator< dim, USER > \- for application to individual FVs  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <TimeStepEvaluator\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBTimeStepEvaluator\fP (double step_size_reduction_factor=0\&.5, double max_time_increment=86400\&. *365\&.)"
+.br
+.ti -1c
+.RI "double \fBOutFlowLessThanContentIncrement\fP (\fBNode\fP< dim > *const, double outflow) const"
+.br
+.RI "returns robust delta_t criterion in the presence of fluid sources and sinks; also computes and stores flux balance "
+.ti -1c
+.RI "double \fBOutFlowLessThanContentIncrementBoundary\fP (const \fBNode\fP< dim > *const, double outflow) const"
+.br
+.RI "returns robust delta_t criterion in the presence of fluid sources and sinks at model boundary (no variables are touched) "
+.ti -1c
+.RI "double \fBStreamlineCFL\fP (const \fBElement\fP< dim > *const) const"
+.br
+.RI "anisotropic CFL for the strictly hyperbolic case; also computes and stores flux balance "
+.ti -1c
+.RI "void \fBStepSizeReductionFactor\fP (double=0\&.5)"
+.br
+.RI "adjust setting for the solve (default=0\&.5) "
+.ti -1c
+.RI "double \fBStepSizeReductionFactor\fP () const"
+.br
+.ti -1c
+.RI "double \fBMaxTimeIncrement\fP () const"
+.br
+.RI "return maximum time-increment that is applied if there is ~no flow "
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim, template< uint32_t > class USER>
+.br
+class csmp::TimeStepEvaluator< dim, USER >"for application to individual FVs 
+
+Face-by-face calculation of CFL like timestepping criteria\&.
+
+.PP
+Part of Colleoli transport scheme\&. 
+.PP
+\fBAuthor\fP
+.RS 4
+Stephan K\&. Matthai 
+.RE
+.PP
+\fBVersion\fP
+.RS 4
+1a 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+21/2/2013 
+.RE
+.PP
+\fBPrecondition\fP
+.RS 4
+high-level class depending on CSMP++ API 
+.RE
+.PP
+\fBWarning\fP
+.RS 4
+.RE
+.PP
+\fBCopyright\fP
+.RS 4
+Stephan K\&. Matthai
+.RE
+.PP
+.SH "Motivation"
+.PP
+.SH "Design Intent"
+.PP
+.SH "Applicability"
+.PP
+.SH "Collaborations"
+.PP
+.SH "Implementation"
+.PP
+.SH "Application Examples"
+.PP
+.PP
+.nf
+.fi
+.PP
+ 
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::TimeStepEvaluator\fP< dim, USER >::OutFlowLessThanContentIncrement (\fBNode\fP< dim > * const nptr, double outflow) const"
+
+.PP
+returns robust delta_t criterion in the presence of fluid sources and sinks; also computes and stores flux balance Computes 1) volumetric flow-based time-increment that ascertains that the amount of tracer that leaves the FV is less than is stored in its pore volume\&.
+
+.PP
+This is robust criterion in the presence of fluid sources and sinks\&. 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::TimeStepEvaluator\fP< dim, USER >::OutFlowLessThanContentIncrementBoundary (const \fBNode\fP< dim > * const nptr, double outflow) const"
+
+.PP
+returns robust delta_t criterion in the presence of fluid sources and sinks at model boundary (no variables are touched) Special case where inflow or outflow needs to be established, differently because the FV is sliced by the model boundary\&.
+
+.PP
+2 boundary cases are considered:
+
+.PP
+.IP "1." 4
+No-flow boundary where flux balance is known because no in- or outflow should occur
+.IP "2." 4
+Dirichlet in- or outflow boundary where balance has to be guessed and compensation is necessary, else there is a saturation buildup at out-flow boundaries\&. 
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::TimeStepEvaluator\fP< dim, USER >::StreamlineCFL (const \fBElement\fP< dim > * const eit) const"
+
+.PP
+anisotropic CFL for the strictly hyperbolic case; also computes and stores flux balance CFL for the strictly hyperbolic case in multiphase flow
+
+.PP
+Computes the Courant time increment (CFL citerion) taking into account viscous, gravitational and capillary fluid displacements using the contraints from the provided relative permeability model\&. The CFL criterion is calculated using the element length in the direction of the flow but not account for the deviation from this vector of the flow of the considered phase\&. 
+.br
+
+.PP
+For the viscous flow the shock speed is used as a multiplier for the total velocity\&. This may lead to a too tight constraint but is safe for the case where CFL is computed only once at the onset of series of advection steps with an explicit scheme\&. 
+.br
+.SH "Input Arguments"
+.PP
+First, a const reference to the current model, a reference to the \fBTwoPhaseModel\fP used (this will be a subclass), and, third, the maximum time-increment imposed by external constraints\&. 
+.br
+
+.PP
+\fBReturns\fP
+.RS 4
+The CFL criterion\&.
+.RE
+.PP
+.SH "Implementation"
+.PP
+The criterion is computed sector by sector for all the finite elements in the entire model\&. 
+.br
+.SH "Application Examples"
+.PP
+Method has been designed primarily to give stability to an explicit transport scheme but it also serves as a guide for the timestepping using an implicit approach\&.
+.SH "Messages"
+.PP
+The method alerts the user to the case where CFL is larger than the input max_time_increment which may be the case if there is no flow at all in the domain\&. Equally, the user is informed if the CFL increment is less than a millisecond (usually a prohibitively small increment)\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

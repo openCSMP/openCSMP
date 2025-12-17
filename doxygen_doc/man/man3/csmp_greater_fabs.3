@@ -1,0 +1,52 @@
+.TH "csmp::greater_fabs< fT >" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::greater_fabs< fT >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <AP_algebraUtilities\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "bool \fBoperator()\fP (const fT &x, const fT &y) const"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<class fT>
+.br
+struct csmp::greater_fabs< fT >"Binary predicate used to compare elements of a set to be order by magnitude\&.
+
+.PP
+original set: -10, -4, 1, 5, 9
+
+.PP
+This set: -10, 9, 5, -4, 1
+.SH "Implementation"
+.PP
+This is just an operator that takes two input parameters: x and y, and returns true if the absolute value of x is greater than the absolute value of y\&.
+.SH "Application Examples"
+.PP
+An example of usage is the following:
+
+.PP
+.PP
+.nf
+std::set< greater_fabs > vals;
+vals\&.insert(9);
+vals\&.insert(\-10);
+vals\&.insert(11);
+.fi
+.PP
+
+.PP
+The order of the elements will be: 11, -10, 9 This is used in TensorVariable\&.cpp to order the eigenvalues\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

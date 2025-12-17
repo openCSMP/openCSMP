@@ -1,0 +1,191 @@
+\doxysection{csmp\+::Stress\+Rotate Class Reference}
+\hypertarget{classcsmp_1_1_stress_rotate}{}\label{classcsmp_1_1_stress_rotate}\index{csmp::StressRotate@{csmp::StressRotate}}
+
+
+Collaboration diagram for csmp\+::Stress\+Rotate\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_stress_rotate__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_stress_rotate_ac8f368e4d09697a4843adc38a7a3cd6a}{Stress\+Rotate}} (const \mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ 3U $>$ \&n1, const \mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ 3U $>$ \&n3, double sigma1, double sigma2, double sigma3)
+\item 
+\Hypertarget{classcsmp_1_1_stress_rotate_af94a58a2425cbb80fa849d9eb6a2e913}\label{classcsmp_1_1_stress_rotate_af94a58a2425cbb80fa849d9eb6a2e913} 
+{\bfseries Stress\+Rotate} (const \mbox{\hyperlink{classcsmp_1_1_stress_rotate}{Stress\+Rotate}} \&)
+\begin{DoxyCompactList}\small\item\em copy constructor \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_stress_rotate_a4eafb0f4771b0ee118ee7a619dde94fd}{Cartesian\+Stress\+Tensor}} (\mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ 3U $>$ \&stress) const
+\begin{DoxyCompactList}\small\item\em returns the full Cartesian stress tensor rotated to align principal axes according to internally stored trend \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_stress_rotate_a33c3b4311c9b397d18ffd68b91185b10}{Cartesian\+Stress\+Tensor}} (\mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ 3U $>$ \&stress, double iso\+\_\+stress\+\_\+offset) const
+\begin{DoxyCompactList}\small\item\em as previous, but augmentation modification of principal stresses by user-\/supplied isostatic stress \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_stress_rotate_a92041531d717596096e8bbcdb46b001e}{Rotate}} (char axis, double angle)
+\begin{DoxyCompactList}\small\item\em counter-\/clockwise rotation of stress vectors (n1,n3) looking down on the rotation axis (use 180-\/angle to get cw.) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_stress_rotate_a7f36dff06703f819ddf728acf7023981}{Reset}} ()
+\begin{DoxyCompactList}\small\item\em loss free restoration of stress to state before rotation \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_stress_rotate_addb63c23f6651a3cc872df557834e2fc}\label{classcsmp_1_1_stress_rotate_addb63c23f6651a3cc872df557834e2fc} 
+double {\bfseries Sigma1} () const
+\begin{DoxyCompactList}\small\item\em maximum (compressive) stress (Pa/m2), corresponding to max Eigenvalue of stress tensor \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_stress_rotate_a3481bb8bd8c3cafd0ac800aaab4a9cf4}\label{classcsmp_1_1_stress_rotate_a3481bb8bd8c3cafd0ac800aaab4a9cf4} 
+double {\bfseries Sigma2} () const
+\begin{DoxyCompactList}\small\item\em intermediate principal stress (Pa/m2) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_stress_rotate_aaa68102d591bad4c2596acd404fbe80f}\label{classcsmp_1_1_stress_rotate_aaa68102d591bad4c2596acd404fbe80f} 
+double {\bfseries Sigma3} () const
+\begin{DoxyCompactList}\small\item\em minimum compressive stress (Pa/m2) = mimimum Eigenvalue of stress tensor \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_stress_rotate_a146d7f0d3e8b2ef8ee97dc0b75a7328d}\label{classcsmp_1_1_stress_rotate_a146d7f0d3e8b2ef8ee97dc0b75a7328d} 
+void {\bfseries Out} () const
+\begin{DoxyCompactList}\small\item\em outputs state of object \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_stress_rotate_add35e1f3a3fee2a0fffd61c70528383f}\label{classcsmp_1_1_stress_rotate_add35e1f3a3fee2a0fffd61c70528383f} 
+void {\bfseries Output\+To\+VTK} (const std\+::string \&filename, const \mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ 3U $>$ \&location, bool normalize\+\_\+by\+\_\+sigma3=true) const
+\begin{DoxyCompactList}\small\item\em output 3 vectors representing the principal axes of the stress tensor \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_stress_rotate_a5371f63b6951034748bcaf82a6a11063}\label{classcsmp_1_1_stress_rotate_a5371f63b6951034748bcaf82a6a11063} 
+void {\bfseries Output\+To\+VTK} (const std\+::string \&filename, const \mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ 3U $>$ \&location, double scale\+\_\+factor) const
+\begin{DoxyCompactList}\small\item\em output 3 vectors representing the principal axes of the stress tensor and scale them by factor \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_stress_rotate_a769fd767f5c3541591147825c8b84c7f}\label{classcsmp_1_1_stress_rotate_a769fd767f5c3541591147825c8b84c7f} 
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ 3U $>$ {\bfseries original\+\_\+n1\+\_\+}
+\item 
+\Hypertarget{classcsmp_1_1_stress_rotate_a7957ece901e63436274c67a06cd62f24}\label{classcsmp_1_1_stress_rotate_a7957ece901e63436274c67a06cd62f24} 
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ 3U $>$ {\bfseries original\+\_\+n3\+\_\+}
+\item 
+\Hypertarget{classcsmp_1_1_stress_rotate_a1876a4542a6f6409245e38b7bb75d688}\label{classcsmp_1_1_stress_rotate_a1876a4542a6f6409245e38b7bb75d688} 
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ 3U $>$ {\bfseries n1\+\_\+}
+\item 
+\Hypertarget{classcsmp_1_1_stress_rotate_a876d88f42060d60b32434e5c7a48adf8}\label{classcsmp_1_1_stress_rotate_a876d88f42060d60b32434e5c7a48adf8} 
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ 3U $>$ {\bfseries n3\+\_\+}
+\item 
+\Hypertarget{classcsmp_1_1_stress_rotate_a636a3915f82e8acae15b2bb276c415c5}\label{classcsmp_1_1_stress_rotate_a636a3915f82e8acae15b2bb276c415c5} 
+double {\bfseries sigma1\+\_\+}
+\item 
+\Hypertarget{classcsmp_1_1_stress_rotate_abac75ca2e4eb0ded24f5ab74ed9f37e1}\label{classcsmp_1_1_stress_rotate_abac75ca2e4eb0ded24f5ab74ed9f37e1} 
+double {\bfseries sigma2\+\_\+}
+\item 
+\Hypertarget{classcsmp_1_1_stress_rotate_a0a9e87df94a0cde3414962cc3640dca6}\label{classcsmp_1_1_stress_rotate_a0a9e87df94a0cde3414962cc3640dca6} 
+double {\bfseries sigma3\+\_\+}
+\item 
+\Hypertarget{classcsmp_1_1_stress_rotate_a33064fde9db6b4c89f32239eb3beb94e}\label{classcsmp_1_1_stress_rotate_a33064fde9db6b4c89f32239eb3beb94e} 
+double {\bfseries x\+\_\+}
+\item 
+\Hypertarget{classcsmp_1_1_stress_rotate_ad3be9a3e540df35a032efe5cdd9d1a56}\label{classcsmp_1_1_stress_rotate_ad3be9a3e540df35a032efe5cdd9d1a56} 
+double {\bfseries y\+\_\+}
+\item 
+\Hypertarget{classcsmp_1_1_stress_rotate_ab71832bf8dabe45a4e2ff908a35a1faf}\label{classcsmp_1_1_stress_rotate_ab71832bf8dabe45a4e2ff908a35a1faf} 
+double {\bfseries z\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\label{doc-constructors}
+\Hypertarget{classcsmp_1_1_stress_rotate_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcsmp_1_1_stress_rotate_ac8f368e4d09697a4843adc38a7a3cd6a}\index{csmp::StressRotate@{csmp::StressRotate}!StressRotate@{StressRotate}}
+\index{StressRotate@{StressRotate}!csmp::StressRotate@{csmp::StressRotate}}
+\doxysubsubsection{\texorpdfstring{StressRotate()}{StressRotate()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_stress_rotate_ac8f368e4d09697a4843adc38a7a3cd6a} 
+csmp\+::\+Stress\+Rotate\+::\+Stress\+Rotate (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ 3U $>$ \&}]{n1}{, }\item[{const \mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ 3U $>$ \&}]{n3}{, }\item[{double}]{sigma1}{, }\item[{double}]{sigma2}{, }\item[{double}]{sigma3}{}\end{DoxyParamCaption})}
+
+constructs class from the orientations (vectors) of sigma1 and 3, and the magnitudes of the principal stresses 1, 2 and 3
+
+\begin{DoxyAttention}{Attention}
+the orientations of sigma1 and sigma must be perpendicular to eachother. 
+\end{DoxyAttention}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_stress_rotate_ac8f368e4d09697a4843adc38a7a3cd6a_icgraph}
+\end{center}
+\end{figure}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_stress_rotate_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_stress_rotate_a4eafb0f4771b0ee118ee7a619dde94fd}\index{csmp::StressRotate@{csmp::StressRotate}!CartesianStressTensor@{CartesianStressTensor}}
+\index{CartesianStressTensor@{CartesianStressTensor}!csmp::StressRotate@{csmp::StressRotate}}
+\doxysubsubsection{\texorpdfstring{CartesianStressTensor()}{CartesianStressTensor()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_stress_rotate_a4eafb0f4771b0ee118ee7a619dde94fd} 
+void csmp\+::\+Stress\+Rotate\+::\+Cartesian\+Stress\+Tensor (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ 3U $>$ \&}]{stress}{}\end{DoxyParamCaption}) const}
+
+
+
+returns the full Cartesian stress tensor rotated to align principal axes according to internally stored trend 
+
+Finds the the Cartesion stresses from the principal stresses using the formulae (6.\+86, 6.\+87, and 6.\+88) from Pollard \& Fletcher\textquotesingle{}s "{}\+Fundamentals of Structural Geology"{}, see p. 225 Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_stress_rotate_a4eafb0f4771b0ee118ee7a619dde94fd_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_stress_rotate_a33c3b4311c9b397d18ffd68b91185b10}\index{csmp::StressRotate@{csmp::StressRotate}!CartesianStressTensor@{CartesianStressTensor}}
+\index{CartesianStressTensor@{CartesianStressTensor}!csmp::StressRotate@{csmp::StressRotate}}
+\doxysubsubsection{\texorpdfstring{CartesianStressTensor()}{CartesianStressTensor()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_stress_rotate_a33c3b4311c9b397d18ffd68b91185b10} 
+void csmp\+::\+Stress\+Rotate\+::\+Cartesian\+Stress\+Tensor (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ 3U $>$ \&}]{stress}{, }\item[{double}]{iso\+\_\+stress\+\_\+offset}{}\end{DoxyParamCaption}) const}
+
+
+
+as previous, but augmentation modification of principal stresses by user-\/supplied isostatic stress 
+
+Cartesian\+Stress\+Tensor
+
+Same as previous method but with principal stresses augmented by isostatic stress in order to take into account offset of current location from where the stress was measured. \Hypertarget{classcsmp_1_1_stress_rotate_a7f36dff06703f819ddf728acf7023981}\index{csmp::StressRotate@{csmp::StressRotate}!Reset@{Reset}}
+\index{Reset@{Reset}!csmp::StressRotate@{csmp::StressRotate}}
+\doxysubsubsection{\texorpdfstring{Reset()}{Reset()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_stress_rotate_a7f36dff06703f819ddf728acf7023981} 
+void csmp\+::\+Stress\+Rotate\+::\+Reset (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+loss free restoration of stress to state before rotation 
+
+converts to state initialized by default constructor \Hypertarget{classcsmp_1_1_stress_rotate_a92041531d717596096e8bbcdb46b001e}\index{csmp::StressRotate@{csmp::StressRotate}!Rotate@{Rotate}}
+\index{Rotate@{Rotate}!csmp::StressRotate@{csmp::StressRotate}}
+\doxysubsubsection{\texorpdfstring{Rotate()}{Rotate()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_stress_rotate_a92041531d717596096e8bbcdb46b001e} 
+void csmp\+::\+Stress\+Rotate\+::\+Rotate (\begin{DoxyParamCaption}\item[{char}]{axis}{, }\item[{double}]{angle}{}\end{DoxyParamCaption})}
+
+
+
+counter-\/clockwise rotation of stress vectors (n1,n3) looking down on the rotation axis (use 180-\/angle to get cw.) 
+
+Rotates the internally stored stress state around one of the principal coordinate axes, x, y or z by the parameter angle (in degrees).
+
+Method applies the Standard Rotation Matrices to each principal stress vector individually Weisstein, Eric W. "{}\+Rotation Matrix."{} From Math\+World--A Wolfram Web Resource. \href{http://mathworld.wolfram.com/RotationMatrix.html}{\texttt{http\+://mathworld.\+wolfram.\+com/\+Rotation\+Matrix.\+html}}
+
+
+\begin{DoxyParams}{Parameters}
+{\em axis} & is either of the x, y or z coordinate axes in the Kartesian system \\
+\hline
+{\em angle} & is the angle in degress (0..360) \\
+\hline
+\end{DoxyParams}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=330pt]{classcsmp_1_1_stress_rotate_a92041531d717596096e8bbcdb46b001e_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_stress_rotate_a92041531d717596096e8bbcdb46b001e_icgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/thmc/mechanics/Stress\+Rotate.\+h\item 
+source/modules/thmc/mechanics/Stress\+Rotate.\+cpp\end{DoxyCompactItemize}

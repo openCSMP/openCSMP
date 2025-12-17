@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_c1c98c5583c7dab7a21ae49aaf0d0692" kind="dir">
+    <compoundname>source/modules/integration/pde_operators/numerical_integration</compoundname>
+    <innerfile refid="_num_integral___b_t___d___b__d_v_8cpp">NumIntegral_BT_D_B_dV.cpp</innerfile>
+    <innerfile refid="_num_integral___b_t___d__op__d_v_8cpp">NumIntegral_BT_D_op_dV.cpp</innerfile>
+    <innerfile refid="_num_integral___b_t__op__d_v_8cpp">NumIntegral_BT_op_dV.cpp</innerfile>
+    <innerfile refid="_num_integral___d_ni__rhsop__d_v_8cpp">NumIntegral_DNi_rhsop_dV.cpp</innerfile>
+    <innerfile refid="_num_integral__d_n_t__d_n__d_v_8cpp">NumIntegral_dNT_dN_dV.cpp</innerfile>
+    <innerfile refid="_num_integral__d_n_t__mixed__op__d_n__d_v_8cpp">NumIntegral_dNT_mixed_op_dN_dV.cpp</innerfile>
+    <innerfile refid="_num_integral__d_n_t__mixed__op__d_n___n_t__v__d_n__d_v_8cpp">NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV.cpp</innerfile>
+    <innerfile refid="_num_integral__d_n_t__op__d_n__d_v_8cpp">NumIntegral_dNT_op_dN_dV.cpp</innerfile>
+    <innerfile refid="_num_integral__d_n_t__op__d_n__d_v___inter_face_8cpp">NumIntegral_dNT_op_dN_dV_InterFace.cpp</innerfile>
+    <innerfile refid="_num_integral__d_n_t__op__d_n__d_v___n_t__v__d_n__d_v_8cpp">NumIntegral_dNT_op_dN_dV_NT_v_dN_dV.cpp</innerfile>
+    <innerfile refid="_num_integral__d_n_t__op__d_n___n_t__op__dop__d_n__d_v_8cpp">NumIntegral_dNT_op_dN_NT_op_dop_dN_dV.cpp</innerfile>
+    <innerfile refid="_num_integral___d_n_t__op___d_n___n_t__v___d_n__d_v_8cpp">NumIntegral_DNT_op_DN_NT_v_DN_dV.cpp</innerfile>
+    <innerfile refid="_num_integral__d_n_t__op__d_v_8cpp">NumIntegral_dNT_op_dV.cpp</innerfile>
+    <innerfile refid="_num_integral___d_n_t__rhsop___d_n__d_v_8cpp">NumIntegral_DNT_rhsop_DN_dV.cpp</innerfile>
+    <innerfile refid="_num_integral___d_n_t__v__d_v_8cpp">NumIntegral_DNT_v_dV.cpp</innerfile>
+    <innerfile refid="_num_integral__dudn__op__u__d_s___inter_face__w__dim_m1___region_8cpp">NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region.cpp</innerfile>
+    <innerfile refid="_num_integral__dudn__rhsop__u__d_s_8cpp">NumIntegral_dudn_rhsop_u_dS.cpp</innerfile>
+    <innerfile refid="_num_integral___n_t__d_ni__d_v_8cpp">NumIntegral_NT_dNi_dV.cpp</innerfile>
+    <innerfile refid="_num_integral___n_t__d_ni__d_v__sc_8cpp">NumIntegral_NT_dNi_dV_sc.cpp</innerfile>
+    <innerfile refid="_num_integral___n_t__lhsop___n__d_v_8cpp">NumIntegral_NT_lhsop_N_dV.cpp</innerfile>
+    <innerfile refid="_num_integral___n_t__mixed__op__d_ni__d_v_8cpp">NumIntegral_NT_mixed_op_dNi_dV.cpp</innerfile>
+    <innerfile refid="_num_integral___n_t__op1__op2__d_ni__d_v_8cpp">NumIntegral_NT_op1_op2_dNi_dV.cpp</innerfile>
+    <innerfile refid="_num_integral___n_t__op__d_ni__d_v_8cpp">NumIntegral_NT_op_dNi_dV.cpp</innerfile>
+    <innerfile refid="_num_integral___n_t__op___n__d_s_8cpp">NumIntegral_NT_op_N_dS.cpp</innerfile>
+    <innerfile refid="_num_integral___n_t__op___n__d_v_8cpp">NumIntegral_NT_op_N_dV.cpp</innerfile>
+    <innerfile refid="_num_integral__op___n_t__d_n__orthogonal__d_v_8cpp">NumIntegral_op_NT_dN_orthogonal_dV.cpp</innerfile>
+    <innerfile refid="_num_integral__op___n_t___n__d_v_8cpp">NumIntegral_op_NT_N_dV.cpp</innerfile>
+    <innerfile refid="_num_integral__op___p_t___p__d_v_8cpp">NumIntegral_op_PT_P_dV.cpp</innerfile>
+    <innerfile refid="_num_integral___p_t__lhsop___p__d_v_8cpp">NumIntegral_PT_lhsop_P_dV.cpp</innerfile>
+    <innerfile refid="_num_integral___p_t__op__d_s_8cpp">NumIntegral_PT_op_dS.cpp</innerfile>
+    <innerfile refid="_num_integral___p_t__op__d_v_8cpp">NumIntegral_PT_op_dV.cpp</innerfile>
+    <innerfile refid="_num_integral___p_t__op___p__d_v_8cpp">NumIntegral_PT_op_P_dV.cpp</innerfile>
+    <innerfile refid="_num_integral___set_r_h_s__to___one_8cpp">NumIntegral_SetRHS_to_One.cpp</innerfile>
+    <innerfile refid="_num_integral___set_r_h_s__to___zero_8cpp">NumIntegral_SetRHS_to_Zero.cpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="source/modules/integration/pde_operators/numerical_integration/"/>
+  </compounddef>
+</doxygen>

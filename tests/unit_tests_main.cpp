@@ -4,14 +4,11 @@
 #include <iostream>
 #include <string>
 
-#define CATCH_CONFIG_RUNNER
-//#define RUNNING_UNDER_CATCH
-// read: http://hiltmon.com/blog/2014/10/26/simple-c-plus-plus-testing-with-catch-in-xcode/ tutorial how to use with XCode
-
 #include "Test.h" // includes catch.hpp
 #include "TestSuite.h"
 #include "CSMP_definitions.h"
 #include "Exception.h"
+
 #ifdef CSMP_WITH_SAMG_SOLVER
 #include "SAMG_Exception.h"
 #endif
@@ -172,9 +169,9 @@ int main()
   const bool verbose(false);
 
   const bool test_fundamentals(true),
-             test_interdependent1(false),
-             test_interdependent2(false),
-             test_composite(false),
+             test_interdependent1(true),
+             test_interdependent2(true),
+             test_composite(true),
              test_refactoring(false),
              test_new_developments(false),
              test_interfaces{false};
@@ -521,23 +518,3 @@ int main()
   std::exit(total_failures);
 
 } // end main // TEST_CASE
-
-
-
-// -----------------------------------------
-// RUNNING THE SUITES OF TESTS THROUGH CATCH
-// -----------------------------------------
-/*
-int main(int argc, char* argv[])
-{
-  Catch::Session session;
-
-  int returnCode = session.applyCommandLine( argc, argv );
-  if( returnCode != 0 ) // Indicates a command line error
-    return returnCode;
-
-
-  // Run Catch tests.
-  session.run();
-} // end main
-*/
